@@ -4,70 +4,61 @@
 	}
 
 	.dialog {
+		container: region / inline-size;
 		inline-size: min(32rem, calc(100vw - 2rem));
 		max-block-size: calc(100dvh - 2rem);
-		border: 1px solid var(--line);
-		border-radius: var(--radius-4);
-		background: var(--surface-raised);
-		box-shadow: var(--shadow-3);
+		border: 1px solid var(--redz-border);
+		border-radius: var(--redz-radius-16);
+		background: var(--redz-bg-raised);
+		box-shadow: var(--redz-shadow-3);
+	}
+
+	.dialog-sm {
+		inline-size: min(24rem, calc(100vw - 2rem));
+	}
+
+	.dialog-lg {
+		inline-size: min(48rem, calc(100vw - 2rem));
 	}
 
 	.dialog::backdrop {
 		background: rgb(8 10 14 / 0.45);
 	}
 
-	.dialog__head {
+	.dialog-header {
 		display: flex;
 		align-items: center;
-		gap: var(--space-3);
-		padding: var(--space-4) var(--space-5) 0;
+		gap: var(--redz-space-12);
+		padding: var(--redz-space-16) var(--redz-space-24) 0;
 	}
 
-	.dialog__head > h2 {
+	.dialog-title {
 		flex: 1;
-		font-size: 1rem;
+		font-size: var(--redz-fs-16);
 	}
 
-	.dialog__body {
-		padding: var(--space-3) var(--space-5) var(--space-5);
+	.dialog-body {
+		padding: var(--redz-space-12) var(--redz-space-24) var(--redz-space-24);
 		overflow: auto;
-		color: var(--ink-muted);
+		color: var(--redz-text-muted);
 	}
 
-	.dialog__foot {
+	.dialog-footer {
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: flex-end;
-		gap: var(--space-2);
-		padding: var(--space-3) var(--space-5);
-		border-block-start: 1px solid var(--line);
-		border-end-start-radius: var(--radius-4);
-		border-end-end-radius: var(--radius-4);
-		background: var(--surface-sunken);
-	}
-
-	.drawer {
-		inline-size: min(28rem, calc(100vw - 1rem));
-		block-size: calc(100dvh - 1rem);
-		max-block-size: calc(100dvh - 1rem);
-		margin-block: var(--space-2);
-		margin-inline: auto var(--space-2);
-		border: 1px solid var(--line);
-		border-radius: var(--radius-3);
-		background: var(--surface-raised);
-		box-shadow: var(--shadow-3);
-	}
-
-	.drawer::backdrop {
-		background: rgb(8 10 14 / 0.3);
+		gap: var(--redz-space-8);
+		padding: var(--redz-space-12) var(--redz-space-24);
+		border-block-start: 1px solid var(--redz-border);
+		border-end-start-radius: var(--redz-radius-16);
+		border-end-end-radius: var(--redz-radius-16);
+		background: var(--redz-bg-page);
 	}
 
 	@media (prefers-reduced-motion: no-preference) {
 		.dialog,
-		.drawer,
-		.dialog::backdrop,
-		.drawer::backdrop {
-			transition: opacity 0.2s var(--ease-out), scale 0.2s var(--ease-out), translate 0.25s var(--ease-out), display 0.2s allow-discrete, overlay 0.2s allow-discrete;
+		.dialog::backdrop {
+			transition: opacity 0.2s var(--redz-ease), scale 0.2s var(--redz-ease), display 0.2s allow-discrete, overlay 0.2s allow-discrete;
 		}
 
 		@starting-style {
@@ -76,17 +67,7 @@
 				scale: 0.97;
 			}
 
-			.drawer[open] {
-				translate: 1.5rem 0;
-				opacity: 0;
-			}
-
-			.drawer[open]:dir(rtl) {
-				translate: -1.5rem 0;
-			}
-
-			.dialog[open]::backdrop,
-			.drawer[open]::backdrop {
+			.dialog[open]::backdrop {
 				opacity: 0;
 			}
 		}

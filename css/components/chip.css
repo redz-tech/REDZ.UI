@@ -3,13 +3,13 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 0.375rem;
-		min-block-size: var(--control-height-small);
+		min-block-size: var(--redz-control-height-sm);
 		padding: 0 0.625rem;
-		border: 1px solid var(--line);
+		border: 1px solid var(--redz-border);
 		border-radius: 999px;
-		background: var(--surface);
-		color: var(--ink);
-		font-size: var(--text-small);
+		background: var(--redz-bg);
+		color: var(--redz-text);
+		font-size: var(--redz-fs-12);
 		font-weight: 550;
 		text-decoration: none;
 		white-space: nowrap;
@@ -17,35 +17,35 @@
 	}
 
 	.chip:hover {
-		background: var(--surface-hover);
+		background: var(--redz-bg-hover);
 	}
 
 	.chip[aria-pressed="true"],
 	.chip[aria-current="true"] {
 		border-color: transparent;
-		background: var(--accent-soft);
-		color: var(--accent);
+		background: var(--redz-primary-subtle);
+		color: var(--redz-primary);
 	}
 
-	.chip .icon {
-		color: var(--ink-muted);
+	.chip .bi {
+		color: var(--redz-text-muted);
 	}
 
-	.chip[aria-pressed="true"] .icon {
+	.chip[aria-pressed="true"] .bi {
 		color: inherit;
 	}
 
-	.chip__count {
-		color: var(--ink-muted);
+	.chip-count {
+		color: var(--redz-text-muted);
 		font-weight: 650;
 		font-variant-numeric: tabular-nums;
 	}
 
-	.chip[aria-pressed="true"] .chip__count {
+	.chip[aria-pressed="true"] .chip-count {
 		color: inherit;
 	}
 
-	.chip__remove {
+	.chip-dismiss {
 		display: inline-grid;
 		place-items: center;
 		inline-size: 1.5rem;
@@ -58,7 +58,17 @@
 		color: inherit;
 	}
 
-	.chip__remove:hover {
+	.chip-dismiss:hover {
 		background: color-mix(in oklch, currentColor 14%, transparent);
+	}
+
+	@media (forced-colors: active) {
+		.chip[aria-pressed="true"],
+		.chip[aria-current="true"] {
+			forced-color-adjust: none;
+			border-color: Highlight;
+			background: Highlight;
+			color: HighlightText;
+		}
 	}
 }

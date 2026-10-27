@@ -1,0 +1,38 @@
+@layer components {
+	.card {
+		container: region / inline-size;
+		border: 1px solid var(--redz-border);
+		border-radius: var(--redz-radius-12);
+		background: var(--redz-bg);
+	}
+
+	.card-header {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--redz-space-8);
+		padding: var(--redz-space-12) var(--redz-space-16);
+		border-block-end: 1px solid var(--redz-border);
+	}
+
+	.card-header > .bi {
+		color: var(--redz-text-muted);
+	}
+
+	.card-body {
+		padding: var(--redz-space-16);
+	}
+
+	.card-footer {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--redz-space-8);
+		padding: var(--redz-space-12) var(--redz-space-16);
+		border-block-start: 1px solid var(--redz-border);
+	}
+
+	.card > .nav {
+		padding-inline: var(--redz-space-16);
+	}
+}

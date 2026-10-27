@@ -1,15 +1,15 @@
 @layer base {
 	html {
-		background: var(--surface-sunken);
+		background: var(--redz-bg-page);
 	}
 
 	body {
 		min-block-size: 100dvh;
-		font-family: var(--font-sans);
-		font-size: var(--text-body);
-		line-height: var(--leading);
-		color: var(--ink);
-		background: var(--surface-sunken);
+		font-family: var(--redz-font-sans);
+		font-size: var(--redz-fs-14);
+		line-height: var(--redz-lh-20);
+		color: var(--redz-text);
+		background: var(--redz-bg-page);
 		overflow-x: clip;
 	}
 
@@ -23,17 +23,17 @@
 	}
 
 	h1 {
-		font-size: var(--text-large);
+		font-size: var(--redz-fs-20);
 		letter-spacing: -0.01em;
 	}
 
 	h2,
 	h3 {
-		font-size: var(--text-body);
+		font-size: var(--redz-fs-14);
 	}
 
 	a {
-		color: var(--accent);
+		color: var(--redz-primary);
 		text-decoration-thickness: from-font;
 		text-underline-offset: 0.15em;
 	}
@@ -43,58 +43,65 @@
 	}
 
 	:focus-visible {
-		outline: 2px solid var(--focus);
+		outline: 2px solid var(--redz-focus);
 		outline-offset: 2px;
 	}
 
 	::selection {
-		background: var(--accent-soft);
-		color: var(--ink);
+		background: var(--redz-primary-subtle);
+		color: var(--redz-text);
 	}
 
 	code,
 	kbd,
 	samp {
-		font-family: var(--font-mono);
+		font-family: var(--redz-font-mono);
 		font-size: 0.875em;
 	}
 
 	kbd {
 		padding-inline: 0.35em;
-		border: 1px solid var(--line);
+		border: 1px solid var(--redz-border);
 		border-block-end-width: 2px;
-		border-radius: var(--radius-1);
-		background: var(--surface);
-		color: var(--ink-muted);
+		border-radius: var(--redz-radius-6);
+		background: var(--redz-bg);
+		color: var(--redz-text-muted);
 	}
 
 	small {
-		font-size: var(--text-small);
+		font-size: var(--redz-fs-12);
 	}
 
 	hr {
-		margin-block: var(--space-4);
+		margin-block: var(--redz-space-16);
 		border: 0;
-		border-block-start: 1px solid var(--line);
+		border-block-start: 1px solid var(--redz-border);
 	}
 
 	meter,
 	progress {
 		inline-size: 100%;
 		block-size: 0.5rem;
-		accent-color: var(--accent);
+		accent-color: var(--redz-primary);
 	}
 
-	.icon {
+	.bi {
 		display: inline-block;
 		flex: none;
 		inline-size: 1em;
 		block-size: 1em;
-		fill: currentColor;
+		background-color: currentColor;
+		mask-position: center;
+		mask-size: contain;
+		mask-repeat: no-repeat;
 		vertical-align: -0.125em;
+		forced-color-adjust: preserve-parent-color;
+		print-color-adjust: exact;
 	}
 
-	.icon--flip:dir(rtl) {
-		scale: -1 1;
+	@media (forced-colors: active) {
+		.bi {
+			color: inherit !important;
+		}
 	}
 }

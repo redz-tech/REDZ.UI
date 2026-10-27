@@ -4,397 +4,347 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Excursions — REDZ.UI demo</title>
+	<link rel="icon" href="data:,">
 	<link rel="stylesheet" href="../../css/index.css">
+	<link rel="stylesheet" href="../../css/icons.css">
 	<link rel="stylesheet" href="demo.css">
 	<script src="demo.js"></script>
 </head>
 <body>
-	<svg id="sprite" hidden>
-		<symbol id="i-arrow-repeat" viewBox="0 0 16 16"><path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/><path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/></symbol>
-		<symbol id="i-arrows-collapse" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8m7-8a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 4.293V.5A.5.5 0 0 1 8 0m-.5 11.707-1.146 1.147a.5.5 0 0 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 11.707V15.5a.5.5 0 0 1-1 0z"/></symbol>
-		<symbol id="i-bell" viewBox="0 0 16 16"><path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"/></symbol>
-		<symbol id="i-box-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/><path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/></symbol>
-		<symbol id="i-calendar-event" viewBox="0 0 16 16"><path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/></symbol>
-		<symbol id="i-calendar2-check" viewBox="0 0 16 16"><path d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0"/><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"/><path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5z"/></symbol>
-		<symbol id="i-check-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></symbol>
-		<symbol id="i-check2" viewBox="0 0 16 16"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></symbol>
-		<symbol id="i-chevron-down" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/></symbol>
-		<symbol id="i-chevron-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></symbol>
-		<symbol id="i-circle-half" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 0 8 1zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16"/></symbol>
-		<symbol id="i-clock-history" viewBox="0 0 16 16"><path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z"/><path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z"/><path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5"/></symbol>
-		<symbol id="i-compass" viewBox="0 0 16 16"><path d="M8 16.016a7.5 7.5 0 0 0 1.962-14.74A1 1 0 0 0 9 0H7a1 1 0 0 0-.962 1.276A7.5 7.5 0 0 0 8 16.016m6.5-7.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0"/><path d="m6.94 7.44 4.95-2.83-2.83 4.95-4.949 2.83 2.828-4.95z"/></symbol>
-		<symbol id="i-diagram-3" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H14a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 2 7h5.5V6A1.5 1.5 0 0 1 6 4.5zM8.5 5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5zM0 11.5A1.5 1.5 0 0 1 1.5 10h1A1.5 1.5 0 0 1 4 11.5v1A1.5 1.5 0 0 1 2.5 14h-1A1.5 1.5 0 0 1 0 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5A1.5 1.5 0 0 1 7.5 10h1a1.5 1.5 0 0 1 1.5 1.5v1A1.5 1.5 0 0 1 8.5 14h-1A1.5 1.5 0 0 1 6 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"/></symbol>
-		<symbol id="i-download" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/></symbol>
-		<symbol id="i-exclamation-triangle-fill" viewBox="0 0 16 16"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/></symbol>
-		<symbol id="i-eye" viewBox="0 0 16 16"><path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/><path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/></symbol>
-		<symbol id="i-eye-slash" viewBox="0 0 16 16"><path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7 7 0 0 0-2.79.588l.77.771A6 6 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755q-.247.248-.517.486z"/><path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829"/><path d="M3.35 5.47q-.27.24-.518.487A13 13 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7 7 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12z"/></symbol>
-		<symbol id="i-file-earmark-text" viewBox="0 0 16 16"><path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"/><path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/></symbol>
-		<symbol id="i-files" viewBox="0 0 16 16"><path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2m0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1M3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/></symbol>
-		<symbol id="i-funnel" viewBox="0 0 16 16"><path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z"/></symbol>
-		<symbol id="i-gear" viewBox="0 0 16 16"><path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/><path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/></symbol>
-		<symbol id="i-globe2" viewBox="0 0 16 16"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855q-.215.403-.395.872c.705.157 1.472.257 2.282.287zM4.249 3.539q.214-.577.481-1.078a7 7 0 0 1 .597-.933A7 7 0 0 0 3.051 3.05q.544.277 1.198.49zM3.509 7.5c.036-1.07.188-2.087.436-3.008a9 9 0 0 1-1.565-.667A6.96 6.96 0 0 0 1.018 7.5zm1.4-2.741a12.3 12.3 0 0 0-.4 2.741H7.5V5.091c-.91-.03-1.783-.145-2.591-.332M8.5 5.09V7.5h2.99a12.3 12.3 0 0 0-.399-2.741c-.808.187-1.681.301-2.591.332zM4.51 8.5c.035.987.176 1.914.399 2.741A13.6 13.6 0 0 1 7.5 10.91V8.5zm3.99 0v2.409c.91.03 1.783.145 2.591.332.223-.827.364-1.754.4-2.741zm-3.282 3.696q.18.469.395.872c.552 1.035 1.218 1.65 1.887 1.855V11.91c-.81.03-1.577.13-2.282.287zm.11 2.276a7 7 0 0 1-.598-.933 9 9 0 0 1-.481-1.079 8.4 8.4 0 0 0-1.198.49 7 7 0 0 0 2.276 1.522zm-1.383-2.964A13.4 13.4 0 0 1 3.508 8.5h-2.49a6.96 6.96 0 0 0 1.362 3.675c.47-.258.995-.482 1.565-.667m6.728 2.964a7 7 0 0 0 2.275-1.521 8.4 8.4 0 0 0-1.197-.49 9 9 0 0 1-.481 1.078 7 7 0 0 1-.597.933M8.5 11.909v3.014c.67-.204 1.335-.82 1.887-1.855q.216-.403.395-.872A12.6 12.6 0 0 0 8.5 11.91zm3.555-.401c.57.185 1.095.409 1.565.667A6.96 6.96 0 0 0 14.982 8.5h-2.49a13.4 13.4 0 0 1-.437 3.008M14.982 7.5a6.96 6.96 0 0 0-1.362-3.675c-.47.258-.995.482-1.565.667.248.92.4 1.938.437 3.008zM11.27 2.461q.266.502.482 1.078a8.4 8.4 0 0 0 1.196-.49 7 7 0 0 0-2.275-1.52c.218.283.418.597.597.932m-.488 1.343a8 8 0 0 0-.395-.872C9.835 1.897 9.17 1.282 8.5 1.077V4.09c.81-.03 1.577-.13 2.282-.287z"/></symbol>
-		<symbol id="i-grid-3x3-gap" viewBox="0 0 16 16"><path d="M4 2v2H2V2zm1 12v-2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V7a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m5 10v-2a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V7a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V2a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1M9 2v2H7V2zm5 0v2h-2V2zM4 7v2H2V7zm5 0v2H7V7zm5 0h-2v2h2zM4 12v2H2v-2zm5 0v2H7v-2zm5 0v2h-2v-2zM12 1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zm-1 6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zm1 4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1z"/></symbol>
-		<symbol id="i-house-heart" viewBox="0 0 16 16"><path d="M8 6.982C9.664 5.309 13.825 8.236 8 12 2.175 8.236 6.336 5.309 8 6.982"/><path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.707L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.646a.5.5 0 0 0 .708-.707L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/></symbol>
-		<symbol id="i-images" viewBox="0 0 16 16"><path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/><path d="M14.002 13a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V5A2 2 0 0 1 2 3a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-1.998 2M14 2H4a1 1 0 0 0-1 1h9.002a2 2 0 0 1 2 2v7A1 1 0 0 0 15 11V3a1 1 0 0 0-1-1M2.002 4a1 1 0 0 0-1 1v8l2.646-2.354a.5.5 0 0 1 .63-.062l2.66 1.773 3.71-3.71a.5.5 0 0 1 .577-.094l1.777 1.947V5a1 1 0 0 0-1-1z"/></symbol>
-		<symbol id="i-keyboard" viewBox="0 0 16 16"><path d="M14 5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zM2 4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><path d="M13 10.25a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zm0-2a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zm-5 0A.25.25 0 0 1 8.25 8h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 8 8.75zm2 0a.25.25 0 0 1 .25-.25h1.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-1.5a.25.25 0 0 1-.25-.25zm1 2a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zm-5-2A.25.25 0 0 1 6.25 8h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 6 8.75zm-2 0A.25.25 0 0 1 4.25 8h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 4 8.75zm-2 0A.25.25 0 0 1 2.25 8h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 2 8.75zm11-2a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zm-2 0a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zm-2 0A.25.25 0 0 1 9.25 6h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 9 6.75zm-2 0A.25.25 0 0 1 7.25 6h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 7 6.75zm-2 0A.25.25 0 0 1 5.25 6h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 5 6.75zm-3 0A.25.25 0 0 1 2.25 6h1.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-1.5A.25.25 0 0 1 2 6.75zm0 4a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zm2 0a.25.25 0 0 1 .25-.25h5.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-5.5a.25.25 0 0 1-.25-.25z"/></symbol>
-		<symbol id="i-layout-three-columns" viewBox="0 0 16 16"><path d="M0 1.5A1.5 1.5 0 0 1 1.5 0h13A1.5 1.5 0 0 1 16 1.5v13a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5zM1.5 1a.5.5 0 0 0-.5.5v13a.5.5 0 0 0 .5.5H5V1zM10 15V1H6v14zm1 0h3.5a.5.5 0 0 0 .5-.5v-13a.5.5 0 0 0-.5-.5H11z"/></symbol>
-		<symbol id="i-list" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/></symbol>
-		<symbol id="i-newspaper" viewBox="0 0 16 16"><path d="M0 2.5A1.5 1.5 0 0 1 1.5 1h11A1.5 1.5 0 0 1 14 2.5v10.528c0 .3-.05.654-.238.972h.738a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 1 1 0v9a1.5 1.5 0 0 1-1.5 1.5H1.497A1.497 1.497 0 0 1 0 13.5zM12 14c.37 0 .654-.211.853-.441.092-.106.147-.279.147-.531V2.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v11c0 .278.223.5.497.5z"/><path d="M2 3h10v2H2zm0 3h4v3H2zm0 4h4v1H2zm0 2h4v1H2zm5-6h2v1H7zm3 0h2v1h-2zM7 8h2v1H7zm3 0h2v1h-2zm-3 2h2v1H7zm3 0h2v1h-2zm-3 2h2v1H7zm3 0h2v1h-2z"/></symbol>
-		<symbol id="i-palette2" viewBox="0 0 16 16"><path d="M0 .5A.5.5 0 0 1 .5 0h5a.5.5 0 0 1 .5.5v5.277l4.147-4.131a.5.5 0 0 1 .707 0l3.535 3.536a.5.5 0 0 1 0 .708L10.261 10H15.5a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-.5.5H3a3 3 0 0 1-2.121-.879A3 3 0 0 1 0 13.044m6-.21 7.328-7.3-2.829-2.828L6 7.188zM4.5 13a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0M15 15v-4H9.258l-4.015 4zM0 .5v12.495zm0 12.495V13z"/></symbol>
-		<symbol id="i-pencil" viewBox="0 0 16 16"><path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/></symbol>
-		<symbol id="i-pencil-square" viewBox="0 0 16 16"><path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/><path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/></symbol>
-		<symbol id="i-people" viewBox="0 0 16 16"><path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/></symbol>
-		<symbol id="i-person" viewBox="0 0 16 16"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/></symbol>
-		<symbol id="i-plus-lg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/></symbol>
-		<symbol id="i-question-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"/></symbol>
-		<symbol id="i-receipt" viewBox="0 0 16 16"><path d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27m.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0z"/><path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5"/></symbol>
-		<symbol id="i-scooter" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M9 2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-.39l1.4 7a2.5 2.5 0 1 1-.98.195l-.189-.938-2.43 3.527A.5.5 0 0 1 9.5 13H4.95a2.5 2.5 0 1 1 0-1h4.287l2.831-4.11L11.09 3H9.5a.5.5 0 0 1-.5-.5M3.915 12a1.5 1.5 0 1 0 0 1H2.5a.5.5 0 0 1 0-1zm8.817-.789A1.499 1.499 0 0 0 13.5 14a1.5 1.5 0 0 0 .213-2.985l.277 1.387a.5.5 0 0 1-.98.196z"/></symbol>
-		<symbol id="i-search" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/></symbol>
-		<symbol id="i-send" viewBox="0 0 16 16"><path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/></symbol>
-		<symbol id="i-sliders" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1z"/></symbol>
-		<symbol id="i-speedometer2" viewBox="0 0 16 16"><path d="M8 4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-1 0V4.5A.5.5 0 0 1 8 4M3.732 5.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707M2 10a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 10m9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5m.754-4.246a.39.39 0 0 0-.527-.02L7.547 9.31a.91.91 0 1 0 1.302 1.258l3.434-4.297a.39.39 0 0 0-.029-.518z"/><path fill-rule="evenodd" d="M0 10a8 8 0 1 1 15.547 2.661c-.442 1.253-1.845 1.602-2.932 1.25C11.309 13.488 9.475 13 8 13c-1.474 0-3.31.488-4.615.911-1.087.352-2.49.003-2.932-1.25A8 8 0 0 1 0 10m8-7a7 7 0 0 0-6.603 9.329c.203.575.923.876 1.68.63C4.397 12.533 6.358 12 8 12s3.604.532 4.923.96c.757.245 1.477-.056 1.68-.631A7 7 0 0 0 8 3"/></symbol>
-		<symbol id="i-stars" viewBox="0 0 16 16"><path d="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.828-1.828l-1.937-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.828zM3.794 1.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387A1.73 1.73 0 0 0 4.593 5.69l-.387 1.162a.217.217 0 0 1-.412 0L3.407 5.69A1.73 1.73 0 0 0 2.31 4.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.73 1.73 0 0 0 3.407 2.31zM10.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732L9.1 2.137a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z"/></symbol>
-		<symbol id="i-three-dots" viewBox="0 0 16 16"><path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/></symbol>
-		<symbol id="i-translate" viewBox="0 0 16 16"><path d="M4.545 6.714 4.11 8H3l1.862-5h1.284L8 8H6.833l-.435-1.286zm1.634-.736L5.5 3.956h-.049l-.679 2.022z"/><path d="M0 2a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v3h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-3H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zm7.138 9.995q.289.451.63.846c-.748.575-1.673 1.001-2.768 1.292.178.217.451.635.555.867 1.125-.359 2.08-.844 2.886-1.494.777.665 1.739 1.165 2.93 1.472.133-.254.414-.673.629-.89-1.125-.253-2.057-.694-2.82-1.284.681-.747 1.222-1.651 1.621-2.757H14V8h-3v1.047h.765c-.318.844-.74 1.546-1.272 2.13a6 6 0 0 1-.415-.492 2 2 0 0 1-.94.31"/></symbol>
-		<symbol id="i-trash3" viewBox="0 0 16 16"><path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/></symbol>
-		<symbol id="i-upload" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/><path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"/></symbol>
-		<symbol id="i-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/></symbol>
-		<symbol id="i-x-octagon-fill" viewBox="0 0 16 16"><path d="M11.46.146A.5.5 0 0 0 11.107 0H4.893a.5.5 0 0 0-.353.146L.146 4.54A.5.5 0 0 0 0 4.893v6.214a.5.5 0 0 0 .146.353l4.394 4.394a.5.5 0 0 0 .353.146h6.214a.5.5 0 0 0 .353-.146l4.394-4.394a.5.5 0 0 0 .146-.353V4.893a.5.5 0 0 0-.146-.353zm-6.106 4.5L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708"/></symbol>
-	</svg>
-	<div class="page">
-		<header class="page__top">
-			<button class="button button--quiet button--icon page__burger" type="button" commandfor="side" command="toggle-popover" aria-label="Sections"><svg class="icon" aria-hidden="true"><use href="#i-list"/></svg></button>
-			<a class="page__brand" href="#"><span class="page__mark">RZ</span><span class="wide-only">REDZ CMS</span></a>
-			<button class="button button--quiet" type="button" commandfor="sites" command="toggle-popover" aria-haspopup="menu"><span class="dot"></span><span>All sites</span><svg class="icon" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
-			<div id="sites" class="menu menu--start" popover role="menu" aria-label="Work context">
-				<div class="menu__head">Work context</div>
-				<a class="menu__item" href="#" role="menuitemradio" aria-checked="true"><svg class="icon" aria-hidden="true"><use href="#i-grid-3x3-gap"/></svg>All sites</a>
-				<a class="menu__item" href="#" role="menuitemradio" aria-checked="false"><span class="demo-site demo-site--a">LG</span>lagoon.example</a>
-				<a class="menu__item" href="#" role="menuitemradio" aria-checked="false"><span class="demo-site demo-site--c">VI</span>villas.lagoon.example</a>
-				<a class="menu__item" href="#" role="menuitemradio" aria-checked="false"><span class="demo-site demo-site--b">AT</span>angthong.example</a>
+	<div class="app">
+		<header class="app-header">
+			<button class="btn btn-text btn-icon app-burger" type="button" commandfor="side" command="toggle-popover" aria-label="Sections"><i class="bi bi-list" aria-hidden="true"></i></button>
+			<a class="app-brand" href="#"><span class="app-mark">RZ</span><span class="d-none md:d-inline">REDZ CMS</span></a>
+			<button class="btn btn-text" type="button" commandfor="sites" command="toggle-popover" aria-haspopup="menu"><span class="dot"></span><span>All sites</span><i class="bi bi-chevron-down" aria-hidden="true"></i></button>
+			<div id="sites" class="menu menu-start" popover role="menu" aria-label="Work context">
+				<div class="menu-header">Work context</div>
+				<a class="menu-item" href="#" role="menuitemradio" aria-checked="true"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i>All sites</a>
+				<a class="menu-item" href="#" role="menuitemradio" aria-checked="false"><span class="demo-site demo-site-a">LG</span>lagoon.example</a>
+				<a class="menu-item" href="#" role="menuitemradio" aria-checked="false"><span class="demo-site demo-site-c">VI</span>villas.lagoon.example</a>
+				<a class="menu-item" href="#" role="menuitemradio" aria-checked="false"><span class="demo-site demo-site-b">AT</span>angthong.example</a>
 			</div>
-			<button class="button page__search wide-only" type="button" aria-keyshortcuts="Meta+K"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><span>Find or go to…</span><kbd>⌘K</kbd></button>
-			<div class="page__end">
-				<button class="button button--quiet button--icon wide-only" type="button" aria-label="Help for this screen"><svg class="icon" aria-hidden="true"><use href="#i-question-circle"/></svg></button>
-				<button class="button button--quiet button--icon" type="button" aria-label="Notifications: 3"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg></button>
-				<button class="button button--quiet button--icon" type="button" commandfor="profile" command="toggle-popover" aria-haspopup="menu" aria-label="Profile"><span class="avatar">MK</span></button>
+			<button class="btn app-search d-none md:d-inline-flex" type="button" aria-keyshortcuts="Meta+K"><i class="bi bi-search" aria-hidden="true"></i><span>Find or go to…</span><kbd>⌘K</kbd></button>
+			<div class="hstack gap-4 ms-auto">
+				<button class="btn btn-text btn-icon d-none md:d-inline-flex" type="button" aria-label="Help for this screen"><i class="bi bi-question-circle" aria-hidden="true"></i></button>
+				<button class="btn btn-text btn-icon" type="button" aria-label="Notifications: 3"><i class="bi bi-bell" aria-hidden="true"></i></button>
+				<button class="btn btn-text btn-icon" type="button" commandfor="profile" command="toggle-popover" aria-haspopup="menu" aria-label="Profile"><span class="avatar">MK</span></button>
 				<div id="profile" class="menu" popover role="menu" aria-label="Profile">
-					<div class="menu__head">Marina K. · editor</div>
-					<a class="menu__item" href="#" role="menuitem"><svg class="icon" aria-hidden="true"><use href="#i-translate"/></svg>Interface language: English</a>
-					<a class="menu__item" href="#" role="menuitem"><svg class="icon" aria-hidden="true"><use href="#i-circle-half"/></svg>Theme: system</a>
-					<a class="menu__item" href="#" role="menuitem"><svg class="icon" aria-hidden="true"><use href="#i-person"/></svg>Profile and devices</a>
-					<hr class="menu__sep">
-					<a class="menu__item" href="#" role="menuitem"><svg class="icon" aria-hidden="true"><use href="#i-box-arrow-right"/></svg>Sign out</a>
+					<div class="menu-header">Marina K. · editor</div>
+					<a class="menu-item" href="#" role="menuitem"><i class="bi bi-translate" aria-hidden="true"></i>Interface language: English</a>
+					<a class="menu-item" href="#" role="menuitem"><i class="bi bi-circle-half" aria-hidden="true"></i>Theme: system</a>
+					<a class="menu-item" href="#" role="menuitem"><i class="bi bi-person" aria-hidden="true"></i>Profile and devices</a>
+					<hr class="menu-divider">
+					<a class="menu-item" href="#" role="menuitem"><i class="bi bi-box-arrow-right" aria-hidden="true"></i>Sign out</a>
 				</div>
 			</div>
 		</header>
 
-		<nav id="side" class="page__side" popover aria-label="Sections">
-			<a class="page__link" href="#"><svg class="icon" aria-hidden="true"><use href="#i-speedometer2"/></svg>Overview</a>
-			<div class="page__section">Content</div>
-			<a class="page__link" href="#"><svg class="icon" aria-hidden="true"><use href="#i-file-earmark-text"/></svg>Pages<span class="page__count">14</span></a>
-			<a class="page__link" href="list.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-compass"/></svg>Excursions<span class="page__count">28</span></a>
-			<a class="page__link" href="#"><svg class="icon" aria-hidden="true"><use href="#i-house-heart"/></svg>Villas<span class="page__count">41</span></a>
-			<a class="page__link" href="#"><svg class="icon" aria-hidden="true"><use href="#i-scooter"/></svg>Transport<span class="page__count">17</span></a>
-			<a class="page__link" href="#"><svg class="icon" aria-hidden="true"><use href="#i-newspaper"/></svg>News<span class="page__count">63</span></a>
-			<a class="page__link" href="#"><svg class="icon" aria-hidden="true"><use href="#i-images"/></svg>Media</a>
-			<div class="page__section">Sales</div>
-			<a class="page__link" href="#"><svg class="icon" aria-hidden="true"><use href="#i-receipt"/></svg>Orders<span class="pill pill--accent end">5</span></a>
-			<a class="page__link" href="#"><svg class="icon" aria-hidden="true"><use href="#i-calendar2-check"/></svg>Bookings</a>
-			<div class="page__section">Sites</div>
-			<a class="page__link" href="#"><svg class="icon" aria-hidden="true"><use href="#i-globe2"/></svg>Sites and domains</a>
-			<a class="page__link" href="#"><svg class="icon" aria-hidden="true"><use href="#i-palette2"/></svg>Design and themes</a>
-			<a class="page__link" href="#"><svg class="icon" aria-hidden="true"><use href="#i-translate"/></svg>Translations<span class="pill pill--warning end">7</span></a>
-			<div class="page__section">System</div>
-			<a class="page__link" href="#"><svg class="icon" aria-hidden="true"><use href="#i-people"/></svg>People and roles</a>
-			<a class="page__link" href="#"><svg class="icon" aria-hidden="true"><use href="#i-clock-history"/></svg>Journal</a>
-			<a class="page__link" href="settings.html"><svg class="icon" aria-hidden="true"><use href="#i-gear"/></svg>Settings</a>
+		<nav id="side" class="app-sidebar" popover aria-label="Sections">
+			<a class="app-link" href="#"><i class="bi bi-speedometer2" aria-hidden="true"></i>Overview</a>
+			<div class="app-section">Content</div>
+			<a class="app-link" href="#"><i class="bi bi-file-earmark-text" aria-hidden="true"></i>Pages<span class="ms-auto fs-12 text-muted tabular-nums">14</span></a>
+			<a class="app-link" href="list.html" aria-current="page"><i class="bi bi-compass" aria-hidden="true"></i>Excursions<span class="ms-auto fs-12 text-muted tabular-nums">28</span></a>
+			<a class="app-link" href="#"><i class="bi bi-house-heart" aria-hidden="true"></i>Villas<span class="ms-auto fs-12 text-muted tabular-nums">41</span></a>
+			<a class="app-link" href="#"><i class="bi bi-scooter" aria-hidden="true"></i>Transport<span class="ms-auto fs-12 text-muted tabular-nums">17</span></a>
+			<a class="app-link" href="#"><i class="bi bi-newspaper" aria-hidden="true"></i>News<span class="ms-auto fs-12 text-muted tabular-nums">63</span></a>
+			<a class="app-link" href="#"><i class="bi bi-images" aria-hidden="true"></i>Media</a>
+			<div class="app-section">Sales</div>
+			<a class="app-link" href="#"><i class="bi bi-receipt" aria-hidden="true"></i>Orders<span class="badge badge-subtle-primary ms-auto">5</span></a>
+			<a class="app-link" href="#"><i class="bi bi-calendar2-check" aria-hidden="true"></i>Bookings</a>
+			<div class="app-section">Sites</div>
+			<a class="app-link" href="#"><i class="bi bi-globe2" aria-hidden="true"></i>Sites and domains</a>
+			<a class="app-link" href="#"><i class="bi bi-palette2" aria-hidden="true"></i>Design and themes</a>
+			<a class="app-link" href="#"><i class="bi bi-translate" aria-hidden="true"></i>Translations<span class="badge badge-subtle-warning ms-auto">7</span></a>
+			<div class="app-section">System</div>
+			<a class="app-link" href="#"><i class="bi bi-people" aria-hidden="true"></i>People and roles</a>
+			<a class="app-link" href="#"><i class="bi bi-clock-history" aria-hidden="true"></i>Journal</a>
+			<a class="app-link" href="settings.html"><i class="bi bi-gear" aria-hidden="true"></i>Settings</a>
 		</nav>
 
-		<main class="page__main" id="main">
-			<div class="page__head">
-				<span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-compass"/></svg></span>
-				<div class="page__title">
+		<main class="app-main" id="main">
+			<div class="d-flex flex-wrap align-items-center row-gap-12 column-gap-16 mb-24">
+				<span class="icon-tile"><i class="bi bi-compass" aria-hidden="true"></i></span>
+				<div class="flex-grow-1 min-w-0">
 					<h1>Excursions</h1>
-					<p>Content type · 28 items · shown on 2 sites of 3</p>
+					<p class="text-muted mt-2">Content type · 28 items · shown on 2 sites of 3</p>
 				</div>
-				<div class="page__actions">
-					<div class="toolbar toolbar--joined">
-						<a class="button" href="#"><svg class="icon" aria-hidden="true"><use href="#i-sliders"/></svg><span class="wide-only">Type fields</span></a>
-						<button class="button button--icon" type="button" commandfor="type-more" command="toggle-popover" aria-haspopup="menu" aria-label="More"><svg class="icon" aria-hidden="true"><use href="#i-three-dots"/></svg></button>
+				<div class="d-flex flex-wrap gap-8">
+					<div class="btn-group">
+						<a class="btn" href="#"><i class="bi bi-sliders" aria-hidden="true"></i><span class="d-none md:d-inline">Type fields</span></a>
+						<button class="btn btn-icon" type="button" commandfor="type-more" command="toggle-popover" aria-haspopup="menu" aria-label="More"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
 					</div>
 					<div id="type-more" class="menu" popover role="menu" aria-label="More">
-						<a class="menu__item" href="#" role="menuitem"><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg>Import</a>
-						<a class="menu__item" href="#" role="menuitem"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>Export</a>
-						<a class="menu__item" href="#" role="menuitem"><svg class="icon" aria-hidden="true"><use href="#i-diagram-3"/></svg>Sections</a>
+						<a class="menu-item" href="#" role="menuitem"><i class="bi bi-upload" aria-hidden="true"></i>Import</a>
+						<a class="menu-item" href="#" role="menuitem"><i class="bi bi-download" aria-hidden="true"></i>Export</a>
+						<a class="menu-item" href="#" role="menuitem"><i class="bi bi-diagram-3" aria-hidden="true"></i>Sections</a>
 					</div>
-					<a class="button button--primary" href="resource.html"><svg class="icon" aria-hidden="true"><use href="#i-plus-lg"/></svg>New excursion</a>
+					<a class="btn btn-primary" href="resource.html"><i class="bi bi-plus-lg" aria-hidden="true"></i>New excursion</a>
 				</div>
 			</div>
 
-			<div class="stack">
-				<div class="banner banner--warning">
-					<svg class="icon" aria-hidden="true"><use href="#i-exclamation-triangle-fill"/></svg>
-					<span class="banner__text"><strong>3 need attention:</strong> 1 page did not rebuild, 2 translations are out of date</span>
-					<a class="button button--small" href="#">Show them</a>
+			<div class="vstack gap-16">
+				<div class="alert alert-warning">
+					<i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+					<div><strong>3 need attention:</strong> 1 page did not rebuild, 2 translations are out of date</div>
+					<a class="btn btn-sm" href="#">Show them</a>
 				</div>
 
-				<section class="panel panel--flush" aria-label="Excursions">
-					<nav class="tabs" aria-label="List views">
-						<a class="tabs__tab" href="#" aria-current="page">All<span class="tabs__count">28</span></a>
-						<a class="tabs__tab" href="#">Need attention<span class="tabs__count tabs__count--warning">3</span></a>
-						<a class="tabs__tab" href="#">Drafts<span class="tabs__count">2</span></a>
-						<a class="tabs__tab" href="#">Translation outdated<span class="tabs__count tabs__count--warning">2</span></a>
-						<a class="tabs__tab" href="#">Scheduled<span class="tabs__count">1</span></a>
-						<a class="tabs__tab" href="#"><svg class="icon" aria-hidden="true"><use href="#i-plus-lg"/></svg>Save view</a>
+				<section class="card" aria-label="Excursions">
+					<nav class="nav nav-underline" aria-label="List views">
+						<a class="nav-link" href="#" aria-current="page">All<span class="badge">28</span></a>
+						<a class="nav-link" href="#">Need attention<span class="badge badge-subtle-warning">3</span></a>
+						<a class="nav-link" href="#">Drafts<span class="badge">2</span></a>
+						<a class="nav-link" href="#">Translation outdated<span class="badge badge-subtle-warning">2</span></a>
+						<a class="nav-link" href="#">Scheduled<span class="badge">1</span></a>
+						<a class="nav-link" href="#"><i class="bi bi-plus-lg" aria-hidden="true"></i>Save view</a>
 					</nav>
-					<div class="panel__head">
-						<div class="field field--icon">
-							<svg class="icon field__icon" aria-hidden="true"><use href="#i-search"/></svg>
-							<input class="control" type="search" placeholder="Name, slug or code" aria-label="Search excursions">
+					<div class="card-header">
+						<div class="form-adorn">
+							<i class="bi bi-search" aria-hidden="true"></i>
+							<input class="form-control" type="search" placeholder="Name, slug or code" aria-label="Search excursions">
 						</div>
-						<span class="chip" role="group" aria-label="Filter: section Marine"><svg class="icon" aria-hidden="true"><use href="#i-diagram-3"/></svg>Section: Marine<span class="chip__count">9</span><button class="chip__remove" type="button" aria-label="Remove filter: section Marine"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button></span>
-						<button class="chip" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-translate"/></svg>Language: any</button>
-						<button class="chip" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-funnel"/></svg>Filter</button>
-						<div class="toolbar end">
-							<button class="button button--small button--icon button--quiet" type="button" aria-label="Columns"><svg class="icon" aria-hidden="true"><use href="#i-layout-three-columns"/></svg></button>
-							<button class="button button--small button--icon button--quiet" type="button" aria-label="Density"><svg class="icon" aria-hidden="true"><use href="#i-arrows-collapse"/></svg></button>
+						<span class="chip" role="group" aria-label="Filter: section Marine"><i class="bi bi-diagram-3" aria-hidden="true"></i>Section: Marine<span class="chip-count">9</span><button class="chip-dismiss" type="button" aria-label="Remove filter: section Marine"><i class="bi bi-x" aria-hidden="true"></i></button></span>
+						<button class="chip" type="button" aria-pressed="false"><i class="bi bi-translate" aria-hidden="true"></i>Language: any</button>
+						<button class="chip" type="button" aria-pressed="false"><i class="bi bi-funnel" aria-hidden="true"></i>Filter</button>
+						<div class="btn-toolbar ms-auto">
+							<button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Columns"><i class="bi bi-layout-three-columns" aria-hidden="true"></i></button>
+							<button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Density"><i class="bi bi-arrows-collapse" aria-hidden="true"></i></button>
 						</div>
 					</div>
-					<div class="toolbar toolbar--selection" role="region" aria-label="Selected excursions">
+					<div class="selection-bar" role="region" aria-label="Selected excursions">
 						<strong>2 selected</strong>
-						<button class="button button--small" type="button"><svg class="icon" aria-hidden="true"><use href="#i-send"/></svg>Publish</button>
-						<button class="button button--small" type="button"><svg class="icon" aria-hidden="true"><use href="#i-eye-slash"/></svg>Withdraw</button>
-						<button class="button button--small button--soft" type="button"><svg class="icon" aria-hidden="true"><use href="#i-stars"/></svg>Translate what changed</button>
-						<button class="button button--small end" type="button" commandfor="confirm" command="show-modal"><svg class="icon" aria-hidden="true"><use href="#i-trash3"/></svg>Delete…</button>
-						<button class="button button--small button--icon button--quiet" type="button" aria-label="Clear the selection"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+						<button class="btn btn-sm" type="button"><i class="bi bi-send" aria-hidden="true"></i>Publish</button>
+						<button class="btn btn-sm" type="button"><i class="bi bi-eye-slash" aria-hidden="true"></i>Withdraw</button>
+						<button class="btn btn-sm btn-subtle-primary" type="button"><i class="bi bi-stars" aria-hidden="true"></i>Translate what changed</button>
+						<button class="btn btn-sm ms-auto" type="button" commandfor="confirm" command="show-modal"><i class="bi bi-trash3" aria-hidden="true"></i>Delete…</button>
+						<button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Clear the selection"><i class="bi bi-x" aria-hidden="true"></i></button>
 					</div>
-					<div class="panel__body">
-						<table class="rows">
+					<div class="card-body p-0">
+						<table class="table table-hover">
 							<thead>
 								<tr>
-									<th class="rows__check"><input class="check" type="checkbox" aria-label="Select all"></th>
+									<th class="table-check"><input class="check" type="checkbox" aria-label="Select all"></th>
 									<th>Excursion</th>
-									<th class="wide-only">Section</th>
-									<th class="rows__num wide-only">Price from</th>
+									<th class="d-none md:d-table-cell">Section</th>
+									<th class="text-end d-none md:d-table-cell">Price from</th>
 									<th>Languages</th>
-									<th class="wide-only">Sites</th>
-									<th class="wide-only">Changed</th>
-									<th class="wide-only">Status</th>
-									<th class="rows__acts"><span class="offscreen">Actions</span></th>
+									<th class="d-none md:d-table-cell">Sites</th>
+									<th class="d-none md:d-table-cell">Changed</th>
+									<th class="d-none md:d-table-cell">Status</th>
+									<th class="table-actions"><span class="visually-hidden">Actions</span></th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr class="rows__row--danger">
+								<tr class="table-danger">
 									<td><input class="check" type="checkbox" aria-label="Select: Elephant sanctuary"></td>
 									<td>
-										<div class="cluster cluster--nowrap">
-											<span class="demo-thumb demo-thumb--land wide-only"></span>
-											<div class="grow">
-												<a class="rows__name" href="resource.html">Elephant sanctuary: feeding and a walk</a>
-												<div class="rows__sub wide-only">/excursions/elephant-sanctuary/</div>
-												<div class="rows__note"><svg class="icon" aria-hidden="true"><use href="#i-x-octagon-fill"/></svg><span class="muted">Did not rebuild: a PHP warning in the theme template</span></div>
+										<div class="hstack gap-8">
+											<span class="demo-thumb demo-thumb-land d-none md:d-block"></span>
+											<div class="flex-grow-1 min-w-0">
+												<a class="table-title" href="resource.html">Elephant sanctuary: feeding and a walk</a>
+												<div class="table-sub d-none md:d-block">/excursions/elephant-sanctuary/</div>
+												<div class="table-note"><i class="bi bi-x-octagon-fill" aria-hidden="true"></i><span class="text-muted">Did not rebuild: a PHP warning in the theme template</span></div>
 											</div>
 										</div>
 									</td>
-									<td class="wide-only">Land</td>
-									<td class="rows__num wide-only">2,600 THB</td>
-									<td><span class="demo-langs"><span class="demo-lang demo-lang--base">RU</span><span class="demo-lang">EN</span><span class="demo-lang demo-lang--machine">TH</span></span></td>
-									<td class="wide-only"><span class="demo-site demo-site--a">LG</span></td>
-									<td class="wide-only num muted text-small"><time datetime="2026-10-27T11:20">today 11:20</time></td>
-									<td class="wide-only"><span class="pill"><svg class="icon" aria-hidden="true"><use href="#i-check2"/></svg>Published</span></td>
-									<td class="rows__acts">
-										<div class="toolbar toolbar--joined">
-											<a class="button button--small button--icon button--quiet wide-only" href="resource.html" aria-label="Edit"><svg class="icon" aria-hidden="true"><use href="#i-pencil"/></svg></a>
-											<button class="button button--small button--icon button--quiet wide-only" type="button" aria-label="Rebuild"><svg class="icon" aria-hidden="true"><use href="#i-arrow-repeat"/></svg></button>
-											<button class="button button--small button--icon button--quiet" type="button" commandfor="row-menu" command="toggle-popover" aria-haspopup="menu" aria-label="More"><svg class="icon" aria-hidden="true"><use href="#i-three-dots"/></svg></button>
+									<td class="d-none md:d-table-cell">Land</td>
+									<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">2,600 THB</td>
+									<td><span class="demo-langs"><span class="demo-lang demo-lang-base">RU</span><span class="demo-lang">EN</span><span class="demo-lang demo-lang-machine">TH</span></span></td>
+									<td class="d-none md:d-table-cell"><span class="demo-site demo-site-a">LG</span></td>
+									<td class="tabular-nums text-muted fs-12 d-none md:d-table-cell"><time datetime="2026-10-27T11:20">today 11:20</time></td>
+									<td class="d-none md:d-table-cell"><span class="badge"><i class="bi bi-check2" aria-hidden="true"></i>Published</span></td>
+									<td class="table-actions">
+										<div class="btn-group">
+											<a class="btn btn-sm btn-icon btn-text d-none md:d-inline-flex" href="resource.html" aria-label="Edit"><i class="bi bi-pencil" aria-hidden="true"></i></a>
+											<button class="btn btn-sm btn-icon btn-text d-none md:d-inline-flex" type="button" aria-label="Rebuild"><i class="bi bi-arrow-repeat" aria-hidden="true"></i></button>
+											<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="row-menu" command="toggle-popover" aria-haspopup="menu" aria-label="More"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
 										</div>
 									</td>
 								</tr>
-								<tr class="rows__row--warning">
+								<tr class="table-warning">
 									<td><input class="check" type="checkbox" checked aria-label="Select: Koh Tao and Nang Yuan"></td>
 									<td>
-										<div class="cluster cluster--nowrap">
-											<span class="demo-thumb wide-only"></span>
-											<div class="grow">
-												<a class="rows__name" href="resource.html">Koh Tao and Nang Yuan: snorkelling two islands</a>
-												<div class="rows__sub wide-only">/excursions/koh-tao-nangyuan/</div>
+										<div class="hstack gap-8">
+											<span class="demo-thumb d-none md:d-block"></span>
+											<div class="flex-grow-1 min-w-0">
+												<a class="table-title" href="resource.html">Koh Tao and Nang Yuan: snorkelling two islands</a>
+												<div class="table-sub d-none md:d-block">/excursions/koh-tao-nangyuan/</div>
 											</div>
 										</div>
 									</td>
-									<td class="wide-only">Marine</td>
-									<td class="rows__num wide-only">2,900 THB</td>
-									<td><span class="demo-langs"><span class="demo-lang demo-lang--base">RU</span><span class="demo-lang demo-lang--old">EN</span><span class="demo-lang demo-lang--machine">TH</span></span></td>
-									<td class="wide-only"><span class="demo-site demo-site--a">LG</span></td>
-									<td class="wide-only num muted text-small"><time datetime="2026-10-26T18:05">yesterday 18:05</time></td>
-									<td class="wide-only"><span class="pill"><svg class="icon" aria-hidden="true"><use href="#i-check2"/></svg>Published</span></td>
-									<td class="rows__acts">
-										<div class="toolbar toolbar--joined">
-											<a class="button button--small button--icon button--quiet wide-only" href="resource.html" aria-label="Edit"><svg class="icon" aria-hidden="true"><use href="#i-pencil"/></svg></a>
-											<button class="button button--small button--icon button--quiet wide-only" type="button" aria-label="Preview"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg></button>
-											<button class="button button--small button--icon button--quiet" type="button" commandfor="row-menu" command="toggle-popover" aria-haspopup="menu" aria-label="More"><svg class="icon" aria-hidden="true"><use href="#i-three-dots"/></svg></button>
+									<td class="d-none md:d-table-cell">Marine</td>
+									<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">2,900 THB</td>
+									<td><span class="demo-langs"><span class="demo-lang demo-lang-base">RU</span><span class="demo-lang demo-lang-old">EN</span><span class="demo-lang demo-lang-machine">TH</span></span></td>
+									<td class="d-none md:d-table-cell"><span class="demo-site demo-site-a">LG</span></td>
+									<td class="tabular-nums text-muted fs-12 d-none md:d-table-cell"><time datetime="2026-10-26T18:05">yesterday 18:05</time></td>
+									<td class="d-none md:d-table-cell"><span class="badge"><i class="bi bi-check2" aria-hidden="true"></i>Published</span></td>
+									<td class="table-actions">
+										<div class="btn-group">
+											<a class="btn btn-sm btn-icon btn-text d-none md:d-inline-flex" href="resource.html" aria-label="Edit"><i class="bi bi-pencil" aria-hidden="true"></i></a>
+											<button class="btn btn-sm btn-icon btn-text d-none md:d-inline-flex" type="button" aria-label="Preview"><i class="bi bi-eye" aria-hidden="true"></i></button>
+											<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="row-menu" command="toggle-popover" aria-haspopup="menu" aria-label="More"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
 										</div>
 									</td>
 								</tr>
 								<tr>
 									<td><input class="check" type="checkbox" checked aria-label="Select: Ang Thong"></td>
 									<td>
-										<div class="cluster cluster--nowrap">
-											<span class="demo-thumb wide-only"></span>
-											<div class="grow">
-												<a class="rows__name" href="resource.html">Ang Thong: marine park by speedboat</a> <span class="pill">draft waiting</span>
-												<div class="rows__sub wide-only">/excursions/ang-thong/</div>
+										<div class="hstack gap-8">
+											<span class="demo-thumb d-none md:d-block"></span>
+											<div class="flex-grow-1 min-w-0">
+												<a class="table-title" href="resource.html">Ang Thong: marine park by speedboat</a> <span class="badge">draft waiting</span>
+												<div class="table-sub d-none md:d-block">/excursions/ang-thong/</div>
 											</div>
 										</div>
 									</td>
-									<td class="wide-only">Marine</td>
-									<td class="rows__num wide-only">2,500 THB</td>
-									<td><span class="demo-langs"><span class="demo-lang demo-lang--base">RU</span><span class="demo-lang">EN</span><span class="demo-lang demo-lang--machine">TH</span></span></td>
-									<td class="wide-only"><span class="cluster"><span class="demo-site demo-site--a">LG</span><span class="demo-site demo-site--b">AT</span></span></td>
-									<td class="wide-only num muted text-small"><time datetime="2026-10-27T12:04">today 12:04</time></td>
-									<td class="wide-only"><span class="pill"><svg class="icon" aria-hidden="true"><use href="#i-check2"/></svg>Published</span></td>
-									<td class="rows__acts">
-										<div class="toolbar toolbar--joined">
-											<a class="button button--small button--icon button--quiet wide-only" href="resource.html" aria-label="Edit"><svg class="icon" aria-hidden="true"><use href="#i-pencil"/></svg></a>
-											<button class="button button--small button--icon button--quiet wide-only" type="button" aria-label="Preview"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg></button>
-											<button class="button button--small button--icon button--quiet" type="button" commandfor="row-menu" command="toggle-popover" aria-haspopup="menu" aria-label="More"><svg class="icon" aria-hidden="true"><use href="#i-three-dots"/></svg></button>
+									<td class="d-none md:d-table-cell">Marine</td>
+									<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">2,500 THB</td>
+									<td><span class="demo-langs"><span class="demo-lang demo-lang-base">RU</span><span class="demo-lang">EN</span><span class="demo-lang demo-lang-machine">TH</span></span></td>
+									<td class="d-none md:d-table-cell"><span class="hstack gap-8"><span class="demo-site demo-site-a">LG</span><span class="demo-site demo-site-b">AT</span></span></td>
+									<td class="tabular-nums text-muted fs-12 d-none md:d-table-cell"><time datetime="2026-10-27T12:04">today 12:04</time></td>
+									<td class="d-none md:d-table-cell"><span class="badge"><i class="bi bi-check2" aria-hidden="true"></i>Published</span></td>
+									<td class="table-actions">
+										<div class="btn-group">
+											<a class="btn btn-sm btn-icon btn-text d-none md:d-inline-flex" href="resource.html" aria-label="Edit"><i class="bi bi-pencil" aria-hidden="true"></i></a>
+											<button class="btn btn-sm btn-icon btn-text d-none md:d-inline-flex" type="button" aria-label="Preview"><i class="bi bi-eye" aria-hidden="true"></i></button>
+											<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="row-menu" command="toggle-popover" aria-haspopup="menu" aria-label="More"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
 										</div>
 									</td>
 								</tr>
 								<tr>
 									<td><input class="check" type="checkbox" aria-label="Select: Sunset junk cruise"></td>
 									<td>
-										<div class="cluster cluster--nowrap">
-											<span class="demo-thumb demo-thumb--sunset wide-only"></span>
-											<div class="grow">
-												<a class="rows__name" href="resource.html">Sunset junk cruise with dinner</a>
-												<div class="rows__sub wide-only">/excursions/junk-sunset-dinner/</div>
+										<div class="hstack gap-8">
+											<span class="demo-thumb demo-thumb-sunset d-none md:d-block"></span>
+											<div class="flex-grow-1 min-w-0">
+												<a class="table-title" href="resource.html">Sunset junk cruise with dinner</a>
+												<div class="table-sub d-none md:d-block">/excursions/junk-sunset-dinner/</div>
 											</div>
 										</div>
 									</td>
-									<td class="wide-only">Evening</td>
-									<td class="rows__num wide-only">3,400 THB</td>
-									<td><span class="demo-langs"><span class="demo-lang demo-lang--base">RU</span><span class="demo-lang">EN</span><span class="demo-lang demo-lang--none">TH</span></span></td>
-									<td class="wide-only"><span class="demo-site demo-site--a">LG</span></td>
-									<td class="wide-only num muted text-small"><time datetime="2026-10-02">Oct 2</time></td>
-									<td class="wide-only"><span class="pill pill--info"><svg class="icon" aria-hidden="true"><use href="#i-calendar-event"/></svg>Oct 30, 09:00</span></td>
-									<td class="rows__acts">
-										<div class="toolbar toolbar--joined">
-											<a class="button button--small button--icon button--quiet wide-only" href="resource.html" aria-label="Edit"><svg class="icon" aria-hidden="true"><use href="#i-pencil"/></svg></a>
-											<button class="button button--small button--icon button--quiet wide-only" type="button" aria-label="Preview"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg></button>
-											<button class="button button--small button--icon button--quiet" type="button" commandfor="row-menu" command="toggle-popover" aria-haspopup="menu" aria-label="More"><svg class="icon" aria-hidden="true"><use href="#i-three-dots"/></svg></button>
+									<td class="d-none md:d-table-cell">Evening</td>
+									<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">3,400 THB</td>
+									<td><span class="demo-langs"><span class="demo-lang demo-lang-base">RU</span><span class="demo-lang">EN</span><span class="demo-lang demo-lang-none">TH</span></span></td>
+									<td class="d-none md:d-table-cell"><span class="demo-site demo-site-a">LG</span></td>
+									<td class="tabular-nums text-muted fs-12 d-none md:d-table-cell"><time datetime="2026-10-02">Oct 2</time></td>
+									<td class="d-none md:d-table-cell"><span class="badge badge-subtle-info"><i class="bi bi-calendar-event" aria-hidden="true"></i>Oct 30, 09:00</span></td>
+									<td class="table-actions">
+										<div class="btn-group">
+											<a class="btn btn-sm btn-icon btn-text d-none md:d-inline-flex" href="resource.html" aria-label="Edit"><i class="bi bi-pencil" aria-hidden="true"></i></a>
+											<button class="btn btn-sm btn-icon btn-text d-none md:d-inline-flex" type="button" aria-label="Preview"><i class="bi bi-eye" aria-hidden="true"></i></button>
+											<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="row-menu" command="toggle-popover" aria-haspopup="menu" aria-label="More"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
 										</div>
 									</td>
 								</tr>
 								<tr>
 									<td><input class="check" type="checkbox" aria-label="Select: Deep sea fishing"></td>
 									<td>
-										<div class="cluster cluster--nowrap">
-											<span class="demo-thumb wide-only"></span>
-											<div class="grow">
-												<a class="rows__name" href="resource.html">Deep sea fishing</a>
-												<div class="rows__sub wide-only">/excursions/deep-sea-fishing/</div>
+										<div class="hstack gap-8">
+											<span class="demo-thumb d-none md:d-block"></span>
+											<div class="flex-grow-1 min-w-0">
+												<a class="table-title" href="resource.html">Deep sea fishing</a>
+												<div class="table-sub d-none md:d-block">/excursions/deep-sea-fishing/</div>
 											</div>
 										</div>
 									</td>
-									<td class="wide-only">Marine</td>
-									<td class="rows__num wide-only">3,900 THB</td>
-									<td><span class="demo-langs"><span class="demo-lang demo-lang--base">RU</span><span class="demo-lang demo-lang--none">EN</span><span class="demo-lang demo-lang--none">TH</span></span></td>
-									<td class="wide-only muted text-small">nowhere</td>
-									<td class="wide-only num muted text-small"><time datetime="2026-09-27">Sep 27</time></td>
-									<td class="wide-only"><span class="pill"><svg class="icon" aria-hidden="true"><use href="#i-pencil-square"/></svg>Draft</span></td>
-									<td class="rows__acts">
-										<div class="toolbar toolbar--joined">
-											<a class="button button--small button--icon button--quiet wide-only" href="resource.html" aria-label="Edit"><svg class="icon" aria-hidden="true"><use href="#i-pencil"/></svg></a>
-											<button class="button button--small button--icon button--quiet wide-only" type="button" aria-label="Preview"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg></button>
-											<button class="button button--small button--icon button--quiet" type="button" commandfor="row-menu" command="toggle-popover" aria-haspopup="menu" aria-label="More"><svg class="icon" aria-hidden="true"><use href="#i-three-dots"/></svg></button>
+									<td class="d-none md:d-table-cell">Marine</td>
+									<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">3,900 THB</td>
+									<td><span class="demo-langs"><span class="demo-lang demo-lang-base">RU</span><span class="demo-lang demo-lang-none">EN</span><span class="demo-lang demo-lang-none">TH</span></span></td>
+									<td class="text-muted fs-12 d-none md:d-table-cell">nowhere</td>
+									<td class="tabular-nums text-muted fs-12 d-none md:d-table-cell"><time datetime="2026-09-27">Sep 27</time></td>
+									<td class="d-none md:d-table-cell"><span class="badge"><i class="bi bi-pencil-square" aria-hidden="true"></i>Draft</span></td>
+									<td class="table-actions">
+										<div class="btn-group">
+											<a class="btn btn-sm btn-icon btn-text d-none md:d-inline-flex" href="resource.html" aria-label="Edit"><i class="bi bi-pencil" aria-hidden="true"></i></a>
+											<button class="btn btn-sm btn-icon btn-text d-none md:d-inline-flex" type="button" aria-label="Preview"><i class="bi bi-eye" aria-hidden="true"></i></button>
+											<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="row-menu" command="toggle-popover" aria-haspopup="menu" aria-label="More"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
 										</div>
 									</td>
 								</tr>
-								<tr class="rows__row--muted">
+								<tr class="table-secondary">
 									<td><input class="check" type="checkbox" aria-label="Select: Muay Thai night"></td>
 									<td>
-										<div class="cluster cluster--nowrap">
-											<span class="demo-thumb demo-thumb--sunset wide-only"></span>
-											<div class="grow">
-												<a class="rows__name" href="resource.html">Muay Thai: an evening at the stadium</a>
-												<div class="rows__sub wide-only">/excursions/muay-thai-night/</div>
+										<div class="hstack gap-8">
+											<span class="demo-thumb demo-thumb-sunset d-none md:d-block"></span>
+											<div class="flex-grow-1 min-w-0">
+												<a class="table-title" href="resource.html">Muay Thai: an evening at the stadium</a>
+												<div class="table-sub d-none md:d-block">/excursions/muay-thai-night/</div>
 											</div>
 										</div>
 									</td>
-									<td class="wide-only">Evening</td>
-									<td class="rows__num wide-only">1,500 THB</td>
-									<td><span class="demo-langs"><span class="demo-lang demo-lang--base">RU</span><span class="demo-lang">EN</span><span class="demo-lang">TH</span></span></td>
-									<td class="wide-only muted text-small">withdrawn</td>
-									<td class="wide-only num muted text-small"><time datetime="2026-09-20">Sep 20</time></td>
-									<td class="wide-only"><span class="pill"><svg class="icon" aria-hidden="true"><use href="#i-eye-slash"/></svg>Withdrawn</span></td>
-									<td class="rows__acts">
-										<div class="toolbar toolbar--joined">
-											<a class="button button--small button--icon button--quiet wide-only" href="resource.html" aria-label="Edit"><svg class="icon" aria-hidden="true"><use href="#i-pencil"/></svg></a>
-											<button class="button button--small button--icon button--quiet wide-only" type="button" aria-label="Preview"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg></button>
-											<button class="button button--small button--icon button--quiet" type="button" commandfor="row-menu" command="toggle-popover" aria-haspopup="menu" aria-label="More"><svg class="icon" aria-hidden="true"><use href="#i-three-dots"/></svg></button>
+									<td class="d-none md:d-table-cell">Evening</td>
+									<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">1,500 THB</td>
+									<td><span class="demo-langs"><span class="demo-lang demo-lang-base">RU</span><span class="demo-lang">EN</span><span class="demo-lang">TH</span></span></td>
+									<td class="text-muted fs-12 d-none md:d-table-cell">withdrawn</td>
+									<td class="tabular-nums text-muted fs-12 d-none md:d-table-cell"><time datetime="2026-09-20">Sep 20</time></td>
+									<td class="d-none md:d-table-cell"><span class="badge"><i class="bi bi-eye-slash" aria-hidden="true"></i>Withdrawn</span></td>
+									<td class="table-actions">
+										<div class="btn-group">
+											<a class="btn btn-sm btn-icon btn-text d-none md:d-inline-flex" href="resource.html" aria-label="Edit"><i class="bi bi-pencil" aria-hidden="true"></i></a>
+											<button class="btn btn-sm btn-icon btn-text d-none md:d-inline-flex" type="button" aria-label="Preview"><i class="bi bi-eye" aria-hidden="true"></i></button>
+											<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="row-menu" command="toggle-popover" aria-haspopup="menu" aria-label="More"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
 										</div>
 									</td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
-					<div class="pager">
+					<div class="card-footer justify-content-between text-muted fs-12">
 						<span>Showing 6 of 28</span>
-						<a class="button button--small" href="#">Next 25<svg class="icon icon--flip" aria-hidden="true"><use href="#i-chevron-right"/></svg></a>
+						<a class="btn btn-sm" href="#">Next 25<i class="bi bi-chevron-right flip-rtl" aria-hidden="true"></i></a>
 					</div>
 				</section>
 
-				<p class="muted text-small"><svg class="icon" aria-hidden="true"><use href="#i-keyboard"/></svg> Keys: <kbd>/</kbd> search, <kbd>⌘K</kbd> command palette, <kbd>N</kbd> new excursion, <kbd>J</kbd> / <kbd>K</kbd> rows.</p>
+				<p class="text-muted fs-12"><i class="bi bi-keyboard" aria-hidden="true"></i> Keys: <kbd>/</kbd> search, <kbd>⌘K</kbd> command palette, <kbd>N</kbd> new excursion, <kbd>J</kbd> / <kbd>K</kbd> rows.</p>
 			</div>
 		</main>
 	</div>
 
 	<div id="row-menu" class="menu" popover role="menu" aria-label="More">
-		<a class="menu__item" href="resource.html" role="menuitem"><svg class="icon" aria-hidden="true"><use href="#i-pencil"/></svg>Edit</a>
-		<button class="menu__item" type="button" role="menuitem"><svg class="icon" aria-hidden="true"><use href="#i-files"/></svg>Duplicate</button>
-		<button class="menu__item" type="button" role="menuitem"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg>Preview on the site</button>
-		<hr class="menu__sep">
-		<button class="menu__item" type="button" role="menuitem"><svg class="icon" aria-hidden="true"><use href="#i-eye-slash"/></svg>Withdraw</button>
-		<button class="menu__item menu__item--danger" type="button" role="menuitem" commandfor="confirm" command="show-modal"><svg class="icon" aria-hidden="true"><use href="#i-trash3"/></svg>Delete…</button>
+		<a class="menu-item" href="resource.html" role="menuitem"><i class="bi bi-pencil" aria-hidden="true"></i>Edit</a>
+		<button class="menu-item" type="button" role="menuitem"><i class="bi bi-files" aria-hidden="true"></i>Duplicate</button>
+		<button class="menu-item" type="button" role="menuitem"><i class="bi bi-eye" aria-hidden="true"></i>Preview on the site</button>
+		<hr class="menu-divider">
+		<button class="menu-item" type="button" role="menuitem"><i class="bi bi-eye-slash" aria-hidden="true"></i>Withdraw</button>
+		<button class="menu-item menu-item-danger" type="button" role="menuitem" commandfor="confirm" command="show-modal"><i class="bi bi-trash3" aria-hidden="true"></i>Delete…</button>
 	</div>
 
 	<dialog id="confirm" class="dialog" aria-labelledby="confirm-title">
-		<div class="dialog__head">
-			<span class="tile tile--small tile--danger"><svg class="icon" aria-hidden="true"><use href="#i-trash3"/></svg></span>
-			<h2 id="confirm-title">Delete 2 excursions?</h2>
+		<div class="dialog-header">
+			<span class="icon-tile icon-tile-sm icon-tile-danger"><i class="bi bi-trash3" aria-hidden="true"></i></span>
+			<h2 class="dialog-title" id="confirm-title">Delete 2 excursions?</h2>
 		</div>
-		<div class="dialog__body stack--tight stack">
+		<div class="dialog-body vstack gap-8">
 			<p>Their pages on lagoon.example and angthong.example go away, and 6 pages × 3 languages are rebuilt.</p>
-			<p class="muted text-small">Revisions are kept for 30 days in the journal.</p>
+			<p class="text-muted fs-12">Revisions are kept for 30 days in the journal.</p>
 		</div>
-		<div class="dialog__foot">
-			<button class="button" type="button" commandfor="confirm" command="close" autofocus>Cancel</button>
-			<button class="button button--danger" type="button" commandfor="confirm" command="close"><svg class="icon" aria-hidden="true"><use href="#i-trash3"/></svg>Delete</button>
+		<div class="dialog-footer">
+			<button class="btn" type="button" commandfor="confirm" command="close" autofocus>Cancel</button>
+			<button class="btn btn-danger" type="button" commandfor="confirm" command="close"><i class="bi bi-trash3" aria-hidden="true"></i>Delete</button>
 		</div>
 	</dialog>
 
-	<div class="notices" role="status">
-		<div class="notice notice--success">
-			<svg class="icon" aria-hidden="true"><use href="#i-check-circle-fill"/></svg>
-			<div class="notice__text"><strong>Published</strong><div class="muted text-small">Ang Thong · 3 pages × 3 languages rebuilt</div></div>
-			<button class="button button--small button--icon button--quiet" type="button" aria-label="Close"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+	<div class="toast-container" role="status">
+		<div class="toast toast-success">
+			<i class="bi bi-check-circle-fill" aria-hidden="true"></i>
+			<div class="toast-body"><strong>Published</strong><div class="text-muted fs-12">Ang Thong · 3 pages × 3 languages rebuilt</div></div>
+			<button class="btn-close" type="button" aria-label="Close"></button>
 		</div>
 	</div>
 
 	<div class="demo-switch" role="group" aria-label="Demo view">
-		<span class="demo-switch__group">
-			<button class="button button--small button--quiet" type="button" data-demo-theme="system">System</button>
-			<button class="button button--small button--quiet" type="button" data-demo-theme="light">Light</button>
-			<button class="button button--small button--quiet" type="button" data-demo-theme="dark">Dark</button>
+		<span class="demo-switch-group">
+			<button class="btn btn-sm btn-text" type="button" data-demo-theme="system">System</button>
+			<button class="btn btn-sm btn-text" type="button" data-demo-theme="light">Light</button>
+			<button class="btn btn-sm btn-text" type="button" data-demo-theme="dark">Dark</button>
 		</span>
-		<span class="demo-switch__group">
-			<button class="button button--small button--quiet" type="button" data-demo-dir="ltr">LTR</button>
-			<button class="button button--small button--quiet" type="button" data-demo-dir="rtl">RTL</button>
+		<span class="demo-switch-group">
+			<button class="btn btn-sm btn-text" type="button" data-demo-dir="ltr">LTR</button>
+			<button class="btn btn-sm btn-text" type="button" data-demo-dir="rtl">RTL</button>
 		</span>
-		<span class="demo-switch__group">
-			<button class="button button--small button--quiet" type="button" data-demo-density="comfortable">Comfortable</button>
-			<button class="button button--small button--quiet" type="button" data-demo-density="compact">Compact</button>
+		<span class="demo-switch-group">
+			<button class="btn btn-sm btn-text" type="button" data-demo-density="comfortable">Comfortable</button>
+			<button class="btn btn-sm btn-text" type="button" data-demo-density="compact">Compact</button>
 		</span>
 	</div>
 </body>

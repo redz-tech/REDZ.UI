@@ -1,0 +1,31 @@
+@layer components {
+	.empty-state {
+		display: grid;
+		justify-items: center;
+		gap: var(--redz-space-8);
+		padding: var(--redz-space-32) var(--redz-space-16);
+		color: var(--redz-text-muted);
+		text-align: center;
+	}
+
+	.empty-state > .bi {
+		color: var(--redz-text-faint);
+		font-size: 2.5rem;
+	}
+
+	.empty-state-drop {
+		grid-template-columns: auto 1fr;
+		justify-items: start;
+		align-items: center;
+		padding: var(--redz-space-12) var(--redz-space-16);
+		border: 1px dashed var(--redz-border-strong);
+		border-radius: var(--redz-radius-12);
+		text-align: start;
+		cursor: pointer;
+	}
+
+	.empty-state-drop:hover {
+		border-color: var(--redz-primary);
+		background: var(--redz-primary-subtle);
+	}
+}

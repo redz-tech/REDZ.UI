@@ -1,0 +1,80 @@
+@layer components {
+	.badge {
+		--redz-badge-bg: var(--redz-bg-hover);
+		--redz-badge-fg: var(--redz-text-muted);
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3125rem;
+		padding: 0.125rem 0.5rem;
+		border-radius: 999px;
+		outline: 1px solid transparent;
+		outline-offset: -1px;
+		background: var(--redz-badge-bg);
+		color: var(--redz-badge-fg);
+		font-size: var(--redz-fs-12);
+		font-weight: 550;
+		line-height: 1rem;
+		white-space: nowrap;
+		print-color-adjust: exact;
+	}
+
+	.badge-primary {
+		--redz-badge-bg: var(--redz-primary);
+		--redz-badge-fg: var(--redz-primary-contrast);
+	}
+
+	.badge-secondary {
+		--redz-badge-bg: var(--redz-secondary);
+		--redz-badge-fg: var(--redz-secondary-contrast);
+	}
+
+	.badge-success {
+		--redz-badge-bg: var(--redz-success);
+		--redz-badge-fg: var(--redz-success-contrast);
+	}
+
+	.badge-danger {
+		--redz-badge-bg: var(--redz-danger);
+		--redz-badge-fg: var(--redz-danger-contrast);
+	}
+
+	.badge-warning {
+		--redz-badge-bg: var(--redz-warning);
+		--redz-badge-fg: var(--redz-warning-contrast);
+	}
+
+	.badge-info {
+		--redz-badge-bg: var(--redz-info);
+		--redz-badge-fg: var(--redz-info-contrast);
+	}
+
+	.badge-subtle-primary {
+		--redz-badge-bg: var(--redz-primary-subtle);
+		--redz-badge-fg: var(--redz-primary);
+	}
+
+	.badge-subtle-secondary {
+		--redz-badge-bg: var(--redz-secondary-subtle);
+		--redz-badge-fg: var(--redz-secondary);
+	}
+
+	.badge-subtle-success {
+		--redz-badge-bg: var(--redz-success-subtle);
+		--redz-badge-fg: var(--redz-success);
+	}
+
+	.badge-subtle-danger {
+		--redz-badge-bg: var(--redz-danger-subtle);
+		--redz-badge-fg: var(--redz-danger);
+	}
+
+	.badge-subtle-warning {
+		--redz-badge-bg: var(--redz-warning-subtle);
+		--redz-badge-fg: var(--redz-warning);
+	}
+
+	.badge-subtle-info {
+		--redz-badge-bg: var(--redz-info-subtle);
+		--redz-badge-fg: var(--redz-info);
+	}
+}

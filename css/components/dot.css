@@ -1,0 +1,42 @@
+@layer components {
+	.dot {
+		display: inline-block;
+		flex: none;
+		inline-size: 0.5rem;
+		block-size: 0.5rem;
+		border-radius: 50%;
+		background: var(--redz-text-faint);
+		print-color-adjust: exact;
+	}
+
+	.dot-primary {
+		background: var(--redz-primary);
+	}
+
+	.dot-secondary {
+		background: var(--redz-secondary);
+	}
+
+	.dot-success {
+		background: var(--redz-success);
+	}
+
+	.dot-danger {
+		background: var(--redz-danger);
+	}
+
+	.dot-warning {
+		background: var(--redz-warning);
+	}
+
+	.dot-info {
+		background: var(--redz-info);
+	}
+
+	@media (forced-colors: active) {
+		.dot {
+			forced-color-adjust: none;
+			background: CanvasText;
+		}
+	}
+}

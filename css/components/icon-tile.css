@@ -1,0 +1,48 @@
+@layer components {
+	.icon-tile {
+		--redz-tile-bg: var(--redz-primary-subtle);
+		--redz-tile-fg: var(--redz-primary);
+		display: grid;
+		place-items: center;
+		flex: none;
+		inline-size: 2.5rem;
+		block-size: 2.5rem;
+		border-radius: var(--redz-radius-12);
+		background: var(--redz-tile-bg);
+		color: var(--redz-tile-fg);
+		font-size: 1.25rem;
+		print-color-adjust: exact;
+	}
+
+	.icon-tile-sm {
+		inline-size: 2rem;
+		block-size: 2rem;
+		border-radius: var(--redz-radius-8);
+		font-size: 1rem;
+	}
+
+	.icon-tile-secondary {
+		--redz-tile-bg: var(--redz-secondary-subtle);
+		--redz-tile-fg: var(--redz-secondary);
+	}
+
+	.icon-tile-success {
+		--redz-tile-bg: var(--redz-success-subtle);
+		--redz-tile-fg: var(--redz-success);
+	}
+
+	.icon-tile-danger {
+		--redz-tile-bg: var(--redz-danger-subtle);
+		--redz-tile-fg: var(--redz-danger);
+	}
+
+	.icon-tile-warning {
+		--redz-tile-bg: var(--redz-warning-subtle);
+		--redz-tile-fg: var(--redz-warning);
+	}
+
+	.icon-tile-info {
+		--redz-tile-bg: var(--redz-info-subtle);
+		--redz-tile-fg: var(--redz-info);
+	}
+}

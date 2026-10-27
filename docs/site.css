@@ -2,49 +2,54 @@
 	.site {
 		inline-size: min(100% - 2rem, 60rem);
 		margin-inline: auto;
-		padding-block: var(--space-6);
+		padding-block: var(--redz-space-32);
 	}
 
-	.site__title {
-		font-size: 2rem;
+	.site-title {
+		font-size: var(--redz-fs-32);
 		letter-spacing: -0.02em;
 	}
 
-	.site__lead {
-		max-inline-size: 40rem;
-		color: var(--ink-muted);
-		font-size: 1rem;
-	}
-
-	.site ul {
+	.site ul:not([class]) {
 		margin-block: 0;
 		padding-inline-start: 1.25rem;
 	}
 
-	.site__card {
+	.site li + li {
+		margin-block-start: var(--redz-space-4);
+	}
+
+	.site-card {
 		display: grid;
-		gap: var(--space-1);
-		padding: var(--space-4);
-		border: 1px solid var(--line);
-		border-radius: var(--radius-3);
-		background: var(--surface);
-		color: var(--ink);
+		align-content: start;
+		gap: var(--redz-space-4);
+		padding: var(--redz-space-16);
+		border: 1px solid var(--redz-border);
+		border-radius: var(--redz-radius-12);
+		background: var(--redz-bg);
+		color: var(--redz-text);
 		text-decoration: none;
 	}
 
-	.site__card:hover {
-		border-color: var(--line-strong);
+	.site-card:hover {
+		border-color: var(--redz-border-strong);
 		text-decoration: none;
 	}
 
-	.site__card > strong {
-		color: var(--accent);
+	.site-card > strong {
+		color: var(--redz-primary);
 	}
 
-	.site__foot {
-		padding-block-start: var(--space-4);
-		border-block-start: 1px solid var(--line);
-		color: var(--ink-muted);
-		font-size: var(--text-small);
+	.site-code {
+		overflow-x: auto;
+		padding: var(--redz-space-12) var(--redz-space-16);
+		border-radius: var(--redz-radius-8);
+		background: var(--redz-bg-page);
+		font-size: var(--redz-fs-12);
+		line-height: var(--redz-lh-20);
+	}
+
+	.site-code > code {
+		font-size: inherit;
 	}
 }

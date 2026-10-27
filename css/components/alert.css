@@ -1,0 +1,52 @@
+@layer components {
+	.alert {
+		--redz-alert-bg: var(--redz-secondary-subtle);
+		--redz-alert-icon: var(--redz-secondary);
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--redz-space-8) var(--redz-space-12);
+		padding: var(--redz-space-12) var(--redz-space-16);
+		border-radius: var(--redz-radius-12);
+		outline: 1px solid transparent;
+		outline-offset: -1px;
+		background: var(--redz-alert-bg);
+		color: var(--redz-text);
+		print-color-adjust: exact;
+	}
+
+	.alert > .bi {
+		color: var(--redz-alert-icon);
+		font-size: 1.125rem;
+	}
+
+	.alert > div {
+		flex: 1 1 16rem;
+		min-inline-size: 0;
+	}
+
+	.alert-primary {
+		--redz-alert-bg: var(--redz-primary-subtle);
+		--redz-alert-icon: var(--redz-primary);
+	}
+
+	.alert-success {
+		--redz-alert-bg: var(--redz-success-subtle);
+		--redz-alert-icon: var(--redz-success);
+	}
+
+	.alert-danger {
+		--redz-alert-bg: var(--redz-danger-subtle);
+		--redz-alert-icon: var(--redz-danger);
+	}
+
+	.alert-warning {
+		--redz-alert-bg: var(--redz-warning-subtle);
+		--redz-alert-icon: var(--redz-warning);
+	}
+
+	.alert-info {
+		--redz-alert-bg: var(--redz-info-subtle);
+		--redz-alert-icon: var(--redz-info);
+	}
+}

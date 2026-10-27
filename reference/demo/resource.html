@@ -4,299 +4,266 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Ang Thong — REDZ.UI demo</title>
+	<link rel="icon" href="data:,">
 	<link rel="stylesheet" href="../../css/index.css">
+	<link rel="stylesheet" href="../../css/icons.css">
 	<link rel="stylesheet" href="demo.css">
 	<script src="demo.js"></script>
 </head>
 <body>
-	<svg id="sprite" hidden>
-		<symbol id="i-bricks" viewBox="0 0 16 16"><path d="M0 .5A.5.5 0 0 1 .5 0h15a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5H2v-2H.5a.5.5 0 0 1-.5-.5v-3A.5.5 0 0 1 .5 6H2V4H.5a.5.5 0 0 1-.5-.5zM3 4v2h4.5V4zm5.5 0v2H13V4zM3 10v2h4.5v-2zm5.5 0v2H13v-2zM1 1v2h3.5V1zm4.5 0v2h5V1zm6 0v2H15V1zM1 7v2h3.5V7zm4.5 0v2h5V7zm6 0v2H15V7zM1 13v2h3.5v-2zm4.5 0v2h5v-2zm6 0v2H15v-2z"/></symbol>
-		<symbol id="i-calendar-event" viewBox="0 0 16 16"><path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/></symbol>
-		<symbol id="i-card-heading" viewBox="0 0 16 16"><path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"/><path d="M3 8.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m0-5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5z"/></symbol>
-		<symbol id="i-cash-coin" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8m5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0"/><path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.936-1.09-1.1l-.296-.07v-1.2c.376.043.614.248.671.532h.658c-.047-.575-.54-1.024-1.329-1.073V8.5h-.375v.45c-.747.073-1.255.522-1.255 1.158 0 .562.378.92 1.007 1.066l.248.061v1.272c-.384-.058-.639-.27-.696-.563h-.668zm1.36-1.354c-.369-.085-.569-.26-.569-.522 0-.294.216-.514.572-.578v1.1zm.432.746c.449.104.655.272.655.569 0 .339-.257.571-.709.614v-1.195z"/><path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083q.088-.517.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1z"/><path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 6 6 0 0 1 3.13-1.567"/></symbol>
-		<symbol id="i-check2" viewBox="0 0 16 16"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/></symbol>
-		<symbol id="i-chevron-down" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/></symbol>
-		<symbol id="i-clock-history" viewBox="0 0 16 16"><path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z"/><path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z"/><path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5"/></symbol>
-		<symbol id="i-compass" viewBox="0 0 16 16"><path d="M8 16.016a7.5 7.5 0 0 0 1.962-14.74A1 1 0 0 0 9 0H7a1 1 0 0 0-.962 1.276A7.5 7.5 0 0 0 8 16.016m6.5-7.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0"/><path d="m6.94 7.44 4.95-2.83-2.83 4.95-4.949 2.83 2.828-4.95z"/></symbol>
-		<symbol id="i-exclamation-triangle-fill" viewBox="0 0 16 16"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/></symbol>
-		<symbol id="i-eye" viewBox="0 0 16 16"><path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/><path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/></symbol>
-		<symbol id="i-file-diff" viewBox="0 0 16 16"><path d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4m-2.5 6.5A.5.5 0 0 1 6 10h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5"/><path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1"/></symbol>
-		<symbol id="i-file-earmark-text" viewBox="0 0 16 16"><path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"/><path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/></symbol>
-		<symbol id="i-floppy" viewBox="0 0 16 16"><path d="M11 2H9v3h2z"/><path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0M1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5m3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4zM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5z"/></symbol>
-		<symbol id="i-gear" viewBox="0 0 16 16"><path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/><path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/></symbol>
-		<symbol id="i-globe2" viewBox="0 0 16 16"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855q-.215.403-.395.872c.705.157 1.472.257 2.282.287zM4.249 3.539q.214-.577.481-1.078a7 7 0 0 1 .597-.933A7 7 0 0 0 3.051 3.05q.544.277 1.198.49zM3.509 7.5c.036-1.07.188-2.087.436-3.008a9 9 0 0 1-1.565-.667A6.96 6.96 0 0 0 1.018 7.5zm1.4-2.741a12.3 12.3 0 0 0-.4 2.741H7.5V5.091c-.91-.03-1.783-.145-2.591-.332M8.5 5.09V7.5h2.99a12.3 12.3 0 0 0-.399-2.741c-.808.187-1.681.301-2.591.332zM4.51 8.5c.035.987.176 1.914.399 2.741A13.6 13.6 0 0 1 7.5 10.91V8.5zm3.99 0v2.409c.91.03 1.783.145 2.591.332.223-.827.364-1.754.4-2.741zm-3.282 3.696q.18.469.395.872c.552 1.035 1.218 1.65 1.887 1.855V11.91c-.81.03-1.577.13-2.282.287zm.11 2.276a7 7 0 0 1-.598-.933 9 9 0 0 1-.481-1.079 8.4 8.4 0 0 0-1.198.49 7 7 0 0 0 2.276 1.522zm-1.383-2.964A13.4 13.4 0 0 1 3.508 8.5h-2.49a6.96 6.96 0 0 0 1.362 3.675c.47-.258.995-.482 1.565-.667m6.728 2.964a7 7 0 0 0 2.275-1.521 8.4 8.4 0 0 0-1.197-.49 9 9 0 0 1-.481 1.078 7 7 0 0 1-.597.933M8.5 11.909v3.014c.67-.204 1.335-.82 1.887-1.855q.216-.403.395-.872A12.6 12.6 0 0 0 8.5 11.91zm3.555-.401c.57.185 1.095.409 1.565.667A6.96 6.96 0 0 0 14.982 8.5h-2.49a13.4 13.4 0 0 1-.437 3.008M14.982 7.5a6.96 6.96 0 0 0-1.362-3.675c-.47.258-.995.482-1.565.667.248.92.4 1.938.437 3.008zM11.27 2.461q.266.502.482 1.078a8.4 8.4 0 0 0 1.196-.49 7 7 0 0 0-2.275-1.52c.218.283.418.597.597.932m-.488 1.343a8 8 0 0 0-.395-.872C9.835 1.897 9.17 1.282 8.5 1.077V4.09c.81-.03 1.577-.13 2.282-.287z"/></symbol>
-		<symbol id="i-grip-vertical" viewBox="0 0 16 16"><path d="M7 2a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0M7 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0M7 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></symbol>
-		<symbol id="i-house-heart" viewBox="0 0 16 16"><path d="M8 6.982C9.664 5.309 13.825 8.236 8 12 2.175 8.236 6.336 5.309 8 6.982"/><path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.707L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.646a.5.5 0 0 0 .708-.707L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/></symbol>
-		<symbol id="i-images" viewBox="0 0 16 16"><path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/><path d="M14.002 13a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V5A2 2 0 0 1 2 3a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-1.998 2M14 2H4a1 1 0 0 0-1 1h9.002a2 2 0 0 1 2 2v7A1 1 0 0 0 15 11V3a1 1 0 0 0-1-1M2.002 4a1 1 0 0 0-1 1v8l2.646-2.354a.5.5 0 0 1 .63-.062l2.66 1.773 3.71-3.71a.5.5 0 0 1 .577-.094l1.777 1.947V5a1 1 0 0 0-1-1z"/></symbol>
-		<symbol id="i-info-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></symbol>
-		<symbol id="i-layout-split" viewBox="0 0 16 16"><path d="M0 3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm8.5-1v12H14a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zm-1 0H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h5.5z"/></symbol>
-		<symbol id="i-list" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/></symbol>
-		<symbol id="i-list-check" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3.854 2.146a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 3.293l1.146-1.147a.5.5 0 0 1 .708 0m0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 7.293l1.146-1.147a.5.5 0 0 1 .708 0m0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0"/></symbol>
-		<symbol id="i-patch-question" viewBox="0 0 16 16"><path d="M8.05 9.6c.336 0 .504-.24.554-.627.04-.534.198-.815.847-1.26.673-.475 1.049-1.09 1.049-1.986 0-1.325-.92-2.227-2.262-2.227-1.02 0-1.792.492-2.1 1.29A1.7 1.7 0 0 0 6 5.48c0 .393.203.64.545.64.272 0 .455-.147.564-.51.158-.592.525-.915 1.074-.915.61 0 1.03.446 1.03 1.084 0 .563-.208.885-.822 1.325-.619.433-.926.914-.926 1.64v.111c0 .428.208.745.585.745"/><path d="m10.273 2.513-.921-.944.715-.698.622.637.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01.622-.636a2.89 2.89 0 0 1 4.134 0l-.715.698a1.89 1.89 0 0 0-2.704 0l-.92.944-1.32-.016a1.89 1.89 0 0 0-1.911 1.912l.016 1.318-.944.921a1.89 1.89 0 0 0 0 2.704l.944.92-.016 1.32a1.89 1.89 0 0 0 1.912 1.911l1.318-.016.921.944a1.89 1.89 0 0 0 2.704 0l.92-.944 1.32.016a1.89 1.89 0 0 0 1.911-1.912l-.016-1.318.944-.921a1.89 1.89 0 0 0 0-2.704l-.944-.92.016-1.32a1.89 1.89 0 0 0-1.912-1.911z"/><path d="M7.001 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0"/></symbol>
-		<symbol id="i-pencil" viewBox="0 0 16 16"><path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/></symbol>
-		<symbol id="i-people" viewBox="0 0 16 16"><path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/></symbol>
-		<symbol id="i-plus-lg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/></symbol>
-		<symbol id="i-question-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"/></symbol>
-		<symbol id="i-search" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/></symbol>
-		<symbol id="i-send" viewBox="0 0 16 16"><path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/></symbol>
-		<symbol id="i-speedometer2" viewBox="0 0 16 16"><path d="M8 4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-1 0V4.5A.5.5 0 0 1 8 4M3.732 5.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707M2 10a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 10m9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5m.754-4.246a.39.39 0 0 0-.527-.02L7.547 9.31a.91.91 0 1 0 1.302 1.258l3.434-4.297a.39.39 0 0 0-.029-.518z"/><path fill-rule="evenodd" d="M0 10a8 8 0 1 1 15.547 2.661c-.442 1.253-1.845 1.602-2.932 1.25C11.309 13.488 9.475 13 8 13c-1.474 0-3.31.488-4.615.911-1.087.352-2.49.003-2.932-1.25A8 8 0 0 1 0 10m8-7a7 7 0 0 0-6.603 9.329c.203.575.923.876 1.68.63C4.397 12.533 6.358 12 8 12s3.604.532 4.923.96c.757.245 1.477-.056 1.68-.631A7 7 0 0 0 8 3"/></symbol>
-		<symbol id="i-stars" viewBox="0 0 16 16"><path d="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.828-1.828l-1.937-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.828zM3.794 1.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387A1.73 1.73 0 0 0 4.593 5.69l-.387 1.162a.217.217 0 0 1-.412 0L3.407 5.69A1.73 1.73 0 0 0 2.31 4.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.73 1.73 0 0 0 3.407 2.31zM10.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732L9.1 2.137a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z"/></symbol>
-		<symbol id="i-three-dots" viewBox="0 0 16 16"><path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/></symbol>
-		<symbol id="i-translate" viewBox="0 0 16 16"><path d="M4.545 6.714 4.11 8H3l1.862-5h1.284L8 8H6.833l-.435-1.286zm1.634-.736L5.5 3.956h-.049l-.679 2.022z"/><path d="M0 2a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v3h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-3H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zm7.138 9.995q.289.451.63.846c-.748.575-1.673 1.001-2.768 1.292.178.217.451.635.555.867 1.125-.359 2.08-.844 2.886-1.494.777.665 1.739 1.165 2.93 1.472.133-.254.414-.673.629-.89-1.125-.253-2.057-.694-2.82-1.284.681-.747 1.222-1.651 1.621-2.757H14V8h-3v1.047h.765c-.318.844-.74 1.546-1.272 2.13a6 6 0 0 1-.415-.492 2 2 0 0 1-.94.31"/></symbol>
-	</svg>
-	<div class="page">
-		<header class="page__top">
-			<button class="button button--quiet button--icon page__burger" type="button" commandfor="side" command="toggle-popover" aria-label="Sections"><svg class="icon" aria-hidden="true"><use href="#i-list"/></svg></button>
-			<a class="page__brand" href="#"><span class="page__mark">RZ</span><span class="wide-only">REDZ CMS</span></a>
-			<button class="button button--quiet" type="button"><span class="dot"></span><span>All sites</span><svg class="icon" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
-			<button class="button page__search wide-only" type="button" aria-keyshortcuts="Meta+K"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><span>Find or go to…</span><kbd>⌘K</kbd></button>
-			<div class="page__end">
-				<button class="button button--quiet button--icon wide-only" type="button" aria-label="Help for this screen"><svg class="icon" aria-hidden="true"><use href="#i-question-circle"/></svg></button>
-				<button class="button button--quiet button--icon" type="button" aria-label="Profile"><span class="avatar">MK</span></button>
+	<div class="app">
+		<header class="app-header">
+			<button class="btn btn-text btn-icon app-burger" type="button" commandfor="side" command="toggle-popover" aria-label="Sections"><i class="bi bi-list" aria-hidden="true"></i></button>
+			<a class="app-brand" href="#"><span class="app-mark">RZ</span><span class="d-none md:d-inline">REDZ CMS</span></a>
+			<button class="btn btn-text" type="button"><span class="dot"></span><span>All sites</span><i class="bi bi-chevron-down" aria-hidden="true"></i></button>
+			<button class="btn app-search d-none md:d-inline-flex" type="button" aria-keyshortcuts="Meta+K"><i class="bi bi-search" aria-hidden="true"></i><span>Find or go to…</span><kbd>⌘K</kbd></button>
+			<div class="hstack gap-4 ms-auto">
+				<button class="btn btn-text btn-icon d-none md:d-inline-flex" type="button" aria-label="Help for this screen"><i class="bi bi-question-circle" aria-hidden="true"></i></button>
+				<button class="btn btn-text btn-icon" type="button" aria-label="Profile"><span class="avatar">MK</span></button>
 			</div>
 		</header>
 
-		<nav id="side" class="page__side" popover aria-label="Sections">
-			<a class="page__link" href="#"><svg class="icon" aria-hidden="true"><use href="#i-speedometer2"/></svg>Overview</a>
-			<div class="page__section">Content</div>
-			<a class="page__link" href="#"><svg class="icon" aria-hidden="true"><use href="#i-file-earmark-text"/></svg>Pages<span class="page__count">14</span></a>
-			<a class="page__link" href="list.html" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-compass"/></svg>Excursions<span class="page__count">28</span></a>
-			<a class="page__link" href="#"><svg class="icon" aria-hidden="true"><use href="#i-house-heart"/></svg>Villas<span class="page__count">41</span></a>
-			<a class="page__link" href="#"><svg class="icon" aria-hidden="true"><use href="#i-images"/></svg>Media</a>
-			<div class="page__section">Sites</div>
-			<a class="page__link" href="#"><svg class="icon" aria-hidden="true"><use href="#i-globe2"/></svg>Sites and domains</a>
-			<a class="page__link" href="#"><svg class="icon" aria-hidden="true"><use href="#i-translate"/></svg>Translations<span class="pill pill--warning end">7</span></a>
-			<div class="page__section">System</div>
-			<a class="page__link" href="settings.html"><svg class="icon" aria-hidden="true"><use href="#i-gear"/></svg>Settings</a>
+		<nav id="side" class="app-sidebar" popover aria-label="Sections">
+			<a class="app-link" href="#"><i class="bi bi-speedometer2" aria-hidden="true"></i>Overview</a>
+			<div class="app-section">Content</div>
+			<a class="app-link" href="#"><i class="bi bi-file-earmark-text" aria-hidden="true"></i>Pages<span class="ms-auto fs-12 text-muted tabular-nums">14</span></a>
+			<a class="app-link" href="list.html" aria-current="page"><i class="bi bi-compass" aria-hidden="true"></i>Excursions<span class="ms-auto fs-12 text-muted tabular-nums">28</span></a>
+			<a class="app-link" href="#"><i class="bi bi-house-heart" aria-hidden="true"></i>Villas<span class="ms-auto fs-12 text-muted tabular-nums">41</span></a>
+			<a class="app-link" href="#"><i class="bi bi-images" aria-hidden="true"></i>Media</a>
+			<div class="app-section">Sites</div>
+			<a class="app-link" href="#"><i class="bi bi-globe2" aria-hidden="true"></i>Sites and domains</a>
+			<a class="app-link" href="#"><i class="bi bi-translate" aria-hidden="true"></i>Translations<span class="badge badge-subtle-warning ms-auto">7</span></a>
+			<div class="app-section">System</div>
+			<a class="app-link" href="settings.html"><i class="bi bi-gear" aria-hidden="true"></i>Settings</a>
 		</nav>
 
-		<main class="page__main" id="main">
-			<div class="page__head">
-				<div class="page__title">
-					<ol class="trail"><li><a href="list.html">Excursions</a></li><li>Ang Thong</li></ol>
+		<main class="app-main" id="main">
+			<div class="d-flex flex-wrap align-items-center row-gap-12 column-gap-16 mb-24">
+				<div class="flex-grow-1 min-w-0">
+					<nav class="mb-4" aria-label="Breadcrumb">
+						<ol class="breadcrumb"><li class="breadcrumb-item"><a href="list.html">Excursions</a></li><li class="breadcrumb-item" aria-current="page">Ang Thong</li></ol>
+					</nav>
 					<h1>Ang Thong: marine national park by speedboat</h1>
-					<div class="cluster">
-						<span class="pill"><svg class="icon" aria-hidden="true"><use href="#i-check2"/></svg>Published</span>
-						<span class="pill pill--warning"><svg class="icon" aria-hidden="true"><use href="#i-pencil"/></svg>Unsaved changes</span>
-						<span class="muted text-small wide-only"><svg class="icon" aria-hidden="true"><use href="#i-people"/></svg> Only Marina is editing now</span>
+					<div class="hstack flex-wrap gap-8 mt-8">
+						<span class="badge"><i class="bi bi-check2" aria-hidden="true"></i>Published</span>
+						<span class="badge badge-subtle-warning"><i class="bi bi-pencil" aria-hidden="true"></i>Unsaved changes</span>
+						<span class="text-muted fs-12 d-none md:d-inline"><i class="bi bi-people" aria-hidden="true"></i> Only Marina is editing now</span>
 					</div>
 				</div>
-				<div class="page__actions">
-					<a class="button" href="#"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg>Preview</a>
-					<button class="button" type="button"><svg class="icon" aria-hidden="true"><use href="#i-floppy"/></svg>Save draft</button>
-					<div class="toolbar toolbar--joined">
-						<button class="button button--primary" type="button"><svg class="icon" aria-hidden="true"><use href="#i-send"/></svg>Publish</button>
-						<button class="button button--primary button--icon" type="button" commandfor="publish-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Publishing options"><svg class="icon" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
+				<div class="d-flex flex-wrap gap-8">
+					<a class="btn" href="#"><i class="bi bi-eye" aria-hidden="true"></i>Preview</a>
+					<button class="btn" type="button"><i class="bi bi-floppy" aria-hidden="true"></i>Save draft</button>
+					<div class="btn-group">
+						<button class="btn btn-primary" type="button"><i class="bi bi-send" aria-hidden="true"></i>Publish</button>
+						<button class="btn btn-primary btn-icon" type="button" commandfor="publish-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Publishing options"><i class="bi bi-chevron-down" aria-hidden="true"></i></button>
 					</div>
 					<div id="publish-menu" class="menu" popover role="menu" aria-label="Publishing options">
-						<button class="menu__item" type="button" role="menuitem"><svg class="icon" aria-hidden="true"><use href="#i-calendar-event"/></svg>Publish on a schedule…</button>
-						<button class="menu__item" type="button" role="menuitem"><svg class="icon" aria-hidden="true"><use href="#i-globe2"/></svg>Publish on one site…</button>
+						<button class="menu-item" type="button" role="menuitem"><i class="bi bi-calendar-event" aria-hidden="true"></i>Publish on a schedule…</button>
+						<button class="menu-item" type="button" role="menuitem"><i class="bi bi-globe2" aria-hidden="true"></i>Publish on one site…</button>
 					</div>
 				</div>
 			</div>
 
-			<div class="stack">
-			<div class="cluster">
-				<nav class="tabs grow" aria-label="Language of editing">
-					<a class="tabs__tab" href="#" aria-current="page">RU <span class="muted text-small">base</span></a>
-					<a class="tabs__tab" href="#">EN <span class="dot dot--warning" role="img" aria-label="1 field outdated"></span></a>
-					<a class="tabs__tab" href="#">TH <span class="dot dot--info" role="img" aria-label="Machine translation"></span></a>
-				</nav>
-				<a class="chip" href="#"><svg class="icon" aria-hidden="true"><use href="#i-layout-split"/></svg>Translate side by side</a>
-				<button class="chip" type="button" commandfor="scope-menu" command="toggle-popover" aria-haspopup="menu"><span class="dot"></span>Values: shared by all sites<svg class="icon" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
-				<div id="scope-menu" class="menu" popover role="menu" aria-label="Values of">
-					<button class="menu__item" type="button" role="menuitemradio" aria-checked="true"><span class="dot"></span>Shared by all sites</button>
-					<button class="menu__item" type="button" role="menuitemradio" aria-checked="false"><span class="demo-site demo-site--b">AT</span>angthong.example · 2 own values</button>
-				</div>
-			</div>
-
-			<div class="split">
-				<div class="stack">
-					<section class="panel" aria-labelledby="p-basics">
-						<div class="panel__head"><svg class="icon" aria-hidden="true"><use href="#i-card-heading"/></svg><h2 id="p-basics">Basics</h2><span class="muted">translatable fields carry their languages</span></div>
-						<div class="panel__body stack">
-							<div class="field">
-								<div class="field__marks"><span class="pill">RU · EN · TH</span><span class="field__tools num">54 / 90</span></div>
-								<div class="field field--float">
-									<label class="field__label" for="f-title">Name</label>
-									<input class="control" id="f-title" value="Ang Thong: marine national park by speedboat" placeholder="A name people search for">
-								</div>
-							</div>
-							<div class="grid grid--two">
-								<div class="field">
-									<div class="field__marks"><span class="pill">RU · EN · TH</span></div>
-									<div class="field field--float">
-										<label class="field__label" for="f-slug">Address</label>
-										<input class="control mono" id="f-slug" value="ang-thong" placeholder="Latin letters and dashes">
-									</div>
-									<div class="field__hint">Full address /excursions/ang-thong/. The old one answers with a 301 redirect.</div>
-								</div>
-								<div class="field">
-									<div class="field__marks"><span class="pill">shared</span></div>
-									<div class="field field--float">
-										<label class="field__label" for="f-section">Section</label>
-										<select class="control" id="f-section"><option>Marine</option><option>Land</option><option>Evening</option></select>
-									</div>
-								</div>
-							</div>
-							<div class="field">
-								<div class="field__marks"><span class="pill">RU · EN · TH</span><span class="field__tools"><button class="button button--small button--quiet" type="button"><svg class="icon" aria-hidden="true"><use href="#i-stars"/></svg>Suggest</button></span></div>
-								<div class="field field--float">
-									<label class="field__label" for="f-lead">Short description</label>
-									<textarea class="control" id="f-lead" placeholder="Two sentences for the card and search results">Emerald Lake, kayaks along the cliffs and lunch on an island — all in one day by speedboat.</textarea>
-								</div>
-							</div>
-							<div class="banner banner--accent" role="region" aria-label="AI suggestion">
-								<svg class="icon" aria-hidden="true"><use href="#i-stars"/></svg>
-								<div class="banner__text stack--tight stack">
-									<div><strong>AI suggestion</strong> <span class="muted text-small">· from the facts of this excursion · 1 of 3</span></div>
-									<p>One day: the Emerald Lake on Koh Mae Ko, kayaks along the cliffs and lunch on an island. Hotel pick-up, a Russian-speaking guide, free cancellation up to 24 hours.</p>
-									<div class="cluster">
-										<button class="button button--small button--primary" type="button">Insert into the field</button>
-										<button class="button button--small" type="button">Another variant</button>
-										<button class="button button--small button--quiet" type="button">Dismiss</button>
-										<span class="muted text-small end"><svg class="icon" aria-hidden="true"><use href="#i-info-circle"/></svg> AI saves nothing: the text goes into the draft.</span>
-									</div>
-								</div>
-							</div>
-						</div>
-					</section>
-
-					<section class="panel" aria-labelledby="p-facts">
-						<div class="panel__head"><svg class="icon" aria-hidden="true"><use href="#i-list-check"/></svg><h2 id="p-facts">Facts</h2><span class="muted">shared by every language and site · the page, schema.org and AI answers are built from them</span></div>
-						<div class="panel__body grid">
-							<div class="field field--float">
-								<label class="field__label" for="f-duration">Duration</label>
-								<input class="control" id="f-duration" value="8 hours" placeholder="For example, 8 hours">
-							</div>
-							<div class="field field--float">
-								<label class="field__label" for="f-meet">Meeting point</label>
-								<input class="control" id="f-meet" value="Nathon pier, 07:30" placeholder="A place and a time">
-							</div>
-							<div class="field field--float">
-								<label class="field__label" for="f-cancel">Cancellation</label>
-								<select class="control" id="f-cancel"><option>Free up to 24 hours</option><option>Free up to 48 hours</option><option>No refunds</option></select>
-							</div>
-							<div class="field">
-								<span class="field__label">Included</span>
-								<div class="cluster">
-									<label class="field--choice"><input class="check" type="checkbox" checked> Transfer</label>
-									<label class="field--choice"><input class="check" type="checkbox" checked> Lunch</label>
-									<label class="field--choice"><input class="check" type="checkbox"> Kayaks</label>
-								</div>
-							</div>
-						</div>
-					</section>
-
-					<section class="panel" aria-labelledby="p-price">
-						<div class="panel__head"><svg class="icon" aria-hidden="true"><use href="#i-cash-coin"/></svg><h2 id="p-price">Price</h2><span class="muted">in the base currency THB · the visitor's currency is an estimate</span></div>
-						<div class="panel__body grid">
-							<div class="field">
-								<div class="field field--float">
-									<label class="field__label" for="f-adult">Adult</label>
-									<input class="control num" id="f-adult" type="number" value="2500" min="0" step="100" placeholder="0" aria-invalid="true" aria-describedby="f-adult-error">
-								</div>
-								<div class="field__error" id="f-adult-error"><svg class="icon" aria-hidden="true"><use href="#i-exclamation-triangle-fill"/></svg>Lower than the child price</div>
-							</div>
-							<div class="field field--float">
-								<label class="field__label" for="f-child">Child</label>
-								<input class="control num" id="f-child" type="number" value="2700" min="0" step="100" placeholder="0">
-							</div>
-						</div>
-					</section>
-
-					<section class="panel panel--flush" aria-labelledby="p-blocks">
-						<div class="panel__head"><svg class="icon" aria-hidden="true"><use href="#i-bricks"/></svg><h2 id="p-blocks">Page blocks</h2><span class="muted">block types come from the core and modules, their look from the site's theme</span></div>
-						<div class="panel__body">
-							<table class="rows">
-								<tbody>
-									<tr>
-										<td class="rows__check"><svg class="icon muted" aria-hidden="true"><use href="#i-grip-vertical"/></svg></td>
-										<td><div class="cluster cluster--nowrap"><span class="tile tile--small"><svg class="icon" aria-hidden="true"><use href="#i-images"/></svg></span><div><strong>Gallery</strong><div class="muted text-small">5 photos · 1 has no alt text in EN</div></div></div></td>
-										<td><span class="pill pill--warning">alt</span></td>
-										<td class="rows__acts"><button class="button button--small button--icon" type="button" aria-label="More"><svg class="icon" aria-hidden="true"><use href="#i-three-dots"/></svg></button></td>
-									</tr>
-									<tr>
-										<td class="rows__check"><svg class="icon muted" aria-hidden="true"><use href="#i-grip-vertical"/></svg></td>
-										<td><div class="cluster cluster--nowrap"><span class="tile tile--small"><svg class="icon" aria-hidden="true"><use href="#i-patch-question"/></svg></span><div><strong>Questions and answers</strong><div class="muted text-small">2 questions · go into the FAQ markup</div></div></div></td>
-										<td><button class="button button--small button--quiet" type="button" aria-label="More questions"><svg class="icon" aria-hidden="true"><use href="#i-stars"/></svg><span class="wide-only">More questions</span></button></td>
-										<td class="rows__acts"><button class="button button--small button--icon" type="button" aria-label="More"><svg class="icon" aria-hidden="true"><use href="#i-three-dots"/></svg></button></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<div class="panel__foot"><button class="button button--small" type="button"><svg class="icon" aria-hidden="true"><use href="#i-plus-lg"/></svg>Add a block</button></div>
-					</section>
-
-					<div class="savebar" data-state="dirty" role="region" aria-label="Unsaved changes">
-						<svg class="icon" aria-hidden="true"><use href="#i-pencil"/></svg>
-						<span class="savebar__text">3 unsaved changes: name, short description, adult price</span>
-						<button class="button button--small" type="button">Discard</button>
-						<button class="button button--small button--primary" type="button"><svg class="icon" aria-hidden="true"><use href="#i-floppy"/></svg>Save draft</button>
+			<div class="vstack gap-16">
+				<div class="hstack flex-wrap gap-8">
+					<nav class="nav nav-underline flex-grow-1" aria-label="Language of editing">
+						<a class="nav-link" href="#" aria-current="page">RU <span class="text-muted fs-12">base</span></a>
+						<a class="nav-link" href="#">EN <span class="dot dot-warning" role="img" aria-label="1 field outdated"></span></a>
+						<a class="nav-link" href="#">TH <span class="dot dot-info" role="img" aria-label="Machine translation"></span></a>
+					</nav>
+					<a class="chip" href="#"><i class="bi bi-layout-split" aria-hidden="true"></i>Translate side by side</a>
+					<button class="chip" type="button" commandfor="scope-menu" command="toggle-popover" aria-haspopup="menu"><span class="dot"></span>Values: shared by all sites<i class="bi bi-chevron-down" aria-hidden="true"></i></button>
+					<div id="scope-menu" class="menu" popover role="menu" aria-label="Values of">
+						<button class="menu-item" type="button" role="menuitemradio" aria-checked="true"><span class="dot"></span>Shared by all sites</button>
+						<button class="menu-item" type="button" role="menuitemradio" aria-checked="false"><span class="demo-site demo-site-b">AT</span>angthong.example · 2 own values</button>
 					</div>
 				</div>
 
-				<aside class="split__aside" aria-label="About this excursion">
-					<section class="panel" aria-labelledby="a-publish">
-						<div class="panel__head"><svg class="icon" aria-hidden="true"><use href="#i-send"/></svg><h2 id="a-publish">Publishing</h2></div>
-						<div class="panel__body stack--tight stack text-small">
-							<div class="cluster cluster--between"><span class="muted">On the site</span><span>Oct 12, 09:40 · Olga</span></div>
-							<div class="cluster cluster--between"><span class="muted">Draft</span><span>5 min ago · Marina</span></div>
-							<div class="stack--tight stack">
-								<a class="button button--small" href="#"><svg class="icon" aria-hidden="true"><use href="#i-file-diff"/></svg>Compare the draft with the site</a>
-								<a class="button button--small" href="#"><svg class="icon" aria-hidden="true"><use href="#i-clock-history"/></svg>Revisions · 14</a>
+				<div class="grid lg:cols-12 gap-24 align-items-start">
+					<div class="lg:span-8 vstack gap-16">
+						<section class="card" aria-labelledby="p-basics">
+							<div class="card-header"><i class="bi bi-card-heading" aria-hidden="true"></i><h2 id="p-basics">Basics</h2><span class="text-muted fs-12">translatable fields carry their languages</span></div>
+							<div class="card-body vstack gap-16">
+								<div class="form-field">
+									<div class="hstack gap-8"><span class="badge">RU · EN · TH</span><span class="ms-auto fs-12 text-muted tabular-nums">54 / 90</span></div>
+									<div class="form-floating">
+										<input class="form-control" id="f-title" value="Ang Thong: marine national park by speedboat" placeholder="A name people search for">
+										<label for="f-title">Name</label>
+									</div>
+								</div>
+								<div class="grid sm:cols-2 gap-16 align-items-start">
+									<div class="form-field">
+										<div class="hstack gap-8"><span class="badge">RU · EN · TH</span></div>
+										<div class="form-floating">
+											<input class="form-control font-monospace" id="f-slug" value="ang-thong" placeholder="Latin letters and dashes">
+											<label for="f-slug">Address</label>
+										</div>
+										<div class="form-text">Full address /excursions/ang-thong/. The old one answers with a 301 redirect.</div>
+									</div>
+									<div class="form-field">
+										<div class="hstack gap-8"><span class="badge">shared</span></div>
+										<div class="form-floating">
+											<select class="form-select" id="f-section"><option>Marine</option><option>Land</option><option>Evening</option></select>
+											<label for="f-section">Section</label>
+										</div>
+									</div>
+								</div>
+								<div class="form-field">
+									<div class="hstack gap-8"><span class="badge">RU · EN · TH</span><button class="btn btn-sm btn-text ms-auto" type="button"><i class="bi bi-stars" aria-hidden="true"></i>Suggest</button></div>
+									<div class="form-floating">
+										<textarea class="form-control" id="f-lead" placeholder="Two sentences for the card and search results">Emerald Lake, kayaks along the cliffs and lunch on an island — all in one day by speedboat.</textarea>
+										<label for="f-lead">Short description</label>
+									</div>
+								</div>
+								<div class="alert alert-primary align-items-start" role="region" aria-label="AI suggestion">
+									<i class="bi bi-stars" aria-hidden="true"></i>
+									<div class="d-grid gap-8">
+										<div><strong>AI suggestion</strong> <span class="text-muted fs-12">· from the facts of this excursion · 1 of 3</span></div>
+										<p>One day: the Emerald Lake on Koh Mae Ko, kayaks along the cliffs and lunch on an island. Hotel pick-up, a Russian-speaking guide, free cancellation up to 24 hours.</p>
+										<div class="hstack flex-wrap gap-8">
+											<button class="btn btn-sm btn-primary" type="button">Insert into the field</button>
+											<button class="btn btn-sm" type="button">Another variant</button>
+											<button class="btn btn-sm btn-text" type="button">Dismiss</button>
+											<span class="text-muted fs-12 ms-auto"><i class="bi bi-info-circle" aria-hidden="true"></i> AI saves nothing: the text goes into the draft.</span>
+										</div>
+									</div>
+								</div>
 							</div>
+						</section>
+
+						<section class="card" aria-labelledby="p-facts">
+							<div class="card-header"><i class="bi bi-list-check" aria-hidden="true"></i><h2 id="p-facts">Facts</h2><span class="text-muted fs-12">shared by every language and site · the page, schema.org and AI answers are built from them</span></div>
+							<div class="card-body grid cols-min-240 gap-16 align-items-start">
+								<div class="form-floating">
+									<input class="form-control" id="f-duration" value="8 hours" placeholder="For example, 8 hours">
+									<label for="f-duration">Duration</label>
+								</div>
+								<div class="form-floating">
+									<input class="form-control" id="f-meet" value="Nathon pier, 07:30" placeholder="A place and a time">
+									<label for="f-meet">Meeting point</label>
+								</div>
+								<div class="form-floating">
+									<select class="form-select" id="f-cancel"><option>Free up to 24 hours</option><option>Free up to 48 hours</option><option>No refunds</option></select>
+									<label for="f-cancel">Cancellation</label>
+								</div>
+								<div class="form-field" role="group" aria-labelledby="f-included">
+									<span class="form-label" id="f-included">Included</span>
+									<div class="hstack flex-wrap row-gap-8 column-gap-16">
+										<label class="form-check"><input class="check" type="checkbox" checked>Transfer</label>
+										<label class="form-check"><input class="check" type="checkbox" checked>Lunch</label>
+										<label class="form-check"><input class="check" type="checkbox">Kayaks</label>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<section class="card" aria-labelledby="p-price">
+							<div class="card-header"><i class="bi bi-cash-coin" aria-hidden="true"></i><h2 id="p-price">Price</h2><span class="text-muted fs-12">in the base currency THB · the visitor's currency is an estimate</span></div>
+							<div class="card-body grid sm:cols-2 gap-16 align-items-start">
+								<div class="form-field">
+									<div class="form-floating">
+										<input class="form-control tabular-nums" id="f-adult" type="number" value="2500" min="0" step="100" placeholder="0" aria-invalid="true" aria-describedby="f-adult-error">
+										<label for="f-adult">Adult</label>
+									</div>
+									<div class="invalid-feedback" id="f-adult-error"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>Lower than the child price</div>
+								</div>
+								<div class="form-floating">
+									<input class="form-control tabular-nums" id="f-child" type="number" value="2700" min="0" step="100" placeholder="0">
+									<label for="f-child">Child</label>
+								</div>
+							</div>
+						</section>
+
+						<section class="card" aria-labelledby="p-blocks">
+							<div class="card-header"><i class="bi bi-bricks" aria-hidden="true"></i><h2 id="p-blocks">Page blocks</h2><span class="text-muted fs-12">block types come from the core and modules, their look from the site's theme</span></div>
+							<div class="card-body p-0">
+								<table class="table">
+									<tbody>
+										<tr>
+											<td class="table-check"><i class="bi bi-grip-vertical text-muted" aria-hidden="true"></i></td>
+											<td><div class="hstack gap-8"><span class="icon-tile icon-tile-sm"><i class="bi bi-images" aria-hidden="true"></i></span><div><strong>Gallery</strong><div class="text-muted fs-12">5 photos · 1 has no alt text in EN</div></div></div></td>
+											<td><span class="badge badge-subtle-warning">alt</span></td>
+											<td class="table-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="More"><i class="bi bi-three-dots" aria-hidden="true"></i></button></td>
+										</tr>
+										<tr>
+											<td class="table-check"><i class="bi bi-grip-vertical text-muted" aria-hidden="true"></i></td>
+											<td><div class="hstack gap-8"><span class="icon-tile icon-tile-sm"><i class="bi bi-patch-question" aria-hidden="true"></i></span><div><strong>Questions and answers</strong><div class="text-muted fs-12">2 questions · go into the FAQ markup</div></div></div></td>
+											<td><button class="btn btn-sm btn-text" type="button" aria-label="More questions"><i class="bi bi-stars" aria-hidden="true"></i><span class="d-none sm:d-inline">More questions</span></button></td>
+											<td class="table-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="More"><i class="bi bi-three-dots" aria-hidden="true"></i></button></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="card-footer"><button class="btn btn-sm" type="button"><i class="bi bi-plus-lg" aria-hidden="true"></i>Add a block</button></div>
+						</section>
+
+						<div class="save-bar save-bar-dirty" role="region" aria-label="Unsaved changes">
+							<i class="bi bi-pencil" aria-hidden="true"></i>
+							<span class="save-bar-text">3 unsaved changes: name, short description, adult price</span>
+							<button class="btn btn-sm" type="button">Discard</button>
+							<button class="btn btn-sm btn-primary" type="button"><i class="bi bi-floppy" aria-hidden="true"></i>Save draft</button>
 						</div>
-					</section>
-					<section class="panel" aria-labelledby="a-where">
-						<div class="panel__head"><svg class="icon" aria-hidden="true"><use href="#i-globe2"/></svg><h2 id="a-where">Where it is shown</h2></div>
-						<div class="panel__body stack text-small">
-							<div class="cluster cluster--nowrap"><span class="demo-site demo-site--a">LG</span><div><strong>lagoon.example</strong> · home site<div class="muted">by the rule «Excursions», canonical here</div></div></div>
-							<div class="cluster cluster--nowrap"><span class="demo-site demo-site--b">AT</span><div><strong>angthong.example</strong> · landing<div class="muted">picked by hand · <a href="#">2 own values</a></div></div></div>
-							<div class="cluster cluster--nowrap"><span class="demo-site demo-site--c">VI</span><div class="muted"><strong>villas.lagoon.example</strong> · not shown<div>rule «villas only»</div></div></div>
-						</div>
-					</section>
-					<section class="panel" aria-labelledby="a-translations">
-						<div class="panel__head"><svg class="icon" aria-hidden="true"><use href="#i-translate"/></svg><h2 id="a-translations">Translations</h2></div>
-						<div class="panel__body stack--tight stack text-small">
-							<div class="cluster"><span class="demo-lang demo-lang--base">RU</span>base language</div>
-							<div class="cluster"><span class="demo-lang demo-lang--old">EN</span>checked, 1 field outdated<a class="end" href="#">Open</a></div>
-							<div class="cluster"><span class="demo-lang demo-lang--machine">TH</span>machine, 20 fields<a class="end" href="#">Translate what changed</a></div>
-						</div>
-					</section>
-					<section class="panel" aria-labelledby="a-facts">
-						<div class="panel__head"><svg class="icon" aria-hidden="true"><use href="#i-stars"/></svg><h2 id="a-facts">Facts complete</h2><span class="muted end">8 of 10</span></div>
-						<div class="panel__body stack--tight stack text-small">
-							<meter min="0" max="10" value="8" aria-label="Facts complete: 8 of 10"></meter>
-							<p class="muted">AI assistants find no answer to:</p>
-							<ul>
-								<li>the meeting point on a map</li>
-								<li>whether it suits pregnant guests</li>
-							</ul>
-							<button class="button button--small" type="button"><svg class="icon" aria-hidden="true"><use href="#i-stars"/></svg>Suggest values</button>
-						</div>
-					</section>
-				</aside>
-			</div>
+					</div>
+
+					<aside class="app-aside lg:span-4" aria-label="About this excursion">
+						<section class="card" aria-labelledby="a-publish">
+							<div class="card-header"><i class="bi bi-send" aria-hidden="true"></i><h2 id="a-publish">Publishing</h2></div>
+							<div class="card-body vstack gap-8 fs-12">
+								<div class="hstack justify-content-between gap-8"><span class="text-muted">On the site</span><span>Oct 12, 09:40 · Olga</span></div>
+								<div class="hstack justify-content-between gap-8"><span class="text-muted">Draft</span><span>5 min ago · Marina</span></div>
+								<a class="btn btn-sm" href="#"><i class="bi bi-file-diff" aria-hidden="true"></i>Compare the draft with the site</a>
+								<a class="btn btn-sm" href="#"><i class="bi bi-clock-history" aria-hidden="true"></i>Revisions · 14</a>
+							</div>
+						</section>
+						<section class="card" aria-labelledby="a-where">
+							<div class="card-header"><i class="bi bi-globe2" aria-hidden="true"></i><h2 id="a-where">Where it is shown</h2></div>
+							<div class="card-body vstack gap-16 fs-12">
+								<div class="hstack gap-8"><span class="demo-site demo-site-a">LG</span><div class="min-w-0"><strong>lagoon.example</strong> · home site<div class="text-muted">by the rule «Excursions», canonical here</div></div></div>
+								<div class="hstack gap-8"><span class="demo-site demo-site-b">AT</span><div class="min-w-0"><strong>angthong.example</strong> · landing<div class="text-muted">picked by hand · <a href="#">2 own values</a></div></div></div>
+								<div class="hstack gap-8"><span class="demo-site demo-site-c">VI</span><div class="min-w-0 text-muted"><strong>villas.lagoon.example</strong> · not shown<div>rule «villas only»</div></div></div>
+							</div>
+						</section>
+						<section class="card" aria-labelledby="a-translations">
+							<div class="card-header"><i class="bi bi-translate" aria-hidden="true"></i><h2 id="a-translations">Translations</h2></div>
+							<div class="card-body vstack gap-8 fs-12">
+								<div class="hstack flex-wrap gap-8"><span class="demo-lang demo-lang-base">RU</span>base language</div>
+								<div class="hstack flex-wrap gap-8"><span class="demo-lang demo-lang-old">EN</span>checked, 1 field outdated<a class="ms-auto" href="#">Open</a></div>
+								<div class="hstack flex-wrap gap-8"><span class="demo-lang demo-lang-machine">TH</span>machine, 20 fields<a class="ms-auto" href="#">Translate what changed</a></div>
+							</div>
+						</section>
+						<section class="card" aria-labelledby="a-facts">
+							<div class="card-header"><i class="bi bi-stars" aria-hidden="true"></i><h2 id="a-facts">Facts complete</h2><span class="text-muted fs-12 ms-auto">8 of 10</span></div>
+							<div class="card-body vstack gap-8 fs-12">
+								<meter min="0" max="10" value="8" aria-label="Facts complete: 8 of 10"></meter>
+								<p class="text-muted">AI assistants find no answer to:</p>
+								<ul>
+									<li>the meeting point on a map</li>
+									<li>whether it suits pregnant guests</li>
+								</ul>
+								<button class="btn btn-sm" type="button"><i class="bi bi-stars" aria-hidden="true"></i>Suggest values</button>
+							</div>
+						</section>
+					</aside>
+				</div>
 			</div>
 		</main>
 	</div>
 
-	<div class="notices" role="status"></div>
+	<div class="toast-container" role="status"></div>
 
 	<div class="demo-switch" role="group" aria-label="Demo view">
-		<span class="demo-switch__group">
-			<button class="button button--small button--quiet" type="button" data-demo-theme="system">System</button>
-			<button class="button button--small button--quiet" type="button" data-demo-theme="light">Light</button>
-			<button class="button button--small button--quiet" type="button" data-demo-theme="dark">Dark</button>
+		<span class="demo-switch-group">
+			<button class="btn btn-sm btn-text" type="button" data-demo-theme="system">System</button>
+			<button class="btn btn-sm btn-text" type="button" data-demo-theme="light">Light</button>
+			<button class="btn btn-sm btn-text" type="button" data-demo-theme="dark">Dark</button>
 		</span>
-		<span class="demo-switch__group">
-			<button class="button button--small button--quiet" type="button" data-demo-dir="ltr">LTR</button>
-			<button class="button button--small button--quiet" type="button" data-demo-dir="rtl">RTL</button>
+		<span class="demo-switch-group">
+			<button class="btn btn-sm btn-text" type="button" data-demo-dir="ltr">LTR</button>
+			<button class="btn btn-sm btn-text" type="button" data-demo-dir="rtl">RTL</button>
 		</span>
-		<span class="demo-switch__group">
-			<button class="button button--small button--quiet" type="button" data-demo-density="comfortable">Comfortable</button>
-			<button class="button button--small button--quiet" type="button" data-demo-density="compact">Compact</button>
+		<span class="demo-switch-group">
+			<button class="btn btn-sm btn-text" type="button" data-demo-density="comfortable">Comfortable</button>
+			<button class="btn btn-sm btn-text" type="button" data-demo-density="compact">Compact</button>
 		</span>
 	</div>
 </body>

@@ -1,0 +1,22 @@
+@layer components {
+	.placeholder {
+		display: block;
+		block-size: 0.875rem;
+		border-radius: var(--redz-radius-6);
+		outline: 1px solid transparent;
+		outline-offset: -1px;
+		background: var(--redz-border);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.placeholder {
+			animation: placeholder-pulse 1.4s ease-in-out infinite;
+		}
+	}
+
+	@keyframes placeholder-pulse {
+		50% {
+			opacity: 0.5;
+		}
+	}
+}

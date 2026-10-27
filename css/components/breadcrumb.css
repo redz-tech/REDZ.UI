@@ -1,0 +1,19 @@
+@layer components {
+	.breadcrumb {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.375rem;
+		color: var(--redz-text-muted);
+		font-size: var(--redz-fs-12);
+	}
+
+	.breadcrumb-item + .breadcrumb-item::before {
+		content: "/";
+		margin-inline-end: 0.375rem;
+		color: var(--redz-text-faint);
+	}
+
+	.breadcrumb a {
+		color: inherit;
+	}
+}

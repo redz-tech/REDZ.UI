@@ -1,0 +1,25 @@
+@layer components {
+	.spinner-border {
+		display: inline-block;
+		inline-size: 1em;
+		block-size: 1em;
+		border: 2px solid currentColor;
+		border-inline-end-color: transparent;
+		border-radius: 50%;
+		animation: spinner-turn 0.7s linear infinite;
+	}
+
+	@media (forced-colors: active) {
+		.spinner-border {
+			forced-color-adjust: none;
+			border-color: CanvasText;
+			border-inline-end-color: transparent;
+		}
+	}
+
+	@keyframes spinner-turn {
+		to {
+			rotate: 1turn;
+		}
+	}
+}

@@ -1,0 +1,15 @@
+@layer components {
+	.selection-bar {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--redz-space-8);
+		padding: var(--redz-space-8) var(--redz-space-16);
+		border-block-end: 1px solid var(--redz-border);
+		background: var(--redz-primary-subtle);
+	}
+
+	.selection-bar > .btn:not(.btn-subtle-primary, .btn-text) {
+		--redz-btn-bg: var(--redz-bg);
+	}
+}

@@ -7,81 +7,95 @@
 		position-try-fallbacks: flip-block, flip-inline;
 		min-inline-size: 13rem;
 		max-inline-size: min(22rem, calc(100vw - 1rem));
-		margin: var(--space-1) 0;
-		padding: var(--space-1);
-		border: 1px solid var(--line);
-		border-radius: var(--radius-3);
-		background: var(--surface-raised);
-		box-shadow: var(--shadow-2);
-		color: var(--ink);
+		margin: var(--redz-space-4) 0;
+		padding: var(--redz-space-4);
+		border: 1px solid var(--redz-border);
+		border-radius: var(--redz-radius-12);
+		background: var(--redz-bg-raised);
+		box-shadow: var(--redz-shadow-2);
+		color: var(--redz-text);
 	}
 
-	.menu--start {
+	.menu-start {
 		position-area: block-end span-inline-end;
 	}
 
-	.menu__head {
-		padding: var(--space-2) var(--space-2) var(--space-1);
-		color: var(--ink-muted);
-		font-size: var(--text-small);
+	.menu-header {
+		padding: var(--redz-space-8) var(--redz-space-8) var(--redz-space-4);
+		color: var(--redz-text-muted);
+		font-size: var(--redz-fs-12);
 		font-weight: 550;
 	}
 
-	.menu__item {
+	.menu-item {
 		display: flex;
 		align-items: center;
-		gap: var(--space-2);
+		gap: var(--redz-space-8);
 		inline-size: 100%;
-		min-block-size: var(--control-height);
-		padding: 0 var(--space-2);
+		min-block-size: var(--redz-control-height);
+		padding: 0 var(--redz-space-8);
 		border: 0;
-		border-radius: var(--radius-2);
+		border-radius: var(--redz-radius-8);
 		background: none;
-		color: var(--ink);
+		color: var(--redz-text);
 		text-align: start;
 		text-decoration: none;
 		cursor: pointer;
 	}
 
-	.menu__item .icon {
-		color: var(--ink-muted);
+	.menu-item .bi {
+		color: var(--redz-text-muted);
 	}
 
-	.menu__item:hover,
-	.menu__item:focus-visible {
-		background: var(--surface-hover);
+	.menu-item:hover,
+	.menu-item:focus-visible {
+		background: var(--redz-bg-hover);
 		outline-offset: -2px;
 	}
 
-	.menu__item[aria-checked="true"],
-	.menu__item[aria-current="true"] {
+	.menu-item[aria-checked="true"],
+	.menu-item[aria-current="true"] {
 		font-weight: 600;
 	}
 
-	.menu__item[aria-checked="true"]::after {
+	.menu-item[aria-checked="true"]::after {
 		content: "";
 		inline-size: 0.875rem;
 		block-size: 0.875rem;
 		margin-inline-start: auto;
-		background: var(--accent);
+		background: var(--redz-primary);
 		mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M13.5 3.8a1 1 0 0 1 .1 1.4l-6.5 7.2a1 1 0 0 1-1.45.05L2.4 9.3a1 1 0 1 1 1.4-1.45l2.5 2.4 5.8-6.4a1 1 0 0 1 1.4-.05'/%3E%3C/svg%3E") center / contain no-repeat;
+		forced-color-adjust: preserve-parent-color;
 	}
 
-	.menu__item--danger,
-	.menu__item--danger .icon {
-		color: var(--danger);
+	.menu-item-danger,
+	.menu-item-danger .bi {
+		color: var(--redz-danger);
 	}
 
-	.menu__sep {
-		margin: var(--space-1) calc(var(--space-1) * -1);
+	.menu-divider {
+		margin: var(--redz-space-4) calc(var(--redz-space-4) * -1);
 		border: 0;
-		border-block-start: 1px solid var(--line);
+		border-block-start: 1px solid var(--redz-border);
+	}
+
+	@media (forced-colors: active) {
+		.menu-item:hover,
+		.menu-item:focus-visible {
+			forced-color-adjust: none;
+			background: Highlight;
+			color: HighlightText;
+		}
+
+		.menu-item[aria-checked="true"]::after {
+			background: currentColor;
+		}
 	}
 
 	@media (prefers-reduced-motion: no-preference) {
 		.menu {
 			transform-origin: top;
-			transition: opacity var(--motion) var(--ease-out), scale var(--motion) var(--ease-out), display var(--motion) allow-discrete, overlay var(--motion) allow-discrete;
+			transition: opacity var(--redz-motion) var(--redz-ease), scale var(--redz-motion) var(--redz-ease), display var(--redz-motion) allow-discrete, overlay var(--redz-motion) allow-discrete;
 		}
 
 		@starting-style {
