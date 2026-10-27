@@ -1,0 +1,20 @@
+{
+	"pages": ["index.html", "reference/demo/list.html", "reference/demo/resource.html", "reference/demo/settings.html"],
+	"widths": {"1440": 900, "1024": 768, "390": 844, "320": 568},
+	"shots": [1440, 390],
+	"combos": {"light-ltr": ["light", "ltr"], "dark-rtl": ["dark", "rtl"]},
+	"engines": {
+		"chrome": {"kind": "chrome", "binary": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"},
+		"firefox": {"kind": "firefox", "binary": "/Applications/Firefox.app/Contents/MacOS/firefox"},
+		"safari": {"kind": "safari"},
+		"chrome-130": {"kind": "chrome", "fetch": {"url": "https://storage.googleapis.com/chrome-for-testing-public/130.0.6723.116/mac-arm64/chrome-mac-arm64.zip", "sha256": "d51fab77a5259c19acd88f135c86d072eab1a52e86a3b8c06e2645352f764521", "binary": "chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing"}},
+		"firefox-132": {"kind": "firefox", "fetch": {"url": "https://archive.mozilla.org/pub/firefox/releases/132.0/mac/en-US/Firefox%20132.0.dmg", "sha512": "9fb26204957d157938a38b426dd5b32f68ae9689cc6e600e48d9d02b193f5cb0933bbc685e47d76905aa1b63e81158395dbe00321d364607c40e0c5b7879a72d", "binary": "Firefox.app/Contents/MacOS/firefox"}, "macos": "< 27", "why": "Firefox 132 spins at startup on macOS 27 and never opens WebDriver BiDi, as Firefox 147 did (measured 2026-10-27 and 28); it runs where macOS is older, as in CI"},
+		"ios-18": {"kind": "safari", "ios": ["18.5", "18.6"]},
+		"chrome-136": {"kind": "chrome", "fetch": {"url": "https://storage.googleapis.com/chrome-for-testing-public/136.0.7103.113/mac-arm64/chrome-mac-arm64.zip", "sha256": "8a0a23242157daa323127353e2c95c5d1c21c79d21c2d776b42b572399e087a0", "binary": "chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing"}},
+		"ios-26": {"kind": "safari", "ios": ["26.4", "26.5", "26.2"]}
+	},
+	"axe": {"version": "4.14.0", "integrity": "sha512-9WTZxEjsZ7b13TH8JPmbV2z8CHbl80/2hm3XPEG4JgNdQLK81IBRXmSxHfMAOkSqQeRxT/0dwNDz2GOm3zzpcQ==", "tags": ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]},
+	"allow": [
+		{"rule": "target-size", "target": ".demo-swatch", "engines": ["ios-18", "ios-26"], "why": "An iPhone screen is 714 px tall, so at the top of the page the sticky save bar covers the swatches row of settings.html; axe judges that one scroll position, and the swatches are their full 36 px once scrolled into view."}
+	]
+}

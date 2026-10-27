@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="css/index.css">
 	<link rel="stylesheet" href="css/icons.css">
 	<link rel="stylesheet" href="docs/site.css">
+	<script type="module" src="js/index.js"></script>
 </head>
 <body>
 	<main class="site region vstack gap-24">
@@ -57,7 +58,7 @@
 					<li>A state is an HTML attribute: <code>aria-current</code>, <code>aria-pressed</code>, <code>disabled</code>, <code>[open]</code>. A button opens a dialog with the browser's own command: <code>commandfor="edit" command="show-modal"</code>.</li>
 					<li>Tokens are <code>--redz-</code> plus the same words: <code>--redz-text-muted</code>, <code>--redz-space-16</code>.</li>
 				</ul>
-				<pre class="site-code"><code>&lt;div class="grid md:cols-2 gap-16"&gt;
+				<pre class="site-code" tabindex="0"><code>&lt;div class="grid md:cols-2 gap-16"&gt;
   &lt;section class="card"&gt;
     &lt;div class="card-header"&gt;&lt;h2&gt;Price&lt;/h2&gt;&lt;/div&gt;
     &lt;div class="card-body vstack gap-8"&gt;…&lt;/div&gt;
@@ -79,8 +80,9 @@
 			<section class="card" aria-labelledby="browsers">
 				<div class="card-header"><h2 id="browsers">Browsers</h2></div>
 				<div class="card-body vstack gap-16">
-					<p>Released since January 2026: Chrome and Edge 135+, Firefox 147+, Safari 26.2+ on macOS and iOS.</p>
-					<p class="text-muted">Nothing is written for older browsers; newer features only as enhancements.</p>
+					<p>Bootstrap 6's floor: Chrome and Edge 130+, Firefox 132+, Safari 18+ on macOS and iOS.</p>
+					<p class="text-muted">What must work rests on features of the floor; invoker commands and anchor positioning are enhancements, with a small script standing in below them.</p>
+					<p><a href="checks/">Checks in real engines</a> — every page, at the floor and above, with its shots.</p>
 				</div>
 			</section>
 		</div>

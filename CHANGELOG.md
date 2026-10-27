@@ -35,7 +35,7 @@ or JavaScript call removed or renamed is a major release, one added is a minor r
   or any block with the class `region` — a page without the shell marks its own.
 - States are the attributes accessibility needs anyway (`aria-current`, `aria-pressed`, `aria-selected`,
   `aria-checked`, `aria-invalid`, `aria-busy`, `disabled`, `[open]`); dialogs and menus open by the browser's commands
-  (`commandfor` + `command`).
+  (`commandfor` + `command`), with `js/commands.js` standing in where the browser has none.
 - Icons as CSS masks: `css/icons.css`, one generated rule per icon over its file in `icons/`, under Bootstrap Icons'
   own class names — `<i class="bi bi-NAME" aria-hidden="true"></i>`; no icon font, no JavaScript, no build.
 - Forced colors (Windows high contrast): icons, check marks and dots take the system colors; the selected tab keeps its
@@ -45,18 +45,44 @@ or JavaScript call removed or renamed is a major release, one added is a minor r
   badges and icons print as on screen.
 
 ### The browser floor
+- The floor is Bootstrap 6's: Chrome / Edge 130, Firefox 132, Safari 18 (desktop and mobile). What must work rests on
+  features of the floor; invoker commands and anchor positioning stay in the markup and the CSS as enhancements.
 - `tools/floor.php`: every property, value, function, unit, selector, at-rule, media feature, element and attribute of
-  the library against MDN's browser-compat-data 8.1.7 at Chrome / Edge 135, Firefox 147, Safari 26.2 (desktop and
-  mobile). A block counts only for the browsers that can apply it (`@media`, `@supports`); a vendor form beside a
-  property covers the browsers that need it; every exception is in `tools/floor/rules.json` with its reason. It runs on
-  every commit and in the new Check workflow; `check FILE…` checks any stylesheet or page.
+  the library against MDN's browser-compat-data 8.1.7 at the floor. A block counts only for the browsers that can apply
+  it (`@media`, `@supports`); a vendor form beside a property covers the browsers that need it; every exception is in
+  `tools/floor/rules.json` with its reason, and so is every repair of an engine bug with the first versions that fixed
+  it — an exception that allows nothing any more and a repair the floor has outgrown are findings. It runs on every
+  commit and in the new Check workflow; `check FILE…` checks any stylesheet or page.
 - `floor.json`: every name the gate knows with its verdict at the floor, for projects that check their own CSS.
 - Fixed at the floor, as the gate found: `print-color-adjust` is unprefixed only from Chrome 136, so every use carries
-  `-webkit-print-color-adjust` (icons, badges and checkboxes now print in Chrome 135); `user-select` needs its
+  `-webkit-print-color-adjust` (icons, badges and checkboxes now print in Chrome 130–135); `user-select` needs its
   `-webkit-` form in Safari; `forced-color-adjust: preserve-parent-color` stays for Chrome only inside `@supports` —
   Firefox has no such value and already paints the icons in the forced text color; the tooltip pairs `block-start`
   with `span-inline-end` (the single keyword overflows the viewport in Chrome 129–143 and Firefox 147); `text-break`
   is `overflow-wrap: anywhere`.
+
+### Scripts
+- `js/index.js`, the one module a page loads beside `css/index.css`.
+- `js/commands.js`: where the browser has no invoker commands (Chrome before 135, Firefox before 144, Safari before
+  26.2), a popover command becomes the browser's own `popovertarget` inside the click — so the browser still reports the
+  menu as expanded, returns focus and anchors it — and a dialog command calls `showModal()`, `close()` or
+  `requestClose()`; every command first dispatches the `command` event, which a listener may cancel.
+- `js/menu.js`: places an opened menu beside its button wherever the engine cannot anchor it (Firefox before 147,
+  Safari before 26, and Chrome 130–132, which make no implicit anchor of a popover's invoker) or puts it out of view or
+  away from its button — Chrome 135–136 in a middle-aligned table cell, Safari 26 at the bottom of a page taller than
+  the viewport. Such a menu carries `data-placed="script"` while it is open.
+
+### Checks in real engines
+- `tools/probe.php`: every page in the installed Chrome, Firefox and Safari, in the floor's Chrome 130, Firefox 132 and
+  Safari 18 in the iOS simulator, and in Chrome 136 and Safari 26 in the simulator; at 1440, 1024, 390 and 320 px,
+  light left-to-right and dark right-to-left. Overflow, icons without a mask, width prefixes outside a region, cut
+  labels and errors; every menu and dialog opened, judged inside the viewport and beside its button; axe-core 4.14.0 at
+  WCAG 2.2 AA; forced colors and print where the engine has them. Chrome over its debugging pipe, Firefox over WebDriver
+  BiDi, Safari over safaridriver; older engines fetched once into the cache and checked against their checksums.
+- The sheet of shots and findings in `.dev/probes/`, with the menus `js/menu.js` had to place; the Probes workflow runs
+  it on macOS 15 on every commit, and every release publishes it under `checks/` on the site.
+- Fixed as the probes found: the profile buttons name the person they open (`MK, profile`), the type fields link has a
+  name, a scrolling code block takes focus, and links are underlined in running text.
 
 ### Added
 - Bootstrap Icons 1.13.2 in `icons/`, the files unchanged (MIT, see `NOTICE`).

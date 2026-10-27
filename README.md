@@ -51,21 +51,41 @@ Such an icon follows the system colors in forced-colors mode and prints, from yo
 CORS headers.
 
 ## Browsers
-Released since January 2026: Chrome and Edge 135+, Firefox 147+, Safari 26.2+ (macOS and iOS). Nothing is written for
-older browsers; newer features only as enhancements inside `@supports`.
+Bootstrap 6's floor: Chrome and Edge 130+, Firefox 132+, Safari 18+ (macOS and iOS) — the browsers of autumn 2024.
+What must work rests on features of the floor. Invoker commands and anchor positioning are enhancements: the library
+writes them, and its scripts stand in below them and where an engine gets them wrong — `js/commands.js` hands a command
+to the browser's own `popovertarget` or calls the dialog, `js/menu.js` places a menu the engine did not put beside its
+button. Load them with one tag beside the stylesheet:
+
+```html
+<script type="module" src="js/index.js"></script>
+```
+
+Nothing is written for older browsers.
 
 **The floor gate.** `php tools/floor.php check` reads every stylesheet and page of the library and checks each
 property, value, function, unit, selector, at-rule, media feature, element and attribute against MDN's
 [browser-compat-data](https://github.com/mdn/browser-compat-data) at those versions — on every commit and in the Check
 workflow here. A block is checked only for the browsers that can apply it: `@media (forced-colors: active)` and
 `@supports (…)` narrow them. A vendor form beside a property covers the browsers that need it, as
-`-webkit-print-color-adjust` does for Chrome 135. Every exception is in `tools/floor/rules.json` with its reason.
-`php tools/floor.php check your.css page.html` checks your own files the same way.
+`-webkit-print-color-adjust` does for Chrome 130–135. Every exception is in `tools/floor/rules.json` with its reason,
+and so is every repair of an engine bug with the first versions that fixed it: when the floor passes those versions, the
+gate asks for the exception or the repair to be removed. `php tools/floor.php check your.css page.html` checks your own
+files the same way.
 
 `floor.json` lists every name the gate knows — `property:print-color-adjust`, `value:display:grid`, `unit:dvh`,
 `selector:has`, `media:forced-colors`, `attribute:button:commandfor` — with `"ok"` or, per browser, what the floor
 lacks. Its data is a pinned version of browser-compat-data in `tools/floor/bcd.tsv`, fetched and checked against its
 sha512 by `php tools/floor.php refresh`.
+
+**Checks in real engines.** `php tools/probe.php` opens every page of the library in the installed Chrome, Firefox and
+Safari, in the floor's Chrome 130, Firefox 132 and Safari 18 in the iOS simulator, and in Chrome 136 and Safari 26 in
+the simulator, whose bugs `js/menu.js` repairs — at 1440, 1024, 390 and 320 px, light left-to-right and dark
+right-to-left. It looks for overflow, icons without a mask, width prefixes outside a region, cut labels and errors;
+opens every menu and dialog and checks where it lands; runs axe-core; and checks forced colors and print where the
+engine has them. Older engines are fetched once into `~/Library/Caches/redz-ui` and checked against their checksums. The sheet of
+shots and findings is written to `.dev/probes/`; the Probes workflow runs it on macOS 15 on every commit, and every
+release publishes its sheet under `checks/` on the site.
 
 ## License
 MIT — see [LICENSE](LICENSE). Pieces taken from other MIT-licensed projects are listed with their notices in `NOTICE`.

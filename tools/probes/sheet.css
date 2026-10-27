@@ -1,0 +1,38 @@
+@layer modules {
+	.sheet {
+		inline-size: min(100% - 2rem, 96rem);
+		margin-inline: auto;
+		padding-block: var(--redz-space-32);
+	}
+
+	.sheet-shots {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+		align-items: start;
+		gap: var(--redz-space-16);
+	}
+
+	.sheet-shots figure {
+		display: grid;
+		gap: var(--redz-space-4);
+		margin: 0;
+	}
+
+	.sheet-shots img {
+		display: block;
+		inline-size: 100%;
+		block-size: auto;
+		max-block-size: 40rem;
+		object-fit: cover;
+		object-position: top;
+		border: 1px solid var(--redz-border);
+		border-radius: var(--redz-radius-8);
+	}
+
+	.sheet-findings {
+		margin: 0;
+		padding-inline-start: 1.25rem;
+		font-family: var(--redz-font-mono);
+		font-size: var(--redz-fs-12);
+	}
+}

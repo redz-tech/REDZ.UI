@@ -1,0 +1,62 @@
+name: Probes
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probes:
+    # macOS 15: its image has the iOS 18.5 and 26.2 simulators, and Firefox 132 starts there — not on macOS 27
+    runs-on: macos-15
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: '8.5'
+          extensions: gd
+          coverage: none
+          tools: none
+
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/Library/Caches/redz-ui
+          key: probes-${{ hashFiles('tools/probes/config.json') }}
+
+      - name: Let safaridriver drive Safari and the simulators
+        run: sudo safaridriver --enable
+
+      - name: The pages in the installed engines, at the floor, and in the engines js/menu.js repairs
+        run: php tools/probe.php chrome firefox safari chrome-130 firefox-132 ios-18 chrome-136 ios-26
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: checks
+          path: .dev/probes
+          if-no-files-found: error
+
+  release:
+    needs: probes
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - name: Attach the sheet of the probes to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -eu
+          gh run download "${GITHUB_RUN_ID}" --name checks --dir checks
+          (cd checks && zip -qr ../checks.zip .)
+          gh release upload "${GITHUB_REF_NAME}" checks.zip --clobber

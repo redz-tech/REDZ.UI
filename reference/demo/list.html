@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="../../css/icons.css">
 	<link rel="stylesheet" href="demo.css">
 	<script src="demo.js"></script>
+	<script type="module" src="../../js/index.js"></script>
 </head>
 <body>
 	<div class="app">
@@ -26,7 +27,7 @@
 			<div class="hstack gap-4 ms-auto">
 				<button class="btn btn-text btn-icon d-none md:d-inline-flex" type="button" aria-label="Help for this screen"><i class="bi bi-question-circle" aria-hidden="true"></i></button>
 				<button class="btn btn-text btn-icon" type="button" aria-label="Notifications: 3"><i class="bi bi-bell" aria-hidden="true"></i></button>
-				<button class="btn btn-text btn-icon" type="button" commandfor="profile" command="toggle-popover" aria-haspopup="menu" aria-label="Profile"><span class="avatar">MK</span></button>
+				<button class="btn btn-text btn-icon" type="button" commandfor="profile" command="toggle-popover" aria-haspopup="menu" aria-label="MK, profile"><span class="avatar">MK</span></button>
 				<div id="profile" class="menu" popover role="menu" aria-label="Profile">
 					<div class="menu-header">Marina K. · editor</div>
 					<a class="menu-item" href="#" role="menuitem"><i class="bi bi-translate" aria-hidden="true"></i>Interface language: English</a>
@@ -69,7 +70,7 @@
 				</div>
 				<div class="d-flex flex-wrap gap-8">
 					<div class="btn-group">
-						<a class="btn" href="#"><i class="bi bi-sliders" aria-hidden="true"></i><span class="d-none md:d-inline">Type fields</span></a>
+						<a class="btn" href="#" aria-label="Type fields"><i class="bi bi-sliders" aria-hidden="true"></i><span class="d-none md:d-inline">Type fields</span></a>
 						<button class="btn btn-icon" type="button" commandfor="type-more" command="toggle-popover" aria-haspopup="menu" aria-label="More"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
 					</div>
 					<div id="type-more" class="menu" popover role="menu" aria-label="More">

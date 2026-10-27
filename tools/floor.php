@@ -1,17 +1,19 @@
 <?php
 // floor — the browser floor gate: every CSS and HTML feature of the library against MDN's browser-compat-data at the
 // versions of tools/floor/rules.json. Usage: php tools/floor.php check [FILE…] | build | refresh [VERSION]
-// check — reports each feature the floor lacks as file:line, exits 1 on any and when floor.json is out of date; with
-// files (.css, .html), checks just them; either way first proves itself on the fuses of FLOOR_FUSES;
+// check — reports each feature the floor lacks as file:line, exits 1 on any, when floor.json is out of date, and when an
+// exception or a repair of rules.json is outgrown; with files (.css, .html), checks just them; either way first proves
+// itself on the fuses of FLOOR_FUSES;
 // build — writes floor.json, every name the gate knows with its verdict at the floor, for the release;
 // refresh — downloads @mdn/browser-compat-data (the version of tools/floor/bcd.tsv, or VERSION), verifies its sha512 and
 // writes tools/floor/bcd.tsv.
+
+require __DIR__ . '/lib.php';
 
 const FLOOR_ROOT = __DIR__ . '/..';
 const FLOOR_DATA = __DIR__ . '/floor/bcd.tsv';
 const FLOOR_RULES = __DIR__ . '/floor/rules.json';
 const FLOOR_LIST = __DIR__ . '/../floor.json';
-const FLOOR_REGISTRY = 'https://registry.npmjs.org/@mdn/browser-compat-data/';
 const FLOOR_BROWSERS = ['chrome', 'chrome_android', 'edge', 'firefox', 'firefox_android', 'safari', 'safari_ios'];
 const FLOOR_PREFIXES = ['-webkit-', '-moz-'];
 const FLOOR_LIST_PROPERTIES = ['transition', 'transition-property', 'will-change'];
@@ -27,8 +29,8 @@ const FLOOR_FUSES = [
 	['css', '.a { field-sizing: content; }', 'property:field-sizing'],
 	['css', '@supports (field-sizing: content) { .a { field-sizing: content; } }', ''],
 	['css', '.a { colr: red; }', 'property:colr'],
-	['css', '.a { print-color-adjust: exact; }', 'property:print-color-adjust'],
-	['css', '.a { -webkit-print-color-adjust: exact; print-color-adjust: exact; }', ''],
+	['css', '.a { user-select: none; }', 'property:user-select'],
+	['css', '.a { -webkit-user-select: none; user-select: none; }', ''],
 	['css', '.a, ::-webkit-inner-spin-button { block-size: auto; }', 'vendor pseudo-element'],
 	['css', '.a { inline-size: 10pxx; }', 'unit:pxx'],
 	['css', 'details:open { color: red; }', 'selector:open'],
@@ -61,7 +63,27 @@ function FLOOR__Rules(): array
 			throw new RuntimeException('tools/floor/rules.json: an exception needs a key or a name, and a reason: ' . json_encode($entry));
 		}
 	}
+	foreach ($rules['repairs'] ?? [] as $repair) {
+		if (!isset($repair['file'], $repair['reason']) || ($repair['until'] ?? []) === [] || array_diff(array_keys($repair['until']), FLOOR_BROWSERS) !== []) {
+			throw new RuntimeException('tools/floor/rules.json: a repair needs a file, the first fixed version per browser and a reason: ' . json_encode($repair));
+		}
+	}
 	return $rules;
+}
+
+/** The findings of the repairs of rules.json: a file that is gone, or a repair whose every browser is fixed at the floor. */
+function FLOOR__RepairFindings(array $rules): array
+{
+	$findings = [];
+	foreach ($rules['repairs'] ?? [] as $repair) {
+		$fixed = array_filter($repair['until'], fn(string $until, string $browser): bool => version_compare($rules['floor'][$browser], $until, '>='), ARRAY_FILTER_USE_BOTH);
+		if (!is_file(FLOOR_ROOT . '/' . $repair['file'])) {
+			$findings[] = 'tools/floor/rules.json  the repair names ' . $repair['file'] . ', which is not there';
+		} elseif (count($fixed) === count($repair['until'])) {
+			$findings[] = 'tools/floor/rules.json  the repair in ' . $repair['file'] . ' repairs nothing at the floor any more — remove it and its record';
+		}
+	}
+	return $findings;
 }
 
 /** The derived rows of tools/floor/bcd.tsv: the BCD version and integrity, rows by key, keys by name. */
@@ -345,64 +367,17 @@ function FLOOR__Derive(array $bcd): array
 	return $rows;
 }
 
-/** A body fetched over HTTPS within two minutes, or an exception naming the address. */
-function FLOOR__Fetch(string $url): string
-{
-	$ch = curl_init($url);
-	curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_FOLLOWLOCATION => true, CURLOPT_CONNECTTIMEOUT => 10, CURLOPT_TIMEOUT => 120, CURLOPT_USERAGENT => 'REDZ.UI floor tool', CURLOPT_PROTOCOLS => CURLPROTO_HTTPS]);
-	$body = curl_exec($ch);
-	$status = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
-	if (!is_string($body) || $status !== 200) {
-		throw new RuntimeException('cannot fetch ' . $url . ': ' . ($status ?: curl_error($ch)));
-	}
-	return $body;
-}
-
-/** The file $name inside a gzipped tar archive. */
-function FLOOR__TarFile(string $tgz, string $name): string
-{
-	$tar = gzdecode($tgz);
-	if ($tar === false) {
-		throw new RuntimeException('the BCD package is not gzip');
-	}
-	$at = 0;
-	$long = '';
-	while ($at + 512 <= strlen($tar)) {
-		$head = substr($tar, $at, 512);
-		if (trim($head, "\0") === '') {
-			break;
-		}
-		$size = (int)octdec(trim(substr($head, 124, 12), " \0"));
-		$prefix = rtrim(substr($head, 345, 155), "\0");
-		$path = $long !== '' ? $long : ($prefix === '' ? '' : $prefix . '/') . rtrim(substr($head, 0, 100), "\0");
-		$long = '';
-		$body = substr($tar, $at + 512, $size);
-		if ($head[156] === 'x' && preg_match('~\d+ path=([^\n]+)\n~', $body, $m) === 1) {
-			$long = $m[1];
-		} elseif ($path === $name) {
-			return $body;
-		}
-		$at += 512 + (int)ceil($size / 512) * 512;
-	}
-	throw new RuntimeException('the BCD package has no ' . $name);
-}
-
 /** refresh: downloads BCD $version, checks the registry's sha512, writes bcd.tsv and names exceptions to review again. */
 function FLOOR__Refresh(string $version): int
 {
-	$meta = json_decode(FLOOR__Fetch(FLOOR_REGISTRY . rawurlencode($version)), true, 512, JSON_THROW_ON_ERROR);
-	$integrity = (string)($meta['dist']['integrity'] ?? '');
-	$tgz = FLOOR__Fetch((string)$meta['dist']['tarball']);
-	if (!str_starts_with($integrity, 'sha512-') || !hash_equals(substr($integrity, 7), base64_encode(hash('sha512', $tgz, true)))) {
-		throw new RuntimeException('the BCD package ' . $version . ' does not match its sha512 ' . $integrity);
-	}
-	$rows = FLOOR__Derive(json_decode(FLOOR__TarFile($tgz, 'package/data.json'), true, 512, JSON_THROW_ON_ERROR));
+	$package = TOOL__NpmFile('@mdn/browser-compat-data', $version, 'package/data.json');
+	$rows = FLOOR__Derive(json_decode($package['body'], true, 512, JSON_THROW_ON_ERROR));
 	$old = is_file(FLOOR_DATA) ? FLOOR__Data()['lines'] : [];
-	$head = '# @mdn/browser-compat-data ' . $meta['version'] . ' ' . $integrity . ' — derived by php tools/floor.php refresh, do not edit';
+	$head = '# @mdn/browser-compat-data ' . $package['version'] . ' ' . $package['integrity'] . ' — derived by php tools/floor.php refresh, do not edit';
 	file_put_contents(FLOOR_DATA, implode("\n", [$head, "# key\tnames\tfeature\t" . implode("\t", FLOOR_BROWSERS), ...$rows]) . "\n");
 	$new = FLOOR__Data()['lines'];
 	$changed = array_keys(array_diff_assoc($new, $old) + array_diff_key($old, $new));
-	echo 'BCD ', $meta['version'], ': ', count($rows), ' keys, ', count($changed), " changed\n";
+	echo 'BCD ', $package['version'], ': ', count($rows), ' keys, ', count($changed), " changed\n";
 	foreach (FLOOR__Rules()['allow'] as $entry) {
 		if (isset($entry['key']) && in_array($entry['key'], $changed, true)) {
 			echo 'review the exception again, its data changed: ', $entry['key'], "\n";
@@ -1098,6 +1073,9 @@ function FLOOR__Check(array $paths): int
 			$findings[] = 'tools/floor/rules.json  the exception ' . ($entry['key'] ?? $entry['name']) . ' allows nothing any more — remove it';
 		}
 	}
+	if ($paths === []) {
+		$findings = [...$findings, ...FLOOR__RepairFindings($rules)];
+	}
 	if ($paths === [] && (!is_file(FLOOR_LIST) || file_get_contents(FLOOR_LIST) !== FLOOR__ListText($data, $rules))) {
 		$findings[] = 'floor.json  out of date — run php tools/floor.php build';
 	}
@@ -1105,7 +1083,7 @@ function FLOOR__Check(array $paths): int
 		echo $finding, "\n";
 	}
 	$floor = implode(' ', array_map(fn(string $browser): string => $browser . ' ' . $rules['floor'][$browser], FLOOR_BROWSERS));
-	printf("floor %s · BCD %s · %d files · %d exceptions · selftest %d/%d · %s\n", $floor, $data['version'], count($files), count($rules['allow']), $fuses, count(FLOOR_FUSES), $findings === [] ? 'CLEAN' : count($findings) . ' findings');
+	printf("floor %s · BCD %s · %d files · %d exceptions · %d repairs · selftest %d/%d · %s\n", $floor, $data['version'], count($files), count($rules['allow']), count($rules['repairs'] ?? []), $fuses, count(FLOOR_FUSES), $findings === [] ? 'CLEAN' : count($findings) . ' findings');
 	return $findings === [] ? 0 : 1;
 }
 

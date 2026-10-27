@@ -1,6 +1,6 @@
 # Why REDZ.UI
 
-*As of October 27, 2026: Bootstrap 5.3.8 and Bootstrap 6.0.0-alpha.1. Bootstrap 6 is an alpha, and its authors say
+*As of October 28, 2026: Bootstrap 5.3.8 and Bootstrap 6.0.0-alpha.1. Bootstrap 6 is an alpha, and its authors say
 "things can still meaningfully change before beta" — we will revisit this page when it reaches beta.*
 
 [Русская версия](why.ru.md)
@@ -13,14 +13,17 @@
 - Bootstrap 6 moves toward the platform in ways we agree with. But it renames the vocabulary everyone has already
   written — 71 % of the v5 class names — without a compatibility layer or a codemod, and costs more in the browser.
 - A layer over Bootstrap does not shield a product; only a vocabulary that belongs to the product does.
-- So REDZ.UI is that vocabulary: written on the platform of 2026, with no build step anywhere, accessible by
-  construction, and checked in three real browser engines.
+- So REDZ.UI is that vocabulary: on today's platform, where what must work stands on features every engine has had
+  for years, with no build step anywhere, accessible by construction, and checked in real engines — at its floor and
+  above.
 
 ## 1. What we need
 - Server-rendered products: a CMS whose modules come from third parties, and an ERP.
 - No build step anywhere — not for us and not for anyone who downloads the library: no Node, no Sass, no bundler. Copy a
   release folder, or link it from a CDN.
-- Browsers released since January 2026: Chrome and Edge 135+, Firefox 147+, Safari 26.2+ on macOS and iOS.
+- Bootstrap 6's browser floor: Chrome and Edge 130+, Firefox 132+, Safari 18+ on macOS and iOS — the browsers of
+  autumn 2024. What must work rests on features of that floor; newer ones, such as invoker commands and anchor
+  positioning, are enhancements, with a small script standing in below them.
 - WCAG 2.2 AA in the light and the dark theme; left-to-right and right-to-left from one stylesheet; the system theme
   followed without JavaScript.
 - A vocabulary that changes only when we change it.
@@ -61,7 +64,8 @@ and content blockers can switch them off.
 Staying on 5.3 means moving later anyway — to Bootstrap 6.
 
 ## 3. What Bootstrap 6 does right — and we take
-Credit where it is due. Bootstrap 6 raises its browser floor (Chrome and Edge 130, Firefox 132, Safari 18). It puts its
+Credit where it is due. Bootstrap 6 raises its browser floor (Chrome and Edge 130, Firefox 132, Safari 18) — the floor
+REDZ.UI keeps too. It puts its
 CSS into cascade layers and writes logical properties — one stylesheet for both directions, about 1,060 logical
 declarations to 30 physical ones by our count. It builds dialogs on `<dialog>` and accordions on `<details>` with fewer
 wrappers, and puts the floating label before its control. It follows the system theme by default with `light-dark()`,
@@ -116,9 +120,13 @@ a date picker inside. The JavaScript is published as ES modules only, themes go 
 files Bootstrap ships target npm, Vite, Parcel and Webpack. It is a world of build tools. We need "copy the folder and
 it works".
 
-### e. Its floor still needs JavaScript where the platform suffices
-Anchor positioning is not in Bootstrap 6's floor — it arrived in Firefox 147 and Safari 26 — so its menus and tooltips
-are placed by Floating UI. Our floor has it: a REDZ.UI menu is placed by CSS alone.
+### e. Its menus are placed by script in every browser
+Anchor positioning is not in Bootstrap 6's floor, nor in ours — it arrived in Firefox 147 and Safari 26 — so both need a
+script for menus. Bootstrap 6 places every menu and tooltip with Floating UI, in every browser, inside its 60 KB bundle.
+REDZ.UI writes the platform's way — invoker commands and anchor positioning — and about 3 KB gzip of script stands in
+only where the browser lacks them or gets them wrong: it hands a command to the browser's own `popovertarget`, so the
+browser still reports the menu as expanded and returns focus, and it places a menu the engine did not put beside its
+button. As the floor rises, the floor gate retires that script part by part.
 
 ### f. Styling that works against accessibility
 The focus ring is 3 px of the accent mixed half and half with the page — about 1.85:1 against white by our computation
@@ -154,13 +162,14 @@ quarry of ideas, never a dependency.
 
 ## 6. What REDZ.UI is instead
 REDZ.UI is in design: its look is approved as a prototype, and nothing is released yet. It is built to be:
-- **A vocabulary people already know, on the platform of 2026:** Bootstrap 5's names for components and utilities,
+- **A vocabulary people already know, on today's platform:** Bootstrap 5's names for components and utilities,
   Bootstrap 6's where it moved onto the platform as we do (`dialog`, `drawer`, `menu`, `check`, `switch`), and one
   reading rule — a component and its variant as one class (`btn btn-primary btn-sm`), every condition as a prefix
-  (`md:`, `print:`), the number is the value (`p-16` is 16 px). Under it: `<dialog>`, `popover`, anchor positioning,
-  invoker commands, `:has()`, cascade layers, `light-dark()`, OKLCH, logical properties.
-- **No build step anywhere:** plain CSS files, one small classic script that works by delegation, and icons as CSS masks
-  over their SVG files. Copy a release, or link it from a CDN — jsDelivr and GitHub Pages serve its CSS and SVG with
+  (`md:`, `print:`), the number is the value (`p-16` is 16 px). Under it: `<dialog>`, `popover`, `:has()`, cascade
+  layers, `light-dark()`, OKLCH, logical properties — and invoker commands and anchor positioning as enhancements, the
+  script standing in below them.
+- **No build step anywhere:** plain CSS files, small modules that work by delegation behind one script tag, and icons
+  as CSS masks over their SVG files. Copy a release, or link it from a CDN — jsDelivr and GitHub Pages serve its CSS and SVG with
   CORS headers (checked).
 - **Rules measured, not guessed:** tokens on `:root`; a component declares few custom properties, and only on its root;
   no substring attribute selectors; a state is an ARIA attribute on the component's class; `:has()` is never anchored on
@@ -169,8 +178,9 @@ REDZ.UI is in design: its look is approved as a prototype, and nothing is releas
   mode and print are part of the checks.
 - **One stylesheet** for left-to-right and right-to-left, and the system theme without JavaScript.
 - **Trust by machinery:** a gate checks every property, value and selector against MDN's compatibility data for the
-  floor, and the components are checked in real Chrome, Safari and Firefox — the prototype screens already were, in
-  both themes and both directions.
+  floor, and every page is checked on every commit in real engines, in both themes and both directions: the installed
+  Chrome, Safari and Firefox; the floor's Chrome 130, Firefox 132 and Safari 18 on iOS; and Chrome 136 and Safari 26 on
+  iOS, whose bugs the script repairs. Each release publishes its sheet of shots.
 - **Icons, measured:** 1,000 icons as masks render in 1.6 ms in Chrome and 4 ms in Safari and Firefox — against
   12–16 ms for an external SVG sprite; there is no font to block, and they stay visible in forced colors and in print.
 - **Moving from Bootstrap 5 is short:** most component and utility names stay, and Bootstrap Icons keep their own
@@ -180,12 +190,19 @@ REDZ.UI is in design: its look is approved as a prototype, and nothing is releas
 
 ## 7. What it costs us
 - We maintain it ourselves; there is no crowd reporting its bugs for us.
-- The floor leaves older devices out — for example iPhone XS and XR, and Safari on macOS 13 and older (Chrome and
-  Firefox still run there).
-- New platform features still have engine bugs — in WebKit, anchor positioning
+- The floor leaves older devices out — for example iPhone 8 and X, Safari on macOS 12 and older (Chrome and Firefox
+  still run there), and Windows 7 and 8, whose browsers stopped at Chrome 109. By StatCounter's data for September
+  2026, about 92 % of all traffic worldwide runs a browser at the floor or above — 83 % in Russia and 96 % in Thailand;
+  on desktop, 86, 75 and 90 %. Part of the older tail looks automated (Chrome 103 to 112 hold a flat 0.2 % each
+  worldwide), so the share of people is higher.
+- New platform features still have engine bugs. In WebKit: anchor positioning
   ([295006](https://bugs.webkit.org/show_bug.cgi?id=295006), [310959](https://bugs.webkit.org/show_bug.cgi?id=310959))
-  and VoiceOver with `<dialog>` ([302351](https://bugs.webkit.org/show_bug.cgi?id=302351)). Our checks run in the real
-  engines to catch such bugs.
+  and VoiceOver with `<dialog>` ([302351](https://bugs.webkit.org/show_bug.cgi?id=302351)). Our own checks found three
+  more in two days: Chrome 135–136 anchor a menu in a middle-aligned table cell at the cell's top; Chrome 130–132 make
+  no implicit anchor of a popover's invoker; Safari 26 keeps a fixed menu below its button at the bottom of a page taller
+  than the viewport, judging the fallbacks by the page instead of the viewport (the class of
+  [289743](https://bugs.webkit.org/show_bug.cgi?id=289743); fixed by Safari 27.2). That is why what must work does not
+  rest on the newest features.
 - Today it is a prototype, and nothing is released yet.
 
 ## 8. Sources and method
@@ -206,6 +223,11 @@ versions from npm, [the migration skill](https://github.com/twbs/bootstrap/blob/
 and [#98288](https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/12.0/Breaking-98288-UpdatedBackendModalAPI.html),
 [MDN browser-compat-data](https://github.com/mdn/browser-compat-data) and
 [web-features](https://github.com/web-platform-dx/web-features).
+
+**Browser shares:** [StatCounter's browser versions](https://gs.statcounter.com/browser-version-market-share) for
+September 2026 — worldwide, Russia and Thailand, desktop and mobile apart — with iPhone traffic split by the iOS Safari
+versions of [caniuse-db](https://www.npmjs.com/package/caniuse-db) 1.0.30001819, and each Chromium-based browser judged
+by its engine version from browser-compat-data.
 
 **Our counts:** class names, custom properties and selectors counted in the minified stylesheets of both versions;
 contrast computed from the colors declared in their CSS with the WCAG formula, OKLCH converted to sRGB.

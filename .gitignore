@@ -1,3 +1,6 @@
 # IDE and OS
 /.idea/
 .DS_Store
+
+# The sheet of the probes (php tools/probe.php)
+/.dev/

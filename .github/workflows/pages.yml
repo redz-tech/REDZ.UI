@@ -1,13 +1,14 @@
 name: Pages
 
 on:
-  push:
-    branches: [main]
-    tags: ['v*']
+  workflow_run:
+    workflows: [Probes]
+    types: [completed]
   workflow_dispatch:
 
 permissions:
   contents: read
+  actions: read
   pages: write
   id-token: write
 
@@ -17,6 +18,7 @@ concurrency:
 
 jobs:
   deploy:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.event == 'push'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -38,6 +40,31 @@ jobs:
             latest="$tag"
           done
           git archive "${latest:-origin/main}" | tar -x -C _site
+
+      - name: Add the sheets of the probes — main's latest as next/checks, each release's own as <version>/checks
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -eu
+          run=$(gh run list --workflow probes.yml --branch main --event push --status completed --limit 1 --json databaseId --jq '.[0].databaseId // empty')
+          if [ -n "$run" ]; then
+            gh run download "$run" --name checks --dir _site/next/checks || echo "main's latest probes run has no sheet"
+          fi
+          for tag in $(git tag --list 'v*' --sort=v:refname); do
+            if gh release download "$tag" --pattern checks.zip --dir "/tmp/checks-$tag" 2>/dev/null; then
+              mkdir -p "_site/${tag#v}/checks"
+              unzip -q "/tmp/checks-$tag/checks.zip" -d "_site/${tag#v}/checks"
+            fi
+          done
+          root=$(git tag --list 'v*' --sort=v:refname | tail -n 1)
+          from="_site/next/checks"
+          if [ -n "$root" ]; then
+            from="_site/${root#v}/checks"
+          fi
+          if [ -d "$from" ]; then
+            cp -R "$from" _site/checks
+          fi
 
       - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
 
