@@ -10,6 +10,8 @@ right-to-left.
 **Site:** [redz-tech.github.io/REDZ.UI](https://redz-tech.github.io/REDZ.UI/) — documentation and the demo screens of
 the latest release at the root, of the main branch under `next/`, and of every release under its version.
 
+**Why:** [why our own library instead of Bootstrap 5.3 or 6](docs/why.md) · [по-русски](docs/why.ru.md).
+
 ## What it is
 - Tokens, a reset, cascade layers, components and a short set of utilities, written as plain CSS files.
 - Behaviour of the widgets that the platform does not give by itself (menus and tabs by keyboard, toasts, a combobox),

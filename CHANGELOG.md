@@ -24,3 +24,6 @@ or JavaScript call removed or renamed is a major release, one added is a minor r
 - The site on GitHub Pages, assembled without a build: the latest release at the root, the main branch under `next/`,
   every release under its version; a landing page that leads to the demo screens. Until the first release the root
   shows the main branch.
+- `docs/why.md` and its Russian version `docs/why.ru.md`: why the library exists instead of Bootstrap 5.3 or
+  Bootstrap 6 — what we need, where each falls short for us, why not a layer over Bootstrap, what it costs us; every
+  number with its source or its method.
