@@ -5,6 +5,21 @@ window.REDZ_PROBE = (() => {
 	const pause = (ms) => new Promise((done) => setTimeout(done, ms));
 	const frames = () => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done)));
 	const closed = (el) => el.closest('[popover]:not(:popover-open), dialog:not([open])') !== null;
+	// The box an opened layer rests in, without the scale or move of its opening transition — a slow engine may not have
+	// run it yet when the probe measures.
+	const resting = (el) => {
+		const style = el.getAttribute('style');
+		for (const property of ['transition', 'scale', 'translate']) {
+			el.style.setProperty(property, 'none', 'important');
+		}
+		const box = el.getBoundingClientRect();
+		if (style === null) {
+			el.removeAttribute('style');
+		} else {
+			el.setAttribute('style', style);
+		}
+		return box;
+	};
 	const shown = (el) => el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden' && !closed(el);
 	const clipped = (el) => {
 		for (let a = el.parentElement; a && a !== root; a = a.parentElement) {
@@ -89,7 +104,7 @@ window.REDZ_PROBE = (() => {
 				invoker.click();
 				await pause(350);
 				const open = command === 'show-modal' ? target.open : target.matches(':popover-open');
-				const r = target.getBoundingClientRect();
+				const r = resting(target);
 				const q = invoker.getBoundingClientRect();
 				const inside = r.left >= -1 && r.top >= -1 && r.right <= root.clientWidth + 1 && r.bottom <= innerHeight + 1;
 				const near = Math.min(Math.abs(r.top - q.bottom), Math.abs(q.top - r.bottom)) <= 12;

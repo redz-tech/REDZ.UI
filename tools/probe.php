@@ -107,6 +107,10 @@ function PROBE__Binary(string $name, array $engine, string &$why): string
 			$why = 'no simulator runtime of iOS ' . implode(' or ', (array)$engine['ios']) . ' here';
 			return '';
 		}
+		if (!isset($engine['ios']) && preg_match('~<key>CGSSessionScreenIsLocked</key>\s*<true/>~', PROBE__Run(['/usr/sbin/ioreg', '-n', 'Root', '-d1', '-a'])) === 1) {
+			$why = 'the screen is locked, and Safari on the Mac draws no frames until it is unlocked';
+			return '';
+		}
 		return '/usr/bin/safaridriver';
 	}
 	if (isset($engine['binary'])) {
