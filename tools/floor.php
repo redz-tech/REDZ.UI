@@ -2,7 +2,7 @@
 // floor — the browser floor gate: every CSS and HTML feature of the library against MDN's browser-compat-data at the
 // versions of tools/floor/rules.json. Usage: php tools/floor.php check [FILE…] | build | refresh [VERSION]
 // check — reports each feature the floor lacks as file:line, exits 1 on any and when floor.json is out of date; with
-// files (.css, .html), checks just them;
+// files (.css, .html), checks just them; either way first proves itself on the fuses of FLOOR_FUSES;
 // build — writes floor.json, every name the gate knows with its verdict at the floor, for the release;
 // refresh — downloads @mdn/browser-compat-data (the version of tools/floor/bcd.tsv, or VERSION), verifies its sha512 and
 // writes tools/floor/bcd.tsv.
@@ -23,6 +23,27 @@ const FLOOR_RANGE = ['<', '>', '='];
 const FLOOR_UNIT_TYPES = ['length', 'angle', 'time', 'frequency', 'resolution', 'flex'];
 const FLOOR_TYPE_UNITS = ['length' => ['px', 'cm', 'mm', 'in', 'pc', 'pt'], 'time' => ['s', 'ms'], 'frequency' => ['hz', 'khz'], 'flex' => ['fr']];
 const FLOOR_FUNCTION_ALIASES = ['rgba' => 'rgb'];
+const FLOOR_FUSES = [
+	['css', '.a { field-sizing: content; }', 'property:field-sizing'],
+	['css', '@supports (field-sizing: content) { .a { field-sizing: content; } }', ''],
+	['css', '.a { colr: red; }', 'property:colr'],
+	['css', '.a { print-color-adjust: exact; }', 'property:print-color-adjust'],
+	['css', '.a { -webkit-print-color-adjust: exact; print-color-adjust: exact; }', ''],
+	['css', '.a, ::-webkit-inner-spin-button { block-size: auto; }', 'vendor pseudo-element'],
+	['css', '.a { inline-size: 10pxx; }', 'unit:pxx'],
+	['css', 'details:open { color: red; }', 'selector:open'],
+	['css', '@media (prefers-colour-scheme: dark) { .a { color: red; } }', 'media:prefers-colour-scheme'],
+	['css', '.a { position-anchor: normal; }', 'value:position-anchor:normal'],
+	['css', '.a { position-anchor: auto; }', ''],
+	['css', '.a { color: contrast-color(red); }', 'function:contrast-color'],
+	['css', '@media (forced-colors: active) { .a { forced-color-adjust: preserve-parent-color; } }', 'preserve-parent-color'],
+	['css', '.a { word-wrap: break-word; }', ''],
+	['html', '<dialog closedby="any"></dialog>', 'attribute:dialog:closedby'],
+	['html', '<div popover="hint"></div>', 'popover:hint'],
+	['html', '<div style="color: red"></div>', 'style='],
+	['html', '<button commandfor="d" command="show-modal">Open</button>', ''],
+	['html', '<blink>Old</blink>', 'element:blink'],
+];
 const FLOOR_WORD = '~^-?[a-z][a-z0-9-]*$~';
 const FLOOR_VENDOR = '~^(-[a-z]+-)(.+)$~';
 
@@ -1031,6 +1052,21 @@ function FLOOR__ListText(array $data, array $rules): string
 	return "{\n\t\"floor\": " . json_encode($rules['floor']) . ",\n\t\"bcd\": " . $bcd . ",\n\t\"names\": {\n" . implode(",\n", $lines) . "\n\t},\n\t\"allow\": [\n" . implode(",\n", $allow) . "\n\t]\n}\n";
 }
 
+/** The fuses of FLOOR_FUSES that misfire: a broken sample the gate lets through, or a sound one it reports. */
+function FLOOR__SelfTest(array $data, array $rules): array
+{
+	$failures = [];
+	foreach (FLOOR_FUSES as [$kind, $sample, $expect]) {
+		$used = [];
+		$facts = $kind === 'css' ? FLOOR__CssFacts($sample, $data, $rules) : FLOOR__HtmlFacts($sample, $data);
+		$findings = implode("\n", FLOOR__Findings($facts, 'fuse', $data, $rules, $used));
+		if ($expect === '' ? $findings !== '' : !str_contains($findings, $expect)) {
+			$failures[] = 'tools/floor.php  the fuse ' . $sample . ($expect === '' ? ' reports ' . $findings : ' does not report ' . $expect);
+		}
+	}
+	return $failures;
+}
+
 /** check: the findings of every stylesheet and page of rules.json, or of the files in $paths (.css or .html) alone;
  *  1 on any, or — for the library itself — when an exception allows nothing or floor.json is out of date. */
 function FLOOR__Check(array $paths): int
@@ -1039,7 +1075,8 @@ function FLOOR__Check(array $paths): int
 	$data = FLOOR__Data();
 	$root = (string)realpath(FLOOR_ROOT);
 	$used = [];
-	$findings = [];
+	$findings = FLOOR__SelfTest($data, $rules);
+	$fuses = count(FLOOR_FUSES) - count($findings);
 	$files = [];
 	foreach (['css', 'html'] as $kind) {
 		foreach ($rules[$kind] as $pattern) {
@@ -1068,7 +1105,7 @@ function FLOOR__Check(array $paths): int
 		echo $finding, "\n";
 	}
 	$floor = implode(' ', array_map(fn(string $browser): string => $browser . ' ' . $rules['floor'][$browser], FLOOR_BROWSERS));
-	printf("floor %s · BCD %s · %d files · %d exceptions · %s\n", $floor, $data['version'], count($files), count($rules['allow']), $findings === [] ? 'CLEAN' : count($findings) . ' findings');
+	printf("floor %s · BCD %s · %d files · %d exceptions · selftest %d/%d · %s\n", $floor, $data['version'], count($files), count($rules['allow']), $fuses, count(FLOOR_FUSES), $findings === [] ? 'CLEAN' : count($findings) . ' findings');
 	return $findings === [] ? 0 : 1;
 }
 
