@@ -10,8 +10,8 @@
   time, the most expensive change is a rename that comes from outside.
 - Bootstrap 5.3 was built for the browsers of 2017–2018. Today's platform does natively much of what it ships as
   JavaScript, and its line is coming to an end.
-- Bootstrap 6 moves toward the platform in ways we agree with. But it puts the design into utility classes in the
-  markup, drops 71 % of the v5 class names without a compatibility layer or a codemod, and costs more in the browser.
+- Bootstrap 6 moves toward the platform in ways we agree with. But it renames the vocabulary everyone has already
+  written — 71 % of the v5 class names — without a compatibility layer or a codemod, and costs more in the browser.
 - A layer over Bootstrap does not shield a product; only a vocabulary that belongs to the product does.
 - So REDZ.UI is that vocabulary: written on the platform of 2026, with no build step anywhere, accessible by
   construction, and checked in three real browser engines.
@@ -72,12 +72,13 @@ We agree with that direction. REDZ.UI takes the same ideas, with credit wherever
 
 ## 4. Where Bootstrap 6 goes where we cannot follow
 
-### a. Utilities in the markup become the main language
+### a. It renames the vocabulary everyone has already written
 The announcement is candid: ["Yes, this is a direct copy of how Tailwind does responsive"](https://blog.getbootstrap.com/2026/10/08/bootstrap-6-alpha/)
-— `.d-md-none` becomes `.md:d-none`. The stylesheet grows from 2,025 class names to 3,113, and colors move to
-`.theme-*` and `.fg-*`. When spacing, breakpoints and colors live in the markup of every screen, every major version
-rewrites every screen. For a product whose screens are partly written by others, that is the most expensive kind of
-change there is.
+— `.d-md-none` becomes `.md:d-none`; colors move to `.theme-*` and `.fg-*`, and the stylesheet grows from 2,025 class
+names to 3,113. The prefix itself reads well, and REDZ.UI uses it too. The cost is the rename: spacing, breakpoints and
+colors already live in the markup of every screen written for v5, so renaming them rewrites every screen. For a product
+whose screens are partly written by others, that is the most expensive kind of change there is — a vocabulary must stay
+put once people have written it.
 
 ### b. Moving without a safety net
 - 1,447 of the 2,025 class names of 5.3.8 — 71 % — do not exist in 6.0.0-alpha.1 (our count of both minified
@@ -153,8 +154,11 @@ quarry of ideas, never a dependency.
 
 ## 6. What REDZ.UI is instead
 REDZ.UI is in design: its look is approved as a prototype, and nothing is released yet. It is built to be:
-- **Our own vocabulary on the platform of 2026:** `<dialog>`, `popover`, anchor positioning, invoker commands, `:has()`,
-  cascade layers, `light-dark()`, OKLCH, logical properties.
+- **A vocabulary people already know, on the platform of 2026:** Bootstrap 5's names for components and utilities,
+  Bootstrap 6's where it moved onto the platform as we do (`dialog`, `drawer`, `menu`, `check`, `switch`), and one
+  reading rule — a component and its variant as one class (`btn btn-primary btn-sm`), every condition as a prefix
+  (`md:`, `print:`), the number is the value (`p-16` is 16 px). Under it: `<dialog>`, `popover`, anchor positioning,
+  invoker commands, `:has()`, cascade layers, `light-dark()`, OKLCH, logical properties.
 - **No build step anywhere:** plain CSS files, one small classic script that works by delegation, and icons as CSS masks
   over their SVG files. Copy a release, or link it from a CDN — jsDelivr and GitHub Pages serve its CSS and SVG with
   CORS headers (checked).
@@ -169,9 +173,10 @@ REDZ.UI is in design: its look is approved as a prototype, and nothing is releas
   both themes and both directions.
 - **Icons, measured:** 1,000 icons as masks render in 1.6 ms in Chrome and 4 ms in Safari and Firefox — against
   12–16 ms for an external SVG sprite; there is no font to block, and they stay visible in forced colors and in print.
-- **A way out of Bootstrap with a safety net:** no REDZ.UI class has the name of a Bootstrap 5.3.8 class, so both
-  stylesheets can live on one page and a project can move screen by screen. A machine-readable map, a public migration
-  skill and a scan for leftovers will come with the components, and the vocabulary follows Semantic Versioning.
+- **Moving from Bootstrap 5 is short:** most component and utility names stay, and Bootstrap Icons keep their own
+  class names (`bi bi-pencil`). What changes — the spacing numbers, grids set by their parent, states as HTML
+  attributes, dialogs and menus opened by the browser's commands — comes with a machine-readable map, a public
+  migration skill and a scan for leftovers, and the vocabulary follows Semantic Versioning.
 
 ## 7. What it costs us
 - We maintain it ourselves; there is no crowd reporting its bugs for us.

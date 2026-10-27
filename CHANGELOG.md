@@ -16,8 +16,13 @@ or JavaScript call removed or renamed is a major release, one added is a minor r
   Chrome, Safari and Firefox. Icons in them are still an inline sprite; the mask delivery below lands with the base.
 
 ### Decided
-- Icons are CSS masks over the files of Bootstrap Icons: `<i class="icon icon--NAME" aria-hidden="true"></i>`, no icon
-  font, no build in any project that uses the library.
+- The reading rules (see the README): Bootstrap 5's names for components and utilities, Bootstrap 6's where it moved
+  onto the platform; a component and its variant as one class; every condition as a prefix (`md:`, `print:`), a width
+  prefix measuring the region; the number is the value; the parent sets the grid; states as HTML attributes; the
+  browser's commands for dialogs and menus; tokens `--redz-*`. They replace the prototype's names (`button--primary`,
+  `stack`, `cluster`, `split`), which are rewritten next.
+- Icons are CSS masks over the files of Bootstrap Icons, under Bootstrap Icons' own class names:
+  `<i class="bi bi-NAME" aria-hidden="true"></i>`, no icon font, no build in any project that uses the library.
 
 ### Added
 - Bootstrap Icons 1.13.2 in `icons/`, the files unchanged (MIT, see `NOTICE`).

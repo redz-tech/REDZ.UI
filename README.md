@@ -19,13 +19,27 @@ the latest release at the root, of the main branch under `next/`, and of every r
 - Light, dark and system themes; left-to-right and right-to-left from one stylesheet; WCAG 2.2 AA in both themes.
 - A static reference of every component in every state, checked in Chrome, Safari and Firefox.
 
+## How it reads
+One rule for every class — decided; the prototype is being rewritten to it:
+- A component, its variant, its size and its parts are one class each: `btn btn-primary btn-sm`, `card-header`.
+  Bootstrap 5's names, and Bootstrap 6's where it moved onto the platform (`dialog`, `drawer`, `menu`, `check`,
+  `switch`).
+- A utility is `property-value`, with Bootstrap 5's names: `d-flex`, `justify-content-between`, `text-muted`.
+- A condition is a prefix: `md:cols-2`, `print:d-none`. A width prefix measures the region the element sits in — a
+  column, a dialog, a card — not the window.
+- The number is the value: `p-16` is 16 px, `rounded-8` is 8 px, `w-50` is 50 %, `cols-3` is three columns.
+- The parent sets the grid: `grid md:cols-2 gap-16`; a child spans with `span-full` or `lg:span-8`.
+- A state is an HTML attribute: `aria-current`, `aria-pressed`, `disabled`, `[open]`. A button opens a dialog with the
+  browser's own command: `commandfor="edit" command="show-modal"`.
+- Tokens are `--redz-` plus the same words: `--redz-text-muted`, `--redz-space-16`.
+
 ## Icons
-[Bootstrap Icons](https://icons.getbootstrap.com/) 1.13.2, one SVG file per icon in `icons/`. The library will deliver
-each icon as a CSS mask over its file (decided; it lands with the base), so an icon takes the color of the text around
-it and needs no font, no JavaScript and no build:
+[Bootstrap Icons](https://icons.getbootstrap.com/) 1.13.2, one SVG file per icon in `icons/`, under their own class
+names. The library will deliver each icon as a CSS mask over its file (decided; it lands with the base), so an icon
+takes the color of the text around it and needs no font, no JavaScript and no build:
 
 ```html
-<i class="icon icon--pencil" aria-hidden="true"></i>
+<i class="bi bi-pencil" aria-hidden="true"></i>
 ```
 
 Such an icon follows the system colors in forced-colors mode and prints, from your own server or from a CDN that sends
