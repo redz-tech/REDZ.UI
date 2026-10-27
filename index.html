@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>REDZ.UI</title>
+	<meta name="description" content="The interface library of the REDZ products: plain CSS and small JavaScript on the browser platform — no framework, no build step.">
+	<link rel="stylesheet" href="css/index.css">
+	<link rel="stylesheet" href="docs/site.css">
+</head>
+<body>
+	<main class="site stack stack--loose">
+		<header class="stack">
+			<h1 class="site__title">REDZ.UI</h1>
+			<p class="site__lead">The interface library of the REDZ products: plain CSS and small JavaScript on the browser platform — no framework, no build step.</p>
+			<div class="cluster">
+				<span class="pill pill--warning">In design · nothing released yet</span>
+				<a class="button" href="https://github.com/redz-tech/REDZ.UI">Source on GitHub</a>
+			</div>
+		</header>
+
+		<section class="panel" aria-labelledby="demo">
+			<div class="panel__head"><h2 id="demo">Demo screens</h2></div>
+			<div class="panel__body stack">
+				<p class="muted">The approved prototype of the look. A switch at the bottom of each screen turns the system, light and dark themes, left-to-right and right-to-left, and the compact density.</p>
+				<div class="grid">
+					<a class="site__card" href="reference/demo/list.html"><strong>A list</strong><span class="muted">Excursions: saved views, filters, a batch bar, row actions and statuses.</span></a>
+					<a class="site__card" href="reference/demo/resource.html"><strong>A resource page</strong><span class="muted">One excursion: languages, sites, facts and a side panel.</span></a>
+					<a class="site__card" href="reference/demo/settings.html"><strong>A settings form</strong><span class="muted">Admin branding: floating fields, a color choice, previews and a save bar.</span></a>
+				</div>
+			</div>
+		</section>
+
+		<section class="panel" aria-labelledby="what">
+			<div class="panel__head"><h2 id="what">What it is</h2></div>
+			<div class="panel__body">
+				<ul>
+					<li>Tokens, a reset, cascade layers, components and a short set of utilities, written as plain CSS files.</li>
+					<li>Behaviour of the widgets that the platform does not give by itself — menus and tabs by keyboard, toasts, a combobox — as small JavaScript that attaches by delegation.</li>
+					<li>Light, dark and system themes; left-to-right and right-to-left from one stylesheet; WCAG 2.2 AA in both themes.</li>
+					<li>A static reference of every component in every state, checked in Chrome, Safari and Firefox.</li>
+				</ul>
+			</div>
+		</section>
+
+		<div class="grid grid--two">
+			<section class="panel" aria-labelledby="icons">
+				<div class="panel__head"><h2 id="icons">Icons</h2></div>
+				<div class="panel__body stack">
+					<p>Bootstrap Icons 1.13.2, one SVG file per icon. Each icon will be a CSS mask over its file — the color of the text around it, no font, no JavaScript, no build (decided; it lands with the base):</p>
+					<p><code>&lt;i class="icon icon--pencil" aria-hidden="true"&gt;&lt;/i&gt;</code></p>
+				</div>
+			</section>
+			<section class="panel" aria-labelledby="browsers">
+				<div class="panel__head"><h2 id="browsers">Browsers</h2></div>
+				<div class="panel__body stack">
+					<p>Released since January 2026: Chrome and Edge 135+, Firefox 147+, Safari 26.2+ on macOS and iOS.</p>
+					<p class="muted">Nothing is written for older browsers; newer features only as enhancements.</p>
+				</div>
+			</section>
+		</div>
+
+		<footer class="site__foot cluster cluster--between">
+			<span>MIT license · © 2026 Red Z Group · includes Bootstrap Icons (MIT)</span>
+			<a href="https://github.com/redz-tech/REDZ.UI/blob/main/CHANGELOG.md">Changelog</a>
+		</footer>
+	</main>
+</body>
+</html>

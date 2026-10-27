@@ -7,6 +7,9 @@ build step.
 `reference/demo/` — a list, a resource page and a settings form — in light and dark themes, left-to-right and
 right-to-left.
 
+**Site:** [redz-tech.github.io/REDZ.UI](https://redz-tech.github.io/REDZ.UI/) — documentation and the demo screens of
+the latest release at the root, of the main branch under `next/`, and of every release under its version.
+
 ## What it is
 - Tokens, a reset, cascade layers, components and a short set of utilities, written as plain CSS files.
 - Behaviour of the widgets that the platform does not give by itself (menus and tabs by keyboard, toasts, a combobox),

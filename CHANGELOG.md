@@ -21,3 +21,6 @@ or JavaScript call removed or renamed is a major release, one added is a minor r
 
 ### Added
 - Bootstrap Icons 1.13.2 in `icons/`, the files unchanged (MIT, see `NOTICE`).
+- The site on GitHub Pages, assembled without a build: the latest release at the root, the main branch under `next/`,
+  every release under its version; a landing page that leads to the demo screens. Until the first release the root
+  shows the main branch.
