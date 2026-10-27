@@ -115,8 +115,19 @@ window.REDZ_PROBE = (() => {
 			return out;
 		},
 		async axe(tags) {
-			const result = await window.axe.run(document, {runOnly: {type: 'tag', values: tags}, resultTypes: ['violations']});
-			return result.violations.map((v) => ({id: v.id, impact: v.impact, help: v.help, targets: v.nodes.slice(0, 5).map((node) => node.target.join(' '))}));
+			// A sticky element covers only what scrolls under it, and axe judges one scroll position: it runs with them in place.
+			const stuck = [...document.querySelectorAll('body *')].filter((el) => getComputedStyle(el).position === 'sticky');
+			for (const el of stuck) {
+				el.style.setProperty('position', 'static', 'important');
+			}
+			try {
+				const result = await window.axe.run(document, {runOnly: {type: 'tag', values: tags}, resultTypes: ['violations']});
+				return result.violations.map((v) => ({id: v.id, impact: v.impact, help: v.help, targets: v.nodes.slice(0, 5).map((node) => node.target.join(' '))}));
+			} finally {
+				for (const el of stuck) {
+					el.style.removeProperty('position');
+				}
+			}
 		}
 	};
 })();

@@ -14,7 +14,5 @@
 		"ios-26": {"kind": "safari", "ios": ["26.4", "26.5", "26.2"]}
 	},
 	"axe": {"version": "4.14.0", "integrity": "sha512-9WTZxEjsZ7b13TH8JPmbV2z8CHbl80/2hm3XPEG4JgNdQLK81IBRXmSxHfMAOkSqQeRxT/0dwNDz2GOm3zzpcQ==", "tags": ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]},
-	"allow": [
-		{"rule": "target-size", "target": ".demo-swatch", "engines": ["ios-18", "ios-26"], "why": "An iPhone screen is 714 px tall, so at the top of the page the sticky save bar covers the swatches row of settings.html; axe judges that one scroll position, and the swatches are their full 36 px once scrolled into view."}
-	]
+	"allow": []
 }
