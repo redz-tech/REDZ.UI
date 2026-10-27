@@ -1,0 +1,28 @@
+name: Check
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: '8.5'
+          coverage: none
+          tools: none
+
+      - name: The generated stylesheets match tools/vocabulary.json
+        run: php tools/build.php --check
+
+      - name: Every CSS and HTML feature works at the browser floor
+        run: php tools/floor.php check

@@ -11,6 +11,7 @@
 		background: var(--redz-tile-bg);
 		color: var(--redz-tile-fg);
 		font-size: 1.25rem;
+		-webkit-print-color-adjust: exact;
 		print-color-adjust: exact;
 	}
 

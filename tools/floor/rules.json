@@ -1,0 +1,20 @@
+{
+	"floor": {"chrome": "135", "chrome_android": "135", "edge": "135", "firefox": "147", "firefox_android": "147", "safari": "26.2", "safari_ios": "26.2"},
+	"css": ["css/*.css", "css/components/*.css", "reference/demo/*.css", "docs/*.css"],
+	"html": ["*.html", "reference/demo/*.html"],
+	"allow": [
+		{"key": "css.properties.forced-color-adjust.*", "browsers": ["safari", "safari_ios"], "reviewed": "8.1.7", "reason": "Safari has no forced colors mode, so the property does nothing there; the library writes it only for that mode."},
+		{"key": "css.properties.cursor.*", "browsers": ["safari_ios"], "reviewed": "8.1.7", "reason": "iOS shows no pointer cursor; cursor values are ignored there."},
+		{"key": "css.properties.resize.*", "browsers": ["firefox_android", "safari_ios"], "reviewed": "8.1.7", "reason": "Mobile browsers show no resize handle on text areas; the declaration is ignored there."},
+		{"key": "css.selectors.selection", "browsers": ["safari_ios"], "reviewed": "8.1.7", "reason": "iOS keeps the system selection colors; the rule is ignored there."},
+		{"key": "css.properties.text-size-adjust", "browsers": ["firefox", "safari"], "reviewed": "8.1.7", "reason": "Text size adjustment exists only in mobile browsers; desktop Firefox and Safari ignore it, and the -webkit- form beside it covers Safari on iOS and Firefox on Android."},
+		{"key": "css.properties.accent-color", "browsers": ["chrome_android"], "reviewed": "8.1.7", "reason": "Chrome for Android does not keep a minimum contrast for controls in the accent color; the library's accent passes 4.5:1 in both themes on its own."},
+		{"key": "css.properties.position-anchor", "reviewed": "8.1.7", "reason": "Partial at the floor only in its initial value (auto, none or implicit by version); the library always writes position-anchor out, and its value auto is supported at the floor."},
+		{"key": "css.properties.position-area.block-end", "browsers": ["chrome", "chrome_android", "edge", "firefox", "firefox_android"], "reviewed": "8.1.7", "reason": "Partial in Chrome 129–143 and Firefox 147 only as a single keyword or beside span-all, where the anchored box may overflow the viewport; the library always pairs it with a span-inline-* keyword."},
+		{"key": "css.properties.position-area.block-start", "browsers": ["chrome", "chrome_android", "edge", "firefox", "firefox_android"], "reviewed": "8.1.7", "reason": "Partial in Chrome 129–143 and Firefox 147 only as a single keyword or beside span-all, where the anchored box may overflow the viewport; the library always pairs it with a span-inline-* keyword."},
+		{"key": "css.selectors.autofill", "browsers": ["firefox", "firefox_android"], "reviewed": "8.1.7", "reason": "Firefox matches :autofill only on autofilled user name and password fields; other autofilled fields show the browser's own autofill style instead of ours."},
+		{"key": "html.elements.meta.name.viewport", "browsers": ["chrome", "edge", "firefox", "safari"], "reviewed": "8.1.7", "reason": "Desktop browsers have no viewport to set; the tag is for mobile browsers, where it is supported."},
+		{"name": "selector:-webkit-search-decoration", "reviewed": "8.1.7", "reason": "Not in browser-compat-data: the decoration of search fields in WebKit and Blink, removed by the reset in a rule of its own, which Firefox ignores."},
+		{"name": "selector:-webkit-outer-spin-button", "reviewed": "8.1.7", "reason": "Not in browser-compat-data: the outer spin button of number fields in WebKit and Blink; it shares its rule only with ::-webkit-inner-spin-button, so Firefox drops just that rule."}
+	]
+}

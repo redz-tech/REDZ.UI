@@ -47,23 +47,24 @@ function BUILD__UtilityRules(stdClass $entry, stdClass $vocab): array
 	}
 	$rules = [];
 	$property = $entry->property;
+	$declare = fn(string $value): string => (isset($entry->vendor) ? $entry->vendor . $property . ': ' . $value . '; ' : '') . $property . ': ' . $value;
 	foreach (is_array($entry->values ?? null) ? $entry->values : [] as $value) {
-		$rules[$entry->name . '-' . $value] = $property . ': ' . $value;
+		$rules[$entry->name . '-' . $value] = $declare($value);
 	}
 	foreach (is_object($entry->values ?? null) ? get_object_vars($entry->values) : [] as $key => $value) {
-		$rules[$entry->name . '-' . $key] = $property . ': ' . $value;
+		$rules[$entry->name . '-' . $key] = $declare($value);
 	}
 	foreach (isset($entry->scale) ? $vocab->scales->{$entry->scale} : [] as $n) {
-		$rules[$entry->name . '-' . $n] = $property . ': var(--redz-' . $entry->scale . '-' . $n . ')';
+		$rules[$entry->name . '-' . $n] = $declare('var(--redz-' . $entry->scale . '-' . $n . ')');
 	}
 	for ($n = 1; $n <= ($entry->count ?? 0); $n++) {
-		$rules[$entry->name . '-' . $n] = $property . ': ' . str_replace('{n}', (string)$n, $entry->pattern);
+		$rules[$entry->name . '-' . $n] = $declare(str_replace('{n}', (string)$n, $entry->pattern));
 	}
 	foreach ($entry->px ?? [] as $px) {
-		$rules[$entry->name . '-' . $px] = $property . ': ' . str_replace('{v}', BUILD__Rem($px), $entry->pattern);
+		$rules[$entry->name . '-' . $px] = $declare(str_replace('{v}', BUILD__Rem($px), $entry->pattern));
 	}
 	foreach (isset($entry->tones) ? $vocab->tones : [] as $tone) {
-		$rules[$entry->name . '-' . $tone . ($entry->suffix ?? '')] = $property . ': ' . str_replace('{tone}', $tone, $entry->tones);
+		$rules[$entry->name . '-' . $tone . ($entry->suffix ?? '')] = $declare(str_replace('{tone}', $tone, $entry->tones));
 	}
 	return $rules;
 }

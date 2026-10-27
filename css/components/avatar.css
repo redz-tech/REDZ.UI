@@ -10,6 +10,7 @@
 		color: var(--redz-primary);
 		font-size: var(--redz-fs-12);
 		font-weight: 700;
+		-webkit-print-color-adjust: exact;
 		print-color-adjust: exact;
 	}
 

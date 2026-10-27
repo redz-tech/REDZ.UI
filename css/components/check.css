@@ -11,6 +11,7 @@
 		background: var(--redz-bg);
 		vertical-align: -0.2em;
 		cursor: pointer;
+		-webkit-print-color-adjust: exact;
 		print-color-adjust: exact;
 	}
 
@@ -33,6 +34,7 @@
 		content: "";
 		background: var(--redz-primary-contrast);
 		scale: 0;
+		-webkit-print-color-adjust: exact;
 		print-color-adjust: exact;
 	}
 
@@ -102,6 +104,7 @@
 		border-radius: 50%;
 		background: var(--redz-bg);
 		box-shadow: 0 0 0 1px var(--redz-border-strong), 0 1px 2px rgb(16 18 24 / 0.2);
+		-webkit-print-color-adjust: exact;
 		print-color-adjust: exact;
 	}
 

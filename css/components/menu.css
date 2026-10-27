@@ -63,9 +63,11 @@
 		inline-size: 0.875rem;
 		block-size: 0.875rem;
 		margin-inline-start: auto;
-		background: var(--redz-primary);
+		color: var(--redz-primary);
+		background: currentColor;
+		-webkit-print-color-adjust: exact;
+		print-color-adjust: exact;
 		mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M13.5 3.8a1 1 0 0 1 .1 1.4l-6.5 7.2a1 1 0 0 1-1.45.05L2.4 9.3a1 1 0 1 1 1.4-1.45l2.5 2.4 5.8-6.4a1 1 0 0 1 1.4-.05'/%3E%3C/svg%3E") center / contain no-repeat;
-		forced-color-adjust: preserve-parent-color;
 	}
 
 	.menu-item-danger,
@@ -87,8 +89,11 @@
 			color: HighlightText;
 		}
 
-		.menu-item[aria-checked="true"]::after {
-			background: currentColor;
+		@supports (forced-color-adjust: preserve-parent-color) {
+			.menu-item[aria-checked="true"]::after {
+				forced-color-adjust: preserve-parent-color;
+				color: inherit;
+			}
 		}
 	}
 

@@ -21,6 +21,7 @@
 		font-size: 0.6875rem;
 		font-weight: 700;
 		line-height: 1.25rem;
+		-webkit-print-color-adjust: exact;
 		print-color-adjust: exact;
 	}
 
@@ -56,6 +57,7 @@
 		color: #ffffff;
 		font-size: 0.625rem;
 		font-weight: 750;
+		-webkit-print-color-adjust: exact;
 		print-color-adjust: exact;
 	}
 
@@ -77,6 +79,7 @@
 		block-size: 2.25rem;
 		border-radius: var(--redz-radius-6);
 		background: linear-gradient(135deg, #2b8bb0, #5ac2a8);
+		-webkit-print-color-adjust: exact;
 		print-color-adjust: exact;
 	}
 
@@ -101,6 +104,7 @@
 		border-radius: 50%;
 		outline: 1px solid var(--redz-border-strong);
 		cursor: pointer;
+		-webkit-print-color-adjust: exact;
 		print-color-adjust: exact;
 	}
 
@@ -132,6 +136,7 @@
 	.demo-login-art {
 		background: linear-gradient(160deg, #3fb7a6, #0d7468 55%, #0a3f3a);
 		color: #ffffff;
+		-webkit-print-color-adjust: exact;
 		print-color-adjust: exact;
 	}
 
@@ -145,6 +150,7 @@
 		background: #0d7468;
 		color: #ffffff;
 		font-weight: 700;
+		-webkit-print-color-adjust: exact;
 		print-color-adjust: exact;
 	}
 

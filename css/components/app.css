@@ -42,6 +42,7 @@
 		color: var(--redz-primary-contrast);
 		font-size: var(--redz-fs-12);
 		font-weight: 750;
+		-webkit-print-color-adjust: exact;
 		print-color-adjust: exact;
 	}
 

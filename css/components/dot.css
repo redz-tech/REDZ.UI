@@ -6,6 +6,7 @@
 		block-size: 0.5rem;
 		border-radius: 50%;
 		background: var(--redz-text-faint);
+		-webkit-print-color-adjust: exact;
 		print-color-adjust: exact;
 	}
 

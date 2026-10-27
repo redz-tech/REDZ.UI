@@ -64,6 +64,7 @@
 		background-position: right var(--redz-space-12) center;
 		background-repeat: no-repeat;
 		background-size: 0.875rem;
+		-webkit-print-color-adjust: exact;
 		print-color-adjust: exact;
 	}
 

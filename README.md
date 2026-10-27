@@ -52,7 +52,20 @@ CORS headers.
 
 ## Browsers
 Released since January 2026: Chrome and Edge 135+, Firefox 147+, Safari 26.2+ (macOS and iOS). Nothing is written for
-older browsers; newer features only as enhancements.
+older browsers; newer features only as enhancements inside `@supports`.
+
+**The floor gate.** `php tools/floor.php check` reads every stylesheet and page of the library and checks each
+property, value, function, unit, selector, at-rule, media feature, element and attribute against MDN's
+[browser-compat-data](https://github.com/mdn/browser-compat-data) at those versions — on every commit and in the Check
+workflow here. A block is checked only for the browsers that can apply it: `@media (forced-colors: active)` and
+`@supports (…)` narrow them. A vendor form beside a property covers the browsers that need it, as
+`-webkit-print-color-adjust` does for Chrome 135. Every exception is in `tools/floor/rules.json` with its reason.
+`php tools/floor.php check your.css page.html` checks your own files the same way.
+
+`floor.json` lists every name the gate knows — `property:print-color-adjust`, `value:display:grid`, `unit:dvh`,
+`selector:has`, `media:forced-colors`, `attribute:button:commandfor` — with `"ok"` or, per browser, what the floor
+lacks. Its data is a pinned version of browser-compat-data in `tools/floor/bcd.tsv`, fetched and checked against its
+sha512 by `php tools/floor.php refresh`.
 
 ## License
 MIT — see [LICENSE](LICENSE). Pieces taken from other MIT-licensed projects are listed with their notices in `NOTICE`.

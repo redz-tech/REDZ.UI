@@ -12,6 +12,7 @@
 		outline-offset: -1px;
 		background: var(--redz-alert-bg);
 		color: var(--redz-text);
+		-webkit-print-color-adjust: exact;
 		print-color-adjust: exact;
 	}
 

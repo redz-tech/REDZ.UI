@@ -3,7 +3,7 @@
 		position: fixed;
 		inset: auto;
 		position-anchor: auto;
-		position-area: block-start;
+		position-area: block-start span-inline-end;
 		position-try-fallbacks: flip-block;
 		max-inline-size: 18rem;
 		margin: var(--redz-space-4);

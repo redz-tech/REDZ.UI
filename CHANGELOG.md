@@ -44,6 +44,20 @@ or JavaScript call removed or renamed is a major release, one added is a minor r
 - Print: the shell's header and sidebar, toasts and the save bar stay off paper; checkboxes, switches, select arrows,
   badges and icons print as on screen.
 
+### The browser floor
+- `tools/floor.php`: every property, value, function, unit, selector, at-rule, media feature, element and attribute of
+  the library against MDN's browser-compat-data 8.1.7 at Chrome / Edge 135, Firefox 147, Safari 26.2 (desktop and
+  mobile). A block counts only for the browsers that can apply it (`@media`, `@supports`); a vendor form beside a
+  property covers the browsers that need it; every exception is in `tools/floor/rules.json` with its reason. It runs on
+  every commit and in the new Check workflow; `check FILE…` checks any stylesheet or page.
+- `floor.json`: every name the gate knows with its verdict at the floor, for projects that check their own CSS.
+- Fixed at the floor, as the gate found: `print-color-adjust` is unprefixed only from Chrome 136, so every use carries
+  `-webkit-print-color-adjust` (icons, badges and checkboxes now print in Chrome 135); `user-select` needs its
+  `-webkit-` form in Safari; `forced-color-adjust: preserve-parent-color` stays for Chrome only inside `@supports` —
+  Firefox has no such value and already paints the icons in the forced text color; the tooltip pairs `block-start`
+  with `span-inline-end` (the single keyword overflows the viewport in Chrome 129–143 and Firefox 147); `text-break`
+  is `overflow-wrap: anywhere`.
+
 ### Added
 - Bootstrap Icons 1.13.2 in `icons/`, the files unchanged (MIT, see `NOTICE`).
 - The site on GitHub Pages, assembled without a build: the latest release at the root, the main branch under `next/`,

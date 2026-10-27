@@ -95,13 +95,16 @@
 		mask-size: contain;
 		mask-repeat: no-repeat;
 		vertical-align: -0.125em;
-		forced-color-adjust: preserve-parent-color;
+		-webkit-print-color-adjust: exact;
 		print-color-adjust: exact;
 	}
 
 	@media (forced-colors: active) {
-		.bi {
-			color: inherit !important;
+		@supports (forced-color-adjust: preserve-parent-color) {
+			.bi {
+				forced-color-adjust: preserve-parent-color;
+				color: inherit !important;
+			}
 		}
 	}
 }
