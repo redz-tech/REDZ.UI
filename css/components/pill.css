@@ -1,0 +1,111 @@
+@layer components {
+	.pill {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3125rem;
+		padding: 0.125rem 0.5rem;
+		border-radius: 999px;
+		background: var(--surface-hover);
+		color: var(--ink-muted);
+		font-size: var(--text-small);
+		font-weight: 550;
+		line-height: 1rem;
+		white-space: nowrap;
+	}
+
+	.pill--accent {
+		background: var(--accent-soft);
+		color: var(--accent);
+	}
+
+	.pill--info {
+		background: var(--info-soft);
+		color: var(--info);
+	}
+
+	.pill--success {
+		background: var(--success-soft);
+		color: var(--success);
+	}
+
+	.pill--warning {
+		background: var(--warning-soft);
+		color: var(--warning);
+	}
+
+	.pill--danger {
+		background: var(--danger-soft);
+		color: var(--danger);
+	}
+
+	.dot {
+		display: inline-block;
+		flex: none;
+		inline-size: 0.5rem;
+		block-size: 0.5rem;
+		border-radius: 50%;
+		background: var(--ink-faint);
+	}
+
+	.dot--accent {
+		background: var(--accent);
+	}
+
+	.dot--info {
+		background: var(--info);
+	}
+
+	.dot--success {
+		background: var(--success);
+	}
+
+	.dot--warning {
+		background: var(--warning);
+	}
+
+	.dot--danger {
+		background: var(--danger);
+	}
+
+	.tile {
+		display: grid;
+		place-items: center;
+		flex: none;
+		inline-size: 2.5rem;
+		block-size: 2.5rem;
+		border-radius: var(--radius-3);
+		background: var(--accent-soft);
+		color: var(--accent);
+		font-size: 1.25rem;
+	}
+
+	.tile--small {
+		inline-size: 2rem;
+		block-size: 2rem;
+		border-radius: var(--radius-2);
+		font-size: 1rem;
+	}
+
+	.tile--warning {
+		background: var(--warning-soft);
+		color: var(--warning);
+	}
+
+	.tile--danger {
+		background: var(--danger-soft);
+		color: var(--danger);
+	}
+
+	.avatar {
+		display: inline-grid;
+		place-items: center;
+		flex: none;
+		inline-size: 2rem;
+		block-size: 2rem;
+		border-radius: 50%;
+		background: var(--accent-soft);
+		color: var(--accent);
+		font-size: 0.75rem;
+		font-weight: 700;
+	}
+}

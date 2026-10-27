@@ -1,0 +1,94 @@
+@layer components {
+	.menu {
+		position: fixed;
+		inset: auto;
+		position-anchor: auto;
+		position-area: block-end span-inline-start;
+		position-try-fallbacks: flip-block, flip-inline;
+		min-inline-size: 13rem;
+		max-inline-size: min(22rem, calc(100vw - 1rem));
+		margin: var(--space-1) 0;
+		padding: var(--space-1);
+		border: 1px solid var(--line);
+		border-radius: var(--radius-3);
+		background: var(--surface-raised);
+		box-shadow: var(--shadow-2);
+		color: var(--ink);
+	}
+
+	.menu--start {
+		position-area: block-end span-inline-end;
+	}
+
+	.menu__head {
+		padding: var(--space-2) var(--space-2) var(--space-1);
+		color: var(--ink-muted);
+		font-size: var(--text-small);
+		font-weight: 550;
+	}
+
+	.menu__item {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		inline-size: 100%;
+		min-block-size: var(--control-height);
+		padding: 0 var(--space-2);
+		border: 0;
+		border-radius: var(--radius-2);
+		background: none;
+		color: var(--ink);
+		text-align: start;
+		text-decoration: none;
+		cursor: pointer;
+	}
+
+	.menu__item .icon {
+		color: var(--ink-muted);
+	}
+
+	.menu__item:hover,
+	.menu__item:focus-visible {
+		background: var(--surface-hover);
+		outline-offset: -2px;
+	}
+
+	.menu__item[aria-checked="true"],
+	.menu__item[aria-current="true"] {
+		font-weight: 600;
+	}
+
+	.menu__item[aria-checked="true"]::after {
+		content: "";
+		inline-size: 0.875rem;
+		block-size: 0.875rem;
+		margin-inline-start: auto;
+		background: var(--accent);
+		mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M13.5 3.8a1 1 0 0 1 .1 1.4l-6.5 7.2a1 1 0 0 1-1.45.05L2.4 9.3a1 1 0 1 1 1.4-1.45l2.5 2.4 5.8-6.4a1 1 0 0 1 1.4-.05'/%3E%3C/svg%3E") center / contain no-repeat;
+	}
+
+	.menu__item--danger,
+	.menu__item--danger .icon {
+		color: var(--danger);
+	}
+
+	.menu__sep {
+		margin: var(--space-1) calc(var(--space-1) * -1);
+		border: 0;
+		border-block-start: 1px solid var(--line);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.menu {
+			transform-origin: top;
+			transition: opacity var(--motion) var(--ease-out), scale var(--motion) var(--ease-out), display var(--motion) allow-discrete, overlay var(--motion) allow-discrete;
+		}
+
+		@starting-style {
+			.menu:popover-open {
+				opacity: 0;
+				scale: 0.97;
+			}
+		}
+	}
+}

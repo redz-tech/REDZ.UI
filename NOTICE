@@ -1,0 +1,7 @@
+REDZ.UI includes material from other projects. Each is listed with its notice.
+
+Bootstrap Icons 1.13.2
+  Where:   icons/ (the SVG files, unchanged)
+  Source:  https://github.com/twbs/icons (release v1.13.2, 2026-10-08)
+  License: MIT, see icons/LICENSE
+  Copyright (c) 2019-2024 The Bootstrap Authors

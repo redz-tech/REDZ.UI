@@ -1,0 +1,101 @@
+@layer components {
+	.check {
+		appearance: none;
+		display: inline-grid;
+		place-content: center;
+		flex: none;
+		inline-size: 1rem;
+		block-size: 1rem;
+		margin: 0;
+		border: 1px solid var(--line-strong);
+		border-radius: 0.25rem;
+		background: var(--surface);
+		vertical-align: -0.2em;
+		cursor: pointer;
+	}
+
+	.check::before {
+		content: "";
+		inline-size: 0.6875rem;
+		block-size: 0.6875rem;
+		background: var(--on-accent);
+		mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M13.5 3.8a1 1 0 0 1 .1 1.4l-6.5 7.2a1 1 0 0 1-1.45.05L2.4 9.3a1 1 0 1 1 1.4-1.45l2.5 2.4 5.8-6.4a1 1 0 0 1 1.4-.05'/%3E%3C/svg%3E") center / contain no-repeat;
+		scale: 0;
+	}
+
+	.check:checked,
+	.check:indeterminate {
+		border-color: var(--accent);
+		background: var(--accent);
+	}
+
+	.check:checked::before {
+		scale: 1;
+	}
+
+	.check:indeterminate::before {
+		block-size: 2px;
+		mask: none;
+		scale: 1;
+	}
+
+	.check[type="radio"] {
+		border-radius: 50%;
+	}
+
+	.check[type="radio"]::before {
+		inline-size: 0.375rem;
+		block-size: 0.375rem;
+		border-radius: 50%;
+		mask: none;
+	}
+
+	.check:focus-visible {
+		outline: 2px solid var(--focus);
+		outline-offset: 2px;
+	}
+
+	.check:disabled,
+	.check[aria-disabled="true"] {
+		border-color: var(--line);
+		background: var(--surface-sunken);
+		cursor: not-allowed;
+	}
+
+	.check--switch {
+		display: inline-flex;
+		align-items: center;
+		inline-size: 2rem;
+		block-size: 1.125rem;
+		padding-inline: 0.125rem;
+		border-radius: 999px;
+		background: var(--surface-hover);
+	}
+
+	.check--switch::before {
+		inline-size: 0.875rem;
+		block-size: 0.875rem;
+		border-radius: 50%;
+		background: var(--surface);
+		box-shadow: 0 0 0 1px var(--line-strong), 0 1px 2px rgb(16 18 24 / 0.2);
+		mask: none;
+		scale: 1;
+	}
+
+	.check--switch:checked::before {
+		margin-inline-start: 0.875rem;
+		background: #ffffff;
+		box-shadow: 0 1px 2px rgb(16 18 24 / 0.3);
+	}
+
+	.check--switch:disabled::before,
+	.check--switch[aria-disabled="true"]::before {
+		box-shadow: 0 0 0 1px var(--line);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.check::before {
+			transition: scale var(--motion) var(--ease-out), margin var(--motion) var(--ease-out);
+		}
+	}
+}

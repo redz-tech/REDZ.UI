@@ -1,0 +1,100 @@
+@layer base {
+	html {
+		background: var(--surface-sunken);
+	}
+
+	body {
+		min-block-size: 100dvh;
+		font-family: var(--font-sans);
+		font-size: var(--text-body);
+		line-height: var(--leading);
+		color: var(--ink);
+		background: var(--surface-sunken);
+		overflow-x: clip;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4 {
+		line-height: 1.25;
+		font-weight: 650;
+		text-wrap: balance;
+	}
+
+	h1 {
+		font-size: var(--text-large);
+		letter-spacing: -0.01em;
+	}
+
+	h2,
+	h3 {
+		font-size: var(--text-body);
+	}
+
+	a {
+		color: var(--accent);
+		text-decoration-thickness: from-font;
+		text-underline-offset: 0.15em;
+	}
+
+	a:not(:hover) {
+		text-decoration: none;
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--focus);
+		outline-offset: 2px;
+	}
+
+	::selection {
+		background: var(--accent-soft);
+		color: var(--ink);
+	}
+
+	code,
+	kbd,
+	samp {
+		font-family: var(--font-mono);
+		font-size: 0.875em;
+	}
+
+	kbd {
+		padding-inline: 0.35em;
+		border: 1px solid var(--line);
+		border-block-end-width: 2px;
+		border-radius: var(--radius-1);
+		background: var(--surface);
+		color: var(--ink-muted);
+	}
+
+	small {
+		font-size: var(--text-small);
+	}
+
+	hr {
+		margin-block: var(--space-4);
+		border: 0;
+		border-block-start: 1px solid var(--line);
+	}
+
+	meter,
+	progress {
+		inline-size: 100%;
+		block-size: 0.5rem;
+		accent-color: var(--accent);
+	}
+
+	.icon {
+		display: inline-block;
+		flex: none;
+		inline-size: 1em;
+		block-size: 1em;
+		fill: currentColor;
+		vertical-align: -0.125em;
+	}
+
+	.icon--flip:dir(rtl) {
+		scale: -1 1;
+	}
+}
