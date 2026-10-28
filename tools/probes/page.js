@@ -59,6 +59,11 @@ window.REDZ_PROBE = (() => {
 			await Promise.race([document.fonts.ready, pause(5000)]);
 			await frames();
 			still.remove();
+			for (const animation of document.getAnimations()) {
+				if (animation.effect?.getTiming().iterations === Infinity) {
+					animation.pause();
+				}
+			}
 			return true;
 		},
 		measure() {
@@ -287,6 +292,7 @@ window.REDZ_PROBE = (() => {
 				await frames();
 				invoker.click();
 				await pause(350);
+				await frames();
 				const open = command === 'show-modal' ? target.open : target.matches(':popover-open');
 				const r = resting(target);
 				const q = invoker.getBoundingClientRect();

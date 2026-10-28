@@ -37,8 +37,9 @@ or JavaScript call removed or renamed is a major release, one added is a minor r
 - Probes: the docs pages in the current three engines at 1440 and 390; the right-to-left cells on the Arabic twins;
   `aria-busy` on a live region, the docs' state copies against the real pointer and Tab, and the fonts of Arabic text
   in Chrome are checked; text that spills out of its box is named; Safari's Tab is Option-Tab, which reaches buttons
-  and links; a cell sets its theme with transitions off; an exception may name a finding; CI runs in five parallel
-  parts joined by `php tools/probe.php merge`.
+  and links; a cell sets its theme with transitions off; an exception may name a finding; every wait in the page ends
+  in a few seconds; CI runs in five parallel parts joined by `php tools/probe.php merge`, with Chrome for Testing 156
+  as its current Chrome.
 
 ### The look, approved as a prototype
 - Tokens `--redz-*`: neutral grays, a blue accent, six tones (`primary`, `secondary`, `success`, `danger`, `warning`,

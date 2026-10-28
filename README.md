@@ -141,8 +141,9 @@ menu and dialog and checks where it lands; walks every menu, modal dialog and ta
 axe-core; and checks forced colors and print where the engine has them. Every docs page runs in the current Chrome,
 Firefox and Safari at 1440 and 390 px. Older engines are fetched once into `~/Library/Caches/redz-ui` and checked
 against their checksums. The sheet of shots and findings is written to `.dev/probes/`; the Probes workflow runs it on
-macOS 15 on every commit in five parallel parts — joined by `php tools/probe.php merge` — and every release publishes
-its sheet under `checks/` on the site.
+macOS 15 on every commit in five parallel parts — joined by `php tools/probe.php merge` — with a pinned Chrome for
+Testing build as the current Chrome, as the image's own lags; every release publishes its sheet under `checks/` on the
+site.
 
 ## License
 MIT — see [LICENSE](LICENSE). Pieces taken from other MIT-licensed projects are listed with their notices in `NOTICE`.

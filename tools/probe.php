@@ -204,6 +204,9 @@ function PROBE__ServerStart(string $dir): array
 /** Calls the engine driver's $verb (Load, Inject, Eval, Shot, Print, Errors, Stop) on the handle. */
 function PROBE__Do(array &$h, string $verb, mixed ...$args): mixed
 {
+	if (getenv('REDZ_PROBE_TRACE') !== false) {
+		fwrite(STDERR, gmdate('H:i:s') . ' ' . $verb . ' ' . substr(json_encode(array_map(fn(mixed $arg): mixed => is_string($arg) && strlen($arg) > 200 ? strlen($arg) . ' bytes' : $arg, $args), JSON_UNESCAPED_SLASHES), 0, 160) . "\n");
+	}
 	return ('PROBE__' . ucfirst($h['kind']) . $verb)($h, ...$args);
 }
 
@@ -646,7 +649,7 @@ function PROBE__Main(array $argv): int
 	if (($argv[1] ?? '') === 'merge') {
 		return PROBE__Merge($config, array_slice($argv, 2));
 	}
-	$names = array_slice($argv, 1) ?: array_keys($config['engines']);
+	$names = array_slice($argv, 1) ?: array_keys(array_filter($config['engines'], fn(array $engine): bool => $engine['default'] ?? true));
 	foreach ($names as $name) {
 		if (!isset($config['engines'][$name])) {
 			fwrite(STDERR, 'no engine ' . $name . ' in tools/probes/config.json; there are ' . implode(', ', array_keys($config['engines'])) . "\n");

@@ -12,7 +12,8 @@ permissions:
 
 jobs:
   probes:
-    # macOS 15: its image has the iOS 18.5 and 26.2 simulators, and Firefox 132 starts there — not on macOS 27.
+    # macOS 15: its image has the iOS 18.5 and 26.2 simulators, and Firefox 132 starts there — not on macOS 27. Its
+    # Chrome lags (152), so the current Chrome is a pinned Chrome for Testing build (chrome-156 in the config).
     # Five parts at once — the most macOS jobs a free account runs together — each its own sheet, joined below.
     name: probes (${{ matrix.part.name }})
     runs-on: macos-15
@@ -21,7 +22,7 @@ jobs:
       fail-fast: false
       matrix:
         part:
-          - {name: chrome, engines: chrome}
+          - {name: chrome, engines: chrome-156}
           - {name: firefox, engines: firefox}
           - {name: safari, engines: safari}
           - {name: floor, engines: chrome-130 firefox-132 chrome-136}
