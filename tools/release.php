@@ -2,7 +2,8 @@
 // release — what a tag v* publishes, for the release job of the Probes workflow: checks that the tag names the
 // passport's version and that the changelog has that version's section, then writes into DIR the archive
 // redz-ui-<version>.zip — `git archive` of the tag: the passport and every file it names, under redz-ui-<version>/ —
-// and notes.md, the release notes: that section of the changelog, what the files are and how to check them. Usage:
+// and notes.md, the release notes: that section of the changelog, what the files are and how to check them. The
+// archive is the same byte for byte wherever it is made, so anyone can rebuild a release's from its tag. Usage:
 // php tools/release.php TAG DIR
 
 const RELEASE_ROOT = __DIR__ . '/..';
@@ -54,7 +55,8 @@ function RELEASE__Main(array $argv): int
 		return 1;
 	}
 	$zip = realpath($dir) . '/redz-ui-' . $version . '.zip';
-	$git = proc_open(['git', '-C', RELEASE_ROOT, 'archive', '--format=zip', '--prefix=redz-ui-' . $version . '/', '-o', $zip, $tag, '--', 'redz-ui.json', ...array_keys($passport['files'])], [1 => STDOUT, 2 => STDERR], $pipes);
+	// A zip keeps local times: in UTC the archive comes out byte for byte the same wherever the tag is archived.
+	$git = proc_open(['git', '-C', RELEASE_ROOT, 'archive', '--format=zip', '--prefix=redz-ui-' . $version . '/', '-o', $zip, $tag, '--', 'redz-ui.json', ...array_keys($passport['files'])], [1 => STDOUT, 2 => STDERR], $pipes, null, ['TZ' => 'UTC'] + getenv());
 	if (!is_resource($git) || proc_close($git) !== 0) {
 		@unlink($zip);
 		fwrite(STDERR, 'git archive of ' . $tag . " failed\n");
