@@ -1,5 +1,6 @@
 {
-	"pages": ["index.html", "reference/widgets.html", "reference/demo/list.html", "reference/demo/resource.html", "reference/demo/settings.html"],
+	"pages": ["index.html", "docs/all.html", "reference/demo/list.html", "reference/demo/resource.html", "reference/demo/settings.html"],
+	"docs": {"engines": ["chrome", "firefox", "safari"], "widths": [1440, 390]},
 	"widths": {"1440": 900, "1024": 768, "390": 844, "320": 568},
 	"shots": [1440, 390],
 	"combos": {"light-ltr": ["light", "ltr"], "dark-rtl": ["dark", "rtl"]},
@@ -14,5 +15,7 @@
 		"ios-26": {"kind": "safari", "ios": ["26.4", "26.5", "26.2"]}
 	},
 	"axe": {"version": "4.14.0", "integrity": "sha512-9WTZxEjsZ7b13TH8JPmbV2z8CHbl80/2hm3XPEG4JgNdQLK81IBRXmSxHfMAOkSqQeRxT/0dwNDz2GOm3zzpcQ==", "tags": ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]},
-	"allow": []
+	"allow": [
+		{"finding": "docs/all.ar.html 1440 · dark · RTL · Arabic — #drawer-filters-panel from button.btn leaves the viewport", "engines": ["chrome-130"], "reason": "Chrome 130 puts fixed boxes 15 px to the left in a right-to-left page whose root keeps a stable scrollbar gutter — as html:has(dialog:modal) does while a modal is open — so a drawer at the end edge loses 7 px; Chrome 136 places it right (measured 2026-10-28). The gutter stays: without it every engine shifts the page when a modal opens."}
+	]
 }

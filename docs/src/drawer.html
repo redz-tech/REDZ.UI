@@ -1,0 +1,50 @@
+<header class="vstack gap-8">
+	<h1>Drawers</h1>
+	<p class="docs-lead">A modal panel at the end of the screen — or at its start with <code>drawer-start</code> — for filters, a record's details, a long form beside the list it belongs to. Bootstrap 5 calls it offcanvas; it is a <code>&lt;dialog&gt;</code> here.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="drawer-examples">
+	<h2 id="drawer-examples">Examples</h2>
+	<p>A drawer opens and closes like a dialog: <code>command="show-modal"</code> and <code>command="close"</code>. It slides in from its side — mirrored right to left — unless the person asks for less motion.</p>
+	<div class="docs-example" id="drawer-filters">
+		<button class="btn" type="button" commandfor="drawer-filters-panel" command="show-modal"><i class="bi bi-funnel" aria-hidden="true"></i>Filters</button>
+		<button class="btn" type="button" commandfor="drawer-filters-start" command="show-modal"><i class="bi bi-layout-sidebar" aria-hidden="true"></i>From the start</button>
+		<dialog id="drawer-filters-panel" class="drawer" closedby="any" aria-labelledby="drawer-filters-panel-title">
+			<div class="drawer-header">
+				<h2 class="drawer-title" id="drawer-filters-panel-title">Filters</h2>
+				<button class="btn-close" type="button" commandfor="drawer-filters-panel" command="close" aria-label="Close"></button>
+			</div>
+			<div class="drawer-body vstack gap-16">
+				<fieldset class="vstack gap-8">
+					<legend class="form-label">Status</legend>
+					<label class="form-check"><input class="check" type="checkbox" checked>Published</label>
+					<label class="form-check"><input class="check" type="checkbox">Draft</label>
+				</fieldset>
+				<div class="form-floating">
+					<select class="form-select" id="drawer-filters-section"><option>Any section</option><option>Marine</option><option>Land</option></select>
+					<label for="drawer-filters-section">Section</label>
+				</div>
+				<div class="hstack gap-8 justify-content-end">
+					<button class="btn" type="button" commandfor="drawer-filters-panel" command="close">Reset</button>
+					<button class="btn btn-primary" type="button" commandfor="drawer-filters-panel" command="close">Show 9</button>
+				</div>
+			</div>
+		</dialog>
+		<dialog id="drawer-filters-start" class="drawer drawer-start" closedby="any" aria-labelledby="drawer-filters-start-title">
+			<div class="drawer-header">
+				<h2 class="drawer-title" id="drawer-filters-start-title">Sections</h2>
+				<button class="btn-close" type="button" commandfor="drawer-filters-start" command="close" aria-label="Close"></button>
+			</div>
+			<div class="drawer-body"><p>A drawer at the start edge: the left in English, the right in Arabic.</p></div>
+		</dialog>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="drawer-access">
+	<h2 id="drawer-access">Keyboard and accessibility</h2>
+	<ul>
+		<li>Everything said of <a href="dialog.html">dialogs</a> holds: the focus moves in and back, <kbd>Tab</kbd> stays inside, <kbd>Esc</kbd> closes.</li>
+		<li>A drawer is a region: the width prefixes inside it measure the drawer, 28 rem wide at most.</li>
+		<li>The drawer's body scrolls by itself; its header stays.</li>
+	</ul>
+</section>

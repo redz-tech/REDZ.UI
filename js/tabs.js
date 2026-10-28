@@ -1,6 +1,7 @@
 // REDZ.UI, tabs (the WAI-ARIA tabs pattern, automatic activation): the arrow keys select the next or the previous tab
 // and show its panel — mirrored right to left, up and down in a vertical list — Home and End the first and the last;
-// only the selected tab takes Tab, and only its panel shows.
+// only the selected tab takes Tab, and only its panel shows. A tablist with data-activation="manual" (panels that load
+// from the server) moves only the focus by those keys; Enter or Space selects.
 const tabsOf = (list) => [...list.querySelectorAll('[role="tab"]')].filter((tab) => tab.closest('[role="tablist"]') === list && !tab.disabled && tab.getAttribute('aria-disabled') !== 'true');
 
 /** Selects the tab: its panel shown, the others' hidden, it alone in the tab order. */
@@ -46,7 +47,9 @@ document.addEventListener('keydown', (event) => {
 	const to = {[next]: tabs[(at + 1) % tabs.length], [previous]: tabs[(at - 1 + tabs.length) % tabs.length], Home: tabs[0], End: tabs.at(-1)}[event.key];
 	if (to !== undefined && at !== -1) {
 		event.preventDefault();
-		select(to);
+		if (list.dataset.activation !== 'manual') {
+			select(to);
+		}
 		to.focus();
 	}
 });

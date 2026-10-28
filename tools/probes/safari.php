@@ -126,14 +126,22 @@ function PROBE__SafariEval(array &$h, string $expression): mixed
 /** Presses and releases the key, a name of PROBE_KEYS, as the user would. */
 function PROBE__SafariKey(array &$h, string $key): void
 {
-	$value = PROBE_KEYS[$key][0];
-	PROBE__SafariCall($h, 'POST', $h['session'] . '/actions', ['actions' => [['type' => 'key', 'id' => 'keyboard', 'actions' => [['type' => 'keyDown', 'value' => $value], ['type' => 'keyUp', 'value' => $value]]]]]);
+	// Tab with Option: Safari's Tab skips buttons and links while "Press Tab to highlight each item" is off, as it is.
+	$values = $key === 'Tab' ? ["\u{E00A}", PROBE_KEYS[$key][0]] : [PROBE_KEYS[$key][0]];
+	$actions = [...array_map(fn(string $v): array => ['type' => 'keyDown', 'value' => $v], $values), ...array_map(fn(string $v): array => ['type' => 'keyUp', 'value' => $v], array_reverse($values))];
+	PROBE__SafariCall($h, 'POST', $h['session'] . '/actions', ['actions' => [['type' => 'key', 'id' => 'keyboard', 'actions' => $actions]]]);
 }
 
 /** Clicks the primary mouse button at the point of the viewport. */
 function PROBE__SafariClick(array &$h, int $x, int $y): void
 {
 	PROBE__SafariCall($h, 'POST', $h['session'] . '/actions', ['actions' => [['type' => 'pointer', 'id' => 'mouse', 'parameters' => ['pointerType' => 'mouse'], 'actions' => [['type' => 'pointerMove', 'origin' => 'viewport', 'x' => $x, 'y' => $y], ['type' => 'pointerDown', 'button' => 0], ['type' => 'pointerUp', 'button' => 0]]]]]);
+}
+
+/** Moves the mouse to the point of the viewport. */
+function PROBE__SafariHover(array &$h, int $x, int $y): void
+{
+	PROBE__SafariCall($h, 'POST', $h['session'] . '/actions', ['actions' => [['type' => 'pointer', 'id' => 'mouse', 'parameters' => ['pointerType' => 'mouse'], 'actions' => [['type' => 'pointerMove', 'origin' => 'viewport', 'x' => $x, 'y' => $y]]]]]);
 }
 
 /** A PNG of the viewport: safaridriver shoots no more than the window. */

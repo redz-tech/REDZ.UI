@@ -1,0 +1,95 @@
+<header class="vstack gap-8">
+	<h1>Navs and tabs</h1>
+	<p class="docs-lead">A row of links between views of one thing — <code>nav-underline</code> — or of choices — <code>nav-pills</code>; and the same row as tabs that switch panels on the page, driven by the keyboard as the WAI-ARIA tabs pattern.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="nav-examples">
+	<h2 id="nav-examples">Examples</h2>
+	<p>Links between pages are a <code>&lt;nav&gt;</code>; the current one is <code>aria-current="page"</code>.</p>
+	<div class="docs-example docs-example-stack" id="nav-links">
+		<nav class="nav nav-underline" aria-label="List views">
+			<a class="nav-link" href="#nav-links" aria-current="page">All<span class="badge">28</span></a>
+			<a class="nav-link" href="#nav-links">Needs attention<span class="badge badge-subtle-warning">3</span></a>
+			<a class="nav-link" href="#nav-links">Drafts</a>
+		</nav>
+		<nav class="nav nav-pills" aria-label="Period">
+			<a class="nav-link" href="#nav-links" aria-current="page">Week</a>
+			<a class="nav-link" href="#nav-links">Month</a>
+			<a class="nav-link" href="#nav-links">Year</a>
+		</nav>
+	</div>
+
+	<h3>Tabs</h3>
+	<p>Tabs switch panels in place: <code>role="tablist"</code>, each tab <code>role="tab"</code> with <code>aria-selected</code> and <code>aria-controls</code>, each panel <code>role="tabpanel"</code>. The library keeps only the selected tab in the tab order and only its panel shown. The arrow keys select as they move.</p>
+	<div class="docs-example docs-example-stack" id="nav-tabs">
+		<div class="nav nav-underline" role="tablist" aria-label="Excursion">
+			<button class="nav-link" type="button" role="tab" id="nav-tabs-1" aria-selected="true" aria-controls="nav-tabs-panel-1">Details</button>
+			<button class="nav-link" type="button" role="tab" id="nav-tabs-2" aria-selected="false" aria-controls="nav-tabs-panel-2">Prices</button>
+			<button class="nav-link" type="button" role="tab" id="nav-tabs-3" aria-selected="false" aria-controls="nav-tabs-panel-3">History</button>
+		</div>
+		<div id="nav-tabs-panel-1" role="tabpanel" aria-labelledby="nav-tabs-1" tabindex="0"><p>A day at sea: snorkelling at two reefs, lunch on the boat.</p></div>
+		<div id="nav-tabs-panel-2" role="tabpanel" aria-labelledby="nav-tabs-2" tabindex="0" hidden><p>Adults 2,500 · children 1,900 · under four free.</p></div>
+		<div id="nav-tabs-panel-3" role="tabpanel" aria-labelledby="nav-tabs-3" tabindex="0" hidden><p>Edited yesterday by M. K.; published on three sites.</p></div>
+	</div>
+
+	<h3>Tabs whose panels load</h3>
+	<p>When a panel comes from the server, the arrows should not load every panel they pass: <code>data-activation="manual"</code> on the tablist makes them move the focus only, and <kbd>Enter</kbd> or <kbd>Space</kbd> selects.</p>
+	<div class="docs-example docs-example-stack" id="nav-manual">
+		<div class="nav nav-pills" role="tablist" aria-label="Report" data-activation="manual">
+			<button class="nav-link" type="button" role="tab" id="nav-manual-1" aria-selected="true" aria-controls="nav-manual-panel-1">Bookings</button>
+			<button class="nav-link" type="button" role="tab" id="nav-manual-2" aria-selected="false" aria-controls="nav-manual-panel-2">Revenue</button>
+			<button class="nav-link" type="button" role="tab" id="nav-manual-3" aria-selected="false" aria-controls="nav-manual-panel-3">Refunds</button>
+		</div>
+		<div id="nav-manual-panel-1" role="tabpanel" aria-labelledby="nav-manual-1" tabindex="0"><p>128 bookings this week.</p></div>
+		<div id="nav-manual-panel-2" role="tabpanel" aria-labelledby="nav-manual-2" tabindex="0" hidden><p>312,400 THB this week.</p></div>
+		<div id="nav-manual-panel-3" role="tabpanel" aria-labelledby="nav-manual-3" tabindex="0" hidden><p>2 refunds this week.</p></div>
+	</div>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="nav-states-title">
+	<h2 id="nav-states-title">States</h2>
+	<div class="docs-states" id="nav-states" tabindex="0" role="region" aria-labelledby="nav-states-title">
+		<table class="docs-matrix">
+			<thead>
+				<tr><th scope="col">class</th><th scope="col">rest</th><th scope="col">:hover</th><th scope="col">:focus-visible</th><th scope="col">aria-current</th><th scope="col">aria-selected</th><th scope="col">aria-pressed</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row">nav-underline</th>
+					<td><nav class="nav nav-underline" aria-label="At rest"><a class="nav-link" href="#nav-states">Drafts</a></nav></td>
+					<td><nav class="nav nav-underline" aria-label="Hovered"><a class="nav-link" href="#nav-states" data-docs-state="hover">Drafts</a></nav></td>
+					<td><nav class="nav nav-underline" aria-label="Focused"><a class="nav-link" href="#nav-states" data-docs-state="focus-visible">Drafts</a></nav></td>
+					<td><nav class="nav nav-underline" aria-label="Current"><a class="nav-link" href="#nav-states" aria-current="page">Drafts</a></nav></td>
+					<td><div class="nav nav-underline" role="tablist" aria-label="Selected"><button class="nav-link" type="button" role="tab" aria-selected="true">Drafts</button></div></td>
+					<td>—</td>
+				</tr>
+				<tr>
+					<th scope="row">nav-pills</th>
+					<td><nav class="nav nav-pills" aria-label="At rest"><a class="nav-link" href="#nav-states">Week</a></nav></td>
+					<td><nav class="nav nav-pills" aria-label="Hovered"><a class="nav-link" href="#nav-states" data-docs-state="hover">Week</a></nav></td>
+					<td><nav class="nav nav-pills" aria-label="Focused"><a class="nav-link" href="#nav-states" data-docs-state="focus-visible">Week</a></nav></td>
+					<td><nav class="nav nav-pills" aria-label="Current"><a class="nav-link" href="#nav-states" aria-current="page">Week</a></nav></td>
+					<td><div class="nav nav-pills" role="tablist" aria-label="Selected"><button class="nav-link" type="button" role="tab" aria-selected="true">Week</button></div></td>
+					<td><div class="nav nav-pills" role="group" aria-label="Pressed"><button class="nav-link" type="button" aria-pressed="true">Week</button></div></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="nav-access">
+	<h2 id="nav-access">Keyboard and accessibility</h2>
+	<table class="table docs-table">
+		<thead><tr><th scope="col">Key</th><th scope="col">In a tablist</th></tr></thead>
+		<tbody>
+			<tr><td><kbd>→</kbd> / <kbd>←</kbd></td><td>The next / the previous tab, round the ends — mirrored right to left; <kbd>↓</kbd> / <kbd>↑</kbd> in a list with <code>aria-orientation="vertical"</code></td></tr>
+			<tr><td><kbd>Home</kbd> / <kbd>End</kbd></td><td>The first / the last tab</td></tr>
+			<tr><td><kbd>Enter</kbd>, <kbd>Space</kbd></td><td>Selects the focused tab — what the arrows do not, with <code>data-activation="manual"</code></td></tr>
+			<tr><td><kbd>Tab</kbd></td><td>From the selected tab into its panel</td></tr>
+		</tbody>
+	</table>
+	<ul>
+		<li>Links that change the page are a <code>&lt;nav&gt;</code> of links, never tabs: tabs only switch what is already on the page.</li>
+		<li>A mark beside a tab's words — a dot, a count — has its own name, so the tab reads as “EN, 1 field outdated”.</li>
+	</ul>
+</section>

@@ -52,4 +52,136 @@
 	.site-code > code {
 		font-size: inherit;
 	}
+
+	.docs {
+		max-inline-size: 64rem;
+	}
+
+	.docs > section > h2 {
+		font-size: var(--redz-fs-18);
+	}
+
+	.docs > section > h3 {
+		font-size: var(--redz-fs-16);
+	}
+
+	.docs-lead {
+		max-inline-size: 48rem;
+		color: var(--redz-text-muted);
+		font-size: var(--redz-fs-16);
+		line-height: var(--redz-lh-24);
+	}
+
+	.docs > section > ul {
+		margin-block: 0;
+		padding-inline-start: 1.25rem;
+	}
+
+	.docs > section > ul > li + li {
+		margin-block-start: var(--redz-space-4);
+	}
+
+	.docs-sample {
+		display: grid;
+	}
+
+	.docs-example {
+		container: region / inline-size;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--redz-space-8);
+		padding: var(--redz-space-16);
+		border: 1px solid var(--redz-border);
+		border-radius: var(--redz-radius-12);
+		background: var(--redz-bg);
+	}
+
+	.docs-example-stack {
+		display: grid;
+		align-items: start;
+		gap: var(--redz-space-12);
+	}
+
+	.docs-sample > .docs-example {
+		border-end-start-radius: 0;
+		border-end-end-radius: 0;
+	}
+
+	.docs-code {
+		margin: 0;
+		padding: var(--redz-space-12) var(--redz-space-16);
+		border: 1px solid var(--redz-border);
+		border-block-start: 0;
+		border-end-start-radius: var(--redz-radius-12);
+		border-end-end-radius: var(--redz-radius-12);
+		background: var(--redz-bg-page);
+		font-size: var(--redz-fs-12);
+		line-height: var(--redz-lh-20);
+		tab-size: 2;
+		overflow-x: auto;
+	}
+
+	.docs-code > code {
+		font-size: inherit;
+	}
+
+	.docs > section > .docs-code {
+		border-block-start: 1px solid var(--redz-border);
+		border-radius: var(--redz-radius-12);
+	}
+
+	.docs-states {
+		overflow-x: auto;
+		border: 1px solid var(--redz-border);
+		border-radius: var(--redz-radius-12);
+		background: var(--redz-bg);
+	}
+
+	.docs-matrix {
+		min-inline-size: 100%;
+		border-collapse: collapse;
+	}
+
+	.docs-matrix .menu {
+		position: static;
+		min-inline-size: 0;
+		margin: 0;
+	}
+
+	.docs-matrix th,
+	.docs-matrix td {
+		padding: var(--redz-space-12);
+		border-block-end: 1px solid var(--redz-border);
+		text-align: start;
+		vertical-align: middle;
+	}
+
+	.docs-matrix th {
+		color: var(--redz-text-muted);
+		font-family: var(--redz-font-mono);
+		font-size: var(--redz-fs-12);
+		font-weight: 400;
+		white-space: nowrap;
+	}
+
+	.docs-matrix tr:last-child > * {
+		border-block-end: 0;
+	}
+
+	.docs-table {
+		table-layout: fixed;
+	}
+
+	.docs-table th {
+		white-space: normal;
+	}
+
+	.docs-table td {
+		overflow-wrap: anywhere;
+	}
+
+	.docs-matrix :is(.form-control, .form-select, .form-floating) {
+		min-inline-size: 9rem;
+	}
 }

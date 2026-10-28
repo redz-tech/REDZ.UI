@@ -1,0 +1,14 @@
+{
+	"site": "https://redz-tech.github.io/REDZ.UI/",
+	"texts": {"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…"},
+	"groups": [
+		{"title": "Start", "pages": {"index": "Getting started", "layout": "Layout", "utilities": "Utilities", "tokens": "Tokens", "icons": "Icons", "migrate": "From Bootstrap 5.3"}},
+		{"title": "Actions", "pages": {"btn": "Buttons", "chip": "Chips", "menu": "Menus"}},
+		{"title": "Forms", "pages": {"form": "Form fields", "check": "Checks, radios and switches"}},
+		{"title": "Content", "pages": {"card": "Cards", "table": "Tables", "badge": "Badges", "dot": "Dots", "avatar": "Avatars", "icon-tile": "Icon tiles", "empty-state": "Empty states", "placeholder": "Placeholders"}},
+		{"title": "Layers", "pages": {"dialog": "Dialogs", "drawer": "Drawers", "tooltip": "Tooltips"}},
+		{"title": "Feedback", "pages": {"alert": "Alerts", "toast": "Toasts", "spinner": "Spinners", "busy": "Busy", "save-bar": "Save bar", "selection-bar": "Selection bar"}},
+		{"title": "Navigation", "pages": {"nav": "Navs and tabs", "breadcrumb": "Breadcrumbs", "app": "App shell"}}
+	],
+	"twins": {"ar": ["docs/all.html", "reference/demo/list.html", "reference/demo/resource.html", "reference/demo/settings.html"]}
+}

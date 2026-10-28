@@ -1,0 +1,52 @@
+<header class="vstack gap-8">
+	<h1>Empty states</h1>
+	<p class="docs-lead">What a list, a panel or a search shows when it has nothing yet: what would be here, and the one action that starts it. And the drop zone of a file field.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="empty-state-examples">
+	<h2 id="empty-state-examples">Examples</h2>
+	<div class="docs-example docs-example-stack" id="empty-state-list">
+		<div class="empty-state">
+			<i class="bi bi-compass" aria-hidden="true"></i>
+			<strong class="text-body">No excursions yet</strong>
+			<p>An excursion is a page with a price, a schedule and a booking form.</p>
+			<button class="btn btn-primary" type="button"><i class="bi bi-plus-lg" aria-hidden="true"></i>New excursion</button>
+		</div>
+	</div>
+
+	<h3>A drop zone</h3>
+	<p><code>empty-state-drop</code> is a label around a hidden file input: a click or a dropped file goes to the input.</p>
+	<div class="docs-example docs-example-stack" id="empty-state-drop">
+		<label class="empty-state empty-state-drop">
+			<span class="icon-tile icon-tile-sm"><i class="bi bi-upload" aria-hidden="true"></i></span>
+			<span class="vstack gap-2"><strong class="text-body">Logo · light theme</strong><span class="form-text">SVG or PNG, drop a file or choose</span></span>
+			<input class="visually-hidden" type="file" accept="image/svg+xml,image/png">
+		</label>
+	</div>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="empty-state-states-title">
+	<h2 id="empty-state-states-title">States</h2>
+	<div class="docs-states" id="empty-state-states" tabindex="0" role="region" aria-labelledby="empty-state-states-title">
+		<table class="docs-matrix">
+			<thead>
+				<tr><th scope="col">class</th><th scope="col">rest</th><th scope="col">:hover</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row">empty-state-drop</th>
+					<td><label class="empty-state empty-state-drop"><span class="icon-tile icon-tile-sm"><i class="bi bi-upload" aria-hidden="true"></i></span><strong class="text-body">Logo</strong><input class="visually-hidden" type="file"></label></td>
+					<td><label class="empty-state empty-state-drop" data-docs-state="hover"><span class="icon-tile icon-tile-sm"><i class="bi bi-upload" aria-hidden="true"></i></span><strong class="text-body">Logo</strong><input class="visually-hidden" type="file"></label></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="empty-state-access">
+	<h2 id="empty-state-access">Accessibility</h2>
+	<ul>
+		<li>Say what would be here and why it is empty — "No excursions yet", "Nothing matches the filters" — and offer the action that changes it.</li>
+		<li>The drop zone's file input is hidden visually only; its label is the zone's words, and the focus ring shows on the zone through the label.</li>
+	</ul>
+</section>

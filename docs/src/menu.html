@@ -1,0 +1,84 @@
+<header class="vstack gap-8">
+	<h1>Menus</h1>
+	<p class="docs-lead">A menu is a short list of actions or choices that opens from a button: the browser's popover, placed beside the button by CSS anchor positioning, driven by the keyboard as the WAI-ARIA menu button.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="menu-examples">
+	<h2 id="menu-examples">Examples</h2>
+	<p>The button opens the menu with the browser's command — <code>commandfor</code> names the menu, <code>command="toggle-popover"</code> opens and closes it — and the browser sets its <code>aria-expanded</code>. No script is needed to open a menu; the library adds the arrow keys.</p>
+	<div class="docs-example" id="menu-actions">
+		<button class="btn" type="button" commandfor="menu-actions-list" command="toggle-popover" aria-haspopup="menu"><i class="bi bi-three-dots" aria-hidden="true"></i>Actions</button>
+		<div id="menu-actions-list" class="menu" popover role="menu" aria-label="Actions">
+			<button class="menu-item" type="button" role="menuitem"><i class="bi bi-pencil" aria-hidden="true"></i>Edit</button>
+			<button class="menu-item" type="button" role="menuitem"><i class="bi bi-files" aria-hidden="true"></i>Duplicate</button>
+			<button class="menu-item" type="button" role="menuitem" aria-disabled="true"><i class="bi bi-archive" aria-hidden="true"></i>Archive</button>
+			<a class="menu-item" href="#menu-actions" role="menuitem"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>Open on the site</a>
+			<hr class="menu-divider">
+			<button class="menu-item menu-item-danger" type="button" role="menuitem"><i class="bi bi-trash3" aria-hidden="true"></i>Delete</button>
+		</div>
+	</div>
+
+	<h3>Choices and headers</h3>
+	<p>A choice of one is a set of <code>menuitemradio</code> items, the chosen one <code>aria-checked="true"</code> with a check drawn after it. <code>menu-header</code> titles a part of the menu. <code>menu-start</code> lines the menu up with its button's start edge instead of its end.</p>
+	<div class="docs-example" id="menu-choice">
+		<button class="btn btn-text" type="button" commandfor="menu-choice-list" command="toggle-popover" aria-haspopup="menu"><span class="dot dot-success"></span>All sites<i class="bi bi-chevron-down" aria-hidden="true"></i></button>
+		<div id="menu-choice-list" class="menu menu-start" popover role="menu" aria-label="Work context">
+			<div class="menu-header">Work context</div>
+			<button class="menu-item" type="button" role="menuitemradio" aria-checked="true"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i>All sites</button>
+			<button class="menu-item" type="button" role="menuitemradio" aria-checked="false"><i class="bi bi-globe2" aria-hidden="true"></i>lagoon.example</button>
+			<button class="menu-item" type="button" role="menuitemradio" aria-checked="false"><i class="bi bi-globe2" aria-hidden="true"></i>angthong.example</button>
+		</div>
+	</div>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="menu-states-title">
+	<h2 id="menu-states-title">States</h2>
+	<p>The items of an open menu. <code>:focus-visible</code> is where the arrow keys are; <code>aria-current="true"</code> marks the page a menu of links is on.</p>
+	<div class="docs-states" id="menu-states" tabindex="0" role="region" aria-labelledby="menu-states-title">
+		<table class="docs-matrix">
+			<thead>
+				<tr><th scope="col">class</th><th scope="col">rest</th><th scope="col">:hover</th><th scope="col">:focus-visible</th><th scope="col">aria-checked</th><th scope="col">aria-current</th><th scope="col">aria-disabled</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row">menu-item</th>
+					<td><div class="menu" role="menu" aria-label="Item at rest"><button class="menu-item" type="button" role="menuitem"><i class="bi bi-pencil" aria-hidden="true"></i>Edit</button></div></td>
+					<td><div class="menu" role="menu" aria-label="Item hovered"><button class="menu-item" type="button" role="menuitem" data-docs-state="hover"><i class="bi bi-pencil" aria-hidden="true"></i>Edit</button></div></td>
+					<td><div class="menu" role="menu" aria-label="Item focused"><button class="menu-item" type="button" role="menuitem" data-docs-state="focus-visible"><i class="bi bi-pencil" aria-hidden="true"></i>Edit</button></div></td>
+					<td><div class="menu" role="menu" aria-label="Item checked"><button class="menu-item" type="button" role="menuitemradio" aria-checked="true"><i class="bi bi-pencil" aria-hidden="true"></i>Edit</button></div></td>
+					<td><div class="menu" role="menu" aria-label="Item current"><a class="menu-item" href="#menu-states" role="menuitem" aria-current="true"><i class="bi bi-pencil" aria-hidden="true"></i>Edit</a></div></td>
+					<td><div class="menu" role="menu" aria-label="Item unavailable"><button class="menu-item" type="button" role="menuitem" aria-disabled="true"><i class="bi bi-pencil" aria-hidden="true"></i>Edit</button></div></td>
+				</tr>
+				<tr>
+					<th scope="row">menu-item-danger</th>
+					<td><div class="menu" role="menu" aria-label="Danger at rest"><button class="menu-item menu-item-danger" type="button" role="menuitem"><i class="bi bi-trash3" aria-hidden="true"></i>Delete</button></div></td>
+					<td><div class="menu" role="menu" aria-label="Danger hovered"><button class="menu-item menu-item-danger" type="button" role="menuitem" data-docs-state="hover"><i class="bi bi-trash3" aria-hidden="true"></i>Delete</button></div></td>
+					<td><div class="menu" role="menu" aria-label="Danger focused"><button class="menu-item menu-item-danger" type="button" role="menuitem" data-docs-state="focus-visible"><i class="bi bi-trash3" aria-hidden="true"></i>Delete</button></div></td>
+					<td>—</td>
+					<td>—</td>
+					<td><div class="menu" role="menu" aria-label="Danger unavailable"><button class="menu-item menu-item-danger" type="button" role="menuitem" aria-disabled="true"><i class="bi bi-trash3" aria-hidden="true"></i>Delete</button></div></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="menu-access">
+	<h2 id="menu-access">Keyboard and accessibility</h2>
+	<table class="table docs-table">
+		<thead><tr><th scope="col">Key</th><th scope="col">On the button</th><th scope="col">In the menu</th></tr></thead>
+		<tbody>
+			<tr><td><kbd>Enter</kbd>, <kbd>Space</kbd></td><td>Opens the menu, the focus on the checked or the first item</td><td>Runs the item and closes the menu</td></tr>
+			<tr><td><kbd>↓</kbd> / <kbd>↑</kbd></td><td>Opens the menu on the first / the last item</td><td>The next / the previous item, round the ends</td></tr>
+			<tr><td><kbd>Home</kbd> / <kbd>End</kbd></td><td>—</td><td>The first / the last item</td></tr>
+			<tr><td>A letter</td><td>—</td><td>The next item that begins with it</td></tr>
+			<tr><td><kbd>Esc</kbd></td><td>—</td><td>Closes the menu, the focus back on the button</td></tr>
+			<tr><td><kbd>Tab</kbd></td><td>—</td><td>Closes the menu and moves on</td></tr>
+		</tbody>
+	</table>
+	<ul>
+		<li>The menu is <code>popover</code> with <code>role="menu"</code> and a name; its items are <code>menuitem</code>, <code>menuitemradio</code> or <code>menuitemcheckbox</code>. A list of site sections is navigation, not a menu — use links.</li>
+		<li>The button carries <code>aria-haspopup="menu"</code>; the browser keeps its <code>aria-expanded</code>, moves the focus back to it on close and closes the menu on a click outside or <kbd>Esc</kbd>.</li>
+		<li>Where an engine does not put the menu beside its button — no anchor positioning below Firefox 147 and Safari 26, no anchor from a popover's button in Chrome 130–132, a table cell in Chrome 135–136, the bottom of a long page in Safari 26 — <code>js/menu-place.js</code> places it, and the probes record each such place.</li>
+	</ul>
+</section>

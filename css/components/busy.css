@@ -1,0 +1,47 @@
+@layer components {
+	:is(.card, .card-body, .dialog-body, .drawer-body, .region)[aria-busy="true"] {
+		position: relative;
+	}
+
+	:is(.card, .card-body, .dialog-body, .drawer-body, .region)[aria-busy="true"]::before,
+	:is(.card, .card-body, .dialog-body, .drawer-body, .region)[aria-busy="true"]::after {
+		content: "";
+		position: absolute;
+		z-index: 2;
+		animation: busy-show 0s 400ms both;
+	}
+
+	:is(.card, .card-body, .dialog-body, .drawer-body, .region)[aria-busy="true"]::before {
+		inset: 0;
+		border-radius: inherit;
+		background: var(--redz-bg);
+		opacity: 0.7;
+	}
+
+	:is(.card, .card-body, .dialog-body, .drawer-body, .region)[aria-busy="true"]::after {
+		inset-block-start: min(50%, 12rem);
+		inset-inline-start: 50%;
+		inline-size: 1.5rem;
+		block-size: 1.5rem;
+		margin-block-start: -0.75rem;
+		margin-inline-start: -0.75rem;
+		border: 2px solid var(--redz-primary);
+		border-inline-end-color: transparent;
+		border-radius: 50%;
+		animation: busy-show 0s 400ms both, spinner-turn 0.7s linear infinite;
+	}
+
+	@media (forced-colors: active) {
+		:is(.card, .card-body, .dialog-body, .drawer-body, .region)[aria-busy="true"]::after {
+			forced-color-adjust: none;
+			border-color: CanvasText;
+			border-inline-end-color: transparent;
+		}
+	}
+
+	@keyframes busy-show {
+		from {
+			visibility: hidden;
+		}
+	}
+}

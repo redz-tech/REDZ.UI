@@ -1,0 +1,27 @@
+<header class="vstack gap-8">
+	<h1>Selection bar</h1>
+	<p class="docs-lead">The bar over a list that shows when rows are checked: how many, and what can be done with all of them at once.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="selection-bar-examples">
+	<h2 id="selection-bar-examples">Examples</h2>
+	<p>Plain buttons in the bar take its tint; the one suggested action stays <code>btn-subtle-primary</code>, and clearing the selection is a quiet icon button at the end.</p>
+	<div class="docs-example docs-example-stack" id="selection-bar-list">
+		<div class="selection-bar" role="region" aria-label="Selected excursions">
+			<strong>2 selected</strong>
+			<button class="btn btn-sm" type="button"><i class="bi bi-send" aria-hidden="true"></i>Publish</button>
+			<button class="btn btn-sm" type="button"><i class="bi bi-eye-slash" aria-hidden="true"></i>Withdraw</button>
+			<button class="btn btn-sm btn-subtle-primary" type="button"><i class="bi bi-stars" aria-hidden="true"></i>Translate what changed</button>
+			<button class="btn btn-sm ms-auto" type="button"><i class="bi bi-trash3" aria-hidden="true"></i>Delete…</button>
+			<button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Clear the selection"><i class="bi bi-x" aria-hidden="true"></i></button>
+		</div>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="selection-bar-access">
+	<h2 id="selection-bar-access">Accessibility</h2>
+	<ul>
+		<li>The bar is a region named after the list; its count says what is selected.</li>
+		<li>An action that removes asks first — its words end in “…” and it opens a <a href="dialog.html">confirmation</a>.</li>
+	</ul>
+</section>

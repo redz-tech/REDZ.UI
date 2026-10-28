@@ -1,0 +1,58 @@
+<header class="vstack gap-8">
+	<h1>Busy</h1>
+	<p class="docs-lead"><code>REDZ.ui.busy(element, promise)</code> marks a button or a region busy until the promise settles: a button shows a spinner and ignores clicks, a region turns inert under an overlay.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="busy-examples">
+	<h2 id="busy-examples">Examples</h2>
+	<p>A region — a card, its body, a dialog's or a drawer's body, any <code>region</code> — keeps its old content under a dimmed overlay while the new comes. The overlay shows only after 400 ms, so a quick answer does not flash; once shown it stays at least 400 ms. A focus the region dropped comes back to the same element, to the element with its id in the new content, or to the region.</p>
+	<div class="docs-example docs-example-stack" id="busy-region">
+		<section class="card" id="busy-region-card" aria-labelledby="busy-region-title">
+			<div class="card-header"><h2 id="busy-region-title">Bookings this week</h2><button class="btn btn-sm ms-auto" type="button" data-docs-run="busy-region" aria-controls="busy-region-card"><i class="bi bi-arrow-repeat" aria-hidden="true"></i>Reload for 2 seconds</button></div>
+			<div class="card-body vstack gap-8">
+				<p class="fs-24 fw-600 tabular-nums">128</p>
+				<p class="text-muted">bookings, 312,400 THB</p>
+			</div>
+		</section>
+	</div>
+	<pre class="docs-code" tabindex="0"><code>await REDZ.ui.busy(card, fetch(url).then((answer) =&gt; answer.text()).then((html) =&gt; { body.innerHTML = html; }));</code></pre>
+
+	<h3>A button</h3>
+	<p>The button keeps its focus and size, shows a spinner in place of its words and ignores clicks until the promise settles.</p>
+	<div class="docs-example" id="busy-button">
+		<button class="btn btn-primary" type="button" data-docs-run="busy-button">Save for 2 seconds</button>
+	</div>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="busy-states-title">
+	<h2 id="busy-states-title">States</h2>
+	<p>What <code>busy()</code> sets, written by hand — the overlay appears 400 ms after the page draws it.</p>
+	<div class="docs-states" id="busy-states" tabindex="0" role="region" aria-labelledby="busy-states-title">
+		<table class="docs-matrix">
+			<thead>
+				<tr><th scope="col">element</th><th scope="col">rest</th><th scope="col">aria-busy</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row">card</th>
+					<td><section class="card" aria-label="At rest"><div class="card-body"><p>128 bookings</p></div></section></td>
+					<td><section class="card" aria-label="Busy" aria-busy="true"><div class="card-body"><p>128 bookings</p></div></section></td>
+				</tr>
+				<tr>
+					<th scope="row">btn</th>
+					<td><button class="btn btn-primary" type="button">Save</button></td>
+					<td><button class="btn btn-primary" type="button" aria-busy="true" aria-disabled="true">Save</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="busy-access">
+	<h2 id="busy-access">Accessibility</h2>
+	<ul>
+		<li>Screen readers mostly ignore <code>aria-busy</code>, and on a live region it breaks the region in some of them: here it is a styling hook, and <code>busy()</code> refuses a live region in the console.</li>
+		<li>The region is <code>inert</code> while busy: no focus, no clicks, out of the accessibility tree. When the overlay shows, one polite message says so — the page's text <code>busy</code>, “Loading…”.</li>
+		<li>For a first load, where there is nothing to cover yet, use <a href="placeholder.html">placeholders</a>.</li>
+	</ul>
+</section>

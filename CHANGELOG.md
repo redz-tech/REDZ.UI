@@ -5,6 +5,41 @@ or JavaScript call removed or renamed is a major release, one added is a minor r
 
 ## Unreleased
 
+### The reference, the docs and the skills
+- `docs/`: a page per component and getting started, layout, utilities, tokens, icons and the move from Bootstrap 5.3
+  — examples whose code is printed from the same markup, every state as a named grid, keyboard and accessibility, the
+  tokens a component reads, its rows of the Bootstrap map; written by `php tools/docs.php` from `docs/src/` into one
+  shell, with `docs/all.html` (every example and state on one page, the probes' fixture), its Arabic twin and those of
+  the demo screens (`docs/ar.tsv`), a Markdown twin of every page, `llms.txt` and `llms-full.txt`. The docs' own
+  script shows `:hover`, `:focus-visible` and `:focus` by copying those rules under `[data-docs-state]`.
+  `reference/widgets.html` folded into the component pages.
+- `skills/redz-ui` and `skills/redz-ui-from-bootstrap-5` (Agent Skills): building screens, and moving a project from
+  Bootstrap 5.3 with `scripts/scan.sh`, a read-only scan that reports what Bootstrap left and every class REDZ.UI does
+  not have. Both carry `assets/map.tsv` — every class of Bootstrap 5.3.8 with its REDZ.UI form, written by
+  `php tools/map.php` from Bootstrap's own stylesheet — and `assets/classes.txt`.
+- Busy regions: `REDZ.ui.busy()` on a card, its body, a dialog's or a drawer's body or any `region` turns it `inert`
+  under an overlay shown after 400 ms and held at least 400 ms (`css/components/busy.css`), says so once politely (the
+  page's text `busy`) and brings back a focus it dropped; on or around a live region it is refused in the console.
+- Tabs with `data-activation="manual"`: the arrow keys move the focus, Enter or Space selects.
+- A check, radio or switch marked `aria-disabled` ignores clicks and Space, as a button so marked.
+- Arabic-script text (`lang` ar, fa, ur) takes `--redz-font-arabic`, a stack without Arial — macOS's Arial carries
+  Arabic and won over the system face — and headings drop their letter-spacing there, which broke the joins in Safari
+  and in Chrome 130–136.
+- `pre`, `code`, `kbd` and `samp` run left to right in a right-to-left page; code lost its order there.
+- `btn-subtle-*` darken their text on hover, pressed and expanded: the darker fill had taken it below 4.5:1.
+- `js/menu-place.js` places a tooltip too, above its button first.
+- `empty-state-drop` is the containing block of the hidden file input it holds: placed against the page, the input
+  escaped a scrolling parent and widened the page.
+- A menu closes on Tab with or without Option — Option-Tab is how Safari's users move through buttons, and it had
+  only moved to the next item — and whenever the focus leaves it another way.
+- Budgets in `php tools/build.php --check`: the stylesheet at most 24 KB and the scripts 25 KB, gzipped as one file
+  each.
+- Probes: the docs pages in the current three engines at 1440 and 390; the right-to-left cells on the Arabic twins;
+  `aria-busy` on a live region, the docs' state copies against the real pointer and Tab, and the fonts of Arabic text
+  in Chrome are checked; text that spills out of its box is named; Safari's Tab is Option-Tab, which reaches buttons
+  and links; a cell sets its theme with transitions off; an exception may name a finding; CI runs in five parallel
+  parts joined by `php tools/probe.php merge`.
+
 ### The look, approved as a prototype
 - Tokens `--redz-*`: neutral grays, a blue accent, six tones (`primary`, `secondary`, `success`, `danger`, `warning`,
   `info`) each with `-subtle` and `-contrast`, layered shadows for floating layers only, radii 6 / 8 / 12 / 16 px, UI
@@ -79,7 +114,6 @@ or JavaScript call removed or renamed is a major release, one added is a minor r
   `aria-disabled` swallows its clicks.
 - `js/dialog.js`: where the browser has no `closedby`, a click on the backdrop of a modal dialog with
   `closedby="any"` closes it. A modal dialog keeps the page's scrollbar gutter while it locks the scroll.
-- `reference/widgets.html`: every behavior on one page of the reference.
 - `js/commands.js`: where the browser has no invoker commands (Chrome before 135, Firefox before 144, Safari before
   26.2), a popover command becomes the browser's own `popovertarget` inside the click — so the browser still reports the
   menu as expanded, returns focus and anchors it — and a dialog command calls `showModal()`, `close()` or

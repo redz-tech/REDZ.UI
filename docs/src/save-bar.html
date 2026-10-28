@@ -1,0 +1,29 @@
+<header class="vstack gap-8">
+	<h1>Save bar</h1>
+	<p class="docs-lead">The bar at the foot of a form that says what is not saved yet and offers to save or discard it. It sticks to the bottom of the screen while the form is longer than the screen.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="save-bar-examples">
+	<h2 id="save-bar-examples">Examples</h2>
+	<p>At rest the bar says everything is saved; with unsaved changes it turns <code>save-bar-dirty</code> and names them.</p>
+	<div class="docs-example docs-example-stack" id="save-bar-states">
+		<div class="save-bar" role="region" aria-label="Changes">
+			<i class="bi bi-check2-circle" aria-hidden="true"></i>
+			<span class="save-bar-text">All changes saved</span>
+		</div>
+		<div class="save-bar save-bar-dirty" role="region" aria-label="Unsaved changes">
+			<i class="bi bi-pencil" aria-hidden="true"></i>
+			<span class="save-bar-text">2 unsaved changes: product name, accent color</span>
+			<button class="btn btn-sm" type="button">Discard</button>
+			<button class="btn btn-sm btn-primary" type="button"><i class="bi bi-floppy" aria-hidden="true"></i>Save</button>
+		</div>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="save-bar-access">
+	<h2 id="save-bar-access">Accessibility</h2>
+	<ul>
+		<li>The bar is a region named after what it holds; its words name the changes, not only their count.</li>
+		<li>It does not print, and it never hides the last field of the form: the form keeps room under it.</li>
+	</ul>
+</section>

@@ -1,0 +1,65 @@
+<header class="vstack gap-8">
+	<h1>Dialogs</h1>
+	<p class="docs-lead">The browser's own modal <code>&lt;dialog&gt;</code>: opened by a command, the page behind it inert and dimmed, closed by its buttons, <kbd>Esc</kbd> or a click outside. And <code>REDZ.ui.confirm()</code> for a question asked from script.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="dialog-examples">
+	<h2 id="dialog-examples">Examples</h2>
+	<p>A button opens the dialog with <code>commandfor</code> + <code>command="show-modal"</code>; buttons inside close it with <code>command="close"</code>. <code>closedby="any"</code> lets a click outside close it too. The focus goes into the dialog — to the control marked <code>autofocus</code> — and back to the button when it closes.</p>
+	<div class="docs-example" id="dialog-edit">
+		<button class="btn" type="button" commandfor="dialog-edit-note" command="show-modal"><i class="bi bi-chat-left-text" aria-hidden="true"></i>Add a note</button>
+		<dialog id="dialog-edit-note" class="dialog" closedby="any" aria-labelledby="dialog-edit-note-title">
+			<div class="dialog-header">
+				<h2 class="dialog-title" id="dialog-edit-note-title">A note for the guides</h2>
+				<button class="btn-close" type="button" commandfor="dialog-edit-note" command="close" aria-label="Close"></button>
+			</div>
+			<div class="dialog-body vstack gap-8">
+				<label class="form-field"><span class="form-label">Note</span><textarea class="form-control" autofocus>Pick up at the pier at 8:30.</textarea></label>
+			</div>
+			<div class="dialog-footer">
+				<button class="btn" type="button" commandfor="dialog-edit-note" command="close">Cancel</button>
+				<button class="btn btn-primary" type="button" commandfor="dialog-edit-note" command="close">Save</button>
+			</div>
+		</dialog>
+	</div>
+
+	<h3>Sizes</h3>
+	<p><code>dialog-sm</code> for a question, the default for a form, <code>dialog-lg</code> for a wide table or a preview.</p>
+	<div class="docs-example" id="dialog-sizes">
+		<button class="btn" type="button" commandfor="dialog-sizes-sm" command="show-modal">Small</button>
+		<button class="btn" type="button" commandfor="dialog-sizes-lg" command="show-modal">Large</button>
+		<dialog id="dialog-sizes-sm" class="dialog dialog-sm" aria-labelledby="dialog-sizes-sm-title">
+			<div class="dialog-header"><h2 class="dialog-title" id="dialog-sizes-sm-title">Publish now?</h2></div>
+			<div class="dialog-body"><p>The page goes live on three sites.</p></div>
+			<div class="dialog-footer">
+				<button class="btn" type="button" commandfor="dialog-sizes-sm" command="close" autofocus>Cancel</button>
+				<button class="btn btn-primary" type="button" commandfor="dialog-sizes-sm" command="close">Publish</button>
+			</div>
+		</dialog>
+		<dialog id="dialog-sizes-lg" class="dialog dialog-lg" closedby="any" aria-labelledby="dialog-sizes-lg-title">
+			<div class="dialog-header">
+				<h2 class="dialog-title" id="dialog-sizes-lg-title">History of changes</h2>
+				<button class="btn-close" type="button" commandfor="dialog-sizes-lg" command="close" aria-label="Close"></button>
+			</div>
+			<div class="dialog-body"><p>Edited yesterday by M. K.; published on three sites; the Thai translation updated today.</p></div>
+		</dialog>
+	</div>
+
+	<h3>A confirmation from script</h3>
+	<p><code>await REDZ.ui.confirm({title, text, ok, tone})</code> builds an <code>alertdialog</code>, waits for the answer and removes it: <code>true</code> for the confirming button, <code>false</code> for Cancel, <kbd>Esc</kbd> or a click outside. The focus starts on Cancel; the button words come from the caller or the page's texts.</p>
+	<div class="docs-example" id="dialog-confirm">
+		<button class="btn btn-danger" type="button" data-docs-run="confirm"><i class="bi bi-trash3" aria-hidden="true"></i>Delete 2 excursions</button>
+		<span class="text-muted fs-12" role="status" data-docs-answer></span>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="dialog-access">
+	<h2 id="dialog-access">Keyboard and accessibility</h2>
+	<ul>
+		<li><kbd>Tab</kbd> stays inside an open dialog; <kbd>Esc</kbd> closes it; the focus goes back to the button that opened it.</li>
+		<li>The dialog is named by its title through <code>aria-labelledby</code>. A question that must be answered is <code>role="alertdialog"</code> with its focus on the safe answer.</li>
+		<li>The page behind does not scroll while a dialog is open, and keeps its width: the scrollbar's place stays.</li>
+		<li>A notice raised while a dialog is open shows inside the dialog, since everything outside it is inert.</li>
+		<li>Where the browser lacks invoker commands (below Chrome 135, Firefox 144, Safari 26.2) or <code>closedby</code> (below Chrome 134, Firefox 141, and in Safari), the library's script stands in.</li>
+	</ul>
+</section>

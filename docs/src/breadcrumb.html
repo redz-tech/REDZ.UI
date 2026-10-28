@@ -1,0 +1,25 @@
+<header class="vstack gap-8">
+	<h1>Breadcrumbs</h1>
+	<p class="docs-lead">The way up from a record to the list it belongs to, above the record's title. The separators are drawn by CSS and turn with the direction.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="breadcrumb-examples">
+	<h2 id="breadcrumb-examples">Examples</h2>
+	<div class="docs-example docs-example-stack" id="breadcrumb-trail">
+		<nav aria-label="Breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#breadcrumb-trail">Content</a></li>
+				<li class="breadcrumb-item"><a href="#breadcrumb-trail">Excursions</a></li>
+				<li class="breadcrumb-item" aria-current="page">Ang Thong</li>
+			</ol>
+		</nav>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="breadcrumb-access">
+	<h2 id="breadcrumb-access">Accessibility</h2>
+	<ul>
+		<li>A <code>&lt;nav aria-label="Breadcrumb"&gt;</code> around an ordered list; the last item is the page itself, <code>aria-current="page"</code>, not a link.</li>
+		<li>The separators are not read: they are drawn, not written.</li>
+	</ul>
+</section>

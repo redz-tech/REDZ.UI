@@ -23,6 +23,9 @@
 	for (const axis of Object.keys(axes)) {
 		state[axis] = params.get(axis) || read(axis) || axes[axis];
 	}
+	if (root.getAttribute('dir') === 'rtl') {
+		state.dir = 'rtl';
+	}
 	const mark = (name, value, on) => {
 		if (on) {
 			root.setAttribute(name, value);

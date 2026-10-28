@@ -1,6 +1,7 @@
-// REDZ.UI, menu placement: places an opened menu beside its button wherever the browser cannot anchor it (Firefox before 147,
-// Safari before 26) or anchors it out of view or away from its button (Chrome 135–136 in a table cell, Safari 26 at the
-// bottom of a page taller than the viewport); such a menu carries data-placed="script" while it is open.
+// REDZ.UI, menu placement: places an opened menu or tooltip beside its button wherever the browser cannot anchor it
+// (Firefox before 147, Safari before 26) or anchors it out of view or away from its button (Chrome 135–136 in a table
+// cell, Safari 26 at the bottom of a page taller than the viewport); such a layer carries data-placed="script" while it
+// is open.
 const anchors = CSS.supports('position-area', 'block-end');
 const overrides = ['position-area', 'position-try-fallbacks', 'inset', 'top', 'left', 'margin'];
 const open = new Map();
@@ -27,13 +28,15 @@ const wellPlaced = (menu, button) => {
 	return inside && near && aligned;
 };
 
-/** Places the menu by script: below the button, or above when only there it fits; its inline end edge on the button's
- *  (its start edge for .menu-start), the other edge when that one leaves the viewport; always inside the viewport. It is
- *  measured in the viewport's corner first — its width depends on the room where it stands. */
+/** Places the menu by script: below the button — a tooltip above it — or on the other side when only there it fits; its
+ *  inline end edge on the button's (its start edge for .menu-start and a tooltip), the other edge when that one leaves
+ *  the viewport; always inside the viewport. It is measured in the viewport's corner first — its width depends on the
+ *  room where it stands. */
 const place = (menu, button) => {
 	const style = getComputedStyle(menu);
 	const gap = parseFloat(style.marginBlockStart) || 0;
-	const end = menu.classList.contains('menu-start') === (style.direction === 'rtl');
+	const tooltip = menu.classList.contains('tooltip');
+	const end = (tooltip || menu.classList.contains('menu-start')) === (style.direction === 'rtl');
 	for (const [property, value] of [['position-area', 'none'], ['position-try-fallbacks', 'none'], ['inset', 'auto'], ['top', '0px'], ['left', '0px'], ['margin', '0']]) {
 		menu.style.setProperty(property, value);
 	}
@@ -41,9 +44,13 @@ const place = (menu, button) => {
 	const height = menu.offsetHeight;
 	const b = button.getBoundingClientRect();
 	const room = document.documentElement.clientWidth;
-	let top = b.bottom + gap;
-	if (top + height > innerHeight && b.top - gap - height >= 0) {
-		top = b.top - gap - height;
+	const below = b.bottom + gap;
+	const above = b.top - gap - height;
+	let top = tooltip ? above : below;
+	if (tooltip && top < 0 && below + height <= innerHeight) {
+		top = below;
+	} else if (!tooltip && top + height > innerHeight && above >= 0) {
+		top = above;
 	}
 	let left = end ? b.right - width : b.left;
 	if (left < 0 || left + width > room) {
@@ -77,7 +84,7 @@ document.addEventListener('click', (event) => {
 
 document.addEventListener('beforetoggle', (event) => {
 	const menu = event.target;
-	if (!(menu instanceof HTMLElement) || !menu.classList.contains('menu')) {
+	if (!(menu instanceof HTMLElement) || !(menu.classList.contains('menu') || menu.classList.contains('tooltip'))) {
 		return;
 	}
 	if (event.newState !== 'open') {

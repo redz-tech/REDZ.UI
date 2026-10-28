@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="css/icons.css">
 	<link rel="stylesheet" href="docs/site.css">
 	<script type="module" src="js/index.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel"}</script>
+	<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…"}</script>
 </head>
 <body>
 	<main class="site region vstack gap-24">
@@ -18,6 +18,7 @@
 			<p class="text-muted fs-16 max-w-640">The interface library of the REDZ products: plain CSS and small JavaScript on the browser platform — no framework, no build step.</p>
 			<div class="hstack flex-wrap gap-8">
 				<span class="badge badge-subtle-warning">In design · nothing released yet</span>
+				<a class="btn btn-primary" href="docs/index.html"><i class="bi bi-book" aria-hidden="true"></i>Documentation</a>
 				<a class="btn" href="https://github.com/redz-tech/REDZ.UI/blob/main/docs/why.md"><i class="bi bi-question-circle" aria-hidden="true"></i>Why REDZ.UI</a>
 				<a class="btn" href="https://github.com/redz-tech/REDZ.UI"><i class="bi bi-github" aria-hidden="true"></i>Source on GitHub</a>
 			</div>
@@ -42,7 +43,8 @@
 					<li>Tokens, a reset, cascade layers, components and utilities with Bootstrap 5's names, written as plain CSS files. The utilities are generated from one vocabulary file and committed, so nothing is built where the library is used.</li>
 					<li>Behavior of the widgets that the platform does not give by itself — menus and tabs by keyboard, toasts, a combobox — as small JavaScript that attaches by delegation.</li>
 					<li>Light, dark and system themes; left-to-right and right-to-left from one stylesheet; WCAG 2.2 AA in both themes.</li>
-					<li>A static reference of every component in every state, checked in Chrome, Safari and Firefox.</li>
+					<li><a href="docs/index.html">Documentation</a> with a page per component, and <a href="docs/all.html">every component in every state</a> on one page — the fixture checked in Chrome, Safari and Firefox at the floor and above, with its <a href="docs/all.ar.html">Arabic twin</a>.</li>
+					<li>Two agent skills — building screens, and moving a project from Bootstrap 5.3 with a scan and a map of every Bootstrap class — and <a href="llms.txt">llms.txt</a>.</li>
 				</ul>
 			</div>
 		</section>

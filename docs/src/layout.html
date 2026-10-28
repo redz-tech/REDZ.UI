@@ -1,0 +1,69 @@
+<header class="vstack gap-8">
+	<h1>Layout</h1>
+	<p class="docs-lead">The parent sets the grid, the number is the count, and a width prefix measures the region the element is in. Stacks for a column or a row of items, gaps between them, no margins on components.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="layout-grid">
+	<h2 id="layout-grid">Grids</h2>
+	<p><code>grid</code> on the parent, <code>cols-N</code> for N equal columns, <code>gap-*</code> between them. A width prefix adds columns as the region grows: <code>grid md:cols-2</code> is one column until the region is 768 px wide. Every example on these pages is a region of its own — resize the window and watch the examples, not the window.</p>
+	<div class="docs-example docs-example-stack" id="layout-cols">
+		<div class="grid sm:cols-2 lg:cols-4 gap-16">
+			<div class="card"><div class="card-body">One</div></div>
+			<div class="card"><div class="card-body">Two</div></div>
+			<div class="card"><div class="card-body">Three</div></div>
+			<div class="card"><div class="card-body">Four</div></div>
+		</div>
+	</div>
+
+	<h3>Spans on a 12-column grid</h3>
+	<p>A child's exception: <code>span-N</code> or <code>span-full</code>, with a prefix where it changes.</p>
+	<div class="docs-example docs-example-stack" id="layout-span">
+		<div class="grid md:cols-12 gap-16">
+			<div class="card md:span-8"><div class="card-body">The main column — <code>md:span-8</code></div></div>
+			<div class="card md:span-4"><div class="card-body">The side — <code>md:span-4</code></div></div>
+		</div>
+	</div>
+
+	<h3>As many as fit</h3>
+	<p><code>cols-min-240</code>: as many columns as fit, none narrower than 240 px.</p>
+	<div class="docs-example docs-example-stack" id="layout-fit">
+		<div class="grid cols-min-160 gap-12">
+			<div class="card"><div class="card-body">lagoon.example</div></div>
+			<div class="card"><div class="card-body">villas.lagoon.example</div></div>
+			<div class="card"><div class="card-body">angthong.example</div></div>
+		</div>
+	</div>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="layout-stacks">
+	<h2 id="layout-stacks">Stacks</h2>
+	<p><code>vstack</code> is a column of items, <code>hstack</code> a row of them centered on one line; <code>gap-*</code> spaces them and <code>ms-auto</code> pushes the rest to the end.</p>
+	<div class="docs-example docs-example-stack" id="layout-hstack">
+		<div class="hstack gap-8">
+			<span class="badge">Draft</span>
+			<span class="text-muted">Edited 2 hours ago</span>
+			<button class="btn btn-sm ms-auto" type="button">Preview</button>
+			<button class="btn btn-sm btn-primary" type="button">Publish</button>
+		</div>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="layout-regions">
+	<h2 id="layout-regions">Regions and breakpoints</h2>
+	<p>Regions are the shell's main and side columns, cards, dialogs, drawers, and any block with the class <code>region</code>. A page without the shell marks its own <code>region</code>; the root is never one.</p>
+	<table class="table docs-table">
+		<thead><tr><th scope="col">Prefix</th><th scope="col">The region is at least</th></tr></thead>
+		<tbody>
+			<tr><td><code>sm:</code></td><td>576 px</td></tr>
+			<tr><td><code>md:</code></td><td>768 px</td></tr>
+			<tr><td><code>lg:</code></td><td>1024 px</td></tr>
+			<tr><td><code>xl:</code></td><td>1280 px</td></tr>
+			<tr><td><code>2xl:</code></td><td>1536 px</td></tr>
+			<tr><td><code>print:</code></td><td>on paper</td></tr>
+		</tbody>
+	</table>
+	<ul>
+		<li>A region inside a flex row needs a width — <code>flex-grow-1</code> or a grid track: its size cannot come from its content.</li>
+		<li>A card in the 8-of-12 column at 1440 px is about 740 px wide: <code>sm:</code> inside it, not <code>md:</code>.</li>
+	</ul>
+</section>

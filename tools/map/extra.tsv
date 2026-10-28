@@ -1,0 +1,33 @@
+# The attributes and script calls of Bootstrap 5.3 that tools/map.php adds after its classes. Columns: the name, the
+# REDZ.UI form, the kind (as in rules.tsv), the docs page, a note. ID is the target's id, without "#".
+data-bs-toggle="modal"	commandfor="ID" command="show-modal"	trigger	dialog	on the button; the dialog is a <dialog id="ID">
+data-bs-toggle="offcanvas"	commandfor="ID" command="show-modal"	trigger	drawer	the drawer is a <dialog id="ID">
+data-bs-toggle="dropdown"	commandfor="ID" command="toggle-popover" aria-haspopup="menu"	trigger	menu	the menu gets popover and role="menu"
+data-bs-toggle="tab"	role="tab" aria-controls="ID"	trigger	nav	in a role="tablist"; the library selects and shows the panel
+data-bs-toggle="pill"	role="tab" aria-controls="ID"	trigger	nav	in a role="tablist"
+data-bs-toggle="button"	aria-pressed	review	btn	switch aria-pressed in your click handler
+data-bs-toggle="tooltip"	commandfor="ID" command="toggle-popover"	review	tooltip	a toggletip at the browser floor
+data-bs-toggle="popover"		missing	tooltip
+data-bs-toggle="collapse"		missing		the missing basics: <details> and <summary>
+data-bs-target	commandfor	trigger		the id alone, without "#"
+data-bs-dismiss="modal"	commandfor="ID" command="close"	trigger	dialog
+data-bs-dismiss="offcanvas"	commandfor="ID" command="close"	trigger	drawer
+data-bs-dismiss="alert"		review	alert	remove the alert in your script
+data-bs-dismiss="toast"		remove	toast	REDZ.ui.toast adds its close button
+data-bs-backdrop="static"	closedby="closerequest"	trigger	dialog	Esc closes it, a click outside does not
+data-bs-keyboard="false"	closedby="none"	trigger	dialog	only its buttons close it
+data-bs-theme	data-theme	rename	index	light or dark on <html>
+data-bs-placement|data-bs-offset|data-bs-auto-close|data-bs-display|data-bs-reference|data-bs-boundary|data-bs-popper-config		remove	menu	anchor positioning places and flips the menu
+data-bs-spy|data-bs-ride|data-bs-slide|data-bs-slide-to|data-bs-interval		missing		scrollspy and carousel
+bootstrap.Modal	dialog.showModal() and dialog.close()	trigger	dialog
+bootstrap.Offcanvas	dialog.showModal() and dialog.close()	trigger	drawer
+bootstrap.Dropdown	menu.showPopover(), menu.hidePopover(), menu.togglePopover()	trigger	menu
+bootstrap.Tab	tab.click()	review	nav	the library selects on click and by the keys
+bootstrap.Toast	REDZ.ui.toast({title, text, tone})	trigger	toast
+bootstrap.Tooltip|bootstrap.Popover		remove	tooltip
+bootstrap.Collapse		missing
+show.bs.modal|shown.bs.modal	toggle	review	dialog	the dialog's toggle event, or code right after showModal()
+hide.bs.modal	cancel	review	dialog	the dialog's cancel event (Esc); your buttons close it
+hidden.bs.modal	close	rename	dialog	the dialog's close event; dialog.returnValue holds the closing button's value
+show.bs.dropdown|shown.bs.dropdown|hide.bs.dropdown|hidden.bs.dropdown	toggle	rename	menu	the popover's toggle event; event.newState is "open" or "closed"
+shown.bs.tab		review	nav	watch aria-selected, or the tab's click

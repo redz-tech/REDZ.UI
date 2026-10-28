@@ -122,10 +122,40 @@ function PROBE__ChromeClick(array &$h, int $x, int $y): void
 	}
 }
 
+/** Moves the mouse to the point of the viewport. */
+function PROBE__ChromeHover(array &$h, int $x, int $y): void
+{
+	PROBE__ChromeSend($h, 'Input.dispatchMouseEvent', ['type' => 'mouseMoved', 'x' => $x, 'y' => $y]);
+}
+
+/**
+ * The fonts the engine drew the text of each element matching $selector with: the elements' order => family names.
+ * @return list<list<string>>
+ */
+function PROBE__ChromeFonts(array &$h, string $selector): array
+{
+	$mark = count($h['events']);
+	PROBE__ChromeSend($h, 'DOM.enable');
+	PROBE__ChromeSend($h, 'CSS.enable');
+	$root = PROBE__ChromeSend($h, 'DOM.getDocument', ['depth' => 0])['root']['nodeId'];
+	$fonts = [];
+	foreach (PROBE__ChromeSend($h, 'DOM.querySelectorAll', ['nodeId' => $root, 'selector' => $selector])['nodeIds'] as $node) {
+		$fonts[] = array_column(PROBE__ChromeSend($h, 'CSS.getPlatformFontsForNode', ['nodeId' => $node])['fonts'] ?? [], 'familyName');
+	}
+	PROBE__ChromeSend($h, 'CSS.disable');
+	PROBE__ChromeSend($h, 'DOM.disable');
+	PROBE__ChromePump($h, 0.2);
+	$own = fn(array $m): bool => ($m['method'] ?? '') === 'Network.loadingFailed' && ($m['params']['errorText'] ?? '') === 'net::ERR_CACHE_MISS';
+	$h['events'] = [...array_slice($h['events'], 0, $mark), ...array_filter(array_slice($h['events'], $mark), fn(array $m): bool => !$own($m))];
+	return $fonts;
+}
+
 /** A PNG of the whole page. */
 function PROBE__ChromeShot(array &$h): string
 {
-	return base64_decode(PROBE__ChromeSend($h, 'Page.captureScreenshot', ['format' => 'png', 'captureBeyondViewport' => true])['data']);
+	$size = PROBE__ChromeSend($h, 'Page.getLayoutMetrics')['cssContentSize'];
+	$clip = ['x' => 0, 'y' => 0, 'width' => $size['width'], 'height' => min($size['height'], PROBE_SHOT_MAX), 'scale' => 1];
+	return base64_decode(PROBE__ChromeSend($h, 'Page.captureScreenshot', ['format' => 'png', 'captureBeyondViewport' => true, 'clip' => $clip])['data']);
 }
 
 /** A PDF of the page printed on A4 the way a reader prints it, backgrounds off. */

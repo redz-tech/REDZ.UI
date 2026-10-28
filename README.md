@@ -20,7 +20,11 @@ the latest release at the root, of the main branch under `next/`, and of every r
   confirmation, busy buttons, a dialog closed by a click outside it — as small JavaScript modules that attach by
   delegation (see [Scripts](#scripts)).
 - Light, dark and system themes; left-to-right and right-to-left from one stylesheet; WCAG 2.2 AA in both themes.
-- A static reference of every component in every state, checked in Chrome, Safari and Firefox.
+- Documentation with a page per component, and every component in every state on one page, `docs/all.html` — the
+  fixture checked in real engines, with its Arabic twin (see [Documentation](#documentation)).
+- Two agent skills in `skills/`: building screens with REDZ.UI, and moving a project from Bootstrap 5.3 with a scan
+  and a map of every Bootstrap class (see [Skills](#skills)).
+- Budgets held on every commit: the stylesheet at most 24 KB and the scripts 25 KB, gzipped as one file each.
 
 ## How it reads
 One rule for every class:
@@ -57,27 +61,52 @@ element and markup added later works the same:
 
 ```html
 <script type="module" src="js/index.js"></script>
-<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel"}</script>
+<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…"}</script>
 ```
 
 - **Menus** (`role="menu"` on a `popover` opened by its button): the arrow keys move through the items, Home and End go
   to the ends, a letter to the next item it starts; Tab and Escape close the menu; the down and up arrows on its
   button open it on the first or the last item (`js/menu.js`).
 - **Tabs** (`role="tablist"`): the arrow keys select the next tab and show its panel — mirrored right to left — Home
-  and End the first and the last; only the selected tab takes Tab (`js/tabs.js`).
+  and End the first and the last; only the selected tab takes Tab. With `data-activation="manual"` — panels that load
+  from the server — the keys move the focus only, and Enter or Space selects (`js/tabs.js`).
 - **Notices:** `REDZ.ui.toast({title, text, tone, action, persistent})` shows a toast in the live regions of
   `.toast-container` — `role="status"`, `role="alert"` for `danger` — or in an open modal dialog's own. Success and info
   leave after 8 seconds unless the pointer or the focus rests on them; an error and a notice with an action stay until
   closed (`js/toast.js`).
 - **Confirmation:** `await REDZ.ui.confirm({title, text, ok, cancel, tone})` asks in a modal alert dialog and answers
   `true` or `false`; the focus starts on cancel (`js/confirm.js`).
-- **Busy:** `REDZ.ui.busy(element, promise)` marks the element `aria-busy` until the promise settles — a button also
-  `aria-disabled`, which keeps its focus and swallows its clicks (`js/busy.js`).
+- **Busy:** `REDZ.ui.busy(element, promise)` marks the element `aria-busy` until the promise settles. A button is also
+  `aria-disabled`, which keeps its focus and swallows its clicks — as on every button, check, radio or switch so
+  marked. A region — a card, its body, a dialog's or a drawer's body, any `region` — turns `inert` under an overlay that
+  shows after 400 ms and stays at least 400 ms; once it shows, one polite message says so, and a focus the region
+  dropped comes back to the same element or its namesake in the new content (`js/busy.js`).
 - **Dialogs:** `closedby="any"` closes a modal dialog by a click outside it; a modal dialog locks the page's scroll by
   CSS alone (`js/dialog.js` stands in for `closedby` where the browser lacks it).
 
 The library has no words of its own: every word it shows comes from the caller or from the page's island
 `#redz-ui-text`, and a missing one is named in the console.
+
+## Documentation
+`docs/` on the site: getting started, layout, utilities, tokens, icons, the move from Bootstrap 5.3, and a page per
+component — examples whose code is printed from the same markup, every state as a named grid, keyboard and
+accessibility, the tokens the component reads and its rows of the Bootstrap map. `php tools/docs.php` writes them from
+their sources in `docs/src/` inside one shell, with `docs/all.html` — every example and state of every page on one
+page — the Arabic twins of that page and of the demo screens (`docs/ar.tsv`), a Markdown twin of every page, and
+`llms.txt` with `llms-full.txt`; `--check` holds them to their sources on every commit. States the pointer or the keys
+make — `:hover`, `:focus-visible`, `:focus` — are shown by the docs' own script, which copies those rules under
+`[data-docs-state]`; the library's stylesheets carry no classes for the docs.
+
+## Skills
+Two skills in the open [Agent Skills](https://agentskills.io/) format, released with the library:
+- `skills/redz-ui` — building screens: the rules, the page, and a reference per component;
+- `skills/redz-ui-from-bootstrap-5` — moving a project from Bootstrap 5.3, file by file: `scripts/scan.sh` reports every
+  Bootstrap class, `data-bs-*` attribute and `bootstrap.*` call left with its REDZ.UI form, and every class REDZ.UI does
+  not have; the agent rewrites each file whole and scans again until nothing is left.
+
+Both carry `assets/map.tsv` — every class of Bootstrap 5.3.8 and its REDZ.UI form, written by `php tools/map.php` from
+Bootstrap's own stylesheet and `tools/map/rules.tsv` — and `assets/classes.txt`, every class of the library. Install
+them with `npx skills add redz-tech/REDZ.UI`, or copy the folders into `.agents/skills/`.
 
 ## Browsers
 Bootstrap 6's floor: Chrome and Edge 130+, Firefox 132+, Safari 18+ (macOS and iOS) — the browsers of autumn 2024.
@@ -101,15 +130,19 @@ files the same way.
 lacks. Its data is a pinned version of browser-compat-data in `tools/floor/bcd.tsv`, fetched and checked against its
 sha512 by `php tools/floor.php refresh`.
 
-**Checks in real engines.** `php tools/probe.php` opens every page of the library in the installed Chrome, Firefox and
-Safari, in the floor's Chrome 130, Firefox 132 and Safari 18 in the iOS simulator, and in Chrome 136 and Safari 26 in
-the simulator, whose bugs `js/menu-place.js` repairs — at 1440, 1024, 390 and 320 px, light left-to-right and dark
-right-to-left. It looks for overflow, icons without a mask, width prefixes outside a region, cut labels and errors;
-opens every menu and dialog and checks where it lands; walks every menu, modal dialog and tab list by real keys —
-and a dialog with `closedby` by a click outside it — against the WAI-ARIA patterns, and sends two notices; runs
-axe-core; and checks forced colors and print where the engine has them. Older engines are fetched once into `~/Library/Caches/redz-ui` and checked against their checksums. The sheet of
-shots and findings is written to `.dev/probes/`; the Probes workflow runs it on macOS 15 on every commit, and every
-release publishes its sheet under `checks/` on the site.
+**Checks in real engines.** `php tools/probe.php` opens the all-components page, the demo screens and the landing in
+the installed Chrome, Firefox and Safari, in the floor's Chrome 130, Firefox 132 and Safari 18 in the iOS simulator, and
+in Chrome 136 and Safari 26 in the simulator, whose bugs `js/menu-place.js` repairs — at 1440, 1024, 390 and 320 px,
+light left-to-right and dark right-to-left, the right-to-left cells on the pages' Arabic twins. It looks for overflow,
+icons without a mask, width prefixes outside a region, cut labels, `aria-busy` on live regions and errors; opens every
+menu and dialog and checks where it lands; walks every menu, modal dialog and tab list by real keys — and a dialog with
+`closedby` by a click outside it — against the WAI-ARIA patterns, and sends two notices; holds the docs' copies of
+`:hover` and `:focus-visible` against the real pointer and Tab; has Chrome name the fonts of the Arabic text; runs
+axe-core; and checks forced colors and print where the engine has them. Every docs page runs in the current Chrome,
+Firefox and Safari at 1440 and 390 px. Older engines are fetched once into `~/Library/Caches/redz-ui` and checked
+against their checksums. The sheet of shots and findings is written to `.dev/probes/`; the Probes workflow runs it on
+macOS 15 on every commit in five parallel parts — joined by `php tools/probe.php merge` — and every release publishes
+its sheet under `checks/` on the site.
 
 ## License
 MIT — see [LICENSE](LICENSE). Pieces taken from other MIT-licensed projects are listed with their notices in `NOTICE`.

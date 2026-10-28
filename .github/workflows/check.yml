@@ -21,8 +21,14 @@ jobs:
           coverage: none
           tools: none
 
-      - name: The generated stylesheets match tools/vocabulary.json
+      - name: The generated stylesheets match tools/vocabulary.json, within the budgets
         run: php tools/build.php --check
+
+      - name: The map from Bootstrap 5.3 covers every class, and the skills carry it
+        run: php tools/map.php --check
+
+      - name: The docs, the all-components page, the Arabic twins and llms.txt match their sources
+        run: php tools/docs.php --check
 
       - name: Every CSS and HTML feature works at the browser floor
         run: php tools/floor.php check

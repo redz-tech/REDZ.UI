@@ -24,6 +24,7 @@
 @import url("components/breadcrumb.css");
 @import url("components/placeholder.css");
 @import url("components/spinner.css");
+@import url("components/busy.css");
 @import url("components/empty-state.css");
 @import url("components/selection-bar.css");
 @import url("components/save-bar.css");

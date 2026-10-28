@@ -3,6 +3,7 @@
 		--redz-btn-bg: var(--redz-bg-hover);
 		--redz-btn-fg: var(--redz-text);
 		--redz-btn-hover: color-mix(in oklch, var(--redz-bg-hover) 92%, var(--redz-text));
+		--redz-btn-hover-fg: var(--redz-btn-fg);
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
@@ -26,6 +27,7 @@
 	.btn[aria-expanded="true"],
 	.btn[aria-pressed="true"] {
 		background: var(--redz-btn-hover);
+		color: var(--redz-btn-hover-fg);
 	}
 
 	.btn .bi {
@@ -112,36 +114,42 @@
 		--redz-btn-bg: var(--redz-primary-subtle);
 		--redz-btn-fg: var(--redz-primary);
 		--redz-btn-hover: color-mix(in oklch, var(--redz-primary-subtle) 85%, var(--redz-primary));
+		--redz-btn-hover-fg: color-mix(in oklch, var(--redz-primary) 70%, var(--redz-text));
 	}
 
 	.btn-subtle-secondary {
 		--redz-btn-bg: var(--redz-secondary-subtle);
 		--redz-btn-fg: var(--redz-secondary);
 		--redz-btn-hover: color-mix(in oklch, var(--redz-secondary-subtle) 85%, var(--redz-secondary));
+		--redz-btn-hover-fg: color-mix(in oklch, var(--redz-secondary) 70%, var(--redz-text));
 	}
 
 	.btn-subtle-success {
 		--redz-btn-bg: var(--redz-success-subtle);
 		--redz-btn-fg: var(--redz-success);
 		--redz-btn-hover: color-mix(in oklch, var(--redz-success-subtle) 85%, var(--redz-success));
+		--redz-btn-hover-fg: color-mix(in oklch, var(--redz-success) 70%, var(--redz-text));
 	}
 
 	.btn-subtle-danger {
 		--redz-btn-bg: var(--redz-danger-subtle);
 		--redz-btn-fg: var(--redz-danger);
 		--redz-btn-hover: color-mix(in oklch, var(--redz-danger-subtle) 85%, var(--redz-danger));
+		--redz-btn-hover-fg: color-mix(in oklch, var(--redz-danger) 70%, var(--redz-text));
 	}
 
 	.btn-subtle-warning {
 		--redz-btn-bg: var(--redz-warning-subtle);
 		--redz-btn-fg: var(--redz-warning);
 		--redz-btn-hover: color-mix(in oklch, var(--redz-warning-subtle) 85%, var(--redz-warning));
+		--redz-btn-hover-fg: color-mix(in oklch, var(--redz-warning) 70%, var(--redz-text));
 	}
 
 	.btn-subtle-info {
 		--redz-btn-bg: var(--redz-info-subtle);
 		--redz-btn-fg: var(--redz-info);
 		--redz-btn-hover: color-mix(in oklch, var(--redz-info-subtle) 85%, var(--redz-info));
+		--redz-btn-hover-fg: color-mix(in oklch, var(--redz-info) 70%, var(--redz-text));
 	}
 
 	.btn-text {

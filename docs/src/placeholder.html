@@ -1,0 +1,27 @@
+<header class="vstack gap-8">
+	<h1>Placeholders</h1>
+	<p class="docs-lead">Grey bars in the shape of content that is on its way — the first load of a page or a panel. A region that already has content and reloads it gets an overlay instead: see <a href="busy.html">Busy</a>.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="placeholder-examples">
+	<h2 id="placeholder-examples">Examples</h2>
+	<p>Each bar is a <code>placeholder</code> sized by a width utility. They pulse slowly, and stand still for people who ask for less motion.</p>
+	<div class="docs-example docs-example-stack" id="placeholder-card">
+		<section class="card" aria-label="Loading">
+			<div class="card-header"><span class="placeholder w-25"></span></div>
+			<div class="card-body vstack gap-8">
+				<span class="placeholder w-75"></span>
+				<span class="placeholder w-50"></span>
+				<span class="placeholder w-100"></span>
+			</div>
+		</section>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="placeholder-access">
+	<h2 id="placeholder-access">Accessibility</h2>
+	<ul>
+		<li>Placeholders are empty elements; the region holding them is named "Loading" until the content takes its place.</li>
+		<li>Keep the shapes close to the real content, so the page does not jump when it arrives.</li>
+	</ul>
+</section>

@@ -1,0 +1,190 @@
+# The rules of tools/map.php: a Bootstrap 5.3.8 class, its breakpoint infix taken off, meets the first pattern that
+# matches it whole. Columns: pattern (a regular expression), the REDZ.UI form ($1 for a group, {space:N} for
+# Bootstrap's spacing step N in px), the kind (same, rename, value, grid, state, trigger, remove, missing, review), the
+# docs page (empty: the page of the target's stylesheet), a note. "missing" is a gap planned in an order of its own.
+
+# Spacing: the number is the pixels — Bootstrap's steps 1 2 3 4 5 are 4 8 16 24 48 px.
+(m|mt|mb|ms|me|mx|my)-(0|auto)	$1-$2	same	utilities
+(p|pt|pb|ps|pe|px|py|gap|row-gap|column-gap)-0	$1-0	same	utilities
+(m|mt|mb|ms|me|mx|my|p|pt|pb|ps|pe|px|py|gap|row-gap|column-gap)-([1-5])	$1-{space:$2}	value	utilities	the number is the pixels
+
+# The grid: the parent sets the columns.
+row	grid	grid	layout	on the parent, with cols-N for equal columns or cols-12 for spans; no gutters to undo
+col		grid	layout	equal columns come from the parent's cols-N; the child needs no class
+col-auto		review	layout	a column as wide as its content: hstack, or grid-template-columns in the module's CSS
+col-([1-9]|1[0-2])	span-$1	grid	layout	N of 12: the parent is grid cols-12 (or md:cols-12)
+row-cols-auto		review	layout	items as wide as their content: hstack flex-wrap
+row-cols-([1-6])	cols-$1	grid	layout	on the same parent
+offset-([0-9]|1[01])		review	layout	no offsets: a span with an empty track before it
+g-([0-5])	gap-{space:$1}	grid	layout	on the grid parent
+gx-([0-5])	column-gap-{space:$1}	grid	layout	on the grid parent
+gy-([0-5])	row-gap-{space:$1}	grid	layout	on the grid parent
+container|container-fluid|container-(sm|md|lg|xl|xxl)		review	layout	the shell's app-main, or a region with max-w-* and mx-auto
+
+# Utilities with other names, numbers or no equivalent.
+float-(start|end|none)		missing	utilities	no floats: flex or grid, with ms-auto or justify-content-end
+object-fit-scale		review	utilities	object-fit-contain is the nearest
+sticky-(top|bottom)		review	utilities	position-sticky with top-0 or bottom-0
+fixed-(top|bottom)		review	utilities	position-fixed with top-0 or bottom-0, start-0 and end-0
+(top|bottom|start|end)-(50|100)		missing	utilities	only 0 here
+translate-middle(-x|-y)?		missing	utilities	center by grid or flex
+z-(n1|0|1|2|3)		missing	utilities	the components stack themselves
+text-(white|black|light|dark)(-50)?		review	utilities	no white, black, light or dark: text-body, text-muted or a tone
+text-body-secondary	text-muted	rename	utilities
+text-body-tertiary	text-faint	rename	utilities
+text-body-emphasis	text-body	rename	utilities
+text-(primary|secondary|success|danger|warning|info)-emphasis	text-$1	rename	utilities	a tone's text color is already its emphasis
+text-(light|dark)-emphasis	text-body	review	utilities	no light or dark: the text color
+text-opacity-(25|50|75|100)		missing	utilities
+text-bg-(primary|secondary|success|danger|warning|info)	badge-$1	review	badge	on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS
+text-bg-(light|dark)		review	badge	a plain badge, or a tone
+bg-(white|black|light|dark)		review	utilities	bg-body, bg-page, bg-raised or a tone
+bg-body-secondary	bg-page	rename	utilities
+bg-body-tertiary	bg-raised	rename	utilities
+bg-(light|dark)-subtle		review	utilities	bg-page, or a tone's -subtle
+bg-gradient		remove	utilities	no gradients
+bg-opacity-(10|25|50|75|100)		missing	utilities
+border-(top|end|bottom|start)-0		missing	utilities	draw only the sides you need: border-top and the others
+border-(3|5)		review	utilities	the widths are 1, 2 and 4 px
+border-(white|black|light|dark)		review	utilities	border-strong, or a tone
+border-(primary|secondary|success|danger|warning|info|light|dark)-subtle		missing	utilities
+border-opacity-(10|25|50|75|100)		missing	utilities
+rounded-1	rounded-4	value	utilities	4 px
+rounded-2	rounded-6	value	utilities	6 px
+rounded-3	rounded-8	value	utilities	8 px
+rounded-4	rounded-16	value	utilities	16 px
+rounded-5		review	utilities	32 px in Bootstrap: rounded-16 or rounded-full
+rounded-(circle|pill)	rounded-full	rename	utilities
+rounded-(top|end|bottom|start)(-[0-5]|-circle|-pill)?		missing	utilities	no one-side radii
+shadow-sm	shadow-1	rename	utilities
+shadow	shadow-2	rename	utilities
+shadow-lg	shadow-3	rename	utilities
+fs-1	fs-32	value	utilities	40 px in Bootstrap; 32 is the largest here
+fs-2	fs-32	value	utilities	32 px
+fs-3	fs-24	value	utilities	28 px in Bootstrap
+fs-4	fs-24	value	utilities	24 px
+fs-5	fs-20	value	utilities	20 px
+fs-6	fs-16	value	utilities	16 px
+fw-normal	fw-400	rename	utilities
+fw-medium	fw-500	rename	utilities
+fw-semibold	fw-600	rename	utilities
+fw-bold	fw-700	rename	utilities
+fw-(light|lighter|bolder)		review	utilities	the weights are 400, 500, 600 and 700
+lh-(1|sm|base|lg)		review	utilities	line heights are px here: lh-16, lh-20, lh-24, lh-28
+lead	fs-16 text-muted	review	utilities	a lead paragraph
+small		review	utilities	fs-12, or the <small> element
+mark		missing	utilities
+initialism		missing	utilities
+h[1-6]		review	utilities	the h1–h4 sizes are the elements'; fs-* for another
+display-[1-6]	fs-32	review	utilities	the largest size here
+blockquote|blockquote-footer		missing	utilities
+list-unstyled		review	utilities	vstack, or a component's own list
+list-inline|list-inline-item		review	utilities	hstack flex-wrap
+mw-100		review	utilities	max-w-* by px
+mh-100		missing	utilities
+vw-100|vh-100|min-vw-100|min-vh-100		missing	utilities
+visually-hidden-focusable		missing	utilities
+stretched-link		missing	utilities
+vr		missing	utilities
+clearfix		remove	utilities	no floats
+focus-ring(-[a-z]+)?		remove	utilities	the focus ring is built in, 3:1 in both themes
+link-(primary|secondary|success|danger|warning|info|light|dark|body-emphasis)		review	utilities	a link is the accent; text-* for a tone
+link-underline(-.+)?|link-opacity-.+|link-offset-.+		missing	utilities
+icon-link(-hover)?		review	icons	a link with its icon: hstack gap-4
+img-fluid		review	utilities	images never overflow their box here; w-100 to fill it
+img-thumbnail		missing	utilities
+figure|figure-img|figure-caption		missing	utilities
+ratio|ratio-(1x1|4x3|16x9|21x9)		missing	utilities	the missing basics: aspect-ratio
+
+# States and transitions: attributes and the browser's own.
+active		state		aria-current, aria-selected or aria-pressed — the attribute of the element's role
+disabled		state		disabled, or aria-disabled="true" to keep the focus
+show|showing		state		the browser's [open] and :popover-open
+collapsed		state		aria-expanded="false" on the button, set by the browser
+hide|hiding		state		closed: no attribute
+fade		remove		the components animate themselves, and not for people who ask for less motion
+pointer-event		remove		carousel only
+is-invalid		state	form	aria-invalid="true" on the control
+is-valid|has-validation|valid-feedback|valid-tooltip		remove	form	fields have no success state
+was-validated		state	form	the browser's :user-invalid shows after the person edits
+invalid-tooltip	invalid-feedback	review	form	the error under the field
+
+# Components renamed by Bootstrap 6, or drawn another way.
+modal	dialog	rename	dialog	on a <dialog>, opened by commandfor + command="show-modal"
+modal-dialog|modal-content		remove	dialog	no wrappers: the <dialog> is the box
+modal-(header|title|body|footer)	dialog-$1	rename	dialog
+modal-(sm|lg)	dialog-$1	rename	dialog
+modal-xl		review	dialog	dialog-lg is the widest
+modal-fullscreen(-.+)?		missing	dialog
+modal-dialog-centered		remove	dialog	a dialog is centered
+modal-dialog-scrollable		remove	dialog	the dialog's body scrolls by itself
+modal-backdrop		remove	dialog	the browser's ::backdrop
+modal-static		remove	dialog	closedby="closerequest"
+offcanvas|offcanvas-end	drawer	rename	drawer	on a <dialog>, opened by command="show-modal"
+offcanvas-start	drawer drawer-start	rename	drawer
+offcanvas-(top|bottom)		missing	drawer
+offcanvas-(header|title|body)	drawer-$1	rename	drawer
+offcanvas-backdrop		remove	drawer	the browser's ::backdrop
+offcanvas-(sm|md|lg|xl|xxl)		missing	drawer	a panel that stays in the page from a width
+dropdown|dropup|dropend|dropstart|dropdown-center|dropup-center		remove	menu	no wrapper: the menu flips by itself
+dropdown-toggle		review	menu	the button: commandfor + command="toggle-popover" + aria-haspopup="menu"; a chevron is an icon
+dropdown-toggle-split		review	menu	a btn-group of the action and a btn-icon that opens the menu
+dropdown-menu	menu	rename	menu	with popover and role="menu"
+dropdown-menu-end		remove	menu	the menu meets its button's end edge by default
+dropdown-menu-start	menu-start	rename	menu
+dropdown-menu-(sm|md|lg|xl|xxl)-(start|end)		review	menu	menu-start or the default
+dropdown-menu-dark		remove	menu	the theme sets it
+dropdown-item	menu-item	rename	menu	role="menuitem"
+dropdown-item-text		review	menu	menu-header, or plain text
+dropdown-divider	menu-divider	rename	menu
+dropdown-header	menu-header	rename	menu
+btn-(light|dark)		review	btn	no light or dark buttons: btn or btn-text
+btn-outline-(light|dark)		review	btn	btn-outline-secondary
+btn-check		review	btn	a toggle is a btn with aria-pressed; a choice is radio inputs
+btn-close-white		remove	btn	the close glyph takes the text color
+btn-group-(sm|lg)		review	btn	size each button
+btn-group-vertical		missing	btn
+form-check-input		review	check	check, radio or switch on the input, by its type
+form-check-label		remove	check	the label is the form-check around the input
+form-check-inline		review	check	hstack gap-16 around the labels
+form-check-reverse		missing	check
+form-switch		review	check	switch on the input, with role="switch"
+form-range		missing	form
+form-control-plaintext		review	form	readonly on a form-control, or plain text
+form-control-color		review	form	a native <input type="color"> in the module's CSS
+col-form-label(-sm|-lg)?	form-label	review	form	a form-label in a form-field
+input-group|input-group-(sm|lg|text)		missing	form	the missing basics; an icon inside a field is form-adorn
+card-(title|subtitle|text|link)		review	card	a heading and paragraphs in card-body
+card-img|card-img-(top|bottom|overlay)		missing	card
+card-group		review	card	grid with gap-16
+card-header-(tabs|pills)		review	card	a nav straight in the card
+alert-(light|dark|secondary)		review	alert	the plain alert, or a tone
+alert-heading		review	alert	a strong title in the alert's div
+alert-link		review	alert	a plain link
+alert-dismissible		review	alert	a btn-close at the end, removed by your script
+nav-tabs	nav-underline	rename	nav	tabs are drawn as an underline
+nav-item		remove	nav	links sit straight in the nav
+nav-fill|nav-justified		missing	nav
+tab-content|tab-pane		remove	nav	panels are siblings with role="tabpanel", hidden when not selected
+navbar|navbar-.+		review	app	the shell's app-header
+table-(primary|success|info|light|dark)		review	table	row tones are danger, warning and secondary
+table-striped|table-striped-columns|table-bordered|table-borderless|table-group-divider|caption-top		missing	table
+table-sm		review	table	data-density="compact" on <html>
+table-active		review	table	aria-selected or aria-current on the row
+table-responsive(-.+)?		review	table	the card's body holds the table; columns hide below md:
+toast-header		review	toast	REDZ.ui.toast builds the toast from its title, text and tone
+tooltip-inner|tooltip-arrow|bs-tooltip-.+		remove	tooltip	the tooltip is one element
+popover|popover-(header|body|arrow)|bs-popover-.+		missing	tooltip	a short note is a toggletip; a rich one a menu or a drawer
+spinner-border-sm		review	spinner	the spinner is 1 em: set the font size
+spinner-grow|spinner-grow-sm		missing	spinner
+placeholder-(xs|sm|lg)		review	placeholder	size by the height of the bar
+placeholder-(glow|wave)		remove	placeholder	placeholders pulse by themselves
+accordion|accordion-.+		missing		the missing basics: <details> and <summary>
+collapse|collapsing|collapse-horizontal		missing		the missing basics: <details>, or hidden switched by a command
+list-group|list-group-.+		missing		the missing basics
+progress|progress-bar|progress-bar-(striped|animated)|progress-stacked		missing		the missing basics: <progress> and <meter>
+pagination|pagination-(sm|lg)|page-item|page-link		missing		lists here page by “Next 25” (keyset), no page numbers
+carousel|carousel-.+		missing		not planned
+
+# Everything else keeps its name.
+(.+)	$1	same

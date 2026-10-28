@@ -22,8 +22,18 @@
 		text-wrap: balance;
 	}
 
+	[lang|="ar"],
+	[lang|="fa"],
+	[lang|="ur"] {
+		--redz-font-sans: var(--redz-font-arabic);
+		font-family: var(--redz-font-sans);
+	}
+
 	h1 {
 		font-size: var(--redz-fs-20);
+	}
+
+	h1:not(:lang(ar), :lang(fa), :lang(ur)) {
 		letter-spacing: -0.01em;
 	}
 
@@ -46,6 +56,14 @@
 	::selection {
 		background: var(--redz-primary-subtle);
 		color: var(--redz-text);
+	}
+
+	pre,
+	code,
+	kbd,
+	samp {
+		direction: ltr;
+		unicode-bidi: isolate;
 	}
 
 	code,

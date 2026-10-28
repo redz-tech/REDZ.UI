@@ -1,0 +1,89 @@
+<header class="vstack gap-8">
+	<h1>Checks, radios and switches</h1>
+	<p class="docs-lead">The browser's own checkbox and radio, drawn by the library: <code>check</code>, <code>radio</code> and <code>switch</code> on the input itself, <code>form-check</code> on the label around it.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="check-examples">
+	<h2 id="check-examples">Examples</h2>
+	<p>The class goes on the <code>&lt;input&gt;</code>; the label wraps it, so a click anywhere on the words toggles it.</p>
+	<div class="docs-example docs-example-stack" id="check-boxes">
+		<fieldset class="vstack gap-8">
+			<legend class="form-label">Included</legend>
+			<label class="form-check"><input class="check" type="checkbox" checked>Transfer</label>
+			<label class="form-check"><input class="check" type="checkbox" checked>Lunch</label>
+			<label class="form-check"><input class="check" type="checkbox">Kayaks</label>
+		</fieldset>
+	</div>
+
+	<h3>Radios</h3>
+	<p>Radios with one <code>name</code> are one choice; the arrow keys move it.</p>
+	<div class="docs-example docs-example-stack" id="check-radios">
+		<fieldset class="vstack gap-8">
+			<legend class="form-label">Departure</legend>
+			<label class="form-check"><input class="radio" type="radio" name="check-radios-time" checked>Morning, 8:30</label>
+			<label class="form-check"><input class="radio" type="radio" name="check-radios-time">Noon, 12:00</label>
+			<label class="form-check"><input class="radio" type="radio" name="check-radios-time">Sunset, 16:30</label>
+		</fieldset>
+	</div>
+
+	<h3>Switches</h3>
+	<p>A switch is a checkbox with <code>role="switch"</code>: on or off, applied at once. One that cannot change keeps its focus with <code>aria-disabled="true"</code> and says why in a hint.</p>
+	<div class="docs-example docs-example-stack" id="check-switches">
+		<label class="form-check"><input class="switch" type="checkbox" role="switch" checked>Show on the site</label>
+		<div class="vstack gap-4">
+			<label class="form-check"><input class="switch" type="checkbox" role="switch" aria-disabled="true" aria-describedby="check-switches-why">Hide “Powered by REDZ CMS”</label>
+			<div class="form-text" id="check-switches-why"><i class="bi bi-lock" aria-hidden="true"></i> Available with a partner license</div>
+		</div>
+	</div>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="check-states-title">
+	<h2 id="check-states-title">States</h2>
+	<p>A check with some of its items chosen is <code>indeterminate</code> — a property set from script, as there is no attribute for it.</p>
+	<div class="docs-states" id="check-states" tabindex="0" role="region" aria-labelledby="check-states-title">
+		<table class="docs-matrix">
+			<thead>
+				<tr><th scope="col">class</th><th scope="col">off</th><th scope="col">checked</th><th scope="col">indeterminate</th><th scope="col">:focus-visible</th><th scope="col">disabled</th><th scope="col">aria-disabled</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row">check</th>
+					<td><input class="check" type="checkbox" aria-label="Off"></td>
+					<td><input class="check" type="checkbox" aria-label="Checked" checked></td>
+					<td><input class="check" type="checkbox" aria-label="Some" data-docs-indeterminate></td>
+					<td><input class="check" type="checkbox" aria-label="Focused" data-docs-state="focus-visible"></td>
+					<td><input class="check" type="checkbox" aria-label="Disabled" checked disabled></td>
+					<td><input class="check" type="checkbox" aria-label="Unavailable" checked aria-disabled="true"></td>
+				</tr>
+				<tr>
+					<th scope="row">radio</th>
+					<td><input class="radio" type="radio" name="check-states-a" aria-label="Off"></td>
+					<td><input class="radio" type="radio" name="check-states-b" aria-label="Checked" checked></td>
+					<td>—</td>
+					<td><input class="radio" type="radio" name="check-states-c" aria-label="Focused" data-docs-state="focus-visible"></td>
+					<td><input class="radio" type="radio" name="check-states-d" aria-label="Disabled" checked disabled></td>
+					<td><input class="radio" type="radio" name="check-states-e" aria-label="Unavailable" checked aria-disabled="true"></td>
+				</tr>
+				<tr>
+					<th scope="row">switch</th>
+					<td><input class="switch" type="checkbox" role="switch" aria-label="Off"></td>
+					<td><input class="switch" type="checkbox" role="switch" aria-label="On" checked></td>
+					<td>—</td>
+					<td><input class="switch" type="checkbox" role="switch" aria-label="Focused" data-docs-state="focus-visible"></td>
+					<td><input class="switch" type="checkbox" role="switch" aria-label="Disabled" checked disabled></td>
+					<td><input class="switch" type="checkbox" role="switch" aria-label="Unavailable" checked aria-disabled="true"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="check-access">
+	<h2 id="check-access">Keyboard and accessibility</h2>
+	<ul>
+		<li>Space toggles a check or a switch; the arrow keys move the choice among radios of one <code>name</code>.</li>
+		<li>A set of checks or radios sits in a <code>&lt;fieldset&gt;</code> whose <code>&lt;legend&gt;</code> names it.</li>
+		<li>The marks are drawn from the browser's own <code>:checked</code> and <code>:indeterminate</code>, and keep showing in forced colors and in print.</li>
+		<li><code>aria-disabled="true"</code> keeps the control focusable and readable, so its hint can say why; the library ignores clicks and Space on it, as on a button so marked.</li>
+	</ul>
+</section>

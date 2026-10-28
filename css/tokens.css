@@ -38,6 +38,7 @@
 		--redz-shadow-3: 0 3px 8px -1px rgb(16 18 24 / calc(0.06 * var(--redz-shadow-strength))), 0 12px 28px -6px rgb(16 18 24 / calc(0.1 * var(--redz-shadow-strength))), 0 32px 72px -12px rgb(16 18 24 / calc(0.12 * var(--redz-shadow-strength)));
 
 		--redz-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+		--redz-font-arabic: -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", Roboto, "Noto Sans Arabic", "Noto Naskh Arabic", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 		--redz-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 
 		--redz-control-height: 2rem;

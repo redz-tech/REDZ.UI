@@ -1,0 +1,38 @@
+<header class="vstack gap-8">
+	<h1>Alerts</h1>
+	<p class="docs-lead">A message that stays on the page beside what it is about: a check passed, a suggestion, a warning before an action. A message that comes and goes is a <a href="toast.html">toast</a>.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="alert-examples">
+	<h2 id="alert-examples">Examples</h2>
+	<p>An icon, then the words in a <code>&lt;div&gt;</code>. The plain <code>alert</code> is neutral; the tones follow Bootstrap's.</p>
+	<div class="docs-example docs-example-stack" id="alert-tones">
+		<div class="alert"><i class="bi bi-info-circle" aria-hidden="true"></i><div>The changes apply to the next booking.</div></div>
+		<div class="alert alert-primary"><i class="bi bi-stars" aria-hidden="true"></i><div>A shorter title would fit the search results.</div></div>
+		<div class="alert alert-success"><i class="bi bi-check-circle" aria-hidden="true"></i><div>White text on it: 5.6:1, AA in both themes.</div></div>
+		<div class="alert alert-warning"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i><div>The Thai translation is older than the English.</div></div>
+		<div class="alert alert-danger"><i class="bi bi-x-octagon" aria-hidden="true"></i><div>The theme template raised a PHP warning; the page did not rebuild.</div></div>
+		<div class="alert alert-info"><i class="bi bi-robot" aria-hidden="true"></i><div>Translated by machine; a person has not read it yet.</div></div>
+	</div>
+
+	<h3>With a title and actions</h3>
+	<div class="docs-example docs-example-stack" id="alert-actions">
+		<div class="alert alert-primary align-items-start" role="region" aria-label="AI suggestion">
+			<i class="bi bi-stars" aria-hidden="true"></i>
+			<div class="vstack gap-8">
+				<strong>A shorter title</strong>
+				<p>“Ang Thong by speedboat” fits the 60 characters search results show.</p>
+				<div class="hstack gap-8"><button class="btn btn-sm btn-primary" type="button">Use it</button><button class="btn btn-sm btn-text" type="button">Dismiss</button></div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="alert-access">
+	<h2 id="alert-access">Accessibility</h2>
+	<ul>
+		<li>An alert that is on the page from the start is plain content — no live region. One that appears after an action and must be heard goes in a live region, or is a toast.</li>
+		<li>A suggestion with its own actions is a <code>region</code> named after what it is.</li>
+		<li>The icon carries the tone in forced colors; the words carry the meaning.</li>
+	</ul>
+</section>

@@ -1,11 +1,15 @@
 <?php
 // probe — the library's pages in real engines: Chrome, Firefox and Safari as installed; the floor — Chrome 130 and
 // Firefox 132 fetched once into the cache, Safari 18 in the iOS simulator; the engines whose bugs js/menu-place.js repairs —
-// Chrome 136, Safari 26 in the simulator. Each cell — a page at a width, light LTR or dark RTL — is judged for overflow,
-// unmasked icons, width prefixes outside a region, cut labels and errors; at the shot widths it is shot, every popover
-// and dialog opened and axe run; forced colors and print where the engine has them. Writes the sheet
-// .dev/probes/index.html and exits 1 on any finding. Usage: php tools/probe.php [ENGINE…] — an engine named that cannot
-// run here is a finding, one left out of a full run only a note.
+// Chrome 136, Safari 26 in the simulator. Each cell — a page at a width, light LTR or dark RTL, right to left on the
+// page's Arabic twin when it has one — is judged for overflow, unmasked icons, width prefixes outside a region, cut
+// labels, busy marks on live regions and errors; at the shot widths it is shot, every popover and dialog opened and axe
+// run; at 1440 its widgets are walked by keyboard, the docs' state mirror is held against the real hover and focus, and
+// Chrome names the fonts of Arabic text; forced colors and print where the engine has them. The pages of the config run
+// that whole way; the docs pages run in the "docs" engines at their widths, without shots or walks. Writes the sheet
+// .dev/probes/index.html with its report.json and exits 1 on any finding. Usage: php tools/probe.php [ENGINE…] — an
+// engine named that cannot run here is a finding, one left out of a full run only a note — or php tools/probe.php
+// merge DIR… — one sheet of the sheets of several runs, as CI's parallel jobs leave them.
 
 require __DIR__ . '/lib.php';
 require __DIR__ . '/probes/chrome.php';
@@ -18,6 +22,8 @@ const PROBE_CONFIG = __DIR__ . '/probes/config.json';
 const PROBE_PAGE = __DIR__ . '/probes/page.js';
 const PROBE_SHEET = __DIR__ . '/../.dev/probes';
 const PROBE_FORCED_PREFS = ['browser.display.document_color_use' => 2];
+// The tallest shot, in CSS px: twice that is the most a 2× phone shot can be, under the engines' 16 384 px canvas.
+const PROBE_SHOT_MAX = 8000;
 // The keys of the keyboard walk: the WebDriver code point (Firefox, Safari), the Windows key code and the text (Chrome).
 const PROBE_KEYS = ['Enter' => ["\u{E006}", 13, "\r"], 'Escape' => ["\u{E00C}", 27, ''], 'Tab' => ["\u{E004}", 9, ''], 'ArrowDown' => ["\u{E015}", 40, ''], 'ArrowUp' => ["\u{E013}", 38, ''], 'ArrowLeft' => ["\u{E012}", 37, ''], 'ArrowRight' => ["\u{E014}", 39, ''], 'Home' => ["\u{E011}", 36, ''], 'End' => ["\u{E010}", 35, '']];
 
@@ -219,6 +225,15 @@ function PROBE__EngineRun(string $name, array $engine, string $binary, string $d
 				}
 			}
 		}
+		if (in_array($name, $run['config']['docs']['engines'], true)) {
+			foreach (PROBE__DocsPages($run['config']) as $page) {
+				foreach ($run['config']['combos'] as $combo => [$theme, $direction]) {
+					foreach ($run['config']['docs']['widths'] as $width) {
+						PROBE__Cell($h, $name, $page, $combo, $theme, $direction, (int)$width, (int)$run['config']['widths'][$width], 'docs', $run, $report);
+					}
+				}
+			}
+		}
 		if ($engine['kind'] !== 'safari') {
 			foreach ($run['config']['pages'] as $page) {
 				PROBE__PrintCell($h, $name, $page, $run, $report);
@@ -247,14 +262,66 @@ function PROBE__EngineRun(string $name, array $engine, string $binary, string $d
 	}
 }
 
-/** One cell — $page at $width × $height (a simulator: its own screen when 0), $theme and $dir, normal or forced colors:
- *  judged; at a shot width shot, and when normal its popovers opened and axe run. */
+/**
+ * The docs pages beside the config's pages: every page of docs/ but those and the twins.
+ * @return list<string>
+ */
+function PROBE__DocsPages(array $config): array
+{
+	$pages = [];
+	foreach (glob(PROBE_ROOT . '/docs/*.html') ?: [] as $file) {
+		$page = 'docs/' . basename($file);
+		if (!in_array($page, $config['pages'], true) && !str_ends_with($page, '.ar.html')) {
+			$pages[] = $page;
+		}
+	}
+	return $pages;
+}
+
+/** The page a cell loads: right to left, the page's Arabic twin when it has one. */
+function PROBE__Shown(string $page, string $dir): string
+{
+	$twin = substr($page, 0, -5) . '.ar.html';
+	return $dir === 'rtl' && is_file(PROBE_ROOT . '/' . $twin) ? $twin : $page;
+}
+
+/** The docs' state mirror held against the real states: each copy beside its twin at rest put in the same state by the
+ *  real pointer or a real Tab; answers the findings. */
+function PROBE__Mirror(array &$h): array
+{
+	$findings = [];
+	foreach (PROBE__Do($h, 'Eval', 'REDZ_PROBE.mirrors()') as $i => $pair) {
+		$focus = $pair['state'] !== 'hover';
+		[$x, $y] = PROBE__Do($h, 'Eval', 'REDZ_PROBE.rest(' . $i . ', ' . json_encode($focus) . ')');
+		if ($focus) {
+			PROBE__Do($h, 'Key', 'Tab');
+		} else {
+			PROBE__Do($h, 'Hover', $x, $y);
+		}
+		$seen = PROBE__Do($h, 'Eval', 'new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(() => done(REDZ_PROBE.compare(' . $i . ')))))');
+		PROBE__Do($h, 'Hover', 1, 1);
+		if ($focus && !$seen['active']) {
+			$findings[] = 'the docs mirror of :' . $pair['state'] . ' on ' . $pair['what'] . ' — Tab did not reach it';
+		} elseif (!$seen['real']) {
+			continue;
+		} elseif ($seen['differ'] !== []) {
+			$findings[] = 'the docs mirror of :' . $pair['state'] . ' on ' . $pair['what'] . ' differs from the real state: ' . implode('; ', $seen['differ']);
+		}
+	}
+	PROBE__Do($h, 'Eval', 'document.activeElement?.blur() ?? true');
+	return $findings;
+}
+
+/** One cell — $page at $width × $height (a simulator: its own screen when 0), $theme and $dir, normal, docs or forced
+ *  colors: judged; normal or forced at a shot width shot; normal or docs at a shot width its popovers opened and axe
+ *  run; normal at 1440 walked by keyboard and its state mirror and Arabic fonts checked. */
 function PROBE__Cell(array &$h, string $name, string $page, string $combo, string $theme, string $dir, int $width, int $height, string $mode, array $run, array &$report): void
 {
 	$forced = $mode === 'forced';
-	$label = ($width === 0 ? 'phone' : $width) . ' · ' . $theme . ' · ' . strtoupper($dir) . ($forced ? ' · forced colors' : '');
-	$where = $name . ' ' . $page . ' ' . $label . ' — ';
-	PROBE__Do($h, 'Load', $run['base'] . $page . '?theme=' . $theme . '&dir=' . $dir, $width, $height, $theme, $forced);
+	$shown = PROBE__Shown($page, $dir);
+	$label = ($width === 0 ? 'phone' : $width) . ' · ' . $theme . ' · ' . strtoupper($dir) . ($shown !== $page ? ' · Arabic' : '') . ($forced ? ' · forced colors' : '');
+	$where = $name . ' ' . $shown . ' ' . $label . ' — ';
+	PROBE__Do($h, 'Load', $run['base'] . $shown . '?theme=' . $theme . '&dir=' . $dir, $width, $height, $theme, $forced);
 	PROBE__Do($h, 'Inject', $run['page']);
 	PROBE__Do($h, 'Eval', 'REDZ_PROBE.prepare(' . json_encode($theme) . ', ' . json_encode($dir) . ')');
 	$report['engines'][$name]['cells']++;
@@ -263,7 +330,7 @@ function PROBE__Cell(array &$h, string $name, string $page, string $combo, strin
 	if ($m['scroll'] > $m['client']) {
 		$findings[] = 'overflow ' . $m['scroll'] . ' > ' . $m['client'] . ': ' . implode(', ', $m['offenders']);
 	}
-	foreach (['unmasked' => 'icons without a mask', 'unregioned' => 'width prefixes outside a region', 'cut' => 'cut labels'] as $key => $what) {
+	foreach (['unmasked' => 'icons without a mask', 'unregioned' => 'width prefixes outside a region', 'cut' => 'cut labels', 'busyLive' => 'aria-busy on or around a live region'] as $key => $what) {
 		if ($m[$key] !== []) {
 			$findings[] = $what . ': ' . implode(', ', $m[$key]);
 		}
@@ -274,13 +341,14 @@ function PROBE__Cell(array &$h, string $name, string $page, string $combo, strin
 	if ($m['ui'] !== true) {
 		$findings[] = 'the library\'s script did not run: no REDZ.ui';
 	}
-	$shot = $width === 0 || in_array($width, $run['config']['shots'], true) || $forced;
+	$at = $width === 0 || in_array($width, $run['config']['shots'], true);
+	$shot = ($at && $mode === 'normal') || $forced;
 	if ($shot) {
 		$file = 'shots/' . PROBE__Slug($name . '-' . $page . '-' . $combo . '-' . ($width ?: 'phone') . ($forced ? '-forced' : '')) . '.webp';
 		$size = PROBE__ShotWrite(PROBE__Do($h, 'Shot'), (float)PROBE__Do($h, 'Eval', 'devicePixelRatio'), $run['sheet'] . '/' . $file);
 		$report['shots'][$page][$name][] = ['file' => $file, 'size' => $size, 'label' => $label . ($h['kind'] === 'safari' ? ' · viewport' : '')];
 	}
-	if ($shot && !$forced) {
+	if ($at && !$forced) {
 		foreach (PROBE__Do($h, 'Eval', 'REDZ_PROBE.popovers()') as $p) {
 			$what = $p['target'] . ' from ' . $p['invoker'];
 			if ($p['guard']) {
@@ -295,14 +363,26 @@ function PROBE__Cell(array &$h, string $name, string $page, string $combo, strin
 			}
 		}
 	}
-	if ($width === 1440 && !$forced) {
+	if ($width === 1440 && $mode === 'normal') {
 		$walked = [];
 		$findings = [...$findings, ...PROBE__KeyWalk($h, $walked), ...PROBE__Notices($h)];
 		foreach ($walked as $widget) {
 			$report['walked'][$page][$widget][$name] = true;
 		}
+		if ($theme === 'light' && $dir === 'ltr') {
+			$findings = [...$findings, ...PROBE__Mirror($h)];
+		}
+		if ($h['kind'] === 'chrome' && $shown !== $page) {
+			$texts = PROBE__Do($h, 'Eval', 'REDZ_PROBE.arabic()');
+			foreach (PROBE__ChromeFonts($h, '[data-probe-arabic]') as $k => $families) {
+				$wrong = array_intersect($families, ['Arial', 'Tahoma', 'Times', 'Times New Roman']);
+				if ($wrong !== []) {
+					$findings[] = 'Arabic drawn in ' . implode(', ', $wrong) . ': ' . ($texts[$k] ?? '?');
+				}
+			}
+		}
 	}
-	if ($shot && !$forced) {
+	if ($at && !$forced) {
 		PROBE__Do($h, 'Inject', $run['axe']);
 		foreach (PROBE__Do($h, 'Eval', 'REDZ_PROBE.axe(' . json_encode($run['config']['axe']['tags']) . ')') as $v) {
 			$targets = array_values(array_filter($v['targets'], fn(string $target): bool => !PROBE__AxeAllowed($run['config'], $name, $v['id'], $target, $report)));
@@ -315,7 +395,9 @@ function PROBE__Cell(array &$h, string $name, string $page, string $combo, strin
 		$findings[] = 'error ' . $error;
 	}
 	foreach ($findings as $finding) {
-		$report['findings'][] = $where . $finding;
+		if (!PROBE__FindingAllowed($run['config'], $name, $where . $finding, $report)) {
+			$report['findings'][] = $where . $finding;
+		}
 	}
 }
 
@@ -383,7 +465,7 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 				$findings[] = $what . 'opening: ' . ($s['open'] ? 'the focus is not inside the dialog' : 'the dialog does not open');
 				continue;
 			}
-			for ($i = 0; $i < $s['focusables'] - 1 && !$s['leaked']; $i++) {
+			for ($i = $s['at']; $i < $s['focusables'] - 1 && !$s['leaked']; $i++) {
 				$press('Tab');
 				$s = $state();
 			}
@@ -406,9 +488,9 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 					usleep(300000);
 					if ($state()['open']) {
 						$findings[] = '#' . $id . ' — a click outside it does not close it (closedby="any")';
-						PROBE__Do($h, 'Eval', '(document.getElementById(' . json_encode($id) . ').close(), true)');
 					}
 				}
+				PROBE__Do($h, 'Eval', '(document.getElementById(' . json_encode($id) . ').open && document.getElementById(' . json_encode($id) . ').close(), true)');
 			}
 		} else {
 			$s = $state();
@@ -417,8 +499,20 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 			foreach ([[$s['rtl'] ? 'ArrowLeft' : 'ArrowRight', ($start + 1) % $s['count']], ['End', $last], ['Home', 0]] as [$key, $tab]) {
 				$press($key);
 				$s = $state();
+				if ($s['manual']) {
+					if ($s['focused'] !== $tab || $s['selected'] !== [$start]) {
+						$findings[] = $what . $key . ' (manual activation): the focus should move to tab ' . $tab . ' and the selection stay on ' . $start . ' — selected ' . json_encode($s['selected']) . ', focused ' . $s['focused'];
+						break;
+					}
+					if ($h['kind'] === 'firefox') {
+						continue;
+					}
+					$press('Enter');
+					$s = $state();
+					$start = $tab;
+				}
 				if ($s['selected'] !== [$tab] || $s['focused'] !== $tab || $s['shown'] !== [$tab]) {
-					$findings[] = $what . $key . ': tab ' . $tab . ' should be selected, focused and its panel alone shown — selected ' . json_encode($s['selected']) . ', focused ' . $s['focused'] . ', shown ' . json_encode($s['shown']);
+					$findings[] = $what . $key . ($s['manual'] ? ' and Enter' : '') . ': tab ' . $tab . ' should be selected, focused and its panel alone shown — selected ' . json_encode($s['selected']) . ', focused ' . $s['focused'] . ', shown ' . json_encode($s['shown']);
 					break;
 				}
 			}
@@ -444,7 +538,20 @@ function PROBE__Notices(array &$h): array
 function PROBE__AxeAllowed(array $config, string $engine, string $rule, string $target, array &$report): bool
 {
 	foreach ($config['allow'] as $k => $entry) {
-		if ($entry['rule'] === $rule && str_contains($target, $entry['target']) && in_array($engine, $entry['engines'] ?? [$engine], true)) {
+		if (($entry['rule'] ?? null) === $rule && str_contains($target, $entry['target']) && in_array($engine, $entry['engines'] ?? [$engine], true)) {
+			$report['used'][$k] = true;
+			return true;
+		}
+	}
+	return false;
+}
+
+/** Whether an exception of the config — {"finding": a part of its text, "engines", "reason"} — allows the finding
+ *  $text of engine $engine; marks the exception used. */
+function PROBE__FindingAllowed(array $config, string $engine, string $text, array &$report): bool
+{
+	foreach ($config['allow'] as $k => $entry) {
+		if (isset($entry['finding']) && str_contains($text, $entry['finding']) && in_array($engine, $entry['engines'] ?? [$engine], true)) {
 			$report['used'][$k] = true;
 			return true;
 		}
@@ -471,9 +578,71 @@ function PROBE__Slug(string $text): string
 }
 
 /** The entry point: every engine of the config, or the ones named. */
+/** Prints the findings and the verdict of $report and checks the config's exceptions against the engines that ran;
+ *  the exit code. */
+function PROBE__Verdict(array $config, array &$report): int
+{
+	$ran = array_keys(array_filter($report['engines'], fn(array $engine): bool => $engine['cells'] > 0));
+	foreach ($config['allow'] as $k => $entry) {
+		if (!isset($report['used'][$k]) && array_diff($entry['engines'] ?? array_keys($config['engines']), $ran) === []) {
+			$report['findings'][] = 'tools/probes/config.json — the exception ' . ($entry['finding'] ?? $entry['rule'] . ' at ' . $entry['target']) . ' allows nothing any more';
+		}
+	}
+	foreach ($report['findings'] as $finding) {
+		echo $finding, "\n";
+	}
+	echo count($report['findings']) === 0 ? 'CLEAN' : count($report['findings']) . ' findings', ' · sheet .dev/probes/index.html', "\n";
+	return $report['findings'] === [] ? 0 : 1;
+}
+
+/** merge: one sheet of the sheets in $dirs — their reports joined, their shots, prints and logs copied; the exit code. */
+function PROBE__Merge(array $config, array $dirs): int
+{
+	$work = PROBE_SHEET . '.new';
+	PROBE__Remove($work);
+	$report = null;
+	foreach ($dirs as $dir) {
+		$part = json_decode((string)@file_get_contents($dir . '/report.json'), true);
+		if (!is_array($part)) {
+			fwrite(STDERR, $dir . '/report.json is missing or not a report' . "\n");
+			return 2;
+		}
+		if ($report === null) {
+			$report = $part;
+		} else {
+			$report['engines'] += $part['engines'];
+			$report['skipped'] += $part['skipped'];
+			$report['used'] += $part['used'];
+			$report['findings'] = [...$report['findings'], ...$part['findings']];
+			$report['guarded'] = [...$report['guarded'], ...$part['guarded']];
+			$report['walked'] = array_replace_recursive($report['walked'], $part['walked']);
+			$report['shots'] = array_merge_recursive($report['shots'], $part['shots']);
+		}
+		foreach (['shots', 'print', 'logs'] as $folder) {
+			@mkdir($work . '/' . $folder, 0777, true);
+			foreach (glob($dir . '/' . $folder . '/*') ?: [] as $file) {
+				copy($file, $work . '/' . $folder . '/' . basename($file));
+			}
+		}
+	}
+	if ($report === null) {
+		fwrite(STDERR, "merge needs the folders of the sheets to join\n");
+		return 2;
+	}
+	$status = PROBE__Verdict($config, $report);
+	PROBE__SheetWrite($work, $report);
+	file_put_contents($work . '/report.json', json_encode($report, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+	PROBE__Remove(PROBE_SHEET);
+	rename($work, PROBE_SHEET);
+	return $status;
+}
+
 function PROBE__Main(array $argv): int
 {
 	$config = json_decode((string)file_get_contents(PROBE_CONFIG), true, 512, JSON_THROW_ON_ERROR);
+	if (($argv[1] ?? '') === 'merge') {
+		return PROBE__Merge($config, array_slice($argv, 2));
+	}
 	$names = array_slice($argv, 1) ?: array_keys($config['engines']);
 	foreach ($names as $name) {
 		if (!isset($config['engines'][$name])) {
@@ -491,6 +660,13 @@ function PROBE__Main(array $argv): int
 	$report = ['when' => gmdate('Y-m-d H:i') . ' UTC', 'commit' => $commit === '' ? 'no commit' : 'commit ' . $commit, 'widths' => array_keys($config['widths']), 'engines' => [], 'skipped' => [], 'findings' => [], 'guarded' => [], 'walked' => [], 'shots' => [], 'used' => []];
 	$run = ['config' => $config, 'page' => (string)file_get_contents(PROBE_PAGE), 'axe' => PROBE__Axe($config['axe']), 'sheet' => $work];
 	[$server, $run['base']] = PROBE__ServerStart($tmp);
+	register_shutdown_function(fn() => is_resource($server) && proc_terminate($server));
+	if (function_exists('pcntl_async_signals')) {
+		pcntl_async_signals(true);
+		foreach ([SIGINT, SIGTERM, SIGHUP] as $signal) {
+			pcntl_signal($signal, fn() => exit(130));
+		}
+	}
 	try {
 		foreach ($names as $name) {
 			$why = '';
@@ -516,25 +692,17 @@ function PROBE__Main(array $argv): int
 		proc_terminate($server);
 		PROBE__Wait($server);
 	}
-	$ran = array_keys(array_filter($report['engines'], fn(array $engine): bool => $engine['cells'] > 0));
-	foreach ($config['allow'] as $k => $entry) {
-		if (!isset($report['used'][$k]) && array_diff($entry['engines'] ?? array_keys($config['engines']), $ran) === []) {
-			$report['findings'][] = 'tools/probes/config.json — the exception ' . $entry['rule'] . ' at ' . $entry['target'] . ' allows nothing any more';
-		}
-	}
 	@mkdir($work . '/logs');
 	foreach (glob($tmp . '/{,*/,*/*/}*.log', GLOB_BRACE) ?: [] as $log) {
 		copy($log, $work . '/logs/' . PROBE__Slug(substr(dirname($log), strlen($tmp))) . (dirname($log) === $tmp ? '' : '-') . basename($log));
 	}
+	$status = PROBE__Verdict($config, $report);
 	PROBE__SheetWrite($work, $report);
+	file_put_contents($work . '/report.json', json_encode($report, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 	PROBE__Remove(PROBE_SHEET);
 	rename($work, PROBE_SHEET);
 	PROBE__Remove($tmp);
-	foreach ($report['findings'] as $finding) {
-		echo $finding, "\n";
-	}
-	echo count($report['findings']) === 0 ? 'CLEAN' : count($report['findings']) . ' findings', ' · sheet .dev/probes/index.html', "\n";
-	return $report['findings'] === [] ? 0 : 1;
+	return $status;
 }
 
 exit(PROBE__Main($argv));

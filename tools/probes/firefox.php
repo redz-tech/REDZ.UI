@@ -191,10 +191,18 @@ function PROBE__FirefoxClick(array &$h, int $x, int $y): void
 	PROBE__FirefoxSend($h, 'input.performActions', ['context' => $h['context'], 'actions' => [['type' => 'pointer', 'id' => 'mouse', 'parameters' => ['pointerType' => 'mouse'], 'actions' => [['type' => 'pointerMove', 'x' => $x, 'y' => $y], ['type' => 'pointerDown', 'button' => 0], ['type' => 'pointerUp', 'button' => 0]]]]]);
 }
 
+/** Moves the mouse to the point of the viewport. */
+function PROBE__FirefoxHover(array &$h, int $x, int $y): void
+{
+	PROBE__FirefoxSend($h, 'input.performActions', ['context' => $h['context'], 'actions' => [['type' => 'pointer', 'id' => 'mouse', 'parameters' => ['pointerType' => 'mouse'], 'actions' => [['type' => 'pointerMove', 'x' => $x, 'y' => $y]]]]]);
+}
+
 /** A PNG of the whole page. */
 function PROBE__FirefoxShot(array &$h): string
 {
-	return base64_decode(PROBE__FirefoxSend($h, 'browsingContext.captureScreenshot', ['context' => $h['context'], 'origin' => 'document'])['data']);
+	[$width, $height] = PROBE__FirefoxEval($h, '[document.documentElement.scrollWidth, document.documentElement.scrollHeight]');
+	$clip = ['type' => 'box', 'x' => 0, 'y' => 0, 'width' => $width, 'height' => min($height, PROBE_SHOT_MAX)];
+	return base64_decode(PROBE__FirefoxSend($h, 'browsingContext.captureScreenshot', ['context' => $h['context'], 'origin' => 'document', 'clip' => $clip])['data']);
 }
 
 /** A PDF of the page printed on A4 the way a reader prints it, backgrounds off. */

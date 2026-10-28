@@ -1,0 +1,522 @@
+# The Arabic of the twins tools/docs.php writes (docs/all.ar.html and the demo screens): English, a tab, Arabic. Modern
+# Standard Arabic, Western digits as CLDR's plain "ar". Brands, domains, paths, codes and initials stay as they are.
+# Written by the library's author, not yet read by a native speaker.
+Pages	الصفحات
+RZ	RZ
+REDZ.UI	REDZ.UI
+View	العرض
+Theme	السمة
+System	النظام
+Light	فاتح
+Dark	داكن
+Direction	الاتجاه
+Left to right	من اليسار إلى اليمين
+Right to left	من اليمين إلى اليسار
+Source on GitHub	المصدر على GitHub
+Start	البداية
+Getting started	البدء
+Layout	التخطيط
+Utilities	الأدوات المساعدة
+Tokens	الرموز
+Icons	الأيقونات
+From Bootstrap 5.3	من Bootstrap 5.3
+Actions	الإجراءات
+Buttons	الأزرار
+Chips	الرقائق
+Menus	القوائم
+Forms	النماذج
+Form fields	حقول النماذج
+Checks, radios and switches	مربعات الاختيار وأزرار الاختيار والمفاتيح
+Content	المحتوى
+Cards	البطاقات
+Tables	الجداول
+Badges	الشارات
+Dots	النقاط
+Avatars	الصور الرمزية
+Icon tiles	مربعات الأيقونات
+Empty states	الحالات الفارغة
+Placeholders	العناصر النائبة
+Layers	الطبقات
+Dialogs	مربعات الحوار
+Drawers	الألواح الجانبية
+Tooltips	التلميحات
+Feedback	الإشعارات
+Alerts	التنبيهات
+Toasts	الإشعارات المنبثقة
+Spinners	مؤشرات التحميل
+Busy	الانشغال
+Save bar	شريط الحفظ
+Selection bar	شريط التحديد
+Navigation	التنقل
+Navs and tabs	روابط التنقل والتبويبات
+Breadcrumbs	مسار التنقل
+App shell	هيكل التطبيق
+Reference	المرجع
+All components	جميع المكونات
+Demo screens	شاشات العرض التوضيحي
+Checks in real engines	الفحوص في محركات حقيقية
+One	واحد
+Two	اثنان
+Three	ثلاثة
+Four	أربعة
+The main column —	العمود الرئيسي —
+The side —	الجانب —
+lagoon.example	lagoon.example
+villas.lagoon.example	villas.lagoon.example
+angthong.example	angthong.example
+Draft	مسودة
+Edited 2 hours ago	عُدّل قبل ساعتين
+Preview	معاينة
+Publish	نشر
+Save	حفظ
+Cancel	إلغاء
+Duplicate	تكرار
+Delete	حذف
+Withdraw	سحب
+Outline	محدد
+Outline danger	خطر محدد
+Subtle	هادئ
+Subtle danger	خطر هادئ
+Text	نص
+Link	رابط
+Extra small	صغير جدًا
+Small	صغير
+Default	افتراضي
+Large	كبير
+New excursion	رحلة جديدة
+Open the site	فتح الموقع
+Edit	تعديل
+More actions	إجراءات أخرى
+Remove	إزالة
+Close	إغلاق
+List view	عرض القائمة
+List	قائمة
+Board	لوحة
+Calendar	تقويم
+Export	تصدير
+Export options	خيارات التصدير
+Pin	تثبيت
+Save for 2 seconds	حفظ لمدة ثانيتين
+Details	التفاصيل
+Published	منشور
+Drafts	المسودات
+Language: any	اللغة: أي لغة
+Site: all	الموقع: الكل
+Site	الموقع
+All sites	جميع المواقع
+All	الكل
+Needs attention	يحتاج إلى انتباه
+Mine	الخاصة بي
+Filter: section Marine	عامل التصفية: القسم البحري
+Section: Marine	القسم: بحري
+Remove filter: section Marine	إزالة عامل التصفية: القسم البحري
+Filter: Marine	عامل التصفية: بحري
+Marine	بحري
+Remove filter: Marine	إزالة عامل التصفية: بحري
+Archive	أرشفة
+Open on the site	فتح على الموقع
+Work context	سياق العمل
+Item at rest	عنصر في وضع السكون
+Item hovered	عنصر تحت المؤشر
+Item focused	عنصر مركّز عليه
+Item checked	عنصر محدد
+Item current	العنصر الحالي
+Item unavailable	عنصر غير متاح
+Danger at rest	خطر في وضع السكون
+Danger hovered	خطر تحت المؤشر
+Danger focused	خطر مركّز عليه
+Danger unavailable	خطر غير متاح
+A name people search for	اسم يبحث عنه الناس
+Name	الاسم
+name@example.com	name@example.com
+E-mail	البريد الإلكتروني
+Land	بري
+Evening	مسائي
+Section	القسم
+A note for the guides	ملاحظة للمرشدين
+Pick up at the pier at 8:30.	الاستقبال عند الرصيف في الساعة 8:30.
+Note	ملاحظة
+Address	العنوان
+Adult price, THB	سعر البالغ، بات
+Lower than the child price	أقل من سعر الطفل
+Search excursions	البحث في الرحلات
+Name, slug or code	الاسم أو المعرّف أو الرمز
+Small field	حقل صغير
+Default field	حقل افتراضي
+Large field	حقل كبير
+Small select	قائمة اختيار صغيرة
+At rest	في وضع السكون
+Focused	مركّز عليه
+Invalid	غير صالح
+Read only	للقراءة فقط
+Disabled	معطّل
+Included	مشمول
+Transfer	النقل
+Lunch	الغداء
+Kayaks	قوارب الكاياك
+Departure	المغادرة
+Morning, 8:30	صباحًا، 8:30
+Noon, 12:00	ظهرًا، 12:00
+Sunset, 16:30	عند الغروب، 16:30
+Show on the site	العرض على الموقع
+Hide “Powered by REDZ CMS”	إخفاء «يعمل بواسطة REDZ CMS»
+Available with a partner license	متاح مع ترخيص الشريك
+Off	إيقاف
+Checked	محدد
+Some	بعضها
+Unavailable	غير متاح
+On	تشغيل
+Price	السعر
+in the base currency THB	بالعملة الأساسية، البات
+The visitor's currency is an estimate.	عملة الزائر تقديرية.
+Ang Thong	أنغ ثونغ
+Prices	الأسعار
+Adults 2,500 · children 1,900.	البالغون 2,500 · الأطفال 1,900.
+Bookings	الحجوزات
+this week	هذا الأسبوع
+Revenue	الإيرادات
+312,400 THB	312,400 بات
+Excursions	الرحلات
+3 of 28	3 من 28
+Select all	تحديد الكل
+Excursion	الرحلة
+Price from	السعر ابتداءً من
+Status	الحالة
+Select: Ang Thong	تحديد: أنغ ثونغ
+Ang Thong: marine park by speedboat	أنغ ثونغ: الحديقة البحرية بالقارب السريع
+/excursions/ang-thong/	/excursions/ang-thong/
+2,500 THB	2,500 بات
+Edit: Ang Thong	تعديل: أنغ ثونغ
+Select: Elephant sanctuary	تحديد: محمية الفيلة
+Elephant sanctuary: feeding and a walk	محمية الفيلة: إطعام ونزهة
+2,600 THB	2,600 بات
+Failed	فشل
+Rebuild: Elephant sanctuary	إعادة البناء: محمية الفيلة
+Select: Night market	تحديد: السوق الليلي
+Night market and street food	السوق الليلي وطعام الشارع
+900 THB	900 بات
+Stale	قديم
+Edit: Night market	تعديل: السوق الليلي
+Select: Muay Thai	تحديد: مواي تاي
+Muay Thai: an evening at the stadium	مواي تاي: أمسية في الملعب
+withdrawn from the sites	مسحوب من المواقع
+1,500 THB	1,500 بات
+Withdrawn	مسحوب
+Edit: Muay Thai	تعديل: مواي تاي
+Elephant sanctuary	محمية الفيلة
+Night market	السوق الليلي
+Muay Thai	مواي تاي
+Paid	مدفوع
+Machine translation	ترجمة آلية
+New	جديد
+Archived	مؤرشف
+Beta	تجريبي
+Live	مباشر
+Overdue	متأخر
+Due today	مستحق اليوم
+Update	تحديث
+Orders	الطلبات
+Offline	غير متصل
+Primary	أساسي
+Secondary	ثانوي
+Down	معطّل
+Slow	بطيء
+Updating	جارٍ التحديث
+MK	MK
+Marina K.	مارينا ك.
+AT	AT
+Arthit T.	أرتيت ت.
+MK, profile	MK، الملف الشخصي
+Content type · 28 items	نوع المحتوى · 28 عنصرًا
+No excursions yet	لا توجد رحلات بعد
+Logo · light theme	الشعار · السمة الفاتحة
+SVG or PNG, drop a file or choose	SVG أو PNG، أفلت ملفًا أو اختر
+Logo	الشعار
+Loading	جارٍ التحميل
+Add a note	إضافة ملاحظة
+Publish now?	النشر الآن؟
+The page goes live on three sites.	تُنشر الصفحة على ثلاثة مواقع.
+History of changes	سجل التغييرات
+Delete 2 excursions	حذف رحلتين
+Filters	عوامل التصفية
+From the start	من البداية
+Any section	أي قسم
+Reset	إعادة تعيين
+Show 9	عرض 9
+Sections	الأقسام
+Partner license	ترخيص الشريك
+What is a partner license	ما هو ترخيص الشريك
+The changes apply to the next booking.	تسري التغييرات على الحجز التالي.
+AI suggestion	اقتراح الذكاء الاصطناعي
+A shorter title	عنوان أقصر
+Use it	استخدامه
+Dismiss	تجاهل
+Saved	تم الحفظ
+Import started	بدأ الاستيراد
+Not saved	لم يُحفظ
+With an action	مع إجراء
+Ang Thong · 3 pages rebuilt	أنغ ثونغ · أُعيد بناء 3 صفحات
+You can leave this page.	يمكنك مغادرة هذه الصفحة.
+Saved without the Thai text	حُفظ دون النص التايلاندي
+The connection was lost; try again.	انقطع الاتصال؛ حاول مرة أخرى.
+Moved to the archive	نُقل إلى الأرشيف
+Undo	تراجع
+Rebuilding 3 pages…	جارٍ إعادة بناء 3 صفحات…
+Larger, in the accent	أكبر، بلون التمييز
+Bookings this week	حجوزات هذا الأسبوع
+Reload for 2 seconds	إعادة التحميل لمدة ثانيتين
+bookings, 312,400 THB	حجزًا، 312,400 بات
+128 bookings	128 حجزًا
+Changes	التغييرات
+All changes saved	حُفظت جميع التغييرات
+Unsaved changes	تغييرات غير محفوظة
+Discard	تجاهل
+Selected excursions	الرحلات المحددة
+2 selected	محدد 2
+Translate what changed	ترجمة ما تغيّر
+Delete…	حذف…
+Clear the selection	مسح التحديد
+List views	طرق عرض القائمة
+Period	الفترة
+Week	أسبوع
+Month	شهر
+Year	سنة
+History	السجل
+Report	التقرير
+Refunds	المبالغ المستردة
+128 bookings this week.	128 حجزًا هذا الأسبوع.
+312,400 THB this week.	312,400 بات هذا الأسبوع.
+2 refunds this week.	استردادان هذا الأسبوع.
+Hovered	تحت المؤشر
+Current	الحالي
+Selected	محدد
+Pressed	مضغوط
+Breadcrumb	مسار التنقل
+This page as Markdown	هذه الصفحة بصيغة Markdown
+All components — REDZ.UI	جميع المكونات — REDZ.UI
+OK	موافق
+Loading…	جارٍ التحميل…
+REDZ CMS	REDZ CMS
+LG	LG
+VI	VI
+Find or go to…	البحث أو الانتقال إلى…
+Help for this screen	مساعدة لهذه الشاشة
+Notifications: 3	الإشعارات: 3
+Profile	الملف الشخصي
+Marina K. · editor	مارينا ك. · محررة
+Interface language: English	لغة الواجهة: الإنجليزية
+Theme: system	السمة: النظام
+Profile and devices	الملف الشخصي والأجهزة
+Sign out	تسجيل الخروج
+Overview	نظرة عامة
+Villas	الفلل
+Transport	النقل
+News	الأخبار
+Media	الوسائط
+Sales	المبيعات
+Sites	المواقع
+Sites and domains	المواقع والنطاقات
+Design and themes	التصميم والسمات
+Translations	الترجمات
+People and roles	الأشخاص والأدوار
+Journal	السجل
+Settings	الإعدادات
+Type fields	حقول النوع
+More	المزيد
+Import	استيراد
+3 need attention:	3 تحتاج إلى انتباه:
+Show them	عرضها
+Need attention	تحتاج إلى انتباه
+Translation outdated	ترجمة قديمة
+Scheduled	مجدول
+Save view	حفظ طريقة العرض
+Filter	تصفية
+Columns	الأعمدة
+Density	الكثافة
+Languages	اللغات
+Changed	تاريخ التغيير
+/excursions/elephant-sanctuary/	/excursions/elephant-sanctuary/
+RU	RU
+EN	EN
+TH	TH
+today 11:20	اليوم 11:20
+Rebuild	إعادة البناء
+Select: Koh Tao and Nang Yuan	تحديد: كو تاو ونانغ يوان
+/excursions/koh-tao-nangyuan/	/excursions/koh-tao-nangyuan/
+2,900 THB	2,900 بات
+yesterday 18:05	أمس 18:05
+draft waiting	مسودة بانتظار المراجعة
+today 12:04	اليوم 12:04
+Select: Sunset junk cruise	تحديد: رحلة الغروب بالمركب الشراعي
+Sunset junk cruise with dinner	رحلة الغروب بالمركب الشراعي مع العشاء
+/excursions/junk-sunset-dinner/	/excursions/junk-sunset-dinner/
+3,400 THB	3,400 بات
+Oct 2	2 أكتوبر
+Oct 30, 09:00	30 أكتوبر، 09:00
+Select: Deep sea fishing	تحديد: صيد أعالي البحار
+Deep sea fishing	صيد أعالي البحار
+/excursions/deep-sea-fishing/	/excursions/deep-sea-fishing/
+3,900 THB	3,900 بات
+nowhere	لا مكان
+Sep 27	27 سبتمبر
+Select: Muay Thai night	تحديد: ليلة مواي تاي
+/excursions/muay-thai-night/	/excursions/muay-thai-night/
+withdrawn	مسحوب
+Sep 20	20 سبتمبر
+Showing 6 of 28	عرض 6 من 28
+Next 25	الـ 25 التالية
+Keys:	المفاتيح:
+search,	البحث،
+command palette,	لوحة الأوامر،
+new excursion,	رحلة جديدة،
+rows.	الصفوف.
+Preview on the site	معاينة على الموقع
+Delete 2 excursions?	حذف رحلتين؟
+Demo view	العرض التوضيحي
+LTR	LTR
+RTL	RTL
+Comfortable	مريح
+Compact	مضغوط
+Excursions — REDZ.UI demo	الرحلات — عرض REDZ.UI التوضيحي
+Only Marina is editing now	مارينا وحدها تعدّل الآن
+Save draft	حفظ المسودة
+Publishing options	خيارات النشر
+Publish on a schedule…	النشر في موعد محدد…
+Publish on one site…	النشر على موقع واحد…
+Language of editing	لغة التحرير
+base	الأساسية
+1 field outdated	حقل واحد قديم
+Translate side by side	الترجمة جنبًا إلى جنب
+Values: shared by all sites	القيم: مشتركة بين جميع المواقع
+Values of	قيم
+Shared by all sites	مشتركة بين جميع المواقع
+angthong.example · 2 own values	angthong.example · قيمتان خاصتان
+Basics	الأساسيات
+RU · EN · TH	RU · EN · TH
+Latin letters and dashes	أحرف لاتينية وشرطات
+shared	مشترك
+Suggest	اقتراح
+Short description	وصف قصير
+Insert into the field	إدراج في الحقل
+Another variant	صيغة أخرى
+Facts	الحقائق
+For example, 8 hours	مثلًا، 8 ساعات
+Duration	المدة
+A place and a time	مكان وزمان
+Meeting point	نقطة الالتقاء
+Free up to 24 hours	مجاني حتى 24 ساعة
+Free up to 48 hours	مجاني حتى 48 ساعة
+No refunds	لا استرداد
+Cancellation	الإلغاء
+Adult	بالغ
+Child	طفل
+Page blocks	كتل الصفحة
+Gallery	المعرض
+5 photos · 1 has no alt text in EN	5 صور · واحدة بلا نص بديل بالإنجليزية
+alt	alt
+Questions and answers	أسئلة وأجوبة
+2 questions · go into the FAQ markup	سؤالان · يدخلان في ترميز الأسئلة الشائعة
+More questions	المزيد من الأسئلة
+Add a block	إضافة كتلة
+About this excursion	عن هذه الرحلة
+Publishing	النشر
+On the site	على الموقع
+Oct 12, 09:40 · Olga	12 أكتوبر، 09:40 · أولغا
+5 min ago · Marina	قبل 5 دقائق · مارينا
+Compare the draft with the site	مقارنة المسودة بالموقع
+Revisions · 14	المراجعات · 14
+Where it is shown	أين تُعرض
+· home site	· الموقع الرئيسي
+· landing	· صفحة الهبوط
+picked by hand ·	مختارة يدويًا ·
+2 own values	قيمتان خاصتان
+· not shown	· غير معروضة
+rule «villas only»	القاعدة «الفلل فقط»
+base language	اللغة الأساسية
+checked, 1 field outdated	مُراجَعة، حقل واحد قديم
+Open	فتح
+machine, 20 fields	آلية، 20 حقلًا
+Facts complete	اكتمال الحقائق
+8 of 10	8 من 10
+Facts complete: 8 of 10	اكتمال الحقائق: 8 من 10
+AI assistants find no answer to:	لا يجد مساعدو الذكاء الاصطناعي جوابًا عن:
+the meeting point on a map	نقطة الالتقاء على الخريطة
+whether it suits pregnant guests	هل تناسب الضيفات الحوامل
+Suggest values	اقتراح قيم
+Ang Thong — REDZ.UI demo	أنغ ثونغ — عرض REDZ.UI التوضيحي
+AZ, profile	AZ، الملف الشخصي
+AZ	AZ
+General	عام
+Admin branding	هوية لوحة الإدارة
+Updates	التحديثات
+Name and marks	الاسم والعلامات
+own value	قيمة خاصة
+Reset to «REDZ CMS»	إعادة التعيين إلى «REDZ CMS»
+The name staff and customers see	الاسم الذي يراه الموظفون والعملاء
+Product name	اسم المنتج
+In the admin and in e-mails	في لوحة الإدارة وفي رسائل البريد
+Logo · dark theme	الشعار · السمة الداكنة
+Accent color	لون التمييز
+Blue	أزرق
+Violet	بنفسجي
+Teal	أزرق مخضر
+Rose	وردي
+Own color…	لون خاص…
+Sign-in screen and help	شاشة تسجيل الدخول والمساعدة
+One line under the name	سطر واحد تحت الاسم
+Tagline on the sign-in screen	الشعار النصي على شاشة تسجيل الدخول
+https://…	https://…
+Help link	رابط المساعدة
+Support e-mail	بريد الدعم
+Hide «Powered by REDZ CMS»	إخفاء «يعمل بواسطة REDZ CMS»
+LP	LP
+Lagoon Panel	Lagoon Panel
+header preview	معاينة الترويسة
+Sites for travel — by Lagoon studio	مواقع للسفر — من استوديو Lagoon
+Sign in	تسجيل الدخول
+Get a code	الحصول على رمز
+Sign in with a passkey	تسجيل الدخول بمفتاح المرور
+Help	المساعدة
+Admin branding — REDZ.UI demo	هوية لوحة الإدارة — عرض REDZ.UI التوضيحي
+Every example and every state of every page on one page — the fixture the probes shoot in each engine, at each width, in both themes and directions, in forced colors and in print.	كل مثال وكل حالة من كل صفحة في صفحة واحدة — المرجع الذي تلتقطه الفحوص في كل محرك، وبكل عرض، وفي السمتين والاتجاهين، وبالألوان القسرية وعند الطباعة.
+Full address /excursions/ang-thong/. The old one answers with a 301 redirect.	العنوان الكامل /excursions/ang-thong/. والعنوان القديم يجيب بإعادة توجيه 301.
+Adults 2,500 · children 1,900 · under four free.	البالغون 2,500 · الأطفال 1,900 · مجانًا لمن هم دون الرابعة.
+A day at sea: snorkelling at two reefs, lunch on the boat.	يوم في البحر: غوص سطحي عند شعبتين مرجانيتين، وغداء على القارب.
+Did not rebuild: a PHP warning in the theme template	لم يُعَد البناء: تحذير PHP في قالب السمة
+The Thai translation is older than the English	الترجمة التايلاندية أقدم من الإنجليزية
+An excursion is a page with a price, a schedule and a booking form.	الرحلة صفحة لها سعر وجدول مواعيد ونموذج حجز.
+Edited yesterday by M. K.; published on three sites; the Thai translation updated today.	عدّلها أمس م. ك.؛ ونُشرت على ثلاثة مواقع؛ وحُدّثت الترجمة التايلاندية اليوم.
+A drawer at the start edge: the left in English, the right in Arabic.	لوح جانبي عند حافة البداية: اليسار في الإنجليزية، واليمين في العربية.
+A partner can hide the brand and set their own help link.	يمكن للشريك إخفاء العلامة التجارية وتعيين رابط مساعدة خاص به.
+A shorter title would fit the search results.	العنوان الأقصر يناسب نتائج البحث.
+White text on it: 5.6:1, AA in both themes.	النص الأبيض عليه: 5.6:1، بمستوى AA في السمتين.
+The Thai translation is older than the English.	الترجمة التايلاندية أقدم من الإنجليزية.
+The theme template raised a PHP warning; the page did not rebuild.	أطلق قالب السمة تحذير PHP؛ ولم يُعَد بناء الصفحة.
+Translated by machine; a person has not read it yet.	مترجمة آليًا؛ ولم يقرأها إنسان بعد.
+“Ang Thong by speedboat” fits the 60 characters search results show.	«أنغ ثونغ بالقارب السريع» يناسب الأحرف الستين التي تعرضها نتائج البحث.
+2 unsaved changes: product name, accent color	تغييران غير محفوظين: اسم المنتج ولون التمييز
+Edited yesterday by M. K.; published on three sites.	عدّلها أمس م. ك.؛ ونُشرت على ثلاثة مواقع.
+MIT license · © 2026 Red Z Group · includes Bootstrap Icons (MIT)	ترخيص MIT · © 2026 Red Z Group · يتضمن Bootstrap Icons (MIT)
+Content type · 28 items · shown on 2 sites of 3	نوع المحتوى · 28 عنصرًا · معروض على موقعين من 3
+1 page did not rebuild, 2 translations are out of date	صفحة واحدة لم يُعَد بناؤها، وترجمتان قديمتان
+Koh Tao and Nang Yuan: snorkelling two islands	كو تاو ونانغ يوان: غوص سطحي عند جزيرتين
+Their pages on lagoon.example and angthong.example go away, and 6 pages × 3 languages are rebuilt.	تختفي صفحاتها على lagoon.example وangthong.example، ويُعاد بناء 6 صفحات × 3 لغات.
+Revisions are kept for 30 days in the journal.	تُحفظ المراجعات 30 يومًا في السجل.
+Ang Thong · 3 pages × 3 languages rebuilt	أنغ ثونغ · أُعيد بناء 3 صفحات × 3 لغات
+Ang Thong: marine national park by speedboat	أنغ ثونغ: الحديقة الوطنية البحرية بالقارب السريع
+translatable fields carry their languages	الحقول القابلة للترجمة تحمل لغاتها
+Two sentences for the card and search results	جملتان للبطاقة ونتائج البحث
+Emerald Lake, kayaks along the cliffs and lunch on an island — all in one day by speedboat.	البحيرة الزمردية، وقوارب الكاياك على امتداد المنحدرات، وغداء على جزيرة — كل ذلك في يوم واحد بالقارب السريع.
+· from the facts of this excursion · 1 of 3	· من حقائق هذه الرحلة · 1 من 3
+One day: the Emerald Lake on Koh Mae Ko, kayaks along the cliffs and lunch on an island. Hotel pick-up, a Russian-speaking guide, free cancellation up to 24 hours.	يوم واحد: البحيرة الزمردية في كو ماي كو، وقوارب الكاياك على امتداد المنحدرات، وغداء على جزيرة. استقبال من الفندق، ومرشد يتحدث الروسية، وإلغاء مجاني حتى 24 ساعة.
+AI saves nothing: the text goes into the draft.	لا يحفظ الذكاء الاصطناعي شيئًا: يذهب النص إلى المسودة.
+shared by every language and site · the page, schema.org and AI answers are built from them	مشتركة بين كل اللغات والمواقع · تُبنى منها الصفحة وschema.org وأجوبة الذكاء الاصطناعي
+in the base currency THB · the visitor's currency is an estimate	بالعملة الأساسية، البات · عملة الزائر تقديرية
+block types come from the core and modules, their look from the site's theme	أنواع الكتل تأتي من النواة والوحدات، ومظهرها من سمة الموقع
+3 unsaved changes: name, short description, adult price	3 تغييرات غير محفوظة: الاسم والوصف القصير وسعر البالغ
+by the rule «Excursions», canonical here	بحسب القاعدة «الرحلات»، والنسخة الأساسية هنا
+White label: the name, logos, accent, sign-in screen, e-mails and help links — settings of this install, not code	العلامة البيضاء: الاسم والشعارات ولون التمييز وشاشة تسجيل الدخول ورسائل البريد وروابط المساعدة — إعدادات لهذا التثبيت، لا شيفرة
+Every interface string names the product through {product} — translators never touch the brand.	كل نص في الواجهة يسمّي المنتج عبر {product} — ولا يلمس المترجمون العلامة التجارية أبدًا.
+White text on it: 5.6:1, AA in the light and the dark theme. Hover and background shades are derived from it.	النص الأبيض عليه: 5.6:1، بمستوى AA في السمة الفاتحة والداكنة. وتُشتق منه درجات التمرير والخلفية.
+New order AT-09-1201 on lagoon.example: «Ang Thong», 2 adults, November 5.	طلب جديد AT-09-1201 على lagoon.example: «أنغ ثونغ»، بالغان، 5 نوفمبر.
+Sent on behalf of Lagoon Panel · unsubscribe in your profile	أُرسلت نيابةً عن Lagoon Panel · يمكنك إلغاء الاشتراك من ملفك الشخصي

@@ -1,0 +1,3202 @@
+# REDZ.UI — the documentation in full
+
+# Getting started
+
+REDZ.UI is two stylesheets and a set of small scripts on the browser platform. Nothing is built where it is used: link the files, write Bootstrap-like markup, and the browser does the rest.
+
+## Include it
+
+The stylesheet, the icons and the scripts, with the page's own words for the few things the library says — every word comes from the page, the library has none of its own.
+
+```html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="redz-ui/css/index.css">
+  <link rel="stylesheet" href="redz-ui/css/icons.css">
+  <script type="module" src="redz-ui/js/index.js"></script>
+  <script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…"}</script>
+</head>
+```
+
+- `css/index.css` pulls in the layers, the tokens, the components and the utilities, 19 KB gzipped. A consumer that bundles may join its files in that order.
+- `css/icons.css` is apart: one mask per Bootstrap Icons file, used only by name.
+- `js/index.js` is an ES module; it loads the behaviors and sets `REDZ.ui` for calls from code.
+
+## How it reads
+
+- A component, its variant, its size and its parts are one class each: `btn btn-primary btn-sm`, `card-header` — Bootstrap 5's names, and Bootstrap 6's where it moved onto the platform: `dialog`, `drawer`, `menu`.
+- A utility is `property-value`: `d-flex`, `text-muted`. The number is the value — `p-16` is 16 px, `w-50` is 50 %.
+- A condition is a prefix: `md:cols-2`, `print:d-none`. A width prefix measures the region the element sits in — a column, a card, a dialog — not the window.
+- A state is an HTML attribute: `aria-pressed`, `aria-current`, `disabled`, `[open]`. A button opens a menu or a dialog with the browser's own command: `commandfor` + `command`.
+- Tokens are `--redz-` plus the same words: `--redz-text-muted`, `--redz-space-16`.
+
+## Theme and direction
+
+Without an attribute the page follows the system's light or dark. `data-theme="light"` or `data-theme="dark"` on `<html>` fixes one — set it on the server, so the page never flashes. Right to left is `dir="rtl"`: one stylesheet serves both directions, by logical properties, and icons that point mirror with `flip-rtl`.
+
+```html
+<html lang="ar" dir="rtl" data-theme="dark">
+```
+
+## From script
+
+Menus, tabs, dialogs and their keys need no call: the library listens on the document. Three calls are for code:
+
+| Call | Does |
+| --- | --- |
+| `REDZ.ui.toast({title, text, tone, action, persistent})` | Shows a notice; answers a function that closes it. [Toasts](toast.md) |
+| `await REDZ.ui.confirm({title, text, ok, cancel, tone})` | Asks a question in a dialog; answers `true` or `false`. [Dialogs](dialog.md) |
+| `await REDZ.ui.busy(element, promise)` | Marks a button or a region busy until the promise settles. [Busy](busy.md) |
+
+## Browsers
+
+Bootstrap 6's floor: Chrome and Edge 130+, Firefox 132+, Safari 18+ on macOS and iOS. What must work rests on features of the floor; invoker commands and anchor positioning are written in their final form, and a small script stands in below them. Every page of these docs is checked in real engines at the floor and above — [the checks](https://redz-tech.github.io/REDZ.UI/checks/).
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `data-bs-theme` | `data-theme` | rename | light or dark on <html> |
+
+# Layout
+
+The parent sets the grid, the number is the count, and a width prefix measures the region the element is in. Stacks for a column or a row of items, gaps between them, no margins on components.
+
+## Grids
+
+`grid` on the parent, `cols-N` for N equal columns, `gap-*` between them. A width prefix adds columns as the region grows: `grid md:cols-2` is one column until the region is 768 px wide. Every example on these pages is a region of its own — resize the window and watch the examples, not the window.
+
+```html
+<div class="grid sm:cols-2 lg:cols-4 gap-16">
+	<div class="card"><div class="card-body">One</div></div>
+	<div class="card"><div class="card-body">Two</div></div>
+	<div class="card"><div class="card-body">Three</div></div>
+	<div class="card"><div class="card-body">Four</div></div>
+</div>
+```
+
+### Spans on a 12-column grid
+
+A child's exception: `span-N` or `span-full`, with a prefix where it changes.
+
+```html
+<div class="grid md:cols-12 gap-16">
+	<div class="card md:span-8"><div class="card-body">The main column — <code>md:span-8</code></div></div>
+	<div class="card md:span-4"><div class="card-body">The side — <code>md:span-4</code></div></div>
+</div>
+```
+
+### As many as fit
+
+`cols-min-240`: as many columns as fit, none narrower than 240 px.
+
+```html
+<div class="grid cols-min-160 gap-12">
+	<div class="card"><div class="card-body">lagoon.example</div></div>
+	<div class="card"><div class="card-body">villas.lagoon.example</div></div>
+	<div class="card"><div class="card-body">angthong.example</div></div>
+</div>
+```
+
+## Stacks
+
+`vstack` is a column of items, `hstack` a row of them centered on one line; `gap-*` spaces them and `ms-auto` pushes the rest to the end.
+
+```html
+<div class="hstack gap-8">
+	<span class="badge">Draft</span>
+	<span class="text-muted">Edited 2 hours ago</span>
+	<button class="btn btn-sm ms-auto" type="button">Preview</button>
+	<button class="btn btn-sm btn-primary" type="button">Publish</button>
+</div>
+```
+
+## Regions and breakpoints
+
+Regions are the shell's main and side columns, cards, dialogs, drawers, and any block with the class `region`. A page without the shell marks its own `region`; the root is never one.
+
+| Prefix | The region is at least |
+| --- | --- |
+| `sm:` | 576 px |
+| `md:` | 768 px |
+| `lg:` | 1024 px |
+| `xl:` | 1280 px |
+| `2xl:` | 1536 px |
+| `print:` | on paper |
+
+- A region inside a flex row needs a width — `flex-grow-1` or a grid track: its size cannot come from its content.
+- A card in the 8-of-12 column at 1440 px is about 740 px wide: `sm:` inside it, not `md:`.
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `col` | — | grid | equal columns come from the parent's cols-N; the child needs no class |
+| `col-1` | `span-1` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-10` | `span-10` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-11` | `span-11` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-12` | `span-12` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-2` | `span-2` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-3` | `span-3` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-4` | `span-4` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-5` | `span-5` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-6` | `span-6` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-7` | `span-7` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-8` | `span-8` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-9` | `span-9` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-auto` | — | review | a column as wide as its content: hstack, or grid-template-columns in the module's CSS |
+| `container` | — | review | the shell's app-main, or a region with max-w-* and mx-auto |
+| `container-fluid` | — | review | the shell's app-main, or a region with max-w-* and mx-auto |
+| `g-0` | `gap-0` | grid | on the grid parent |
+| `g-1` | `gap-4` | grid | on the grid parent |
+| `g-2` | `gap-8` | grid | on the grid parent |
+| `g-3` | `gap-16` | grid | on the grid parent |
+| `g-4` | `gap-24` | grid | on the grid parent |
+| `g-5` | `gap-48` | grid | on the grid parent |
+| `gx-0` | `column-gap-0` | grid | on the grid parent |
+| `gx-1` | `column-gap-4` | grid | on the grid parent |
+| `gx-2` | `column-gap-8` | grid | on the grid parent |
+| `gx-3` | `column-gap-16` | grid | on the grid parent |
+| `gx-4` | `column-gap-24` | grid | on the grid parent |
+| `gx-5` | `column-gap-48` | grid | on the grid parent |
+| `gy-0` | `row-gap-0` | grid | on the grid parent |
+| `gy-1` | `row-gap-4` | grid | on the grid parent |
+| `gy-2` | `row-gap-8` | grid | on the grid parent |
+| `gy-3` | `row-gap-16` | grid | on the grid parent |
+| `gy-4` | `row-gap-24` | grid | on the grid parent |
+| `gy-5` | `row-gap-48` | grid | on the grid parent |
+| `offset-1` | — | review | no offsets: a span with an empty track before it |
+| `offset-10` | — | review | no offsets: a span with an empty track before it |
+| `offset-11` | — | review | no offsets: a span with an empty track before it |
+| `offset-2` | — | review | no offsets: a span with an empty track before it |
+| `offset-3` | — | review | no offsets: a span with an empty track before it |
+| `offset-4` | — | review | no offsets: a span with an empty track before it |
+| `offset-5` | — | review | no offsets: a span with an empty track before it |
+| `offset-6` | — | review | no offsets: a span with an empty track before it |
+| `offset-7` | — | review | no offsets: a span with an empty track before it |
+| `offset-8` | — | review | no offsets: a span with an empty track before it |
+| `offset-9` | — | review | no offsets: a span with an empty track before it |
+| `row` | `grid` | grid | on the parent, with cols-N for equal columns or cols-12 for spans; no gutters to undo |
+| `row-cols-1` | `cols-1` | grid | on the same parent |
+| `row-cols-2` | `cols-2` | grid | on the same parent |
+| `row-cols-3` | `cols-3` | grid | on the same parent |
+| `row-cols-4` | `cols-4` | grid | on the same parent |
+| `row-cols-5` | `cols-5` | grid | on the same parent |
+| `row-cols-6` | `cols-6` | grid | on the same parent |
+| `row-cols-auto` | — | review | items as wide as their content: hstack flex-wrap |
+
+# Utilities
+
+Single-purpose classes with Bootstrap 5's names, where the number is the value: `p-16`, `gap-8`, `fs-14`, `rounded-8`, `w-50`. Written once from a vocabulary file and committed — nothing is generated where they are used.
+
+## Scales
+
+- Space, in px: 0 2 4 8 12 16 20 24 32 40 48 64 — for `m`, `p` and `gap` with their sides: `mt` `mb` `ms` `me` `mx` `my`, the same for `p`. `ms` and `me` are the start and the end of the line, so they turn right to left.
+- Font size: 12 14 16 18 20 24 32; line height: 16 20 24 28; radius: 0 4 6 8 12 16 and `rounded-full`.
+- Width prefixes come on placement and spacing — display, flex, grid, gaps, order, text alignment, margins and paddings: `md:d-none`, `lg:p-24`.
+
+## Every utility
+
+| Class | Declarations | Width prefixes |
+| --- | --- | --- |
+| `d-none` | `display: none;` | yes |
+| `d-inline` | `display: inline;` | yes |
+| `d-inline-block` | `display: inline-block;` | yes |
+| `d-block` | `display: block;` | yes |
+| `d-grid` | `display: grid;` | yes |
+| `d-inline-grid` | `display: inline-grid;` | yes |
+| `d-flex` | `display: flex;` | yes |
+| `d-inline-flex` | `display: inline-flex;` | yes |
+| `d-table` | `display: table;` | yes |
+| `d-table-row` | `display: table-row;` | yes |
+| `d-table-cell` | `display: table-cell;` | yes |
+| `d-contents` | `display: contents;` | yes |
+| `vstack` | `display: flex; flex: 1 1 auto; flex-direction: column; align-self: stretch;` | yes |
+| `hstack` | `display: flex; flex-direction: row; align-items: center; align-self: stretch;` | yes |
+| `flex-row` | `flex-direction: row;` | yes |
+| `flex-column` | `flex-direction: column;` | yes |
+| `flex-row-reverse` | `flex-direction: row-reverse;` | yes |
+| `flex-column-reverse` | `flex-direction: column-reverse;` | yes |
+| `flex-wrap` | `flex-wrap: wrap;` | yes |
+| `flex-nowrap` | `flex-wrap: nowrap;` | yes |
+| `flex-wrap-reverse` | `flex-wrap: wrap-reverse;` | yes |
+| `flex-fill` | `flex: 1 1 auto;` | yes |
+| `flex-grow-0` | `flex-grow: 0;` | yes |
+| `flex-grow-1` | `flex-grow: 1;` | yes |
+| `flex-shrink-0` | `flex-shrink: 0;` | yes |
+| `flex-shrink-1` | `flex-shrink: 1;` | yes |
+| `justify-content-start` | `justify-content: flex-start;` | yes |
+| `justify-content-end` | `justify-content: flex-end;` | yes |
+| `justify-content-center` | `justify-content: center;` | yes |
+| `justify-content-between` | `justify-content: space-between;` | yes |
+| `justify-content-around` | `justify-content: space-around;` | yes |
+| `justify-content-evenly` | `justify-content: space-evenly;` | yes |
+| `align-items-start` | `align-items: flex-start;` | yes |
+| `align-items-end` | `align-items: flex-end;` | yes |
+| `align-items-center` | `align-items: center;` | yes |
+| `align-items-baseline` | `align-items: baseline;` | yes |
+| `align-items-stretch` | `align-items: stretch;` | yes |
+| `align-self-auto` | `align-self: auto;` | yes |
+| `align-self-start` | `align-self: flex-start;` | yes |
+| `align-self-end` | `align-self: flex-end;` | yes |
+| `align-self-center` | `align-self: center;` | yes |
+| `align-self-baseline` | `align-self: baseline;` | yes |
+| `align-self-stretch` | `align-self: stretch;` | yes |
+| `align-content-start` | `align-content: flex-start;` | yes |
+| `align-content-end` | `align-content: flex-end;` | yes |
+| `align-content-center` | `align-content: center;` | yes |
+| `align-content-between` | `align-content: space-between;` | yes |
+| `align-content-around` | `align-content: space-around;` | yes |
+| `align-content-stretch` | `align-content: stretch;` | yes |
+| `order-first` | `order: -1;` | yes |
+| `order-0` | `order: 0;` | yes |
+| `order-1` | `order: 1;` | yes |
+| `order-2` | `order: 2;` | yes |
+| `order-3` | `order: 3;` | yes |
+| `order-4` | `order: 4;` | yes |
+| `order-5` | `order: 5;` | yes |
+| `order-last` | `order: 6;` | yes |
+| `grid` | `display: grid; grid-auto-columns: minmax(0, 1fr);` | yes |
+| `cols-1` | `grid-template-columns: repeat(1, minmax(0, 1fr));` | yes |
+| `cols-2` | `grid-template-columns: repeat(2, minmax(0, 1fr));` | yes |
+| `cols-3` | `grid-template-columns: repeat(3, minmax(0, 1fr));` | yes |
+| `cols-4` | `grid-template-columns: repeat(4, minmax(0, 1fr));` | yes |
+| `cols-5` | `grid-template-columns: repeat(5, minmax(0, 1fr));` | yes |
+| `cols-6` | `grid-template-columns: repeat(6, minmax(0, 1fr));` | yes |
+| `cols-7` | `grid-template-columns: repeat(7, minmax(0, 1fr));` | yes |
+| `cols-8` | `grid-template-columns: repeat(8, minmax(0, 1fr));` | yes |
+| `cols-9` | `grid-template-columns: repeat(9, minmax(0, 1fr));` | yes |
+| `cols-10` | `grid-template-columns: repeat(10, minmax(0, 1fr));` | yes |
+| `cols-11` | `grid-template-columns: repeat(11, minmax(0, 1fr));` | yes |
+| `cols-12` | `grid-template-columns: repeat(12, minmax(0, 1fr));` | yes |
+| `cols-min-160` | `grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));` | yes |
+| `cols-min-200` | `grid-template-columns: repeat(auto-fit, minmax(min(100%, 12.5rem), 1fr));` | yes |
+| `cols-min-240` | `grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));` | yes |
+| `cols-min-280` | `grid-template-columns: repeat(auto-fit, minmax(min(100%, 17.5rem), 1fr));` | yes |
+| `cols-min-320` | `grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));` | yes |
+| `span-full` | `grid-column: 1 / -1;` | yes |
+| `span-1` | `grid-column: span 1 / span 1;` | yes |
+| `span-2` | `grid-column: span 2 / span 2;` | yes |
+| `span-3` | `grid-column: span 3 / span 3;` | yes |
+| `span-4` | `grid-column: span 4 / span 4;` | yes |
+| `span-5` | `grid-column: span 5 / span 5;` | yes |
+| `span-6` | `grid-column: span 6 / span 6;` | yes |
+| `span-7` | `grid-column: span 7 / span 7;` | yes |
+| `span-8` | `grid-column: span 8 / span 8;` | yes |
+| `span-9` | `grid-column: span 9 / span 9;` | yes |
+| `span-10` | `grid-column: span 10 / span 10;` | yes |
+| `span-11` | `grid-column: span 11 / span 11;` | yes |
+| `span-12` | `grid-column: span 12 / span 12;` | yes |
+| `gap-0` | `gap: var(--redz-space-0);` | yes |
+| `gap-2` | `gap: var(--redz-space-2);` | yes |
+| `gap-4` | `gap: var(--redz-space-4);` | yes |
+| `gap-8` | `gap: var(--redz-space-8);` | yes |
+| `gap-12` | `gap: var(--redz-space-12);` | yes |
+| `gap-16` | `gap: var(--redz-space-16);` | yes |
+| `gap-20` | `gap: var(--redz-space-20);` | yes |
+| `gap-24` | `gap: var(--redz-space-24);` | yes |
+| `gap-32` | `gap: var(--redz-space-32);` | yes |
+| `gap-40` | `gap: var(--redz-space-40);` | yes |
+| `gap-48` | `gap: var(--redz-space-48);` | yes |
+| `gap-64` | `gap: var(--redz-space-64);` | yes |
+| `row-gap-0` | `row-gap: var(--redz-space-0);` | yes |
+| `row-gap-2` | `row-gap: var(--redz-space-2);` | yes |
+| `row-gap-4` | `row-gap: var(--redz-space-4);` | yes |
+| `row-gap-8` | `row-gap: var(--redz-space-8);` | yes |
+| `row-gap-12` | `row-gap: var(--redz-space-12);` | yes |
+| `row-gap-16` | `row-gap: var(--redz-space-16);` | yes |
+| `row-gap-20` | `row-gap: var(--redz-space-20);` | yes |
+| `row-gap-24` | `row-gap: var(--redz-space-24);` | yes |
+| `row-gap-32` | `row-gap: var(--redz-space-32);` | yes |
+| `row-gap-40` | `row-gap: var(--redz-space-40);` | yes |
+| `row-gap-48` | `row-gap: var(--redz-space-48);` | yes |
+| `row-gap-64` | `row-gap: var(--redz-space-64);` | yes |
+| `column-gap-0` | `column-gap: var(--redz-space-0);` | yes |
+| `column-gap-2` | `column-gap: var(--redz-space-2);` | yes |
+| `column-gap-4` | `column-gap: var(--redz-space-4);` | yes |
+| `column-gap-8` | `column-gap: var(--redz-space-8);` | yes |
+| `column-gap-12` | `column-gap: var(--redz-space-12);` | yes |
+| `column-gap-16` | `column-gap: var(--redz-space-16);` | yes |
+| `column-gap-20` | `column-gap: var(--redz-space-20);` | yes |
+| `column-gap-24` | `column-gap: var(--redz-space-24);` | yes |
+| `column-gap-32` | `column-gap: var(--redz-space-32);` | yes |
+| `column-gap-40` | `column-gap: var(--redz-space-40);` | yes |
+| `column-gap-48` | `column-gap: var(--redz-space-48);` | yes |
+| `column-gap-64` | `column-gap: var(--redz-space-64);` | yes |
+| `m-auto` | `margin: auto;` | yes |
+| `m-0` | `margin: var(--redz-space-0);` | yes |
+| `m-2` | `margin: var(--redz-space-2);` | yes |
+| `m-4` | `margin: var(--redz-space-4);` | yes |
+| `m-8` | `margin: var(--redz-space-8);` | yes |
+| `m-12` | `margin: var(--redz-space-12);` | yes |
+| `m-16` | `margin: var(--redz-space-16);` | yes |
+| `m-20` | `margin: var(--redz-space-20);` | yes |
+| `m-24` | `margin: var(--redz-space-24);` | yes |
+| `m-32` | `margin: var(--redz-space-32);` | yes |
+| `m-40` | `margin: var(--redz-space-40);` | yes |
+| `m-48` | `margin: var(--redz-space-48);` | yes |
+| `m-64` | `margin: var(--redz-space-64);` | yes |
+| `mt-auto` | `margin-block-start: auto;` | yes |
+| `mt-0` | `margin-block-start: var(--redz-space-0);` | yes |
+| `mt-2` | `margin-block-start: var(--redz-space-2);` | yes |
+| `mt-4` | `margin-block-start: var(--redz-space-4);` | yes |
+| `mt-8` | `margin-block-start: var(--redz-space-8);` | yes |
+| `mt-12` | `margin-block-start: var(--redz-space-12);` | yes |
+| `mt-16` | `margin-block-start: var(--redz-space-16);` | yes |
+| `mt-20` | `margin-block-start: var(--redz-space-20);` | yes |
+| `mt-24` | `margin-block-start: var(--redz-space-24);` | yes |
+| `mt-32` | `margin-block-start: var(--redz-space-32);` | yes |
+| `mt-40` | `margin-block-start: var(--redz-space-40);` | yes |
+| `mt-48` | `margin-block-start: var(--redz-space-48);` | yes |
+| `mt-64` | `margin-block-start: var(--redz-space-64);` | yes |
+| `mb-auto` | `margin-block-end: auto;` | yes |
+| `mb-0` | `margin-block-end: var(--redz-space-0);` | yes |
+| `mb-2` | `margin-block-end: var(--redz-space-2);` | yes |
+| `mb-4` | `margin-block-end: var(--redz-space-4);` | yes |
+| `mb-8` | `margin-block-end: var(--redz-space-8);` | yes |
+| `mb-12` | `margin-block-end: var(--redz-space-12);` | yes |
+| `mb-16` | `margin-block-end: var(--redz-space-16);` | yes |
+| `mb-20` | `margin-block-end: var(--redz-space-20);` | yes |
+| `mb-24` | `margin-block-end: var(--redz-space-24);` | yes |
+| `mb-32` | `margin-block-end: var(--redz-space-32);` | yes |
+| `mb-40` | `margin-block-end: var(--redz-space-40);` | yes |
+| `mb-48` | `margin-block-end: var(--redz-space-48);` | yes |
+| `mb-64` | `margin-block-end: var(--redz-space-64);` | yes |
+| `ms-auto` | `margin-inline-start: auto;` | yes |
+| `ms-0` | `margin-inline-start: var(--redz-space-0);` | yes |
+| `ms-2` | `margin-inline-start: var(--redz-space-2);` | yes |
+| `ms-4` | `margin-inline-start: var(--redz-space-4);` | yes |
+| `ms-8` | `margin-inline-start: var(--redz-space-8);` | yes |
+| `ms-12` | `margin-inline-start: var(--redz-space-12);` | yes |
+| `ms-16` | `margin-inline-start: var(--redz-space-16);` | yes |
+| `ms-20` | `margin-inline-start: var(--redz-space-20);` | yes |
+| `ms-24` | `margin-inline-start: var(--redz-space-24);` | yes |
+| `ms-32` | `margin-inline-start: var(--redz-space-32);` | yes |
+| `ms-40` | `margin-inline-start: var(--redz-space-40);` | yes |
+| `ms-48` | `margin-inline-start: var(--redz-space-48);` | yes |
+| `ms-64` | `margin-inline-start: var(--redz-space-64);` | yes |
+| `me-auto` | `margin-inline-end: auto;` | yes |
+| `me-0` | `margin-inline-end: var(--redz-space-0);` | yes |
+| `me-2` | `margin-inline-end: var(--redz-space-2);` | yes |
+| `me-4` | `margin-inline-end: var(--redz-space-4);` | yes |
+| `me-8` | `margin-inline-end: var(--redz-space-8);` | yes |
+| `me-12` | `margin-inline-end: var(--redz-space-12);` | yes |
+| `me-16` | `margin-inline-end: var(--redz-space-16);` | yes |
+| `me-20` | `margin-inline-end: var(--redz-space-20);` | yes |
+| `me-24` | `margin-inline-end: var(--redz-space-24);` | yes |
+| `me-32` | `margin-inline-end: var(--redz-space-32);` | yes |
+| `me-40` | `margin-inline-end: var(--redz-space-40);` | yes |
+| `me-48` | `margin-inline-end: var(--redz-space-48);` | yes |
+| `me-64` | `margin-inline-end: var(--redz-space-64);` | yes |
+| `mx-auto` | `margin-inline: auto;` | yes |
+| `mx-0` | `margin-inline: var(--redz-space-0);` | yes |
+| `mx-2` | `margin-inline: var(--redz-space-2);` | yes |
+| `mx-4` | `margin-inline: var(--redz-space-4);` | yes |
+| `mx-8` | `margin-inline: var(--redz-space-8);` | yes |
+| `mx-12` | `margin-inline: var(--redz-space-12);` | yes |
+| `mx-16` | `margin-inline: var(--redz-space-16);` | yes |
+| `mx-20` | `margin-inline: var(--redz-space-20);` | yes |
+| `mx-24` | `margin-inline: var(--redz-space-24);` | yes |
+| `mx-32` | `margin-inline: var(--redz-space-32);` | yes |
+| `mx-40` | `margin-inline: var(--redz-space-40);` | yes |
+| `mx-48` | `margin-inline: var(--redz-space-48);` | yes |
+| `mx-64` | `margin-inline: var(--redz-space-64);` | yes |
+| `my-auto` | `margin-block: auto;` | yes |
+| `my-0` | `margin-block: var(--redz-space-0);` | yes |
+| `my-2` | `margin-block: var(--redz-space-2);` | yes |
+| `my-4` | `margin-block: var(--redz-space-4);` | yes |
+| `my-8` | `margin-block: var(--redz-space-8);` | yes |
+| `my-12` | `margin-block: var(--redz-space-12);` | yes |
+| `my-16` | `margin-block: var(--redz-space-16);` | yes |
+| `my-20` | `margin-block: var(--redz-space-20);` | yes |
+| `my-24` | `margin-block: var(--redz-space-24);` | yes |
+| `my-32` | `margin-block: var(--redz-space-32);` | yes |
+| `my-40` | `margin-block: var(--redz-space-40);` | yes |
+| `my-48` | `margin-block: var(--redz-space-48);` | yes |
+| `my-64` | `margin-block: var(--redz-space-64);` | yes |
+| `p-0` | `padding: var(--redz-space-0);` | yes |
+| `p-2` | `padding: var(--redz-space-2);` | yes |
+| `p-4` | `padding: var(--redz-space-4);` | yes |
+| `p-8` | `padding: var(--redz-space-8);` | yes |
+| `p-12` | `padding: var(--redz-space-12);` | yes |
+| `p-16` | `padding: var(--redz-space-16);` | yes |
+| `p-20` | `padding: var(--redz-space-20);` | yes |
+| `p-24` | `padding: var(--redz-space-24);` | yes |
+| `p-32` | `padding: var(--redz-space-32);` | yes |
+| `p-40` | `padding: var(--redz-space-40);` | yes |
+| `p-48` | `padding: var(--redz-space-48);` | yes |
+| `p-64` | `padding: var(--redz-space-64);` | yes |
+| `pt-0` | `padding-block-start: var(--redz-space-0);` | yes |
+| `pt-2` | `padding-block-start: var(--redz-space-2);` | yes |
+| `pt-4` | `padding-block-start: var(--redz-space-4);` | yes |
+| `pt-8` | `padding-block-start: var(--redz-space-8);` | yes |
+| `pt-12` | `padding-block-start: var(--redz-space-12);` | yes |
+| `pt-16` | `padding-block-start: var(--redz-space-16);` | yes |
+| `pt-20` | `padding-block-start: var(--redz-space-20);` | yes |
+| `pt-24` | `padding-block-start: var(--redz-space-24);` | yes |
+| `pt-32` | `padding-block-start: var(--redz-space-32);` | yes |
+| `pt-40` | `padding-block-start: var(--redz-space-40);` | yes |
+| `pt-48` | `padding-block-start: var(--redz-space-48);` | yes |
+| `pt-64` | `padding-block-start: var(--redz-space-64);` | yes |
+| `pb-0` | `padding-block-end: var(--redz-space-0);` | yes |
+| `pb-2` | `padding-block-end: var(--redz-space-2);` | yes |
+| `pb-4` | `padding-block-end: var(--redz-space-4);` | yes |
+| `pb-8` | `padding-block-end: var(--redz-space-8);` | yes |
+| `pb-12` | `padding-block-end: var(--redz-space-12);` | yes |
+| `pb-16` | `padding-block-end: var(--redz-space-16);` | yes |
+| `pb-20` | `padding-block-end: var(--redz-space-20);` | yes |
+| `pb-24` | `padding-block-end: var(--redz-space-24);` | yes |
+| `pb-32` | `padding-block-end: var(--redz-space-32);` | yes |
+| `pb-40` | `padding-block-end: var(--redz-space-40);` | yes |
+| `pb-48` | `padding-block-end: var(--redz-space-48);` | yes |
+| `pb-64` | `padding-block-end: var(--redz-space-64);` | yes |
+| `ps-0` | `padding-inline-start: var(--redz-space-0);` | yes |
+| `ps-2` | `padding-inline-start: var(--redz-space-2);` | yes |
+| `ps-4` | `padding-inline-start: var(--redz-space-4);` | yes |
+| `ps-8` | `padding-inline-start: var(--redz-space-8);` | yes |
+| `ps-12` | `padding-inline-start: var(--redz-space-12);` | yes |
+| `ps-16` | `padding-inline-start: var(--redz-space-16);` | yes |
+| `ps-20` | `padding-inline-start: var(--redz-space-20);` | yes |
+| `ps-24` | `padding-inline-start: var(--redz-space-24);` | yes |
+| `ps-32` | `padding-inline-start: var(--redz-space-32);` | yes |
+| `ps-40` | `padding-inline-start: var(--redz-space-40);` | yes |
+| `ps-48` | `padding-inline-start: var(--redz-space-48);` | yes |
+| `ps-64` | `padding-inline-start: var(--redz-space-64);` | yes |
+| `pe-0` | `padding-inline-end: var(--redz-space-0);` | yes |
+| `pe-2` | `padding-inline-end: var(--redz-space-2);` | yes |
+| `pe-4` | `padding-inline-end: var(--redz-space-4);` | yes |
+| `pe-8` | `padding-inline-end: var(--redz-space-8);` | yes |
+| `pe-12` | `padding-inline-end: var(--redz-space-12);` | yes |
+| `pe-16` | `padding-inline-end: var(--redz-space-16);` | yes |
+| `pe-20` | `padding-inline-end: var(--redz-space-20);` | yes |
+| `pe-24` | `padding-inline-end: var(--redz-space-24);` | yes |
+| `pe-32` | `padding-inline-end: var(--redz-space-32);` | yes |
+| `pe-40` | `padding-inline-end: var(--redz-space-40);` | yes |
+| `pe-48` | `padding-inline-end: var(--redz-space-48);` | yes |
+| `pe-64` | `padding-inline-end: var(--redz-space-64);` | yes |
+| `px-0` | `padding-inline: var(--redz-space-0);` | yes |
+| `px-2` | `padding-inline: var(--redz-space-2);` | yes |
+| `px-4` | `padding-inline: var(--redz-space-4);` | yes |
+| `px-8` | `padding-inline: var(--redz-space-8);` | yes |
+| `px-12` | `padding-inline: var(--redz-space-12);` | yes |
+| `px-16` | `padding-inline: var(--redz-space-16);` | yes |
+| `px-20` | `padding-inline: var(--redz-space-20);` | yes |
+| `px-24` | `padding-inline: var(--redz-space-24);` | yes |
+| `px-32` | `padding-inline: var(--redz-space-32);` | yes |
+| `px-40` | `padding-inline: var(--redz-space-40);` | yes |
+| `px-48` | `padding-inline: var(--redz-space-48);` | yes |
+| `px-64` | `padding-inline: var(--redz-space-64);` | yes |
+| `py-0` | `padding-block: var(--redz-space-0);` | yes |
+| `py-2` | `padding-block: var(--redz-space-2);` | yes |
+| `py-4` | `padding-block: var(--redz-space-4);` | yes |
+| `py-8` | `padding-block: var(--redz-space-8);` | yes |
+| `py-12` | `padding-block: var(--redz-space-12);` | yes |
+| `py-16` | `padding-block: var(--redz-space-16);` | yes |
+| `py-20` | `padding-block: var(--redz-space-20);` | yes |
+| `py-24` | `padding-block: var(--redz-space-24);` | yes |
+| `py-32` | `padding-block: var(--redz-space-32);` | yes |
+| `py-40` | `padding-block: var(--redz-space-40);` | yes |
+| `py-48` | `padding-block: var(--redz-space-48);` | yes |
+| `py-64` | `padding-block: var(--redz-space-64);` | yes |
+| `text-start` | `text-align: start;` | yes |
+| `text-end` | `text-align: end;` | yes |
+| `text-center` | `text-align: center;` | yes |
+| `fs-12` | `font-size: var(--redz-fs-12);` | — |
+| `fs-14` | `font-size: var(--redz-fs-14);` | — |
+| `fs-16` | `font-size: var(--redz-fs-16);` | — |
+| `fs-18` | `font-size: var(--redz-fs-18);` | — |
+| `fs-20` | `font-size: var(--redz-fs-20);` | — |
+| `fs-24` | `font-size: var(--redz-fs-24);` | — |
+| `fs-32` | `font-size: var(--redz-fs-32);` | — |
+| `fw-400` | `font-weight: 400;` | — |
+| `fw-500` | `font-weight: 500;` | — |
+| `fw-600` | `font-weight: 600;` | — |
+| `fw-700` | `font-weight: 700;` | — |
+| `lh-16` | `line-height: var(--redz-lh-16);` | — |
+| `lh-20` | `line-height: var(--redz-lh-20);` | — |
+| `lh-24` | `line-height: var(--redz-lh-24);` | — |
+| `lh-28` | `line-height: var(--redz-lh-28);` | — |
+| `fst-italic` | `font-style: italic;` | — |
+| `fst-normal` | `font-style: normal;` | — |
+| `font-monospace` | `font-family: var(--redz-font-mono);` | — |
+| `tabular-nums` | `font-variant-numeric: tabular-nums;` | — |
+| `text-decoration-none` | `text-decoration: none;` | — |
+| `text-decoration-underline` | `text-decoration: underline;` | — |
+| `text-decoration-line-through` | `text-decoration: line-through;` | — |
+| `text-lowercase` | `text-transform: lowercase;` | — |
+| `text-uppercase` | `text-transform: uppercase;` | — |
+| `text-capitalize` | `text-transform: capitalize;` | — |
+| `text-wrap` | `white-space: normal;` | — |
+| `text-nowrap` | `white-space: nowrap;` | — |
+| `text-break` | `overflow-wrap: anywhere;` | — |
+| `text-truncate` | `overflow: hidden; text-overflow: ellipsis; white-space: nowrap;` | — |
+| `text-body` | `color: var(--redz-text);` | — |
+| `text-muted` | `color: var(--redz-text-muted);` | — |
+| `text-faint` | `color: var(--redz-text-faint);` | — |
+| `text-reset` | `color: inherit;` | — |
+| `text-primary` | `color: var(--redz-primary);` | — |
+| `text-secondary` | `color: var(--redz-secondary);` | — |
+| `text-success` | `color: var(--redz-success);` | — |
+| `text-danger` | `color: var(--redz-danger);` | — |
+| `text-warning` | `color: var(--redz-warning);` | — |
+| `text-info` | `color: var(--redz-info);` | — |
+| `bg-body` | `background-color: var(--redz-bg);` | — |
+| `bg-page` | `background-color: var(--redz-bg-page);` | — |
+| `bg-raised` | `background-color: var(--redz-bg-raised);` | — |
+| `bg-transparent` | `background-color: transparent;` | — |
+| `bg-primary` | `background-color: var(--redz-primary);` | — |
+| `bg-secondary` | `background-color: var(--redz-secondary);` | — |
+| `bg-success` | `background-color: var(--redz-success);` | — |
+| `bg-danger` | `background-color: var(--redz-danger);` | — |
+| `bg-warning` | `background-color: var(--redz-warning);` | — |
+| `bg-info` | `background-color: var(--redz-info);` | — |
+| `bg-primary-subtle` | `background-color: var(--redz-primary-subtle);` | — |
+| `bg-secondary-subtle` | `background-color: var(--redz-secondary-subtle);` | — |
+| `bg-success-subtle` | `background-color: var(--redz-success-subtle);` | — |
+| `bg-danger-subtle` | `background-color: var(--redz-danger-subtle);` | — |
+| `bg-warning-subtle` | `background-color: var(--redz-warning-subtle);` | — |
+| `bg-info-subtle` | `background-color: var(--redz-info-subtle);` | — |
+| `border` | `border: 1px solid var(--redz-border);` | — |
+| `border-top` | `border-block-start: 1px solid var(--redz-border);` | — |
+| `border-bottom` | `border-block-end: 1px solid var(--redz-border);` | — |
+| `border-start` | `border-inline-start: 1px solid var(--redz-border);` | — |
+| `border-end` | `border-inline-end: 1px solid var(--redz-border);` | — |
+| `border-0` | `border-width: 0;` | — |
+| `border-1` | `border-width: 1px;` | — |
+| `border-2` | `border-width: 2px;` | — |
+| `border-4` | `border-width: 4px;` | — |
+| `border-strong` | `border-color: var(--redz-border-strong);` | — |
+| `border-primary` | `border-color: var(--redz-primary);` | — |
+| `border-secondary` | `border-color: var(--redz-secondary);` | — |
+| `border-success` | `border-color: var(--redz-success);` | — |
+| `border-danger` | `border-color: var(--redz-danger);` | — |
+| `border-warning` | `border-color: var(--redz-warning);` | — |
+| `border-info` | `border-color: var(--redz-info);` | — |
+| `rounded` | `border-radius: var(--redz-radius-8);` | — |
+| `rounded-full` | `border-radius: 999px;` | — |
+| `rounded-0` | `border-radius: var(--redz-radius-0);` | — |
+| `rounded-4` | `border-radius: var(--redz-radius-4);` | — |
+| `rounded-6` | `border-radius: var(--redz-radius-6);` | — |
+| `rounded-8` | `border-radius: var(--redz-radius-8);` | — |
+| `rounded-12` | `border-radius: var(--redz-radius-12);` | — |
+| `rounded-16` | `border-radius: var(--redz-radius-16);` | — |
+| `shadow-1` | `box-shadow: var(--redz-shadow-1);` | — |
+| `shadow-2` | `box-shadow: var(--redz-shadow-2);` | — |
+| `shadow-3` | `box-shadow: var(--redz-shadow-3);` | — |
+| `shadow-none` | `box-shadow: none;` | — |
+| `w-25` | `inline-size: 25%;` | — |
+| `w-50` | `inline-size: 50%;` | — |
+| `w-75` | `inline-size: 75%;` | — |
+| `w-100` | `inline-size: 100%;` | — |
+| `w-auto` | `inline-size: auto;` | — |
+| `h-25` | `block-size: 25%;` | — |
+| `h-50` | `block-size: 50%;` | — |
+| `h-75` | `block-size: 75%;` | — |
+| `h-100` | `block-size: 100%;` | — |
+| `h-auto` | `block-size: auto;` | — |
+| `max-w-320` | `max-inline-size: 20rem;` | — |
+| `max-w-480` | `max-inline-size: 30rem;` | — |
+| `max-w-640` | `max-inline-size: 40rem;` | — |
+| `max-w-768` | `max-inline-size: 48rem;` | — |
+| `max-w-960` | `max-inline-size: 60rem;` | — |
+| `max-w-1200` | `max-inline-size: 75rem;` | — |
+| `min-w-0` | `min-inline-size: 0;` | — |
+| `opacity-0` | `opacity: 0;` | — |
+| `opacity-25` | `opacity: 0.25;` | — |
+| `opacity-50` | `opacity: 0.5;` | — |
+| `opacity-75` | `opacity: 0.75;` | — |
+| `opacity-100` | `opacity: 1;` | — |
+| `position-static` | `position: static;` | — |
+| `position-relative` | `position: relative;` | — |
+| `position-absolute` | `position: absolute;` | — |
+| `position-fixed` | `position: fixed;` | — |
+| `position-sticky` | `position: sticky;` | — |
+| `top-0` | `inset-block-start: 0;` | — |
+| `bottom-0` | `inset-block-end: 0;` | — |
+| `start-0` | `inset-inline-start: 0;` | — |
+| `end-0` | `inset-inline-end: 0;` | — |
+| `overflow-auto` | `overflow: auto;` | — |
+| `overflow-hidden` | `overflow: hidden;` | — |
+| `overflow-visible` | `overflow: visible;` | — |
+| `overflow-scroll` | `overflow: scroll;` | — |
+| `overflow-x-auto` | `overflow-x: auto;` | — |
+| `overflow-x-hidden` | `overflow-x: hidden;` | — |
+| `overflow-x-visible` | `overflow-x: visible;` | — |
+| `overflow-x-scroll` | `overflow-x: scroll;` | — |
+| `overflow-y-auto` | `overflow-y: auto;` | — |
+| `overflow-y-hidden` | `overflow-y: hidden;` | — |
+| `overflow-y-visible` | `overflow-y: visible;` | — |
+| `overflow-y-scroll` | `overflow-y: scroll;` | — |
+| `align-baseline` | `vertical-align: baseline;` | — |
+| `align-top` | `vertical-align: top;` | — |
+| `align-middle` | `vertical-align: middle;` | — |
+| `align-bottom` | `vertical-align: bottom;` | — |
+| `align-text-top` | `vertical-align: text-top;` | — |
+| `align-text-bottom` | `vertical-align: text-bottom;` | — |
+| `object-fit-contain` | `object-fit: contain;` | — |
+| `object-fit-cover` | `object-fit: cover;` | — |
+| `object-fit-fill` | `object-fit: fill;` | — |
+| `object-fit-none` | `object-fit: none;` | — |
+| `visible` | `visibility: visible;` | — |
+| `invisible` | `visibility: hidden;` | — |
+| `user-select-none` | `-webkit-user-select: none; user-select: none;` | — |
+| `user-select-all` | `-webkit-user-select: all; user-select: all;` | — |
+| `user-select-auto` | `-webkit-user-select: auto; user-select: auto;` | — |
+| `pe-none` | `pointer-events: none;` | — |
+| `pe-auto` | `pointer-events: auto;` | — |
+| `visually-hidden` | `position: absolute; inline-size: 1px; block-size: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;` | — |
+| `flip-rtl:dir(rtl)` | `scale: -1 1;` | — |
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `bg-black` | — | review | bg-body, bg-page, bg-raised or a tone |
+| `bg-body-secondary` | `bg-page` | rename |  |
+| `bg-body-tertiary` | `bg-raised` | rename |  |
+| `bg-dark` | — | review | bg-body, bg-page, bg-raised or a tone |
+| `bg-dark-subtle` | — | review | bg-page, or a tone's -subtle |
+| `bg-gradient` | — | remove | no gradients |
+| `bg-light` | — | review | bg-body, bg-page, bg-raised or a tone |
+| `bg-light-subtle` | — | review | bg-page, or a tone's -subtle |
+| `bg-opacity-10` | — | missing |  |
+| `bg-opacity-100` | — | missing |  |
+| `bg-opacity-25` | — | missing |  |
+| `bg-opacity-50` | — | missing |  |
+| `bg-opacity-75` | — | missing |  |
+| `bg-white` | — | review | bg-body, bg-page, bg-raised or a tone |
+| `blockquote` | — | missing |  |
+| `blockquote-footer` | — | missing |  |
+| `border-3` | — | review | the widths are 1, 2 and 4 px |
+| `border-5` | — | review | the widths are 1, 2 and 4 px |
+| `border-black` | — | review | border-strong, or a tone |
+| `border-bottom-0` | — | missing | draw only the sides you need: border-top and the others |
+| `border-danger-subtle` | — | missing |  |
+| `border-dark` | — | review | border-strong, or a tone |
+| `border-dark-subtle` | — | missing |  |
+| `border-end-0` | — | missing | draw only the sides you need: border-top and the others |
+| `border-info-subtle` | — | missing |  |
+| `border-light` | — | review | border-strong, or a tone |
+| `border-light-subtle` | — | missing |  |
+| `border-opacity-10` | — | missing |  |
+| `border-opacity-100` | — | missing |  |
+| `border-opacity-25` | — | missing |  |
+| `border-opacity-50` | — | missing |  |
+| `border-opacity-75` | — | missing |  |
+| `border-primary-subtle` | — | missing |  |
+| `border-secondary-subtle` | — | missing |  |
+| `border-start-0` | — | missing | draw only the sides you need: border-top and the others |
+| `border-success-subtle` | — | missing |  |
+| `border-top-0` | — | missing | draw only the sides you need: border-top and the others |
+| `border-warning-subtle` | — | missing |  |
+| `border-white` | — | review | border-strong, or a tone |
+| `bottom-100` | — | missing | only 0 here |
+| `bottom-50` | — | missing | only 0 here |
+| `clearfix` | — | remove | no floats |
+| `column-gap-1` | `column-gap-4` | value | the number is the pixels |
+| `column-gap-2` | `column-gap-8` | value | reused — column-gap-2 means another thing in REDZ.UI; the number is the pixels |
+| `column-gap-3` | `column-gap-16` | value | the number is the pixels |
+| `column-gap-4` | `column-gap-24` | value | reused — column-gap-4 means another thing in REDZ.UI; the number is the pixels |
+| `column-gap-5` | `column-gap-48` | value | the number is the pixels |
+| `display-1` | `fs-32` | review | the largest size here |
+| `display-2` | `fs-32` | review | the largest size here |
+| `display-3` | `fs-32` | review | the largest size here |
+| `display-4` | `fs-32` | review | the largest size here |
+| `display-5` | `fs-32` | review | the largest size here |
+| `display-6` | `fs-32` | review | the largest size here |
+| `end-100` | — | missing | only 0 here |
+| `end-50` | — | missing | only 0 here |
+| `figure` | — | missing |  |
+| `figure-caption` | — | missing |  |
+| `figure-img` | — | missing |  |
+| `fixed-bottom` | — | review | position-fixed with top-0 or bottom-0, start-0 and end-0 |
+| `fixed-top` | — | review | position-fixed with top-0 or bottom-0, start-0 and end-0 |
+| `float-end` | — | missing | no floats: flex or grid, with ms-auto or justify-content-end |
+| `float-none` | — | missing | no floats: flex or grid, with ms-auto or justify-content-end |
+| `float-start` | — | missing | no floats: flex or grid, with ms-auto or justify-content-end |
+| `focus-ring` | — | remove | the focus ring is built in, 3:1 in both themes |
+| `focus-ring-danger` | — | remove | the focus ring is built in, 3:1 in both themes |
+| `focus-ring-dark` | — | remove | the focus ring is built in, 3:1 in both themes |
+| `focus-ring-info` | — | remove | the focus ring is built in, 3:1 in both themes |
+| `focus-ring-light` | — | remove | the focus ring is built in, 3:1 in both themes |
+| `focus-ring-primary` | — | remove | the focus ring is built in, 3:1 in both themes |
+| `focus-ring-secondary` | — | remove | the focus ring is built in, 3:1 in both themes |
+| `focus-ring-success` | — | remove | the focus ring is built in, 3:1 in both themes |
+| `focus-ring-warning` | — | remove | the focus ring is built in, 3:1 in both themes |
+| `fs-1` | `fs-32` | value | 40 px in Bootstrap; 32 is the largest here |
+| `fs-2` | `fs-32` | value | 32 px |
+| `fs-3` | `fs-24` | value | 28 px in Bootstrap |
+| `fs-4` | `fs-24` | value | 24 px |
+| `fs-5` | `fs-20` | value | 20 px |
+| `fs-6` | `fs-16` | value | 16 px |
+| `fw-bold` | `fw-700` | rename |  |
+| `fw-bolder` | — | review | the weights are 400, 500, 600 and 700 |
+| `fw-light` | — | review | the weights are 400, 500, 600 and 700 |
+| `fw-lighter` | — | review | the weights are 400, 500, 600 and 700 |
+| `fw-medium` | `fw-500` | rename |  |
+| `fw-normal` | `fw-400` | rename |  |
+| `fw-semibold` | `fw-600` | rename |  |
+| `gap-1` | `gap-4` | value | the number is the pixels |
+| `gap-2` | `gap-8` | value | reused — gap-2 means another thing in REDZ.UI; the number is the pixels |
+| `gap-3` | `gap-16` | value | the number is the pixels |
+| `gap-4` | `gap-24` | value | reused — gap-4 means another thing in REDZ.UI; the number is the pixels |
+| `gap-5` | `gap-48` | value | the number is the pixels |
+| `h1` | — | review | the h1–h4 sizes are the elements'; fs-* for another |
+| `h2` | — | review | the h1–h4 sizes are the elements'; fs-* for another |
+| `h3` | — | review | the h1–h4 sizes are the elements'; fs-* for another |
+| `h4` | — | review | the h1–h4 sizes are the elements'; fs-* for another |
+| `h5` | — | review | the h1–h4 sizes are the elements'; fs-* for another |
+| `h6` | — | review | the h1–h4 sizes are the elements'; fs-* for another |
+| `img-fluid` | — | review | images never overflow their box here; w-100 to fill it |
+| `img-thumbnail` | — | missing |  |
+| `initialism` | — | missing |  |
+| `lead` | `fs-16 text-muted` | review | a lead paragraph |
+| `lh-1` | — | review | line heights are px here: lh-16, lh-20, lh-24, lh-28 |
+| `lh-base` | — | review | line heights are px here: lh-16, lh-20, lh-24, lh-28 |
+| `link-body-emphasis` | — | review | a link is the accent; text-* for a tone |
+| `link-danger` | — | review | a link is the accent; text-* for a tone |
+| `link-dark` | — | review | a link is the accent; text-* for a tone |
+| `link-info` | — | review | a link is the accent; text-* for a tone |
+| `link-light` | — | review | a link is the accent; text-* for a tone |
+| `link-offset-1` | — | missing |  |
+| `link-offset-1-hover` | — | missing |  |
+| `link-offset-2` | — | missing |  |
+| `link-offset-2-hover` | — | missing |  |
+| `link-offset-3` | — | missing |  |
+| `link-offset-3-hover` | — | missing |  |
+| `link-opacity-10` | — | missing |  |
+| `link-opacity-10-hover` | — | missing |  |
+| `link-opacity-100` | — | missing |  |
+| `link-opacity-100-hover` | — | missing |  |
+| `link-opacity-25` | — | missing |  |
+| `link-opacity-25-hover` | — | missing |  |
+| `link-opacity-50` | — | missing |  |
+| `link-opacity-50-hover` | — | missing |  |
+| `link-opacity-75` | — | missing |  |
+| `link-opacity-75-hover` | — | missing |  |
+| `link-primary` | — | review | a link is the accent; text-* for a tone |
+| `link-secondary` | — | review | a link is the accent; text-* for a tone |
+| `link-success` | — | review | a link is the accent; text-* for a tone |
+| `link-underline` | — | missing |  |
+| `link-underline-danger` | — | missing |  |
+| `link-underline-dark` | — | missing |  |
+| `link-underline-info` | — | missing |  |
+| `link-underline-light` | — | missing |  |
+| `link-underline-opacity-0` | — | missing |  |
+| `link-underline-opacity-0-hover` | — | missing |  |
+| `link-underline-opacity-10` | — | missing |  |
+| `link-underline-opacity-10-hover` | — | missing |  |
+| `link-underline-opacity-100` | — | missing |  |
+| `link-underline-opacity-100-hover` | — | missing |  |
+| `link-underline-opacity-25` | — | missing |  |
+| `link-underline-opacity-25-hover` | — | missing |  |
+| `link-underline-opacity-50` | — | missing |  |
+| `link-underline-opacity-50-hover` | — | missing |  |
+| `link-underline-opacity-75` | — | missing |  |
+| `link-underline-opacity-75-hover` | — | missing |  |
+| `link-underline-primary` | — | missing |  |
+| `link-underline-secondary` | — | missing |  |
+| `link-underline-success` | — | missing |  |
+| `link-underline-warning` | — | missing |  |
+| `link-warning` | — | review | a link is the accent; text-* for a tone |
+| `list-inline` | — | review | hstack flex-wrap |
+| `list-inline-item` | — | review | hstack flex-wrap |
+| `list-unstyled` | — | review | vstack, or a component's own list |
+| `m-1` | `m-4` | value | the number is the pixels |
+| `m-2` | `m-8` | value | reused — m-2 means another thing in REDZ.UI; the number is the pixels |
+| `m-3` | `m-16` | value | the number is the pixels |
+| `m-4` | `m-24` | value | reused — m-4 means another thing in REDZ.UI; the number is the pixels |
+| `m-5` | `m-48` | value | the number is the pixels |
+| `mark` | — | missing |  |
+| `mb-1` | `mb-4` | value | the number is the pixels |
+| `mb-2` | `mb-8` | value | reused — mb-2 means another thing in REDZ.UI; the number is the pixels |
+| `mb-3` | `mb-16` | value | the number is the pixels |
+| `mb-4` | `mb-24` | value | reused — mb-4 means another thing in REDZ.UI; the number is the pixels |
+| `mb-5` | `mb-48` | value | the number is the pixels |
+| `me-1` | `me-4` | value | the number is the pixels |
+| `me-2` | `me-8` | value | reused — me-2 means another thing in REDZ.UI; the number is the pixels |
+| `me-3` | `me-16` | value | the number is the pixels |
+| `me-4` | `me-24` | value | reused — me-4 means another thing in REDZ.UI; the number is the pixels |
+| `me-5` | `me-48` | value | the number is the pixels |
+| `mh-100` | — | missing |  |
+| `min-vh-100` | — | missing |  |
+| `min-vw-100` | — | missing |  |
+| `ms-1` | `ms-4` | value | the number is the pixels |
+| `ms-2` | `ms-8` | value | reused — ms-2 means another thing in REDZ.UI; the number is the pixels |
+| `ms-3` | `ms-16` | value | the number is the pixels |
+| `ms-4` | `ms-24` | value | reused — ms-4 means another thing in REDZ.UI; the number is the pixels |
+| `ms-5` | `ms-48` | value | the number is the pixels |
+| `mt-1` | `mt-4` | value | the number is the pixels |
+| `mt-2` | `mt-8` | value | reused — mt-2 means another thing in REDZ.UI; the number is the pixels |
+| `mt-3` | `mt-16` | value | the number is the pixels |
+| `mt-4` | `mt-24` | value | reused — mt-4 means another thing in REDZ.UI; the number is the pixels |
+| `mt-5` | `mt-48` | value | the number is the pixels |
+| `mw-100` | — | review | max-w-* by px |
+| `mx-1` | `mx-4` | value | the number is the pixels |
+| `mx-2` | `mx-8` | value | reused — mx-2 means another thing in REDZ.UI; the number is the pixels |
+| `mx-3` | `mx-16` | value | the number is the pixels |
+| `mx-4` | `mx-24` | value | reused — mx-4 means another thing in REDZ.UI; the number is the pixels |
+| `mx-5` | `mx-48` | value | the number is the pixels |
+| `my-1` | `my-4` | value | the number is the pixels |
+| `my-2` | `my-8` | value | reused — my-2 means another thing in REDZ.UI; the number is the pixels |
+| `my-3` | `my-16` | value | the number is the pixels |
+| `my-4` | `my-24` | value | reused — my-4 means another thing in REDZ.UI; the number is the pixels |
+| `my-5` | `my-48` | value | the number is the pixels |
+| `object-fit-scale` | — | review | object-fit-contain is the nearest |
+| `p-1` | `p-4` | value | the number is the pixels |
+| `p-2` | `p-8` | value | reused — p-2 means another thing in REDZ.UI; the number is the pixels |
+| `p-3` | `p-16` | value | the number is the pixels |
+| `p-4` | `p-24` | value | reused — p-4 means another thing in REDZ.UI; the number is the pixels |
+| `p-5` | `p-48` | value | the number is the pixels |
+| `pb-1` | `pb-4` | value | the number is the pixels |
+| `pb-2` | `pb-8` | value | reused — pb-2 means another thing in REDZ.UI; the number is the pixels |
+| `pb-3` | `pb-16` | value | the number is the pixels |
+| `pb-4` | `pb-24` | value | reused — pb-4 means another thing in REDZ.UI; the number is the pixels |
+| `pb-5` | `pb-48` | value | the number is the pixels |
+| `pe-1` | `pe-4` | value | the number is the pixels |
+| `pe-2` | `pe-8` | value | reused — pe-2 means another thing in REDZ.UI; the number is the pixels |
+| `pe-3` | `pe-16` | value | the number is the pixels |
+| `pe-4` | `pe-24` | value | reused — pe-4 means another thing in REDZ.UI; the number is the pixels |
+| `pe-5` | `pe-48` | value | the number is the pixels |
+| `ps-1` | `ps-4` | value | the number is the pixels |
+| `ps-2` | `ps-8` | value | reused — ps-2 means another thing in REDZ.UI; the number is the pixels |
+| `ps-3` | `ps-16` | value | the number is the pixels |
+| `ps-4` | `ps-24` | value | reused — ps-4 means another thing in REDZ.UI; the number is the pixels |
+| `ps-5` | `ps-48` | value | the number is the pixels |
+| `pt-1` | `pt-4` | value | the number is the pixels |
+| `pt-2` | `pt-8` | value | reused — pt-2 means another thing in REDZ.UI; the number is the pixels |
+| `pt-3` | `pt-16` | value | the number is the pixels |
+| `pt-4` | `pt-24` | value | reused — pt-4 means another thing in REDZ.UI; the number is the pixels |
+| `pt-5` | `pt-48` | value | the number is the pixels |
+| `px-1` | `px-4` | value | the number is the pixels |
+| `px-2` | `px-8` | value | reused — px-2 means another thing in REDZ.UI; the number is the pixels |
+| `px-3` | `px-16` | value | the number is the pixels |
+| `px-4` | `px-24` | value | reused — px-4 means another thing in REDZ.UI; the number is the pixels |
+| `px-5` | `px-48` | value | the number is the pixels |
+| `py-1` | `py-4` | value | the number is the pixels |
+| `py-2` | `py-8` | value | reused — py-2 means another thing in REDZ.UI; the number is the pixels |
+| `py-3` | `py-16` | value | the number is the pixels |
+| `py-4` | `py-24` | value | reused — py-4 means another thing in REDZ.UI; the number is the pixels |
+| `py-5` | `py-48` | value | the number is the pixels |
+| `ratio` | — | missing | the missing basics: aspect-ratio |
+| `ratio-16x9` | — | missing | the missing basics: aspect-ratio |
+| `ratio-1x1` | — | missing | the missing basics: aspect-ratio |
+| `ratio-21x9` | — | missing | the missing basics: aspect-ratio |
+| `ratio-4x3` | — | missing | the missing basics: aspect-ratio |
+| `rounded-1` | `rounded-4` | value | 4 px |
+| `rounded-2` | `rounded-6` | value | 6 px |
+| `rounded-3` | `rounded-8` | value | 8 px |
+| `rounded-4` | `rounded-16` | value | reused — rounded-4 means another thing in REDZ.UI; 16 px |
+| `rounded-5` | — | review | 32 px in Bootstrap: rounded-16 or rounded-full |
+| `rounded-bottom` | — | missing | no one-side radii |
+| `rounded-bottom-0` | — | missing | no one-side radii |
+| `rounded-bottom-1` | — | missing | no one-side radii |
+| `rounded-bottom-2` | — | missing | no one-side radii |
+| `rounded-bottom-3` | — | missing | no one-side radii |
+| `rounded-bottom-4` | — | missing | no one-side radii |
+| `rounded-bottom-5` | — | missing | no one-side radii |
+| `rounded-bottom-circle` | — | missing | no one-side radii |
+| `rounded-bottom-pill` | — | missing | no one-side radii |
+| `rounded-circle` | `rounded-full` | rename |  |
+| `rounded-end` | — | missing | no one-side radii |
+| `rounded-end-0` | — | missing | no one-side radii |
+| `rounded-end-1` | — | missing | no one-side radii |
+| `rounded-end-2` | — | missing | no one-side radii |
+| `rounded-end-3` | — | missing | no one-side radii |
+| `rounded-end-4` | — | missing | no one-side radii |
+| `rounded-end-5` | — | missing | no one-side radii |
+| `rounded-end-circle` | — | missing | no one-side radii |
+| `rounded-end-pill` | — | missing | no one-side radii |
+| `rounded-pill` | `rounded-full` | rename |  |
+| `rounded-start` | — | missing | no one-side radii |
+| `rounded-start-0` | — | missing | no one-side radii |
+| `rounded-start-1` | — | missing | no one-side radii |
+| `rounded-start-2` | — | missing | no one-side radii |
+| `rounded-start-3` | — | missing | no one-side radii |
+| `rounded-start-4` | — | missing | no one-side radii |
+| `rounded-start-5` | — | missing | no one-side radii |
+| `rounded-start-circle` | — | missing | no one-side radii |
+| `rounded-start-pill` | — | missing | no one-side radii |
+| `rounded-top` | — | missing | no one-side radii |
+| `rounded-top-0` | — | missing | no one-side radii |
+| `rounded-top-1` | — | missing | no one-side radii |
+| `rounded-top-2` | — | missing | no one-side radii |
+| `rounded-top-3` | — | missing | no one-side radii |
+| `rounded-top-4` | — | missing | no one-side radii |
+| `rounded-top-5` | — | missing | no one-side radii |
+| `rounded-top-circle` | — | missing | no one-side radii |
+| `rounded-top-pill` | — | missing | no one-side radii |
+| `row-gap-1` | `row-gap-4` | value | the number is the pixels |
+| `row-gap-2` | `row-gap-8` | value | reused — row-gap-2 means another thing in REDZ.UI; the number is the pixels |
+| `row-gap-3` | `row-gap-16` | value | the number is the pixels |
+| `row-gap-4` | `row-gap-24` | value | reused — row-gap-4 means another thing in REDZ.UI; the number is the pixels |
+| `row-gap-5` | `row-gap-48` | value | the number is the pixels |
+| `shadow` | `shadow-2` | rename |  |
+| `small` | — | review | fs-12, or the <small> element |
+| `start-100` | — | missing | only 0 here |
+| `start-50` | — | missing | only 0 here |
+| `sticky-bottom` | — | review | position-sticky with top-0 or bottom-0 |
+| `sticky-top` | — | review | position-sticky with top-0 or bottom-0 |
+| `stretched-link` | — | missing |  |
+| `text-black` | — | review | no white, black, light or dark: text-body, text-muted or a tone |
+| `text-black-50` | — | review | no white, black, light or dark: text-body, text-muted or a tone |
+| `text-body-emphasis` | `text-body` | rename |  |
+| `text-body-secondary` | `text-muted` | rename |  |
+| `text-body-tertiary` | `text-faint` | rename |  |
+| `text-danger-emphasis` | `text-danger` | rename | a tone's text color is already its emphasis |
+| `text-dark` | — | review | no white, black, light or dark: text-body, text-muted or a tone |
+| `text-dark-emphasis` | `text-body` | review | no light or dark: the text color |
+| `text-info-emphasis` | `text-info` | rename | a tone's text color is already its emphasis |
+| `text-light` | — | review | no white, black, light or dark: text-body, text-muted or a tone |
+| `text-light-emphasis` | `text-body` | review | no light or dark: the text color |
+| `text-opacity-100` | — | missing |  |
+| `text-opacity-25` | — | missing |  |
+| `text-opacity-50` | — | missing |  |
+| `text-opacity-75` | — | missing |  |
+| `text-primary-emphasis` | `text-primary` | rename | a tone's text color is already its emphasis |
+| `text-secondary-emphasis` | `text-secondary` | rename | a tone's text color is already its emphasis |
+| `text-success-emphasis` | `text-success` | rename | a tone's text color is already its emphasis |
+| `text-warning-emphasis` | `text-warning` | rename | a tone's text color is already its emphasis |
+| `text-white` | — | review | no white, black, light or dark: text-body, text-muted or a tone |
+| `text-white-50` | — | review | no white, black, light or dark: text-body, text-muted or a tone |
+| `top-100` | — | missing | only 0 here |
+| `top-50` | — | missing | only 0 here |
+| `translate-middle` | — | missing | center by grid or flex |
+| `translate-middle-x` | — | missing | center by grid or flex |
+| `translate-middle-y` | — | missing | center by grid or flex |
+| `vh-100` | — | missing |  |
+| `visually-hidden-focusable` | — | missing |  |
+| `vr` | — | missing |  |
+| `vw-100` | — | missing |  |
+| `z-0` | — | missing | the components stack themselves |
+| `z-1` | — | missing | the components stack themselves |
+| `z-2` | — | missing | the components stack themselves |
+| `z-3` | — | missing | the components stack themselves |
+| `z-n1` | — | missing | the components stack themselves |
+
+# Tokens
+
+The custom properties on `:root` that the components read: colors by role in pairs that pass WCAG AA in both themes, spacing, type, radii, shadows and motion. A theme changes tokens, never component rules.
+
+## How they are made
+
+- Colors by role: `--redz-text`, `-muted`, `-faint`; `--redz-bg-page`, `--redz-bg`, `-raised`, `-hover`; a tone, its `-subtle` fill and its `-contrast` text for primary, secondary, success, danger, warning and info.
+- Text is at least 4.5:1 on its background, the borders of fields and the focus ring 3:1, in the light and the dark theme — computed in OKLCH and written as checked hex.
+- A component declares a few properties of its own on its root and never on rows or items: hundreds of properties on small elements slow every style recalculation.
+
+## Every token, light theme
+
+| Token | Value |
+| --- | --- |
+| `--redz-bg` | `light-dark(#ffffff, #161719)` |
+| `--redz-bg-raised` | `light-dark(#ffffff, #212224)` |
+| `--redz-bg-page` | `light-dark(#f5f6f8, #0f0f11)` |
+| `--redz-bg-hover` | `light-dark(#eff0f2, #252629)` |
+| `--redz-text` | `light-dark(#191a1d, #eeeef0)` |
+| `--redz-text-muted` | `light-dark(#595b5f, #acaeb2)` |
+| `--redz-text-faint` | `light-dark(#7e8085, #7f8084)` |
+| `--redz-border` | `light-dark(#e5e6e8, #2d2e30)` |
+| `--redz-border-strong` | `light-dark(#7e8085, #7f8084)` |
+| `--redz-primary` | `light-dark(#006cc9, #64a9f3)` |
+| `--redz-primary-subtle` | `light-dark(#e5f2ff, #1d3249)` |
+| `--redz-primary-contrast` | `light-dark(#ffffff, #000000)` |
+| `--redz-secondary` | `light-dark(#595b5f, #acaeb2)` |
+| `--redz-secondary-subtle` | `light-dark(#eff0f2, #252629)` |
+| `--redz-secondary-contrast` | `light-dark(#ffffff, #000000)` |
+| `--redz-success` | `light-dark(#1d7d3e, #66be7b)` |
+| `--redz-success-subtle` | `light-dark(#e3fae6, #1c3422)` |
+| `--redz-success-contrast` | `light-dark(#ffffff, #000000)` |
+| `--redz-danger` | `light-dark(#c22826, #f17871)` |
+| `--redz-danger-subtle` | `light-dark(#ffeceb, #442321)` |
+| `--redz-danger-contrast` | `light-dark(#ffffff, #000000)` |
+| `--redz-warning` | `light-dark(#985b0b, #e9b452)` |
+| `--redz-warning-subtle` | `light-dark(#fff2d1, #3e2d15)` |
+| `--redz-warning-contrast` | `light-dark(#ffffff, #000000)` |
+| `--redz-info` | `light-dark(#0071bb, #5eaceb)` |
+| `--redz-info-subtle` | `light-dark(#e4f3ff, #193043)` |
+| `--redz-info-contrast` | `light-dark(#ffffff, #000000)` |
+| `--redz-focus` | `var(--redz-primary)` |
+| `--redz-shadow-strength` | `1` |
+| `--redz-shadow-1` | `0 1px 2px rgb(16 18 24 / calc(0.06 * var(--redz-shadow-strength)))` |
+| `--redz-shadow-2` | `0 2px 6px -1px rgb(16 18 24 / calc(0.06 * var(--redz-shadow-strength))), 0 8px 18px -4px rgb(16 18 24 / calc(0.08 * var(--redz-shadow-strength))), 0 16px 32px -8px rgb(16 18 24 / calc(0.08 * var(--redz-shadow-strength)))` |
+| `--redz-shadow-3` | `0 3px 8px -1px rgb(16 18 24 / calc(0.06 * var(--redz-shadow-strength))), 0 12px 28px -6px rgb(16 18 24 / calc(0.1 * var(--redz-shadow-strength))), 0 32px 72px -12px rgb(16 18 24 / calc(0.12 * var(--redz-shadow-strength)))` |
+| `--redz-font-sans` | `-apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"` |
+| `--redz-font-arabic` | `-apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", Roboto, "Noto Sans Arabic", "Noto Naskh Arabic", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"` |
+| `--redz-font-mono` | `ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace` |
+| `--redz-control-height` | `2rem` |
+| `--redz-control-height-xs` | `1.5rem` |
+| `--redz-control-height-sm` | `1.75rem` |
+| `--redz-control-height-lg` | `2.5rem` |
+| `--redz-control-height-float` | `3.25rem` |
+| `--redz-row-pad` | `0.625rem` |
+| `--redz-motion` | `150ms` |
+| `--redz-ease` | `cubic-bezier(0.22, 1, 0.36, 1)` |
+| `--redz-form-select-chevron` | `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23595b5f'%3E%3Cpath d='M1.6 4.6a.6.6 0 0 1 .85 0L8 10.15l5.55-5.55a.6.6 0 1 1 .85.85l-5.98 5.97a.6.6 0 0 1-.84 0L1.6 5.45a.6.6 0 0 1 0-.85'/%3E%3C/svg%3E")` |
+| `--redz-space-0` | `0` |
+| `--redz-space-2` | `0.125rem` |
+| `--redz-space-4` | `0.25rem` |
+| `--redz-space-8` | `0.5rem` |
+| `--redz-space-12` | `0.75rem` |
+| `--redz-space-16` | `1rem` |
+| `--redz-space-20` | `1.25rem` |
+| `--redz-space-24` | `1.5rem` |
+| `--redz-space-32` | `2rem` |
+| `--redz-space-40` | `2.5rem` |
+| `--redz-space-48` | `3rem` |
+| `--redz-space-64` | `4rem` |
+| `--redz-fs-12` | `0.75rem` |
+| `--redz-fs-14` | `0.875rem` |
+| `--redz-fs-16` | `1rem` |
+| `--redz-fs-18` | `1.125rem` |
+| `--redz-fs-20` | `1.25rem` |
+| `--redz-fs-24` | `1.5rem` |
+| `--redz-fs-32` | `2rem` |
+| `--redz-lh-16` | `1rem` |
+| `--redz-lh-20` | `1.25rem` |
+| `--redz-lh-24` | `1.5rem` |
+| `--redz-lh-28` | `1.75rem` |
+| `--redz-radius-0` | `0` |
+| `--redz-radius-4` | `0.25rem` |
+| `--redz-radius-6` | `0.375rem` |
+| `--redz-radius-8` | `0.5rem` |
+| `--redz-radius-12` | `0.75rem` |
+| `--redz-radius-16` | `1rem` |
+
+# Icons
+
+Bootstrap Icons 1.13.2 under their own class names — `<i class="bi bi-pencil">` — each a CSS mask over its own SVG file: the color of the text around it, no font, no script, no build.
+
+## Examples
+
+An icon takes the size of the text and its color: a utility or the parent sets both.
+
+```html
+<i class="bi bi-pencil" aria-hidden="true"></i>
+<i class="bi bi-trash3 text-danger" aria-hidden="true"></i>
+<i class="bi bi-check-circle-fill text-success fs-20" aria-hidden="true"></i>
+<i class="bi bi-stars text-primary fs-24" aria-hidden="true"></i>
+<i class="bi bi-chevron-right flip-rtl" aria-hidden="true"></i>
+<i class="bi bi-arrow-left flip-rtl" aria-hidden="true"></i>
+```
+
+The names are Bootstrap Icons' own — look one up at [icons.getbootstrap.com](https://icons.getbootstrap.com/). A name the set does not have paints a filled square, and the checks flag it.
+
+## Accessibility
+
+- An icon beside words is `aria-hidden="true"`. An icon alone takes its meaning from its parent: the button's `aria-label`, or hidden words.
+- Icons that point — chevrons, arrows, back and next — mirror right to left with `flip-rtl`; a check, a clock, a search glass, media controls do not.
+- Icons keep the forced color of their parent and print in their color.
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `icon-link` | — | review | a link with its icon: hstack gap-4 |
+| `icon-link-hover` | — | review | a link with its icon: hstack gap-4 |
+
+# From Bootstrap 5.3
+
+Most of Bootstrap 5's names stay. What changes is the spacing numbers, the grid, the breakpoints, states and triggers, and the three components Bootstrap 6 renamed. The two libraries are never on one page: a project switches its stylesheet at once.
+
+## What changes
+
+- **Spacing:** the number is the pixels. `p-3` becomes `p-16`, `mb-2` `mb-8`, `gap-4` `gap-24` — and `p-4` exists in both with another size: Bootstrap's 24 px, REDZ.UI's 4 px. Never rename by chained replacements; rewrite each file once.
+- **Grid:** `row` and `col-md-6` become the parent's `grid md:cols-2`; a column's own width is `span-N`.
+- **Breakpoints:** the infix becomes a prefix — `d-md-none` is `md:d-none` — and it measures the region, not the window.
+- **States:** classes become attributes — `.active` is `aria-current`, `aria-selected` or `aria-pressed`; `.disabled` is `disabled` or `aria-disabled`; `.is-invalid` is `aria-invalid="true"`.
+- **Triggers:** `data-bs-toggle` becomes the browser's commands — `commandfor` + `command="show-modal"`, `"close"` or `"toggle-popover"`; `bootstrap.Modal` becomes `dialog.showModal()`.
+- **Renamed:** modal → `dialog` on a `<dialog>`, dropdown → `menu` on a popover, offcanvas → `drawer`.
+- **Icons:** Bootstrap Icons keep their classes; swap the font's stylesheet for `css/icons.css`.
+
+## With an agent
+
+The skill `redz-ui-from-bootstrap-5` moves a project file by file: `scripts/scan.sh` finds every Bootstrap class, attribute and call with its replacement and checks every class against the vocabulary; the agent rewrites the whole file in one pass, scans it again until nothing is left, and compares the screens before and after. Install it with `npx skills add redz-tech/REDZ.UI`.
+
+## The map
+
+Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not listed keeps its name, and a breakpoint form follows its class — `mb-md-3` is `md:mb-16`. The full map, every class and form, is the skill's `assets/map.tsv`.
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `accordion` | — | missing | the missing basics: <details> and <summary> |
+| `accordion-body` | — | missing | the missing basics: <details> and <summary> |
+| `accordion-button` | — | missing | the missing basics: <details> and <summary> |
+| `accordion-collapse` | — | missing | the missing basics: <details> and <summary> |
+| `accordion-flush` | — | missing | the missing basics: <details> and <summary> |
+| `accordion-header` | — | missing | the missing basics: <details> and <summary> |
+| `accordion-item` | — | missing | the missing basics: <details> and <summary> |
+| `active` | — | state | aria-current, aria-selected or aria-pressed — the attribute of the element's role |
+| `alert-dark` | — | review | the plain alert, or a tone |
+| `alert-dismissible` | — | review | a btn-close at the end, removed by your script |
+| `alert-heading` | — | review | a strong title in the alert's div |
+| `alert-light` | — | review | the plain alert, or a tone |
+| `alert-link` | — | review | a plain link |
+| `alert-secondary` | — | review | the plain alert, or a tone |
+| `bg-black` | — | review | bg-body, bg-page, bg-raised or a tone |
+| `bg-body-secondary` | `bg-page` | rename |  |
+| `bg-body-tertiary` | `bg-raised` | rename |  |
+| `bg-dark` | — | review | bg-body, bg-page, bg-raised or a tone |
+| `bg-dark-subtle` | — | review | bg-page, or a tone's -subtle |
+| `bg-gradient` | — | remove | no gradients |
+| `bg-light` | — | review | bg-body, bg-page, bg-raised or a tone |
+| `bg-light-subtle` | — | review | bg-page, or a tone's -subtle |
+| `bg-opacity-10` | — | missing |  |
+| `bg-opacity-100` | — | missing |  |
+| `bg-opacity-25` | — | missing |  |
+| `bg-opacity-50` | — | missing |  |
+| `bg-opacity-75` | — | missing |  |
+| `bg-white` | — | review | bg-body, bg-page, bg-raised or a tone |
+| `blockquote` | — | missing |  |
+| `blockquote-footer` | — | missing |  |
+| `border-3` | — | review | the widths are 1, 2 and 4 px |
+| `border-5` | — | review | the widths are 1, 2 and 4 px |
+| `border-black` | — | review | border-strong, or a tone |
+| `border-bottom-0` | — | missing | draw only the sides you need: border-top and the others |
+| `border-danger-subtle` | — | missing |  |
+| `border-dark` | — | review | border-strong, or a tone |
+| `border-dark-subtle` | — | missing |  |
+| `border-end-0` | — | missing | draw only the sides you need: border-top and the others |
+| `border-info-subtle` | — | missing |  |
+| `border-light` | — | review | border-strong, or a tone |
+| `border-light-subtle` | — | missing |  |
+| `border-opacity-10` | — | missing |  |
+| `border-opacity-100` | — | missing |  |
+| `border-opacity-25` | — | missing |  |
+| `border-opacity-50` | — | missing |  |
+| `border-opacity-75` | — | missing |  |
+| `border-primary-subtle` | — | missing |  |
+| `border-secondary-subtle` | — | missing |  |
+| `border-start-0` | — | missing | draw only the sides you need: border-top and the others |
+| `border-success-subtle` | — | missing |  |
+| `border-top-0` | — | missing | draw only the sides you need: border-top and the others |
+| `border-warning-subtle` | — | missing |  |
+| `border-white` | — | review | border-strong, or a tone |
+| `bottom-100` | — | missing | only 0 here |
+| `bottom-50` | — | missing | only 0 here |
+| `bs-popover-auto` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
+| `bs-popover-bottom` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
+| `bs-popover-end` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
+| `bs-popover-start` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
+| `bs-popover-top` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
+| `bs-tooltip-auto` | — | remove | the tooltip is one element |
+| `bs-tooltip-bottom` | — | remove | the tooltip is one element |
+| `bs-tooltip-end` | — | remove | the tooltip is one element |
+| `bs-tooltip-start` | — | remove | the tooltip is one element |
+| `bs-tooltip-top` | — | remove | the tooltip is one element |
+| `btn-check` | — | review | a toggle is a btn with aria-pressed; a choice is radio inputs |
+| `btn-close-white` | — | remove | the close glyph takes the text color |
+| `btn-dark` | — | review | no light or dark buttons: btn or btn-text |
+| `btn-group-vertical` | — | missing |  |
+| `btn-light` | — | review | no light or dark buttons: btn or btn-text |
+| `btn-outline-dark` | — | review | btn-outline-secondary |
+| `btn-outline-light` | — | review | btn-outline-secondary |
+| `caption-top` | — | missing |  |
+| `card-group` | — | review | grid with gap-16 |
+| `card-header-pills` | — | review | a nav straight in the card |
+| `card-header-tabs` | — | review | a nav straight in the card |
+| `card-img` | — | missing |  |
+| `card-img-bottom` | — | missing |  |
+| `card-img-overlay` | — | missing |  |
+| `card-img-top` | — | missing |  |
+| `card-link` | — | review | a heading and paragraphs in card-body |
+| `card-subtitle` | — | review | a heading and paragraphs in card-body |
+| `card-text` | — | review | a heading and paragraphs in card-body |
+| `card-title` | — | review | a heading and paragraphs in card-body |
+| `carousel` | — | missing | not planned |
+| `carousel-caption` | — | missing | not planned |
+| `carousel-control-next` | — | missing | not planned |
+| `carousel-control-next-icon` | — | missing | not planned |
+| `carousel-control-prev` | — | missing | not planned |
+| `carousel-control-prev-icon` | — | missing | not planned |
+| `carousel-dark` | — | missing | not planned |
+| `carousel-fade` | — | missing | not planned |
+| `carousel-indicators` | — | missing | not planned |
+| `carousel-inner` | — | missing | not planned |
+| `carousel-item` | — | missing | not planned |
+| `carousel-item-end` | — | missing | not planned |
+| `carousel-item-next` | — | missing | not planned |
+| `carousel-item-prev` | — | missing | not planned |
+| `carousel-item-start` | — | missing | not planned |
+| `clearfix` | — | remove | no floats |
+| `col` | — | grid | equal columns come from the parent's cols-N; the child needs no class |
+| `col-1` | `span-1` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-10` | `span-10` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-11` | `span-11` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-12` | `span-12` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-2` | `span-2` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-3` | `span-3` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-4` | `span-4` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-5` | `span-5` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-6` | `span-6` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-7` | `span-7` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-8` | `span-8` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-9` | `span-9` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
+| `col-auto` | — | review | a column as wide as its content: hstack, or grid-template-columns in the module's CSS |
+| `col-form-label` | `form-label` | review | a form-label in a form-field |
+| `collapse` | — | missing | the missing basics: <details>, or hidden switched by a command |
+| `collapse-horizontal` | — | missing | the missing basics: <details>, or hidden switched by a command |
+| `collapsed` | — | state | aria-expanded="false" on the button, set by the browser |
+| `collapsing` | — | missing | the missing basics: <details>, or hidden switched by a command |
+| `column-gap-1` | `column-gap-4` | value | the number is the pixels |
+| `column-gap-2` | `column-gap-8` | value | reused — column-gap-2 means another thing in REDZ.UI; the number is the pixels |
+| `column-gap-3` | `column-gap-16` | value | the number is the pixels |
+| `column-gap-4` | `column-gap-24` | value | reused — column-gap-4 means another thing in REDZ.UI; the number is the pixels |
+| `column-gap-5` | `column-gap-48` | value | the number is the pixels |
+| `container` | — | review | the shell's app-main, or a region with max-w-* and mx-auto |
+| `container-fluid` | — | review | the shell's app-main, or a region with max-w-* and mx-auto |
+| `disabled` | — | state | disabled, or aria-disabled="true" to keep the focus |
+| `display-1` | `fs-32` | review | the largest size here |
+| `display-2` | `fs-32` | review | the largest size here |
+| `display-3` | `fs-32` | review | the largest size here |
+| `display-4` | `fs-32` | review | the largest size here |
+| `display-5` | `fs-32` | review | the largest size here |
+| `display-6` | `fs-32` | review | the largest size here |
+| `dropdown` | — | remove | no wrapper: the menu flips by itself |
+| `dropdown-center` | — | remove | no wrapper: the menu flips by itself |
+| `dropdown-divider` | `menu-divider` | rename |  |
+| `dropdown-header` | `menu-header` | rename |  |
+| `dropdown-item` | `menu-item` | rename | role="menuitem" |
+| `dropdown-item-text` | — | review | menu-header, or plain text |
+| `dropdown-menu` | `menu` | rename | with popover and role="menu" |
+| `dropdown-menu-dark` | — | remove | the theme sets it |
+| `dropdown-menu-end` | — | remove | the menu meets its button's end edge by default |
+| `dropdown-menu-start` | `menu-start` | rename |  |
+| `dropdown-toggle` | — | review | the button: commandfor + command="toggle-popover" + aria-haspopup="menu"; a chevron is an icon |
+| `dropdown-toggle-split` | — | review | a btn-group of the action and a btn-icon that opens the menu |
+| `dropend` | — | remove | no wrapper: the menu flips by itself |
+| `dropstart` | — | remove | no wrapper: the menu flips by itself |
+| `dropup` | — | remove | no wrapper: the menu flips by itself |
+| `dropup-center` | — | remove | no wrapper: the menu flips by itself |
+| `end-100` | — | missing | only 0 here |
+| `end-50` | — | missing | only 0 here |
+| `fade` | — | remove | the components animate themselves, and not for people who ask for less motion |
+| `figure` | — | missing |  |
+| `figure-caption` | — | missing |  |
+| `figure-img` | — | missing |  |
+| `fixed-bottom` | — | review | position-fixed with top-0 or bottom-0, start-0 and end-0 |
+| `fixed-top` | — | review | position-fixed with top-0 or bottom-0, start-0 and end-0 |
+| `float-end` | — | missing | no floats: flex or grid, with ms-auto or justify-content-end |
+| `float-none` | — | missing | no floats: flex or grid, with ms-auto or justify-content-end |
+| `float-start` | — | missing | no floats: flex or grid, with ms-auto or justify-content-end |
+| `focus-ring` | — | remove | the focus ring is built in, 3:1 in both themes |
+| `focus-ring-danger` | — | remove | the focus ring is built in, 3:1 in both themes |
+| `focus-ring-dark` | — | remove | the focus ring is built in, 3:1 in both themes |
+| `focus-ring-info` | — | remove | the focus ring is built in, 3:1 in both themes |
+| `focus-ring-light` | — | remove | the focus ring is built in, 3:1 in both themes |
+| `focus-ring-primary` | — | remove | the focus ring is built in, 3:1 in both themes |
+| `focus-ring-secondary` | — | remove | the focus ring is built in, 3:1 in both themes |
+| `focus-ring-success` | — | remove | the focus ring is built in, 3:1 in both themes |
+| `focus-ring-warning` | — | remove | the focus ring is built in, 3:1 in both themes |
+| `form-check-inline` | — | review | hstack gap-16 around the labels |
+| `form-check-input` | — | review | check, radio or switch on the input, by its type |
+| `form-check-label` | — | remove | the label is the form-check around the input |
+| `form-check-reverse` | — | missing |  |
+| `form-control-color` | — | review | a native <input type="color"> in the module's CSS |
+| `form-control-plaintext` | — | review | readonly on a form-control, or plain text |
+| `form-range` | — | missing |  |
+| `form-switch` | — | review | switch on the input, with role="switch" |
+| `fs-1` | `fs-32` | value | 40 px in Bootstrap; 32 is the largest here |
+| `fs-2` | `fs-32` | value | 32 px |
+| `fs-3` | `fs-24` | value | 28 px in Bootstrap |
+| `fs-4` | `fs-24` | value | 24 px |
+| `fs-5` | `fs-20` | value | 20 px |
+| `fs-6` | `fs-16` | value | 16 px |
+| `fw-bold` | `fw-700` | rename |  |
+| `fw-bolder` | — | review | the weights are 400, 500, 600 and 700 |
+| `fw-light` | — | review | the weights are 400, 500, 600 and 700 |
+| `fw-lighter` | — | review | the weights are 400, 500, 600 and 700 |
+| `fw-medium` | `fw-500` | rename |  |
+| `fw-normal` | `fw-400` | rename |  |
+| `fw-semibold` | `fw-600` | rename |  |
+| `g-0` | `gap-0` | grid | on the grid parent |
+| `g-1` | `gap-4` | grid | on the grid parent |
+| `g-2` | `gap-8` | grid | on the grid parent |
+| `g-3` | `gap-16` | grid | on the grid parent |
+| `g-4` | `gap-24` | grid | on the grid parent |
+| `g-5` | `gap-48` | grid | on the grid parent |
+| `gap-1` | `gap-4` | value | the number is the pixels |
+| `gap-2` | `gap-8` | value | reused — gap-2 means another thing in REDZ.UI; the number is the pixels |
+| `gap-3` | `gap-16` | value | the number is the pixels |
+| `gap-4` | `gap-24` | value | reused — gap-4 means another thing in REDZ.UI; the number is the pixels |
+| `gap-5` | `gap-48` | value | the number is the pixels |
+| `gx-0` | `column-gap-0` | grid | on the grid parent |
+| `gx-1` | `column-gap-4` | grid | on the grid parent |
+| `gx-2` | `column-gap-8` | grid | on the grid parent |
+| `gx-3` | `column-gap-16` | grid | on the grid parent |
+| `gx-4` | `column-gap-24` | grid | on the grid parent |
+| `gx-5` | `column-gap-48` | grid | on the grid parent |
+| `gy-0` | `row-gap-0` | grid | on the grid parent |
+| `gy-1` | `row-gap-4` | grid | on the grid parent |
+| `gy-2` | `row-gap-8` | grid | on the grid parent |
+| `gy-3` | `row-gap-16` | grid | on the grid parent |
+| `gy-4` | `row-gap-24` | grid | on the grid parent |
+| `gy-5` | `row-gap-48` | grid | on the grid parent |
+| `h1` | — | review | the h1–h4 sizes are the elements'; fs-* for another |
+| `h2` | — | review | the h1–h4 sizes are the elements'; fs-* for another |
+| `h3` | — | review | the h1–h4 sizes are the elements'; fs-* for another |
+| `h4` | — | review | the h1–h4 sizes are the elements'; fs-* for another |
+| `h5` | — | review | the h1–h4 sizes are the elements'; fs-* for another |
+| `h6` | — | review | the h1–h4 sizes are the elements'; fs-* for another |
+| `has-validation` | — | remove | fields have no success state |
+| `hiding` | — | state | closed: no attribute |
+| `icon-link` | — | review | a link with its icon: hstack gap-4 |
+| `icon-link-hover` | — | review | a link with its icon: hstack gap-4 |
+| `img-fluid` | — | review | images never overflow their box here; w-100 to fill it |
+| `img-thumbnail` | — | missing |  |
+| `initialism` | — | missing |  |
+| `input-group` | — | missing | the missing basics; an icon inside a field is form-adorn |
+| `input-group-text` | — | missing | the missing basics; an icon inside a field is form-adorn |
+| `invalid-tooltip` | `invalid-feedback` | review | the error under the field |
+| `is-invalid` | — | state | aria-invalid="true" on the control |
+| `is-valid` | — | remove | fields have no success state |
+| `lead` | `fs-16 text-muted` | review | a lead paragraph |
+| `lh-1` | — | review | line heights are px here: lh-16, lh-20, lh-24, lh-28 |
+| `lh-base` | — | review | line heights are px here: lh-16, lh-20, lh-24, lh-28 |
+| `link-body-emphasis` | — | review | a link is the accent; text-* for a tone |
+| `link-danger` | — | review | a link is the accent; text-* for a tone |
+| `link-dark` | — | review | a link is the accent; text-* for a tone |
+| `link-info` | — | review | a link is the accent; text-* for a tone |
+| `link-light` | — | review | a link is the accent; text-* for a tone |
+| `link-offset-1` | — | missing |  |
+| `link-offset-1-hover` | — | missing |  |
+| `link-offset-2` | — | missing |  |
+| `link-offset-2-hover` | — | missing |  |
+| `link-offset-3` | — | missing |  |
+| `link-offset-3-hover` | — | missing |  |
+| `link-opacity-10` | — | missing |  |
+| `link-opacity-10-hover` | — | missing |  |
+| `link-opacity-100` | — | missing |  |
+| `link-opacity-100-hover` | — | missing |  |
+| `link-opacity-25` | — | missing |  |
+| `link-opacity-25-hover` | — | missing |  |
+| `link-opacity-50` | — | missing |  |
+| `link-opacity-50-hover` | — | missing |  |
+| `link-opacity-75` | — | missing |  |
+| `link-opacity-75-hover` | — | missing |  |
+| `link-primary` | — | review | a link is the accent; text-* for a tone |
+| `link-secondary` | — | review | a link is the accent; text-* for a tone |
+| `link-success` | — | review | a link is the accent; text-* for a tone |
+| `link-underline` | — | missing |  |
+| `link-underline-danger` | — | missing |  |
+| `link-underline-dark` | — | missing |  |
+| `link-underline-info` | — | missing |  |
+| `link-underline-light` | — | missing |  |
+| `link-underline-opacity-0` | — | missing |  |
+| `link-underline-opacity-0-hover` | — | missing |  |
+| `link-underline-opacity-10` | — | missing |  |
+| `link-underline-opacity-10-hover` | — | missing |  |
+| `link-underline-opacity-100` | — | missing |  |
+| `link-underline-opacity-100-hover` | — | missing |  |
+| `link-underline-opacity-25` | — | missing |  |
+| `link-underline-opacity-25-hover` | — | missing |  |
+| `link-underline-opacity-50` | — | missing |  |
+| `link-underline-opacity-50-hover` | — | missing |  |
+| `link-underline-opacity-75` | — | missing |  |
+| `link-underline-opacity-75-hover` | — | missing |  |
+| `link-underline-primary` | — | missing |  |
+| `link-underline-secondary` | — | missing |  |
+| `link-underline-success` | — | missing |  |
+| `link-underline-warning` | — | missing |  |
+| `link-warning` | — | review | a link is the accent; text-* for a tone |
+| `list-group` | — | missing | the missing basics |
+| `list-group-flush` | — | missing | the missing basics |
+| `list-group-horizontal` | — | missing | the missing basics |
+| `list-group-item` | — | missing | the missing basics |
+| `list-group-item-action` | — | missing | the missing basics |
+| `list-group-item-danger` | — | missing | the missing basics |
+| `list-group-item-dark` | — | missing | the missing basics |
+| `list-group-item-info` | — | missing | the missing basics |
+| `list-group-item-light` | — | missing | the missing basics |
+| `list-group-item-primary` | — | missing | the missing basics |
+| `list-group-item-secondary` | — | missing | the missing basics |
+| `list-group-item-success` | — | missing | the missing basics |
+| `list-group-item-warning` | — | missing | the missing basics |
+| `list-group-numbered` | — | missing | the missing basics |
+| `list-inline` | — | review | hstack flex-wrap |
+| `list-inline-item` | — | review | hstack flex-wrap |
+| `list-unstyled` | — | review | vstack, or a component's own list |
+| `m-1` | `m-4` | value | the number is the pixels |
+| `m-2` | `m-8` | value | reused — m-2 means another thing in REDZ.UI; the number is the pixels |
+| `m-3` | `m-16` | value | the number is the pixels |
+| `m-4` | `m-24` | value | reused — m-4 means another thing in REDZ.UI; the number is the pixels |
+| `m-5` | `m-48` | value | the number is the pixels |
+| `mark` | — | missing |  |
+| `mb-1` | `mb-4` | value | the number is the pixels |
+| `mb-2` | `mb-8` | value | reused — mb-2 means another thing in REDZ.UI; the number is the pixels |
+| `mb-3` | `mb-16` | value | the number is the pixels |
+| `mb-4` | `mb-24` | value | reused — mb-4 means another thing in REDZ.UI; the number is the pixels |
+| `mb-5` | `mb-48` | value | the number is the pixels |
+| `me-1` | `me-4` | value | the number is the pixels |
+| `me-2` | `me-8` | value | reused — me-2 means another thing in REDZ.UI; the number is the pixels |
+| `me-3` | `me-16` | value | the number is the pixels |
+| `me-4` | `me-24` | value | reused — me-4 means another thing in REDZ.UI; the number is the pixels |
+| `me-5` | `me-48` | value | the number is the pixels |
+| `mh-100` | — | missing |  |
+| `min-vh-100` | — | missing |  |
+| `min-vw-100` | — | missing |  |
+| `modal` | `dialog` | rename | on a <dialog>, opened by commandfor + command="show-modal" |
+| `modal-backdrop` | — | remove | the browser's ::backdrop |
+| `modal-body` | `dialog-body` | rename |  |
+| `modal-content` | — | remove | no wrappers: the <dialog> is the box |
+| `modal-dialog` | — | remove | no wrappers: the <dialog> is the box |
+| `modal-dialog-centered` | — | remove | a dialog is centered |
+| `modal-dialog-scrollable` | — | remove | the dialog's body scrolls by itself |
+| `modal-footer` | `dialog-footer` | rename |  |
+| `modal-fullscreen` | — | missing |  |
+| `modal-header` | `dialog-header` | rename |  |
+| `modal-static` | — | remove | closedby="closerequest" |
+| `modal-title` | `dialog-title` | rename |  |
+| `ms-1` | `ms-4` | value | the number is the pixels |
+| `ms-2` | `ms-8` | value | reused — ms-2 means another thing in REDZ.UI; the number is the pixels |
+| `ms-3` | `ms-16` | value | the number is the pixels |
+| `ms-4` | `ms-24` | value | reused — ms-4 means another thing in REDZ.UI; the number is the pixels |
+| `ms-5` | `ms-48` | value | the number is the pixels |
+| `mt-1` | `mt-4` | value | the number is the pixels |
+| `mt-2` | `mt-8` | value | reused — mt-2 means another thing in REDZ.UI; the number is the pixels |
+| `mt-3` | `mt-16` | value | the number is the pixels |
+| `mt-4` | `mt-24` | value | reused — mt-4 means another thing in REDZ.UI; the number is the pixels |
+| `mt-5` | `mt-48` | value | the number is the pixels |
+| `mw-100` | — | review | max-w-* by px |
+| `mx-1` | `mx-4` | value | the number is the pixels |
+| `mx-2` | `mx-8` | value | reused — mx-2 means another thing in REDZ.UI; the number is the pixels |
+| `mx-3` | `mx-16` | value | the number is the pixels |
+| `mx-4` | `mx-24` | value | reused — mx-4 means another thing in REDZ.UI; the number is the pixels |
+| `mx-5` | `mx-48` | value | the number is the pixels |
+| `my-1` | `my-4` | value | the number is the pixels |
+| `my-2` | `my-8` | value | reused — my-2 means another thing in REDZ.UI; the number is the pixels |
+| `my-3` | `my-16` | value | the number is the pixels |
+| `my-4` | `my-24` | value | reused — my-4 means another thing in REDZ.UI; the number is the pixels |
+| `my-5` | `my-48` | value | the number is the pixels |
+| `nav-fill` | — | missing |  |
+| `nav-item` | — | remove | links sit straight in the nav |
+| `nav-justified` | — | missing |  |
+| `nav-tabs` | `nav-underline` | rename | tabs are drawn as an underline |
+| `navbar` | — | review | the shell's app-header |
+| `navbar-brand` | — | review | the shell's app-header |
+| `navbar-collapse` | — | review | the shell's app-header |
+| `navbar-dark` | — | review | the shell's app-header |
+| `navbar-expand` | — | review | the shell's app-header |
+| `navbar-nav` | — | review | the shell's app-header |
+| `navbar-nav-scroll` | — | review | the shell's app-header |
+| `navbar-text` | — | review | the shell's app-header |
+| `navbar-toggler` | — | review | the shell's app-header |
+| `navbar-toggler-icon` | — | review | the shell's app-header |
+| `object-fit-scale` | — | review | object-fit-contain is the nearest |
+| `offcanvas` | `drawer` | rename | on a <dialog>, opened by command="show-modal" |
+| `offcanvas-backdrop` | — | remove | the browser's ::backdrop |
+| `offcanvas-body` | `drawer-body` | rename |  |
+| `offcanvas-bottom` | — | missing |  |
+| `offcanvas-end` | `drawer` | rename | on a <dialog>, opened by command="show-modal" |
+| `offcanvas-header` | `drawer-header` | rename |  |
+| `offcanvas-start` | `drawer drawer-start` | rename |  |
+| `offcanvas-title` | `drawer-title` | rename |  |
+| `offcanvas-top` | — | missing |  |
+| `offset-1` | — | review | no offsets: a span with an empty track before it |
+| `offset-10` | — | review | no offsets: a span with an empty track before it |
+| `offset-11` | — | review | no offsets: a span with an empty track before it |
+| `offset-2` | — | review | no offsets: a span with an empty track before it |
+| `offset-3` | — | review | no offsets: a span with an empty track before it |
+| `offset-4` | — | review | no offsets: a span with an empty track before it |
+| `offset-5` | — | review | no offsets: a span with an empty track before it |
+| `offset-6` | — | review | no offsets: a span with an empty track before it |
+| `offset-7` | — | review | no offsets: a span with an empty track before it |
+| `offset-8` | — | review | no offsets: a span with an empty track before it |
+| `offset-9` | — | review | no offsets: a span with an empty track before it |
+| `p-1` | `p-4` | value | the number is the pixels |
+| `p-2` | `p-8` | value | reused — p-2 means another thing in REDZ.UI; the number is the pixels |
+| `p-3` | `p-16` | value | the number is the pixels |
+| `p-4` | `p-24` | value | reused — p-4 means another thing in REDZ.UI; the number is the pixels |
+| `p-5` | `p-48` | value | the number is the pixels |
+| `page-item` | — | missing | lists here page by “Next 25” (keyset), no page numbers |
+| `page-link` | — | missing | lists here page by “Next 25” (keyset), no page numbers |
+| `pagination` | — | missing | lists here page by “Next 25” (keyset), no page numbers |
+| `pb-1` | `pb-4` | value | the number is the pixels |
+| `pb-2` | `pb-8` | value | reused — pb-2 means another thing in REDZ.UI; the number is the pixels |
+| `pb-3` | `pb-16` | value | the number is the pixels |
+| `pb-4` | `pb-24` | value | reused — pb-4 means another thing in REDZ.UI; the number is the pixels |
+| `pb-5` | `pb-48` | value | the number is the pixels |
+| `pe-1` | `pe-4` | value | the number is the pixels |
+| `pe-2` | `pe-8` | value | reused — pe-2 means another thing in REDZ.UI; the number is the pixels |
+| `pe-3` | `pe-16` | value | the number is the pixels |
+| `pe-4` | `pe-24` | value | reused — pe-4 means another thing in REDZ.UI; the number is the pixels |
+| `pe-5` | `pe-48` | value | the number is the pixels |
+| `placeholder-glow` | — | remove | placeholders pulse by themselves |
+| `placeholder-wave` | — | remove | placeholders pulse by themselves |
+| `placeholder-xs` | — | review | size by the height of the bar |
+| `pointer-event` | — | remove | carousel only |
+| `popover` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
+| `popover-arrow` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
+| `popover-body` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
+| `popover-header` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
+| `progress` | — | missing | the missing basics: <progress> and <meter> |
+| `progress-bar` | — | missing | the missing basics: <progress> and <meter> |
+| `progress-bar-animated` | — | missing | the missing basics: <progress> and <meter> |
+| `progress-bar-striped` | — | missing | the missing basics: <progress> and <meter> |
+| `progress-stacked` | — | missing | the missing basics: <progress> and <meter> |
+| `ps-1` | `ps-4` | value | the number is the pixels |
+| `ps-2` | `ps-8` | value | reused — ps-2 means another thing in REDZ.UI; the number is the pixels |
+| `ps-3` | `ps-16` | value | the number is the pixels |
+| `ps-4` | `ps-24` | value | reused — ps-4 means another thing in REDZ.UI; the number is the pixels |
+| `ps-5` | `ps-48` | value | the number is the pixels |
+| `pt-1` | `pt-4` | value | the number is the pixels |
+| `pt-2` | `pt-8` | value | reused — pt-2 means another thing in REDZ.UI; the number is the pixels |
+| `pt-3` | `pt-16` | value | the number is the pixels |
+| `pt-4` | `pt-24` | value | reused — pt-4 means another thing in REDZ.UI; the number is the pixels |
+| `pt-5` | `pt-48` | value | the number is the pixels |
+| `px-1` | `px-4` | value | the number is the pixels |
+| `px-2` | `px-8` | value | reused — px-2 means another thing in REDZ.UI; the number is the pixels |
+| `px-3` | `px-16` | value | the number is the pixels |
+| `px-4` | `px-24` | value | reused — px-4 means another thing in REDZ.UI; the number is the pixels |
+| `px-5` | `px-48` | value | the number is the pixels |
+| `py-1` | `py-4` | value | the number is the pixels |
+| `py-2` | `py-8` | value | reused — py-2 means another thing in REDZ.UI; the number is the pixels |
+| `py-3` | `py-16` | value | the number is the pixels |
+| `py-4` | `py-24` | value | reused — py-4 means another thing in REDZ.UI; the number is the pixels |
+| `py-5` | `py-48` | value | the number is the pixels |
+| `ratio` | — | missing | the missing basics: aspect-ratio |
+| `ratio-16x9` | — | missing | the missing basics: aspect-ratio |
+| `ratio-1x1` | — | missing | the missing basics: aspect-ratio |
+| `ratio-21x9` | — | missing | the missing basics: aspect-ratio |
+| `ratio-4x3` | — | missing | the missing basics: aspect-ratio |
+| `rounded-1` | `rounded-4` | value | 4 px |
+| `rounded-2` | `rounded-6` | value | 6 px |
+| `rounded-3` | `rounded-8` | value | 8 px |
+| `rounded-4` | `rounded-16` | value | reused — rounded-4 means another thing in REDZ.UI; 16 px |
+| `rounded-5` | — | review | 32 px in Bootstrap: rounded-16 or rounded-full |
+| `rounded-bottom` | — | missing | no one-side radii |
+| `rounded-bottom-0` | — | missing | no one-side radii |
+| `rounded-bottom-1` | — | missing | no one-side radii |
+| `rounded-bottom-2` | — | missing | no one-side radii |
+| `rounded-bottom-3` | — | missing | no one-side radii |
+| `rounded-bottom-4` | — | missing | no one-side radii |
+| `rounded-bottom-5` | — | missing | no one-side radii |
+| `rounded-bottom-circle` | — | missing | no one-side radii |
+| `rounded-bottom-pill` | — | missing | no one-side radii |
+| `rounded-circle` | `rounded-full` | rename |  |
+| `rounded-end` | — | missing | no one-side radii |
+| `rounded-end-0` | — | missing | no one-side radii |
+| `rounded-end-1` | — | missing | no one-side radii |
+| `rounded-end-2` | — | missing | no one-side radii |
+| `rounded-end-3` | — | missing | no one-side radii |
+| `rounded-end-4` | — | missing | no one-side radii |
+| `rounded-end-5` | — | missing | no one-side radii |
+| `rounded-end-circle` | — | missing | no one-side radii |
+| `rounded-end-pill` | — | missing | no one-side radii |
+| `rounded-pill` | `rounded-full` | rename |  |
+| `rounded-start` | — | missing | no one-side radii |
+| `rounded-start-0` | — | missing | no one-side radii |
+| `rounded-start-1` | — | missing | no one-side radii |
+| `rounded-start-2` | — | missing | no one-side radii |
+| `rounded-start-3` | — | missing | no one-side radii |
+| `rounded-start-4` | — | missing | no one-side radii |
+| `rounded-start-5` | — | missing | no one-side radii |
+| `rounded-start-circle` | — | missing | no one-side radii |
+| `rounded-start-pill` | — | missing | no one-side radii |
+| `rounded-top` | — | missing | no one-side radii |
+| `rounded-top-0` | — | missing | no one-side radii |
+| `rounded-top-1` | — | missing | no one-side radii |
+| `rounded-top-2` | — | missing | no one-side radii |
+| `rounded-top-3` | — | missing | no one-side radii |
+| `rounded-top-4` | — | missing | no one-side radii |
+| `rounded-top-5` | — | missing | no one-side radii |
+| `rounded-top-circle` | — | missing | no one-side radii |
+| `rounded-top-pill` | — | missing | no one-side radii |
+| `row` | `grid` | grid | on the parent, with cols-N for equal columns or cols-12 for spans; no gutters to undo |
+| `row-cols-1` | `cols-1` | grid | on the same parent |
+| `row-cols-2` | `cols-2` | grid | on the same parent |
+| `row-cols-3` | `cols-3` | grid | on the same parent |
+| `row-cols-4` | `cols-4` | grid | on the same parent |
+| `row-cols-5` | `cols-5` | grid | on the same parent |
+| `row-cols-6` | `cols-6` | grid | on the same parent |
+| `row-cols-auto` | — | review | items as wide as their content: hstack flex-wrap |
+| `row-gap-1` | `row-gap-4` | value | the number is the pixels |
+| `row-gap-2` | `row-gap-8` | value | reused — row-gap-2 means another thing in REDZ.UI; the number is the pixels |
+| `row-gap-3` | `row-gap-16` | value | the number is the pixels |
+| `row-gap-4` | `row-gap-24` | value | reused — row-gap-4 means another thing in REDZ.UI; the number is the pixels |
+| `row-gap-5` | `row-gap-48` | value | the number is the pixels |
+| `shadow` | `shadow-2` | rename |  |
+| `show` | — | state | the browser's [open] and :popover-open |
+| `showing` | — | state | the browser's [open] and :popover-open |
+| `small` | — | review | fs-12, or the <small> element |
+| `spinner-grow` | — | missing |  |
+| `start-100` | — | missing | only 0 here |
+| `start-50` | — | missing | only 0 here |
+| `sticky-bottom` | — | review | position-sticky with top-0 or bottom-0 |
+| `sticky-top` | — | review | position-sticky with top-0 or bottom-0 |
+| `stretched-link` | — | missing |  |
+| `tab-content` | — | remove | panels are siblings with role="tabpanel", hidden when not selected |
+| `tab-pane` | — | remove | panels are siblings with role="tabpanel", hidden when not selected |
+| `table-active` | — | review | aria-selected or aria-current on the row |
+| `table-bordered` | — | missing |  |
+| `table-borderless` | — | missing |  |
+| `table-dark` | — | review | row tones are danger, warning and secondary |
+| `table-group-divider` | — | missing |  |
+| `table-info` | — | review | row tones are danger, warning and secondary |
+| `table-light` | — | review | row tones are danger, warning and secondary |
+| `table-primary` | — | review | row tones are danger, warning and secondary |
+| `table-responsive` | — | review | the card's body holds the table; columns hide below md: |
+| `table-striped` | — | missing |  |
+| `table-striped-columns` | — | missing |  |
+| `table-success` | — | review | row tones are danger, warning and secondary |
+| `text-bg-danger` | `badge-danger` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
+| `text-bg-dark` | — | review | a plain badge, or a tone |
+| `text-bg-info` | `badge-info` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
+| `text-bg-light` | — | review | a plain badge, or a tone |
+| `text-bg-primary` | `badge-primary` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
+| `text-bg-secondary` | `badge-secondary` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
+| `text-bg-success` | `badge-success` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
+| `text-bg-warning` | `badge-warning` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
+| `text-black` | — | review | no white, black, light or dark: text-body, text-muted or a tone |
+| `text-black-50` | — | review | no white, black, light or dark: text-body, text-muted or a tone |
+| `text-body-emphasis` | `text-body` | rename |  |
+| `text-body-secondary` | `text-muted` | rename |  |
+| `text-body-tertiary` | `text-faint` | rename |  |
+| `text-danger-emphasis` | `text-danger` | rename | a tone's text color is already its emphasis |
+| `text-dark` | — | review | no white, black, light or dark: text-body, text-muted or a tone |
+| `text-dark-emphasis` | `text-body` | review | no light or dark: the text color |
+| `text-info-emphasis` | `text-info` | rename | a tone's text color is already its emphasis |
+| `text-light` | — | review | no white, black, light or dark: text-body, text-muted or a tone |
+| `text-light-emphasis` | `text-body` | review | no light or dark: the text color |
+| `text-opacity-100` | — | missing |  |
+| `text-opacity-25` | — | missing |  |
+| `text-opacity-50` | — | missing |  |
+| `text-opacity-75` | — | missing |  |
+| `text-primary-emphasis` | `text-primary` | rename | a tone's text color is already its emphasis |
+| `text-secondary-emphasis` | `text-secondary` | rename | a tone's text color is already its emphasis |
+| `text-success-emphasis` | `text-success` | rename | a tone's text color is already its emphasis |
+| `text-warning-emphasis` | `text-warning` | rename | a tone's text color is already its emphasis |
+| `text-white` | — | review | no white, black, light or dark: text-body, text-muted or a tone |
+| `text-white-50` | — | review | no white, black, light or dark: text-body, text-muted or a tone |
+| `toast-header` | — | review | REDZ.ui.toast builds the toast from its title, text and tone |
+| `tooltip-arrow` | — | remove | the tooltip is one element |
+| `tooltip-inner` | — | remove | the tooltip is one element |
+| `top-100` | — | missing | only 0 here |
+| `top-50` | — | missing | only 0 here |
+| `translate-middle` | — | missing | center by grid or flex |
+| `translate-middle-x` | — | missing | center by grid or flex |
+| `translate-middle-y` | — | missing | center by grid or flex |
+| `valid-feedback` | — | remove | fields have no success state |
+| `valid-tooltip` | — | remove | fields have no success state |
+| `vh-100` | — | missing |  |
+| `visually-hidden-focusable` | — | missing |  |
+| `vr` | — | missing |  |
+| `vw-100` | — | missing |  |
+| `was-validated` | — | state | the browser's :user-invalid shows after the person edits |
+| `z-0` | — | missing | the components stack themselves |
+| `z-1` | — | missing | the components stack themselves |
+| `z-2` | — | missing | the components stack themselves |
+| `z-3` | — | missing | the components stack themselves |
+| `z-n1` | — | missing | the components stack themselves |
+| `data-bs-toggle="modal"` | `commandfor="ID" command="show-modal"` | trigger | on the button; the dialog is a <dialog id="ID"> |
+| `data-bs-toggle="offcanvas"` | `commandfor="ID" command="show-modal"` | trigger | the drawer is a <dialog id="ID"> |
+| `data-bs-toggle="dropdown"` | `commandfor="ID" command="toggle-popover" aria-haspopup="menu"` | trigger | the menu gets popover and role="menu" |
+| `data-bs-toggle="tab"` | `role="tab" aria-controls="ID"` | trigger | in a role="tablist"; the library selects and shows the panel |
+| `data-bs-toggle="pill"` | `role="tab" aria-controls="ID"` | trigger | in a role="tablist" |
+| `data-bs-toggle="button"` | `aria-pressed` | review | switch aria-pressed in your click handler |
+| `data-bs-toggle="tooltip"` | `commandfor="ID" command="toggle-popover"` | review | a toggletip at the browser floor |
+| `data-bs-toggle="popover"` | — | missing |  |
+| `data-bs-toggle="collapse"` | — | missing | the missing basics: <details> and <summary> |
+| `data-bs-target` | `commandfor` | trigger | the id alone, without "#" |
+| `data-bs-dismiss="modal"` | `commandfor="ID" command="close"` | trigger |  |
+| `data-bs-dismiss="offcanvas"` | `commandfor="ID" command="close"` | trigger |  |
+| `data-bs-dismiss="alert"` | — | review | remove the alert in your script |
+| `data-bs-dismiss="toast"` | — | remove | REDZ.ui.toast adds its close button |
+| `data-bs-backdrop="static"` | `closedby="closerequest"` | trigger | Esc closes it, a click outside does not |
+| `data-bs-keyboard="false"` | `closedby="none"` | trigger | only its buttons close it |
+| `data-bs-theme` | `data-theme` | rename | light or dark on <html> |
+| `data-bs-placement` | — | remove | anchor positioning places and flips the menu |
+| `data-bs-offset` | — | remove | anchor positioning places and flips the menu |
+| `data-bs-auto-close` | — | remove | anchor positioning places and flips the menu |
+| `data-bs-display` | — | remove | anchor positioning places and flips the menu |
+| `data-bs-reference` | — | remove | anchor positioning places and flips the menu |
+| `data-bs-boundary` | — | remove | anchor positioning places and flips the menu |
+| `data-bs-popper-config` | — | remove | anchor positioning places and flips the menu |
+| `data-bs-spy` | — | missing | scrollspy and carousel |
+| `data-bs-ride` | — | missing | scrollspy and carousel |
+| `data-bs-slide` | — | missing | scrollspy and carousel |
+| `data-bs-slide-to` | — | missing | scrollspy and carousel |
+| `data-bs-interval` | — | missing | scrollspy and carousel |
+| `bootstrap.Modal` | `dialog.showModal() and dialog.close()` | trigger |  |
+| `bootstrap.Offcanvas` | `dialog.showModal() and dialog.close()` | trigger |  |
+| `bootstrap.Dropdown` | `menu.showPopover(), menu.hidePopover(), menu.togglePopover()` | trigger |  |
+| `bootstrap.Tab` | `tab.click()` | review | the library selects on click and by the keys |
+| `bootstrap.Toast` | `REDZ.ui.toast({title, text, tone})` | trigger |  |
+| `bootstrap.Tooltip` | — | remove |  |
+| `bootstrap.Popover` | — | remove |  |
+| `bootstrap.Collapse` | — | missing |  |
+| `show.bs.modal` | `toggle` | review | the dialog's toggle event, or code right after showModal() |
+| `shown.bs.modal` | `toggle` | review | the dialog's toggle event, or code right after showModal() |
+| `hide.bs.modal` | `cancel` | review | the dialog's cancel event (Esc); your buttons close it |
+| `hidden.bs.modal` | `close` | rename | the dialog's close event; dialog.returnValue holds the closing button's value |
+| `show.bs.dropdown` | `toggle` | rename | the popover's toggle event; event.newState is "open" or "closed" |
+| `shown.bs.dropdown` | `toggle` | rename | the popover's toggle event; event.newState is "open" or "closed" |
+| `hide.bs.dropdown` | `toggle` | rename | the popover's toggle event; event.newState is "open" or "closed" |
+| `hidden.bs.dropdown` | `toggle` | rename | the popover's toggle event; event.newState is "open" or "closed" |
+| `shown.bs.tab` | — | review | watch aria-selected, or the tab's click |
+
+# Buttons
+
+A button runs an action; a link drawn as a button goes somewhere. One class, `btn`, then a tone, a size or an icon when the button needs one.
+
+## Examples
+
+The plain `btn` is neutral. `btn-primary` marks the one main action of a screen; the other tones say what an action does.
+
+```html
+<button class="btn btn-primary" type="button">Save</button>
+<button class="btn" type="button">Cancel</button>
+<button class="btn btn-secondary" type="button">Duplicate</button>
+<button class="btn btn-success" type="button">Publish</button>
+<button class="btn btn-danger" type="button">Delete</button>
+<button class="btn btn-warning" type="button">Withdraw</button>
+<button class="btn btn-info" type="button">Preview</button>
+```
+
+### Outline, subtle, text and link
+
+Quieter forms of the same tones for secondary actions, rows and toolbars. `btn-text` has no fill until hovered; `btn-link` reads as a link and keeps a button's size.
+
+```html
+<button class="btn btn-outline-primary" type="button">Outline</button>
+<button class="btn btn-outline-danger" type="button">Outline danger</button>
+<button class="btn btn-subtle-primary" type="button">Subtle</button>
+<button class="btn btn-subtle-danger" type="button">Subtle danger</button>
+<button class="btn btn-text" type="button">Text</button>
+<button class="btn btn-link" type="button">Link</button>
+```
+
+### Sizes
+
+A size is a word: `btn-xs` 24 px, `btn-sm` 28 px, the default 32 px, `btn-lg` 40 px — the heights of every control of the same size.
+
+```html
+<button class="btn btn-primary btn-xs" type="button">Extra small</button>
+<button class="btn btn-primary btn-sm" type="button">Small</button>
+<button class="btn btn-primary" type="button">Default</button>
+<button class="btn btn-primary btn-lg" type="button">Large</button>
+```
+
+### Icons
+
+An icon sits beside the words, or alone in a square `btn-icon` whose name is its `aria-label`. `btn-close` draws the close glyph by itself.
+
+```html
+<button class="btn" type="button"><i class="bi bi-plus-lg" aria-hidden="true"></i>New excursion</button>
+<a class="btn" href="#btn-icons">Open the site<i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a>
+<button class="btn btn-icon" type="button" aria-label="Edit"><i class="bi bi-pencil" aria-hidden="true"></i></button>
+<button class="btn btn-icon btn-text" type="button" aria-label="More actions"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
+<button class="btn btn-icon btn-sm btn-subtle-danger" type="button" aria-label="Remove"><i class="bi bi-trash3" aria-hidden="true"></i></button>
+<button class="btn-close" type="button" aria-label="Close"></button>
+```
+
+### Groups and toolbars
+
+`btn-group` joins buttons into one control — here a choice of view, each button pressed or not. `btn-toolbar` lays groups and buttons out in a wrapping row.
+
+```html
+<div class="btn-toolbar" role="group" aria-label="List view">
+	<div class="btn-group" role="group" aria-label="Layout">
+		<button class="btn" type="button" aria-pressed="true">List</button>
+		<button class="btn" type="button" aria-pressed="false">Board</button>
+		<button class="btn" type="button" aria-pressed="false">Calendar</button>
+	</div>
+	<div class="btn-group" role="group" aria-label="Export">
+		<button class="btn" type="button">Export</button>
+		<button class="btn btn-icon" type="button" aria-label="Export options"><i class="bi bi-chevron-down" aria-hidden="true"></i></button>
+	</div>
+</div>
+```
+
+### Toggle and busy
+
+A toggle carries `aria-pressed`. While its action runs, `REDZ.ui.busy(button, promise)` shows a spinner in the button and marks it `aria-disabled`: it keeps the focus and ignores clicks until the promise settles.
+
+```html
+<button class="btn" type="button" aria-pressed="false" data-docs-run="toggle"><i class="bi bi-pin-angle" aria-hidden="true"></i>Pin</button>
+<button class="btn btn-primary" type="button" data-docs-run="busy-button">Save for 2 seconds</button>
+```
+
+## States
+
+A state is the attribute accessibility needs anyway, on the button itself: no `active` or `disabled` classes. `aria-expanded` is set by the browser on a button that opens a menu or a dialog.
+
+## Keyboard and accessibility
+
+- `<button type="button">` for an action, `<a href>` for a place; `btn` draws both the same. Enter and Space press a button, Enter follows a link.
+- A button with only an icon takes its name from `aria-label`; the icon is `aria-hidden="true"`.
+- `disabled` takes a button out of the tab order and hides why. `aria-disabled="true"` keeps it focusable — so a tooltip can say why — and the library swallows its clicks.
+- A button that opens a menu or a dialog uses the browser's command: `commandfor` + `command`, never `data-bs-toggle`.
+- The focus ring is 2 px of `--redz-focus`, 3:1 against the page in both themes.
+
+## Tokens
+
+From [`css/components/btn.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/btn.css). It declares `--redz-btn-bg`, `--redz-btn-fg`, `--redz-btn-hover`, `--redz-btn-hover-fg` on its root, never on rows or items.
+
+It reads the theme's `--redz-bg-hover`, `--redz-text`, `--redz-control-height`, `--redz-space-12`, `--redz-radius-8`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-primary-subtle`, `--redz-secondary-subtle`, `--redz-success-subtle`, `--redz-danger-subtle`, `--redz-warning-subtle`, `--redz-info-subtle`, `--redz-control-height-xs`, `--redz-radius-6`, `--redz-fs-12`, `--redz-control-height-sm`, `--redz-space-8`, `--redz-control-height-lg`, `--redz-space-16`, `--redz-fs-16`, `--redz-bg-page`, `--redz-text-faint`, `--redz-text-muted`, `--redz-motion`.
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `btn-check` | — | review | a toggle is a btn with aria-pressed; a choice is radio inputs |
+| `btn-close-white` | — | remove | the close glyph takes the text color |
+| `btn-dark` | — | review | no light or dark buttons: btn or btn-text |
+| `btn-group-vertical` | — | missing |  |
+| `btn-light` | — | review | no light or dark buttons: btn or btn-text |
+| `btn-outline-dark` | — | review | btn-outline-secondary |
+| `btn-outline-light` | — | review | btn-outline-secondary |
+| `data-bs-toggle="button"` | `aria-pressed` | review | switch aria-pressed in your click handler |
+
+# Chips
+
+A chip is a small rounded choice: a filter that is on or off, a saved view, an applied filter with its count and a way to remove it.
+
+## Examples
+
+A filter chip is a toggle button: `aria-pressed` says whether it is on. A chip that opens a menu is the menu's button.
+
+```html
+<button class="chip" type="button" aria-pressed="true"><i class="bi bi-eye" aria-hidden="true"></i>Published</button>
+<button class="chip" type="button" aria-pressed="false"><i class="bi bi-pencil-square" aria-hidden="true"></i>Drafts</button>
+<button class="chip" type="button" aria-pressed="false"><i class="bi bi-translate" aria-hidden="true"></i>Language: any</button>
+<button class="chip" type="button" commandfor="chip-site-menu" command="toggle-popover" aria-haspopup="menu"><i class="bi bi-globe2" aria-hidden="true"></i>Site: all<i class="bi bi-chevron-down" aria-hidden="true"></i></button>
+<div id="chip-site-menu" class="menu menu-start" popover role="menu" aria-label="Site">
+	<button class="menu-item" type="button" role="menuitemradio" aria-checked="true">All sites</button>
+	<button class="menu-item" type="button" role="menuitemradio" aria-checked="false">lagoon.example</button>
+	<button class="menu-item" type="button" role="menuitemradio" aria-checked="false">angthong.example</button>
+</div>
+```
+
+### Saved views and applied filters
+
+Links between saved views mark the current one with `aria-current="true"`. An applied filter is a group: its name, its count in `chip-count`, and a `chip-dismiss` button named after what it removes.
+
+```html
+<a class="chip" href="#chip-views" aria-current="true">All<span class="chip-count">28</span></a>
+<a class="chip" href="#chip-views">Needs attention<span class="chip-count">3</span></a>
+<a class="chip" href="#chip-views">Mine<span class="chip-count">11</span></a>
+<span class="chip" role="group" aria-label="Filter: section Marine"><i class="bi bi-diagram-3" aria-hidden="true"></i>Section: Marine<span class="chip-count">9</span><button class="chip-dismiss" type="button" aria-label="Remove filter: section Marine"><i class="bi bi-x" aria-hidden="true"></i></button></span>
+```
+
+## States
+
+## Keyboard and accessibility
+
+- A filter chip is a `<button>` with `aria-pressed`; Space or Enter toggles it. Change the attribute when the filter changes — the look follows it.
+- A saved view is a link; the current one carries `aria-current="true"`.
+- An applied filter is `role="group"` named after the filter, and its dismiss button names what it removes — "Remove filter: section Marine", not "Remove".
+- A count is part of the chip's name; say what it counts in the words around it when it is not obvious.
+
+## Tokens
+
+From [`css/components/chip.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/chip.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-control-height-sm`, `--redz-border`, `--redz-bg`, `--redz-text`, `--redz-fs-12`, `--redz-bg-hover`, `--redz-primary-subtle`, `--redz-primary`, `--redz-text-muted`.
+
+# Menus
+
+A menu is a short list of actions or choices that opens from a button: the browser's popover, placed beside the button by CSS anchor positioning, driven by the keyboard as the WAI-ARIA menu button.
+
+## Examples
+
+The button opens the menu with the browser's command — `commandfor` names the menu, `command="toggle-popover"` opens and closes it — and the browser sets its `aria-expanded`. No script is needed to open a menu; the library adds the arrow keys.
+
+```html
+<button class="btn" type="button" commandfor="menu-actions-list" command="toggle-popover" aria-haspopup="menu"><i class="bi bi-three-dots" aria-hidden="true"></i>Actions</button>
+<div id="menu-actions-list" class="menu" popover role="menu" aria-label="Actions">
+	<button class="menu-item" type="button" role="menuitem"><i class="bi bi-pencil" aria-hidden="true"></i>Edit</button>
+	<button class="menu-item" type="button" role="menuitem"><i class="bi bi-files" aria-hidden="true"></i>Duplicate</button>
+	<button class="menu-item" type="button" role="menuitem" aria-disabled="true"><i class="bi bi-archive" aria-hidden="true"></i>Archive</button>
+	<a class="menu-item" href="#menu-actions" role="menuitem"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>Open on the site</a>
+	<hr class="menu-divider">
+	<button class="menu-item menu-item-danger" type="button" role="menuitem"><i class="bi bi-trash3" aria-hidden="true"></i>Delete</button>
+</div>
+```
+
+### Choices and headers
+
+A choice of one is a set of `menuitemradio` items, the chosen one `aria-checked="true"` with a check drawn after it. `menu-header` titles a part of the menu. `menu-start` lines the menu up with its button's start edge instead of its end.
+
+```html
+<button class="btn btn-text" type="button" commandfor="menu-choice-list" command="toggle-popover" aria-haspopup="menu"><span class="dot dot-success"></span>All sites<i class="bi bi-chevron-down" aria-hidden="true"></i></button>
+<div id="menu-choice-list" class="menu menu-start" popover role="menu" aria-label="Work context">
+	<div class="menu-header">Work context</div>
+	<button class="menu-item" type="button" role="menuitemradio" aria-checked="true"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i>All sites</button>
+	<button class="menu-item" type="button" role="menuitemradio" aria-checked="false"><i class="bi bi-globe2" aria-hidden="true"></i>lagoon.example</button>
+	<button class="menu-item" type="button" role="menuitemradio" aria-checked="false"><i class="bi bi-globe2" aria-hidden="true"></i>angthong.example</button>
+</div>
+```
+
+## States
+
+The items of an open menu. `:focus-visible` is where the arrow keys are; `aria-current="true"` marks the page a menu of links is on.
+
+## Keyboard and accessibility
+
+| Key | On the button | In the menu |
+| --- | --- | --- |
+| `Enter`, `Space` | Opens the menu, the focus on the checked or the first item | Runs the item and closes the menu |
+| `↓` / `↑` | Opens the menu on the first / the last item | The next / the previous item, round the ends |
+| `Home` / `End` | — | The first / the last item |
+| A letter | — | The next item that begins with it |
+| `Esc` | — | Closes the menu, the focus back on the button |
+| `Tab` | — | Closes the menu and moves on |
+
+- The menu is `popover` with `role="menu"` and a name; its items are `menuitem`, `menuitemradio` or `menuitemcheckbox`. A list of site sections is navigation, not a menu — use links.
+- The button carries `aria-haspopup="menu"`; the browser keeps its `aria-expanded`, moves the focus back to it on close and closes the menu on a click outside or `Esc`.
+- Where an engine does not put the menu beside its button — no anchor positioning below Firefox 147 and Safari 26, no anchor from a popover's button in Chrome 130–132, a table cell in Chrome 135–136, the bottom of a long page in Safari 26 — `js/menu-place.js` places it, and the probes record each such place.
+
+## Tokens
+
+From [`css/components/menu.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/menu.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-space-4`, `--redz-border`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-2`, `--redz-text`, `--redz-space-8`, `--redz-text-muted`, `--redz-fs-12`, `--redz-control-height`, `--redz-radius-8`, `--redz-bg-hover`, `--redz-primary`, `--redz-danger`, `--redz-motion`, `--redz-ease`.
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `dropdown` | — | remove | no wrapper: the menu flips by itself |
+| `dropdown-center` | — | remove | no wrapper: the menu flips by itself |
+| `dropdown-divider` | `menu-divider` | rename |  |
+| `dropdown-header` | `menu-header` | rename |  |
+| `dropdown-item` | `menu-item` | rename | role="menuitem" |
+| `dropdown-item-text` | — | review | menu-header, or plain text |
+| `dropdown-menu` | `menu` | rename | with popover and role="menu" |
+| `dropdown-menu-dark` | — | remove | the theme sets it |
+| `dropdown-menu-end` | — | remove | the menu meets its button's end edge by default |
+| `dropdown-menu-start` | `menu-start` | rename |  |
+| `dropdown-toggle` | — | review | the button: commandfor + command="toggle-popover" + aria-haspopup="menu"; a chevron is an icon |
+| `dropdown-toggle-split` | — | review | a btn-group of the action and a btn-icon that opens the menu |
+| `dropend` | — | remove | no wrapper: the menu flips by itself |
+| `dropstart` | — | remove | no wrapper: the menu flips by itself |
+| `dropup` | — | remove | no wrapper: the menu flips by itself |
+| `dropup-center` | — | remove | no wrapper: the menu flips by itself |
+| `data-bs-toggle="dropdown"` | `commandfor="ID" command="toggle-popover" aria-haspopup="menu"` | trigger | the menu gets popover and role="menu" |
+| `data-bs-placement` | — | remove | anchor positioning places and flips the menu |
+| `data-bs-offset` | — | remove | anchor positioning places and flips the menu |
+| `data-bs-auto-close` | — | remove | anchor positioning places and flips the menu |
+| `data-bs-display` | — | remove | anchor positioning places and flips the menu |
+| `data-bs-reference` | — | remove | anchor positioning places and flips the menu |
+| `data-bs-boundary` | — | remove | anchor positioning places and flips the menu |
+| `data-bs-popper-config` | — | remove | anchor positioning places and flips the menu |
+| `bootstrap.Dropdown` | `menu.showPopover(), menu.hidePopover(), menu.togglePopover()` | trigger |  |
+| `show.bs.dropdown` | `toggle` | rename | the popover's toggle event; event.newState is "open" or "closed" |
+| `shown.bs.dropdown` | `toggle` | rename | the popover's toggle event; event.newState is "open" or "closed" |
+| `hide.bs.dropdown` | `toggle` | rename | the popover's toggle event; event.newState is "open" or "closed" |
+| `hidden.bs.dropdown` | `toggle` | rename | the popover's toggle event; event.newState is "open" or "closed" |
+
+# Form fields
+
+Text fields, selects and text areas with Bootstrap 5's names: a label floating in the field or above it, a hint, an error said in words, an icon inside the field.
+
+## Examples
+
+`form-floating` keeps the label inside the field and lifts it when the field has a value or the focus. The label follows the control, and the control needs a `placeholder` — it is how CSS knows the field is empty.
+
+```html
+<div class="form-floating">
+	<input class="form-control" id="form-floating-name" value="Ang Thong: marine park by speedboat" placeholder="A name people search for">
+	<label for="form-floating-name">Name</label>
+</div>
+<div class="form-floating">
+	<input class="form-control" id="form-floating-mail" type="email" placeholder="name@example.com">
+	<label for="form-floating-mail">E-mail</label>
+</div>
+<div class="form-floating">
+	<select class="form-select" id="form-floating-section"><option>Marine</option><option>Land</option><option>Evening</option></select>
+	<label for="form-floating-section">Section</label>
+</div>
+<div class="form-floating">
+	<textarea class="form-control" id="form-floating-note" placeholder="A note for the guides">Pick up at the pier at 8:30.</textarea>
+	<label for="form-floating-note">Note</label>
+</div>
+```
+
+### A label above, a hint, an error
+
+`form-field` stacks a field's parts: `form-label`, the control, `form-text` for a hint and `invalid-feedback` for an error. The control points at both with `aria-describedby`; an error sets `aria-invalid="true"`, and the browser's own `:user-invalid` draws the same after the person has edited the field.
+
+```html
+<div class="form-field">
+	<label class="form-label" for="form-stacked-slug">Address</label>
+	<input class="form-control font-monospace" id="form-stacked-slug" value="ang-thong" aria-describedby="form-stacked-slug-hint">
+	<div class="form-text" id="form-stacked-slug-hint">Full address /excursions/ang-thong/. The old one answers with a 301 redirect.</div>
+</div>
+<div class="form-field">
+	<label class="form-label" for="form-stacked-price">Adult price, THB</label>
+	<input class="form-control tabular-nums" id="form-stacked-price" type="number" value="2500" min="0" step="100" aria-invalid="true" aria-describedby="form-stacked-price-error">
+	<div class="invalid-feedback" id="form-stacked-price-error"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>Lower than the child price</div>
+</div>
+```
+
+### An icon in the field
+
+`form-adorn` puts an icon inside a field, at its start; the field keeps its own name.
+
+```html
+<div class="form-adorn">
+	<i class="bi bi-search" aria-hidden="true"></i>
+	<input class="form-control" type="search" placeholder="Name, slug or code" aria-label="Search excursions">
+</div>
+```
+
+### Sizes
+
+`form-control-sm` and `form-select-sm` are 28 px high, the default 32 px, `-lg` 40 px — the same heights as the buttons beside them.
+
+```html
+<input class="form-control form-control-sm" placeholder="Small" aria-label="Small field">
+<input class="form-control" placeholder="Default" aria-label="Default field">
+<input class="form-control form-control-lg" placeholder="Large" aria-label="Large field">
+<select class="form-select form-select-sm" aria-label="Small select"><option>Small select</option></select>
+```
+
+## States
+
+## Keyboard and accessibility
+
+- Every control has a visible label: a `<label for>`, or `aria-label` only where the context says it all — a search field with its icon.
+- A placeholder is never the label: it goes away as the person types. In `form-floating` the placeholder is only the empty marker.
+- An error is said in words in `invalid-feedback`, joined to the control by `aria-describedby`; a color alone never tells it.
+- The borders of fields and the focus ring are at least 3:1 against the page in both themes; the text 4.5:1.
+- `form-select` paints its own chevron from the theme, mirrored right to left; a multiple select or one with `size` drops it.
+
+## Tokens
+
+From [`css/components/form.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/form.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-space-4`, `--redz-text`, `--redz-fs-12`, `--redz-text-muted`, `--redz-danger`, `--redz-control-height`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg`, `--redz-focus`, `--redz-space-8`, `--redz-form-select-chevron`, `--redz-bg-page`, `--redz-primary-subtle`, `--redz-control-height-sm`, `--redz-radius-6`, `--redz-control-height-lg`, `--redz-fs-16`, `--redz-control-height-float`, `--redz-fs-14`, `--redz-motion`, `--redz-ease`.
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `col-form-label` | `form-label` | review | a form-label in a form-field |
+| `form-control-color` | — | review | a native <input type="color"> in the module's CSS |
+| `form-control-plaintext` | — | review | readonly on a form-control, or plain text |
+| `form-range` | — | missing |  |
+| `has-validation` | — | remove | fields have no success state |
+| `input-group` | — | missing | the missing basics; an icon inside a field is form-adorn |
+| `input-group-text` | — | missing | the missing basics; an icon inside a field is form-adorn |
+| `invalid-tooltip` | `invalid-feedback` | review | the error under the field |
+| `is-invalid` | — | state | aria-invalid="true" on the control |
+| `is-valid` | — | remove | fields have no success state |
+| `valid-feedback` | — | remove | fields have no success state |
+| `valid-tooltip` | — | remove | fields have no success state |
+| `was-validated` | — | state | the browser's :user-invalid shows after the person edits |
+
+# Checks, radios and switches
+
+The browser's own checkbox and radio, drawn by the library: `check`, `radio` and `switch` on the input itself, `form-check` on the label around it.
+
+## Examples
+
+The class goes on the `<input>`; the label wraps it, so a click anywhere on the words toggles it.
+
+```html
+<fieldset class="vstack gap-8">
+	<legend class="form-label">Included</legend>
+	<label class="form-check"><input class="check" type="checkbox" checked>Transfer</label>
+	<label class="form-check"><input class="check" type="checkbox" checked>Lunch</label>
+	<label class="form-check"><input class="check" type="checkbox">Kayaks</label>
+</fieldset>
+```
+
+### Radios
+
+Radios with one `name` are one choice; the arrow keys move it.
+
+```html
+<fieldset class="vstack gap-8">
+	<legend class="form-label">Departure</legend>
+	<label class="form-check"><input class="radio" type="radio" name="check-radios-time" checked>Morning, 8:30</label>
+	<label class="form-check"><input class="radio" type="radio" name="check-radios-time">Noon, 12:00</label>
+	<label class="form-check"><input class="radio" type="radio" name="check-radios-time">Sunset, 16:30</label>
+</fieldset>
+```
+
+### Switches
+
+A switch is a checkbox with `role="switch"`: on or off, applied at once. One that cannot change keeps its focus with `aria-disabled="true"` and says why in a hint.
+
+```html
+<label class="form-check"><input class="switch" type="checkbox" role="switch" checked>Show on the site</label>
+<div class="vstack gap-4">
+	<label class="form-check"><input class="switch" type="checkbox" role="switch" aria-disabled="true" aria-describedby="check-switches-why">Hide “Powered by REDZ CMS”</label>
+	<div class="form-text" id="check-switches-why"><i class="bi bi-lock" aria-hidden="true"></i> Available with a partner license</div>
+</div>
+```
+
+## States
+
+A check with some of its items chosen is `indeterminate` — a property set from script, as there is no attribute for it.
+
+## Keyboard and accessibility
+
+- Space toggles a check or a switch; the arrow keys move the choice among radios of one `name`.
+- A set of checks or radios sits in a `<fieldset>` whose `<legend>` names it.
+- The marks are drawn from the browser's own `:checked` and `:indeterminate`, and keep showing in forced colors and in print.
+- `aria-disabled="true"` keeps the control focusable and readable, so its hint can say why; the library ignores clicks and Space on it, as on a button so marked.
+
+## Tokens
+
+From [`css/components/check.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/check.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-border-strong`, `--redz-bg`, `--redz-primary-contrast`, `--redz-primary`, `--redz-focus`, `--redz-border`, `--redz-bg-page`, `--redz-bg-hover`, `--redz-motion`, `--redz-ease`.
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `form-check-inline` | — | review | hstack gap-16 around the labels |
+| `form-check-input` | — | review | check, radio or switch on the input, by its type |
+| `form-check-label` | — | remove | the label is the form-check around the input |
+| `form-check-reverse` | — | missing |  |
+| `form-switch` | — | review | switch on the input, with role="switch" |
+
+# Cards
+
+A card is a bordered region of a screen: a header with its title and actions, a body, a footer. It is a region — the width prefixes inside it measure the card, not the window.
+
+## Examples
+
+A card that is a section of the screen is a `<section>` named by its heading. The header holds an icon, the title and whatever belongs to it; the footer holds the card's actions.
+
+```html
+<section class="card" aria-labelledby="card-basic-title">
+	<div class="card-header"><i class="bi bi-cash-coin" aria-hidden="true"></i><h2 id="card-basic-title">Price</h2><span class="text-muted fs-12">in the base currency THB</span></div>
+	<div class="card-body vstack gap-8">
+		<p>Adults 2,500 · children 1,900 · under four free.</p>
+		<p class="text-muted">The visitor's currency is an estimate.</p>
+	</div>
+	<div class="card-footer justify-content-end">
+		<button class="btn" type="button">Cancel</button>
+		<button class="btn btn-primary" type="button">Save</button>
+	</div>
+</section>
+```
+
+### Tabs on a card
+
+A `nav` placed straight in the card lines up with the header's padding.
+
+```html
+<section class="card" aria-labelledby="card-tabs-title">
+	<div class="card-header"><h2 id="card-tabs-title">Ang Thong</h2></div>
+	<div class="nav nav-underline" role="tablist" aria-label="Ang Thong">
+		<button class="nav-link" type="button" role="tab" id="card-tabs-1" aria-selected="true" aria-controls="card-tabs-panel-1">Details</button>
+		<button class="nav-link" type="button" role="tab" id="card-tabs-2" aria-selected="false" aria-controls="card-tabs-panel-2">Prices</button>
+	</div>
+	<div class="card-body" id="card-tabs-panel-1" role="tabpanel" aria-labelledby="card-tabs-1" tabindex="0"><p>A day at sea: snorkelling at two reefs, lunch on the boat.</p></div>
+	<div class="card-body" id="card-tabs-panel-2" role="tabpanel" aria-labelledby="card-tabs-2" tabindex="0" hidden><p>Adults 2,500 · children 1,900.</p></div>
+</section>
+```
+
+### A grid of cards
+
+The parent sets the grid; each card measures itself. Under 576 px of the region the cards stack.
+
+```html
+<div class="grid sm:cols-2 gap-16">
+	<section class="card" aria-labelledby="card-grid-a"><div class="card-header"><h2 id="card-grid-a">Bookings</h2></div><div class="card-body"><p class="fs-24 fw-600 tabular-nums">128</p><p class="text-muted">this week</p></div></section>
+	<section class="card" aria-labelledby="card-grid-b"><div class="card-header"><h2 id="card-grid-b">Revenue</h2></div><div class="card-body"><p class="fs-24 fw-600 tabular-nums">312,400 THB</p><p class="text-muted">this week</p></div></section>
+</div>
+```
+
+## Accessibility
+
+- A card that is a part of the page is a `<section>` with `aria-labelledby` pointing at its heading; a card in a list of cards is an `<article>` or a list item.
+- A card has no outer margin: the gap between cards belongs to their parent.
+- A card being refreshed in place turns busy with `REDZ.ui.busy(card, promise)` — see [Busy](busy.md).
+
+## Tokens
+
+From [`css/components/card.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/card.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-space-8`, `--redz-space-12`, `--redz-space-16`, `--redz-text-muted`.
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `card-group` | — | review | grid with gap-16 |
+| `card-header-pills` | — | review | a nav straight in the card |
+| `card-header-tabs` | — | review | a nav straight in the card |
+| `card-img` | — | missing |  |
+| `card-img-bottom` | — | missing |  |
+| `card-img-overlay` | — | missing |  |
+| `card-img-top` | — | missing |  |
+| `card-link` | — | review | a heading and paragraphs in card-body |
+| `card-subtitle` | — | review | a heading and paragraphs in card-body |
+| `card-text` | — | review | a heading and paragraphs in card-body |
+| `card-title` | — | review | a heading and paragraphs in card-body |
+
+# Tables
+
+A list of records: a title that links to the record, a line under it, a note when something is wrong, a column of checks for batch actions and the row's own actions at the end.
+
+## Examples
+
+`table` on the `<table>`; `table-hover` lights the row under the pointer. The head stays at the top of the screen as the page scrolls. Columns that only help on a wide screen hide below `md` of their card.
+
+```html
+<section class="card" aria-labelledby="table-list-title">
+	<div class="card-header"><h2 id="table-list-title">Excursions</h2><span class="text-muted fs-12">3 of 28</span></div>
+	<div class="card-body p-0">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th class="table-check"><input class="check" type="checkbox" aria-label="Select all"></th>
+					<th>Excursion</th>
+					<th class="text-end d-none md:d-table-cell">Price from</th>
+					<th class="d-none md:d-table-cell">Status</th>
+					<th class="table-actions"><span class="visually-hidden">Actions</span></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><input class="check" type="checkbox" aria-label="Select: Ang Thong"></td>
+					<td><a class="table-title" href="#table-list">Ang Thong: marine park by speedboat</a><div class="table-sub d-none md:d-block">/excursions/ang-thong/</div></td>
+					<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">2,500 THB</td>
+					<td class="d-none md:d-table-cell"><span class="badge"><i class="bi bi-check2" aria-hidden="true"></i>Published</span></td>
+					<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Ang Thong"><i class="bi bi-pencil" aria-hidden="true"></i></button></td>
+				</tr>
+				<tr class="table-danger">
+					<td><input class="check" type="checkbox" aria-label="Select: Elephant sanctuary"></td>
+					<td><a class="table-title" href="#table-list">Elephant sanctuary: feeding and a walk</a><div class="table-note"><i class="bi bi-x-octagon-fill" aria-hidden="true"></i><span class="text-muted">Did not rebuild: a PHP warning in the theme template</span></div></td>
+					<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">2,600 THB</td>
+					<td class="d-none md:d-table-cell"><span class="badge badge-subtle-danger"><i class="bi bi-x-octagon" aria-hidden="true"></i>Failed</span></td>
+					<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Rebuild: Elephant sanctuary"><i class="bi bi-arrow-repeat" aria-hidden="true"></i></button></td>
+				</tr>
+				<tr class="table-warning">
+					<td><input class="check" type="checkbox" aria-label="Select: Night market"></td>
+					<td><a class="table-title" href="#table-list">Night market and street food</a><div class="table-note"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i><span class="text-muted">The Thai translation is older than the English</span></div></td>
+					<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">900 THB</td>
+					<td class="d-none md:d-table-cell"><span class="badge badge-subtle-warning"><i class="bi bi-clock-history" aria-hidden="true"></i>Stale</span></td>
+					<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Night market"><i class="bi bi-pencil" aria-hidden="true"></i></button></td>
+				</tr>
+				<tr class="table-secondary">
+					<td><input class="check" type="checkbox" aria-label="Select: Muay Thai"></td>
+					<td><a class="table-title" href="#table-list">Muay Thai: an evening at the stadium</a><div class="table-sub d-none md:d-block">withdrawn from the sites</div></td>
+					<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">1,500 THB</td>
+					<td class="d-none md:d-table-cell"><span class="badge"><i class="bi bi-eye-slash" aria-hidden="true"></i>Withdrawn</span></td>
+					<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Muay Thai"><i class="bi bi-pencil" aria-hidden="true"></i></button></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+```
+
+## States
+
+A row's tone marks what needs attention: `table-danger` failed, `table-warning` needs a look, `table-secondary` is out of use. On a pointer screen the row's actions show on hover and on focus; on a touch screen they always show.
+
+## Keyboard and accessibility
+
+- The row's title is a link; its actions are buttons named with the record — "Edit: Ang Thong", not a column of identical "Edit".
+- The column of actions has a hidden header, and each check its own name: "Select: Ang Thong".
+- A tone is never the only sign: a failed row also says why in its `table-note`, with an icon.
+- Numbers sit at the end of their cells with `tabular-nums`, so their digits line up.
+- A table being reloaded turns busy on its card's body: `REDZ.ui.busy(body, promise)` — not on the `<table>`, which cannot hold an overlay.
+
+## Tokens
+
+From [`css/components/table.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css). It declares `--redz-row-tint`, `--redz-row-mark` on its root, never on rows or items.
+
+It reads the theme's `--redz-space-8`, `--redz-space-12`, `--redz-border`, `--redz-bg`, `--redz-text-muted`, `--redz-fs-12`, `--redz-row-pad`, `--redz-radius-12`, `--redz-space-16`, `--redz-bg-hover`, `--redz-text`, `--redz-font-mono`, `--redz-space-4`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-bg-page`.
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `caption-top` | — | missing |  |
+| `table-active` | — | review | aria-selected or aria-current on the row |
+| `table-bordered` | — | missing |  |
+| `table-borderless` | — | missing |  |
+| `table-dark` | — | review | row tones are danger, warning and secondary |
+| `table-group-divider` | — | missing |  |
+| `table-info` | — | review | row tones are danger, warning and secondary |
+| `table-light` | — | review | row tones are danger, warning and secondary |
+| `table-primary` | — | review | row tones are danger, warning and secondary |
+| `table-responsive` | — | review | the card's body holds the table; columns hide below md: |
+| `table-striped` | — | missing |  |
+| `table-striped-columns` | — | missing |  |
+| `table-success` | — | review | row tones are danger, warning and secondary |
+
+# Badges
+
+A badge is a short label of state or count beside the thing it describes: Published, Draft, 5 new. It never acts — a badge that does something is a chip or a button.
+
+## Examples
+
+The plain `badge` is neutral, for a status that needs no attention. `badge-subtle-{tone}` is the usual colored form; `badge-{tone}`, filled, is for the one that must be seen. An icon before the words carries the meaning in forced colors and for people who do not tell the colors apart.
+
+```html
+<span class="badge"><i class="bi bi-check2" aria-hidden="true"></i>Published</span>
+<span class="badge"><i class="bi bi-pencil-square" aria-hidden="true"></i>Draft</span>
+<span class="badge badge-subtle-success"><i class="bi bi-check-circle" aria-hidden="true"></i>Paid</span>
+<span class="badge badge-subtle-warning"><i class="bi bi-clock-history" aria-hidden="true"></i>Stale</span>
+<span class="badge badge-subtle-danger"><i class="bi bi-x-octagon" aria-hidden="true"></i>Failed</span>
+<span class="badge badge-subtle-info"><i class="bi bi-robot" aria-hidden="true"></i>Machine translation</span>
+<span class="badge badge-subtle-primary">New</span>
+<span class="badge badge-subtle-secondary">Archived</span>
+```
+
+### Filled
+
+```html
+<span class="badge badge-primary">5</span>
+<span class="badge badge-secondary">Beta</span>
+<span class="badge badge-success">Live</span>
+<span class="badge badge-danger">Overdue</span>
+<span class="badge badge-warning">Due today</span>
+<span class="badge badge-info">Update</span>
+```
+
+### Beside other things
+
+A count in a navigation link, a status in a heading.
+
+```html
+<nav class="nav nav-pills" aria-label="Orders">
+	<a class="nav-link" href="#badge-beside" aria-current="page">New<span class="badge badge-subtle-primary">5</span></a>
+	<a class="nav-link" href="#badge-beside">Paid<span class="badge">128</span></a>
+</nav>
+<h3 class="hstack gap-8 fs-16">Ang Thong <span class="badge badge-subtle-warning"><i class="bi bi-clock-history" aria-hidden="true"></i>Stale</span></h3>
+```
+
+## Accessibility
+
+- A badge's words are read with the thing it stands beside; write them so — "5" in "New 5" reads as five new orders only if the link says New.
+- The tones of text against their fill are at least 4.5:1 in both themes; a tone alone is never the meaning.
+
+## Tokens
+
+From [`css/components/badge.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/badge.css). It declares `--redz-badge-bg`, `--redz-badge-fg` on its root, never on rows or items.
+
+It reads the theme's `--redz-bg-hover`, `--redz-text-muted`, `--redz-fs-12`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-primary-subtle`, `--redz-secondary-subtle`, `--redz-success-subtle`, `--redz-danger-subtle`, `--redz-warning-subtle`, `--redz-info-subtle`.
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `text-bg-danger` | `badge-danger` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
+| `text-bg-dark` | — | review | a plain badge, or a tone |
+| `text-bg-info` | `badge-info` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
+| `text-bg-light` | — | review | a plain badge, or a tone |
+| `text-bg-primary` | `badge-primary` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
+| `text-bg-secondary` | `badge-secondary` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
+| `text-bg-success` | `badge-success` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
+| `text-bg-warning` | `badge-warning` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
+
+# Dots
+
+An 8 px dot of a tone beside a word: online, live, the color of a site. The dot repeats what the word says; it never says it alone.
+
+## Examples
+
+```html
+<span class="hstack gap-8"><span class="dot"></span>Offline</span>
+<span class="hstack gap-8"><span class="dot dot-primary"></span>Primary</span>
+<span class="hstack gap-8"><span class="dot dot-secondary"></span>Secondary</span>
+<span class="hstack gap-8"><span class="dot dot-success"></span>Live</span>
+<span class="hstack gap-8"><span class="dot dot-danger"></span>Down</span>
+<span class="hstack gap-8"><span class="dot dot-warning"></span>Slow</span>
+<span class="hstack gap-8"><span class="dot dot-info"></span>Updating</span>
+```
+
+## Accessibility
+
+- A dot has no name; the word beside it carries the meaning. In forced colors every dot is drawn in the text color, so the word is what tells them apart.
+- Dots print with their colors.
+
+## Tokens
+
+From [`css/components/dot.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/dot.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-text-faint`, `--redz-primary`, `--redz-secondary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`.
+
+# Avatars
+
+A round mark of a person: their initials in the accent, 32 px or 24 px with `avatar-sm`.
+
+## Examples
+
+An avatar beside the person's name hides from assistive technology; an avatar alone — the profile button — is named by its button.
+
+```html
+<span class="hstack gap-8"><span class="avatar" aria-hidden="true">MK</span>Marina K.</span>
+<span class="hstack gap-8"><span class="avatar avatar-sm" aria-hidden="true">AT</span>Arthit T.</span>
+<button class="btn btn-text btn-icon" type="button" aria-label="MK, profile"><span class="avatar">MK</span></button>
+```
+
+## Accessibility
+
+- The initials are 4.5:1 against the fill in both themes.
+- Where a person's photo is wanted, put an `<img alt="">` inside the avatar; the name beside it carries the meaning.
+
+## Tokens
+
+From [`css/components/avatar.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/avatar.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-primary-subtle`, `--redz-primary`, `--redz-fs-12`.
+
+# Icon tiles
+
+A rounded square with an icon in it: the mark of a screen's subject in its title, of a kind of record, of a drop zone.
+
+## Examples
+
+The plain tile is in the accent; the tones and `icon-tile-sm` follow Bootstrap's grammar.
+
+```html
+<span class="icon-tile"><i class="bi bi-compass" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-secondary"><i class="bi bi-archive" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-success"><i class="bi bi-check-circle" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-danger"><i class="bi bi-x-octagon" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-warning"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-info"><i class="bi bi-info-circle" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-sm"><i class="bi bi-upload" aria-hidden="true"></i></span>
+```
+
+### In a title
+
+```html
+<div class="hstack gap-12">
+	<span class="icon-tile"><i class="bi bi-compass" aria-hidden="true"></i></span>
+	<div><h3 class="fs-20">Excursions</h3><p class="text-muted">Content type · 28 items</p></div>
+</div>
+```
+
+## Accessibility
+
+- The tile is decoration: its icon is `aria-hidden="true"` and the words beside it name the subject.
+- The icon keeps a 3:1 contrast with its tile in both themes.
+
+## Tokens
+
+From [`css/components/icon-tile.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/icon-tile.css). It declares `--redz-tile-bg`, `--redz-tile-fg` on its root, never on rows or items.
+
+It reads the theme's `--redz-primary-subtle`, `--redz-primary`, `--redz-radius-12`, `--redz-radius-8`, `--redz-secondary-subtle`, `--redz-secondary`, `--redz-success-subtle`, `--redz-success`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-info-subtle`, `--redz-info`.
+
+# Empty states
+
+What a list, a panel or a search shows when it has nothing yet: what would be here, and the one action that starts it. And the drop zone of a file field.
+
+## Examples
+
+```html
+<div class="empty-state">
+	<i class="bi bi-compass" aria-hidden="true"></i>
+	<strong class="text-body">No excursions yet</strong>
+	<p>An excursion is a page with a price, a schedule and a booking form.</p>
+	<button class="btn btn-primary" type="button"><i class="bi bi-plus-lg" aria-hidden="true"></i>New excursion</button>
+</div>
+```
+
+### A drop zone
+
+`empty-state-drop` is a label around a hidden file input: a click or a dropped file goes to the input.
+
+```html
+<label class="empty-state empty-state-drop">
+	<span class="icon-tile icon-tile-sm"><i class="bi bi-upload" aria-hidden="true"></i></span>
+	<span class="vstack gap-2"><strong class="text-body">Logo · light theme</strong><span class="form-text">SVG or PNG, drop a file or choose</span></span>
+	<input class="visually-hidden" type="file" accept="image/svg+xml,image/png">
+</label>
+```
+
+## States
+
+## Accessibility
+
+- Say what would be here and why it is empty — "No excursions yet", "Nothing matches the filters" — and offer the action that changes it.
+- The drop zone's file input is hidden visually only; its label is the zone's words, and the focus ring shows on the zone through the label.
+
+## Tokens
+
+From [`css/components/empty-state.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/empty-state.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-space-8`, `--redz-space-32`, `--redz-space-16`, `--redz-text-muted`, `--redz-text-faint`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-12`, `--redz-primary`, `--redz-primary-subtle`.
+
+# Placeholders
+
+Grey bars in the shape of content that is on its way — the first load of a page or a panel. A region that already has content and reloads it gets an overlay instead: see [Busy](busy.md).
+
+## Examples
+
+Each bar is a `placeholder` sized by a width utility. They pulse slowly, and stand still for people who ask for less motion.
+
+```html
+<section class="card" aria-label="Loading">
+	<div class="card-header"><span class="placeholder w-25"></span></div>
+	<div class="card-body vstack gap-8">
+		<span class="placeholder w-75"></span>
+		<span class="placeholder w-50"></span>
+		<span class="placeholder w-100"></span>
+	</div>
+</section>
+```
+
+## Accessibility
+
+- Placeholders are empty elements; the region holding them is named "Loading" until the content takes its place.
+- Keep the shapes close to the real content, so the page does not jump when it arrives.
+
+## Tokens
+
+From [`css/components/placeholder.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/placeholder.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-radius-6`, `--redz-border`.
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `placeholder-glow` | — | remove | placeholders pulse by themselves |
+| `placeholder-wave` | — | remove | placeholders pulse by themselves |
+| `placeholder-xs` | — | review | size by the height of the bar |
+
+# Dialogs
+
+The browser's own modal `<dialog>`: opened by a command, the page behind it inert and dimmed, closed by its buttons, `Esc` or a click outside. And `REDZ.ui.confirm()` for a question asked from script.
+
+## Examples
+
+A button opens the dialog with `commandfor` + `command="show-modal"`; buttons inside close it with `command="close"`. `closedby="any"` lets a click outside close it too. The focus goes into the dialog — to the control marked `autofocus` — and back to the button when it closes.
+
+```html
+<button class="btn" type="button" commandfor="dialog-edit-note" command="show-modal"><i class="bi bi-chat-left-text" aria-hidden="true"></i>Add a note</button>
+<dialog id="dialog-edit-note" class="dialog" closedby="any" aria-labelledby="dialog-edit-note-title">
+	<div class="dialog-header">
+		<h2 class="dialog-title" id="dialog-edit-note-title">A note for the guides</h2>
+		<button class="btn-close" type="button" commandfor="dialog-edit-note" command="close" aria-label="Close"></button>
+	</div>
+	<div class="dialog-body vstack gap-8">
+		<label class="form-field"><span class="form-label">Note</span><textarea class="form-control" autofocus>Pick up at the pier at 8:30.</textarea></label>
+	</div>
+	<div class="dialog-footer">
+		<button class="btn" type="button" commandfor="dialog-edit-note" command="close">Cancel</button>
+		<button class="btn btn-primary" type="button" commandfor="dialog-edit-note" command="close">Save</button>
+	</div>
+</dialog>
+```
+
+### Sizes
+
+`dialog-sm` for a question, the default for a form, `dialog-lg` for a wide table or a preview.
+
+```html
+<button class="btn" type="button" commandfor="dialog-sizes-sm" command="show-modal">Small</button>
+<button class="btn" type="button" commandfor="dialog-sizes-lg" command="show-modal">Large</button>
+<dialog id="dialog-sizes-sm" class="dialog dialog-sm" aria-labelledby="dialog-sizes-sm-title">
+	<div class="dialog-header"><h2 class="dialog-title" id="dialog-sizes-sm-title">Publish now?</h2></div>
+	<div class="dialog-body"><p>The page goes live on three sites.</p></div>
+	<div class="dialog-footer">
+		<button class="btn" type="button" commandfor="dialog-sizes-sm" command="close" autofocus>Cancel</button>
+		<button class="btn btn-primary" type="button" commandfor="dialog-sizes-sm" command="close">Publish</button>
+	</div>
+</dialog>
+<dialog id="dialog-sizes-lg" class="dialog dialog-lg" closedby="any" aria-labelledby="dialog-sizes-lg-title">
+	<div class="dialog-header">
+		<h2 class="dialog-title" id="dialog-sizes-lg-title">History of changes</h2>
+		<button class="btn-close" type="button" commandfor="dialog-sizes-lg" command="close" aria-label="Close"></button>
+	</div>
+	<div class="dialog-body"><p>Edited yesterday by M. K.; published on three sites; the Thai translation updated today.</p></div>
+</dialog>
+```
+
+### A confirmation from script
+
+`await REDZ.ui.confirm({title, text, ok, tone})` builds an `alertdialog`, waits for the answer and removes it: `true` for the confirming button, `false` for Cancel, `Esc` or a click outside. The focus starts on Cancel; the button words come from the caller or the page's texts.
+
+```html
+<button class="btn btn-danger" type="button" data-docs-run="confirm"><i class="bi bi-trash3" aria-hidden="true"></i>Delete 2 excursions</button>
+<span class="text-muted fs-12" role="status" data-docs-answer></span>
+```
+
+## Keyboard and accessibility
+
+- `Tab` stays inside an open dialog; `Esc` closes it; the focus goes back to the button that opened it.
+- The dialog is named by its title through `aria-labelledby`. A question that must be answered is `role="alertdialog"` with its focus on the safe answer.
+- The page behind does not scroll while a dialog is open, and keeps its width: the scrollbar's place stays.
+- A notice raised while a dialog is open shows inside the dialog, since everything outside it is inert.
+- Where the browser lacks invoker commands (below Chrome 135, Firefox 144, Safari 26.2) or `closedby` (below Chrome 134, Firefox 141, and in Safari), the library's script stands in.
+
+## Tokens
+
+From [`css/components/dialog.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/dialog.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-border`, `--redz-radius-16`, `--redz-bg-raised`, `--redz-shadow-3`, `--redz-space-12`, `--redz-space-16`, `--redz-space-24`, `--redz-fs-16`, `--redz-text-muted`, `--redz-space-8`, `--redz-bg-page`, `--redz-ease`.
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `modal` | `dialog` | rename | on a <dialog>, opened by commandfor + command="show-modal" |
+| `modal-backdrop` | — | remove | the browser's ::backdrop |
+| `modal-body` | `dialog-body` | rename |  |
+| `modal-content` | — | remove | no wrappers: the <dialog> is the box |
+| `modal-dialog` | — | remove | no wrappers: the <dialog> is the box |
+| `modal-dialog-centered` | — | remove | a dialog is centered |
+| `modal-dialog-scrollable` | — | remove | the dialog's body scrolls by itself |
+| `modal-footer` | `dialog-footer` | rename |  |
+| `modal-fullscreen` | — | missing |  |
+| `modal-header` | `dialog-header` | rename |  |
+| `modal-static` | — | remove | closedby="closerequest" |
+| `modal-title` | `dialog-title` | rename |  |
+| `data-bs-toggle="modal"` | `commandfor="ID" command="show-modal"` | trigger | on the button; the dialog is a <dialog id="ID"> |
+| `data-bs-dismiss="modal"` | `commandfor="ID" command="close"` | trigger |  |
+| `data-bs-backdrop="static"` | `closedby="closerequest"` | trigger | Esc closes it, a click outside does not |
+| `data-bs-keyboard="false"` | `closedby="none"` | trigger | only its buttons close it |
+| `bootstrap.Modal` | `dialog.showModal() and dialog.close()` | trigger |  |
+| `show.bs.modal` | `toggle` | review | the dialog's toggle event, or code right after showModal() |
+| `shown.bs.modal` | `toggle` | review | the dialog's toggle event, or code right after showModal() |
+| `hide.bs.modal` | `cancel` | review | the dialog's cancel event (Esc); your buttons close it |
+| `hidden.bs.modal` | `close` | rename | the dialog's close event; dialog.returnValue holds the closing button's value |
+
+# Drawers
+
+A modal panel at the end of the screen — or at its start with `drawer-start` — for filters, a record's details, a long form beside the list it belongs to. Bootstrap 5 calls it offcanvas; it is a `<dialog>` here.
+
+## Examples
+
+A drawer opens and closes like a dialog: `command="show-modal"` and `command="close"`. It slides in from its side — mirrored right to left — unless the person asks for less motion.
+
+```html
+<button class="btn" type="button" commandfor="drawer-filters-panel" command="show-modal"><i class="bi bi-funnel" aria-hidden="true"></i>Filters</button>
+<button class="btn" type="button" commandfor="drawer-filters-start" command="show-modal"><i class="bi bi-layout-sidebar" aria-hidden="true"></i>From the start</button>
+<dialog id="drawer-filters-panel" class="drawer" closedby="any" aria-labelledby="drawer-filters-panel-title">
+	<div class="drawer-header">
+		<h2 class="drawer-title" id="drawer-filters-panel-title">Filters</h2>
+		<button class="btn-close" type="button" commandfor="drawer-filters-panel" command="close" aria-label="Close"></button>
+	</div>
+	<div class="drawer-body vstack gap-16">
+		<fieldset class="vstack gap-8">
+			<legend class="form-label">Status</legend>
+			<label class="form-check"><input class="check" type="checkbox" checked>Published</label>
+			<label class="form-check"><input class="check" type="checkbox">Draft</label>
+		</fieldset>
+		<div class="form-floating">
+			<select class="form-select" id="drawer-filters-section"><option>Any section</option><option>Marine</option><option>Land</option></select>
+			<label for="drawer-filters-section">Section</label>
+		</div>
+		<div class="hstack gap-8 justify-content-end">
+			<button class="btn" type="button" commandfor="drawer-filters-panel" command="close">Reset</button>
+			<button class="btn btn-primary" type="button" commandfor="drawer-filters-panel" command="close">Show 9</button>
+		</div>
+	</div>
+</dialog>
+<dialog id="drawer-filters-start" class="drawer drawer-start" closedby="any" aria-labelledby="drawer-filters-start-title">
+	<div class="drawer-header">
+		<h2 class="drawer-title" id="drawer-filters-start-title">Sections</h2>
+		<button class="btn-close" type="button" commandfor="drawer-filters-start" command="close" aria-label="Close"></button>
+	</div>
+	<div class="drawer-body"><p>A drawer at the start edge: the left in English, the right in Arabic.</p></div>
+</dialog>
+```
+
+## Keyboard and accessibility
+
+- Everything said of [dialogs](dialog.md) holds: the focus moves in and back, `Tab` stays inside, `Esc` closes.
+- A drawer is a region: the width prefixes inside it measure the drawer, 28 rem wide at most.
+- The drawer's body scrolls by itself; its header stays.
+
+## Tokens
+
+From [`css/components/drawer.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/drawer.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-space-8`, `--redz-border`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-3`, `--redz-space-12`, `--redz-space-16`, `--redz-fs-16`, `--redz-ease`.
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `offcanvas` | `drawer` | rename | on a <dialog>, opened by command="show-modal" |
+| `offcanvas-backdrop` | — | remove | the browser's ::backdrop |
+| `offcanvas-body` | `drawer-body` | rename |  |
+| `offcanvas-bottom` | — | missing |  |
+| `offcanvas-end` | `drawer` | rename | on a <dialog>, opened by command="show-modal" |
+| `offcanvas-header` | `drawer-header` | rename |  |
+| `offcanvas-start` | `drawer drawer-start` | rename |  |
+| `offcanvas-title` | `drawer-title` | rename |  |
+| `offcanvas-top` | — | missing |  |
+| `data-bs-toggle="offcanvas"` | `commandfor="ID" command="show-modal"` | trigger | the drawer is a <dialog id="ID"> |
+| `data-bs-dismiss="offcanvas"` | `commandfor="ID" command="close"` | trigger |  |
+| `bootstrap.Offcanvas` | `dialog.showModal() and dialog.close()` | trigger |  |
+
+# Tooltips
+
+A short dark label beside a control, placed by CSS anchor positioning. At the browser floor it is a toggletip: a small button opens it, a click outside or `Esc` closes it.
+
+## Examples
+
+The tooltip is a `popover` opened by its button's command. It sits above the button and turns below when there is no room — `js/menu-place.js` keeps it beside its button where an engine cannot.
+
+```html
+<span class="hstack gap-4">Partner license
+	<button class="btn btn-icon btn-xs btn-text" type="button" commandfor="tooltip-why-tip" command="toggle-popover" aria-label="What is a partner license"><i class="bi bi-question-circle" aria-hidden="true"></i></button>
+</span>
+<div id="tooltip-why-tip" class="tooltip" popover role="tooltip">A partner can hide the brand and set their own help link.</div>
+```
+
+## Keyboard and accessibility
+
+- The button is named after its question; the tooltip's words answer it. Nothing that must be read to use the screen lives only in a tooltip.
+- A tooltip on hover and focus waits for `interestfor`, which is outside the browser floor.
+- The label is the page's text color on the page color reversed: 4.5:1 in both themes, an outline in forced colors.
+
+## Tokens
+
+From [`css/components/tooltip.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/tooltip.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-space-4`, `--redz-space-8`, `--redz-radius-6`, `--redz-text`, `--redz-bg`, `--redz-fs-12`.
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `bs-popover-auto` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
+| `bs-popover-bottom` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
+| `bs-popover-end` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
+| `bs-popover-start` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
+| `bs-popover-top` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
+| `bs-tooltip-auto` | — | remove | the tooltip is one element |
+| `bs-tooltip-bottom` | — | remove | the tooltip is one element |
+| `bs-tooltip-end` | — | remove | the tooltip is one element |
+| `bs-tooltip-start` | — | remove | the tooltip is one element |
+| `bs-tooltip-top` | — | remove | the tooltip is one element |
+| `popover` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
+| `popover-arrow` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
+| `popover-body` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
+| `popover-header` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
+| `tooltip-arrow` | — | remove | the tooltip is one element |
+| `tooltip-inner` | — | remove | the tooltip is one element |
+| `data-bs-toggle="tooltip"` | `commandfor="ID" command="toggle-popover"` | review | a toggletip at the browser floor |
+| `data-bs-toggle="popover"` | — | missing |  |
+| `bootstrap.Tooltip` | — | remove |  |
+| `bootstrap.Popover` | — | remove |  |
+
+# Alerts
+
+A message that stays on the page beside what it is about: a check passed, a suggestion, a warning before an action. A message that comes and goes is a [toast](toast.md).
+
+## Examples
+
+An icon, then the words in a `<div>`. The plain `alert` is neutral; the tones follow Bootstrap's.
+
+```html
+<div class="alert"><i class="bi bi-info-circle" aria-hidden="true"></i><div>The changes apply to the next booking.</div></div>
+<div class="alert alert-primary"><i class="bi bi-stars" aria-hidden="true"></i><div>A shorter title would fit the search results.</div></div>
+<div class="alert alert-success"><i class="bi bi-check-circle" aria-hidden="true"></i><div>White text on it: 5.6:1, AA in both themes.</div></div>
+<div class="alert alert-warning"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i><div>The Thai translation is older than the English.</div></div>
+<div class="alert alert-danger"><i class="bi bi-x-octagon" aria-hidden="true"></i><div>The theme template raised a PHP warning; the page did not rebuild.</div></div>
+<div class="alert alert-info"><i class="bi bi-robot" aria-hidden="true"></i><div>Translated by machine; a person has not read it yet.</div></div>
+```
+
+### With a title and actions
+
+```html
+<div class="alert alert-primary align-items-start" role="region" aria-label="AI suggestion">
+	<i class="bi bi-stars" aria-hidden="true"></i>
+	<div class="vstack gap-8">
+		<strong>A shorter title</strong>
+		<p>“Ang Thong by speedboat” fits the 60 characters search results show.</p>
+		<div class="hstack gap-8"><button class="btn btn-sm btn-primary" type="button">Use it</button><button class="btn btn-sm btn-text" type="button">Dismiss</button></div>
+	</div>
+</div>
+```
+
+## Accessibility
+
+- An alert that is on the page from the start is plain content — no live region. One that appears after an action and must be heard goes in a live region, or is a toast.
+- A suggestion with its own actions is a `region` named after what it is.
+- The icon carries the tone in forced colors; the words carry the meaning.
+
+## Tokens
+
+From [`css/components/alert.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/alert.css). It declares `--redz-alert-bg`, `--redz-alert-icon` on its root, never on rows or items.
+
+It reads the theme's `--redz-secondary-subtle`, `--redz-secondary`, `--redz-space-8`, `--redz-space-12`, `--redz-space-16`, `--redz-radius-12`, `--redz-text`, `--redz-primary-subtle`, `--redz-primary`, `--redz-success-subtle`, `--redz-success`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-info-subtle`, `--redz-info`.
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `alert-dark` | — | review | the plain alert, or a tone |
+| `alert-dismissible` | — | review | a btn-close at the end, removed by your script |
+| `alert-heading` | — | review | a strong title in the alert's div |
+| `alert-light` | — | review | the plain alert, or a tone |
+| `alert-link` | — | review | a plain link |
+| `alert-secondary` | — | review | the plain alert, or a tone |
+| `data-bs-dismiss="alert"` | — | review | remove the alert in your script |
+
+# Toasts
+
+A notice after an action — saved, failed, moved with a way to undo — shown by `REDZ.ui.toast()` in a stack at the corner of the screen and read aloud from a live region.
+
+## Examples
+
+Success and info leave after 8 seconds, unless the pointer or the focus rests on them. An error, and a notice with an action, stay until closed.
+
+```html
+<button class="btn" type="button" data-docs-run="toast-success">Saved</button>
+<button class="btn" type="button" data-docs-run="toast-info">Import started</button>
+<button class="btn" type="button" data-docs-run="toast-danger">Not saved</button>
+<button class="btn" type="button" data-docs-run="toast-action">With an action</button>
+```
+
+The call takes the words and the tone and answers a function that closes the toast:
+
+```js
+const close = REDZ.ui.toast({title: 'Moved to the archive', tone: 'info', action: {label: 'Undo', run: restore}});
+```
+
+### The stack
+
+The page carries the stack from the start, so that screen readers know its live regions before anything is said in them: `role="status"` for notices, `role="alert"` for errors. Without one, the library adds it at load.
+
+```html
+<div class="toast-container"><div role="status"></div><div role="alert"></div></div>
+```
+
+### How a toast looks
+
+```html
+<div class="toast toast-success"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><div class="toast-body"><strong>Saved</strong><div class="text-muted fs-12">Ang Thong · 3 pages rebuilt</div></div><button class="btn-close" type="button" aria-label="Close"></button></div>
+<div class="toast toast-info"><i class="bi bi-info-circle-fill" aria-hidden="true"></i><div class="toast-body"><strong>Import started</strong><div class="text-muted fs-12">You can leave this page.</div></div><button class="btn-close" type="button" aria-label="Close"></button></div>
+<div class="toast toast-warning"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i><div class="toast-body"><strong>Saved without the Thai text</strong></div><button class="btn-close" type="button" aria-label="Close"></button></div>
+<div class="toast toast-danger"><i class="bi bi-x-octagon-fill" aria-hidden="true"></i><div class="toast-body"><strong>Not saved</strong><div class="text-muted fs-12">The connection was lost; try again.</div></div><button class="btn-close" type="button" aria-label="Close"></button></div>
+<div class="toast toast-primary"><i class="bi bi-bell-fill" aria-hidden="true"></i><div class="toast-body"><strong>Moved to the archive</strong></div><button class="btn btn-sm" type="button">Undo</button><button class="btn-close" type="button" aria-label="Close"></button></div>
+```
+
+## Keyboard and accessibility
+
+- A toast never takes the focus; its close button and its action are in the tab order at the end of the page.
+- While a modal dialog is open, toasts show inside it, since everything outside it is inert.
+- The close button's name comes from the page's texts: `close` in the island `#redz-ui-text`.
+- Nothing a person must act on lives only in a toast that leaves by itself.
+
+## Tokens
+
+From [`css/components/toast.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/toast.css). It declares `--redz-toast-mark` on its root, never on rows or items.
+
+It reads the theme's `--redz-space-16`, `--redz-space-8`, `--redz-text-faint`, `--redz-space-12`, `--redz-border`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-2`, `--redz-primary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`.
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `toast-header` | — | review | REDZ.ui.toast builds the toast from its title, text and tone |
+| `data-bs-dismiss="toast"` | — | remove | REDZ.ui.toast adds its close button |
+| `bootstrap.Toast` | `REDZ.ui.toast({title, text, tone})` | trigger |  |
+
+# Spinners
+
+A turning ring, 1 em across in the color of the text around it, for something small that is on its way. A button shows its own while busy; a region shows an overlay.
+
+## Examples
+
+The words beside the spinner say what is happening; the ring alone is hidden from assistive technology.
+
+```html
+<span class="hstack gap-8"><span class="spinner-border" aria-hidden="true"></span>Rebuilding 3 pages…</span>
+<span class="hstack gap-8 text-primary fs-20"><span class="spinner-border" aria-hidden="true"></span>Larger, in the accent</span>
+```
+
+## Accessibility
+
+- A spinner turns even for people who ask for less motion — it is the sign that something is happening — and stays a ring in forced colors.
+- Say the same in words, in a live region when it starts after an action.
+
+## Tokens
+
+From [`css/components/spinner.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/spinner.css), which declares no custom property of its own.
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `spinner-grow` | — | missing |  |
+
+# Busy
+
+`REDZ.ui.busy(element, promise)` marks a button or a region busy until the promise settles: a button shows a spinner and ignores clicks, a region turns inert under an overlay.
+
+## Examples
+
+A region — a card, its body, a dialog's or a drawer's body, any `region` — keeps its old content under a dimmed overlay while the new comes. The overlay shows only after 400 ms, so a quick answer does not flash; once shown it stays at least 400 ms. A focus the region dropped comes back to the same element, to the element with its id in the new content, or to the region.
+
+```html
+<section class="card" id="busy-region-card" aria-labelledby="busy-region-title">
+	<div class="card-header"><h2 id="busy-region-title">Bookings this week</h2><button class="btn btn-sm ms-auto" type="button" data-docs-run="busy-region" aria-controls="busy-region-card"><i class="bi bi-arrow-repeat" aria-hidden="true"></i>Reload for 2 seconds</button></div>
+	<div class="card-body vstack gap-8">
+		<p class="fs-24 fw-600 tabular-nums">128</p>
+		<p class="text-muted">bookings, 312,400 THB</p>
+	</div>
+</section>
+```
+
+```js
+await REDZ.ui.busy(card, fetch(url).then((answer) => answer.text()).then((html) => { body.innerHTML = html; }));
+```
+
+### A button
+
+The button keeps its focus and size, shows a spinner in place of its words and ignores clicks until the promise settles.
+
+```html
+<button class="btn btn-primary" type="button" data-docs-run="busy-button">Save for 2 seconds</button>
+```
+
+## States
+
+What `busy()` sets, written by hand — the overlay appears 400 ms after the page draws it.
+
+## Accessibility
+
+- Screen readers mostly ignore `aria-busy`, and on a live region it breaks the region in some of them: here it is a styling hook, and `busy()` refuses a live region in the console.
+- The region is `inert` while busy: no focus, no clicks, out of the accessibility tree. When the overlay shows, one polite message says so — the page's text `busy`, “Loading…”.
+- For a first load, where there is nothing to cover yet, use [placeholders](placeholder.md).
+
+## Tokens
+
+From [`css/components/busy.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/busy.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-bg`, `--redz-primary`.
+
+# Save bar
+
+The bar at the foot of a form that says what is not saved yet and offers to save or discard it. It sticks to the bottom of the screen while the form is longer than the screen.
+
+## Examples
+
+At rest the bar says everything is saved; with unsaved changes it turns `save-bar-dirty` and names them.
+
+```html
+<div class="save-bar" role="region" aria-label="Changes">
+	<i class="bi bi-check2-circle" aria-hidden="true"></i>
+	<span class="save-bar-text">All changes saved</span>
+</div>
+<div class="save-bar save-bar-dirty" role="region" aria-label="Unsaved changes">
+	<i class="bi bi-pencil" aria-hidden="true"></i>
+	<span class="save-bar-text">2 unsaved changes: product name, accent color</span>
+	<button class="btn btn-sm" type="button">Discard</button>
+	<button class="btn btn-sm btn-primary" type="button"><i class="bi bi-floppy" aria-hidden="true"></i>Save</button>
+</div>
+```
+
+## Accessibility
+
+- The bar is a region named after what it holds; its words name the changes, not only their count.
+- It does not print, and it never hides the last field of the form: the form keeps room under it.
+
+## Tokens
+
+From [`css/components/save-bar.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/save-bar.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-space-12`, `--redz-space-8`, `--redz-space-16`, `--redz-border`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-2`, `--redz-text-muted`, `--redz-fs-12`, `--redz-warning`, `--redz-warning-subtle`.
+
+# Selection bar
+
+The bar over a list that shows when rows are checked: how many, and what can be done with all of them at once.
+
+## Examples
+
+Plain buttons in the bar take its tint; the one suggested action stays `btn-subtle-primary`, and clearing the selection is a quiet icon button at the end.
+
+```html
+<div class="selection-bar" role="region" aria-label="Selected excursions">
+	<strong>2 selected</strong>
+	<button class="btn btn-sm" type="button"><i class="bi bi-send" aria-hidden="true"></i>Publish</button>
+	<button class="btn btn-sm" type="button"><i class="bi bi-eye-slash" aria-hidden="true"></i>Withdraw</button>
+	<button class="btn btn-sm btn-subtle-primary" type="button"><i class="bi bi-stars" aria-hidden="true"></i>Translate what changed</button>
+	<button class="btn btn-sm ms-auto" type="button"><i class="bi bi-trash3" aria-hidden="true"></i>Delete…</button>
+	<button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Clear the selection"><i class="bi bi-x" aria-hidden="true"></i></button>
+</div>
+```
+
+## Accessibility
+
+- The bar is a region named after the list; its count says what is selected.
+- An action that removes asks first — its words end in “…” and it opens a [confirmation](dialog.md).
+
+## Tokens
+
+From [`css/components/selection-bar.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/selection-bar.css). It declares `--redz-btn-bg` on its root, never on rows or items.
+
+It reads the theme's `--redz-space-8`, `--redz-space-16`, `--redz-border`, `--redz-primary-subtle`, `--redz-bg`.
+
+# Navs and tabs
+
+A row of links between views of one thing — `nav-underline` — or of choices — `nav-pills`; and the same row as tabs that switch panels on the page, driven by the keyboard as the WAI-ARIA tabs pattern.
+
+## Examples
+
+Links between pages are a `<nav>`; the current one is `aria-current="page"`.
+
+```html
+<nav class="nav nav-underline" aria-label="List views">
+	<a class="nav-link" href="#nav-links" aria-current="page">All<span class="badge">28</span></a>
+	<a class="nav-link" href="#nav-links">Needs attention<span class="badge badge-subtle-warning">3</span></a>
+	<a class="nav-link" href="#nav-links">Drafts</a>
+</nav>
+<nav class="nav nav-pills" aria-label="Period">
+	<a class="nav-link" href="#nav-links" aria-current="page">Week</a>
+	<a class="nav-link" href="#nav-links">Month</a>
+	<a class="nav-link" href="#nav-links">Year</a>
+</nav>
+```
+
+### Tabs
+
+Tabs switch panels in place: `role="tablist"`, each tab `role="tab"` with `aria-selected` and `aria-controls`, each panel `role="tabpanel"`. The library keeps only the selected tab in the tab order and only its panel shown. The arrow keys select as they move.
+
+```html
+<div class="nav nav-underline" role="tablist" aria-label="Excursion">
+	<button class="nav-link" type="button" role="tab" id="nav-tabs-1" aria-selected="true" aria-controls="nav-tabs-panel-1">Details</button>
+	<button class="nav-link" type="button" role="tab" id="nav-tabs-2" aria-selected="false" aria-controls="nav-tabs-panel-2">Prices</button>
+	<button class="nav-link" type="button" role="tab" id="nav-tabs-3" aria-selected="false" aria-controls="nav-tabs-panel-3">History</button>
+</div>
+<div id="nav-tabs-panel-1" role="tabpanel" aria-labelledby="nav-tabs-1" tabindex="0"><p>A day at sea: snorkelling at two reefs, lunch on the boat.</p></div>
+<div id="nav-tabs-panel-2" role="tabpanel" aria-labelledby="nav-tabs-2" tabindex="0" hidden><p>Adults 2,500 · children 1,900 · under four free.</p></div>
+<div id="nav-tabs-panel-3" role="tabpanel" aria-labelledby="nav-tabs-3" tabindex="0" hidden><p>Edited yesterday by M. K.; published on three sites.</p></div>
+```
+
+### Tabs whose panels load
+
+When a panel comes from the server, the arrows should not load every panel they pass: `data-activation="manual"` on the tablist makes them move the focus only, and `Enter` or `Space` selects.
+
+```html
+<div class="nav nav-pills" role="tablist" aria-label="Report" data-activation="manual">
+	<button class="nav-link" type="button" role="tab" id="nav-manual-1" aria-selected="true" aria-controls="nav-manual-panel-1">Bookings</button>
+	<button class="nav-link" type="button" role="tab" id="nav-manual-2" aria-selected="false" aria-controls="nav-manual-panel-2">Revenue</button>
+	<button class="nav-link" type="button" role="tab" id="nav-manual-3" aria-selected="false" aria-controls="nav-manual-panel-3">Refunds</button>
+</div>
+<div id="nav-manual-panel-1" role="tabpanel" aria-labelledby="nav-manual-1" tabindex="0"><p>128 bookings this week.</p></div>
+<div id="nav-manual-panel-2" role="tabpanel" aria-labelledby="nav-manual-2" tabindex="0" hidden><p>312,400 THB this week.</p></div>
+<div id="nav-manual-panel-3" role="tabpanel" aria-labelledby="nav-manual-3" tabindex="0" hidden><p>2 refunds this week.</p></div>
+```
+
+## States
+
+## Keyboard and accessibility
+
+| Key | In a tablist |
+| --- | --- |
+| `→` / `←` | The next / the previous tab, round the ends — mirrored right to left; `↓` / `↑` in a list with `aria-orientation="vertical"` |
+| `Home` / `End` | The first / the last tab |
+| `Enter`, `Space` | Selects the focused tab — what the arrows do not, with `data-activation="manual"` |
+| `Tab` | From the selected tab into its panel |
+
+- Links that change the page are a `<nav>` of links, never tabs: tabs only switch what is already on the page.
+- A mark beside a tab's words — a dot, a count — has its own name, so the tab reads as “EN, 1 field outdated”.
+
+## Tokens
+
+From [`css/components/nav.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/nav.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-space-16`, `--redz-space-8`, `--redz-text-muted`, `--redz-text`, `--redz-border`, `--redz-radius-8`, `--redz-bg-hover`, `--redz-space-12`, `--redz-radius-6`, `--redz-fs-12`, `--redz-bg`, `--redz-shadow-1`.
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `nav-fill` | — | missing |  |
+| `nav-item` | — | remove | links sit straight in the nav |
+| `nav-justified` | — | missing |  |
+| `nav-tabs` | `nav-underline` | rename | tabs are drawn as an underline |
+| `tab-content` | — | remove | panels are siblings with role="tabpanel", hidden when not selected |
+| `tab-pane` | — | remove | panels are siblings with role="tabpanel", hidden when not selected |
+| `data-bs-toggle="tab"` | `role="tab" aria-controls="ID"` | trigger | in a role="tablist"; the library selects and shows the panel |
+| `data-bs-toggle="pill"` | `role="tab" aria-controls="ID"` | trigger | in a role="tablist" |
+| `bootstrap.Tab` | `tab.click()` | review | the library selects on click and by the keys |
+| `shown.bs.tab` | — | review | watch aria-selected, or the tab's click |
+
+# Breadcrumbs
+
+The way up from a record to the list it belongs to, above the record's title. The separators are drawn by CSS and turn with the direction.
+
+## Examples
+
+```html
+<nav aria-label="Breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="#breadcrumb-trail">Content</a></li>
+		<li class="breadcrumb-item"><a href="#breadcrumb-trail">Excursions</a></li>
+		<li class="breadcrumb-item" aria-current="page">Ang Thong</li>
+	</ol>
+</nav>
+```
+
+## Accessibility
+
+- A `<nav aria-label="Breadcrumb">` around an ordered list; the last item is the page itself, `aria-current="page"`, not a link.
+- The separators are not read: they are drawn, not written.
+
+## Tokens
+
+From [`css/components/breadcrumb.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/breadcrumb.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-text-muted`, `--redz-fs-12`, `--redz-text-faint`.
+
+# App shell
+
+The frame of an admin screen: `app` with a header, a side navigation, the main column and an optional side column. Below 1024 px the side navigation becomes a panel opened from the header. These docs stand in it.
+
+## The parts
+
+The shell is the one part of the library that looks at the window; everything inside it measures its own region. `app-main` and `app-aside` are regions, so `md:` inside the main column measures the column.
+
+```html
+<div class="app">
+  <header class="app-header">
+    <button class="btn btn-text btn-icon app-burger" type="button" commandfor="side" command="toggle-popover" aria-label="Sections">…</button>
+    <a class="app-brand" href="/"><span class="app-mark">RZ</span>REDZ CMS</a>
+    <button class="btn app-search" type="button" aria-keyshortcuts="Meta+K">…</button>
+  </header>
+  <nav id="side" class="app-sidebar" popover aria-label="Sections">
+    <div class="app-section">Content</div>
+    <a class="app-link" href="/excursions/" aria-current="page">…Excursions</a>
+  </nav>
+  <main class="app-main" id="main">…</main>
+  <aside class="app-aside">…</aside>
+</div>
+```
+
+The [demo screens](https://redz-tech.github.io/REDZ.UI/reference/demo/list.html) show the whole shell: a list, a resource page with its side column, a settings form.
+
+## States
+
+## Keyboard and accessibility
+
+- The header is a `<header>`, the side navigation a named `<nav>`, the main column the page's one `<main>`.
+- On a narrow screen the burger opens the navigation as a popover: `Esc` or a click outside closes it, and the focus goes back to the burger.
+- The current section is `aria-current="page"`, drawn as a bar that stays in forced colors.
+- The header and the navigation stay off paper: only the main column prints.
+
+## Tokens
+
+From [`css/components/app.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/app.css). It declares `--redz-btn-bg`, `--redz-btn-fg`, `--redz-btn-hover` on its root, never on rows or items.
+
+It reads the theme's `--redz-space-8`, `--redz-space-12`, `--redz-bg-page`, `--redz-text`, `--redz-radius-8`, `--redz-primary`, `--redz-primary-contrast`, `--redz-fs-12`, `--redz-bg`, `--redz-text-muted`, `--redz-border`, `--redz-border-strong`, `--redz-space-4`, `--redz-space-16`, `--redz-bg-hover`, `--redz-shadow-1`, `--redz-space-24`, `--redz-space-32`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-3`.
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `navbar` | — | review | the shell's app-header |
+| `navbar-brand` | — | review | the shell's app-header |
+| `navbar-collapse` | — | review | the shell's app-header |
+| `navbar-dark` | — | review | the shell's app-header |
+| `navbar-expand` | — | review | the shell's app-header |
+| `navbar-nav` | — | review | the shell's app-header |
+| `navbar-nav-scroll` | — | review | the shell's app-header |
+| `navbar-text` | — | review | the shell's app-header |
+| `navbar-toggler` | — | review | the shell's app-header |
+| `navbar-toggler-icon` | — | review | the shell's app-header |

@@ -1,0 +1,79 @@
+<header class="vstack gap-8">
+	<h1>Chips</h1>
+	<p class="docs-lead">A chip is a small rounded choice: a filter that is on or off, a saved view, an applied filter with its count and a way to remove it.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="chip-examples">
+	<h2 id="chip-examples">Examples</h2>
+	<p>A filter chip is a toggle button: <code>aria-pressed</code> says whether it is on. A chip that opens a menu is the menu's button.</p>
+	<div class="docs-example" id="chip-filters">
+		<button class="chip" type="button" aria-pressed="true"><i class="bi bi-eye" aria-hidden="true"></i>Published</button>
+		<button class="chip" type="button" aria-pressed="false"><i class="bi bi-pencil-square" aria-hidden="true"></i>Drafts</button>
+		<button class="chip" type="button" aria-pressed="false"><i class="bi bi-translate" aria-hidden="true"></i>Language: any</button>
+		<button class="chip" type="button" commandfor="chip-site-menu" command="toggle-popover" aria-haspopup="menu"><i class="bi bi-globe2" aria-hidden="true"></i>Site: all<i class="bi bi-chevron-down" aria-hidden="true"></i></button>
+		<div id="chip-site-menu" class="menu menu-start" popover role="menu" aria-label="Site">
+			<button class="menu-item" type="button" role="menuitemradio" aria-checked="true">All sites</button>
+			<button class="menu-item" type="button" role="menuitemradio" aria-checked="false">lagoon.example</button>
+			<button class="menu-item" type="button" role="menuitemradio" aria-checked="false">angthong.example</button>
+		</div>
+	</div>
+
+	<h3>Saved views and applied filters</h3>
+	<p>Links between saved views mark the current one with <code>aria-current="true"</code>. An applied filter is a group: its name, its count in <code>chip-count</code>, and a <code>chip-dismiss</code> button named after what it removes.</p>
+	<div class="docs-example" id="chip-views">
+		<a class="chip" href="#chip-views" aria-current="true">All<span class="chip-count">28</span></a>
+		<a class="chip" href="#chip-views">Needs attention<span class="chip-count">3</span></a>
+		<a class="chip" href="#chip-views">Mine<span class="chip-count">11</span></a>
+		<span class="chip" role="group" aria-label="Filter: section Marine"><i class="bi bi-diagram-3" aria-hidden="true"></i>Section: Marine<span class="chip-count">9</span><button class="chip-dismiss" type="button" aria-label="Remove filter: section Marine"><i class="bi bi-x" aria-hidden="true"></i></button></span>
+	</div>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="chip-states-title">
+	<h2 id="chip-states-title">States</h2>
+	<div class="docs-states" id="chip-states" tabindex="0" role="region" aria-labelledby="chip-states-title">
+		<table class="docs-matrix">
+			<thead>
+				<tr><th scope="col">class</th><th scope="col">rest</th><th scope="col">:hover</th><th scope="col">:focus-visible</th><th scope="col">aria-pressed</th><th scope="col">aria-current</th><th scope="col">aria-expanded</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row">chip</th>
+					<td><button class="chip" type="button" aria-pressed="false">Drafts</button></td>
+					<td><button class="chip" type="button" aria-pressed="false" data-docs-state="hover">Drafts</button></td>
+					<td><button class="chip" type="button" aria-pressed="false" data-docs-state="focus-visible">Drafts</button></td>
+					<td><button class="chip" type="button" aria-pressed="true">Drafts</button></td>
+					<td><a class="chip" href="#chip-states" aria-current="true">Drafts</a></td>
+					<td><button class="chip" type="button" aria-expanded="true">Drafts</button></td>
+				</tr>
+				<tr>
+					<th scope="row">chip + chip-count</th>
+					<td><button class="chip" type="button" aria-pressed="false">Mine<span class="chip-count">11</span></button></td>
+					<td><button class="chip" type="button" aria-pressed="false" data-docs-state="hover">Mine<span class="chip-count">11</span></button></td>
+					<td><button class="chip" type="button" aria-pressed="false" data-docs-state="focus-visible">Mine<span class="chip-count">11</span></button></td>
+					<td><button class="chip" type="button" aria-pressed="true">Mine<span class="chip-count">11</span></button></td>
+					<td><a class="chip" href="#chip-states" aria-current="true">Mine<span class="chip-count">11</span></a></td>
+					<td>—</td>
+				</tr>
+				<tr>
+					<th scope="row">chip-dismiss</th>
+					<td><span class="chip" role="group" aria-label="Filter: Marine">Marine<button class="chip-dismiss" type="button" aria-label="Remove filter: Marine"><i class="bi bi-x" aria-hidden="true"></i></button></span></td>
+					<td><span class="chip" role="group" aria-label="Filter: Marine">Marine<button class="chip-dismiss" type="button" aria-label="Remove filter: Marine" data-docs-state="hover"><i class="bi bi-x" aria-hidden="true"></i></button></span></td>
+					<td><span class="chip" role="group" aria-label="Filter: Marine">Marine<button class="chip-dismiss" type="button" aria-label="Remove filter: Marine" data-docs-state="focus-visible"><i class="bi bi-x" aria-hidden="true"></i></button></span></td>
+					<td>—</td>
+					<td>—</td>
+					<td>—</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="chip-access">
+	<h2 id="chip-access">Keyboard and accessibility</h2>
+	<ul>
+		<li>A filter chip is a <code>&lt;button&gt;</code> with <code>aria-pressed</code>; Space or Enter toggles it. Change the attribute when the filter changes — the look follows it.</li>
+		<li>A saved view is a link; the current one carries <code>aria-current="true"</code>.</li>
+		<li>An applied filter is <code>role="group"</code> named after the filter, and its dismiss button names what it removes — "Remove filter: section Marine", not "Remove".</li>
+		<li>A count is part of the chip's name; say what it counts in the words around it when it is not obvious.</li>
+	</ul>
+</section>

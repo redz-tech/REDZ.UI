@@ -1,0 +1,54 @@
+<header class="vstack gap-8">
+	<h1>Cards</h1>
+	<p class="docs-lead">A card is a bordered region of a screen: a header with its title and actions, a body, a footer. It is a region — the width prefixes inside it measure the card, not the window.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="card-examples">
+	<h2 id="card-examples">Examples</h2>
+	<p>A card that is a section of the screen is a <code>&lt;section&gt;</code> named by its heading. The header holds an icon, the title and whatever belongs to it; the footer holds the card's actions.</p>
+	<div class="docs-example docs-example-stack" id="card-basic">
+		<section class="card" aria-labelledby="card-basic-title">
+			<div class="card-header"><i class="bi bi-cash-coin" aria-hidden="true"></i><h2 id="card-basic-title">Price</h2><span class="text-muted fs-12">in the base currency THB</span></div>
+			<div class="card-body vstack gap-8">
+				<p>Adults 2,500 · children 1,900 · under four free.</p>
+				<p class="text-muted">The visitor's currency is an estimate.</p>
+			</div>
+			<div class="card-footer justify-content-end">
+				<button class="btn" type="button">Cancel</button>
+				<button class="btn btn-primary" type="button">Save</button>
+			</div>
+		</section>
+	</div>
+
+	<h3>Tabs on a card</h3>
+	<p>A <code>nav</code> placed straight in the card lines up with the header's padding.</p>
+	<div class="docs-example docs-example-stack" id="card-tabs">
+		<section class="card" aria-labelledby="card-tabs-title">
+			<div class="card-header"><h2 id="card-tabs-title">Ang Thong</h2></div>
+			<div class="nav nav-underline" role="tablist" aria-label="Ang Thong">
+				<button class="nav-link" type="button" role="tab" id="card-tabs-1" aria-selected="true" aria-controls="card-tabs-panel-1">Details</button>
+				<button class="nav-link" type="button" role="tab" id="card-tabs-2" aria-selected="false" aria-controls="card-tabs-panel-2">Prices</button>
+			</div>
+			<div class="card-body" id="card-tabs-panel-1" role="tabpanel" aria-labelledby="card-tabs-1" tabindex="0"><p>A day at sea: snorkelling at two reefs, lunch on the boat.</p></div>
+			<div class="card-body" id="card-tabs-panel-2" role="tabpanel" aria-labelledby="card-tabs-2" tabindex="0" hidden><p>Adults 2,500 · children 1,900.</p></div>
+		</section>
+	</div>
+
+	<h3>A grid of cards</h3>
+	<p>The parent sets the grid; each card measures itself. Under 576 px of the region the cards stack.</p>
+	<div class="docs-example docs-example-stack" id="card-grid">
+		<div class="grid sm:cols-2 gap-16">
+			<section class="card" aria-labelledby="card-grid-a"><div class="card-header"><h2 id="card-grid-a">Bookings</h2></div><div class="card-body"><p class="fs-24 fw-600 tabular-nums">128</p><p class="text-muted">this week</p></div></section>
+			<section class="card" aria-labelledby="card-grid-b"><div class="card-header"><h2 id="card-grid-b">Revenue</h2></div><div class="card-body"><p class="fs-24 fw-600 tabular-nums">312,400 THB</p><p class="text-muted">this week</p></div></section>
+		</div>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="card-access">
+	<h2 id="card-access">Accessibility</h2>
+	<ul>
+		<li>A card that is a part of the page is a <code>&lt;section&gt;</code> with <code>aria-labelledby</code> pointing at its heading; a card in a list of cards is an <code>&lt;article&gt;</code> or a list item.</li>
+		<li>A card has no outer margin: the gap between cards belongs to their parent.</li>
+		<li>A card being refreshed in place turns busy with <code>REDZ.ui.busy(card, promise)</code> — see <a href="busy.html">Busy</a>.</li>
+	</ul>
+</section>

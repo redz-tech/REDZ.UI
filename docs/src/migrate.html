@@ -1,0 +1,28 @@
+<header class="vstack gap-8">
+	<h1>From Bootstrap 5.3</h1>
+	<p class="docs-lead">Most of Bootstrap 5's names stay. What changes is the spacing numbers, the grid, the breakpoints, states and triggers, and the three components Bootstrap 6 renamed. The two libraries are never on one page: a project switches its stylesheet at once.</p>
+</header>
+
+<section class="vstack gap-12" aria-labelledby="migrate-changes">
+	<h2 id="migrate-changes">What changes</h2>
+	<ul>
+		<li><strong>Spacing:</strong> the number is the pixels. <code>p-3</code> becomes <code>p-16</code>, <code>mb-2</code> <code>mb-8</code>, <code>gap-4</code> <code>gap-24</code> — and <code>p-4</code> exists in both with another size: Bootstrap's 24 px, REDZ.UI's 4 px. Never rename by chained replacements; rewrite each file once.</li>
+		<li><strong>Grid:</strong> <code>row</code> and <code>col-md-6</code> become the parent's <code>grid md:cols-2</code>; a column's own width is <code>span-N</code>.</li>
+		<li><strong>Breakpoints:</strong> the infix becomes a prefix — <code>d-md-none</code> is <code>md:d-none</code> — and it measures the region, not the window.</li>
+		<li><strong>States:</strong> classes become attributes — <code>.active</code> is <code>aria-current</code>, <code>aria-selected</code> or <code>aria-pressed</code>; <code>.disabled</code> is <code>disabled</code> or <code>aria-disabled</code>; <code>.is-invalid</code> is <code>aria-invalid="true"</code>.</li>
+		<li><strong>Triggers:</strong> <code>data-bs-toggle</code> becomes the browser's commands — <code>commandfor</code> + <code>command="show-modal"</code>, <code>"close"</code> or <code>"toggle-popover"</code>; <code>bootstrap.Modal</code> becomes <code>dialog.showModal()</code>.</li>
+		<li><strong>Renamed:</strong> modal → <code>dialog</code> on a <code>&lt;dialog&gt;</code>, dropdown → <code>menu</code> on a popover, offcanvas → <code>drawer</code>.</li>
+		<li><strong>Icons:</strong> Bootstrap Icons keep their classes; swap the font's stylesheet for <code>css/icons.css</code>.</li>
+	</ul>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="migrate-skill">
+	<h2 id="migrate-skill">With an agent</h2>
+	<p>The skill <code>redz-ui-from-bootstrap-5</code> moves a project file by file: <code>scripts/scan.sh</code> finds every Bootstrap class, attribute and call with its replacement and checks every class against the vocabulary; the agent rewrites the whole file in one pass, scans it again until nothing is left, and compares the screens before and after. Install it with <code>npx skills add redz-tech/REDZ.UI</code>.</p>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="migrate-map">
+	<h2 id="migrate-map">The map</h2>
+	<p>Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not listed keeps its name, and a breakpoint form follows its class — <code>mb-md-3</code> is <code>md:mb-16</code>. The full map, every class and form, is the skill's <code>assets/map.tsv</code>.</p>
+	<!-- docs:map -->
+</section>

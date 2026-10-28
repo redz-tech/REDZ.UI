@@ -1,0 +1,240 @@
+<header class="vstack gap-8">
+	<h1>Buttons</h1>
+	<p class="docs-lead">A button runs an action; a link drawn as a button goes somewhere. One class, <code>btn</code>, then a tone, a size or an icon when the button needs one.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="btn-examples">
+	<h2 id="btn-examples">Examples</h2>
+	<p>The plain <code>btn</code> is neutral. <code>btn-primary</code> marks the one main action of a screen; the other tones say what an action does.</p>
+	<div class="docs-example" id="btn-tones">
+		<button class="btn btn-primary" type="button">Save</button>
+		<button class="btn" type="button">Cancel</button>
+		<button class="btn btn-secondary" type="button">Duplicate</button>
+		<button class="btn btn-success" type="button">Publish</button>
+		<button class="btn btn-danger" type="button">Delete</button>
+		<button class="btn btn-warning" type="button">Withdraw</button>
+		<button class="btn btn-info" type="button">Preview</button>
+	</div>
+
+	<h3>Outline, subtle, text and link</h3>
+	<p>Quieter forms of the same tones for secondary actions, rows and toolbars. <code>btn-text</code> has no fill until hovered; <code>btn-link</code> reads as a link and keeps a button's size.</p>
+	<div class="docs-example" id="btn-quiet">
+		<button class="btn btn-outline-primary" type="button">Outline</button>
+		<button class="btn btn-outline-danger" type="button">Outline danger</button>
+		<button class="btn btn-subtle-primary" type="button">Subtle</button>
+		<button class="btn btn-subtle-danger" type="button">Subtle danger</button>
+		<button class="btn btn-text" type="button">Text</button>
+		<button class="btn btn-link" type="button">Link</button>
+	</div>
+
+	<h3>Sizes</h3>
+	<p>A size is a word: <code>btn-xs</code> 24 px, <code>btn-sm</code> 28 px, the default 32 px, <code>btn-lg</code> 40 px — the heights of every control of the same size.</p>
+	<div class="docs-example" id="btn-sizes">
+		<button class="btn btn-primary btn-xs" type="button">Extra small</button>
+		<button class="btn btn-primary btn-sm" type="button">Small</button>
+		<button class="btn btn-primary" type="button">Default</button>
+		<button class="btn btn-primary btn-lg" type="button">Large</button>
+	</div>
+
+	<h3>Icons</h3>
+	<p>An icon sits beside the words, or alone in a square <code>btn-icon</code> whose name is its <code>aria-label</code>. <code>btn-close</code> draws the close glyph by itself.</p>
+	<div class="docs-example" id="btn-icons">
+		<button class="btn" type="button"><i class="bi bi-plus-lg" aria-hidden="true"></i>New excursion</button>
+		<a class="btn" href="#btn-icons">Open the site<i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a>
+		<button class="btn btn-icon" type="button" aria-label="Edit"><i class="bi bi-pencil" aria-hidden="true"></i></button>
+		<button class="btn btn-icon btn-text" type="button" aria-label="More actions"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
+		<button class="btn btn-icon btn-sm btn-subtle-danger" type="button" aria-label="Remove"><i class="bi bi-trash3" aria-hidden="true"></i></button>
+		<button class="btn-close" type="button" aria-label="Close"></button>
+	</div>
+
+	<h3>Groups and toolbars</h3>
+	<p><code>btn-group</code> joins buttons into one control — here a choice of view, each button pressed or not. <code>btn-toolbar</code> lays groups and buttons out in a wrapping row.</p>
+	<div class="docs-example" id="btn-groups">
+		<div class="btn-toolbar" role="group" aria-label="List view">
+			<div class="btn-group" role="group" aria-label="Layout">
+				<button class="btn" type="button" aria-pressed="true">List</button>
+				<button class="btn" type="button" aria-pressed="false">Board</button>
+				<button class="btn" type="button" aria-pressed="false">Calendar</button>
+			</div>
+			<div class="btn-group" role="group" aria-label="Export">
+				<button class="btn" type="button">Export</button>
+				<button class="btn btn-icon" type="button" aria-label="Export options"><i class="bi bi-chevron-down" aria-hidden="true"></i></button>
+			</div>
+		</div>
+	</div>
+
+	<h3>Toggle and busy</h3>
+	<p>A toggle carries <code>aria-pressed</code>. While its action runs, <code>REDZ.ui.busy(button, promise)</code> shows a spinner in the button and marks it <code>aria-disabled</code>: it keeps the focus and ignores clicks until the promise settles.</p>
+	<div class="docs-example" id="btn-toggle">
+		<button class="btn" type="button" aria-pressed="false" data-docs-run="toggle"><i class="bi bi-pin-angle" aria-hidden="true"></i>Pin</button>
+		<button class="btn btn-primary" type="button" data-docs-run="busy-button">Save for 2 seconds</button>
+	</div>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="btn-states-title">
+	<h2 id="btn-states-title">States</h2>
+	<p>A state is the attribute accessibility needs anyway, on the button itself: no <code>active</code> or <code>disabled</code> classes. <code>aria-expanded</code> is set by the browser on a button that opens a menu or a dialog.</p>
+	<div class="docs-states" id="btn-states" tabindex="0" role="region" aria-labelledby="btn-states-title">
+		<table class="docs-matrix">
+			<thead>
+				<tr><th scope="col">class</th><th scope="col">rest</th><th scope="col">:hover</th><th scope="col">:focus-visible</th><th scope="col">aria-pressed</th><th scope="col">aria-expanded</th><th scope="col">disabled</th><th scope="col">aria-disabled</th><th scope="col">aria-busy</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row">btn</th>
+					<td><button class="btn" type="button">Save</button></td>
+					<td><button class="btn" type="button" data-docs-state="hover">Save</button></td>
+					<td><button class="btn" type="button" data-docs-state="focus-visible">Save</button></td>
+					<td><button class="btn" type="button" aria-pressed="true">Save</button></td>
+					<td><button class="btn" type="button" aria-expanded="true">Save</button></td>
+					<td><button class="btn" type="button" disabled>Save</button></td>
+					<td><button class="btn" type="button" aria-disabled="true">Save</button></td>
+					<td><button class="btn" type="button" aria-busy="true">Save</button></td>
+				</tr>
+				<tr>
+					<th scope="row">btn-primary</th>
+					<td><button class="btn btn-primary" type="button">Save</button></td>
+					<td><button class="btn btn-primary" type="button" data-docs-state="hover">Save</button></td>
+					<td><button class="btn btn-primary" type="button" data-docs-state="focus-visible">Save</button></td>
+					<td><button class="btn btn-primary" type="button" aria-pressed="true">Save</button></td>
+					<td><button class="btn btn-primary" type="button" aria-expanded="true">Save</button></td>
+					<td><button class="btn btn-primary" type="button" disabled>Save</button></td>
+					<td><button class="btn btn-primary" type="button" aria-disabled="true">Save</button></td>
+					<td><button class="btn btn-primary" type="button" aria-busy="true">Save</button></td>
+				</tr>
+				<tr>
+					<th scope="row">btn-danger</th>
+					<td><button class="btn btn-danger" type="button">Delete</button></td>
+					<td><button class="btn btn-danger" type="button" data-docs-state="hover">Delete</button></td>
+					<td><button class="btn btn-danger" type="button" data-docs-state="focus-visible">Delete</button></td>
+					<td><button class="btn btn-danger" type="button" aria-pressed="true">Delete</button></td>
+					<td><button class="btn btn-danger" type="button" aria-expanded="true">Delete</button></td>
+					<td><button class="btn btn-danger" type="button" disabled>Delete</button></td>
+					<td><button class="btn btn-danger" type="button" aria-disabled="true">Delete</button></td>
+					<td><button class="btn btn-danger" type="button" aria-busy="true">Delete</button></td>
+				</tr>
+				<tr>
+					<th scope="row">btn-outline-primary</th>
+					<td><button class="btn btn-outline-primary" type="button">Edit</button></td>
+					<td><button class="btn btn-outline-primary" type="button" data-docs-state="hover">Edit</button></td>
+					<td><button class="btn btn-outline-primary" type="button" data-docs-state="focus-visible">Edit</button></td>
+					<td><button class="btn btn-outline-primary" type="button" aria-pressed="true">Edit</button></td>
+					<td><button class="btn btn-outline-primary" type="button" aria-expanded="true">Edit</button></td>
+					<td><button class="btn btn-outline-primary" type="button" disabled>Edit</button></td>
+					<td><button class="btn btn-outline-primary" type="button" aria-disabled="true">Edit</button></td>
+					<td><button class="btn btn-outline-primary" type="button" aria-busy="true">Edit</button></td>
+				</tr>
+				<tr>
+					<th scope="row">btn-subtle-primary</th>
+					<td><button class="btn btn-subtle-primary" type="button">Edit</button></td>
+					<td><button class="btn btn-subtle-primary" type="button" data-docs-state="hover">Edit</button></td>
+					<td><button class="btn btn-subtle-primary" type="button" data-docs-state="focus-visible">Edit</button></td>
+					<td><button class="btn btn-subtle-primary" type="button" aria-pressed="true">Edit</button></td>
+					<td><button class="btn btn-subtle-primary" type="button" aria-expanded="true">Edit</button></td>
+					<td><button class="btn btn-subtle-primary" type="button" disabled>Edit</button></td>
+					<td><button class="btn btn-subtle-primary" type="button" aria-disabled="true">Edit</button></td>
+					<td><button class="btn btn-subtle-primary" type="button" aria-busy="true">Edit</button></td>
+				</tr>
+				<tr>
+					<th scope="row">btn-subtle-secondary</th>
+					<td><button class="btn btn-subtle-secondary" type="button">Edit</button></td>
+					<td><button class="btn btn-subtle-secondary" type="button" data-docs-state="hover">Edit</button></td>
+					<td><button class="btn btn-subtle-secondary" type="button" data-docs-state="focus-visible">Edit</button></td>
+					<td><button class="btn btn-subtle-secondary" type="button" aria-pressed="true">Edit</button></td>
+					<td><button class="btn btn-subtle-secondary" type="button" aria-expanded="true">Edit</button></td>
+					<td><button class="btn btn-subtle-secondary" type="button" disabled>Edit</button></td>
+					<td><button class="btn btn-subtle-secondary" type="button" aria-disabled="true">Edit</button></td>
+					<td><button class="btn btn-subtle-secondary" type="button" aria-busy="true">Edit</button></td>
+				</tr>
+				<tr>
+					<th scope="row">btn-subtle-success</th>
+					<td><button class="btn btn-subtle-success" type="button">Edit</button></td>
+					<td><button class="btn btn-subtle-success" type="button" data-docs-state="hover">Edit</button></td>
+					<td><button class="btn btn-subtle-success" type="button" data-docs-state="focus-visible">Edit</button></td>
+					<td><button class="btn btn-subtle-success" type="button" aria-pressed="true">Edit</button></td>
+					<td><button class="btn btn-subtle-success" type="button" aria-expanded="true">Edit</button></td>
+					<td><button class="btn btn-subtle-success" type="button" disabled>Edit</button></td>
+					<td><button class="btn btn-subtle-success" type="button" aria-disabled="true">Edit</button></td>
+					<td><button class="btn btn-subtle-success" type="button" aria-busy="true">Edit</button></td>
+				</tr>
+				<tr>
+					<th scope="row">btn-subtle-danger</th>
+					<td><button class="btn btn-subtle-danger" type="button">Edit</button></td>
+					<td><button class="btn btn-subtle-danger" type="button" data-docs-state="hover">Edit</button></td>
+					<td><button class="btn btn-subtle-danger" type="button" data-docs-state="focus-visible">Edit</button></td>
+					<td><button class="btn btn-subtle-danger" type="button" aria-pressed="true">Edit</button></td>
+					<td><button class="btn btn-subtle-danger" type="button" aria-expanded="true">Edit</button></td>
+					<td><button class="btn btn-subtle-danger" type="button" disabled>Edit</button></td>
+					<td><button class="btn btn-subtle-danger" type="button" aria-disabled="true">Edit</button></td>
+					<td><button class="btn btn-subtle-danger" type="button" aria-busy="true">Edit</button></td>
+				</tr>
+				<tr>
+					<th scope="row">btn-subtle-warning</th>
+					<td><button class="btn btn-subtle-warning" type="button">Edit</button></td>
+					<td><button class="btn btn-subtle-warning" type="button" data-docs-state="hover">Edit</button></td>
+					<td><button class="btn btn-subtle-warning" type="button" data-docs-state="focus-visible">Edit</button></td>
+					<td><button class="btn btn-subtle-warning" type="button" aria-pressed="true">Edit</button></td>
+					<td><button class="btn btn-subtle-warning" type="button" aria-expanded="true">Edit</button></td>
+					<td><button class="btn btn-subtle-warning" type="button" disabled>Edit</button></td>
+					<td><button class="btn btn-subtle-warning" type="button" aria-disabled="true">Edit</button></td>
+					<td><button class="btn btn-subtle-warning" type="button" aria-busy="true">Edit</button></td>
+				</tr>
+				<tr>
+					<th scope="row">btn-subtle-info</th>
+					<td><button class="btn btn-subtle-info" type="button">Edit</button></td>
+					<td><button class="btn btn-subtle-info" type="button" data-docs-state="hover">Edit</button></td>
+					<td><button class="btn btn-subtle-info" type="button" data-docs-state="focus-visible">Edit</button></td>
+					<td><button class="btn btn-subtle-info" type="button" aria-pressed="true">Edit</button></td>
+					<td><button class="btn btn-subtle-info" type="button" aria-expanded="true">Edit</button></td>
+					<td><button class="btn btn-subtle-info" type="button" disabled>Edit</button></td>
+					<td><button class="btn btn-subtle-info" type="button" aria-disabled="true">Edit</button></td>
+					<td><button class="btn btn-subtle-info" type="button" aria-busy="true">Edit</button></td>
+				</tr>
+				<tr>
+					<th scope="row">btn-text</th>
+					<td><button class="btn btn-text" type="button">Edit</button></td>
+					<td><button class="btn btn-text" type="button" data-docs-state="hover">Edit</button></td>
+					<td><button class="btn btn-text" type="button" data-docs-state="focus-visible">Edit</button></td>
+					<td><button class="btn btn-text" type="button" aria-pressed="true">Edit</button></td>
+					<td><button class="btn btn-text" type="button" aria-expanded="true">Edit</button></td>
+					<td><button class="btn btn-text" type="button" disabled>Edit</button></td>
+					<td><button class="btn btn-text" type="button" aria-disabled="true">Edit</button></td>
+					<td><button class="btn btn-text" type="button" aria-busy="true">Edit</button></td>
+				</tr>
+				<tr>
+					<th scope="row">btn-link</th>
+					<td><button class="btn btn-link" type="button">Details</button></td>
+					<td><button class="btn btn-link" type="button" data-docs-state="hover">Details</button></td>
+					<td><button class="btn btn-link" type="button" data-docs-state="focus-visible">Details</button></td>
+					<td><button class="btn btn-link" type="button" aria-pressed="true">Details</button></td>
+					<td><button class="btn btn-link" type="button" aria-expanded="true">Details</button></td>
+					<td><button class="btn btn-link" type="button" disabled>Details</button></td>
+					<td><button class="btn btn-link" type="button" aria-disabled="true">Details</button></td>
+					<td><button class="btn btn-link" type="button" aria-busy="true">Details</button></td>
+				</tr>
+				<tr>
+					<th scope="row">btn-close</th>
+					<td><button class="btn-close" type="button" aria-label="Close"></button></td>
+					<td><button class="btn-close" type="button" aria-label="Close" data-docs-state="hover"></button></td>
+					<td><button class="btn-close" type="button" aria-label="Close" data-docs-state="focus-visible"></button></td>
+					<td>—</td>
+					<td>—</td>
+					<td><button class="btn-close" type="button" aria-label="Close" disabled></button></td>
+					<td>—</td>
+					<td>—</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="btn-access">
+	<h2 id="btn-access">Keyboard and accessibility</h2>
+	<ul>
+		<li><code>&lt;button type="button"&gt;</code> for an action, <code>&lt;a href&gt;</code> for a place; <code>btn</code> draws both the same. Enter and Space press a button, Enter follows a link.</li>
+		<li>A button with only an icon takes its name from <code>aria-label</code>; the icon is <code>aria-hidden="true"</code>.</li>
+		<li><code>disabled</code> takes a button out of the tab order and hides why. <code>aria-disabled="true"</code> keeps it focusable — so a tooltip can say why — and the library swallows its clicks.</li>
+		<li>A button that opens a menu or a dialog uses the browser's command: <code>commandfor</code> + <code>command</code>, never <code>data-bs-toggle</code>.</li>
+		<li>The focus ring is 2 px of <code>--redz-focus</code>, 3:1 against the page in both themes.</li>
+	</ul>
+</section>

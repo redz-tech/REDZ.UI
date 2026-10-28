@@ -1,7 +1,8 @@
 // REDZ.UI, menus by keyboard (the WAI-ARIA menu button): an opened menu takes the focus on its checked or first item;
 // the arrow keys move it, wrapping, Home and End go to the ends and a letter to the next item it starts; Tab closes
 // the menu and goes on from its button, Escape closes it back to the button (the browser's own), an item chosen closes
-// it. On a closed menu's button the down and up arrows open it on the first or the last item.
+// it, and so does the focus leaving it any other way. Option-Tab is Tab here: it is how Safari's users move through
+// buttons. On a closed menu's button the down and up arrows open it on the first or the last item.
 const ITEM = '[role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"]';
 let from = 'first';
 
@@ -25,7 +26,19 @@ document.addEventListener('toggle', (event) => {
 	from = 'first';
 }, true);
 
+document.addEventListener('focusout', (event) => {
+	const menu = event.target instanceof Element ? event.target.closest('[role="menu"]') : null;
+	if (menu?.matches(':popover-open') && event.relatedTarget instanceof Node && !menu.contains(event.relatedTarget)) {
+		menu.hidePopover();
+	}
+});
+
 document.addEventListener('keydown', (event) => {
+	const tab = event.key === 'Tab' && !event.ctrlKey && !event.metaKey;
+	if (tab && event.target instanceof Element && event.target.matches(ITEM)) {
+		event.target.closest('[role="menu"]')?.hidePopover();
+		return;
+	}
 	if (event.altKey || event.ctrlKey || event.metaKey || !(event.target instanceof Element)) {
 		return;
 	}
@@ -52,9 +65,6 @@ document.addEventListener('keydown', (event) => {
 		to = items[0];
 	} else if (event.key === 'End') {
 		to = items.at(-1);
-	} else if (event.key === 'Tab') {
-		menu.hidePopover();
-		return;
 	} else if (event.key.length === 1 && event.key !== ' ') {
 		const letter = event.key.toLocaleLowerCase();
 		to = [...items.slice(at + 1), ...items.slice(0, at + 1)].find((item) => item.textContent.trim().toLocaleLowerCase().startsWith(letter)) ?? null;

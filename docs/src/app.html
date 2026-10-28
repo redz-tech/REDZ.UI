@@ -1,0 +1,53 @@
+<header class="vstack gap-8">
+	<h1>App shell</h1>
+	<p class="docs-lead">The frame of an admin screen: <code>app</code> with a header, a side navigation, the main column and an optional side column. Below 1024 px the side navigation becomes a panel opened from the header. These docs stand in it.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="app-examples">
+	<h2 id="app-examples">The parts</h2>
+	<p>The shell is the one part of the library that looks at the window; everything inside it measures its own region. <code>app-main</code> and <code>app-aside</code> are regions, so <code>md:</code> inside the main column measures the column.</p>
+	<pre class="docs-code" tabindex="0"><code>&lt;div class="app"&gt;
+  &lt;header class="app-header"&gt;
+    &lt;button class="btn btn-text btn-icon app-burger" type="button" commandfor="side" command="toggle-popover" aria-label="Sections"&gt;…&lt;/button&gt;
+    &lt;a class="app-brand" href="/"&gt;&lt;span class="app-mark"&gt;RZ&lt;/span&gt;REDZ CMS&lt;/a&gt;
+    &lt;button class="btn app-search" type="button" aria-keyshortcuts="Meta+K"&gt;…&lt;/button&gt;
+  &lt;/header&gt;
+  &lt;nav id="side" class="app-sidebar" popover aria-label="Sections"&gt;
+    &lt;div class="app-section"&gt;Content&lt;/div&gt;
+    &lt;a class="app-link" href="/excursions/" aria-current="page"&gt;…Excursions&lt;/a&gt;
+  &lt;/nav&gt;
+  &lt;main class="app-main" id="main"&gt;…&lt;/main&gt;
+  &lt;aside class="app-aside"&gt;…&lt;/aside&gt;
+&lt;/div&gt;</code></pre>
+	<p>The <a href="../reference/demo/list.html">demo screens</a> show the whole shell: a list, a resource page with its side column, a settings form.</p>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="app-states-title">
+	<h2 id="app-states-title">States</h2>
+	<div class="docs-states" id="app-states" tabindex="0" role="region" aria-labelledby="app-states-title">
+		<table class="docs-matrix">
+			<thead>
+				<tr><th scope="col">class</th><th scope="col">rest</th><th scope="col">:hover</th><th scope="col">:focus-visible</th><th scope="col">aria-current</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row">app-link</th>
+					<td><navaria-label="At rest"><a class="app-link" href="#app-states"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
+					<td><navaria-label="Hovered"><a class="app-link" href="#app-states" data-docs-state="hover"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
+					<td><navaria-label="Focused"><a class="app-link" href="#app-states" data-docs-state="focus-visible"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
+					<td><navaria-label="Current"><a class="app-link" href="#app-states" aria-current="page"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="app-access">
+	<h2 id="app-access">Keyboard and accessibility</h2>
+	<ul>
+		<li>The header is a <code>&lt;header&gt;</code>, the side navigation a named <code>&lt;nav&gt;</code>, the main column the page's one <code>&lt;main&gt;</code>.</li>
+		<li>On a narrow screen the burger opens the navigation as a popover: <kbd>Esc</kbd> or a click outside closes it, and the focus goes back to the burger.</li>
+		<li>The current section is <code>aria-current="page"</code>, drawn as a bar that stays in forced colors.</li>
+		<li>The header and the navigation stay off paper: only the main column prints.</li>
+	</ul>
+</section>

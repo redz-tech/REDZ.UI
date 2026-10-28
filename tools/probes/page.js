@@ -30,9 +30,11 @@ window.REDZ_PROBE = (() => {
 		errors.push('console ' + parts.map(String).join(' '));
 		consoleError.apply(console, parts);
 	};
+	const live = '[aria-live], [role="status"], [role="alert"], [role="log"]';
+	const mirrored = [];
 	const itemsOf = (menu) => [...menu.querySelectorAll('[role^="menuitem"]')].filter((item) => item.getClientRects().length > 0 && item.getAttribute('aria-disabled') !== 'true');
 	const clipped = (el) => {
-		for (let a = el.parentElement; a && a !== root; a = a.parentElement) {
+		for (let a = el.parentElement; a && a !== root && a !== document.body; a = a.parentElement) {
 			if (getComputedStyle(a).overflowX !== 'visible') {
 				return true;
 			}
@@ -40,12 +42,18 @@ window.REDZ_PROBE = (() => {
 		return false;
 	};
 	return {
+		// The cell's theme and direction, set with transitions off: an engine that cannot emulate the system's theme
+		// (Safari) first draws the page in the system's, and a button would still be fading to the cell's when measured.
 		async prepare(theme, dir) {
+			const still = document.createElement('style');
+			still.textContent = '*, *::before, *::after { transition: none !important; }';
+			document.head.append(still);
 			root.setAttribute('data-probe', '');
 			root.setAttribute('data-theme', theme);
 			root.dir = dir;
 			await document.fonts.ready;
 			await frames();
+			still.remove();
 			return true;
 		},
 		measure() {
@@ -56,7 +64,8 @@ window.REDZ_PROBE = (() => {
 					continue;
 				}
 				const r = el.getBoundingClientRect();
-				if (r.width > 0 && (r.right > vw + 1 || r.left < -1) && !clipped(el) && !offenders.some((o) => o.contains(el))) {
+				const spills = [...el.childNodes].some((n) => n.nodeType === 3 && n.data.trim() !== '') && el.scrollWidth > el.clientWidth + 1 && getComputedStyle(el).overflowX === 'visible' && r.left + el.scrollWidth > vw + 1;
+				if (r.width > 0 && (r.right > vw + 1 || r.left < -1 || spills) && !clipped(el) && !offenders.some((o) => o.contains(el))) {
 					offenders.push(el);
 				}
 			}
@@ -97,8 +106,83 @@ window.REDZ_PROBE = (() => {
 				unmasked: unmasked.slice(0, 5).map(name),
 				unregioned: unregioned.slice(0, 8),
 				cut: cut.slice(0, 8),
+				busyLive: [...document.querySelectorAll('[aria-busy="true"]')].filter((el) => el.matches(live) || el.querySelector(live) !== null).slice(0, 8).map(name),
 				ui: typeof globalThis.REDZ?.ui?.toast === 'function'
 			};
+		},
+		// The docs' state mirror: each copy (data-docs-state) and its twin at rest — the element of the same tag and
+		// classes in the first cell of its row of the grid — kept by number, as one twin stands for several copies.
+		mirrors() {
+			mirrored.length = 0;
+			for (const copy of document.querySelectorAll('[data-docs-state]')) {
+				const row = copy.closest('.docs-matrix > tbody > tr');
+				const first = row?.querySelector(':scope > td');
+				const twin = first ? [...first.querySelectorAll(copy.tagName)].find((el) => el.className === copy.className && !el.hasAttribute('data-docs-state')) : undefined;
+				if (twin !== undefined) {
+					mirrored.push([twin, copy]);
+				}
+			}
+			return mirrored.map(([twin, copy]) => ({state: copy.dataset.docsState, what: name(twin)}));
+		},
+		// The twin brought into view: the point of its middle. For a focus, a button put just before it takes the focus,
+		// so that the next Tab — a real key — gives it to the twin.
+		async rest(i, focus) {
+			const [twin] = mirrored[i];
+			twin.scrollIntoView({block: 'center', inline: 'center'});
+			if (focus) {
+				const before = Object.assign(document.createElement('button'), {type: 'button', textContent: 'probe'});
+				before.dataset.probeBefore = '';
+				twin.before(before);
+				before.focus();
+			}
+			await frames();
+			const box = twin.getBoundingClientRect();
+			return [Math.round(box.left + box.width / 2), Math.round(box.top + box.height / 2)];
+		},
+		// The differences between the twin in its real state and the copy, the element and its first descendants, read
+		// with transitions off; then the focus helper goes.
+		compare(i) {
+			const [twin, copy] = mirrored[i];
+			const props = ['background-color', 'color', 'border-top-color', 'border-bottom-color', 'box-shadow', 'outline-style', 'outline-color', 'outline-width', 'text-decoration-line', 'opacity'];
+			const read = (el) => {
+				const style = el.getAttribute('style');
+				el.style.setProperty('transition', 'none', 'important');
+				const s = getComputedStyle(el);
+				const values = props.map((p) => s.getPropertyValue(p));
+				if (style === null) {
+					el.removeAttribute('style');
+				} else {
+					el.setAttribute('style', style);
+				}
+				return values;
+			};
+			const a = [twin, ...twin.querySelectorAll('*')].slice(0, 16);
+			const b = [copy, ...copy.querySelectorAll('*')].slice(0, 16);
+			const differ = [];
+			a.forEach((el, k) => {
+				const [x, y] = [read(el), read(b[k])];
+				props.forEach((p, n) => {
+					if (x[n] !== y[n] && differ.length < 4) {
+						differ.push(name(el) + ' ' + p + ' ' + x[n] + ' ≠ ' + y[n]);
+					}
+				});
+			});
+			const active = document.activeElement === twin || twin.contains(document.activeElement);
+			const state = copy.dataset.docsState;
+			const real = state === 'hover' ? twin.matches(':hover') : twin.matches(':' + state);
+			document.querySelectorAll('[data-probe-before]').forEach((el) => el.remove());
+			return {differ, active, real};
+		},
+		// Up to 24 elements whose own text is Arabic, marked by number for the engine's font report.
+		arabic() {
+			const found = [];
+			for (const el of document.body.querySelectorAll('*')) {
+				if (found.length < 24 && [...el.childNodes].some((n) => n.nodeType === 3 && /\p{Script=Arabic}/u.test(n.data)) && el.getClientRects().length > 0) {
+					el.dataset.probeArabic = String(found.length);
+					found.push(name(el));
+				}
+			}
+			return found;
 		},
 		errors() {
 			return errors.splice(0);
@@ -137,10 +221,11 @@ window.REDZ_PROBE = (() => {
 				const list = document.querySelector('[data-probe-tablist="' + id + '"]');
 				const tabs = [...list.querySelectorAll('[role="tab"]')];
 				const panels = tabs.map((tab) => document.getElementById(tab.getAttribute('aria-controls') || ''));
-				return {count: tabs.length, focused: tabs.indexOf(active), selected: tabs.flatMap((tab, i) => tab.getAttribute('aria-selected') === 'true' ? [i] : []), shown: panels.flatMap((panel, i) => panel && !panel.hidden ? [i] : []), rtl: getComputedStyle(list).direction === 'rtl'};
+				return {count: tabs.length, focused: tabs.indexOf(active), selected: tabs.flatMap((tab, i) => tab.getAttribute('aria-selected') === 'true' ? [i] : []), shown: panels.flatMap((panel, i) => panel && !panel.hidden ? [i] : []), rtl: getComputedStyle(list).direction === 'rtl', manual: list.dataset.activation === 'manual'};
 			}
 			const target = document.getElementById(id);
 			const items = kind === 'menu' ? itemsOf(target) : [];
+			const focusables = [...target.querySelectorAll('a[href], button, input, select, textarea, [tabindex]')].filter((el) => shown(el) && !el.disabled && el.tabIndex >= 0);
 			return {
 				open: kind === 'dialog' ? target.open : target.matches(':popover-open'),
 				onInvoker: active === document.querySelector('[data-probe-invoker="' + id + '"]'),
@@ -148,7 +233,8 @@ window.REDZ_PROBE = (() => {
 				leaked: active !== null && active !== document.body && !target.contains(active),
 				item: items.indexOf(active),
 				items: items.length,
-				focusables: [...target.querySelectorAll('a[href], button, input, select, textarea, [tabindex]')].filter((el) => shown(el) && !el.disabled && el.tabIndex >= 0).length,
+				focusables: focusables.length,
+				at: focusables.indexOf(active),
 				checked: items.findIndex((item) => item.getAttribute('aria-checked') === 'true')
 			};
 		},
@@ -160,7 +246,14 @@ window.REDZ_PROBE = (() => {
 		// A point of the viewport outside the open dialog, clear of the edges a scrollbar may take: above it, mid-width.
 		outside(id) {
 			const box = document.getElementById(id).getBoundingClientRect();
-			return box.top >= 16 ? [Math.round(innerWidth / 2), Math.round(box.top / 2)] : null;
+			const width = root.clientWidth;
+			if (box.top >= 16) {
+				return [Math.round(width / 2), Math.round(box.top / 2)];
+			}
+			if (box.left >= 32) {
+				return [Math.round(box.left / 2), Math.round(innerHeight / 2)];
+			}
+			return width - box.right >= 32 ? [Math.round((box.right + width) / 2), Math.round(innerHeight / 2)] : null;
 		},
 		// Two notices by REDZ.ui.toast: where each landed — the live region's role — and whether it shows.
 		async notices() {

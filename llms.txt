@@ -1,0 +1,62 @@
+# REDZ.UI
+
+> The interface library of the REDZ products: plain CSS and small JavaScript on the browser platform — no framework, no build step.
+
+Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the number in a class is its value in pixels, a state is an HTML attribute, behavior comes from the browser's invoker commands. Browsers: Chrome and Edge 130+, Firefox 132+, Safari 18+.
+
+## Start
+
+- [Getting started](docs/index.md): REDZ.UI is two stylesheets and a set of small scripts on the browser platform. Nothing is built where it is used: link the files, write Bootstrap-like markup, and the browser does the rest.
+- [Layout](docs/layout.md): The parent sets the grid, the number is the count, and a width prefix measures the region the element is in. Stacks for a column or a row of items, gaps between them, no margins on components.
+- [Utilities](docs/utilities.md): Single-purpose classes with Bootstrap 5's names, where the number is the value: p-16, gap-8, fs-14, rounded-8, w-50. Written once from a vocabulary file and committed — nothing is generated where they are used.
+- [Tokens](docs/tokens.md): The custom properties on :root that the components read: colors by role in pairs that pass WCAG AA in both themes, spacing, type, radii, shadows and motion. A theme changes tokens, never component rules.
+- [Icons](docs/icons.md): Bootstrap Icons 1.13.2 under their own class names — <i class="bi bi-pencil"> — each a CSS mask over its own SVG file: the color of the text around it, no font, no script, no build.
+- [From Bootstrap 5.3](docs/migrate.md): Most of Bootstrap 5's names stay. What changes is the spacing numbers, the grid, the breakpoints, states and triggers, and the three components Bootstrap 6 renamed. The two libraries are never on one page: a project switches its stylesheet at once.
+
+## Actions
+
+- [Buttons](docs/btn.md): A button runs an action; a link drawn as a button goes somewhere. One class, btn, then a tone, a size or an icon when the button needs one.
+- [Chips](docs/chip.md): A chip is a small rounded choice: a filter that is on or off, a saved view, an applied filter with its count and a way to remove it.
+- [Menus](docs/menu.md): A menu is a short list of actions or choices that opens from a button: the browser's popover, placed beside the button by CSS anchor positioning, driven by the keyboard as the WAI-ARIA menu button.
+
+## Forms
+
+- [Form fields](docs/form.md): Text fields, selects and text areas with Bootstrap 5's names: a label floating in the field or above it, a hint, an error said in words, an icon inside the field.
+- [Checks, radios and switches](docs/check.md): The browser's own checkbox and radio, drawn by the library: check, radio and switch on the input itself, form-check on the label around it.
+
+## Content
+
+- [Cards](docs/card.md): A card is a bordered region of a screen: a header with its title and actions, a body, a footer. It is a region — the width prefixes inside it measure the card, not the window.
+- [Tables](docs/table.md): A list of records: a title that links to the record, a line under it, a note when something is wrong, a column of checks for batch actions and the row's own actions at the end.
+- [Badges](docs/badge.md): A badge is a short label of state or count beside the thing it describes: Published, Draft, 5 new. It never acts — a badge that does something is a chip or a button.
+- [Dots](docs/dot.md): An 8 px dot of a tone beside a word: online, live, the color of a site. The dot repeats what the word says; it never says it alone.
+- [Avatars](docs/avatar.md): A round mark of a person: their initials in the accent, 32 px or 24 px with avatar-sm.
+- [Icon tiles](docs/icon-tile.md): A rounded square with an icon in it: the mark of a screen's subject in its title, of a kind of record, of a drop zone.
+- [Empty states](docs/empty-state.md): What a list, a panel or a search shows when it has nothing yet: what would be here, and the one action that starts it. And the drop zone of a file field.
+- [Placeholders](docs/placeholder.md): Grey bars in the shape of content that is on its way — the first load of a page or a panel. A region that already has content and reloads it gets an overlay instead: see Busy.
+
+## Layers
+
+- [Dialogs](docs/dialog.md): The browser's own modal <dialog>: opened by a command, the page behind it inert and dimmed, closed by its buttons, Esc or a click outside. And REDZ.ui.confirm() for a question asked from script.
+- [Drawers](docs/drawer.md): A modal panel at the end of the screen — or at its start with drawer-start — for filters, a record's details, a long form beside the list it belongs to. Bootstrap 5 calls it offcanvas; it is a <dialog> here.
+- [Tooltips](docs/tooltip.md): A short dark label beside a control, placed by CSS anchor positioning. At the browser floor it is a toggletip: a small button opens it, a click outside or Esc closes it.
+
+## Feedback
+
+- [Alerts](docs/alert.md): A message that stays on the page beside what it is about: a check passed, a suggestion, a warning before an action. A message that comes and goes is a toast.
+- [Toasts](docs/toast.md): A notice after an action — saved, failed, moved with a way to undo — shown by REDZ.ui.toast() in a stack at the corner of the screen and read aloud from a live region.
+- [Spinners](docs/spinner.md): A turning ring, 1 em across in the color of the text around it, for something small that is on its way. A button shows its own while busy; a region shows an overlay.
+- [Busy](docs/busy.md): REDZ.ui.busy(element, promise) marks a button or a region busy until the promise settles: a button shows a spinner and ignores clicks, a region turns inert under an overlay.
+- [Save bar](docs/save-bar.md): The bar at the foot of a form that says what is not saved yet and offers to save or discard it. It sticks to the bottom of the screen while the form is longer than the screen.
+- [Selection bar](docs/selection-bar.md): The bar over a list that shows when rows are checked: how many, and what can be done with all of them at once.
+
+## Navigation
+
+- [Navs and tabs](docs/nav.md): A row of links between views of one thing — nav-underline — or of choices — nav-pills; and the same row as tabs that switch panels on the page, driven by the keyboard as the WAI-ARIA tabs pattern.
+- [Breadcrumbs](docs/breadcrumb.md): The way up from a record to the list it belongs to, above the record's title. The separators are drawn by CSS and turn with the direction.
+- [App shell](docs/app.md): The frame of an admin screen: app with a header, a side navigation, the main column and an optional side column. Below 1024 px the side navigation becomes a panel opened from the header. These docs stand in it.
+
+## Skills
+
+- [redz-ui](skills/redz-ui/SKILL.md): build screens with REDZ.UI
+- [redz-ui-from-bootstrap-5](skills/redz-ui-from-bootstrap-5/SKILL.md): move a project from Bootstrap 5.3 to REDZ.UI

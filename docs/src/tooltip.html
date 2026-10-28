@@ -1,0 +1,24 @@
+<header class="vstack gap-8">
+	<h1>Tooltips</h1>
+	<p class="docs-lead">A short dark label beside a control, placed by CSS anchor positioning. At the browser floor it is a toggletip: a small button opens it, a click outside or <kbd>Esc</kbd> closes it.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="tooltip-examples">
+	<h2 id="tooltip-examples">Examples</h2>
+	<p>The tooltip is a <code>popover</code> opened by its button's command. It sits above the button and turns below when there is no room — <code>js/menu-place.js</code> keeps it beside its button where an engine cannot.</p>
+	<div class="docs-example" id="tooltip-why">
+		<span class="hstack gap-4">Partner license
+			<button class="btn btn-icon btn-xs btn-text" type="button" commandfor="tooltip-why-tip" command="toggle-popover" aria-label="What is a partner license"><i class="bi bi-question-circle" aria-hidden="true"></i></button>
+		</span>
+		<div id="tooltip-why-tip" class="tooltip" popover role="tooltip">A partner can hide the brand and set their own help link.</div>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="tooltip-access">
+	<h2 id="tooltip-access">Keyboard and accessibility</h2>
+	<ul>
+		<li>The button is named after its question; the tooltip's words answer it. Nothing that must be read to use the screen lives only in a tooltip.</li>
+		<li>A tooltip on hover and focus waits for <code>interestfor</code>, which is outside the browser floor.</li>
+		<li>The label is the page's text color on the page color reversed: 4.5:1 in both themes, an outline in forced colors.</li>
+	</ul>
+</section>

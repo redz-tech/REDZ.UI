@@ -1,0 +1,22 @@
+<header class="vstack gap-8">
+	<h1>Avatars</h1>
+	<p class="docs-lead">A round mark of a person: their initials in the accent, 32 px or 24 px with <code>avatar-sm</code>.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="avatar-examples">
+	<h2 id="avatar-examples">Examples</h2>
+	<p>An avatar beside the person's name hides from assistive technology; an avatar alone — the profile button — is named by its button.</p>
+	<div class="docs-example" id="avatar-sizes">
+		<span class="hstack gap-8"><span class="avatar" aria-hidden="true">MK</span>Marina K.</span>
+		<span class="hstack gap-8"><span class="avatar avatar-sm" aria-hidden="true">AT</span>Arthit T.</span>
+		<button class="btn btn-text btn-icon" type="button" aria-label="MK, profile"><span class="avatar">MK</span></button>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="avatar-access">
+	<h2 id="avatar-access">Accessibility</h2>
+	<ul>
+		<li>The initials are 4.5:1 against the fill in both themes.</li>
+		<li>Where a person's photo is wanted, put an <code>&lt;img alt=""&gt;</code> inside the avatar; the name beside it carries the meaning.</li>
+	</ul>
+</section>
