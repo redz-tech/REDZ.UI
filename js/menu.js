@@ -1,99 +1,74 @@
-// REDZ.UI, menus: places an opened menu beside its button wherever the browser cannot anchor it (Firefox before 147,
-// Safari before 26) or anchors it out of view or away from its button (Chrome 135–136 in a table cell, Safari 26 at the
-// bottom of a page taller than the viewport); such a menu carries data-placed="script" while it is open.
-const anchors = CSS.supports('position-area', 'block-end');
-const overrides = ['position-area', 'position-try-fallbacks', 'inset', 'top', 'left', 'margin'];
-const open = new Map();
-let invoker = null;
-let frame = 0;
+// REDZ.UI, menus by keyboard (the WAI-ARIA menu button): an opened menu takes the focus on its checked or first item;
+// the arrow keys move it, wrapping, Home and End go to the ends and a letter to the next item it starts; Tab closes
+// the menu and goes on from its button, Escape closes it back to the button (the browser's own), an item chosen closes
+// it. On a closed menu's button the down and up arrows open it on the first or the last item.
+const ITEM = '[role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"]';
+let from = 'first';
 
-/** The button that opened the menu: the last one clicked, when it names the menu. */
-const buttonOf = (menu) => invoker !== null && (invoker.getAttribute('commandfor') === menu.id || invoker.popoverTargetElement === menu) ? invoker : null;
+/** The items of the menu a keyboard can reach: shown and not disabled. */
+const itemsOf = (menu) => [...menu.querySelectorAll(ITEM)].filter((item) => item.getClientRects().length > 0 && item.getAttribute('aria-disabled') !== 'true' && !item.disabled);
 
-/** The menu's border box without the scale of its opening transition: that grows from the middle of the top edge, which
- *  it leaves in place — engines differ in whether the box and the computed scale show the transition yet. */
-const boxOf = (menu) => {
-	const box = menu.getBoundingClientRect();
-	return {left: box.left + (box.width - menu.offsetWidth) / 2, top: box.top, width: menu.offsetWidth, height: menu.offsetHeight};
+/** The menu the button opens, when it is one. */
+const menuOf = (button) => {
+	const menu = document.getElementById(button.getAttribute('commandfor') || button.getAttribute('popovertarget') || '');
+	return menu !== null && menu.getAttribute('role') === 'menu' ? menu : null;
 };
 
-/** Whether the engine put the menu inside the viewport, just above or below the button, an inline edge on the button's. */
-const wellPlaced = (menu, button) => {
-	const m = boxOf(menu);
-	const b = button.getBoundingClientRect();
-	const inside = m.left >= -1 && m.top >= -1 && m.left + m.width <= document.documentElement.clientWidth + 1 && m.top + m.height <= innerHeight + 1;
-	const near = Math.min(Math.abs(m.top - b.bottom), Math.abs(b.top - m.top - m.height)) <= 12;
-	const aligned = Math.abs(m.left - b.left) <= 2 || Math.abs(m.left + m.width - b.right) <= 2;
-	return inside && near && aligned;
-};
+document.addEventListener('toggle', (event) => {
+	const menu = event.target;
+	if (event.newState !== 'open' || !(menu instanceof HTMLElement) || menu.getAttribute('role') !== 'menu') {
+		return;
+	}
+	const items = itemsOf(menu);
+	const checked = items.find((item) => item.getAttribute('aria-checked') === 'true');
+	(from === 'last' ? items.at(-1) : checked ?? items[0])?.focus();
+	from = 'first';
+}, true);
 
-/** Places the menu by script: below the button, or above when only there it fits; its inline end edge on the button's
- *  (its start edge for .menu-start), the other edge when that one leaves the viewport; always inside the viewport. It is
- *  measured in the viewport's corner first — its width depends on the room where it stands. */
-const place = (menu, button) => {
-	const style = getComputedStyle(menu);
-	const gap = parseFloat(style.marginBlockStart) || 0;
-	const end = menu.classList.contains('menu-start') === (style.direction === 'rtl');
-	for (const [property, value] of [['position-area', 'none'], ['position-try-fallbacks', 'none'], ['inset', 'auto'], ['top', '0px'], ['left', '0px'], ['margin', '0']]) {
-		menu.style.setProperty(property, value);
+document.addEventListener('keydown', (event) => {
+	if (event.altKey || event.ctrlKey || event.metaKey || !(event.target instanceof Element)) {
+		return;
 	}
-	const width = menu.offsetWidth;
-	const height = menu.offsetHeight;
-	const b = button.getBoundingClientRect();
-	const room = document.documentElement.clientWidth;
-	let top = b.bottom + gap;
-	if (top + height > innerHeight && b.top - gap - height >= 0) {
-		top = b.top - gap - height;
+	const button = event.target.closest('button[commandfor], button[popovertarget]');
+	const closed = button === null ? null : menuOf(button);
+	if (closed !== null && !closed.matches(':popover-open') && (event.key === 'ArrowDown' || event.key === 'ArrowUp')) {
+		event.preventDefault();
+		from = event.key === 'ArrowUp' ? 'last' : 'first';
+		button.click();
+		return;
 	}
-	let left = end ? b.right - width : b.left;
-	if (left < 0 || left + width > room) {
-		left = end ? b.left : b.right - width;
+	const menu = event.target.closest('[role="menu"]');
+	if (menu === null || !event.target.matches(ITEM)) {
+		return;
 	}
-	menu.style.setProperty('top', Math.max(0, Math.min(top, innerHeight - height)) + 'px');
-	menu.style.setProperty('left', Math.max(0, Math.min(left, room - width)) + 'px');
-	menu.dataset.placed = 'script';
-};
-
-/** Checks every open menu and places by script the ones the engine did not put beside their button. */
-const watch = () => {
-	frame = 0;
-	for (const [menu, button] of open) {
-		if (!anchors || menu.dataset.placed === 'script' || !wellPlaced(menu, button)) {
-			place(menu, button);
-		}
+	const items = itemsOf(menu);
+	const at = items.indexOf(event.target);
+	let to = null;
+	if (event.key === 'ArrowDown') {
+		to = items[(at + 1) % items.length];
+	} else if (event.key === 'ArrowUp') {
+		to = items[(at - 1 + items.length) % items.length];
+	} else if (event.key === 'Home') {
+		to = items[0];
+	} else if (event.key === 'End') {
+		to = items.at(-1);
+	} else if (event.key === 'Tab') {
+		menu.hidePopover();
+		return;
+	} else if (event.key.length === 1 && event.key !== ' ') {
+		const letter = event.key.toLocaleLowerCase();
+		to = [...items.slice(at + 1), ...items.slice(0, at + 1)].find((item) => item.textContent.trim().toLocaleLowerCase().startsWith(letter)) ?? null;
 	}
-};
-
-/** Runs the check in the next frame, before it is painted. */
-const schedule = () => {
-	if (frame === 0 && open.size > 0) {
-		frame = requestAnimationFrame(watch);
+	if (to !== null) {
+		event.preventDefault();
+		to.focus();
 	}
-};
+}, true);
 
 document.addEventListener('click', (event) => {
-	invoker = event.target instanceof Element ? event.target.closest('button[commandfor], button[popovertarget]') : null;
-}, true);
-
-document.addEventListener('beforetoggle', (event) => {
-	const menu = event.target;
-	if (!(menu instanceof HTMLElement) || !menu.classList.contains('menu')) {
-		return;
+	const item = event.target instanceof Element ? event.target.closest(ITEM) : null;
+	const menu = item?.closest('[role="menu"]');
+	if (menu?.matches(':popover-open') && item.getAttribute('aria-disabled') !== 'true') {
+		menu.hidePopover();
 	}
-	if (event.newState !== 'open') {
-		open.delete(menu);
-		return;
-	}
-	for (const property of overrides) {
-		menu.style.removeProperty(property);
-	}
-	delete menu.dataset.placed;
-	const button = buttonOf(menu);
-	if (button !== null) {
-		open.set(menu, button);
-		schedule();
-	}
-}, true);
-
-addEventListener('scroll', schedule, {capture: true, passive: true});
-addEventListener('resize', schedule, {passive: true});
+});

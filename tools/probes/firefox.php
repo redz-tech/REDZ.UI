@@ -178,6 +178,19 @@ function PROBE__FirefoxEval(array &$h, string $expression): mixed
 	return json_decode((string)($r['result']['value'] ?? 'null'), true);
 }
 
+/** Presses and releases the key, a name of PROBE_KEYS, as the user would. */
+function PROBE__FirefoxKey(array &$h, string $key): void
+{
+	$value = PROBE_KEYS[$key][0];
+	PROBE__FirefoxSend($h, 'input.performActions', ['context' => $h['context'], 'actions' => [['type' => 'key', 'id' => 'keyboard', 'actions' => [['type' => 'keyDown', 'value' => $value], ['type' => 'keyUp', 'value' => $value]]]]]);
+}
+
+/** Clicks the primary mouse button at the point of the viewport. */
+function PROBE__FirefoxClick(array &$h, int $x, int $y): void
+{
+	PROBE__FirefoxSend($h, 'input.performActions', ['context' => $h['context'], 'actions' => [['type' => 'pointer', 'id' => 'mouse', 'parameters' => ['pointerType' => 'mouse'], 'actions' => [['type' => 'pointerMove', 'x' => $x, 'y' => $y], ['type' => 'pointerDown', 'button' => 0], ['type' => 'pointerUp', 'button' => 0]]]]]);
+}
+
 /** A PNG of the whole page. */
 function PROBE__FirefoxShot(array &$h): string
 {

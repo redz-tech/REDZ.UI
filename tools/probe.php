@@ -1,6 +1,6 @@
 <?php
 // probe — the library's pages in real engines: Chrome, Firefox and Safari as installed; the floor — Chrome 130 and
-// Firefox 132 fetched once into the cache, Safari 18 in the iOS simulator; the engines whose bugs js/menu.js repairs —
+// Firefox 132 fetched once into the cache, Safari 18 in the iOS simulator; the engines whose bugs js/menu-place.js repairs —
 // Chrome 136, Safari 26 in the simulator. Each cell — a page at a width, light LTR or dark RTL — is judged for overflow,
 // unmasked icons, width prefixes outside a region, cut labels and errors; at the shot widths it is shot, every popover
 // and dialog opened and axe run; forced colors and print where the engine has them. Writes the sheet
@@ -18,6 +18,8 @@ const PROBE_CONFIG = __DIR__ . '/probes/config.json';
 const PROBE_PAGE = __DIR__ . '/probes/page.js';
 const PROBE_SHEET = __DIR__ . '/../.dev/probes';
 const PROBE_FORCED_PREFS = ['browser.display.document_color_use' => 2];
+// The keys of the keyboard walk: the WebDriver code point (Firefox, Safari), the Windows key code and the text (Chrome).
+const PROBE_KEYS = ['Enter' => ["\u{E006}", 13, "\r"], 'Escape' => ["\u{E00C}", 27, ''], 'Tab' => ["\u{E004}", 9, ''], 'ArrowDown' => ["\u{E015}", 40, ''], 'ArrowUp' => ["\u{E013}", 38, ''], 'ArrowLeft' => ["\u{E012}", 37, ''], 'ArrowRight' => ["\u{E014}", 39, ''], 'Home' => ["\u{E011}", 36, ''], 'End' => ["\u{E010}", 35, '']];
 
 /** The folder of fetched engines and packages: $REDZ_UI_CACHE, or ~/Library/Caches/redz-ui. */
 function PROBE__Cache(): string
@@ -269,8 +271,8 @@ function PROBE__Cell(array &$h, string $name, string $page, string $combo, strin
 	if ($forced && $m['forced'] !== true) {
 		$findings[] = 'forced colors did not apply';
 	}
-	foreach (PROBE__Do($h, 'Errors') as $error) {
-		$findings[] = 'error ' . $error;
+	if ($m['ui'] !== true) {
+		$findings[] = 'the library\'s script did not run: no REDZ.ui';
 	}
 	$shot = $width === 0 || in_array($width, $run['config']['shots'], true) || $forced;
 	if ($shot) {
@@ -293,6 +295,13 @@ function PROBE__Cell(array &$h, string $name, string $page, string $combo, strin
 			}
 		}
 	}
+	if ($width === 1440 && !$forced) {
+		$walked = [];
+		$findings = [...$findings, ...PROBE__KeyWalk($h, $walked), ...PROBE__Notices($h)];
+		foreach ($walked as $widget) {
+			$report['walked'][$page][$widget][$name] = true;
+		}
+	}
 	if ($shot && !$forced) {
 		PROBE__Do($h, 'Inject', $run['axe']);
 		foreach (PROBE__Do($h, 'Eval', 'REDZ_PROBE.axe(' . json_encode($run['config']['axe']['tags']) . ')') as $v) {
@@ -302,9 +311,133 @@ function PROBE__Cell(array &$h, string $name, string $page, string $combo, strin
 			}
 		}
 	}
+	foreach ($h['kind'] === 'safari' ? PROBE__Do($h, 'Eval', 'REDZ_PROBE.errors()') : PROBE__Do($h, 'Errors') as $error) {
+		$findings[] = 'error ' . $error;
+	}
 	foreach ($findings as $finding) {
 		$report['findings'][] = $where . $finding;
 	}
+}
+
+/** The keyboard walk of a page: each menu, modal dialog and tab list driven by real keys — and a dialog with
+ *  closedby="any" by a click outside it — against the WAI-ARIA patterns; answers its findings, and the widgets it
+ *  walked in $walked. */
+function PROBE__KeyWalk(array &$h, array &$walked): array
+{
+	$findings = [];
+	$press = function (string $key) use (&$h): void {
+		PROBE__Do($h, 'Key', $key);
+		usleep(200000);
+	};
+	// Headless Firefox on macOS gives the document no focus, so it presses no button by keyboard: it opens by a click.
+	$activate = function (string $id) use (&$h, $press): void {
+		if ($h['kind'] === 'firefox') {
+			PROBE__Do($h, 'Click', ...PROBE__Do($h, 'Eval', 'REDZ_PROBE.invokerPoint(' . json_encode($id) . ')'));
+			usleep(200000);
+		} else {
+			$press('Enter');
+		}
+	};
+	foreach (PROBE__Do($h, 'Eval', 'REDZ_PROBE.keyTargets()') as ['kind' => $kind, 'id' => $id, 'outside' => $outside]) {
+		$state = fn(): array => PROBE__Do($h, 'Eval', 'REDZ_PROBE.state(' . json_encode($kind) . ', ' . json_encode($id) . ')');
+		$what = ($kind === 'tabs' ? 'the tab list ' . $id : '#' . $id) . ' by keyboard — ';
+		$walked[] = ($kind === 'tabs' ? 'a tab list' : '#' . $id . ' (' . $kind . ($outside ? ', a click outside' : '') . ')');
+		PROBE__Do($h, 'Eval', 'REDZ_PROBE.focus(' . json_encode($kind) . ', ' . json_encode($id) . ')');
+		if ($kind === 'menu') {
+			$activate($id);
+			$s = $state();
+			$first = max(0, $s['checked']);
+			$steps = [['opening', $first], ['ArrowDown', ($first + 1) % max(1, $s['items'])], ['End', $s['items'] - 1], ['Home', 0]];
+			foreach ($steps as $i => [$key, $item]) {
+				if ($i > 0) {
+					$press($key);
+					$s = $state();
+				}
+				if (!$s['open'] || $s['item'] !== $item) {
+					$findings[] = $what . $key . ': ' . ($s['open'] ? 'the focus is on item ' . $s['item'] . ', not ' . $item : 'the menu is closed');
+					continue 2;
+				}
+			}
+			$press('Escape');
+			$s = $state();
+			if ($s['open'] || !$s['onInvoker']) {
+				$findings[] = $what . 'Escape: ' . ($s['open'] ? 'the menu stays open' : 'the focus is not back on its button');
+				continue;
+			}
+			$press('ArrowDown');
+			$s = $state();
+			if (!$s['open'] || $s['item'] !== $first) {
+				$findings[] = $what . 'ArrowDown on its button: ' . ($s['open'] ? 'the focus is on item ' . $s['item'] . ', not ' . $first : 'the menu does not open');
+				continue;
+			}
+			$press('Tab');
+			$s = $state();
+			if ($s['open'] || $s['inside']) {
+				$findings[] = $what . 'Tab: the menu stays open';
+			}
+		} elseif ($kind === 'dialog') {
+			$activate($id);
+			usleep(200000);
+			$s = $state();
+			if (!$s['open'] || !$s['inside']) {
+				$findings[] = $what . 'opening: ' . ($s['open'] ? 'the focus is not inside the dialog' : 'the dialog does not open');
+				continue;
+			}
+			for ($i = 0; $i < $s['focusables'] - 1 && !$s['leaked']; $i++) {
+				$press('Tab');
+				$s = $state();
+			}
+			if ($s['leaked']) {
+				$findings[] = $what . 'Tab: the focus left the open dialog';
+			}
+			$press('Escape');
+			usleep(200000);
+			$s = $state();
+			if ($s['open'] || !$s['onInvoker']) {
+				$findings[] = $what . 'Escape: ' . ($s['open'] ? 'the dialog stays open' : 'the focus is not back on its button');
+				continue;
+			}
+			if ($outside) {
+				$activate($id);
+				usleep(200000);
+				$point = PROBE__Do($h, 'Eval', 'REDZ_PROBE.outside(' . json_encode($id) . ')');
+				if ($point !== null) {
+					PROBE__Do($h, 'Click', $point[0], $point[1]);
+					usleep(300000);
+					if ($state()['open']) {
+						$findings[] = '#' . $id . ' — a click outside it does not close it (closedby="any")';
+						PROBE__Do($h, 'Eval', '(document.getElementById(' . json_encode($id) . ').close(), true)');
+					}
+				}
+			}
+		} else {
+			$s = $state();
+			$start = $s['selected'][0] ?? 0;
+			$last = $s['count'] - 1;
+			foreach ([[$s['rtl'] ? 'ArrowLeft' : 'ArrowRight', ($start + 1) % $s['count']], ['End', $last], ['Home', 0]] as [$key, $tab]) {
+				$press($key);
+				$s = $state();
+				if ($s['selected'] !== [$tab] || $s['focused'] !== $tab || $s['shown'] !== [$tab]) {
+					$findings[] = $what . $key . ': tab ' . $tab . ' should be selected, focused and its panel alone shown — selected ' . json_encode($s['selected']) . ', focused ' . $s['focused'] . ', shown ' . json_encode($s['shown']);
+					break;
+				}
+			}
+		}
+	}
+	return $findings;
+}
+
+/** Two notices by REDZ.ui.toast on the page: a success in the role="status" region, an error in the role="alert" one. */
+function PROBE__Notices(array &$h): array
+{
+	$findings = [];
+	foreach (PROBE__Do($h, 'Eval', 'REDZ_PROBE.notices()') as $notice) {
+		$role = $notice['tone'] === 'danger' ? 'alert' : 'status';
+		if ($notice['role'] !== $role || !$notice['shown']) {
+			$findings[] = 'a ' . $notice['tone'] . ' notice is ' . ($notice['shown'] ? 'in the region of role "' . $notice['role'] . '", not "' . $role . '"' : 'not shown');
+		}
+	}
+	return $findings;
 }
 
 /** Whether an exception of the probes' config allows axe rule $rule at $target in engine $engine; marks it used. */
@@ -355,7 +488,7 @@ function PROBE__Main(array $argv): int
 		mkdir($folder, 0777, true);
 	}
 	$commit = trim((string)shell_exec('git -C ' . escapeshellarg(PROBE_ROOT) . ' rev-parse --short HEAD 2>/dev/null'));
-	$report = ['when' => gmdate('Y-m-d H:i') . ' UTC', 'commit' => $commit === '' ? 'no commit' : 'commit ' . $commit, 'widths' => array_keys($config['widths']), 'engines' => [], 'skipped' => [], 'findings' => [], 'guarded' => [], 'shots' => [], 'used' => []];
+	$report = ['when' => gmdate('Y-m-d H:i') . ' UTC', 'commit' => $commit === '' ? 'no commit' : 'commit ' . $commit, 'widths' => array_keys($config['widths']), 'engines' => [], 'skipped' => [], 'findings' => [], 'guarded' => [], 'walked' => [], 'shots' => [], 'used' => []];
 	$run = ['config' => $config, 'page' => (string)file_get_contents(PROBE_PAGE), 'axe' => PROBE__Axe($config['axe']), 'sheet' => $work];
 	[$server, $run['base']] = PROBE__ServerStart($tmp);
 	try {

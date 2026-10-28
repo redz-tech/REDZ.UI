@@ -40,7 +40,7 @@ const FLOOR_FUSES = [
 	['css', '.a { color: contrast-color(red); }', 'function:contrast-color'],
 	['css', '@media (forced-colors: active) { .a { forced-color-adjust: preserve-parent-color; } }', 'preserve-parent-color'],
 	['css', '.a { word-wrap: break-word; }', ''],
-	['html', '<dialog closedby="any"></dialog>', 'attribute:dialog:closedby'],
+	['html', '<button interestfor="tip">Info</button>', 'attribute:button:interestfor'],
 	['html', '<div popover="hint"></div>', 'popover:hint'],
 	['html', '<div style="color: red"></div>', 'style='],
 	['html', '<button commandfor="d" command="show-modal">Open</button>', ''],

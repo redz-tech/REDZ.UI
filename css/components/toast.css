@@ -10,6 +10,11 @@
 		pointer-events: none;
 	}
 
+	.toast-container > [role] {
+		display: grid;
+		gap: var(--redz-space-8);
+	}
+
 	.toast {
 		--redz-toast-mark: var(--redz-text-faint);
 		display: flex;

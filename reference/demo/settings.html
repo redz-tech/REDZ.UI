@@ -9,6 +9,7 @@
 	<link rel="stylesheet" href="demo.css">
 	<script src="demo.js"></script>
 	<script type="module" src="../../js/index.js"></script>
+	<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel"}</script>
 </head>
 <body>
 	<div class="app">
@@ -149,7 +150,10 @@
 		</main>
 	</div>
 
-	<div class="toast-container" role="status"></div>
+	<div class="toast-container">
+		<div role="status"></div>
+		<div role="alert"></div>
+	</div>
 
 	<div class="demo-switch" role="group" aria-label="Demo view">
 		<span class="demo-switch-group">

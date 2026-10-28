@@ -1,5 +1,5 @@
 {
-	"pages": ["index.html", "reference/demo/list.html", "reference/demo/resource.html", "reference/demo/settings.html"],
+	"pages": ["index.html", "reference/widgets.html", "reference/demo/list.html", "reference/demo/resource.html", "reference/demo/settings.html"],
 	"widths": {"1440": 900, "1024": 768, "390": 844, "320": 568},
 	"shots": [1440, 390],
 	"combos": {"light-ltr": ["light", "ltr"], "dark-rtl": ["dark", "rtl"]},

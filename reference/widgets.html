@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Widgets — REDZ.UI reference</title>
+	<link rel="stylesheet" href="../css/index.css">
+	<link rel="stylesheet" href="../css/icons.css">
+	<script type="module" src="../js/index.js"></script>
+	<script type="module" src="widgets.js"></script>
+	<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel"}</script>
+</head>
+<body>
+	<main class="region vstack gap-24 p-24 max-w-960 mx-auto">
+		<header class="vstack gap-8">
+			<h1>Widgets</h1>
+			<p class="text-muted">The behavior REDZ.UI adds to the browser's own: menus and tabs by keyboard, a dialog closed by a click outside it, notices, a confirmation and a busy button.</p>
+		</header>
+
+		<section class="card" aria-labelledby="w-menu">
+			<div class="card-header"><h2 id="w-menu">Menu</h2></div>
+			<div class="card-body vstack gap-12">
+				<p>The arrow keys move through the items, Home and End go to the ends, a letter to the next item it starts; Tab and Escape close it.</p>
+				<div class="hstack gap-8">
+					<button class="btn" type="button" commandfor="w-actions" command="toggle-popover" aria-haspopup="menu"><i class="bi bi-three-dots" aria-hidden="true"></i>Actions</button>
+				</div>
+				<div id="w-actions" class="menu menu-start" popover role="menu" aria-label="Actions">
+					<button class="menu-item" type="button" role="menuitem"><i class="bi bi-pencil" aria-hidden="true"></i>Edit</button>
+					<button class="menu-item" type="button" role="menuitem"><i class="bi bi-files" aria-hidden="true"></i>Duplicate</button>
+					<button class="menu-item" type="button" role="menuitem" aria-disabled="true"><i class="bi bi-archive" aria-hidden="true"></i>Archive</button>
+					<button class="menu-item" type="button" role="menuitem"><i class="bi bi-share" aria-hidden="true"></i>Share</button>
+					<hr class="menu-divider">
+					<button class="menu-item menu-item-danger" type="button" role="menuitem"><i class="bi bi-trash3" aria-hidden="true"></i>Delete</button>
+				</div>
+			</div>
+		</section>
+
+		<section class="card" aria-labelledby="w-tabs">
+			<div class="card-header"><h2 id="w-tabs">Tabs</h2></div>
+			<div class="card-body vstack gap-12">
+				<div class="nav nav-underline" role="tablist" aria-label="Excursion">
+					<button class="nav-link" type="button" role="tab" id="w-tab-1" aria-selected="true" aria-controls="w-panel-1">Details</button>
+					<button class="nav-link" type="button" role="tab" id="w-tab-2" aria-selected="false" aria-controls="w-panel-2">Prices</button>
+					<button class="nav-link" type="button" role="tab" id="w-tab-3" aria-selected="false" aria-controls="w-panel-3">History</button>
+				</div>
+				<div id="w-panel-1" role="tabpanel" aria-labelledby="w-tab-1" tabindex="0"><p>A day at sea: snorkelling at two reefs, lunch on the boat.</p></div>
+				<div id="w-panel-2" role="tabpanel" aria-labelledby="w-tab-2" tabindex="0" hidden><p>Adults 1,900 · children 1,300 · under four free.</p></div>
+				<div id="w-panel-3" role="tabpanel" aria-labelledby="w-tab-3" tabindex="0" hidden><p>Edited yesterday by M. K.; published on three sites.</p></div>
+			</div>
+		</section>
+
+		<section class="card" aria-labelledby="w-dialog">
+			<div class="card-header"><h2 id="w-dialog">Dialog</h2></div>
+			<div class="card-body vstack gap-12">
+				<p>Escape, the close button or a click outside it closes the dialog; the focus goes back to its button.</p>
+				<div class="hstack gap-8">
+					<button class="btn" type="button" commandfor="w-note" command="show-modal">Open the dialog</button>
+				</div>
+			</div>
+		</section>
+
+		<section class="card" aria-labelledby="w-notices">
+			<div class="card-header"><h2 id="w-notices">Notices, confirmation, busy</h2></div>
+			<div class="card-body vstack gap-12">
+				<p>Success and info leave after 8 seconds unless the pointer or the focus rests on them; an error and a notice with an action stay until closed.</p>
+				<div class="hstack flex-wrap gap-8">
+					<button class="btn" type="button" data-widget="toast-success">Notice: saved</button>
+					<button class="btn" type="button" data-widget="toast-danger">Notice: failed</button>
+					<button class="btn" type="button" data-widget="toast-action">Notice with an action</button>
+					<button class="btn" type="button" data-widget="confirm">Confirm</button>
+					<button class="btn btn-primary" type="button" data-widget="busy">Save for 2 seconds</button>
+				</div>
+				<p class="text-muted fs-12" id="w-answer" role="status"></p>
+			</div>
+		</section>
+	</main>
+
+	<dialog id="w-note" class="dialog" closedby="any" aria-labelledby="w-note-title">
+		<div class="dialog-header">
+			<h2 class="dialog-title" id="w-note-title">A note</h2>
+			<button class="btn-close" type="button" commandfor="w-note" command="close" aria-label="Close"></button>
+		</div>
+		<div class="dialog-body vstack gap-8">
+			<p>Click the dimmed page around the dialog to close it.</p>
+			<label class="form-field"><span class="form-label">Comment</span><input class="form-control" type="text"></label>
+		</div>
+		<div class="dialog-footer">
+			<button class="btn" type="button" data-widget="toast-success">Notice from the dialog</button>
+			<button class="btn btn-primary" type="button" commandfor="w-note" command="close">Done</button>
+		</div>
+	</dialog>
+
+	<div class="toast-container">
+		<div role="status"></div>
+		<div role="alert"></div>
+	</div>
+</body>
+</html>

@@ -92,8 +92,17 @@ function PROBE__SheetWrite(string $dir, array $report): void
 		}
 		$out[] = '</ul></div></section>';
 	}
+	if ($report['walked'] !== []) {
+		$out[] = '<section class="card"><div class="card-header"><h2>Walked by keyboard</h2></div><div class="card-body vstack gap-8"><p class="text-muted">Each menu, modal dialog and tab list driven by real keys against the WAI-ARIA patterns, at 1440 px in both directions.</p><ul class="sheet-findings">';
+		foreach ($report['walked'] as $page => $widgets) {
+			foreach ($widgets as $widget => $engines) {
+				$out[] = '<li>' . PROBE__Html($page . ' — ' . $widget . ' · ' . implode(', ', array_keys($engines))) . '</li>';
+			}
+		}
+		$out[] = '</ul></div></section>';
+	}
 	if ($report['guarded'] !== []) {
-		$out[] = '<section class="card"><div class="card-header"><h2>Placed by js/menu.js</h2></div><div class="card-body vstack gap-8"><p class="text-muted">Menus the engine did not anchor beside their button, placed by the script instead — the measure of where the guard is still needed.</p><ul class="sheet-findings">';
+		$out[] = '<section class="card"><div class="card-header"><h2>Placed by js/menu-place.js</h2></div><div class="card-body vstack gap-8"><p class="text-muted">Menus the engine did not anchor beside their button, placed by the script instead — the measure of where the guard is still needed.</p><ul class="sheet-findings">';
 		foreach ($report['guarded'] as $note) {
 			$out[] = '<li>' . PROBE__Html($note) . '</li>';
 		}

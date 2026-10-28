@@ -16,8 +16,9 @@ the latest release at the root, of the main branch under `next/`, and of every r
 - Tokens, a reset, cascade layers, components and utilities with Bootstrap 5's names, written as plain CSS files. The
   utilities are generated from one vocabulary file (`tools/vocabulary.json`, `php tools/build.php`) and committed, so
   nothing is built where the library is used.
-- Behavior of the widgets that the platform does not give by itself (menus and tabs by keyboard, toasts, a combobox),
-  as small JavaScript that attaches by delegation.
+- Behavior of the widgets that the platform does not give by itself — menus and tabs by keyboard, notices, a
+  confirmation, busy buttons, a dialog closed by a click outside it — as small JavaScript modules that attach by
+  delegation (see [Scripts](#scripts)).
 - Light, dark and system themes; left-to-right and right-to-left from one stylesheet; WCAG 2.2 AA in both themes.
 - A static reference of every component in every state, checked in Chrome, Safari and Firefox.
 
@@ -50,18 +51,40 @@ and needs no font, no JavaScript and no build:
 Such an icon follows the system colors in forced-colors mode and prints, from your own server or from a CDN that sends
 CORS headers.
 
-## Browsers
-Bootstrap 6's floor: Chrome and Edge 130+, Firefox 132+, Safari 18+ (macOS and iOS) — the browsers of autumn 2024.
-What must work rests on features of the floor. Invoker commands and anchor positioning are enhancements: the library
-writes them, and its scripts stand in below them and where an engine gets them wrong — `js/commands.js` hands a command
-to the browser's own `popovertarget` or calls the dialog, `js/menu.js` places a menu the engine did not put beside its
-button. Load them with one tag beside the stylesheet:
+## Scripts
+One module beside the stylesheet loads them all; each attaches by delegation on `document`, so nothing is set up per
+element and markup added later works the same:
 
 ```html
 <script type="module" src="js/index.js"></script>
+<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel"}</script>
 ```
 
-Nothing is written for older browsers.
+- **Menus** (`role="menu"` on a `popover` opened by its button): the arrow keys move through the items, Home and End go
+  to the ends, a letter to the next item it starts; Tab and Escape close the menu; the down and up arrows on its
+  button open it on the first or the last item (`js/menu.js`).
+- **Tabs** (`role="tablist"`): the arrow keys select the next tab and show its panel — mirrored right to left — Home
+  and End the first and the last; only the selected tab takes Tab (`js/tabs.js`).
+- **Notices:** `REDZ.ui.toast({title, text, tone, action, persistent})` shows a toast in the live regions of
+  `.toast-container` — `role="status"`, `role="alert"` for `danger` — or in an open modal dialog's own. Success and info
+  leave after 8 seconds unless the pointer or the focus rests on them; an error and a notice with an action stay until
+  closed (`js/toast.js`).
+- **Confirmation:** `await REDZ.ui.confirm({title, text, ok, cancel, tone})` asks in a modal alert dialog and answers
+  `true` or `false`; the focus starts on cancel (`js/confirm.js`).
+- **Busy:** `REDZ.ui.busy(element, promise)` marks the element `aria-busy` until the promise settles — a button also
+  `aria-disabled`, which keeps its focus and swallows its clicks (`js/busy.js`).
+- **Dialogs:** `closedby="any"` closes a modal dialog by a click outside it; a modal dialog locks the page's scroll by
+  CSS alone (`js/dialog.js` stands in for `closedby` where the browser lacks it).
+
+The library has no words of its own: every word it shows comes from the caller or from the page's island
+`#redz-ui-text`, and a missing one is named in the console.
+
+## Browsers
+Bootstrap 6's floor: Chrome and Edge 130+, Firefox 132+, Safari 18+ (macOS and iOS) — the browsers of autumn 2024.
+What must work rests on features of the floor. Invoker commands, anchor positioning and `closedby` are enhancements: the
+library writes them, and its scripts stand in below them and where an engine gets them wrong — `js/commands.js` hands a
+command to the browser's own `popovertarget` or calls the dialog, `js/menu-place.js` places a menu the engine did not
+put beside its button, `js/dialog.js` closes a dialog by a click outside it. Nothing is written for older browsers.
 
 **The floor gate.** `php tools/floor.php check` reads every stylesheet and page of the library and checks each
 property, value, function, unit, selector, at-rule, media feature, element and attribute against MDN's
@@ -80,10 +103,11 @@ sha512 by `php tools/floor.php refresh`.
 
 **Checks in real engines.** `php tools/probe.php` opens every page of the library in the installed Chrome, Firefox and
 Safari, in the floor's Chrome 130, Firefox 132 and Safari 18 in the iOS simulator, and in Chrome 136 and Safari 26 in
-the simulator, whose bugs `js/menu.js` repairs — at 1440, 1024, 390 and 320 px, light left-to-right and dark
+the simulator, whose bugs `js/menu-place.js` repairs — at 1440, 1024, 390 and 320 px, light left-to-right and dark
 right-to-left. It looks for overflow, icons without a mask, width prefixes outside a region, cut labels and errors;
-opens every menu and dialog and checks where it lands; runs axe-core; and checks forced colors and print where the
-engine has them. Older engines are fetched once into `~/Library/Caches/redz-ui` and checked against their checksums. The sheet of
+opens every menu and dialog and checks where it lands; walks every menu, modal dialog and tab list by real keys —
+and a dialog with `closedby` by a click outside it — against the WAI-ARIA patterns, and sends two notices; runs
+axe-core; and checks forced colors and print where the engine has them. Older engines are fetched once into `~/Library/Caches/redz-ui` and checked against their checksums. The sheet of
 shots and findings is written to `.dev/probes/`; the Probes workflow runs it on macOS 15 on every commit, and every
 release publishes its sheet under `checks/` on the site.
 

@@ -9,6 +9,7 @@
 	<link rel="stylesheet" href="demo.css">
 	<script src="demo.js"></script>
 	<script type="module" src="../../js/index.js"></script>
+	<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel"}</script>
 </head>
 <body>
 	<div class="app">
@@ -324,12 +325,15 @@
 		</div>
 	</dialog>
 
-	<div class="toast-container" role="status">
-		<div class="toast toast-success">
-			<i class="bi bi-check-circle-fill" aria-hidden="true"></i>
-			<div class="toast-body"><strong>Published</strong><div class="text-muted fs-12">Ang Thong · 3 pages × 3 languages rebuilt</div></div>
-			<button class="btn-close" type="button" aria-label="Close"></button>
+	<div class="toast-container">
+		<div role="status">
+			<div class="toast toast-success">
+				<i class="bi bi-check-circle-fill" aria-hidden="true"></i>
+				<div class="toast-body"><strong>Published</strong><div class="text-muted fs-12">Ang Thong · 3 pages × 3 languages rebuilt</div></div>
+				<button class="btn-close" type="button" aria-label="Close"></button>
+			</div>
 		</div>
+		<div role="alert"></div>
 	</div>
 
 	<div class="demo-switch" role="group" aria-label="Demo view">

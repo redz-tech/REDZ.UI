@@ -21,6 +21,16 @@ window.REDZ_PROBE = (() => {
 		return box;
 	};
 	const shown = (el) => el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden' && !closed(el);
+	// The page's own errors from here on — an engine whose driver brings no events (Safari) shows them only this way.
+	const errors = [];
+	addEventListener('error', (event) => errors.push('exception ' + String(event.message || event.error)));
+	addEventListener('unhandledrejection', (event) => errors.push('unhandled rejection ' + String(event.reason?.message ?? event.reason)));
+	const consoleError = console.error;
+	console.error = (...parts) => {
+		errors.push('console ' + parts.map(String).join(' '));
+		consoleError.apply(console, parts);
+	};
+	const itemsOf = (menu) => [...menu.querySelectorAll('[role^="menuitem"]')].filter((item) => item.getClientRects().length > 0 && item.getAttribute('aria-disabled') !== 'true');
 	const clipped = (el) => {
 		for (let a = el.parentElement; a && a !== root; a = a.parentElement) {
 			if (getComputedStyle(a).overflowX !== 'visible') {
@@ -86,8 +96,82 @@ window.REDZ_PROBE = (() => {
 				}),
 				unmasked: unmasked.slice(0, 5).map(name),
 				unregioned: unregioned.slice(0, 8),
-				cut: cut.slice(0, 8)
+				cut: cut.slice(0, 8),
+				ui: typeof globalThis.REDZ?.ui?.toast === 'function'
 			};
+		},
+		errors() {
+			return errors.splice(0);
+		},
+		// The widgets a keyboard walk tries: each menu and modal dialog by its first shown invoker, each tab list.
+		keyTargets() {
+			const out = [];
+			const seen = new Set();
+			for (const invoker of document.querySelectorAll('[commandfor]')) {
+				const target = document.getElementById(invoker.getAttribute('commandfor') || '');
+				const command = invoker.getAttribute('command') || '';
+				const kind = target?.getAttribute('role') === 'menu' && command === 'toggle-popover' ? 'menu' : (target?.localName === 'dialog' && command === 'show-modal' ? 'dialog' : '');
+				if (kind !== '' && !seen.has(target) && shown(invoker)) {
+					seen.add(target);
+					invoker.setAttribute('data-probe-invoker', target.id);
+					out.push({kind, id: target.id, outside: target.getAttribute('closedby') === 'any'});
+				}
+			}
+			for (const list of document.querySelectorAll('[role="tablist"]')) {
+				if (shown(list) && list.querySelectorAll('[role="tab"]').length > 1) {
+					list.setAttribute('data-probe-tablist', String(out.length));
+					out.push({kind: 'tabs', id: String(out.length), outside: false});
+				}
+			}
+			return out;
+		},
+		focus(kind, id) {
+			const el = kind === 'tabs' ? document.querySelector('[data-probe-tablist="' + id + '"] [role="tab"][aria-selected="true"]') : document.querySelector('[data-probe-invoker="' + id + '"]');
+			el.scrollIntoView({block: 'nearest'});
+			el.focus();
+			return document.activeElement === el;
+		},
+		state(kind, id) {
+			const active = document.activeElement;
+			if (kind === 'tabs') {
+				const list = document.querySelector('[data-probe-tablist="' + id + '"]');
+				const tabs = [...list.querySelectorAll('[role="tab"]')];
+				const panels = tabs.map((tab) => document.getElementById(tab.getAttribute('aria-controls') || ''));
+				return {count: tabs.length, focused: tabs.indexOf(active), selected: tabs.flatMap((tab, i) => tab.getAttribute('aria-selected') === 'true' ? [i] : []), shown: panels.flatMap((panel, i) => panel && !panel.hidden ? [i] : []), rtl: getComputedStyle(list).direction === 'rtl'};
+			}
+			const target = document.getElementById(id);
+			const items = kind === 'menu' ? itemsOf(target) : [];
+			return {
+				open: kind === 'dialog' ? target.open : target.matches(':popover-open'),
+				onInvoker: active === document.querySelector('[data-probe-invoker="' + id + '"]'),
+				inside: target.contains(active),
+				leaked: active !== null && active !== document.body && !target.contains(active),
+				item: items.indexOf(active),
+				items: items.length,
+				focusables: [...target.querySelectorAll('a[href], button, input, select, textarea, [tabindex]')].filter((el) => shown(el) && !el.disabled && el.tabIndex >= 0).length,
+				checked: items.findIndex((item) => item.getAttribute('aria-checked') === 'true')
+			};
+		},
+		// The middle of the widget's invoker, a point of the viewport.
+		invokerPoint(id) {
+			const box = document.querySelector('[data-probe-invoker="' + id + '"]').getBoundingClientRect();
+			return [Math.round(box.left + box.width / 2), Math.round(box.top + box.height / 2)];
+		},
+		// A point of the viewport outside the open dialog, clear of the edges a scrollbar may take: above it, mid-width.
+		outside(id) {
+			const box = document.getElementById(id).getBoundingClientRect();
+			return box.top >= 16 ? [Math.round(innerWidth / 2), Math.round(box.top / 2)] : null;
+		},
+		// Two notices by REDZ.ui.toast: where each landed — the live region's role — and whether it shows.
+		async notices() {
+			if (typeof globalThis.REDZ?.ui?.toast !== 'function') {
+				return [];
+			}
+			const closers = [REDZ.ui.toast({title: 'Probe notice', tone: 'success'}), REDZ.ui.toast({title: 'Probe error', tone: 'danger'})];
+			await pause(200);
+			const out = [...document.querySelectorAll('.toast')].filter((toast) => toast.textContent.includes('Probe ')).map((toast) => ({tone: toast.classList.contains('toast-danger') ? 'danger' : 'success', role: toast.parentElement?.getAttribute('role') ?? '', shown: shown(toast)}));
+			closers.forEach((close) => close());
+			return out;
 		},
 		async popovers() {
 			const out = [];

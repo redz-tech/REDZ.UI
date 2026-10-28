@@ -62,12 +62,29 @@ or JavaScript call removed or renamed is a major release, one added is a minor r
   is `overflow-wrap: anywhere`.
 
 ### Scripts
-- `js/index.js`, the one module a page loads beside `css/index.css`.
+- ES modules, one per behavior, behind `js/index.js` — the one module a page loads beside `css/index.css`; it sets
+  `REDZ.ui` for calls from code. The library has no words of its own: they come from the caller or from the page's
+  island `<script type="application/json" id="redz-ui-text">` (`js/text.js`), a missing one named in the console.
+- `js/menu.js`: menus by keyboard (the WAI-ARIA menu button) — the focus on the checked or the first item when a menu
+  opens, the arrow keys, Home, End and a letter, Tab and Escape close it, the down and up arrows open it from its button;
+  choosing an item closes the menu.
+- `js/tabs.js`: tab lists by keyboard (the WAI-ARIA tabs, automatic activation) — the arrow keys, mirrored right to
+  left, Home and End select a tab and show its panel; only the selected tab takes Tab.
+- `REDZ.ui.toast()` (`js/toast.js`): notices in the live regions of `.toast-container` — `role="status"`, and
+  `role="alert"` for danger — present from the first paint and moved into an open modal dialog; success and info leave
+  after 8 seconds unless the pointer or the focus rests on them, an error and a notice with an action stay.
+  `.toast-container` now holds the two regions instead of being one.
+- `REDZ.ui.confirm()` (`js/confirm.js`): a modal alert dialog that answers `true` or `false`, the focus on cancel.
+- `REDZ.ui.busy()` (`js/busy.js`): `aria-busy` while a promise runs, a button `aria-disabled` too; a button marked
+  `aria-disabled` swallows its clicks.
+- `js/dialog.js`: where the browser has no `closedby`, a click on the backdrop of a modal dialog with
+  `closedby="any"` closes it. A modal dialog keeps the page's scrollbar gutter while it locks the scroll.
+- `reference/widgets.html`: every behavior on one page of the reference.
 - `js/commands.js`: where the browser has no invoker commands (Chrome before 135, Firefox before 144, Safari before
   26.2), a popover command becomes the browser's own `popovertarget` inside the click — so the browser still reports the
   menu as expanded, returns focus and anchors it — and a dialog command calls `showModal()`, `close()` or
   `requestClose()`; every command first dispatches the `command` event, which a listener may cancel.
-- `js/menu.js`: places an opened menu beside its button wherever the engine cannot anchor it (Firefox before 147,
+- `js/menu-place.js` (the placement guard, apart from the keyboard so that it can go as one file): places an opened menu beside its button wherever the engine cannot anchor it (Firefox before 147,
   Safari before 26, and Chrome 130–132, which make no implicit anchor of a popover's invoker) or puts it out of view or
   away from its button — Chrome 135–136 in a middle-aligned table cell, Safari 26 at the bottom of a page taller than
   the viewport. Such a menu carries `data-placed="script"` while it is open.
@@ -79,7 +96,12 @@ or JavaScript call removed or renamed is a major release, one added is a minor r
   labels and errors; every menu and dialog opened, judged inside the viewport and beside its button; axe-core 4.14.0 at
   WCAG 2.2 AA; forced colors and print where the engine has them. Chrome over its debugging pipe, Firefox over WebDriver
   BiDi, Safari over safaridriver; older engines fetched once into the cache and checked against their checksums.
-- The sheet of shots and findings in `.dev/probes/`, with the menus `js/menu.js` had to place; the Probes workflow runs
+- The keyboard walk: at 1440 px, in both directions, every menu, modal dialog and tab list is driven by real keys —
+  and a dialog with `closedby="any"` by a click outside it — against the WAI-ARIA patterns, and two notices must land
+  in their live regions. The page's own errors are collected inside it, so Safari's show too, and a page whose library
+  script did not run is a finding. Proved on planted breaks: a menu's down arrow, a tab list's panels, the `closedby`
+  stand-in.
+- The sheet of shots and findings in `.dev/probes/`, with the menus `js/menu-place.js` had to place; the Probes workflow runs
   it on macOS 15 on every commit, and every release publishes it under `checks/` on the site.
 - Fixed as the probes found: the profile buttons name the person they open (`MK, profile`), the type fields link has a
   name, a scrolling code block takes focus, and links are underlined in running text.

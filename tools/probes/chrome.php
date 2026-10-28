@@ -20,6 +20,7 @@ function PROBE__ChromeStart(string $binary, string $dir): array
 	}
 	PROBE__ChromeSend($h, 'Network.setCacheDisabled', ['cacheDisabled' => true]);
 	PROBE__ChromeSend($h, 'Emulation.setScrollbarsHidden', ['hidden' => true]);
+	PROBE__ChromeSend($h, 'Emulation.setFocusEmulationEnabled', ['enabled' => true]);
 	return $h;
 }
 
@@ -102,6 +103,23 @@ function PROBE__ChromeEval(array &$h, string $expression): mixed
 		throw new RuntimeException('the page threw: ' . ($r['exceptionDetails']['exception']['description'] ?? $r['exceptionDetails']['text']));
 	}
 	return json_decode((string)($r['result']['value'] ?? 'null'), true);
+}
+
+/** Presses and releases the key, a name of PROBE_KEYS, as the user would. */
+function PROBE__ChromeKey(array &$h, string $key): void
+{
+	[, $code, $text] = PROBE_KEYS[$key];
+	$event = ['key' => $key, 'code' => $key, 'windowsVirtualKeyCode' => $code, 'nativeVirtualKeyCode' => $code];
+	PROBE__ChromeSend($h, 'Input.dispatchKeyEvent', ['type' => $text === '' ? 'rawKeyDown' : 'keyDown'] + $event + ($text === '' ? [] : ['text' => $text, 'unmodifiedText' => $text]));
+	PROBE__ChromeSend($h, 'Input.dispatchKeyEvent', ['type' => 'keyUp'] + $event);
+}
+
+/** Clicks the primary mouse button at the point of the viewport. */
+function PROBE__ChromeClick(array &$h, int $x, int $y): void
+{
+	foreach (['mousePressed', 'mouseReleased'] as $type) {
+		PROBE__ChromeSend($h, 'Input.dispatchMouseEvent', ['type' => $type, 'x' => $x, 'y' => $y, 'button' => 'left', 'clickCount' => 1]);
+	}
 }
 
 /** A PNG of the whole page. */
