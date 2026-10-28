@@ -298,7 +298,7 @@ function PROBE__Mirror(array &$h): array
 		} else {
 			PROBE__Do($h, 'Hover', $x, $y);
 		}
-		$seen = PROBE__Do($h, 'Eval', 'new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(() => done(REDZ_PROBE.compare(' . $i . ')))))');
+		$seen = PROBE__Do($h, 'Eval', 'REDZ_PROBE.compare(' . $i . ')');
 		PROBE__Do($h, 'Hover', 1, 1);
 		if ($focus && !$seen['active']) {
 			$findings[] = 'the docs mirror of :' . $pair['state'] . ' on ' . $pair['what'] . ' — Tab did not reach it';
@@ -340,6 +340,9 @@ function PROBE__Cell(array &$h, string $name, string $page, string $combo, strin
 	}
 	if ($m['ui'] !== true) {
 		$findings[] = 'the library\'s script did not run: no REDZ.ui';
+	}
+	if ($m['hidden'] ?? false) {
+		echo 'note: ', $where, "the engine keeps the page in the background, so it draws no frames\n";
 	}
 	$at = $width === 0 || in_array($width, $run['config']['shots'], true);
 	$shot = ($at && $mode === 'normal') || $forced;

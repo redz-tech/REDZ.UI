@@ -3,7 +3,11 @@ window.REDZ_PROBE = (() => {
 	const root = document.documentElement;
 	const name = (el) => el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') + (el.classList.length ? '.' + [...el.classList].join('.') : '');
 	const pause = (ms) => new Promise((done) => setTimeout(done, ms));
-	const frames = () => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done)));
+	// Two frames — or a second, as a page the engine has put in the background draws no frames at all.
+	const frames = () => new Promise((done) => {
+		requestAnimationFrame(() => requestAnimationFrame(done));
+		setTimeout(done, 1000);
+	});
 	const closed = (el) => el.closest('[popover]:not(:popover-open), dialog:not([open])') !== null;
 	// The box an opened layer rests in, without the scale or move of its opening transition — a slow engine may not have
 	// run it yet when the probe measures.
@@ -51,7 +55,7 @@ window.REDZ_PROBE = (() => {
 			root.setAttribute('data-probe', '');
 			root.setAttribute('data-theme', theme);
 			root.dir = dir;
-			await document.fonts.ready;
+			await Promise.race([document.fonts.ready, pause(5000)]);
 			await frames();
 			still.remove();
 			return true;
@@ -107,6 +111,7 @@ window.REDZ_PROBE = (() => {
 				unregioned: unregioned.slice(0, 8),
 				cut: cut.slice(0, 8),
 				busyLive: [...document.querySelectorAll('[aria-busy="true"]')].filter((el) => el.matches(live) || el.querySelector(live) !== null).slice(0, 8).map(name),
+				hidden: document.visibilityState !== 'visible',
 				ui: typeof globalThis.REDZ?.ui?.toast === 'function'
 			};
 		},
@@ -141,7 +146,8 @@ window.REDZ_PROBE = (() => {
 		},
 		// The differences between the twin in its real state and the copy, the element and its first descendants, read
 		// with transitions off; then the focus helper goes.
-		compare(i) {
+		async compare(i) {
+			await frames();
 			const [twin, copy] = mirrored[i];
 			const props = ['background-color', 'color', 'border-top-color', 'border-bottom-color', 'box-shadow', 'outline-style', 'outline-color', 'outline-width', 'text-decoration-line', 'opacity'];
 			const read = (el) => {
