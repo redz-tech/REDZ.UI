@@ -3,7 +3,18 @@
 All notable changes of the library. Newest first. Versions follow Semantic Versioning: a class, token, attribute
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch.
 
-## Unreleased
+## 0.1.0 — 2026-10-28
+
+The first release.
+
+### The release
+- `redz-ui.json`, the passport, written by `php tools/build.php` and held current on every commit: the version, the
+  floor, the stylesheets a bundle joins in their order, the modules of `js/index.js`, every class, custom property,
+  command and text key of the library, and the sha256 of every file a release archives, in the SRI form.
+- A tag `v*` becomes a release only when the probes are clean in every engine: `redz-ui-<version>.zip` — the passport
+  and the files it names — and `checks.zip`, the sheet of the probes, are attached to a draft whose notes come from
+  this changelog, and the draft is published. Releases are immutable: GitHub locks the tag and the files and signs an
+  attestation of both, which `gh release verify-asset` checks.
 
 ### The reference, the docs and the skills
 - `docs/`: a page per component and getting started, layout, utilities, tokens, icons and the move from Bootstrap 5.3

@@ -87,6 +87,15 @@
 					<p class="docs-lead">REDZ.UI is two stylesheets and a set of small scripts on the browser platform. Nothing is built where it is used: link the files, write Bootstrap-like markup, and the browser does the rest.</p>
 				</header>
 
+				<section class="vstack gap-12" aria-labelledby="index-get">
+					<h2 id="index-get">Get it</h2>
+					<p>Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. <code>redz-ui-0.1.0.zip</code> holds the library's files and its passport, <code>redz-ui.json</code> — the version, the floor, the stylesheets a bundle joins in their order, the modules, every class, token, command and text key, and the sha256 of every file. <code>checks.zip</code> beside it is the sheet of the probes the release passed in every engine.</p>
+					<pre class="docs-code" tabindex="0"><code>gh release download v0.1.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
+gh release verify-asset v0.1.0 redz-ui-0.1.0.zip --repo redz-tech/REDZ.UI</code></pre>
+					<p>Or from jsDelivr, which serves a release by its tag:</p>
+					<pre class="docs-code" tabindex="0"><code>&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.1.0/css/index.css"&gt;</code></pre>
+				</section>
+
 				<section class="vstack gap-12" aria-labelledby="index-include">
 					<h2 id="index-include">Include it</h2>
 					<p>The stylesheet, the icons and the scripts, with the page's own words for the few things the library says — every word comes from the page, the library has none of its own.</p>
@@ -101,7 +110,7 @@
   &lt;script type="application/json" id="redz-ui-text"&gt;{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…"}&lt;/script&gt;
 &lt;/head&gt;</code></pre>
 					<ul>
-						<li><code>css/index.css</code> pulls in the layers, the tokens, the components and the utilities, 19 KB gzipped. A consumer that bundles may join its files in that order.</li>
+						<li><code>css/index.css</code> pulls in the layers, the tokens, the components and the utilities, 19 KB gzipped. A consumer that bundles may join its files in that order — the passport lists them.</li>
 						<li><code>css/icons.css</code> is apart: one mask per Bootstrap Icons file, used only by name.</li>
 						<li><code>js/index.js</code> is an ES module; it loads the behaviors and sets <code>REDZ.ui</code> for calls from code.</li>
 					</ul>

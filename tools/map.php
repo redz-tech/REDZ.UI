@@ -37,38 +37,6 @@ function MAP__Refresh(): int
 }
 
 /**
- * Every class of the library's stylesheets, unescaped — components, utilities with their prefixes, icons — with the
- * docs page of its stylesheet ('' for the base layers).
- * @return array<string, string>
- */
-function MAP__Classes(): array
-{
-	$classes = [];
-	foreach ([...glob(MAP_ROOT . '/css/*.css'), ...glob(MAP_ROOT . '/css/components/*.css')] as $file) {
-		$page = basename($file, '.css');
-		$page = in_array($page, ['base', 'reset', 'tokens', 'scales', 'layers', 'index'], true) ? '' : $page;
-		$css = (string)preg_replace(['~/\*.*?\*/~s', '~url\([^)]*\)~'], '', (string)file_get_contents($file));
-		preg_match_all('~([^{}]+)\{~', $css, $selectors);
-		foreach ($selectors[1] as $selector) {
-			if (str_starts_with(trim($selector), '@')) {
-				continue;
-			}
-			preg_match_all('~\.((?:\\\\[0-9a-f]{1,6} ?|\\\\.|[\w-])+)~', $selector, $found);
-			foreach ($found[1] as $class) {
-				$class = (string)preg_replace_callback('~\\\\([0-9a-f]{1,6}) ?|\\\\(.)~', fn(array $m): string => ($m[2] ?? '') !== '' ? $m[2] : mb_chr((int)hexdec($m[1])), $class);
-				$classes[$class][] = $page;
-			}
-		}
-	}
-	ksort($classes, SORT_STRING);
-	foreach ($classes as $class => $pages) {
-		$named = array_filter($pages, fn(string $page): bool => $page !== '' && ($class === $page || str_starts_with($class, $page . '-')));
-		$classes[$class] = $named === [] ? $pages[0] : reset($named);
-	}
-	return $classes;
-}
-
-/**
  * The rules of a tab-separated file: [pattern or name, redz, kind, page, note], comments and blank lines skipped.
  * @return list<list<string>>
  */
@@ -140,7 +108,7 @@ function MAP__Row(string $class, array $rules, array $ours): ?array
  */
 function MAP__Build(): array
 {
-	$ours = MAP__Classes();
+	$ours = TOOL__Classes();
 	$rules = MAP__Rules('rules.tsv');
 	$lines = explode("\n", trim((string)file_get_contents(__DIR__ . '/map/bootstrap.txt')));
 	$rows = [];
@@ -170,7 +138,7 @@ function MAP__Build(): array
 function MAP__Files(array $rows): array
 {
 	$map = MAP_HEAD . "\n" . implode("\n", array_map(fn(array $row): string => implode("\t", $row), $rows)) . "\n";
-	$classes = implode("\n", array_keys(MAP__Classes())) . "\n";
+	$classes = implode("\n", array_keys(TOOL__Classes())) . "\n";
 	$files = [];
 	foreach (MAP_SKILLS as $folder) {
 		$files[$folder . '/map.tsv'] = $map;

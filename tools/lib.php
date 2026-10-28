@@ -1,6 +1,6 @@
 <?php
 // lib — what the library's tools share: fetching over HTTPS within a budget, one file out of a gzipped tar, a file of
-// an npm package checked against its sha512.
+// an npm package checked against its sha512, and every class of the library's stylesheets.
 
 /** The body at $url over HTTPS within two minutes, or an exception naming the address. */
 function TOOL__Fetch(string $url): string
@@ -75,4 +75,36 @@ function TOOL__NpmFile(string $package, string $version, string $name, string $i
 		throw new RuntimeException($package . ' ' . $version . ' does not match its sha512 ' . $published);
 	}
 	return ['version' => (string)$meta['version'], 'integrity' => $published, 'body' => TOOL__TarFile($tgz, $name)];
+}
+
+/**
+ * Every class of the library's stylesheets, unescaped — components, utilities with their prefixes, icons — with the
+ * docs page of its stylesheet ('' for the base layers).
+ * @return array<string, string>
+ */
+function TOOL__Classes(): array
+{
+	$classes = [];
+	foreach ([...glob(dirname(__DIR__) . '/css/*.css'), ...glob(dirname(__DIR__) . '/css/components/*.css')] as $file) {
+		$page = basename($file, '.css');
+		$page = in_array($page, ['base', 'reset', 'tokens', 'scales', 'layers', 'index'], true) ? '' : $page;
+		$css = (string)preg_replace(['~/\*.*?\*/~s', '~url\([^)]*\)~'], '', (string)file_get_contents($file));
+		preg_match_all('~([^{}]+)\{~', $css, $selectors);
+		foreach ($selectors[1] as $selector) {
+			if (str_starts_with(trim($selector), '@')) {
+				continue;
+			}
+			preg_match_all('~\.((?:\\\\[0-9a-f]{1,6} ?|\\\\.|[\w-])+)~', $selector, $found);
+			foreach ($found[1] as $class) {
+				$class = (string)preg_replace_callback('~\\\\([0-9a-f]{1,6}) ?|\\\\(.)~', fn(array $m): string => ($m[2] ?? '') !== '' ? $m[2] : mb_chr((int)hexdec($m[1])), $class);
+				$classes[$class][] = $page;
+			}
+		}
+	}
+	ksort($classes, SORT_STRING);
+	foreach ($classes as $class => $pages) {
+		$named = array_filter($pages, fn(string $page): bool => $page !== '' && ($class === $page || str_starts_with($class, $page . '-')));
+		$classes[$class] = $named === [] ? $pages[0] : reset($named);
+	}
+	return $classes;
 }

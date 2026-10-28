@@ -3,9 +3,8 @@
 The interface library of the REDZ products: plain CSS and small JavaScript on the browser platform — no framework, no
 build step.
 
-**Status:** in design. Nothing is released yet. The look is approved as a prototype and written by the reading rules
-below: three demo screens in `reference/demo/` — a list, a resource page and a settings form — in light and dark
-themes, left-to-right and right-to-left.
+**Status:** 0.1.0, the first release (2026-10-28) — see [Releases](#releases). Three demo screens in `reference/demo/`
+— a list, a resource page and a settings form — show it in light and dark themes, left-to-right and right-to-left.
 
 **Site:** [redz-tech.github.io/REDZ.UI](https://redz-tech.github.io/REDZ.UI/) — documentation and the demo screens of
 the latest release at the root, of the main branch under `next/`, and of every release under its version.
@@ -144,6 +143,25 @@ against their checksums. The sheet of shots and findings is written to `.dev/pro
 macOS 15 on every commit in five parallel parts — joined by `php tools/probe.php merge` — with a pinned Chrome for
 Testing build as the current Chrome, as the image's own lags; every release publishes its sheet under `checks/` on the
 site.
+
+## Releases
+Every release is an [immutable GitHub release](https://github.com/redz-tech/REDZ.UI/releases): once it is out, neither
+its tag nor its files can change, and GitHub signs an attestation of both. A tag `v*` becomes a release only when the
+probes are clean in every engine; the release carries two files:
+- `redz-ui-<version>.zip` — `css/`, `js/`, `icons/`, `floor.json`, the license files, this README, the changelog and the
+  passport `redz-ui.json`: the version, the floor, the stylesheets a bundle joins in their order, the modules of
+  `js/index.js`, every class, custom property, command and text key of the library, and the sha256 of every file in the
+  SRI form. `php tools/build.php` writes the passport and `--check` holds it current on every commit;
+- `checks.zip` — the sheet of the probes the release passed, also on the site under `<version>/checks/`.
+
+```sh
+gh release download v0.1.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
+gh release verify-asset v0.1.0 redz-ui-0.1.0.zip --repo redz-tech/REDZ.UI
+```
+
+jsDelivr serves a release by its tag: `https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.1.0/css/index.css`. Versions
+follow Semantic Versioning: a class, token, attribute or JavaScript call removed or renamed is a major release, one
+added is a minor release, a fix is a patch.
 
 ## License
 MIT — see [LICENSE](LICENSE). Pieces taken from other MIT-licensed projects are listed with their notices in `NOTICE`.
