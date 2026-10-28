@@ -3,10 +3,11 @@ window.REDZ_PROBE = (() => {
 	const root = document.documentElement;
 	const name = (el) => el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') + (el.classList.length ? '.' + [...el.classList].join('.') : '');
 	const pause = (ms) => new Promise((done) => setTimeout(done, ms));
-	// Two frames — or a second, as a page the engine has put in the background draws no frames at all.
+	// Two frames — or five seconds, as a page the engine has put in the background draws no frames at all; a slow
+	// simulator's frames may take more than a second, and the menu guard places its menu in one.
 	const frames = () => new Promise((done) => {
 		requestAnimationFrame(() => requestAnimationFrame(done));
-		setTimeout(done, 1000);
+		setTimeout(done, 5000);
 	});
 	const closed = (el) => el.closest('[popover]:not(:popover-open), dialog:not([open])') !== null;
 	// The box an opened layer rests in, without the scale or move of its opening transition — a slow engine may not have

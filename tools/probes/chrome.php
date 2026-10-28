@@ -65,7 +65,7 @@ function PROBE__ChromeSend(array &$h, string $method, array $params = [], bool $
 		}
 		PROBE__ChromePump($h, 0.02);
 	}
-	throw new RuntimeException('Chrome gave no answer to ' . $method);
+	throw new RuntimeException('Chrome gave no answer to ' . $method . (isset($params['expression']) ? ' of ' . substr((string)preg_replace('~^\(async \(\) => JSON\.stringify\(await \(~', '', (string)$params['expression']), 0, 90) : ''));
 }
 
 /** Loads $url in a $width × $height viewport (a phone below 600 px, two device pixels a CSS pixel) with the color scheme
