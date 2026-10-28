@@ -7,9 +7,10 @@
 // run; at 1440 its widgets are walked by keyboard, the docs' state mirror is held against the real hover and focus, and
 // Chrome names the fonts of Arabic text; forced colors and print where the engine has them. The pages of the config run
 // that whole way; the docs pages run in the "docs" engines at their widths, without shots or walks. Writes the sheet
-// .dev/probes/index.html with its report.json and exits 1 on any finding. Usage: php tools/probe.php [ENGINE…] — an
-// engine named that cannot run here is a finding, one left out of a full run only a note — or php tools/probe.php
-// merge DIR… — one sheet of the sheets of several runs, as CI's parallel jobs leave them.
+// .dev/probes/index.html with its report.json and exits 1 on any finding; an engine whose cell runs past five minutes
+// stops as stalling, that cell named. Usage: php tools/probe.php [ENGINE…] — an engine named that cannot run here is a
+// finding, one left out of a full run only a note — or php tools/probe.php merge DIR… — one sheet of the sheets of
+// several runs, as CI's parallel jobs leave them.
 
 require __DIR__ . '/lib.php';
 require __DIR__ . '/probes/chrome.php';
@@ -24,6 +25,8 @@ const PROBE_SHEET = __DIR__ . '/../.dev/probes';
 const PROBE_FORCED_PREFS = ['browser.display.document_color_use' => 2];
 // The tallest shot, in CSS px: twice that is the most a 2× phone shot can be, under the engines' 16 384 px canvas.
 const PROBE_SHOT_MAX = 8000;
+// The longest a cell may run, in seconds: CI's iOS 26 simulator, the slowest engine, spends about a minute on a cell.
+const PROBE_CELL_MAX = 300;
 // The keys of the keyboard walk: the WebDriver code point (Firefox, Safari), the Windows key code and the text (Chrome).
 const PROBE_KEYS = ['Enter' => ["\u{E006}", 13, "\r"], 'Escape' => ["\u{E00C}", 27, ''], 'Tab' => ["\u{E004}", 9, ''], 'ArrowDown' => ["\u{E015}", 40, ''], 'ArrowUp' => ["\u{E013}", 38, ''], 'ArrowLeft' => ["\u{E012}", 37, ''], 'ArrowRight' => ["\u{E014}", 39, ''], 'Home' => ["\u{E011}", 36, ''], 'End' => ["\u{E010}", 35, '']];
 
@@ -201,13 +204,28 @@ function PROBE__ServerStart(string $dir): array
 	return [$proc, $base];
 }
 
-/** Calls the engine driver's $verb (Load, Inject, Eval, Shot, Print, Errors, Stop) on the handle. */
+/** Calls the engine driver's $verb (Load, Inject, Eval, Key, Click, Hover, Shot, Print, Errors, Stop) on the handle. A
+ *  cell runs from its Load; past PROBE_CELL_MAX the engine is stalling, and the next call throws with the cell and its
+ *  slowest call named. */
 function PROBE__Do(array &$h, string $verb, mixed ...$args): mixed
 {
+	$what = $verb . ' ' . substr(json_encode(array_map(fn(mixed $arg): mixed => is_string($arg) && strlen($arg) > 200 ? strlen($arg) . ' bytes' : $arg, $args), JSON_UNESCAPED_SLASHES), 0, 160);
 	if (getenv('REDZ_PROBE_TRACE') !== false) {
-		fwrite(STDERR, gmdate('H:i:s') . ' ' . $verb . ' ' . substr(json_encode(array_map(fn(mixed $arg): mixed => is_string($arg) && strlen($arg) > 200 ? strlen($arg) . ' bytes' : $arg, $args), JSON_UNESCAPED_SLASHES), 0, 160) . "\n");
+		fwrite(STDERR, gmdate('H:i:s') . ' ' . $what . "\n");
 	}
-	return ('PROBE__' . ucfirst($h['kind']) . $verb)($h, ...$args);
+	if ($verb === 'Load') {
+		$h['cell'] = ['page' => (string)preg_replace('~^\w+://[^/]+/~', '', (string)$args[0]) . ' at ' . ($args[1] ?: 'phone'), 'since' => microtime(true), 'slowest' => 0.0, 'call' => ''];
+	} elseif ($verb !== 'Stop' && isset($h['cell']) && microtime(true) - $h['cell']['since'] > PROBE_CELL_MAX) {
+		throw new RuntimeException(sprintf('%s ran over %d s — the engine is stalling; its slowest call, %.0f s: %s', $h['cell']['page'], PROBE_CELL_MAX, $h['cell']['slowest'], $h['cell']['call']));
+	}
+	$start = microtime(true);
+	$answer = ('PROBE__' . ucfirst($h['kind']) . $verb)($h, ...$args);
+	$took = microtime(true) - $start;
+	if (isset($h['cell']) && $took > $h['cell']['slowest']) {
+		$h['cell']['slowest'] = $took;
+		$h['cell']['call'] = $what;
+	}
+	return $answer;
 }
 
 /** Runs every cell of engine $name, then its forced colors and print, into $report. */

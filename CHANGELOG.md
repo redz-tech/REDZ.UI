@@ -39,7 +39,9 @@ or JavaScript call removed or renamed is a major release, one added is a minor r
   in Chrome are checked; text that spills out of its box is named; Safari's Tab is Option-Tab, which reaches buttons
   and links; a cell sets its theme with transitions off; an exception may name a finding; every wait in the page ends
   in a few seconds; CI runs in five parallel parts joined by `php tools/probe.php merge`, with Chrome for Testing 156
-  as its current Chrome.
+  as its current Chrome. The Chrome driver sends a key without a native key code, as Playwright does: Chrome 152–154
+  on macOS sent a key the page left alone back into the page, forever. A cell that runs past five minutes stops its
+  engine as stalling, the cell and its slowest call named.
 
 ### The look, approved as a prototype
 - Tokens `--redz-*`: neutral grays, a blue accent, six tones (`primary`, `secondary`, `success`, `danger`, `warning`,

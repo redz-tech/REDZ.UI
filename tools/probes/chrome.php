@@ -109,7 +109,7 @@ function PROBE__ChromeEval(array &$h, string $expression): mixed
 function PROBE__ChromeKey(array &$h, string $key): void
 {
 	[, $code, $text] = PROBE_KEYS[$key];
-	$event = ['key' => $key, 'code' => $key, 'windowsVirtualKeyCode' => $code, 'nativeVirtualKeyCode' => $code];
+	$event = ['key' => $key, 'code' => $key, 'windowsVirtualKeyCode' => $code];
 	PROBE__ChromeSend($h, 'Input.dispatchKeyEvent', ['type' => $text === '' ? 'rawKeyDown' : 'keyDown'] + $event + ($text === '' ? [] : ['text' => $text, 'unmodifiedText' => $text]));
 	PROBE__ChromeSend($h, 'Input.dispatchKeyEvent', ['type' => 'keyUp'] + $event);
 }
