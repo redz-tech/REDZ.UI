@@ -1,6 +1,6 @@
 {
 	"name": "REDZ.UI",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"license": "MIT",
 	"site": "https://redz-tech.github.io/REDZ.UI/",
 	"floor": {"chrome":"130","chrome_android":"130","edge":"130","firefox":"132","firefox_android":"132","safari":"18.0","safari_ios":"18.0"},
@@ -4415,10 +4415,10 @@
 		"confirm.ok"
 	],
 	"files": {
-		"CHANGELOG.md": "sha256-o1eWI8/e4HnCUvnvAX6ANRk5XaioqSeulYsaVUcqUN8=",
+		"CHANGELOG.md": "sha256-+Jbnv7W1tzWEyFx3I0Md3P6ePF9rLBAM6T9uq+2A0V0=",
 		"LICENSE": "sha256-8pEc4ECwd79krplYdY+WVWqMIFNgcosqMOEmO/IRl6E=",
 		"NOTICE": "sha256-kspN6Bvm3sph93yHQc52RmQ1HKUMN/HbFOIH1iKYpMA=",
-		"README.md": "sha256-R/4thDd78xxOl0Tw76wZ8Kclf4If0vT1vSPcyCAdoOA=",
+		"README.md": "sha256-VhYGaEp0vDiaz6JK/a8q9sdwUohaDaELfxcRRGCE9BY=",
 		"css/base.css": "sha256-Q6Smi2Izi5wkGWmO5e/OfhEzRZPzu1aCRh5V/GzjUso=",
 		"css/components/accordion.css": "sha256-qzneYb6yrM/iS3d8Kq1v2P8KZg1x2jvnUmITMuXdxxo=",
 		"css/components/alert.css": "sha256-20SUa5rJAxlw/fEryb/G+4VJ4tvNDImlc96GH6xQyqM=",

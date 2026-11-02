@@ -3,7 +3,7 @@
 All notable changes of the library. Newest first. Versions follow Semantic Versioning: a class, token, attribute
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch.
 
-## Unreleased
+## 0.3.0 — 2026-11-02
 
 ### The combobox and the command palette
 - `combobox` — the WAI-ARIA combobox with a listbox, one core in three places (`js/combobox.js`):

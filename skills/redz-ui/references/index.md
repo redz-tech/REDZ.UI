@@ -6,17 +6,17 @@ REDZ.UI is two stylesheets and a set of small scripts on the browser platform. N
 
 ## Get it
 
-Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. `redz-ui-0.1.0.zip` holds the library's files and its passport, `redz-ui.json` — the version, the floor, the stylesheets a bundle joins in their order, the modules, every class, token, command and text key, and the sha256 of every file. `checks.zip` beside it is the sheet of the probes the release passed in every engine.
+Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. `redz-ui-0.3.0.zip` holds the library's files and its passport, `redz-ui.json` — the version, the floor, the stylesheets a bundle joins in their order, the modules, every class, token, command and text key, and the sha256 of every file. `checks.zip` beside it is the sheet of the probes the release passed in every engine.
 
 ```js
-gh release download v0.1.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
-gh release verify-asset v0.1.0 redz-ui-0.1.0.zip --repo redz-tech/REDZ.UI
+gh release download v0.3.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
+gh release verify-asset v0.3.0 redz-ui-0.3.0.zip --repo redz-tech/REDZ.UI
 ```
 
 Or from jsDelivr, which serves a release by its tag:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.1.0/css/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.3.0/css/index.css">
 ```
 
 ## Include it
