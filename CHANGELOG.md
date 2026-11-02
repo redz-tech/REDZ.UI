@@ -10,7 +10,9 @@ or JavaScript call removed or renamed is a major release, one added is a minor r
   - a choice in a form: a `form-select combobox-toggle` button with `role="combobox"` shows the value
     (`combobox-value`, its `data-placeholder` while empty) and opens a `combobox-menu` panel with `combobox-search` ›
     `combobox-search-input` and a `combobox-list`; the value lives in hidden fields named by the list's `data-name`,
-    one per value (`name[]` for many), so a form posts it as it is; Down, Up or a letter on the button open it;
+    one per value (`name[]` for many), so a form posts it as it is; Down, Up or a letter on the button open it; the
+    button names its panel in `aria-controls` only while it is open, and one choice closes the panel a frame after it
+    is written, so VoiceOver reads the new value;
   - many values: `aria-multiselectable="true"` keeps the panel open; the button lists the values in the page's
     language while they fit, else the first ones and `+N` (`combobox-more`); a list whose `data-chips` names a
     `combobox-chips` container shows each value there as a chip with its remove button instead;
