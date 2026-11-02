@@ -72,9 +72,9 @@ function MIN__CssValue(string $css, int $i): string
 
 /**
  * The stylesheet squeezed: comments gone; strings and escapes as written; white space kept only where it means
- * something — and wherever it stood in a value the engine keeps as written, a custom property's or one with `var()`
- * or `env()`; a declaration block's last `;` dropped. A comment between two names, an unquoted `url(`, a rule nested
- * in declarations and an at-rule not named above stop it.
+ * something — and wherever it stood but before a value the engine keeps as written, a custom property's or one with
+ * `var()` or `env()`, as Firefox 132 keeps even its trailing space; a declaration block's last `;` dropped. A comment
+ * between two names, an unquoted `url(`, a rule nested in declarations and an at-rule not named above stop it.
  */
 function MIN__Css(string $css): string
 {
@@ -107,8 +107,7 @@ function MIN__Css(string $css): string
 		}
 		$block = $blocks[array_key_last($blocks)];
 		$where = $block === 'declarations' ? 'declarations' : (($out[$prelude] ?? $c) === '@' ? 'at' : 'selector');
-		$ends = str_contains(';}', $c);
-		if ($space && ($verbatim ? (strlen($out) > $value ? !$ends && $c !== '!' : $ends) : MIN__CssSpace(substr($out, -1), $c, $where))) {
+		if ($space && ($verbatim ? strlen($out) > $value || str_contains(';}', $c) : MIN__CssSpace(substr($out, -1), $c, $where))) {
 			$out .= ' ';
 		}
 		$space = false;
