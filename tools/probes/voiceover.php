@@ -66,7 +66,7 @@ function PROBE__VoiceOverRun(array &$h, string $name, array $run, array &$report
 	}
 	try {
 		foreach ($run['config']['voiceover'] as $page => $steps) {
-			PROBE__Do($h, 'Load', $run['base'] . '/' . $page, 1280, 900);
+			PROBE__Do($h, 'Load', $run['base'] . $page, 1280, 900);
 			for ($tries = 0; PROBE__Do($h, 'Eval', 'document.readyState === "complete" && "REDZ" in window') !== true; $tries++) {
 				if ($tries > 100) {
 					throw new RuntimeException($page . ' did not load: ' . json_encode(PROBE__Do($h, 'Eval', '[location.href, document.readyState, document.title]')));
