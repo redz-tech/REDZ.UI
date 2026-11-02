@@ -18,12 +18,16 @@ the latest release at the root, of the main branch under `next/`, and of every r
 - Behavior of the widgets that the platform does not give by itself — menus and tabs by keyboard, notices, a
   confirmation, busy buttons, a dialog closed by a click outside it — as small JavaScript modules that attach by
   delegation (see [Scripts](#scripts)).
+- Two files a project serves, made by our own PHP tool (`tools/min.php`) and committed: `dist/redz-ui.min.css`, the
+  stylesheets in one, squeezed, and `dist/redz-ui.min.js`, the modules as one ES module with short local names. Each
+  pass proves its result, the probes run the two files in every engine, and `css/` and `js/` stay to read.
 - Light, dark and system themes; left-to-right and right-to-left from one stylesheet; WCAG 2.2 AA in both themes.
 - Documentation with a page per component, and every component in every state on one page, `docs/all.html` — the
   fixture checked in real engines, with its Arabic twin (see [Documentation](#documentation)).
 - Two agent skills in `skills/`: building screens with REDZ.UI, and moving a project from Bootstrap 5.3 with a scan
   and a map of every Bootstrap class (see [Skills](#skills)).
-- Budgets held on every commit: the stylesheet at most 24 KB and the scripts 25 KB, gzipped as one file each.
+- Budgets held on every commit: the stylesheet at most 24 KB and the script 25 KB, gzipped — the two files a project
+  serves.
 
 ## How it reads
 One rule for every class:
@@ -45,7 +49,7 @@ names. `css/icons.css` delivers each icon as a CSS mask over its file, so an ico
 and needs no font, no JavaScript and no build:
 
 ```html
-<link rel="stylesheet" href="css/index.css">
+<link rel="stylesheet" href="dist/redz-ui.min.css">
 <link rel="stylesheet" href="css/icons.css">
 
 <i class="bi bi-pencil" aria-hidden="true"></i>
@@ -55,11 +59,11 @@ Such an icon follows the system colors in forced-colors mode and prints, from yo
 CORS headers.
 
 ## Scripts
-One module beside the stylesheet loads them all; each attaches by delegation on `document`, so nothing is set up per
-element and markup added later works the same:
+One file beside the stylesheet carries them all — `dist/redz-ui.min.js`, the modules of `js/index.js` as one; each
+attaches by delegation on `document`, so nothing is set up per element and markup added later works the same:
 
 ```html
-<script type="module" src="js/index.js"></script>
+<script type="module" src="dist/redz-ui.min.js"></script>
 <script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results"}</script>
 ```
 
@@ -150,7 +154,8 @@ icons without a mask, width prefixes outside a region, cut labels, `aria-busy` o
 menu and dialog and checks where it lands; walks every menu, combobox, modal dialog and tab list by real keys — and a
 dialog with `closedby` by a click outside it — against the WAI-ARIA patterns, and sends two notices; holds the docs' copies of
 `:hover` and `:focus-visible` against the real pointer and Tab; has Chrome name the fonts of the Arabic text; runs
-axe-core; and checks forced colors and print where the engine has them. Every docs page runs in the current Chrome,
+axe-core; checks forced colors and print where the engine has them; and runs the minifier's scripts of `tools/min/` as
+written and minified, and the release's stylesheet as written and squeezed, which must agree. Every docs page runs in the current Chrome,
 Firefox and Safari at 1440 and 390 px. Older engines are fetched once into `~/Library/Caches/redz-ui` and checked
 against their checksums. The engine `voiceover` hears what VoiceOver says in Safari through the combobox and the
 palette, step by step, against the words each step must hold. The sheet of shots and findings is written to
@@ -162,10 +167,11 @@ lags; every release publishes its sheet under `checks/` on the site.
 Every release is an [immutable GitHub release](https://github.com/redz-tech/REDZ.UI/releases): once it is out, neither
 its tag nor its files can change, and GitHub signs an attestation of both. A tag `v*` becomes a release only when the
 probes are clean in every engine; the release carries two files:
-- `redz-ui-<version>.zip` — `css/`, `js/`, `icons/`, `floor.json`, the license files, this README, the changelog and the
-  passport `redz-ui.json`: the version, the floor, the stylesheets a bundle joins in their order, the modules of
-  `js/index.js`, every class, custom property, command and text key of the library, and the sha256 of every file in the
-  SRI form. `php tools/build.php` writes the passport and `--check` holds it current on every commit;
+- `redz-ui-<version>.zip` — `dist/`, `css/`, `js/`, `icons/`, `floor.json`, the license files, this README, the
+  changelog and the passport `redz-ui.json`: the version, the floor, the two files a project serves, the stylesheets a
+  bundle joins in their order, the modules of `js/index.js`, every class, custom property, command and text key of the
+  library, and the sha256 of every file in the SRI form. `php tools/build.php` writes the two files and the passport,
+  and `--check` holds them current on every commit;
 - `checks.zip` — the sheet of the probes the release passed, also on the site under `<version>/checks/`.
 
 ```sh
@@ -173,7 +179,7 @@ gh release download v0.3.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
 gh release verify-asset v0.3.0 redz-ui-0.3.0.zip --repo redz-tech/REDZ.UI
 ```
 
-jsDelivr serves a release by its tag: `https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.3.0/css/index.css`. Versions
+jsDelivr serves a release by its tag: `https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.3.0/dist/redz-ui.min.css`. Versions
 follow Semantic Versioning: a class, token, attribute or JavaScript call removed or renamed is a major release, one
 added is a minor release, a fix is a patch; while the version is 0.x, a removal or a rename is a minor release.
 

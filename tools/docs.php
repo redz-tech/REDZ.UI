@@ -227,12 +227,12 @@ function DOCS__Page(array $config, string $key, string $title, string $lead, str
 			<meta name="viewport" content="width=device-width, initial-scale=1">
 			<title>{$name} — REDZ.UI</title>
 			<meta name="description" content="{$description}">
-			<link rel="stylesheet" href="../css/index.css">
+			<link rel="stylesheet" href="../dist/redz-ui.min.css">
 			<link rel="stylesheet" href="../css/icons.css">
 			<link rel="stylesheet" href="site.css">
 			<link rel="alternate" type="text/markdown" href="{$key}.md">
 			<script src="site.js"></script>
-			<script type="module" src="../js/index.js"></script>
+			<script type="module" src="../dist/redz-ui.min.js"></script>
 			<script type="application/json" id="redz-ui-text">{$texts}</script>
 		</head>
 		<body>

@@ -62,9 +62,9 @@ the project switches at once, so migrate on a branch and switch the `<link>` wit
 ## The page
 
 ```html
-<link rel="stylesheet" href="redz-ui/css/index.css">
+<link rel="stylesheet" href="redz-ui/dist/redz-ui.min.css">
 <link rel="stylesheet" href="redz-ui/css/icons.css">
-<script type="module" src="redz-ui/js/index.js"></script>
+<script type="module" src="redz-ui/dist/redz-ui.min.js"></script>
 <script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…"}</script>
 ```
 

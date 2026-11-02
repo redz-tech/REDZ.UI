@@ -24,7 +24,7 @@ function RELEASE__Section(string $version): string
 function RELEASE__Notes(string $tag, string $version, string $section): string
 {
 	return $section . "\n\n---\n\n"
-		. '**Files.** `redz-ui-' . $version . '.zip` — the library as released: `redz-ui.json`, its passport (the version, the floor, the stylesheets a bundle joins in their order, the modules, the vocabulary and the sha256 of every file), and every file it names. `checks.zip` — the sheet of the probes this release passed in every engine, also at ' . RELEASE_SITE . $version . "/checks/.\n\n"
+		. '**Files.** `redz-ui-' . $version . '.zip` — the library as released: `redz-ui.json`, its passport (the version, the floor, the two files a project serves, the stylesheets a bundle joins in their order, the modules, the vocabulary and the sha256 of every file), and every file it names — `dist/redz-ui.min.css` and `dist/redz-ui.min.js` among them. `checks.zip` — the sheet of the probes this release passed in every engine, also at ' . RELEASE_SITE . $version . "/checks/.\n\n"
 		. '**Check the archive:** `gh release verify-asset ' . $tag . ' redz-ui-' . $version . '.zip --repo ' . RELEASE_REPO . "`.\n";
 }
 

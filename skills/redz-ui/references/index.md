@@ -2,11 +2,11 @@
 
 # Getting started
 
-REDZ.UI is two stylesheets and a set of small scripts on the browser platform. Nothing is built where it is used: link the files, write Bootstrap-like markup, and the browser does the rest.
+REDZ.UI is a stylesheet, its icons and one small script on the browser platform. Nothing is built where it is used: link the three files, write Bootstrap-like markup, and the browser does the rest.
 
 ## Get it
 
-Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. `redz-ui-0.3.0.zip` holds the library's files and its passport, `redz-ui.json` — the version, the floor, the stylesheets a bundle joins in their order, the modules, every class, token, command and text key, and the sha256 of every file. `checks.zip` beside it is the sheet of the probes the release passed in every engine.
+Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. `redz-ui-0.3.0.zip` holds the library's files and its passport, `redz-ui.json` — the version, the floor, the two files a project serves, the stylesheets and modules they are made of, every class, token, command and text key, and the sha256 of every file. `checks.zip` beside it is the sheet of the probes the release passed in every engine.
 
 ```js
 gh release download v0.3.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
@@ -16,7 +16,7 @@ gh release verify-asset v0.3.0 redz-ui-0.3.0.zip --repo redz-tech/REDZ.UI
 Or from jsDelivr, which serves a release by its tag:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.3.0/css/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.3.0/dist/redz-ui.min.css">
 ```
 
 ## Include it
@@ -29,16 +29,17 @@ The stylesheet, the icons and the scripts, with the page's own words for the few
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="redz-ui/css/index.css">
+  <link rel="stylesheet" href="redz-ui/dist/redz-ui.min.css">
   <link rel="stylesheet" href="redz-ui/css/icons.css">
-  <script type="module" src="redz-ui/js/index.js"></script>
+  <script type="module" src="redz-ui/dist/redz-ui.min.js"></script>
   <script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…"}</script>
 </head>
 ```
 
-- `css/index.css` pulls in the layers, the tokens, the components and the utilities, 19 KB gzipped. A consumer that bundles may join its files in that order — the passport lists them.
+- `dist/redz-ui.min.css` is the layers, the tokens, the components and the utilities in one file, 21 KB gzipped: the stylesheets `css/index.css` pulls in, squeezed.
 - `css/icons.css` is apart: one mask per Bootstrap Icons file, used only by name.
-- `js/index.js` is an ES module; it loads the behaviors and sets `REDZ.ui` for calls from code.
+- `dist/redz-ui.min.js` is one ES module of the behaviors, 9 KB gzipped: the modules of `js/index.js` joined, squeezed and given short local names. It sets `REDZ.ui` for calls from code.
+- The two files are made from `css/` and `js/`, which stay to read. A project that bundles its own may join the stylesheets in the passport's order instead.
 
 ## How it reads
 

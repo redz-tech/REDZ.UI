@@ -27,6 +27,22 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - The docs: a page for pagination, the new parts on the pages of navs, tables, cards, dialogs and utilities, and an
   icon for every page in the menu; the probes flag a scrollspy nav without exactly one current link.
 
+### One stylesheet and one script for a project
+- `dist/redz-ui.min.css` — the stylesheets `css/index.css` pulls in, as one file, squeezed: 21.2 KB gzipped, from 34 KB
+  as 40 files. `dist/redz-ui.min.js` — the modules of `js/index.js` as one ES module, squeezed and given short local
+  names: 9.4 KB gzipped, from 20.4 KB as 14 modules three imports deep. A page links them and `css/icons.css`; the
+  sources stay to read, and the passport names the two files (`dist`) with their hashes.
+- `tools/min.php` makes them, with no tool from outside: its JS scanner — strings, patterns and a template's text as
+  written, white space only where two tokens would fuse — and its verdict come from the REDZ ERP's minifier, with one
+  rule more (a `/` after `++` or `--` divides); the joiner, the short names — scoped as esbuild scopes them, never a
+  free name or a property — and the CSS pass are new. A selector keeps its descendant space, also before `:`; a value
+  the engine keeps as written — a custom property's, or one with `var()` — keeps its spaces. Each pass proves its
+  result before it is written: the scanner's tokens and idempotence, the names' declarations one for one, the
+  stylesheet's bytes beyond white space.
+- The probes run the two files on every page, and in every engine the scripts of `tools/min/` answer the same as
+  written and minified, and the stylesheet gives the same rules squeezed as written. The budgets are measured on the
+  two files, gzipped; the ceilings stay 24 KB and 25 KB.
+
 ### Changed — breaking, in a minor release while the version is 0.x
 - The combobox's server search event is `redz:search`, not `redz:filter`: a page listens for `redz:search` on the
   search, as before with `detail.query` and `detail.signal`.

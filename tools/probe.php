@@ -5,8 +5,10 @@
 // page's Arabic twin when it has one — is judged for overflow, unmasked icons, width prefixes outside a region, cut
 // labels, busy marks on live regions and errors; at the shot widths it is shot, every popover and dialog opened and axe
 // run; at 1440 its widgets are walked by keyboard, the docs' state mirror is held against the real hover and focus, and
-// Chrome names the fonts of Arabic text; forced colors and print where the engine has them. The pages of the config run
-// that whole way; the docs pages run in the "docs" engines at their widths, without shots or walks. Writes the sheet
+// Chrome names the fonts of Arabic text; forced colors and print where the engine has them; and every engine runs the
+// minifier's scripts of tools/min/ as written and minified, and reads the release's stylesheet as written and squeezed,
+// which must agree. The pages of the config run that whole way; the docs pages run in the "docs" engines at their
+// widths, without shots or walks. Writes the sheet
 // .dev/probes/index.html with its report.json and exits 1 on any finding; an engine whose cell runs past five minutes
 // stops as stalling, that cell named. The engine voiceover hears what VoiceOver says through the config's steps in
 // Safari. Usage: php tools/probe.php [ENGINE…] — an engine named that cannot run here is a finding, one left out of a
@@ -14,6 +16,7 @@
 // jobs leave them — or php tools/probe.php voiceover-setup, which lets CI's VoiceOver be driven.
 
 require __DIR__ . '/lib.php';
+require __DIR__ . '/min.php';
 require __DIR__ . '/probes/chrome.php';
 require __DIR__ . '/probes/firefox.php';
 require __DIR__ . '/probes/safari.php';
@@ -283,6 +286,7 @@ function PROBE__EngineRun(string $name, array $engine, string $binary, string $d
 				}
 			}
 		}
+		PROBE__MinCell($h, $name, $run, $report);
 	} finally {
 		PROBE__Do($h, 'Stop');
 	}
@@ -675,6 +679,48 @@ function PROBE__FindingAllowed(array $config, string $engine, string $text, arra
 		}
 	}
 	return false;
+}
+
+/**
+ * The minifier in this engine: every script of tools/min/ answers the same as written and as tools/min.php writes
+ * it, and the release's stylesheet and tools/min/hostile.css give the engine the same rules squeezed as written.
+ */
+function PROBE__MinCell(array &$h, string $name, array $run, array &$report): void
+{
+	$answer = function (string $code) use (&$h): mixed {
+		PROBE__Do($h, 'Load', 'about:blank', 1280, 900, 'light', false);
+		return PROBE__Do($h, 'Eval', "(async () => {'use strict';\n" . $code . "\nreturn globalThis.REDZ_MIN_RESULT;})()");
+	};
+	foreach (glob(PROBE_ROOT . '/tools/min/*.js') ?: [] as $file) {
+		$source = (string)file_get_contents($file);
+		try {
+			$written = $answer($source);
+			$minified = $answer(MIN__JsNamesSafe(MIN__JsSafe($source)));
+		} catch (RuntimeException $e) {
+			$report['findings'][] = $name . ' tools/min/' . basename($file) . ' — ' . $e->getMessage();
+			continue;
+		}
+		if ($written !== $minified) {
+			$report['findings'][] = $name . ' tools/min/' . basename($file) . ' answers ' . substr((string)json_encode($minified, JSON_UNESCAPED_UNICODE), 0, 300) . ' minified, ' . substr((string)json_encode($written, JSON_UNESCAPED_UNICODE), 0, 300) . ' as written';
+		}
+	}
+	$passport = json_decode((string)file_get_contents(PROBE_ROOT . '/redz-ui.json'), true, 512, JSON_THROW_ON_ERROR);
+	$hostile = (string)file_get_contents(PROBE_ROOT . '/tools/min/hostile.css');
+	$sheets = [
+		$passport['dist']['css'] => [implode("\n", array_map(fn(string $file): string => (string)file_get_contents(PROBE_ROOT . '/' . $file), $passport['css'])), (string)file_get_contents(PROBE_ROOT . '/' . $passport['dist']['css'])],
+		'tools/min/hostile.css' => [$hostile, MIN__CssSafe($hostile)],
+	];
+	PROBE__Do($h, 'Load', 'about:blank', 1280, 900, 'light', false);
+	foreach ($sheets as $file => $pair) {
+		[$written, $squeezed] = array_map(fn(string $css): mixed => PROBE__Do($h, 'Eval', '((text) => { const out = []; const walk = (rules) => { for (const rule of rules) { const nested = rule.cssRules?.length > 0; out.push(nested ? rule.cssText.slice(0, rule.cssText.indexOf("{")) : rule.cssText); if (nested) { walk(rule.cssRules); } } }; const sheet = new CSSStyleSheet(); sheet.replaceSync(text); walk(sheet.cssRules); return out; })(' . json_encode($css, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ')'), $pair);
+		$at = 0;
+		while ($at < count($written) && ($written[$at] ?? null) === ($squeezed[$at] ?? null)) {
+			$at++;
+		}
+		if ($at < max(count($written), count($squeezed))) {
+			$report['findings'][] = $name . ' ' . $file . ' squeezed gives the rule ' . substr((string)($squeezed[$at] ?? 'none'), 0, 200) . ' for ' . substr((string)($written[$at] ?? 'none'), 0, 200);
+		}
+	}
 }
 
 /** $page printed by the engine on A4, light: the PDF beside the sheet and its first page as a shot. */

@@ -6,7 +6,7 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 
 ## Start
 
-- [Getting started](docs/index.md): REDZ.UI is two stylesheets and a set of small scripts on the browser platform. Nothing is built where it is used: link the files, write Bootstrap-like markup, and the browser does the rest.
+- [Getting started](docs/index.md): REDZ.UI is a stylesheet, its icons and one small script on the browser platform. Nothing is built where it is used: link the three files, write Bootstrap-like markup, and the browser does the rest.
 - [Layout](docs/layout.md): The parent sets the grid, the number is the count, and a width prefix measures the region the element is in. Stacks for a column or a row of items, gaps between them, no margins on components.
 - [Utilities](docs/utilities.md): Single-purpose classes with Bootstrap 5's names, where the number is the value: p-16, gap-8, fs-14, rounded-8, w-50. Written once from a vocabulary file and committed — nothing is generated where they are used.
 - [Tokens](docs/tokens.md): The custom properties on :root that the components read: colors by role in pairs that pass WCAG AA in both themes, spacing, type, radii, shadows and motion. A theme changes tokens, never component rules.

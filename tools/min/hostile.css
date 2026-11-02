@@ -1,0 +1,93 @@
+/* The minifier's fixture: what a squeezed stylesheet could read differently — a descendant before a pseudo-class,
+   escaped names, strings with spaces and braces, arithmetic, !important, values kept as written, an empty value. */
+@layer fixture {
+	.a :is(.b, .c) > .d ~ .e + .f {
+		color: red;
+	}
+
+	.a:is(.b) .c {
+		color: blue;
+	}
+
+	.md\:d-none, .\31 0col, .x\.y {
+		display: none;
+	}
+
+	.s::before {
+		content: "a  b ; } { /* not a comment */";
+	}
+
+	.s::after {
+		content: 'it\'s';
+	}
+
+	.calc {
+		inline-size: calc(100% - 2rem);
+		margin: calc(1px + 2px) auto calc(-1 * 3px);
+	}
+
+	.imp {
+		color: green !important;
+	}
+
+	.var {
+		--spaced: a , b ( c ) ;
+		--empty: ;
+		box-shadow: 0 0 0 1px var(--x, red), 0 1px 2px rgb(0 0 0 / 0.2);
+	}
+
+	.grid {
+		grid-template-areas: "a b" "c d";
+		font: italic 12px/1.5 "Segoe UI", sans-serif;
+	}
+
+	.attr[data-x="a b"], .attr[data-y='c'] {
+		order: 1;
+	}
+
+	.nth:nth-child(2n + 1), .nth:nth-last-child(-n + 3) {
+		order: 2;
+	}
+
+	.has:has(> .x, + .y) {
+		order: 3;
+	}
+}
+
+@media (width < 36rem) and (prefers-reduced-motion: no-preference) {
+	.m {
+		color: red;
+	}
+}
+
+@supports (inline-size: calc(1px + 1px)) and selector(:has(a)) {
+	.sup {
+		color: red;
+	}
+}
+
+@container region (width >= 576px) {
+	.cq {
+		color: red;
+	}
+}
+
+@keyframes spin {
+	from {
+		rotate: 0deg;
+	}
+
+	50% {
+		rotate: 180deg;
+	}
+
+	to {
+		rotate: 360deg;
+	}
+}
+
+@starting-style {
+	.start {
+		opacity: 0;
+	}
+}

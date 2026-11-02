@@ -62,6 +62,7 @@
 		"js/busy.js",
 		"js/index.js"
 	],
+	"dist": {"css":"dist/redz-ui.min.css","js":"dist/redz-ui.min.js"},
 	"classes": [
 		"2xl:align-content-around",
 		"2xl:align-content-between",
@@ -4479,10 +4480,10 @@
 		"confirm.ok"
 	],
 	"files": {
-		"CHANGELOG.md": "sha256-2guAwIh3XJVKb/4HBlKUcaJHDxAMQNAh9ZCwIhCFQQo=",
+		"CHANGELOG.md": "sha256-Z3vStGTQ8eAWMSCVzkQl6+2weFXw7QQs9bQwZLs9TBg=",
 		"LICENSE": "sha256-8pEc4ECwd79krplYdY+WVWqMIFNgcosqMOEmO/IRl6E=",
 		"NOTICE": "sha256-kspN6Bvm3sph93yHQc52RmQ1HKUMN/HbFOIH1iKYpMA=",
-		"README.md": "sha256-rzk5cmmF+1oT+NqV6mAG/pSnl0rI4kFjU1EQFfdSl7I=",
+		"README.md": "sha256-7zQT4k80ax4bGuoCVYrudU0S2JdzxSrOdergMWzXF5U=",
 		"css/base.css": "sha256-Q6Smi2Izi5wkGWmO5e/OfhEzRZPzu1aCRh5V/GzjUso=",
 		"css/components/accordion.css": "sha256-qzneYb6yrM/iS3d8Kq1v2P8KZg1x2jvnUmITMuXdxxo=",
 		"css/components/alert.css": "sha256-20SUa5rJAxlw/fEryb/G+4VJ4tvNDImlc96GH6xQyqM=",
@@ -4524,6 +4525,8 @@
 		"css/scales.css": "sha256-WcICEPNnFIVcN130zTaXrtjyOUabG/dUJEFzLA/Wy7c=",
 		"css/tokens.css": "sha256-3ULyqpVHmATk7Qva0MWZafYfTNMjsKSyHkxK5Ros/Z8=",
 		"css/utilities.css": "sha256-FhVHo6Kn8YPC3+qEMapJPKPWrdkHCUy9L3iTYYodMS0=",
+		"dist/redz-ui.min.css": "sha256-X/ZtA77CtGJ5c2U4lx/8zsU6I1Qlx+jeO0qosmW9jlU=",
+		"dist/redz-ui.min.js": "sha256-qCyPc0dn/kEYr8l9TWztlCm+M0DnTgjfITD3QNbi2Uc=",
 		"floor.json": "sha256-NTRequCJwb2P3IzI0MWFgD1gFuieLVg2sdGKW3lwwLc=",
 		"icons/0-circle-fill.svg": "sha256-CgoKPtvHkyTETBVtMNzXSShQ02LXnyEh/a2K3+BPk1A=",
 		"icons/0-circle.svg": "sha256-KOZBUdwwZYg869+kTm7ge9PRFoHFSq8SGGz3M2DjTWo=",

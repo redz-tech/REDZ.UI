@@ -50,17 +50,10 @@ function PROBE__PrintShotWrite(string $pdf, string $file): array
 	return $size;
 }
 
-/** Copies the library's stylesheets into the sheet folder $dir, so its page needs nothing outside it. */
+/** Copies the library's stylesheet into the sheet folder $dir, so its page needs nothing outside it. */
 function PROBE__SheetCss(string $dir): void
 {
-	foreach (['css', 'css/components'] as $folder) {
-		@mkdir($dir . '/' . $folder, 0777, true);
-		foreach (glob(PROBE_ROOT . '/' . $folder . '/*.css') ?: [] as $file) {
-			if (basename($file) !== 'icons.css') {
-				copy($file, $dir . '/' . $folder . '/' . basename($file));
-			}
-		}
-	}
+	copy(PROBE_ROOT . '/dist/redz-ui.min.css', $dir . '/redz-ui.min.css');
 	copy(__DIR__ . '/sheet.css', $dir . '/sheet.css');
 }
 
@@ -75,7 +68,7 @@ function PROBE__SheetWrite(string $dir, array $report): void
 {
 	PROBE__SheetCss($dir);
 	$total = count($report['findings']);
-	$out = ['<!doctype html>', '<html lang="en">', '<head>', '<meta charset="utf-8">', '<meta name="viewport" content="width=device-width, initial-scale=1">', '<title>REDZ.UI checks</title>', '<link rel="stylesheet" href="css/index.css">', '<link rel="stylesheet" href="sheet.css">', '</head>', '<body>', '<main class="region sheet vstack gap-24">'];
+	$out = ['<!doctype html>', '<html lang="en">', '<head>', '<meta charset="utf-8">', '<meta name="viewport" content="width=device-width, initial-scale=1">', '<title>REDZ.UI checks</title>', '<link rel="stylesheet" href="redz-ui.min.css">', '<link rel="stylesheet" href="sheet.css">', '</head>', '<body>', '<main class="region sheet vstack gap-24">'];
 	$out[] = '<header class="vstack gap-8"><h1>Checks</h1><p class="text-muted">' . PROBE__Html($report['when'] . ' · ' . $report['commit']) . ' · the library\'s pages in real engines, light LTR and dark RTL, at ' . PROBE__Html(implode(', ', $report['widths'])) . ' px</p>';
 	$out[] = '<div class="hstack flex-wrap gap-8">' . ($total === 0 ? '<span class="badge badge-subtle-success">no findings</span>' : '<span class="badge badge-subtle-danger">' . $total . ' findings</span>');
 	foreach ($report['engines'] as $name => $engine) {
