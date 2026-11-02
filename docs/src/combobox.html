@@ -228,7 +228,7 @@
 	<ul>
 		<li>The button is the WAI-ARIA select-only combobox: named by its <code>&lt;label for&gt;</code>, its value its text, its popup a panel with <code>role="dialog"</code>; the library keeps its <code>aria-expanded</code>.</li>
 		<li>The search is the editable combobox with list autocomplete: the focus stays in it, <code>aria-activedescendant</code> names the active option, <code>aria-selected</code> marks the chosen ones. The list follows the search in the page, so a screen reader on a phone reaches it by swiping.</li>
-		<li>Once the typing pauses, the option <kbd>Enter</kbd> would take is named again — a screen reader busy with the typed keys says nothing of it — with its place among those found; with nothing found, the count is said politely, from the page's texts. The probes' engine <code>voiceover</code> holds these words against what VoiceOver says in Safari.</li>
+		<li>Once the typing pauses, the option <kbd>Enter</kbd> would take is said politely by its label — a screen reader busy with the typed keys says nothing of it — and with nothing found, the count, from the page's texts. The probes' engine <code>voiceover</code> holds these words against what VoiceOver says in Safari.</li>
 		<li>A choice fires <code>input</code> and <code>change</code> on the list; a form's reset puts the values back as the page sent them.</li>
 	</ul>
 </section>

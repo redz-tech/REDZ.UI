@@ -18,8 +18,8 @@ or JavaScript call removed or renamed is a major release, one added is a minor r
 - The search folds case and accents (not Thai marks; Arabic vowel marks off), finds what holds every word, the best
   first — the text itself, its start, a word's start (`Intl.Segmenter`), anywhere, then `data-keywords` — within each
   group, and paints the matches by the browser's highlights where it has them; once the typing pauses, the option
-  Enter would take is named again with its place — VoiceOver says nothing of it while keys are typed — and with
-  nothing found the count is said politely; no option is active when the panel opens, so a screen reader names the
+  Enter would take is said politely by its label — VoiceOver says nothing of it while keys are typed — and with
+  nothing found, the count; no option is active when the panel opens, so a screen reader names the
   search, and the first Down goes to the chosen option; `aria-activedescendant` keeps the focus in the search; Escape
   empties the search, then closes
   the panel or the palette — the library closes it itself, as Safari's search field keeps the key.

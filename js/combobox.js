@@ -225,8 +225,8 @@ const statusOf = (list) => {
 	return status;
 };
 
-/** Once the typing pauses and the page's options have landed: names the active option again — a screen reader, busy
- *  with the typed keys, said nothing of it — with its place among the found; with none active, says the count. */
+/** Once the typing pauses and the page's options have landed, says politely the option Enter would take — a screen
+ *  reader, busy with the typed keys, says nothing of it — or, with none, the count found. */
 const announce = (input) => {
 	clearTimeout(timers.get(input));
 	timers.set(input, setTimeout(() => {
@@ -239,13 +239,7 @@ const announce = (input) => {
 			return;
 		}
 		const active = list.querySelector('[data-active]');
-		if (active !== null && input.value.trim() !== '') {
-			statusOf(list).textContent = '';
-			input.removeAttribute('aria-activedescendant');
-			requestAnimationFrame(() => active.hasAttribute('data-active') && input.setAttribute('aria-activedescendant', active.id));
-			return;
-		}
-		statusOf(list).textContent = input.value.trim() === '' ? '' : textCount('found', shownOf(list).length);
+		statusOf(list).textContent = input.value.trim() === '' ? '' : (active === null ? textCount('found', shownOf(list).length) : labelOf(active));
 	}, PAUSE));
 };
 
@@ -345,7 +339,8 @@ const hold = (list, pairs) => {
 	}
 };
 
-/** Takes the option: a value is chosen (one closes the panel, many toggle), a link or a button is pressed. */
+/** Takes the option: a value is chosen — many toggle; one closes the panel a frame later, so the button's new value
+ *  reaches a screen reader before the focus does — a link or a button is pressed. */
 const choose = (option) => {
 	if (!usable(option)) {
 		return;
@@ -365,7 +360,7 @@ const choose = (option) => {
 	hold(list, [[value, labelOf(option)]]);
 	const panel = list.closest('[popover]');
 	if (panel?.matches(':popover-open')) {
-		panel.hidePopover();
+		requestAnimationFrame(() => setTimeout(() => panel.matches(':popover-open') && panel.hidePopover()));
 	}
 };
 
