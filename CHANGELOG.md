@@ -3,6 +3,32 @@
 All notable changes of the library. Newest first. Versions follow Semantic Versioning: a class, token, attribute
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch.
 
+## 0.2.0 — 2026-11-02
+
+### The missing basics
+- `accordion` on the browser's `<details>` and `<summary>`, as Bootstrap 6 has it: `accordion-item` on the
+  `<details>`, `accordion-header` on its `<summary>`, `accordion-body`, `accordion-icon` on the chevron,
+  `accordion-flush`; the items of one group share a `name`. No script; a section opens with an animation only where
+  the browser has `interpolate-size` and the reader allows motion.
+- Collapse by the library's command `--toggle`: a button with `commandfor` opens and closes the region it names,
+  closed as `hidden="until-found"` so find in page still opens it; the library keeps `aria-expanded` on its buttons
+  (`js/toggle.js`).
+- `input-group`, `input-group-sm` and `input-group-text`; the borders of the parts meet by themselves, and a menu or a
+  hidden element inside the group is left out of the joining.
+- `list-group`, `list-group-item`, `-action`, `-flush`, `-numbered`, `-horizontal` and its width-prefixed forms by the
+  region (`md:list-group-horizontal`); the current item by `aria-current`, the unavailable by `disabled` or
+  `aria-disabled`.
+- `progress` on the browser's `<progress>` — tones `progress-{tone}`, `progress-sm`, `progress-lg`, `progress-striped`,
+  `progress-animated`, the indeterminate state of a `<progress>` without a value — and `meter` on `<meter>`, coloured
+  by `low`, `high` and `optimum`.
+- `ratio-1x1`, `ratio-4x3`, `ratio-16x9`, `ratio-21x9` and `ratio-auto` on the element itself.
+- The docs have a page for each, the map from Bootstrap 5.3 their rows, and the probes walk every accordion by Enter
+  and Space, every `--toggle` button by Enter, and flag a `--toggle` button whose `aria-expanded` is not its region's
+  state. The probes' Chrome sends Space as the key `" "`, and their focus helper stands before a `<details>`.
+- The app shell keeps what the browser scrolls to — a focused control, a link's target — clear of its sticky header
+  (`scroll-padding-block-start` on the page), as WCAG 2.4.11 asks; the probes' Firefox clicked the header where a
+  header of an accordion had been scrolled under it.
+
 ## 0.1.0 — 2026-10-28
 
 The first release.

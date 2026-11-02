@@ -24,13 +24,10 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 
 | Bootstrap 5.3 | REDZ.UI | Change | Note |
 | --- | --- | --- | --- |
-| `accordion` | — | missing | the missing basics: <details> and <summary> |
-| `accordion-body` | — | missing | the missing basics: <details> and <summary> |
-| `accordion-button` | — | missing | the missing basics: <details> and <summary> |
-| `accordion-collapse` | — | missing | the missing basics: <details> and <summary> |
-| `accordion-flush` | — | missing | the missing basics: <details> and <summary> |
-| `accordion-header` | — | missing | the missing basics: <details> and <summary> |
-| `accordion-item` | — | missing | the missing basics: <details> and <summary> |
+| `accordion-button` | — | remove | the summary is the button; its chevron is <i class="bi bi-chevron-down accordion-icon"> |
+| `accordion-collapse` | — | remove | the body follows the summary inside the <details> |
+| `accordion-header` | `accordion-header` | review | the item's <summary> with the button's words in it — no heading and no button inside |
+| `accordion-item` | `accordion-item` | review | a <details>; the items of one group share a name, as data-bs-parent did |
 | `active` | — | state | aria-current, aria-selected or aria-pressed — the attribute of the element's role |
 | `alert-dark` | — | review | the plain alert, or a tone |
 | `alert-dismissible` | — | review | a btn-close at the end, removed by your script |
@@ -139,10 +136,10 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `col-9` | `span-9` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
 | `col-auto` | — | review | a column as wide as its content: hstack, or grid-template-columns in the module's CSS |
 | `col-form-label` | `form-label` | review | a form-label in a form-field |
-| `collapse` | — | missing | the missing basics: <details>, or hidden switched by a command |
-| `collapse-horizontal` | — | missing | the missing basics: <details>, or hidden switched by a command |
-| `collapsed` | — | state | aria-expanded="false" on the button, set by the browser |
-| `collapsing` | — | missing | the missing basics: <details>, or hidden switched by a command |
+| `collapse` | — | state | closed: hidden="until-found" on the region; open: no hidden; its button has command="--toggle" |
+| `collapse-horizontal` | — | review | not planned: a region opens downward, in its place |
+| `collapsed` | — | state | aria-expanded="false" on the button, set by the browser or by --toggle |
+| `collapsing` | — | remove | the region opens at once |
 | `column-gap-1` | `column-gap-4` | value | the number is the pixels |
 | `column-gap-2` | `column-gap-8` | value | reused — column-gap-2 means another thing in REDZ.UI; the number is the pixels |
 | `column-gap-3` | `column-gap-16` | value | the number is the pixels |
@@ -250,8 +247,6 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `img-fluid` | — | review | images never overflow their box here; w-100 to fill it |
 | `img-thumbnail` | — | missing |  |
 | `initialism` | — | missing |  |
-| `input-group` | — | missing | the missing basics; an icon inside a field is form-adorn |
-| `input-group-text` | — | missing | the missing basics; an icon inside a field is form-adorn |
 | `invalid-tooltip` | `invalid-feedback` | review | the error under the field |
 | `is-invalid` | — | state | aria-invalid="true" on the control |
 | `is-valid` | — | remove | fields have no success state |
@@ -304,20 +299,14 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `link-underline-success` | — | missing |  |
 | `link-underline-warning` | — | missing |  |
 | `link-warning` | — | review | a link is the accent; text-* for a tone |
-| `list-group` | — | missing | the missing basics |
-| `list-group-flush` | — | missing | the missing basics |
-| `list-group-horizontal` | — | missing | the missing basics |
-| `list-group-item` | — | missing | the missing basics |
-| `list-group-item-action` | — | missing | the missing basics |
-| `list-group-item-danger` | — | missing | the missing basics |
-| `list-group-item-dark` | — | missing | the missing basics |
-| `list-group-item-info` | — | missing | the missing basics |
-| `list-group-item-light` | — | missing | the missing basics |
-| `list-group-item-primary` | — | missing | the missing basics |
-| `list-group-item-secondary` | — | missing | the missing basics |
-| `list-group-item-success` | — | missing | the missing basics |
-| `list-group-item-warning` | — | missing | the missing basics |
-| `list-group-numbered` | — | missing | the missing basics |
+| `list-group-item-danger` | — | review | no item tones: a badge or a dot in the item says it |
+| `list-group-item-dark` | — | review | no item tones: a badge or a dot in the item says it |
+| `list-group-item-info` | — | review | no item tones: a badge or a dot in the item says it |
+| `list-group-item-light` | — | review | no item tones: a badge or a dot in the item says it |
+| `list-group-item-primary` | — | review | no item tones: a badge or a dot in the item says it |
+| `list-group-item-secondary` | — | review | no item tones: a badge or a dot in the item says it |
+| `list-group-item-success` | — | review | no item tones: a badge or a dot in the item says it |
+| `list-group-item-warning` | — | review | no item tones: a badge or a dot in the item says it |
 | `list-inline` | — | review | hstack flex-wrap |
 | `list-inline-item` | — | review | hstack flex-wrap |
 | `list-unstyled` | — | review | vstack, or a component's own list |
@@ -434,11 +423,11 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `popover-arrow` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
 | `popover-body` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
 | `popover-header` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
-| `progress` | — | missing | the missing basics: <progress> and <meter> |
-| `progress-bar` | — | missing | the missing basics: <progress> and <meter> |
-| `progress-bar-animated` | — | missing | the missing basics: <progress> and <meter> |
-| `progress-bar-striped` | — | missing | the missing basics: <progress> and <meter> |
-| `progress-stacked` | — | missing | the missing basics: <progress> and <meter> |
+| `progress` | `progress` | review | on a <progress value="40" max="100"> itself, not around a progress-bar with a width; a tone is progress-success and the like, not bg-* on the bar |
+| `progress-bar` | — | remove | the browser draws the bar from value |
+| `progress-bar-animated` | `progress-animated` | rename | it moves only while motion is allowed |
+| `progress-bar-striped` | `progress-striped` | rename |  |
+| `progress-stacked` | — | review | not planned: one <progress> a value |
 | `ps-1` | `ps-4` | value | the number is the pixels |
 | `ps-2` | `ps-8` | value | reused — ps-2 means another thing in REDZ.UI; the number is the pixels |
 | `ps-3` | `ps-16` | value | the number is the pixels |
@@ -459,11 +448,7 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `py-3` | `py-16` | value | the number is the pixels |
 | `py-4` | `py-24` | value | reused — py-4 means another thing in REDZ.UI; the number is the pixels |
 | `py-5` | `py-48` | value | the number is the pixels |
-| `ratio` | — | missing | the missing basics: aspect-ratio |
-| `ratio-16x9` | — | missing | the missing basics: aspect-ratio |
-| `ratio-1x1` | — | missing | the missing basics: aspect-ratio |
-| `ratio-21x9` | — | missing | the missing basics: aspect-ratio |
-| `ratio-4x3` | — | missing | the missing basics: aspect-ratio |
+| `ratio` | — | remove | the ratio goes on the element itself; an image inside a frame fills it with w-100 h-100 object-fit-cover |
 | `rounded-1` | `rounded-4` | value | 4 px |
 | `rounded-2` | `rounded-6` | value | 6 px |
 | `rounded-3` | `rounded-8` | value | 8 px |
@@ -601,7 +586,8 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `data-bs-toggle="button"` | `aria-pressed` | review | switch aria-pressed in your click handler |
 | `data-bs-toggle="tooltip"` | `commandfor="ID" command="toggle-popover"` | review | a toggletip at the browser floor |
 | `data-bs-toggle="popover"` | — | missing |  |
-| `data-bs-toggle="collapse"` | — | missing | the missing basics: <details> and <summary> |
+| `data-bs-toggle="collapse"` | `commandfor="ID" command="--toggle" aria-expanded="false"` | trigger | the region is hidden="until-found" while closed; in an accordion the item is a <details> |
+| `data-bs-parent` | `name` | trigger | the same name on every <details> of the group |
 | `data-bs-target` | `commandfor` | trigger | the id alone, without "#" |
 | `data-bs-dismiss="modal"` | `commandfor="ID" command="close"` | trigger |  |
 | `data-bs-dismiss="offcanvas"` | `commandfor="ID" command="close"` | trigger |  |
@@ -629,7 +615,7 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `bootstrap.Toast` | `REDZ.ui.toast({title, text, tone})` | trigger |  |
 | `bootstrap.Tooltip` | — | remove |  |
 | `bootstrap.Popover` | — | remove |  |
-| `bootstrap.Collapse` | — | missing |  |
+| `bootstrap.Collapse` | `region.hidden = false` | review | and setAttribute('hidden', 'until-found') to close; set aria-expanded on its buttons then — a button with command="--toggle" does both |
 | `show.bs.modal` | `toggle` | review | the dialog's toggle event, or code right after showModal() |
 | `shown.bs.modal` | `toggle` | review | the dialog's toggle event, or code right after showModal() |
 | `hide.bs.modal` | `cancel` | review | the dialog's cancel event (Esc); your buttons close it |

@@ -22,11 +22,15 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 ## Forms
 
 - [Form fields](docs/form.md): Text fields, selects and text areas with Bootstrap 5's names: a label floating in the field or above it, a hint, an error said in words, an icon inside the field.
+- [Input groups](docs/input-group.md): A field joined to what belongs to it — a unit, a prefix, a button, a choice — into one control. The borders meet by themselves; a menu or a hidden element inside the group is left out of the joining.
 - [Checks, radios and switches](docs/check.md): The browser's own checkbox and radio, drawn by the library: check, radio and switch on the input itself, form-check on the label around it.
 
 ## Content
 
 - [Cards](docs/card.md): A card is a bordered region of a screen: a header with its title and actions, a body, a footer. It is a region — the width prefixes inside it measure the card, not the window.
+- [Accordions](docs/accordion.md): Sections that open one at a time, or each on its own, on the browser's own disclosure — <details> and <summary>: no script, the keys and the open state built in, and the browser's find in page opens a closed section on a match.
+- [Collapse](docs/collapse.md): A button that opens and closes a region elsewhere on the page — help under a toolbar, more filters, the details of a row — by the library's own command, --toggle. A closed region is hidden="until-found", so the browser's find in page still reaches its words and opens it. A section that opens under its own header is an accordion.
+- [List groups](docs/list-group.md): A column of items in one frame — plain rows, or links and buttons to choose from — with the current one and the unavailable ones marked by the same attributes the browser reads.
 - [Tables](docs/table.md): A list of records: a title that links to the record, a line under it, a note when something is wrong, a column of checks for batch actions and the row's own actions at the end.
 - [Badges](docs/badge.md): A badge is a short label of state or count beside the thing it describes: Published, Draft, 5 new. It never acts — a badge that does something is a chip or a button.
 - [Dots](docs/dot.md): An 8 px dot of a tone beside a word: online, live, the color of a site. The dot repeats what the word says; it never says it alone.
@@ -46,6 +50,7 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 - [Alerts](docs/alert.md): A message that stays on the page beside what it is about: a check passed, a suggestion, a warning before an action. A message that comes and goes is a toast.
 - [Toasts](docs/toast.md): A notice after an action — saved, failed, moved with a way to undo — shown by REDZ.ui.toast() in a stack at the corner of the screen and read aloud from a live region.
 - [Spinners](docs/spinner.md): A turning ring, 1 em across in the color of the text around it, for something small that is on its way. A button shows its own while busy; a region shows an overlay.
+- [Progress and meters](docs/progress.md): The browser's own <progress> for work under way and <meter> for a measure within known limits — a quota, a score. The value is an attribute, the browser announces it, and a progress without a value says the work has no known end.
 - [Busy](docs/busy.md): REDZ.ui.busy(element, promise) marks a button or a region busy until the promise settles: a button shows a spinner and ignores clicks, a region turns inert under an overlay.
 - [Save bar](docs/save-bar.md): The bar at the foot of a form that says what is not saved yet and offers to save or discard it. It sticks to the bottom of the screen while the form is longer than the screen.
 - [Selection bar](docs/selection-bar.md): The bar over a list that shows when rows are checked: how many, and what can be done with all of them at once.

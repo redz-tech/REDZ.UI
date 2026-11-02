@@ -88,6 +88,7 @@
 2xl:justify-content-end
 2xl:justify-content-evenly
 2xl:justify-content-start
+2xl:list-group-horizontal
 2xl:m-0
 2xl:m-12
 2xl:m-16
@@ -300,6 +301,12 @@
 2xl:text-end
 2xl:text-start
 2xl:vstack
+accordion
+accordion-body
+accordion-flush
+accordion-header
+accordion-icon
+accordion-item
 alert
 alert-danger
 alert-info
@@ -2633,6 +2640,9 @@ icon-tile-secondary
 icon-tile-sm
 icon-tile-success
 icon-tile-warning
+input-group
+input-group-sm
+input-group-text
 invalid-feedback
 invisible
 justify-content-around
@@ -2731,6 +2741,7 @@ lg:justify-content-center
 lg:justify-content-end
 lg:justify-content-evenly
 lg:justify-content-start
+lg:list-group-horizontal
 lg:m-0
 lg:m-12
 lg:m-16
@@ -2947,6 +2958,12 @@ lh-16
 lh-20
 lh-24
 lh-28
+list-group
+list-group-flush
+list-group-horizontal
+list-group-item
+list-group-item-action
+list-group-numbered
 m-0
 m-12
 m-16
@@ -3069,6 +3086,7 @@ md:justify-content-center
 md:justify-content-end
 md:justify-content-evenly
 md:justify-content-start
+md:list-group-horizontal
 md:m-0
 md:m-12
 md:m-16
@@ -3300,6 +3318,7 @@ menu-header
 menu-item
 menu-item-danger
 menu-start
+meter
 min-w-0
 ms-0
 ms-12
@@ -3442,6 +3461,16 @@ print:d-none
 print:d-table
 print:d-table-cell
 print:d-table-row
+progress
+progress-animated
+progress-danger
+progress-info
+progress-lg
+progress-secondary
+progress-sm
+progress-striped
+progress-success
+progress-warning
 ps-0
 ps-12
 ps-16
@@ -3491,6 +3520,11 @@ py-48
 py-64
 py-8
 radio
+ratio-16x9
+ratio-1x1
+ratio-21x9
+ratio-4x3
+ratio-auto
 region
 rounded
 rounded-0
@@ -3610,6 +3644,7 @@ sm:justify-content-center
 sm:justify-content-end
 sm:justify-content-evenly
 sm:justify-content-start
+sm:list-group-horizontal
 sm:m-0
 sm:m-12
 sm:m-16
@@ -3983,6 +4018,7 @@ xl:justify-content-center
 xl:justify-content-end
 xl:justify-content-evenly
 xl:justify-content-start
+xl:list-group-horizontal
 xl:m-0
 xl:m-12
 xl:m-16

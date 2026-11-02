@@ -1,0 +1,96 @@
+<header class="vstack gap-8">
+	<h1>List groups</h1>
+	<p class="docs-lead">A column of items in one frame — plain rows, or links and buttons to choose from — with the current one and the unavailable ones marked by the same attributes the browser reads.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="list-group-examples">
+	<h2 id="list-group-examples">Examples</h2>
+	<p><code>list-group</code> on a list, <code>list-group-item</code> on each item.</p>
+	<div class="docs-example docs-example-stack" id="list-group-basic">
+		<ul class="list-group">
+			<li class="list-group-item">Ang Thong Marine Park</li>
+			<li class="list-group-item">Koh Tao and Koh Nang Yuan</li>
+			<li class="list-group-item">The Five Islands by kayak</li>
+		</ul>
+	</div>
+
+	<h3>Links and buttons</h3>
+	<p><code>list-group-item-action</code> makes an item a choice. The current one is <code>aria-current</code> — <code>"page"</code> for a link to the page shown, <code>"true"</code> otherwise; one that cannot be chosen is a <code>disabled</code> button, or a link without <code>href</code> and with <code>aria-disabled="true"</code>.</p>
+	<div class="docs-example docs-example-stack" id="list-group-action">
+		<nav class="list-group" aria-label="Sites">
+			<a class="list-group-item list-group-item-action" href="#list-group-action" aria-current="page">All sites</a>
+			<a class="list-group-item list-group-item-action" href="#list-group-action">lagoon.example</a>
+			<a class="list-group-item list-group-item-action" href="#list-group-action">angthong.example</a>
+			<a class="list-group-item list-group-item-action" aria-disabled="true">archive.example</a>
+		</nav>
+		<div class="list-group" role="group" aria-label="Import from">
+			<button class="list-group-item list-group-item-action" type="button">A CSV file</button>
+			<button class="list-group-item list-group-item-action" type="button">Another site</button>
+			<button class="list-group-item list-group-item-action" type="button" disabled>The old catalog</button>
+		</div>
+	</div>
+
+	<h3>Flush, numbered, with counts</h3>
+	<p><code>list-group-flush</code> drops the frame, for a list inside a card; <code>list-group-numbered</code> on an <code>&lt;ol&gt;</code> numbers the items.</p>
+	<div class="docs-example docs-example-stack" id="list-group-flush">
+		<div class="card">
+			<div class="card-body">
+				<ol class="list-group list-group-flush list-group-numbered">
+					<li class="list-group-item hstack gap-8"><span class="flex-fill">Ang Thong Marine Park</span><span class="badge">28</span></li>
+					<li class="list-group-item hstack gap-8"><span class="flex-fill">Koh Tao</span><span class="badge">11</span></li>
+					<li class="list-group-item hstack gap-8"><span class="flex-fill">The Five Islands</span><span class="badge badge-subtle-warning">3</span></li>
+				</ol>
+			</div>
+		</div>
+	</div>
+
+	<h3>Side by side</h3>
+	<p><code>list-group-horizontal</code> sets the items in a row; with a width prefix, from that width of the region on: <code>md:list-group-horizontal</code>.</p>
+	<div class="docs-example docs-example-stack" id="list-group-horizontal">
+		<ul class="list-group md:list-group-horizontal">
+			<li class="list-group-item">Transfer</li>
+			<li class="list-group-item">Boat</li>
+			<li class="list-group-item">Lunch</li>
+			<li class="list-group-item">Park fee</li>
+		</ul>
+	</div>
+
+	<h3>With checks</h3>
+	<div class="docs-example docs-example-stack" id="list-group-checks">
+		<div class="list-group" role="group" aria-label="Show on">
+			<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" checked>lagoon.example</label>
+			<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" checked>angthong.example</label>
+			<label class="list-group-item hstack gap-8"><input class="check" type="checkbox">kohtao.example</label>
+		</div>
+	</div>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="list-group-states-title">
+	<h2 id="list-group-states-title">States</h2>
+	<div class="docs-states" id="list-group-states" tabindex="0" role="region" aria-labelledby="list-group-states-title">
+		<table class="docs-matrix">
+			<thead>
+				<tr><th scope="col">class</th><th scope="col">rest</th><th scope="col">:hover</th><th scope="col">:focus-visible</th><th scope="col">aria-current</th><th scope="col">disabled</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row">list-group-item-action</th>
+					<td><div class="list-group" role="group" aria-label="At rest"><button class="list-group-item list-group-item-action" type="button">Koh Tao</button></div></td>
+					<td><div class="list-group" role="group" aria-label="Hovered"><button class="list-group-item list-group-item-action" type="button" data-docs-state="hover">Koh Tao</button></div></td>
+					<td><div class="list-group" role="group" aria-label="Focused"><button class="list-group-item list-group-item-action" type="button" data-docs-state="focus-visible">Koh Tao</button></div></td>
+					<td><div class="list-group" role="group" aria-label="Current"><button class="list-group-item list-group-item-action" type="button" aria-current="true">Koh Tao</button></div></td>
+					<td><div class="list-group" role="group" aria-label="Disabled"><button class="list-group-item list-group-item-action" type="button" disabled>Koh Tao</button></div></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="list-group-access">
+	<h2 id="list-group-access">Keyboard and accessibility</h2>
+	<ul>
+		<li>Links and buttons keep their own keys: <kbd>Tab</kbd> from one to the next, <kbd>Enter</kbd> — and <kbd>Space</kbd> on a button — to choose. A list of links that moves between pages is a <code>&lt;nav&gt;</code> with its own name.</li>
+		<li>The current item is <code>aria-current</code>, never a class: the screen reader says “current page”, the look follows the attribute.</li>
+		<li>A link that may not be followed has no <code>href</code>: <code>aria-disabled</code> alone would leave it working.</li>
+	</ul>
+</section>

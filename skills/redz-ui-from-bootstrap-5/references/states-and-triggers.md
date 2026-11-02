@@ -9,8 +9,8 @@
 | `.active` on a toggle button, a filter | `aria-pressed="true"` |
 | `.active` on a list item, a dropdown item | `aria-current="true"`, or `aria-checked="true"` on a `menuitemradio` |
 | `.disabled` on a link or button | `disabled` on a button; `aria-disabled="true"` keeps it focusable — the library swallows its clicks |
-| `.show` | the browser's `[open]` (dialog) and `:popover-open` (menu); nothing to set |
-| `.collapsed` | `aria-expanded="false"`, set by the browser on the button |
+| `.show` | the browser's `[open]` (dialog, accordion item) and `:popover-open` (menu); a collapsed region open: no `hidden` |
+| `.collapsed` | `aria-expanded="false"`, set by the browser on the button — or by the library for `command="--toggle"` |
 | `.is-invalid` | `aria-invalid="true"` on the control, its error in `invalid-feedback` joined by `aria-describedby` |
 | `.was-validated` | nothing: the browser's `:user-invalid` shows after the person edits |
 | `.is-valid` | nothing: fields have no success state |
@@ -36,6 +36,8 @@ Script that reads or writes these classes changes with them: `el.classList.conta
 | `data-bs-dismiss="modal"` / `"offcanvas"` | `commandfor="ID" command="close"` |
 | `data-bs-toggle="dropdown"` | `commandfor="ID" command="toggle-popover" aria-haspopup="menu"`; the menu gets `popover` and `role="menu"` |
 | `data-bs-toggle="tab"` / `"pill"` | `role="tab" aria-controls="ID"` inside `role="tablist"`; the library selects |
+| `data-bs-toggle="collapse"` | `commandfor="ID" command="--toggle" aria-expanded="false"`; the region is `hidden="until-found"` while closed; in an accordion, the item is a `<details>` |
+| `data-bs-parent` | `name="…"`, the same on every `<details>` of the group |
 | `data-bs-backdrop="static"` | `closedby="closerequest"` on the dialog (Esc closes, a click outside does not) |
 | `data-bs-keyboard="false"` | `closedby="none"` |
 | a click outside closes | `closedby="any"` |

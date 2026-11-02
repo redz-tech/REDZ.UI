@@ -49,9 +49,13 @@
 			<a class="app-link" href="menu.html">Menus</a>
 			<div class="app-section">Forms</div>
 			<a class="app-link" href="form.html">Form fields</a>
+			<a class="app-link" href="input-group.html">Input groups</a>
 			<a class="app-link" href="check.html">Checks, radios and switches</a>
 			<div class="app-section">Content</div>
 			<a class="app-link" href="card.html">Cards</a>
+			<a class="app-link" href="accordion.html">Accordions</a>
+			<a class="app-link" href="collapse.html">Collapse</a>
+			<a class="app-link" href="list-group.html">List groups</a>
 			<a class="app-link" href="table.html">Tables</a>
 			<a class="app-link" href="badge.html">Badges</a>
 			<a class="app-link" href="dot.html">Dots</a>
@@ -67,6 +71,7 @@
 			<a class="app-link" href="alert.html">Alerts</a>
 			<a class="app-link" href="toast.html">Toasts</a>
 			<a class="app-link" href="spinner.html">Spinners</a>
+			<a class="app-link" href="progress.html">Progress and meters</a>
 			<a class="app-link" href="busy.html">Busy</a>
 			<a class="app-link" href="save-bar.html">Save bar</a>
 			<a class="app-link" href="selection-bar.html">Selection bar</a>
@@ -111,13 +116,10 @@
 					<table class="table docs-table">
 								<thead><tr><th scope="col">Bootstrap 5.3</th><th scope="col">REDZ.UI</th><th scope="col">Change</th><th scope="col">Note</th></tr></thead>
 								<tbody>
-									<tr><td><code>accordion</code></td><td>—</td><td>missing</td><td>the missing basics: &lt;details&gt; and &lt;summary&gt;</td></tr>
-									<tr><td><code>accordion-body</code></td><td>—</td><td>missing</td><td>the missing basics: &lt;details&gt; and &lt;summary&gt;</td></tr>
-									<tr><td><code>accordion-button</code></td><td>—</td><td>missing</td><td>the missing basics: &lt;details&gt; and &lt;summary&gt;</td></tr>
-									<tr><td><code>accordion-collapse</code></td><td>—</td><td>missing</td><td>the missing basics: &lt;details&gt; and &lt;summary&gt;</td></tr>
-									<tr><td><code>accordion-flush</code></td><td>—</td><td>missing</td><td>the missing basics: &lt;details&gt; and &lt;summary&gt;</td></tr>
-									<tr><td><code>accordion-header</code></td><td>—</td><td>missing</td><td>the missing basics: &lt;details&gt; and &lt;summary&gt;</td></tr>
-									<tr><td><code>accordion-item</code></td><td>—</td><td>missing</td><td>the missing basics: &lt;details&gt; and &lt;summary&gt;</td></tr>
+									<tr><td><code>accordion-button</code></td><td>—</td><td>remove</td><td>the summary is the button; its chevron is &lt;i class=&quot;bi bi-chevron-down accordion-icon&quot;&gt;</td></tr>
+									<tr><td><code>accordion-collapse</code></td><td>—</td><td>remove</td><td>the body follows the summary inside the &lt;details&gt;</td></tr>
+									<tr><td><code>accordion-header</code></td><td><code>accordion-header</code></td><td>review</td><td>the item&#039;s &lt;summary&gt; with the button&#039;s words in it — no heading and no button inside</td></tr>
+									<tr><td><code>accordion-item</code></td><td><code>accordion-item</code></td><td>review</td><td>a &lt;details&gt;; the items of one group share a name, as data-bs-parent did</td></tr>
 									<tr><td><code>active</code></td><td>—</td><td>state</td><td>aria-current, aria-selected or aria-pressed — the attribute of the element&#039;s role</td></tr>
 									<tr><td><code>alert-dark</code></td><td>—</td><td>review</td><td>the plain alert, or a tone</td></tr>
 									<tr><td><code>alert-dismissible</code></td><td>—</td><td>review</td><td>a btn-close at the end, removed by your script</td></tr>
@@ -226,10 +228,10 @@
 									<tr><td><code>col-9</code></td><td><code>span-9</code></td><td>grid</td><td>N of 12: the parent is grid cols-12 (or md:cols-12)</td></tr>
 									<tr><td><code>col-auto</code></td><td>—</td><td>review</td><td>a column as wide as its content: hstack, or grid-template-columns in the module&#039;s CSS</td></tr>
 									<tr><td><code>col-form-label</code></td><td><code>form-label</code></td><td>review</td><td>a form-label in a form-field</td></tr>
-									<tr><td><code>collapse</code></td><td>—</td><td>missing</td><td>the missing basics: &lt;details&gt;, or hidden switched by a command</td></tr>
-									<tr><td><code>collapse-horizontal</code></td><td>—</td><td>missing</td><td>the missing basics: &lt;details&gt;, or hidden switched by a command</td></tr>
-									<tr><td><code>collapsed</code></td><td>—</td><td>state</td><td>aria-expanded=&quot;false&quot; on the button, set by the browser</td></tr>
-									<tr><td><code>collapsing</code></td><td>—</td><td>missing</td><td>the missing basics: &lt;details&gt;, or hidden switched by a command</td></tr>
+									<tr><td><code>collapse</code></td><td>—</td><td>state</td><td>closed: hidden=&quot;until-found&quot; on the region; open: no hidden; its button has command=&quot;--toggle&quot;</td></tr>
+									<tr><td><code>collapse-horizontal</code></td><td>—</td><td>review</td><td>not planned: a region opens downward, in its place</td></tr>
+									<tr><td><code>collapsed</code></td><td>—</td><td>state</td><td>aria-expanded=&quot;false&quot; on the button, set by the browser or by --toggle</td></tr>
+									<tr><td><code>collapsing</code></td><td>—</td><td>remove</td><td>the region opens at once</td></tr>
 									<tr><td><code>column-gap-1</code></td><td><code>column-gap-4</code></td><td>value</td><td>the number is the pixels</td></tr>
 									<tr><td><code>column-gap-2</code></td><td><code>column-gap-8</code></td><td>value</td><td>reused — column-gap-2 means another thing in REDZ.UI; the number is the pixels</td></tr>
 									<tr><td><code>column-gap-3</code></td><td><code>column-gap-16</code></td><td>value</td><td>the number is the pixels</td></tr>
@@ -337,8 +339,6 @@
 									<tr><td><code>img-fluid</code></td><td>—</td><td>review</td><td>images never overflow their box here; w-100 to fill it</td></tr>
 									<tr><td><code>img-thumbnail</code></td><td>—</td><td>missing</td><td></td></tr>
 									<tr><td><code>initialism</code></td><td>—</td><td>missing</td><td></td></tr>
-									<tr><td><code>input-group</code></td><td>—</td><td>missing</td><td>the missing basics; an icon inside a field is form-adorn</td></tr>
-									<tr><td><code>input-group-text</code></td><td>—</td><td>missing</td><td>the missing basics; an icon inside a field is form-adorn</td></tr>
 									<tr><td><code>invalid-tooltip</code></td><td><code>invalid-feedback</code></td><td>review</td><td>the error under the field</td></tr>
 									<tr><td><code>is-invalid</code></td><td>—</td><td>state</td><td>aria-invalid=&quot;true&quot; on the control</td></tr>
 									<tr><td><code>is-valid</code></td><td>—</td><td>remove</td><td>fields have no success state</td></tr>
@@ -391,20 +391,14 @@
 									<tr><td><code>link-underline-success</code></td><td>—</td><td>missing</td><td></td></tr>
 									<tr><td><code>link-underline-warning</code></td><td>—</td><td>missing</td><td></td></tr>
 									<tr><td><code>link-warning</code></td><td>—</td><td>review</td><td>a link is the accent; text-* for a tone</td></tr>
-									<tr><td><code>list-group</code></td><td>—</td><td>missing</td><td>the missing basics</td></tr>
-									<tr><td><code>list-group-flush</code></td><td>—</td><td>missing</td><td>the missing basics</td></tr>
-									<tr><td><code>list-group-horizontal</code></td><td>—</td><td>missing</td><td>the missing basics</td></tr>
-									<tr><td><code>list-group-item</code></td><td>—</td><td>missing</td><td>the missing basics</td></tr>
-									<tr><td><code>list-group-item-action</code></td><td>—</td><td>missing</td><td>the missing basics</td></tr>
-									<tr><td><code>list-group-item-danger</code></td><td>—</td><td>missing</td><td>the missing basics</td></tr>
-									<tr><td><code>list-group-item-dark</code></td><td>—</td><td>missing</td><td>the missing basics</td></tr>
-									<tr><td><code>list-group-item-info</code></td><td>—</td><td>missing</td><td>the missing basics</td></tr>
-									<tr><td><code>list-group-item-light</code></td><td>—</td><td>missing</td><td>the missing basics</td></tr>
-									<tr><td><code>list-group-item-primary</code></td><td>—</td><td>missing</td><td>the missing basics</td></tr>
-									<tr><td><code>list-group-item-secondary</code></td><td>—</td><td>missing</td><td>the missing basics</td></tr>
-									<tr><td><code>list-group-item-success</code></td><td>—</td><td>missing</td><td>the missing basics</td></tr>
-									<tr><td><code>list-group-item-warning</code></td><td>—</td><td>missing</td><td>the missing basics</td></tr>
-									<tr><td><code>list-group-numbered</code></td><td>—</td><td>missing</td><td>the missing basics</td></tr>
+									<tr><td><code>list-group-item-danger</code></td><td>—</td><td>review</td><td>no item tones: a badge or a dot in the item says it</td></tr>
+									<tr><td><code>list-group-item-dark</code></td><td>—</td><td>review</td><td>no item tones: a badge or a dot in the item says it</td></tr>
+									<tr><td><code>list-group-item-info</code></td><td>—</td><td>review</td><td>no item tones: a badge or a dot in the item says it</td></tr>
+									<tr><td><code>list-group-item-light</code></td><td>—</td><td>review</td><td>no item tones: a badge or a dot in the item says it</td></tr>
+									<tr><td><code>list-group-item-primary</code></td><td>—</td><td>review</td><td>no item tones: a badge or a dot in the item says it</td></tr>
+									<tr><td><code>list-group-item-secondary</code></td><td>—</td><td>review</td><td>no item tones: a badge or a dot in the item says it</td></tr>
+									<tr><td><code>list-group-item-success</code></td><td>—</td><td>review</td><td>no item tones: a badge or a dot in the item says it</td></tr>
+									<tr><td><code>list-group-item-warning</code></td><td>—</td><td>review</td><td>no item tones: a badge or a dot in the item says it</td></tr>
 									<tr><td><code>list-inline</code></td><td>—</td><td>review</td><td>hstack flex-wrap</td></tr>
 									<tr><td><code>list-inline-item</code></td><td>—</td><td>review</td><td>hstack flex-wrap</td></tr>
 									<tr><td><code>list-unstyled</code></td><td>—</td><td>review</td><td>vstack, or a component&#039;s own list</td></tr>
@@ -521,11 +515,11 @@
 									<tr><td><code>popover-arrow</code></td><td>—</td><td>missing</td><td>a short note is a toggletip; a rich one a menu or a drawer</td></tr>
 									<tr><td><code>popover-body</code></td><td>—</td><td>missing</td><td>a short note is a toggletip; a rich one a menu or a drawer</td></tr>
 									<tr><td><code>popover-header</code></td><td>—</td><td>missing</td><td>a short note is a toggletip; a rich one a menu or a drawer</td></tr>
-									<tr><td><code>progress</code></td><td>—</td><td>missing</td><td>the missing basics: &lt;progress&gt; and &lt;meter&gt;</td></tr>
-									<tr><td><code>progress-bar</code></td><td>—</td><td>missing</td><td>the missing basics: &lt;progress&gt; and &lt;meter&gt;</td></tr>
-									<tr><td><code>progress-bar-animated</code></td><td>—</td><td>missing</td><td>the missing basics: &lt;progress&gt; and &lt;meter&gt;</td></tr>
-									<tr><td><code>progress-bar-striped</code></td><td>—</td><td>missing</td><td>the missing basics: &lt;progress&gt; and &lt;meter&gt;</td></tr>
-									<tr><td><code>progress-stacked</code></td><td>—</td><td>missing</td><td>the missing basics: &lt;progress&gt; and &lt;meter&gt;</td></tr>
+									<tr><td><code>progress</code></td><td><code>progress</code></td><td>review</td><td>on a &lt;progress value=&quot;40&quot; max=&quot;100&quot;&gt; itself, not around a progress-bar with a width; a tone is progress-success and the like, not bg-* on the bar</td></tr>
+									<tr><td><code>progress-bar</code></td><td>—</td><td>remove</td><td>the browser draws the bar from value</td></tr>
+									<tr><td><code>progress-bar-animated</code></td><td><code>progress-animated</code></td><td>rename</td><td>it moves only while motion is allowed</td></tr>
+									<tr><td><code>progress-bar-striped</code></td><td><code>progress-striped</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>progress-stacked</code></td><td>—</td><td>review</td><td>not planned: one &lt;progress&gt; a value</td></tr>
 									<tr><td><code>ps-1</code></td><td><code>ps-4</code></td><td>value</td><td>the number is the pixels</td></tr>
 									<tr><td><code>ps-2</code></td><td><code>ps-8</code></td><td>value</td><td>reused — ps-2 means another thing in REDZ.UI; the number is the pixels</td></tr>
 									<tr><td><code>ps-3</code></td><td><code>ps-16</code></td><td>value</td><td>the number is the pixels</td></tr>
@@ -546,11 +540,7 @@
 									<tr><td><code>py-3</code></td><td><code>py-16</code></td><td>value</td><td>the number is the pixels</td></tr>
 									<tr><td><code>py-4</code></td><td><code>py-24</code></td><td>value</td><td>reused — py-4 means another thing in REDZ.UI; the number is the pixels</td></tr>
 									<tr><td><code>py-5</code></td><td><code>py-48</code></td><td>value</td><td>the number is the pixels</td></tr>
-									<tr><td><code>ratio</code></td><td>—</td><td>missing</td><td>the missing basics: aspect-ratio</td></tr>
-									<tr><td><code>ratio-16x9</code></td><td>—</td><td>missing</td><td>the missing basics: aspect-ratio</td></tr>
-									<tr><td><code>ratio-1x1</code></td><td>—</td><td>missing</td><td>the missing basics: aspect-ratio</td></tr>
-									<tr><td><code>ratio-21x9</code></td><td>—</td><td>missing</td><td>the missing basics: aspect-ratio</td></tr>
-									<tr><td><code>ratio-4x3</code></td><td>—</td><td>missing</td><td>the missing basics: aspect-ratio</td></tr>
+									<tr><td><code>ratio</code></td><td>—</td><td>remove</td><td>the ratio goes on the element itself; an image inside a frame fills it with w-100 h-100 object-fit-cover</td></tr>
 									<tr><td><code>rounded-1</code></td><td><code>rounded-4</code></td><td>value</td><td>4 px</td></tr>
 									<tr><td><code>rounded-2</code></td><td><code>rounded-6</code></td><td>value</td><td>6 px</td></tr>
 									<tr><td><code>rounded-3</code></td><td><code>rounded-8</code></td><td>value</td><td>8 px</td></tr>
@@ -688,7 +678,8 @@
 									<tr><td><code>data-bs-toggle=&quot;button&quot;</code></td><td><code>aria-pressed</code></td><td>review</td><td>switch aria-pressed in your click handler</td></tr>
 									<tr><td><code>data-bs-toggle=&quot;tooltip&quot;</code></td><td><code>commandfor=&quot;ID&quot; command=&quot;toggle-popover&quot;</code></td><td>review</td><td>a toggletip at the browser floor</td></tr>
 									<tr><td><code>data-bs-toggle=&quot;popover&quot;</code></td><td>—</td><td>missing</td><td></td></tr>
-									<tr><td><code>data-bs-toggle=&quot;collapse&quot;</code></td><td>—</td><td>missing</td><td>the missing basics: &lt;details&gt; and &lt;summary&gt;</td></tr>
+									<tr><td><code>data-bs-toggle=&quot;collapse&quot;</code></td><td><code>commandfor=&quot;ID&quot; command=&quot;--toggle&quot; aria-expanded=&quot;false&quot;</code></td><td>trigger</td><td>the region is hidden=&quot;until-found&quot; while closed; in an accordion the item is a &lt;details&gt;</td></tr>
+									<tr><td><code>data-bs-parent</code></td><td><code>name</code></td><td>trigger</td><td>the same name on every &lt;details&gt; of the group</td></tr>
 									<tr><td><code>data-bs-target</code></td><td><code>commandfor</code></td><td>trigger</td><td>the id alone, without &quot;#&quot;</td></tr>
 									<tr><td><code>data-bs-dismiss=&quot;modal&quot;</code></td><td><code>commandfor=&quot;ID&quot; command=&quot;close&quot;</code></td><td>trigger</td><td></td></tr>
 									<tr><td><code>data-bs-dismiss=&quot;offcanvas&quot;</code></td><td><code>commandfor=&quot;ID&quot; command=&quot;close&quot;</code></td><td>trigger</td><td></td></tr>
@@ -716,7 +707,7 @@
 									<tr><td><code>bootstrap.Toast</code></td><td><code>REDZ.ui.toast({title, text, tone})</code></td><td>trigger</td><td></td></tr>
 									<tr><td><code>bootstrap.Tooltip</code></td><td>—</td><td>remove</td><td></td></tr>
 									<tr><td><code>bootstrap.Popover</code></td><td>—</td><td>remove</td><td></td></tr>
-									<tr><td><code>bootstrap.Collapse</code></td><td>—</td><td>missing</td><td></td></tr>
+									<tr><td><code>bootstrap.Collapse</code></td><td><code>region.hidden = false</code></td><td>review</td><td>and setAttribute(&#039;hidden&#039;, &#039;until-found&#039;) to close; set aria-expanded on its buttons then — a button with command=&quot;--toggle&quot; does both</td></tr>
 									<tr><td><code>show.bs.modal</code></td><td><code>toggle</code></td><td>review</td><td>the dialog&#039;s toggle event, or code right after showModal()</td></tr>
 									<tr><td><code>shown.bs.modal</code></td><td><code>toggle</code></td><td>review</td><td>the dialog&#039;s toggle event, or code right after showModal()</td></tr>
 									<tr><td><code>hide.bs.modal</code></td><td><code>cancel</code></td><td>review</td><td>the dialog&#039;s cancel event (Esc); your buttons close it</td></tr>

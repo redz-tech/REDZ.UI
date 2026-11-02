@@ -1,0 +1,52 @@
+<header class="vstack gap-8">
+	<h1>Progress and meters</h1>
+	<p class="docs-lead">The browser's own <code>&lt;progress&gt;</code> for work under way and <code>&lt;meter&gt;</code> for a measure within known limits — a quota, a score. The value is an attribute, the browser announces it, and a progress without a value says the work has no known end.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="progress-examples">
+	<h2 id="progress-examples">Examples</h2>
+	<p><code>progress</code> on a <code>&lt;progress&gt;</code> with <code>value</code> and <code>max</code>; the words of the value go beside the bar, <code>text-nowrap</code> so the bar gives way, and the label names it.</p>
+	<div class="docs-example docs-example-stack" id="progress-basic">
+		<div class="form-field">
+			<label class="form-label" for="progress-basic-upload">Uploading photos</label>
+			<div class="hstack gap-12">
+				<progress class="progress" id="progress-basic-upload" value="40" max="100">40 %</progress>
+				<span class="text-muted fs-12 text-nowrap">40 %</span>
+			</div>
+		</div>
+		<progress class="progress" aria-label="Rebuilding pages"></progress>
+	</div>
+
+	<h3>Tones and sizes</h3>
+	<p><code>progress-{tone}</code> for the tones, <code>progress-sm</code> and <code>progress-lg</code> for the height; <code>progress-striped</code> lays stripes on the bar, <code>progress-animated</code> moves them while motion is allowed.</p>
+	<div class="docs-example docs-example-stack" id="progress-tones">
+		<progress class="progress progress-success" value="75" max="100" aria-label="Published, 75 percent"></progress>
+		<progress class="progress progress-warning progress-sm" value="50" max="100" aria-label="Translated, 50 percent"></progress>
+		<progress class="progress progress-danger progress-lg" value="20" max="100" aria-label="Failed, 20 percent"></progress>
+		<progress class="progress progress-lg progress-striped progress-animated" value="60" max="100" aria-label="Deploying, 60 percent"></progress>
+	</div>
+
+	<h3>Meters</h3>
+	<p><code>meter</code> on a <code>&lt;meter&gt;</code>: <code>low</code>, <code>high</code> and <code>optimum</code> divide the range, and the browser colours the value by the part it falls in — green in the good part, amber next to it, red in the far one.</p>
+	<div class="docs-example docs-example-stack" id="progress-meter">
+		<div class="form-field">
+			<label class="form-label" for="progress-meter-storage">Storage used</label>
+			<div class="hstack gap-12">
+				<meter class="meter" id="progress-meter-storage" value="3.1" min="0" max="10" low="7" high="9" optimum="0">3.1 of 10 GB</meter>
+				<span class="text-muted fs-12 text-nowrap">3.1 of 10 GB</span>
+			</div>
+		</div>
+		<meter class="meter" value="8" min="0" max="10" low="7" high="9" optimum="0" aria-label="Photos, 8 of 10 GB">8 of 10 GB</meter>
+		<meter class="meter" value="9.6" min="0" max="10" low="7" high="9" optimum="0" aria-label="Backups, 9.6 of 10 GB">9.6 of 10 GB</meter>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="progress-access">
+	<h2 id="progress-access">Keyboard and accessibility</h2>
+	<ul>
+		<li>Name every bar: a <code>&lt;label for&gt;</code>, <code>aria-label</code> or <code>aria-labelledby</code>. The browser announces the value as a percentage of <code>max</code>; the words beside the bar are for the eye.</li>
+		<li>Colour is not the message: a meter in the red part also says so in words where it matters.</li>
+		<li>A screen reader does not follow a bar as it fills: say the end of a long task in a notice, by <code>REDZ.ui.toast</code>.</li>
+		<li>In forced colours the bar takes the system's highlight; right to left it fills from the right.</li>
+	</ul>
+</section>

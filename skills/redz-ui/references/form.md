@@ -91,8 +91,6 @@ It reads the theme's `--redz-space-4`, `--redz-text`, `--redz-fs-12`, `--redz-te
 | `form-control-plaintext` | — | review | readonly on a form-control, or plain text |
 | `form-range` | — | missing |  |
 | `has-validation` | — | remove | fields have no success state |
-| `input-group` | — | missing | the missing basics; an icon inside a field is form-adorn |
-| `input-group-text` | — | missing | the missing basics; an icon inside a field is form-adorn |
 | `invalid-tooltip` | `invalid-feedback` | review | the error under the field |
 | `is-invalid` | — | state | aria-invalid="true" on the control |
 | `is-valid` | — | remove | fields have no success state |

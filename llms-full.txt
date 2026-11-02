@@ -213,6 +213,15 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 - Font size: 12 14 16 18 20 24 32; line height: 16 20 24 28; radius: 0 4 6 8 12 16 and `rounded-full`.
 - Width prefixes come on placement and spacing — display, flex, grid, gaps, order, text alignment, margins and paddings: `md:d-none`, `lg:p-24`.
 
+## Aspect ratio
+
+`ratio-1x1`, `ratio-4x3`, `ratio-16x9` and `ratio-21x9` keep an element's shape as its width changes — on a video, a map, an image's frame; `ratio-auto` lets it go. The class goes on the element itself: an image inside a frame fills it with `w-100 h-100 object-fit-cover`.
+
+```html
+<div class="ratio-16x9 w-50 hstack justify-content-center rounded-8 bg-page text-muted">16 × 9</div>
+<div class="ratio-1x1 w-25 hstack justify-content-center rounded-8 bg-page text-muted">1 × 1</div>
+```
+
 ## Every utility
 
 | Class | Declarations | Width prefixes |
@@ -655,6 +664,11 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 | `object-fit-cover` | `object-fit: cover;` | — |
 | `object-fit-fill` | `object-fit: fill;` | — |
 | `object-fit-none` | `object-fit: none;` | — |
+| `ratio-1x1` | `aspect-ratio: 1 / 1;` | — |
+| `ratio-4x3` | `aspect-ratio: 4 / 3;` | — |
+| `ratio-16x9` | `aspect-ratio: 16 / 9;` | — |
+| `ratio-21x9` | `aspect-ratio: 21 / 9;` | — |
+| `ratio-auto` | `aspect-ratio: auto;` | — |
 | `visible` | `visibility: visible;` | — |
 | `invisible` | `visibility: hidden;` | — |
 | `user-select-none` | `-webkit-user-select: none; user-select: none;` | — |
@@ -896,11 +910,7 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 | `py-3` | `py-16` | value | the number is the pixels |
 | `py-4` | `py-24` | value | reused — py-4 means another thing in REDZ.UI; the number is the pixels |
 | `py-5` | `py-48` | value | the number is the pixels |
-| `ratio` | — | missing | the missing basics: aspect-ratio |
-| `ratio-16x9` | — | missing | the missing basics: aspect-ratio |
-| `ratio-1x1` | — | missing | the missing basics: aspect-ratio |
-| `ratio-21x9` | — | missing | the missing basics: aspect-ratio |
-| `ratio-4x3` | — | missing | the missing basics: aspect-ratio |
+| `ratio` | — | remove | the ratio goes on the element itself; an image inside a frame fills it with w-100 h-100 object-fit-cover |
 | `rounded-1` | `rounded-4` | value | 4 px |
 | `rounded-2` | `rounded-6` | value | 6 px |
 | `rounded-3` | `rounded-8` | value | 8 px |
@@ -1136,13 +1146,10 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 
 | Bootstrap 5.3 | REDZ.UI | Change | Note |
 | --- | --- | --- | --- |
-| `accordion` | — | missing | the missing basics: <details> and <summary> |
-| `accordion-body` | — | missing | the missing basics: <details> and <summary> |
-| `accordion-button` | — | missing | the missing basics: <details> and <summary> |
-| `accordion-collapse` | — | missing | the missing basics: <details> and <summary> |
-| `accordion-flush` | — | missing | the missing basics: <details> and <summary> |
-| `accordion-header` | — | missing | the missing basics: <details> and <summary> |
-| `accordion-item` | — | missing | the missing basics: <details> and <summary> |
+| `accordion-button` | — | remove | the summary is the button; its chevron is <i class="bi bi-chevron-down accordion-icon"> |
+| `accordion-collapse` | — | remove | the body follows the summary inside the <details> |
+| `accordion-header` | `accordion-header` | review | the item's <summary> with the button's words in it — no heading and no button inside |
+| `accordion-item` | `accordion-item` | review | a <details>; the items of one group share a name, as data-bs-parent did |
 | `active` | — | state | aria-current, aria-selected or aria-pressed — the attribute of the element's role |
 | `alert-dark` | — | review | the plain alert, or a tone |
 | `alert-dismissible` | — | review | a btn-close at the end, removed by your script |
@@ -1251,10 +1258,10 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `col-9` | `span-9` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
 | `col-auto` | — | review | a column as wide as its content: hstack, or grid-template-columns in the module's CSS |
 | `col-form-label` | `form-label` | review | a form-label in a form-field |
-| `collapse` | — | missing | the missing basics: <details>, or hidden switched by a command |
-| `collapse-horizontal` | — | missing | the missing basics: <details>, or hidden switched by a command |
-| `collapsed` | — | state | aria-expanded="false" on the button, set by the browser |
-| `collapsing` | — | missing | the missing basics: <details>, or hidden switched by a command |
+| `collapse` | — | state | closed: hidden="until-found" on the region; open: no hidden; its button has command="--toggle" |
+| `collapse-horizontal` | — | review | not planned: a region opens downward, in its place |
+| `collapsed` | — | state | aria-expanded="false" on the button, set by the browser or by --toggle |
+| `collapsing` | — | remove | the region opens at once |
 | `column-gap-1` | `column-gap-4` | value | the number is the pixels |
 | `column-gap-2` | `column-gap-8` | value | reused — column-gap-2 means another thing in REDZ.UI; the number is the pixels |
 | `column-gap-3` | `column-gap-16` | value | the number is the pixels |
@@ -1362,8 +1369,6 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `img-fluid` | — | review | images never overflow their box here; w-100 to fill it |
 | `img-thumbnail` | — | missing |  |
 | `initialism` | — | missing |  |
-| `input-group` | — | missing | the missing basics; an icon inside a field is form-adorn |
-| `input-group-text` | — | missing | the missing basics; an icon inside a field is form-adorn |
 | `invalid-tooltip` | `invalid-feedback` | review | the error under the field |
 | `is-invalid` | — | state | aria-invalid="true" on the control |
 | `is-valid` | — | remove | fields have no success state |
@@ -1416,20 +1421,14 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `link-underline-success` | — | missing |  |
 | `link-underline-warning` | — | missing |  |
 | `link-warning` | — | review | a link is the accent; text-* for a tone |
-| `list-group` | — | missing | the missing basics |
-| `list-group-flush` | — | missing | the missing basics |
-| `list-group-horizontal` | — | missing | the missing basics |
-| `list-group-item` | — | missing | the missing basics |
-| `list-group-item-action` | — | missing | the missing basics |
-| `list-group-item-danger` | — | missing | the missing basics |
-| `list-group-item-dark` | — | missing | the missing basics |
-| `list-group-item-info` | — | missing | the missing basics |
-| `list-group-item-light` | — | missing | the missing basics |
-| `list-group-item-primary` | — | missing | the missing basics |
-| `list-group-item-secondary` | — | missing | the missing basics |
-| `list-group-item-success` | — | missing | the missing basics |
-| `list-group-item-warning` | — | missing | the missing basics |
-| `list-group-numbered` | — | missing | the missing basics |
+| `list-group-item-danger` | — | review | no item tones: a badge or a dot in the item says it |
+| `list-group-item-dark` | — | review | no item tones: a badge or a dot in the item says it |
+| `list-group-item-info` | — | review | no item tones: a badge or a dot in the item says it |
+| `list-group-item-light` | — | review | no item tones: a badge or a dot in the item says it |
+| `list-group-item-primary` | — | review | no item tones: a badge or a dot in the item says it |
+| `list-group-item-secondary` | — | review | no item tones: a badge or a dot in the item says it |
+| `list-group-item-success` | — | review | no item tones: a badge or a dot in the item says it |
+| `list-group-item-warning` | — | review | no item tones: a badge or a dot in the item says it |
 | `list-inline` | — | review | hstack flex-wrap |
 | `list-inline-item` | — | review | hstack flex-wrap |
 | `list-unstyled` | — | review | vstack, or a component's own list |
@@ -1546,11 +1545,11 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `popover-arrow` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
 | `popover-body` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
 | `popover-header` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
-| `progress` | — | missing | the missing basics: <progress> and <meter> |
-| `progress-bar` | — | missing | the missing basics: <progress> and <meter> |
-| `progress-bar-animated` | — | missing | the missing basics: <progress> and <meter> |
-| `progress-bar-striped` | — | missing | the missing basics: <progress> and <meter> |
-| `progress-stacked` | — | missing | the missing basics: <progress> and <meter> |
+| `progress` | `progress` | review | on a <progress value="40" max="100"> itself, not around a progress-bar with a width; a tone is progress-success and the like, not bg-* on the bar |
+| `progress-bar` | — | remove | the browser draws the bar from value |
+| `progress-bar-animated` | `progress-animated` | rename | it moves only while motion is allowed |
+| `progress-bar-striped` | `progress-striped` | rename |  |
+| `progress-stacked` | — | review | not planned: one <progress> a value |
 | `ps-1` | `ps-4` | value | the number is the pixels |
 | `ps-2` | `ps-8` | value | reused — ps-2 means another thing in REDZ.UI; the number is the pixels |
 | `ps-3` | `ps-16` | value | the number is the pixels |
@@ -1571,11 +1570,7 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `py-3` | `py-16` | value | the number is the pixels |
 | `py-4` | `py-24` | value | reused — py-4 means another thing in REDZ.UI; the number is the pixels |
 | `py-5` | `py-48` | value | the number is the pixels |
-| `ratio` | — | missing | the missing basics: aspect-ratio |
-| `ratio-16x9` | — | missing | the missing basics: aspect-ratio |
-| `ratio-1x1` | — | missing | the missing basics: aspect-ratio |
-| `ratio-21x9` | — | missing | the missing basics: aspect-ratio |
-| `ratio-4x3` | — | missing | the missing basics: aspect-ratio |
+| `ratio` | — | remove | the ratio goes on the element itself; an image inside a frame fills it with w-100 h-100 object-fit-cover |
 | `rounded-1` | `rounded-4` | value | 4 px |
 | `rounded-2` | `rounded-6` | value | 6 px |
 | `rounded-3` | `rounded-8` | value | 8 px |
@@ -1713,7 +1708,8 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `data-bs-toggle="button"` | `aria-pressed` | review | switch aria-pressed in your click handler |
 | `data-bs-toggle="tooltip"` | `commandfor="ID" command="toggle-popover"` | review | a toggletip at the browser floor |
 | `data-bs-toggle="popover"` | — | missing |  |
-| `data-bs-toggle="collapse"` | — | missing | the missing basics: <details> and <summary> |
+| `data-bs-toggle="collapse"` | `commandfor="ID" command="--toggle" aria-expanded="false"` | trigger | the region is hidden="until-found" while closed; in an accordion the item is a <details> |
+| `data-bs-parent` | `name` | trigger | the same name on every <details> of the group |
 | `data-bs-target` | `commandfor` | trigger | the id alone, without "#" |
 | `data-bs-dismiss="modal"` | `commandfor="ID" command="close"` | trigger |  |
 | `data-bs-dismiss="offcanvas"` | `commandfor="ID" command="close"` | trigger |  |
@@ -1741,7 +1737,7 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `bootstrap.Toast` | `REDZ.ui.toast({title, text, tone})` | trigger |  |
 | `bootstrap.Tooltip` | — | remove |  |
 | `bootstrap.Popover` | — | remove |  |
-| `bootstrap.Collapse` | — | missing |  |
+| `bootstrap.Collapse` | `region.hidden = false` | review | and setAttribute('hidden', 'until-found') to close; set aria-expanded on its buttons then — a button with command="--toggle" does both |
 | `show.bs.modal` | `toggle` | review | the dialog's toggle event, or code right after showModal() |
 | `shown.bs.modal` | `toggle` | review | the dialog's toggle event, or code right after showModal() |
 | `hide.bs.modal` | `cancel` | review | the dialog's cancel event (Esc); your buttons close it |
@@ -2095,14 +2091,101 @@ It reads the theme's `--redz-space-4`, `--redz-text`, `--redz-fs-12`, `--redz-te
 | `form-control-plaintext` | — | review | readonly on a form-control, or plain text |
 | `form-range` | — | missing |  |
 | `has-validation` | — | remove | fields have no success state |
-| `input-group` | — | missing | the missing basics; an icon inside a field is form-adorn |
-| `input-group-text` | — | missing | the missing basics; an icon inside a field is form-adorn |
 | `invalid-tooltip` | `invalid-feedback` | review | the error under the field |
 | `is-invalid` | — | state | aria-invalid="true" on the control |
 | `is-valid` | — | remove | fields have no success state |
 | `valid-feedback` | — | remove | fields have no success state |
 | `valid-tooltip` | — | remove | fields have no success state |
 | `was-validated` | — | state | the browser's :user-invalid shows after the person edits |
+
+# Input groups
+
+A field joined to what belongs to it — a unit, a prefix, a button, a choice — into one control. The borders meet by themselves; a menu or a hidden element inside the group is left out of the joining.
+
+## Examples
+
+`input-group` around a `form-control` or a `form-select` and its parts: `input-group-text` for words and icons, a `btn` for an action. An icon inside the field itself is [`form-adorn`](form.md).
+
+```html
+<div class="input-group">
+	<input class="form-control" type="text" inputmode="decimal" value="2,500" aria-label="Adult price" aria-describedby="input-group-basic-unit">
+	<span class="input-group-text" id="input-group-basic-unit">THB</span>
+</div>
+<div class="input-group">
+	<span class="input-group-text">https://</span>
+	<input class="form-control" type="text" value="angthong.example" aria-label="Site address">
+</div>
+<div class="input-group">
+	<input class="form-control" type="text" value="R7K2-9QXM" readonly aria-label="Access code">
+	<button class="btn" type="button"><i class="bi bi-clipboard" aria-hidden="true"></i>Copy</button>
+</div>
+```
+
+### With a choice
+
+A `form-select` or a check joins the same way; a check goes inside an `input-group-text`.
+
+```html
+<div class="input-group">
+	<select class="form-select" aria-label="Currency">
+		<option>THB</option>
+		<option>USD</option>
+		<option>EUR</option>
+	</select>
+	<input class="form-control" type="text" inputmode="decimal" value="1,900" aria-label="Child price">
+</div>
+<div class="input-group">
+	<label class="input-group-text"><input class="check" type="checkbox" checked>Discount</label>
+	<input class="form-control" type="text" inputmode="decimal" value="10" aria-label="Discount, percent">
+	<span class="input-group-text">%</span>
+</div>
+```
+
+### With a menu
+
+The menu sits in the group beside its button; the group joins only what it shows.
+
+```html
+<div class="input-group">
+	<input class="form-control" type="search" placeholder="Search excursions" aria-label="Search excursions">
+	<button class="btn" type="button" commandfor="input-group-menu-in" command="toggle-popover" aria-haspopup="menu">Everywhere<i class="bi bi-chevron-down" aria-hidden="true"></i></button>
+	<div id="input-group-menu-in" class="menu" popover role="menu" aria-label="Search in">
+		<button class="menu-item" type="button" role="menuitemradio" aria-checked="true">Everywhere</button>
+		<button class="menu-item" type="button" role="menuitemradio" aria-checked="false">Titles</button>
+		<button class="menu-item" type="button" role="menuitemradio" aria-checked="false">Descriptions</button>
+	</div>
+</div>
+```
+
+### Small, in a field
+
+`input-group-sm` sizes every part of the group; `form-field` carries the label, the hint and the error outside it.
+
+```html
+<div class="form-field">
+	<label class="form-label" for="input-group-field-months">Free months</label>
+	<div class="input-group input-group-sm">
+		<input class="form-control" id="input-group-field-months" type="text" inputmode="numeric" value="3" aria-describedby="input-group-field-hint">
+		<span class="input-group-text">months</span>
+		<button class="btn btn-sm btn-icon" type="button" aria-label="Remove"><i class="bi bi-trash" aria-hidden="true"></i></button>
+	</div>
+	<div class="form-text" id="input-group-field-hint">Given with a yearly plan.</div>
+</div>
+```
+
+## States
+
+## Keyboard and accessibility
+
+- Every field of a group has its own name — a `<label>` or `aria-label`. The words beside it are not its name: point at a unit with `aria-describedby`, so it reads as “Adult price, 2,500, THB”.
+- The parts keep their own keys: `Tab` goes from the field to its button, a menu opens as every [menu](menu.md) does.
+- An error goes under the group, in its `form-field`, never inside it.
+
+## Tokens
+
+From [`css/components/input-group.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/input-group.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-space-8`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg-page`, `--redz-text-muted`, `--redz-control-height-sm`, `--redz-radius-6`, `--redz-fs-12`.
 
 # Checks, radios and switches
 
@@ -2249,6 +2332,251 @@ It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-s
 | `card-subtitle` | — | review | a heading and paragraphs in card-body |
 | `card-text` | — | review | a heading and paragraphs in card-body |
 | `card-title` | — | review | a heading and paragraphs in card-body |
+
+# Accordions
+
+Sections that open one at a time, or each on its own, on the browser's own disclosure — `<details>` and `<summary>`: no script, the keys and the open state built in, and the browser's find in page opens a closed section on a match.
+
+## Examples
+
+Items that share a `name` are one group: opening one closes the one that was open. `open` opens an item from the start.
+
+```html
+<div class="accordion">
+	<details class="accordion-item" name="accordion-basic" open>
+		<summary class="accordion-header">What does a day trip include?<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+		<div class="accordion-body">The transfer from the hotel, the boat, lunch, snorkelling gear and the park fee.</div>
+	</details>
+	<details class="accordion-item" name="accordion-basic">
+		<summary class="accordion-header">Can I cancel a booking?<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+		<div class="accordion-body">Free of charge up to 24 hours before the start; later, half the price is kept.</div>
+	</details>
+	<details class="accordion-item" name="accordion-basic">
+		<summary class="accordion-header">Are children welcome?<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+		<div class="accordion-body">From four years old; under four they travel free.</div>
+	</details>
+</div>
+```
+
+### Each on its own
+
+Without `name` every item opens and closes by itself.
+
+```html
+<div class="accordion">
+	<details class="accordion-item" open>
+		<summary class="accordion-header">Pickup<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+		<div class="accordion-body">07:30 at the pier, 07:00 from the hotels of Chaweng.</div>
+	</details>
+	<details class="accordion-item">
+		<summary class="accordion-header">What to bring<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+		<div class="accordion-body">Swimwear, a towel and a sunscreen that spares the reef.</div>
+	</details>
+</div>
+```
+
+### Flush
+
+`accordion-flush` drops the frame and the side padding, for sections inside a card or a drawer.
+
+```html
+<div class="card">
+	<div class="card-body">
+		<div class="accordion accordion-flush">
+			<details class="accordion-item" name="accordion-flush" open>
+				<summary class="accordion-header">Prices<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+				<div class="accordion-body">Adults 2,500 · children 1,900 · under four free.</div>
+			</details>
+			<details class="accordion-item" name="accordion-flush">
+				<summary class="accordion-header">History<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+				<div class="accordion-body">Edited yesterday by M. K.; published on three sites.</div>
+			</details>
+		</div>
+	</div>
+</div>
+```
+
+## States
+
+## Keyboard and accessibility
+
+| Key | On a section's header |
+| --- | --- |
+| `Enter`, `Space` | Opens or closes the section; in a group, opening it closes the open one |
+| `Tab` | The next header, or the first control inside an open section |
+
+- The header is the `<summary>` itself, which the browser announces as expanded or collapsed. Put no heading inside it: screen readers announce a heading in a summary unevenly. When the sections need a place in the page's outline, a heading goes before the accordion.
+- The chevron is decoration, `aria-hidden="true"`; it turns as the section opens.
+- A section opens with a short animation only where the browser has `interpolate-size`, and only when the reader allows motion; elsewhere it opens at once.
+- From script: `details.open = true`, and the `toggle` event after each change.
+
+## Tokens
+
+From [`css/components/accordion.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/accordion.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-border`, `--redz-bg`, `--redz-radius-12`, `--redz-space-12`, `--redz-space-16`, `--redz-text`, `--redz-bg-hover`, `--redz-text-muted`, `--redz-motion`, `--redz-ease`.
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `accordion-button` | — | remove | the summary is the button; its chevron is <i class="bi bi-chevron-down accordion-icon"> |
+| `accordion-collapse` | — | remove | the body follows the summary inside the <details> |
+| `accordion-header` | `accordion-header` | review | the item's <summary> with the button's words in it — no heading and no button inside |
+| `accordion-item` | `accordion-item` | review | a <details>; the items of one group share a name, as data-bs-parent did |
+| `data-bs-parent` | `name` | trigger | the same name on every <details> of the group |
+
+# Collapse
+
+A button that opens and closes a region elsewhere on the page — help under a toolbar, more filters, the details of a row — by the library's own command, `--toggle`. A closed region is `hidden="until-found"`, so the browser's find in page still reaches its words and opens it. A section that opens under its own header is an [accordion](accordion.md).
+
+## Examples
+
+The button names its region with `commandfor` and `command="--toggle"`, and says in `aria-expanded` whether the region is open: write it as the region starts, and the library keeps it.
+
+```html
+<div class="hstack gap-8">
+	<button class="btn btn-sm" type="button" commandfor="collapse-help-text" command="--toggle" aria-expanded="false" aria-controls="collapse-help-text"><i class="bi bi-question-circle" aria-hidden="true"></i>How prices work</button>
+</div>
+<div id="collapse-help-text" hidden="until-found">
+	<p class="text-muted">A price is per person. Children from four to eleven pay the child price; under four they travel free.</p>
+</div>
+```
+
+### Open from the start
+
+A region without `hidden` starts open, its button `aria-expanded="true"`.
+
+```html
+<div class="hstack gap-8">
+	<button class="btn btn-sm" type="button" commandfor="collapse-open-filters" command="--toggle" aria-expanded="true" aria-controls="collapse-open-filters"><i class="bi bi-funnel" aria-hidden="true"></i>More filters</button>
+</div>
+<div id="collapse-open-filters" class="hstack flex-wrap gap-8">
+	<button class="chip" type="button" aria-pressed="true">With lunch</button>
+	<button class="chip" type="button" aria-pressed="false">Private</button>
+	<button class="chip" type="button" aria-pressed="false">Sunset</button>
+</div>
+```
+
+## Keyboard and accessibility
+
+| Key | On the button |
+| --- | --- |
+| `Enter`, `Space` | Opens or closes the region; every button for it says the new state |
+
+- Find in page opens a closed region on a match where the browser has `hidden="until-found"` — Chrome, Firefox 148 and Safari 26.2 on — and the library marks its buttons open; in older browsers the region stays closed until its button opens it.
+- Put the region right after its button in the reading order, or name it, so a reader who opens it finds it.
+- From script: `region.hidden = false` opens it — set `aria-expanded` on its buttons yourself then.
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `collapse` | — | state | closed: hidden="until-found" on the region; open: no hidden; its button has command="--toggle" |
+| `collapse-horizontal` | — | review | not planned: a region opens downward, in its place |
+| `collapsing` | — | remove | the region opens at once |
+| `data-bs-toggle="collapse"` | `commandfor="ID" command="--toggle" aria-expanded="false"` | trigger | the region is hidden="until-found" while closed; in an accordion the item is a <details> |
+| `bootstrap.Collapse` | `region.hidden = false` | review | and setAttribute('hidden', 'until-found') to close; set aria-expanded on its buttons then — a button with command="--toggle" does both |
+
+# List groups
+
+A column of items in one frame — plain rows, or links and buttons to choose from — with the current one and the unavailable ones marked by the same attributes the browser reads.
+
+## Examples
+
+`list-group` on a list, `list-group-item` on each item.
+
+```html
+<ul class="list-group">
+	<li class="list-group-item">Ang Thong Marine Park</li>
+	<li class="list-group-item">Koh Tao and Koh Nang Yuan</li>
+	<li class="list-group-item">The Five Islands by kayak</li>
+</ul>
+```
+
+### Links and buttons
+
+`list-group-item-action` makes an item a choice. The current one is `aria-current` — `"page"` for a link to the page shown, `"true"` otherwise; one that cannot be chosen is a `disabled` button, or a link without `href` and with `aria-disabled="true"`.
+
+```html
+<nav class="list-group" aria-label="Sites">
+	<a class="list-group-item list-group-item-action" href="#list-group-action" aria-current="page">All sites</a>
+	<a class="list-group-item list-group-item-action" href="#list-group-action">lagoon.example</a>
+	<a class="list-group-item list-group-item-action" href="#list-group-action">angthong.example</a>
+	<a class="list-group-item list-group-item-action" aria-disabled="true">archive.example</a>
+</nav>
+<div class="list-group" role="group" aria-label="Import from">
+	<button class="list-group-item list-group-item-action" type="button">A CSV file</button>
+	<button class="list-group-item list-group-item-action" type="button">Another site</button>
+	<button class="list-group-item list-group-item-action" type="button" disabled>The old catalog</button>
+</div>
+```
+
+### Flush, numbered, with counts
+
+`list-group-flush` drops the frame, for a list inside a card; `list-group-numbered` on an `<ol>` numbers the items.
+
+```html
+<div class="card">
+	<div class="card-body">
+		<ol class="list-group list-group-flush list-group-numbered">
+			<li class="list-group-item hstack gap-8"><span class="flex-fill">Ang Thong Marine Park</span><span class="badge">28</span></li>
+			<li class="list-group-item hstack gap-8"><span class="flex-fill">Koh Tao</span><span class="badge">11</span></li>
+			<li class="list-group-item hstack gap-8"><span class="flex-fill">The Five Islands</span><span class="badge badge-subtle-warning">3</span></li>
+		</ol>
+	</div>
+</div>
+```
+
+### Side by side
+
+`list-group-horizontal` sets the items in a row; with a width prefix, from that width of the region on: `md:list-group-horizontal`.
+
+```html
+<ul class="list-group md:list-group-horizontal">
+	<li class="list-group-item">Transfer</li>
+	<li class="list-group-item">Boat</li>
+	<li class="list-group-item">Lunch</li>
+	<li class="list-group-item">Park fee</li>
+</ul>
+```
+
+### With checks
+
+```html
+<div class="list-group" role="group" aria-label="Show on">
+	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" checked>lagoon.example</label>
+	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" checked>angthong.example</label>
+	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox">kohtao.example</label>
+</div>
+```
+
+## States
+
+## Keyboard and accessibility
+
+- Links and buttons keep their own keys: `Tab` from one to the next, `Enter` — and `Space` on a button — to choose. A list of links that moves between pages is a `<nav>` with its own name.
+- The current item is `aria-current`, never a class: the screen reader says “current page”, the look follows the attribute.
+- A link that may not be followed has no `href`: `aria-disabled` alone would leave it working.
+
+## Tokens
+
+From [`css/components/list-group.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/list-group.css). It declares `--redz-list-group-row`, `--redz-list-group-column` on its root, never on rows or items.
+
+It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-space-12`, `--redz-space-16`, `--redz-text`, `--redz-bg-hover`, `--redz-primary-subtle`, `--redz-primary`, `--redz-text-faint`, `--redz-text-muted`.
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `list-group-item-danger` | — | review | no item tones: a badge or a dot in the item says it |
+| `list-group-item-dark` | — | review | no item tones: a badge or a dot in the item says it |
+| `list-group-item-info` | — | review | no item tones: a badge or a dot in the item says it |
+| `list-group-item-light` | — | review | no item tones: a badge or a dot in the item says it |
+| `list-group-item-primary` | — | review | no item tones: a badge or a dot in the item says it |
+| `list-group-item-secondary` | — | review | no item tones: a badge or a dot in the item says it |
+| `list-group-item-success` | — | review | no item tones: a badge or a dot in the item says it |
+| `list-group-item-warning` | — | review | no item tones: a badge or a dot in the item says it |
 
 # Tables
 
@@ -2938,6 +3266,75 @@ From [`css/components/spinner.css`](https://github.com/redz-tech/REDZ.UI/blob/ma
 | Bootstrap 5.3 | REDZ.UI | Change | Note |
 | --- | --- | --- | --- |
 | `spinner-grow` | — | missing |  |
+
+# Progress and meters
+
+The browser's own `<progress>` for work under way and `<meter>` for a measure within known limits — a quota, a score. The value is an attribute, the browser announces it, and a progress without a value says the work has no known end.
+
+## Examples
+
+`progress` on a `<progress>` with `value` and `max`; the words of the value go beside the bar, `text-nowrap` so the bar gives way, and the label names it.
+
+```html
+<div class="form-field">
+	<label class="form-label" for="progress-basic-upload">Uploading photos</label>
+	<div class="hstack gap-12">
+		<progress class="progress" id="progress-basic-upload" value="40" max="100">40 %</progress>
+		<span class="text-muted fs-12 text-nowrap">40 %</span>
+	</div>
+</div>
+<progress class="progress" aria-label="Rebuilding pages"></progress>
+```
+
+### Tones and sizes
+
+`progress-{tone}` for the tones, `progress-sm` and `progress-lg` for the height; `progress-striped` lays stripes on the bar, `progress-animated` moves them while motion is allowed.
+
+```html
+<progress class="progress progress-success" value="75" max="100" aria-label="Published, 75 percent"></progress>
+<progress class="progress progress-warning progress-sm" value="50" max="100" aria-label="Translated, 50 percent"></progress>
+<progress class="progress progress-danger progress-lg" value="20" max="100" aria-label="Failed, 20 percent"></progress>
+<progress class="progress progress-lg progress-striped progress-animated" value="60" max="100" aria-label="Deploying, 60 percent"></progress>
+```
+
+### Meters
+
+`meter` on a `<meter>`: `low`, `high` and `optimum` divide the range, and the browser colours the value by the part it falls in — green in the good part, amber next to it, red in the far one.
+
+```html
+<div class="form-field">
+	<label class="form-label" for="progress-meter-storage">Storage used</label>
+	<div class="hstack gap-12">
+		<meter class="meter" id="progress-meter-storage" value="3.1" min="0" max="10" low="7" high="9" optimum="0">3.1 of 10 GB</meter>
+		<span class="text-muted fs-12 text-nowrap">3.1 of 10 GB</span>
+	</div>
+</div>
+<meter class="meter" value="8" min="0" max="10" low="7" high="9" optimum="0" aria-label="Photos, 8 of 10 GB">8 of 10 GB</meter>
+<meter class="meter" value="9.6" min="0" max="10" low="7" high="9" optimum="0" aria-label="Backups, 9.6 of 10 GB">9.6 of 10 GB</meter>
+```
+
+## Keyboard and accessibility
+
+- Name every bar: a `<label for>`, `aria-label` or `aria-labelledby`. The browser announces the value as a percentage of `max`; the words beside the bar are for the eye.
+- Colour is not the message: a meter in the red part also says so in words where it matters.
+- A screen reader does not follow a bar as it fills: say the end of a long task in a notice, by `REDZ.ui.toast`.
+- In forced colours the bar takes the system's highlight; right to left it fills from the right.
+
+## Tokens
+
+From [`css/components/progress.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/progress.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-bg-hover`, `--redz-primary`, `--redz-secondary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-motion`, `--redz-ease`.
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `progress` | `progress` | review | on a <progress value="40" max="100"> itself, not around a progress-bar with a width; a tone is progress-success and the like, not bg-* on the bar |
+| `progress-bar` | — | remove | the browser draws the bar from value |
+| `progress-bar-animated` | `progress-animated` | rename | it moves only while motion is allowed |
+| `progress-bar-striped` | `progress-striped` | rename |  |
+| `progress-stacked` | — | review | not planned: one <progress> a value |
 
 # Busy
 

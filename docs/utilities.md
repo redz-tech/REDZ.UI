@@ -10,6 +10,15 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 - Font size: 12 14 16 18 20 24 32; line height: 16 20 24 28; radius: 0 4 6 8 12 16 and `rounded-full`.
 - Width prefixes come on placement and spacing — display, flex, grid, gaps, order, text alignment, margins and paddings: `md:d-none`, `lg:p-24`.
 
+## Aspect ratio
+
+`ratio-1x1`, `ratio-4x3`, `ratio-16x9` and `ratio-21x9` keep an element's shape as its width changes — on a video, a map, an image's frame; `ratio-auto` lets it go. The class goes on the element itself: an image inside a frame fills it with `w-100 h-100 object-fit-cover`.
+
+```html
+<div class="ratio-16x9 w-50 hstack justify-content-center rounded-8 bg-page text-muted">16 × 9</div>
+<div class="ratio-1x1 w-25 hstack justify-content-center rounded-8 bg-page text-muted">1 × 1</div>
+```
+
 ## Every utility
 
 | Class | Declarations | Width prefixes |
@@ -452,6 +461,11 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 | `object-fit-cover` | `object-fit: cover;` | — |
 | `object-fit-fill` | `object-fit: fill;` | — |
 | `object-fit-none` | `object-fit: none;` | — |
+| `ratio-1x1` | `aspect-ratio: 1 / 1;` | — |
+| `ratio-4x3` | `aspect-ratio: 4 / 3;` | — |
+| `ratio-16x9` | `aspect-ratio: 16 / 9;` | — |
+| `ratio-21x9` | `aspect-ratio: 21 / 9;` | — |
+| `ratio-auto` | `aspect-ratio: auto;` | — |
 | `visible` | `visibility: visible;` | — |
 | `invisible` | `visibility: hidden;` | — |
 | `user-select-none` | `-webkit-user-select: none; user-select: none;` | — |
@@ -693,11 +707,7 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 | `py-3` | `py-16` | value | the number is the pixels |
 | `py-4` | `py-24` | value | reused — py-4 means another thing in REDZ.UI; the number is the pixels |
 | `py-5` | `py-48` | value | the number is the pixels |
-| `ratio` | — | missing | the missing basics: aspect-ratio |
-| `ratio-16x9` | — | missing | the missing basics: aspect-ratio |
-| `ratio-1x1` | — | missing | the missing basics: aspect-ratio |
-| `ratio-21x9` | — | missing | the missing basics: aspect-ratio |
-| `ratio-4x3` | — | missing | the missing basics: aspect-ratio |
+| `ratio` | — | remove | the ratio goes on the element itself; an image inside a frame fills it with w-100 h-100 object-fit-cover |
 | `rounded-1` | `rounded-4` | value | 4 px |
 | `rounded-2` | `rounded-6` | value | 6 px |
 | `rounded-3` | `rounded-8` | value | 8 px |

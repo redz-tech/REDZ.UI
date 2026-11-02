@@ -1,4 +1,8 @@
 @layer components {
+	html:has(> body > .app) {
+		scroll-padding-block-start: 3.25rem;
+	}
+
 	.app {
 		display: grid;
 		grid-template-columns: 15rem minmax(0, 1fr);

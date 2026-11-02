@@ -28,7 +28,7 @@ const PROBE_SHOT_MAX = 8000;
 // The longest a cell may run, in seconds: CI's iOS 26 simulator, the slowest engine, spends about a minute on a cell.
 const PROBE_CELL_MAX = 300;
 // The keys of the keyboard walk: the WebDriver code point (Firefox, Safari), the Windows key code and the text (Chrome).
-const PROBE_KEYS = ['Enter' => ["\u{E006}", 13, "\r"], 'Escape' => ["\u{E00C}", 27, ''], 'Tab' => ["\u{E004}", 9, ''], 'ArrowDown' => ["\u{E015}", 40, ''], 'ArrowUp' => ["\u{E013}", 38, ''], 'ArrowLeft' => ["\u{E012}", 37, ''], 'ArrowRight' => ["\u{E014}", 39, ''], 'Home' => ["\u{E011}", 36, ''], 'End' => ["\u{E010}", 35, '']];
+const PROBE_KEYS = ['Enter' => ["\u{E006}", 13, "\r"], 'Space' => ["\u{E00D}", 32, ' '], 'Escape' => ["\u{E00C}", 27, ''], 'Tab' => ["\u{E004}", 9, ''], 'ArrowDown' => ["\u{E015}", 40, ''], 'ArrowUp' => ["\u{E013}", 38, ''], 'ArrowLeft' => ["\u{E012}", 37, ''], 'ArrowRight' => ["\u{E014}", 39, ''], 'Home' => ["\u{E011}", 36, ''], 'End' => ["\u{E010}", 35, '']];
 
 /** The folder of fetched engines and packages: $REDZ_UI_CACHE, or ~/Library/Caches/redz-ui. */
 function PROBE__Cache(): string
@@ -351,7 +351,7 @@ function PROBE__Cell(array &$h, string $name, string $page, string $combo, strin
 	if ($m['scroll'] > $m['client']) {
 		$findings[] = 'overflow ' . $m['scroll'] . ' > ' . $m['client'] . ': ' . implode(', ', $m['offenders']);
 	}
-	foreach (['unmasked' => 'icons without a mask', 'unregioned' => 'width prefixes outside a region', 'cut' => 'cut labels', 'busyLive' => 'aria-busy on or around a live region'] as $key => $what) {
+	foreach (['unmasked' => 'icons without a mask', 'unregioned' => 'width prefixes outside a region', 'cut' => 'cut labels', 'busyLive' => 'aria-busy on or around a live region', 'toggles' => '--toggle buttons whose aria-expanded is not their region\'s state'] as $key => $what) {
 		if ($m[$key] !== []) {
 			$findings[] = $what . ': ' . implode(', ', $m[$key]);
 		}
@@ -425,7 +425,8 @@ function PROBE__Cell(array &$h, string $name, string $page, string $combo, strin
 	}
 }
 
-/** The keyboard walk of a page: each menu, modal dialog and tab list driven by real keys — and a dialog with
+/** The keyboard walk of a page: each menu, modal dialog, tab list, accordion and --toggle region driven by real keys
+ *  (Enter, then Space, opening and closing an accordion's item; headless Firefox clicks) — and a dialog with
  *  closedby="any" by a click outside it — against the WAI-ARIA patterns; answers its findings, and the widgets it
  *  walked in $walked. */
 function PROBE__KeyWalk(array &$h, array &$walked): array
@@ -446,8 +447,16 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 	};
 	foreach (PROBE__Do($h, 'Eval', 'REDZ_PROBE.keyTargets()') as ['kind' => $kind, 'id' => $id, 'outside' => $outside]) {
 		$state = fn(): array => PROBE__Do($h, 'Eval', 'REDZ_PROBE.state(' . json_encode($kind) . ', ' . json_encode($id) . ')');
-		$what = ($kind === 'tabs' ? 'the tab list ' . $id : '#' . $id) . ' by keyboard — ';
-		$walked[] = ($kind === 'tabs' ? 'a tab list' : '#' . $id . ' (' . $kind . ($outside ? ', a click outside' : '') . ')');
+		$what = match ($kind) {
+			'tabs' => 'the tab list ' . $id,
+			'accordion' => 'the accordion ' . $id,
+			default => '#' . $id,
+		} . ' by keyboard — ';
+		$walked[] = match ($kind) {
+			'tabs' => 'a tab list',
+			'accordion' => 'an accordion',
+			default => '#' . $id . ' (' . $kind . ($outside ? ', a click outside' : '') . ')',
+		};
 		PROBE__Do($h, 'Eval', 'REDZ_PROBE.focus(' . json_encode($kind) . ', ' . json_encode($id) . ')');
 		if ($kind === 'menu') {
 			$activate($id);
@@ -515,6 +524,36 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 					}
 				}
 				PROBE__Do($h, 'Eval', '(document.getElementById(' . json_encode($id) . ').open && document.getElementById(' . json_encode($id) . ').close(), true)');
+			}
+		} elseif ($kind === 'accordion') {
+			$was = in_array($state()['walked'], $state()['open'], true);
+			foreach (['Enter', 'Space'] as $step => $key) {
+				if ($h['kind'] === 'firefox') {
+					PROBE__Do($h, 'Click', ...PROBE__Do($h, 'Eval', 'REDZ_PROBE.summaryPoint(' . json_encode($id) . ')'));
+					usleep(200000);
+				} else {
+					$press($key);
+				}
+				$s = $state();
+				$open = in_array($s['walked'], $s['open'], true);
+				if ($open === ($step === 0 ? $was : !$was)) {
+					$findings[] = $what . $key . ': item ' . $s['walked'] . ' ' . ($open ? 'stays open' : 'stays closed');
+					break;
+				}
+				if ($open && $s['grouped'] && $s['open'] !== [$s['walked']]) {
+					$findings[] = $what . $key . ': opening item ' . $s['walked'] . ' of a group leaves ' . json_encode($s['open']) . ' open';
+					break;
+				}
+			}
+		} elseif ($kind === 'toggle') {
+			$was = $state()['open'];
+			foreach ([!$was, $was] as $open) {
+				$activate($id);
+				$s = $state();
+				if ($s['open'] !== $open || $s['expanded'] !== ($open ? 'true' : 'false')) {
+					$findings[] = $what . 'Enter: the region should be ' . ($open ? 'open' : 'closed') . ' — it is ' . ($s['open'] ? 'open' : 'closed') . ', its button says aria-expanded="' . $s['expanded'] . '"';
+					break;
+				}
 			}
 		} else {
 			$s = $state();

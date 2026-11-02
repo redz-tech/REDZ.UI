@@ -1,11 +1,11 @@
 bs5	redz	kind	scope	page	note
-accordion		missing	class		the missing basics: <details> and <summary>
-accordion-body		missing	class		the missing basics: <details> and <summary>
-accordion-button		missing	class		the missing basics: <details> and <summary>
-accordion-collapse		missing	class		the missing basics: <details> and <summary>
-accordion-flush		missing	class		the missing basics: <details> and <summary>
-accordion-header		missing	class		the missing basics: <details> and <summary>
-accordion-item		missing	class		the missing basics: <details> and <summary>
+accordion	accordion	same	class	accordion	
+accordion-body	accordion-body	same	class	accordion	
+accordion-button		remove	class	accordion	the summary is the button; its chevron is <i class="bi bi-chevron-down accordion-icon">
+accordion-collapse		remove	class	accordion	the body follows the summary inside the <details>
+accordion-flush	accordion-flush	same	class	accordion	
+accordion-header	accordion-header	review	class	accordion	the item's <summary> with the button's words in it — no heading and no button inside
+accordion-item	accordion-item	review	class	accordion	a <details>; the items of one group share a name, as data-bs-parent did
 active		state	class		aria-current, aria-selected or aria-pressed — the attribute of the element's role
 alert	alert	same	class	alert	
 alert-danger	alert-danger	same	class	alert	
@@ -359,10 +359,10 @@ col-xxl-7	2xl:span-7	grid	class	layout	N of 12: the parent is grid cols-12 (or m
 col-xxl-8	2xl:span-8	grid	class	layout	N of 12: the parent is grid cols-12 (or md:cols-12)
 col-xxl-9	2xl:span-9	grid	class	layout	N of 12: the parent is grid cols-12 (or md:cols-12)
 col-xxl-auto		review	class	layout	a column as wide as its content: hstack, or grid-template-columns in the module's CSS
-collapse		missing	class		the missing basics: <details>, or hidden switched by a command
-collapse-horizontal		missing	class		the missing basics: <details>, or hidden switched by a command
-collapsed		state	class		aria-expanded="false" on the button, set by the browser
-collapsing		missing	class		the missing basics: <details>, or hidden switched by a command
+collapse		state	class	collapse	closed: hidden="until-found" on the region; open: no hidden; its button has command="--toggle"
+collapse-horizontal		review	class	collapse	not planned: a region opens downward, in its place
+collapsed		state	class		aria-expanded="false" on the button, set by the browser or by --toggle
+collapsing		remove	class	collapse	the region opens at once
 column-gap-0	column-gap-0	same	class	utilities	
 column-gap-1	column-gap-4	value	class	utilities	the number is the pixels
 column-gap-2	column-gap-8	value	class	utilities	reused — column-gap-2 means another thing in REDZ.UI; the number is the pixels
@@ -821,10 +821,10 @@ icon-link-hover		review	class	icons	a link with its icon: hstack gap-4
 img-fluid		review	class	utilities	images never overflow their box here; w-100 to fill it
 img-thumbnail		missing	class	utilities	
 initialism		missing	class	utilities	
-input-group		missing	class	form	the missing basics; an icon inside a field is form-adorn
-input-group-lg		missing	class	form	the missing basics; an icon inside a field is form-adorn
-input-group-sm		missing	class	form	the missing basics; an icon inside a field is form-adorn
-input-group-text		missing	class	form	the missing basics; an icon inside a field is form-adorn
+input-group	input-group	same	class	input-group	
+input-group-lg	input-group	review	class	input-group	no larger size: the default group, or input-group-sm
+input-group-sm	input-group-sm	same	class	input-group	
+input-group-text	input-group-text	same	class	input-group	
 invalid-feedback	invalid-feedback	same	class	form	
 invalid-tooltip	invalid-feedback	review	class	form	the error under the field
 invisible	invisible	same	class	utilities	
@@ -917,25 +917,25 @@ link-underline-secondary		missing	class	utilities
 link-underline-success		missing	class	utilities	
 link-underline-warning		missing	class	utilities	
 link-warning		review	class	utilities	a link is the accent; text-* for a tone
-list-group		missing	class		the missing basics
-list-group-flush		missing	class		the missing basics
-list-group-horizontal		missing	class		the missing basics
-list-group-horizontal-lg		missing	class		the missing basics
-list-group-horizontal-md		missing	class		the missing basics
-list-group-horizontal-sm		missing	class		the missing basics
-list-group-horizontal-xl		missing	class		the missing basics
-list-group-horizontal-xxl		missing	class		the missing basics
-list-group-item		missing	class		the missing basics
-list-group-item-action		missing	class		the missing basics
-list-group-item-danger		missing	class		the missing basics
-list-group-item-dark		missing	class		the missing basics
-list-group-item-info		missing	class		the missing basics
-list-group-item-light		missing	class		the missing basics
-list-group-item-primary		missing	class		the missing basics
-list-group-item-secondary		missing	class		the missing basics
-list-group-item-success		missing	class		the missing basics
-list-group-item-warning		missing	class		the missing basics
-list-group-numbered		missing	class		the missing basics
+list-group	list-group	same	class	list-group	
+list-group-flush	list-group-flush	same	class	list-group	
+list-group-horizontal	list-group-horizontal	same	class	list-group	
+list-group-horizontal-lg	lg:list-group-horizontal	rename	class	list-group	from that width of the region, not of the window
+list-group-horizontal-md	md:list-group-horizontal	rename	class	list-group	from that width of the region, not of the window
+list-group-horizontal-sm	sm:list-group-horizontal	rename	class	list-group	from that width of the region, not of the window
+list-group-horizontal-xl	xl:list-group-horizontal	rename	class	list-group	from that width of the region, not of the window
+list-group-horizontal-xxl	2xl:list-group-horizontal	rename	class	list-group	from that width of the region, not of the window
+list-group-item	list-group-item	same	class	list-group	
+list-group-item-action	list-group-item-action	same	class	list-group	
+list-group-item-danger		review	class	list-group	no item tones: a badge or a dot in the item says it
+list-group-item-dark		review	class	list-group	no item tones: a badge or a dot in the item says it
+list-group-item-info		review	class	list-group	no item tones: a badge or a dot in the item says it
+list-group-item-light		review	class	list-group	no item tones: a badge or a dot in the item says it
+list-group-item-primary		review	class	list-group	no item tones: a badge or a dot in the item says it
+list-group-item-secondary		review	class	list-group	no item tones: a badge or a dot in the item says it
+list-group-item-success		review	class	list-group	no item tones: a badge or a dot in the item says it
+list-group-item-warning		review	class	list-group	no item tones: a badge or a dot in the item says it
+list-group-numbered	list-group-numbered	same	class	list-group	
 list-inline		review	class	utilities	hstack flex-wrap
 list-inline-item		review	class	utilities	hstack flex-wrap
 list-unstyled		review	class	utilities	vstack, or a component's own list
@@ -1592,11 +1592,11 @@ position-fixed	position-fixed	same	class	utilities
 position-relative	position-relative	same	class	utilities	
 position-static	position-static	same	class	utilities	
 position-sticky	position-sticky	same	class	utilities	
-progress		missing	class		the missing basics: <progress> and <meter>
-progress-bar		missing	class		the missing basics: <progress> and <meter>
-progress-bar-animated		missing	class		the missing basics: <progress> and <meter>
-progress-bar-striped		missing	class		the missing basics: <progress> and <meter>
-progress-stacked		missing	class		the missing basics: <progress> and <meter>
+progress	progress	review	class	progress	on a <progress value="40" max="100"> itself, not around a progress-bar with a width; a tone is progress-success and the like, not bg-* on the bar
+progress-bar		remove	class	progress	the browser draws the bar from value
+progress-bar-animated	progress-animated	rename	class	progress	it moves only while motion is allowed
+progress-bar-striped	progress-striped	rename	class	progress	
+progress-stacked		review	class	progress	not planned: one <progress> a value
 ps-0	ps-0	same	class	utilities	
 ps-1	ps-4	value	class	utilities	the number is the pixels
 ps-2	ps-8	value	class	utilities	reused — ps-2 means another thing in REDZ.UI; the number is the pixels
@@ -1741,11 +1741,11 @@ py-xxl-2	2xl:py-8	value	class	utilities	the number is the pixels
 py-xxl-3	2xl:py-16	value	class	utilities	the number is the pixels
 py-xxl-4	2xl:py-24	value	class	utilities	the number is the pixels
 py-xxl-5	2xl:py-48	value	class	utilities	the number is the pixels
-ratio		missing	class	utilities	the missing basics: aspect-ratio
-ratio-16x9		missing	class	utilities	the missing basics: aspect-ratio
-ratio-1x1		missing	class	utilities	the missing basics: aspect-ratio
-ratio-21x9		missing	class	utilities	the missing basics: aspect-ratio
-ratio-4x3		missing	class	utilities	the missing basics: aspect-ratio
+ratio		remove	class	utilities	the ratio goes on the element itself; an image inside a frame fills it with w-100 h-100 object-fit-cover
+ratio-16x9	ratio-16x9	same	class	utilities	on the element itself, not a wrapper
+ratio-1x1	ratio-1x1	same	class	utilities	on the element itself, not a wrapper
+ratio-21x9	ratio-21x9	same	class	utilities	on the element itself, not a wrapper
+ratio-4x3	ratio-4x3	same	class	utilities	on the element itself, not a wrapper
 rounded	rounded	same	class	utilities	
 rounded-0	rounded-0	same	class	utilities	
 rounded-1	rounded-4	value	class	utilities	4 px
@@ -2032,7 +2032,8 @@ data-bs-toggle="pill"	role="tab" aria-controls="ID"	trigger	data-attr	nav	in a r
 data-bs-toggle="button"	aria-pressed	review	data-attr	btn	switch aria-pressed in your click handler
 data-bs-toggle="tooltip"	commandfor="ID" command="toggle-popover"	review	data-attr	tooltip	a toggletip at the browser floor
 data-bs-toggle="popover"		missing	data-attr	tooltip	
-data-bs-toggle="collapse"		missing	data-attr		the missing basics: <details> and <summary>
+data-bs-toggle="collapse"	commandfor="ID" command="--toggle" aria-expanded="false"	trigger	data-attr	collapse	the region is hidden="until-found" while closed; in an accordion the item is a <details>
+data-bs-parent	name	trigger	data-attr	accordion	the same name on every <details> of the group
 data-bs-target	commandfor	trigger	data-attr		the id alone, without "#"
 data-bs-dismiss="modal"	commandfor="ID" command="close"	trigger	data-attr	dialog	
 data-bs-dismiss="offcanvas"	commandfor="ID" command="close"	trigger	data-attr	drawer	
@@ -2060,7 +2061,7 @@ bootstrap.Tab	tab.click()	review	js	nav	the library selects on click and by the 
 bootstrap.Toast	REDZ.ui.toast({title, text, tone})	trigger	js	toast	
 bootstrap.Tooltip		remove	js	tooltip	
 bootstrap.Popover		remove	js	tooltip	
-bootstrap.Collapse		missing	js		
+bootstrap.Collapse	region.hidden = false	review	js	collapse	and setAttribute('hidden', 'until-found') to close; set aria-expanded on its buttons then — a button with command="--toggle" does both
 show.bs.modal	toggle	review	js	dialog	the dialog's toggle event, or code right after showModal()
 shown.bs.modal	toggle	review	js	dialog	the dialog's toggle event, or code right after showModal()
 hide.bs.modal	cancel	review	js	dialog	the dialog's cancel event (Esc); your buttons close it

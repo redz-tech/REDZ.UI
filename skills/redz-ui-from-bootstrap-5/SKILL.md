@@ -3,7 +3,7 @@ name: redz-ui-from-bootstrap-5
 description: Move a project's markup, styles and scripts from Bootstrap 5.3 to REDZ.UI, file by file — find what Bootstrap left with scripts/scan.sh and the map assets/map.tsv, rewrite each file whole, scan again until nothing is left. Use when a project links Bootstrap 5 (bootstrap.css, bootstrap.bundle.js, data-bs-* attributes, row and col grids) and is to run on REDZ.UI instead.
 license: MIT
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
   from: "bootstrap 5.3.8"
 ---
 
@@ -36,7 +36,7 @@ the project switches at once, so migrate on a branch and switch the `<link>` wit
 | `state` | Drop the class; set the attribute of the role — `aria-current`, `aria-selected`, `aria-pressed`, `aria-invalid`, `disabled`. See `references/states-and-triggers.md`. |
 | `trigger` | Replace the `data-bs-*` trigger or `bootstrap.*` call with the browser's command or method. See `references/states-and-triggers.md`. |
 | `remove` | Delete it: the wrapper or helper is not needed (`modal-dialog`, `fade`, `nav-item`). |
-| `missing` | REDZ.UI has no such component yet (accordion, list group, progress, input group, ratio, pagination, popover, carousel). Keep the markup in the module's own classes with its prefix, and leave a note; do not invent a REDZ.UI class. |
+| `missing` | REDZ.UI has no such component yet (pagination, popover, carousel and a few helpers). Keep the markup in the module's own classes with its prefix, and leave a note; do not invent a REDZ.UI class. |
 | `review` | Decide by context; the map's note proposes the nearest form. |
 | `unknown` | Not a class of REDZ.UI: invented, a Bootstrap 6 habit, or a module class without its prefix. |
 

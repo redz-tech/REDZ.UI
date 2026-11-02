@@ -49,9 +49,13 @@
 			<a class="app-link" href="menu.html">Menus</a>
 			<div class="app-section">Forms</div>
 			<a class="app-link" href="form.html">Form fields</a>
+			<a class="app-link" href="input-group.html">Input groups</a>
 			<a class="app-link" href="check.html">Checks, radios and switches</a>
 			<div class="app-section">Content</div>
 			<a class="app-link" href="card.html">Cards</a>
+			<a class="app-link" href="accordion.html">Accordions</a>
+			<a class="app-link" href="collapse.html">Collapse</a>
+			<a class="app-link" href="list-group.html">List groups</a>
 			<a class="app-link" href="table.html">Tables</a>
 			<a class="app-link" href="badge.html">Badges</a>
 			<a class="app-link" href="dot.html">Dots</a>
@@ -67,6 +71,7 @@
 			<a class="app-link" href="alert.html">Alerts</a>
 			<a class="app-link" href="toast.html">Toasts</a>
 			<a class="app-link" href="spinner.html">Spinners</a>
+			<a class="app-link" href="progress.html">Progress and meters</a>
 			<a class="app-link" href="busy.html">Busy</a>
 			<a class="app-link" href="save-bar.html">Save bar</a>
 			<a class="app-link" href="selection-bar.html">Selection bar</a>
@@ -94,6 +99,17 @@
 						<li>Font size: 12 14 16 18 20 24 32; line height: 16 20 24 28; radius: 0 4 6 8 12 16 and <code>rounded-full</code>.</li>
 						<li>Width prefixes come on placement and spacing — display, flex, grid, gaps, order, text alignment, margins and paddings: <code>md:d-none</code>, <code>lg:p-24</code>.</li>
 					</ul>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="utilities-ratio">
+					<h2 id="utilities-ratio">Aspect ratio</h2>
+					<p><code>ratio-1x1</code>, <code>ratio-4x3</code>, <code>ratio-16x9</code> and <code>ratio-21x9</code> keep an element's shape as its width changes — on a video, a map, an image's frame; <code>ratio-auto</code> lets it go. The class goes on the element itself: an image inside a frame fills it with <code>w-100 h-100 object-fit-cover</code>.</p>
+					<div class="docs-sample"><div class="docs-example" id="utilities-ratio-boxes">
+						<div class="ratio-16x9 w-50 hstack justify-content-center rounded-8 bg-page text-muted">16 × 9</div>
+						<div class="ratio-1x1 w-25 hstack justify-content-center rounded-8 bg-page text-muted">1 × 1</div>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;div class="ratio-16x9 w-50 hstack justify-content-center rounded-8 bg-page text-muted"&gt;16 × 9&lt;/div&gt;
+&lt;div class="ratio-1x1 w-25 hstack justify-content-center rounded-8 bg-page text-muted"&gt;1 × 1&lt;/div&gt;</code></pre></div>
 				</section>
 
 				<section class="vstack gap-12" aria-labelledby="utilities-all">
@@ -539,6 +555,11 @@
 									<tr><td><code>object-fit-cover</code></td><td><code>object-fit: cover;</code></td><td>—</td></tr>
 									<tr><td><code>object-fit-fill</code></td><td><code>object-fit: fill;</code></td><td>—</td></tr>
 									<tr><td><code>object-fit-none</code></td><td><code>object-fit: none;</code></td><td>—</td></tr>
+									<tr><td><code>ratio-1x1</code></td><td><code>aspect-ratio: 1 / 1;</code></td><td>—</td></tr>
+									<tr><td><code>ratio-4x3</code></td><td><code>aspect-ratio: 4 / 3;</code></td><td>—</td></tr>
+									<tr><td><code>ratio-16x9</code></td><td><code>aspect-ratio: 16 / 9;</code></td><td>—</td></tr>
+									<tr><td><code>ratio-21x9</code></td><td><code>aspect-ratio: 21 / 9;</code></td><td>—</td></tr>
+									<tr><td><code>ratio-auto</code></td><td><code>aspect-ratio: auto;</code></td><td>—</td></tr>
 									<tr><td><code>visible</code></td><td><code>visibility: visible;</code></td><td>—</td></tr>
 									<tr><td><code>invisible</code></td><td><code>visibility: hidden;</code></td><td>—</td></tr>
 									<tr><td><code>user-select-none</code></td><td><code>-webkit-user-select: none; user-select: none;</code></td><td>—</td></tr>
@@ -784,11 +805,7 @@
 									<tr><td><code>py-3</code></td><td><code>py-16</code></td><td>value</td><td>the number is the pixels</td></tr>
 									<tr><td><code>py-4</code></td><td><code>py-24</code></td><td>value</td><td>reused — py-4 means another thing in REDZ.UI; the number is the pixels</td></tr>
 									<tr><td><code>py-5</code></td><td><code>py-48</code></td><td>value</td><td>the number is the pixels</td></tr>
-									<tr><td><code>ratio</code></td><td>—</td><td>missing</td><td>the missing basics: aspect-ratio</td></tr>
-									<tr><td><code>ratio-16x9</code></td><td>—</td><td>missing</td><td>the missing basics: aspect-ratio</td></tr>
-									<tr><td><code>ratio-1x1</code></td><td>—</td><td>missing</td><td>the missing basics: aspect-ratio</td></tr>
-									<tr><td><code>ratio-21x9</code></td><td>—</td><td>missing</td><td>the missing basics: aspect-ratio</td></tr>
-									<tr><td><code>ratio-4x3</code></td><td>—</td><td>missing</td><td>the missing basics: aspect-ratio</td></tr>
+									<tr><td><code>ratio</code></td><td>—</td><td>remove</td><td>the ratio goes on the element itself; an image inside a frame fills it with w-100 h-100 object-fit-cover</td></tr>
 									<tr><td><code>rounded-1</code></td><td><code>rounded-4</code></td><td>value</td><td>4 px</td></tr>
 									<tr><td><code>rounded-2</code></td><td><code>rounded-6</code></td><td>value</td><td>6 px</td></tr>
 									<tr><td><code>rounded-3</code></td><td><code>rounded-8</code></td><td>value</td><td>8 px</td></tr>

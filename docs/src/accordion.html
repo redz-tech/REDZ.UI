@@ -1,0 +1,96 @@
+<header class="vstack gap-8">
+	<h1>Accordions</h1>
+	<p class="docs-lead">Sections that open one at a time, or each on its own, on the browser's own disclosure — <code>&lt;details&gt;</code> and <code>&lt;summary&gt;</code>: no script, the keys and the open state built in, and the browser's find in page opens a closed section on a match.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="accordion-examples">
+	<h2 id="accordion-examples">Examples</h2>
+	<p>Items that share a <code>name</code> are one group: opening one closes the one that was open. <code>open</code> opens an item from the start.</p>
+	<div class="docs-example docs-example-stack" id="accordion-basic">
+		<div class="accordion">
+			<details class="accordion-item" name="accordion-basic" open>
+				<summary class="accordion-header">What does a day trip include?<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+				<div class="accordion-body">The transfer from the hotel, the boat, lunch, snorkelling gear and the park fee.</div>
+			</details>
+			<details class="accordion-item" name="accordion-basic">
+				<summary class="accordion-header">Can I cancel a booking?<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+				<div class="accordion-body">Free of charge up to 24 hours before the start; later, half the price is kept.</div>
+			</details>
+			<details class="accordion-item" name="accordion-basic">
+				<summary class="accordion-header">Are children welcome?<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+				<div class="accordion-body">From four years old; under four they travel free.</div>
+			</details>
+		</div>
+	</div>
+
+	<h3>Each on its own</h3>
+	<p>Without <code>name</code> every item opens and closes by itself.</p>
+	<div class="docs-example docs-example-stack" id="accordion-free">
+		<div class="accordion">
+			<details class="accordion-item" open>
+				<summary class="accordion-header">Pickup<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+				<div class="accordion-body">07:30 at the pier, 07:00 from the hotels of Chaweng.</div>
+			</details>
+			<details class="accordion-item">
+				<summary class="accordion-header">What to bring<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+				<div class="accordion-body">Swimwear, a towel and a sunscreen that spares the reef.</div>
+			</details>
+		</div>
+	</div>
+
+	<h3>Flush</h3>
+	<p><code>accordion-flush</code> drops the frame and the side padding, for sections inside a card or a drawer.</p>
+	<div class="docs-example docs-example-stack" id="accordion-flush">
+		<div class="card">
+			<div class="card-body">
+				<div class="accordion accordion-flush">
+					<details class="accordion-item" name="accordion-flush" open>
+						<summary class="accordion-header">Prices<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+						<div class="accordion-body">Adults 2,500 · children 1,900 · under four free.</div>
+					</details>
+					<details class="accordion-item" name="accordion-flush">
+						<summary class="accordion-header">History<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+						<div class="accordion-body">Edited yesterday by M. K.; published on three sites.</div>
+					</details>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="accordion-states-title">
+	<h2 id="accordion-states-title">States</h2>
+	<div class="docs-states" id="accordion-states" tabindex="0" role="region" aria-labelledby="accordion-states-title">
+		<table class="docs-matrix">
+			<thead>
+				<tr><th scope="col">class</th><th scope="col">rest</th><th scope="col">:hover</th><th scope="col">:focus-visible</th><th scope="col">open</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row">accordion-item</th>
+					<td><div class="accordion"><details class="accordion-item"><summary class="accordion-header">Pickup<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary><div class="accordion-body">07:30 at the pier.</div></details></div></td>
+					<td><div class="accordion"><details class="accordion-item"><summary class="accordion-header" data-docs-state="hover">Pickup<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary><div class="accordion-body">07:30 at the pier.</div></details></div></td>
+					<td><div class="accordion"><details class="accordion-item"><summary class="accordion-header" data-docs-state="focus-visible">Pickup<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary><div class="accordion-body">07:30 at the pier.</div></details></div></td>
+					<td><div class="accordion"><details class="accordion-item" open><summary class="accordion-header">Pickup<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary><div class="accordion-body">07:30 at the pier.</div></details></div></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="accordion-access">
+	<h2 id="accordion-access">Keyboard and accessibility</h2>
+	<table class="table docs-table">
+		<thead><tr><th scope="col">Key</th><th scope="col">On a section's header</th></tr></thead>
+		<tbody>
+			<tr><td><kbd>Enter</kbd>, <kbd>Space</kbd></td><td>Opens or closes the section; in a group, opening it closes the open one</td></tr>
+			<tr><td><kbd>Tab</kbd></td><td>The next header, or the first control inside an open section</td></tr>
+		</tbody>
+	</table>
+	<ul>
+		<li>The header is the <code>&lt;summary&gt;</code> itself, which the browser announces as expanded or collapsed. Put no heading inside it: screen readers announce a heading in a summary unevenly. When the sections need a place in the page's outline, a heading goes before the accordion.</li>
+		<li>The chevron is decoration, <code>aria-hidden="true"</code>; it turns as the section opens.</li>
+		<li>A section opens with a short animation only where the browser has <code>interpolate-size</code>, and only when the reader allows motion; elsewhere it opens at once.</li>
+		<li>From script: <code>details.open = true</code>, and the <code>toggle</code> event after each change.</li>
+	</ul>
+</section>

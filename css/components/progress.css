@@ -1,0 +1,179 @@
+@layer components {
+	.progress,
+	.meter {
+		appearance: none;
+		display: block;
+		inline-size: 100%;
+		block-size: 0.5rem;
+		border: 0;
+		border-radius: 999px;
+		background: var(--redz-bg-hover);
+		overflow: hidden;
+		-webkit-print-color-adjust: exact;
+		print-color-adjust: exact;
+	}
+
+	.progress {
+		color: var(--redz-primary);
+	}
+
+	.progress::-webkit-progress-bar {
+		background: transparent;
+	}
+
+	.progress::-webkit-progress-value {
+		border-radius: inherit;
+		background-color: currentColor;
+	}
+
+	.progress::-moz-progress-bar {
+		border-radius: inherit;
+		background-color: currentColor;
+	}
+
+	.progress-secondary {
+		color: var(--redz-secondary);
+	}
+
+	.progress-success {
+		color: var(--redz-success);
+	}
+
+	.progress-danger {
+		color: var(--redz-danger);
+	}
+
+	.progress-warning {
+		color: var(--redz-warning);
+	}
+
+	.progress-info {
+		color: var(--redz-info);
+	}
+
+	.progress-sm {
+		block-size: 0.25rem;
+	}
+
+	.progress-lg {
+		block-size: 1rem;
+	}
+
+	.progress-striped::-webkit-progress-value {
+		background-image: linear-gradient(45deg, rgb(255 255 255 / 0.25) 25%, transparent 25% 50%, rgb(255 255 255 / 0.25) 50% 75%, transparent 75%);
+		background-size: 1rem 1rem;
+	}
+
+	.progress-striped::-moz-progress-bar {
+		background-image: linear-gradient(45deg, rgb(255 255 255 / 0.25) 25%, transparent 25% 50%, rgb(255 255 255 / 0.25) 50% 75%, transparent 75%);
+		background-size: 1rem 1rem;
+	}
+
+	.progress:indeterminate {
+		background: linear-gradient(to right, transparent 35%, currentColor 35% 65%, transparent 65%) 100% 0 / 300% 100% no-repeat, var(--redz-bg-hover);
+		animation: progress-sweep 1.4s linear infinite;
+	}
+
+	.progress:indeterminate:dir(rtl) {
+		animation-direction: reverse;
+	}
+
+	.progress:indeterminate::-webkit-progress-bar {
+		background: transparent;
+	}
+
+	.progress:indeterminate::-moz-progress-bar {
+		background: transparent;
+	}
+
+	@keyframes progress-sweep {
+		to {
+			background-position: 0 0, 0 0;
+		}
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.progress::-webkit-progress-value {
+			transition: inline-size var(--redz-motion) var(--redz-ease);
+		}
+
+		.progress-animated::-webkit-progress-value {
+			animation: progress-stripes 1s linear infinite;
+		}
+
+		.progress-animated::-moz-progress-bar {
+			animation: progress-stripes 1s linear infinite;
+		}
+	}
+
+	@keyframes progress-stripes {
+		from {
+			background-position: 1rem 0;
+		}
+	}
+
+	.meter::-webkit-meter-bar {
+		block-size: 100%;
+		border: 0;
+		border-radius: inherit;
+		background: transparent;
+	}
+
+	.meter::-webkit-meter-optimum-value {
+		border-radius: inherit;
+		background: var(--redz-success);
+	}
+
+	.meter::-webkit-meter-suboptimum-value {
+		border-radius: inherit;
+		background: var(--redz-warning);
+	}
+
+	.meter::-webkit-meter-even-less-good-value {
+		border-radius: inherit;
+		background: var(--redz-danger);
+	}
+
+	.meter::-moz-meter-bar {
+		border-radius: inherit;
+		background: var(--redz-success);
+	}
+
+	.meter:-moz-meter-sub-optimum::-moz-meter-bar {
+		background: var(--redz-warning);
+	}
+
+	.meter:-moz-meter-sub-sub-optimum::-moz-meter-bar {
+		background: var(--redz-danger);
+	}
+
+	@media (forced-colors: active) {
+		.progress,
+		.meter {
+			forced-color-adjust: none;
+			border: 1px solid CanvasText;
+			background: Canvas;
+			color: Highlight;
+		}
+
+		.progress:indeterminate {
+			background: linear-gradient(to right, transparent 35%, Highlight 35% 65%, transparent 65%) 100% 0 / 300% 100% no-repeat, Canvas;
+		}
+
+		.meter::-webkit-meter-optimum-value {
+			background: Highlight;
+		}
+
+		.meter::-webkit-meter-suboptimum-value {
+			background: Highlight;
+		}
+
+		.meter::-webkit-meter-even-less-good-value {
+			background: Highlight;
+		}
+
+		.meter::-moz-meter-bar {
+			background: Highlight;
+		}
+	}
+}

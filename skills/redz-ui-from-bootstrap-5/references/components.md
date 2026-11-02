@@ -60,8 +60,33 @@ body are `drawer-header`, `drawer-title`, `drawer-body`. It opens like a dialog:
   The `form-check` is the `<label>` around the input; `form-check-label` goes.
 - `form-floating`, `form-control`, `form-select`, `form-label`, `form-text`, `invalid-feedback` keep their names.
 - `is-invalid` → `aria-invalid="true"`; drop `was-validated`, `is-valid` and `valid-feedback`.
-- `input-group` is missing: an icon inside a field is `form-adorn`; a field joined to a button keeps the module's own
-  classes until REDZ.UI has the input group.
+- `input-group`, `input-group-sm` and `input-group-text` keep their names; `input-group-lg` becomes the default size;
+  `has-validation` goes — the error sits under the group in its `form-field`. A menu inside the group stays where it
+  is: the joining skips popovers. An icon inside the field itself is `form-adorn`.
+
+## Accordion and collapse
+
+- The accordion is `<details>`: `accordion-item` on the `<details>`, `accordion-header` on its `<summary>` with the
+  words straight in it, `accordion-body` after it; `accordion-button` and `accordion-collapse` go, and so does the
+  heading around the button. The items of one group share `name="…"` — that replaces `data-bs-parent` — and the open
+  one has `open` instead of `show`. The chevron is `<i class="bi bi-chevron-down accordion-icon" aria-hidden="true">`
+  at the end of the summary.
+- A standalone collapse keeps its button and its region where they are: the button gets `commandfor="ID"
+  command="--toggle" aria-expanded="false"` instead of `data-bs-toggle` and `data-bs-target`; the region drops
+  `collapse` and gets `hidden="until-found"` while closed (no `hidden` when it starts open, its button
+  `aria-expanded="true"`).
+
+## List groups, progress, ratio
+
+- `list-group`, `list-group-item`, `-action`, `-flush`, `-numbered` and `-horizontal` keep their names;
+  `list-group-horizontal-md` → `md:list-group-horizontal`; `active` → `aria-current`, `disabled` → `disabled` on a
+  button or a link without `href` and with `aria-disabled="true"`; the item tones go — a badge or a dot says it.
+- `<div class="progress"><div class="progress-bar" style="width: 40%">` → `<progress class="progress" value="40"
+  max="100">` with a name; `progress-bar-striped` and `-animated` → `progress-striped` and `progress-animated` on the
+  `<progress>`; `bg-success` on the bar → `progress-success`; text inside the bar moves beside it. A quota or a score
+  is a `<meter class="meter">` with `low`, `high` and `optimum`.
+- `ratio ratio-16x9` on a wrapper → `ratio-16x9` on the element itself; an image inside a frame gets `w-100 h-100
+  object-fit-cover`.
 
 ## Tables
 
@@ -85,5 +110,5 @@ Tabs are `<button class="nav-link" role="tab" aria-selected aria-controls>` in a
 
 ## Missing for now
 
-Accordion and collapse, list group, progress, input group, ratio, pagination, popover, carousel, spinner-grow: keep
-their markup under the module's own classes with its prefix, and note it for the order that adds them.
+Pagination, popover, carousel, spinner-grow: keep their markup under the module's own classes with its prefix, and
+note it for the order that adds them.

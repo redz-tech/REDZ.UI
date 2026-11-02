@@ -3,7 +3,7 @@ name: redz-ui
 description: Build or change admin screens with REDZ.UI — its class names, states, commands and page skeleton, with one reference per component. Use when writing HTML, PHP templates or JavaScript for a project that links redz-ui/css/index.css, or when asked for a list, form, card, dialog, menu, tabs or notice in REDZ.UI.
 license: MIT
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # Building screens with REDZ.UI
@@ -24,8 +24,9 @@ where the meaning is the same, and like the platform where Bootstrap 6 moved ont
    `cols-min-240`; a column or a row of items `vstack` / `hstack` with `gap-*`. Components have no outer margin.
 5. A state is the attribute accessibility needs: `aria-current`, `aria-selected`, `aria-pressed`, `aria-expanded`,
    `[open]`, `disabled` / `aria-disabled`, `aria-invalid`, `aria-busy` — never a state class.
-6. Behavior is the browser's commands: `commandfor` + `command="show-modal" | "close" | "toggle-popover"`. Menus, tabs
-   and dialogs need no start-up call; the library listens on the document.
+6. Behavior is the browser's commands: `commandfor` + `command="show-modal" | "close" | "toggle-popover"`, and the
+   library's `--toggle` for a region elsewhere; an accordion is `<details name>`. Menus, tabs, dialogs and regions need
+   no start-up call; the library listens on the document.
 7. Tokens are `--redz-` with the classes' words: `--redz-text-muted`, `--redz-space-16`. No inline styles: values come
    from classes, `<progress>` / `<meter>`, or the module's CSS.
 8. A module's own classes carry its prefix: `orders-summary`, never a bare name that could collide.
@@ -62,8 +63,9 @@ Check it exists: `grep -x 'CLASS' assets/classes.txt`. A class that is not there
 ## References — one per page of the docs
 
 Start: `references/index.md` (getting started), `layout.md`, `utilities.md`, `tokens.md`, `icons.md`.
-Actions: `btn.md`, `chip.md`, `menu.md`. Forms: `form.md`, `check.md`. Content: `card.md`, `table.md`, `badge.md`,
-`dot.md`, `avatar.md`, `icon-tile.md`, `empty-state.md`, `placeholder.md`. Layers: `dialog.md`, `drawer.md`,
-`tooltip.md`. Feedback: `alert.md`, `toast.md`, `spinner.md`, `busy.md`, `save-bar.md`, `selection-bar.md`.
+Actions: `btn.md`, `chip.md`, `menu.md`. Forms: `form.md`, `input-group.md`, `check.md`. Content: `card.md`,
+`accordion.md`, `collapse.md`, `list-group.md`, `table.md`, `badge.md`, `dot.md`, `avatar.md`, `icon-tile.md`,
+`empty-state.md`, `placeholder.md`. Layers: `dialog.md`, `drawer.md`, `tooltip.md`. Feedback: `alert.md`, `toast.md`,
+`spinner.md`, `progress.md`, `busy.md`, `save-bar.md`, `selection-bar.md`.
 Navigation: `nav.md`, `breadcrumb.md`, `app.md`. The same pages live at
 `https://redz-tech.github.io/REDZ.UI/docs/`.

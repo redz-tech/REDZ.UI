@@ -47,9 +47,13 @@
 			<a class="app-link" href="menu.html">القوائم</a>
 			<div class="app-section">النماذج</div>
 			<a class="app-link" href="form.html">حقول النماذج</a>
+			<a class="app-link" href="input-group.html">مجموعات الإدخال</a>
 			<a class="app-link" href="check.html">مربعات الاختيار وأزرار الاختيار والمفاتيح</a>
 			<div class="app-section">المحتوى</div>
 			<a class="app-link" href="card.html">البطاقات</a>
+			<a class="app-link" href="accordion.html">الأكورديونات</a>
+			<a class="app-link" href="collapse.html">الطي</a>
+			<a class="app-link" href="list-group.html">مجموعات القوائم</a>
 			<a class="app-link" href="table.html">الجداول</a>
 			<a class="app-link" href="badge.html">الشارات</a>
 			<a class="app-link" href="dot.html">النقاط</a>
@@ -65,6 +69,7 @@
 			<a class="app-link" href="alert.html">التنبيهات</a>
 			<a class="app-link" href="toast.html">الإشعارات المنبثقة</a>
 			<a class="app-link" href="spinner.html">مؤشرات التحميل</a>
+			<a class="app-link" href="progress.html">أشرطة التقدم والمقاييس</a>
 			<a class="app-link" href="busy.html">الانشغال</a>
 			<a class="app-link" href="save-bar.html">شريط الحفظ</a>
 			<a class="app-link" href="selection-bar.html">شريط التحديد</a>
@@ -115,6 +120,14 @@
 							<button class="btn btn-sm ms-auto" type="button">معاينة</button>
 							<button class="btn btn-sm btn-primary" type="button">نشر</button>
 						</div>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-utilities">
+					<h2 id="all-utilities"><a href="utilities.html">الأدوات المساعدة</a></h2>
+					<div class="docs-example" id="utilities-ratio-boxes">
+						<div class="ratio-16x9 w-50 hstack justify-content-center rounded-8 bg-page text-muted">16 × 9</div>
+						<div class="ratio-1x1 w-25 hstack justify-content-center rounded-8 bg-page text-muted">1 × 1</div>
 					</div>
 				</section>
 
@@ -521,6 +534,78 @@
 					</div>
 				</section>
 
+				<section class="vstack gap-16" aria-labelledby="all-input-group">
+					<h2 id="all-input-group"><a href="input-group.html">مجموعات الإدخال</a></h2>
+					<div class="docs-example docs-example-stack" id="input-group-basic">
+						<div class="input-group">
+							<input class="form-control" type="text" inputmode="decimal" value="2,500" aria-label="سعر البالغ" aria-describedby="input-group-basic-unit">
+							<span class="input-group-text" id="input-group-basic-unit">THB</span>
+						</div>
+						<div class="input-group">
+							<span class="input-group-text">https://</span>
+							<input class="form-control" type="text" value="angthong.example" aria-label="عنوان الموقع">
+						</div>
+						<div class="input-group">
+							<input class="form-control" type="text" value="R7K2-9QXM" readonly="" aria-label="رمز الدخول">
+							<button class="btn" type="button"><i class="bi bi-clipboard" aria-hidden="true"></i>نسخ</button>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="input-group-choice">
+						<div class="input-group">
+							<select class="form-select" aria-label="العملة">
+								<option>THB</option>
+								<option>USD</option>
+								<option>EUR</option>
+							</select>
+							<input class="form-control" type="text" inputmode="decimal" value="1,900" aria-label="سعر الطفل">
+						</div>
+						<div class="input-group">
+							<label class="input-group-text"><input class="check" type="checkbox" checked="">خصم</label>
+							<input class="form-control" type="text" inputmode="decimal" value="10" aria-label="الخصم، بالنسبة المئوية">
+							<span class="input-group-text">%</span>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="input-group-menu">
+						<div class="input-group">
+							<input class="form-control" type="search" placeholder="البحث في الرحلات" aria-label="البحث في الرحلات">
+							<button class="btn" type="button" commandfor="input-group-menu-in" command="toggle-popover" aria-haspopup="menu">في كل مكان<i class="bi bi-chevron-down" aria-hidden="true"></i></button>
+							<div id="input-group-menu-in" class="menu" popover="" role="menu" aria-label="البحث في">
+								<button class="menu-item" type="button" role="menuitemradio" aria-checked="true">في كل مكان</button>
+								<button class="menu-item" type="button" role="menuitemradio" aria-checked="false">العناوين</button>
+								<button class="menu-item" type="button" role="menuitemradio" aria-checked="false">الأوصاف</button>
+							</div>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="input-group-field">
+						<div class="form-field">
+							<label class="form-label" for="input-group-field-months">أشهر مجانية</label>
+							<div class="input-group input-group-sm">
+								<input class="form-control" id="input-group-field-months" type="text" inputmode="numeric" value="3" aria-describedby="input-group-field-hint">
+								<span class="input-group-text">أشهر</span>
+								<button class="btn btn-sm btn-icon" type="button" aria-label="إزالة"><i class="bi bi-trash" aria-hidden="true"></i></button>
+							</div>
+							<div class="form-text" id="input-group-field-hint">تُمنح مع الاشتراك السنوي.</div>
+						</div>
+					</div>
+					<div class="docs-states" id="input-group-states" tabindex="0" role="region" aria-labelledby="input-group-states-title">
+						<table class="docs-matrix">
+							<thead>
+								<tr><th scope="col">class</th><th scope="col">rest</th><th scope="col">:hover</th><th scope="col">:focus</th><th scope="col">aria-invalid</th><th scope="col">disabled</th></tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">input-group</th>
+									<td><div class="input-group"><input class="form-control" type="text" value="2,500" aria-label="في وضع السكون"><span class="input-group-text">THB</span></div></td>
+									<td><div class="input-group"><input class="form-control" type="text" value="2,500" aria-label="تحت المؤشر" data-docs-state="hover"><span class="input-group-text">THB</span></div></td>
+									<td><div class="input-group"><input class="form-control" type="text" value="2,500" aria-label="مركّز عليه" data-docs-state="focus"><span class="input-group-text">THB</span></div></td>
+									<td><div class="input-group"><input class="form-control" type="text" value="25OO" aria-label="غير صالح" aria-invalid="true"><span class="input-group-text">THB</span></div></td>
+									<td><div class="input-group"><input class="form-control" type="text" value="2,500" aria-label="معطّل" disabled=""><span class="input-group-text">THB</span></div></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
 				<section class="vstack gap-16" aria-labelledby="all-check">
 					<h2 id="all-check"><a href="check.html">مربعات الاختيار وأزرار الاختيار والمفاتيح</a></h2>
 					<div class="docs-example docs-example-stack" id="check-boxes">
@@ -615,6 +700,159 @@
 							<section class="card" aria-labelledby="card-grid-a"><div class="card-header"><h2 id="card-grid-a">الحجوزات</h2></div><div class="card-body"><p class="fs-24 fw-600 tabular-nums">128</p><p class="text-muted">هذا الأسبوع</p></div></section>
 							<section class="card" aria-labelledby="card-grid-b"><div class="card-header"><h2 id="card-grid-b">الإيرادات</h2></div><div class="card-body"><p class="fs-24 fw-600 tabular-nums">312,400 بات</p><p class="text-muted">هذا الأسبوع</p></div></section>
 						</div>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-accordion">
+					<h2 id="all-accordion"><a href="accordion.html">الأكورديونات</a></h2>
+					<div class="docs-example docs-example-stack" id="accordion-basic">
+						<div class="accordion">
+							<details class="accordion-item" name="accordion-basic" open="">
+								<summary class="accordion-header">ماذا تشمل الرحلة اليومية؟<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+								<div class="accordion-body">النقل من الفندق والقارب والغداء ومعدات الغطس السطحي ورسوم الحديقة.</div>
+							</details>
+							<details class="accordion-item" name="accordion-basic">
+								<summary class="accordion-header">هل يمكنني إلغاء الحجز؟<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+								<div class="accordion-body">مجانًا حتى 24 ساعة قبل الموعد؛ وبعد ذلك يُحتفظ بنصف السعر.</div>
+							</details>
+							<details class="accordion-item" name="accordion-basic">
+								<summary class="accordion-header">هل يُرحَّب بالأطفال؟<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+								<div class="accordion-body">من عمر أربع سنوات؛ ومن هم دون الرابعة يسافرون مجانًا.</div>
+							</details>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="accordion-free">
+						<div class="accordion">
+							<details class="accordion-item" open="">
+								<summary class="accordion-header">الاستقبال<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+								<div class="accordion-body">07:30 عند الرصيف، و07:00 من فنادق تشاوينغ.</div>
+							</details>
+							<details class="accordion-item">
+								<summary class="accordion-header">ما الذي تحضره<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+								<div class="accordion-body">ملابس السباحة ومنشفة وواقٍ من الشمس لا يضر بالشعاب المرجانية.</div>
+							</details>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="accordion-flush">
+						<div class="card">
+							<div class="card-body">
+								<div class="accordion accordion-flush">
+									<details class="accordion-item" name="accordion-flush" open="">
+										<summary class="accordion-header">الأسعار<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+										<div class="accordion-body">البالغون 2,500 · الأطفال 1,900 · مجانًا لمن هم دون الرابعة.</div>
+									</details>
+									<details class="accordion-item" name="accordion-flush">
+										<summary class="accordion-header">السجل<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+										<div class="accordion-body">عدّلها أمس م. ك.؛ ونُشرت على ثلاثة مواقع.</div>
+									</details>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="docs-states" id="accordion-states" tabindex="0" role="region" aria-labelledby="accordion-states-title">
+						<table class="docs-matrix">
+							<thead>
+								<tr><th scope="col">class</th><th scope="col">rest</th><th scope="col">:hover</th><th scope="col">:focus-visible</th><th scope="col">open</th></tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">accordion-item</th>
+									<td><div class="accordion"><details class="accordion-item"><summary class="accordion-header">الاستقبال<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary><div class="accordion-body">07:30 عند الرصيف.</div></details></div></td>
+									<td><div class="accordion"><details class="accordion-item"><summary class="accordion-header" data-docs-state="hover">الاستقبال<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary><div class="accordion-body">07:30 عند الرصيف.</div></details></div></td>
+									<td><div class="accordion"><details class="accordion-item"><summary class="accordion-header" data-docs-state="focus-visible">الاستقبال<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary><div class="accordion-body">07:30 عند الرصيف.</div></details></div></td>
+									<td><div class="accordion"><details class="accordion-item" open=""><summary class="accordion-header">الاستقبال<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary><div class="accordion-body">07:30 عند الرصيف.</div></details></div></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-collapse">
+					<h2 id="all-collapse"><a href="collapse.html">الطي</a></h2>
+					<div class="docs-example docs-example-stack" id="collapse-help">
+						<div class="hstack gap-8">
+							<button class="btn btn-sm" type="button" commandfor="collapse-help-text" command="--toggle" aria-expanded="false" aria-controls="collapse-help-text"><i class="bi bi-question-circle" aria-hidden="true"></i>كيف تُحسب الأسعار</button>
+						</div>
+						<div id="collapse-help-text" hidden="until-found">
+							<p class="text-muted">السعر للشخص الواحد. يدفع الأطفال من الرابعة حتى الحادية عشرة سعر الطفل، ومن هم دون الرابعة يسافرون مجانًا.</p>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="collapse-open">
+						<div class="hstack gap-8">
+							<button class="btn btn-sm" type="button" commandfor="collapse-open-filters" command="--toggle" aria-expanded="true" aria-controls="collapse-open-filters"><i class="bi bi-funnel" aria-hidden="true"></i>مزيد من عوامل التصفية</button>
+						</div>
+						<div id="collapse-open-filters" class="hstack flex-wrap gap-8">
+							<button class="chip" type="button" aria-pressed="true">مع الغداء</button>
+							<button class="chip" type="button" aria-pressed="false">خاصة</button>
+							<button class="chip" type="button" aria-pressed="false">الغروب</button>
+						</div>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-list-group">
+					<h2 id="all-list-group"><a href="list-group.html">مجموعات القوائم</a></h2>
+					<div class="docs-example docs-example-stack" id="list-group-basic">
+						<ul class="list-group">
+							<li class="list-group-item">حديقة أنغ ثونغ البحرية</li>
+							<li class="list-group-item">كو تاو وكو نانغ يوان</li>
+							<li class="list-group-item">الجزر الخمس بقوارب الكاياك</li>
+						</ul>
+					</div>
+					<div class="docs-example docs-example-stack" id="list-group-action">
+						<nav class="list-group" aria-label="المواقع">
+							<a class="list-group-item list-group-item-action" href="#list-group-action" aria-current="page">جميع المواقع</a>
+							<a class="list-group-item list-group-item-action" href="#list-group-action">lagoon.example</a>
+							<a class="list-group-item list-group-item-action" href="#list-group-action">angthong.example</a>
+							<a class="list-group-item list-group-item-action" aria-disabled="true">archive.example</a>
+						</nav>
+						<div class="list-group" role="group" aria-label="الاستيراد من">
+							<button class="list-group-item list-group-item-action" type="button">ملف CSV</button>
+							<button class="list-group-item list-group-item-action" type="button">موقع آخر</button>
+							<button class="list-group-item list-group-item-action" type="button" disabled="">الكتالوج القديم</button>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="list-group-flush">
+						<div class="card">
+							<div class="card-body">
+								<ol class="list-group list-group-flush list-group-numbered">
+									<li class="list-group-item hstack gap-8"><span class="flex-fill">حديقة أنغ ثونغ البحرية</span><span class="badge">28</span></li>
+									<li class="list-group-item hstack gap-8"><span class="flex-fill">كو تاو</span><span class="badge">11</span></li>
+									<li class="list-group-item hstack gap-8"><span class="flex-fill">الجزر الخمس</span><span class="badge badge-subtle-warning">3</span></li>
+								</ol>
+							</div>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="list-group-horizontal">
+						<ul class="list-group md:list-group-horizontal">
+							<li class="list-group-item">النقل</li>
+							<li class="list-group-item">القارب</li>
+							<li class="list-group-item">الغداء</li>
+							<li class="list-group-item">رسوم الحديقة</li>
+						</ul>
+					</div>
+					<div class="docs-example docs-example-stack" id="list-group-checks">
+						<div class="list-group" role="group" aria-label="العرض على">
+							<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" checked="">lagoon.example</label>
+							<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" checked="">angthong.example</label>
+							<label class="list-group-item hstack gap-8"><input class="check" type="checkbox">kohtao.example</label>
+						</div>
+					</div>
+					<div class="docs-states" id="list-group-states" tabindex="0" role="region" aria-labelledby="list-group-states-title">
+						<table class="docs-matrix">
+							<thead>
+								<tr><th scope="col">class</th><th scope="col">rest</th><th scope="col">:hover</th><th scope="col">:focus-visible</th><th scope="col">aria-current</th><th scope="col">disabled</th></tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">list-group-item-action</th>
+									<td><div class="list-group" role="group" aria-label="في وضع السكون"><button class="list-group-item list-group-item-action" type="button">كو تاو</button></div></td>
+									<td><div class="list-group" role="group" aria-label="تحت المؤشر"><button class="list-group-item list-group-item-action" type="button" data-docs-state="hover">كو تاو</button></div></td>
+									<td><div class="list-group" role="group" aria-label="مركّز عليه"><button class="list-group-item list-group-item-action" type="button" data-docs-state="focus-visible">كو تاو</button></div></td>
+									<td><div class="list-group" role="group" aria-label="الحالي"><button class="list-group-item list-group-item-action" type="button" aria-current="true">كو تاو</button></div></td>
+									<td><div class="list-group" role="group" aria-label="معطّل"><button class="list-group-item list-group-item-action" type="button" disabled="">كو تاو</button></div></td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 				</section>
 
@@ -949,6 +1187,37 @@
 					<div class="docs-example" id="spinner-inline">
 						<span class="hstack gap-8"><span class="spinner-border" aria-hidden="true"></span>جارٍ إعادة بناء 3 صفحات…</span>
 						<span class="hstack gap-8 text-primary fs-20"><span class="spinner-border" aria-hidden="true"></span>أكبر، بلون التمييز</span>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-progress">
+					<h2 id="all-progress"><a href="progress.html">أشرطة التقدم والمقاييس</a></h2>
+					<div class="docs-example docs-example-stack" id="progress-basic">
+						<div class="form-field">
+							<label class="form-label" for="progress-basic-upload">رفع الصور</label>
+							<div class="hstack gap-12">
+								<progress class="progress" id="progress-basic-upload" value="40" max="100">40 %</progress>
+								<span class="text-muted fs-12 text-nowrap">40 %</span>
+							</div>
+						</div>
+						<progress class="progress" aria-label="إعادة بناء الصفحات"></progress>
+					</div>
+					<div class="docs-example docs-example-stack" id="progress-tones">
+						<progress class="progress progress-success" value="75" max="100" aria-label="منشور، 75 بالمئة"></progress>
+						<progress class="progress progress-warning progress-sm" value="50" max="100" aria-label="مترجم، 50 بالمئة"></progress>
+						<progress class="progress progress-danger progress-lg" value="20" max="100" aria-label="فشل، 20 بالمئة"></progress>
+						<progress class="progress progress-lg progress-striped progress-animated" value="60" max="100" aria-label="جارٍ النشر، 60 بالمئة"></progress>
+					</div>
+					<div class="docs-example docs-example-stack" id="progress-meter">
+						<div class="form-field">
+							<label class="form-label" for="progress-meter-storage">المساحة المستخدمة</label>
+							<div class="hstack gap-12">
+								<meter class="meter" id="progress-meter-storage" value="3.1" min="0" max="10" low="7" high="9" optimum="0">3.1 من 10 غيغابايت</meter>
+								<span class="text-muted fs-12 text-nowrap">3.1 من 10 غيغابايت</span>
+							</div>
+						</div>
+						<meter class="meter" value="8" min="0" max="10" low="7" high="9" optimum="0" aria-label="الصور، 8 من 10 غيغابايت">8 من 10 غيغابايت</meter>
+						<meter class="meter" value="9.6" min="0" max="10" low="7" high="9" optimum="0" aria-label="النسخ الاحتياطية، 9.6 من 10 غيغابايت">9.6 من 10 غيغابايت</meter>
 					</div>
 				</section>
 

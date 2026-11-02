@@ -117,6 +117,10 @@ window.REDZ_PROBE = (() => {
 				unregioned: unregioned.slice(0, 8),
 				cut: cut.slice(0, 8),
 				busyLive: [...document.querySelectorAll('[aria-busy="true"]')].filter((el) => el.matches(live) || el.querySelector(live) !== null).slice(0, 8).map(name),
+				toggles: [...document.querySelectorAll('button[command="--toggle"][commandfor]')].filter((button) => {
+					const target = document.getElementById(button.getAttribute('commandfor') || '');
+					return target === null || button.getAttribute('aria-expanded') !== String(!target.hidden);
+				}).slice(0, 8).map((button) => name(button) + ' → #' + button.getAttribute('commandfor')),
 				hidden: document.visibilityState !== 'visible',
 				ui: typeof globalThis.REDZ?.ui?.toast === 'function'
 			};
@@ -135,15 +139,15 @@ window.REDZ_PROBE = (() => {
 			}
 			return mirrored.map(([twin, copy]) => ({state: copy.dataset.docsState, what: name(twin)}));
 		},
-		// The twin brought into view: the point of its middle. For a focus, a button put just before it takes the focus,
-		// so that the next Tab — a real key — gives it to the twin.
+		// The twin brought into view: the point of its middle. For a focus, a button put just before it — before its
+		// <details>, for a summary — takes the focus, so that the next Tab, a real key, gives it to the twin.
 		async rest(i, focus) {
 			const [twin] = mirrored[i];
 			twin.scrollIntoView({block: 'center', inline: 'center'});
 			if (focus) {
 				const before = Object.assign(document.createElement('button'), {type: 'button', textContent: 'probe'});
 				before.dataset.probeBefore = '';
-				twin.before(before);
+				(twin.localName === 'summary' ? twin.parentElement : twin).before(before);
 				before.focus();
 			}
 			await frames();
@@ -199,14 +203,15 @@ window.REDZ_PROBE = (() => {
 		errors() {
 			return errors.splice(0);
 		},
-		// The widgets a keyboard walk tries: each menu and modal dialog by its first shown invoker, each tab list.
+		// The widgets a keyboard walk tries: each menu, modal dialog and region a --toggle button opens by its first shown
+		// invoker, each tab list, each accordion.
 		keyTargets() {
 			const out = [];
 			const seen = new Set();
 			for (const invoker of document.querySelectorAll('[commandfor]')) {
 				const target = document.getElementById(invoker.getAttribute('commandfor') || '');
 				const command = invoker.getAttribute('command') || '';
-				const kind = target?.getAttribute('role') === 'menu' && command === 'toggle-popover' ? 'menu' : (target?.localName === 'dialog' && command === 'show-modal' ? 'dialog' : '');
+				const kind = target?.getAttribute('role') === 'menu' && command === 'toggle-popover' ? 'menu' : (target?.localName === 'dialog' && command === 'show-modal' ? 'dialog' : (target && command === '--toggle' ? 'toggle' : ''));
 				if (kind !== '' && !seen.has(target) && shown(invoker)) {
 					seen.add(target);
 					invoker.setAttribute('data-probe-invoker', target.id);
@@ -219,16 +224,41 @@ window.REDZ_PROBE = (() => {
 					out.push({kind: 'tabs', id: String(out.length), outside: false});
 				}
 			}
+			for (const accordion of document.querySelectorAll('.accordion')) {
+				if (shown(accordion) && accordion.querySelector(':scope > details > summary') !== null) {
+					accordion.setAttribute('data-probe-accordion', String(out.length));
+					out.push({kind: 'accordion', id: String(out.length), outside: false});
+				}
+			}
 			return out;
 		},
+		// The accordion's item the walk drives: the second, or the only one.
+		walkedItem(id) {
+			const items = [...document.querySelectorAll('[data-probe-accordion="' + id + '"] > details')];
+			return items[Math.min(1, items.length - 1)];
+		},
 		focus(kind, id) {
-			const el = kind === 'tabs' ? document.querySelector('[data-probe-tablist="' + id + '"] [role="tab"][aria-selected="true"]') : document.querySelector('[data-probe-invoker="' + id + '"]');
+			const el = kind === 'tabs' ? document.querySelector('[data-probe-tablist="' + id + '"] [role="tab"][aria-selected="true"]') : (kind === 'accordion' ? this.walkedItem(id).querySelector(':scope > summary') : document.querySelector('[data-probe-invoker="' + id + '"]'));
 			el.scrollIntoView({block: 'nearest'});
 			el.focus();
 			return document.activeElement === el;
 		},
+		// The middle of the walked accordion item's summary, a point of the viewport.
+		summaryPoint(id) {
+			const box = this.walkedItem(id).querySelector(':scope > summary').getBoundingClientRect();
+			return [Math.round(box.left + box.width / 2), Math.round(box.top + box.height / 2)];
+		},
 		state(kind, id) {
 			const active = document.activeElement;
+			if (kind === 'accordion') {
+				const items = [...document.querySelectorAll('[data-probe-accordion="' + id + '"] > details')];
+				const walked = this.walkedItem(id);
+				return {open: items.flatMap((item, i) => item.open ? [i] : []), walked: items.indexOf(walked), grouped: walked.name !== '' && items.every((item) => item.name === walked.name), onSummary: active === walked.querySelector(':scope > summary')};
+			}
+			if (kind === 'toggle') {
+				const invoker = document.querySelector('[data-probe-invoker="' + id + '"]');
+				return {open: !document.getElementById(id).hidden, expanded: invoker.getAttribute('aria-expanded'), onInvoker: active === invoker};
+			}
 			if (kind === 'tabs') {
 				const list = document.querySelector('[data-probe-tablist="' + id + '"]');
 				const tabs = [...list.querySelectorAll('[role="tab"]')];

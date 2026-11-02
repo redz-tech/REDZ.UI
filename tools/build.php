@@ -3,9 +3,10 @@
 // (Bootstrap 5's utility names, the number is the value, width prefixes measured by the region, print) and css/icons.css
 // (one mask per file of icons/); then the release's passport redz-ui.json — the version of the changelog's newest
 // section, the floor, the files a bundle joins in their order, the vocabulary and the sha256 of every file a release
-// archives; then holds the budgets — the stylesheet and the scripts each as ONE concatenation of the files their entry
-// pulls in, gzip -9, the way a consumer's bundle serves them. Usage: php tools/build.php [--check] — --check writes
-// nothing and exits 1 when a file is out of date or a budget is exceeded.
+// archives — and that every skill carries that version; then holds the budgets — the stylesheet and the scripts each as
+// ONE concatenation of the files their entry pulls in, gzip -9, the way a consumer's bundle serves them. Usage: php
+// tools/build.php [--check] — --check writes nothing and exits 1 when a file is out of date, a skill's version is not
+// the passport's or a budget is exceeded.
 require __DIR__ . '/lib.php';
 
 const BUILD_ROOT = __DIR__ . '/..';
@@ -279,6 +280,12 @@ function BUILD__Main(array $argv): int
 	if ($stale !== []) {
 		fwrite(STDERR, 'out of date: ' . implode(', ', $stale) . " — run php tools/build.php\n");
 		return 1;
+	}
+	foreach (glob(BUILD_ROOT . '/skills/*/SKILL.md') ?: [] as $skill) {
+		if (preg_match('~^\s+version: "' . preg_quote(BUILD__Version(), '~') . '"$~m', (string)file_get_contents($skill)) !== 1) {
+			fwrite(STDERR, substr($skill, strlen(BUILD_ROOT) + 1) . ': metadata.version is not the changelog\'s ' . BUILD__Version() . "\n");
+			return 1;
+		}
 	}
 	$over = [];
 	$line = [];

@@ -1,0 +1,113 @@
+@layer components {
+	.accordion {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.accordion-item {
+		border: 1px solid var(--redz-border);
+		background: var(--redz-bg);
+	}
+
+	.accordion-item + .accordion-item {
+		border-block-start: 0;
+	}
+
+	.accordion-item:first-child {
+		border-start-start-radius: var(--redz-radius-12);
+		border-start-end-radius: var(--redz-radius-12);
+	}
+
+	.accordion-item:last-child {
+		border-end-start-radius: var(--redz-radius-12);
+		border-end-end-radius: var(--redz-radius-12);
+	}
+
+	.accordion-header {
+		display: flex;
+		align-items: center;
+		gap: var(--redz-space-12);
+		padding: var(--redz-space-12) var(--redz-space-16);
+		border-radius: inherit;
+		color: var(--redz-text);
+		font-weight: 550;
+		list-style: none;
+		cursor: pointer;
+	}
+
+	.accordion-header::-webkit-details-marker {
+		display: none;
+	}
+
+	.accordion-header:hover {
+		background: var(--redz-bg-hover);
+	}
+
+	.accordion-header:focus-visible {
+		outline-offset: -2px;
+	}
+
+	.accordion-item[open] > .accordion-header {
+		border-end-start-radius: 0;
+		border-end-end-radius: 0;
+	}
+
+	.accordion-icon {
+		margin-inline-start: auto;
+		color: var(--redz-text-muted);
+	}
+
+	.accordion-item[open] > .accordion-header > .accordion-icon {
+		rotate: 180deg;
+	}
+
+	.accordion-body {
+		padding: 0 var(--redz-space-16) var(--redz-space-16);
+		color: var(--redz-text-muted);
+	}
+
+	.accordion-flush > .accordion-item {
+		border-inline: 0;
+		border-radius: 0;
+		background: transparent;
+	}
+
+	.accordion-flush > .accordion-item:first-child {
+		border-block-start: 0;
+	}
+
+	.accordion-flush > .accordion-item:last-child {
+		border-block-end: 0;
+	}
+
+	.accordion-flush > .accordion-item > .accordion-header {
+		padding-inline: 0;
+		border-radius: 0;
+	}
+
+	.accordion-flush > .accordion-item > .accordion-body {
+		padding-inline: 0;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.accordion-icon {
+			transition: rotate var(--redz-motion) var(--redz-ease);
+		}
+
+		@supports (interpolate-size: allow-keywords) and selector(::details-content) {
+			.accordion {
+				interpolate-size: allow-keywords;
+			}
+
+			.accordion-item::details-content {
+				block-size: 0;
+				overflow-y: clip;
+				transition: block-size var(--redz-motion) var(--redz-ease), content-visibility var(--redz-motion) allow-discrete;
+			}
+
+			.accordion-item[open]::details-content {
+				block-size: auto;
+			}
+		}
+	}
+}

@@ -94,13 +94,14 @@ icon-link(-hover)?		review	icons	a link with its icon: hstack gap-4
 img-fluid		review	utilities	images never overflow their box here; w-100 to fill it
 img-thumbnail		missing	utilities
 figure|figure-img|figure-caption		missing	utilities
-ratio|ratio-(1x1|4x3|16x9|21x9)		missing	utilities	the missing basics: aspect-ratio
+ratio		remove	utilities	the ratio goes on the element itself; an image inside a frame fills it with w-100 h-100 object-fit-cover
+ratio-(1x1|4x3|16x9|21x9)	ratio-$1	same	utilities	on the element itself, not a wrapper
 
 # States and transitions: attributes and the browser's own.
 active		state		aria-current, aria-selected or aria-pressed — the attribute of the element's role
 disabled		state		disabled, or aria-disabled="true" to keep the focus
 show|showing		state		the browser's [open] and :popover-open
-collapsed		state		aria-expanded="false" on the button, set by the browser
+collapsed		state		aria-expanded="false" on the button, set by the browser or by --toggle
 hide|hiding		state		closed: no attribute
 fade		remove		the components animate themselves, and not for people who ask for less motion
 pointer-event		remove		carousel only
@@ -153,7 +154,9 @@ form-range		missing	form
 form-control-plaintext		review	form	readonly on a form-control, or plain text
 form-control-color		review	form	a native <input type="color"> in the module's CSS
 col-form-label(-sm|-lg)?	form-label	review	form	a form-label in a form-field
-input-group|input-group-(sm|lg|text)		missing	form	the missing basics; an icon inside a field is form-adorn
+(input-group|input-group-sm|input-group-text)	$1	same	input-group
+input-group-lg	input-group	review	input-group	no larger size: the default group, or input-group-sm
+has-validation		remove	input-group	the error goes under the group, in its form-field
 card-(title|subtitle|text|link)		review	card	a heading and paragraphs in card-body
 card-img|card-img-(top|bottom|overlay)		missing	card
 card-group		review	card	grid with gap-16
@@ -179,10 +182,23 @@ spinner-border-sm		review	spinner	the spinner is 1 em: set the font size
 spinner-grow|spinner-grow-sm		missing	spinner
 placeholder-(xs|sm|lg)		review	placeholder	size by the height of the bar
 placeholder-(glow|wave)		remove	placeholder	placeholders pulse by themselves
-accordion|accordion-.+		missing		the missing basics: <details> and <summary>
-collapse|collapsing|collapse-horizontal		missing		the missing basics: <details>, or hidden switched by a command
-list-group|list-group-.+		missing		the missing basics
-progress|progress-bar|progress-bar-(striped|animated)|progress-stacked		missing		the missing basics: <progress> and <meter>
+(accordion|accordion-body|accordion-flush)	$1	same	accordion
+accordion-item	accordion-item	review	accordion	a <details>; the items of one group share a name, as data-bs-parent did
+accordion-header	accordion-header	review	accordion	the item's <summary> with the button's words in it — no heading and no button inside
+accordion-button		remove	accordion	the summary is the button; its chevron is <i class="bi bi-chevron-down accordion-icon">
+accordion-collapse		remove	accordion	the body follows the summary inside the <details>
+collapse		state	collapse	closed: hidden="until-found" on the region; open: no hidden; its button has command="--toggle"
+collapsing		remove	collapse	the region opens at once
+collapse-horizontal		review	collapse	not planned: a region opens downward, in its place
+(list-group|list-group-item|list-group-item-action|list-group-flush|list-group-numbered|list-group-horizontal)	$1	same	list-group
+list-group-horizontal-(sm|md|lg|xl)	$1:list-group-horizontal	rename	list-group	from that width of the region, not of the window
+list-group-horizontal-xxl	2xl:list-group-horizontal	rename	list-group	from that width of the region, not of the window
+list-group-item-(primary|secondary|success|danger|warning|info|light|dark)		review	list-group	no item tones: a badge or a dot in the item says it
+progress	progress	review	progress	on a <progress value="40" max="100"> itself, not around a progress-bar with a width; a tone is progress-success and the like, not bg-* on the bar
+progress-bar		remove	progress	the browser draws the bar from value
+progress-bar-striped	progress-striped	rename	progress
+progress-bar-animated	progress-animated	rename	progress	it moves only while motion is allowed
+progress-stacked		review	progress	not planned: one <progress> a value
 pagination|pagination-(sm|lg)|page-item|page-link		missing		lists here page by “Next 25” (keyset), no page numbers
 carousel|carousel-.+		missing		not planned
 

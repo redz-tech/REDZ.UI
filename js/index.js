@@ -3,6 +3,7 @@ import './commands.js';
 import './menu.js';
 import './menu-place.js';
 import './tabs.js';
+import './toggle.js';
 import './dialog.js';
 import {toast} from './toast.js';
 import {confirm} from './confirm.js';
