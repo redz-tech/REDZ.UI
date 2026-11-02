@@ -89,7 +89,7 @@ element and markup added later works the same:
   aside, every word found, the best first — the arrow keys move the active option while the focus stays in the field,
   Enter takes it, and once the typing pauses that option is said politely, or the count when nothing is found. In a form, a `combobox-toggle` button shows the value and opens
   the panel, and the value lives in hidden fields named by the list's `data-name`; a page that searches its server
-  cancels `redz:filter` and puts the options in. The command palette is the same search in a `<dialog>`, its options
+  cancels `redz:search` and puts the options in. The command palette is the same search in a `<dialog>`, its options
   links and buttons (`js/combobox.js`).
 - **Shortcuts:** a button or link whose `aria-keyshortcuts` names a combination with Control, Meta or Alt is pressed by
   it — `Meta+K Control+K` answers ⌘K on Apple's systems and Ctrl K elsewhere (`js/shortcuts.js`).

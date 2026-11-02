@@ -2,7 +2,7 @@
 // controls as one types — case and accents aside, every word found, the best first — and the arrow keys move the active
 // option while the focus stays in the field; Enter takes it. A choice in a form: a face button shows the value and opens
 // a panel with the search, the value lives in hidden fields named by the list's data-name; the palette: the same search
-// in a dialog, its options links and buttons. A page that finds options itself cancels redz:filter and puts them in.
+// in a dialog, its options links and buttons. A page that finds options itself cancels redz:search and puts them in.
 import {text, textCount} from './text.js';
 
 const OPTION = '[role="option"]';
@@ -432,7 +432,7 @@ document.addEventListener('input', (event) => {
 	aborts.get(input)?.abort();
 	const controller = new AbortController();
 	aborts.set(input, controller);
-	const asked = new CustomEvent('redz:filter', {bubbles: true, cancelable: true, detail: {query: input.value.trim(), signal: controller.signal}});
+	const asked = new CustomEvent('redz:search', {bubbles: true, cancelable: true, detail: {query: input.value.trim(), signal: controller.signal}});
 	if (input.dispatchEvent(asked)) {
 		waiting.delete(list);
 		list.removeAttribute('aria-busy');

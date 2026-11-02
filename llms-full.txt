@@ -2390,7 +2390,7 @@ Options sit in groups — `role="group"` named by its `menu-header` — and carr
 
 ### Options from the server
 
-A page that finds options itself listens for `redz:filter` on the search and cancels it: the list is marked `aria-busy` until the page puts its options in — or sets `aria-busy="false"` when it cannot. This example answers from a short list after 400 ms.
+A page that finds options itself listens for `redz:search` on the search and cancels it: the list is marked `aria-busy` until the page puts its options in — or sets `aria-busy="false"` when it cannot. This example answers from a short list after 400 ms.
 
 ```html
 <div class="form-floating">
@@ -2408,7 +2408,7 @@ A page that finds options itself listens for `redz:filter` on the search and can
 ```
 
 ```js
-document.addEventListener('redz:filter', (event) => {
+document.addEventListener('redz:search', (event) => {
 	const list = document.getElementById(event.target.getAttribute('aria-controls'));
 	if (list.id !== 'people' || event.detail.query.length < 2) {
 		return; // the library filters the options it has
@@ -3832,7 +3832,7 @@ A button or a link whose `aria-keyshortcuts` names a combination with `Control`,
 
 - The palette is a modal `<dialog>` with a name; a click on its backdrop closes it (`closedby="any"`). Opening it empties its search.
 - Its search is the WAI-ARIA combobox with a listbox, as in [Combobox](combobox.md): the options are plain links and buttons with `role="option"`, so a link opens in a new tab with `⌘` or the middle button as any link does. The library keeps them out of the Tab order (`tabindex="-1"`): the arrow keys reach them, as in every listbox.
-- Where the options come from — the app's menu, recent pages, a search on the server — is the page's: a server search answers `redz:filter` as a combobox's does.
+- Where the options come from — the app's menu, recent pages, a search on the server — is the page's: a server search answers `redz:search` as a combobox's does.
 
 ## Tokens
 

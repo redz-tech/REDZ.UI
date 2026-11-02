@@ -125,7 +125,7 @@
 	</div>
 
 	<h3>Options from the server</h3>
-	<p>A page that finds options itself listens for <code>redz:filter</code> on the search and cancels it: the list is marked <code>aria-busy</code> until the page puts its options in — or sets <code>aria-busy="false"</code> when it cannot. This example answers from a short list after 400 ms.</p>
+	<p>A page that finds options itself listens for <code>redz:search</code> on the search and cancels it: the list is marked <code>aria-busy</code> until the page puts its options in — or sets <code>aria-busy="false"</code> when it cannot. This example answers from a short list after 400 ms.</p>
 	<div class="docs-example docs-example-stack" id="combobox-remote">
 		<div class="form-floating">
 			<button class="form-select combobox-toggle" type="button" id="combobox-remote-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-remote-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Find a person…"></span></button>
@@ -140,7 +140,7 @@
 			<p class="combobox-no-results" hidden>Nobody found</p>
 		</div>
 	</div>
-	<pre class="docs-code" tabindex="0"><code>document.addEventListener('redz:filter', (event) =&gt; {
+	<pre class="docs-code" tabindex="0"><code>document.addEventListener('redz:search', (event) =&gt; {
 	const list = document.getElementById(event.target.getAttribute('aria-controls'));
 	if (list.id !== 'people' || event.detail.query.length &lt; 2) {
 		return; // the library filters the options it has

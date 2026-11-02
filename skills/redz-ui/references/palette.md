@@ -52,7 +52,7 @@ A button or a link whose `aria-keyshortcuts` names a combination with `Control`,
 
 - The palette is a modal `<dialog>` with a name; a click on its backdrop closes it (`closedby="any"`). Opening it empties its search.
 - Its search is the WAI-ARIA combobox with a listbox, as in [Combobox](combobox.md): the options are plain links and buttons with `role="option"`, so a link opens in a new tab with `⌘` or the middle button as any link does. The library keeps them out of the Tab order (`tabindex="-1"`): the arrow keys reach them, as in every listbox.
-- Where the options come from — the app's menu, recent pages, a search on the server — is the page's: a server search answers `redz:filter` as a combobox's does.
+- Where the options come from — the app's menu, recent pages, a search on the server — is the page's: a server search answers `redz:search` as a combobox's does.
 
 ## Tokens
 

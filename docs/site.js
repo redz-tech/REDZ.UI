@@ -103,7 +103,7 @@
 	});
 
 	const people = ['Anong Srisuk', 'Boris Lebedev', 'Chen Wei', 'Dao Nguyen', 'Elena Petrova', 'Farid Haddad', 'Grace Kim', 'Hiroshi Sato', 'Ingrid Berg', 'Kanya Thongchai', 'Leila Nasser', 'Maria Lopez', 'Niran Pongsak', 'Olga Ivanova', 'Somchai Wong'];
-	document.addEventListener('redz:filter', (event) => {
+	document.addEventListener('redz:search', (event) => {
 		const list = document.getElementById(event.target.getAttribute('aria-controls') || '');
 		const query = event.detail.query.toLowerCase();
 		if (list === null || !list.hasAttribute('data-docs-remote') || query === '') {

@@ -3,6 +3,12 @@
 All notable changes of the library. Newest first. Versions follow Semantic Versioning: a class, token, attribute
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch.
 
+## Unreleased
+
+### Changed
+- The combobox's server search event is `redz:search`, not `redz:filter`: a page listens for `redz:search` on the
+  search, as before with `detail.query` and `detail.signal`.
+
 ## 0.3.0 — 2026-11-02
 
 ### The combobox and the command palette

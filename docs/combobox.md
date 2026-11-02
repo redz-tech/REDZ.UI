@@ -134,7 +134,7 @@ Options sit in groups — `role="group"` named by its `menu-header` — and carr
 
 ### Options from the server
 
-A page that finds options itself listens for `redz:filter` on the search and cancels it: the list is marked `aria-busy` until the page puts its options in — or sets `aria-busy="false"` when it cannot. This example answers from a short list after 400 ms.
+A page that finds options itself listens for `redz:search` on the search and cancels it: the list is marked `aria-busy` until the page puts its options in — or sets `aria-busy="false"` when it cannot. This example answers from a short list after 400 ms.
 
 ```html
 <div class="form-floating">
@@ -152,7 +152,7 @@ A page that finds options itself listens for `redz:filter` on the search and can
 ```
 
 ```js
-document.addEventListener('redz:filter', (event) => {
+document.addEventListener('redz:search', (event) => {
 	const list = document.getElementById(event.target.getAttribute('aria-controls'));
 	if (list.id !== 'people' || event.detail.query.length < 2) {
 		return; // the library filters the options it has
