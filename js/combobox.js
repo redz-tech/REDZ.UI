@@ -225,7 +225,8 @@ const statusOf = (list) => {
 	return status;
 };
 
-/** Says how many options the search found, once the typing pauses and the page's options have landed. */
+/** Once the typing pauses and the page's options have landed: names the active option again — a screen reader, busy
+ *  with the typed keys, said nothing of it — with its place among the found; with none active, says the count. */
 const announce = (input) => {
 	clearTimeout(timers.get(input));
 	timers.set(input, setTimeout(() => {
@@ -235,6 +236,13 @@ const announce = (input) => {
 		}
 		if (list.getAttribute('aria-busy') === 'true') {
 			announce(input);
+			return;
+		}
+		const active = list.querySelector('[data-active]');
+		if (active !== null && input.value.trim() !== '') {
+			statusOf(list).textContent = '';
+			input.removeAttribute('aria-activedescendant');
+			requestAnimationFrame(() => active.hasAttribute('data-active') && input.setAttribute('aria-activedescendant', active.id));
 			return;
 		}
 		statusOf(list).textContent = input.value.trim() === '' ? '' : textCount('found', shownOf(list).length);
@@ -388,16 +396,11 @@ const unwatch = (list, input) => {
 	list.removeAttribute('aria-busy');
 };
 
-/** Empties the search and shows the list as the page made it, the chosen option active. */
+/** Empties the search and shows the list as the page made it, no option active: a screen reader names the search. */
 const fresh = (input) => {
 	input.value = '';
-	const list = listOf(input);
 	filter(input);
-	const chosen = list.querySelector(OPTION + '[aria-selected="true"]');
-	if (chosen !== null && list.getAttribute('aria-multiselectable') !== 'true') {
-		activate(input, chosen);
-	}
-	statusOf(list).textContent = '';
+	statusOf(listOf(input)).textContent = '';
 };
 
 const observer = new ResizeObserver((entries) => {
@@ -467,10 +470,11 @@ document.addEventListener('keydown', (event) => {
 	const shown = shownOf(list).filter(usable);
 	const at = shown.indexOf(list.querySelector('[data-active]'));
 	let to = null;
+	const chosen = list.getAttribute('aria-multiselectable') === 'true' ? -1 : shown.indexOf(list.querySelector(OPTION + '[aria-selected="true"]'));
 	if (event.key === 'ArrowDown' && !event.altKey) {
-		to = shown[at < 0 ? 0 : (at + 1) % shown.length];
+		to = shown[at < 0 ? Math.max(0, chosen) : (at + 1) % shown.length];
 	} else if (event.key === 'ArrowUp' && !event.altKey) {
-		to = shown[at < 0 ? shown.length - 1 : (at - 1 + shown.length) % shown.length];
+		to = shown[at < 0 ? (chosen < 0 ? shown.length - 1 : chosen) : (at - 1 + shown.length) % shown.length];
 	} else if (event.key === 'PageDown') {
 		to = shown[Math.min(shown.length - 1, Math.max(0, at) + PAGE)];
 	} else if (event.key === 'PageUp') {
@@ -503,6 +507,7 @@ document.addEventListener('keydown', (event) => {
 	}
 	if (to !== null && to !== undefined) {
 		event.preventDefault();
+		clearTimeout(timers.get(target));
 		activate(target, to);
 	}
 }, true);

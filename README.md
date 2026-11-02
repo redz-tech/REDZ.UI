@@ -87,7 +87,7 @@ element and markup added later works the same:
   CSS alone (`js/dialog.js` stands in for `closedby` where the browser lacks it).
 - **Comboboxes** (a search field `role="combobox"` controlling a `listbox`): typing filters the list — case and accents
   aside, every word found, the best first — the arrow keys move the active option while the focus stays in the field,
-  Enter takes it, and the count found is said politely. In a form, a `combobox-toggle` button shows the value and opens
+  Enter takes it, and once the typing pauses that option is named again, or the count when nothing is found. In a form, a `combobox-toggle` button shows the value and opens
   the panel, and the value lives in hidden fields named by the list's `data-name`; a page that searches its server
   cancels `redz:filter` and puts the options in. The command palette is the same search in a `<dialog>`, its options
   links and buttons (`js/combobox.js`).

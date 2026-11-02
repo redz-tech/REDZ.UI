@@ -21,8 +21,8 @@
 		"docs/combobox.html": [
 			{"label": "the button", "do": "focus", "target": "#combobox-one-face", "expect": ["Default language", "Thai"]},
 			{"label": "Enter on the button", "do": "key", "key": "Enter", "expect": ["Find a language"]},
-			{"label": "Down in the search", "do": "key", "key": "ArrowDown", "expect": ["Russian"]},
-			{"label": "typing “ger”", "do": "type", "text": "ger", "expect": ["German", "1 result"]},
+			{"label": "Down in the search", "do": "key", "key": "ArrowDown", "expect": ["Thai"]},
+			{"label": "typing “ger”", "do": "type", "text": "ger", "expect": ["German"]},
 			{"label": "Enter in the search", "do": "key", "key": "Enter", "expect": ["Default language", "German"]}
 		],
 		"docs/palette.html": [

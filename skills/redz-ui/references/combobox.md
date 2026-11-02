@@ -196,8 +196,8 @@ The button carries a field's states; an option is active where the arrow keys ar
 
 | Key | On the button | In the search |
 | --- | --- | --- |
-| `Enter`, `Space` | Opens the panel, the chosen option active | `Enter` takes the active option: one closes the panel, many stay |
-| `↓` / `↑` | Opens the panel | The next / the previous option, round the ends |
+| `Enter`, `Space` | Opens the panel, the focus in its search | `Enter` takes the active option: one closes the panel, many stay |
+| `↓` / `↑` | Opens the panel | The next / the previous option, round the ends; the first press goes to the chosen option |
 | `Page Down` / `Page Up` | — | Ten options on / back |
 | A letter | Opens the panel with the letter in the search | Types; the first match becomes active |
 | `Esc` | — | Empties the search; on an empty search, closes the panel, the focus back on the button |
@@ -205,7 +205,7 @@ The button carries a field's states; an option is active where the arrow keys ar
 
 - The button is the WAI-ARIA select-only combobox: named by its `<label for>`, its value its text, its popup a panel with `role="dialog"`; the library keeps its `aria-expanded`.
 - The search is the editable combobox with list autocomplete: the focus stays in it, `aria-activedescendant` names the active option, `aria-selected` marks the chosen ones. The list follows the search in the page, so a screen reader on a phone reaches it by swiping.
-- The count of the options found is said politely once the typing pauses, from the page's texts.
+- Once the typing pauses, the option `Enter` would take is named again — a screen reader busy with the typed keys says nothing of it — with its place among those found; with nothing found, the count is said politely, from the page's texts. The probes' engine `voiceover` holds these words against what VoiceOver says in Safari.
 - A choice fires `input` and `change` on the list; a form's reset puts the values back as the page sent them.
 
 ## Texts

@@ -17,8 +17,11 @@ or JavaScript call removed or renamed is a major release, one added is a minor r
   - a list in the page: the same search and list without a button or a panel.
 - The search folds case and accents (not Thai marks; Arabic vowel marks off), finds what holds every word, the best
   first — the text itself, its start, a word's start (`Intl.Segmenter`), anywhere, then `data-keywords` — within each
-  group, and paints the matches by the browser's highlights where it has them; the count found is said politely once
-  the typing pauses; `aria-activedescendant` keeps the focus in the search; Escape empties the search, then closes
+  group, and paints the matches by the browser's highlights where it has them; once the typing pauses, the option
+  Enter would take is named again with its place — VoiceOver says nothing of it while keys are typed — and with
+  nothing found the count is said politely; no option is active when the panel opens, so a screen reader names the
+  search, and the first Down goes to the chosen option; `aria-activedescendant` keeps the focus in the search; Escape
+  empties the search, then closes
   the panel or the palette — the library closes it itself, as Safari's search field keeps the key.
 - `redz:filter` on the search, with the query and an `AbortSignal`: a page that finds options itself cancels it and
   puts them into the list, which is `aria-busy` meanwhile. A choice fires `input` and `change` on the list; a form's

@@ -4415,10 +4415,10 @@
 		"confirm.ok"
 	],
 	"files": {
-		"CHANGELOG.md": "sha256-5fATdv+rrJf64qSKepCK44rWH2g8lhyWueOYh8U/0Oc=",
+		"CHANGELOG.md": "sha256-JX2a+5l4lNo3uAuF/25NcO+e7UWLRdRwVWhXkm5hzgc=",
 		"LICENSE": "sha256-8pEc4ECwd79krplYdY+WVWqMIFNgcosqMOEmO/IRl6E=",
 		"NOTICE": "sha256-kspN6Bvm3sph93yHQc52RmQ1HKUMN/HbFOIH1iKYpMA=",
-		"README.md": "sha256-2knH64LHq0oZ3ITttw6/dg4PQmpx0COxXCxO0MXdTUM=",
+		"README.md": "sha256-t6oiMZ8QFQF2WvZQTHsJK67e1NL1Zhn3pIXszL46laQ=",
 		"css/base.css": "sha256-Q6Smi2Izi5wkGWmO5e/OfhEzRZPzu1aCRh5V/GzjUso=",
 		"css/components/accordion.css": "sha256-qzneYb6yrM/iS3d8Kq1v2P8KZg1x2jvnUmITMuXdxxo=",
 		"css/components/alert.css": "sha256-20SUa5rJAxlw/fEryb/G+4VJ4tvNDImlc96GH6xQyqM=",
@@ -6540,7 +6540,7 @@
 		"icons/zoom-in.svg": "sha256-CLxeOps+A/aiiFpeNx88kVSdD6GIRJW/O0OdoWAyDlU=",
 		"icons/zoom-out.svg": "sha256-v+rMSLl/fF3U7ShNPZsHwRhkPFbwPyOFmpkUfAnVIvQ=",
 		"js/busy.js": "sha256-50eWAnBpv0g3/L1a5k6cB7Gwp4flnFSXpCZliOkkP5o=",
-		"js/combobox.js": "sha256-bXNotvKATX/AiG6z1pl6yp8n5lNzyBXTN+d1zSalJtk=",
+		"js/combobox.js": "sha256-t936jwlepT/gGpAKkP9W0YLRP+POcMziT8CiDl7HP7E=",
 		"js/commands.js": "sha256-TmwOvUosSMhX3XCOV9/KBLG55WIg004U/Vl/UgB/aBI=",
 		"js/confirm.js": "sha256-Xydzsr2Dog5288jHz54v3G1WqlSF0VWI+Pm/gsCo+tM=",
 		"js/dialog.js": "sha256-wbZ3LOoesBjsa7PL+vfsS8F93Qg9/l9yoxkjJgWfwsg=",

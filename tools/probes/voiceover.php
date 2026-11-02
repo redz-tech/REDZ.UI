@@ -86,7 +86,8 @@ function PROBE__VoiceOverRun(array &$h, string $name, array $run, array &$report
 				$heard = PROBE__VoiceOverHeard($before, 6);
 				$said = mb_strtolower(implode(' · ', $heard));
 				$missing = array_values(array_filter($step['expect'], fn(string $words): bool => !str_contains($said, mb_strtolower($words))));
-				$report['spoken'][$page][] = ['engine' => $name, 'step' => $step['label'], 'expect' => $step['expect'], 'said' => $heard];
+				$state = PROBE__Do($h, 'Eval', '(() => { const el = document.activeElement; const active = document.getElementById(el.getAttribute("aria-activedescendant") || ""); return (el.id || el.localName) + (active === null ? "" : " → " + active.textContent.trim()) + " · " + String(el.value ?? el.textContent.trim()).slice(0, 40); })()');
+				$report['spoken'][$page][] = ['engine' => $name, 'step' => $step['label'], 'expect' => $step['expect'], 'said' => $heard, 'state' => $state];
 				if ($missing !== []) {
 					$report['findings'][] = $name . ' ' . $page . ' — ' . $step['label'] . ': VoiceOver said «' . implode(' · ', $heard) . '», without «' . implode('», «', $missing) . '»';
 				}
