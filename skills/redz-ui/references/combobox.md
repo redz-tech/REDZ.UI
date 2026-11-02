@@ -10,7 +10,7 @@ The face is a button with `role="combobox"` that opens its panel by the browser'
 
 ```html
 <div class="form-floating">
-	<button class="form-select combobox-toggle" type="button" id="combobox-one-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" aria-controls="combobox-one-panel" commandfor="combobox-one-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Choose a language…">Thai</span></button>
+	<button class="form-select combobox-toggle" type="button" id="combobox-one-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-one-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Choose a language…">Thai</span></button>
 	<label for="combobox-one-face">Default language</label>
 </div>
 <div class="menu combobox-menu" id="combobox-one-panel" popover role="dialog" aria-label="Default language">
@@ -43,7 +43,7 @@ A list with `aria-multiselectable="true"` keeps its panel open while options are
 
 ```html
 <div class="form-floating">
-	<button class="form-select combobox-toggle" type="button" id="combobox-many-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" aria-controls="combobox-many-panel" commandfor="combobox-many-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Choose languages…">English, Thai, and Russian</span></button>
+	<button class="form-select combobox-toggle" type="button" id="combobox-many-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-many-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Choose languages…">English, Thai, and Russian</span></button>
 	<label for="combobox-many-face">Site languages</label>
 </div>
 <div class="menu combobox-menu" id="combobox-many-panel" popover role="dialog" aria-label="Site languages">
@@ -75,7 +75,7 @@ Where the chosen values are the field's content — categories, tags — the lis
 ```html
 <div class="vstack gap-8">
 	<div class="form-floating">
-		<button class="form-select combobox-toggle" type="button" id="combobox-chips-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" aria-controls="combobox-chips-panel" commandfor="combobox-chips-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Add a category…"></span></button>
+		<button class="form-select combobox-toggle" type="button" id="combobox-chips-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-chips-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Add a category…"></span></button>
 		<label for="combobox-chips-face">Categories</label>
 	</div>
 	<div class="combobox-chips" id="combobox-chips-list-chips"></div>
@@ -107,7 +107,7 @@ Options sit in groups — `role="group"` named by its `menu-header` — and carr
 
 ```html
 <div class="form-floating">
-	<button class="form-select combobox-toggle" type="button" id="combobox-groups-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" aria-controls="combobox-groups-panel" commandfor="combobox-groups-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Choose a role…">Editor</span></button>
+	<button class="form-select combobox-toggle" type="button" id="combobox-groups-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-groups-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Choose a role…">Editor</span></button>
 	<label for="combobox-groups-face">Role</label>
 </div>
 <div class="menu combobox-menu" id="combobox-groups-panel" popover role="dialog" aria-label="Role">
@@ -138,7 +138,7 @@ A page that finds options itself listens for `redz:filter` on the search and can
 
 ```html
 <div class="form-floating">
-	<button class="form-select combobox-toggle" type="button" id="combobox-remote-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" aria-controls="combobox-remote-panel" commandfor="combobox-remote-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Find a person…"></span></button>
+	<button class="form-select combobox-toggle" type="button" id="combobox-remote-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-remote-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Find a person…"></span></button>
 	<label for="combobox-remote-face">Assigned to</label>
 </div>
 <div class="menu combobox-menu" id="combobox-remote-panel" popover role="dialog" aria-label="Assigned to">
@@ -203,7 +203,7 @@ The button carries a field's states; an option is active where the arrow keys ar
 | `Esc` | — | Empties the search; on an empty search, closes the panel, the focus back on the button |
 | `Tab` | — | Closes the panel and moves on |
 
-- The button is the WAI-ARIA select-only combobox: named by its `<label for>`, its value its text, its popup a panel with `role="dialog"`; the library keeps its `aria-expanded`.
+- The button is the WAI-ARIA select-only combobox: named by its `<label for>`, its value its text, its popup a panel with `role="dialog"`; the library keeps its `aria-expanded`, and its `aria-controls` only while the panel is open — VoiceOver otherwise reads the value from the closed list, not from the button.
 - The search is the editable combobox with list autocomplete: the focus stays in it, `aria-activedescendant` names the active option, `aria-selected` marks the chosen ones. The list follows the search in the page, so a screen reader on a phone reaches it by swiping.
 - Once the typing pauses, the option `Enter` would take is said politely by its label — a screen reader busy with the typed keys says nothing of it — and with nothing found, the count, from the page's texts. The probes' engine `voiceover` holds these words against what VoiceOver says in Safari.
 - A choice fires `input` and `change` on the list; a form's reset puts the values back as the page sent them.

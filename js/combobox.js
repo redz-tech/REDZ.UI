@@ -557,6 +557,11 @@ document.addEventListener('toggle', (event) => {
 	}
 	const face = document.querySelector('.combobox-toggle[commandfor="' + CSS.escape(panel.id) + '"]');
 	face?.setAttribute('aria-expanded', String(event.newState === 'open'));
+	if (event.newState === 'open') {
+		face?.setAttribute('aria-controls', panel.id);
+	} else {
+		face?.removeAttribute('aria-controls');
+	}
 	const input = panel.querySelector('input[role="combobox"]');
 	const list = input === null ? null : listOf(input);
 	if (list === null) {

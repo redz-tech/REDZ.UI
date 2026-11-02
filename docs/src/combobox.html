@@ -8,7 +8,7 @@
 	<p>The face is a button with <code>role="combobox"</code> that opens its panel by the browser's command; the panel is a popover with the search, the <code>listbox</code> and the value: one hidden field per chosen value, named by the list's <code>data-name</code>, so a form posts it as it is. Typing filters the list — case and accents aside, every word found, the best first — and the arrow keys move the active option while the focus stays in the search.</p>
 	<div class="docs-example docs-example-stack" id="combobox-one">
 		<div class="form-floating">
-			<button class="form-select combobox-toggle" type="button" id="combobox-one-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" aria-controls="combobox-one-panel" commandfor="combobox-one-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Choose a language…">Thai</span></button>
+			<button class="form-select combobox-toggle" type="button" id="combobox-one-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-one-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Choose a language…">Thai</span></button>
 			<label for="combobox-one-face">Default language</label>
 		</div>
 		<div class="menu combobox-menu" id="combobox-one-panel" popover role="dialog" aria-label="Default language">
@@ -39,7 +39,7 @@
 	<p>A list with <code>aria-multiselectable="true"</code> keeps its panel open while options are chosen, and a field <code>name[]</code> holds each value. The button lists them in the page's language — "English, Thai, and Russian" — while they fit, else the first ones and the count of the rest.</p>
 	<div class="docs-example docs-example-stack" id="combobox-many">
 		<div class="form-floating">
-			<button class="form-select combobox-toggle" type="button" id="combobox-many-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" aria-controls="combobox-many-panel" commandfor="combobox-many-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Choose languages…">English, Thai, and Russian</span></button>
+			<button class="form-select combobox-toggle" type="button" id="combobox-many-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-many-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Choose languages…">English, Thai, and Russian</span></button>
 			<label for="combobox-many-face">Site languages</label>
 		</div>
 		<div class="menu combobox-menu" id="combobox-many-panel" popover role="dialog" aria-label="Site languages">
@@ -69,7 +69,7 @@
 	<div class="docs-example docs-example-stack" id="combobox-chips">
 		<div class="vstack gap-8">
 			<div class="form-floating">
-				<button class="form-select combobox-toggle" type="button" id="combobox-chips-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" aria-controls="combobox-chips-panel" commandfor="combobox-chips-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Add a category…"></span></button>
+				<button class="form-select combobox-toggle" type="button" id="combobox-chips-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-chips-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Add a category…"></span></button>
 				<label for="combobox-chips-face">Categories</label>
 			</div>
 			<div class="combobox-chips" id="combobox-chips-list-chips"></div>
@@ -99,7 +99,7 @@
 	<p>Options sit in groups — <code>role="group"</code> named by its <code>menu-header</code> — and carry an icon and a <code>menu-item-description</code>, which the search reads too; <code>data-keywords</code> adds words the option answers without showing them, and <code>aria-disabled="true"</code> keeps an option out of reach.</p>
 	<div class="docs-example docs-example-stack" id="combobox-groups">
 		<div class="form-floating">
-			<button class="form-select combobox-toggle" type="button" id="combobox-groups-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" aria-controls="combobox-groups-panel" commandfor="combobox-groups-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Choose a role…">Editor</span></button>
+			<button class="form-select combobox-toggle" type="button" id="combobox-groups-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-groups-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Choose a role…">Editor</span></button>
 			<label for="combobox-groups-face">Role</label>
 		</div>
 		<div class="menu combobox-menu" id="combobox-groups-panel" popover role="dialog" aria-label="Role">
@@ -128,7 +128,7 @@
 	<p>A page that finds options itself listens for <code>redz:filter</code> on the search and cancels it: the list is marked <code>aria-busy</code> until the page puts its options in — or sets <code>aria-busy="false"</code> when it cannot. This example answers from a short list after 400 ms.</p>
 	<div class="docs-example docs-example-stack" id="combobox-remote">
 		<div class="form-floating">
-			<button class="form-select combobox-toggle" type="button" id="combobox-remote-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" aria-controls="combobox-remote-panel" commandfor="combobox-remote-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Find a person…"></span></button>
+			<button class="form-select combobox-toggle" type="button" id="combobox-remote-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-remote-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Find a person…"></span></button>
 			<label for="combobox-remote-face">Assigned to</label>
 		</div>
 		<div class="menu combobox-menu" id="combobox-remote-panel" popover role="dialog" aria-label="Assigned to">
@@ -185,12 +185,12 @@
 			<tbody>
 				<tr>
 					<th scope="row">combobox-toggle</th>
-					<td><button class="form-select combobox-toggle" type="button" role="combobox" aria-expanded="false" aria-controls="combobox-one-panel" aria-label="Language at rest"><span class="combobox-value">Thai</span></button></td>
-					<td><button class="form-select combobox-toggle" type="button" role="combobox" aria-expanded="false" aria-controls="combobox-one-panel" aria-label="Language hovered" data-docs-state="hover"><span class="combobox-value">Thai</span></button></td>
-					<td><button class="form-select combobox-toggle" type="button" role="combobox" aria-expanded="false" aria-controls="combobox-one-panel" aria-label="Language focused" data-docs-state="focus-visible focus"><span class="combobox-value">Thai</span></button></td>
+					<td><button class="form-select combobox-toggle" type="button" role="combobox" aria-expanded="false" aria-label="Language at rest"><span class="combobox-value">Thai</span></button></td>
+					<td><button class="form-select combobox-toggle" type="button" role="combobox" aria-expanded="false" aria-label="Language hovered" data-docs-state="hover"><span class="combobox-value">Thai</span></button></td>
+					<td><button class="form-select combobox-toggle" type="button" role="combobox" aria-expanded="false" aria-label="Language focused" data-docs-state="focus-visible focus"><span class="combobox-value">Thai</span></button></td>
 					<td><button class="form-select combobox-toggle" type="button" role="combobox" aria-expanded="true" aria-controls="combobox-one-panel" aria-label="Language opened"><span class="combobox-value">Thai</span></button></td>
-					<td><button class="form-select combobox-toggle" type="button" role="combobox" aria-expanded="false" aria-controls="combobox-one-panel" aria-label="Language unavailable" disabled><span class="combobox-value">Thai</span></button></td>
-					<td><button class="form-select combobox-toggle" type="button" role="combobox" aria-expanded="false" aria-controls="combobox-one-panel" aria-label="Language with an error" aria-invalid="true"><span class="combobox-value" data-placeholder="Choose a language…"></span></button></td>
+					<td><button class="form-select combobox-toggle" type="button" role="combobox" aria-expanded="false" aria-label="Language unavailable" disabled><span class="combobox-value">Thai</span></button></td>
+					<td><button class="form-select combobox-toggle" type="button" role="combobox" aria-expanded="false" aria-label="Language with an error" aria-invalid="true"><span class="combobox-value" data-placeholder="Choose a language…"></span></button></td>
 				</tr>
 			</tbody>
 		</table>
@@ -226,7 +226,7 @@
 		</tbody>
 	</table>
 	<ul>
-		<li>The button is the WAI-ARIA select-only combobox: named by its <code>&lt;label for&gt;</code>, its value its text, its popup a panel with <code>role="dialog"</code>; the library keeps its <code>aria-expanded</code>.</li>
+		<li>The button is the WAI-ARIA select-only combobox: named by its <code>&lt;label for&gt;</code>, its value its text, its popup a panel with <code>role="dialog"</code>; the library keeps its <code>aria-expanded</code>, and its <code>aria-controls</code> only while the panel is open — VoiceOver otherwise reads the value from the closed list, not from the button.</li>
 		<li>The search is the editable combobox with list autocomplete: the focus stays in it, <code>aria-activedescendant</code> names the active option, <code>aria-selected</code> marks the chosen ones. The list follows the search in the page, so a screen reader on a phone reaches it by swiping.</li>
 		<li>Once the typing pauses, the option <kbd>Enter</kbd> would take is said politely by its label — a screen reader busy with the typed keys says nothing of it — and with nothing found, the count, from the page's texts. The probes' engine <code>voiceover</code> holds these words against what VoiceOver says in Safari.</li>
 		<li>A choice fires <code>input</code> and <code>change</code> on the list; a form's reset puts the values back as the page sent them.</li>
