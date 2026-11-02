@@ -67,12 +67,18 @@ function PROBE__VoiceOverRun(array &$h, string $name, array $run, array &$report
 	try {
 		foreach ($run['config']['voiceover'] as $page => $steps) {
 			PROBE__Do($h, 'Load', $run['base'] . '/' . $page, 1280, 900);
+			for ($tries = 0; PROBE__Do($h, 'Eval', 'document.readyState === "complete" && "REDZ" in window') !== true; $tries++) {
+				if ($tries > 100) {
+					throw new RuntimeException($page . ' did not load: ' . json_encode(PROBE__Do($h, 'Eval', '[location.href, document.readyState, document.title]')));
+				}
+				usleep(100000);
+			}
 			PROBE__AppleScript('tell application "Safari" to activate');
 			PROBE__VoiceOverHeard('', 3);
 			foreach ($steps as $step) {
 				$before = PROBE__AppleScript('tell application "VoiceOver" to return content of last phrase');
 				match ($step['do']) {
-					'focus' => PROBE__Do($h, 'Eval', '(document.querySelector(' . json_encode($step['target']) . ').focus(), true)'),
+					'focus' => PROBE__Do($h, 'Eval', '(() => { const el = document.querySelector(' . json_encode($step['target']) . '); if (el === null) { throw new Error("no ' . $step['target'] . ' on the page"); } el.focus(); return true; })()'),
 					'key' => PROBE__Do($h, 'Key', $step['key']),
 					'type' => PROBE__Do($h, 'Type', $step['text']),
 					'chord' => PROBE__Do($h, 'Chord', $step['keys']),
@@ -87,6 +93,13 @@ function PROBE__VoiceOverRun(array &$h, string $name, array $run, array &$report
 			}
 			$report['engines'][$name]['cells']++;
 		}
+	} catch (Throwable $e) {
+		try {
+			file_put_contents($run['sheet'] . '/shots/' . $name . '-stopped.png', PROBE__Do($h, 'Shot'));
+		} catch (Throwable) {
+			// Without a shot the error itself still goes up.
+		}
+		throw $e;
 	} finally {
 		PROBE__AppleScript('tell application "VoiceOver" to quit');
 	}

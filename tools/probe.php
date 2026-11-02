@@ -245,7 +245,7 @@ function PROBE__EngineRun(string $name, array $engine, string $binary, string $d
 {
 	if ($engine['kind'] === 'voiceover') {
 		$h = PROBE__SafariStart($dir);
-		$report['engines'][$name] = ['version' => $h['version'] . ' · VoiceOver · macOS ' . PROBE__Run(['/usr/bin/sw_vers', '-productVersion']), 'cells' => 0];
+		$report['engines'][$name] = ['version' => $h['version'] . ' · VoiceOver · macOS ' . trim(PROBE__Run(['/usr/bin/sw_vers', '-productVersion'])), 'cells' => 0];
 		try {
 			PROBE__VoiceOverRun($h, $name, $run, $report);
 		} finally {

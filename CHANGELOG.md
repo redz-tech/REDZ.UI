@@ -36,8 +36,8 @@ or JavaScript call removed or renamed is a major release, one added is a minor r
 - The docs have a page for the combobox and one for the palette and shortcuts; the probes walk every combobox — open,
   Down, Enter, the value written, the panel closed, the focus back — and the palette's search, and flag a combobox
   whose button, active option or chosen values disagree with its list.
-- A probe run stopped by a signal still ends its Safari session: one Safari under automation had stayed open for six
-  days, and the next runs' clicks outside a dialog went to its window instead.
+- A probe run stopped by a signal still ends its Safari session, so its automation windows close; the Safari they run
+  in is the Mac owner's browser too and is never quit.
 - The probes' engine `voiceover` hears what VoiceOver says in Safari through the combobox and the palette, each step
   against the words it must hold, and the sheet shows the phrases; CI runs it on macOS 15 and 26 after
   `php tools/probe.php voiceover-setup` lets AppleScript drive VoiceOver (ported from `@guidepup/setup`, MIT).

@@ -4,9 +4,9 @@
 // unseen here.
 
 /** Starts safaridriver with its log in $dir and a session: Safari on this Mac, or the Safari of iOS $ios in a simulator
- *  booted for it. Safari 27 keeps running when its session ends, and a later session takes that same window: the stop
- *  quits the Safari this session started, and a run that ends without the stop — stopped by a signal, which skips
- *  finally — stops it at shutdown, so no Safari under automation is left behind. */
+ *  booted for it. A run that ends without PROBE__SafariStop — stopped by a signal, which skips finally — still ends its
+ *  session at shutdown. Only the session ends: the Safari it runs in is the Mac owner's browser too, with the owner's
+ *  windows, and is never quit. */
 function PROBE__SafariStart(string $dir, string $ios = ''): array
 {
 	$port = PROBE__FreePort();
@@ -14,8 +14,7 @@ function PROBE__SafariStart(string $dir, string $ios = ''): array
 	if (!is_resource($proc)) {
 		throw new RuntimeException('cannot start safaridriver');
 	}
-	$h = ['kind' => 'safari', 'proc' => $proc, 'base' => 'http://127.0.0.1:' . $port, 'session' => '', 'ios' => $ios, 'booted' => '', 'automated' => []];
-	$before = $ios === '' ? PROBE__SafariAutomated() : [];
+	$h = ['kind' => 'safari', 'proc' => $proc, 'base' => 'http://127.0.0.1:' . $port, 'session' => '', 'ios' => $ios, 'booted' => ''];
 	for ($tries = 0; !PROBE__SafariReady($h); $tries++) {
 		if ($tries > 40) {
 			PROBE__SafariStop($h);
@@ -41,9 +40,6 @@ function PROBE__SafariStart(string $dir, string $ios = ''): array
 		}
 	}
 	PROBE__SafariCall($h, 'POST', $h['session'] . '/timeouts', ['script' => 120000, 'pageLoad' => 60000]);
-	if ($ios === '') {
-		$h['automated'] = array_values(array_diff(PROBE__SafariAutomated(), $before));
-	}
 	$left = $h;
 	register_shutdown_function(function () use ($left): void {
 		if (is_resource($left['proc'])) {
@@ -127,7 +123,7 @@ function PROBE__SafariInject(array &$h, string $source): void
 /** The value of $expression in the page, a promise awaited; the value travels as JSON. */
 function PROBE__SafariEval(array &$h, string $expression): mixed
 {
-	$script = 'const done = arguments[arguments.length - 1]; Promise.resolve().then(() => ' . $expression . ').then((v) => done(JSON.stringify({value: v === undefined ? null : v})), (e) => done(JSON.stringify({error: String(e && e.stack || e)})));';
+	$script = 'const done = arguments[arguments.length - 1]; Promise.resolve().then(() => ' . $expression . ').then((v) => done(JSON.stringify({value: v === undefined ? null : v})), (e) => done(JSON.stringify({error: e instanceof Error ? e.name + ": " + e.message + " " + e.stack : String(e)})));';
 	$answer = json_decode((string)PROBE__SafariCall($h, 'POST', $h['session'] . '/execute/async', ['script' => $script, 'args' => []]), true);
 	if (isset($answer['error'])) {
 		throw new RuntimeException('the page threw: ' . $answer['error']);
@@ -207,26 +203,5 @@ function PROBE__SafariStop(array &$h): void
 	PROBE__Wait($h['proc']);
 	if ($h['booted'] !== '') {
 		PROBE__Run(['xcrun', 'simctl', 'shutdown', $h['booted']]);
-	}
-	foreach ($h['automated'] as $pid) {
-		for ($tries = 0; $tries < 30 && in_array($pid, PROBE__SafariAutomated(), true); $tries++) {
-			usleep(100000);
-		}
-		if (in_array($pid, PROBE__SafariAutomated(), true)) {
-			PROBE__Run(['/bin/kill', '-TERM', (string)$pid]);
-		}
-	}
-}
-
-/**
- * The process ids of the Safaris running under automation now.
- * @return list<int>
- */
-function PROBE__SafariAutomated(): array
-{
-	try {
-		return array_map('intval', preg_split('~\s+~', trim(PROBE__Run(['/usr/bin/pgrep', '-f', 'Safari.app/Contents/MacOS/Safari .*--automation'])), -1, PREG_SPLIT_NO_EMPTY));
-	} catch (RuntimeException) {
-		return [];
 	}
 }
