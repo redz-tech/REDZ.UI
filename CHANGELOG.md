@@ -1,11 +1,12 @@
 # REDZ.UI — Changelog
 
 All notable changes of the library. Newest first. Versions follow Semantic Versioning: a class, token, attribute
-or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch.
+or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
+version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
 ## Unreleased
 
-### Changed
+### Changed — breaking, in a minor release while the version is 0.x
 - The combobox's server search event is `redz:search`, not `redz:filter`: a page listens for `redz:search` on the
   search, as before with `detail.query` and `detail.signal`.
 

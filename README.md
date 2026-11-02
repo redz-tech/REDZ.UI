@@ -173,7 +173,7 @@ gh release verify-asset v0.3.0 redz-ui-0.3.0.zip --repo redz-tech/REDZ.UI
 
 jsDelivr serves a release by its tag: `https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.3.0/css/index.css`. Versions
 follow Semantic Versioning: a class, token, attribute or JavaScript call removed or renamed is a major release, one
-added is a minor release, a fix is a patch.
+added is a minor release, a fix is a patch; while the version is 0.x, a removal or a rename is a minor release.
 
 ## License
 MIT — see [LICENSE](LICENSE). Pieces taken from other MIT-licensed projects are listed with their notices in `NOTICE`.
