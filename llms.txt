@@ -60,6 +60,7 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 
 - [Navs and tabs](docs/nav.md): A row of links between views of one thing — nav-underline — or of choices — nav-pills; and the same row as tabs that switch panels on the page, driven by the keyboard as the WAI-ARIA tabs pattern.
 - [Breadcrumbs](docs/breadcrumb.md): The way up from a record to the list it belongs to, above the record's title. The separators are drawn by CSS and turn with the direction.
+- [Pagination](docs/pagination.md): Links to the pages of a long list, with Bootstrap's names: the current page says so in aria-current="page", a page there is none of says so in aria-disabled. A list that pages by "the next 50" shows only previous, next and where you are.
 - [Command palette](docs/palette.md): One search for every place and action of an app, opened from anywhere by ⌘K or Ctrl K: a dialog with the combobox's search and a list of links and buttons — Enter opens a page by its plain link or runs a button's command.
 - [App shell](docs/app.md): The frame of an admin screen: app with a header, a side navigation, the main column and an optional side column. Below 1024 px the side navigation becomes a panel opened from the header. These docs stand in it.
 

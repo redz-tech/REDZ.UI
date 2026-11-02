@@ -381,6 +381,10 @@
 	.rounded-8 { border-radius: var(--redz-radius-8); }
 	.rounded-12 { border-radius: var(--redz-radius-12); }
 	.rounded-16 { border-radius: var(--redz-radius-16); }
+	.rounded-top { border-start-start-radius: var(--redz-radius-8); border-start-end-radius: var(--redz-radius-8); }
+	.rounded-end { border-start-end-radius: var(--redz-radius-8); border-end-end-radius: var(--redz-radius-8); }
+	.rounded-bottom { border-end-start-radius: var(--redz-radius-8); border-end-end-radius: var(--redz-radius-8); }
+	.rounded-start { border-start-start-radius: var(--redz-radius-8); border-end-start-radius: var(--redz-radius-8); }
 	.shadow-1 { box-shadow: var(--redz-shadow-1); }
 	.shadow-2 { box-shadow: var(--redz-shadow-2); }
 	.shadow-3 { box-shadow: var(--redz-shadow-3); }
@@ -402,6 +406,10 @@
 	.max-w-960 { max-inline-size: 60rem; }
 	.max-w-1200 { max-inline-size: 75rem; }
 	.min-w-0 { min-inline-size: 0; }
+	.vw-100 { inline-size: 100vw; }
+	.min-vw-100 { min-inline-size: 100vw; }
+	.vh-100 { block-size: 100dvh; }
+	.min-vh-100 { min-block-size: 100dvh; }
 	.opacity-0 { opacity: 0; }
 	.opacity-25 { opacity: 0.25; }
 	.opacity-50 { opacity: 0.5; }
@@ -413,9 +421,30 @@
 	.position-fixed { position: fixed; }
 	.position-sticky { position: sticky; }
 	.top-0 { inset-block-start: 0; }
+	.top-50 { inset-block-start: 50%; }
+	.top-100 { inset-block-start: 100%; }
 	.bottom-0 { inset-block-end: 0; }
+	.bottom-50 { inset-block-end: 50%; }
+	.bottom-100 { inset-block-end: 100%; }
 	.start-0 { inset-inline-start: 0; }
+	.start-50 { inset-inline-start: 50%; }
+	.start-100 { inset-inline-start: 100%; }
 	.end-0 { inset-inline-end: 0; }
+	.end-50 { inset-inline-end: 50%; }
+	.end-100 { inset-inline-end: 100%; }
+	.translate-middle { translate: -50% -50%; }
+	.translate-middle:dir(rtl) { translate: 50% -50%; }
+	.translate-middle-x { translate: -50% 0; }
+	.translate-middle-x:dir(rtl) { translate: 50% 0; }
+	.translate-middle-y { translate: 0 -50%; }
+	.z-n1 { z-index: -1; }
+	.z-0 { z-index: 0; }
+	.z-1 { z-index: 1; }
+	.z-2 { z-index: 2; }
+	.z-3 { z-index: 3; }
+	.float-start { float: inline-start; }
+	.float-end { float: inline-end; }
+	.float-none { float: none; }
 	.overflow-auto { overflow: auto; }
 	.overflow-hidden { overflow: hidden; }
 	.overflow-visible { overflow: visible; }
@@ -451,6 +480,8 @@
 	.pe-none { pointer-events: none; }
 	.pe-auto { pointer-events: auto; }
 	.visually-hidden { position: absolute; inline-size: 1px; block-size: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+	.visually-hidden-focusable:not(:focus, :focus-within) { position: absolute; inline-size: 1px; block-size: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+	.stretched-link::after { content: ""; position: absolute; inset: 0; z-index: 1; }
 	.flip-rtl:dir(rtl) { scale: -1 1; }
 
 	@container region (width >= 576px) {
@@ -756,6 +787,9 @@
 		.sm\:text-start { text-align: start; }
 		.sm\:text-end { text-align: end; }
 		.sm\:text-center { text-align: center; }
+		.sm\:float-start { float: inline-start; }
+		.sm\:float-end { float: inline-end; }
+		.sm\:float-none { float: none; }
 	}
 
 	@container region (width >= 768px) {
@@ -1061,6 +1095,9 @@
 		.md\:text-start { text-align: start; }
 		.md\:text-end { text-align: end; }
 		.md\:text-center { text-align: center; }
+		.md\:float-start { float: inline-start; }
+		.md\:float-end { float: inline-end; }
+		.md\:float-none { float: none; }
 	}
 
 	@container region (width >= 1024px) {
@@ -1366,6 +1403,9 @@
 		.lg\:text-start { text-align: start; }
 		.lg\:text-end { text-align: end; }
 		.lg\:text-center { text-align: center; }
+		.lg\:float-start { float: inline-start; }
+		.lg\:float-end { float: inline-end; }
+		.lg\:float-none { float: none; }
 	}
 
 	@container region (width >= 1280px) {
@@ -1671,6 +1711,9 @@
 		.xl\:text-start { text-align: start; }
 		.xl\:text-end { text-align: end; }
 		.xl\:text-center { text-align: center; }
+		.xl\:float-start { float: inline-start; }
+		.xl\:float-end { float: inline-end; }
+		.xl\:float-none { float: none; }
 	}
 
 	@container region (width >= 1536px) {
@@ -1976,6 +2019,9 @@
 		.\32 xl\:text-start { text-align: start; }
 		.\32 xl\:text-end { text-align: end; }
 		.\32 xl\:text-center { text-align: center; }
+		.\32 xl\:float-start { float: inline-start; }
+		.\32 xl\:float-end { float: inline-end; }
+		.\32 xl\:float-none { float: none; }
 	}
 
 	@media print {

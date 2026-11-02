@@ -6,9 +6,34 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 
 ## Unreleased
 
+### The ERP's gaps
+- `pagination` › `page-item` › `page-link` with `pagination-sm` and `pagination-lg`: the current page
+  `aria-current="page"`, a page there is none of `aria-disabled="true"` on a link without `href`; `page-text` for words
+  between the links — a list paged by "the next 50" shows previous, next and where you are.
+- Dialogs on a window under 576 px fill the screen by themselves — the body scrolls, the footer stays at the bottom —
+  and `dialog-sm` and confirmations stay a card; `dialog-fullscreen` fills it on any window.
+- Scrollspy (`js/scrollspy.js`): in a nav or list group with `data-scrollspy`, the link to the section in view says so
+  in `aria-current="location"`, in the page or in a box that scrolls.
+- Tables `table-striped`, `table-striped-columns` — the stripe lies under the hover's light and a row's tone —
+  `table-bordered` — the lines between columns and, outside a card, the table's own frame — `table-borderless`,
+  `table-group-divider`; card images `card-img`, `card-img-top`, `card-img-bottom`, `card-img-overlay`; `nav-fill`,
+  `nav-justified`.
+- Utilities: `rounded-top`, `-end`, `-bottom`, `-start`; `z-n1` … `z-3`; `float-start`, `-end`, `-none` with width
+  prefixes; `top`, `bottom`, `start`, `end` at 50 and 100; `translate-middle`, `-x`, `-y`, turned round right to left;
+  `vw-100`, `min-vw-100`, `vh-100`, `min-vh-100` (heights by `dvh`); `visually-hidden-focusable` for a skip link;
+  `stretched-link`. A vocabulary entry's `rtl` gives its rule right to left.
+- The map from Bootstrap 5.3 covers them — 69 classes left without a form here, from 214 — and names the
+  replacement of what Bootstrap 6 dropped too (`link-underline-*`, `bg-opacity-*`, `text-opacity-*`).
+- The docs: a page for pagination, the new parts on the pages of navs, tables, cards, dialogs and utilities, and an
+  icon for every page in the menu; the probes flag a scrollspy nav without exactly one current link.
+
 ### Changed — breaking, in a minor release while the version is 0.x
 - The combobox's server search event is `redz:search`, not `redz:filter`: a page listens for `redz:search` on the
   search, as before with `detail.query` and `detail.signal`.
+
+### Fixed
+- A table of several `tbody` keeps the line between them: only the table's last row goes without one, and its
+  corners round with the card's.
 
 ## 0.3.0 — 2026-11-02
 

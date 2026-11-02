@@ -138,6 +138,12 @@
 		background: var(--redz-bg);
 	}
 
+	.docs-scroll {
+		block-size: 8rem;
+		overflow-y: auto;
+		padding-inline-end: var(--redz-space-8);
+	}
+
 	.docs-matrix {
 		min-inline-size: 100%;
 		border-collapse: collapse;

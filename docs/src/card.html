@@ -20,6 +20,26 @@
 		</section>
 	</div>
 
+	<h3>Images</h3>
+	<p><code>card-img-top</code> and <code>card-img-bottom</code> round the image with the card's corners; <code>card-img-overlay</code> lays the card's words over a <code>card-img</code>. A <code>stretched-link</code> makes the whole card its link.</p>
+	<div class="docs-example docs-example-stack" id="card-images">
+		<div class="grid md:cols-2 gap-16">
+			<section class="card" aria-labelledby="card-images-title">
+				<img class="card-img-top ratio-16x9" src="img/lagoon.svg" alt="A lagoon under green hills">
+				<div class="card-body vstack gap-4">
+					<h2 class="fs-16" id="card-images-title"><a class="stretched-link" href="#card-images">Ang Thong by speedboat</a></h2>
+					<p class="text-muted mb-0">From 2 500 THB · a day</p>
+				</div>
+			</section>
+			<section class="card" aria-labelledby="card-overlay-title">
+				<img class="card-img ratio-16x9" src="img/lagoon.svg" alt="">
+				<div class="card-img-overlay vstack justify-content-end">
+					<h2 class="fs-16" id="card-overlay-title">The emerald lake</h2>
+				</div>
+			</section>
+		</div>
+	</div>
+
 	<h3>Tabs on a card</h3>
 	<p>A <code>nav</code> placed straight in the card lines up with the header's padding.</p>
 	<div class="docs-example docs-example-stack" id="card-tabs">

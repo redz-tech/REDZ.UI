@@ -43,11 +43,11 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `bg-gradient` | — | remove | no gradients |
 | `bg-light` | — | review | bg-body, bg-page, bg-raised or a tone |
 | `bg-light-subtle` | — | review | bg-page, or a tone's -subtle |
-| `bg-opacity-10` | — | missing |  |
-| `bg-opacity-100` | — | missing |  |
-| `bg-opacity-25` | — | missing |  |
-| `bg-opacity-50` | — | missing |  |
-| `bg-opacity-75` | — | missing |  |
+| `bg-opacity-10` | — | review | Bootstrap 6 dropped it too: bg-{tone}-subtle |
+| `bg-opacity-100` | — | review | Bootstrap 6 dropped it too: bg-{tone}-subtle |
+| `bg-opacity-25` | — | review | Bootstrap 6 dropped it too: bg-{tone}-subtle |
+| `bg-opacity-50` | — | review | Bootstrap 6 dropped it too: bg-{tone}-subtle |
+| `bg-opacity-75` | — | review | Bootstrap 6 dropped it too: bg-{tone}-subtle |
 | `bg-white` | — | review | bg-body, bg-page, bg-raised or a tone |
 | `blockquote` | — | missing |  |
 | `blockquote-footer` | — | missing |  |
@@ -74,8 +74,6 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `border-top-0` | — | missing | draw only the sides you need: border-top and the others |
 | `border-warning-subtle` | — | missing |  |
 | `border-white` | — | review | border-strong, or a tone |
-| `bottom-100` | — | missing | only 0 here |
-| `bottom-50` | — | missing | only 0 here |
 | `bs-popover-auto` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
 | `bs-popover-bottom` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
 | `bs-popover-end` | — | missing | a short note is a toggletip; a rich one a menu or a drawer |
@@ -97,10 +95,6 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `card-group` | — | review | grid with gap-16 |
 | `card-header-pills` | — | review | a nav straight in the card |
 | `card-header-tabs` | — | review | a nav straight in the card |
-| `card-img` | — | missing |  |
-| `card-img-bottom` | — | missing |  |
-| `card-img-overlay` | — | missing |  |
-| `card-img-top` | — | missing |  |
 | `card-link` | — | review | a heading and paragraphs in card-body |
 | `card-subtitle` | — | review | a heading and paragraphs in card-body |
 | `card-text` | — | review | a heading and paragraphs in card-body |
@@ -170,17 +164,12 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `dropstart` | — | remove | no wrapper: the menu flips by itself |
 | `dropup` | — | remove | no wrapper: the menu flips by itself |
 | `dropup-center` | — | remove | no wrapper: the menu flips by itself |
-| `end-100` | — | missing | only 0 here |
-| `end-50` | — | missing | only 0 here |
 | `fade` | — | remove | the components animate themselves, and not for people who ask for less motion |
 | `figure` | — | missing |  |
 | `figure-caption` | — | missing |  |
 | `figure-img` | — | missing |  |
 | `fixed-bottom` | — | review | position-fixed with top-0 or bottom-0, start-0 and end-0 |
 | `fixed-top` | — | review | position-fixed with top-0 or bottom-0, start-0 and end-0 |
-| `float-end` | — | missing | no floats: flex or grid, with ms-auto or justify-content-end |
-| `float-none` | — | missing | no floats: flex or grid, with ms-auto or justify-content-end |
-| `float-start` | — | missing | no floats: flex or grid, with ms-auto or justify-content-end |
 | `focus-ring` | — | remove | the focus ring is built in, 3:1 in both themes |
 | `focus-ring-danger` | — | remove | the focus ring is built in, 3:1 in both themes |
 | `focus-ring-dark` | — | remove | the focus ring is built in, 3:1 in both themes |
@@ -258,46 +247,46 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `link-dark` | — | review | a link is the accent; text-* for a tone |
 | `link-info` | — | review | a link is the accent; text-* for a tone |
 | `link-light` | — | review | a link is the accent; text-* for a tone |
-| `link-offset-1` | — | missing |  |
-| `link-offset-1-hover` | — | missing |  |
-| `link-offset-2` | — | missing |  |
-| `link-offset-2-hover` | — | missing |  |
-| `link-offset-3` | — | missing |  |
-| `link-offset-3-hover` | — | missing |  |
-| `link-opacity-10` | — | missing |  |
-| `link-opacity-10-hover` | — | missing |  |
-| `link-opacity-100` | — | missing |  |
-| `link-opacity-100-hover` | — | missing |  |
-| `link-opacity-25` | — | missing |  |
-| `link-opacity-25-hover` | — | missing |  |
-| `link-opacity-50` | — | missing |  |
-| `link-opacity-50-hover` | — | missing |  |
-| `link-opacity-75` | — | missing |  |
-| `link-opacity-75-hover` | — | missing |  |
+| `link-offset-1` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-offset-1-hover` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-offset-2` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-offset-2-hover` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-offset-3` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-offset-3-hover` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-opacity-10` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-opacity-10-hover` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-opacity-100` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-opacity-100-hover` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-opacity-25` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-opacity-25-hover` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-opacity-50` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-opacity-50-hover` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-opacity-75` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-opacity-75-hover` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
 | `link-primary` | — | review | a link is the accent; text-* for a tone |
 | `link-secondary` | — | review | a link is the accent; text-* for a tone |
 | `link-success` | — | review | a link is the accent; text-* for a tone |
-| `link-underline` | — | missing |  |
-| `link-underline-danger` | — | missing |  |
-| `link-underline-dark` | — | missing |  |
-| `link-underline-info` | — | missing |  |
-| `link-underline-light` | — | missing |  |
-| `link-underline-opacity-0` | — | missing |  |
-| `link-underline-opacity-0-hover` | — | missing |  |
-| `link-underline-opacity-10` | — | missing |  |
-| `link-underline-opacity-10-hover` | — | missing |  |
-| `link-underline-opacity-100` | — | missing |  |
-| `link-underline-opacity-100-hover` | — | missing |  |
-| `link-underline-opacity-25` | — | missing |  |
-| `link-underline-opacity-25-hover` | — | missing |  |
-| `link-underline-opacity-50` | — | missing |  |
-| `link-underline-opacity-50-hover` | — | missing |  |
-| `link-underline-opacity-75` | — | missing |  |
-| `link-underline-opacity-75-hover` | — | missing |  |
-| `link-underline-primary` | — | missing |  |
-| `link-underline-secondary` | — | missing |  |
-| `link-underline-success` | — | missing |  |
-| `link-underline-warning` | — | missing |  |
+| `link-underline` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-underline-danger` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-underline-dark` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-underline-info` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-underline-light` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-underline-opacity-0` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-underline-opacity-0-hover` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-underline-opacity-10` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-underline-opacity-10-hover` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-underline-opacity-100` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-underline-opacity-100-hover` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-underline-opacity-25` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-underline-opacity-25-hover` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-underline-opacity-50` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-underline-opacity-50-hover` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-underline-opacity-75` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-underline-opacity-75-hover` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-underline-primary` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-underline-secondary` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-underline-success` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-underline-warning` | — | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
 | `link-warning` | — | review | a link is the accent; text-* for a tone |
 | `list-group-item-danger` | — | review | no item tones: a badge or a dot in the item says it |
 | `list-group-item-dark` | — | review | no item tones: a badge or a dot in the item says it |
@@ -327,8 +316,6 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `me-4` | `me-24` | value | reused — me-4 means another thing in REDZ.UI; the number is the pixels |
 | `me-5` | `me-48` | value | the number is the pixels |
 | `mh-100` | — | missing |  |
-| `min-vh-100` | — | missing |  |
-| `min-vw-100` | — | missing |  |
 | `modal` | `dialog` | rename | on a <dialog>, opened by commandfor + command="show-modal" |
 | `modal-backdrop` | — | remove | the browser's ::backdrop |
 | `modal-body` | `dialog-body` | rename |  |
@@ -337,7 +324,7 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `modal-dialog-centered` | — | remove | a dialog is centered |
 | `modal-dialog-scrollable` | — | remove | the dialog's body scrolls by itself |
 | `modal-footer` | `dialog-footer` | rename |  |
-| `modal-fullscreen` | — | missing |  |
+| `modal-fullscreen` | `dialog-fullscreen` | rename |  |
 | `modal-header` | `dialog-header` | rename |  |
 | `modal-static` | — | remove | closedby="closerequest" |
 | `modal-title` | `dialog-title` | rename |  |
@@ -362,9 +349,7 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `my-3` | `my-16` | value | the number is the pixels |
 | `my-4` | `my-24` | value | reused — my-4 means another thing in REDZ.UI; the number is the pixels |
 | `my-5` | `my-48` | value | the number is the pixels |
-| `nav-fill` | — | missing |  |
 | `nav-item` | — | remove | links sit straight in the nav |
-| `nav-justified` | — | missing |  |
 | `nav-tabs` | `nav-underline` | rename | tabs are drawn as an underline |
 | `navbar` | — | review | the shell's app-header |
 | `navbar-brand` | — | review | the shell's app-header |
@@ -402,9 +387,6 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `p-3` | `p-16` | value | the number is the pixels |
 | `p-4` | `p-24` | value | reused — p-4 means another thing in REDZ.UI; the number is the pixels |
 | `p-5` | `p-48` | value | the number is the pixels |
-| `page-item` | — | missing | lists here page by “Next 25” (keyset), no page numbers |
-| `page-link` | — | missing | lists here page by “Next 25” (keyset), no page numbers |
-| `pagination` | — | missing | lists here page by “Next 25” (keyset), no page numbers |
 | `pb-1` | `pb-4` | value | the number is the pixels |
 | `pb-2` | `pb-8` | value | reused — pb-2 means another thing in REDZ.UI; the number is the pixels |
 | `pb-3` | `pb-16` | value | the number is the pixels |
@@ -454,44 +436,40 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `rounded-3` | `rounded-8` | value | 8 px |
 | `rounded-4` | `rounded-16` | value | reused — rounded-4 means another thing in REDZ.UI; 16 px |
 | `rounded-5` | — | review | 32 px in Bootstrap: rounded-16 or rounded-full |
-| `rounded-bottom` | — | missing | no one-side radii |
-| `rounded-bottom-0` | — | missing | no one-side radii |
-| `rounded-bottom-1` | — | missing | no one-side radii |
-| `rounded-bottom-2` | — | missing | no one-side radii |
-| `rounded-bottom-3` | — | missing | no one-side radii |
-| `rounded-bottom-4` | — | missing | no one-side radii |
-| `rounded-bottom-5` | — | missing | no one-side radii |
-| `rounded-bottom-circle` | — | missing | no one-side radii |
-| `rounded-bottom-pill` | — | missing | no one-side radii |
+| `rounded-bottom-0` | `rounded-bottom` | review | a side takes the 8 px radius |
+| `rounded-bottom-1` | `rounded-bottom` | review | a side takes the 8 px radius |
+| `rounded-bottom-2` | `rounded-bottom` | review | a side takes the 8 px radius |
+| `rounded-bottom-3` | `rounded-bottom` | review | a side takes the 8 px radius |
+| `rounded-bottom-4` | `rounded-bottom` | review | a side takes the 8 px radius |
+| `rounded-bottom-5` | `rounded-bottom` | review | a side takes the 8 px radius |
+| `rounded-bottom-circle` | `rounded-bottom` | review | a side takes the 8 px radius |
+| `rounded-bottom-pill` | `rounded-bottom` | review | a side takes the 8 px radius |
 | `rounded-circle` | `rounded-full` | rename |  |
-| `rounded-end` | — | missing | no one-side radii |
-| `rounded-end-0` | — | missing | no one-side radii |
-| `rounded-end-1` | — | missing | no one-side radii |
-| `rounded-end-2` | — | missing | no one-side radii |
-| `rounded-end-3` | — | missing | no one-side radii |
-| `rounded-end-4` | — | missing | no one-side radii |
-| `rounded-end-5` | — | missing | no one-side radii |
-| `rounded-end-circle` | — | missing | no one-side radii |
-| `rounded-end-pill` | — | missing | no one-side radii |
+| `rounded-end-0` | `rounded-end` | review | a side takes the 8 px radius |
+| `rounded-end-1` | `rounded-end` | review | a side takes the 8 px radius |
+| `rounded-end-2` | `rounded-end` | review | a side takes the 8 px radius |
+| `rounded-end-3` | `rounded-end` | review | a side takes the 8 px radius |
+| `rounded-end-4` | `rounded-end` | review | a side takes the 8 px radius |
+| `rounded-end-5` | `rounded-end` | review | a side takes the 8 px radius |
+| `rounded-end-circle` | `rounded-end` | review | a side takes the 8 px radius |
+| `rounded-end-pill` | `rounded-end` | review | a side takes the 8 px radius |
 | `rounded-pill` | `rounded-full` | rename |  |
-| `rounded-start` | — | missing | no one-side radii |
-| `rounded-start-0` | — | missing | no one-side radii |
-| `rounded-start-1` | — | missing | no one-side radii |
-| `rounded-start-2` | — | missing | no one-side radii |
-| `rounded-start-3` | — | missing | no one-side radii |
-| `rounded-start-4` | — | missing | no one-side radii |
-| `rounded-start-5` | — | missing | no one-side radii |
-| `rounded-start-circle` | — | missing | no one-side radii |
-| `rounded-start-pill` | — | missing | no one-side radii |
-| `rounded-top` | — | missing | no one-side radii |
-| `rounded-top-0` | — | missing | no one-side radii |
-| `rounded-top-1` | — | missing | no one-side radii |
-| `rounded-top-2` | — | missing | no one-side radii |
-| `rounded-top-3` | — | missing | no one-side radii |
-| `rounded-top-4` | — | missing | no one-side radii |
-| `rounded-top-5` | — | missing | no one-side radii |
-| `rounded-top-circle` | — | missing | no one-side radii |
-| `rounded-top-pill` | — | missing | no one-side radii |
+| `rounded-start-0` | `rounded-start` | review | a side takes the 8 px radius |
+| `rounded-start-1` | `rounded-start` | review | a side takes the 8 px radius |
+| `rounded-start-2` | `rounded-start` | review | a side takes the 8 px radius |
+| `rounded-start-3` | `rounded-start` | review | a side takes the 8 px radius |
+| `rounded-start-4` | `rounded-start` | review | a side takes the 8 px radius |
+| `rounded-start-5` | `rounded-start` | review | a side takes the 8 px radius |
+| `rounded-start-circle` | `rounded-start` | review | a side takes the 8 px radius |
+| `rounded-start-pill` | `rounded-start` | review | a side takes the 8 px radius |
+| `rounded-top-0` | `rounded-top` | review | a side takes the 8 px radius |
+| `rounded-top-1` | `rounded-top` | review | a side takes the 8 px radius |
+| `rounded-top-2` | `rounded-top` | review | a side takes the 8 px radius |
+| `rounded-top-3` | `rounded-top` | review | a side takes the 8 px radius |
+| `rounded-top-4` | `rounded-top` | review | a side takes the 8 px radius |
+| `rounded-top-5` | `rounded-top` | review | a side takes the 8 px radius |
+| `rounded-top-circle` | `rounded-top` | review | a side takes the 8 px radius |
+| `rounded-top-pill` | `rounded-top` | review | a side takes the 8 px radius |
 | `row` | `grid` | grid | on the parent, with cols-N for equal columns or cols-12 for spans; no gutters to undo |
 | `row-cols-1` | `cols-1` | grid | on the same parent |
 | `row-cols-2` | `cols-2` | grid | on the same parent |
@@ -510,24 +488,16 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `showing` | — | state | the browser's [open] and :popover-open |
 | `small` | — | review | fs-12, or the <small> element |
 | `spinner-grow` | — | missing |  |
-| `start-100` | — | missing | only 0 here |
-| `start-50` | — | missing | only 0 here |
 | `sticky-bottom` | — | review | position-sticky with top-0 or bottom-0 |
 | `sticky-top` | — | review | position-sticky with top-0 or bottom-0 |
-| `stretched-link` | — | missing |  |
 | `tab-content` | — | remove | panels are siblings with role="tabpanel", hidden when not selected |
 | `tab-pane` | — | remove | panels are siblings with role="tabpanel", hidden when not selected |
 | `table-active` | — | review | aria-selected or aria-current on the row |
-| `table-bordered` | — | missing |  |
-| `table-borderless` | — | missing |  |
 | `table-dark` | — | review | row tones are danger, warning and secondary |
-| `table-group-divider` | — | missing |  |
 | `table-info` | — | review | row tones are danger, warning and secondary |
 | `table-light` | — | review | row tones are danger, warning and secondary |
 | `table-primary` | — | review | row tones are danger, warning and secondary |
 | `table-responsive` | — | review | the card's body holds the table; columns hide below md: |
-| `table-striped` | — | missing |  |
-| `table-striped-columns` | — | missing |  |
 | `table-success` | — | review | row tones are danger, warning and secondary |
 | `text-bg-danger` | `badge-danger` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
 | `text-bg-dark` | — | review | a plain badge, or a tone |
@@ -548,10 +518,10 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `text-info-emphasis` | `text-info` | rename | a tone's text color is already its emphasis |
 | `text-light` | — | review | no white, black, light or dark: text-body, text-muted or a tone |
 | `text-light-emphasis` | `text-body` | review | no light or dark: the text color |
-| `text-opacity-100` | — | missing |  |
-| `text-opacity-25` | — | missing |  |
-| `text-opacity-50` | — | missing |  |
-| `text-opacity-75` | — | missing |  |
+| `text-opacity-100` | — | review | Bootstrap 6 dropped it too: text-muted or text-faint |
+| `text-opacity-25` | — | review | Bootstrap 6 dropped it too: text-muted or text-faint |
+| `text-opacity-50` | — | review | Bootstrap 6 dropped it too: text-muted or text-faint |
+| `text-opacity-75` | — | review | Bootstrap 6 dropped it too: text-muted or text-faint |
 | `text-primary-emphasis` | `text-primary` | rename | a tone's text color is already its emphasis |
 | `text-secondary-emphasis` | `text-secondary` | rename | a tone's text color is already its emphasis |
 | `text-success-emphasis` | `text-success` | rename | a tone's text color is already its emphasis |
@@ -561,23 +531,10 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `toast-header` | — | review | REDZ.ui.toast builds the toast from its title, text and tone |
 | `tooltip-arrow` | — | remove | the tooltip is one element |
 | `tooltip-inner` | — | remove | the tooltip is one element |
-| `top-100` | — | missing | only 0 here |
-| `top-50` | — | missing | only 0 here |
-| `translate-middle` | — | missing | center by grid or flex |
-| `translate-middle-x` | — | missing | center by grid or flex |
-| `translate-middle-y` | — | missing | center by grid or flex |
 | `valid-feedback` | — | remove | fields have no success state |
 | `valid-tooltip` | — | remove | fields have no success state |
-| `vh-100` | — | missing |  |
-| `visually-hidden-focusable` | — | missing |  |
 | `vr` | — | missing |  |
-| `vw-100` | — | missing |  |
 | `was-validated` | — | state | the browser's :user-invalid shows after the person edits |
-| `z-0` | — | missing | the components stack themselves |
-| `z-1` | — | missing | the components stack themselves |
-| `z-2` | — | missing | the components stack themselves |
-| `z-3` | — | missing | the components stack themselves |
-| `z-n1` | — | missing | the components stack themselves |
 | `data-bs-toggle="modal"` | `commandfor="ID" command="show-modal"` | trigger | on the button; the dialog is a <dialog id="ID"> |
 | `data-bs-toggle="offcanvas"` | `commandfor="ID" command="show-modal"` | trigger | the drawer is a <dialog id="ID"> |
 | `data-bs-toggle="dropdown"` | `commandfor="ID" command="toggle-popover" aria-haspopup="menu"` | trigger | the menu gets popover and role="menu" |
@@ -603,11 +560,11 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `data-bs-reference` | — | remove | anchor positioning places and flips the menu |
 | `data-bs-boundary` | — | remove | anchor positioning places and flips the menu |
 | `data-bs-popper-config` | — | remove | anchor positioning places and flips the menu |
-| `data-bs-spy` | — | missing | scrollspy and carousel |
-| `data-bs-ride` | — | missing | scrollspy and carousel |
-| `data-bs-slide` | — | missing | scrollspy and carousel |
-| `data-bs-slide-to` | — | missing | scrollspy and carousel |
-| `data-bs-interval` | — | missing | scrollspy and carousel |
+| `data-bs-spy` | `data-scrollspy` | trigger | on the nav or list group of the links, not on the scrolled box; the link to the section in view gets aria-current="location" |
+| `data-bs-ride` | — | missing | the carousel |
+| `data-bs-slide` | — | missing | the carousel |
+| `data-bs-slide-to` | — | missing | the carousel |
+| `data-bs-interval` | — | missing | the carousel |
 | `bootstrap.Modal` | `dialog.showModal() and dialog.close()` | trigger |  |
 | `bootstrap.Offcanvas` | `dialog.showModal() and dialog.close()` | trigger |  |
 | `bootstrap.Dropdown` | `menu.showPopover(), menu.hidePopover(), menu.togglePopover()` | trigger |  |

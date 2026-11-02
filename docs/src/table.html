@@ -54,6 +54,33 @@
 			</div>
 		</section>
 	</div>
+
+	<h3>Stripes, borders and groups</h3>
+	<p><code>table-striped</code> shades every other row, <code>table-striped-columns</code> every other column — under the hover's light and a row's tone alike; <code>table-group-divider</code> on a <code>tbody</code> draws a stronger line above it. <code>table-bordered</code> draws the lines between columns and, outside a card, the table's own frame; <code>table-borderless</code> takes the lines between rows away.</p>
+	<div class="docs-example docs-example-stack" id="table-variants">
+		<section class="card" aria-labelledby="table-variants-title">
+			<div class="card-header"><h2 class="fs-14" id="table-variants-title">Boats this week</h2></div>
+			<table class="table table-striped table-hover">
+				<thead><tr><th scope="col">Boat</th><th class="text-end" scope="col">Trips</th><th class="text-end" scope="col">Seats sold</th></tr></thead>
+				<tbody>
+					<tr><td>Sea Breeze</td><td class="text-end tabular-nums">12</td><td class="text-end tabular-nums">286</td></tr>
+					<tr><td>Coral Star</td><td class="text-end tabular-nums">9</td><td class="text-end tabular-nums">201</td></tr>
+					<tr><td>Blue Lagoon</td><td class="text-end tabular-nums">7</td><td class="text-end tabular-nums">164</td></tr>
+				</tbody>
+				<tbody class="table-group-divider">
+					<tr><td>All boats</td><td class="text-end tabular-nums">28</td><td class="text-end tabular-nums">651</td></tr>
+				</tbody>
+			</table>
+		</section>
+		<table class="table table-bordered" aria-label="Seasons on Samui">
+			<thead><tr><th scope="col">Season</th><th scope="col">Months</th><th scope="col">The sea</th></tr></thead>
+			<tbody>
+				<tr><td>Dry</td><td>January to April</td><td>Calm</td></tr>
+				<tr><td>Hot</td><td>May to August</td><td>Calm</td></tr>
+				<tr><td>Rainy</td><td>September to December</td><td>Waves</td></tr>
+			</tbody>
+		</table>
+	</div>
 </section>
 
 <section class="vstack gap-16" aria-labelledby="table-states-title">

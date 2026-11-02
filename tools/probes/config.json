@@ -32,6 +32,7 @@
 	},
 	"axe": {"version": "4.14.0", "integrity": "sha512-9WTZxEjsZ7b13TH8JPmbV2z8CHbl80/2hm3XPEG4JgNdQLK81IBRXmSxHfMAOkSqQeRxT/0dwNDz2GOm3zzpcQ==", "tags": ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]},
 	"allow": [
+		{"finding": "docs/all.ar.html 1440 · dark · RTL · Arabic — #dialog-full-panel from button.btn leaves the viewport", "engines": ["chrome-130"], "reason": "The drawer's Chrome 130 fault below: the full-screen dialog, 100 % of its fixed containing block, gets the 1440 px of the viewport moved 15 px to the left — [-15, 1425] — while Chrome 136 and the others give it [0, 1425] (measured 2026-11-02)."},
 		{"finding": "docs/all.ar.html 1440 · dark · RTL · Arabic — #drawer-filters-panel from button.btn leaves the viewport", "engines": ["chrome-130"], "reason": "Chrome 130 puts fixed boxes 15 px to the left in a right-to-left page whose root keeps a stable scrollbar gutter — as html:has(dialog:modal) does while a modal is open — so a drawer at the end edge loses 7 px; Chrome 136 places it right (measured 2026-10-28). The gutter stays: without it every engine shifts the page when a modal opens."}
 	]
 }

@@ -26,15 +26,15 @@
 		vertical-align: middle;
 	}
 
-	.table tbody tr:last-child td {
+	.table > :last-child > tr:last-child > td {
 		border-block-end: 0;
 	}
 
-	.table tbody tr:last-child td:first-child {
+	.table > :last-child > tr:last-child > td:first-child {
 		border-end-start-radius: var(--redz-radius-12);
 	}
 
-	.table tbody tr:last-child td:last-child {
+	.table > :last-child > tr:last-child > td:last-child {
 		border-end-end-radius: var(--redz-radius-12);
 	}
 
@@ -46,6 +46,36 @@
 	.table th:last-child,
 	.table td:last-child {
 		padding-inline-end: var(--redz-space-16);
+	}
+
+	.table-striped > tbody > tr:nth-child(odd) > td,
+	.table-striped-columns :is(th, td):nth-child(even) {
+		box-shadow: inset 0 0 0 100vmax color-mix(in oklch, var(--redz-text) 4%, transparent);
+	}
+
+	.table-bordered :is(th, td):not(:last-child) {
+		border-inline-end: 1px solid var(--redz-border);
+	}
+
+	.table-bordered:not(.card *) {
+		border: 1px solid var(--redz-border);
+		border-radius: var(--redz-radius-12);
+	}
+
+	.table-bordered:not(.card *) > thead > tr:first-child > th:first-child {
+		border-start-start-radius: var(--redz-radius-12);
+	}
+
+	.table-bordered:not(.card *) > thead > tr:first-child > th:last-child {
+		border-start-end-radius: var(--redz-radius-12);
+	}
+
+	.table-borderless :is(th, td) {
+		border-block-end: 0;
+	}
+
+	.table > :has(+ .table-group-divider) > tr:last-child > :is(th, td) {
+		border-block-end: 2px solid var(--redz-border-strong);
 	}
 
 	.table-hover tbody tr:hover td {

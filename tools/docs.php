@@ -14,8 +14,8 @@ const DOCS_KEPT = ['code', 'pre', 'kbd', 'samp', 'script', 'style', 'svg'];
 const DOCS_INDENT = "\t\t\t";
 
 /**
- * The page list of tools/docs.json: key => [title, group], in order.
- * @return array{site: string, texts: array<string, string>, pages: array<string, array{string, string}>, twins: array<string, list<string>>}
+ * The page list of tools/docs.json: key => [title, group], in order; every menu item's icon of icons/.
+ * @return array{site: string, texts: array<string, string>, pages: array<string, array{string, string}>, twins: array<string, list<string>>, icons: array<string, string>}
  */
 function DOCS__Config(): array
 {
@@ -26,7 +26,12 @@ function DOCS__Config(): array
 			$pages[$key] = [$title, $group['title']];
 		}
 	}
-	return ['site' => $config['site'], 'texts' => $config['texts'], 'pages' => $pages, 'twins' => $config['twins']];
+	foreach ([...array_keys($pages), 'all', 'demo', 'checks'] as $key) {
+		if (!is_file(DOCS_ROOT . '/icons/' . ($config['icons'][$key] ?? '') . '.svg')) {
+			throw new RuntimeException('tools/docs.json gives the menu item "' . $key . '" no icon of icons/');
+		}
+	}
+	return ['site' => $config['site'], 'texts' => $config['texts'], 'pages' => $pages, 'twins' => $config['twins'], 'icons' => $config['icons']];
 }
 
 /** The text of an HTML fragment: tags gone, entities decoded, white space as single spaces. */
@@ -128,9 +133,15 @@ function DOCS__Nav(array $config, string $current): string
 			$out .= DOCS_INDENT . '<div class="app-section">' . $in . "</div>\n";
 			$group = $in;
 		}
-		$out .= DOCS_INDENT . '<a class="app-link" href="' . $key . '.html"' . ($key === $current ? ' aria-current="page"' : '') . '>' . htmlspecialchars($title) . "</a>\n";
+		$out .= DOCS_INDENT . '<a class="app-link" href="' . $key . '.html"' . ($key === $current ? ' aria-current="page"' : '') . '>' . DOCS__NavIcon($config, $key) . htmlspecialchars($title) . "</a>\n";
 	}
-	return $out . DOCS_INDENT . '<a class="app-link" href="../reference/demo/list.html">Demo screens</a>' . "\n" . DOCS_INDENT . '<a class="app-link" href="../checks/">Checks in real engines</a>' . "\n";
+	return $out . DOCS_INDENT . '<a class="app-link" href="../reference/demo/list.html">' . DOCS__NavIcon($config, 'demo') . 'Demo screens</a>' . "\n" . DOCS_INDENT . '<a class="app-link" href="../checks/">' . DOCS__NavIcon($config, 'checks') . 'Checks in real engines</a>' . "\n";
+}
+
+/** The icon of the menu item $key. */
+function DOCS__NavIcon(array $config, string $key): string
+{
+	return '<i class="bi bi-' . $config['icons'][$key] . '" aria-hidden="true"></i>';
 }
 
 /** The custom properties of a stylesheet: [declared, read and not declared], each in order of appearance. */

@@ -57,6 +57,35 @@ A list of records: a title that links to the record, a line under it, a note whe
 </section>
 ```
 
+### Stripes, borders and groups
+
+`table-striped` shades every other row, `table-striped-columns` every other column — under the hover's light and a row's tone alike; `table-group-divider` on a `tbody` draws a stronger line above it. `table-bordered` draws the lines between columns and, outside a card, the table's own frame; `table-borderless` takes the lines between rows away.
+
+```html
+<section class="card" aria-labelledby="table-variants-title">
+	<div class="card-header"><h2 class="fs-14" id="table-variants-title">Boats this week</h2></div>
+	<table class="table table-striped table-hover">
+		<thead><tr><th scope="col">Boat</th><th class="text-end" scope="col">Trips</th><th class="text-end" scope="col">Seats sold</th></tr></thead>
+		<tbody>
+			<tr><td>Sea Breeze</td><td class="text-end tabular-nums">12</td><td class="text-end tabular-nums">286</td></tr>
+			<tr><td>Coral Star</td><td class="text-end tabular-nums">9</td><td class="text-end tabular-nums">201</td></tr>
+			<tr><td>Blue Lagoon</td><td class="text-end tabular-nums">7</td><td class="text-end tabular-nums">164</td></tr>
+		</tbody>
+		<tbody class="table-group-divider">
+			<tr><td>All boats</td><td class="text-end tabular-nums">28</td><td class="text-end tabular-nums">651</td></tr>
+		</tbody>
+	</table>
+</section>
+<table class="table table-bordered" aria-label="Seasons on Samui">
+	<thead><tr><th scope="col">Season</th><th scope="col">Months</th><th scope="col">The sea</th></tr></thead>
+	<tbody>
+		<tr><td>Dry</td><td>January to April</td><td>Calm</td></tr>
+		<tr><td>Hot</td><td>May to August</td><td>Calm</td></tr>
+		<tr><td>Rainy</td><td>September to December</td><td>Waves</td></tr>
+	</tbody>
+</table>
+```
+
 ## States
 
 A row's tone marks what needs attention: `table-danger` failed, `table-warning` needs a look, `table-secondary` is out of use. On a pointer screen the row's actions show on hover and on focus; on a touch screen they always show.
@@ -73,7 +102,7 @@ A row's tone marks what needs attention: `table-danger` failed, `table-warning` 
 
 From [`css/components/table.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css). It declares `--redz-row-tint`, `--redz-row-mark` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-8`, `--redz-space-12`, `--redz-border`, `--redz-bg`, `--redz-text-muted`, `--redz-fs-12`, `--redz-row-pad`, `--redz-radius-12`, `--redz-space-16`, `--redz-bg-hover`, `--redz-text`, `--redz-font-mono`, `--redz-space-4`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-bg-page`.
+It reads the theme's `--redz-space-8`, `--redz-space-12`, `--redz-border`, `--redz-bg`, `--redz-text-muted`, `--redz-fs-12`, `--redz-row-pad`, `--redz-radius-12`, `--redz-space-16`, `--redz-text`, `--redz-border-strong`, `--redz-bg-hover`, `--redz-font-mono`, `--redz-space-4`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-bg-page`.
 
 ## From Bootstrap 5.3
 
@@ -81,14 +110,9 @@ It reads the theme's `--redz-space-8`, `--redz-space-12`, `--redz-border`, `--re
 | --- | --- | --- | --- |
 | `caption-top` | — | missing |  |
 | `table-active` | — | review | aria-selected or aria-current on the row |
-| `table-bordered` | — | missing |  |
-| `table-borderless` | — | missing |  |
 | `table-dark` | — | review | row tones are danger, warning and secondary |
-| `table-group-divider` | — | missing |  |
 | `table-info` | — | review | row tones are danger, warning and secondary |
 | `table-light` | — | review | row tones are danger, warning and secondary |
 | `table-primary` | — | review | row tones are danger, warning and secondary |
 | `table-responsive` | — | review | the card's body holds the table; columns hide below md: |
-| `table-striped` | — | missing |  |
-| `table-striped-columns` | — | missing |  |
 | `table-success` | — | review | row tones are danger, warning and secondary |

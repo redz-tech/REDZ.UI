@@ -26,6 +26,8 @@ window.REDZ_PROBE = (() => {
 		return box;
 	};
 	const shown = (el) => el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden' && !closed(el);
+	// Hidden on purpose: the screen-reader-only pattern clips its box to nothing.
+	const unseen = (el) => getComputedStyle(el).clipPath === 'inset(50%)';
 	// The page's own errors from here on — an engine whose driver brings no events (Safari) shows them only this way.
 	const errors = [];
 	addEventListener('error', (event) => errors.push('exception ' + String(event.message || event.error)));
@@ -98,7 +100,7 @@ window.REDZ_PROBE = (() => {
 			}
 			const cut = [];
 			for (const el of document.querySelectorAll('.btn, .badge, .chip, .nav-link, .menu-item, .app-link, .form-label, label')) {
-				if (shown(el) && el.scrollWidth > el.clientWidth + 1 && getComputedStyle(el).overflowX !== 'visible') {
+				if (shown(el) && !unseen(el) && el.scrollWidth > el.clientWidth + 1 && getComputedStyle(el).overflowX !== 'visible') {
 					cut.push(name(el) + ' "' + el.textContent.trim().slice(0, 30) + '"');
 				}
 			}
@@ -121,6 +123,7 @@ window.REDZ_PROBE = (() => {
 					const target = document.getElementById(button.getAttribute('commandfor') || '');
 					return target === null || button.getAttribute('aria-expanded') !== String(!target.hidden);
 				}).slice(0, 8).map((button) => name(button) + ' → #' + button.getAttribute('commandfor')),
+				scrollspies: [...document.querySelectorAll('[data-scrollspy]')].filter((nav) => nav.querySelectorAll('[aria-current="location"]').length !== 1).slice(0, 8).map(name),
 				comboboxes: [...document.querySelectorAll('input[role="combobox"][aria-controls]')].flatMap((input) => {
 					const list = document.getElementById(input.getAttribute('aria-controls') || '');
 					if (list === null) {

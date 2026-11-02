@@ -93,6 +93,8 @@ element and markup added later works the same:
   links and buttons (`js/combobox.js`).
 - **Shortcuts:** a button or link whose `aria-keyshortcuts` names a combination with Control, Meta or Alt is pressed by
   it — `Meta+K Control+K` answers ⌘K on Apple's systems and Ctrl K elsewhere (`js/shortcuts.js`).
+- **Scrollspy:** in a nav or list group with `data-scrollspy`, the link to the section in view says so in
+  `aria-current="location"` (`js/scrollspy.js`).
 
 The library has no words of its own: every word it shows comes from the caller or from the page's island
 `#redz-ui-text`, and a missing one is named in the console.

@@ -22,6 +22,28 @@ A card that is a section of the screen is a `<section>` named by its heading. Th
 </section>
 ```
 
+### Images
+
+`card-img-top` and `card-img-bottom` round the image with the card's corners; `card-img-overlay` lays the card's words over a `card-img`. A `stretched-link` makes the whole card its link.
+
+```html
+<div class="grid md:cols-2 gap-16">
+	<section class="card" aria-labelledby="card-images-title">
+		<img class="card-img-top ratio-16x9" src="img/lagoon.svg" alt="A lagoon under green hills">
+		<div class="card-body vstack gap-4">
+			<h2 class="fs-16" id="card-images-title"><a class="stretched-link" href="#card-images">Ang Thong by speedboat</a></h2>
+			<p class="text-muted mb-0">From 2 500 THB · a day</p>
+		</div>
+	</section>
+	<section class="card" aria-labelledby="card-overlay-title">
+		<img class="card-img ratio-16x9" src="img/lagoon.svg" alt="">
+		<div class="card-img-overlay vstack justify-content-end">
+			<h2 class="fs-16" id="card-overlay-title">The emerald lake</h2>
+		</div>
+	</section>
+</div>
+```
+
 ### Tabs on a card
 
 A `nav` placed straight in the card lines up with the header's padding.
@@ -59,7 +81,7 @@ The parent sets the grid; each card measures itself. Under 576 px of the region 
 
 From [`css/components/card.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/card.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-space-8`, `--redz-space-12`, `--redz-space-16`, `--redz-text-muted`.
+It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-space-16`, `--redz-space-8`, `--redz-space-12`, `--redz-text-muted`.
 
 ## From Bootstrap 5.3
 
@@ -68,10 +90,6 @@ It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-s
 | `card-group` | — | review | grid with gap-16 |
 | `card-header-pills` | — | review | a nav straight in the card |
 | `card-header-tabs` | — | review | a nav straight in the card |
-| `card-img` | — | missing |  |
-| `card-img-bottom` | — | missing |  |
-| `card-img-overlay` | — | missing |  |
-| `card-img-top` | — | missing |  |
 | `card-link` | — | review | a heading and paragraphs in card-body |
 | `card-subtitle` | — | review | a heading and paragraphs in card-body |
 | `card-text` | — | review | a heading and paragraphs in card-body |

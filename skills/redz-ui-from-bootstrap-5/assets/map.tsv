@@ -141,11 +141,11 @@ bg-info	bg-info	same	class	utilities
 bg-info-subtle	bg-info-subtle	same	class	utilities	
 bg-light		review	class	utilities	bg-body, bg-page, bg-raised or a tone
 bg-light-subtle		review	class	utilities	bg-page, or a tone's -subtle
-bg-opacity-10		missing	class	utilities	
-bg-opacity-100		missing	class	utilities	
-bg-opacity-25		missing	class	utilities	
-bg-opacity-50		missing	class	utilities	
-bg-opacity-75		missing	class	utilities	
+bg-opacity-10		review	class	utilities	Bootstrap 6 dropped it too: bg-{tone}-subtle
+bg-opacity-100		review	class	utilities	Bootstrap 6 dropped it too: bg-{tone}-subtle
+bg-opacity-25		review	class	utilities	Bootstrap 6 dropped it too: bg-{tone}-subtle
+bg-opacity-50		review	class	utilities	Bootstrap 6 dropped it too: bg-{tone}-subtle
+bg-opacity-75		review	class	utilities	Bootstrap 6 dropped it too: bg-{tone}-subtle
 bg-primary	bg-primary	same	class	utilities	
 bg-primary-subtle	bg-primary-subtle	same	class	utilities	
 bg-secondary	bg-secondary	same	class	utilities	
@@ -198,8 +198,8 @@ border-warning	border-warning	same	class	utilities
 border-warning-subtle		missing	class	utilities	
 border-white		review	class	utilities	border-strong, or a tone
 bottom-0	bottom-0	same	class	utilities	
-bottom-100		missing	class	utilities	only 0 here
-bottom-50		missing	class	utilities	only 0 here
+bottom-100	bottom-100	same	class	utilities	
+bottom-50	bottom-50	same	class	utilities	
 breadcrumb	breadcrumb	same	class	breadcrumb	
 breadcrumb-item	breadcrumb-item	same	class	breadcrumb	
 bs-popover-auto		missing	class	tooltip	a short note is a toggletip; a rich one a menu or a drawer
@@ -248,10 +248,10 @@ card-group		review	class	card	grid with gap-16
 card-header	card-header	same	class	card	
 card-header-pills		review	class	card	a nav straight in the card
 card-header-tabs		review	class	card	a nav straight in the card
-card-img		missing	class	card	
-card-img-bottom		missing	class	card	
-card-img-overlay		missing	class	card	
-card-img-top		missing	class	card	
+card-img	card-img	same	class	card	
+card-img-bottom	card-img-bottom	same	class	card	
+card-img-overlay	card-img-overlay	same	class	card	
+card-img-top	card-img-top	same	class	card	
 card-link		review	class	card	a heading and paragraphs in card-body
 card-subtitle		review	class	card	a heading and paragraphs in card-body
 card-text		review	class	card	a heading and paragraphs in card-body
@@ -517,8 +517,8 @@ dropstart		remove	class	menu	no wrapper: the menu flips by itself
 dropup		remove	class	menu	no wrapper: the menu flips by itself
 dropup-center		remove	class	menu	no wrapper: the menu flips by itself
 end-0	end-0	same	class	utilities	
-end-100		missing	class	utilities	only 0 here
-end-50		missing	class	utilities	only 0 here
+end-100	end-100	same	class	utilities	
+end-50	end-50	same	class	utilities	
 fade		remove	class		the components animate themselves, and not for people who ask for less motion
 figure		missing	class	utilities	
 figure-caption		missing	class	utilities	
@@ -597,24 +597,24 @@ flex-xxl-shrink-0	2xl:flex-shrink-0	rename	class	utilities
 flex-xxl-shrink-1	2xl:flex-shrink-1	rename	class	utilities	
 flex-xxl-wrap	2xl:flex-wrap	rename	class	utilities	
 flex-xxl-wrap-reverse	2xl:flex-wrap-reverse	rename	class	utilities	
-float-end		missing	class	utilities	no floats: flex or grid, with ms-auto or justify-content-end
-float-lg-end		missing	class	utilities	no floats: flex or grid, with ms-auto or justify-content-end
-float-lg-none		missing	class	utilities	no floats: flex or grid, with ms-auto or justify-content-end
-float-lg-start		missing	class	utilities	no floats: flex or grid, with ms-auto or justify-content-end
-float-md-end		missing	class	utilities	no floats: flex or grid, with ms-auto or justify-content-end
-float-md-none		missing	class	utilities	no floats: flex or grid, with ms-auto or justify-content-end
-float-md-start		missing	class	utilities	no floats: flex or grid, with ms-auto or justify-content-end
-float-none		missing	class	utilities	no floats: flex or grid, with ms-auto or justify-content-end
-float-sm-end		missing	class	utilities	no floats: flex or grid, with ms-auto or justify-content-end
-float-sm-none		missing	class	utilities	no floats: flex or grid, with ms-auto or justify-content-end
-float-sm-start		missing	class	utilities	no floats: flex or grid, with ms-auto or justify-content-end
-float-start		missing	class	utilities	no floats: flex or grid, with ms-auto or justify-content-end
-float-xl-end		missing	class	utilities	no floats: flex or grid, with ms-auto or justify-content-end
-float-xl-none		missing	class	utilities	no floats: flex or grid, with ms-auto or justify-content-end
-float-xl-start		missing	class	utilities	no floats: flex or grid, with ms-auto or justify-content-end
-float-xxl-end		missing	class	utilities	no floats: flex or grid, with ms-auto or justify-content-end
-float-xxl-none		missing	class	utilities	no floats: flex or grid, with ms-auto or justify-content-end
-float-xxl-start		missing	class	utilities	no floats: flex or grid, with ms-auto or justify-content-end
+float-end	float-end	same	class	utilities	
+float-lg-end	lg:float-end	rename	class	utilities	
+float-lg-none	lg:float-none	rename	class	utilities	
+float-lg-start	lg:float-start	rename	class	utilities	
+float-md-end	md:float-end	rename	class	utilities	
+float-md-none	md:float-none	rename	class	utilities	
+float-md-start	md:float-start	rename	class	utilities	
+float-none	float-none	same	class	utilities	
+float-sm-end	sm:float-end	rename	class	utilities	
+float-sm-none	sm:float-none	rename	class	utilities	
+float-sm-start	sm:float-start	rename	class	utilities	
+float-start	float-start	same	class	utilities	
+float-xl-end	xl:float-end	rename	class	utilities	
+float-xl-none	xl:float-none	rename	class	utilities	
+float-xl-start	xl:float-start	rename	class	utilities	
+float-xxl-end	2xl:float-end	rename	class	utilities	
+float-xxl-none	2xl:float-none	rename	class	utilities	
+float-xxl-start	2xl:float-start	rename	class	utilities	
 focus-ring		remove	class	utilities	the focus ring is built in, 3:1 in both themes
 focus-ring-danger		remove	class	utilities	the focus ring is built in, 3:1 in both themes
 focus-ring-dark		remove	class	utilities	the focus ring is built in, 3:1 in both themes
@@ -876,46 +876,46 @@ link-danger		review	class	utilities	a link is the accent; text-* for a tone
 link-dark		review	class	utilities	a link is the accent; text-* for a tone
 link-info		review	class	utilities	a link is the accent; text-* for a tone
 link-light		review	class	utilities	a link is the accent; text-* for a tone
-link-offset-1		missing	class	utilities	
-link-offset-1-hover		missing	class	utilities	
-link-offset-2		missing	class	utilities	
-link-offset-2-hover		missing	class	utilities	
-link-offset-3		missing	class	utilities	
-link-offset-3-hover		missing	class	utilities	
-link-opacity-10		missing	class	utilities	
-link-opacity-10-hover		missing	class	utilities	
-link-opacity-100		missing	class	utilities	
-link-opacity-100-hover		missing	class	utilities	
-link-opacity-25		missing	class	utilities	
-link-opacity-25-hover		missing	class	utilities	
-link-opacity-50		missing	class	utilities	
-link-opacity-50-hover		missing	class	utilities	
-link-opacity-75		missing	class	utilities	
-link-opacity-75-hover		missing	class	utilities	
+link-offset-1		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-offset-1-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-offset-2		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-offset-2-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-offset-3		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-offset-3-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-opacity-10		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-opacity-10-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-opacity-100		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-opacity-100-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-opacity-25		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-opacity-25-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-opacity-50		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-opacity-50-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-opacity-75		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-opacity-75-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
 link-primary		review	class	utilities	a link is the accent; text-* for a tone
 link-secondary		review	class	utilities	a link is the accent; text-* for a tone
 link-success		review	class	utilities	a link is the accent; text-* for a tone
-link-underline		missing	class	utilities	
-link-underline-danger		missing	class	utilities	
-link-underline-dark		missing	class	utilities	
-link-underline-info		missing	class	utilities	
-link-underline-light		missing	class	utilities	
-link-underline-opacity-0		missing	class	utilities	
-link-underline-opacity-0-hover		missing	class	utilities	
-link-underline-opacity-10		missing	class	utilities	
-link-underline-opacity-10-hover		missing	class	utilities	
-link-underline-opacity-100		missing	class	utilities	
-link-underline-opacity-100-hover		missing	class	utilities	
-link-underline-opacity-25		missing	class	utilities	
-link-underline-opacity-25-hover		missing	class	utilities	
-link-underline-opacity-50		missing	class	utilities	
-link-underline-opacity-50-hover		missing	class	utilities	
-link-underline-opacity-75		missing	class	utilities	
-link-underline-opacity-75-hover		missing	class	utilities	
-link-underline-primary		missing	class	utilities	
-link-underline-secondary		missing	class	utilities	
-link-underline-success		missing	class	utilities	
-link-underline-warning		missing	class	utilities	
+link-underline		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-underline-danger		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-underline-dark		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-underline-info		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-underline-light		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-underline-opacity-0		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-underline-opacity-0-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-underline-opacity-10		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-underline-opacity-10-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-underline-opacity-100		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-underline-opacity-100-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-underline-opacity-25		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-underline-opacity-25-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-underline-opacity-50		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-underline-opacity-50-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-underline-opacity-75		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-underline-opacity-75-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-underline-primary		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-underline-secondary		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-underline-success		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-underline-warning		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
 link-warning		review	class	utilities	a link is the accent; text-* for a tone
 list-group	list-group	same	class	list-group	
 list-group-flush	list-group-flush	same	class	list-group	
@@ -1067,8 +1067,8 @@ me-xxl-4	2xl:me-24	value	class	utilities	the number is the pixels
 me-xxl-5	2xl:me-48	value	class	utilities	the number is the pixels
 me-xxl-auto	2xl:me-auto	rename	class	utilities	
 mh-100		missing	class	utilities	
-min-vh-100		missing	class	utilities	
-min-vw-100		missing	class	utilities	
+min-vh-100	min-vh-100	same	class	utilities	the height by dvh, as a phone's browser bars come and go
+min-vw-100	min-vw-100	same	class	utilities	the height by dvh, as a phone's browser bars come and go
 modal	dialog	rename	class	dialog	on a <dialog>, opened by commandfor + command="show-modal"
 modal-backdrop		remove	class	dialog	the browser's ::backdrop
 modal-body	dialog-body	rename	class	dialog	
@@ -1077,12 +1077,12 @@ modal-dialog		remove	class	dialog	no wrappers: the <dialog> is the box
 modal-dialog-centered		remove	class	dialog	a dialog is centered
 modal-dialog-scrollable		remove	class	dialog	the dialog's body scrolls by itself
 modal-footer	dialog-footer	rename	class	dialog	
-modal-fullscreen		missing	class	dialog	
-modal-fullscreen-lg-down		missing	class	dialog	
-modal-fullscreen-md-down		missing	class	dialog	
-modal-fullscreen-sm-down		missing	class	dialog	
-modal-fullscreen-xl-down		missing	class	dialog	
-modal-fullscreen-xxl-down		missing	class	dialog	
+modal-fullscreen	dialog-fullscreen	rename	class	dialog	
+modal-fullscreen-lg-down		remove	class	dialog	under 576 px a dialog fills the screen by itself; dialog-fullscreen fills it everywhere
+modal-fullscreen-md-down		remove	class	dialog	under 576 px a dialog fills the screen by itself; dialog-fullscreen fills it everywhere
+modal-fullscreen-sm-down		remove	class	dialog	under 576 px a dialog fills the screen by itself; dialog-fullscreen fills it everywhere
+modal-fullscreen-xl-down		remove	class	dialog	under 576 px a dialog fills the screen by itself; dialog-fullscreen fills it everywhere
+modal-fullscreen-xxl-down		remove	class	dialog	under 576 px a dialog fills the screen by itself; dialog-fullscreen fills it everywhere
 modal-header	dialog-header	rename	class	dialog	
 modal-lg	dialog-lg	rename	class	dialog	
 modal-sm	dialog-sm	rename	class	dialog	
@@ -1259,9 +1259,9 @@ my-xxl-4	2xl:my-24	value	class	utilities	the number is the pixels
 my-xxl-5	2xl:my-48	value	class	utilities	the number is the pixels
 my-xxl-auto	2xl:my-auto	rename	class	utilities	
 nav	nav	same	class	nav	
-nav-fill		missing	class	nav	
+nav-fill	nav-fill	same	class	nav	
 nav-item		remove	class	nav	links sit straight in the nav
-nav-justified		missing	class	nav	
+nav-justified	nav-justified	same	class	nav	
 nav-link	nav-link	same	class	nav	
 nav-pills	nav-pills	same	class	nav	
 nav-tabs	nav-underline	rename	class	nav	tabs are drawn as an underline
@@ -1497,11 +1497,11 @@ p-xxl-2	2xl:p-8	value	class	utilities	the number is the pixels
 p-xxl-3	2xl:p-16	value	class	utilities	the number is the pixels
 p-xxl-4	2xl:p-24	value	class	utilities	the number is the pixels
 p-xxl-5	2xl:p-48	value	class	utilities	the number is the pixels
-page-item		missing	class		lists here page by “Next 25” (keyset), no page numbers
-page-link		missing	class		lists here page by “Next 25” (keyset), no page numbers
-pagination		missing	class		lists here page by “Next 25” (keyset), no page numbers
-pagination-lg		missing	class		lists here page by “Next 25” (keyset), no page numbers
-pagination-sm		missing	class		lists here page by “Next 25” (keyset), no page numbers
+page-item	page-item	same	class	pagination	the current page aria-current="page", a missing one aria-disabled; previous and next with page-text for a list paged by "the next 50"
+page-link	page-link	same	class	pagination	the current page aria-current="page", a missing one aria-disabled; previous and next with page-text for a list paged by "the next 50"
+pagination	pagination	same	class	pagination	the current page aria-current="page", a missing one aria-disabled; previous and next with page-text for a list paged by "the next 50"
+pagination-lg	pagination-lg	same	class	pagination	the current page aria-current="page", a missing one aria-disabled; previous and next with page-text for a list paged by "the next 50"
+pagination-sm	pagination-sm	same	class	pagination	the current page aria-current="page", a missing one aria-disabled; previous and next with page-text for a list paged by "the next 50"
 pb-0	pb-0	same	class	utilities	
 pb-1	pb-4	value	class	utilities	the number is the pixels
 pb-2	pb-8	value	class	utilities	reused — pb-2 means another thing in REDZ.UI; the number is the pixels
@@ -1753,44 +1753,44 @@ rounded-2	rounded-6	value	class	utilities	6 px
 rounded-3	rounded-8	value	class	utilities	8 px
 rounded-4	rounded-16	value	class	utilities	reused — rounded-4 means another thing in REDZ.UI; 16 px
 rounded-5		review	class	utilities	32 px in Bootstrap: rounded-16 or rounded-full
-rounded-bottom		missing	class	utilities	no one-side radii
-rounded-bottom-0		missing	class	utilities	no one-side radii
-rounded-bottom-1		missing	class	utilities	no one-side radii
-rounded-bottom-2		missing	class	utilities	no one-side radii
-rounded-bottom-3		missing	class	utilities	no one-side radii
-rounded-bottom-4		missing	class	utilities	no one-side radii
-rounded-bottom-5		missing	class	utilities	no one-side radii
-rounded-bottom-circle		missing	class	utilities	no one-side radii
-rounded-bottom-pill		missing	class	utilities	no one-side radii
+rounded-bottom	rounded-bottom	same	class	utilities	
+rounded-bottom-0	rounded-bottom	review	class	utilities	a side takes the 8 px radius
+rounded-bottom-1	rounded-bottom	review	class	utilities	a side takes the 8 px radius
+rounded-bottom-2	rounded-bottom	review	class	utilities	a side takes the 8 px radius
+rounded-bottom-3	rounded-bottom	review	class	utilities	a side takes the 8 px radius
+rounded-bottom-4	rounded-bottom	review	class	utilities	a side takes the 8 px radius
+rounded-bottom-5	rounded-bottom	review	class	utilities	a side takes the 8 px radius
+rounded-bottom-circle	rounded-bottom	review	class	utilities	a side takes the 8 px radius
+rounded-bottom-pill	rounded-bottom	review	class	utilities	a side takes the 8 px radius
 rounded-circle	rounded-full	rename	class	utilities	
-rounded-end		missing	class	utilities	no one-side radii
-rounded-end-0		missing	class	utilities	no one-side radii
-rounded-end-1		missing	class	utilities	no one-side radii
-rounded-end-2		missing	class	utilities	no one-side radii
-rounded-end-3		missing	class	utilities	no one-side radii
-rounded-end-4		missing	class	utilities	no one-side radii
-rounded-end-5		missing	class	utilities	no one-side radii
-rounded-end-circle		missing	class	utilities	no one-side radii
-rounded-end-pill		missing	class	utilities	no one-side radii
+rounded-end	rounded-end	same	class	utilities	
+rounded-end-0	rounded-end	review	class	utilities	a side takes the 8 px radius
+rounded-end-1	rounded-end	review	class	utilities	a side takes the 8 px radius
+rounded-end-2	rounded-end	review	class	utilities	a side takes the 8 px radius
+rounded-end-3	rounded-end	review	class	utilities	a side takes the 8 px radius
+rounded-end-4	rounded-end	review	class	utilities	a side takes the 8 px radius
+rounded-end-5	rounded-end	review	class	utilities	a side takes the 8 px radius
+rounded-end-circle	rounded-end	review	class	utilities	a side takes the 8 px radius
+rounded-end-pill	rounded-end	review	class	utilities	a side takes the 8 px radius
 rounded-pill	rounded-full	rename	class	utilities	
-rounded-start		missing	class	utilities	no one-side radii
-rounded-start-0		missing	class	utilities	no one-side radii
-rounded-start-1		missing	class	utilities	no one-side radii
-rounded-start-2		missing	class	utilities	no one-side radii
-rounded-start-3		missing	class	utilities	no one-side radii
-rounded-start-4		missing	class	utilities	no one-side radii
-rounded-start-5		missing	class	utilities	no one-side radii
-rounded-start-circle		missing	class	utilities	no one-side radii
-rounded-start-pill		missing	class	utilities	no one-side radii
-rounded-top		missing	class	utilities	no one-side radii
-rounded-top-0		missing	class	utilities	no one-side radii
-rounded-top-1		missing	class	utilities	no one-side radii
-rounded-top-2		missing	class	utilities	no one-side radii
-rounded-top-3		missing	class	utilities	no one-side radii
-rounded-top-4		missing	class	utilities	no one-side radii
-rounded-top-5		missing	class	utilities	no one-side radii
-rounded-top-circle		missing	class	utilities	no one-side radii
-rounded-top-pill		missing	class	utilities	no one-side radii
+rounded-start	rounded-start	same	class	utilities	
+rounded-start-0	rounded-start	review	class	utilities	a side takes the 8 px radius
+rounded-start-1	rounded-start	review	class	utilities	a side takes the 8 px radius
+rounded-start-2	rounded-start	review	class	utilities	a side takes the 8 px radius
+rounded-start-3	rounded-start	review	class	utilities	a side takes the 8 px radius
+rounded-start-4	rounded-start	review	class	utilities	a side takes the 8 px radius
+rounded-start-5	rounded-start	review	class	utilities	a side takes the 8 px radius
+rounded-start-circle	rounded-start	review	class	utilities	a side takes the 8 px radius
+rounded-start-pill	rounded-start	review	class	utilities	a side takes the 8 px radius
+rounded-top	rounded-top	same	class	utilities	
+rounded-top-0	rounded-top	review	class	utilities	a side takes the 8 px radius
+rounded-top-1	rounded-top	review	class	utilities	a side takes the 8 px radius
+rounded-top-2	rounded-top	review	class	utilities	a side takes the 8 px radius
+rounded-top-3	rounded-top	review	class	utilities	a side takes the 8 px radius
+rounded-top-4	rounded-top	review	class	utilities	a side takes the 8 px radius
+rounded-top-5	rounded-top	review	class	utilities	a side takes the 8 px radius
+rounded-top-circle	rounded-top	review	class	utilities	a side takes the 8 px radius
+rounded-top-pill	rounded-top	review	class	utilities	a side takes the 8 px radius
 row	grid	grid	class	layout	on the parent, with cols-N for equal columns or cols-12 for spans; no gutters to undo
 row-cols-1	cols-1	grid	class	layout	on the same parent
 row-cols-2	cols-2	grid	class	layout	on the same parent
@@ -1882,8 +1882,8 @@ spinner-border-sm		review	class	spinner	the spinner is 1 em: set the font size
 spinner-grow		missing	class	spinner	
 spinner-grow-sm		missing	class	spinner	
 start-0	start-0	same	class	utilities	
-start-100		missing	class	utilities	only 0 here
-start-50		missing	class	utilities	only 0 here
+start-100	start-100	same	class	utilities	
+start-50	start-50	same	class	utilities	
 sticky-bottom		review	class	utilities	position-sticky with top-0 or bottom-0
 sticky-lg-bottom		review	class	utilities	position-sticky with top-0 or bottom-0
 sticky-lg-top		review	class	utilities	position-sticky with top-0 or bottom-0
@@ -1896,16 +1896,16 @@ sticky-xl-bottom		review	class	utilities	position-sticky with top-0 or bottom-0
 sticky-xl-top		review	class	utilities	position-sticky with top-0 or bottom-0
 sticky-xxl-bottom		review	class	utilities	position-sticky with top-0 or bottom-0
 sticky-xxl-top		review	class	utilities	position-sticky with top-0 or bottom-0
-stretched-link		missing	class	utilities	
+stretched-link	stretched-link	same	class	utilities	a card is its own positioned parent
 tab-content		remove	class	nav	panels are siblings with role="tabpanel", hidden when not selected
 tab-pane		remove	class	nav	panels are siblings with role="tabpanel", hidden when not selected
 table	table	same	class	table	
 table-active		review	class	table	aria-selected or aria-current on the row
-table-bordered		missing	class	table	
-table-borderless		missing	class	table	
+table-bordered	table-bordered	same	class	table	in a card the card's border is the table's frame
+table-borderless	table-borderless	same	class	table	
 table-danger	table-danger	same	class	table	
 table-dark		review	class	table	row tones are danger, warning and secondary
-table-group-divider		missing	class	table	
+table-group-divider	table-group-divider	same	class	table	
 table-hover	table-hover	same	class	table	
 table-info		review	class	table	row tones are danger, warning and secondary
 table-light		review	class	table	row tones are danger, warning and secondary
@@ -1918,8 +1918,8 @@ table-responsive-xl		review	class	table	the card's body holds the table; columns
 table-responsive-xxl		review	class	table	the card's body holds the table; columns hide below md:
 table-secondary	table-secondary	same	class	table	
 table-sm		review	class	table	data-density="compact" on <html>
-table-striped		missing	class	table	
-table-striped-columns		missing	class	table	
+table-striped	table-striped	same	class	table	
+table-striped-columns	table-striped-columns	same	class	table	
 table-success		review	class	table	row tones are danger, warning and secondary
 table-warning	table-warning	same	class	table	
 text-bg-danger	badge-danger	review	class	badge	on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS
@@ -1960,10 +1960,10 @@ text-md-end	md:text-end	rename	class	utilities
 text-md-start	md:text-start	rename	class	utilities	
 text-muted	text-muted	same	class	utilities	
 text-nowrap	text-nowrap	same	class	utilities	
-text-opacity-100		missing	class	utilities	
-text-opacity-25		missing	class	utilities	
-text-opacity-50		missing	class	utilities	
-text-opacity-75		missing	class	utilities	
+text-opacity-100		review	class	utilities	Bootstrap 6 dropped it too: text-muted or text-faint
+text-opacity-25		review	class	utilities	Bootstrap 6 dropped it too: text-muted or text-faint
+text-opacity-50		review	class	utilities	Bootstrap 6 dropped it too: text-muted or text-faint
+text-opacity-75		review	class	utilities	Bootstrap 6 dropped it too: text-muted or text-faint
 text-primary	text-primary	same	class	utilities	
 text-primary-emphasis	text-primary	rename	class	utilities	a tone's text color is already its emphasis
 text-reset	text-reset	same	class	utilities	
@@ -1996,34 +1996,34 @@ tooltip	tooltip	same	class	tooltip
 tooltip-arrow		remove	class	tooltip	the tooltip is one element
 tooltip-inner		remove	class	tooltip	the tooltip is one element
 top-0	top-0	same	class	utilities	
-top-100		missing	class	utilities	only 0 here
-top-50		missing	class	utilities	only 0 here
-translate-middle		missing	class	utilities	center by grid or flex
-translate-middle-x		missing	class	utilities	center by grid or flex
-translate-middle-y		missing	class	utilities	center by grid or flex
+top-100	top-100	same	class	utilities	
+top-50	top-50	same	class	utilities	
+translate-middle	translate-middle	same	class	utilities	turns round right to left
+translate-middle-x	translate-middle-x	same	class	utilities	turns round right to left
+translate-middle-y	translate-middle-y	same	class	utilities	turns round right to left
 user-select-all	user-select-all	same	class	utilities	
 user-select-auto	user-select-auto	same	class	utilities	
 user-select-none	user-select-none	same	class	utilities	
 valid-feedback		remove	class	form	fields have no success state
 valid-tooltip		remove	class	form	fields have no success state
-vh-100		missing	class	utilities	
+vh-100	vh-100	same	class	utilities	the height by dvh, as a phone's browser bars come and go
 visible	visible	same	class	utilities	
 visually-hidden	visually-hidden	same	class	utilities	
-visually-hidden-focusable		missing	class	utilities	
+visually-hidden-focusable	visually-hidden-focusable	same	class	utilities	
 vr		missing	class	utilities	
 vstack	vstack	same	class	utilities	
-vw-100		missing	class	utilities	
+vw-100	vw-100	same	class	utilities	the height by dvh, as a phone's browser bars come and go
 w-100	w-100	same	class	utilities	
 w-25	w-25	same	class	utilities	
 w-50	w-50	same	class	utilities	
 w-75	w-75	same	class	utilities	
 w-auto	w-auto	same	class	utilities	
 was-validated		state	class	form	the browser's :user-invalid shows after the person edits
-z-0		missing	class	utilities	the components stack themselves
-z-1		missing	class	utilities	the components stack themselves
-z-2		missing	class	utilities	the components stack themselves
-z-3		missing	class	utilities	the components stack themselves
-z-n1		missing	class	utilities	the components stack themselves
+z-0	z-0	same	class	utilities	dialogs, menus and toasts stack in the top layer without one
+z-1	z-1	same	class	utilities	dialogs, menus and toasts stack in the top layer without one
+z-2	z-2	same	class	utilities	dialogs, menus and toasts stack in the top layer without one
+z-3	z-3	same	class	utilities	dialogs, menus and toasts stack in the top layer without one
+z-n1	z-n1	same	class	utilities	dialogs, menus and toasts stack in the top layer without one
 data-bs-toggle="modal"	commandfor="ID" command="show-modal"	trigger	data-attr	dialog	on the button; the dialog is a <dialog id="ID">
 data-bs-toggle="offcanvas"	commandfor="ID" command="show-modal"	trigger	data-attr	drawer	the drawer is a <dialog id="ID">
 data-bs-toggle="dropdown"	commandfor="ID" command="toggle-popover" aria-haspopup="menu"	trigger	data-attr	menu	the menu gets popover and role="menu"
@@ -2049,11 +2049,11 @@ data-bs-display		remove	data-attr	menu	anchor positioning places and flips the m
 data-bs-reference		remove	data-attr	menu	anchor positioning places and flips the menu
 data-bs-boundary		remove	data-attr	menu	anchor positioning places and flips the menu
 data-bs-popper-config		remove	data-attr	menu	anchor positioning places and flips the menu
-data-bs-spy		missing	data-attr		scrollspy and carousel
-data-bs-ride		missing	data-attr		scrollspy and carousel
-data-bs-slide		missing	data-attr		scrollspy and carousel
-data-bs-slide-to		missing	data-attr		scrollspy and carousel
-data-bs-interval		missing	data-attr		scrollspy and carousel
+data-bs-spy	data-scrollspy	trigger	data-attr	nav	on the nav or list group of the links, not on the scrolled box; the link to the section in view gets aria-current="location"
+data-bs-ride		missing	data-attr		the carousel
+data-bs-slide		missing	data-attr		the carousel
+data-bs-slide-to		missing	data-attr		the carousel
+data-bs-interval		missing	data-attr		the carousel
 bootstrap.Modal	dialog.showModal() and dialog.close()	trigger	js	dialog	
 bootstrap.Offcanvas	dialog.showModal() and dialog.close()	trigger	js	drawer	
 bootstrap.Dropdown	menu.showPopover(), menu.hidePopover(), menu.togglePopover()	trigger	js	menu	

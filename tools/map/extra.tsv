@@ -19,7 +19,8 @@ data-bs-backdrop="static"	closedby="closerequest"	trigger	dialog	Esc closes it, 
 data-bs-keyboard="false"	closedby="none"	trigger	dialog	only its buttons close it
 data-bs-theme	data-theme	rename	index	light or dark on <html>
 data-bs-placement|data-bs-offset|data-bs-auto-close|data-bs-display|data-bs-reference|data-bs-boundary|data-bs-popper-config		remove	menu	anchor positioning places and flips the menu
-data-bs-spy|data-bs-ride|data-bs-slide|data-bs-slide-to|data-bs-interval		missing		scrollspy and carousel
+data-bs-spy	data-scrollspy	trigger	nav	on the nav or list group of the links, not on the scrolled box; the link to the section in view gets aria-current="location"
+data-bs-ride|data-bs-slide|data-bs-slide-to|data-bs-interval		missing		the carousel
 bootstrap.Modal	dialog.showModal() and dialog.close()	trigger	dialog
 bootstrap.Offcanvas	dialog.showModal() and dialog.close()	trigger	drawer
 bootstrap.Dropdown	menu.showPopover(), menu.hidePopover(), menu.togglePopover()	trigger	menu

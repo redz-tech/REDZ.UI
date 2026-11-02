@@ -58,6 +58,22 @@ A button opens the dialog with `commandfor` + `command="show-modal"`; buttons in
 <span class="text-muted fs-12" role="status" data-docs-answer></span>
 ```
 
+### On a phone and full screen
+
+On a window narrower than 576 px a dialog fills the screen by itself — its body scrolls, its footer stays at the bottom — while `dialog-sm` and a confirmation stay a card in the middle. `dialog-fullscreen` fills the screen on any window.
+
+```html
+<button class="btn" type="button" commandfor="dialog-full-panel" command="show-modal"><i class="bi bi-arrows-fullscreen" aria-hidden="true"></i>Open full screen</button>
+<dialog class="dialog dialog-fullscreen" id="dialog-full-panel" aria-labelledby="dialog-full-title">
+	<div class="dialog-header">
+		<h2 class="dialog-title" id="dialog-full-title">Route of the day</h2>
+		<button class="btn-close" type="button" commandfor="dialog-full-panel" command="close" aria-label="Close"></button>
+	</div>
+	<div class="dialog-body"><p>Pick-up at the hotel at 7:30, the pier at 8:15, Ang Thong at 9:30; snorkeling, the emerald lake, lunch on the boat, back by 17:00.</p></div>
+	<div class="dialog-footer"><button class="btn btn-primary" type="button" commandfor="dialog-full-panel" command="close">Done</button></div>
+</dialog>
+```
+
 ## Keyboard and accessibility
 
 - `Tab` stays inside an open dialog; `Esc` closes it; the focus goes back to the button that opened it.
@@ -84,7 +100,7 @@ It reads the theme's `--redz-border`, `--redz-radius-16`, `--redz-bg-raised`, `-
 | `modal-dialog-centered` | — | remove | a dialog is centered |
 | `modal-dialog-scrollable` | — | remove | the dialog's body scrolls by itself |
 | `modal-footer` | `dialog-footer` | rename |  |
-| `modal-fullscreen` | — | missing |  |
+| `modal-fullscreen` | `dialog-fullscreen` | rename |  |
 | `modal-header` | `dialog-header` | rename |  |
 | `modal-static` | — | remove | closedby="closerequest" |
 | `modal-title` | `dialog-title` | rename |  |

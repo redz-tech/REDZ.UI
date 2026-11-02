@@ -51,6 +51,44 @@ When a panel comes from the server, the arrows should not load every panel they 
 <div id="nav-manual-panel-3" role="tabpanel" aria-labelledby="nav-manual-3" tabindex="0" hidden><p>2 refunds this week.</p></div>
 ```
 
+### Filling the width
+
+`nav-fill` lets the links share the width by their length, `nav-justified` in equal parts.
+
+```html
+<nav class="nav nav-underline nav-fill" aria-label="Filled">
+	<a class="nav-link" href="#nav-fill" aria-current="page">Overview</a>
+	<a class="nav-link" href="#nav-fill">Prices and seasons</a>
+	<a class="nav-link" href="#nav-fill">Reviews</a>
+</nav>
+<nav class="nav nav-underline nav-justified" aria-label="Justified">
+	<a class="nav-link" href="#nav-fill" aria-current="page">Overview</a>
+	<a class="nav-link" href="#nav-fill">Prices and seasons</a>
+	<a class="nav-link" href="#nav-fill">Reviews</a>
+</nav>
+```
+
+### Where you are on the page
+
+A nav or a list group with `data-scrollspy` marks the link to the section in view `aria-current="location"` as the page — or the box the sections scroll in — scrolls: the last section whose top has passed a quarter of the height, or the last one at the end.
+
+```html
+<div class="grid md:cols-12 gap-16">
+	<nav class="list-group list-group-flush md:span-4" aria-label="On this example" data-scrollspy>
+		<a class="list-group-item list-group-item-action" href="#nav-spy-plan">Plan</a>
+		<a class="list-group-item list-group-item-action" href="#nav-spy-boat">The boat</a>
+		<a class="list-group-item list-group-item-action" href="#nav-spy-lunch">Lunch</a>
+		<a class="list-group-item list-group-item-action" href="#nav-spy-back">Back</a>
+	</nav>
+	<div class="docs-scroll md:span-8 vstack gap-16" tabindex="0" role="region" aria-label="The day, by section">
+		<section id="nav-spy-plan" class="vstack gap-4"><h4 class="fs-14">Plan</h4><p class="mb-0">Pick-up at the hotel at 7:30, the pier at 8:15. The crew hands out life vests and snorkels before the boat leaves the bay.</p></section>
+		<section id="nav-spy-boat" class="vstack gap-4"><h4 class="fs-14">The boat</h4><p class="mb-0">A speedboat for 30 guests with shade and a toilet; the ride to the park takes an hour across open water.</p></section>
+		<section id="nav-spy-lunch" class="vstack gap-4"><h4 class="fs-14">Lunch</h4><p class="mb-0">Thai lunch on a beach of the park: rice, green curry, fruit and water; vegetarian on request.</p></section>
+		<section id="nav-spy-back" class="vstack gap-4"><h4 class="fs-14">Back</h4><p class="mb-0">The boat leaves the park at 15:30 and reaches the pier by 17:00; the transfer brings everyone back to the hotel.</p></section>
+	</div>
+</div>
+```
+
 ## States
 
 ## Keyboard and accessibility
@@ -75,13 +113,12 @@ It reads the theme's `--redz-space-16`, `--redz-space-8`, `--redz-text-muted`, `
 
 | Bootstrap 5.3 | REDZ.UI | Change | Note |
 | --- | --- | --- | --- |
-| `nav-fill` | — | missing |  |
 | `nav-item` | — | remove | links sit straight in the nav |
-| `nav-justified` | — | missing |  |
 | `nav-tabs` | `nav-underline` | rename | tabs are drawn as an underline |
 | `tab-content` | — | remove | panels are siblings with role="tabpanel", hidden when not selected |
 | `tab-pane` | — | remove | panels are siblings with role="tabpanel", hidden when not selected |
 | `data-bs-toggle="tab"` | `role="tab" aria-controls="ID"` | trigger | in a role="tablist"; the library selects and shows the panel |
 | `data-bs-toggle="pill"` | `role="tab" aria-controls="ID"` | trigger | in a role="tablist" |
+| `data-bs-spy` | `data-scrollspy` | trigger | on the nav or list group of the links, not on the scrolled box; the link to the section in view gets aria-current="location" |
 | `bootstrap.Tab` | `tab.click()` | review | the library selects on click and by the keys |
 | `shown.bs.tab` | — | review | watch aria-selected, or the tab's click |

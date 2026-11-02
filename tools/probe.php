@@ -367,7 +367,7 @@ function PROBE__Cell(array &$h, string $name, string $page, string $combo, strin
 	if ($m['scroll'] > $m['client']) {
 		$findings[] = 'overflow ' . $m['scroll'] . ' > ' . $m['client'] . ': ' . implode(', ', $m['offenders']);
 	}
-	foreach (['unmasked' => 'icons without a mask', 'unregioned' => 'width prefixes outside a region', 'cut' => 'cut labels', 'busyLive' => 'aria-busy on or around a live region', 'toggles' => '--toggle buttons whose aria-expanded is not their region\'s state', 'comboboxes' => 'comboboxes whose button, active option or chosen values disagree with their list'] as $key => $what) {
+	foreach (['unmasked' => 'icons without a mask', 'unregioned' => 'width prefixes outside a region', 'cut' => 'cut labels', 'busyLive' => 'aria-busy on or around a live region', 'toggles' => '--toggle buttons whose aria-expanded is not their region\'s state', 'comboboxes' => 'comboboxes whose button, active option or chosen values disagree with their list', 'scrollspies' => 'scrollspy navs without exactly one link at aria-current="location"'] as $key => $what) {
 		if ($m[$key] !== []) {
 			$findings[] = $what . ': ' . implode(', ', $m[$key]);
 		}

@@ -22,8 +22,19 @@
 
 	.nav-link:hover,
 	.nav-link[aria-selected="true"],
-	.nav-link[aria-current="page"] {
+	.nav-link[aria-current="page"],
+	.nav-link[aria-current="location"] {
 		color: var(--redz-text);
+	}
+
+	.nav-fill > .nav-link {
+		flex: 1 1 auto;
+		justify-content: center;
+	}
+
+	.nav-justified > .nav-link {
+		flex: 1 1 0;
+		justify-content: center;
 	}
 
 	.nav-link:focus-visible {

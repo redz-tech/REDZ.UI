@@ -94,15 +94,30 @@ body are `drawer-header`, `drawer-title`, `drawer-body`. It opens like a dialog:
 
 ## Tables
 
-`table`, `table-hover` and the tones `table-danger`, `table-warning`, `table-secondary` keep their names. The row's
+`table`, `table-hover`, `table-striped`, `table-striped-columns`, `table-bordered`, `table-borderless`,
+`table-group-divider` and the tones `table-danger`, `table-warning`, `table-secondary` keep their names. The row's
 title is a `table-title` link, the line under it `table-sub`, a problem `table-note`, the checks column `table-check`,
 the actions `table-actions`. Drop `table-responsive`: the card's body holds the table and columns hide below `md:`.
 
+## Pagination
+
+`pagination`, `page-item`, `page-link`, `pagination-sm` and `pagination-lg` keep their names. `active` on the item →
+`aria-current="page"` on its link; `disabled` → `aria-disabled="true"` on a link without `href`. The `nav` around it
+gets a name (`aria-label`). A list paged by "the next 50" shows previous, next and a `page-text` between them.
+
 ## Navs and tabs
 
-`nav-tabs` → `nav-underline`; `nav-item` goes. Links between pages are `<a class="nav-link">` with `aria-current`.
-Tabs are `<button class="nav-link" role="tab" aria-selected aria-controls>` in a `role="tablist"`, the panels
-`role="tabpanel"` with `hidden`; `tab-content` and `tab-pane` go.
+`nav-tabs` → `nav-underline`; `nav-item` goes; `nav-fill` and `nav-justified` stay. Links between pages are
+`<a class="nav-link">` with `aria-current`. Tabs are `<button class="nav-link" role="tab" aria-selected
+aria-controls>` in a `role="tablist"`, the panels `role="tabpanel"` with `hidden`; `tab-content` and `tab-pane` go.
+Scrollspy: `data-bs-spy="scroll"` on the scrolled box → `data-scrollspy` on the nav or list group of the links; the
+link to the section in view gets `aria-current="location"`, no `active` class.
+
+## Cards and dialogs
+
+- `card-img`, `card-img-top`, `card-img-bottom`, `card-img-overlay` and `stretched-link` keep their names.
+- `modal-fullscreen` → `dialog-fullscreen`; drop `modal-fullscreen-*-down`: on a window under 576 px every dialog but
+  `dialog-sm` and a confirmation fills the screen by itself.
 
 ## Toasts, badges, alerts
 
@@ -114,5 +129,5 @@ Tabs are `<button class="nav-link" role="tab" aria-selected aria-controls>` in a
 
 ## Missing for now
 
-Pagination, popover, carousel, spinner-grow: keep their markup under the module's own classes with its prefix, and
-note it for the order that adds them.
+Popover, carousel, spinner-grow, the range, vertical button groups, drawers from the top or the bottom: keep their
+markup under the module's own classes with its prefix, and note it for the order that adds them.

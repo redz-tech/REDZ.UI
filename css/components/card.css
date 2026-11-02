@@ -1,9 +1,39 @@
 @layer components {
 	.card {
 		container: region / inline-size;
+		position: relative;
 		border: 1px solid var(--redz-border);
 		border-radius: var(--redz-radius-12);
 		background: var(--redz-bg);
+	}
+
+	.card-img,
+	.card-img-top,
+	.card-img-bottom {
+		display: block;
+		inline-size: 100%;
+		object-fit: cover;
+	}
+
+	.card-img,
+	.card-img-overlay {
+		border-radius: calc(var(--redz-radius-12) - 1px);
+	}
+
+	.card-img-top {
+		border-start-start-radius: calc(var(--redz-radius-12) - 1px);
+		border-start-end-radius: calc(var(--redz-radius-12) - 1px);
+	}
+
+	.card-img-bottom {
+		border-end-start-radius: calc(var(--redz-radius-12) - 1px);
+		border-end-end-radius: calc(var(--redz-radius-12) - 1px);
+	}
+
+	.card-img-overlay {
+		position: absolute;
+		inset: 0;
+		padding: var(--redz-space-16);
 	}
 
 	.card-header {

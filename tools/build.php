@@ -90,7 +90,8 @@ function BUILD__ScalesCss(stdClass $vocab): string
 	return $out . "\t}\n}\n";
 }
 
-/** The utilities: the plain rules, then the prefixed ones by breakpoint inside the region's container query, then print. */
+/** The utilities: the plain rules — an entry's `rtl` is its rule right to left — then the prefixed ones by breakpoint
+ *  inside the region's container query, then print. */
 function BUILD__UtilitiesCss(stdClass $vocab): string
 {
 	$plain = [];
@@ -102,6 +103,9 @@ function BUILD__UtilitiesCss(stdClass $vocab): string
 				throw new RuntimeException('tools/vocabulary.json makes the class "' . $class . '" twice');
 			}
 			$plain[$class] = [$entry->selector ?? BUILD__Selector($class), $css];
+			if (isset($entry->rtl)) {
+				$plain[$class . ':dir(rtl)'] = [BUILD__Selector($class) . ':dir(rtl)', $entry->rtl];
+			}
 			if ($entry->prefix ?? false) {
 				$prefixed[$class] = $css;
 			}

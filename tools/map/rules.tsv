@@ -22,20 +22,20 @@ gy-([0-5])	row-gap-{space:$1}	grid	layout	on the grid parent
 container|container-fluid|container-(sm|md|lg|xl|xxl)		review	layout	the shell's app-main, or a region with max-w-* and mx-auto
 
 # Utilities with other names, numbers or no equivalent.
-float-(start|end|none)		missing	utilities	no floats: flex or grid, with ms-auto or justify-content-end
+float-(start|end|none)	float-$1	same	utilities
 object-fit-scale		review	utilities	object-fit-contain is the nearest
 sticky-(top|bottom)		review	utilities	position-sticky with top-0 or bottom-0
 fixed-(top|bottom)		review	utilities	position-fixed with top-0 or bottom-0, start-0 and end-0
-(top|bottom|start|end)-(50|100)		missing	utilities	only 0 here
-translate-middle(-x|-y)?		missing	utilities	center by grid or flex
-z-(n1|0|1|2|3)		missing	utilities	the components stack themselves
+(top|bottom|start|end)-(50|100)	$1-$2	same	utilities
+translate-middle(-x|-y)?	translate-middle$1	same	utilities	turns round right to left
+z-(n1|0|1|2|3)	z-$1	same	utilities	dialogs, menus and toasts stack in the top layer without one
 text-(white|black|light|dark)(-50)?		review	utilities	no white, black, light or dark: text-body, text-muted or a tone
 text-body-secondary	text-muted	rename	utilities
 text-body-tertiary	text-faint	rename	utilities
 text-body-emphasis	text-body	rename	utilities
 text-(primary|secondary|success|danger|warning|info)-emphasis	text-$1	rename	utilities	a tone's text color is already its emphasis
 text-(light|dark)-emphasis	text-body	review	utilities	no light or dark: the text color
-text-opacity-(25|50|75|100)		missing	utilities
+text-opacity-(25|50|75|100)		review	utilities	Bootstrap 6 dropped it too: text-muted or text-faint
 text-bg-(primary|secondary|success|danger|warning|info)	badge-$1	review	badge	on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS
 text-bg-(light|dark)		review	badge	a plain badge, or a tone
 bg-(white|black|light|dark)		review	utilities	bg-body, bg-page, bg-raised or a tone
@@ -43,7 +43,7 @@ bg-body-secondary	bg-page	rename	utilities
 bg-body-tertiary	bg-raised	rename	utilities
 bg-(light|dark)-subtle		review	utilities	bg-page, or a tone's -subtle
 bg-gradient		remove	utilities	no gradients
-bg-opacity-(10|25|50|75|100)		missing	utilities
+bg-opacity-(10|25|50|75|100)		review	utilities	Bootstrap 6 dropped it too: bg-{tone}-subtle
 border-(top|end|bottom|start)-0		missing	utilities	draw only the sides you need: border-top and the others
 border-(3|5)		review	utilities	the widths are 1, 2 and 4 px
 border-(white|black|light|dark)		review	utilities	border-strong, or a tone
@@ -55,7 +55,8 @@ rounded-3	rounded-8	value	utilities	8 px
 rounded-4	rounded-16	value	utilities	16 px
 rounded-5		review	utilities	32 px in Bootstrap: rounded-16 or rounded-full
 rounded-(circle|pill)	rounded-full	rename	utilities
-rounded-(top|end|bottom|start)(-[0-5]|-circle|-pill)?		missing	utilities	no one-side radii
+rounded-(top|end|bottom|start)	rounded-$1	same	utilities
+rounded-(top|end|bottom|start)-([0-5]|circle|pill)	rounded-$1	review	utilities	a side takes the 8 px radius
 shadow-sm	shadow-1	rename	utilities
 shadow	shadow-2	rename	utilities
 shadow-lg	shadow-3	rename	utilities
@@ -82,14 +83,14 @@ list-unstyled		review	utilities	vstack, or a component's own list
 list-inline|list-inline-item		review	utilities	hstack flex-wrap
 mw-100		review	utilities	max-w-* by px
 mh-100		missing	utilities
-vw-100|vh-100|min-vw-100|min-vh-100		missing	utilities
-visually-hidden-focusable		missing	utilities
-stretched-link		missing	utilities
+(vw-100|vh-100|min-vw-100|min-vh-100)	$1	same	utilities	the height by dvh, as a phone's browser bars come and go
+visually-hidden-focusable	visually-hidden-focusable	same	utilities
+stretched-link	stretched-link	same	utilities	a card is its own positioned parent
 vr		missing	utilities
 clearfix		remove	utilities	no floats
 focus-ring(-[a-z]+)?		remove	utilities	the focus ring is built in, 3:1 in both themes
 link-(primary|secondary|success|danger|warning|info|light|dark|body-emphasis)		review	utilities	a link is the accent; text-* for a tone
-link-underline(-.+)?|link-opacity-.+|link-offset-.+		missing	utilities
+link-underline(-.+)?|link-opacity-.+|link-offset-.+		review	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
 icon-link(-hover)?		review	icons	a link with its icon: hstack gap-4
 img-fluid		review	utilities	images never overflow their box here; w-100 to fill it
 img-thumbnail		missing	utilities
@@ -116,7 +117,8 @@ modal-dialog|modal-content		remove	dialog	no wrappers: the <dialog> is the box
 modal-(header|title|body|footer)	dialog-$1	rename	dialog
 modal-(sm|lg)	dialog-$1	rename	dialog
 modal-xl		review	dialog	dialog-lg is the widest
-modal-fullscreen(-.+)?		missing	dialog
+modal-fullscreen	dialog-fullscreen	rename	dialog
+modal-fullscreen-(sm|md|lg|xl|xxl)-down		remove	dialog	under 576 px a dialog fills the screen by itself; dialog-fullscreen fills it everywhere
 modal-dialog-centered		remove	dialog	a dialog is centered
 modal-dialog-scrollable		remove	dialog	the dialog's body scrolls by itself
 modal-backdrop		remove	dialog	the browser's ::backdrop
@@ -158,7 +160,7 @@ col-form-label(-sm|-lg)?	form-label	review	form	a form-label in a form-field
 input-group-lg	input-group	review	input-group	no larger size: the default group, or input-group-sm
 has-validation		remove	input-group	the error goes under the group, in its form-field
 card-(title|subtitle|text|link)		review	card	a heading and paragraphs in card-body
-card-img|card-img-(top|bottom|overlay)		missing	card
+(card-img|card-img-top|card-img-bottom|card-img-overlay)	$1	same	card
 card-group		review	card	grid with gap-16
 card-header-(tabs|pills)		review	card	a nav straight in the card
 alert-(light|dark|secondary)		review	alert	the plain alert, or a tone
@@ -167,11 +169,13 @@ alert-link		review	alert	a plain link
 alert-dismissible		review	alert	a btn-close at the end, removed by your script
 nav-tabs	nav-underline	rename	nav	tabs are drawn as an underline
 nav-item		remove	nav	links sit straight in the nav
-nav-fill|nav-justified		missing	nav
+(nav-fill|nav-justified)	$1	same	nav
 tab-content|tab-pane		remove	nav	panels are siblings with role="tabpanel", hidden when not selected
 navbar|navbar-.+		review	app	the shell's app-header
 table-(primary|success|info|light|dark)		review	table	row tones are danger, warning and secondary
-table-striped|table-striped-columns|table-bordered|table-borderless|table-group-divider|caption-top		missing	table
+(table-striped|table-striped-columns|table-borderless|table-group-divider)	$1	same	table
+table-bordered	table-bordered	same	table	in a card the card's border is the table's frame
+caption-top		missing	table
 table-sm		review	table	data-density="compact" on <html>
 table-active		review	table	aria-selected or aria-current on the row
 table-responsive(-.+)?		review	table	the card's body holds the table; columns hide below md:
@@ -199,7 +203,7 @@ progress-bar		remove	progress	the browser draws the bar from value
 progress-bar-striped	progress-striped	rename	progress
 progress-bar-animated	progress-animated	rename	progress	it moves only while motion is allowed
 progress-stacked		review	progress	not planned: one <progress> a value
-pagination|pagination-(sm|lg)|page-item|page-link		missing		lists here page by “Next 25” (keyset), no page numbers
+(pagination|pagination-sm|pagination-lg|page-item|page-link)	$1	same	pagination	the current page aria-current="page", a missing one aria-disabled; previous and next with page-text for a list paged by "the next 50"
 carousel|carousel-.+		missing		not planned
 
 # Everything else keeps its name.
