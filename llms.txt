@@ -24,6 +24,7 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 - [Form fields](docs/form.md): Text fields, selects and text areas with Bootstrap 5's names: a label floating in the field or above it, a hint, an error said in words, an icon inside the field.
 - [Input groups](docs/input-group.md): A field joined to what belongs to it — a unit, a prefix, a button, a choice — into one control. The borders meet by themselves; a menu or a hidden element inside the group is left out of the joining.
 - [Checks, radios and switches](docs/check.md): The browser's own checkbox and radio, drawn by the library: check, radio and switch on the input itself, form-check on the label around it.
+- [Combobox](docs/combobox.md): A choice from a list long enough to search: a button in the look of a select shows the value and opens a panel with a search field and the list. One core — the WAI-ARIA combobox with a listbox — also drives the command palette and a list in the page.
 
 ## Content
 
@@ -59,6 +60,7 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 
 - [Navs and tabs](docs/nav.md): A row of links between views of one thing — nav-underline — or of choices — nav-pills; and the same row as tabs that switch panels on the page, driven by the keyboard as the WAI-ARIA tabs pattern.
 - [Breadcrumbs](docs/breadcrumb.md): The way up from a record to the list it belongs to, above the record's title. The separators are drawn by CSS and turn with the direction.
+- [Command palette](docs/palette.md): One search for every place and action of an app, opened from anywhere by ⌘K or Ctrl K: a dialog with the combobox's search and a list of links and buttons — Enter opens a page by its plain link or runs a button's command.
 - [App shell](docs/app.md): The frame of an admin screen: app with a header, a side navigation, the main column and an optional side column. Below 1024 px the side navigation becomes a panel opened from the header. These docs stand in it.
 
 ## Skills

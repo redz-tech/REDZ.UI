@@ -8,14 +8,16 @@
 // Chrome names the fonts of Arabic text; forced colors and print where the engine has them. The pages of the config run
 // that whole way; the docs pages run in the "docs" engines at their widths, without shots or walks. Writes the sheet
 // .dev/probes/index.html with its report.json and exits 1 on any finding; an engine whose cell runs past five minutes
-// stops as stalling, that cell named. Usage: php tools/probe.php [ENGINE…] — an engine named that cannot run here is a
-// finding, one left out of a full run only a note — or php tools/probe.php merge DIR… — one sheet of the sheets of
-// several runs, as CI's parallel jobs leave them.
+// stops as stalling, that cell named. The engine voiceover hears what VoiceOver says through the config's steps in
+// Safari. Usage: php tools/probe.php [ENGINE…] — an engine named that cannot run here is a finding, one left out of a
+// full run only a note — or php tools/probe.php merge DIR… — one sheet of the sheets of several runs, as CI's parallel
+// jobs leave them — or php tools/probe.php voiceover-setup, which lets CI's VoiceOver be driven.
 
 require __DIR__ . '/lib.php';
 require __DIR__ . '/probes/chrome.php';
 require __DIR__ . '/probes/firefox.php';
 require __DIR__ . '/probes/safari.php';
+require __DIR__ . '/probes/voiceover.php';
 require __DIR__ . '/probes/sheet.php';
 
 const PROBE_ROOT = __DIR__ . '/..';
@@ -101,6 +103,12 @@ function PROBE__IosRuntime(array $engine): string
 	return '';
 }
 
+/** Whether the Mac's screen is locked: Safari draws no frames then. */
+function PROBE__ScreenLocked(): bool
+{
+	return preg_match('~<key>CGSSessionScreenIsLocked</key>\s*<true/>~', PROBE__Run(['/usr/sbin/ioreg', '-n', 'Root', '-d1', '-a'])) === 1;
+}
+
 /** The binary that runs engine $name: the installed one, or the one fetched into the cache — fetched now when missing;
  *  '' with the reason in $why when it cannot run on this machine. */
 function PROBE__Binary(string $name, array $engine, string &$why): string
@@ -108,6 +116,10 @@ function PROBE__Binary(string $name, array $engine, string &$why): string
 	if (isset($engine['macos']) && preg_match('~^<\s*(\d+)$~', $engine['macos'], $m) === 1 && (int)PROBE__Run(['/usr/bin/sw_vers', '-productVersion']) >= (int)$m[1]) {
 		$why = $engine['why'];
 		return '';
+	}
+	if ($engine['kind'] === 'voiceover') {
+		$why = PROBE__VoiceOverBlocked();
+		return $why === '' ? PROBE_VOICEOVER : '';
 	}
 	if ($engine['kind'] === 'safari') {
 		if (!is_file('/usr/bin/safaridriver')) {
@@ -118,7 +130,7 @@ function PROBE__Binary(string $name, array $engine, string &$why): string
 			$why = 'no simulator runtime of iOS ' . implode(' or ', (array)$engine['ios']) . ' here';
 			return '';
 		}
-		if (!isset($engine['ios']) && preg_match('~<key>CGSSessionScreenIsLocked</key>\s*<true/>~', PROBE__Run(['/usr/sbin/ioreg', '-n', 'Root', '-d1', '-a'])) === 1) {
+		if (!isset($engine['ios']) && PROBE__ScreenLocked()) {
 			$why = 'the screen is locked, and Safari on the Mac draws no frames until it is unlocked';
 			return '';
 		}
@@ -231,6 +243,16 @@ function PROBE__Do(array &$h, string $verb, mixed ...$args): mixed
 /** Runs every cell of engine $name, then its forced colors and print, into $report. */
 function PROBE__EngineRun(string $name, array $engine, string $binary, string $dir, array $run, array &$report): void
 {
+	if ($engine['kind'] === 'voiceover') {
+		$h = PROBE__SafariStart($dir);
+		$report['engines'][$name] = ['version' => $h['version'] . ' · VoiceOver · macOS ' . PROBE__Run(['/usr/bin/sw_vers', '-productVersion']), 'cells' => 0];
+		try {
+			PROBE__VoiceOverRun($h, $name, $run, $report);
+		} finally {
+			PROBE__Do($h, 'Stop');
+		}
+		return;
+	}
 	$h = match ($engine['kind']) {
 		'chrome' => PROBE__ChromeStart($binary, $dir),
 		'firefox' => PROBE__FirefoxStart($binary, $dir),
@@ -351,7 +373,7 @@ function PROBE__Cell(array &$h, string $name, string $page, string $combo, strin
 	if ($m['scroll'] > $m['client']) {
 		$findings[] = 'overflow ' . $m['scroll'] . ' > ' . $m['client'] . ': ' . implode(', ', $m['offenders']);
 	}
-	foreach (['unmasked' => 'icons without a mask', 'unregioned' => 'width prefixes outside a region', 'cut' => 'cut labels', 'busyLive' => 'aria-busy on or around a live region', 'toggles' => '--toggle buttons whose aria-expanded is not their region\'s state'] as $key => $what) {
+	foreach (['unmasked' => 'icons without a mask', 'unregioned' => 'width prefixes outside a region', 'cut' => 'cut labels', 'busyLive' => 'aria-busy on or around a live region', 'toggles' => '--toggle buttons whose aria-expanded is not their region\'s state', 'comboboxes' => 'comboboxes whose button, active option or chosen values disagree with their list'] as $key => $what) {
 		if ($m[$key] !== []) {
 			$findings[] = $what . ': ' . implode(', ', $m[$key]);
 		}
@@ -498,6 +520,13 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 				$findings[] = $what . 'opening: ' . ($s['open'] ? 'the focus is not inside the dialog' : 'the dialog does not open');
 				continue;
 			}
+			if ($s['search'] !== null) {
+				$press('ArrowDown');
+				$s = $state();
+				if ($s['search']['active'] === null) {
+					$findings[] = $what . 'ArrowDown in its search: no option is active';
+				}
+			}
 			for ($i = $s['at']; $i < $s['focusables'] - 1 && !$s['leaked']; $i++) {
 				$press('Tab');
 				$s = $state();
@@ -524,6 +553,38 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 					}
 				}
 				PROBE__Do($h, 'Eval', '(document.getElementById(' . json_encode($id) . ').open && document.getElementById(' . json_encode($id) . ').close(), true)');
+			}
+		} elseif ($kind === 'combobox') {
+			$activate($id);
+			usleep(200000);
+			$s = $state();
+			if (!$s['open'] || !$s['onSearch'] || $s['expanded'] !== 'true') {
+				$findings[] = $what . 'opening: ' . (!$s['open'] ? 'the panel does not open' : (!$s['onSearch'] ? 'the focus is not in its search' : 'its button says aria-expanded="' . $s['expanded'] . '"'));
+				continue;
+			}
+			if ($s['options'] > 0) {
+				$before = $s['values'];
+				$press('ArrowDown');
+				$s = $state();
+				if ($s['active'] === null) {
+					$findings[] = $what . 'ArrowDown: no option is active';
+					continue;
+				}
+				$taken = $s['active'];
+				$press('Enter');
+				$s = $state();
+				$values = $s['multiple'] ? (in_array($taken, $before, true) ? array_values(array_diff($before, [$taken])) : [...$before, $taken]) : [$taken];
+				if ($s['values'] !== $values || $s['open'] !== $s['multiple']) {
+					$findings[] = $what . 'Enter on "' . $taken . '": the values should be ' . json_encode($values) . ' with the panel ' . ($s['multiple'] ? 'open' : 'closed') . ' — they are ' . json_encode($s['values']) . ', the panel ' . ($s['open'] ? 'open' : 'closed');
+					continue;
+				}
+			}
+			if ($s['open']) {
+				$press('Escape');
+				$s = $state();
+			}
+			if ($s['open'] || !$s['onInvoker'] || $s['expanded'] !== 'false') {
+				$findings[] = $what . 'closing: ' . ($s['open'] ? 'the panel stays open' : (!$s['onInvoker'] ? 'the focus is not back on its button' : 'its button says aria-expanded="' . $s['expanded'] . '"'));
 			}
 		} elseif ($kind === 'accordion') {
 			$was = in_array($state()['walked'], $state()['open'], true);
@@ -679,6 +740,7 @@ function PROBE__Merge(array $config, array $dirs): int
 			$report['findings'] = [...$report['findings'], ...$part['findings']];
 			$report['guarded'] = [...$report['guarded'], ...$part['guarded']];
 			$report['walked'] = array_replace_recursive($report['walked'], $part['walked']);
+			$report['spoken'] = array_merge_recursive($report['spoken'], $part['spoken']);
 			$report['shots'] = array_merge_recursive($report['shots'], $part['shots']);
 		}
 		foreach (['shots', 'print', 'logs'] as $folder) {
@@ -706,6 +768,9 @@ function PROBE__Main(array $argv): int
 	if (($argv[1] ?? '') === 'merge') {
 		return PROBE__Merge($config, array_slice($argv, 2));
 	}
+	if (($argv[1] ?? '') === 'voiceover-setup') {
+		return PROBE__VoiceOverSetup();
+	}
 	$names = array_slice($argv, 1) ?: array_keys(array_filter($config['engines'], fn(array $engine): bool => $engine['default'] ?? true));
 	foreach ($names as $name) {
 		if (!isset($config['engines'][$name])) {
@@ -720,7 +785,7 @@ function PROBE__Main(array $argv): int
 		mkdir($folder, 0777, true);
 	}
 	$commit = trim((string)shell_exec('git -C ' . escapeshellarg(PROBE_ROOT) . ' rev-parse --short HEAD 2>/dev/null'));
-	$report = ['when' => gmdate('Y-m-d H:i') . ' UTC', 'commit' => $commit === '' ? 'no commit' : 'commit ' . $commit, 'widths' => array_keys($config['widths']), 'engines' => [], 'skipped' => [], 'findings' => [], 'guarded' => [], 'walked' => [], 'shots' => [], 'used' => []];
+	$report = ['when' => gmdate('Y-m-d H:i') . ' UTC', 'commit' => $commit === '' ? 'no commit' : 'commit ' . $commit, 'widths' => array_keys($config['widths']), 'engines' => [], 'skipped' => [], 'findings' => [], 'guarded' => [], 'walked' => [], 'spoken' => [], 'shots' => [], 'used' => []];
 	$run = ['config' => $config, 'page' => (string)file_get_contents(PROBE_PAGE), 'axe' => PROBE__Axe($config['axe']), 'sheet' => $work];
 	[$server, $run['base']] = PROBE__ServerStart($tmp);
 	register_shutdown_function(fn() => is_resource($server) && proc_terminate($server));

@@ -60,7 +60,7 @@ element and markup added later works the same:
 
 ```html
 <script type="module" src="js/index.js"></script>
-<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…"}</script>
+<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results"}</script>
 ```
 
 - **Menus** (`role="menu"` on a `popover` opened by its button): the arrow keys move through the items, Home and End go
@@ -85,6 +85,14 @@ element and markup added later works the same:
   dropped comes back to the same element or its namesake in the new content (`js/busy.js`).
 - **Dialogs:** `closedby="any"` closes a modal dialog by a click outside it; a modal dialog locks the page's scroll by
   CSS alone (`js/dialog.js` stands in for `closedby` where the browser lacks it).
+- **Comboboxes** (a search field `role="combobox"` controlling a `listbox`): typing filters the list — case and accents
+  aside, every word found, the best first — the arrow keys move the active option while the focus stays in the field,
+  Enter takes it, and the count found is said politely. In a form, a `combobox-toggle` button shows the value and opens
+  the panel, and the value lives in hidden fields named by the list's `data-name`; a page that searches its server
+  cancels `redz:filter` and puts the options in. The command palette is the same search in a `<dialog>`, its options
+  links and buttons (`js/combobox.js`).
+- **Shortcuts:** a button or link whose `aria-keyshortcuts` names a combination with Control, Meta or Alt is pressed by
+  it — `Meta+K Control+K` answers ⌘K on Apple's systems and Ctrl K elsewhere (`js/shortcuts.js`).
 
 The library has no words of its own: every word it shows comes from the caller or from the page's island
 `#redz-ui-text`, and a missing one is named in the console.
@@ -137,15 +145,16 @@ the installed Chrome, Firefox and Safari, in the floor's Chrome 130, Firefox 132
 in Chrome 136 and Safari 26 in the simulator, whose bugs `js/menu-place.js` repairs — at 1440, 1024, 390 and 320 px,
 light left-to-right and dark right-to-left, the right-to-left cells on the pages' Arabic twins. It looks for overflow,
 icons without a mask, width prefixes outside a region, cut labels, `aria-busy` on live regions and errors; opens every
-menu and dialog and checks where it lands; walks every menu, modal dialog and tab list by real keys — and a dialog with
-`closedby` by a click outside it — against the WAI-ARIA patterns, and sends two notices; holds the docs' copies of
+menu and dialog and checks where it lands; walks every menu, combobox, modal dialog and tab list by real keys — and a
+dialog with `closedby` by a click outside it — against the WAI-ARIA patterns, and sends two notices; holds the docs' copies of
 `:hover` and `:focus-visible` against the real pointer and Tab; has Chrome name the fonts of the Arabic text; runs
 axe-core; and checks forced colors and print where the engine has them. Every docs page runs in the current Chrome,
 Firefox and Safari at 1440 and 390 px. Older engines are fetched once into `~/Library/Caches/redz-ui` and checked
-against their checksums. The sheet of shots and findings is written to `.dev/probes/`; the Probes workflow runs it on
-macOS 15 on every commit in five parallel parts — joined by `php tools/probe.php merge` — with a pinned Chrome for
-Testing build as the current Chrome, as the image's own lags; every release publishes its sheet under `checks/` on the
-site.
+against their checksums. The engine `voiceover` hears what VoiceOver says in Safari through the combobox and the
+palette, step by step, against the words each step must hold. The sheet of shots and findings is written to
+`.dev/probes/`; the Probes workflow runs it on every commit in seven parts — joined by `php tools/probe.php merge` — on
+macOS 15, VoiceOver also on macOS 26, with a pinned Chrome for Testing build as the current Chrome, as the image's own
+lags; every release publishes its sheet under `checks/` on the site.
 
 ## Releases
 Every release is an [immutable GitHub release](https://github.com/redz-tech/REDZ.UI/releases): once it is out, neither

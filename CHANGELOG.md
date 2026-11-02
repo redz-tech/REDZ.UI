@@ -3,6 +3,45 @@
 All notable changes of the library. Newest first. Versions follow Semantic Versioning: a class, token, attribute
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch.
 
+## Unreleased
+
+### The combobox and the command palette
+- `combobox` — the WAI-ARIA combobox with a listbox, one core in three places (`js/combobox.js`):
+  - a choice in a form: a `form-select combobox-toggle` button with `role="combobox"` shows the value
+    (`combobox-value`, its `data-placeholder` while empty) and opens a `combobox-menu` panel with `combobox-search` ›
+    `combobox-search-input` and a `combobox-list`; the value lives in hidden fields named by the list's `data-name`,
+    one per value (`name[]` for many), so a form posts it as it is; Down, Up or a letter on the button open it;
+  - many values: `aria-multiselectable="true"` keeps the panel open; the button lists the values in the page's
+    language while they fit, else the first ones and `+N` (`combobox-more`); a list whose `data-chips` names a
+    `combobox-chips` container shows each value there as a chip with its remove button instead;
+  - a list in the page: the same search and list without a button or a panel.
+- The search folds case and accents (not Thai marks; Arabic vowel marks off), finds what holds every word, the best
+  first — the text itself, its start, a word's start (`Intl.Segmenter`), anywhere, then `data-keywords` — within each
+  group, and paints the matches by the browser's highlights where it has them; the count found is said politely once
+  the typing pauses; `aria-activedescendant` keeps the focus in the search; Escape empties the search, then closes
+  the panel or the palette — the library closes it itself, as Safari's search field keeps the key.
+- `redz:filter` on the search, with the query and an `AbortSignal`: a page that finds options itself cancels it and
+  puts them into the list, which is `aria-busy` meanwhile. A choice fires `input` and `change` on the list; a form's
+  reset puts the values back as the page sent them.
+- `palette` — the command palette on a `<dialog>`: `palette-search`, `palette-list` of links and buttons with
+  `role="option"` (kept out of the Tab order), `palette-footer`; Enter opens a link or presses a button, and the
+  palette closes first.
+- Shortcuts (`js/shortcuts.js`): a button or link whose `aria-keyshortcuts` names a combination with Control, Meta or
+  Alt is pressed by it; where both `Meta+K` and `Control+K` are named, Apple's systems answer Meta and the others
+  Control.
+- Texts: a text fills its `{names}` from arguments, and a count picks its plural form by the page language's rules
+  (`found.one`, `found.few`, … else `found.other`); new keys `remove`, `found.*`.
+- `menu-item-content` and `menu-item-description` for a second line in an item; an option's chosen state by
+  `aria-selected`, as an item's by `aria-checked`.
+- The docs have a page for the combobox and one for the palette and shortcuts; the probes walk every combobox — open,
+  Down, Enter, the value written, the panel closed, the focus back — and the palette's search, and flag a combobox
+  whose button, active option or chosen values disagree with its list.
+- A probe run stopped by a signal still ends its Safari session: one Safari under automation had stayed open for six
+  days, and the next runs' clicks outside a dialog went to its window instead.
+- The probes' engine `voiceover` hears what VoiceOver says in Safari through the combobox and the palette, each step
+  against the words it must hold, and the sheet shows the phrases; CI runs it on macOS 15 and 26 after
+  `php tools/probe.php voiceover-setup` lets AppleScript drive VoiceOver (ported from `@guidepup/setup`, MIT).
+
 ## 0.2.0 — 2026-11-02
 
 ### The missing basics

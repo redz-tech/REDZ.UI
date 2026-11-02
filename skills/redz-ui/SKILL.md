@@ -26,7 +26,9 @@ where the meaning is the same, and like the platform where Bootstrap 6 moved ont
    `[open]`, `disabled` / `aria-disabled`, `aria-invalid`, `aria-busy` — never a state class.
 6. Behavior is the browser's commands: `commandfor` + `command="show-modal" | "close" | "toggle-popover"`, and the
    library's `--toggle` for a region elsewhere; an accordion is `<details name>`. Menus, tabs, dialogs and regions need
-   no start-up call; the library listens on the document.
+   no start-up call; the library listens on the document. A choice from a long list is a combobox — a `combobox-toggle`
+   button opens a panel with a search and a `listbox`, the value in hidden fields named by the list's `data-name` —
+   and a button's `aria-keyshortcuts` with Control, Meta or Alt is its shortcut (`Meta+K Control+K` opens a palette).
 7. Tokens are `--redz-` with the classes' words: `--redz-text-muted`, `--redz-space-16`. No inline styles: values come
    from classes, `<progress>` / `<meter>`, or the module's CSS.
 8. A module's own classes carry its prefix: `orders-summary`, never a bare name that could collide.
@@ -42,12 +44,13 @@ where the meaning is the same, and like the platform where Bootstrap 6 moved ont
   <link rel="stylesheet" href="redz-ui/css/index.css">
   <link rel="stylesheet" href="redz-ui/css/icons.css">
   <script type="module" src="redz-ui/js/index.js"></script>
-  <script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…"}</script>
+  <script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results"}</script>
 </head>
 ```
 
 `data-theme="light"` or `"dark"` on `<html>` fixes a theme (none follows the system); `dir="rtl"` turns the page right
-to left — the same stylesheet serves both. Every word the library shows comes from that island.
+to left — the same stylesheet serves both. Every word the library shows comes from that island; a count takes the
+form the page language's plural rules name (`found.one`, `found.few`, …), else `found.other`.
 
 ## From script
 
@@ -63,9 +66,9 @@ Check it exists: `grep -x 'CLASS' assets/classes.txt`. A class that is not there
 ## References — one per page of the docs
 
 Start: `references/index.md` (getting started), `layout.md`, `utilities.md`, `tokens.md`, `icons.md`.
-Actions: `btn.md`, `chip.md`, `menu.md`. Forms: `form.md`, `input-group.md`, `check.md`. Content: `card.md`,
+Actions: `btn.md`, `chip.md`, `menu.md`. Forms: `form.md`, `input-group.md`, `check.md`, `combobox.md`. Content: `card.md`,
 `accordion.md`, `collapse.md`, `list-group.md`, `table.md`, `badge.md`, `dot.md`, `avatar.md`, `icon-tile.md`,
 `empty-state.md`, `placeholder.md`. Layers: `dialog.md`, `drawer.md`, `tooltip.md`. Feedback: `alert.md`, `toast.md`,
 `spinner.md`, `progress.md`, `busy.md`, `save-bar.md`, `selection-bar.md`.
-Navigation: `nav.md`, `breadcrumb.md`, `app.md`. The same pages live at
+Navigation: `nav.md`, `breadcrumb.md`, `palette.md`, `app.md`. The same pages live at
 `https://redz-tech.github.io/REDZ.UI/docs/`.

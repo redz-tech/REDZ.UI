@@ -29,14 +29,14 @@ const wellPlaced = (menu, button) => {
 };
 
 /** Places the menu by script: below the button — a tooltip above it — or on the other side when only there it fits; its
- *  inline end edge on the button's (its start edge for .menu-start and a tooltip), the other edge when that one leaves
- *  the viewport; always inside the viewport. It is measured in the viewport's corner first — its width depends on the
- *  room where it stands. */
+ *  inline end edge on the button's (its start edge for .menu-start, a combobox's panel and a tooltip), the other edge
+ *  when that one leaves the viewport; always inside the viewport. It is measured in the viewport's corner first — its
+ *  width depends on the room where it stands. */
 const place = (menu, button) => {
 	const style = getComputedStyle(menu);
 	const gap = parseFloat(style.marginBlockStart) || 0;
 	const tooltip = menu.classList.contains('tooltip');
-	const end = (tooltip || menu.classList.contains('menu-start')) === (style.direction === 'rtl');
+	const end = (tooltip || menu.classList.contains('menu-start') || menu.classList.contains('combobox-menu')) === (style.direction === 'rtl');
 	for (const [property, value] of [['position-area', 'none'], ['position-try-fallbacks', 'none'], ['inset', 'auto'], ['top', '0px'], ['left', '0px'], ['margin', '0']]) {
 		menu.style.setProperty(property, value);
 	}

@@ -63,6 +63,10 @@ body are `drawer-header`, `drawer-title`, `drawer-body`. It opens like a dialog:
 - `input-group`, `input-group-sm` and `input-group-text` keep their names; `input-group-lg` becomes the default size;
   `has-validation` goes — the error sits under the group in its `form-field`. A menu inside the group stays where it
   is: the joining skips popovers. An icon inside the field itself is `form-adorn`.
+- A `<select>` that a plugin turned into a search (Select2, Tom Select, Choices.js, a project's own) becomes a
+  combobox: a `form-select combobox-toggle` button, a `combobox-menu` panel with `combobox-search` and a `listbox`
+  whose `data-name` names the field, the value in hidden fields (`name[]` for many). Remove the plugin and its
+  start-up call. A short list stays a plain `form-select`.
 
 ## Accordion and collapse
 

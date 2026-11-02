@@ -5,6 +5,8 @@ import './menu-place.js';
 import './tabs.js';
 import './toggle.js';
 import './dialog.js';
+import './combobox.js';
+import './shortcuts.js';
 import {toast} from './toast.js';
 import {confirm} from './confirm.js';
 import {busy} from './busy.js';

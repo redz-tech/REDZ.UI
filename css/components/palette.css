@@ -1,0 +1,95 @@
+@layer components {
+	.palette {
+		inline-size: min(40rem, calc(100vw - 1rem));
+		max-block-size: min(32rem, calc(100dvh - 2rem));
+		margin: max(1rem, 10dvh) auto auto;
+		padding: 0;
+		border: 1px solid var(--redz-border);
+		border-radius: var(--redz-radius-12);
+		background: var(--redz-bg-raised);
+		box-shadow: var(--redz-shadow-3);
+		color: var(--redz-text);
+	}
+
+	.palette[open] {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.palette::backdrop {
+		background: rgb(8 10 14 / 0.3);
+	}
+
+	.palette-search {
+		inline-size: 100%;
+		min-block-size: 3rem;
+		padding: 0 var(--redz-space-16);
+		border: 0;
+		border-block-end: 1px solid var(--redz-border);
+		background: transparent;
+		color: var(--redz-text);
+		font-size: var(--redz-fs-16);
+	}
+
+	.palette-search::placeholder {
+		color: var(--redz-text-muted);
+		opacity: 1;
+	}
+
+	.palette-search:focus-visible {
+		outline: 0;
+		border-block-end: 2px solid var(--redz-focus);
+	}
+
+	.palette-list {
+		flex: 1;
+		min-block-size: 0;
+		padding: var(--redz-space-4) var(--redz-space-8) var(--redz-space-8);
+		overflow-y: auto;
+		overscroll-behavior: contain;
+	}
+
+	.palette-list .menu-item[data-active] {
+		background: var(--redz-bg-hover);
+	}
+
+	.palette-footer {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--redz-space-4) var(--redz-space-16);
+		padding: var(--redz-space-8) var(--redz-space-16);
+		border-block-start: 1px solid var(--redz-border);
+		color: var(--redz-text-muted);
+		font-size: var(--redz-fs-12);
+	}
+
+	@media (forced-colors: active) {
+		.palette-search:focus-visible {
+			outline: 2px solid CanvasText;
+		}
+
+		.palette-list .menu-item[data-active] {
+			forced-color-adjust: none;
+			background: Highlight;
+			color: HighlightText;
+		}
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.palette,
+		.palette::backdrop {
+			transition: opacity 0.2s var(--redz-ease), translate 0.2s var(--redz-ease), display 0.2s allow-discrete, overlay 0.2s allow-discrete;
+		}
+
+		@starting-style {
+			.palette[open] {
+				opacity: 0;
+				translate: 0 -0.5rem;
+			}
+
+			.palette[open]::backdrop {
+				opacity: 0;
+			}
+		}
+	}
+}

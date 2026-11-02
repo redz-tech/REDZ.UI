@@ -2541,6 +2541,15 @@ column-gap-40
 column-gap-48
 column-gap-64
 column-gap-8
+combobox-chips
+combobox-list
+combobox-menu
+combobox-more
+combobox-no-results
+combobox-search
+combobox-search-input
+combobox-toggle
+combobox-value
 d-block
 d-contents
 d-flex
@@ -3316,7 +3325,9 @@ menu
 menu-divider
 menu-header
 menu-item
+menu-item-content
 menu-item-danger
+menu-item-description
 menu-start
 meter
 min-w-0
@@ -3417,6 +3428,10 @@ p-40
 p-48
 p-64
 p-8
+palette
+palette-footer
+palette-list
+palette-search
 pb-0
 pb-12
 pb-16

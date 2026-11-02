@@ -1,0 +1,61 @@
+<header class="vstack gap-8">
+	<h1>Command palette</h1>
+	<p class="docs-lead">One search for every place and action of an app, opened from anywhere by <kbd>⌘K</kbd> or <kbd>Ctrl K</kbd>: a dialog with the combobox's search and a list of links and buttons — Enter opens a page by its plain link or runs a button's command.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="palette-examples">
+	<h2 id="palette-examples">Example</h2>
+	<p>The button opens the dialog by the browser's command and names its keys in <code>aria-keyshortcuts</code>, which the library also takes as the shortcut. The options are links and buttons with <code>role="option"</code>, in groups; the search finds them by their words and by <code>data-keywords</code>.</p>
+	<div class="docs-example" id="palette-demo">
+		<button class="btn btn-subtle-secondary" type="button" commandfor="palette-demo-dialog" command="show-modal" aria-keyshortcuts="Meta+K Control+K"><i class="bi bi-search" aria-hidden="true"></i>Find or go to…<kbd>⌘K</kbd></button>
+		<dialog class="palette" id="palette-demo-dialog" closedby="any" aria-label="Find or go to">
+			<input class="palette-search" type="search" role="combobox" aria-controls="palette-demo-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find or go to" placeholder="Find or go to…" autocomplete="off" autofocus>
+			<div class="palette-list" id="palette-demo-list" role="listbox" aria-label="Places and actions">
+				<div role="group" aria-labelledby="palette-demo-go">
+					<div class="menu-header" id="palette-demo-go" role="presentation">Go to</div>
+					<a class="menu-item" role="option" id="palette-demo-pages" href="#palette-examples"><i class="bi bi-file-text" aria-hidden="true"></i>Pages</a>
+					<a class="menu-item" role="option" id="palette-demo-excursions" href="#palette-examples"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a>
+					<a class="menu-item" role="option" id="palette-demo-media" href="#palette-examples" data-keywords="images photos files"><i class="bi bi-images" aria-hidden="true"></i>Media library</a>
+					<a class="menu-item" role="option" id="palette-demo-languages" href="#palette-examples" data-keywords="translations strings"><i class="bi bi-translate" aria-hidden="true"></i>Languages</a>
+					<a class="menu-item" role="option" id="palette-demo-settings" href="#palette-examples" data-keywords="preferences options"><i class="bi bi-gear" aria-hidden="true"></i>Settings</a>
+				</div>
+				<div role="group" aria-labelledby="palette-demo-do">
+					<div class="menu-header" id="palette-demo-do" role="presentation">Actions</div>
+					<button class="menu-item" role="option" id="palette-demo-new" type="button" data-docs-run="toast-success"><i class="bi bi-plus-lg" aria-hidden="true"></i>New page</button>
+					<button class="menu-item" role="option" id="palette-demo-cache" type="button" aria-disabled="true"><i class="bi bi-arrow-clockwise" aria-hidden="true"></i>Rebuild every page</button>
+				</div>
+			</div>
+			<p class="combobox-no-results" hidden>Nothing found</p>
+			<div class="palette-footer"><span><kbd>↑</kbd> <kbd>↓</kbd> to move</span><span><kbd>↵</kbd> to open</span><span><kbd>esc</kbd> to close</span></div>
+		</dialog>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="palette-shortcuts">
+	<h2 id="palette-shortcuts">Shortcuts</h2>
+	<p>A button or a link whose <code>aria-keyshortcuts</code> names a combination with <kbd>Control</kbd>, <kbd>Meta</kbd> or <kbd>Alt</kbd> is pressed by it: the page states the keys once, for screen readers and for the library. Where both <code>Meta+K</code> and <code>Control+K</code> are named, Apple's systems answer <kbd>⌘K</kbd> and the others <kbd>Ctrl K</kbd>, so <kbd>Control K</kbd> keeps its meaning in a Mac's text fields; Firefox's own <kbd>Ctrl K</kbd> gives way to the page's.</p>
+	<ul>
+		<li>A single key is never a shortcut here: WCAG 2.1.4 asks for a way to turn such keys off, and a combination needs none.</li>
+		<li>A disabled or hidden button is left alone, and so is one outside an open modal dialog.</li>
+		<li>The hint the button shows — <kbd>⌘K</kbd> or <kbd>Ctrl K</kbd> — is the page's to write.</li>
+	</ul>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="palette-access">
+	<h2 id="palette-access">Keyboard and accessibility</h2>
+	<table class="table docs-table">
+		<thead><tr><th scope="col">Key</th><th scope="col">In the palette</th></tr></thead>
+		<tbody>
+			<tr><td><kbd>⌘K</kbd>, <kbd>Ctrl K</kbd></td><td>Opens it from anywhere, the focus in its search</td></tr>
+			<tr><td><kbd>↓</kbd> / <kbd>↑</kbd></td><td>The next / the previous option, round the ends</td></tr>
+			<tr><td><kbd>Page Down</kbd> / <kbd>Page Up</kbd></td><td>Ten options on / back</td></tr>
+			<tr><td><kbd>Enter</kbd></td><td>Opens the active link or presses the active button; the palette closes</td></tr>
+			<tr><td><kbd>Esc</kbd></td><td>Empties the search; on an empty search, closes the palette, the focus back where it was</td></tr>
+		</tbody>
+	</table>
+	<ul>
+		<li>The palette is a modal <code>&lt;dialog&gt;</code> with a name; a click on its backdrop closes it (<code>closedby="any"</code>). Opening it empties its search.</li>
+		<li>Its search is the WAI-ARIA combobox with a listbox, as in <a href="combobox.html">Combobox</a>: the options are plain links and buttons with <code>role="option"</code>, so a link opens in a new tab with <kbd>⌘</kbd> or the middle button as any link does. The library keeps them out of the Tab order (<code>tabindex="-1"</code>): the arrow keys reach them, as in every listbox.</li>
+		<li>Where the options come from — the app's menu, recent pages, a search on the server — is the page's: a server search answers <code>redz:filter</code> as a combobox's does.</li>
+	</ul>
+</section>

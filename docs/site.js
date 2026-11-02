@@ -101,4 +101,25 @@
 			calls[button.dataset.docsRun]?.(button);
 		}
 	});
+
+	const people = ['Anong Srisuk', 'Boris Lebedev', 'Chen Wei', 'Dao Nguyen', 'Elena Petrova', 'Farid Haddad', 'Grace Kim', 'Hiroshi Sato', 'Ingrid Berg', 'Kanya Thongchai', 'Leila Nasser', 'Maria Lopez', 'Niran Pongsak', 'Olga Ivanova', 'Somchai Wong'];
+	document.addEventListener('redz:filter', (event) => {
+		const list = document.getElementById(event.target.getAttribute('aria-controls') || '');
+		const query = event.detail.query.toLowerCase();
+		if (list === null || !list.hasAttribute('data-docs-remote') || query === '') {
+			return;
+		}
+		event.preventDefault();
+		setTimeout(() => {
+			if (event.detail.signal.aborted) {
+				return;
+			}
+			list.replaceChildren(...people.filter((name) => name.toLowerCase().includes(query)).map((name) => {
+				const option = Object.assign(document.createElement('div'), {className: 'menu-item', id: list.id + '-' + name.toLowerCase().replace(/\W+/g, '-'), textContent: name});
+				option.setAttribute('role', 'option');
+				option.dataset.value = name.toLowerCase().replace(/\W+/g, '.');
+				return option;
+			}));
+		}, 400);
+	});
 })();

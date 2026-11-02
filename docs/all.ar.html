@@ -10,7 +10,7 @@
 	<link rel="alternate" type="text/markdown" href="all.md">
 	<script src="site.js"></script>
 	<script type="module" src="../js/index.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close":"إغلاق","confirm.ok":"موافق","confirm.cancel":"إلغاء","busy":"جارٍ التحميل…"}</script>
+	<script type="application/json" id="redz-ui-text">{"close":"إغلاق","confirm.ok":"موافق","confirm.cancel":"إلغاء","busy":"جارٍ التحميل…","remove":"إزالة {label}","found.one":"{count} نتيجة","found.other":"{count} نتائج"}</script>
 </head>
 <body>
 	<div class="app">
@@ -49,6 +49,7 @@
 			<a class="app-link" href="form.html">حقول النماذج</a>
 			<a class="app-link" href="input-group.html">مجموعات الإدخال</a>
 			<a class="app-link" href="check.html">مربعات الاختيار وأزرار الاختيار والمفاتيح</a>
+			<a class="app-link" href="combobox.html">مربع التحرير والسرد</a>
 			<div class="app-section">المحتوى</div>
 			<a class="app-link" href="card.html">البطاقات</a>
 			<a class="app-link" href="accordion.html">الأكورديونات</a>
@@ -76,6 +77,7 @@
 			<div class="app-section">التنقل</div>
 			<a class="app-link" href="nav.html">روابط التنقل والتبويبات</a>
 			<a class="app-link" href="breadcrumb.html">مسار التنقل</a>
+			<a class="app-link" href="palette.html">لوحة الأوامر</a>
 			<a class="app-link" href="app.html">هيكل التطبيق</a>
 			<div class="app-section">المرجع</div>
 			<a class="app-link" href="all.html" aria-current="page">جميع المكونات</a>
@@ -663,6 +665,182 @@
 									<td><input class="switch" type="checkbox" role="switch" aria-label="مركّز عليه" data-docs-state="focus-visible"></td>
 									<td><input class="switch" type="checkbox" role="switch" aria-label="معطّل" checked="" disabled=""></td>
 									<td><input class="switch" type="checkbox" role="switch" aria-label="غير متاح" checked="" aria-disabled="true"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-combobox">
+					<h2 id="all-combobox"><a href="combobox.html">مربع التحرير والسرد</a></h2>
+					<div class="docs-example docs-example-stack" id="combobox-one">
+						<div class="form-floating">
+							<button class="form-select combobox-toggle" type="button" id="combobox-one-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" aria-controls="combobox-one-panel" commandfor="combobox-one-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="اختر لغة…">التايلاندية</span></button>
+							<label for="combobox-one-face">اللغة الافتراضية</label>
+						</div>
+						<div class="menu combobox-menu" id="combobox-one-panel" popover="" role="dialog" aria-label="اللغة الافتراضية">
+							<div class="combobox-search">
+								<i class="bi bi-search" aria-hidden="true"></i>
+								<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-one-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن لغة" placeholder="ابحث عن لغة" autocomplete="off" autofocus="">
+							</div>
+							<div class="combobox-list" id="combobox-one-list" role="listbox" aria-label="اللغات" data-name="language">
+								<div class="menu-item" role="option" id="combobox-one-en" data-value="en" aria-selected="false">الإنجليزية</div>
+								<div class="menu-item" role="option" id="combobox-one-th" data-value="th" aria-selected="true">التايلاندية</div>
+								<div class="menu-item" role="option" id="combobox-one-ru" data-value="ru" aria-selected="false">الروسية</div>
+								<div class="menu-item" role="option" id="combobox-one-de" data-value="de" aria-selected="false">الألمانية</div>
+								<div class="menu-item" role="option" id="combobox-one-fr" data-value="fr" aria-selected="false">الفرنسية</div>
+								<div class="menu-item" role="option" id="combobox-one-es" data-value="es" aria-selected="false">الإسبانية</div>
+								<div class="menu-item" role="option" id="combobox-one-zh" data-value="zh" aria-selected="false">الصينية</div>
+								<div class="menu-item" role="option" id="combobox-one-ja" data-value="ja" aria-selected="false">اليابانية</div>
+								<div class="menu-item" role="option" id="combobox-one-ko" data-value="ko" aria-selected="false">الكورية</div>
+								<div class="menu-item" role="option" id="combobox-one-ar" data-value="ar" aria-selected="false">العربية</div>
+								<div class="menu-item" role="option" id="combobox-one-he" data-value="he" aria-selected="false">العبرية</div>
+								<div class="menu-item" role="option" id="combobox-one-vi" data-value="vi" aria-selected="false">الفيتنامية</div>
+							</div>
+							<p class="combobox-no-results" hidden="">لم يُعثر على شيء</p>
+							<input type="hidden" name="language" value="th" data-label="التايلاندية">
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="combobox-many">
+						<div class="form-floating">
+							<button class="form-select combobox-toggle" type="button" id="combobox-many-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" aria-controls="combobox-many-panel" commandfor="combobox-many-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="اختر اللغات…">الإنجليزية والتايلاندية والروسية</span></button>
+							<label for="combobox-many-face">لغات الموقع</label>
+						</div>
+						<div class="menu combobox-menu" id="combobox-many-panel" popover="" role="dialog" aria-label="لغات الموقع">
+							<div class="combobox-search">
+								<i class="bi bi-search" aria-hidden="true"></i>
+								<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-many-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن لغة" placeholder="ابحث عن لغة" autocomplete="off" autofocus="">
+							</div>
+							<div class="combobox-list" id="combobox-many-list" role="listbox" aria-label="اللغات" aria-multiselectable="true" data-name="languages[]">
+								<div class="menu-item" role="option" id="combobox-many-en" data-value="en" aria-selected="true">الإنجليزية</div>
+								<div class="menu-item" role="option" id="combobox-many-th" data-value="th" aria-selected="true">التايلاندية</div>
+								<div class="menu-item" role="option" id="combobox-many-ru" data-value="ru" aria-selected="true">الروسية</div>
+								<div class="menu-item" role="option" id="combobox-many-de" data-value="de" aria-selected="false">الألمانية</div>
+								<div class="menu-item" role="option" id="combobox-many-fr" data-value="fr" aria-selected="false">الفرنسية</div>
+								<div class="menu-item" role="option" id="combobox-many-es" data-value="es" aria-selected="false">الإسبانية</div>
+								<div class="menu-item" role="option" id="combobox-many-zh" data-value="zh" aria-selected="false">الصينية</div>
+								<div class="menu-item" role="option" id="combobox-many-ja" data-value="ja" aria-selected="false">اليابانية</div>
+							</div>
+							<p class="combobox-no-results" hidden="">لم يُعثر على شيء</p>
+							<input type="hidden" name="languages[]" value="en" data-label="الإنجليزية">
+							<input type="hidden" name="languages[]" value="th" data-label="التايلاندية">
+							<input type="hidden" name="languages[]" value="ru" data-label="الروسية">
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="combobox-chips">
+						<div class="vstack gap-8">
+							<div class="form-floating">
+								<button class="form-select combobox-toggle" type="button" id="combobox-chips-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" aria-controls="combobox-chips-panel" commandfor="combobox-chips-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="أضف فئة…"></span></button>
+								<label for="combobox-chips-face">الفئات</label>
+							</div>
+							<div class="combobox-chips" id="combobox-chips-list-chips"></div>
+						</div>
+						<div class="menu combobox-menu" id="combobox-chips-panel" popover="" role="dialog" aria-label="الفئات">
+							<div class="combobox-search">
+								<i class="bi bi-search" aria-hidden="true"></i>
+								<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-chips-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن فئة" placeholder="ابحث عن فئة" autocomplete="off" autofocus="">
+							</div>
+							<div class="combobox-list" id="combobox-chips-list" role="listbox" aria-label="الفئات" aria-multiselectable="true" data-name="categories[]" data-chips="combobox-chips-list-chips">
+								<div class="menu-item" role="option" id="combobox-chips-beaches" data-value="beaches" aria-selected="true">الشواطئ</div>
+								<div class="menu-item" role="option" id="combobox-chips-islands" data-value="islands" aria-selected="true">الجزر</div>
+								<div class="menu-item" role="option" id="combobox-chips-diving" data-value="diving" aria-selected="false">الغوص والغطس السطحي</div>
+								<div class="menu-item" role="option" id="combobox-chips-food" data-value="food" aria-selected="false">جولات الطعام</div>
+								<div class="menu-item" role="option" id="combobox-chips-temples" data-value="temples" aria-selected="true">المعابد</div>
+								<div class="menu-item" role="option" id="combobox-chips-markets" data-value="markets" aria-selected="false">الأسواق الليلية</div>
+								<div class="menu-item" role="option" id="combobox-chips-parks" data-value="parks" aria-selected="false">الحدائق الوطنية</div>
+							</div>
+							<p class="combobox-no-results" hidden="">لم يُعثر على شيء</p>
+							<input type="hidden" name="categories[]" value="beaches" data-label="الشواطئ">
+							<input type="hidden" name="categories[]" value="islands" data-label="الجزر">
+							<input type="hidden" name="categories[]" value="temples" data-label="المعابد">
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="combobox-groups">
+						<div class="form-floating">
+							<button class="form-select combobox-toggle" type="button" id="combobox-groups-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" aria-controls="combobox-groups-panel" commandfor="combobox-groups-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="اختر دورًا…">محرر</span></button>
+							<label for="combobox-groups-face">الدور</label>
+						</div>
+						<div class="menu combobox-menu" id="combobox-groups-panel" popover="" role="dialog" aria-label="الدور">
+							<div class="combobox-search">
+								<i class="bi bi-search" aria-hidden="true"></i>
+								<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-groups-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن دور" placeholder="ابحث عن دور" autocomplete="off" autofocus="">
+							</div>
+							<div class="combobox-list" id="combobox-groups-list" role="listbox" aria-label="الأدوار" data-name="role">
+								<div role="group" aria-labelledby="combobox-groups-content">
+									<div class="menu-header" id="combobox-groups-content" role="presentation">المحتوى</div>
+									<div class="menu-item" role="option" id="combobox-groups-editor" data-value="editor" data-label="محرر" aria-selected="true"><i class="bi bi-pencil-square" aria-hidden="true"></i><span class="menu-item-content"><span>محرر</span><span class="menu-item-description">يكتب الصفحات وينشرها</span></span></div>
+									<div class="menu-item" role="option" id="combobox-groups-translator" data-value="translator" data-label="مترجم" data-keywords="لغات" aria-selected="false"><i class="bi bi-translate" aria-hidden="true"></i><span class="menu-item-content"><span>مترجم</span><span class="menu-item-description">يترجم ما يكتبه المحررون</span></span></div>
+								</div>
+								<div role="group" aria-labelledby="combobox-groups-site">
+									<div class="menu-header" id="combobox-groups-site" role="presentation">الموقع</div>
+									<div class="menu-item" role="option" id="combobox-groups-manager" data-value="manager" data-label="مدير الموقع" aria-selected="false"><i class="bi bi-globe2" aria-hidden="true"></i><span class="menu-item-content"><span>مدير الموقع</span><span class="menu-item-description">يدير موقعًا واحدًا وإعداداته</span></span></div>
+									<div class="menu-item" role="option" id="combobox-groups-owner" data-value="owner" data-label="المالك" aria-selected="false" aria-disabled="true"><i class="bi bi-key" aria-hidden="true"></i><span class="menu-item-content"><span>المالك</span><span class="menu-item-description">لا يمنح هذا الدور إلا المالك</span></span></div>
+								</div>
+							</div>
+							<p class="combobox-no-results" hidden="">لم يُعثر على شيء</p>
+							<input type="hidden" name="role" value="editor" data-label="محرر">
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="combobox-remote">
+						<div class="form-floating">
+							<button class="form-select combobox-toggle" type="button" id="combobox-remote-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" aria-controls="combobox-remote-panel" commandfor="combobox-remote-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="ابحث عن شخص…"></span></button>
+							<label for="combobox-remote-face">مُسنَد إلى</label>
+						</div>
+						<div class="menu combobox-menu" id="combobox-remote-panel" popover="" role="dialog" aria-label="مُسنَد إلى">
+							<div class="combobox-search">
+								<i class="bi bi-search" aria-hidden="true"></i>
+								<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-remote-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن شخص" placeholder="ابحث عن شخص" autocomplete="off" autofocus="">
+							</div>
+							<div class="combobox-list" id="combobox-remote-list" role="listbox" aria-label="الأشخاص" data-name="assignee" data-docs-remote=""></div>
+							<p class="combobox-no-results" hidden="">لم يُعثر على أحد</p>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="combobox-inline">
+						<div class="card">
+							<div class="card-body vstack gap-8">
+								<input class="form-control" type="search" role="combobox" aria-controls="combobox-inline-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن منطقة زمنية" placeholder="ابحث عن منطقة زمنية" autocomplete="off">
+								<div class="combobox-list" id="combobox-inline-list" role="listbox" aria-label="المناطق الزمنية" data-name="zone">
+									<div class="menu-item" role="option" id="combobox-inline-bkk" data-value="Asia/Bangkok" aria-selected="true">بانكوك · UTC+7</div>
+									<div class="menu-item" role="option" id="combobox-inline-sgp" data-value="Asia/Singapore" aria-selected="false">سنغافورة · UTC+8</div>
+									<div class="menu-item" role="option" id="combobox-inline-dxb" data-value="Asia/Dubai" aria-selected="false">دبي · UTC+4</div>
+									<div class="menu-item" role="option" id="combobox-inline-msk" data-value="Europe/Moscow" aria-selected="false">موسكو · UTC+3</div>
+									<div class="menu-item" role="option" id="combobox-inline-ber" data-value="Europe/Berlin" aria-selected="false">برلين · UTC+1</div>
+									<div class="menu-item" role="option" id="combobox-inline-nyc" data-value="America/New_York" aria-selected="false">نيويورك · UTC−5</div>
+								</div>
+								<p class="combobox-no-results" hidden="">لم يُعثر على شيء</p>
+								<input type="hidden" name="zone" value="Asia/Bangkok" data-label="بانكوك · UTC+7">
+							</div>
+						</div>
+					</div>
+					<div class="docs-states" id="combobox-states" tabindex="0" role="region" aria-labelledby="combobox-states-title">
+						<table class="docs-matrix">
+							<thead>
+								<tr><th scope="col">class</th><th scope="col">rest</th><th scope="col">:hover</th><th scope="col">:focus-visible</th><th scope="col">aria-expanded</th><th scope="col">disabled</th><th scope="col">aria-invalid</th></tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">combobox-toggle</th>
+									<td><button class="form-select combobox-toggle" type="button" role="combobox" aria-expanded="false" aria-controls="combobox-one-panel" aria-label="اللغة في وضع السكون"><span class="combobox-value">التايلاندية</span></button></td>
+									<td><button class="form-select combobox-toggle" type="button" role="combobox" aria-expanded="false" aria-controls="combobox-one-panel" aria-label="اللغة تحت المؤشر" data-docs-state="hover"><span class="combobox-value">التايلاندية</span></button></td>
+									<td><button class="form-select combobox-toggle" type="button" role="combobox" aria-expanded="false" aria-controls="combobox-one-panel" aria-label="اللغة مع التركيز" data-docs-state="focus-visible focus"><span class="combobox-value">التايلاندية</span></button></td>
+									<td><button class="form-select combobox-toggle" type="button" role="combobox" aria-expanded="true" aria-controls="combobox-one-panel" aria-label="اللغة مفتوحة"><span class="combobox-value">التايلاندية</span></button></td>
+									<td><button class="form-select combobox-toggle" type="button" role="combobox" aria-expanded="false" aria-controls="combobox-one-panel" aria-label="اللغة غير متاحة" disabled=""><span class="combobox-value">التايلاندية</span></button></td>
+									<td><button class="form-select combobox-toggle" type="button" role="combobox" aria-expanded="false" aria-controls="combobox-one-panel" aria-label="اللغة مع خطأ" aria-invalid="true"><span class="combobox-value" data-placeholder="اختر لغة…"></span></button></td>
+								</tr>
+							</tbody>
+						</table>
+						<table class="docs-matrix">
+							<thead>
+								<tr><th scope="col">class</th><th scope="col">rest</th><th scope="col">:hover</th><th scope="col">data-active</th><th scope="col">aria-selected</th><th scope="col">aria-disabled</th></tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">menu-item</th>
+									<td><div class="menu" role="listbox" aria-label="الخيار في وضع السكون"><div class="menu-item" role="option" aria-selected="false">التايلاندية</div></div></td>
+									<td><div class="menu" role="listbox" aria-label="الخيار تحت المؤشر"><div class="menu-item" role="option" aria-selected="false" data-docs-state="hover">التايلاندية</div></div></td>
+									<td><div class="menu combobox-list" role="listbox" aria-label="الخيار النشط"><div class="menu-item" role="option" aria-selected="false" data-active="">التايلاندية</div></div></td>
+									<td><div class="menu" role="listbox" aria-label="الخيار المختار"><div class="menu-item" role="option" aria-selected="true">التايلاندية</div></div></td>
+									<td><div class="menu" role="listbox" aria-label="الخيار غير متاح"><div class="menu-item" role="option" aria-selected="false" aria-disabled="true">التايلاندية</div></div></td>
 								</tr>
 							</tbody>
 						</table>
@@ -1359,6 +1537,33 @@
 								<li class="breadcrumb-item" aria-current="page">أنغ ثونغ</li>
 							</ol>
 						</nav>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-palette">
+					<h2 id="all-palette"><a href="palette.html">لوحة الأوامر</a></h2>
+					<div class="docs-example" id="palette-demo">
+						<button class="btn btn-subtle-secondary" type="button" commandfor="palette-demo-dialog" command="show-modal" aria-keyshortcuts="Meta+K Control+K"><i class="bi bi-search" aria-hidden="true"></i>البحث أو الانتقال إلى…<kbd>⌘K</kbd></button>
+						<dialog class="palette" id="palette-demo-dialog" closedby="any" aria-label="ابحث أو انتقل">
+							<input class="palette-search" type="search" role="combobox" aria-controls="palette-demo-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث أو انتقل" placeholder="البحث أو الانتقال إلى…" autocomplete="off" autofocus="">
+							<div class="palette-list" id="palette-demo-list" role="listbox" aria-label="الأماكن والإجراءات">
+								<div role="group" aria-labelledby="palette-demo-go">
+									<div class="menu-header" id="palette-demo-go" role="presentation">انتقل إلى</div>
+									<a class="menu-item" role="option" id="palette-demo-pages" href="#palette-examples"><i class="bi bi-file-text" aria-hidden="true"></i>الصفحات</a>
+									<a class="menu-item" role="option" id="palette-demo-excursions" href="#palette-examples"><i class="bi bi-compass" aria-hidden="true"></i>الرحلات</a>
+									<a class="menu-item" role="option" id="palette-demo-media" href="#palette-examples" data-keywords="صور ملفات وسائط"><i class="bi bi-images" aria-hidden="true"></i>مكتبة الوسائط</a>
+									<a class="menu-item" role="option" id="palette-demo-languages" href="#palette-examples" data-keywords="ترجمات نصوص"><i class="bi bi-translate" aria-hidden="true"></i>اللغات</a>
+									<a class="menu-item" role="option" id="palette-demo-settings" href="#palette-examples" data-keywords="تفضيلات خيارات"><i class="bi bi-gear" aria-hidden="true"></i>الإعدادات</a>
+								</div>
+								<div role="group" aria-labelledby="palette-demo-do">
+									<div class="menu-header" id="palette-demo-do" role="presentation">الإجراءات</div>
+									<button class="menu-item" role="option" id="palette-demo-new" type="button" data-docs-run="toast-success"><i class="bi bi-plus-lg" aria-hidden="true"></i>صفحة جديدة</button>
+									<button class="menu-item" role="option" id="palette-demo-cache" type="button" aria-disabled="true"><i class="bi bi-arrow-clockwise" aria-hidden="true"></i>أعد بناء كل الصفحات</button>
+								</div>
+							</div>
+							<p class="combobox-no-results" hidden="">لم يُعثر على شيء</p>
+							<div class="palette-footer"><span><kbd>↑</kbd> <kbd>↓</kbd> للتنقل</span><span><kbd>↵</kbd> للفتح</span><span><kbd>esc</kbd> للإغلاق</span></div>
+						</dialog>
 					</div>
 				</section>
 

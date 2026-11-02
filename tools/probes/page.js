@@ -121,6 +121,33 @@ window.REDZ_PROBE = (() => {
 					const target = document.getElementById(button.getAttribute('commandfor') || '');
 					return target === null || button.getAttribute('aria-expanded') !== String(!target.hidden);
 				}).slice(0, 8).map((button) => name(button) + ' → #' + button.getAttribute('commandfor')),
+				comboboxes: [...document.querySelectorAll('input[role="combobox"][aria-controls]')].flatMap((input) => {
+					const list = document.getElementById(input.getAttribute('aria-controls') || '');
+					if (list === null) {
+						return [name(input) + ': no list #' + input.getAttribute('aria-controls')];
+					}
+					const wrong = [];
+					const active = input.getAttribute('aria-activedescendant');
+					const option = active ? document.getElementById(active) : null;
+					if (active && (option === null || !list.contains(option) || option.hidden)) {
+						wrong.push(name(input) + ': the active option #' + active + ' is not a shown option of its list');
+					}
+					if (list.dataset.name) {
+						const scope = list.closest('[popover], dialog') ?? list.parentElement;
+						const held = new Set([...scope.querySelectorAll('input[type="hidden"]')].filter((holder) => holder.name === list.dataset.name).map((holder) => holder.value));
+						for (const each of list.querySelectorAll('[role="option"][data-value]')) {
+							if ((each.getAttribute('aria-selected') === 'true') !== held.has(each.dataset.value)) {
+								wrong.push(name(each) + ': aria-selected="' + each.getAttribute('aria-selected') + '" but its value is' + (held.has(each.dataset.value) ? '' : ' not') + ' held');
+							}
+						}
+					}
+					const panel = list.closest('[popover]');
+					const face = panel === null ? null : document.querySelector('.combobox-toggle[commandfor="' + CSS.escape(panel.id) + '"]');
+					if (face !== null && face.getAttribute('aria-expanded') !== String(panel.matches(':popover-open'))) {
+						wrong.push(name(face) + ': aria-expanded="' + face.getAttribute('aria-expanded') + '" on a ' + (panel.matches(':popover-open') ? 'shown' : 'hidden') + ' panel');
+					}
+					return wrong;
+				}).slice(0, 8),
 				hidden: document.visibilityState !== 'visible',
 				ui: typeof globalThis.REDZ?.ui?.toast === 'function'
 			};
@@ -203,15 +230,15 @@ window.REDZ_PROBE = (() => {
 		errors() {
 			return errors.splice(0);
 		},
-		// The widgets a keyboard walk tries: each menu, modal dialog and region a --toggle button opens by its first shown
-		// invoker, each tab list, each accordion.
+		// The widgets a keyboard walk tries: each menu, combobox, modal dialog and region a --toggle button opens by its first
+		// shown invoker, each tab list, each accordion.
 		keyTargets() {
 			const out = [];
 			const seen = new Set();
 			for (const invoker of document.querySelectorAll('[commandfor]')) {
 				const target = document.getElementById(invoker.getAttribute('commandfor') || '');
 				const command = invoker.getAttribute('command') || '';
-				const kind = target?.getAttribute('role') === 'menu' && command === 'toggle-popover' ? 'menu' : (target?.localName === 'dialog' && command === 'show-modal' ? 'dialog' : (target && command === '--toggle' ? 'toggle' : ''));
+				const kind = invoker.classList.contains('combobox-toggle') && target?.querySelector('[role="listbox"]') ? 'combobox' : (target?.getAttribute('role') === 'menu' && command === 'toggle-popover' ? 'menu' : (target?.localName === 'dialog' && command === 'show-modal' ? 'dialog' : (target && command === '--toggle' ? 'toggle' : '')));
 				if (kind !== '' && !seen.has(target) && shown(invoker)) {
 					seen.add(target);
 					invoker.setAttribute('data-probe-invoker', target.id);
@@ -259,6 +286,24 @@ window.REDZ_PROBE = (() => {
 				const invoker = document.querySelector('[data-probe-invoker="' + id + '"]');
 				return {open: !document.getElementById(id).hidden, expanded: invoker.getAttribute('aria-expanded'), onInvoker: active === invoker};
 			}
+			if (kind === 'combobox') {
+				const panel = document.getElementById(id);
+				const invoker = document.querySelector('[data-probe-invoker="' + id + '"]');
+				const input = panel.querySelector('input[role="combobox"]');
+				const list = document.getElementById(input?.getAttribute('aria-controls') || '');
+				const option = document.getElementById(input?.getAttribute('aria-activedescendant') || '');
+				const scope = list.closest('[popover], dialog') ?? list.parentElement;
+				return {
+					open: panel.matches(':popover-open'),
+					expanded: invoker.getAttribute('aria-expanded'),
+					onSearch: active === input,
+					onInvoker: active === invoker,
+					options: [...list.querySelectorAll('[role="option"]')].filter((each) => !each.hidden && each.getAttribute('aria-disabled') !== 'true').length,
+					active: option === null || option.hidden ? null : (option.dataset.value ?? option.id),
+					values: [...scope.querySelectorAll('input[type="hidden"]')].filter((holder) => holder.name === list.dataset.name).map((holder) => holder.value),
+					multiple: list.getAttribute('aria-multiselectable') === 'true'
+				};
+			}
 			if (kind === 'tabs') {
 				const list = document.querySelector('[data-probe-tablist="' + id + '"]');
 				const tabs = [...list.querySelectorAll('[role="tab"]')];
@@ -277,7 +322,8 @@ window.REDZ_PROBE = (() => {
 				items: items.length,
 				focusables: focusables.length,
 				at: focusables.indexOf(active),
-				checked: items.findIndex((item) => item.getAttribute('aria-checked') === 'true')
+				checked: items.findIndex((item) => item.getAttribute('aria-checked') === 'true'),
+				search: target.querySelector('input[role="combobox"]') === null ? null : {active: target.querySelector('input[role="combobox"]').getAttribute('aria-activedescendant')}
 			};
 		},
 		// The middle of the widget's invoker, a point of the viewport.

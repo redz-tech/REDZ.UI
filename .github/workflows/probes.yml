@@ -14,9 +14,10 @@ jobs:
   probes:
     # macOS 15: its image has the iOS 18.5 and 26.2 simulators, and Firefox 132 starts there — not on macOS 27. Its
     # Chrome lags (152), so the current Chrome is a pinned Chrome for Testing build (chrome-156 in the config).
-    # Five parts at once — the most macOS jobs a free account runs together — each its own sheet, joined below.
+    # Seven parts, five at a time — the most macOS jobs a free account runs together — each its own sheet, joined below;
+    # VoiceOver on macOS 15, the first with its activedescendant fix, and on macOS 26.
     name: probes (${{ matrix.part.name }})
-    runs-on: macos-15
+    runs-on: ${{ matrix.part.runner || 'macos-15' }}
     timeout-minutes: 60
     strategy:
       fail-fast: false
@@ -27,6 +28,8 @@ jobs:
           - {name: safari, engines: safari}
           - {name: floor, engines: chrome-130 firefox-132 chrome-136}
           - {name: ios, engines: ios-18 ios-26}
+          - {name: voiceover, engines: voiceover}
+          - {name: voiceover-tahoe, engines: voiceover-tahoe, runner: macos-26}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -43,8 +46,12 @@ jobs:
           key: probes-${{ matrix.part.name }}-${{ hashFiles('tools/probes/config.json') }}
 
       - name: Let safaridriver drive Safari and the simulators
-        if: matrix.part.name == 'safari' || matrix.part.name == 'ios'
+        if: matrix.part.name == 'safari' || matrix.part.name == 'ios' || startsWith(matrix.part.name, 'voiceover')
         run: sudo safaridriver --enable
+
+      - name: Let AppleScript drive VoiceOver
+        if: startsWith(matrix.part.name, 'voiceover')
+        run: php tools/probe.php voiceover-setup
 
       - name: The pages in ${{ matrix.part.engines }}
         run: php tools/probe.php ${{ matrix.part.engines }}
@@ -72,14 +79,14 @@ jobs:
           coverage: none
           tools: none
 
-      - name: One sheet of the five parts
+      - name: One sheet of the seven parts
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
           set -eu
           gh run download "${GITHUB_RUN_ID}" --pattern 'part-*' --dir parts
-          php tools/probe.php merge parts/part-chrome parts/part-firefox parts/part-safari parts/part-floor parts/part-ios
+          php tools/probe.php merge parts/part-chrome parts/part-firefox parts/part-safari parts/part-floor parts/part-ios parts/part-voiceover parts/part-voiceover-tahoe
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()

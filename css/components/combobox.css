@@ -1,0 +1,105 @@
+@layer components {
+	.combobox-toggle {
+		display: flex;
+		align-items: center;
+		gap: var(--redz-space-8);
+		min-inline-size: 0;
+		text-align: start;
+		cursor: pointer;
+	}
+
+	.combobox-toggle[aria-expanded="true"] {
+		border-color: var(--redz-focus);
+	}
+
+	.combobox-value {
+		flex: 1;
+		min-inline-size: 0;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+
+	.combobox-value:empty::before {
+		content: attr(data-placeholder);
+		color: var(--redz-text-muted);
+	}
+
+	.combobox-more {
+		flex: none;
+	}
+
+	.combobox-menu {
+		position-area: block-end span-inline-end;
+		inline-size: min(20rem, calc(100vw - 1rem));
+		max-inline-size: none;
+		padding: 0;
+	}
+
+	@supports (inline-size: anchor-size(inline)) {
+		.combobox-menu {
+			inline-size: min(max(16rem, anchor-size(inline)), calc(100vw - 1rem));
+		}
+	}
+
+	.combobox-search {
+		position: relative;
+		padding: var(--redz-space-8);
+		border-block-end: 1px solid var(--redz-border);
+	}
+
+	.combobox-search > .bi {
+		position: absolute;
+		inset-block-start: 50%;
+		inset-inline-start: calc(var(--redz-space-8) + var(--redz-space-8));
+		color: var(--redz-text-muted);
+		translate: 0 -50%;
+		pointer-events: none;
+	}
+
+	.combobox-search-input {
+		padding-inline-start: 2rem;
+	}
+
+	.combobox-list {
+		max-block-size: min(18rem, 50dvh);
+		padding: var(--redz-space-4);
+		overflow-y: auto;
+		overscroll-behavior: contain;
+	}
+
+	.combobox-list[aria-busy="true"] {
+		opacity: 0.6;
+	}
+
+	.combobox-list .menu-item[data-active] {
+		background: var(--redz-bg-hover);
+	}
+
+	.combobox-no-results {
+		margin: 0;
+		padding: var(--redz-space-8) var(--redz-space-12);
+		color: var(--redz-text-muted);
+	}
+
+	.combobox-chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--redz-space-4);
+	}
+
+	@supports selector(::highlight(redz-match)) {
+		::highlight(redz-match) {
+			background-color: var(--redz-primary-subtle);
+			color: var(--redz-primary);
+		}
+	}
+
+	@media (forced-colors: active) {
+		.combobox-list .menu-item[data-active] {
+			forced-color-adjust: none;
+			background: Highlight;
+			color: HighlightText;
+		}
+	}
+}

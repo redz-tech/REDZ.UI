@@ -13,7 +13,22 @@
 		"ios-18": {"kind": "safari", "ios": ["18.5", "18.6"]},
 		"chrome-136": {"kind": "chrome", "fetch": {"url": "https://storage.googleapis.com/chrome-for-testing-public/136.0.7103.113/mac-arm64/chrome-mac-arm64.zip", "sha256": "8a0a23242157daa323127353e2c95c5d1c21c79d21c2d776b42b572399e087a0", "binary": "chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing"}},
 		"chrome-156": {"kind": "chrome", "default": false, "why": "The current Chrome for CI, pinned: the macOS 15 image's Chrome lags behind the stable one (152 against 156 in October 2026). Named in CI; locally the installed Chrome is the current one.", "fetch": {"url": "https://storage.googleapis.com/chrome-for-testing-public/156.0.8078.74/mac-arm64/chrome-mac-arm64.zip", "sha256": "a2b4db4905d4b8756228ad4df8eba5b07b0cb5ece62fa928d11169d7f19d035c", "binary": "chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing"}},
-		"ios-26": {"kind": "safari", "ios": ["26.4", "26.5", "26.2"]}
+		"ios-26": {"kind": "safari", "ios": ["26.4", "26.5", "26.2"]},
+		"voiceover": {"kind": "voiceover", "default": false, "why": "What VoiceOver says through the combobox and the palette in Safari; VoiceOver must obey AppleScript — CI sets that up, a Mac's owner allows it."},
+		"voiceover-tahoe": {"kind": "voiceover", "default": false, "why": "The same on CI's macOS 26 image."}
+	},
+	"voiceover": {
+		"docs/combobox.html": [
+			{"label": "the button", "do": "focus", "target": "#combobox-one-face", "expect": ["Default language", "Thai"]},
+			{"label": "Enter on the button", "do": "key", "key": "Enter", "expect": ["Find a language"]},
+			{"label": "Down in the search", "do": "key", "key": "ArrowDown", "expect": ["Russian"]},
+			{"label": "typing “ger”", "do": "type", "text": "ger", "expect": ["German", "1 result"]},
+			{"label": "Enter in the search", "do": "key", "key": "Enter", "expect": ["Default language", "German"]}
+		],
+		"docs/palette.html": [
+			{"label": "⌘K", "do": "chord", "keys": "Meta+K", "expect": ["Find or go to"]},
+			{"label": "Down in the palette", "do": "key", "key": "ArrowDown", "expect": ["Pages"]}
+		]
 	},
 	"axe": {"version": "4.14.0", "integrity": "sha512-9WTZxEjsZ7b13TH8JPmbV2z8CHbl80/2hm3XPEG4JgNdQLK81IBRXmSxHfMAOkSqQeRxT/0dwNDz2GOm3zzpcQ==", "tags": ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]},
 	"allow": [
