@@ -244,13 +244,7 @@ function PROBE__Do(array &$h, string $verb, mixed ...$args): mixed
 function PROBE__EngineRun(string $name, array $engine, string $binary, string $dir, array $run, array &$report): void
 {
 	if ($engine['kind'] === 'voiceover') {
-		$h = PROBE__SafariStart($dir);
-		$report['engines'][$name] = ['version' => $h['version'] . ' · VoiceOver · macOS ' . trim(PROBE__Run(['/usr/bin/sw_vers', '-productVersion'])), 'cells' => 0];
-		try {
-			PROBE__VoiceOverRun($h, $name, $run, $report);
-		} finally {
-			PROBE__Do($h, 'Stop');
-		}
+		PROBE__VoiceOverRun($name, $dir, $run, $report);
 		return;
 	}
 	$h = match ($engine['kind']) {

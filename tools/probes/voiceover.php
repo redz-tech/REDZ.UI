@@ -54,17 +54,21 @@ function PROBE__VoiceOverHeard(string $before, float $most): array
 	return $heard;
 }
 
-/** Starts VoiceOver, goes through the config's steps on each page in Safari, records what it says into the report. */
-function PROBE__VoiceOverRun(array &$h, string $name, array $run, array &$report): void
+/** Starts VoiceOver, then Safari's session — VoiceOver's start would take the window from a session already open —
+ *  goes through the config's steps on each page, records what VoiceOver says into the report. */
+function PROBE__VoiceOverRun(string $name, string $dir, array $run, array &$report): void
 {
 	PROBE__Run([PROBE_VOICEOVER]);
-	for ($tries = 0; PROBE__AppleScript('tell application "VoiceOver" to return bounds of vo cursor') === ''; $tries++) {
-		if ($tries > 60) {
-			throw new RuntimeException('VoiceOver did not answer AppleScript within 30 s');
-		}
-		usleep(500000);
-	}
+	$h = null;
 	try {
+		for ($tries = 0; PROBE__AppleScript('tell application "VoiceOver" to return bounds of vo cursor') === ''; $tries++) {
+			if ($tries > 60) {
+				throw new RuntimeException('VoiceOver did not answer AppleScript within 30 s');
+			}
+			usleep(500000);
+		}
+		$h = PROBE__SafariStart($dir);
+		$report['engines'][$name] = ['version' => $h['version'] . ' · VoiceOver · macOS ' . trim(PROBE__Run(['/usr/bin/sw_vers', '-productVersion'])), 'cells' => 0];
 		foreach ($run['config']['voiceover'] as $page => $steps) {
 			PROBE__Do($h, 'Load', $run['base'] . $page, 1280, 900);
 			for ($tries = 0; PROBE__Do($h, 'Eval', 'document.readyState === "complete" && "REDZ" in window') !== true; $tries++) {
@@ -86,7 +90,7 @@ function PROBE__VoiceOverRun(array &$h, string $name, array $run, array &$report
 				$heard = PROBE__VoiceOverHeard($before, 6);
 				$said = mb_strtolower(implode(' · ', $heard));
 				$missing = array_values(array_filter($step['expect'], fn(string $words): bool => !str_contains($said, mb_strtolower($words))));
-				$state = PROBE__Do($h, 'Eval', '(() => { const el = document.activeElement; const active = document.getElementById(el.getAttribute("aria-activedescendant") || ""); return (el.id || el.localName) + (active === null ? "" : " → " + active.textContent.trim()) + " · " + String(el.value ?? el.textContent.trim()).slice(0, 40); })()');
+				$state = PROBE__Do($h, 'Eval', '(() => { const el = document.activeElement; const active = document.getElementById(el.getAttribute("aria-activedescendant") || ""); return (el.id || el.localName) + (active === null ? "" : " → " + active.textContent.trim()) + " · " + (el.matches("input, textarea") ? el.value : el.textContent.trim()).slice(0, 40); })()');
 				$report['spoken'][$page][] = ['engine' => $name, 'step' => $step['label'], 'expect' => $step['expect'], 'said' => $heard, 'state' => $state];
 				if ($missing !== []) {
 					$report['findings'][] = $name . ' ' . $page . ' — ' . $step['label'] . ': VoiceOver said «' . implode(' · ', $heard) . '», without «' . implode('», «', $missing) . '»';
@@ -96,12 +100,17 @@ function PROBE__VoiceOverRun(array &$h, string $name, array $run, array &$report
 		}
 	} catch (Throwable $e) {
 		try {
-			file_put_contents($run['sheet'] . '/shots/' . $name . '-stopped.png', PROBE__Do($h, 'Shot'));
+			if ($h !== null) {
+				file_put_contents($run['sheet'] . '/shots/' . $name . '-stopped.png', PROBE__Do($h, 'Shot'));
+			}
 		} catch (Throwable) {
 			// Without a shot the error itself still goes up.
 		}
 		throw $e;
 	} finally {
+		if ($h !== null) {
+			PROBE__Do($h, 'Stop');
+		}
 		PROBE__AppleScript('tell application "VoiceOver" to quit');
 	}
 }
