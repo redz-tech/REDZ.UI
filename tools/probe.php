@@ -248,7 +248,7 @@ function PROBE__ServerStart(string $dir): array
 	$base = 'http://127.0.0.1:' . $port . '/';
 	for ($tries = 0; @file_get_contents($base . 'index.html') === false; $tries++) {
 		if ($tries > 50) {
-			throw new RuntimeException('the static server did not start, see ' . $dir . '/server.log');
+			throw new RuntimeException('the static server did not serve index.html: ' . trim(substr((string)@file_get_contents($dir . '/server.log'), -600)));
 		}
 		usleep(100000);
 	}

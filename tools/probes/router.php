@@ -7,7 +7,7 @@ if (str_ends_with($path, '/')) {
 	$path .= 'index.html';
 }
 $file = realpath($root . $path);
-if ($file === false || !str_starts_with($file, $root . '/') || !is_file($file) || str_contains(substr($file, strlen($root)), '/.')) {
+if ($file === false || !str_starts_with($file, $root . DIRECTORY_SEPARATOR) || !is_file($file) || str_contains(substr($file, strlen($root)), DIRECTORY_SEPARATOR . '.')) {
 	http_response_code(404);
 	header('Cache-Control: no-store');
 	echo 'not found';
