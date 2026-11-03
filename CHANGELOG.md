@@ -4,7 +4,7 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
-## Unreleased
+## 0.6.0 — 2026-11-03
 
 ### Structures: trees, reordering, uploads
 - Trees (`css/components/tree.css`, `js/tree.js`): `tree` › `tree-item` › a `tree-row` with a `tree-toggle` — a
@@ -28,7 +28,9 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - The names pass reads `.catch(` and `.for(` as the properties they are, not as the statements' heads.
 - The docs: pages for trees and uploads, reordering on the page of list groups, 34 Arabic strings; the probes walk
   `--expand-all`, a move by each list's menu and two files on each upload, wait for a toggle busy with its children,
-  and flag a handle outside an item of a `data-reorder` list and an upload without its parts.
+  and flag a handle outside an item of a `data-reorder` list and an upload without its parts. The docs' state mirror
+  is checked on the page as loaded, before the walks: in headless Firefox, after a move of the focused handle, Tab
+  went on from the handle's old place.
 
 ## 0.5.0 — 2026-11-03
 
