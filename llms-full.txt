@@ -1926,7 +1926,7 @@ The items of an open menu. `:focus-visible` is where the arrow keys are; `aria-c
 
 - The menu is `popover` with `role="menu"` and a name; its items are `menuitem`, `menuitemradio` or `menuitemcheckbox`. A list of site sections is navigation, not a menu — use links.
 - The button carries `aria-haspopup="menu"`; the browser keeps its `aria-expanded`, moves the focus back to it on close and closes the menu on a click outside or `Esc`.
-- Where an engine does not put the menu beside its button — no anchor positioning below Firefox 147 and Safari 26, no anchor from a popover's button in Chrome 130–132, a table cell in Chrome 135–136, the bottom of a long page in Safari 26 — `js/menu-place.js` places it, and the probes record each such place.
+- Where an engine does not put the menu beside its button — no anchor positioning below Firefox 147 and Safari 26, no anchor from a popover's button in Chrome 130–132, a table cell in Chrome 135–136, the bottom of a long page in Safari 26 — `js/menu-place.js` places it, again when the page scrolls or the menu or its button changes size, and the probes record each such place.
 
 ## Tokens
 

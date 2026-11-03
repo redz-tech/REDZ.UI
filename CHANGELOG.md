@@ -25,6 +25,10 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   sent on its own by `redz:files`, with its row, `progress(fraction)` for its bar and a `signal` its remove button
   aborts; one file's error leaves the others. Left alone, the file joins the input's files for the form. A file
   dropped beside the zone does not open in the window; each remove button is named after its file.
+- The menu guard (`js/menu-place.js`) places a menu again when the menu or its button changes size, and waits for a
+  menu with no box yet: on iOS 18 a menu of moves opened from a second handle stood off the screen, and on the floor's
+  engines a combobox's panel above its field came 252 px away from it as its list shrank. A menu placed again keeps
+  its gap from the button.
 - The names pass reads `.catch(` and `.for(` as the properties they are, not as the statements' heads.
 - The docs: pages for trees and uploads, reordering on the page of list groups, 34 Arabic strings; the probes walk
   `--expand-all`, a move by each list's menu and two files on each upload, wait for a toggle busy with its children,

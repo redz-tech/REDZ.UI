@@ -1,7 +1,8 @@
 // REDZ.UI, menu placement: places an opened menu or tooltip beside its button wherever the browser cannot anchor it
 // (Firefox before 147, Safari before 26) or anchors it out of view or away from its button (Chrome 135–136 in a table
 // cell, Safari 26 at the bottom of a page taller than the viewport); such a layer carries data-placed="script" while it
-// is open.
+// is open. It looks again when the page scrolls, the window resizes, or the layer or its button changes size; a layer
+// with no box yet waits for one.
 const anchors = CSS.supports('position-area', 'block-end');
 const overrides = ['position-area', 'position-try-fallbacks', 'inset', 'top', 'left', 'margin'];
 const open = new Map();
@@ -33,6 +34,7 @@ const wellPlaced = (menu, button) => {
  *  when that one leaves the viewport; always inside the viewport. It is measured in the viewport's corner first — its
  *  width depends on the room where it stands. */
 const place = (menu, button) => {
+	menu.style.removeProperty('margin');
 	const style = getComputedStyle(menu);
 	const gap = parseFloat(style.marginBlockStart) || 0;
 	const tooltip = menu.classList.contains('tooltip');
@@ -61,11 +63,11 @@ const place = (menu, button) => {
 	menu.dataset.placed = 'script';
 };
 
-/** Checks every open menu and places by script the ones the engine did not put beside their button. */
+/** Checks every open menu that has a box and places by script the ones the engine did not put beside their button. */
 const watch = () => {
 	frame = 0;
 	for (const [menu, button] of open) {
-		if (!anchors || menu.dataset.placed === 'script' || !wellPlaced(menu, button)) {
+		if (menu.offsetWidth > 0 && (!anchors || menu.dataset.placed === 'script' || !wellPlaced(menu, button))) {
 			place(menu, button);
 		}
 	}
@@ -78,6 +80,8 @@ const schedule = () => {
 	}
 };
 
+const sized = new ResizeObserver(schedule);
+
 document.addEventListener('click', (event) => {
 	invoker = event.target instanceof Element ? event.target.closest('button[commandfor], button[popovertarget]') : null;
 }, true);
@@ -88,7 +92,11 @@ document.addEventListener('beforetoggle', (event) => {
 		return;
 	}
 	if (event.newState !== 'open') {
-		open.delete(menu);
+		if (open.has(menu)) {
+			sized.unobserve(open.get(menu));
+			sized.unobserve(menu);
+			open.delete(menu);
+		}
 		return;
 	}
 	for (const property of overrides) {
@@ -98,6 +106,8 @@ document.addEventListener('beforetoggle', (event) => {
 	const button = buttonOf(menu);
 	if (button !== null) {
 		open.set(menu, button);
+		sized.observe(menu);
+		sized.observe(button);
 		schedule();
 	}
 }, true);
