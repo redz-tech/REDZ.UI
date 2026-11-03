@@ -88,9 +88,10 @@
 			{"label": "a field with an error", "do": "focus", "target": "#form-stacked-price", "expect": ["Adult price, THB", "Lower than the child price"]},
 			{"label": "the code field", "do": "focus", "target": "#form-otp-code", "expect": ["6-digit code from your app", "Spaces and dashes are fine"]},
 			{"label": "a new password", "do": "focus", "target": "#form-password-new", "expect": ["New password", "At least 12 characters"]},
-			{"label": "a strong one typed", "do": "type", "text": "Tr0pical-Lagoon!", "expect": ["Strong"]},
+			{"label": "a strong one typed", "do": "type", "text": "Tr0pical-Lagoon!", "expect": ["Strong"], "unsteady": {"voiceover-tahoe": "VoiceOver 26 says the polite level on one run and nothing on the next (measured 2026-11-03)."}},
 			{"label": "the button that shows it", "do": "focus", "target": "[commandfor=\"form-password-new\"][command=\"--reveal\"]", "expect": ["Show the password"]},
 			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": []},
+			{"label": "the field, its text shown", "do": "focus", "target": "#form-password-new", "expect": []},
 			{"label": "back on the button: it says it is pressed", "do": "focus", "target": "[commandfor=\"form-password-new\"][command=\"--reveal\"]", "expect": ["Show the password"], "voiceover": ["selected"]}
 		],
 		"docs/check.html": [
@@ -123,7 +124,7 @@
 		],
 		"docs/list-group.html": [
 			{"label": "an item's handle", "do": "focus", "target": "[aria-label=\"Move: The pier\"]", "expect": ["Move: The pier"]},
-			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["Move down"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["Move down"], "unsteady": {"voiceover": "VoiceOver 15 says the first move of the menu, or only the menu's hint after it, run by run (measured 2026-11-03)."}},
 			{"label": "Enter on “Move down”", "do": "key", "key": "Enter", "expect": ["Moved to 2 of 3"]}
 		],
 		"docs/upload.html": [

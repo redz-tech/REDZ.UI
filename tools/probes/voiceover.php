@@ -85,7 +85,9 @@ function PROBE__VoiceOverPage(array &$h, string $name, string $page, array $step
 		}
 		usleep(100000);
 	}
-	PROBE__Do($h, 'Eval', '(addEventListener("click", (event) => { const link = event.target instanceof Element ? event.target.closest("a[href]") : null; if (link !== null && (link.origin !== location.origin || link.pathname !== location.pathname)) { event.preventDefault(); window.REDZ_PROBE_LEFT = link.href; } }, true), true)');
+	// The docs' own header and navigation are inert while VoiceOver hears a page: its cursor, and the focus it carries,
+	// stay among the examples. A link that would leave the page is held.
+	PROBE__Do($h, 'Eval', '(() => { for (const chrome of document.querySelectorAll(".app-header, #docs-nav")) { chrome.inert = true; } addEventListener("click", (event) => { const link = event.target instanceof Element ? event.target.closest("a[href]") : null; if (link !== null && (link.origin !== location.origin || link.pathname !== location.pathname)) { event.preventDefault(); window.REDZ_PROBE_LEFT = link.href; } }, true); return true; })()');
 	PROBE__AppleScript('tell application "Safari" to activate');
 	PROBE__VoiceOverHeard($log, microtime(true) * 1000, microtime(true) * 1000, 2.0, 10);
 	$spoken = [];
@@ -105,8 +107,10 @@ function PROBE__VoiceOverPage(array &$h, string $name, string $page, array $step
 			'chord' => PROBE__Do($h, 'Chord', $step['keys']),
 			'eval' => PROBE__Do($h, 'Eval', $step['script']),
 		};
-		usleep(300000);
-		PROBE__Do($h, 'Eval', '(() => { for (const el of document.querySelectorAll("[data-probe-focus]")) { el.removeAttribute("data-probe-focus"); } document.activeElement?.setAttribute("data-probe-focus", ""); return true; })()');
+		if ($step['do'] !== 'focus') {
+			usleep(300000);
+		}
+		PROBE__Do($h, 'Eval', '(() => { for (const el of document.querySelectorAll("[data-probe-focus]")) { el.removeAttribute("data-probe-focus"); } (' . ($step['do'] === 'focus' ? 'document.querySelector(' . json_encode($step['target']) . ')' : 'document.activeElement') . ')?.setAttribute("data-probe-focus", ""); return true; })()');
 		$heard = PROBE__VoiceOverHeard($log, $since, microtime(true) * 1000, 2.5, 10);
 		$left = PROBE__Do($h, 'Eval', 'window.REDZ_PROBE_LEFT ?? null');
 		if ($left !== null) {
