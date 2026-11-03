@@ -85,11 +85,18 @@ function PROBE__VoiceOverPage(array &$h, string $name, string $page, array $step
 		}
 		usleep(100000);
 	}
+	PROBE__Do($h, 'Eval', '(addEventListener("click", (event) => { const link = event.target instanceof Element ? event.target.closest("a[href]") : null; if (link !== null && (link.origin !== location.origin || link.pathname !== location.pathname)) { event.preventDefault(); window.REDZ_PROBE_LEFT = link.href; } }, true), true)');
 	PROBE__AppleScript('tell application "Safari" to activate');
 	PROBE__VoiceOverHeard($log, microtime(true) * 1000, microtime(true) * 1000, 2.0, 10);
 	$spoken = [];
 	$findings = [];
 	foreach ($steps as $step) {
+		// VoiceOver may carry the keyboard focus along with its own cursor: a key goes where the last step left the focus.
+		$back = $step['do'] === 'focus' || $step['do'] === 'eval' ? null : PROBE__Do($h, 'Eval', '(() => { const kept = document.querySelector("[data-probe-focus]"); if (kept === null || document.activeElement === kept) { return null; } const away = document.activeElement?.outerHTML.slice(0, 60) ?? "none"; kept.focus(); return away; })()');
+		if ($back !== null) {
+			echo 'note: ', $name, ' ', $page, ' — before «', $step['label'], '» the focus was on ', $back, ', put back', "\n";
+			PROBE__VoiceOverHeard($log, microtime(true) * 1000, microtime(true) * 1000, 1.0, 5);
+		}
 		$since = microtime(true) * 1000;
 		match ($step['do']) {
 			'focus' => PROBE__Do($h, 'Eval', '(() => { const el = document.querySelector(' . json_encode($step['target']) . '); if (el === null) { throw new Error(' . json_encode('no ' . $step['target'] . ' on the page') . '); } el.focus(); return true; })()'),
@@ -98,7 +105,14 @@ function PROBE__VoiceOverPage(array &$h, string $name, string $page, array $step
 			'chord' => PROBE__Do($h, 'Chord', $step['keys']),
 			'eval' => PROBE__Do($h, 'Eval', $step['script']),
 		};
+		usleep(300000);
+		PROBE__Do($h, 'Eval', '(() => { for (const el of document.querySelectorAll("[data-probe-focus]")) { el.removeAttribute("data-probe-focus"); } document.activeElement?.setAttribute("data-probe-focus", ""); return true; })()');
 		$heard = PROBE__VoiceOverHeard($log, $since, microtime(true) * 1000, 2.5, 10);
+		$left = PROBE__Do($h, 'Eval', 'window.REDZ_PROBE_LEFT ?? null');
+		if ($left !== null) {
+			$findings[] = $name . ' ' . $page . ' — ' . $step['label'] . ': a key pressed the link to ' . $left . ', which would leave the page';
+			PROBE__Do($h, 'Eval', '(delete window.REDZ_PROBE_LEFT, true)');
+		}
 		$said = mb_strtolower(implode(' · ', $heard));
 		$expect = [...$step['expect'], ...($step['voiceover'] ?? [])];
 		$missing = array_values(array_filter($expect, fn(string $words): bool => !str_contains($said, mb_strtolower($words))));
