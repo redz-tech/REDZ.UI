@@ -308,12 +308,13 @@ function PROBE__NvdaReady(array &$r, array &$h, string $page): void
 {
 	$title = (string)PROBE__Do($h, 'Eval', 'document.title');
 	PROBE__Do($h, 'Front');
-	for ($tries = 0; PROBE__SpeechMissing($r, [$title], $said = PROBE__NvdaSay($r, 'NVDA+t')) !== []; $tries++) {
+	// What NVDA said of the load passes first — it holds the title too —, and a busy browser may take a second to answer.
+	PROBE__NvdaHeard($r, microtime(true) * 1000, microtime(true) * 1000, 1.0, 10);
+	for ($tries = 0; PROBE__SpeechMissing($r, [$title], $said = PROBE__NvdaSay($r, 'NVDA+t', 1.5)) !== []; $tries++) {
 		if ($tries >= 10) {
 			throw new RuntimeException($page . ': the browser\'s window never came in front — NVDA+T said «' . implode(' · ', $said) . '»');
 		}
-		PROBE__NvdaPress($r, 'Alt+Escape');
-		usleep(500000);
+		PROBE__NvdaSay($r, 'Alt+Escape', 1.0);
 	}
 	for ($tries = 0; PROBE__Do($h, 'Eval', 'document.hasFocus()') !== true; $tries++) {
 		if ($tries >= 6) {
