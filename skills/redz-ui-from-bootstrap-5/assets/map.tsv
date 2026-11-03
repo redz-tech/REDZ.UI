@@ -4,9 +4,9 @@ accordion-body	accordion-body	same	class	accordion
 accordion-button		remove	class	accordion	the summary is the button; its chevron is <i class="bi bi-chevron-down accordion-icon">
 accordion-collapse		remove	class	accordion	the body follows the summary inside the <details>
 accordion-flush	accordion-flush	same	class	accordion	
-accordion-header	accordion-header	review	class	accordion	the item's <summary> with the button's words in it — no heading and no button inside
+accordion-header	accordion-header	review	class	accordion	the item's <summary> with the button's words in it; no heading and no button inside
 accordion-item	accordion-item	review	class	accordion	a <details>; the items of one group share a name, as data-bs-parent did
-active		state	class		aria-current, aria-selected or aria-pressed — the attribute of the element's role
+active		state	class		aria-current, aria-selected or aria-pressed: the attribute of the element's role
 alert	alert	same	class	alert	
 alert-danger	alert-danger	same	class	alert	
 alert-dark		review	class	alert	the plain alert, or a tone
@@ -202,11 +202,11 @@ bottom-100	bottom-100	same	class	utilities
 bottom-50	bottom-50	same	class	utilities	
 breadcrumb	breadcrumb	same	class	breadcrumb	
 breadcrumb-item	breadcrumb-item	same	class	breadcrumb	
-bs-popover-auto		missing	class	tooltip	a short note is a toggletip; a rich one a menu or a drawer
-bs-popover-bottom		missing	class	tooltip	a short note is a toggletip; a rich one a menu or a drawer
-bs-popover-end		missing	class	tooltip	a short note is a toggletip; a rich one a menu or a drawer
-bs-popover-start		missing	class	tooltip	a short note is a toggletip; a rich one a menu or a drawer
-bs-popover-top		missing	class	tooltip	a short note is a toggletip; a rich one a menu or a drawer
+bs-popover-auto		remove	class	popover	no arrow: anchor positioning places and flips the panel
+bs-popover-bottom		remove	class	popover	no arrow: anchor positioning places and flips the panel
+bs-popover-end		remove	class	popover	no arrow: anchor positioning places and flips the panel
+bs-popover-start		remove	class	popover	no arrow: anchor positioning places and flips the panel
+bs-popover-top		remove	class	popover	no arrow: anchor positioning places and flips the panel
 bs-tooltip-auto		remove	class	tooltip	the tooltip is one element
 bs-tooltip-bottom		remove	class	tooltip	the tooltip is one element
 bs-tooltip-end		remove	class	tooltip	the tooltip is one element
@@ -365,9 +365,9 @@ collapsed		state	class		aria-expanded="false" on the button, set by the browser 
 collapsing		remove	class	collapse	the region opens at once
 column-gap-0	column-gap-0	same	class	utilities	
 column-gap-1	column-gap-4	value	class	utilities	the number is the pixels
-column-gap-2	column-gap-8	value	class	utilities	reused — column-gap-2 means another thing in REDZ.UI; the number is the pixels
+column-gap-2	column-gap-8	value	class	utilities	reused: column-gap-2 means another thing in REDZ.UI; the number is the pixels
 column-gap-3	column-gap-16	value	class	utilities	the number is the pixels
-column-gap-4	column-gap-24	value	class	utilities	reused — column-gap-4 means another thing in REDZ.UI; the number is the pixels
+column-gap-4	column-gap-24	value	class	utilities	reused: column-gap-4 means another thing in REDZ.UI; the number is the pixels
 column-gap-5	column-gap-48	value	class	utilities	the number is the pixels
 column-gap-lg-0	lg:column-gap-0	rename	class	utilities	
 column-gap-lg-1	lg:column-gap-4	value	class	utilities	the number is the pixels
@@ -637,7 +637,7 @@ form-control-plaintext		review	class	form	readonly on a form-control, or plain t
 form-control-sm	form-control-sm	same	class	form	
 form-floating	form-floating	same	class	form	
 form-label	form-label	same	class	form	
-form-range		missing	class	form	
+form-range	form-range	same	class	form	on an <input type="range">, in the accent color
 form-select	form-select	same	class	form	
 form-select-lg	form-select-lg	same	class	form	
 form-select-sm	form-select-sm	same	class	form	
@@ -696,9 +696,9 @@ g-xxl-4	2xl:gap-24	grid	class	layout	on the grid parent
 g-xxl-5	2xl:gap-48	grid	class	layout	on the grid parent
 gap-0	gap-0	same	class	utilities	
 gap-1	gap-4	value	class	utilities	the number is the pixels
-gap-2	gap-8	value	class	utilities	reused — gap-2 means another thing in REDZ.UI; the number is the pixels
+gap-2	gap-8	value	class	utilities	reused: gap-2 means another thing in REDZ.UI; the number is the pixels
 gap-3	gap-16	value	class	utilities	the number is the pixels
-gap-4	gap-24	value	class	utilities	reused — gap-4 means another thing in REDZ.UI; the number is the pixels
+gap-4	gap-24	value	class	utilities	reused: gap-4 means another thing in REDZ.UI; the number is the pixels
 gap-5	gap-48	value	class	utilities	the number is the pixels
 gap-lg-0	lg:gap-0	rename	class	utilities	
 gap-lg-1	lg:gap-4	value	class	utilities	the number is the pixels
@@ -807,17 +807,17 @@ h-25	h-25	same	class	utilities
 h-50	h-50	same	class	utilities	
 h-75	h-75	same	class	utilities	
 h-auto	h-auto	same	class	utilities	
-h1		review	class	utilities	the h1–h4 sizes are the elements'; fs-* for another
-h2		review	class	utilities	the h1–h4 sizes are the elements'; fs-* for another
-h3		review	class	utilities	the h1–h4 sizes are the elements'; fs-* for another
-h4		review	class	utilities	the h1–h4 sizes are the elements'; fs-* for another
-h5		review	class	utilities	the h1–h4 sizes are the elements'; fs-* for another
-h6		review	class	utilities	the h1–h4 sizes are the elements'; fs-* for another
+h1		review	class	utilities	the h1-h4 sizes are the elements'; fs-* for another
+h2		review	class	utilities	the h1-h4 sizes are the elements'; fs-* for another
+h3		review	class	utilities	the h1-h4 sizes are the elements'; fs-* for another
+h4		review	class	utilities	the h1-h4 sizes are the elements'; fs-* for another
+h5		review	class	utilities	the h1-h4 sizes are the elements'; fs-* for another
+h6		review	class	utilities	the h1-h4 sizes are the elements'; fs-* for another
 has-validation		remove	class	form	fields have no success state
 hiding		state	class		closed: no attribute
 hstack	hstack	same	class	utilities	
-icon-link		review	class	icons	a link with its icon: hstack gap-4
-icon-link-hover		review	class	icons	a link with its icon: hstack gap-4
+icon-link	icon-link	same	class	utilities	the icon sits in the link's line, its gap in em
+icon-link-hover		remove	class	utilities	the icon does not move on hover
 img-fluid		review	class	utilities	images never overflow their box here; w-100 to fill it
 img-thumbnail		missing	class	utilities	
 initialism		missing	class	utilities	
@@ -941,9 +941,9 @@ list-inline-item		review	class	utilities	hstack flex-wrap
 list-unstyled		review	class	utilities	vstack, or a component's own list
 m-0	m-0	same	class	utilities	
 m-1	m-4	value	class	utilities	the number is the pixels
-m-2	m-8	value	class	utilities	reused — m-2 means another thing in REDZ.UI; the number is the pixels
+m-2	m-8	value	class	utilities	reused: m-2 means another thing in REDZ.UI; the number is the pixels
 m-3	m-16	value	class	utilities	the number is the pixels
-m-4	m-24	value	class	utilities	reused — m-4 means another thing in REDZ.UI; the number is the pixels
+m-4	m-24	value	class	utilities	reused: m-4 means another thing in REDZ.UI; the number is the pixels
 m-5	m-48	value	class	utilities	the number is the pixels
 m-auto	m-auto	same	class	utilities	
 m-lg-0	lg:m-0	rename	class	utilities	
@@ -984,9 +984,9 @@ m-xxl-auto	2xl:m-auto	rename	class	utilities
 mark		missing	class	utilities	
 mb-0	mb-0	same	class	utilities	
 mb-1	mb-4	value	class	utilities	the number is the pixels
-mb-2	mb-8	value	class	utilities	reused — mb-2 means another thing in REDZ.UI; the number is the pixels
+mb-2	mb-8	value	class	utilities	reused: mb-2 means another thing in REDZ.UI; the number is the pixels
 mb-3	mb-16	value	class	utilities	the number is the pixels
-mb-4	mb-24	value	class	utilities	reused — mb-4 means another thing in REDZ.UI; the number is the pixels
+mb-4	mb-24	value	class	utilities	reused: mb-4 means another thing in REDZ.UI; the number is the pixels
 mb-5	mb-48	value	class	utilities	the number is the pixels
 mb-auto	mb-auto	same	class	utilities	
 mb-lg-0	lg:mb-0	rename	class	utilities	
@@ -1026,9 +1026,9 @@ mb-xxl-5	2xl:mb-48	value	class	utilities	the number is the pixels
 mb-xxl-auto	2xl:mb-auto	rename	class	utilities	
 me-0	me-0	same	class	utilities	
 me-1	me-4	value	class	utilities	the number is the pixels
-me-2	me-8	value	class	utilities	reused — me-2 means another thing in REDZ.UI; the number is the pixels
+me-2	me-8	value	class	utilities	reused: me-2 means another thing in REDZ.UI; the number is the pixels
 me-3	me-16	value	class	utilities	the number is the pixels
-me-4	me-24	value	class	utilities	reused — me-4 means another thing in REDZ.UI; the number is the pixels
+me-4	me-24	value	class	utilities	reused: me-4 means another thing in REDZ.UI; the number is the pixels
 me-5	me-48	value	class	utilities	the number is the pixels
 me-auto	me-auto	same	class	utilities	
 me-lg-0	lg:me-0	rename	class	utilities	
@@ -1091,9 +1091,9 @@ modal-title	dialog-title	rename	class	dialog
 modal-xl		review	class	dialog	dialog-lg is the widest
 ms-0	ms-0	same	class	utilities	
 ms-1	ms-4	value	class	utilities	the number is the pixels
-ms-2	ms-8	value	class	utilities	reused — ms-2 means another thing in REDZ.UI; the number is the pixels
+ms-2	ms-8	value	class	utilities	reused: ms-2 means another thing in REDZ.UI; the number is the pixels
 ms-3	ms-16	value	class	utilities	the number is the pixels
-ms-4	ms-24	value	class	utilities	reused — ms-4 means another thing in REDZ.UI; the number is the pixels
+ms-4	ms-24	value	class	utilities	reused: ms-4 means another thing in REDZ.UI; the number is the pixels
 ms-5	ms-48	value	class	utilities	the number is the pixels
 ms-auto	ms-auto	same	class	utilities	
 ms-lg-0	lg:ms-0	rename	class	utilities	
@@ -1133,9 +1133,9 @@ ms-xxl-5	2xl:ms-48	value	class	utilities	the number is the pixels
 ms-xxl-auto	2xl:ms-auto	rename	class	utilities	
 mt-0	mt-0	same	class	utilities	
 mt-1	mt-4	value	class	utilities	the number is the pixels
-mt-2	mt-8	value	class	utilities	reused — mt-2 means another thing in REDZ.UI; the number is the pixels
+mt-2	mt-8	value	class	utilities	reused: mt-2 means another thing in REDZ.UI; the number is the pixels
 mt-3	mt-16	value	class	utilities	the number is the pixels
-mt-4	mt-24	value	class	utilities	reused — mt-4 means another thing in REDZ.UI; the number is the pixels
+mt-4	mt-24	value	class	utilities	reused: mt-4 means another thing in REDZ.UI; the number is the pixels
 mt-5	mt-48	value	class	utilities	the number is the pixels
 mt-auto	mt-auto	same	class	utilities	
 mt-lg-0	lg:mt-0	rename	class	utilities	
@@ -1176,9 +1176,9 @@ mt-xxl-auto	2xl:mt-auto	rename	class	utilities
 mw-100		review	class	utilities	max-w-* by px
 mx-0	mx-0	same	class	utilities	
 mx-1	mx-4	value	class	utilities	the number is the pixels
-mx-2	mx-8	value	class	utilities	reused — mx-2 means another thing in REDZ.UI; the number is the pixels
+mx-2	mx-8	value	class	utilities	reused: mx-2 means another thing in REDZ.UI; the number is the pixels
 mx-3	mx-16	value	class	utilities	the number is the pixels
-mx-4	mx-24	value	class	utilities	reused — mx-4 means another thing in REDZ.UI; the number is the pixels
+mx-4	mx-24	value	class	utilities	reused: mx-4 means another thing in REDZ.UI; the number is the pixels
 mx-5	mx-48	value	class	utilities	the number is the pixels
 mx-auto	mx-auto	same	class	utilities	
 mx-lg-0	lg:mx-0	rename	class	utilities	
@@ -1218,9 +1218,9 @@ mx-xxl-5	2xl:mx-48	value	class	utilities	the number is the pixels
 mx-xxl-auto	2xl:mx-auto	rename	class	utilities	
 my-0	my-0	same	class	utilities	
 my-1	my-4	value	class	utilities	the number is the pixels
-my-2	my-8	value	class	utilities	reused — my-2 means another thing in REDZ.UI; the number is the pixels
+my-2	my-8	value	class	utilities	reused: my-2 means another thing in REDZ.UI; the number is the pixels
 my-3	my-16	value	class	utilities	the number is the pixels
-my-4	my-24	value	class	utilities	reused — my-4 means another thing in REDZ.UI; the number is the pixels
+my-4	my-24	value	class	utilities	reused: my-4 means another thing in REDZ.UI; the number is the pixels
 my-5	my-48	value	class	utilities	the number is the pixels
 my-auto	my-auto	same	class	utilities	
 my-lg-0	lg:my-0	rename	class	utilities	
@@ -1284,32 +1284,32 @@ navbar-toggler-icon		review	class	app	the shell's app-header
 object-fit-contain	object-fit-contain	same	class	utilities	
 object-fit-cover	object-fit-cover	same	class	utilities	
 object-fit-fill	object-fit-fill	same	class	utilities	
-object-fit-lg-contain	object-fit-contain	review	class	utilities	no lg: form here — set it at that width in the module's CSS, or rethink the layout.
-object-fit-lg-cover	object-fit-cover	review	class	utilities	no lg: form here — set it at that width in the module's CSS, or rethink the layout.
-object-fit-lg-fill	object-fit-fill	review	class	utilities	no lg: form here — set it at that width in the module's CSS, or rethink the layout.
-object-fit-lg-none	object-fit-none	review	class	utilities	no lg: form here — set it at that width in the module's CSS, or rethink the layout.
+object-fit-lg-contain	object-fit-contain	review	class	utilities	no lg: form here; set it at that width in the module's CSS, or rethink the layout.
+object-fit-lg-cover	object-fit-cover	review	class	utilities	no lg: form here; set it at that width in the module's CSS, or rethink the layout.
+object-fit-lg-fill	object-fit-fill	review	class	utilities	no lg: form here; set it at that width in the module's CSS, or rethink the layout.
+object-fit-lg-none	object-fit-none	review	class	utilities	no lg: form here; set it at that width in the module's CSS, or rethink the layout.
 object-fit-lg-scale		review	class	utilities	object-fit-contain is the nearest
-object-fit-md-contain	object-fit-contain	review	class	utilities	no md: form here — set it at that width in the module's CSS, or rethink the layout.
-object-fit-md-cover	object-fit-cover	review	class	utilities	no md: form here — set it at that width in the module's CSS, or rethink the layout.
-object-fit-md-fill	object-fit-fill	review	class	utilities	no md: form here — set it at that width in the module's CSS, or rethink the layout.
-object-fit-md-none	object-fit-none	review	class	utilities	no md: form here — set it at that width in the module's CSS, or rethink the layout.
+object-fit-md-contain	object-fit-contain	review	class	utilities	no md: form here; set it at that width in the module's CSS, or rethink the layout.
+object-fit-md-cover	object-fit-cover	review	class	utilities	no md: form here; set it at that width in the module's CSS, or rethink the layout.
+object-fit-md-fill	object-fit-fill	review	class	utilities	no md: form here; set it at that width in the module's CSS, or rethink the layout.
+object-fit-md-none	object-fit-none	review	class	utilities	no md: form here; set it at that width in the module's CSS, or rethink the layout.
 object-fit-md-scale		review	class	utilities	object-fit-contain is the nearest
 object-fit-none	object-fit-none	same	class	utilities	
 object-fit-scale		review	class	utilities	object-fit-contain is the nearest
-object-fit-sm-contain	object-fit-contain	review	class	utilities	no sm: form here — set it at that width in the module's CSS, or rethink the layout.
-object-fit-sm-cover	object-fit-cover	review	class	utilities	no sm: form here — set it at that width in the module's CSS, or rethink the layout.
-object-fit-sm-fill	object-fit-fill	review	class	utilities	no sm: form here — set it at that width in the module's CSS, or rethink the layout.
-object-fit-sm-none	object-fit-none	review	class	utilities	no sm: form here — set it at that width in the module's CSS, or rethink the layout.
+object-fit-sm-contain	object-fit-contain	review	class	utilities	no sm: form here; set it at that width in the module's CSS, or rethink the layout.
+object-fit-sm-cover	object-fit-cover	review	class	utilities	no sm: form here; set it at that width in the module's CSS, or rethink the layout.
+object-fit-sm-fill	object-fit-fill	review	class	utilities	no sm: form here; set it at that width in the module's CSS, or rethink the layout.
+object-fit-sm-none	object-fit-none	review	class	utilities	no sm: form here; set it at that width in the module's CSS, or rethink the layout.
 object-fit-sm-scale		review	class	utilities	object-fit-contain is the nearest
-object-fit-xl-contain	object-fit-contain	review	class	utilities	no xl: form here — set it at that width in the module's CSS, or rethink the layout.
-object-fit-xl-cover	object-fit-cover	review	class	utilities	no xl: form here — set it at that width in the module's CSS, or rethink the layout.
-object-fit-xl-fill	object-fit-fill	review	class	utilities	no xl: form here — set it at that width in the module's CSS, or rethink the layout.
-object-fit-xl-none	object-fit-none	review	class	utilities	no xl: form here — set it at that width in the module's CSS, or rethink the layout.
+object-fit-xl-contain	object-fit-contain	review	class	utilities	no xl: form here; set it at that width in the module's CSS, or rethink the layout.
+object-fit-xl-cover	object-fit-cover	review	class	utilities	no xl: form here; set it at that width in the module's CSS, or rethink the layout.
+object-fit-xl-fill	object-fit-fill	review	class	utilities	no xl: form here; set it at that width in the module's CSS, or rethink the layout.
+object-fit-xl-none	object-fit-none	review	class	utilities	no xl: form here; set it at that width in the module's CSS, or rethink the layout.
 object-fit-xl-scale		review	class	utilities	object-fit-contain is the nearest
-object-fit-xxl-contain	object-fit-contain	review	class	utilities	no 2xl: form here — set it at that width in the module's CSS, or rethink the layout.
-object-fit-xxl-cover	object-fit-cover	review	class	utilities	no 2xl: form here — set it at that width in the module's CSS, or rethink the layout.
-object-fit-xxl-fill	object-fit-fill	review	class	utilities	no 2xl: form here — set it at that width in the module's CSS, or rethink the layout.
-object-fit-xxl-none	object-fit-none	review	class	utilities	no 2xl: form here — set it at that width in the module's CSS, or rethink the layout.
+object-fit-xxl-contain	object-fit-contain	review	class	utilities	no 2xl: form here; set it at that width in the module's CSS, or rethink the layout.
+object-fit-xxl-cover	object-fit-cover	review	class	utilities	no 2xl: form here; set it at that width in the module's CSS, or rethink the layout.
+object-fit-xxl-fill	object-fit-fill	review	class	utilities	no 2xl: form here; set it at that width in the module's CSS, or rethink the layout.
+object-fit-xxl-none	object-fit-none	review	class	utilities	no 2xl: form here; set it at that width in the module's CSS, or rethink the layout.
 object-fit-xxl-scale		review	class	utilities	object-fit-contain is the nearest
 offcanvas	drawer	rename	class	drawer	on a <dialog>, opened by command="show-modal"
 offcanvas-backdrop		remove	class	drawer	the browser's ::backdrop
@@ -1463,9 +1463,9 @@ overflow-y-scroll	overflow-y-scroll	same	class	utilities
 overflow-y-visible	overflow-y-visible	same	class	utilities	
 p-0	p-0	same	class	utilities	
 p-1	p-4	value	class	utilities	the number is the pixels
-p-2	p-8	value	class	utilities	reused — p-2 means another thing in REDZ.UI; the number is the pixels
+p-2	p-8	value	class	utilities	reused: p-2 means another thing in REDZ.UI; the number is the pixels
 p-3	p-16	value	class	utilities	the number is the pixels
-p-4	p-24	value	class	utilities	reused — p-4 means another thing in REDZ.UI; the number is the pixels
+p-4	p-24	value	class	utilities	reused: p-4 means another thing in REDZ.UI; the number is the pixels
 p-5	p-48	value	class	utilities	the number is the pixels
 p-lg-0	lg:p-0	rename	class	utilities	
 p-lg-1	lg:p-4	value	class	utilities	the number is the pixels
@@ -1504,9 +1504,9 @@ pagination-lg	pagination-lg	same	class	pagination	the current page aria-current=
 pagination-sm	pagination-sm	same	class	pagination	the current page aria-current="page", a missing one aria-disabled; previous and next with page-text for a list paged by "the next 50"
 pb-0	pb-0	same	class	utilities	
 pb-1	pb-4	value	class	utilities	the number is the pixels
-pb-2	pb-8	value	class	utilities	reused — pb-2 means another thing in REDZ.UI; the number is the pixels
+pb-2	pb-8	value	class	utilities	reused: pb-2 means another thing in REDZ.UI; the number is the pixels
 pb-3	pb-16	value	class	utilities	the number is the pixels
-pb-4	pb-24	value	class	utilities	reused — pb-4 means another thing in REDZ.UI; the number is the pixels
+pb-4	pb-24	value	class	utilities	reused: pb-4 means another thing in REDZ.UI; the number is the pixels
 pb-5	pb-48	value	class	utilities	the number is the pixels
 pb-lg-0	lg:pb-0	rename	class	utilities	
 pb-lg-1	lg:pb-4	value	class	utilities	the number is the pixels
@@ -1540,9 +1540,9 @@ pb-xxl-4	2xl:pb-24	value	class	utilities	the number is the pixels
 pb-xxl-5	2xl:pb-48	value	class	utilities	the number is the pixels
 pe-0	pe-0	same	class	utilities	
 pe-1	pe-4	value	class	utilities	the number is the pixels
-pe-2	pe-8	value	class	utilities	reused — pe-2 means another thing in REDZ.UI; the number is the pixels
+pe-2	pe-8	value	class	utilities	reused: pe-2 means another thing in REDZ.UI; the number is the pixels
 pe-3	pe-16	value	class	utilities	the number is the pixels
-pe-4	pe-24	value	class	utilities	reused — pe-4 means another thing in REDZ.UI; the number is the pixels
+pe-4	pe-24	value	class	utilities	reused: pe-4 means another thing in REDZ.UI; the number is the pixels
 pe-5	pe-48	value	class	utilities	the number is the pixels
 pe-auto	pe-auto	same	class	utilities	
 pe-lg-0	lg:pe-0	rename	class	utilities	
@@ -1583,10 +1583,10 @@ placeholder-sm		review	class	placeholder	size by the height of the bar
 placeholder-wave		remove	class	placeholder	placeholders pulse by themselves
 placeholder-xs		review	class	placeholder	size by the height of the bar
 pointer-event		remove	class		carousel only
-popover		missing	class	tooltip	a short note is a toggletip; a rich one a menu or a drawer
-popover-arrow		missing	class	tooltip	a short note is a toggletip; a rich one a menu or a drawer
-popover-body		missing	class	tooltip	a short note is a toggletip; a rich one a menu or a drawer
-popover-header		missing	class	tooltip	a short note is a toggletip; a rich one a menu or a drawer
+popover	popover	same	class	popover	the panel has popover, right after its button; with a title and a link in it, role="dialog"
+popover-arrow		remove	class	popover	no arrow: anchor positioning places and flips the panel
+popover-body	popover-body	same	class	popover	the panel has popover, right after its button; with a title and a link in it, role="dialog"
+popover-header	popover-header	same	class	popover	the panel has popover, right after its button; with a title and a link in it, role="dialog"
 position-absolute	position-absolute	same	class	utilities	
 position-fixed	position-fixed	same	class	utilities	
 position-relative	position-relative	same	class	utilities	
@@ -1599,9 +1599,9 @@ progress-bar-striped	progress-striped	rename	class	progress
 progress-stacked		review	class	progress	not planned: one <progress> a value
 ps-0	ps-0	same	class	utilities	
 ps-1	ps-4	value	class	utilities	the number is the pixels
-ps-2	ps-8	value	class	utilities	reused — ps-2 means another thing in REDZ.UI; the number is the pixels
+ps-2	ps-8	value	class	utilities	reused: ps-2 means another thing in REDZ.UI; the number is the pixels
 ps-3	ps-16	value	class	utilities	the number is the pixels
-ps-4	ps-24	value	class	utilities	reused — ps-4 means another thing in REDZ.UI; the number is the pixels
+ps-4	ps-24	value	class	utilities	reused: ps-4 means another thing in REDZ.UI; the number is the pixels
 ps-5	ps-48	value	class	utilities	the number is the pixels
 ps-lg-0	lg:ps-0	rename	class	utilities	
 ps-lg-1	lg:ps-4	value	class	utilities	the number is the pixels
@@ -1635,9 +1635,9 @@ ps-xxl-4	2xl:ps-24	value	class	utilities	the number is the pixels
 ps-xxl-5	2xl:ps-48	value	class	utilities	the number is the pixels
 pt-0	pt-0	same	class	utilities	
 pt-1	pt-4	value	class	utilities	the number is the pixels
-pt-2	pt-8	value	class	utilities	reused — pt-2 means another thing in REDZ.UI; the number is the pixels
+pt-2	pt-8	value	class	utilities	reused: pt-2 means another thing in REDZ.UI; the number is the pixels
 pt-3	pt-16	value	class	utilities	the number is the pixels
-pt-4	pt-24	value	class	utilities	reused — pt-4 means another thing in REDZ.UI; the number is the pixels
+pt-4	pt-24	value	class	utilities	reused: pt-4 means another thing in REDZ.UI; the number is the pixels
 pt-5	pt-48	value	class	utilities	the number is the pixels
 pt-lg-0	lg:pt-0	rename	class	utilities	
 pt-lg-1	lg:pt-4	value	class	utilities	the number is the pixels
@@ -1671,9 +1671,9 @@ pt-xxl-4	2xl:pt-24	value	class	utilities	the number is the pixels
 pt-xxl-5	2xl:pt-48	value	class	utilities	the number is the pixels
 px-0	px-0	same	class	utilities	
 px-1	px-4	value	class	utilities	the number is the pixels
-px-2	px-8	value	class	utilities	reused — px-2 means another thing in REDZ.UI; the number is the pixels
+px-2	px-8	value	class	utilities	reused: px-2 means another thing in REDZ.UI; the number is the pixels
 px-3	px-16	value	class	utilities	the number is the pixels
-px-4	px-24	value	class	utilities	reused — px-4 means another thing in REDZ.UI; the number is the pixels
+px-4	px-24	value	class	utilities	reused: px-4 means another thing in REDZ.UI; the number is the pixels
 px-5	px-48	value	class	utilities	the number is the pixels
 px-lg-0	lg:px-0	rename	class	utilities	
 px-lg-1	lg:px-4	value	class	utilities	the number is the pixels
@@ -1707,9 +1707,9 @@ px-xxl-4	2xl:px-24	value	class	utilities	the number is the pixels
 px-xxl-5	2xl:px-48	value	class	utilities	the number is the pixels
 py-0	py-0	same	class	utilities	
 py-1	py-4	value	class	utilities	the number is the pixels
-py-2	py-8	value	class	utilities	reused — py-2 means another thing in REDZ.UI; the number is the pixels
+py-2	py-8	value	class	utilities	reused: py-2 means another thing in REDZ.UI; the number is the pixels
 py-3	py-16	value	class	utilities	the number is the pixels
-py-4	py-24	value	class	utilities	reused — py-4 means another thing in REDZ.UI; the number is the pixels
+py-4	py-24	value	class	utilities	reused: py-4 means another thing in REDZ.UI; the number is the pixels
 py-5	py-48	value	class	utilities	the number is the pixels
 py-lg-0	lg:py-0	rename	class	utilities	
 py-lg-1	lg:py-4	value	class	utilities	the number is the pixels
@@ -1751,7 +1751,7 @@ rounded-0	rounded-0	same	class	utilities
 rounded-1	rounded-4	value	class	utilities	4 px
 rounded-2	rounded-6	value	class	utilities	6 px
 rounded-3	rounded-8	value	class	utilities	8 px
-rounded-4	rounded-16	value	class	utilities	reused — rounded-4 means another thing in REDZ.UI; 16 px
+rounded-4	rounded-16	value	class	utilities	reused: rounded-4 means another thing in REDZ.UI; 16 px
 rounded-5		review	class	utilities	32 px in Bootstrap: rounded-16 or rounded-full
 rounded-bottom	rounded-bottom	same	class	utilities	
 rounded-bottom-0	rounded-bottom	review	class	utilities	a side takes the 8 px radius
@@ -1836,9 +1836,9 @@ row-cols-xxl-6	2xl:cols-6	grid	class	layout	on the same parent
 row-cols-xxl-auto		review	class	layout	items as wide as their content: hstack flex-wrap
 row-gap-0	row-gap-0	same	class	utilities	
 row-gap-1	row-gap-4	value	class	utilities	the number is the pixels
-row-gap-2	row-gap-8	value	class	utilities	reused — row-gap-2 means another thing in REDZ.UI; the number is the pixels
+row-gap-2	row-gap-8	value	class	utilities	reused: row-gap-2 means another thing in REDZ.UI; the number is the pixels
 row-gap-3	row-gap-16	value	class	utilities	the number is the pixels
-row-gap-4	row-gap-24	value	class	utilities	reused — row-gap-4 means another thing in REDZ.UI; the number is the pixels
+row-gap-4	row-gap-24	value	class	utilities	reused: row-gap-4 means another thing in REDZ.UI; the number is the pixels
 row-gap-5	row-gap-48	value	class	utilities	the number is the pixels
 row-gap-lg-0	lg:row-gap-0	rename	class	utilities	
 row-gap-lg-1	lg:row-gap-4	value	class	utilities	the number is the pixels
@@ -2010,7 +2010,7 @@ vh-100	vh-100	same	class	utilities	the height by dvh, as a phone's browser bars 
 visible	visible	same	class	utilities	
 visually-hidden	visually-hidden	same	class	utilities	
 visually-hidden-focusable	visually-hidden-focusable	same	class	utilities	
-vr		missing	class	utilities	
+vr	vr	same	class	utilities	a 1 px rule as tall as its flex row
 vstack	vstack	same	class	utilities	
 vw-100	vw-100	same	class	utilities	the height by dvh, as a phone's browser bars come and go
 w-100	w-100	same	class	utilities	
@@ -2031,7 +2031,7 @@ data-bs-toggle="tab"	role="tab" aria-controls="ID"	trigger	data-attr	nav	in a ro
 data-bs-toggle="pill"	role="tab" aria-controls="ID"	trigger	data-attr	nav	in a role="tablist"
 data-bs-toggle="button"	aria-pressed	review	data-attr	btn	switch aria-pressed in your click handler
 data-bs-toggle="tooltip"	commandfor="ID" command="toggle-popover"	review	data-attr	tooltip	a toggletip at the browser floor
-data-bs-toggle="popover"		missing	data-attr	tooltip	
+data-bs-toggle="popover"	commandfor="ID" command="toggle-popover"	trigger	data-attr	popover	the panel is a <div id="ID" class="popover" popover> right after the button
 data-bs-toggle="collapse"	command="--toggle" aria-controls="ID" aria-expanded="false"	trigger	data-attr	collapse	the region is hidden="until-found" while closed; in an accordion the item is a <details>
 data-bs-parent	name	trigger	data-attr	accordion	the same name on every <details> of the group
 data-bs-target	commandfor	trigger	data-attr		the id alone, without "#"
@@ -2060,8 +2060,8 @@ bootstrap.Dropdown	menu.showPopover(), menu.hidePopover(), menu.togglePopover()	
 bootstrap.Tab	tab.click()	review	js	nav	the library selects on click and by the keys
 bootstrap.Toast	REDZ.ui.toast({title, text, tone})	trigger	js	toast	
 bootstrap.Tooltip		remove	js	tooltip	
-bootstrap.Popover		remove	js	tooltip	
-bootstrap.Collapse	region.hidden = false	review	js	collapse	and setAttribute('hidden', 'until-found') to close; set aria-expanded on its buttons then — a button with command="--toggle" does both
+bootstrap.Popover	panel.showPopover(), panel.hidePopover(), panel.togglePopover()	trigger	js	popover	
+bootstrap.Collapse	region.hidden = false	review	js	collapse	and setAttribute('hidden', 'until-found') to close; set aria-expanded on its buttons then: a button with command="--toggle" does both
 show.bs.modal	toggle	review	js	dialog	the dialog's toggle event, or code right after showModal()
 shown.bs.modal	toggle	review	js	dialog	the dialog's toggle event, or code right after showModal()
 hide.bs.modal	cancel	review	js	dialog	the dialog's cancel event (Esc); your buttons close it

@@ -4,6 +4,37 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+What Bootstrap 6 has that REDZ.UI had not, for the admin of the CMS and the ERP, by Bootstrap 6's names; to be
+released as 0.8.0.
+
+### Added
+- **Steppers** (`stepper`, `stepper-item`, `stepper-horizontal` and its width prefixes `sm:` `md:` `lg:`): the steps
+  of a task on an `<ol>`, the step the person is on `aria-current="step"`, the steps before it drawn as done by their
+  place, the numbers counted by the list, a track between the circles; a done step may hold a link back.
+- **Nav overflow** (`nav-overflow`, `nav-overflow-keep`, `js/nav-overflow.js`): a nav that does not fit its own box
+  hides its links from the end and gives them back, in their order, as the items of a "More" menu after the nav; the
+  link the person is on and a link with `nav-overflow-keep` stay in the row. Tabs fold the same way: the arrows pass
+  over a hidden tab, and a tab chosen in the menu comes back into the row selected. A plain click on an item clicks the
+  hidden link itself, so the page's own handlers run. The button says the island's new text `more`.
+- **Popovers** (`popover`, `popover-header`, `popover-body`): a titled panel beside its button on the browser's
+  `popover`, opened by `commandfor` and `command="toggle-popover"`, placed below with its start edge on the button's
+  and kept beside it by `js/menu-place.js` where an engine cannot anchor it.
+- **Prose** (`prose`): long text from an editor or Markdown with no classes inside: reading sizes, the rhythm between
+  blocks, a 72-character measure, lists, quotes, code, rules, images and tables.
+- **A range** (`form-range`): the native slider in the accent color, full width, disabled as a field is.
+- **Utilities**: `divide-x` and `divide-y` (a line between the children), `vr` (a rule as tall as its flex row),
+  `icon-link` (an icon in a link's line), `justify-items-*` and `place-items-*` with width prefixes.
+- The migration skill's map turns Bootstrap 5's `popover`, `form-range`, `vr` and `icon-link` into these, and
+  `data-bs-toggle="popover"` into `commandfor` with `command="toggle-popover"`.
+
+### Changed
+- The docs, the demo pages, the Bootstrap map and the tools that write them use "-" where they used the em dash and the
+  en dash.
+- A docs page's "States" is one region, the scrolling grid's: its section no longer carries the same name, which a
+  screen reader's landmark keys met twice.
+
 ## 0.7.1 - 2026-11-04
 
 ### Fixed

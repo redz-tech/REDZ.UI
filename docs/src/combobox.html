@@ -1,11 +1,11 @@
 <header class="vstack gap-8">
 	<h1>Combobox</h1>
-	<p class="docs-lead">A choice from a list long enough to search: a button in the look of a select shows the value and opens a panel with a search field and the list. One core — the WAI-ARIA combobox with a listbox — also drives the command palette and a list in the page.</p>
+	<p class="docs-lead">A choice from a list long enough to search: a button in the look of a select shows the value and opens a panel with a search field and the list. One core - the WAI-ARIA combobox with a listbox - also drives the command palette and a list in the page.</p>
 </header>
 
 <section class="vstack gap-16" aria-labelledby="combobox-examples">
 	<h2 id="combobox-examples">Examples</h2>
-	<p>The face is a button with <code>role="combobox"</code> that opens its panel by the browser's command; the panel is a popover with the search, the <code>listbox</code> and the value: one hidden field per chosen value, named by the list's <code>data-name</code>, so a form posts it as it is. Typing filters the list — case and accents aside, every word found, the best first — and the arrow keys move the active option while the focus stays in the search.</p>
+	<p>The face is a button with <code>role="combobox"</code> that opens its panel by the browser's command; the panel is a popover with the search, the <code>listbox</code> and the value: one hidden field per chosen value, named by the list's <code>data-name</code>, so a form posts it as it is. Typing filters the list - case and accents aside, every word found, the best first - and the arrow keys move the active option while the focus stays in the search.</p>
 	<div class="docs-example docs-example-stack" id="combobox-one">
 		<div class="form-floating">
 			<button class="form-select combobox-toggle" type="button" id="combobox-one-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-one-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Choose a language…">Thai</span></button>
@@ -35,8 +35,8 @@
 		</div>
 	</div>
 
-	<h3>Many — a list on the button</h3>
-	<p>A list with <code>aria-multiselectable="true"</code> keeps its panel open while options are chosen, and a field <code>name[]</code> holds each value. The button lists them in the page's language — "English, Thai, and Russian" — while they fit, else the first ones and the count of the rest.</p>
+	<h3>Many - a list on the button</h3>
+	<p>A list with <code>aria-multiselectable="true"</code> keeps its panel open while options are chosen, and a field <code>name[]</code> holds each value. The button lists them in the page's language - "English, Thai, and Russian" - while they fit, else the first ones and the count of the rest.</p>
 	<div class="docs-example docs-example-stack" id="combobox-many">
 		<div class="form-floating">
 			<button class="form-select combobox-toggle" type="button" id="combobox-many-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-many-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Choose languages…">English, Thai, and Russian</span></button>
@@ -64,8 +64,8 @@
 		</div>
 	</div>
 
-	<h3>Many — chips</h3>
-	<p>Where the chosen values are the field's content — categories, tags — the list names a container by <code>data-chips</code>: each value shows there as a chip with its remove button, and the button keeps its placeholder.</p>
+	<h3>Many - chips</h3>
+	<p>Where the chosen values are the field's content - categories, tags - the list names a container by <code>data-chips</code>: each value shows there as a chip with its remove button, and the button keeps its placeholder.</p>
 	<div class="docs-example docs-example-stack" id="combobox-chips">
 		<div class="vstack gap-8">
 			<div class="form-floating">
@@ -96,7 +96,7 @@
 	</div>
 
 	<h3>Tags that create values</h3>
-	<p>A list with <code>data-create</code> ends with <span class="text-nowrap">“Create …”</span> while the search's words are no option's label and no chosen one — the page's text <code>create</code>. Taken, the new label is held in a hidden field <code>data-create</code> names, beside the list's own; the search empties for the next one. A page that makes the value on its server cancels <code>redz:create</code> on the list and answers with a promise of <code>{value, label}</code>: the list is busy until it settles, the new value is an option from then on — or, rejected, its words are said.</p>
+	<p>A list with <code>data-create</code> ends with <span class="text-nowrap">“Create …”</span> while the search's words are no option's label and no chosen one - the page's text <code>create</code>. Taken, the new label is held in a hidden field <code>data-create</code> names, beside the list's own; the search empties for the next one. A page that makes the value on its server cancels <code>redz:create</code> on the list and answers with a promise of <code>{value, label}</code>: the list is busy until it settles, the new value is an option from then on - or, rejected, its words are said.</p>
 	<div class="docs-example docs-example-stack" id="combobox-tags">
 		<div class="vstack gap-8">
 			<div class="form-floating">
@@ -128,7 +128,7 @@
 });</code></pre>
 
 	<h3>Groups, descriptions and icons</h3>
-	<p>Options sit in groups — <code>role="group"</code> named by its <code>menu-header</code> — and carry an icon and a <code>menu-item-description</code>, which the search reads too; <code>data-keywords</code> adds words the option answers without showing them, and <code>aria-disabled="true"</code> keeps an option out of reach.</p>
+	<p>Options sit in groups - <code>role="group"</code> named by its <code>menu-header</code> - and carry an icon and a <code>menu-item-description</code>, which the search reads too; <code>data-keywords</code> adds words the option answers without showing them, and <code>aria-disabled="true"</code> keeps an option out of reach.</p>
 	<div class="docs-example docs-example-stack" id="combobox-groups">
 		<div class="form-floating">
 			<button class="form-select combobox-toggle" type="button" id="combobox-groups-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-groups-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Choose a role…">Editor</span></button>
@@ -157,7 +157,7 @@
 	</div>
 
 	<h3>Options from the server</h3>
-	<p>A page that finds options itself listens for <code>redz:search</code> on the search and cancels it: the list is marked <code>aria-busy</code> until the page puts its options in — or sets <code>aria-busy="false"</code> when it cannot. This example answers from a short list after 400 ms.</p>
+	<p>A page that finds options itself listens for <code>redz:search</code> on the search and cancels it: the list is marked <code>aria-busy</code> until the page puts its options in - or sets <code>aria-busy="false"</code> when it cannot. This example answers from a short list after 400 ms.</p>
 	<div class="docs-example docs-example-stack" id="combobox-remote">
 		<div class="form-floating">
 			<button class="form-select combobox-toggle" type="button" id="combobox-remote-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-remote-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Find a person…"></span></button>
@@ -186,7 +186,7 @@
 });</code></pre>
 
 	<h3>A list in the page</h3>
-	<p>The same search and list without a button and a panel — a filter in a side column, a long choice in a settings page.</p>
+	<p>The same search and list without a button and a panel - a filter in a side column, a long choice in a settings page.</p>
 	<div class="docs-example docs-example-stack" id="combobox-inline">
 		<div class="card">
 			<div class="card-body vstack gap-8">
@@ -206,9 +206,9 @@
 	</div>
 </section>
 
-<section class="vstack gap-16" aria-labelledby="combobox-states-title">
+<section class="vstack gap-16">
 	<h2 id="combobox-states-title">States</h2>
-	<p>The button carries a field's states; an option is active where the arrow keys are — <code>data-active</code>, which the library sets — and chosen by <code>aria-selected="true"</code>.</p>
+	<p>The button carries a field's states; an option is active where the arrow keys are - <code>data-active</code>, which the library sets - and chosen by <code>aria-selected="true"</code>.</p>
 	<div class="docs-states" id="combobox-states" tabindex="0" role="region" aria-labelledby="combobox-states-title">
 		<table class="docs-matrix">
 			<thead>
@@ -251,23 +251,23 @@
 		<tbody>
 			<tr><td><kbd>Enter</kbd>, <kbd>Space</kbd></td><td>Opens the panel, the focus in its search</td><td><kbd>Enter</kbd> takes the active option: one closes the panel, many stay</td></tr>
 			<tr><td><kbd>↓</kbd> / <kbd>↑</kbd></td><td>Opens the panel</td><td>The next / the previous option, round the ends; the first press goes to the chosen option</td></tr>
-			<tr><td><kbd>Page Down</kbd> / <kbd>Page Up</kbd></td><td>—</td><td>Ten options on / back</td></tr>
+			<tr><td><kbd>Page Down</kbd> / <kbd>Page Up</kbd></td><td>-</td><td>Ten options on / back</td></tr>
 			<tr><td>A letter</td><td>Opens the panel with the letter in the search</td><td>Types; the first match becomes active</td></tr>
-			<tr><td><kbd>Esc</kbd></td><td>—</td><td>Empties the search; on an empty search, closes the panel, the focus back on the button</td></tr>
-			<tr><td><kbd>Tab</kbd></td><td>—</td><td>Closes the panel and moves on</td></tr>
+			<tr><td><kbd>Esc</kbd></td><td>-</td><td>Empties the search; on an empty search, closes the panel, the focus back on the button</td></tr>
+			<tr><td><kbd>Tab</kbd></td><td>-</td><td>Closes the panel and moves on</td></tr>
 		</tbody>
 	</table>
 	<ul>
-		<li>The button is the WAI-ARIA select-only combobox: named by its <code>&lt;label for&gt;</code>, its value its text, its popup a panel with <code>role="dialog"</code>; the library keeps its <code>aria-expanded</code>, and its <code>aria-controls</code> only while the panel is open — VoiceOver otherwise reads the value from the closed list, not from the button.</li>
+		<li>The button is the WAI-ARIA select-only combobox: named by its <code>&lt;label for&gt;</code>, its value its text, its popup a panel with <code>role="dialog"</code>; the library keeps its <code>aria-expanded</code>, and its <code>aria-controls</code> only while the panel is open - VoiceOver otherwise reads the value from the closed list, not from the button.</li>
 		<li>The search is the editable combobox with list autocomplete: the focus stays in it, <code>aria-activedescendant</code> names the active option, <code>aria-selected</code> marks the chosen ones. The list follows the search in the page, so a screen reader on a phone reaches it by swiping.</li>
-		<li>Once the typing pauses, the option <kbd>Enter</kbd> would take is said politely by its label — a screen reader busy with the typed keys says nothing of it — and with nothing found, the count, from the page's texts. The probes' engine <code>voiceover</code> holds these words against what VoiceOver says in Safari.</li>
+		<li>Once the typing pauses, the option <kbd>Enter</kbd> would take is said politely by its label - a screen reader busy with the typed keys says nothing of it - and with nothing found, the count, from the page's texts. The probes' engine <code>voiceover</code> holds these words against what VoiceOver says in Safari.</li>
 		<li>A choice fires <code>input</code> and <code>change</code> on the list; a form's reset puts the values back as the page sent them.</li>
 	</ul>
 </section>
 
 <section class="vstack gap-12" aria-labelledby="combobox-texts">
 	<h2 id="combobox-texts">Texts</h2>
-	<p>The library has no words of its own; it reads these from the page's island <code>#redz-ui-text</code>. A count takes the form the page language's plural rules name — <code>found.one</code>, <code>found.few</code>, <code>found.many</code> — and <code>found.other</code> when the page gives no such form.</p>
+	<p>The library has no words of its own; it reads these from the page's island <code>#redz-ui-text</code>. A count takes the form the page language's plural rules name - <code>found.one</code>, <code>found.few</code>, <code>found.many</code> - and <code>found.other</code> when the page gives no such form.</p>
 	<table class="table docs-table">
 		<thead><tr><th scope="col">Key</th><th scope="col">For</th><th scope="col">In English</th></tr></thead>
 		<tbody>

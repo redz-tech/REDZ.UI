@@ -1,5 +1,5 @@
-// REDZ.UI, menu placement: places an opened menu or tooltip beside its button wherever the browser cannot anchor it
-// (Firefox before 147, Safari before 26) or anchors it out of view or away from its button (Chrome 135–136 in a table
+// REDZ.UI, menu placement: places an opened menu, popover or tooltip beside its button wherever the browser cannot anchor
+// it (Firefox before 147, Safari before 26) or anchors it out of view or away from its button (Chrome 135-136 in a table
 // cell, Safari 26 at the bottom of a page taller than the viewport); such a layer carries data-placed="script" while it
 // is open. It looks again when the page scrolls, the window resizes, or the layer or its button changes size; a layer
 // with no box yet waits for one.
@@ -13,7 +13,7 @@ let frame = 0;
 const buttonOf = (menu) => invoker !== null && (invoker.getAttribute('commandfor') === menu.id || invoker.popoverTargetElement === menu) ? invoker : null;
 
 /** The menu's border box without the scale of its opening transition: that grows from the middle of the top edge, which
- *  it leaves in place — engines differ in whether the box and the computed scale show the transition yet. */
+ *  it leaves in place; engines differ in whether the box and the computed scale show the transition yet. */
 const boxOf = (menu) => {
 	const box = menu.getBoundingClientRect();
 	return {left: box.left + (box.width - menu.offsetWidth) / 2, top: box.top, width: menu.offsetWidth, height: menu.offsetHeight};
@@ -29,16 +29,16 @@ const wellPlaced = (menu, button) => {
 	return inside && near && aligned;
 };
 
-/** Places the menu by script: below the button — a tooltip above it — or on the other side when only there it fits; its
- *  inline end edge on the button's (its start edge for .menu-start, a combobox's panel and a tooltip), the other edge
- *  when that one leaves the viewport; always inside the viewport. It is measured in the viewport's corner first — its
- *  width depends on the room where it stands. */
+/** Places the menu by script: below the button (a tooltip above it) or on the other side when only there it fits; its
+ *  inline end edge on the button's (its start edge for .menu-start, a combobox's panel, a popover and a tooltip), the
+ *  other edge when that one leaves the viewport; always inside the viewport. It is measured in the viewport's corner
+ *  first, as its width depends on the room where it stands. */
 const place = (menu, button) => {
 	menu.style.removeProperty('margin');
 	const style = getComputedStyle(menu);
 	const gap = parseFloat(style.marginBlockStart) || 0;
 	const tooltip = menu.classList.contains('tooltip');
-	const end = (tooltip || menu.classList.contains('menu-start') || menu.classList.contains('combobox-menu')) === (style.direction === 'rtl');
+	const end = (tooltip || menu.classList.contains('menu-start') || menu.classList.contains('combobox-menu') || menu.classList.contains('popover')) === (style.direction === 'rtl');
 	for (const [property, value] of [['position-area', 'none'], ['position-try-fallbacks', 'none'], ['inset', 'auto'], ['top', '0px'], ['left', '0px'], ['margin', '0']]) {
 		menu.style.setProperty(property, value);
 	}
@@ -88,7 +88,7 @@ document.addEventListener('click', (event) => {
 
 document.addEventListener('beforetoggle', (event) => {
 	const menu = event.target;
-	if (!(menu instanceof HTMLElement) || !(menu.classList.contains('menu') || menu.classList.contains('tooltip'))) {
+	if (!(menu instanceof HTMLElement) || !['menu', 'popover', 'tooltip'].some((name) => menu.classList.contains(name))) {
 		return;
 	}
 	if (event.newState !== 'open') {

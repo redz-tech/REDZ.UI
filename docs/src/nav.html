@@ -1,6 +1,6 @@
 <header class="vstack gap-8">
 	<h1>Navs and tabs</h1>
-	<p class="docs-lead">A row of links between views of one thing — <code>nav-underline</code> — or of choices — <code>nav-pills</code>; and the same row as tabs that switch panels on the page, driven by the keyboard as the WAI-ARIA tabs pattern.</p>
+	<p class="docs-lead">A row of links between views of one thing - <code>nav-underline</code> - or of choices - <code>nav-pills</code>; and the same row as tabs that switch panels on the page, driven by the keyboard as the WAI-ARIA tabs pattern.</p>
 </header>
 
 <section class="vstack gap-16" aria-labelledby="nav-examples">
@@ -61,7 +61,7 @@
 	</div>
 
 	<h3>Where you are on the page</h3>
-	<p>A nav or a list group with <code>data-scrollspy</code> marks the link to the section in view <code>aria-current="location"</code> as the page — or the box the sections scroll in — scrolls: the last section whose top has passed a quarter of the height, or the last one at the end.</p>
+	<p>A nav or a list group with <code>data-scrollspy</code> marks the link to the section in view <code>aria-current="location"</code> as the page - or the box the sections scroll in - scrolls: the last section whose top has passed a quarter of the height, or the last one at the end.</p>
 	<div class="docs-example docs-example-stack" id="nav-spy">
 		<div class="grid md:cols-12 gap-16">
 			<nav class="list-group list-group-flush md:span-4" aria-label="On this example" data-scrollspy>
@@ -78,9 +78,44 @@
 			</div>
 		</div>
 	</div>
+
+	<h3>When the links do not fit</h3>
+	<p><code>nav-overflow</code> around a nav keeps it on one line: the links that do not fit hide from the end and come back, in their order, as the items of a menu behind a “More” button after the nav. The link the person is on and a link with <code>nav-overflow-keep</code> stay in the row. It measures the room its own box has, not the window, so a nav in a narrow column folds as early as it needs to. For a row of links the wrapper is the <code>&lt;nav&gt;</code>, so the menu stays inside the landmark.</p>
+	<div class="docs-example docs-example-stack" id="nav-overflow">
+		<nav class="nav-overflow max-w-480" aria-label="Excursion sections">
+			<div class="nav nav-underline">
+				<a class="nav-link" href="#nav-overflow" aria-current="page">Overview</a>
+				<a class="nav-link" href="#nav-overflow">Program</a>
+				<a class="nav-link" href="#nav-overflow">Prices</a>
+				<a class="nav-link" href="#nav-overflow">Dates</a>
+				<a class="nav-link" href="#nav-overflow">Pickup</a>
+				<a class="nav-link" href="#nav-overflow">Reviews<span class="badge">42</span></a>
+				<a class="nav-link" href="#nav-overflow">Photos</a>
+				<a class="nav-link" href="#nav-overflow">Questions</a>
+			</div>
+		</nav>
+	</div>
+
+	<p>Tabs fold the same way. The arrows move between the tabs in the row; a tab chosen in the menu comes back into the row selected, with the focus, and the last one in the row takes its place in the menu.</p>
+	<div class="docs-example docs-example-stack" id="nav-overflow-tabs">
+		<div class="nav-overflow max-w-320">
+			<div class="nav nav-pills" role="tablist" aria-label="Guest">
+				<button class="nav-link nav-overflow-keep" type="button" role="tab" id="nav-overflow-tabs-1" aria-selected="true" aria-controls="nav-overflow-tabs-panel-1">Profile</button>
+				<button class="nav-link" type="button" role="tab" id="nav-overflow-tabs-2" aria-selected="false" aria-controls="nav-overflow-tabs-panel-2">Bookings</button>
+				<button class="nav-link" type="button" role="tab" id="nav-overflow-tabs-3" aria-selected="false" aria-controls="nav-overflow-tabs-panel-3">Payments</button>
+				<button class="nav-link" type="button" role="tab" id="nav-overflow-tabs-4" aria-selected="false" aria-controls="nav-overflow-tabs-panel-4">Messages</button>
+				<button class="nav-link" type="button" role="tab" id="nav-overflow-tabs-5" aria-selected="false" aria-controls="nav-overflow-tabs-panel-5">Notes</button>
+			</div>
+		</div>
+		<div id="nav-overflow-tabs-panel-1" role="tabpanel" aria-labelledby="nav-overflow-tabs-1" tabindex="0"><p>Anna Petrova, two trips this year.</p></div>
+		<div id="nav-overflow-tabs-panel-2" role="tabpanel" aria-labelledby="nav-overflow-tabs-2" tabindex="0" hidden><p>Ang Thong on 12 December, 2 adults.</p></div>
+		<div id="nav-overflow-tabs-panel-3" role="tabpanel" aria-labelledby="nav-overflow-tabs-3" tabindex="0" hidden><p>Paid in full by card.</p></div>
+		<div id="nav-overflow-tabs-panel-4" role="tabpanel" aria-labelledby="nav-overflow-tabs-4" tabindex="0" hidden><p>No messages yet.</p></div>
+		<div id="nav-overflow-tabs-panel-5" role="tabpanel" aria-labelledby="nav-overflow-tabs-5" tabindex="0" hidden><p>Vegetarian lunch.</p></div>
+	</div>
 </section>
 
-<section class="vstack gap-16" aria-labelledby="nav-states-title">
+<section class="vstack gap-16">
 	<h2 id="nav-states-title">States</h2>
 	<div class="docs-states" id="nav-states" tabindex="0" role="region" aria-labelledby="nav-states-title">
 		<table class="docs-matrix">
@@ -95,7 +130,7 @@
 					<td><nav class="nav nav-underline" aria-label="Focused"><a class="nav-link" href="#nav-states" data-docs-state="focus-visible">Drafts</a></nav></td>
 					<td><nav class="nav nav-underline" aria-label="Current"><a class="nav-link" href="#nav-states" aria-current="page">Drafts</a></nav></td>
 					<td><div class="nav nav-underline" role="tablist" aria-label="Selected"><button class="nav-link" type="button" role="tab" aria-selected="true">Drafts</button></div></td>
-					<td>—</td>
+					<td>-</td>
 				</tr>
 				<tr>
 					<th scope="row">nav-pills</th>
@@ -116,14 +151,15 @@
 	<table class="table docs-table">
 		<thead><tr><th scope="col">Key</th><th scope="col">In a tablist</th></tr></thead>
 		<tbody>
-			<tr><td><kbd>→</kbd> / <kbd>←</kbd></td><td>The next / the previous tab, round the ends — mirrored right to left; <kbd>↓</kbd> / <kbd>↑</kbd> in a list with <code>aria-orientation="vertical"</code></td></tr>
+			<tr><td><kbd>→</kbd> / <kbd>←</kbd></td><td>The next / the previous tab, round the ends - mirrored right to left; <kbd>↓</kbd> / <kbd>↑</kbd> in a list with <code>aria-orientation="vertical"</code></td></tr>
 			<tr><td><kbd>Home</kbd> / <kbd>End</kbd></td><td>The first / the last tab</td></tr>
-			<tr><td><kbd>Enter</kbd>, <kbd>Space</kbd></td><td>Selects the focused tab — what the arrows do not, with <code>data-activation="manual"</code></td></tr>
-			<tr><td><kbd>Tab</kbd></td><td>From the selected tab into its panel</td></tr>
+			<tr><td><kbd>Enter</kbd>, <kbd>Space</kbd></td><td>Selects the focused tab - what the arrows do not, with <code>data-activation="manual"</code></td></tr>
+			<tr><td><kbd>Tab</kbd></td><td>From the selected tab into its panel, or first to the “More” button when the row has one</td></tr>
 		</tbody>
 	</table>
 	<ul>
 		<li>Links that change the page are a <code>&lt;nav&gt;</code> of links, never tabs: tabs only switch what is already on the page.</li>
-		<li>A mark beside a tab's words — a dot, a count — has its own name, so the tab reads as “EN, 1 field outdated”.</li>
+		<li>A link folded into the “More” menu is hidden in the row, so a screen reader and <kbd>Tab</kbd> meet it once, in the menu. The button says the page's text <code>more</code>, reports whether its menu is open, and opens it by the menu's keys; a plain click on an item clicks the hidden link itself, so the page's own handlers run.</li>
+		<li>A mark beside a tab's words - a dot, a count - has its own name, so the tab reads as “EN, 1 field outdated”.</li>
 	</ul>
 </section>

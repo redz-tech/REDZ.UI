@@ -1,0 +1,34 @@
+@layer components {
+	.popover {
+		position: fixed;
+		inset: auto;
+		position-anchor: auto;
+		position-area: block-end span-inline-end;
+		position-try-fallbacks: flip-block, flip-inline;
+		inline-size: max-content;
+		max-inline-size: min(20rem, calc(100vw - 1rem));
+		margin: var(--redz-space-4) 0;
+		padding: 0;
+		border: 1px solid var(--redz-border);
+		border-radius: var(--redz-radius-12);
+		background: var(--redz-bg-raised);
+		box-shadow: var(--redz-shadow-2);
+		color: var(--redz-text);
+		font-size: var(--redz-fs-14);
+	}
+
+	.popover-header {
+		padding: var(--redz-space-12) var(--redz-space-16) 0;
+		font-size: var(--redz-fs-14);
+		font-weight: 600;
+	}
+
+	.popover-body {
+		padding: var(--redz-space-8) var(--redz-space-16) var(--redz-space-12);
+		color: var(--redz-text-muted);
+	}
+
+	.popover-body:only-child {
+		padding-block-start: var(--redz-space-12);
+	}
+}

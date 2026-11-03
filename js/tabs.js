@@ -1,7 +1,8 @@
 // REDZ.UI, tabs (the WAI-ARIA tabs pattern, automatic activation): the arrow keys select the next or the previous tab
-// and show its panel — mirrored right to left, up and down in a vertical list — Home and End the first and the last;
-// only the selected tab takes Tab, and only its panel shows. A tablist with data-activation="manual" (panels that load
-// from the server) moves only the focus by those keys; Enter or Space selects.
+// and show its panel (mirrored right to left, up and down in a vertical list), Home and End the first and the last,
+// passing over a tab hidden as js/nav-overflow.js hides one; only the selected tab takes Tab, and only its panel shows.
+// A tablist with data-activation="manual" (panels that load from the server) moves only the focus by those keys; Enter
+// or Space selects.
 const tabsOf = (list) => [...list.querySelectorAll('[role="tab"]')].filter((tab) => tab.closest('[role="tablist"]') === list && !tab.disabled && tab.getAttribute('aria-disabled') !== 'true');
 
 /** Selects the tab: its panel shown, the others' hidden, it alone in the tab order. */
@@ -38,7 +39,7 @@ document.addEventListener('keydown', (event) => {
 	if (!list) {
 		return;
 	}
-	const tabs = tabsOf(list);
+	const tabs = tabsOf(list).filter((one) => !one.hidden);
 	const at = tabs.indexOf(tab);
 	const vertical = list.getAttribute('aria-orientation') === 'vertical';
 	const rtl = getComputedStyle(list).direction === 'rtl';

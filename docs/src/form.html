@@ -5,7 +5,7 @@
 
 <section class="vstack gap-16" aria-labelledby="form-examples">
 	<h2 id="form-examples">Examples</h2>
-	<p><code>form-floating</code> keeps the label inside the field and lifts it when the field has a value or the focus. The label follows the control, and the control needs a <code>placeholder</code> — it is how CSS knows the field is empty.</p>
+	<p><code>form-floating</code> keeps the label inside the field and lifts it when the field has a value or the focus. The label follows the control, and the control needs a <code>placeholder</code> - it is how CSS knows the field is empty.</p>
 	<div class="docs-example docs-example-stack" id="form-floating">
 		<div class="form-floating">
 			<input class="form-control" id="form-floating-name" value="Ang Thong: marine park by speedboat" placeholder="A name people search for">
@@ -50,7 +50,7 @@
 	</div>
 
 	<h3>Sizes</h3>
-	<p><code>form-control-sm</code> and <code>form-select-sm</code> are 28 px high, the default 32 px, <code>-lg</code> 40 px — the same heights as the buttons beside them.</p>
+	<p><code>form-control-sm</code> and <code>form-select-sm</code> are 28 px high, the default 32 px, <code>-lg</code> 40 px - the same heights as the buttons beside them.</p>
 	<div class="docs-example docs-example-stack" id="form-sizes">
 		<input class="form-control form-control-sm" placeholder="Small" aria-label="Small field">
 		<input class="form-control" placeholder="Default" aria-label="Default field">
@@ -59,7 +59,7 @@
 	</div>
 
 	<h3>A one-time code</h3>
-	<p><code>form-control-otp</code> spaces the digits of a code from an app or a message in one field. One field takes a paste and the code the system offers above the keyboard — a box per digit takes neither — and the form goes by its button, never by the last digit.</p>
+	<p><code>form-control-otp</code> spaces the digits of a code from an app or a message in one field. One field takes a paste and the code the system offers above the keyboard - a box per digit takes neither - and the form goes by its button, never by the last digit.</p>
 	<div class="docs-example docs-example-stack" id="form-otp">
 		<div class="form-field">
 			<label class="form-label" for="form-otp-code">6-digit code from your app</label>
@@ -69,7 +69,7 @@
 	</div>
 
 	<h3>A new password</h3>
-	<p>A button with <code>command="--reveal"</code> for a password field shows its text and hides it again — <code>aria-pressed</code> says which — and the field hides it on its form's submit and when the page comes back from the history. Each element with <code>data-strength</code> naming the field shows its level as it is typed: shorter than its <code>minlength</code>, long enough, then longer or of three kinds of characters, then both — a <code>meter</code> at once, and the words, the page's texts <code>strength.short</code>, <code>.fair</code>, <code>.good</code> and <code>.strong</code>, once the typing pauses, said politely by a live region of the field's own — VoiceOver says nothing of a password field's own description changing, so the words' element needs no <code>aria-live</code>. The level is a hint: the server keeps its own rules.</p>
+	<p>A button with <code>command="--reveal"</code> for a password field shows its text and hides it again - <code>aria-pressed</code> says which - and the field hides it on its form's submit and when the page comes back from the history. Each element with <code>data-strength</code> naming the field shows its level as it is typed: shorter than its <code>minlength</code>, long enough, then longer or of three kinds of characters, then both - a <code>meter</code> at once, and the words, the page's texts <code>strength.short</code>, <code>.fair</code>, <code>.good</code> and <code>.strong</code>, once the typing pauses, said politely by a live region of the field's own - VoiceOver says nothing of a password field's own description changing, so the words' element needs no <code>aria-live</code>. The level is a hint: the server keeps its own rules.</p>
 	<div class="docs-example docs-example-stack" id="form-password">
 		<div class="form-field">
 			<label class="form-label" for="form-password-new">New password</label>
@@ -82,9 +82,18 @@
 			<div class="form-text" id="form-password-hint">At least 12 characters. A phrase of a few words is easy to remember.</div>
 		</div>
 	</div>
+
+	<h3>A range</h3>
+	<p><code>form-range</code> on an <code>&lt;input type="range"&gt;</code> is the browser's own slider in the theme's accent: it keeps its keys (the arrows, <kbd>Home</kbd>, <kbd>End</kbd>, <kbd>Page Up</kbd> and <kbd>Page Down</kbd>) and its look in forced colors. The label says what it sets; when the number matters, write it beside the slider.</p>
+	<div class="docs-example docs-example-stack" id="form-range">
+		<div class="form-field">
+			<label class="form-label" for="form-range-quality">Photo quality</label>
+			<input class="form-range" id="form-range-quality" type="range" min="40" max="100" step="5" value="80">
+		</div>
+	</div>
 </section>
 
-<section class="vstack gap-16" aria-labelledby="form-states-title">
+<section class="vstack gap-16">
 	<h2 id="form-states-title">States</h2>
 	<div class="docs-states" id="form-states" tabindex="0" role="region" aria-labelledby="form-states-title">
 		<table class="docs-matrix">
@@ -105,7 +114,7 @@
 					<td><select class="form-select" aria-label="At rest"><option>Marine</option></select></td>
 					<td><select class="form-select" aria-label="Focused" data-docs-state="focus"><option>Marine</option></select></td>
 					<td><select class="form-select" aria-label="Invalid" aria-invalid="true"><option>Marine</option></select></td>
-					<td>—</td>
+					<td>-</td>
 					<td><select class="form-select" aria-label="Disabled" disabled><option>Marine</option></select></td>
 				</tr>
 				<tr>
@@ -124,7 +133,7 @@
 <section class="vstack gap-12" aria-labelledby="form-access">
 	<h2 id="form-access">Keyboard and accessibility</h2>
 	<ul>
-		<li>Every control has a visible label: a <code>&lt;label for&gt;</code>, or <code>aria-label</code> only where the context says it all — a search field with its icon.</li>
+		<li>Every control has a visible label: a <code>&lt;label for&gt;</code>, or <code>aria-label</code> only where the context says it all - a search field with its icon.</li>
 		<li>A placeholder is never the label: it goes away as the person types. In <code>form-floating</code> the placeholder is only the empty marker.</li>
 		<li>An error is said in words in <code>invalid-feedback</code>, joined to the control by <code>aria-describedby</code>; a color alone never tells it.</li>
 		<li>The borders of fields and the focus ring are at least 3:1 against the page in both themes; the text 4.5:1.</li>

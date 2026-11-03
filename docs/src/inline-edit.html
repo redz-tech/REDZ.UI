@@ -1,6 +1,6 @@
 <header class="vstack gap-8">
 	<h1>Inline edit</h1>
-	<p class="docs-lead">A value changed where it shows — a title in a list, a name on a page — behind a real Edit button, in a small form of its own that saves or cancels.</p>
+	<p class="docs-lead">A value changed where it shows - a title in a list, a name on a page - behind a real Edit button, in a small form of its own that saves or cancels.</p>
 </header>
 
 <section class="vstack gap-16" aria-labelledby="inline-edit-examples">
@@ -35,7 +35,7 @@
 	</div>
 
 	<h3>Saved by the page</h3>
-	<p>The form's submit fires <code>redz:save</code> on it, with the form and the field's value. A page that saves cancels it and answers with a promise: the Save button is busy until it settles — resolved, the value shows the saved text and the form closes; rejected with words, the form stays open, the field marked invalid and the words in its <code>invalid-feedback</code>, said at once. Left alone, the value shows the text and the field keeps it. The second row above answers after 600 ms and refuses an empty title.</p>
+	<p>The form's submit fires <code>redz:save</code> on it, with the form and the field's value. A page that saves cancels it and answers with a promise: the Save button is busy until it settles - resolved, the value shows the saved text and the form closes; rejected with words, the form stays open, the field marked invalid and the words in its <code>invalid-feedback</code>, said at once. Left alone, the value shows the text and the field keeps it. The second row above answers after 600 ms and refuses an empty title.</p>
 	<pre class="docs-code" tabindex="0"><code>document.addEventListener('redz:save', (event) =&gt; {
 	event.preventDefault();
 	event.detail.respondWith(fetch(event.detail.form.action, {method: 'POST', body: new FormData(event.detail.form)})
@@ -43,7 +43,7 @@
 });</code></pre>
 
 	<h3>Inside another form</h3>
-	<p>A form cannot sit in a form: where the value lives in one — a settings page with a save bar — the edit form is a <code>popover="manual"</code> placed outside it, with the class <code>menu</code> for its panel; <code>--edit</code> opens it beside the Edit button.</p>
+	<p>A form cannot sit in a form: where the value lives in one - a settings page with a save bar - the edit form is a <code>popover="manual"</code> placed outside it, with the class <code>menu</code> for its panel; <code>--edit</code> opens it beside the Edit button.</p>
 	<div class="docs-example docs-example-stack" id="inline-edit-popover">
 		<div class="hstack gap-8">
 			<span class="fs-16 fw-600" id="inline-edit-popover-name">Lagoon Tours</span>
@@ -69,7 +69,7 @@
 		</tbody>
 	</table>
 	<ul>
-		<li>Edit is a real button named after what it edits — the value's own text may be a link to its record and stays one.</li>
+		<li>Edit is a real button named after what it edits - the value's own text may be a link to its record and stays one.</li>
 		<li>The form saves only by its Save button or <kbd>Enter</kbd>: a blur never commits half an edit, and never throws one away.</li>
 		<li>A refused save keeps the focus in the field; <code>invalid-feedback</code> takes <code>role="alert"</code>, so the page's words are said at once, and the field names it in <code>aria-describedby</code>.</li>
 	</ul>

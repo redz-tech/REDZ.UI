@@ -86,6 +86,35 @@
 		color: var(--redz-text);
 	}
 
+	.nav-overflow {
+		display: flex;
+		align-items: center;
+		gap: var(--redz-space-16);
+		min-inline-size: 0;
+	}
+
+	.nav-overflow > .nav {
+		flex: 0 1 auto;
+		min-inline-size: 0;
+	}
+
+	.nav-overflow:has(> .nav-underline) {
+		align-items: stretch;
+		border-block-end: 1px solid var(--redz-border);
+	}
+
+	.nav-overflow > .nav-underline {
+		margin-block-end: -1px;
+	}
+
+	.nav-overflow-toggle {
+		flex: none;
+	}
+
+	.nav-overflow > .nav-pills ~ .nav-overflow-toggle {
+		font-size: var(--redz-fs-12);
+	}
+
 	@media (forced-colors: active) {
 		.nav-pills > .nav-link[aria-selected="true"],
 		.nav-pills > .nav-link[aria-current="page"],

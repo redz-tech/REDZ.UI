@@ -59,8 +59,8 @@ One	واحد
 Two	اثنان
 Three	ثلاثة
 Four	أربعة
-The main column —	العمود الرئيسي —
-The side —	الجانب —
+The main column -	العمود الرئيسي -
+The side -	الجانب -
 lagoon.example	lagoon.example
 villas.lagoon.example	villas.lagoon.example
 angthong.example	angthong.example
@@ -293,7 +293,7 @@ Selected	محدد
 Pressed	مضغوط
 Breadcrumb	مسار التنقل
 This page as Markdown	هذه الصفحة بصيغة Markdown
-All components — REDZ.UI	جميع المكونات — REDZ.UI
+All components - REDZ.UI	جميع المكونات - REDZ.UI
 OK	موافق
 Loading…	جارٍ التحميل…
 REDZ CMS	REDZ CMS
@@ -377,7 +377,7 @@ LTR	LTR
 RTL	RTL
 Comfortable	مريح
 Compact	مضغوط
-Excursions — REDZ.UI demo	الرحلات — عرض REDZ.UI التوضيحي
+Excursions - REDZ.UI demo	الرحلات - عرض REDZ.UI التوضيحي
 Only Marina is editing now	مارينا وحدها تعدّل الآن
 Save draft	حفظ المسودة
 Publishing options	خيارات النشر
@@ -443,7 +443,7 @@ AI assistants find no answer to:	لا يجد مساعدو الذكاء الاص�
 the meeting point on a map	نقطة الالتقاء على الخريطة
 whether it suits pregnant guests	هل تناسب الضيفات الحوامل
 Suggest values	اقتراح قيم
-Ang Thong — REDZ.UI demo	أنغ ثونغ — عرض REDZ.UI التوضيحي
+Ang Thong - REDZ.UI demo	أنغ ثونغ - عرض REDZ.UI التوضيحي
 AZ, profile	AZ، الملف الشخصي
 AZ	AZ
 General	عام
@@ -472,13 +472,13 @@ Hide «Powered by REDZ CMS»	إخفاء «يعمل بواسطة REDZ CMS»
 LP	LP
 Lagoon Panel	Lagoon Panel
 header preview	معاينة الترويسة
-Sites for travel — by Lagoon studio	مواقع للسفر — من استوديو Lagoon
+Sites for travel - by Lagoon studio	مواقع للسفر - من استوديو Lagoon
 Sign in	تسجيل الدخول
 Get a code	الحصول على رمز
 Sign in with a passkey	تسجيل الدخول بمفتاح المرور
 Help	المساعدة
-Admin branding — REDZ.UI demo	هوية لوحة الإدارة — عرض REDZ.UI التوضيحي
-Every example and every state of every page on one page — the fixture the probes shoot in each engine, at each width, in both themes and directions, in forced colors and in print.	كل مثال وكل حالة من كل صفحة في صفحة واحدة — المرجع الذي تلتقطه الفحوص في كل محرك، وبكل عرض، وفي السمتين والاتجاهين، وبالألوان القسرية وعند الطباعة.
+Admin branding - REDZ.UI demo	هوية لوحة الإدارة - عرض REDZ.UI التوضيحي
+Every example and every state of every page on one page - the fixture the probes shoot in each engine, at each width, in both themes and directions, in forced colors and in print.	كل مثال وكل حالة من كل صفحة في صفحة واحدة - المرجع الذي تلتقطه الفحوص في كل محرك، وبكل عرض، وفي السمتين والاتجاهين، وبالألوان القسرية وعند الطباعة.
 Full address /excursions/ang-thong/. The old one answers with a 301 redirect.	العنوان الكامل /excursions/ang-thong/. والعنوان القديم يجيب بإعادة توجيه 301.
 Adults 2,500 · children 1,900 · under four free.	البالغون 2,500 · الأطفال 1,900 · مجانًا لمن هم دون الرابعة.
 A day at sea: snorkelling at two reefs, lunch on the boat.	يوم في البحر: غوص سطحي عند شعبتين مرجانيتين، وغداء على القارب.
@@ -506,7 +506,7 @@ Ang Thong · 3 pages × 3 languages rebuilt	أنغ ثونغ · أُعيد بنا
 Ang Thong: marine national park by speedboat	أنغ ثونغ: الحديقة الوطنية البحرية بالقارب السريع
 translatable fields carry their languages	الحقول القابلة للترجمة تحمل لغاتها
 Two sentences for the card and search results	جملتان للبطاقة ونتائج البحث
-Emerald Lake, kayaks along the cliffs and lunch on an island — all in one day by speedboat.	البحيرة الزمردية، وقوارب الكاياك على امتداد المنحدرات، وغداء على جزيرة — كل ذلك في يوم واحد بالقارب السريع.
+Emerald Lake, kayaks along the cliffs and lunch on an island - all in one day by speedboat.	البحيرة الزمردية، وقوارب الكاياك على امتداد المنحدرات، وغداء على جزيرة - كل ذلك في يوم واحد بالقارب السريع.
 · from the facts of this excursion · 1 of 3	· من حقائق هذه الرحلة · 1 من 3
 One day: the Emerald Lake on Koh Mae Ko, kayaks along the cliffs and lunch on an island. Hotel pick-up, a Russian-speaking guide, free cancellation up to 24 hours.	يوم واحد: البحيرة الزمردية في كو ماي كو، وقوارب الكاياك على امتداد المنحدرات، وغداء على جزيرة. استقبال من الفندق، ومرشد يتحدث الروسية، وإلغاء مجاني حتى 24 ساعة.
 AI saves nothing: the text goes into the draft.	لا يحفظ الذكاء الاصطناعي شيئًا: يذهب النص إلى المسودة.
@@ -515,8 +515,8 @@ in the base currency THB · the visitor's currency is an estimate	بالعملة
 block types come from the core and modules, their look from the site's theme	أنواع الكتل تأتي من النواة والوحدات، ومظهرها من سمة الموقع
 3 unsaved changes: name, short description, adult price	3 تغييرات غير محفوظة: الاسم والوصف القصير وسعر البالغ
 by the rule «Excursions», canonical here	بحسب القاعدة «الرحلات»، والنسخة الأساسية هنا
-White label: the name, logos, accent, sign-in screen, e-mails and help links — settings of this install, not code	العلامة البيضاء: الاسم والشعارات ولون التمييز وشاشة تسجيل الدخول ورسائل البريد وروابط المساعدة — إعدادات لهذا التثبيت، لا شيفرة
-Every interface string names the product through {product} — translators never touch the brand.	كل نص في الواجهة يسمّي المنتج عبر {product} — ولا يلمس المترجمون العلامة التجارية أبدًا.
+White label: the name, logos, accent, sign-in screen, e-mails and help links - settings of this install, not code	العلامة البيضاء: الاسم والشعارات ولون التمييز وشاشة تسجيل الدخول ورسائل البريد وروابط المساعدة - إعدادات لهذا التثبيت، لا شيفرة
+Every interface string names the product through {product} - translators never touch the brand.	كل نص في الواجهة يسمّي المنتج عبر {product} - ولا يلمس المترجمون العلامة التجارية أبدًا.
 White text on it: 5.6:1, AA in the light and the dark theme. Hover and background shades are derived from it.	النص الأبيض عليه: 5.6:1، بمستوى AA في السمة الفاتحة والداكنة. وتُشتق منه درجات التمرير والخلفية.
 New order AT-09-1201 on lagoon.example: «Ang Thong», 2 adults, November 5.	طلب جديد AT-09-1201 على lagoon.example: «أنغ ثونغ»، بالغان، 5 نوفمبر.
 Sent on behalf of Lagoon Panel · unsubscribe in your profile	أُرسلت نيابةً عن Lagoon Panel · يمكنك إلغاء الاشتراك من ملفك الشخصي
@@ -677,7 +677,7 @@ Next page	الصفحة التالية
 Pages of bookings	صفحات الحجوزات
 Previous	السابق
 Next	التالي
-51–100 of 1 234	51–100 من 1 234
+51-100 of 1 234	51-100 من 1 234
 Small pages	صفحات صغيرة
 Large pages	صفحات كبيرة
 Filled	موزعة
@@ -779,3 +779,45 @@ Move out	انقل إلى الخارج
 Moved to {position} of {count}	نُقل إلى {position} من {count}
 {name} is not a kind of file this takes	{name} ليس من أنواع الملفات المقبولة هنا
 {name} is larger than {size}	{name} أكبر من {size}
+Steppers	مؤشرات الخطوات
+Booking	الحجز
+Choose a tour	اختر جولة
+Pick a date	اختر تاريخًا
+Guests	الضيوف
+Payment	الدفع
+Upload the file	ارفع الملف
+Match the columns	طابِق الأعمدة
+Check the rows	راجِع الصفوف
+New site	موقع جديد
+On the first step	عند الخطوة الأولى
+On a middle step	عند خطوة في المنتصف
+On the last step	عند الخطوة الأخيرة
+Prose	النصوص الطويلة
+A day at Ang Thong	يوم في أنغ ثونغ
+The boat leaves the pier at eight and is back before sunset. Lunch is on the beach, and the water is calm from December to April.	يغادر القارب الرصيف في الثامنة ويعود قبل الغروب. الغداء على الشاطئ، والبحر هادئ من ديسمبر إلى أبريل.
+Shoes for the climb to the lookout	حذاء للصعود إلى نقطة المشاهدة
+A hat and water	قبعة وماء
+Cash for the park fee	نقود لرسوم المتنزه
+The emerald lake is a short walk from the beach.	البحيرة الزمردية على مسافة قصيرة سيرًا من الشاطئ.
+The booking code is	رمز الحجز هو
+; show it at the pier.	؛ أظهره عند الرصيف.
+Photo quality	جودة الصور
+Popovers	النوافذ المنبثقة
+Ang Thong marine park	متنزه أنغ ثونغ البحري
+The fee is paid in cash at the pier and is not part of the tour price.	تُدفع الرسوم نقدًا عند الرصيف وليست جزءًا من سعر الجولة.
+The park rules	قواعد المتنزه
+Pickup time	موعد الاصطحاب
+The driver comes 15 minutes before the time on the voucher.	يصل السائق قبل 15 دقيقة من الموعد المذكور في القسيمة.
+Excursion sections	أقسام الرحلة
+Program	البرنامج
+Dates	المواعيد
+Questions	الأسئلة
+Guest	الضيف
+Payments	المدفوعات
+Messages	الرسائل
+Notes	الملاحظات
+Anna Petrova, two trips this year.	آنا بتروفا، رحلتان هذا العام.
+Ang Thong on 12 December, 2 adults.	أنغ ثونغ في 12 ديسمبر، شخصان بالغان.
+Paid in full by card.	مدفوع بالكامل بالبطاقة.
+No messages yet.	لا رسائل بعد.
+Vegetarian lunch.	غداء نباتي.

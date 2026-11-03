@@ -1,20 +1,20 @@
 <header class="vstack gap-8">
 	<h1>Utilities</h1>
-	<p class="docs-lead">Single-purpose classes with Bootstrap 5's names, where the number is the value: <code>p-16</code>, <code>gap-8</code>, <code>fs-14</code>, <code>rounded-8</code>, <code>w-50</code>. Written once from a vocabulary file and committed — nothing is generated where they are used.</p>
+	<p class="docs-lead">Single-purpose classes with Bootstrap 5's names, where the number is the value: <code>p-16</code>, <code>gap-8</code>, <code>fs-14</code>, <code>rounded-8</code>, <code>w-50</code>. Written once from a vocabulary file and committed - nothing is generated where they are used.</p>
 </header>
 
 <section class="vstack gap-12" aria-labelledby="utilities-scales">
 	<h2 id="utilities-scales">Scales</h2>
 	<ul>
-		<li>Space, in px: 0 2 4 8 12 16 20 24 32 40 48 64 — for <code>m</code>, <code>p</code> and <code>gap</code> with their sides: <code>mt</code> <code>mb</code> <code>ms</code> <code>me</code> <code>mx</code> <code>my</code>, the same for <code>p</code>. <code>ms</code> and <code>me</code> are the start and the end of the line, so they turn right to left.</li>
+		<li>Space, in px: 0 2 4 8 12 16 20 24 32 40 48 64 - for <code>m</code>, <code>p</code> and <code>gap</code> with their sides: <code>mt</code> <code>mb</code> <code>ms</code> <code>me</code> <code>mx</code> <code>my</code>, the same for <code>p</code>. <code>ms</code> and <code>me</code> are the start and the end of the line, so they turn right to left.</li>
 		<li>Font size: 12 14 16 18 20 24 32; line height: 16 20 24 28; radius: 0 4 6 8 12 16 and <code>rounded-full</code>.</li>
-		<li>Width prefixes come on placement and spacing — display, flex, grid, gaps, order, text alignment, margins and paddings: <code>md:d-none</code>, <code>lg:p-24</code>.</li>
+		<li>Width prefixes come on placement and spacing - display, flex, grid, gaps, order, text alignment, margins and paddings: <code>md:d-none</code>, <code>lg:p-24</code>.</li>
 	</ul>
 </section>
 
 <section class="vstack gap-16" aria-labelledby="utilities-ratio">
 	<h2 id="utilities-ratio">Aspect ratio</h2>
-	<p><code>ratio-1x1</code>, <code>ratio-4x3</code>, <code>ratio-16x9</code> and <code>ratio-21x9</code> keep an element's shape as its width changes — on a video, a map, an image's frame; <code>ratio-auto</code> lets it go. The class goes on the element itself: an image inside a frame fills it with <code>w-100 h-100 object-fit-cover</code>.</p>
+	<p><code>ratio-1x1</code>, <code>ratio-4x3</code>, <code>ratio-16x9</code> and <code>ratio-21x9</code> keep an element's shape as its width changes - on a video, a map, an image's frame; <code>ratio-auto</code> lets it go. The class goes on the element itself: an image inside a frame fills it with <code>w-100 h-100 object-fit-cover</code>.</p>
 	<div class="docs-example" id="utilities-ratio-boxes">
 		<div class="ratio-16x9 w-50 hstack justify-content-center rounded-8 bg-page text-muted">16 × 9</div>
 		<div class="ratio-1x1 w-25 hstack justify-content-center rounded-8 bg-page text-muted">1 × 1</div>
@@ -23,10 +23,20 @@
 
 <section class="vstack gap-16" aria-labelledby="utilities-focus">
 	<h2 id="utilities-focus">Shown when focused</h2>
-	<p><code>visually-hidden-focusable</code> hides an element until it or something in it takes the focus — the first link of a page that jumps to its content. Press <kbd>Tab</kbd> into the example to see it.</p>
+	<p><code>visually-hidden-focusable</code> hides an element until it or something in it takes the focus - the first link of a page that jumps to its content. Press <kbd>Tab</kbd> into the example to see it.</p>
 	<div class="docs-example" id="utilities-skip">
 		<a class="visually-hidden-focusable btn" href="#utilities-all">Skip to every utility</a>
 		<span class="text-muted">The link above shows on focus.</span>
+	</div>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="utilities-dividers">
+	<h2 id="utilities-dividers">Dividers, rules and icon links</h2>
+	<p><code>divide-x</code> and <code>divide-y</code> on a parent draw a line between its children, across or down, with no class on any child. <code>vr</code> is a rule between the items of a row. <code>icon-link</code> lines an icon up with the words of a link.</p>
+	<div class="docs-example docs-example-stack" id="utilities-divide">
+		<div class="hstack divide-x"><span class="px-12">Bookings</span><span class="px-12">Guests</span><span class="px-12">Revenue</span></div>
+		<div class="hstack gap-12"><button class="btn btn-sm" type="button">Copy</button><span class="vr"></span><button class="btn btn-sm" type="button">Delete</button></div>
+		<a class="icon-link" href="#utilities-divide"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>Open on the site</a>
 	</div>
 </section>
 

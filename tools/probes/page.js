@@ -3,14 +3,14 @@ window.REDZ_PROBE = (() => {
 	const root = document.documentElement;
 	const name = (el) => el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') + (el.classList.length ? '.' + [...el.classList].join('.') : '');
 	const pause = (ms) => new Promise((done) => setTimeout(done, ms));
-	// Two frames — or five seconds, as a page the engine has put in the background draws no frames at all; a slow
+	// Two frames - or five seconds, as a page the engine has put in the background draws no frames at all; a slow
 	// simulator's frames may take more than a second, and the menu guard places its menu in one.
 	const frames = () => new Promise((done) => {
 		requestAnimationFrame(() => requestAnimationFrame(done));
 		setTimeout(done, 5000);
 	});
 	const closed = (el) => el.closest('[popover]:not(:popover-open), dialog:not([open])') !== null;
-	// The box an opened layer rests in, without the scale or move of its opening transition — a slow engine may not have
+	// The box an opened layer rests in, without the scale or move of its opening transition - a slow engine may not have
 	// run it yet when the probe measures.
 	const resting = (el) => {
 		const style = el.getAttribute('style');
@@ -30,7 +30,7 @@ window.REDZ_PROBE = (() => {
 	const targetOf = (button) => document.getElementById(button.getAttribute('commandfor') || (button.getAttribute('command') === '--toggle' ? (button.getAttribute('aria-controls') || '').trim().split(/\s+/)[0] : ''));
 	// Hidden on purpose: the screen-reader-only pattern clips its box to nothing.
 	const unseen = (el) => getComputedStyle(el).clipPath === 'inset(50%)';
-	// The page's own errors from here on — an engine whose driver brings no events (Safari) shows them only this way.
+	// The page's own errors from here on - an engine whose driver brings no events (Safari) shows them only this way.
 	const errors = [];
 	addEventListener('error', (event) => errors.push('exception ' + String(event.message || event.error)));
 	addEventListener('unhandledrejection', (event) => errors.push('unhandled rejection ' + String(event.reason?.message ?? event.reason)));
@@ -163,8 +163,8 @@ window.REDZ_PROBE = (() => {
 				ui: typeof globalThis.REDZ?.ui?.toast === 'function'
 			};
 		},
-		// The docs' state mirror: each copy (data-docs-state) and its twin at rest — the element of the same tag and
-		// classes in the first cell of its row of the grid — kept by number, as one twin stands for several copies.
+		// The docs' state mirror: each copy (data-docs-state) and its twin at rest - the element of the same tag and
+		// classes in the first cell of its row of the grid - kept by number, as one twin stands for several copies.
 		mirrors() {
 			mirrored.length = 0;
 			for (const copy of document.querySelectorAll('[data-docs-state]')) {
@@ -177,8 +177,8 @@ window.REDZ_PROBE = (() => {
 			}
 			return mirrored.map(([twin, copy]) => ({state: copy.dataset.docsState, what: name(twin)}));
 		},
-		// The twin brought into view: the point of its middle. For a focus, a button put just before it — before its
-		// <details>, for a summary — takes the focus, so that the next Tab, a real key, gives it to the twin.
+		// The twin brought into view: the point of its middle. For a focus, a button put just before it - before its
+		// <details>, for a summary - takes the focus, so that the next Tab, a real key, gives it to the twin.
 		async rest(i, focus) {
 			const [twin] = mirrored[i];
 			twin.scrollIntoView({block: 'center', inline: 'center'});
@@ -412,7 +412,7 @@ window.REDZ_PROBE = (() => {
 			}
 			if (kind === 'tabs') {
 				const list = document.querySelector('[data-probe-tablist="' + id + '"]');
-				const tabs = [...list.querySelectorAll('[role="tab"]')];
+				const tabs = [...list.querySelectorAll('[role="tab"]')].filter((tab) => tab.getClientRects().length > 0);
 				const panels = tabs.map((tab) => document.getElementById(tab.getAttribute('aria-controls') || ''));
 				return {count: tabs.length, focused: tabs.indexOf(active), selected: tabs.flatMap((tab, i) => tab.getAttribute('aria-selected') === 'true' ? [i] : []), shown: panels.flatMap((panel, i) => panel && !panel.hidden ? [i] : []), rtl: getComputedStyle(list).direction === 'rtl', manual: list.dataset.activation === 'manual'};
 			}
@@ -449,7 +449,7 @@ window.REDZ_PROBE = (() => {
 			}
 			return width - box.right >= 32 ? [Math.round((box.right + width) / 2), Math.round(innerHeight / 2)] : null;
 		},
-		// Two notices by REDZ.ui.toast: where each landed — the live region's role — and whether it shows.
+		// Two notices by REDZ.ui.toast: where each landed - the live region's role - and whether it shows.
 		async notices() {
 			if (typeof globalThis.REDZ?.ui?.toast !== 'function') {
 				return [];

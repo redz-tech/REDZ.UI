@@ -1,6 +1,6 @@
 <header class="vstack gap-8">
 	<h1>List groups</h1>
-	<p class="docs-lead">A column of items in one frame — plain rows, or links and buttons to choose from — with the current one and the unavailable ones marked by the same attributes the browser reads.</p>
+	<p class="docs-lead">A column of items in one frame - plain rows, or links and buttons to choose from - with the current one and the unavailable ones marked by the same attributes the browser reads.</p>
 </header>
 
 <section class="vstack gap-16" aria-labelledby="list-group-examples">
@@ -15,7 +15,7 @@
 	</div>
 
 	<h3>Links and buttons</h3>
-	<p><code>list-group-item-action</code> makes an item a choice. The current one is <code>aria-current</code> — <code>"page"</code> for a link to the page shown, <code>"true"</code> otherwise; one that cannot be chosen is a <code>disabled</code> button, or a link without <code>href</code> and with <code>aria-disabled="true"</code>.</p>
+	<p><code>list-group-item-action</code> makes an item a choice. The current one is <code>aria-current</code> - <code>"page"</code> for a link to the page shown, <code>"true"</code> otherwise; one that cannot be chosen is a <code>disabled</code> button, or a link without <code>href</code> and with <code>aria-disabled="true"</code>.</p>
 	<div class="docs-example docs-example-stack" id="list-group-action">
 		<nav class="list-group" aria-label="Sites">
 			<a class="list-group-item list-group-item-action" href="#list-group-action" aria-current="page">All sites</a>
@@ -65,7 +65,7 @@
 	</div>
 
 	<h3 id="list-group-reorder">Reordering</h3>
-	<p>A list with <code>data-reorder</code> naming a hidden field moves its items, each with a <code>data-value</code>, by a <code>drag-handle</code>: a button opening the list's menu of moves, whose items carry <code>data-move</code> — <code>up</code>, <code>down</code>, <code>first</code>, <code>last</code> — or the pointer dragging the handle. A move is done at once, the focus back on the handle, and the page's text <code>moved</code> says the new place. Then <code>redz:move</code> fires on the item: a page that saves cancels it and answers with a promise — refused, the move is undone and the page's words are said; left alone, hidden fields beside the list hold the new order for the form.</p>
+	<p>A list with <code>data-reorder</code> naming a hidden field moves its items, each with a <code>data-value</code>, by a <code>drag-handle</code>: a button opening the list's menu of moves, whose items carry <code>data-move</code> - <code>up</code>, <code>down</code>, <code>first</code>, <code>last</code> - or the pointer dragging the handle. A move is done at once, the focus back on the handle, and the page's text <code>moved</code> says the new place. Then <code>redz:move</code> fires on the item: a page that saves cancels it and answers with a promise - refused, the move is undone and the page's words are said; left alone, hidden fields beside the list hold the new order for the form.</p>
 	<div class="docs-example docs-example-stack" id="list-group-moves">
 		<ul class="list-group" id="list-group-moves-list" aria-label="Stops of the tour" data-reorder="stops[]">
 			<li class="list-group-item hstack gap-8" data-value="pier"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: The pier"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>The pier</li>
@@ -87,7 +87,7 @@
 });</code></pre>
 </section>
 
-<section class="vstack gap-16" aria-labelledby="list-group-states-title">
+<section class="vstack gap-16">
 	<h2 id="list-group-states-title">States</h2>
 	<div class="docs-states" id="list-group-states" tabindex="0" role="region" aria-labelledby="list-group-states-title">
 		<table class="docs-matrix">
@@ -111,7 +111,7 @@
 <section class="vstack gap-12" aria-labelledby="list-group-access">
 	<h2 id="list-group-access">Keyboard and accessibility</h2>
 	<ul>
-		<li>Links and buttons keep their own keys: <kbd>Tab</kbd> from one to the next, <kbd>Enter</kbd> — and <kbd>Space</kbd> on a button — to choose. A list of links that moves between pages is a <code>&lt;nav&gt;</code> with its own name.</li>
+		<li>Links and buttons keep their own keys: <kbd>Tab</kbd> from one to the next, <kbd>Enter</kbd> - and <kbd>Space</kbd> on a button - to choose. A list of links that moves between pages is a <code>&lt;nav&gt;</code> with its own name.</li>
 		<li>The current item is <code>aria-current</code>, never a class: the screen reader says “current page”, the look follows the attribute.</li>
 		<li>A link that may not be followed has no <code>href</code>: <code>aria-disabled</code> alone would leave it working.</li>
 	</ul>

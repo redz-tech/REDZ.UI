@@ -229,4 +229,16 @@
 		gap: var(--redz-space-8);
 		cursor: pointer;
 	}
+
+	.form-range {
+		display: block;
+		inline-size: 100%;
+		margin: 0;
+		accent-color: var(--redz-primary);
+		cursor: pointer;
+	}
+
+	.form-range:disabled {
+		cursor: not-allowed;
+	}
 }

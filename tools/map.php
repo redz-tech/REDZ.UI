@@ -1,10 +1,10 @@
 <?php
-// map — the machine map Bootstrap 5.3.8 → REDZ.UI for the migration skill and the docs: every class of Bootstrap's
-// stylesheet gets a row — its REDZ.UI form and the kind of change — by the first rule of tools/map/rules.tsv that
+// map - the machine map Bootstrap 5.3.8 → REDZ.UI for the migration skill and the docs: every class of Bootstrap's
+// stylesheet gets a row (its REDZ.UI form and the kind of change) by the first rule of tools/map/rules.tsv that
 // matches it, a breakpoint infix turned into a width prefix; the attributes and calls of tools/map/extra.tsv follow.
-// Writes skills/*/assets/map.tsv and classes.txt (every class of the library, the icons included) — real copies in
+// Writes skills/*/assets/map.tsv and classes.txt (every class of the library, the icons included): real copies in
 // each skill, as installers copy a skill's folder alone. A class with no rule, or a target the library does not have,
-// is an error. Usage: php tools/map.php [--check] | refresh — refresh downloads bootstrap@5.3.8 from npm, checks its
+// is an error. Usage: php tools/map.php [--check] | refresh - refresh downloads bootstrap@5.3.8 from npm, checks its
 // sha512 and writes the class list tools/map/bootstrap.txt.
 require __DIR__ . '/lib.php';
 
@@ -31,7 +31,7 @@ function MAP__Refresh(): int
 		}
 	}
 	ksort($classes, SORT_STRING);
-	file_put_contents(__DIR__ . '/map/bootstrap.txt', '# bootstrap ' . $package['version'] . ' ' . $package['integrity'] . " dist/css/bootstrap.css — derived by php tools/map.php refresh, do not edit\n" . implode("\n", array_keys($classes)) . "\n");
+	file_put_contents(__DIR__ . '/map/bootstrap.txt', '# bootstrap ' . $package['version'] . ' ' . $package['integrity'] . " dist/css/bootstrap.css - derived by php tools/map.php refresh, do not edit\n" . implode("\n", array_keys($classes)) . "\n");
 	echo 'wrote tools/map/bootstrap.txt · ', count($classes), " classes\n";
 	return 0;
 }
@@ -85,7 +85,7 @@ function MAP__Row(string $class, array $rules, array $ours): ?array
 				$redz = $prefixed;
 				$kind = $kind === 'same' ? 'rename' : $kind;
 			} else {
-				$note = trim('no ' . $prefix . ': form here — set it at that width in the module\'s CSS, or rethink the layout. ' . $note);
+				$note = trim('no ' . $prefix . ': form here; set it at that width in the module\'s CSS, or rethink the layout. ' . $note);
 				$kind = 'review';
 			}
 		}
@@ -93,7 +93,7 @@ function MAP__Row(string $class, array $rules, array $ours): ?array
 			$kind = 'rename';
 		}
 		if ($redz !== '' && $redz !== $class && isset($ours[$class]) && in_array($kind, ['rename', 'value'], true)) {
-			$note = trim('reused — ' . $class . ' means another thing in REDZ.UI; ' . $note);
+			$note = trim('reused: ' . $class . ' means another thing in REDZ.UI; ' . $note);
 		}
 		$first = explode(' ', $redz)[0];
 		$page = $page !== '' ? $page : (string)($ours[(string)preg_replace('~^[a-z0-9]+:~', '', $first)] ?? '');
@@ -180,7 +180,7 @@ function MAP__Main(array $argv): int
 		echo 'wrote ', $file, "\n";
 	}
 	if ($stale !== []) {
-		fwrite(STDERR, 'out of date: ' . implode(', ', $stale) . " — run php tools/map.php\n");
+		fwrite(STDERR, 'out of date: ' . implode(', ', $stale) . " - run php tools/map.php\n");
 		return 1;
 	}
 	$kinds = array_count_values(array_column($rows, 2));

@@ -28,7 +28,7 @@
 	</div>
 
 	<h3>Sizes</h3>
-	<p>A size is a word: <code>btn-xs</code> 24 px, <code>btn-sm</code> 28 px, the default 32 px, <code>btn-lg</code> 40 px — the heights of every control of the same size.</p>
+	<p>A size is a word: <code>btn-xs</code> 24 px, <code>btn-sm</code> 28 px, the default 32 px, <code>btn-lg</code> 40 px - the heights of every control of the same size.</p>
 	<div class="docs-example" id="btn-sizes">
 		<button class="btn btn-primary btn-xs" type="button">Extra small</button>
 		<button class="btn btn-primary btn-sm" type="button">Small</button>
@@ -48,7 +48,7 @@
 	</div>
 
 	<h3>Groups and toolbars</h3>
-	<p><code>btn-group</code> joins buttons into one control — here a choice of view, each button pressed or not. <code>btn-toolbar</code> lays groups and buttons out in a wrapping row.</p>
+	<p><code>btn-group</code> joins buttons into one control - here a choice of view, each button pressed or not. <code>btn-toolbar</code> lays groups and buttons out in a wrapping row.</p>
 	<div class="docs-example" id="btn-groups">
 		<div class="btn-toolbar" role="group" aria-label="List view">
 			<div class="btn-group" role="group" aria-label="Layout">
@@ -71,7 +71,7 @@
 	</div>
 </section>
 
-<section class="vstack gap-16" aria-labelledby="btn-states-title">
+<section class="vstack gap-16">
 	<h2 id="btn-states-title">States</h2>
 	<p>A state is the attribute accessibility needs anyway, on the button itself: no <code>active</code> or <code>disabled</code> classes. <code>aria-expanded</code> is set by the browser on a button that opens a menu or a dialog.</p>
 	<div class="docs-states" id="btn-states" tabindex="0" role="region" aria-labelledby="btn-states-title">
@@ -217,11 +217,11 @@
 					<td><button class="btn-close" type="button" aria-label="Close"></button></td>
 					<td><button class="btn-close" type="button" aria-label="Close" data-docs-state="hover"></button></td>
 					<td><button class="btn-close" type="button" aria-label="Close" data-docs-state="focus-visible"></button></td>
-					<td>—</td>
-					<td>—</td>
+					<td>-</td>
+					<td>-</td>
 					<td><button class="btn-close" type="button" aria-label="Close" disabled></button></td>
-					<td>—</td>
-					<td>—</td>
+					<td>-</td>
+					<td>-</td>
 				</tr>
 			</tbody>
 		</table>
@@ -233,7 +233,7 @@
 	<ul>
 		<li><code>&lt;button type="button"&gt;</code> for an action, <code>&lt;a href&gt;</code> for a place; <code>btn</code> draws both the same. Enter and Space press a button, Enter follows a link.</li>
 		<li>A button with only an icon takes its name from <code>aria-label</code>; the icon is <code>aria-hidden="true"</code>.</li>
-		<li><code>disabled</code> takes a button out of the tab order and hides why. <code>aria-disabled="true"</code> keeps it focusable — so a tooltip can say why — and the library swallows its clicks.</li>
+		<li><code>disabled</code> takes a button out of the tab order and hides why. <code>aria-disabled="true"</code> keeps it focusable - so a tooltip can say why - and the library swallows its clicks.</li>
 		<li>A button that opens a menu or a dialog uses the browser's command: <code>commandfor</code> + <code>command</code>, never <code>data-bs-toggle</code>.</li>
 		<li>The focus ring is 2 px of <code>--redz-focus</code>, 3:1 against the page in both themes.</li>
 	</ul>

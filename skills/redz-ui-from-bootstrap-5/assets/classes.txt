@@ -91,6 +91,10 @@
 2xl:justify-content-end
 2xl:justify-content-evenly
 2xl:justify-content-start
+2xl:justify-items-center
+2xl:justify-items-end
+2xl:justify-items-start
+2xl:justify-items-stretch
 2xl:list-group-horizontal
 2xl:m-0
 2xl:m-12
@@ -227,6 +231,10 @@
 2xl:pe-48
 2xl:pe-64
 2xl:pe-8
+2xl:place-items-center
+2xl:place-items-end
+2xl:place-items-start
+2xl:place-items-stretch
 2xl:ps-0
 2xl:ps-12
 2xl:ps-16
@@ -2579,6 +2587,8 @@ dialog-header
 dialog-lg
 dialog-sm
 dialog-title
+divide-x
+divide-y
 dot
 dot-danger
 dot-info
@@ -2623,6 +2633,7 @@ form-control-sm
 form-field
 form-floating
 form-label
+form-range
 form-select
 form-select-lg
 form-select-sm
@@ -2659,6 +2670,7 @@ h-50
 h-75
 h-auto
 hstack
+icon-link
 icon-tile
 icon-tile-danger
 icon-tile-info
@@ -2678,6 +2690,10 @@ justify-content-center
 justify-content-end
 justify-content-evenly
 justify-content-start
+justify-items-center
+justify-items-end
+justify-items-start
+justify-items-stretch
 lg:align-content-around
 lg:align-content-between
 lg:align-content-center
@@ -2771,6 +2787,10 @@ lg:justify-content-center
 lg:justify-content-end
 lg:justify-content-evenly
 lg:justify-content-start
+lg:justify-items-center
+lg:justify-items-end
+lg:justify-items-start
+lg:justify-items-stretch
 lg:list-group-horizontal
 lg:m-0
 lg:m-12
@@ -2907,6 +2927,10 @@ lg:pe-40
 lg:pe-48
 lg:pe-64
 lg:pe-8
+lg:place-items-center
+lg:place-items-end
+lg:place-items-start
+lg:place-items-stretch
 lg:ps-0
 lg:ps-12
 lg:ps-16
@@ -2980,6 +3004,7 @@ lg:span-7
 lg:span-8
 lg:span-9
 lg:span-full
+lg:stepper-horizontal
 lg:text-center
 lg:text-end
 lg:text-start
@@ -3119,6 +3144,10 @@ md:justify-content-center
 md:justify-content-end
 md:justify-content-evenly
 md:justify-content-start
+md:justify-items-center
+md:justify-items-end
+md:justify-items-start
+md:justify-items-stretch
 md:list-group-horizontal
 md:m-0
 md:m-12
@@ -3255,6 +3284,10 @@ md:pe-40
 md:pe-48
 md:pe-64
 md:pe-8
+md:place-items-center
+md:place-items-end
+md:place-items-start
+md:place-items-stretch
 md:ps-0
 md:ps-12
 md:ps-16
@@ -3328,6 +3361,7 @@ md:span-7
 md:span-8
 md:span-9
 md:span-full
+md:stepper-horizontal
 md:text-center
 md:text-end
 md:text-start
@@ -3413,6 +3447,8 @@ nav
 nav-fill
 nav-justified
 nav-link
+nav-overflow
+nav-overflow-toggle
 nav-pills
 nav-underline
 object-fit-contain
@@ -3492,7 +3528,14 @@ pe-64
 pe-8
 pe-auto
 pe-none
+place-items-center
+place-items-end
+place-items-start
+place-items-stretch
 placeholder
+popover
+popover-body
+popover-header
 position-absolute
 position-fixed
 position-relative
@@ -3520,6 +3563,7 @@ progress-sm
 progress-striped
 progress-success
 progress-warning
+prose
 ps-0
 ps-12
 ps-16
@@ -3701,6 +3745,10 @@ sm:justify-content-center
 sm:justify-content-end
 sm:justify-content-evenly
 sm:justify-content-start
+sm:justify-items-center
+sm:justify-items-end
+sm:justify-items-start
+sm:justify-items-stretch
 sm:list-group-horizontal
 sm:m-0
 sm:m-12
@@ -3837,6 +3885,10 @@ sm:pe-40
 sm:pe-48
 sm:pe-64
 sm:pe-8
+sm:place-items-center
+sm:place-items-end
+sm:place-items-start
+sm:place-items-stretch
 sm:ps-0
 sm:ps-12
 sm:ps-16
@@ -3910,6 +3962,7 @@ sm:span-7
 sm:span-8
 sm:span-9
 sm:span-full
+sm:stepper-horizontal
 sm:text-center
 sm:text-end
 sm:text-start
@@ -3931,6 +3984,9 @@ spinner-border
 start-0
 start-100
 start-50
+stepper
+stepper-horizontal
+stepper-item
 stretched-link
 switch
 table
@@ -4001,6 +4057,7 @@ vh-100
 visible
 visually-hidden
 visually-hidden-focusable
+vr
 vstack
 vw-100
 w-100
@@ -4101,6 +4158,10 @@ xl:justify-content-center
 xl:justify-content-end
 xl:justify-content-evenly
 xl:justify-content-start
+xl:justify-items-center
+xl:justify-items-end
+xl:justify-items-start
+xl:justify-items-stretch
 xl:list-group-horizontal
 xl:m-0
 xl:m-12
@@ -4237,6 +4298,10 @@ xl:pe-40
 xl:pe-48
 xl:pe-64
 xl:pe-8
+xl:place-items-center
+xl:place-items-end
+xl:place-items-start
+xl:place-items-stretch
 xl:ps-0
 xl:ps-12
 xl:ps-16

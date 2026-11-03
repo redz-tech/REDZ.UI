@@ -64,7 +64,7 @@ attaches by delegation on `document`, so nothing is set up per element and marku
 
 ```html
 <script type="module" src="dist/redz-ui.min.js"></script>
-<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong", "moved": "Moved to {position} of {count}", "file.type": "{name} is not a kind of file this takes", "file.size": "{name} is larger than {size}"}</script>
+<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong", "moved": "Moved to {position} of {count}", "more": "More", "file.type": "{name} is not a kind of file this takes", "file.size": "{name} is larger than {size}"}</script>
 ```
 
 - **Menus** (`role="menu"` on a `popover` opened by its button): the arrow keys move through the items, Home and End go
@@ -73,6 +73,10 @@ attaches by delegation on `document`, so nothing is set up per element and marku
 - **Tabs** (`role="tablist"`): the arrow keys select the next tab and show its panel - mirrored right to left - Home
   and End the first and the last; only the selected tab takes Tab. With `data-activation="manual"` - panels that load
   from the server - the keys move the focus only, and Enter or Space selects (`js/tabs.js`).
+- **Nav overflow** (`nav-overflow` around a nav): the links that do not fit the wrapper's own box hide from the end
+  into a "More" menu after the nav, the current link and `nav-overflow-keep` ones staying in the row; a plain click on
+  an item clicks the hidden link itself. It watches the wrapper's size and the nav's links, and takes up a wrapper
+  added later (`js/nav-overflow.js`).
 - **Regions:** a button with `command="--toggle"` opens and closes the element its `aria-controls` names, closed as
   `hidden="until-found"`, so the browser's find in page still reaches its words and opens it; every button for the
   region says the state in `aria-expanded` (`js/toggle.js`). It takes no `commandfor`, which WebKit would expose as

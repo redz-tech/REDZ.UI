@@ -1,6 +1,6 @@
 # REDZ.UI
 
-> The interface library of the REDZ products: plain CSS and small JavaScript on the browser platform — no framework, no build step.
+> The interface library of the REDZ products: plain CSS and small JavaScript on the browser platform - no framework, no build step.
 
 Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the number in a class is its value in pixels, a state is an HTML attribute, behavior comes from the browser's invoker commands. Browsers: Chrome and Edge 130+, Firefox 132+, Safari 18+.
 
@@ -8,9 +8,9 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 
 - [Getting started](docs/index.md): REDZ.UI is a stylesheet, its icons and one small script on the browser platform. Nothing is built where it is used: link the three files, write Bootstrap-like markup, and the browser does the rest.
 - [Layout](docs/layout.md): The parent sets the grid, the number is the count, and a width prefix measures the region the element is in. Stacks for a column or a row of items, gaps between them, no margins on components.
-- [Utilities](docs/utilities.md): Single-purpose classes with Bootstrap 5's names, where the number is the value: p-16, gap-8, fs-14, rounded-8, w-50. Written once from a vocabulary file and committed — nothing is generated where they are used.
+- [Utilities](docs/utilities.md): Single-purpose classes with Bootstrap 5's names, where the number is the value: p-16, gap-8, fs-14, rounded-8, w-50. Written once from a vocabulary file and committed - nothing is generated where they are used.
 - [Tokens](docs/tokens.md): The custom properties on :root that the components read: colors by role in pairs that pass WCAG AA in both themes, spacing, type, radii, shadows and motion. A theme changes tokens, never component rules.
-- [Icons](docs/icons.md): Bootstrap Icons 1.13.2 under their own class names — <i class="bi bi-pencil"> — each a CSS mask over its own SVG file: the color of the text around it, no font, no script, no build.
+- [Icons](docs/icons.md): Bootstrap Icons 1.13.2 under their own class names - <i class="bi bi-pencil"> - each a CSS mask over its own SVG file: the color of the text around it, no font, no script, no build.
 - [From Bootstrap 5.3](docs/migrate.md): Most of Bootstrap 5's names stay. What changes is the spacing numbers, the grid, the breakpoints, states and triggers, and the three components Bootstrap 6 renamed. The two libraries are never on one page: a project switches its stylesheet at once.
 
 ## Actions
@@ -22,49 +22,52 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 ## Forms
 
 - [Form fields](docs/form.md): Text fields, selects and text areas with Bootstrap 5's names: a label floating in the field or above it, a hint, an error said in words, an icon inside the field.
-- [Input groups](docs/input-group.md): A field joined to what belongs to it — a unit, a prefix, a button, a choice — into one control. The borders meet by themselves; a menu or a hidden element inside the group is left out of the joining.
+- [Input groups](docs/input-group.md): A field joined to what belongs to it - a unit, a prefix, a button, a choice - into one control. The borders meet by themselves; a menu or a hidden element inside the group is left out of the joining.
 - [Checks, radios and switches](docs/check.md): The browser's own checkbox and radio, drawn by the library: check, radio and switch on the input itself, form-check on the label around it.
-- [Combobox](docs/combobox.md): A choice from a list long enough to search: a button in the look of a select shows the value and opens a panel with a search field and the list. One core — the WAI-ARIA combobox with a listbox — also drives the command palette and a list in the page.
-- [Inline edit](docs/inline-edit.md): A value changed where it shows — a title in a list, a name on a page — behind a real Edit button, in a small form of its own that saves or cancels.
+- [Combobox](docs/combobox.md): A choice from a list long enough to search: a button in the look of a select shows the value and opens a panel with a search field and the list. One core - the WAI-ARIA combobox with a listbox - also drives the command palette and a list in the page.
+- [Inline edit](docs/inline-edit.md): A value changed where it shows - a title in a list, a name on a page - behind a real Edit button, in a small form of its own that saves or cancels.
 - [File upload](docs/upload.md): Photos, documents, a price list: chosen, dropped or pasted, each file checked at once and sent on its own, with its own progress and its own error.
 
 ## Content
 
-- [Cards](docs/card.md): A card is a bordered region of a screen: a header with its title and actions, a body, a footer. It is a region — the width prefixes inside it measure the card, not the window.
-- [Accordions](docs/accordion.md): Sections that open one at a time, or each on its own, on the browser's own disclosure — <details> and <summary>: no script, the keys and the open state built in, and the browser's find in page opens a closed section on a match.
-- [Collapse](docs/collapse.md): A button that opens and closes a region elsewhere on the page — help under a toolbar, more filters, the details of a row — by the library's own command, --toggle. A closed region is hidden="until-found", so the browser's find in page still reaches its words and opens it. A section that opens under its own header is an accordion.
-- [List groups](docs/list-group.md): A column of items in one frame — plain rows, or links and buttons to choose from — with the current one and the unavailable ones marked by the same attributes the browser reads.
+- [Cards](docs/card.md): A card is a bordered region of a screen: a header with its title and actions, a body, a footer. It is a region - the width prefixes inside it measure the card, not the window.
+- [Accordions](docs/accordion.md): Sections that open one at a time, or each on its own, on the browser's own disclosure - <details> and <summary>: no script, the keys and the open state built in, and the browser's find in page opens a closed section on a match.
+- [Collapse](docs/collapse.md): A button that opens and closes a region elsewhere on the page - help under a toolbar, more filters, the details of a row - by the library's own command, --toggle. A closed region is hidden="until-found", so the browser's find in page still reaches its words and opens it. A section that opens under its own header is an accordion.
+- [List groups](docs/list-group.md): A column of items in one frame - plain rows, or links and buttons to choose from - with the current one and the unavailable ones marked by the same attributes the browser reads.
 - [Trees](docs/tree.md): Pages under pages, a menu's items, folders: a list whose items open their own lists, each a link or a name, and moved by a handle.
 - [Tables](docs/table.md): A list of records: a title that links to the record, a line under it, a note when something is wrong, a column of checks for batch actions and the row's own actions at the end.
-- [Badges](docs/badge.md): A badge is a short label of state or count beside the thing it describes: Published, Draft, 5 new. It never acts — a badge that does something is a chip or a button.
+- [Badges](docs/badge.md): A badge is a short label of state or count beside the thing it describes: Published, Draft, 5 new. It never acts - a badge that does something is a chip or a button.
 - [Dots](docs/dot.md): An 8 px dot of a tone beside a word: online, live, the color of a site. The dot repeats what the word says; it never says it alone.
 - [Avatars](docs/avatar.md): A round mark of a person: their initials in the accent, 32 px or 24 px with avatar-sm.
 - [Icon tiles](docs/icon-tile.md): A rounded square with an icon in it: the mark of a screen's subject in its title, of a kind of record, of a drop zone.
 - [Empty states](docs/empty-state.md): What a list, a panel or a search shows when it has nothing yet: what would be here, and the one action that starts it. And the drop zone of a file field.
-- [Placeholders](docs/placeholder.md): Grey bars in the shape of content that is on its way — the first load of a page or a panel. A region that already has content and reloads it gets an overlay instead: see Busy.
+- [Placeholders](docs/placeholder.md): Grey bars in the shape of content that is on its way - the first load of a page or a panel. A region that already has content and reloads it gets an overlay instead: see Busy.
+- [Prose](docs/prose.md): Long text that comes from an editor or from Markdown, where no element carries a class: a page's content in a preview, a help page, a note. One class on the wrapper sets the size, the rhythm and the measure of everything inside.
 
 ## Layers
 
 - [Dialogs](docs/dialog.md): The browser's own modal <dialog>: opened by a command, the page behind it inert and dimmed, closed by its buttons, Esc or a click outside. And REDZ.ui.confirm() for a question asked from script.
-- [Drawers](docs/drawer.md): A modal panel at the end of the screen — or at its start with drawer-start — for filters, a record's details, a long form beside the list it belongs to. Bootstrap 5 calls it offcanvas; it is a <dialog> here.
+- [Drawers](docs/drawer.md): A modal panel at the end of the screen - or at its start with drawer-start - for filters, a record's details, a long form beside the list it belongs to. Bootstrap 5 calls it offcanvas; it is a <dialog> here.
+- [Popovers](docs/popover.md): A small panel that opens beside its button and holds more than a label: a title, a few lines of text, a link. A click outside or Esc closes it; the page under it stays usable.
 - [Tooltips](docs/tooltip.md): A short dark label beside a control, placed by CSS anchor positioning. At the browser floor it is a toggletip: a small button opens it, a click outside or Esc closes it.
 
 ## Feedback
 
 - [Alerts](docs/alert.md): A message that stays on the page beside what it is about: a check passed, a suggestion, a warning before an action. A message that comes and goes is a toast.
-- [Toasts](docs/toast.md): A notice after an action — saved, failed, moved with a way to undo — shown by REDZ.ui.toast() in a stack at the corner of the screen and read aloud from a live region.
+- [Toasts](docs/toast.md): A notice after an action - saved, failed, moved with a way to undo - shown by REDZ.ui.toast() in a stack at the corner of the screen and read aloud from a live region.
 - [Spinners](docs/spinner.md): A turning ring, 1 em across in the color of the text around it, for something small that is on its way. A button shows its own while busy; a region shows an overlay.
-- [Progress and meters](docs/progress.md): The browser's own <progress> for work under way and <meter> for a measure within known limits — a quota, a score. The value is an attribute, the browser announces it, and a progress without a value says the work has no known end.
+- [Progress and meters](docs/progress.md): The browser's own <progress> for work under way and <meter> for a measure within known limits - a quota, a score. The value is an attribute, the browser announces it, and a progress without a value says the work has no known end.
 - [Busy](docs/busy.md): REDZ.ui.busy(element, promise) marks a button or a region busy until the promise settles: a button shows a spinner and ignores clicks, a region turns inert under an overlay.
 - [Save bar](docs/save-bar.md): The bar at the foot of a form that says what is not saved yet and offers to save or discard it. It sticks to the bottom of the screen while the form is longer than the screen.
 - [Selection bar](docs/selection-bar.md): The bar over a list that shows when rows are checked: how many, and what can be done with all of them at once.
 
 ## Navigation
 
-- [Navs and tabs](docs/nav.md): A row of links between views of one thing — nav-underline — or of choices — nav-pills; and the same row as tabs that switch panels on the page, driven by the keyboard as the WAI-ARIA tabs pattern.
+- [Navs and tabs](docs/nav.md): A row of links between views of one thing - nav-underline - or of choices - nav-pills; and the same row as tabs that switch panels on the page, driven by the keyboard as the WAI-ARIA tabs pattern.
 - [Breadcrumbs](docs/breadcrumb.md): The way up from a record to the list it belongs to, above the record's title. The separators are drawn by CSS and turn with the direction.
 - [Pagination](docs/pagination.md): Links to the pages of a long list, with Bootstrap's names: the current page says so in aria-current="page", a page there is none of says so in aria-disabled. A list that pages by "the next 50" shows only previous, next and where you are.
-- [Command palette](docs/palette.md): One search for every place and action of an app, opened from anywhere by ⌘K or Ctrl K: a dialog with the combobox's search and a list of links and buttons — Enter opens a page by its plain link or runs a button's command.
+- [Steppers](docs/stepper.md): The steps of a task that takes more than one screen: a booking, an import, the first run of a site. A list of steps in order, the one the person is on marked by the attribute a screen reader says, the ones before it done by their place.
+- [Command palette](docs/palette.md): One search for every place and action of an app, opened from anywhere by ⌘K or Ctrl K: a dialog with the combobox's search and a list of links and buttons - Enter opens a page by its plain link or runs a button's command.
 - [App shell](docs/app.md): The frame of an admin screen: app with a header, a side navigation, the main column and an optional side column. Below 1024 px the side navigation becomes a panel opened from the header. These docs stand in it.
 
 ## Skills

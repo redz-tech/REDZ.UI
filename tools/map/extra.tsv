@@ -7,7 +7,7 @@ data-bs-toggle="tab"	role="tab" aria-controls="ID"	trigger	nav	in a role="tablis
 data-bs-toggle="pill"	role="tab" aria-controls="ID"	trigger	nav	in a role="tablist"
 data-bs-toggle="button"	aria-pressed	review	btn	switch aria-pressed in your click handler
 data-bs-toggle="tooltip"	commandfor="ID" command="toggle-popover"	review	tooltip	a toggletip at the browser floor
-data-bs-toggle="popover"		missing	tooltip
+data-bs-toggle="popover"	commandfor="ID" command="toggle-popover"	trigger	popover	the panel is a <div id="ID" class="popover" popover> right after the button
 data-bs-toggle="collapse"	command="--toggle" aria-controls="ID" aria-expanded="false"	trigger	collapse	the region is hidden="until-found" while closed; in an accordion the item is a <details>
 data-bs-parent	name	trigger	accordion	the same name on every <details> of the group
 data-bs-target	commandfor	trigger		the id alone, without "#"
@@ -26,8 +26,9 @@ bootstrap.Offcanvas	dialog.showModal() and dialog.close()	trigger	drawer
 bootstrap.Dropdown	menu.showPopover(), menu.hidePopover(), menu.togglePopover()	trigger	menu
 bootstrap.Tab	tab.click()	review	nav	the library selects on click and by the keys
 bootstrap.Toast	REDZ.ui.toast({title, text, tone})	trigger	toast
-bootstrap.Tooltip|bootstrap.Popover		remove	tooltip
-bootstrap.Collapse	region.hidden = false	review	collapse	and setAttribute('hidden', 'until-found') to close; set aria-expanded on its buttons then — a button with command="--toggle" does both
+bootstrap.Tooltip		remove	tooltip
+bootstrap.Popover	panel.showPopover(), panel.hidePopover(), panel.togglePopover()	trigger	popover
+bootstrap.Collapse	region.hidden = false	review	collapse	and setAttribute('hidden', 'until-found') to close; set aria-expanded on its buttons then: a button with command="--toggle" does both
 show.bs.modal|shown.bs.modal	toggle	review	dialog	the dialog's toggle event, or code right after showModal()
 hide.bs.modal	cancel	review	dialog	the dialog's cancel event (Esc); your buttons close it
 hidden.bs.modal	close	rename	dialog	the dialog's close event; dialog.returnValue holds the closing button's value

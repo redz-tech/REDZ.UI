@@ -1,6 +1,6 @@
 <header class="vstack gap-8">
 	<h1>Command palette</h1>
-	<p class="docs-lead">One search for every place and action of an app, opened from anywhere by <kbd>⌘K</kbd> or <kbd>Ctrl K</kbd>: a dialog with the combobox's search and a list of links and buttons — Enter opens a page by its plain link or runs a button's command.</p>
+	<p class="docs-lead">One search for every place and action of an app, opened from anywhere by <kbd>⌘K</kbd> or <kbd>Ctrl K</kbd>: a dialog with the combobox's search and a list of links and buttons - Enter opens a page by its plain link or runs a button's command.</p>
 </header>
 
 <section class="vstack gap-16" aria-labelledby="palette-examples">
@@ -37,7 +37,7 @@
 	<ul>
 		<li>A single key is never a shortcut here: WCAG 2.1.4 asks for a way to turn such keys off, and a combination needs none.</li>
 		<li>A disabled or hidden button is left alone, and so is one outside an open modal dialog.</li>
-		<li>The hint the button shows — <kbd>⌘K</kbd> or <kbd>Ctrl K</kbd> — is the page's to write.</li>
+		<li>The hint the button shows - <kbd>⌘K</kbd> or <kbd>Ctrl K</kbd> - is the page's to write.</li>
 	</ul>
 </section>
 
@@ -56,6 +56,6 @@
 	<ul>
 		<li>The palette is a modal <code>&lt;dialog&gt;</code> with a name; a click on its backdrop closes it (<code>closedby="any"</code>). Opening it empties its search.</li>
 		<li>Its search is the WAI-ARIA combobox with a listbox, as in <a href="combobox.html">Combobox</a>: the options are plain links and buttons with <code>role="option"</code>, so a link opens in a new tab with <kbd>⌘</kbd> or the middle button as any link does. The library keeps them out of the Tab order (<code>tabindex="-1"</code>): the arrow keys reach them, as in every listbox.</li>
-		<li>Where the options come from — the app's menu, recent pages, a search on the server — is the page's: a server search answers <code>redz:search</code> as a combobox's does.</li>
+		<li>Where the options come from - the app's menu, recent pages, a search on the server - is the page's: a server search answers <code>redz:search</code> as a combobox's does.</li>
 	</ul>
 </section>

@@ -1,0 +1,114 @@
+@layer components {
+	.prose {
+		max-inline-size: 72ch;
+		color: var(--redz-text);
+		font-size: var(--redz-fs-16);
+		line-height: 1.65;
+		overflow-wrap: break-word;
+	}
+
+	.prose > * + * {
+		margin-block-start: 1em;
+	}
+
+	.prose :is(h1, h2, h3, h4) {
+		line-height: 1.3;
+		font-weight: 650;
+		text-wrap: balance;
+	}
+
+	.prose h1 {
+		font-size: var(--redz-fs-32);
+	}
+
+	.prose h2 {
+		font-size: var(--redz-fs-24);
+	}
+
+	.prose h3 {
+		font-size: var(--redz-fs-20);
+	}
+
+	.prose h4 {
+		font-size: var(--redz-fs-18);
+	}
+
+	.prose > :is(h1, h2, h3, h4) + * {
+		margin-block-start: 0.5em;
+	}
+
+	.prose > * + :is(h2, h3, h4) {
+		margin-block-start: 1.75em;
+	}
+
+	.prose :is(ul, ol) {
+		padding-inline-start: 1.5em;
+	}
+
+	.prose li + li,
+	.prose li > :is(ul, ol) {
+		margin-block-start: 0.25em;
+	}
+
+	.prose a {
+		color: var(--redz-primary);
+		text-decoration: underline;
+		text-underline-offset: 0.15em;
+	}
+
+	.prose blockquote {
+		padding-inline-start: 1em;
+		border-inline-start: 3px solid var(--redz-border);
+		color: var(--redz-text-muted);
+	}
+
+	.prose :not(pre) > code {
+		padding: 0.1em 0.35em;
+		border-radius: var(--redz-radius-4);
+		background: var(--redz-bg-hover);
+	}
+
+	.prose pre {
+		padding: var(--redz-space-12) var(--redz-space-16);
+		border: 1px solid var(--redz-border);
+		border-radius: var(--redz-radius-8);
+		background: var(--redz-bg-page);
+		font-size: var(--redz-fs-14);
+		line-height: 1.5;
+		overflow-x: auto;
+	}
+
+	.prose hr {
+		margin-block: 2em;
+		border: 0;
+		border-block-start: 1px solid var(--redz-border);
+	}
+
+	.prose :is(img, video) {
+		max-inline-size: 100%;
+		block-size: auto;
+		border-radius: var(--redz-radius-8);
+	}
+
+	.prose figcaption {
+		margin-block-start: 0.5em;
+		color: var(--redz-text-muted);
+		font-size: var(--redz-fs-14);
+	}
+
+	.prose table {
+		inline-size: 100%;
+		border-collapse: collapse;
+		font-size: var(--redz-fs-14);
+	}
+
+	.prose :is(th, td) {
+		padding: var(--redz-space-8) var(--redz-space-12);
+		border-block-end: 1px solid var(--redz-border);
+		text-align: start;
+	}
+
+	.prose th {
+		font-weight: 600;
+	}
+}

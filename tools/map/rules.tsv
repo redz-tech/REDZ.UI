@@ -3,7 +3,7 @@
 # Bootstrap's spacing step N in px), the kind (same, rename, value, grid, state, trigger, remove, missing, review), the
 # docs page (empty: the page of the target's stylesheet), a note. "missing" is a gap planned in an order of its own.
 
-# Spacing: the number is the pixels — Bootstrap's steps 1 2 3 4 5 are 4 8 16 24 48 px.
+# Spacing: the number is the pixels; Bootstrap's steps 1 2 3 4 5 are 4 8 16 24 48 px.
 (m|mt|mb|ms|me|mx|my)-(0|auto)	$1-$2	same	utilities
 (p|pt|pb|ps|pe|px|py|gap|row-gap|column-gap)-0	$1-0	same	utilities
 (m|mt|mb|ms|me|mx|my|p|pt|pb|ps|pe|px|py|gap|row-gap|column-gap)-([1-5])	$1-{space:$2}	value	utilities	the number is the pixels
@@ -76,7 +76,7 @@ lead	fs-16 text-muted	review	utilities	a lead paragraph
 small		review	utilities	fs-12, or the <small> element
 mark		missing	utilities
 initialism		missing	utilities
-h[1-6]		review	utilities	the h1–h4 sizes are the elements'; fs-* for another
+h[1-6]		review	utilities	the h1-h4 sizes are the elements'; fs-* for another
 display-[1-6]	fs-32	review	utilities	the largest size here
 blockquote|blockquote-footer		missing	utilities
 list-unstyled		review	utilities	vstack, or a component's own list
@@ -86,12 +86,13 @@ mh-100		missing	utilities
 (vw-100|vh-100|min-vw-100|min-vh-100)	$1	same	utilities	the height by dvh, as a phone's browser bars come and go
 visually-hidden-focusable	visually-hidden-focusable	same	utilities
 stretched-link	stretched-link	same	utilities	a card is its own positioned parent
-vr		missing	utilities
+vr	vr	same	utilities	a 1 px rule as tall as its flex row
 clearfix		remove	utilities	no floats
 focus-ring(-[a-z]+)?		remove	utilities	the focus ring is built in, 3:1 in both themes
 link-(primary|secondary|success|danger|warning|info|light|dark|body-emphasis)		review	utilities	a link is the accent; text-* for a tone
 link-underline(-.+)?|link-opacity-.+|link-offset-.+		review	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-icon-link(-hover)?		review	icons	a link with its icon: hstack gap-4
+icon-link	icon-link	same	utilities	the icon sits in the link's line, its gap in em
+icon-link-hover		remove	utilities	the icon does not move on hover
 img-fluid		review	utilities	images never overflow their box here; w-100 to fill it
 img-thumbnail		missing	utilities
 figure|figure-img|figure-caption		missing	utilities
@@ -99,7 +100,7 @@ ratio		remove	utilities	the ratio goes on the element itself; an image inside a 
 ratio-(1x1|4x3|16x9|21x9)	ratio-$1	same	utilities	on the element itself, not a wrapper
 
 # States and transitions: attributes and the browser's own.
-active		state		aria-current, aria-selected or aria-pressed — the attribute of the element's role
+active		state		aria-current, aria-selected or aria-pressed: the attribute of the element's role
 disabled		state		disabled, or aria-disabled="true" to keep the focus
 show|showing		state		the browser's [open] and :popover-open
 collapsed		state		aria-expanded="false" on the button, set by the browser or by --toggle
@@ -152,7 +153,7 @@ form-check-label		remove	check	the label is the form-check around the input
 form-check-inline		review	check	hstack gap-16 around the labels
 form-check-reverse		missing	check
 form-switch		review	check	switch on the input, with role="switch"
-form-range		missing	form
+form-range	form-range	same	form	on an <input type="range">, in the accent color
 form-control-plaintext		review	form	readonly on a form-control, or plain text
 form-control-color		review	form	a native <input type="color"> in the module's CSS
 col-form-label(-sm|-lg)?	form-label	review	form	a form-label in a form-field
@@ -181,14 +182,15 @@ table-active		review	table	aria-selected or aria-current on the row
 table-responsive(-.+)?		review	table	the card's body holds the table; columns hide below md:
 toast-header		review	toast	REDZ.ui.toast builds the toast from its title, text and tone
 tooltip-inner|tooltip-arrow|bs-tooltip-.+		remove	tooltip	the tooltip is one element
-popover|popover-(header|body|arrow)|bs-popover-.+		missing	tooltip	a short note is a toggletip; a rich one a menu or a drawer
+(popover|popover-header|popover-body)	$1	same	popover	the panel has popover, right after its button; with a title and a link in it, role="dialog"
+popover-arrow|bs-popover-.+		remove	popover	no arrow: anchor positioning places and flips the panel
 spinner-border-sm		review	spinner	the spinner is 1 em: set the font size
 spinner-grow|spinner-grow-sm		missing	spinner
 placeholder-(xs|sm|lg)		review	placeholder	size by the height of the bar
 placeholder-(glow|wave)		remove	placeholder	placeholders pulse by themselves
 (accordion|accordion-body|accordion-flush)	$1	same	accordion
 accordion-item	accordion-item	review	accordion	a <details>; the items of one group share a name, as data-bs-parent did
-accordion-header	accordion-header	review	accordion	the item's <summary> with the button's words in it — no heading and no button inside
+accordion-header	accordion-header	review	accordion	the item's <summary> with the button's words in it; no heading and no button inside
 accordion-button		remove	accordion	the summary is the button; its chevron is <i class="bi bi-chevron-down accordion-icon">
 accordion-collapse		remove	accordion	the body follows the summary inside the <details>
 collapse		state	collapse	closed: hidden="until-found" on the region; open: no hidden; its button has command="--toggle"

@@ -37,6 +37,14 @@
 	.align-items-center { align-items: center; }
 	.align-items-baseline { align-items: baseline; }
 	.align-items-stretch { align-items: stretch; }
+	.justify-items-start { justify-items: start; }
+	.justify-items-end { justify-items: end; }
+	.justify-items-center { justify-items: center; }
+	.justify-items-stretch { justify-items: stretch; }
+	.place-items-start { place-items: start; }
+	.place-items-end { place-items: end; }
+	.place-items-center { place-items: center; }
+	.place-items-stretch { place-items: stretch; }
 	.align-self-auto { align-self: auto; }
 	.align-self-start { align-self: flex-start; }
 	.align-self-end { align-self: flex-end; }
@@ -482,6 +490,10 @@
 	.visually-hidden { position: absolute; inline-size: 1px; block-size: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 	.visually-hidden-focusable:not(:focus, :focus-within) { position: absolute; inline-size: 1px; block-size: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 	.stretched-link::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+	.divide-x > * + * { border-inline-start: 1px solid var(--redz-border); }
+	.divide-y > * + * { border-block-start: 1px solid var(--redz-border); }
+	.vr { display: inline-block; align-self: stretch; inline-size: 1px; min-block-size: 1em; background: var(--redz-border-strong); }
+	.icon-link { display: inline-flex; align-items: center; gap: 0.375em; text-underline-offset: 0.2em; }
 	.flip-rtl:dir(rtl) { scale: -1 1; }
 
 	@container region (width >= 576px) {
@@ -522,6 +534,14 @@
 		.sm\:align-items-center { align-items: center; }
 		.sm\:align-items-baseline { align-items: baseline; }
 		.sm\:align-items-stretch { align-items: stretch; }
+		.sm\:justify-items-start { justify-items: start; }
+		.sm\:justify-items-end { justify-items: end; }
+		.sm\:justify-items-center { justify-items: center; }
+		.sm\:justify-items-stretch { justify-items: stretch; }
+		.sm\:place-items-start { place-items: start; }
+		.sm\:place-items-end { place-items: end; }
+		.sm\:place-items-center { place-items: center; }
+		.sm\:place-items-stretch { place-items: stretch; }
 		.sm\:align-self-auto { align-self: auto; }
 		.sm\:align-self-start { align-self: flex-start; }
 		.sm\:align-self-end { align-self: flex-end; }
@@ -830,6 +850,14 @@
 		.md\:align-items-center { align-items: center; }
 		.md\:align-items-baseline { align-items: baseline; }
 		.md\:align-items-stretch { align-items: stretch; }
+		.md\:justify-items-start { justify-items: start; }
+		.md\:justify-items-end { justify-items: end; }
+		.md\:justify-items-center { justify-items: center; }
+		.md\:justify-items-stretch { justify-items: stretch; }
+		.md\:place-items-start { place-items: start; }
+		.md\:place-items-end { place-items: end; }
+		.md\:place-items-center { place-items: center; }
+		.md\:place-items-stretch { place-items: stretch; }
 		.md\:align-self-auto { align-self: auto; }
 		.md\:align-self-start { align-self: flex-start; }
 		.md\:align-self-end { align-self: flex-end; }
@@ -1138,6 +1166,14 @@
 		.lg\:align-items-center { align-items: center; }
 		.lg\:align-items-baseline { align-items: baseline; }
 		.lg\:align-items-stretch { align-items: stretch; }
+		.lg\:justify-items-start { justify-items: start; }
+		.lg\:justify-items-end { justify-items: end; }
+		.lg\:justify-items-center { justify-items: center; }
+		.lg\:justify-items-stretch { justify-items: stretch; }
+		.lg\:place-items-start { place-items: start; }
+		.lg\:place-items-end { place-items: end; }
+		.lg\:place-items-center { place-items: center; }
+		.lg\:place-items-stretch { place-items: stretch; }
 		.lg\:align-self-auto { align-self: auto; }
 		.lg\:align-self-start { align-self: flex-start; }
 		.lg\:align-self-end { align-self: flex-end; }
@@ -1446,6 +1482,14 @@
 		.xl\:align-items-center { align-items: center; }
 		.xl\:align-items-baseline { align-items: baseline; }
 		.xl\:align-items-stretch { align-items: stretch; }
+		.xl\:justify-items-start { justify-items: start; }
+		.xl\:justify-items-end { justify-items: end; }
+		.xl\:justify-items-center { justify-items: center; }
+		.xl\:justify-items-stretch { justify-items: stretch; }
+		.xl\:place-items-start { place-items: start; }
+		.xl\:place-items-end { place-items: end; }
+		.xl\:place-items-center { place-items: center; }
+		.xl\:place-items-stretch { place-items: stretch; }
 		.xl\:align-self-auto { align-self: auto; }
 		.xl\:align-self-start { align-self: flex-start; }
 		.xl\:align-self-end { align-self: flex-end; }
@@ -1754,6 +1798,14 @@
 		.\32 xl\:align-items-center { align-items: center; }
 		.\32 xl\:align-items-baseline { align-items: baseline; }
 		.\32 xl\:align-items-stretch { align-items: stretch; }
+		.\32 xl\:justify-items-start { justify-items: start; }
+		.\32 xl\:justify-items-end { justify-items: end; }
+		.\32 xl\:justify-items-center { justify-items: center; }
+		.\32 xl\:justify-items-stretch { justify-items: stretch; }
+		.\32 xl\:place-items-start { place-items: start; }
+		.\32 xl\:place-items-end { place-items: end; }
+		.\32 xl\:place-items-center { place-items: center; }
+		.\32 xl\:place-items-stretch { place-items: stretch; }
 		.\32 xl\:align-self-auto { align-self: auto; }
 		.\32 xl\:align-self-start { align-self: flex-start; }
 		.\32 xl\:align-self-end { align-self: flex-end; }

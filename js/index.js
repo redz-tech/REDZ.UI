@@ -1,4 +1,4 @@
-// REDZ.UI: the library's scripts — the one module a page loads beside css/index.css; it sets REDZ.ui for calls from code.
+// REDZ.UI: the library's scripts, the one module a page loads beside css/index.css; it sets REDZ.ui for calls from code.
 import './commands.js';
 import './menu.js';
 import './menu-place.js';
@@ -8,6 +8,7 @@ import './dialog.js';
 import './combobox.js';
 import './shortcuts.js';
 import './scrollspy.js';
+import './nav-overflow.js';
 import './inline-edit.js';
 import './password.js';
 import './tree.js';

@@ -1,0 +1,36 @@
+<header class="vstack gap-8">
+	<h1>Popovers</h1>
+	<p class="docs-lead">A small panel that opens beside its button and holds more than a label: a title, a few lines of text, a link. A click outside or <kbd>Esc</kbd> closes it; the page under it stays usable.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="popover-examples">
+	<h2 id="popover-examples">Examples</h2>
+	<p><code>popover</code> on the panel, <code>popover-header</code> on its title, <code>popover-body</code> on its text. The button opens it with <code>commandfor</code> and <code>command="toggle-popover"</code>; the panel stands below the button, its start edge on the button's, and turns above or across where there is no room.</p>
+	<div class="docs-example" id="popover-titled">
+		<button class="btn btn-secondary" type="button" commandfor="popover-titled-panel" command="toggle-popover">Park fee</button>
+		<div id="popover-titled-panel" class="popover" popover role="dialog" aria-labelledby="popover-titled-title">
+			<div class="popover-header" id="popover-titled-title">Ang Thong marine park</div>
+			<div class="popover-body">The fee is paid in cash at the pier and is not part of the tour price. <a href="#popover-titled">The park rules</a></div>
+		</div>
+	</div>
+
+	<h3>Only a body</h3>
+	<p>Without a title the panel is its text alone.</p>
+	<div class="docs-example" id="popover-body">
+		<button class="btn btn-secondary" type="button" commandfor="popover-body-panel" command="toggle-popover">Pickup time</button>
+		<div id="popover-body-panel" class="popover" popover>
+			<div class="popover-body">The driver comes 15 minutes before the time on the voucher.</div>
+		</div>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="popover-access">
+	<h2 id="popover-access">Keyboard and accessibility</h2>
+	<ul>
+		<li>The panel comes right after its button in the page, so a screen reader reads it there and <kbd>Tab</kbd> from the button moves into it. Opening it moves no focus; <kbd>Esc</kbd> closes it and brings focus back to the button.</li>
+		<li>The button says whether the panel is open: the browsers set <code>aria-expanded</code> for a button with <code>commandfor</code>, and <code>js/commands.js</code> sets it in Firefox, which does not.</li>
+		<li>A panel with a title and a link or a field in it is <code>role="dialog"</code>, named by its title in <code>aria-labelledby</code>. A panel of words only has no role.</li>
+		<li>Nothing that must be read to use the screen lives only in a popover; a choice that needs an answer is a <a href="dialog.html">dialog</a>.</li>
+		<li><code>js/menu-place.js</code> keeps the panel beside its button where an engine cannot anchor it.</li>
+	</ul>
+</section>

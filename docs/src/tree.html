@@ -5,7 +5,7 @@
 
 <section class="vstack gap-16" aria-labelledby="tree-examples">
 	<h2 id="tree-examples">Examples</h2>
-	<p><code>tree</code> on the list, <code>tree-item</code> on each item, its <code>tree-row</code> holding a <code>tree-toggle</code> — a <code>--toggle</code> button naming the item's <code>tree-group</code> in <code>aria-controls</code>, as on <a href="collapse.html">collapse</a> — and the item's link. The groups close as <code>hidden="until-found"</code>, so the browser's find in page still opens them. A button with <code>command="--expand-all"</code> or <code>"--collapse-all"</code> for the tree opens or closes every group that holds items.</p>
+	<p><code>tree</code> on the list, <code>tree-item</code> on each item, its <code>tree-row</code> holding a <code>tree-toggle</code> - a <code>--toggle</code> button naming the item's <code>tree-group</code> in <code>aria-controls</code>, as on <a href="collapse.html">collapse</a> - and the item's link. The groups close as <code>hidden="until-found"</code>, so the browser's find in page still opens them. A button with <code>command="--expand-all"</code> or <code>"--collapse-all"</code> for the tree opens or closes every group that holds items.</p>
 	<div class="docs-example docs-example-stack" id="tree-pages">
 		<div class="hstack gap-8">
 			<button class="btn btn-sm" type="button" commandfor="tree-pages-list" command="--expand-all"><i class="bi bi-arrows-expand" aria-hidden="true"></i>Expand all</button>
@@ -53,7 +53,7 @@
 });</code></pre>
 
 	<h3>Moved by a handle</h3>
-	<p>A tree with <code>data-reorder</code> moves its items as a list does — see <a href="list-group.html#list-group-reorder">reordering</a> — and its menu of moves adds <code>data-move="in"</code>, to the end of the group of the item above, and <code>"out"</code>, after its parent; an item can go in where the item above has a <code>tree-group</code>, empty or not. <code>data-parent</code> names the hidden field of each item's parent, its value the item's key.</p>
+	<p>A tree with <code>data-reorder</code> moves its items as a list does - see <a href="list-group.html#list-group-reorder">reordering</a> - and its menu of moves adds <code>data-move="in"</code>, to the end of the group of the item above, and <code>"out"</code>, after its parent; an item can go in where the item above has a <code>tree-group</code>, empty or not. <code>data-parent</code> names the hidden field of each item's parent, its value the item's key.</p>
 	<div class="docs-example docs-example-stack" id="tree-menu">
 		<ul class="tree" id="tree-menu-list" aria-label="The site's menu" data-reorder="menu[]" data-parent="menu_parent">
 			<li class="tree-item" data-value="home">
@@ -98,7 +98,7 @@
 <section class="vstack gap-12" aria-labelledby="tree-access">
 	<h2 id="tree-access">Keyboard and accessibility</h2>
 	<ul>
-		<li>The tree is a list of lists with buttons and links — the disclosure pattern: Tab goes from one control to the next, <kbd>Enter</kbd> or <kbd>Space</kbd> opens or closes a group, and the toggle says it in <code>aria-expanded</code>. It is not the ARIA tree widget, which the APG itself keeps for choosing, not for links.</li>
+		<li>The tree is a list of lists with buttons and links - the disclosure pattern: Tab goes from one control to the next, <kbd>Enter</kbd> or <kbd>Space</kbd> opens or closes a group, and the toggle says it in <code>aria-expanded</code>. It is not the ARIA tree widget, which the APG itself keeps for choosing, not for links.</li>
 		<li>A toggle is named after its item; its chevron points along the line of reading, mirrored right to left.</li>
 		<li>The moves are a menu on the handle, so a keyboard, a screen reader and a single tap move an item as a drag does; after a move the focus stays on the moved item's handle and its new place is said politely.</li>
 	</ul>
