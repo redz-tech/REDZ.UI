@@ -36,31 +36,49 @@ function PROBE__VoiceOverBlocked(): string
 	return PROBE__ScreenLocked() ? 'the screen is locked, and Safari on the Mac draws no frames until it is unlocked' : '';
 }
 
-/** Each phrase VoiceOver says after an action, in order: listened for at least 1.5 s, until a second of quiet or $most seconds. */
-function PROBE__VoiceOverHeard(string $before, float $most): array
+/** Starts the listener: a JXA loop that reads VoiceOver's last phrase every 30 ms and writes each new one to $file,
+ *  after the time it was heard in ms — a phrase another quickly follows is kept, as one osascript per read lost it. */
+function PROBE__VoiceOverListen(string $file)
 {
-	$heard = [];
-	$last = $before;
-	$start = microtime(true);
-	$spoke = $start;
-	while (microtime(true) - $start < $most && (microtime(true) - $start < 1.5 || microtime(true) - $spoke < 1.0)) {
-		usleep(150000);
-		$phrase = PROBE__AppleScript('tell application "VoiceOver" to return content of last phrase');
-		if ($phrase !== '' && $phrase !== $last) {
-			$heard[] = $phrase;
-			$last = $phrase;
-			$spoke = microtime(true);
-		}
+	$script = 'const vo = Application("VoiceOver"); let last = ""; for (;;) { let phrase = ""; try { phrase = vo.lastPhrase.content(); } catch (error) {} if (phrase !== "" && phrase !== last) { last = phrase; console.log(Date.now() + "\t" + phrase.replace(/\s+/g, " ")); } delay(0.03); }';
+	$proc = proc_open(['/usr/bin/osascript', '-l', 'JavaScript', '-e', $script], [0 => ['file', '/dev/null', 'r'], 1 => ['file', '/dev/null', 'a'], 2 => ['file', $file, 'a']], $pipes);
+	if (!is_resource($proc)) {
+		throw new RuntimeException('cannot start the VoiceOver listener');
 	}
-	return $heard;
+	return $proc;
 }
 
-/** Starts VoiceOver, then Safari's session — VoiceOver's start would take the window from a session already open —
- *  goes through the config's steps on each page, records what VoiceOver says into the report. */
+/** The phrases the listener wrote since $since (ms), in order: read for at least 1.5 s, until $quiet seconds without a
+ *  new one — longer than VoiceOver waits before a hint — or $most seconds. */
+function PROBE__VoiceOverHeard(string $file, float $since, float $quiet, float $most): array
+{
+	while (true) {
+		$heard = [];
+		$spoke = $since;
+		foreach (file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [] as $line) {
+			[$at, $phrase] = explode("\t", $line, 2) + [1 => ''];
+			if ((float)$at >= $since) {
+				$heard[] = $phrase;
+				$spoke = (float)$at;
+			}
+		}
+		$now = microtime(true) * 1000;
+		if ($now - $since >= $most * 1000 || ($now - $since >= 1500 && $now - $spoke >= $quiet * 1000)) {
+			return $heard;
+		}
+		usleep(100000);
+	}
+}
+
+/** Starts VoiceOver and its listener, then Safari's session — VoiceOver's start would take the window from a session
+ *  already open — goes through the config's speech steps on each page, records what VoiceOver says into the report;
+ *  every phrase heard stays in the sheet's logs/NAME-phrases.log. */
 function PROBE__VoiceOverRun(string $name, string $dir, array $run, array &$report): void
 {
 	PROBE__Run([PROBE_VOICEOVER]);
 	$h = null;
+	$listener = null;
+	$log = $run['sheet'] . '/logs/' . $name . '-phrases.log';
 	try {
 		for ($tries = 0; PROBE__AppleScript('tell application "VoiceOver" to return bounds of vo cursor') === ''; $tries++) {
 			if ($tries > 60) {
@@ -68,6 +86,8 @@ function PROBE__VoiceOverRun(string $name, string $dir, array $run, array &$repo
 			}
 			usleep(500000);
 		}
+		@mkdir(dirname($log), 0777, true);
+		$listener = PROBE__VoiceOverListen($log);
 		$h = PROBE__SafariStart($dir);
 		$report['engines'][$name] = ['version' => $h['version'] . ' · VoiceOver · macOS ' . trim(PROBE__Run(['/usr/bin/sw_vers', '-productVersion'])), 'cells' => 0];
 		foreach ($run['config']['speech'] as $page => $steps) {
@@ -79,17 +99,17 @@ function PROBE__VoiceOverRun(string $name, string $dir, array $run, array &$repo
 				usleep(100000);
 			}
 			PROBE__AppleScript('tell application "Safari" to activate');
-			PROBE__VoiceOverHeard('', 3);
+			PROBE__VoiceOverHeard($log, microtime(true) * 1000, 1.0, 5);
 			foreach ($steps as $step) {
-				$before = PROBE__AppleScript('tell application "VoiceOver" to return content of last phrase');
+				$since = microtime(true) * 1000;
 				match ($step['do']) {
-					'focus' => PROBE__Do($h, 'Eval', '(() => { const el = document.querySelector(' . json_encode($step['target']) . '); if (el === null) { throw new Error("no ' . $step['target'] . ' on the page"); } el.focus(); return true; })()'),
+					'focus' => PROBE__Do($h, 'Eval', '(() => { const el = document.querySelector(' . json_encode($step['target']) . '); if (el === null) { throw new Error(' . json_encode('no ' . $step['target'] . ' on the page') . '); } el.focus(); return true; })()'),
 					'key' => PROBE__Do($h, 'Key', $step['key']),
 					'type' => PROBE__Do($h, 'Type', $step['text']),
 					'chord' => PROBE__Do($h, 'Chord', $step['keys']),
 					'eval' => PROBE__Do($h, 'Eval', $step['script']),
 				};
-				$heard = PROBE__VoiceOverHeard($before, 6);
+				$heard = PROBE__VoiceOverHeard($log, $since, 2.5, 10);
 				$said = mb_strtolower(implode(' · ', $heard));
 				$expect = [...$step['expect'], ...($step['voiceover'] ?? [])];
 				$missing = array_values(array_filter($expect, fn(string $words): bool => !str_contains($said, mb_strtolower($words))));
@@ -113,6 +133,10 @@ function PROBE__VoiceOverRun(string $name, string $dir, array $run, array &$repo
 	} finally {
 		if ($h !== null) {
 			PROBE__Do($h, 'Stop');
+		}
+		if ($listener !== null) {
+			proc_terminate($listener);
+			PROBE__Wait($listener);
 		}
 		PROBE__AppleScript('tell application "VoiceOver" to quit');
 	}
