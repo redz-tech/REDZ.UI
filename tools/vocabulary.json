@@ -2,6 +2,7 @@
 	"region": "region",
 	"breakpoints": {"sm": 576, "md": 768, "lg": 1024, "xl": 1280, "2xl": 1536},
 	"tones": ["primary", "secondary", "success", "danger", "warning", "info"],
+	"texts": {"busy": "text", "close": "text", "confirm.cancel": "text", "confirm.ok": "text", "create": "text", "file.size": "text", "file.type": "text", "found": "count", "moved": "text", "remove": "text", "strength.fair": "text", "strength.good": "text", "strength.short": "text", "strength.strong": "text"},
 	"scales": {
 		"space": [0, 2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64],
 		"fs": [12, 14, 16, 18, 20, 24, 32],

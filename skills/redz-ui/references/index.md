@@ -6,22 +6,22 @@ REDZ.UI is a stylesheet, its icons and one small script on the browser platform.
 
 ## Get it
 
-Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. `redz-ui-0.7.0.zip` holds the library's files and its passport, `redz-ui.json` — the version, the floor, the two files a project serves, the stylesheets and modules they are made of, every class, token, command and text key, and the sha256 of every file. `checks.zip` beside it is the sheet of the probes the release passed in every engine.
+Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. `redz-ui-0.7.1.zip` holds the library's files and its passport, `redz-ui.json` - the version, the floor, the two files a project serves, the stylesheets and modules they are made of, every class, token, command and text key, and the sha256 of every file. `checks.zip` beside it is the sheet of the probes the release passed in every engine.
 
 ```js
-gh release download v0.7.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
-gh release verify-asset v0.7.0 redz-ui-0.7.0.zip --repo redz-tech/REDZ.UI
+gh release download v0.7.1 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
+gh release verify-asset v0.7.1 redz-ui-0.7.1.zip --repo redz-tech/REDZ.UI
 ```
 
 Or from jsDelivr, which serves a release by its tag:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.7.0/dist/redz-ui.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.7.1/dist/redz-ui.min.css">
 ```
 
 ## Include it
 
-The stylesheet, the icons and the scripts, with the page's own words for the few things the library says — every word comes from the page, the library has none of its own.
+The stylesheet, the icons and the scripts, with the page's own words for the few things the library says - every word comes from the page, the library has none of its own.
 
 ```html
 <!doctype html>
@@ -38,20 +38,21 @@ The stylesheet, the icons and the scripts, with the page's own words for the few
 
 - `dist/redz-ui.min.css` is the layers, the tokens, the components and the utilities in one file, 21 KB gzipped: the stylesheets `css/index.css` pulls in, squeezed.
 - `css/icons.css` is apart: one mask per Bootstrap Icons file, used only by name.
-- `dist/redz-ui.min.js` is one ES module of the behaviors, 9 KB gzipped: the modules of `js/index.js` joined, squeezed and given short local names. It sets `REDZ.ui` for calls from code.
+- `dist/redz-ui.min.js` is one ES module of the behaviors, 14 KB gzipped: the modules of `js/index.js` joined, squeezed and given short local names. It sets `REDZ.ui` for calls from code.
+- The island `#redz-ui-text` gives the library its words, in the page's language: every key of the passport's `texts`, and for each key of its `plurals` the other forms its language's plural rules name (`found.one`, `found.few`). The example shows four of them.
 - The two files are made from `css/` and `js/`, which stay to read. A project that bundles its own may join the stylesheets in the passport's order instead.
 
 ## How it reads
 
-- A component, its variant, its size and its parts are one class each: `btn btn-primary btn-sm`, `card-header` — Bootstrap 5's names, and Bootstrap 6's where it moved onto the platform: `dialog`, `drawer`, `menu`.
-- A utility is `property-value`: `d-flex`, `text-muted`. The number is the value — `p-16` is 16 px, `w-50` is 50 %.
-- A condition is a prefix: `md:cols-2`, `print:d-none`. A width prefix measures the region the element sits in — a column, a card, a dialog — not the window.
+- A component, its variant, its size and its parts are one class each: `btn btn-primary btn-sm`, `card-header` - Bootstrap 5's names, and Bootstrap 6's where it moved onto the platform: `dialog`, `drawer`, `menu`.
+- A utility is `property-value`: `d-flex`, `text-muted`. The number is the value - `p-16` is 16 px, `w-50` is 50 %.
+- A condition is a prefix: `md:cols-2`, `print:d-none`. A width prefix measures the region the element sits in - a column, a card, a dialog - not the window.
 - A state is an HTML attribute: `aria-pressed`, `aria-current`, `disabled`, `[open]`. A button opens a menu or a dialog with the browser's own command: `commandfor` + `command`.
 - Tokens are `--redz-` plus the same words: `--redz-text-muted`, `--redz-space-16`.
 
 ## Theme and direction
 
-Without an attribute the page follows the system's light or dark. `data-theme="light"` or `data-theme="dark"` on `<html>` fixes one — set it on the server, so the page never flashes. Right to left is `dir="rtl"`: one stylesheet serves both directions, by logical properties, and icons that point mirror with `flip-rtl`.
+Without an attribute the page follows the system's light or dark. `data-theme="light"` or `data-theme="dark"` on `<html>` fixes one - set it on the server, so the page never flashes. Right to left is `dir="rtl"`: one stylesheet serves both directions, by logical properties, and icons that point mirror with `flip-rtl`.
 
 ```html
 <html lang="ar" dir="rtl" data-theme="dark">
@@ -69,7 +70,7 @@ Menus, tabs, dialogs and their keys need no call: the library listens on the doc
 
 ## Browsers
 
-Bootstrap 6's floor: Chrome and Edge 130+, Firefox 132+, Safari 18+ on macOS and iOS. What must work rests on features of the floor; invoker commands and anchor positioning are written in their final form, and a small script stands in below them. Every page of these docs is checked in real engines at the floor and above — [the checks](https://redz-tech.github.io/REDZ.UI/checks/).
+Bootstrap 6's floor: Chrome and Edge 130+, Firefox 132+, Safari 18+ on macOS and iOS. What must work rests on features of the floor; invoker commands and anchor positioning are written in their final form, and a small script stands in below them. Every page of these docs is checked in real engines at the floor and above - [the checks](https://redz-tech.github.io/REDZ.UI/checks/).
 
 ## From Bootstrap 5.3
 

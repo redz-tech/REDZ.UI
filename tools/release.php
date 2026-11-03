@@ -1,7 +1,7 @@
 <?php
-// release — what a tag v* publishes, for the release job of the Probes workflow: checks that the tag names the
+// release - what a tag v* publishes, for the release job of the Probes workflow: checks that the tag names the
 // passport's version and that the changelog has that version's section, then writes into DIR the archive
-// redz-ui-<version>.zip — `git archive` of the tag: the passport and every file it names, under redz-ui-<version>/ —
+// redz-ui-<version>.zip - `git archive` of the tag: the passport and every file it names, under redz-ui-<version>/ -
 // and notes.md, the release notes: that section of the changelog, what the files are and how to check them. The
 // archive is the same byte for byte wherever it is made, so anyone can rebuild a release's from its tag. Usage:
 // php tools/release.php TAG DIR
@@ -14,7 +14,7 @@ const RELEASE_SITE = 'https://redz-tech.github.io/REDZ.UI/';
 function RELEASE__Section(string $version): string
 {
 	$changelog = (string)file_get_contents(RELEASE_ROOT . '/CHANGELOG.md');
-	if (preg_match('~^## ' . preg_quote($version, '~') . ' [-—] \d{4}-\d{2}-\d{2}\n(.*?)(?=^## |\z)~msu', $changelog, $m) !== 1) {
+	if (preg_match('~^## ' . preg_quote($version, '~') . ' - \d{4}-\d{2}-\d{2}\n(.*?)(?=^## |\z)~msu', $changelog, $m) !== 1) {
 		return '';
 	}
 	return trim($m[1]);
@@ -24,7 +24,7 @@ function RELEASE__Section(string $version): string
 function RELEASE__Notes(string $tag, string $version, string $section): string
 {
 	return $section . "\n\n---\n\n"
-		. '**Files.** `redz-ui-' . $version . '.zip` — the library as released: `redz-ui.json`, its passport (the version, the floor, the two files a project serves, the stylesheets a bundle joins in their order, the modules, the vocabulary and the sha256 of every file), and every file it names — `dist/redz-ui.min.css` and `dist/redz-ui.min.js` among them. `checks.zip` — the sheet of the probes this release passed in every engine, also at ' . RELEASE_SITE . $version . "/checks/.\n\n"
+		. '**Files.** `redz-ui-' . $version . '.zip` - the library as released: `redz-ui.json`, its passport (the version, the floor, the two files a project serves, the stylesheets a bundle joins in their order, the modules, the vocabulary and the sha256 of every file), and every file it names - `dist/redz-ui.min.css` and `dist/redz-ui.min.js` among them. `checks.zip` - the sheet of the probes this release passed in every engine, also at ' . RELEASE_SITE . $version . "/checks/.\n\n"
 		. '**Check the archive:** `gh release verify-asset ' . $tag . ' redz-ui-' . $version . '.zip --repo ' . RELEASE_REPO . "`.\n";
 }
 

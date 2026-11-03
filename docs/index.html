@@ -100,16 +100,16 @@
 
 				<section class="vstack gap-12" aria-labelledby="index-get">
 					<h2 id="index-get">Get it</h2>
-					<p>Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. <code>redz-ui-0.7.0.zip</code> holds the library's files and its passport, <code>redz-ui.json</code> — the version, the floor, the two files a project serves, the stylesheets and modules they are made of, every class, token, command and text key, and the sha256 of every file. <code>checks.zip</code> beside it is the sheet of the probes the release passed in every engine.</p>
-					<pre class="docs-code" tabindex="0"><code>gh release download v0.7.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
-gh release verify-asset v0.7.0 redz-ui-0.7.0.zip --repo redz-tech/REDZ.UI</code></pre>
+					<p>Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. <code>redz-ui-0.7.1.zip</code> holds the library's files and its passport, <code>redz-ui.json</code> - the version, the floor, the two files a project serves, the stylesheets and modules they are made of, every class, token, command and text key, and the sha256 of every file. <code>checks.zip</code> beside it is the sheet of the probes the release passed in every engine.</p>
+					<pre class="docs-code" tabindex="0"><code>gh release download v0.7.1 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
+gh release verify-asset v0.7.1 redz-ui-0.7.1.zip --repo redz-tech/REDZ.UI</code></pre>
 					<p>Or from jsDelivr, which serves a release by its tag:</p>
-					<pre class="docs-code" tabindex="0"><code>&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.7.0/dist/redz-ui.min.css"&gt;</code></pre>
+					<pre class="docs-code" tabindex="0"><code>&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.7.1/dist/redz-ui.min.css"&gt;</code></pre>
 				</section>
 
 				<section class="vstack gap-12" aria-labelledby="index-include">
 					<h2 id="index-include">Include it</h2>
-					<p>The stylesheet, the icons and the scripts, with the page's own words for the few things the library says — every word comes from the page, the library has none of its own.</p>
+					<p>The stylesheet, the icons and the scripts, with the page's own words for the few things the library says - every word comes from the page, the library has none of its own.</p>
 					<pre class="docs-code" tabindex="0"><code>&lt;!doctype html&gt;
 &lt;html lang="en"&gt;
 &lt;head&gt;
@@ -123,7 +123,8 @@ gh release verify-asset v0.7.0 redz-ui-0.7.0.zip --repo redz-tech/REDZ.UI</code>
 					<ul>
 						<li><code>dist/redz-ui.min.css</code> is the layers, the tokens, the components and the utilities in one file, 21 KB gzipped: the stylesheets <code>css/index.css</code> pulls in, squeezed.</li>
 						<li><code>css/icons.css</code> is apart: one mask per Bootstrap Icons file, used only by name.</li>
-						<li><code>dist/redz-ui.min.js</code> is one ES module of the behaviors, 9 KB gzipped: the modules of <code>js/index.js</code> joined, squeezed and given short local names. It sets <code>REDZ.ui</code> for calls from code.</li>
+						<li><code>dist/redz-ui.min.js</code> is one ES module of the behaviors, 14 KB gzipped: the modules of <code>js/index.js</code> joined, squeezed and given short local names. It sets <code>REDZ.ui</code> for calls from code.</li>
+						<li>The island <code>#redz-ui-text</code> gives the library its words, in the page's language: every key of the passport's <code>texts</code>, and for each key of its <code>plurals</code> the other forms its language's plural rules name (<code>found.one</code>, <code>found.few</code>). The example shows four of them.</li>
 						<li>The two files are made from <code>css/</code> and <code>js/</code>, which stay to read. A project that bundles its own may join the stylesheets in the passport's order instead.</li>
 					</ul>
 				</section>
@@ -131,9 +132,9 @@ gh release verify-asset v0.7.0 redz-ui-0.7.0.zip --repo redz-tech/REDZ.UI</code>
 				<section class="vstack gap-12" aria-labelledby="index-reads">
 					<h2 id="index-reads">How it reads</h2>
 					<ul>
-						<li>A component, its variant, its size and its parts are one class each: <code>btn btn-primary btn-sm</code>, <code>card-header</code> — Bootstrap 5's names, and Bootstrap 6's where it moved onto the platform: <code>dialog</code>, <code>drawer</code>, <code>menu</code>.</li>
-						<li>A utility is <code>property-value</code>: <code>d-flex</code>, <code>text-muted</code>. The number is the value — <code>p-16</code> is 16 px, <code>w-50</code> is 50 %.</li>
-						<li>A condition is a prefix: <code>md:cols-2</code>, <code>print:d-none</code>. A width prefix measures the region the element sits in — a column, a card, a dialog — not the window.</li>
+						<li>A component, its variant, its size and its parts are one class each: <code>btn btn-primary btn-sm</code>, <code>card-header</code> - Bootstrap 5's names, and Bootstrap 6's where it moved onto the platform: <code>dialog</code>, <code>drawer</code>, <code>menu</code>.</li>
+						<li>A utility is <code>property-value</code>: <code>d-flex</code>, <code>text-muted</code>. The number is the value - <code>p-16</code> is 16 px, <code>w-50</code> is 50 %.</li>
+						<li>A condition is a prefix: <code>md:cols-2</code>, <code>print:d-none</code>. A width prefix measures the region the element sits in - a column, a card, a dialog - not the window.</li>
 						<li>A state is an HTML attribute: <code>aria-pressed</code>, <code>aria-current</code>, <code>disabled</code>, <code>[open]</code>. A button opens a menu or a dialog with the browser's own command: <code>commandfor</code> + <code>command</code>.</li>
 						<li>Tokens are <code>--redz-</code> plus the same words: <code>--redz-text-muted</code>, <code>--redz-space-16</code>.</li>
 					</ul>
@@ -141,7 +142,7 @@ gh release verify-asset v0.7.0 redz-ui-0.7.0.zip --repo redz-tech/REDZ.UI</code>
 
 				<section class="vstack gap-12" aria-labelledby="index-theme">
 					<h2 id="index-theme">Theme and direction</h2>
-					<p>Without an attribute the page follows the system's light or dark. <code>data-theme="light"</code> or <code>data-theme="dark"</code> on <code>&lt;html&gt;</code> fixes one — set it on the server, so the page never flashes. Right to left is <code>dir="rtl"</code>: one stylesheet serves both directions, by logical properties, and icons that point mirror with <code>flip-rtl</code>.</p>
+					<p>Without an attribute the page follows the system's light or dark. <code>data-theme="light"</code> or <code>data-theme="dark"</code> on <code>&lt;html&gt;</code> fixes one - set it on the server, so the page never flashes. Right to left is <code>dir="rtl"</code>: one stylesheet serves both directions, by logical properties, and icons that point mirror with <code>flip-rtl</code>.</p>
 					<pre class="docs-code" tabindex="0"><code>&lt;html lang="ar" dir="rtl" data-theme="dark"&gt;</code></pre>
 				</section>
 
@@ -160,7 +161,7 @@ gh release verify-asset v0.7.0 redz-ui-0.7.0.zip --repo redz-tech/REDZ.UI</code>
 
 				<section class="vstack gap-12" aria-labelledby="index-browsers">
 					<h2 id="index-browsers">Browsers</h2>
-					<p>Bootstrap 6's floor: Chrome and Edge 130+, Firefox 132+, Safari 18+ on macOS and iOS. What must work rests on features of the floor; invoker commands and anchor positioning are written in their final form, and a small script stands in below them. Every page of these docs is checked in real engines at the floor and above — <a href="../checks/">the checks</a>.</p>
+					<p>Bootstrap 6's floor: Chrome and Edge 130+, Firefox 132+, Safari 18+ on macOS and iOS. What must work rests on features of the floor; invoker commands and anchor positioning are written in their final form, and a small script stands in below them. Every page of these docs is checked in real engines at the floor and above - <a href="../checks/">the checks</a>.</p>
 				</section>
 
 						<section class="vstack gap-12" aria-labelledby="index-from-bootstrap">

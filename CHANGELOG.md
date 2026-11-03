@@ -4,9 +4,19 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
-## Unreleased
+## 0.7.1 - 2026-11-04
 
 ### Fixed
+- The passport's `texts` holds every key the island must give the library - `close`, `confirm.ok`, `confirm.cancel`,
+  `busy`, `remove`, `create`, `moved`, `file.type`, `file.size`, `strength.short` … `strength.strong`, `found.other` -
+  where 0.7.0's held only the first four, and its new `plurals` names the keys whose other plural forms a page may add
+  (`found`). The keys are declared once in `tools/vocabulary.json`; `php tools/build.php --check` holds them against
+  every `text('…')` and `textCount('…')` the scripts ask for and against the docs' texts.
+- The migration skill's `scan.sh` reads a class value that holds template code by its words: the text around the code
+  and the quoted strings inside it, not the code (PHP's `?`, `echo`, `===` were reported as unknown classes); a string
+  compared, a key or an index is no class; only the quoted names of `classList` calls count; a class joined in a
+  script's string is reported as built in code; minified files (`*.min.js`) are left out. On the ERP the findings went
+  from 21 192 to 14 935, the unknown ones from 5 458 to 1 902.
 - A combobox's button is collapsed by the time its closing panel hands the focus back to it: its `aria-expanded`
   follows the panel's `beforetoggle`, not its later `toggle`. NVDA in Firefox said the button expanded after a choice
   and never said it collapsed.

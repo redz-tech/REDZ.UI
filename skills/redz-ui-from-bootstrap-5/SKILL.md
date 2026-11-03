@@ -3,7 +3,7 @@ name: redz-ui-from-bootstrap-5
 description: Move a project's markup, styles and scripts from Bootstrap 5.3 to REDZ.UI, file by file - find what Bootstrap left with scripts/scan.sh and the map assets/map.tsv, rewrite each file whole, scan again until nothing is left. Use when a project links Bootstrap 5 (bootstrap.css, bootstrap.bundle.js, data-bs-* attributes, row and col grids) and is to run on REDZ.UI instead.
 license: MIT
 metadata:
-  version: "0.7.0"
+  version: "0.7.1"
   from: "bootstrap 5.3.8"
 ---
 
@@ -54,9 +54,11 @@ the project switches at once, so migrate on a branch and switch the `<link>` wit
   now - the scan reports class names in `querySelector`, `closest`, `matches` and `classList`.
 - **Classes built in code** (`'btn-' . $tone`, `class="alert-<?= $x ?>"`) are invisible to any scan: write the full
   names in a lookup - `['danger' => 'btn-danger', …]` - so the next scan reads them.
-- **Words come from the page.** REDZ.UI has no words of its own: the close button, the confirm's buttons and the busy
-  message read the island `<script type="application/json" id="redz-ui-text">` - keys `close`, `confirm.ok`,
-  `confirm.cancel`, `busy`.
+- **Words come from the page.** REDZ.UI has no words of its own: every word it shows reads the island
+  `<script type="application/json" id="redz-ui-text">`, whose keys are the passport's `texts` (`redz-ui.json`) -
+  `close`, `confirm.ok`, `confirm.cancel`, `busy`, `remove`, `create`, `moved`, `file.type`, `file.size`,
+  `strength.short` … `strength.strong`, `found.other` - and, for each key of its `plurals`, the other plural forms
+  (`found.one`, `found.few`).
 - **Icons stay**: `bi bi-NAME` keep their classes; swap the Bootstrap Icons font stylesheet for `css/icons.css`.
 
 ## The page

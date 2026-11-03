@@ -1,4 +1,4 @@
-# scan.awk — the reading behind scan.sh: the map and the class list first, then the project's files line by line.
+# scan.awk - the reading behind scan.sh: the map and the class list first, then the project's files line by line.
 BEGIN {
 	FS = "\t"
 	owned = split(own, prefixes, " ")
@@ -23,7 +23,8 @@ function report(token, what, form) {
 }
 
 function check(token,    i) {
-	if (token == "" || token ~ /[<>{}$()]/) {
+	# Code inside a class value - an operator, a quote, a number, a call - is no class.
+	if (token == "" || token ~ /[<>{}$()'"]/ || token !~ /[A-Za-z]/) {
 		return
 	}
 	if (token in kind) {
@@ -50,6 +51,50 @@ function classes(value,    n, i, tokens) {
 	}
 }
 
+# The words of a class value that holds template code (PHP, Twig, Jinja, JS templates, ERB): the text around the code
+# and the quoted strings inside it; the code itself - variables, operators, calls - names no class, and a part glued to
+# the code is one half of a class built in code, which the scan reports apart.
+function templated(value,    pairs, i, at, best, which, end, code, words) {
+	split("<?|?>|{{|}}|{%|%}|${|}|<%|%>", pairs, "|")
+	words = ""
+	while (1) {
+		best = 0
+		for (i = 1; i <= 9; i += 2) {
+			at = index(value, pairs[i])
+			if (at > 0 && (best == 0 || at < best)) {
+				best = at
+				which = i
+			}
+		}
+		if (best == 0) {
+			return glued(words, value, 0)
+		}
+		words = glued(words, substr(value, 1, best - 1), 1)
+		value = substr(value, best + length(pairs[which]))
+		end = index(value, pairs[which + 1])
+		code = end > 0 ? substr(value, 1, end - 1) : value
+		value = end > 0 ? substr(value, end + length(pairs[which + 1])) : ""
+		while (match(code, /'[^']*'|"[^"]*"/)) {
+			# A string compared, a key or an index names a value, not a class: $tone === 'x', ['danger' => …], $row['id'].
+			if (substr(code, 1, RSTART - 1) !~ /(==|!=|<|>|\[)[ \t]*$/ && substr(code, RSTART + RLENGTH) !~ /^[ \t]*(==|!=|=>|\])/) {
+				words = words " " substr(code, RSTART + 1, RLENGTH - 2)
+			}
+			code = substr(code, RSTART + RLENGTH)
+		}
+		if (value !~ /^[ \t]/) {
+			sub(/^[^ \t]+/, "", value)
+		}
+	}
+}
+
+# The words before $text joined with its own, the last one dropped when code follows it with no space between.
+function glued(words, text, before) {
+	if (before && text !~ /[ \t]$/) {
+		sub(/[^ \t]+$/, "", text)
+	}
+	return words " " text
+}
+
 {
 	rest = $0
 	while (match(rest, /class(Name)?[ \t]*=[ \t]*("[^"]*"|'[^']*')/)) {
@@ -59,6 +104,12 @@ function classes(value,    n, i, tokens) {
 		sub(/.$/, "", value)
 		if (value ~ /<\?|\{\{|\{%|\$\{|<%/) {
 			report("class", "review", "a class built in code: write every class name out whole")
+			value = templated(value)
+		}
+		# A class value joined in a script's string ('<span class="badge ' + tone + '">') names its variables no class.
+		if (value ~ /['"][ \t]*\+|\+[ \t]*['"]/) {
+			report("class", "review", "a class built in code: write every class name out whole")
+			gsub(/['"][ \t]*\+[^'"]*(\+[ \t]*['"]|$)/, " ", value)
 		}
 		classes(value)
 	}
@@ -66,9 +117,11 @@ function classes(value,    n, i, tokens) {
 	while (match(rest, /classList\.(add|remove|toggle|contains)\([^)]*\)/)) {
 		value = substr(rest, RSTART, RLENGTH)
 		rest = substr(rest, RSTART + RLENGTH)
-		gsub(/^classList\.[a-z]+\(|\)$|['"]/, "", value)
-		gsub(/,/, " ", value)
-		classes(value)
+		# Only the quoted names: toggle('active', on) names one class, its second argument is a condition.
+		while (match(value, /'[^']*'|"[^"]*"/)) {
+			classes(substr(value, RSTART + 1, RLENGTH - 2))
+			value = substr(value, RSTART + RLENGTH)
+		}
 	}
 	rest = $0
 	while (match(rest, /(querySelector(All)?|closest|matches)\(['"][^'"]*['"]/)) {
