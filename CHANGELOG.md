@@ -24,6 +24,9 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   Pages takes that run's sheet; a run whose job GitHub never placed on a runner reruns its failed jobs once by itself
   (`.github/workflows/rerun.yml`); a simulator's Safari that ends while pairing is started afresh before the next try;
   the engines' cache is restored from the last one when the config changes.
+- On a Mac whose own Safari is open, desktop Safari and VoiceOver are skipped with the reason: Safari 27 takes an
+  automation session only in a Safari `safaridriver` starts ("Safari was not launched for automation"), and the
+  owner's Safari is never quit; CI runs them.
 - A finding's parts are joined by " - ", the exceptions' findings with them.
 
 ### Every widget that speaks, heard by NVDA too

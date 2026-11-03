@@ -1,5 +1,5 @@
 <?php
-// probes, VoiceOver: the reader of tools/probes/speech.php in desktop Safari — its keys pressed by the Safari driver,
+// probes, VoiceOver: the reader of tools/probes/speech.php in desktop Safari - its keys pressed by the Safari driver,
 // every phrase written by a listener as it comes. VoiceOver obeys AppleScript only where the machine allows it: CI runs
 // php tools/probe.php voiceover-setup (the defaults, the flag file and the TCC rows, after @guidepup/setup 0.29.3, MIT); a
 // Mac's owner turns it on in VoiceOver Utility.
@@ -29,13 +29,13 @@ function PROBE__VoiceOverBlocked(): string
 	} catch (RuntimeException) {
 	}
 	if ($defaults !== '1' || !file_exists(PROBE_VOICEOVER_FLAG)) {
-		return 'VoiceOver may not be driven by AppleScript here — CI runs php tools/probe.php voiceover-setup; on a Mac its owner allows it in VoiceOver Utility';
+		return 'VoiceOver may not be driven by AppleScript here - CI runs php tools/probe.php voiceover-setup; on a Mac its owner allows it in VoiceOver Utility';
 	}
-	return PROBE__ScreenLocked() ? 'the screen is locked, and Safari on the Mac draws no frames until it is unlocked' : '';
+	return PROBE__ScreenLocked() ? 'the screen is locked, and Safari on the Mac draws no frames until it is unlocked' : PROBE__SafariBusy();
 }
 
 /** Starts the listener: a JXA loop that reads VoiceOver's last phrase every 30 ms and writes each new one to $file,
- *  after the time it was heard in ms — a phrase another quickly follows is kept, as one osascript per read lost it. */
+ *  after the time it was heard in ms - a phrase another quickly follows is kept, as one osascript per read lost it. */
 function PROBE__VoiceOverListen(string $file)
 {
 	$script = 'const vo = Application("VoiceOver"); let last = ""; for (;;) { let phrase = ""; try { phrase = vo.lastPhrase.content(); } catch (error) {} if (phrase !== "" && phrase !== last) { last = phrase; console.log(Date.now() + "\t" + phrase.replace(/\s+/g, " ")); } delay(0.03); }';
@@ -47,8 +47,8 @@ function PROBE__VoiceOverListen(string $file)
 }
 
 /** The phrases the listener wrote since the action began at $since (ms), in order: read for at least 1.5 s after it
- *  ended at $acted, until $quiet seconds without a new one — longer than VoiceOver waits before a hint, and than a
- *  widget waits for the typing to pause — or $most seconds. */
+ *  ended at $acted, until $quiet seconds without a new one - longer than VoiceOver waits before a hint, and than a
+ *  widget waits for the typing to pause - or $most seconds. */
 function PROBE__VoiceOverHeard(array &$r, float $since, float $acted, float $quiet, float $most): array
 {
 	while (true) {
@@ -69,8 +69,8 @@ function PROBE__VoiceOverHeard(array &$r, float $since, float $acted, float $qui
 	}
 }
 
-/** A loaded page made ready for VoiceOver: the docs' own header and navigation inert — its cursor, and the focus it
- *  carries, stay among the examples —, Safari in front, its first words let pass. */
+/** A loaded page made ready for VoiceOver: the docs' own header and navigation inert - its cursor, and the focus it
+ *  carries, stay among the examples -, Safari in front, its first words let pass. */
 function PROBE__VoiceOverReady(array &$r, array &$h, string $page): void
 {
 	PROBE__Do($h, 'Eval', '(() => { for (const chrome of document.querySelectorAll(".app-header, #docs-nav")) { chrome.inert = true; } return true; })()');
@@ -94,8 +94,8 @@ function PROBE__VoiceOverAct(array &$r, array &$h, array $step): void
 	};
 }
 
-/** Starts VoiceOver and its listener, then Safari's session — VoiceOver's start would take the window from a session
- *  already open — goes through the config's speech steps on each page, records what VoiceOver says into the report;
+/** Starts VoiceOver and its listener, then Safari's session - VoiceOver's start would take the window from a session
+ *  already open - goes through the config's speech steps on each page, records what VoiceOver says into the report;
  *  every phrase heard stays in the sheet's logs/NAME-phrases.log. */
 function PROBE__VoiceOverRun(string $name, string $dir, array $run, array &$report): void
 {

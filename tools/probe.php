@@ -161,6 +161,9 @@ function PROBE__Binary(string $name, array $engine, string &$why): string
 			$why = 'the screen is locked, and Safari on the Mac draws no frames until it is unlocked';
 			return '';
 		}
+		if (!isset($engine['ios']) && ($why = PROBE__SafariBusy()) !== '') {
+			return '';
+		}
 		return '/usr/bin/safaridriver';
 	}
 	if (isset($engine['binary'])) {

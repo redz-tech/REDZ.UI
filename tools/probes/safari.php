@@ -59,6 +59,18 @@ function PROBE__SafariStart(string $dir, string $ios = ''): array
 	return $h;
 }
 
+/** Why desktop Safari cannot be driven here now; '' when it can: Safari 27 takes an automation session only in a Safari
+ *  safaridriver starts ("Safari was not launched for automation"), and the Mac owner's open Safari is never quit. */
+function PROBE__SafariBusy(): string
+{
+	try {
+		PROBE__Run(['/usr/bin/pgrep', '-x', 'Safari']);
+	} catch (RuntimeException) {
+		return '';
+	}
+	return 'Safari is open as the Mac owner\'s browser, and Safari takes an automation session only when safaridriver starts it - close Safari to run it here; CI runs it';
+}
+
 /** Whether safaridriver answers its status. */
 function PROBE__SafariReady(array $h): bool
 {
