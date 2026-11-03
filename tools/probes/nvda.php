@@ -2,11 +2,11 @@
 // probes, NVDA: the reader of tools/probes/speech.php in Chrome and Firefox on Windows. A portable NVDA of the pinned
 // version, made from its official installer, runs on a config of the run; its Remote Access serves itself on a port of
 // the run as the follower, and the probe joins as the leader over TLS, the relay's own certificate pinned by its
-// fingerprint — every utterance comes as a phrase, every key goes in as a user's, so NVDA meets a page in browse mode and
+// fingerprint - every utterance comes as a phrase, every key goes in as a user's, so NVDA meets a page in browse mode and
 // switches to focus mode by itself. Before a page's steps NVDA reads the page whole by its quick navigation, against
 // what the page holds (tools/probes/read.js). CI runs php tools/probe.php nvda-setup first.
 
-// The named keys: the Windows virtual key code and whether the key is an extended one. NVDA is the NVDA key — Insert.
+// The named keys: the Windows virtual key code and whether the key is an extended one. NVDA is the NVDA key - Insert.
 const PROBE_NVDA_KEYS = ['Enter' => [0x0D, false], 'Space' => [0x20, false], 'Escape' => [0x1B, false], 'Tab' => [0x09, false], 'Backspace' => [0x08, false], 'ArrowDown' => [0x28, true], 'ArrowUp' => [0x26, true], 'ArrowLeft' => [0x25, true], 'ArrowRight' => [0x27, true], 'Home' => [0x24, true], 'End' => [0x23, true], 'Delete' => [0x2E, true], 'F6' => [0x75, false], 'Shift' => [0x10, false], 'Control' => [0x11, false], 'Alt' => [0x12, false], 'NVDA' => [0x2D, true]];
 // The signs of the US layout on their own keys, and the shifted ones by the sign or digit of their key.
 const PROBE_NVDA_SIGNS = ['-' => 0xBD, '=' => 0xBB, '[' => 0xDB, ']' => 0xDD, '\\' => 0xDC, ';' => 0xBA, "'" => 0xDE, ',' => 0xBC, '.' => 0xBE, '/' => 0xBF, '`' => 0xC0];
@@ -20,7 +20,7 @@ const PROBE_NVDA_LANDMARKS = ['banner' => 'banner', 'navigation' => 'navigation'
 /** Why NVDA cannot run here; '' when it can. */
 function PROBE__NvdaBlocked(): string
 {
-	return PHP_OS_FAMILY === 'Windows' ? '' : 'NVDA runs on Windows only — CI\'s windows-2025';
+	return PHP_OS_FAMILY === 'Windows' ? '' : 'NVDA runs on Windows only - CI\'s windows-2025';
 }
 
 /** The nvda.exe of the portable copy of the config's NVDA, made once into the cache from its official installer, whose
@@ -108,8 +108,8 @@ function PROBE__NvdaStart(string $name, string $exe, string $dir, string $log): 
 	return $r;
 }
 
-/** Joins the relay on $port with $key as the leader once its certificate's fingerprint is in $fingerprint — the relay
- *  writes it as it starts —, that certificate pinned; returns when the follower is in the channel. */
+/** Joins the relay on $port with $key as the leader once its certificate's fingerprint is in $fingerprint - the relay
+ *  writes it as it starts -, that certificate pinned; returns when the follower is in the channel. */
 function PROBE__NvdaJoin(array &$r, int $port, string $key, string $fingerprint): void
 {
 	for ($until = microtime(true) + 60; true; usleep(250000)) {
@@ -182,7 +182,7 @@ function PROBE__NvdaPump(array &$r, float $seconds): void
 	} while (microtime(true) < $until);
 }
 
-/** Keeps the words of an utterance — its strings; its commands of pitch, pauses and indexes left out — as a phrase. */
+/** Keeps the words of an utterance - its strings; its commands of pitch, pauses and indexes left out - as a phrase. */
 function PROBE__NvdaPhrase(array &$r, array $sequence): void
 {
 	$phrase = trim((string)preg_replace('~\s+~u', ' ', implode(', ', array_filter($sequence, fn(mixed $part): bool => is_string($part) && trim($part) !== ''))));
@@ -194,9 +194,10 @@ function PROBE__NvdaPhrase(array &$r, array $sequence): void
 }
 
 /** The phrases NVDA said since the action began at $since (ms), in order: read for at least 0.3 s after it ended at
- *  $acted, until $quiet seconds without a new one — longer than a widget waits for the typing to pause — or $most
- *  seconds. */
-function PROBE__NvdaHeard(array &$r, float $since, float $acted, float $quiet, float $most): array
+ *  $acted, until $quiet seconds without a new one - longer than a widget waits for the typing to pause - or $most
+ *  seconds. After a key NVDA always $answers, the quiet counts from its first phrase: a busy browser answers late, and
+ *  the next key's words would join this one's. */
+function PROBE__NvdaHeard(array &$r, float $since, float $acted, float $quiet, float $most, bool $answers = false): array
 {
 	$r['heard'] = array_values(array_filter($r['heard'], fn(array $phrase): bool => $phrase[0] >= $since));
 	while (true) {
@@ -204,14 +205,14 @@ function PROBE__NvdaHeard(array &$r, float $since, float $acted, float $quiet, f
 		$heard = array_column($r['heard'], 1);
 		$spoke = max([$acted, ...array_column($r['heard'], 0)]);
 		$now = microtime(true) * 1000;
-		if ($now - $acted >= $most * 1000 || ($now - $acted >= 300 && $now - $spoke >= $quiet * 1000)) {
+		if ($now - $acted >= $most * 1000 || ($now - $acted >= 300 && $now - $spoke >= $quiet * 1000 && (!$answers || $heard !== []))) {
 			return $heard;
 		}
 	}
 }
 
 /** The signs NVDA says as words at its default symbol level, some, read from the pinned copy's own $dic, the way NVDA
- *  tries them: its complex symbols first — every one, so a sentence's end is never a "dot" —, then the single signs,
+ *  tries them: its complex symbols first - every one, so a sentence's end is never a "dot" -, then the single signs,
  *  the longest first. Answers one pattern of a group a symbol and the words of the groups, '' for one said at a higher
  *  level only. */
 function PROBE__NvdaSymbols(string $dic): array
@@ -263,7 +264,7 @@ function PROBE__NvdaChar(string $char): array
 	};
 }
 
-/** Sends the keys — [virtual key, extended] — down in order, then up in reverse, through NVDA. */
+/** Sends the keys - [virtual key, extended] - down in order, then up in reverse, through NVDA. */
 function PROBE__NvdaKeys(array &$r, array $keys): void
 {
 	foreach ([true, false] as $pressed) {
@@ -273,7 +274,7 @@ function PROBE__NvdaKeys(array &$r, array $keys): void
 	}
 }
 
-/** Presses $combination — Enter, Control+Home, NVDA+t —, its modifiers held around its last key; Meta is Control here,
+/** Presses $combination - Enter, Control+Home, NVDA+t -, its modifiers held around its last key; Meta is Control here,
  *  as the library's shortcuts answer on Windows. */
 function PROBE__NvdaPress(array &$r, string $combination): void
 {
@@ -293,26 +294,27 @@ function PROBE__NvdaType(array &$r, string $text): void
 	}
 }
 
-/** Presses $combination and answers what NVDA said after it, until $quiet seconds without a new phrase. */
-function PROBE__NvdaSay(array &$r, string $combination, float $quiet = 0.5): array
+/** Presses $combination and answers what NVDA said after it, until $quiet seconds without a new phrase, counted from its
+ *  first phrase for a key NVDA always $answers. */
+function PROBE__NvdaSay(array &$r, string $combination, float $quiet = 0.5, bool $answers = false): array
 {
 	$since = microtime(true) * 1000;
 	PROBE__NvdaPress($r, $combination);
-	return PROBE__NvdaHeard($r, $since, microtime(true) * 1000, $quiet, 3);
+	return PROBE__NvdaHeard($r, $since, microtime(true) * 1000, $quiet, $answers ? 5 : 3, $answers);
 }
 
-/** A loaded page made ready for NVDA as a user meets it: the browser's window in front — Alt+Escape until NVDA's title
- *  is the page's —, the focus on the page, not the browser's bar — F6 until the document has it —, browse mode from the
+/** A loaded page made ready for NVDA as a user meets it: the browser's window in front - Alt+Escape until NVDA's title
+ *  is the page's -, the focus on the page, not the browser's bar - F6 until the document has it -, browse mode from the
  *  top, its first words let pass. */
 function PROBE__NvdaReady(array &$r, array &$h, string $page): void
 {
 	$title = (string)PROBE__Do($h, 'Eval', 'document.title');
 	PROBE__Do($h, 'Front');
-	// What NVDA said of the load passes first — it holds the title too —, and a busy browser may take a second to answer.
+	// What NVDA said of the load passes first - it holds the title too -, and a busy browser may take a second to answer.
 	PROBE__NvdaHeard($r, microtime(true) * 1000, microtime(true) * 1000, 1.0, 10);
-	for ($tries = 0; PROBE__SpeechMissing($r, [$title], $said = PROBE__NvdaSay($r, 'NVDA+t', 1.5)) !== []; $tries++) {
+	for ($tries = 0; PROBE__SpeechMissing($r, [$title], $said = PROBE__NvdaSay($r, 'NVDA+t', 1.0, true)) !== []; $tries++) {
 		if ($tries >= 10) {
-			throw new RuntimeException($page . ': the browser\'s window never came in front — NVDA+T said «' . implode(' · ', $said) . '»');
+			throw new RuntimeException($page . ': the browser\'s window never came in front - NVDA+T said «' . implode(' · ', $said) . '»');
 		}
 		PROBE__NvdaSay($r, 'Alt+Escape', 1.0);
 	}
@@ -323,8 +325,8 @@ function PROBE__NvdaReady(array &$r, array &$h, string $page): void
 		PROBE__NvdaSay($r, 'F6');
 	}
 	// Firefox can leave NVDA on the whole browser after its window comes in front (nvaccess/nvda #5758); a switch to focus
-	// mode and back puts NVDA on the page. The switch focuses what NVDA's cursor is on — NVDA brings its cursor back where
-	// it was on the page's last load —, so the focus leaves it again: a step's focus must arrive.
+	// mode and back puts NVDA on the page. The switch focuses what NVDA's cursor is on - NVDA brings its cursor back where
+	// it was on the page's last load -, so the focus leaves it again: a step's focus must arrive.
 	PROBE__NvdaSay($r, 'NVDA+Space');
 	PROBE__NvdaSay($r, 'NVDA+Space');
 	PROBE__Do($h, 'Eval', '(() => { document.activeElement?.blur(); addEventListener("keydown", (event) => { if (event.key === "Escape") { window.REDZ_PROBE_ESCAPES = (window.REDZ_PROBE_ESCAPES ?? 0) + 1; } }, true); return true; })()');
@@ -343,7 +345,7 @@ function PROBE__NvdaAct(array &$r, array &$h, array $step): void
 }
 
 /** Escape as a user presses it under NVDA: NVDA takes an Escape in focus mode for itself, back to browse mode, the page
- *  none the wiser — then the user presses it again, and NVDA hands it to the page. */
+ *  none the wiser - then the user presses it again, and NVDA hands it to the page. */
 function PROBE__NvdaEscape(array &$r, array &$h): void
 {
 	$seen = PROBE__Do($h, 'Eval', 'window.REDZ_PROBE_ESCAPES ?? 0');
@@ -353,8 +355,8 @@ function PROBE__NvdaEscape(array &$r, array &$h): void
 	}
 }
 
-/** NVDA reads the page whole by its quick navigation, on a page of its own: for each kind of item — headings by H,
- *  landmarks by D, form fields by F — from the top until NVDA says there is no next one, each press's words held in
+/** NVDA reads the page whole by its quick navigation, on a page of its own: for each kind of item - headings by H,
+ *  landmarks by D, form fields by F - from the top until NVDA says there is no next one, each press's words held in
  *  order against what the page holds (tools/probes/read.js). An item NVDA never says, and an item with no words to say,
  *  are findings; answers what was read and the findings, an exception's not among them. */
 function PROBE__NvdaRead(array &$r, array &$h, string $page, array $run, array &$report): array
@@ -367,10 +369,10 @@ function PROBE__NvdaRead(array &$r, array &$h, string $page, array $run, array &
 	$findings = [];
 	foreach (PROBE_NVDA_READ as $kind => [$key, $end]) {
 		$items = $holds[$kind];
-		// The top of the page is already inside its first item — the banner —, which NVDA says there, not at the first key.
-		$said = [implode(', ', PROBE__NvdaSay($r, 'Control+Home'))];
+		// The top of the page is already inside its first item - the banner -, which NVDA says there, not at the first key.
+		$said = [implode(', ', PROBE__NvdaSay($r, 'Control+Home', 0.5, true))];
 		for ($press = 0; $press < 2 * count($items) + 10; $press++) {
-			$words = implode(', ', PROBE__NvdaSay($r, $key, 0.4));
+			$words = implode(', ', PROBE__NvdaSay($r, $key, 0.4, true));
 			if (str_contains(PROBE__SpeechWords($words), $end)) {
 				break;
 			}
@@ -386,8 +388,8 @@ function PROBE__NvdaRead(array &$r, array &$h, string $page, array $run, array &
 			}
 			$read[] = ['engine' => $name, 'kind' => $kind, 'item' => $label, 'expect' => $expect, 'said' => $found === null ? '' : $said[$found]];
 			$finding = match (true) {
-				$item['words'] === '' && $kind !== 'landmark' => $name . ' ' . $page . ' — NVDA\'s reading by ' . strtoupper($key) . ': ' . $label . ' has no words to say',
-				$found === null => $name . ' ' . $page . ' — NVDA\'s reading by ' . strtoupper($key) . ' never said «' . implode('», «', $expect) . '» of ' . $label,
+				$item['words'] === '' && $kind !== 'landmark' => $name . ' ' . $page . " \u{2014} NVDA's reading by " . strtoupper($key) . ': ' . $label . ' has no words to say',
+				$found === null => $name . ' ' . $page . " \u{2014} NVDA's reading by " . strtoupper($key) . ' never said «' . implode('», «', $expect) . '» of ' . $label,
 				default => '',
 			};
 			$at = $found === null ? $at : $found + 1;
@@ -444,9 +446,9 @@ function PROBE__NvdaStop(array &$r): void
 	PROBE__Wait($r['proc']);
 }
 
-/** Readies CI's Windows for NVDA: the apps' notifications off — NVDA reads one aloud and follows it, as it did Firefox's
- *  "pin to taskbar" in the middle of a page —, and a window the probe starts may come in front of the others: Windows'
- *  foreground lock off for later sessions, and for this one where Windows lets the setup change it — otherwise NVDA's
+/** Readies CI's Windows for NVDA: the apps' notifications off - NVDA reads one aloud and follows it, as it did Firefox's
+ *  "pin to taskbar" in the middle of a page -, and a window the probe starts may come in front of the others: Windows'
+ *  foreground lock off for later sessions, and for this one where Windows lets the setup change it - otherwise NVDA's
  *  Alt+Escape brings the window. */
 function PROBE__NvdaSetup(): int
 {
