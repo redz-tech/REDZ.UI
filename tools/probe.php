@@ -910,12 +910,27 @@ function PROBE__Verdict(array $config, array &$report): int
 	return $report['findings'] === [] ? 0 : 1;
 }
 
-/** merge: one sheet of the sheets in $dirs - their reports joined, their shots, prints and logs copied; the exit code. */
-function PROBE__Merge(array $config, array $dirs): int
+/** merge: one sheet of the sheets in $dirs - their reports joined, their shots, prints and logs copied; the exit code.
+ *  On a $base sheet (the last commit every part passed): the base whole, each page the parts checked again taken from
+ *  the parts instead, as every engine that runs a page ran it again. */
+function PROBE__Merge(array $config, array $dirs, string $base = ''): int
 {
 	$work = PROBE_SHEET . '.new';
 	PROBE__Remove($work);
 	$report = null;
+	if ($base !== '') {
+		$under = json_decode((string)@file_get_contents($base . '/report.json'), true);
+		if (!is_array($under)) {
+			fwrite(STDERR, $base . '/report.json is missing or not a report' . "\n");
+			return 2;
+		}
+		foreach (['shots', 'print', 'logs'] as $folder) {
+			@mkdir($work . '/' . $folder, 0777, true);
+			foreach (glob($base . '/' . $folder . '/*') ?: [] as $file) {
+				copy($file, $work . '/' . $folder . '/' . basename($file));
+			}
+		}
+	}
 	foreach ($dirs as $dir) {
 		$part = json_decode((string)@file_get_contents($dir . '/report.json'), true);
 		if (!is_array($part)) {
@@ -943,9 +958,27 @@ function PROBE__Merge(array $config, array $dirs): int
 			}
 		}
 	}
-	if ($report === null) {
+	if ($report === null && $base === '') {
 		fwrite(STDERR, "merge needs the folders of the sheets to join\n");
 		return 2;
+	}
+	if ($base !== '') {
+		try {
+			$commit = trim(PROBE__Run(['git', '-C', PROBE_ROOT, 'rev-parse', '--short', 'HEAD']));
+		} catch (RuntimeException) {
+			$commit = '';
+		}
+		$fresh = $report ?? ['when' => gmdate('Y-m-d H:i') . ' UTC', 'commit' => $commit === '' ? 'no commit' : 'commit ' . $commit, 'engines' => [], 'skipped' => [], 'findings' => [], 'guarded' => [], 'walked' => [], 'spoken' => [], 'read' => [], 'shots' => [], 'used' => [], 'only' => []];
+		$report = ['when' => $fresh['when'], 'commit' => $fresh['commit'], 'base' => $under['commit'], 'delta' => $fresh['only'] ?? []] + $under;
+		$report['engines'] = $fresh['engines'] + $under['engines'];
+		$report['skipped'] = $fresh['skipped'] + $under['skipped'];
+		$report['used'] = $fresh['used'] + $under['used'];
+		$report['findings'] = [...$under['findings'], ...$fresh['findings']];
+		$report['guarded'] = [...$under['guarded'], ...$fresh['guarded']];
+		foreach (['walked', 'spoken', 'read', 'shots'] as $key) {
+			$report[$key] = array_replace($under[$key] ?? [], $fresh[$key] ?? []);
+		}
+		$report['only'] = [];
 	}
 	$status = PROBE__Verdict($config, $report);
 	PROBE__SheetWrite($work, $report);
@@ -970,6 +1003,91 @@ function PROBE__Only(array $config, array $pages): array
 	$config['speech'] = array_intersect_key($config['speech'], array_flip($pages));
 	$config['only'] = array_values($pages);
 	return $config;
+}
+
+/**
+ * What a changed file asks of the probes: '' when they read nothing of it (texts, skills, the build and release tools,
+ * the passport, generated twins of the docs), the page it is when it is one, or '*' when it reaches every page (the
+ * stylesheets, the scripts, the icons, the probes themselves, anything else).
+ */
+function PROBE__TouchedPage(string $file): string
+{
+	$inert = '~\.md$|^skills/|^llms(-full)?\.txt$|^(LICENSE|NOTICE|\.gitignore|redz-ui\.json)$|^tools/(build|release|map|docs|floor|dashes)\.php$|^tools/(map|floor)/|^tools/(docs|vocabulary)\.json$|^docs/ar\.tsv$|^\.github/workflows/(check|pages|rerun)\.yml$~';
+	if (preg_match($inert, $file) === 1) {
+		return '';
+	}
+	if (preg_match('~^(index\.html)$|^docs/src/([\w-]+)\.html$|^(docs|reference/demo)/([\w-]+?)(\.ar)?\.html$~', $file, $m) === 1) {
+		return match (true) {
+			($m[1] ?? '') !== '' => 'index.html',
+			($m[2] ?? '') !== '' => 'docs/' . $m[2] . '.html',
+			default => $m[3] . '/' . $m[4] . '.html',
+		};
+	}
+	return '*';
+}
+
+/** Whether the stylesheet or script $file changed since $base in its comments alone - a whole-line comment, a banner,
+ *  a docblock's line in a script -, which no engine renders or runs. */
+function PROBE__CommentsOnly(string $base, string $file): bool
+{
+	$diff = PROBE__Run(['git', '-C', PROBE_ROOT, 'diff', '-U0', '--no-color', $base, 'HEAD', '--', $file]);
+	$comment = str_ends_with($file, '.js') ? '~^[+-]\s*(/\*.*\*/|//.*|\*( .*)?|\*/)?\s*$~' : '~^[+-]\s*(/\*.*\*/)?\s*$~';
+	foreach (explode("\n", $diff) as $line) {
+		if (preg_match('~^[+-]~', $line) === 1 && !str_starts_with($line, '+++') && !str_starts_with($line, '---') && preg_match($comment, $line) !== 1) {
+			return false;
+		}
+	}
+	return true;
+}
+
+/**
+ * The pages engine $name runs: a reader's speech pages, a simulator's full pages, a docs engine's full and docs pages,
+ * any other engine's full pages.
+ * @return list<string>
+ */
+function PROBE__EnginePages(array $config, string $name): array
+{
+	$engine = $config['engines'][$name];
+	return match (true) {
+		in_array($engine['kind'], ['voiceover', 'nvda'], true) => array_keys($config['speech']),
+		isset($engine['ios']) => $config['pages'],
+		in_array($name, $config['docs']['engines'], true) => [...$config['pages'], ...PROBE__DocsPages($config)],
+		default => $config['pages'],
+	};
+}
+
+/** affected: what the files changed since the commit $base ask of CI's parts ($all, the workflow's list), as JSON - the
+ *  mode "full" (every part, every page), "pages" (the parts whose engines run a changed page, those pages only) or
+ *  "none" (the probes read none of it), the parts, the pages and each file's verdict; the exit code. */
+function PROBE__Affected(array $config, string $base, array $all): int
+{
+	try {
+		$files = array_filter(explode("\n", PROBE__Run(['git', '-C', PROBE_ROOT, 'diff', '--name-only', $base, 'HEAD'])));
+	} catch (RuntimeException $e) {
+		fwrite(STDERR, $e->getMessage() . "\n");
+		return 2;
+	}
+	$touched = [];
+	foreach ($files as $file) {
+		$touched[$file] = PROBE__TouchedPage($file);
+		if ($touched[$file] === '*' && preg_match('~\.(css|js)$~', $file) === 1 && is_file(PROBE_ROOT . '/' . $file) && PROBE__CommentsOnly($base, $file)) {
+			$touched[$file] = '';
+		}
+	}
+	$pages = array_values(array_unique(array_filter($touched, fn(string $page): bool => $page !== '' && $page !== '*')));
+	$known = [...$config['pages'], ...PROBE__DocsPages($config), ...array_keys($config['speech'])];
+	$full = in_array('*', $touched, true) || array_diff($pages, $known) !== [];
+	$parts = $full ? $all : array_values(array_filter($all, function (array $part) use ($config, $pages): bool {
+		foreach (preg_split('~\s+~', trim($part['engines'])) as $name) {
+			if (isset($config['engines'][$name]) && array_intersect(PROBE__EnginePages($config, $name), $pages) !== []) {
+				return true;
+			}
+		}
+		return false;
+	}));
+	$mode = $full ? 'full' : ($parts === [] ? 'none' : 'pages');
+	echo json_encode(['mode' => $mode, 'parts' => $parts, 'pages' => $full ? [] : $pages, 'files' => $touched], JSON_UNESCAPED_SLASHES), "\n";
+	return 0;
 }
 
 /** Runs the engines at once, a process a group, each writing a sheet of its own, then one sheet of them all: every
@@ -1013,12 +1131,13 @@ function PROBE__Parallel(array $config, array $groups, array $options): int
 function PROBE__Main(array $argv): int
 {
 	$config = json_decode((string)file_get_contents(PROBE_CONFIG), true, 512, JSON_THROW_ON_ERROR);
-	$options = ['pages' => [], 'sheet' => PROBE_SHEET, 'serial' => false, 'full' => false];
+	$options = ['pages' => [], 'sheet' => PROBE_SHEET, 'serial' => false, 'full' => false, 'base' => ''];
 	$args = [];
 	foreach (array_slice($argv, 1) as $arg) {
 		match (true) {
 			str_starts_with($arg, '--pages=') => $options['pages'] = preg_split('~[\s,]+~', substr($arg, strlen('--pages=')), -1, PREG_SPLIT_NO_EMPTY),
 			str_starts_with($arg, '--sheet=') => $options['sheet'] = substr($arg, strlen('--sheet=')),
+			str_starts_with($arg, '--base=') => $options['base'] = substr($arg, strlen('--base=')),
 			$arg === '--serial' => $options['serial'] = true,
 			// A group of a full run: its engines were not named, so one that cannot run here is only a note.
 			$arg === '--full' => $options['full'] = true,
@@ -1027,7 +1146,10 @@ function PROBE__Main(array $argv): int
 	}
 	$options['named'] = $args !== [] && !$options['full'];
 	if (($args[0] ?? '') === 'merge') {
-		return PROBE__Merge($config, array_slice($args, 1));
+		return PROBE__Merge($config, array_slice($args, 1), $options['base']);
+	}
+	if (($args[0] ?? '') === 'affected') {
+		return PROBE__Affected($config, $args[1] ?? '', json_decode((string)getenv('ALL'), true) ?: []);
 	}
 	if (($args[0] ?? '') === 'voiceover-setup') {
 		return PROBE__VoiceOverSetup();

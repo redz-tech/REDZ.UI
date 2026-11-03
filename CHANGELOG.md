@@ -30,8 +30,11 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - `php tools/probe.php` runs the engines at once on a Mac, a process each, the ones `safaridriver` drives (Safari,
   VoiceOver, the simulators) one after another, and joins their sheets; `--serial` keeps the old way. `--pages=PAGE,…` (and the workflows'
   `pages` input) checks only those pages, leaving the other pages' exceptions unjudged.
-- CI runs no part again for a commit that a run of every part already passed (a branch fast-forwarded to `main`), and
-  Pages takes that run's sheet; a run whose job GitHub never placed on a runner reruns its failed jobs once by itself
+- CI checks only what changed since the nearest commit that passed: `php tools/probe.php affected` sorts the changed
+  files into what the probes never read (texts, skills, the build and release tools, comments), pages (only those, in
+  the parts whose engines run them) and the rest (every part); the run's sheet is the base's with those pages checked
+  again, and a run that passes leaves the artifact `verified` for the next one. A commit that passed runs nothing
+  again (a branch fast-forwarded to `main`, a tag on a passed commit), and Pages takes that run's sheet; a run whose job GitHub never placed on a runner reruns its failed jobs once by itself
   (`.github/workflows/rerun.yml`); a simulator's Safari that ends while pairing is started afresh before the next try;
   the engines' cache is restored from the last one when the config changes.
 - On a Mac whose own Safari is open, desktop Safari and VoiceOver are skipped with the reason: Safari 27 takes an

@@ -25,23 +25,40 @@ jobs:
     # Chrome lags (152), so the current Chrome is a pinned Chrome for Testing build (chrome-156 in the config).
     # Seven macOS parts, five at a time - the most macOS jobs a free account runs together - and two Windows parts beside
     # them, each its own sheet, joined below; VoiceOver on macOS 15, the first with its activedescendant fix, and on macOS
-    # 26; NVDA in Chrome and in Firefox on Windows Server 2025. A push, a pull request and a tag run them all - but a
-    # push to main of a commit that a run with every part already passed (the branch's, fast-forwarded) runs none, and
-    # Pages takes that run's sheet.
+    # 26; NVDA in Chrome and in Firefox on Windows Server 2025.
+    # A push, a pull request and a tag run only what changed since the nearest commit that passed (every part, or what
+    # changed on top of a commit that passed - its run left the artifact "verified"): `php tools/probe.php affected`
+    # says the mode - "full", "pages" (the parts whose engines run a changed page, those pages only) or "none" (the probes
+    # read none of it: texts, skills, the build tools; their own checks run in Check) - and the sheet is the base's with
+    # the pages checked again in place. A manual run with no input runs everything; one naming parts or pages is a lab
+    # run, which never counts as passed.
     runs-on: ubuntu-latest
     permissions:
       contents: read
       actions: read
     outputs:
+      mode: ${{ steps.plan.outputs.mode }}
       parts: ${{ steps.plan.outputs.parts }}
       dirs: ${{ steps.plan.outputs.dirs }}
-      verified: ${{ steps.plan.outputs.verified }}
+      pages: ${{ steps.plan.outputs.pages }}
+      base: ${{ steps.plan.outputs.base }}
     steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: '8.5'
+          coverage: none
+          tools: none
+
       - id: plan
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           WANTED: ${{ inputs.parts }}
+          PAGES: ${{ inputs.pages }}
           ALL: >-
             [{"name": "chrome", "engines": "chrome-156"},
             {"name": "firefox", "engines": "firefox"},
@@ -54,32 +71,75 @@ jobs:
             {"name": "nvda-firefox", "engines": "nvda-firefox", "runner": "windows-2025"}]
         run: |
           set -eu
-          parts=$(jq -c --arg wanted "${WANTED:-}" '($wanted | split(" ") | map(select(. != ""))) as $w | map(select($w == [] or (.name as $n | any($w[]; . == $n))))' <<< "$ALL")
-          if [ "$(jq length <<< "$parts")" -eq 0 ]; then
-            echo "no part is named ${WANTED}" >&2
-            exit 1
-          fi
-          echo "parts=${parts}" >> "$GITHUB_OUTPUT"
-          echo "dirs=$(jq -r 'map("parts/part-" + .name) | join(" ")' <<< "$parts")" >> "$GITHUB_OUTPUT"
-          verified=""
-          if [ "${GITHUB_EVENT_NAME}" = push ] && [ "${GITHUB_REF}" = refs/heads/main ]; then
-            want=$(jq -c '[.[] | "probes (" + .name + ")"]' <<< "$ALL")
-            for id in $(gh run list --workflow probes.yml --commit "${GITHUB_SHA}" --status success --limit 20 --json databaseId --jq '.[].databaseId'); do
-              have=$(gh run view "$id" --json jobs --jq '[.jobs[] | select(.conclusion == "success") | .name]')
-              if jq -e --argjson want "$want" '. as $have | ($want - $have) == []' <<< "$have" > /dev/null; then
-                verified="$id"
-                break
+          want=$(jq -c '[.[] | "probes (" + .name + ")"]' <<< "$ALL")
+          # The run that passed commit $1: it left the artifact "verified", or every part of it passed; '' when none did.
+          passed() {
+            for id in $(gh run list --workflow probes.yml --commit "$1" --status success --limit 20 --json databaseId --jq '.[].databaseId'); do
+              if gh api "repos/${GH_REPO}/actions/runs/${id}/artifacts" --jq '.artifacts[].name' | grep -qx verified; then
+                echo "$id"
+                return
+              fi
+              if gh run view "$id" --json jobs --jq '[.jobs[] | select(.conclusion == "success") | .name]' | jq -e --argjson want "$want" '. as $have | ($want - $have) == []' > /dev/null; then
+                echo "$id"
+                return
               fi
             done
+          }
+          mode=full
+          parts="$ALL"
+          pages=""
+          base=""
+          if [ "${GITHUB_EVENT_NAME}" = workflow_dispatch ]; then
+            if [ -n "${WANTED:-}" ] || [ -n "${PAGES:-}" ]; then
+              mode=lab
+              pages="${PAGES:-}"
+              parts=$(jq -c --arg wanted "${WANTED:-}" '($wanted | split(" ") | map(select(. != ""))) as $w | map(select($w == [] or (.name as $n | any($w[]; . == $n))))' <<< "$ALL")
+              if [ "$(jq length <<< "$parts")" -eq 0 ]; then
+                echo "no part is named ${WANTED}" >&2
+                exit 1
+              fi
+            fi
+          else
+            base=$(passed "${GITHUB_SHA}")
+            if [ -n "$base" ]; then
+              mode=none
+              echo "${GITHUB_SHA} passed in run ${base}: no part runs again." >> "$GITHUB_STEP_SUMMARY"
+            else
+              for sha in $(git rev-list --first-parent --max-count=30 HEAD^ 2> /dev/null || true); do
+                base=$(passed "$sha")
+                if [ -n "$base" ]; then
+                  sel=$(php tools/probe.php affected "$sha")
+                  mode=$(jq -r .mode <<< "$sel")
+                  parts=$(jq -c .parts <<< "$sel")
+                  pages=$(jq -r '.pages | join(",")' <<< "$sel")
+                  {
+                    echo "On top of ${sha} (run ${base}): mode ${mode}, parts $(jq -r '[.[].name] | join(", ")' <<< "$parts"), pages ${pages:-all}."
+                    echo
+                    jq -r '.files | to_entries[] | "- `" + .key + "`: " + (if .value == "" then "the probes read none of it" elif .value == "*" then "every page" else .value end)' <<< "$sel"
+                  } >> "$GITHUB_STEP_SUMMARY"
+                  break
+                fi
+              done
+              if [ "$mode" = full ]; then
+                base=""
+              fi
+            fi
           fi
-          echo "verified=${verified}" >> "$GITHUB_OUTPUT"
-          if [ -n "$verified" ]; then
-            echo "Every part of ${GITHUB_SHA} passed in run ${verified}: no part runs again." >> "$GITHUB_STEP_SUMMARY"
+          dirs=$(jq -r 'map("parts/part-" + .name) | join(" ")' <<< "$parts")
+          if [ "$mode" = none ]; then
+            # No part runs; the matrix still gets a list, as GitHub reads it before the job's condition.
+            parts="$ALL"
+            dirs=""
           fi
+          echo "mode=${mode}" >> "$GITHUB_OUTPUT"
+          echo "parts=${parts}" >> "$GITHUB_OUTPUT"
+          echo "dirs=${dirs}" >> "$GITHUB_OUTPUT"
+          echo "pages=${pages}" >> "$GITHUB_OUTPUT"
+          echo "base=${base}" >> "$GITHUB_OUTPUT"
 
   probes:
     needs: plan
-    if: needs.plan.outputs.verified == ''
+    if: needs.plan.outputs.mode != 'none'
     name: probes (${{ matrix.part.name }})
     runs-on: ${{ matrix.part.runner || 'macos-15' }}
     timeout-minutes: 60
@@ -119,7 +179,7 @@ jobs:
         shell: bash
         env:
           ENGINES: ${{ matrix.part.engines }}
-          PAGES: ${{ inputs.pages }}
+          PAGES: ${{ needs.plan.outputs.pages }}
         run: php tools/probe.php ${PAGES:+"--pages=$PAGES"} $ENGINES
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -131,7 +191,7 @@ jobs:
 
   sheet:
     needs: [plan, probes]
-    if: always() && needs.plan.result == 'success' && needs.plan.outputs.verified == ''
+    if: always() && needs.plan.result == 'success'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -145,15 +205,37 @@ jobs:
           coverage: none
           tools: none
 
-      - name: One sheet of the parts
+      - name: One sheet of the parts, on the base's when the run checked only what changed
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           DIRS: ${{ needs.plan.outputs.dirs }}
+          BASE: ${{ needs.plan.outputs.base }}
         run: |
           set -eu
-          gh run download "${GITHUB_RUN_ID}" --pattern 'part-*' --dir parts
-          php tools/probe.php merge ${DIRS}
+          if [ -n "$DIRS" ]; then
+            gh run download "${GITHUB_RUN_ID}" --pattern 'part-*' --dir parts
+          fi
+          if [ -n "$BASE" ]; then
+            gh run download "$BASE" --name checks --dir base
+          fi
+          php tools/probe.php merge ${BASE:+--base=base} ${DIRS}
+
+      - name: Mark the commit passed, for the next run's plan
+        if: success() && needs.plan.outputs.mode != 'lab' && (needs.probes.result == 'success' || needs.probes.result == 'skipped')
+        env:
+          MODE: ${{ needs.plan.outputs.mode }}
+          BASE: ${{ needs.plan.outputs.base }}
+        run: |
+          set -eu
+          mkdir -p verified
+          printf '{"commit": "%s", "mode": "%s", "base_run": "%s"}\n' "${GITHUB_SHA}" "$MODE" "$BASE" > verified/verified.json
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: success() && needs.plan.outputs.mode != 'lab' && (needs.probes.result == 'success' || needs.probes.result == 'skipped')
+        with:
+          name: verified
+          path: verified
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
@@ -165,8 +247,8 @@ jobs:
   release:
     # A tag v* becomes a release only when every part of the probes is clean: a draft with the archive and the sheet,
     # then published - the repository's immutable releases lock the tag and the files and sign an attestation of them.
-    needs: [probes, sheet]
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: [plan, probes, sheet]
+    if: always() && github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && needs.sheet.result == 'success' && (needs.probes.result == 'success' || needs.probes.result == 'skipped')
     runs-on: ubuntu-latest
     permissions:
       contents: write

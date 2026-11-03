@@ -188,7 +188,8 @@ merge` - on macOS 15, VoiceOver also on macOS 26, NVDA on Windows Server 2025, w
 the current Chrome, as the images' own lag; every release publishes its sheet under `checks/` on the site. On a Mac the
 engines run at once, a process each (the engines `safaridriver` drives, Safari, VoiceOver and the simulators, one after
 another; `--serial` runs them all so), and `--pages=docs/menu.html,…` checks only those pages, as the workflow's `pages` input does for a lab
-run. A push to `main` of a commit a run of every part already passed runs nothing again, and a run whose job GitHub
+run. CI checks only what changed since the nearest commit that passed (`php tools/probe.php affected BASE` says what and
+why: nothing for texts and tools, the changed pages alone, or everything), a commit that passed runs nothing again, and a run whose job GitHub
 never placed on a runner runs its failed jobs once more by itself.
 
 ## Releases
