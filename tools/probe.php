@@ -355,7 +355,8 @@ function PROBE__Mirror(array &$h): array
 
 /** One cell — $page at $width × $height (a simulator: its own screen when 0), $theme and $dir, normal, docs or forced
  *  colors: judged; normal or forced at a shot width shot; normal or docs at a shot width its popovers opened and axe
- *  run; normal at 1440 walked by keyboard and its state mirror and Arabic fonts checked. */
+ *  run; normal at 1440 its state mirror checked on the page as loaded, then walked by keyboard and its Arabic fonts
+ *  checked. */
 function PROBE__Cell(array &$h, string $name, string $page, string $combo, string $theme, string $dir, int $width, int $height, string $mode, array $run, array &$report): void
 {
 	$forced = $mode === 'forced';
@@ -408,13 +409,13 @@ function PROBE__Cell(array &$h, string $name, string $page, string $combo, strin
 		}
 	}
 	if ($width === 1440 && $mode === 'normal') {
+		if ($theme === 'light' && $dir === 'ltr') {
+			$findings = [...$findings, ...PROBE__Mirror($h)];
+		}
 		$walked = [];
 		$findings = [...$findings, ...PROBE__KeyWalk($h, $walked), ...PROBE__Notices($h)];
 		foreach ($walked as $widget) {
 			$report['walked'][$page][$widget][$name] = true;
-		}
-		if ($theme === 'light' && $dir === 'ltr') {
-			$findings = [...$findings, ...PROBE__Mirror($h)];
 		}
 		if ($h['kind'] === 'chrome' && $shown !== $page) {
 			$texts = PROBE__Do($h, 'Eval', 'REDZ_PROBE.arabic()');
@@ -668,7 +669,12 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 				$findings[] = $what . 'Enter on its first handle: ' . ($s['open'] ? 'its menu has no "down"' : 'the menu of moves does not open');
 				continue;
 			}
-			$press('Enter');
+			if ($h['kind'] === 'firefox') {
+				PROBE__Do($h, 'Click', ...PROBE__Do($h, 'Eval', 'REDZ_PROBE.movePoint(' . json_encode($id) . ', "down")'));
+				usleep(200000);
+			} else {
+				$press('Enter');
+			}
 			$s = $state();
 			$moved = [$before[1], $before[0], ...array_slice($before, 2)];
 			if ($s['order'] !== $moved || !$s['onGrip'] || $s['said'] === '' || $s['open']) {

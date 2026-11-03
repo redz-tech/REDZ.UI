@@ -319,6 +319,12 @@ window.REDZ_PROBE = (() => {
 			const box = document.querySelector('[data-probe-grip="' + id + '"]').getBoundingClientRect();
 			return [Math.round(box.left + box.width / 2), Math.round(box.top + box.height / 2)];
 		},
+		// The middle of the open moves menu's item for the move, a point of the viewport.
+		movePoint(id, move) {
+			const menu = document.getElementById(document.querySelector('[data-probe-grip="' + id + '"]').getAttribute('commandfor'));
+			const box = menu.querySelector('[data-move="' + move + '"]').getBoundingClientRect();
+			return [Math.round(box.left + box.width / 2), Math.round(box.top + box.height / 2)];
+		},
 		// Types into a field as a person would, as far as the library hears it: the text, then an input event.
 		typeInto(selector, words) {
 			const field = document.querySelector(selector);
