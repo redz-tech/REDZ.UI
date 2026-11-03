@@ -306,9 +306,9 @@ function PROBE__NvdaSay(array &$r, string $combination, float $quiet = 0.5): arr
  *  top, its first words let pass. */
 function PROBE__NvdaReady(array &$r, array &$h, string $page): void
 {
-	$title = PROBE__SpeechWords((string)PROBE__Do($h, 'Eval', 'document.title'));
+	$title = (string)PROBE__Do($h, 'Eval', 'document.title');
 	PROBE__Do($h, 'Front');
-	for ($tries = 0; !str_contains(PROBE__SpeechWords(implode(' ', $said = PROBE__NvdaSay($r, 'NVDA+t'))), $title); $tries++) {
+	for ($tries = 0; PROBE__SpeechMissing($r, [$title], $said = PROBE__NvdaSay($r, 'NVDA+t')) !== []; $tries++) {
 		if ($tries >= 10) {
 			throw new RuntimeException($page . ': the browser\'s window never came in front — NVDA+T said «' . implode(' · ', $said) . '»');
 		}
