@@ -371,7 +371,7 @@ function PROBE__Cell(array &$h, string $name, string $page, string $combo, strin
 	if ($m['scroll'] > $m['client']) {
 		$findings[] = 'overflow ' . $m['scroll'] . ' > ' . $m['client'] . ': ' . implode(', ', $m['offenders']);
 	}
-	foreach (['unmasked' => 'icons without a mask', 'unregioned' => 'width prefixes outside a region', 'cut' => 'cut labels', 'busyLive' => 'aria-busy on or around a live region', 'toggles' => '--toggle buttons whose aria-expanded is not their region\'s state', 'comboboxes' => 'comboboxes whose button, active option or chosen values disagree with their list', 'scrollspies' => 'scrollspy navs without exactly one link at aria-current="location"', 'strengths' => 'data-strength displays whose field is missing', 'edits' => 'inline edit forms whose data-for names no value'] as $key => $what) {
+	foreach (['unmasked' => 'icons without a mask', 'unregioned' => 'width prefixes outside a region', 'cut' => 'cut labels', 'busyLive' => 'aria-busy on or around a live region', 'toggles' => '--toggle buttons whose aria-expanded is not their region\'s state', 'comboboxes' => 'comboboxes whose button, active option or chosen values disagree with their list', 'scrollspies' => 'scrollspy navs without exactly one link at aria-current="location"', 'strengths' => 'data-strength displays whose field is missing', 'edits' => 'inline edit forms whose data-for names no value', 'grips' => 'drag handles outside an item of a data-reorder list', 'uploads' => 'uploads without their file input, zone, template or list'] as $key => $what) {
 		if ($m[$key] !== []) {
 			$findings[] = $what . ': ' . implode(', ', $m[$key]);
 		}
@@ -643,6 +643,52 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 					break;
 				}
 			}
+		} elseif ($kind === 'trees') {
+			$activate($id);
+			$s = $state();
+			if ($s['open'] !== $s['groups'] || $s['said'] !== $s['groups']) {
+				$findings[] = $what . 'Expand all: ' . $s['open'] . ' of ' . $s['groups'] . ' groups open, ' . $s['said'] . ' toggles saying so';
+				continue;
+			}
+			PROBE__Do($h, 'Eval', '(document.querySelector(' . json_encode('[commandfor="' . $id . '"][command="--collapse-all"]') . ').click(), true)');
+			$s = $state();
+			if ($s['open'] !== 0 || $s['said'] !== $s['groups']) {
+				$findings[] = $what . 'Collapse all: ' . $s['open'] . ' of ' . $s['groups'] . ' groups still open, ' . $s['said'] . ' toggles saying their state';
+			}
+		} elseif ($kind === 'reorder') {
+			$before = $state()['order'];
+			if ($h['kind'] === 'firefox') {
+				PROBE__Do($h, 'Click', ...PROBE__Do($h, 'Eval', 'REDZ_PROBE.gripPoint(' . json_encode($id) . ')'));
+				usleep(200000);
+			} else {
+				$press('Enter');
+			}
+			$s = $state();
+			if (!$s['open'] || !PROBE__Do($h, 'Eval', 'REDZ_PROBE.pickMove(' . json_encode($id) . ', "down")')) {
+				$findings[] = $what . 'Enter on its first handle: ' . ($s['open'] ? 'its menu has no "down"' : 'the menu of moves does not open');
+				continue;
+			}
+			$press('Enter');
+			$s = $state();
+			$moved = [$before[1], $before[0], ...array_slice($before, 2)];
+			if ($s['order'] !== $moved || !$s['onGrip'] || $s['said'] === '' || $s['open']) {
+				$findings[] = $what . 'Move down: the order should be ' . json_encode($moved) . ', the focus on the moved handle and the move said — it is ' . json_encode($s['order']) . ($s['onGrip'] ? '' : ', the focus elsewhere') . ($s['said'] === '' ? ', nothing said' : '') . ($s['open'] ? ', the menu still open' : '');
+			}
+		} elseif ($kind === 'upload') {
+			PROBE__Do($h, 'Eval', 'REDZ_PROBE.chooseFiles(' . json_encode($id) . ')');
+			usleep(300000);
+			$s = $state();
+			$rows = array_slice($s['rows'], -2);
+			if (count($rows) !== 2 || !in_array($rows[0]['state'], ['sending', 'done', 'ready'], true) || $rows[1]['state'] !== 'failed' || $rows[1]['error'] === '') {
+				$findings[] = $what . 'two files chosen, one it takes and one it refuses: their rows say ' . json_encode($rows);
+				continue;
+			}
+			$count = count($s['rows']);
+			PROBE__Do($h, 'Eval', '(document.getElementById(' . json_encode($id) . ').querySelector(".upload-list > :last-child [data-file-remove]").click(), true)');
+			$s = $state();
+			if (count($s['rows']) !== $count - 1 || !($s['onRemove'] || $s['onZone'])) {
+				$findings[] = $what . 'Remove on a file: ' . (count($s['rows']) === $count ? 'the row stays' : 'the focus is on neither the next file nor the zone');
+			}
 		} elseif ($kind === 'reveal') {
 			foreach (['text' => 'true', 'password' => 'false'] as $type => $pressed) {
 				$activate($id);
@@ -657,6 +703,11 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 			foreach ([!$was, $was] as $open) {
 				$activate($id);
 				$s = $state();
+				// A group whose children load keeps its button busy, deaf to presses, until they are in.
+				for ($waited = 0; $s['busy'] && $waited < 30; $waited++) {
+					usleep(100000);
+					$s = $state();
+				}
 				if ($s['open'] !== $open || $s['expanded'] !== ($open ? 'true' : 'false')) {
 					$findings[] = $what . 'Enter: the region should be ' . ($open ? 'open' : 'closed') . ' — it is ' . ($s['open'] ? 'open' : 'closed') . ', its button says aria-expanded="' . $s['expanded'] . '"';
 					break;

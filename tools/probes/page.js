@@ -126,6 +126,8 @@ window.REDZ_PROBE = (() => {
 				scrollspies: [...document.querySelectorAll('[data-scrollspy]')].filter((nav) => nav.querySelectorAll('[aria-current="location"]').length !== 1).slice(0, 8).map(name),
 				strengths: [...document.querySelectorAll('[data-strength]')].filter((show) => !(document.getElementById(show.dataset.strength) instanceof HTMLInputElement)).slice(0, 8).map(name),
 				edits: [...document.querySelectorAll('.inline-edit-form')].filter((form) => document.getElementById(form.dataset.for || '') === null).slice(0, 8).map(name),
+				grips: [...document.querySelectorAll('.drag-handle')].filter((grip) => grip.closest('[data-reorder]') === null || grip.closest('[data-value]') === null).slice(0, 8).map(name),
+				uploads: [...document.querySelectorAll('.upload')].filter((upload) => ['input[type="file"]', '.upload-zone', 'template', '.upload-list'].some((part) => upload.querySelector(part) === null)).slice(0, 8).map(name),
 				comboboxes: [...document.querySelectorAll('input[role="combobox"][aria-controls]')].flatMap((input) => {
 					const list = document.getElementById(input.getAttribute('aria-controls') || '');
 					if (list === null) {
@@ -267,7 +269,55 @@ window.REDZ_PROBE = (() => {
 					out.push({kind: 'strength', id: field.id, outside: false});
 				}
 			}
+			for (const tree of document.querySelectorAll('.tree[id]')) {
+				const expand = document.querySelector('[commandfor="' + CSS.escape(tree.id) + '"][command="--expand-all"]');
+				if (shown(tree) && expand !== null && shown(expand) && document.querySelector('[commandfor="' + CSS.escape(tree.id) + '"][command="--collapse-all"]') !== null) {
+					expand.setAttribute('data-probe-invoker', tree.id);
+					out.push({kind: 'trees', id: tree.id, outside: false});
+				}
+			}
+			for (const list of document.querySelectorAll('[data-reorder]')) {
+				const items = [...list.children].filter((child) => child.matches('[data-value]'));
+				const grip = items[0]?.querySelector('.drag-handle');
+				if (shown(list) && items.length > 1 && grip && shown(grip)) {
+					list.id ||= 'probe-reorder-' + out.length;
+					grip.setAttribute('data-probe-grip', list.id);
+					out.push({kind: 'reorder', id: list.id, outside: false});
+				}
+			}
+			for (const upload of document.querySelectorAll('.upload')) {
+				if (shown(upload)) {
+					upload.id ||= 'probe-upload-' + out.length;
+					out.push({kind: 'upload', id: upload.id, outside: false});
+				}
+			}
 			return out;
+		},
+		// Hands the upload two files as a choice would: one its input takes, and one too large for it or of a kind it
+		// does not take.
+		chooseFiles(id) {
+			const upload = document.getElementById(id);
+			const input = upload.querySelector('input[type="file"]');
+			const wanted = input.accept.split(',').map((one) => one.trim()).filter(Boolean)[0] ?? '';
+			const good = wanted.startsWith('.') ? 'probe' + wanted : 'probe.' + (wanted.split('/')[1] || 'bin').replace('*', 'png');
+			const type = wanted.includes('/') ? wanted.replace('*', 'png') : '';
+			const box = new DataTransfer();
+			box.items.add(new File(['probe'], good, {type}));
+			box.items.add(upload.dataset.maxSize ? new File(['x'.repeat(Number(upload.dataset.maxSize) + 1)], 'big-' + good, {type}) : new File(['probe'], 'probe.refused', {type: 'application/x-probe'}));
+			input.files = box.files;
+			input.dispatchEvent(new Event('change', {bubbles: true}));
+			return true;
+		},
+		// Clicks the moves menu's item for the move, as Enter on it would.
+		pickMove(id, move) {
+			const menu = document.getElementById(document.querySelector('[data-probe-grip="' + id + '"]').getAttribute('commandfor'));
+			menu.querySelector('[data-move="' + move + '"]').focus();
+			return document.activeElement?.dataset.move === move;
+		},
+		// The middle of the walked list's first handle, a point of the viewport.
+		gripPoint(id) {
+			const box = document.querySelector('[data-probe-grip="' + id + '"]').getBoundingClientRect();
+			return [Math.round(box.left + box.width / 2), Math.round(box.top + box.height / 2)];
 		},
 		// Types into a field as a person would, as far as the library hears it: the text, then an input event.
 		typeInto(selector, words) {
@@ -282,7 +332,7 @@ window.REDZ_PROBE = (() => {
 			return items[Math.min(1, items.length - 1)];
 		},
 		focus(kind, id) {
-			const el = kind === 'tabs' ? document.querySelector('[data-probe-tablist="' + id + '"] [role="tab"][aria-selected="true"]') : (kind === 'accordion' ? this.walkedItem(id).querySelector(':scope > summary') : (kind === 'strength' ? document.getElementById(id) : document.querySelector('[data-probe-invoker="' + id + '"]')));
+			const el = kind === 'tabs' ? document.querySelector('[data-probe-tablist="' + id + '"] [role="tab"][aria-selected="true"]') : (kind === 'accordion' ? this.walkedItem(id).querySelector(':scope > summary') : (kind === 'strength' ? document.getElementById(id) : (kind === 'upload' ? document.getElementById(id).querySelector('.upload-zone') : document.querySelector('[data-probe-' + (kind === 'reorder' ? 'grip' : 'invoker') + '="' + id + '"]'))));
 			el.scrollIntoView({block: 'nearest'});
 			el.focus();
 			return document.activeElement === el;
@@ -301,7 +351,7 @@ window.REDZ_PROBE = (() => {
 			}
 			if (kind === 'toggle') {
 				const invoker = document.querySelector('[data-probe-invoker="' + id + '"]');
-				return {open: !document.getElementById(id).hidden, expanded: invoker.getAttribute('aria-expanded'), onInvoker: active === invoker};
+				return {open: !document.getElementById(id).hidden, expanded: invoker.getAttribute('aria-expanded'), onInvoker: active === invoker, busy: invoker.getAttribute('aria-busy') === 'true'};
 			}
 			if (kind === 'edit') {
 				const form = document.getElementById(id);
@@ -311,6 +361,19 @@ window.REDZ_PROBE = (() => {
 			if (kind === 'reveal') {
 				const invoker = document.querySelector('[data-probe-invoker="' + id + '"]');
 				return {type: document.getElementById(id).type, pressed: invoker.getAttribute('aria-pressed')};
+			}
+			if (kind === 'trees') {
+				const groups = [...document.getElementById(id).querySelectorAll('.tree-group')].filter((group) => group.childElementCount > 0);
+				return {open: groups.filter((group) => !group.hidden).length, groups: groups.length, said: groups.filter((group) => document.querySelector('[commandfor="' + CSS.escape(group.id) + '"]')?.getAttribute('aria-expanded') === String(!group.hidden)).length};
+			}
+			if (kind === 'reorder') {
+				const list = document.getElementById(id);
+				const grip = document.querySelector('[data-probe-grip="' + id + '"]');
+				const menu = document.getElementById(grip.getAttribute('commandfor') || '');
+				return {order: [...list.children].filter((child) => child.matches('[data-value]')).map((child) => child.dataset.value), walked: grip.closest('[data-value]').dataset.value, onGrip: active === grip, open: menu?.matches(':popover-open') ?? false, said: list.parentElement.querySelector(':scope > .reorder-status')?.textContent ?? ''};
+			}
+			if (kind === 'upload') {
+				return {rows: [...document.getElementById(id).querySelectorAll('.upload-list > *')].map((row) => ({state: row.dataset.state ?? '', error: row.querySelector('[data-file-error]')?.textContent ?? ''})), onZone: active?.classList.contains('upload-zone') ?? false, onRemove: active?.hasAttribute('data-file-remove') ?? false};
 			}
 			if (kind === 'combobox') {
 				const panel = document.getElementById(id);

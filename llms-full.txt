@@ -2597,6 +2597,75 @@ From [`css/components/inline-edit.css`](https://github.com/redz-tech/REDZ.UI/blo
 
 It reads the theme's `--redz-space-8`, `--redz-space-12`.
 
+# File upload
+
+Photos, documents, a price list: chosen, dropped or pasted, each file checked at once and sent on its own, with its own progress and its own error.
+
+## Examples
+
+`upload` holds the file input, an `upload-zone` button that opens it and takes files dropped on it, a `<template>` of one file's row and an `upload-list`. A paste while the focus is in the upload takes the clipboard's files. Each file is checked against the input's `accept` and the upload's `data-max-size` in bytes; a refusal shows in the file's row, the page's text `file.type` or `file.size`. A file dropped beside the zone does not open in the window.
+
+```html
+<div class="upload" data-max-size="2097152" data-docs-upload>
+	<input class="visually-hidden" id="upload-photos-input" type="file" name="photos[]" accept="image/*,.pdf" multiple tabindex="-1" aria-label="Photos">
+	<button class="upload-zone" type="button" aria-describedby="upload-photos-hint">
+		<i class="bi bi-cloud-arrow-up fs-24" aria-hidden="true"></i>
+		<span>Drop photos here, or choose them</span>
+		<span class="fs-12" id="upload-photos-hint">JPEG, PNG or PDF, up to 2 MB each</span>
+	</button>
+	<ul class="upload-list" aria-label="Files"></ul>
+	<template>
+		<li>
+			<i class="bi bi-file-earmark-image" aria-hidden="true"></i>
+			<span class="flex-fill" data-file-name></span>
+			<progress class="progress" max="1" value="0" aria-label="Sent"></progress>
+			<span class="invalid-feedback" data-file-error></span>
+			<button class="btn btn-sm btn-icon btn-text" type="button" data-file-remove><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+		</li>
+	</template>
+</div>
+```
+
+### Sent by the page
+
+Each file fires `redz:files` on the upload with the file, its row, `progress(fraction)` for the row's bar and a `signal` its remove button aborts. A page that sends cancels it and answers with a promise: resolved, the row is done; rejected, the page's words show in the row's `data-file-error`. One file's error leaves the others. Left alone, the file joins the input's files and goes with the form. The example above answers in a second and a half.
+
+```js
+document.addEventListener('redz:files', (event) => {
+	event.preventDefault();
+	const {file, progress, signal} = event.detail;
+	event.detail.respondWith(new Promise((sent, failed) => {
+		const request = new XMLHttpRequest();
+		request.open('POST', '/files');
+		request.upload.onprogress = (step) => progress(step.loaded / step.total);
+		request.onload = () => (request.status === 200 ? sent() : failed(request.responseText));
+		request.onerror = () => failed('The file did not arrive');
+		signal.addEventListener('abort', () => request.abort());
+		request.send(file);
+	}));
+});
+```
+
+## Keyboard and accessibility
+
+- The zone is one real button: `Enter` or `Space` opens the browser's picker; the input itself stays out of the Tab order, and its words — which follow the browser's language, not the page's — never show.
+- A refused or failed file says why in its row, at once; a removed file's focus goes to the next file's remove button, else to the zone.
+- Each remove button is named after its file, from the page's text `remove`.
+
+## Texts
+
+| Key | For | In English |
+| --- | --- | --- |
+| `file.type` | A file the input's `accept` does not take; `{name}` is its name | {name} is not a kind of file this takes |
+| `file.size` | A file over `data-max-size`; `{size}` the limit in the page's units | {name} is larger than {size} |
+| `remove` | A file's remove button | Remove {label} |
+
+## Tokens
+
+From [`css/components/upload.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/upload.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-space-8`, `--redz-space-4`, `--redz-space-24`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-primary`, `--redz-bg-hover`.
+
 # Cards
 
 A card is a bordered region of a screen: a header with its title and actions, a body, a footer. It is a region — the width prefixes inside it measure the card, not the window.
@@ -2910,6 +2979,33 @@ A column of items in one frame — plain rows, or links and buttons to choose fr
 </div>
 ```
 
+### Reordering
+
+A list with `data-reorder` naming a hidden field moves its items, each with a `data-value`, by a `drag-handle`: a button opening the list's menu of moves, whose items carry `data-move` — `up`, `down`, `first`, `last` — or the pointer dragging the handle. A move is done at once, the focus back on the handle, and the page's text `moved` says the new place. Then `redz:move` fires on the item: a page that saves cancels it and answers with a promise — refused, the move is undone and the page's words are said; left alone, hidden fields beside the list hold the new order for the form.
+
+```html
+<ul class="list-group" id="list-group-moves-list" aria-label="Stops of the tour" data-reorder="stops[]">
+	<li class="list-group-item hstack gap-8" data-value="pier"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: The pier"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>The pier</li>
+	<li class="list-group-item hstack gap-8" data-value="lagoon"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: The emerald lake"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>The emerald lake</li>
+	<li class="list-group-item hstack gap-8" data-value="beach"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Lunch on the beach"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>Lunch on the beach</li>
+</ul>
+<div class="menu" id="list-group-moves-menu" popover role="menu" aria-label="Move">
+	<button class="menu-item" type="button" role="menuitem" data-move="up"><i class="bi bi-arrow-up" aria-hidden="true"></i>Move up</button>
+	<button class="menu-item" type="button" role="menuitem" data-move="down"><i class="bi bi-arrow-down" aria-hidden="true"></i>Move down</button>
+	<button class="menu-item" type="button" role="menuitem" data-move="first">Move to the top</button>
+	<button class="menu-item" type="button" role="menuitem" data-move="last">Move to the bottom</button>
+</div>
+```
+
+```js
+document.addEventListener('redz:move', (event) => {
+	event.preventDefault();
+	const {item, parent, position} = event.detail;
+	event.detail.respondWith(fetch('/stops/' + item.dataset.value + '/place', {method: 'POST', body: new URLSearchParams({parent: parent?.dataset.value ?? '', position})})
+		.then((answer) => answer.ok || Promise.reject('The stop could not be moved')));
+});
+```
+
 ## States
 
 ## Keyboard and accessibility
@@ -2936,6 +3032,120 @@ It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-s
 | `list-group-item-secondary` | — | review | no item tones: a badge or a dot in the item says it |
 | `list-group-item-success` | — | review | no item tones: a badge or a dot in the item says it |
 | `list-group-item-warning` | — | review | no item tones: a badge or a dot in the item says it |
+
+# Trees
+
+Pages under pages, a menu's items, folders: a list whose items open their own lists, each a link or a name, and moved by a handle.
+
+## Examples
+
+`tree` on the list, `tree-item` on each item, its `tree-row` holding a `tree-toggle` — a `--toggle` button for the item's `tree-group` — and the item's link. The groups close as `hidden="until-found"`, so the browser's find in page still opens them. A button with `command="--expand-all"` or `"--collapse-all"` for the tree opens or closes every group that holds items.
+
+```html
+<div class="hstack gap-8">
+	<button class="btn btn-sm" type="button" commandfor="tree-pages-list" command="--expand-all"><i class="bi bi-arrows-expand" aria-hidden="true"></i>Expand all</button>
+	<button class="btn btn-sm" type="button" commandfor="tree-pages-list" command="--collapse-all"><i class="bi bi-arrows-collapse" aria-hidden="true"></i>Collapse all</button>
+</div>
+<ul class="tree" id="tree-pages-list" aria-label="Pages">
+	<li class="tree-item">
+		<div class="tree-row">
+			<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-excursions" command="--toggle" aria-expanded="true" aria-label="Excursions"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+			<a href="#tree-pages">Excursions</a>
+		</div>
+		<ul class="tree-group" id="tree-pages-excursions">
+			<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Ang Thong by speedboat</a></div></li>
+			<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Night market and street food</a></div></li>
+		</ul>
+	</li>
+	<li class="tree-item">
+		<div class="tree-row">
+			<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-islands" command="--toggle" aria-expanded="false" aria-label="Islands"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+			<a href="#tree-pages">Islands</a>
+		</div>
+		<ul class="tree-group" id="tree-pages-islands" hidden="until-found">
+			<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Koh Tao</a></div></li>
+			<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Koh Phangan</a></div></li>
+		</ul>
+	</li>
+	<li class="tree-item">
+		<div class="tree-row">
+			<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-archive" command="--toggle" aria-expanded="false" aria-label="Archive"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+			<a href="#tree-pages">Archive</a>
+		</div>
+		<ul class="tree-group" id="tree-pages-archive" hidden="until-found" data-lazy data-docs-lazy></ul>
+	</li>
+	<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Contacts</a></div></li>
+</ul>
+```
+
+### Children from the server
+
+A group with `data-lazy` and no items fires `redz:expand` on it when it first opens. A page that loads the items cancels it and answers with a promise: the toggle is busy until it settles, and a refusal closes the group again for another try. The Archive above answers after 400 ms.
+
+```js
+document.addEventListener('redz:expand', (event) => {
+	event.preventDefault();
+	event.detail.respondWith(fetch('/pages?parent=' + event.target.dataset.parent)
+		.then((answer) => answer.text())
+		.then((items) => event.target.insertAdjacentHTML('beforeend', items)));
+});
+```
+
+### Moved by a handle
+
+A tree with `data-reorder` moves its items as a list does — see [reordering](list-group.md#list-group-reorder) — and its menu of moves adds `data-move="in"`, to the end of the group of the item above, and `"out"`, after its parent; an item can go in where the item above has a `tree-group`, empty or not. `data-parent` names the hidden field of each item's parent, its value the item's key.
+
+```html
+<ul class="tree" id="tree-menu-list" aria-label="The site's menu" data-reorder="menu[]" data-parent="menu_parent">
+	<li class="tree-item" data-value="home">
+		<div class="tree-row">
+			<button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="tree-menu-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Home"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>
+			<span>Home</span>
+		</div>
+		<ul class="tree-group" id="tree-menu-home"></ul>
+	</li>
+	<li class="tree-item" data-value="tours">
+		<div class="tree-row">
+			<button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="tree-menu-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Tours"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>
+			<span>Tours</span>
+		</div>
+		<ul class="tree-group" id="tree-menu-tours">
+			<li class="tree-item" data-value="boats">
+				<div class="tree-row">
+					<button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="tree-menu-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Boats"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>
+					<span>Boats</span>
+				</div>
+				<ul class="tree-group" id="tree-menu-boats"></ul>
+			</li>
+		</ul>
+	</li>
+	<li class="tree-item" data-value="contacts">
+		<div class="tree-row">
+			<button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="tree-menu-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Contacts"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>
+			<span>Contacts</span>
+		</div>
+		<ul class="tree-group" id="tree-menu-contacts"></ul>
+	</li>
+</ul>
+<div class="menu" id="tree-menu-moves" popover role="menu" aria-label="Move">
+	<button class="menu-item" type="button" role="menuitem" data-move="up"><i class="bi bi-arrow-up" aria-hidden="true"></i>Move up</button>
+	<button class="menu-item" type="button" role="menuitem" data-move="down"><i class="bi bi-arrow-down" aria-hidden="true"></i>Move down</button>
+	<button class="menu-item" type="button" role="menuitem" data-move="in"><i class="bi bi-arrow-return-right flip-rtl" aria-hidden="true"></i>Move into the item above</button>
+	<button class="menu-item" type="button" role="menuitem" data-move="out"><i class="bi bi-arrow-bar-left flip-rtl" aria-hidden="true"></i>Move out</button>
+</div>
+```
+
+## Keyboard and accessibility
+
+- The tree is a list of lists with buttons and links — the disclosure pattern: Tab goes from one control to the next, `Enter` or `Space` opens or closes a group, and the toggle says it in `aria-expanded`. It is not the ARIA tree widget, which the APG itself keeps for choosing, not for links.
+- A toggle is named after its item; its chevron points along the line of reading, mirrored right to left.
+- The moves are a menu on the handle, so a keyboard, a screen reader and a single tap move an item as a drag does; after a move the focus stays on the moved item's handle and its new place is said politely.
+
+## Tokens
+
+From [`css/components/tree.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/tree.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-space-12`, `--redz-space-8`, `--redz-border`, `--redz-space-4`, `--redz-control-height`, `--redz-control-height-sm`, `--redz-motion`, `--redz-ease`.
 
 # Tables
 

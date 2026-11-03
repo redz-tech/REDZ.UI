@@ -1,0 +1,43 @@
+@layer components {
+	.tree,
+	.tree-group {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.tree-group {
+		margin-inline-start: var(--redz-space-12);
+		padding-inline-start: var(--redz-space-8);
+		border-inline-start: 1px solid var(--redz-border);
+	}
+
+	.tree-row {
+		display: flex;
+		align-items: center;
+		gap: var(--redz-space-4);
+		min-block-size: var(--redz-control-height);
+	}
+
+	.tree-row:not(:has(> .tree-toggle)) {
+		padding-inline-start: var(--redz-control-height-sm);
+	}
+
+	.tree-toggle > .bi:dir(rtl) {
+		scale: -1 1;
+	}
+
+	.tree-toggle[aria-expanded="true"] > .bi {
+		rotate: 90deg;
+	}
+
+	.tree-toggle[aria-expanded="true"] > .bi:dir(rtl) {
+		rotate: -90deg;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.tree-toggle > .bi {
+			transition: rotate var(--redz-motion) var(--redz-ease);
+		}
+	}
+}

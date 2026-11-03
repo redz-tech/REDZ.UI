@@ -64,7 +64,7 @@ attaches by delegation on `document`, so nothing is set up per element and marku
 
 ```html
 <script type="module" src="dist/redz-ui.min.js"></script>
-<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong"}</script>
+<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong", "moved": "Moved to {position} of {count}", "file.type": "{name} is not a kind of file this takes", "file.size": "{name} is larger than {size}"}</script>
 ```
 
 - **Menus** (`role="menu"` on a `popover` opened by its button): the arrow keys move through the items, Home and End go
@@ -103,6 +103,15 @@ attaches by delegation on `document`, so nothing is set up per element and marku
 - **Passwords:** a button with `command="--reveal"` shows a password field's text and hides it again, `aria-pressed`
   saying which; elements with `data-strength` naming the field show its level as it is typed — by its length and its
   kinds of characters — a meter at once, the words after a pause (`js/password.js`).
+- **Trees:** a list of class `tree` opens its groups by `--toggle` buttons; a group with `data-lazy` asks the page for
+  its items by `redz:expand` on its first opening, and `--expand-all` / `--collapse-all` open and close a whole tree
+  (`js/tree.js`).
+- **Reordering:** a list or a tree with `data-reorder` moves its items by a `drag-handle` — a button opening the list's
+  menu of moves (up, down, first, last; in and out in a tree) — or by the pointer dragging it; the move is said, then
+  `redz:move` lets the page save it or refuse it, which undoes it, and hidden fields hold the order (`js/reorder.js`).
+- **Uploads:** an `upload` takes files chosen, dropped on its `upload-zone` or pasted, checks each against `accept` and
+  `data-max-size`, gives each a row from the page's `<template>` and sends each by `redz:files`, with its own progress
+  and its own error (`js/upload.js`).
 - **The page's answers:** a moment only the page can carry out is a cancelable `redz:*` event on the widget; the page
   that takes it calls `event.preventDefault()` and `event.detail.respondWith(promise)`, and the widget waits for the
   promise (`js/answer.js`).

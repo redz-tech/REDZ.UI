@@ -1,0 +1,105 @@
+<header class="vstack gap-8">
+	<h1>Trees</h1>
+	<p class="docs-lead">Pages under pages, a menu's items, folders: a list whose items open their own lists, each a link or a name, and moved by a handle.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="tree-examples">
+	<h2 id="tree-examples">Examples</h2>
+	<p><code>tree</code> on the list, <code>tree-item</code> on each item, its <code>tree-row</code> holding a <code>tree-toggle</code> — a <code>--toggle</code> button for the item's <code>tree-group</code> — and the item's link. The groups close as <code>hidden="until-found"</code>, so the browser's find in page still opens them. A button with <code>command="--expand-all"</code> or <code>"--collapse-all"</code> for the tree opens or closes every group that holds items.</p>
+	<div class="docs-example docs-example-stack" id="tree-pages">
+		<div class="hstack gap-8">
+			<button class="btn btn-sm" type="button" commandfor="tree-pages-list" command="--expand-all"><i class="bi bi-arrows-expand" aria-hidden="true"></i>Expand all</button>
+			<button class="btn btn-sm" type="button" commandfor="tree-pages-list" command="--collapse-all"><i class="bi bi-arrows-collapse" aria-hidden="true"></i>Collapse all</button>
+		</div>
+		<ul class="tree" id="tree-pages-list" aria-label="Pages">
+			<li class="tree-item">
+				<div class="tree-row">
+					<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-excursions" command="--toggle" aria-expanded="true" aria-label="Excursions"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+					<a href="#tree-pages">Excursions</a>
+				</div>
+				<ul class="tree-group" id="tree-pages-excursions">
+					<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Ang Thong by speedboat</a></div></li>
+					<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Night market and street food</a></div></li>
+				</ul>
+			</li>
+			<li class="tree-item">
+				<div class="tree-row">
+					<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-islands" command="--toggle" aria-expanded="false" aria-label="Islands"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+					<a href="#tree-pages">Islands</a>
+				</div>
+				<ul class="tree-group" id="tree-pages-islands" hidden="until-found">
+					<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Koh Tao</a></div></li>
+					<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Koh Phangan</a></div></li>
+				</ul>
+			</li>
+			<li class="tree-item">
+				<div class="tree-row">
+					<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-archive" command="--toggle" aria-expanded="false" aria-label="Archive"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+					<a href="#tree-pages">Archive</a>
+				</div>
+				<ul class="tree-group" id="tree-pages-archive" hidden="until-found" data-lazy data-docs-lazy></ul>
+			</li>
+			<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Contacts</a></div></li>
+		</ul>
+	</div>
+
+	<h3>Children from the server</h3>
+	<p>A group with <code>data-lazy</code> and no items fires <code>redz:expand</code> on it when it first opens. A page that loads the items cancels it and answers with a promise: the toggle is busy until it settles, and a refusal closes the group again for another try. The Archive above answers after 400 ms.</p>
+	<pre class="docs-code" tabindex="0"><code>document.addEventListener('redz:expand', (event) =&gt; {
+	event.preventDefault();
+	event.detail.respondWith(fetch('/pages?parent=' + event.target.dataset.parent)
+		.then((answer) =&gt; answer.text())
+		.then((items) =&gt; event.target.insertAdjacentHTML('beforeend', items)));
+});</code></pre>
+
+	<h3>Moved by a handle</h3>
+	<p>A tree with <code>data-reorder</code> moves its items as a list does — see <a href="list-group.html#list-group-reorder">reordering</a> — and its menu of moves adds <code>data-move="in"</code>, to the end of the group of the item above, and <code>"out"</code>, after its parent; an item can go in where the item above has a <code>tree-group</code>, empty or not. <code>data-parent</code> names the hidden field of each item's parent, its value the item's key.</p>
+	<div class="docs-example docs-example-stack" id="tree-menu">
+		<ul class="tree" id="tree-menu-list" aria-label="The site's menu" data-reorder="menu[]" data-parent="menu_parent">
+			<li class="tree-item" data-value="home">
+				<div class="tree-row">
+					<button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="tree-menu-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Home"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>
+					<span>Home</span>
+				</div>
+				<ul class="tree-group" id="tree-menu-home"></ul>
+			</li>
+			<li class="tree-item" data-value="tours">
+				<div class="tree-row">
+					<button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="tree-menu-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Tours"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>
+					<span>Tours</span>
+				</div>
+				<ul class="tree-group" id="tree-menu-tours">
+					<li class="tree-item" data-value="boats">
+						<div class="tree-row">
+							<button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="tree-menu-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Boats"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>
+							<span>Boats</span>
+						</div>
+						<ul class="tree-group" id="tree-menu-boats"></ul>
+					</li>
+				</ul>
+			</li>
+			<li class="tree-item" data-value="contacts">
+				<div class="tree-row">
+					<button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="tree-menu-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Contacts"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>
+					<span>Contacts</span>
+				</div>
+				<ul class="tree-group" id="tree-menu-contacts"></ul>
+			</li>
+		</ul>
+		<div class="menu" id="tree-menu-moves" popover role="menu" aria-label="Move">
+			<button class="menu-item" type="button" role="menuitem" data-move="up"><i class="bi bi-arrow-up" aria-hidden="true"></i>Move up</button>
+			<button class="menu-item" type="button" role="menuitem" data-move="down"><i class="bi bi-arrow-down" aria-hidden="true"></i>Move down</button>
+			<button class="menu-item" type="button" role="menuitem" data-move="in"><i class="bi bi-arrow-return-right flip-rtl" aria-hidden="true"></i>Move into the item above</button>
+			<button class="menu-item" type="button" role="menuitem" data-move="out"><i class="bi bi-arrow-bar-left flip-rtl" aria-hidden="true"></i>Move out</button>
+		</div>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="tree-access">
+	<h2 id="tree-access">Keyboard and accessibility</h2>
+	<ul>
+		<li>The tree is a list of lists with buttons and links — the disclosure pattern: Tab goes from one control to the next, <kbd>Enter</kbd> or <kbd>Space</kbd> opens or closes a group, and the toggle says it in <code>aria-expanded</code>. It is not the ARIA tree widget, which the APG itself keeps for choosing, not for links.</li>
+		<li>A toggle is named after its item; its chevron points along the line of reading, mirrored right to left.</li>
+		<li>The moves are a menu on the handle, so a keyboard, a screen reader and a single tap move an item as a drag does; after a move the focus stays on the moved item's handle and its new place is said politely.</li>
+	</ul>
+</section>

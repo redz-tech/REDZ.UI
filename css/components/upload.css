@@ -1,0 +1,63 @@
+@layer components {
+	.upload {
+		display: grid;
+		gap: var(--redz-space-8);
+	}
+
+	.upload-zone {
+		display: grid;
+		justify-items: center;
+		gap: var(--redz-space-4);
+		padding: var(--redz-space-24) var(--redz-space-16);
+		border: 1px dashed var(--redz-border-strong);
+		border-radius: var(--redz-radius-12);
+		background: var(--redz-bg);
+		color: var(--redz-text-muted);
+		font: inherit;
+		text-align: center;
+		cursor: pointer;
+	}
+
+	.upload-zone:hover,
+	.upload-zone[data-over] {
+		border-color: var(--redz-primary);
+		background: var(--redz-bg-hover);
+	}
+
+	.upload-list {
+		display: grid;
+		gap: var(--redz-space-4);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.upload-list > * {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--redz-space-8);
+	}
+
+	.upload-list progress {
+		flex: 1 1 8rem;
+	}
+
+	.upload-list > :not([data-state="sending"]) progress {
+		display: none;
+	}
+
+	.drag-handle {
+		cursor: grab;
+		touch-action: none;
+	}
+
+	.reordering {
+		-webkit-user-select: none;
+		user-select: none;
+	}
+
+	.reordering [data-dragging] {
+		opacity: 0.6;
+	}
+}

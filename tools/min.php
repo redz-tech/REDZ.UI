@@ -841,7 +841,7 @@ function MIN__JsScopes(array $tokens): array
 				if ($type === 'object' && $pos === 'colon') {
 					throw new RuntimeException('a method with a computed key at token ' . $t . ' is not read here');
 				}
-				if ($prev === 'for' || $prev === 'catch') {
+				if (($prev === 'for' || $prev === 'catch') && !in_array($tokens[$t - 2][1] ?? '', ['.', '?.'], true)) {
 					$inner = $scope($top['scope']);
 					$push(['type' => $prev === 'for' ? 'forhead' : 'catch', 'scope' => $inner, 'bind' => $inner, 'pos' => $prev === 'for' ? '' : 'binding']);
 				} elseif (($tokens[$match[$t] + 1][1] ?? '') === '=>' || ($type === 'object' && $pos === 'method')) {

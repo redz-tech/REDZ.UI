@@ -12,7 +12,7 @@
 	<link rel="alternate" type="text/markdown" href="all.md">
 	<script src="site.js"></script>
 	<script type="module" src="../dist/redz-ui.min.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong"}</script>
+	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}"}</script>
 </head>
 <body>
 	<div class="app">
@@ -53,11 +53,13 @@
 			<a class="app-link" href="check.html"><i class="bi bi-check2-square" aria-hidden="true"></i>Checks, radios and switches</a>
 			<a class="app-link" href="combobox.html"><i class="bi bi-menu-down" aria-hidden="true"></i>Combobox</a>
 			<a class="app-link" href="inline-edit.html"><i class="bi bi-pencil-square" aria-hidden="true"></i>Inline edit</a>
+			<a class="app-link" href="upload.html"><i class="bi bi-cloud-arrow-up" aria-hidden="true"></i>File upload</a>
 			<div class="app-section">Content</div>
 			<a class="app-link" href="card.html"><i class="bi bi-card-text" aria-hidden="true"></i>Cards</a>
 			<a class="app-link" href="accordion.html"><i class="bi bi-chevron-bar-expand" aria-hidden="true"></i>Accordions</a>
 			<a class="app-link" href="collapse.html"><i class="bi bi-arrows-collapse" aria-hidden="true"></i>Collapse</a>
 			<a class="app-link" href="list-group.html"><i class="bi bi-list-ul" aria-hidden="true"></i>List groups</a>
+			<a class="app-link" href="tree.html"><i class="bi bi-diagram-3" aria-hidden="true"></i>Trees</a>
 			<a class="app-link" href="table.html"><i class="bi bi-table" aria-hidden="true"></i>Tables</a>
 			<a class="app-link" href="badge.html"><i class="bi bi-patch-check" aria-hidden="true"></i>Badges</a>
 			<a class="app-link" href="dot.html"><i class="bi bi-record-circle" aria-hidden="true"></i>Dots</a>
@@ -938,6 +940,30 @@
 					</div>
 				</section>
 
+				<section class="vstack gap-16" aria-labelledby="all-upload">
+					<h2 id="all-upload"><a href="upload.html">File upload</a></h2>
+					<div class="docs-example docs-example-stack" id="upload-photos">
+						<div class="upload" data-max-size="2097152" data-docs-upload>
+							<input class="visually-hidden" id="upload-photos-input" type="file" name="photos[]" accept="image/*,.pdf" multiple tabindex="-1" aria-label="Photos">
+							<button class="upload-zone" type="button" aria-describedby="upload-photos-hint">
+								<i class="bi bi-cloud-arrow-up fs-24" aria-hidden="true"></i>
+								<span>Drop photos here, or choose them</span>
+								<span class="fs-12" id="upload-photos-hint">JPEG, PNG or PDF, up to 2 MB each</span>
+							</button>
+							<ul class="upload-list" aria-label="Files"></ul>
+							<template>
+								<li>
+									<i class="bi bi-file-earmark-image" aria-hidden="true"></i>
+									<span class="flex-fill" data-file-name></span>
+									<progress class="progress" max="1" value="0" aria-label="Sent"></progress>
+									<span class="invalid-feedback" data-file-error></span>
+									<button class="btn btn-sm btn-icon btn-text" type="button" data-file-remove><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+								</li>
+							</template>
+						</div>
+					</div>
+				</section>
+
 				<section class="vstack gap-16" aria-labelledby="all-card">
 					<h2 id="all-card"><a href="card.html">Cards</a></h2>
 					<div class="docs-example docs-example-stack" id="card-basic">
@@ -1123,6 +1149,19 @@
 							<label class="list-group-item hstack gap-8"><input class="check" type="checkbox">kohtao.example</label>
 						</div>
 					</div>
+					<div class="docs-example docs-example-stack" id="list-group-moves">
+						<ul class="list-group" id="list-group-moves-list" aria-label="Stops of the tour" data-reorder="stops[]">
+							<li class="list-group-item hstack gap-8" data-value="pier"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: The pier"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>The pier</li>
+							<li class="list-group-item hstack gap-8" data-value="lagoon"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: The emerald lake"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>The emerald lake</li>
+							<li class="list-group-item hstack gap-8" data-value="beach"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Lunch on the beach"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>Lunch on the beach</li>
+						</ul>
+						<div class="menu" id="list-group-moves-menu" popover role="menu" aria-label="Move">
+							<button class="menu-item" type="button" role="menuitem" data-move="up"><i class="bi bi-arrow-up" aria-hidden="true"></i>Move up</button>
+							<button class="menu-item" type="button" role="menuitem" data-move="down"><i class="bi bi-arrow-down" aria-hidden="true"></i>Move down</button>
+							<button class="menu-item" type="button" role="menuitem" data-move="first">Move to the top</button>
+							<button class="menu-item" type="button" role="menuitem" data-move="last">Move to the bottom</button>
+						</div>
+					</div>
 					<div class="docs-states" id="list-group-states" tabindex="0" role="region" aria-labelledby="list-group-states-title">
 						<table class="docs-matrix">
 							<thead>
@@ -1139,6 +1178,85 @@
 								</tr>
 							</tbody>
 						</table>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-tree">
+					<h2 id="all-tree"><a href="tree.html">Trees</a></h2>
+					<div class="docs-example docs-example-stack" id="tree-pages">
+						<div class="hstack gap-8">
+							<button class="btn btn-sm" type="button" commandfor="tree-pages-list" command="--expand-all"><i class="bi bi-arrows-expand" aria-hidden="true"></i>Expand all</button>
+							<button class="btn btn-sm" type="button" commandfor="tree-pages-list" command="--collapse-all"><i class="bi bi-arrows-collapse" aria-hidden="true"></i>Collapse all</button>
+						</div>
+						<ul class="tree" id="tree-pages-list" aria-label="Pages">
+							<li class="tree-item">
+								<div class="tree-row">
+									<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-excursions" command="--toggle" aria-expanded="true" aria-label="Excursions"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+									<a href="#tree-pages">Excursions</a>
+								</div>
+								<ul class="tree-group" id="tree-pages-excursions">
+									<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Ang Thong by speedboat</a></div></li>
+									<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Night market and street food</a></div></li>
+								</ul>
+							</li>
+							<li class="tree-item">
+								<div class="tree-row">
+									<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-islands" command="--toggle" aria-expanded="false" aria-label="Islands"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+									<a href="#tree-pages">Islands</a>
+								</div>
+								<ul class="tree-group" id="tree-pages-islands" hidden="until-found">
+									<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Koh Tao</a></div></li>
+									<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Koh Phangan</a></div></li>
+								</ul>
+							</li>
+							<li class="tree-item">
+								<div class="tree-row">
+									<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-archive" command="--toggle" aria-expanded="false" aria-label="Archive"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+									<a href="#tree-pages">Archive</a>
+								</div>
+								<ul class="tree-group" id="tree-pages-archive" hidden="until-found" data-lazy data-docs-lazy></ul>
+							</li>
+							<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Contacts</a></div></li>
+						</ul>
+					</div>
+					<div class="docs-example docs-example-stack" id="tree-menu">
+						<ul class="tree" id="tree-menu-list" aria-label="The site's menu" data-reorder="menu[]" data-parent="menu_parent">
+							<li class="tree-item" data-value="home">
+								<div class="tree-row">
+									<button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="tree-menu-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Home"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>
+									<span>Home</span>
+								</div>
+								<ul class="tree-group" id="tree-menu-home"></ul>
+							</li>
+							<li class="tree-item" data-value="tours">
+								<div class="tree-row">
+									<button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="tree-menu-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Tours"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>
+									<span>Tours</span>
+								</div>
+								<ul class="tree-group" id="tree-menu-tours">
+									<li class="tree-item" data-value="boats">
+										<div class="tree-row">
+											<button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="tree-menu-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Boats"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>
+											<span>Boats</span>
+										</div>
+										<ul class="tree-group" id="tree-menu-boats"></ul>
+									</li>
+								</ul>
+							</li>
+							<li class="tree-item" data-value="contacts">
+								<div class="tree-row">
+									<button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="tree-menu-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Contacts"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>
+									<span>Contacts</span>
+								</div>
+								<ul class="tree-group" id="tree-menu-contacts"></ul>
+							</li>
+						</ul>
+						<div class="menu" id="tree-menu-moves" popover role="menu" aria-label="Move">
+							<button class="menu-item" type="button" role="menuitem" data-move="up"><i class="bi bi-arrow-up" aria-hidden="true"></i>Move up</button>
+							<button class="menu-item" type="button" role="menuitem" data-move="down"><i class="bi bi-arrow-down" aria-hidden="true"></i>Move down</button>
+							<button class="menu-item" type="button" role="menuitem" data-move="in"><i class="bi bi-arrow-return-right flip-rtl" aria-hidden="true"></i>Move into the item above</button>
+							<button class="menu-item" type="button" role="menuitem" data-move="out"><i class="bi bi-arrow-bar-left flip-rtl" aria-hidden="true"></i>Move out</button>
+						</div>
 					</div>
 				</section>
 

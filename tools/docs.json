@@ -1,11 +1,11 @@
 {
 	"site": "https://redz-tech.github.io/REDZ.UI/",
-	"texts": {"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong"},
+	"texts": {"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong", "moved": "Moved to {position} of {count}", "file.type": "{name} is not a kind of file this takes", "file.size": "{name} is larger than {size}"},
 	"groups": [
 		{"title": "Start", "pages": {"index": "Getting started", "layout": "Layout", "utilities": "Utilities", "tokens": "Tokens", "icons": "Icons", "migrate": "From Bootstrap 5.3"}},
 		{"title": "Actions", "pages": {"btn": "Buttons", "chip": "Chips", "menu": "Menus"}},
-		{"title": "Forms", "pages": {"form": "Form fields", "input-group": "Input groups", "check": "Checks, radios and switches", "combobox": "Combobox", "inline-edit": "Inline edit"}},
-		{"title": "Content", "pages": {"card": "Cards", "accordion": "Accordions", "collapse": "Collapse", "list-group": "List groups", "table": "Tables", "badge": "Badges", "dot": "Dots", "avatar": "Avatars", "icon-tile": "Icon tiles", "empty-state": "Empty states", "placeholder": "Placeholders"}},
+		{"title": "Forms", "pages": {"form": "Form fields", "input-group": "Input groups", "check": "Checks, radios and switches", "combobox": "Combobox", "inline-edit": "Inline edit", "upload": "File upload"}},
+		{"title": "Content", "pages": {"card": "Cards", "accordion": "Accordions", "collapse": "Collapse", "list-group": "List groups", "tree": "Trees", "table": "Tables", "badge": "Badges", "dot": "Dots", "avatar": "Avatars", "icon-tile": "Icon tiles", "empty-state": "Empty states", "placeholder": "Placeholders"}},
 		{"title": "Layers", "pages": {"dialog": "Dialogs", "drawer": "Drawers", "tooltip": "Tooltips"}},
 		{"title": "Feedback", "pages": {"alert": "Alerts", "toast": "Toasts", "spinner": "Spinners", "progress": "Progress and meters", "busy": "Busy", "save-bar": "Save bar", "selection-bar": "Selection bar"}},
 		{"title": "Navigation", "pages": {"nav": "Navs and tabs", "breadcrumb": "Breadcrumbs", "pagination": "Pagination", "palette": "Command palette", "app": "App shell"}}
@@ -14,8 +14,8 @@
 	"icons": {
 		"index": "rocket-takeoff", "layout": "grid-1x2", "utilities": "tools", "tokens": "palette", "icons": "emoji-smile", "migrate": "arrow-left-right",
 		"btn": "hand-index", "chip": "tags", "menu": "menu-button-wide",
-		"form": "input-cursor-text", "input-group": "input-cursor", "check": "check2-square", "combobox": "menu-down", "inline-edit": "pencil-square",
-		"card": "card-text", "accordion": "chevron-bar-expand", "collapse": "arrows-collapse", "list-group": "list-ul", "table": "table", "badge": "patch-check", "dot": "record-circle", "avatar": "person-circle", "icon-tile": "app", "empty-state": "inbox", "placeholder": "body-text",
+		"form": "input-cursor-text", "input-group": "input-cursor", "check": "check2-square", "combobox": "menu-down", "inline-edit": "pencil-square", "upload": "cloud-arrow-up",
+		"card": "card-text", "accordion": "chevron-bar-expand", "collapse": "arrows-collapse", "list-group": "list-ul", "tree": "diagram-3", "table": "table", "badge": "patch-check", "dot": "record-circle", "avatar": "person-circle", "icon-tile": "app", "empty-state": "inbox", "placeholder": "body-text",
 		"dialog": "window", "drawer": "layout-sidebar-reverse", "tooltip": "chat-square-text",
 		"alert": "exclamation-triangle", "toast": "bell", "spinner": "arrow-repeat", "progress": "bar-chart-line", "busy": "hourglass-split", "save-bar": "floppy", "selection-bar": "check2-all",
 		"nav": "segmented-nav", "breadcrumb": "chevron-double-right", "pagination": "123", "palette": "command", "app": "window-sidebar",

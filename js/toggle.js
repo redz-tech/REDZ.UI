@@ -4,7 +4,7 @@
 const COMMAND = '--toggle';
 
 /** Marks every --toggle button of the element open or closed. */
-const mark = (target, open) => {
+export const mark = (target, open) => {
 	for (const button of document.querySelectorAll('button[commandfor="' + CSS.escape(target.id) + '"]')) {
 		if (button.getAttribute('command') === COMMAND) {
 			button.setAttribute('aria-expanded', String(open));

@@ -2586,6 +2586,7 @@ dot-primary
 dot-secondary
 dot-success
 dot-warning
+drag-handle
 drawer
 drawer-body
 drawer-header
@@ -3574,6 +3575,7 @@ ratio-21x9
 ratio-4x3
 ratio-auto
 region
+reordering
 rounded
 rounded-0
 rounded-12
@@ -3985,6 +3987,13 @@ top-50
 translate-middle
 translate-middle-x
 translate-middle-y
+tree
+tree-group
+tree-row
+tree-toggle
+upload
+upload-list
+upload-zone
 user-select-all
 user-select-auto
 user-select-none

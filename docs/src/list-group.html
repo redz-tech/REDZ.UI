@@ -63,6 +63,28 @@
 			<label class="list-group-item hstack gap-8"><input class="check" type="checkbox">kohtao.example</label>
 		</div>
 	</div>
+
+	<h3 id="list-group-reorder">Reordering</h3>
+	<p>A list with <code>data-reorder</code> naming a hidden field moves its items, each with a <code>data-value</code>, by a <code>drag-handle</code>: a button opening the list's menu of moves, whose items carry <code>data-move</code> — <code>up</code>, <code>down</code>, <code>first</code>, <code>last</code> — or the pointer dragging the handle. A move is done at once, the focus back on the handle, and the page's text <code>moved</code> says the new place. Then <code>redz:move</code> fires on the item: a page that saves cancels it and answers with a promise — refused, the move is undone and the page's words are said; left alone, hidden fields beside the list hold the new order for the form.</p>
+	<div class="docs-example docs-example-stack" id="list-group-moves">
+		<ul class="list-group" id="list-group-moves-list" aria-label="Stops of the tour" data-reorder="stops[]">
+			<li class="list-group-item hstack gap-8" data-value="pier"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: The pier"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>The pier</li>
+			<li class="list-group-item hstack gap-8" data-value="lagoon"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: The emerald lake"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>The emerald lake</li>
+			<li class="list-group-item hstack gap-8" data-value="beach"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Lunch on the beach"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>Lunch on the beach</li>
+		</ul>
+		<div class="menu" id="list-group-moves-menu" popover role="menu" aria-label="Move">
+			<button class="menu-item" type="button" role="menuitem" data-move="up"><i class="bi bi-arrow-up" aria-hidden="true"></i>Move up</button>
+			<button class="menu-item" type="button" role="menuitem" data-move="down"><i class="bi bi-arrow-down" aria-hidden="true"></i>Move down</button>
+			<button class="menu-item" type="button" role="menuitem" data-move="first">Move to the top</button>
+			<button class="menu-item" type="button" role="menuitem" data-move="last">Move to the bottom</button>
+		</div>
+	</div>
+	<pre class="docs-code" tabindex="0"><code>document.addEventListener('redz:move', (event) =&gt; {
+	event.preventDefault();
+	const {item, parent, position} = event.detail;
+	event.detail.respondWith(fetch('/stops/' + item.dataset.value + '/place', {method: 'POST', body: new URLSearchParams({parent: parent?.dataset.value ?? '', position})})
+		.then((answer) =&gt; answer.ok || Promise.reject('The stop could not be moved')));
+});</code></pre>
 </section>
 
 <section class="vstack gap-16" aria-labelledby="list-group-states-title">

@@ -73,6 +73,33 @@ A column of items in one frame — plain rows, or links and buttons to choose fr
 </div>
 ```
 
+### Reordering
+
+A list with `data-reorder` naming a hidden field moves its items, each with a `data-value`, by a `drag-handle`: a button opening the list's menu of moves, whose items carry `data-move` — `up`, `down`, `first`, `last` — or the pointer dragging the handle. A move is done at once, the focus back on the handle, and the page's text `moved` says the new place. Then `redz:move` fires on the item: a page that saves cancels it and answers with a promise — refused, the move is undone and the page's words are said; left alone, hidden fields beside the list hold the new order for the form.
+
+```html
+<ul class="list-group" id="list-group-moves-list" aria-label="Stops of the tour" data-reorder="stops[]">
+	<li class="list-group-item hstack gap-8" data-value="pier"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: The pier"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>The pier</li>
+	<li class="list-group-item hstack gap-8" data-value="lagoon"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: The emerald lake"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>The emerald lake</li>
+	<li class="list-group-item hstack gap-8" data-value="beach"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Lunch on the beach"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>Lunch on the beach</li>
+</ul>
+<div class="menu" id="list-group-moves-menu" popover role="menu" aria-label="Move">
+	<button class="menu-item" type="button" role="menuitem" data-move="up"><i class="bi bi-arrow-up" aria-hidden="true"></i>Move up</button>
+	<button class="menu-item" type="button" role="menuitem" data-move="down"><i class="bi bi-arrow-down" aria-hidden="true"></i>Move down</button>
+	<button class="menu-item" type="button" role="menuitem" data-move="first">Move to the top</button>
+	<button class="menu-item" type="button" role="menuitem" data-move="last">Move to the bottom</button>
+</div>
+```
+
+```js
+document.addEventListener('redz:move', (event) => {
+	event.preventDefault();
+	const {item, parent, position} = event.detail;
+	event.detail.respondWith(fetch('/stops/' + item.dataset.value + '/place', {method: 'POST', body: new URLSearchParams({parent: parent?.dataset.value ?? '', position})})
+		.then((answer) => answer.ok || Promise.reject('The stop could not be moved')));
+});
+```
+
 ## States
 
 ## Keyboard and accessibility

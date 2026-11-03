@@ -55,7 +55,7 @@ const later = async (values) => {
 	}
 	return sum;
 };
-const wait = async () => [await later([1, 2, 3]), await (async (x) => x * 2)(21)];
+const wait = async () => [await later([1, 2, 3]), await (async (x) => x * 2)(21), await Promise.reject(new Error('refused')).catch((error) => error.message)];
 globalThis.REDZ_MIN_RESULT = wait().then((waited) => ({kinds: [1, 2, 3, 4].map(kind), loops: loops(), safe: [safe(() => 'fine'), safe(() => {
 	throw new Error('x');
 })], waited}));

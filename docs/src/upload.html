@@ -1,0 +1,66 @@
+<header class="vstack gap-8">
+	<h1>File upload</h1>
+	<p class="docs-lead">Photos, documents, a price list: chosen, dropped or pasted, each file checked at once and sent on its own, with its own progress and its own error.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="upload-examples">
+	<h2 id="upload-examples">Examples</h2>
+	<p><code>upload</code> holds the file input, an <code>upload-zone</code> button that opens it and takes files dropped on it, a <code>&lt;template&gt;</code> of one file's row and an <code>upload-list</code>. A paste while the focus is in the upload takes the clipboard's files. Each file is checked against the input's <code>accept</code> and the upload's <code>data-max-size</code> in bytes; a refusal shows in the file's row, the page's text <code>file.type</code> or <code>file.size</code>. A file dropped beside the zone does not open in the window.</p>
+	<div class="docs-example docs-example-stack" id="upload-photos">
+		<div class="upload" data-max-size="2097152" data-docs-upload>
+			<input class="visually-hidden" id="upload-photos-input" type="file" name="photos[]" accept="image/*,.pdf" multiple tabindex="-1" aria-label="Photos">
+			<button class="upload-zone" type="button" aria-describedby="upload-photos-hint">
+				<i class="bi bi-cloud-arrow-up fs-24" aria-hidden="true"></i>
+				<span>Drop photos here, or choose them</span>
+				<span class="fs-12" id="upload-photos-hint">JPEG, PNG or PDF, up to 2 MB each</span>
+			</button>
+			<ul class="upload-list" aria-label="Files"></ul>
+			<template>
+				<li>
+					<i class="bi bi-file-earmark-image" aria-hidden="true"></i>
+					<span class="flex-fill" data-file-name></span>
+					<progress class="progress" max="1" value="0" aria-label="Sent"></progress>
+					<span class="invalid-feedback" data-file-error></span>
+					<button class="btn btn-sm btn-icon btn-text" type="button" data-file-remove><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+				</li>
+			</template>
+		</div>
+	</div>
+
+	<h3>Sent by the page</h3>
+	<p>Each file fires <code>redz:files</code> on the upload with the file, its row, <code>progress(fraction)</code> for the row's bar and a <code>signal</code> its remove button aborts. A page that sends cancels it and answers with a promise: resolved, the row is done; rejected, the page's words show in the row's <code>data-file-error</code>. One file's error leaves the others. Left alone, the file joins the input's files and goes with the form. The example above answers in a second and a half.</p>
+	<pre class="docs-code" tabindex="0"><code>document.addEventListener('redz:files', (event) =&gt; {
+	event.preventDefault();
+	const {file, progress, signal} = event.detail;
+	event.detail.respondWith(new Promise((sent, failed) =&gt; {
+		const request = new XMLHttpRequest();
+		request.open('POST', '/files');
+		request.upload.onprogress = (step) =&gt; progress(step.loaded / step.total);
+		request.onload = () =&gt; (request.status === 200 ? sent() : failed(request.responseText));
+		request.onerror = () =&gt; failed('The file did not arrive');
+		signal.addEventListener('abort', () =&gt; request.abort());
+		request.send(file);
+	}));
+});</code></pre>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="upload-access">
+	<h2 id="upload-access">Keyboard and accessibility</h2>
+	<ul>
+		<li>The zone is one real button: <kbd>Enter</kbd> or <kbd>Space</kbd> opens the browser's picker; the input itself stays out of the Tab order, and its words — which follow the browser's language, not the page's — never show.</li>
+		<li>A refused or failed file says why in its row, at once; a removed file's focus goes to the next file's remove button, else to the zone.</li>
+		<li>Each remove button is named after its file, from the page's text <code>remove</code>.</li>
+	</ul>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="upload-texts">
+	<h2 id="upload-texts">Texts</h2>
+	<table class="table docs-table">
+		<thead><tr><th scope="col">Key</th><th scope="col">For</th><th scope="col">In English</th></tr></thead>
+		<tbody>
+			<tr><td><code>file.type</code></td><td>A file the input's <code>accept</code> does not take; <code>{name}</code> is its name</td><td>{name} is not a kind of file this takes</td></tr>
+			<tr><td><code>file.size</code></td><td>A file over <code>data-max-size</code>; <code>{size}</code> the limit in the page's units</td><td>{name} is larger than {size}</td></tr>
+			<tr><td><code>remove</code></td><td>A file's remove button</td><td>Remove {label}</td></tr>
+		</tbody>
+	</table>
+</section>

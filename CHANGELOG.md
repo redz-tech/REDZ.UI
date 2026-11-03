@@ -4,6 +4,32 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Structures: trees, reordering, uploads
+- Trees (`css/components/tree.css`, `js/tree.js`): `tree` › `tree-item` › a `tree-row` with a `tree-toggle` — a
+  `--toggle` button for the item's `tree-group`, its chevron turned when open and mirrored right to left — and the
+  item's link. A group with `data-lazy` and no items fires `redz:expand` when it first opens: answered with a promise,
+  its toggle is busy until the page has put the items in, and a refusal closes it for another try. `--expand-all` and
+  `--collapse-all` on a button for the tree open and close every group that holds items.
+- Reordering (`js/reorder.js`): a list or a tree with `data-reorder` naming a hidden field moves its items, each with a
+  `data-value`, by a `drag-handle` — a button opening the list's menu of moves, its items `data-move="up"`, `down`,
+  `first`, `last`, and in a tree `in`, to the end of the group of the item above, and `out`, after its parent — or by
+  the pointer dragging the handle within its group (pointer events, a tap still opens the menu). A move is done at
+  once, the focus back on the handle and the page's text `moved` said; then `redz:move` on the item: refused, the move
+  is undone and the page's words said; left alone, hidden fields beside the list hold the order, and with
+  `data-parent` each item's parent.
+- Uploads (`css/components/upload.css`, `js/upload.js`): an `upload` with its file input, an `upload-zone` button, a
+  `<template>` of one file's row and an `upload-list`. Chosen, dropped on the zone or pasted, each file is checked
+  against `accept` and `data-max-size` — the page's texts `file.type` and `file.size` say a refusal in its row — then
+  sent on its own by `redz:files`, with its row, `progress(fraction)` for its bar and a `signal` its remove button
+  aborts; one file's error leaves the others. Left alone, the file joins the input's files for the form. A file
+  dropped beside the zone does not open in the window; each remove button is named after its file.
+- The names pass reads `.catch(` and `.for(` as the properties they are, not as the statements' heads.
+- The docs: pages for trees and uploads, reordering on the page of list groups, 34 Arabic strings; the probes walk
+  `--expand-all`, a move by each list's menu and two files on each upload, wait for a toggle busy with its children,
+  and flag a handle outside an item of a `data-reorder` list and an upload without its parts.
+
 ## 0.5.0 — 2026-11-03
 
 ### Forms: tags that create values, inline edit, the one-time code, passwords

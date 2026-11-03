@@ -10,7 +10,7 @@
 	<link rel="alternate" type="text/markdown" href="all.md">
 	<script src="site.js"></script>
 	<script type="module" src="../dist/redz-ui.min.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close":"إغلاق","confirm.ok":"موافق","confirm.cancel":"إلغاء","busy":"جارٍ التحميل…","remove":"إزالة {label}","found.one":"{count} نتيجة","found.other":"{count} نتائج","create":"إنشاء «{label}»","strength.short":"قصيرة جدًا","strength.fair":"مقبولة","strength.good":"جيدة","strength.strong":"قوية"}</script>
+	<script type="application/json" id="redz-ui-text">{"close":"إغلاق","confirm.ok":"موافق","confirm.cancel":"إلغاء","busy":"جارٍ التحميل…","remove":"إزالة {label}","found.one":"{count} نتيجة","found.other":"{count} نتائج","create":"إنشاء «{label}»","strength.short":"قصيرة جدًا","strength.fair":"مقبولة","strength.good":"جيدة","strength.strong":"قوية","moved":"نُقل إلى {position} من {count}","file.type":"{name} ليس من أنواع الملفات المقبولة هنا","file.size":"{name} أكبر من {size}"}</script>
 </head>
 <body>
 	<div class="app">
@@ -51,11 +51,13 @@
 			<a class="app-link" href="check.html"><i class="bi bi-check2-square" aria-hidden="true"></i>مربعات الاختيار وأزرار الاختيار والمفاتيح</a>
 			<a class="app-link" href="combobox.html"><i class="bi bi-menu-down" aria-hidden="true"></i>مربع التحرير والسرد</a>
 			<a class="app-link" href="inline-edit.html"><i class="bi bi-pencil-square" aria-hidden="true"></i>التحرير في المكان</a>
+			<a class="app-link" href="upload.html"><i class="bi bi-cloud-arrow-up" aria-hidden="true"></i>رفع الملفات</a>
 			<div class="app-section">المحتوى</div>
 			<a class="app-link" href="card.html"><i class="bi bi-card-text" aria-hidden="true"></i>البطاقات</a>
 			<a class="app-link" href="accordion.html"><i class="bi bi-chevron-bar-expand" aria-hidden="true"></i>الأكورديونات</a>
 			<a class="app-link" href="collapse.html"><i class="bi bi-arrows-collapse" aria-hidden="true"></i>الطي</a>
 			<a class="app-link" href="list-group.html"><i class="bi bi-list-ul" aria-hidden="true"></i>مجموعات القوائم</a>
+			<a class="app-link" href="tree.html"><i class="bi bi-diagram-3" aria-hidden="true"></i>الأشجار</a>
 			<a class="app-link" href="table.html"><i class="bi bi-table" aria-hidden="true"></i>الجداول</a>
 			<a class="app-link" href="badge.html"><i class="bi bi-patch-check" aria-hidden="true"></i>الشارات</a>
 			<a class="app-link" href="dot.html"><i class="bi bi-record-circle" aria-hidden="true"></i>النقاط</a>
@@ -936,6 +938,30 @@
 					</div>
 				</section>
 
+				<section class="vstack gap-16" aria-labelledby="all-upload">
+					<h2 id="all-upload"><a href="upload.html">رفع الملفات</a></h2>
+					<div class="docs-example docs-example-stack" id="upload-photos">
+						<div class="upload" data-max-size="2097152" data-docs-upload="">
+							<input class="visually-hidden" id="upload-photos-input" type="file" name="photos[]" accept="image/*,.pdf" multiple="" tabindex="-1" aria-label="الصور">
+							<button class="upload-zone" type="button" aria-describedby="upload-photos-hint">
+								<i class="bi bi-cloud-arrow-up fs-24" aria-hidden="true"></i>
+								<span>أسقط الصور هنا، أو اخترها</span>
+								<span class="fs-12" id="upload-photos-hint">JPEG أو PNG أو PDF، حتى 2 ميغابايت لكل ملف</span>
+							</button>
+							<ul class="upload-list" aria-label="الملفات"></ul>
+							<template>
+								<li>
+									<i class="bi bi-file-earmark-image" aria-hidden="true"></i>
+									<span class="flex-fill" data-file-name=""></span>
+									<progress class="progress" max="1" value="0" aria-label="Sent"></progress>
+									<span class="invalid-feedback" data-file-error=""></span>
+									<button class="btn btn-sm btn-icon btn-text" type="button" data-file-remove=""><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+								</li>
+							</template>
+						</div>
+					</div>
+				</section>
+
 				<section class="vstack gap-16" aria-labelledby="all-card">
 					<h2 id="all-card"><a href="card.html">البطاقات</a></h2>
 					<div class="docs-example docs-example-stack" id="card-basic">
@@ -1121,6 +1147,19 @@
 							<label class="list-group-item hstack gap-8"><input class="check" type="checkbox">kohtao.example</label>
 						</div>
 					</div>
+					<div class="docs-example docs-example-stack" id="list-group-moves">
+						<ul class="list-group" id="list-group-moves-list" aria-label="محطات الجولة" data-reorder="stops[]">
+							<li class="list-group-item hstack gap-8" data-value="pier"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="نقل: الرصيف"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>الرصيف</li>
+							<li class="list-group-item hstack gap-8" data-value="lagoon"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="نقل: البحيرة الزمردية"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>البحيرة الزمردية</li>
+							<li class="list-group-item hstack gap-8" data-value="beach"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="نقل: الغداء على الشاطئ"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>الغداء على الشاطئ</li>
+						</ul>
+						<div class="menu" id="list-group-moves-menu" popover="" role="menu" aria-label="نقل">
+							<button class="menu-item" type="button" role="menuitem" data-move="up"><i class="bi bi-arrow-up" aria-hidden="true"></i>انقل للأعلى</button>
+							<button class="menu-item" type="button" role="menuitem" data-move="down"><i class="bi bi-arrow-down" aria-hidden="true"></i>انقل للأسفل</button>
+							<button class="menu-item" type="button" role="menuitem" data-move="first">انقل إلى البداية</button>
+							<button class="menu-item" type="button" role="menuitem" data-move="last">انقل إلى النهاية</button>
+						</div>
+					</div>
 					<div class="docs-states" id="list-group-states" tabindex="0" role="region" aria-labelledby="list-group-states-title">
 						<table class="docs-matrix">
 							<thead>
@@ -1137,6 +1176,85 @@
 								</tr>
 							</tbody>
 						</table>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-tree">
+					<h2 id="all-tree"><a href="tree.html">الأشجار</a></h2>
+					<div class="docs-example docs-example-stack" id="tree-pages">
+						<div class="hstack gap-8">
+							<button class="btn btn-sm" type="button" commandfor="tree-pages-list" command="--expand-all"><i class="bi bi-arrows-expand" aria-hidden="true"></i>توسيع الكل</button>
+							<button class="btn btn-sm" type="button" commandfor="tree-pages-list" command="--collapse-all"><i class="bi bi-arrows-collapse" aria-hidden="true"></i>طي الكل</button>
+						</div>
+						<ul class="tree" id="tree-pages-list" aria-label="الصفحات">
+							<li class="tree-item">
+								<div class="tree-row">
+									<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-excursions" command="--toggle" aria-expanded="true" aria-label="الرحلات"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+									<a href="#tree-pages">الرحلات</a>
+								</div>
+								<ul class="tree-group" id="tree-pages-excursions">
+									<li class="tree-item"><div class="tree-row"><a href="#tree-pages">أنغ ثونغ بالقارب السريع</a></div></li>
+									<li class="tree-item"><div class="tree-row"><a href="#tree-pages">السوق الليلي وطعام الشارع</a></div></li>
+								</ul>
+							</li>
+							<li class="tree-item">
+								<div class="tree-row">
+									<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-islands" command="--toggle" aria-expanded="false" aria-label="الجزر"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+									<a href="#tree-pages">الجزر</a>
+								</div>
+								<ul class="tree-group" id="tree-pages-islands" hidden="until-found">
+									<li class="tree-item"><div class="tree-row"><a href="#tree-pages">كو تاو</a></div></li>
+									<li class="tree-item"><div class="tree-row"><a href="#tree-pages">كو فانغان</a></div></li>
+								</ul>
+							</li>
+							<li class="tree-item">
+								<div class="tree-row">
+									<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-archive" command="--toggle" aria-expanded="false" aria-label="أرشفة"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+									<a href="#tree-pages">أرشفة</a>
+								</div>
+								<ul class="tree-group" id="tree-pages-archive" hidden="until-found" data-lazy="" data-docs-lazy=""></ul>
+							</li>
+							<li class="tree-item"><div class="tree-row"><a href="#tree-pages">جهات الاتصال</a></div></li>
+						</ul>
+					</div>
+					<div class="docs-example docs-example-stack" id="tree-menu">
+						<ul class="tree" id="tree-menu-list" aria-label="قائمة الموقع" data-reorder="menu[]" data-parent="menu_parent">
+							<li class="tree-item" data-value="home">
+								<div class="tree-row">
+									<button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="tree-menu-moves" command="toggle-popover" aria-haspopup="menu" aria-label="نقل: الرئيسية"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>
+									<span>الرئيسية</span>
+								</div>
+								<ul class="tree-group" id="tree-menu-home"></ul>
+							</li>
+							<li class="tree-item" data-value="tours">
+								<div class="tree-row">
+									<button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="tree-menu-moves" command="toggle-popover" aria-haspopup="menu" aria-label="نقل: الجولات"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>
+									<span>الجولات</span>
+								</div>
+								<ul class="tree-group" id="tree-menu-tours">
+									<li class="tree-item" data-value="boats">
+										<div class="tree-row">
+											<button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="tree-menu-moves" command="toggle-popover" aria-haspopup="menu" aria-label="نقل: القوارب"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>
+											<span>القوارب</span>
+										</div>
+										<ul class="tree-group" id="tree-menu-boats"></ul>
+									</li>
+								</ul>
+							</li>
+							<li class="tree-item" data-value="contacts">
+								<div class="tree-row">
+									<button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="tree-menu-moves" command="toggle-popover" aria-haspopup="menu" aria-label="نقل: جهات الاتصال"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>
+									<span>جهات الاتصال</span>
+								</div>
+								<ul class="tree-group" id="tree-menu-contacts"></ul>
+							</li>
+						</ul>
+						<div class="menu" id="tree-menu-moves" popover="" role="menu" aria-label="نقل">
+							<button class="menu-item" type="button" role="menuitem" data-move="up"><i class="bi bi-arrow-up" aria-hidden="true"></i>انقل للأعلى</button>
+							<button class="menu-item" type="button" role="menuitem" data-move="down"><i class="bi bi-arrow-down" aria-hidden="true"></i>انقل للأسفل</button>
+							<button class="menu-item" type="button" role="menuitem" data-move="in"><i class="bi bi-arrow-return-right flip-rtl" aria-hidden="true"></i>انقل إلى داخل العنصر السابق</button>
+							<button class="menu-item" type="button" role="menuitem" data-move="out"><i class="bi bi-arrow-bar-left flip-rtl" aria-hidden="true"></i>انقل إلى الخارج</button>
+						</div>
 					</div>
 				</section>
 

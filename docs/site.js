@@ -123,6 +123,38 @@
 		}, 400);
 	});
 
+	// The tree's lazy Archive: two pages after 400 ms.
+	document.addEventListener('redz:expand', (event) => {
+		if (!event.target.hasAttribute('data-docs-lazy')) {
+			return;
+		}
+		event.preventDefault();
+		event.detail.respondWith(new Promise((done) => setTimeout(() => {
+			event.target.innerHTML = '<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Songkran 2025</a></div></li><li class="tree-item"><div class="tree-row"><a href="#tree-pages">Loy Krathong 2025</a></div></li>';
+			done();
+		}, 400)));
+	});
+
+	// The upload's example: each file "sent" in a second and a half, its bar moving.
+	document.addEventListener('redz:files', (event) => {
+		if (!event.target.hasAttribute('data-docs-upload')) {
+			return;
+		}
+		event.preventDefault();
+		const {progress, signal} = event.detail;
+		event.detail.respondWith(new Promise((sent) => {
+			let step = 0;
+			const timer = setInterval(() => {
+				progress(++step / 10);
+				if (step === 10) {
+					clearInterval(timer);
+					sent();
+				}
+			}, 150);
+			signal.addEventListener('abort', () => clearInterval(timer));
+		}));
+	});
+
 	// The inline edit's "saved by the page" example: a save after 600 ms, an empty title refused.
 	document.addEventListener('redz:save', (event) => {
 		if (!event.target.hasAttribute('data-docs-save')) {
