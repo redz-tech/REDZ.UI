@@ -14,20 +14,120 @@
 		"chrome-136": {"kind": "chrome", "fetch": {"url": "https://storage.googleapis.com/chrome-for-testing-public/136.0.7103.113/mac-arm64/chrome-mac-arm64.zip", "sha256": "8a0a23242157daa323127353e2c95c5d1c21c79d21c2d776b42b572399e087a0", "binary": "chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing"}},
 		"chrome-156": {"kind": "chrome", "default": false, "why": "The current Chrome for CI, pinned: the macOS 15 image's Chrome lags behind the stable one (152 against 156 in October 2026). Named in CI; locally the installed Chrome is the current one.", "fetch": {"url": "https://storage.googleapis.com/chrome-for-testing-public/156.0.8078.74/mac-arm64/chrome-mac-arm64.zip", "sha256": "a2b4db4905d4b8756228ad4df8eba5b07b0cb5ece62fa928d11169d7f19d035c", "binary": "chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing"}},
 		"ios-26": {"kind": "safari", "ios": ["26.4", "26.5", "26.2"]},
-		"voiceover": {"kind": "voiceover", "default": false, "why": "What VoiceOver says through the combobox and the palette in Safari; VoiceOver must obey AppleScript — CI sets that up, a Mac's owner allows it."},
+		"voiceover": {"kind": "voiceover", "default": false, "why": "What VoiceOver says through the speech steps of every widget that speaks, in Safari; VoiceOver must obey AppleScript — CI sets that up, a Mac's owner allows it."},
 		"voiceover-tahoe": {"kind": "voiceover", "default": false, "why": "The same on CI's macOS 26 image."}
 	},
-	"voiceover": {
+	"speech": {
+		"docs/menu.html": [
+			{"label": "the menu's button", "do": "focus", "target": "#menu-actions > button", "expect": ["Actions"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["Edit"]},
+			{"label": "Down in the menu", "do": "key", "key": "ArrowDown", "expect": ["Duplicate"]},
+			{"label": "Escape in the menu", "do": "key", "key": "Escape", "expect": ["Actions"]},
+			{"label": "the button of a menu of choices", "do": "focus", "target": "#menu-choice > button", "expect": ["All sites"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["All sites"]},
+			{"label": "Down to another choice", "do": "key", "key": "ArrowDown", "expect": ["lagoon.example"]},
+			{"label": "Escape in the choices", "do": "key", "key": "Escape", "expect": ["All sites"]}
+		],
+		"docs/dialog.html": [
+			{"label": "the dialog's button", "do": "focus", "target": "#dialog-edit > button", "expect": ["Add a note"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["A note for the guides", "Note"]},
+			{"label": "Escape in the dialog", "do": "key", "key": "Escape", "expect": ["Add a note"]},
+			{"label": "the confirm's button", "do": "focus", "target": "[data-docs-run=\"confirm\"]", "expect": ["Delete 2 excursions"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["Delete 2 excursions?", "Their pages go away on all three sites"]},
+			{"label": "Escape in the confirm", "do": "key", "key": "Escape", "expect": ["Delete 2 excursions"]}
+		],
+		"docs/drawer.html": [
+			{"label": "the drawer's button", "do": "focus", "target": "#drawer-filters > button[commandfor=\"drawer-filters-panel\"]", "expect": ["Filters"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["Filters"], "voiceover": ["dialog"]},
+			{"label": "Escape in the drawer", "do": "key", "key": "Escape", "expect": ["Filters"]}
+		],
+		"docs/nav.html": [
+			{"label": "the first tab", "do": "focus", "target": "#nav-tabs-1", "expect": ["Details"]},
+			{"label": "Right on it", "do": "key", "key": "ArrowRight", "expect": ["Prices"]},
+			{"label": "End in the tabs", "do": "key", "key": "End", "expect": ["History"]},
+			{"label": "the first tab of manual tabs", "do": "focus", "target": "#nav-manual-1", "expect": ["Bookings"]},
+			{"label": "Right on it", "do": "key", "key": "ArrowRight", "expect": ["Revenue"]},
+			{"label": "Enter on that tab", "do": "key", "key": "Enter", "expect": ["Revenue"]}
+		],
+		"docs/accordion.html": [
+			{"label": "an item's summary", "do": "focus", "target": "#accordion-basic summary", "expect": ["What does a day trip include?"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": []}
+		],
+		"docs/collapse.html": [
+			{"label": "the disclosure's button", "do": "focus", "target": "#collapse-help button", "expect": ["How prices work", "collapsed"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["expanded"]}
+		],
+		"docs/tooltip.html": [
+			{"label": "the tooltip's button", "do": "focus", "target": "#tooltip-why button", "expect": ["What is a partner license"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["A partner can hide the brand"]}
+		],
+		"docs/toast.html": [
+			{"label": "a button that saves", "do": "focus", "target": "[data-docs-run=\"toast-success\"]", "expect": ["Saved"]},
+			{"label": "Enter on it: a success", "do": "key", "key": "Enter", "expect": ["3 pages rebuilt"]},
+			{"label": "a button that fails", "do": "focus", "target": "[data-docs-run=\"toast-danger\"]", "expect": ["Not saved"]},
+			{"label": "Enter on it: an error", "do": "key", "key": "Enter", "expect": ["The connection was lost"]}
+		],
+		"docs/busy.html": [
+			{"label": "a button that works for 2 s", "do": "focus", "target": "#busy-button button", "expect": ["Save for 2 seconds"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": []}
+		],
+		"docs/inline-edit.html": [
+			{"label": "an Edit button", "do": "focus", "target": "[commandfor=\"inline-edit-row-1-form\"][command=\"--edit\"]", "expect": ["Edit the title: Ang Thong"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["Title", "Ang Thong: marine park by speedboat"]},
+			{"label": "Escape in the field", "do": "key", "key": "Escape", "expect": ["Edit the title: Ang Thong"]},
+			{"label": "the Edit button of a value the page saves", "do": "focus", "target": "[commandfor=\"inline-edit-row-2-form\"][command=\"--edit\"]", "expect": ["Edit the title: Night market"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["Title"]},
+			{"label": "the field's text selected", "do": "chord", "keys": "Meta+A", "expect": []},
+			{"label": "Backspace", "do": "key", "key": "Backspace", "expect": []},
+			{"label": "Enter on the empty field: the page refuses", "do": "key", "key": "Enter", "expect": ["A title cannot be empty"]}
+		],
+		"docs/form.html": [
+			{"label": "a field with an error", "do": "focus", "target": "#form-stacked-price", "expect": ["Adult price, THB", "Lower than the child price"]},
+			{"label": "the code field", "do": "focus", "target": "#form-otp-code", "expect": ["6-digit code from your app", "Spaces and dashes are fine"]},
+			{"label": "a new password", "do": "focus", "target": "#form-password-new", "expect": ["New password", "At least 12 characters"]},
+			{"label": "a strong one typed", "do": "type", "text": "Tr0pical-Lagoon!", "expect": ["Strong"]},
+			{"label": "the button that shows it", "do": "focus", "target": "[commandfor=\"form-password-new\"][command=\"--reveal\"]", "expect": ["Show the password"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": []}
+		],
+		"docs/check.html": [
+			{"label": "a switch", "do": "focus", "target": "#check-switches input", "expect": ["Show on the site"]},
+			{"label": "Space on it", "do": "key", "key": "Space", "expect": []}
+		],
 		"docs/combobox.html": [
 			{"label": "the button", "do": "focus", "target": "#combobox-one-face", "expect": ["Default language", "Thai"]},
 			{"label": "Enter on the button", "do": "key", "key": "Enter", "expect": ["Find a language"]},
 			{"label": "Down in the search", "do": "key", "key": "ArrowDown", "expect": ["Thai"]},
 			{"label": "typing “ger”", "do": "type", "text": "ger", "expect": ["German"]},
-			{"label": "Enter in the search", "do": "key", "key": "Enter", "expect": ["collapsed", "German"]}
+			{"label": "Enter in the search", "do": "key", "key": "Enter", "expect": ["collapsed", "German"]},
+			{"label": "the button of tags", "do": "focus", "target": "#combobox-tags-face", "expect": []},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": []},
+			{"label": "a new tag typed", "do": "type", "text": "Snorkeling trips", "expect": ["Create", "Snorkeling trips"]},
+			{"label": "Enter on “Create …”", "do": "key", "key": "Enter", "expect": ["Snorkeling trips"]}
 		],
 		"docs/palette.html": [
 			{"label": "⌘K", "do": "chord", "keys": "Meta+K", "expect": ["Find or go to"]},
 			{"label": "Down in the palette", "do": "key", "key": "ArrowDown", "expect": ["Pages"]}
+		],
+		"docs/tree.html": [
+			{"label": "a closed group's button", "do": "focus", "target": "[commandfor=\"tree-pages-islands\"]", "expect": ["Islands", "collapsed"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["expanded"]},
+			{"label": "the button of a group whose items load", "do": "focus", "target": "[commandfor=\"tree-pages-archive\"]", "expect": ["Archive", "collapsed"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["expanded"]},
+			{"label": "Expand all", "do": "focus", "target": "[commandfor=\"tree-pages-list\"][command=\"--expand-all\"]", "expect": ["Expand all"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": []}
+		],
+		"docs/list-group.html": [
+			{"label": "an item's handle", "do": "focus", "target": "[aria-label=\"Move: The pier\"]", "expect": ["Move: The pier"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["Move down"]},
+			{"label": "Enter on “Move down”", "do": "key", "key": "Enter", "expect": ["Moved to 2 of 3"]}
+		],
+		"docs/upload.html": [
+			{"label": "the zone", "do": "focus", "target": "#upload-photos .upload-zone", "expect": ["Drop photos here, or choose them", "JPEG, PNG or PDF, up to 2 MB each"]},
+			{"label": "two files chosen, one too big", "do": "eval", "script": "(() => { const input = document.getElementById('upload-photos-input'); const files = new DataTransfer(); files.items.add(new File(['x'], 'pier.jpg', {type: 'image/jpeg'})); files.items.add(new File([new Uint8Array(3145728)], 'lagoon.jpg', {type: 'image/jpeg'})); input.files = files.files; input.dispatchEvent(new Event('change', {bubbles: true})); return true; })()", "expect": ["lagoon.jpg is larger than"]},
+			{"label": "the refused file's remove button", "do": "focus", "target": "#upload-photos .upload-list > :last-child [data-file-remove]", "expect": ["lagoon.jpg"]}
+		],
+		"docs/pagination.html": [
+			{"label": "the current page", "do": "focus", "target": "#pagination-numbers [aria-current=\"page\"]", "expect": ["2"]}
 		]
 	},
 	"axe": {"version": "4.14.0", "integrity": "sha512-9WTZxEjsZ7b13TH8JPmbV2z8CHbl80/2hm3XPEG4JgNdQLK81IBRXmSxHfMAOkSqQeRxT/0dwNDz2GOm3zzpcQ==", "tags": ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]},

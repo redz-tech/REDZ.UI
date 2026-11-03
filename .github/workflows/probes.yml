@@ -6,30 +6,57 @@ on:
     tags: ['v*']
   pull_request:
   workflow_dispatch:
+    inputs:
+      parts:
+        description: 'A lab run of only these parts, by name, space separated (all when empty); its sheet joins them alone'
+        type: string
+        default: ''
 
 permissions:
   contents: read
 
 jobs:
-  probes:
+  plan:
     # macOS 15: its image has the iOS 18.5 and 26.2 simulators, and Firefox 132 starts there — not on macOS 27. Its
     # Chrome lags (152), so the current Chrome is a pinned Chrome for Testing build (chrome-156 in the config).
     # Seven parts, five at a time — the most macOS jobs a free account runs together — each its own sheet, joined below;
-    # VoiceOver on macOS 15, the first with its activedescendant fix, and on macOS 26.
+    # VoiceOver on macOS 15, the first with its activedescendant fix, and on macOS 26. A push, a pull request and a tag
+    # run them all.
+    runs-on: ubuntu-latest
+    outputs:
+      parts: ${{ steps.plan.outputs.parts }}
+      dirs: ${{ steps.plan.outputs.dirs }}
+    steps:
+      - id: plan
+        env:
+          WANTED: ${{ inputs.parts }}
+          ALL: >-
+            [{"name": "chrome", "engines": "chrome-156"},
+            {"name": "firefox", "engines": "firefox"},
+            {"name": "safari", "engines": "safari"},
+            {"name": "floor", "engines": "chrome-130 firefox-132 chrome-136"},
+            {"name": "ios", "engines": "ios-18 ios-26"},
+            {"name": "voiceover", "engines": "voiceover"},
+            {"name": "voiceover-tahoe", "engines": "voiceover-tahoe", "runner": "macos-26"}]
+        run: |
+          set -eu
+          parts=$(jq -c --arg wanted "${WANTED:-}" '($wanted | split(" ") | map(select(. != ""))) as $w | map(select($w == [] or (.name as $n | any($w[]; . == $n))))' <<< "$ALL")
+          if [ "$(jq length <<< "$parts")" -eq 0 ]; then
+            echo "no part is named ${WANTED}" >&2
+            exit 1
+          fi
+          echo "parts=${parts}" >> "$GITHUB_OUTPUT"
+          echo "dirs=$(jq -r 'map("parts/part-" + .name) | join(" ")' <<< "$parts")" >> "$GITHUB_OUTPUT"
+
+  probes:
+    needs: plan
     name: probes (${{ matrix.part.name }})
     runs-on: ${{ matrix.part.runner || 'macos-15' }}
     timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
-        part:
-          - {name: chrome, engines: chrome-156}
-          - {name: firefox, engines: firefox}
-          - {name: safari, engines: safari}
-          - {name: floor, engines: chrome-130 firefox-132 chrome-136}
-          - {name: ios, engines: ios-18 ios-26}
-          - {name: voiceover, engines: voiceover}
-          - {name: voiceover-tahoe, engines: voiceover-tahoe, runner: macos-26}
+        part: ${{ fromJSON(needs.plan.outputs.parts) }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -64,8 +91,8 @@ jobs:
           if-no-files-found: error
 
   sheet:
-    needs: probes
-    if: always()
+    needs: [plan, probes]
+    if: always() && needs.plan.result == 'success'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -79,14 +106,15 @@ jobs:
           coverage: none
           tools: none
 
-      - name: One sheet of the seven parts
+      - name: One sheet of the parts
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
+          DIRS: ${{ needs.plan.outputs.dirs }}
         run: |
           set -eu
           gh run download "${GITHUB_RUN_ID}" --pattern 'part-*' --dir parts
-          php tools/probe.php merge parts/part-chrome parts/part-firefox parts/part-safari parts/part-floor parts/part-ios parts/part-voiceover parts/part-voiceover-tahoe
+          php tools/probe.php merge ${DIRS}
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
@@ -99,7 +127,7 @@ jobs:
     # A tag v* becomes a release only when every part of the probes is clean: a draft with the archive and the sheet,
     # then published — the repository's immutable releases lock the tag and the files and sign an attestation of them.
     needs: [probes, sheet]
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     permissions:
       contents: write

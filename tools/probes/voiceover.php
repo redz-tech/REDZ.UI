@@ -1,7 +1,8 @@
 <?php
 // probes, VoiceOver: what VoiceOver says while desktop Safari, driven by the Safari driver, goes through the steps of the
-// config's "voiceover" pages — its last phrase read by AppleScript until it falls quiet, each step holding the words it
-// must contain. VoiceOver obeys AppleScript only where the machine allows it: CI runs php tools/probe.php
+// config's "speech" pages — its last phrase read by AppleScript until it falls quiet, each step holding the words it
+// must contain, the page's own for every reader and VoiceOver's apart. VoiceOver obeys AppleScript only where the
+// machine allows it: CI runs php tools/probe.php
 // voiceover-setup (the defaults, the flag file and the TCC rows, after @guidepup/setup 0.29.3, MIT); a Mac's owner turns
 // it on in VoiceOver Utility.
 
@@ -69,7 +70,7 @@ function PROBE__VoiceOverRun(string $name, string $dir, array $run, array &$repo
 		}
 		$h = PROBE__SafariStart($dir);
 		$report['engines'][$name] = ['version' => $h['version'] . ' · VoiceOver · macOS ' . trim(PROBE__Run(['/usr/bin/sw_vers', '-productVersion'])), 'cells' => 0];
-		foreach ($run['config']['voiceover'] as $page => $steps) {
+		foreach ($run['config']['speech'] as $page => $steps) {
 			PROBE__Do($h, 'Load', $run['base'] . $page, 1280, 900);
 			for ($tries = 0; PROBE__Do($h, 'Eval', 'document.readyState === "complete" && "REDZ" in window') !== true; $tries++) {
 				if ($tries > 100) {
@@ -86,12 +87,14 @@ function PROBE__VoiceOverRun(string $name, string $dir, array $run, array &$repo
 					'key' => PROBE__Do($h, 'Key', $step['key']),
 					'type' => PROBE__Do($h, 'Type', $step['text']),
 					'chord' => PROBE__Do($h, 'Chord', $step['keys']),
+					'eval' => PROBE__Do($h, 'Eval', $step['script']),
 				};
 				$heard = PROBE__VoiceOverHeard($before, 6);
 				$said = mb_strtolower(implode(' · ', $heard));
-				$missing = array_values(array_filter($step['expect'], fn(string $words): bool => !str_contains($said, mb_strtolower($words))));
+				$expect = [...$step['expect'], ...($step['voiceover'] ?? [])];
+				$missing = array_values(array_filter($expect, fn(string $words): bool => !str_contains($said, mb_strtolower($words))));
 				$state = PROBE__Do($h, 'Eval', '(() => { const el = document.activeElement; const active = document.getElementById(el.getAttribute("aria-activedescendant") || ""); return (el.id || el.localName) + (active === null ? "" : " → " + active.textContent.trim()) + " · " + (el.matches("input, textarea") ? el.value : el.textContent.trim()).slice(0, 40); })()');
-				$report['spoken'][$page][] = ['engine' => $name, 'step' => $step['label'], 'expect' => $step['expect'], 'said' => $heard, 'state' => $state];
+				$report['spoken'][$page][] = ['engine' => $name, 'step' => $step['label'], 'expect' => $expect, 'said' => $heard, 'state' => $state];
 				if ($missing !== []) {
 					$report['findings'][] = $name . ' ' . $page . ' — ' . $step['label'] . ': VoiceOver said «' . implode(' · ', $heard) . '», without «' . implode('», «', $missing) . '»';
 				}
