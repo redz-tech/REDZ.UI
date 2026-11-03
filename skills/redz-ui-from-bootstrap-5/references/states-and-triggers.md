@@ -8,9 +8,9 @@
 | `.active` on a tab | `aria-selected="true"` (the library sets it) |
 | `.active` on a toggle button, a filter | `aria-pressed="true"` |
 | `.active` on a list item, a dropdown item | `aria-current="true"`, or `aria-checked="true"` on a `menuitemradio` |
-| `.disabled` on a link or button | `disabled` on a button; `aria-disabled="true"` keeps it focusable — the library swallows its clicks |
+| `.disabled` on a link or button | `disabled` on a button; `aria-disabled="true"` keeps it focusable - the library swallows its clicks |
 | `.show` | the browser's `[open]` (dialog, accordion item) and `:popover-open` (menu); a collapsed region open: no `hidden` |
-| `.collapsed` | `aria-expanded="false"`, set by the browser on the button — or by the library for `command="--toggle"` |
+| `.collapsed` | `aria-expanded="false"`, set by the browser on the button - or by the library for `command="--toggle"` |
 | `.is-invalid` | `aria-invalid="true"` on the control, its error in `invalid-feedback` joined by `aria-describedby` |
 | `.was-validated` | nothing: the browser's `:user-invalid` shows after the person edits |
 | `.is-valid` | nothing: fields have no success state |

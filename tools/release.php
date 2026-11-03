@@ -14,7 +14,7 @@ const RELEASE_SITE = 'https://redz-tech.github.io/REDZ.UI/';
 function RELEASE__Section(string $version): string
 {
 	$changelog = (string)file_get_contents(RELEASE_ROOT . '/CHANGELOG.md');
-	if (preg_match('~^## ' . preg_quote($version, '~') . ' — \d{4}-\d{2}-\d{2}\n(.*?)(?=^## |\z)~ms', $changelog, $m) !== 1) {
+	if (preg_match('~^## ' . preg_quote($version, '~') . ' [-—] \d{4}-\d{2}-\d{2}\n(.*?)(?=^## |\z)~msu', $changelog, $m) !== 1) {
 		return '';
 	}
 	return trim($m[1]);
@@ -47,7 +47,7 @@ function RELEASE__Main(array $argv): int
 	}
 	$section = RELEASE__Section($version);
 	if ($section === '') {
-		fwrite(STDERR, 'CHANGELOG.md has no section "## ' . $version . " — YYYY-MM-DD\"\n");
+		fwrite(STDERR, 'CHANGELOG.md has no section "## ' . $version . " - YYYY-MM-DD\"\n");
 		return 1;
 	}
 	if (!is_dir($dir) && !mkdir($dir, 0777, true)) {

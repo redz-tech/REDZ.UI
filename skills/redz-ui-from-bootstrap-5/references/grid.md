@@ -36,7 +36,7 @@ In REDZ.UI the parent sets the grid and the number is the count. A width prefix 
 </div>
 ```
 
-Below the prefix, the grid has one column — as Bootstrap's columns stack.
+Below the prefix, the grid has one column - as Bootstrap's columns stack.
 
 ## row-cols
 
@@ -56,5 +56,5 @@ the shell marks its own wrapper `region` and limits it with `max-w-*` and `mx-au
 ## Prefixes measure regions
 
 `md:` means "the nearest region is at least 768 px wide": a card, a dialog, a drawer, the shell's columns, any
-`region`. A card in the 8-of-12 column of a 1440 px window is about 740 px wide — use `sm:` inside it. A region inside a
+`region`. A card in the 8-of-12 column of a 1440 px window is about 740 px wide - use `sm:` inside it. A region inside a
 flex row needs a width (`flex-grow-1`, a grid track): inline-size containment does not size it by its content.

@@ -61,7 +61,7 @@ body are `drawer-header`, `drawer-title`, `drawer-body`. It opens like a dialog:
 - `form-floating`, `form-control`, `form-select`, `form-label`, `form-text`, `invalid-feedback` keep their names.
 - `is-invalid` → `aria-invalid="true"`; drop `was-validated`, `is-valid` and `valid-feedback`.
 - `input-group`, `input-group-sm` and `input-group-text` keep their names; `input-group-lg` becomes the default size;
-  `has-validation` goes — the error sits under the group in its `form-field`. A menu inside the group stays where it
+  `has-validation` goes - the error sits under the group in its `form-field`. A menu inside the group stays where it
   is: the joining skips popovers. An icon inside the field itself is `form-adorn`.
 - A `<select>` that a plugin turned into a search (Select2, Tom Select, Choices.js, a project's own) becomes a
   combobox: a `form-select combobox-toggle` button, a `combobox-menu` panel with `combobox-search` and a `listbox`
@@ -72,11 +72,11 @@ body are `drawer-header`, `drawer-title`, `drawer-body`. It opens like a dialog:
 
 - The accordion is `<details>`: `accordion-item` on the `<details>`, `accordion-header` on its `<summary>` with the
   words straight in it, `accordion-body` after it; `accordion-button` and `accordion-collapse` go, and so does the
-  heading around the button. The items of one group share `name="…"` — that replaces `data-bs-parent` — and the open
+  heading around the button. The items of one group share `name="…"` - that replaces `data-bs-parent` - and the open
   one has `open` instead of `show`. The chevron is `<i class="bi bi-chevron-down accordion-icon" aria-hidden="true">`
   at the end of the summary.
 - A standalone collapse keeps its button and its region where they are: the button gets `command="--toggle"
-  aria-controls="ID" aria-expanded="false"` instead of `data-bs-toggle` and `data-bs-target` — no `commandfor`, which
+  aria-controls="ID" aria-expanded="false"` instead of `data-bs-toggle` and `data-bs-target` - no `commandfor`, which
   WebKit would expose as collapsed whatever `aria-expanded` says; the region drops
   `collapse` and gets `hidden="until-found"` while closed (no `hidden` when it starts open, its button
   `aria-expanded="true"`).
@@ -85,7 +85,7 @@ body are `drawer-header`, `drawer-title`, `drawer-body`. It opens like a dialog:
 
 - `list-group`, `list-group-item`, `-action`, `-flush`, `-numbered` and `-horizontal` keep their names;
   `list-group-horizontal-md` → `md:list-group-horizontal`; `active` → `aria-current`, `disabled` → `disabled` on a
-  button or a link without `href` and with `aria-disabled="true"`; the item tones go — a badge or a dot says it.
+  button or a link without `href` and with `aria-disabled="true"`; the item tones go - a badge or a dot says it.
 - `<div class="progress"><div class="progress-bar" style="width: 40%">` → `<progress class="progress" value="40"
   max="100">` with a name; `progress-bar-striped` and `-animated` → `progress-striped` and `progress-animated` on the
   `<progress>`; `bg-success` on the bar → `progress-success`; text inside the bar moves beside it. A quota or a score

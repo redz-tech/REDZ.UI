@@ -178,8 +178,8 @@ function BUILD__Pulled(string $file, array &$seen = []): array
 /** The version of the changelog's newest released section, `## X.Y.Z — YYYY-MM-DD`. */
 function BUILD__Version(): string
 {
-	if (preg_match('~^## (\d+\.\d+\.\d+) — \d{4}-\d{2}-\d{2}$~m', (string)file_get_contents(BUILD_ROOT . '/CHANGELOG.md'), $m) !== 1) {
-		throw new RuntimeException('CHANGELOG.md has no released section "## X.Y.Z — YYYY-MM-DD"');
+	if (preg_match('~^## (\d+\.\d+\.\d+) [-—] \d{4}-\d{2}-\d{2}$~mu', (string)file_get_contents(BUILD_ROOT . '/CHANGELOG.md'), $m) !== 1) {
+		throw new RuntimeException('CHANGELOG.md has no released section "## X.Y.Z - YYYY-MM-DD"');
 	}
 	return $m[1];
 }
