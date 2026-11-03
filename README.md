@@ -3,8 +3,8 @@
 The interface library of the REDZ products: plain CSS and small JavaScript on the browser platform - no framework, no
 build step.
 
-**Status:** 0.7.0 (2026-11-03) - see [Releases](#releases). Three demo screens in `reference/demo/`
-- a list, a resource page and a settings form - show it in light and dark themes, left-to-right and right-to-left.
+**Status:** 0.7.0 (2026-11-03) - see [Releases](#releases). Three demo screens in `reference/demo/` -
+a list, a resource page and a settings form - show it in light and dark themes, left-to-right and right-to-left.
 
 **Site:** [redz-tech.github.io/REDZ.UI](https://redz-tech.github.io/REDZ.UI/) - documentation and the demo screens of
 the latest release at the root, of the main branch under `next/`, and of every release under its version.

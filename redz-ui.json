@@ -4500,10 +4500,10 @@
 		"confirm.ok"
 	],
 	"files": {
-		"CHANGELOG.md": "sha256-r3CveZGdxZYJg7mo4wzvZkCTSvULwCbUnWbNM+MmRZ4=",
+		"CHANGELOG.md": "sha256-mn76BlU/piRbMuE6IuHCeRetBBGjGKsKYN4tlgW8shY=",
 		"LICENSE": "sha256-8pEc4ECwd79krplYdY+WVWqMIFNgcosqMOEmO/IRl6E=",
 		"NOTICE": "sha256-kspN6Bvm3sph93yHQc52RmQ1HKUMN/HbFOIH1iKYpMA=",
-		"README.md": "sha256-g8Aezip24x/ydfFr0lA+vchx2u92O2/LSqr10wrsgC4=",
+		"README.md": "sha256-rKicM6FcDSOVWxxsxT3PBUdstw6wUiApvJ25GRnUj/M=",
 		"css/base.css": "sha256-Q6Smi2Izi5wkGWmO5e/OfhEzRZPzu1aCRh5V/GzjUso=",
 		"css/components/accordion.css": "sha256-qzneYb6yrM/iS3d8Kq1v2P8KZg1x2jvnUmITMuXdxxo=",
 		"css/components/alert.css": "sha256-20SUa5rJAxlw/fEryb/G+4VJ4tvNDImlc96GH6xQyqM=",

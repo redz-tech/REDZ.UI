@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 2
 
       - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
         with:
@@ -32,3 +34,6 @@ jobs:
 
       - name: Every CSS and HTML feature works at the browser floor
         run: php tools/floor.php check
+
+      - name: No em dash or en dash in the files this commit touches
+        run: php tools/dashes.php --commit

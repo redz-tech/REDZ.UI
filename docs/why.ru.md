@@ -77,8 +77,8 @@ Bootstrap 5.3 хорошо послужил вебу. Нам он больше �
 ## 4. Где Bootstrap 6 идёт туда, куда мы пойти не можем
 
 ### a. Он переименовывает словарь, на котором уже всё написано
-Анонс говорит прямо: [«Yes, this is a direct copy of how Tailwind does responsive»](https://blog.getbootstrap.com/2026/10/08/bootstrap-6-alpha/)
-- `.d-md-none` становится `.md:d-none`; цвета переезжают в `.theme-*` и `.fg-*`, а файл стилей вырастает с 2 025 имён
+Анонс говорит прямо: [«Yes, this is a direct copy of how Tailwind does responsive»](https://blog.getbootstrap.com/2026/10/08/bootstrap-6-alpha/) -
+`.d-md-none` становится `.md:d-none`; цвета переезжают в `.theme-*` и `.fg-*`, а файл стилей вырастает с 2 025 имён
 классов до 3 113. Сама приставка читается хорошо, и REDZ.UI её тоже берёт. Цена - в переименовании: отступы,
 брейкпоинты и цвета уже живут в разметке каждого экрана, написанного под v5, поэтому их переименование переписывает
 каждый экран. Для продукта, чьи экраны отчасти пишут другие, это самый дорогой вид изменений - словарь, на котором люди
@@ -136,8 +136,8 @@ Bootstrap, рассчитаны на npm, Vite, Parcel и Webpack. Это мир
 ### g. Кроссбраузерность проверяют руками
 JavaScript-тесты Bootstrap идут только в Chromium ([`js.yml`](https://github.com/twbs/bootstrap/blob/main/.github/workflows/js.yml)).
 Интеграцию с BrowserStack убрали в июле 2026 года -
-[«Zero runs since ~October 2024, and its matrix pinned Chrome 60 / Firefox 60 / iOS 12»](https://github.com/twbs/bootstrap/pull/42764),
-- а Safari и Firefox проверяют люди. На «фреймворк проверен во всех браузерах» мы рассчитывать не можем.
+[«Zero runs since ~October 2024, and its matrix pinned Chrome 60 / Firefox 60 / iOS 12»](https://github.com/twbs/bootstrap/pull/42764), -
+а Safari и Firefox проверяют люди. На «фреймворк проверен во всех браузерах» мы рассчитывать не можем.
 
 ## 5. Почему не прослойка над Bootstrap
 Прослойка между нашими экранами и китом была нашей первой идеей, и мы её измерили.

@@ -77,8 +77,8 @@ We agree with that direction. REDZ.UI takes the same ideas, with credit wherever
 ## 4. Where Bootstrap 6 goes where we cannot follow
 
 ### a. It renames the vocabulary everyone has already written
-The announcement is candid: ["Yes, this is a direct copy of how Tailwind does responsive"](https://blog.getbootstrap.com/2026/10/08/bootstrap-6-alpha/)
-- `.d-md-none` becomes `.md:d-none`; colors move to `.theme-*` and `.fg-*`, and the stylesheet grows from 2,025 class
+The announcement is candid: ["Yes, this is a direct copy of how Tailwind does responsive"](https://blog.getbootstrap.com/2026/10/08/bootstrap-6-alpha/) -
+`.d-md-none` becomes `.md:d-none`; colors move to `.theme-*` and `.fg-*`, and the stylesheet grows from 2,025 class
 names to 3,113. The prefix itself reads well, and REDZ.UI uses it too. The cost is the rename: spacing, breakpoints and
 colors already live in the markup of every screen written for v5, so renaming them rewrites every screen. For a product
 whose screens are partly written by others, that is the most expensive kind of change there is - a vocabulary must stay
@@ -138,8 +138,8 @@ and motion that only shows where things go.
 ### g. Cross-browser behavior is checked by hand
 Bootstrap's JavaScript tests run in Chromium only ([`js.yml`](https://github.com/twbs/bootstrap/blob/main/.github/workflows/js.yml)).
 The BrowserStack integration was removed in July 2026 -
-["Zero runs since ~October 2024, and its matrix pinned Chrome 60 / Firefox 60 / iOS 12"](https://github.com/twbs/bootstrap/pull/42764)
-- and Safari and Firefox are checked by people. "A framework is tested in every browser" is not something we can count
+["Zero runs since ~October 2024, and its matrix pinned Chrome 60 / Firefox 60 / iOS 12"](https://github.com/twbs/bootstrap/pull/42764) -
+and Safari and Firefox are checked by people. "A framework is tested in every browser" is not something we can count
 on.
 
 ## 5. Why not a layer over Bootstrap

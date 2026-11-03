@@ -241,8 +241,8 @@ The first release.
   attestation of both, which `gh release verify-asset` checks.
 
 ### The reference, the docs and the skills
-- `docs/`: a page per component and getting started, layout, utilities, tokens, icons and the move from Bootstrap 5.3
-  - examples whose code is printed from the same markup, every state as a named grid, keyboard and accessibility, the
+- `docs/`: a page per component and getting started, layout, utilities, tokens, icons and the move from Bootstrap 5.3 -
+  examples whose code is printed from the same markup, every state as a named grid, keyboard and accessibility, the
   tokens a component reads, its rows of the Bootstrap map; written by `php tools/docs.php` from `docs/src/` into one
   shell, with `docs/all.html` (every example and state on one page, the probes' fixture), its Arabic twin and those of
   the demo screens (`docs/ar.tsv`), a Markdown twin of every page, `llms.txt` and `llms-full.txt`. The docs' own
