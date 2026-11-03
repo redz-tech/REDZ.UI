@@ -322,10 +322,12 @@ function PROBE__NvdaReady(array &$r, array &$h, string $page): void
 		PROBE__NvdaSay($r, 'F6');
 	}
 	// Firefox can leave NVDA on the whole browser after its window comes in front (nvaccess/nvda #5758); a switch to focus
-	// mode and back puts NVDA on the page.
-	foreach (['NVDA+Space', 'NVDA+Space', 'Control+Home'] as $keys) {
-		PROBE__NvdaSay($r, $keys);
-	}
+	// mode and back puts NVDA on the page. The switch focuses what NVDA's cursor is on — NVDA brings its cursor back where
+	// it was on the page's last load —, so the focus leaves it again: a step's focus must arrive.
+	PROBE__NvdaSay($r, 'NVDA+Space');
+	PROBE__NvdaSay($r, 'NVDA+Space');
+	PROBE__Do($h, 'Eval', '(() => { document.activeElement?.blur(); addEventListener("keydown", (event) => { if (event.key === "Escape") { window.REDZ_PROBE_ESCAPES = (window.REDZ_PROBE_ESCAPES ?? 0) + 1; } }, true); return true; })()');
+	PROBE__NvdaSay($r, 'Control+Home');
 	PROBE__NvdaHeard($r, microtime(true) * 1000, microtime(true) * 1000, 1.0, 5);
 }
 
@@ -333,10 +335,21 @@ function PROBE__NvdaReady(array &$r, array &$h, string $page): void
 function PROBE__NvdaAct(array &$r, array &$h, array $step): void
 {
 	match ($step['do']) {
-		'key' => PROBE__NvdaPress($r, $step['key']),
+		'key' => $step['key'] === 'Escape' ? PROBE__NvdaEscape($r, $h) : PROBE__NvdaPress($r, $step['key']),
 		'type' => PROBE__NvdaType($r, $step['text']),
 		'chord' => PROBE__NvdaPress($r, $step['keys']),
 	};
+}
+
+/** Escape as a user presses it under NVDA: NVDA takes an Escape in focus mode for itself, back to browse mode, the page
+ *  none the wiser — then the user presses it again, and NVDA hands it to the page. */
+function PROBE__NvdaEscape(array &$r, array &$h): void
+{
+	$seen = PROBE__Do($h, 'Eval', 'window.REDZ_PROBE_ESCAPES ?? 0');
+	PROBE__NvdaSay($r, 'Escape', 0.3);
+	if (PROBE__Do($h, 'Eval', 'window.REDZ_PROBE_ESCAPES ?? 0') === $seen) {
+		PROBE__NvdaPress($r, 'Escape');
+	}
 }
 
 /** NVDA reads the page whole by its quick navigation, on a page of its own: for each kind of item — headings by H,
@@ -353,8 +366,8 @@ function PROBE__NvdaRead(array &$r, array &$h, string $page, array $run, array &
 	$findings = [];
 	foreach (PROBE_NVDA_READ as $kind => [$key, $end]) {
 		$items = $holds[$kind];
-		PROBE__NvdaSay($r, 'Control+Home');
-		$said = [];
+		// The top of the page is already inside its first item — the banner —, which NVDA says there, not at the first key.
+		$said = [implode(', ', PROBE__NvdaSay($r, 'Control+Home'))];
 		for ($press = 0; $press < 2 * count($items) + 10; $press++) {
 			$words = implode(', ', PROBE__NvdaSay($r, $key, 0.4));
 			if (str_contains(PROBE__SpeechWords($words), $end)) {
@@ -395,7 +408,7 @@ function PROBE__NvdaRun(string $name, array $engine, string $binary, string $dir
 	$r = PROBE__NvdaStart($name, $exe, $dir, $log);
 	$h = null;
 	try {
-		$h = $engine['browser'] === 'chrome' ? PROBE__ChromeStart($binary, $dir, true) : PROBE__FirefoxStart($binary, $dir, [], true);
+		$h = $engine['browser'] === 'chrome' ? PROBE__ChromeStart($binary, $dir, true) : PROBE__FirefoxStart($binary, $dir, ['browser.aboutwelcome.enabled' => false, 'browser.startup.homepage_override.mstone' => 'ignore', 'browser.startup.upgradeDialog.enabled' => false], true);
 		$report['engines'][$name] = ['version' => $h['version'] . ' · NVDA ' . $run['config']['nvda']['version'] . ' · Windows ' . php_uname('r') . ' ' . php_uname('v'), 'cells' => 0];
 		PROBE__SpeechHear($r, $h, $run, $report);
 	} catch (Throwable $e) {
@@ -430,14 +443,17 @@ function PROBE__NvdaStop(array &$r): void
 	PROBE__Wait($r['proc']);
 }
 
-/** Lets a window the probe starts come in front of the others, as CI needs: Windows' foreground lock off for later
- *  sessions, and for this one where Windows lets the setup change it — otherwise NVDA's Alt+Escape brings the window. */
+/** Readies CI's Windows for NVDA: the apps' notifications off — NVDA reads one aloud and follows it, as it did Firefox's
+ *  "pin to taskbar" in the middle of a page —, and a window the probe starts may come in front of the others: Windows'
+ *  foreground lock off for later sessions, and for this one where Windows lets the setup change it — otherwise NVDA's
+ *  Alt+Escape brings the window. */
 function PROBE__NvdaSetup(): int
 {
 	if (PROBE__NvdaBlocked() !== '') {
 		fwrite(STDERR, PROBE__NvdaBlocked() . "\n");
 		return 1;
 	}
+	PROBE__Run(['reg', 'add', 'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications', '/v', 'ToastEnabled', '/t', 'REG_DWORD', '/d', '0', '/f']);
 	foreach (['ForegroundLockTimeout', 'ForegroundFlashCount'] as $value) {
 		PROBE__Run(['reg', 'add', 'HKCU\\Control Panel\\Desktop', '/v', $value, '/t', 'REG_DWORD', '/d', '0', '/f']);
 	}

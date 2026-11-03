@@ -6,6 +6,11 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 
 ## Unreleased
 
+### Fixed
+- A combobox's button is collapsed by the time its closing panel hands the focus back to it: its `aria-expanded`
+  follows the panel's `beforetoggle`, not its later `toggle`. NVDA in Firefox said the button expanded after a choice
+  and never said it collapsed.
+
 ### Every widget that speaks, heard by NVDA too
 - The probes hear NVDA 2026.3 in Chrome and in Firefox on Windows Server 2025 through the same 80 speech steps: a
   portable copy made from NVDA's official installer, its sha256 checked, on a config of the run. NVDA's own Remote

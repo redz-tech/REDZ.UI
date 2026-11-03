@@ -641,7 +641,9 @@ document.addEventListener('click', (event) => {
 	}
 }, true);
 
-document.addEventListener('toggle', (event) => {
+/** The button of a combobox's panel says the state the panel goes into before it does: a closing panel hands the focus
+ *  back to the button at once, and a screen reader takes the button as it finds it then. */
+document.addEventListener('beforetoggle', (event) => {
 	const panel = event.target;
 	if (!(panel instanceof HTMLElement) || !panel.classList.contains('combobox-menu')) {
 		return;
@@ -653,6 +655,14 @@ document.addEventListener('toggle', (event) => {
 	} else {
 		face?.removeAttribute('aria-controls');
 	}
+}, true);
+
+document.addEventListener('toggle', (event) => {
+	const panel = event.target;
+	if (!(panel instanceof HTMLElement) || !panel.classList.contains('combobox-menu')) {
+		return;
+	}
+	const face = document.querySelector('.combobox-toggle[commandfor="' + CSS.escape(panel.id) + '"]');
 	const input = panel.querySelector('input[role="combobox"]');
 	const list = input === null ? null : listOf(input);
 	if (list === null) {
