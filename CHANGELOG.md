@@ -19,6 +19,13 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   starts, a combobox's when its search takes the focus, a password's words when the first key is typed. A region made
   with its words says nothing, so the first move, the first count found and every level of strength went unsaid.
 - A combobox of many says politely the label of a value it creates, its panel still open.
+- A password's level is said by a live region of the field's own: VoiceOver says nothing of a password field's own
+  description changing, live or not.
+- The probes hear every widget that speaks: the config's `speech`, one list of 80 steps on 18 pages for every
+  reader — the words the page owns shared, a reader's own apart — which VoiceOver goes through on macOS 15 and 26. A
+  listener writes each phrase as it comes; a page is heard up to three times; the docs' header and navigation are
+  inert meanwhile, as VoiceOver's cursor carried the keyboard focus through them. What a version does every run is an
+  exception with its reason, what it does now and then a step `unsteady` there. A manual run may name its parts.
 
 ## 0.6.0 — 2026-11-03
 
