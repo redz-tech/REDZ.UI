@@ -16,6 +16,16 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   tooltip's button without "collapsed" or "expanded". An open menu's button now also takes the look of
   `.btn[aria-expanded="true"]`.
 
+### Faster probes
+- `php tools/probe.php` runs the engines at once on a Mac, a process each, the ones `safaridriver` drives (Safari,
+  VoiceOver, the simulators) one after another, and joins their sheets; `--serial` keeps the old way. `--pages=PAGE,…` (and the workflows'
+  `pages` input) checks only those pages, leaving the other pages' exceptions unjudged.
+- CI runs no part again for a commit that a run of every part already passed (a branch fast-forwarded to `main`), and
+  Pages takes that run's sheet; a run whose job GitHub never placed on a runner reruns its failed jobs once by itself
+  (`.github/workflows/rerun.yml`); a simulator's Safari that ends while pairing is started afresh before the next try;
+  the engines' cache is restored from the last one when the config changes.
+- A finding's parts are joined by " - ", the exceptions' findings with them.
+
 ### Every widget that speaks, heard by NVDA too
 - The probes hear NVDA 2026.3 in Chrome and in Firefox on Windows Server 2025 through the same 80 speech steps: a
   portable copy made from NVDA's official installer, its sha256 checked, on a config of the run. NVDA's own Remote

@@ -1,6 +1,6 @@
 <?php
 // probes, the sheet: the shots as WebP and the page that shows them with the findings beside, on the library's own CSS
-// copied in, so the folder opens anywhere — from disk, as a CI artifact, on the site.
+// copied in, so the folder opens anywhere - from disk, as a CI artifact, on the site.
 
 /** The PNG $png without its iCCP chunk: libpng warns on the colour profile Safari writes, and GD ignores profiles. */
 function PROBE__PngPlain(string $png): string
@@ -70,6 +70,9 @@ function PROBE__SheetWrite(string $dir, array $report): void
 	$total = count($report['findings']);
 	$out = ['<!doctype html>', '<html lang="en">', '<head>', '<meta charset="utf-8">', '<meta name="viewport" content="width=device-width, initial-scale=1">', '<title>REDZ.UI checks</title>', '<link rel="stylesheet" href="redz-ui.min.css">', '<link rel="stylesheet" href="sheet.css">', '</head>', '<body>', '<main class="region sheet vstack gap-24">'];
 	$out[] = '<header class="vstack gap-8"><h1>Checks</h1><p class="text-muted">' . PROBE__Html($report['when'] . ' · ' . $report['commit']) . ' · the library\'s pages in real engines, light LTR and dark RTL, at ' . PROBE__Html(implode(', ', $report['widths'])) . ' px</p>';
+	if (($report['only'] ?? []) !== []) {
+		$out[] = '<p class="text-muted">A run of chosen pages only: ' . PROBE__Html(implode(', ', $report['only'])) . '; the exceptions of the others are left unjudged.</p>';
+	}
 	$out[] = '<div class="hstack flex-wrap gap-8">' . ($total === 0 ? '<span class="badge badge-subtle-success">no findings</span>' : '<span class="badge badge-subtle-danger">' . $total . ' findings</span>');
 	foreach ($report['engines'] as $name => $engine) {
 		$out[] = '<span class="badge">' . PROBE__Html($name . ' · ' . $engine['version'] . ' · ' . $engine['cells'] . ' cells') . '</span>';
@@ -89,7 +92,7 @@ function PROBE__SheetWrite(string $dir, array $report): void
 		$out[] = '<section class="card"><div class="card-header"><h2>Walked by keyboard</h2></div><div class="card-body vstack gap-8"><p class="text-muted">Each menu, modal dialog and tab list driven by real keys against the WAI-ARIA patterns, at 1440 px in both directions.</p><ul class="sheet-findings">';
 		foreach ($report['walked'] as $page => $widgets) {
 			foreach ($widgets as $widget => $engines) {
-				$out[] = '<li>' . PROBE__Html($page . ' — ' . $widget . ' · ' . implode(', ', array_keys($engines))) . '</li>';
+				$out[] = '<li>' . PROBE__Html($page . ' - ' . $widget . ' · ' . implode(', ', array_keys($engines))) . '</li>';
 			}
 		}
 		$out[] = '</ul></div></section>';
@@ -104,16 +107,16 @@ function PROBE__SheetWrite(string $dir, array $report): void
 		$out[] = '</tbody></table></div></section>';
 	}
 	if (($report['read'] ?? []) !== []) {
-		$out[] = '<section class="card"><div class="card-header"><h2>Read by NVDA</h2></div><div class="card-body vstack gap-8"><p class="text-muted">Each speech page read whole by NVDA\'s quick navigation — headings by H, landmarks by D, form fields by F —, each item the page holds beside what NVDA said at it.</p><table class="table"><thead><tr><th scope="col">Page</th><th scope="col">Item</th><th scope="col">Engine</th><th scope="col">Must hold</th><th scope="col">NVDA said</th></tr></thead><tbody>';
+		$out[] = '<section class="card"><div class="card-header"><h2>Read by NVDA</h2></div><div class="card-body vstack gap-8"><p class="text-muted">Each speech page read whole by NVDA\'s quick navigation - headings by H, landmarks by D, form fields by F -, each item the page holds beside what NVDA said at it.</p><table class="table"><thead><tr><th scope="col">Page</th><th scope="col">Item</th><th scope="col">Engine</th><th scope="col">Must hold</th><th scope="col">NVDA said</th></tr></thead><tbody>';
 		foreach ($report['read'] as $page => $items) {
 			foreach ($items as $item) {
-				$out[] = '<tr><td>' . PROBE__Html($page) . '</td><td>' . PROBE__Html($item['item']) . '</td><td>' . PROBE__Html($item['engine']) . '</td><td>' . PROBE__Html(implode(', ', $item['expect'])) . '</td><td>' . PROBE__Html($item['said'] === '' ? '—' : $item['said']) . '</td></tr>';
+				$out[] = '<tr><td>' . PROBE__Html($page) . '</td><td>' . PROBE__Html($item['item']) . '</td><td>' . PROBE__Html($item['engine']) . '</td><td>' . PROBE__Html(implode(', ', $item['expect'])) . '</td><td>' . PROBE__Html($item['said'] === '' ? '-' : $item['said']) . '</td></tr>';
 			}
 		}
 		$out[] = '</tbody></table></div></section>';
 	}
 	if ($report['guarded'] !== []) {
-		$out[] = '<section class="card"><div class="card-header"><h2>Placed by js/menu-place.js</h2></div><div class="card-body vstack gap-8"><p class="text-muted">Menus the engine did not anchor beside their button, placed by the script instead — the measure of where the guard is still needed.</p><ul class="sheet-findings">';
+		$out[] = '<section class="card"><div class="card-header"><h2>Placed by js/menu-place.js</h2></div><div class="card-body vstack gap-8"><p class="text-muted">Menus the engine did not anchor beside their button, placed by the script instead - the measure of where the guard is still needed.</p><ul class="sheet-findings">';
 		foreach ($report['guarded'] as $note) {
 			$out[] = '<li>' . PROBE__Html($note) . '</li>';
 		}

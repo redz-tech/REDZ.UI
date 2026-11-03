@@ -185,7 +185,11 @@ Remote Access, so it meets a page in browse mode as a user does - and NVDA also 
 quick navigation (headings, landmarks, form fields) against what the page holds. The sheet of shots and findings is
 written to `.dev/probes/`; the Probes workflow runs it on every commit in nine parts - joined by `php tools/probe.php
 merge` - on macOS 15, VoiceOver also on macOS 26, NVDA on Windows Server 2025, with a pinned Chrome for Testing build as
-the current Chrome, as the images' own lag; every release publishes its sheet under `checks/` on the site.
+the current Chrome, as the images' own lag; every release publishes its sheet under `checks/` on the site. On a Mac the
+engines run at once, a process each (the engines `safaridriver` drives, Safari, VoiceOver and the simulators, one after
+another; `--serial` runs them all so), and `--pages=docs/menu.html,…` checks only those pages, as the workflow's `pages` input does for a lab
+run. A push to `main` of a commit a run of every part already passed runs nothing again, and a run whose job GitHub
+never placed on a runner runs its failed jobs once more by itself.
 
 ## Releases
 Every release is an [immutable GitHub release](https://github.com/redz-tech/REDZ.UI/releases): once it is out, neither

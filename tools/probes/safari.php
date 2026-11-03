@@ -1,10 +1,10 @@
 <?php
-// probes, Safari: classic WebDriver over HTTP to safaridriver — Safari on this Mac, or Safari of an iOS runtime in the
+// probes, Safari: classic WebDriver over HTTP to safaridriver - Safari on this Mac, or Safari of an iOS runtime in the
 // simulator; one session at a time, no headless mode; viewport shots; no print command and no events, so errors stay
 // unseen here.
 
 /** Starts safaridriver with its log in $dir and a session: Safari on this Mac, or the Safari of iOS $ios in a simulator
- *  booted for it. A run that ends without PROBE__SafariStop — stopped by a signal, which skips finally — still ends its
+ *  booted for it. A run that ends without PROBE__SafariStop - stopped by a signal, which skips finally - still ends its
  *  session at shutdown. Only the session ends: the Safari it runs in is the Mac owner's browser too, with the owner's
  *  windows, and is never quit. */
 function PROBE__SafariStart(string $dir, string $ios = ''): array
@@ -23,6 +23,7 @@ function PROBE__SafariStart(string $dir, string $ios = ''): array
 		usleep(250000);
 	}
 	$caps = ['browserName' => 'safari'];
+	$udid = '';
 	if ($ios !== '') {
 		[$udid, $h['booted'], $version] = PROBE__SafariSimulator($ios);
 		$caps += ['platformName' => 'ios', 'safari:useSimulator' => true, 'safari:platformVersion' => $version, 'safari:deviceUDID' => $udid];
@@ -37,6 +38,15 @@ function PROBE__SafariStart(string $dir, string $ios = ''): array
 				PROBE__SafariStop($h);
 				throw $e;
 			}
+			// A simulator's Safari that ended while pairing (CI's iOS 18.5) pairs again once it is started afresh.
+			if ($udid !== '') {
+				try {
+					PROBE__Run(['xcrun', 'simctl', 'terminate', $udid, 'com.apple.mobilesafari']);
+				} catch (RuntimeException) {
+					// Not running is the state wanted.
+				}
+			}
+			sleep(5);
 		}
 	}
 	PROBE__SafariCall($h, 'POST', $h['session'] . '/timeouts', ['script' => 120000, 'pageLoad' => 60000]);
@@ -60,8 +70,8 @@ function PROBE__SafariReady(array $h): bool
 	}
 }
 
-/** The UDID of an iPhone simulator of iOS $ios, booted, settled and with Safari launched once — a session on a cold
- *  Safari fails —, the UDID to shut down at the end ('' when it ran already) and the runtime's exact version, which
+/** The UDID of an iPhone simulator of iOS $ios, booted, settled and with Safari launched once - a session on a cold
+ *  Safari fails -, the UDID to shut down at the end ('' when it ran already) and the runtime's exact version, which
  *  the session must name (26.4 is 26.4.1). */
 function PROBE__SafariSimulator(string $ios): array
 {
@@ -150,7 +160,7 @@ function PROBE__SafariType(array &$h, string $text): void
 	PROBE__SafariCall($h, 'POST', $h['session'] . '/actions', ['actions' => [['type' => 'key', 'id' => 'keyboard', 'actions' => $actions]]]);
 }
 
-/** Presses a combination as aria-keyshortcuts writes it — Meta+K — its modifiers held around the key. */
+/** Presses a combination as aria-keyshortcuts writes it - Meta+K - its modifiers held around the key. */
 function PROBE__SafariChord(array &$h, string $combination): void
 {
 	$codes = ['Meta' => "\u{E03D}", 'Control' => "\u{E009}", 'Alt' => "\u{E00A}", 'Shift' => "\u{E008}"];

@@ -1,8 +1,8 @@
 <?php
-// probe — the library's pages in real engines: Chrome, Firefox and Safari as installed; the floor — Chrome 130 and
-// Firefox 132 fetched once into the cache, Safari 18 in the iOS simulator; the engines whose bugs js/menu-place.js repairs —
-// Chrome 136, Safari 26 in the simulator. Each cell — a page at a width, light LTR or dark RTL, right to left on the
-// page's Arabic twin when it has one — is judged for overflow, unmasked icons, width prefixes outside a region, cut
+// probe - the library's pages in real engines: Chrome, Firefox and Safari as installed; the floor - Chrome 130 and
+// Firefox 132 fetched once into the cache, Safari 18 in the iOS simulator; the engines whose bugs js/menu-place.js repairs -
+// Chrome 136, Safari 26 in the simulator. Each cell - a page at a width, light LTR or dark RTL, right to left on the
+// page's Arabic twin when it has one - is judged for overflow, unmasked icons, width prefixes outside a region, cut
 // labels, busy marks on live regions and errors; at the shot widths it is shot, every popover and dialog opened and axe
 // run; at 1440 its widgets are walked by keyboard, the docs' state mirror is held against the real hover and focus, and
 // Chrome names the fonts of Arabic text; forced colors and print where the engine has them; and every engine runs the
@@ -12,9 +12,11 @@
 // .dev/probes/index.html with its report.json and exits 1 on any finding; an engine whose cell runs past five minutes
 // stops as stalling, that cell named. The screen readers hear the config's speech steps: VoiceOver in Safari on a Mac,
 // NVDA in Chrome and Firefox on Windows, where NVDA also reads each speech page whole by its quick navigation. Usage:
-// php tools/probe.php [ENGINE…] — an engine named that cannot run here is a finding, one left out of a full run only a
-// note — or php tools/probe.php merge DIR… — one sheet of the sheets of several runs, as CI's parallel jobs leave them —
-// or php tools/probe.php voiceover-setup | nvda-setup, which ready CI's machines for the readers.
+// php tools/probe.php [--pages=PAGE,…] [--serial] [ENGINE…] - an engine named that cannot run here is a finding, one left
+// out of a full run only a note; --pages runs only those pages, the exceptions of the others left unjudged; outside CI the
+// engines run at once, a process each (the engines safaridriver drives one after another), unless --serial - or
+// php tools/probe.php merge DIR… - one sheet of the sheets of several runs, as CI's parallel jobs leave them - or php
+// tools/probe.php voiceover-setup | nvda-setup, which ready CI's machines for the readers.
 
 require __DIR__ . '/lib.php';
 require __DIR__ . '/min.php';
@@ -93,7 +95,7 @@ function PROBE__Wait($proc): void
 	proc_close($proc);
 }
 
-/** Removes $path and everything under it, if it is there — on Windows by PHP itself, a link removed, never followed. */
+/** Removes $path and everything under it, if it is there - on Windows by PHP itself, a link removed, never followed. */
 function PROBE__Remove(string $path): void
 {
 	if (!file_exists($path) && !is_link($path)) {
@@ -131,7 +133,7 @@ function PROBE__ScreenLocked(): bool
 	return preg_match('~<key>CGSSessionScreenIsLocked</key>\s*<true/>~', PROBE__Run(['/usr/sbin/ioreg', '-n', 'Root', '-d1', '-a'])) === 1;
 }
 
-/** The binary that runs engine $name: the installed one, or the one fetched into the cache — fetched now when missing;
+/** The binary that runs engine $name: the installed one, or the one fetched into the cache - fetched now when missing;
  *  '' with the reason in $why when it cannot run on this machine. */
 function PROBE__Binary(string $name, array $engine, string &$why): string
 {
@@ -195,8 +197,8 @@ function PROBE__Download(string $name, array $fetch): string
 	return $file;
 }
 
-/** Downloads the archive of engine $name and unpacks it into $home: a zip by ditto on a Mac — it keeps an app's links
- *  and modes — and by ZipArchive elsewhere, a disk image by hdiutil. */
+/** Downloads the archive of engine $name and unpacks it into $home: a zip by ditto on a Mac - it keeps an app's links
+ *  and modes - and by ZipArchive elsewhere, a disk image by hdiutil. */
 function PROBE__Fetch(string $name, array $fetch, string $home): void
 {
 	$file = PROBE__Download($name, $fetch);
@@ -267,7 +269,7 @@ function PROBE__Do(array &$h, string $verb, mixed ...$args): mixed
 	if ($verb === 'Load') {
 		$h['cell'] = ['page' => (string)preg_replace('~^\w+://[^/]+/~', '', (string)$args[0]) . ' at ' . ($args[1] ?: 'phone'), 'since' => microtime(true), 'slowest' => 0.0, 'call' => ''];
 	} elseif ($verb !== 'Stop' && isset($h['cell']) && microtime(true) - $h['cell']['since'] > PROBE_CELL_MAX) {
-		throw new RuntimeException(sprintf('%s ran over %d s — the engine is stalling; its slowest call, %.0f s: %s', $h['cell']['page'], PROBE_CELL_MAX, $h['cell']['slowest'], $h['cell']['call']));
+		throw new RuntimeException(sprintf('%s ran over %d s - the engine is stalling; its slowest call, %.0f s: %s', $h['cell']['page'], PROBE_CELL_MAX, $h['cell']['slowest'], $h['cell']['call']));
 	}
 	$start = microtime(true);
 	$answer = ('PROBE__' . ucfirst($h['kind']) . $verb)($h, ...$args);
@@ -352,7 +354,7 @@ function PROBE__DocsPages(array $config): array
 	$pages = [];
 	foreach (glob(PROBE_ROOT . '/docs/*.html') ?: [] as $file) {
 		$page = 'docs/' . basename($file);
-		if (!in_array($page, $config['pages'], true) && !str_ends_with($page, '.ar.html')) {
+		if (!in_array($page, $config['pages'], true) && !str_ends_with($page, '.ar.html') && (($config['only'] ?? []) === [] || in_array($page, $config['only'], true))) {
 			$pages[] = $page;
 		}
 	}
@@ -382,7 +384,7 @@ function PROBE__Mirror(array &$h): array
 		$seen = PROBE__Do($h, 'Eval', 'REDZ_PROBE.compare(' . $i . ')');
 		PROBE__Do($h, 'Hover', 1, 1);
 		if ($focus && !$seen['active']) {
-			$findings[] = 'the docs mirror of :' . $pair['state'] . ' on ' . $pair['what'] . ' — Tab did not reach it';
+			$findings[] = 'the docs mirror of :' . $pair['state'] . ' on ' . $pair['what'] . ' - Tab did not reach it';
 		} elseif (!$seen['real']) {
 			continue;
 		} elseif ($seen['differ'] !== []) {
@@ -393,7 +395,7 @@ function PROBE__Mirror(array &$h): array
 	return $findings;
 }
 
-/** One cell — $page at $width × $height (a simulator: its own screen when 0), $theme and $dir, normal, docs or forced
+/** One cell - $page at $width × $height (a simulator: its own screen when 0), $theme and $dir, normal, docs or forced
  *  colors: judged; normal or forced at a shot width shot; normal or docs at a shot width its popovers opened and axe
  *  run; normal at 1440 its state mirror checked on the page as loaded, then walked by keyboard and its Arabic fonts
  *  checked. */
@@ -402,7 +404,7 @@ function PROBE__Cell(array &$h, string $name, string $page, string $combo, strin
 	$forced = $mode === 'forced';
 	$shown = PROBE__Shown($page, $dir);
 	$label = ($width === 0 ? 'phone' : $width) . ' · ' . $theme . ' · ' . strtoupper($dir) . ($shown !== $page ? ' · Arabic' : '') . ($forced ? ' · forced colors' : '');
-	$where = $name . ' ' . $shown . ' ' . $label . ' — ';
+	$where = $name . ' ' . $shown . ' ' . $label . ' - ';
 	PROBE__Do($h, 'Load', $run['base'] . $shown . '?theme=' . $theme . '&dir=' . $dir, $width, $height, $theme, $forced);
 	PROBE__Do($h, 'Inject', $run['page']);
 	PROBE__Do($h, 'Eval', 'REDZ_PROBE.prepare(' . json_encode($theme) . ', ' . json_encode($dir) . ')');
@@ -487,8 +489,8 @@ function PROBE__Cell(array &$h, string $name, string $page, string $combo, strin
 }
 
 /** The keyboard walk of a page: each menu, modal dialog, tab list, accordion and --toggle region driven by real keys
- *  (Enter, then Space, opening and closing an accordion's item; headless Firefox clicks) — and a dialog with
- *  closedby="any" by a click outside it — against the WAI-ARIA patterns; answers its findings, and the widgets it
+ *  (Enter, then Space, opening and closing an accordion's item; headless Firefox clicks) - and a dialog with
+ *  closedby="any" by a click outside it - against the WAI-ARIA patterns; answers its findings, and the widgets it
  *  walked in $walked. */
 function PROBE__KeyWalk(array &$h, array &$walked): array
 {
@@ -512,7 +514,7 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 			'tabs' => 'the tab list ' . $id,
 			'accordion' => 'the accordion ' . $id,
 			default => '#' . $id,
-		} . ' by keyboard — ';
+		} . ' by keyboard - ';
 		$walked[] = match ($kind) {
 			'tabs' => 'a tab list',
 			'accordion' => 'an accordion',
@@ -588,7 +590,7 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 					PROBE__Do($h, 'Click', $point[0], $point[1]);
 					usleep(300000);
 					if ($state()['open']) {
-						$findings[] = '#' . $id . ' — a click outside it does not close it (closedby="any")';
+						$findings[] = '#' . $id . ' - a click outside it does not close it (closedby="any")';
 					}
 				}
 				PROBE__Do($h, 'Eval', '(document.getElementById(' . json_encode($id) . ').open && document.getElementById(' . json_encode($id) . ').close(), true)');
@@ -614,7 +616,7 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 				$s = $state();
 				$values = $s['multiple'] ? (in_array($taken, $before, true) ? array_values(array_diff($before, [$taken])) : [...$before, $taken]) : [$taken];
 				if ($s['values'] !== $values || $s['open'] !== $s['multiple']) {
-					$findings[] = $what . 'Enter on "' . $taken . '": the values should be ' . json_encode($values) . ' with the panel ' . ($s['multiple'] ? 'open' : 'closed') . ' — they are ' . json_encode($s['values']) . ', the panel ' . ($s['open'] ? 'open' : 'closed');
+					$findings[] = $what . 'Enter on "' . $taken . '": the values should be ' . json_encode($values) . ' with the panel ' . ($s['multiple'] ? 'open' : 'closed') . ' - they are ' . json_encode($s['values']) . ', the panel ' . ($s['open'] ? 'open' : 'closed');
 					continue;
 				}
 			}
@@ -718,7 +720,7 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 			$s = $state();
 			$moved = [$before[1], $before[0], ...array_slice($before, 2)];
 			if ($s['order'] !== $moved || !$s['onGrip'] || $s['said'] === '' || $s['open']) {
-				$findings[] = $what . 'Move down: the order should be ' . json_encode($moved) . ', the focus on the moved handle and the move said — it is ' . json_encode($s['order']) . ($s['onGrip'] ? '' : ', the focus elsewhere') . ($s['said'] === '' ? ', nothing said' : '') . ($s['open'] ? ', the menu still open' : '');
+				$findings[] = $what . 'Move down: the order should be ' . json_encode($moved) . ', the focus on the moved handle and the move said - it is ' . json_encode($s['order']) . ($s['onGrip'] ? '' : ', the focus elsewhere') . ($s['said'] === '' ? ', nothing said' : '') . ($s['open'] ? ', the menu still open' : '');
 			}
 		} elseif ($kind === 'upload') {
 			PROBE__Do($h, 'Eval', 'REDZ_PROBE.chooseFiles(' . json_encode($id) . ')');
@@ -740,7 +742,7 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 				$activate($id);
 				$s = $state();
 				if ($s['type'] !== $type || $s['pressed'] !== $pressed) {
-					$findings[] = $what . 'Enter: the field should be ' . $type . ', its button aria-pressed="' . $pressed . '" — it is ' . $s['type'] . ', aria-pressed="' . $s['pressed'] . '"';
+					$findings[] = $what . 'Enter: the field should be ' . $type . ', its button aria-pressed="' . $pressed . '" - it is ' . $s['type'] . ', aria-pressed="' . $s['pressed'] . '"';
 					break;
 				}
 			}
@@ -755,7 +757,7 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 					$s = $state();
 				}
 				if ($s['open'] !== $open || $s['expanded'] !== ($open ? 'true' : 'false')) {
-					$findings[] = $what . 'Enter: the region should be ' . ($open ? 'open' : 'closed') . ' — it is ' . ($s['open'] ? 'open' : 'closed') . ', its button says aria-expanded="' . $s['expanded'] . '"';
+					$findings[] = $what . 'Enter: the region should be ' . ($open ? 'open' : 'closed') . ' - it is ' . ($s['open'] ? 'open' : 'closed') . ', its button says aria-expanded="' . $s['expanded'] . '"';
 					break;
 				}
 			}
@@ -768,7 +770,7 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 				$s = $state();
 				if ($s['manual']) {
 					if ($s['focused'] !== $tab || $s['selected'] !== [$start]) {
-						$findings[] = $what . $key . ' (manual activation): the focus should move to tab ' . $tab . ' and the selection stay on ' . $start . ' — selected ' . json_encode($s['selected']) . ', focused ' . $s['focused'];
+						$findings[] = $what . $key . ' (manual activation): the focus should move to tab ' . $tab . ' and the selection stay on ' . $start . ' - selected ' . json_encode($s['selected']) . ', focused ' . $s['focused'];
 						break;
 					}
 					if ($h['kind'] === 'firefox') {
@@ -779,7 +781,7 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 					$start = $tab;
 				}
 				if ($s['selected'] !== [$tab] || $s['focused'] !== $tab || $s['shown'] !== [$tab]) {
-					$findings[] = $what . $key . ($s['manual'] ? ' and Enter' : '') . ': tab ' . $tab . ' should be selected, focused and its panel alone shown — selected ' . json_encode($s['selected']) . ', focused ' . $s['focused'] . ', shown ' . json_encode($s['shown']);
+					$findings[] = $what . $key . ($s['manual'] ? ' and Enter' : '') . ': tab ' . $tab . ' should be selected, focused and its panel alone shown - selected ' . json_encode($s['selected']) . ', focused ' . $s['focused'] . ', shown ' . json_encode($s['shown']);
 					break;
 				}
 			}
@@ -813,7 +815,7 @@ function PROBE__AxeAllowed(array $config, string $engine, string $rule, string $
 	return false;
 }
 
-/** Whether an exception of the config — {"finding": a part of its text, "engines", "reason"} — allows the finding
+/** Whether an exception of the config - {"finding": a part of its text, "engines", "reason"} - allows the finding
  *  $text of engine $engine; marks the exception used. */
 function PROBE__FindingAllowed(array $config, string $engine, string $text, array &$report): bool
 {
@@ -842,7 +844,7 @@ function PROBE__MinCell(array &$h, string $name, array $run, array &$report): vo
 			$written = $answer($source);
 			$minified = $answer(MIN__JsNamesSafe(MIN__JsSafe($source)));
 		} catch (RuntimeException $e) {
-			$report['findings'][] = $name . ' tools/min/' . basename($file) . ' — ' . $e->getMessage();
+			$report['findings'][] = $name . ' tools/min/' . basename($file) . ' - ' . $e->getMessage();
 			continue;
 		}
 		if ($written !== $minified) {
@@ -892,9 +894,10 @@ function PROBE__Slug(string $text): string
 function PROBE__Verdict(array $config, array &$report): int
 {
 	$ran = array_keys(array_filter($report['engines'], fn(array $engine): bool => $engine['cells'] > 0));
-	foreach ($config['allow'] as $k => $entry) {
+	// A run of chosen pages leaves the other pages' exceptions unused by design.
+	foreach (($report['only'] ?? []) === [] ? $config['allow'] : [] as $k => $entry) {
 		if (!isset($report['used'][$k]) && array_diff($entry['engines'] ?? array_keys($config['engines']), $ran) === []) {
-			$report['findings'][] = 'tools/probes/config.json — the exception ' . ($entry['finding'] ?? $entry['rule'] . ' at ' . $entry['target']) . ' allows nothing any more';
+			$report['findings'][] = 'tools/probes/config.json - the exception ' . ($entry['finding'] ?? $entry['rule'] . ' at ' . $entry['target']) . ' allows nothing any more';
 		}
 	}
 	foreach ($report['findings'] as $finding) {
@@ -904,7 +907,7 @@ function PROBE__Verdict(array $config, array &$report): int
 	return $report['findings'] === [] ? 0 : 1;
 }
 
-/** merge: one sheet of the sheets in $dirs — their reports joined, their shots, prints and logs copied; the exit code. */
+/** merge: one sheet of the sheets in $dirs - their reports joined, their shots, prints and logs copied; the exit code. */
 function PROBE__Merge(array $config, array $dirs): int
 {
 	$work = PROBE_SHEET . '.new';
@@ -928,6 +931,7 @@ function PROBE__Merge(array $config, array $dirs): int
 			$report['spoken'] = array_merge_recursive($report['spoken'], $part['spoken']);
 			$report['read'] = array_merge_recursive($report['read'] ?? [], $part['read'] ?? []);
 			$report['shots'] = array_merge_recursive($report['shots'], $part['shots']);
+			$report['only'] = array_values(array_unique([...$report['only'] ?? [], ...$part['only'] ?? []]));
 		}
 		foreach (['shots', 'print', 'logs'] as $folder) {
 			@mkdir($work . '/' . $folder, 0777, true);
@@ -948,27 +952,112 @@ function PROBE__Merge(array $config, array $dirs): int
 	return $status;
 }
 
+/**
+ * The config narrowed to the $pages of a run of chosen pages: its full pages, docs pages and speech pages among them.
+ * @param list<string> $pages
+ */
+function PROBE__Only(array $config, array $pages): array
+{
+	$known = [...$config['pages'], ...PROBE__DocsPages($config), ...array_keys($config['speech'])];
+	$unknown = array_diff($pages, $known);
+	if ($unknown !== []) {
+		throw new InvalidArgumentException('no page ' . implode(', ', $unknown) . ' among the probes\' pages: the full pages of the config, docs/*.html, the speech pages');
+	}
+	$config['pages'] = array_values(array_intersect($config['pages'], $pages));
+	$config['speech'] = array_intersect_key($config['speech'], array_flip($pages));
+	$config['only'] = array_values($pages);
+	return $config;
+}
+
+/** Runs the engines at once, a process a group, each writing a sheet of its own, then one sheet of them all: every
+ *  engine safaridriver drives - desktop Safari, VoiceOver's, the simulators' - goes one after another, as two of its
+ *  sessions starting together time out; every other engine runs alone. Answers the merged sheet's exit code. */
+function PROBE__Parallel(array $config, array $groups, array $options): int
+{
+	$root = sys_get_temp_dir() . '/redz-ui-parallel-' . getmypid();
+	PROBE__Remove($root);
+	mkdir($root, 0777, true);
+	$running = [];
+	foreach ($groups as $group => $names) {
+		$command = [PHP_BINARY, '-d', 'xdebug.mode=off', __FILE__, '--serial', '--sheet=' . $root . '/' . $group, ...($options['named'] ? [] : ['--full']), ...($options['pages'] === [] ? [] : ['--pages=' . implode(',', $options['pages'])]), ...$names];
+		$proc = proc_open($command, [0 => ['file', PROBE_NULL, 'r'], 1 => ['file', $root . '/' . $group . '.log', 'a'], 2 => ['file', $root . '/' . $group . '.log', 'a']], $pipes, PROBE_ROOT);
+		if (!is_resource($proc)) {
+			throw new RuntimeException('cannot start the run of ' . implode(', ', $names));
+		}
+		$running[$group] = $proc;
+		echo 'started ', implode(', ', $names), "\n";
+	}
+	register_shutdown_function(function () use (&$running): void {
+		foreach ($running as $proc) {
+			proc_terminate($proc);
+		}
+	});
+	while ($running !== []) {
+		foreach ($running as $group => $proc) {
+			if (!proc_get_status($proc)['running']) {
+				proc_close($proc);
+				unset($running[$group]);
+				echo implode("\n", array_filter(file($root . '/' . $group . '.log', FILE_IGNORE_NEW_LINES) ?: [], fn(string $line): bool => preg_match('~ · \d+ cells · \d+ findings$| skipped: ~', $line) === 1)), "\n";
+			}
+		}
+		usleep(500000);
+	}
+	$status = PROBE__Merge($config, array_map(fn(string $group): string => $root . '/' . $group, array_keys($groups)));
+	PROBE__Remove($root);
+	return $status;
+}
+
 function PROBE__Main(array $argv): int
 {
 	$config = json_decode((string)file_get_contents(PROBE_CONFIG), true, 512, JSON_THROW_ON_ERROR);
-	if (($argv[1] ?? '') === 'merge') {
-		return PROBE__Merge($config, array_slice($argv, 2));
+	$options = ['pages' => [], 'sheet' => PROBE_SHEET, 'serial' => false, 'full' => false];
+	$args = [];
+	foreach (array_slice($argv, 1) as $arg) {
+		match (true) {
+			str_starts_with($arg, '--pages=') => $options['pages'] = preg_split('~[\s,]+~', substr($arg, strlen('--pages=')), -1, PREG_SPLIT_NO_EMPTY),
+			str_starts_with($arg, '--sheet=') => $options['sheet'] = substr($arg, strlen('--sheet=')),
+			$arg === '--serial' => $options['serial'] = true,
+			// A group of a full run: its engines were not named, so one that cannot run here is only a note.
+			$arg === '--full' => $options['full'] = true,
+			default => $args[] = $arg,
+		};
 	}
-	if (($argv[1] ?? '') === 'voiceover-setup') {
+	$options['named'] = $args !== [] && !$options['full'];
+	if (($args[0] ?? '') === 'merge') {
+		return PROBE__Merge($config, array_slice($args, 1));
+	}
+	if (($args[0] ?? '') === 'voiceover-setup') {
 		return PROBE__VoiceOverSetup();
 	}
-	if (($argv[1] ?? '') === 'nvda-setup') {
+	if (($args[0] ?? '') === 'nvda-setup') {
 		return PROBE__NvdaSetup();
 	}
-	$names = array_slice($argv, 1) ?: array_keys(array_filter($config['engines'], fn(array $engine): bool => $engine['default'] ?? true));
+	$names = $args ?: array_keys(array_filter($config['engines'], fn(array $engine): bool => $engine['default'] ?? true));
 	foreach ($names as $name) {
 		if (!isset($config['engines'][$name])) {
 			fwrite(STDERR, 'no engine ' . $name . ' in tools/probes/config.json; there are ' . implode(', ', array_keys($config['engines'])) . "\n");
 			return 2;
 		}
 	}
+	if ($options['pages'] !== []) {
+		try {
+			$config = PROBE__Only($config, $options['pages']);
+		} catch (InvalidArgumentException $e) {
+			fwrite(STDERR, $e->getMessage() . "\n");
+			return 2;
+		}
+	}
+	$groups = [];
+	foreach ($names as $name) {
+		$engine = $config['engines'][$name];
+		$groups[in_array($engine['kind'], ['safari', 'voiceover'], true) ? 'safari' : $name][] = $name;
+	}
+	if (count($groups) > 1 && !$options['serial'] && getenv('CI') === false) {
+		return PROBE__Parallel(json_decode((string)file_get_contents(PROBE_CONFIG), true, 512, JSON_THROW_ON_ERROR), $groups, $options);
+	}
+	$sheet = $options['sheet'];
 	$tmp = sys_get_temp_dir() . '/redz-ui-probe-' . getmypid();
-	$work = PROBE_SHEET . '.new';
+	$work = $sheet . '.new';
 	PROBE__Remove($work);
 	foreach ([$tmp, $work . '/shots', $work . '/print'] as $folder) {
 		mkdir($folder, 0777, true);
@@ -978,7 +1067,7 @@ function PROBE__Main(array $argv): int
 	} catch (RuntimeException) {
 		$commit = '';
 	}
-	$report = ['when' => gmdate('Y-m-d H:i') . ' UTC', 'commit' => $commit === '' ? 'no commit' : 'commit ' . $commit, 'widths' => array_keys($config['widths']), 'engines' => [], 'skipped' => [], 'findings' => [], 'guarded' => [], 'walked' => [], 'spoken' => [], 'read' => [], 'shots' => [], 'used' => []];
+	$report = ['when' => gmdate('Y-m-d H:i') . ' UTC', 'commit' => $commit === '' ? 'no commit' : 'commit ' . $commit, 'widths' => array_keys($config['widths']), 'only' => $config['only'] ?? [], 'engines' => [], 'skipped' => [], 'findings' => [], 'guarded' => [], 'walked' => [], 'spoken' => [], 'read' => [], 'shots' => [], 'used' => []];
 	$run = ['config' => $config, 'page' => (string)file_get_contents(PROBE_PAGE), 'read' => (string)file_get_contents(PROBE_READ), 'axe' => PROBE__Axe($config['axe']), 'sheet' => $work];
 	[$server, $run['base']] = PROBE__ServerStart($tmp);
 	register_shutdown_function(fn() => is_resource($server) && proc_terminate($server));
@@ -996,8 +1085,8 @@ function PROBE__Main(array $argv): int
 				$binary = PROBE__Binary($name, $config['engines'][$name], $why);
 				if ($binary === '') {
 					$report['skipped'][$name] = $why;
-					if (array_slice($argv, 1) !== []) {
-						$report['findings'][] = $name . ' — named, but cannot run here: ' . $why;
+					if ($options['named']) {
+						$report['findings'][] = $name . ' - named, but cannot run here: ' . $why;
 					}
 					echo $name, ' skipped: ', $why, "\n";
 					continue;
@@ -1005,7 +1094,7 @@ function PROBE__Main(array $argv): int
 				mkdir($tmp . '/' . $name, 0777, true);
 				PROBE__EngineRun($name, $config['engines'][$name], $binary, $tmp . '/' . $name, $run, $report);
 			} catch (Throwable $e) {
-				$report['findings'][] = $name . ' — stopped: ' . $e->getMessage();
+				$report['findings'][] = $name . ' - stopped: ' . $e->getMessage();
 			}
 			printf("%-12s %s · %d cells · %d findings\n", $name, $report['engines'][$name]['version'] ?? '?', $report['engines'][$name]['cells'] ?? 0, count($report['findings']) - $before);
 		}
@@ -1020,8 +1109,8 @@ function PROBE__Main(array $argv): int
 	$status = PROBE__Verdict($config, $report);
 	PROBE__SheetWrite($work, $report);
 	file_put_contents($work . '/report.json', json_encode($report, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
-	PROBE__Remove(PROBE_SHEET);
-	rename($work, PROBE_SHEET);
+	PROBE__Remove($sheet);
+	rename($work, $sheet);
 	PROBE__Remove($tmp);
 	return $status;
 }

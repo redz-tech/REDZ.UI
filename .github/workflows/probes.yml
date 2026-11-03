@@ -11,24 +11,36 @@ on:
         description: 'A lab run of only these parts, by name, space separated (all when empty); its sheet joins them alone'
         type: string
         default: ''
+      pages:
+        description: 'A lab run of only these pages, comma separated, as php tools/probe.php --pages takes them (all when empty)'
+        type: string
+        default: ''
 
 permissions:
   contents: read
 
 jobs:
   plan:
-    # macOS 15: its image has the iOS 18.5 and 26.2 simulators, and Firefox 132 starts there — not on macOS 27. Its
+    # macOS 15: its image has the iOS 18.5 and 26.2 simulators, and Firefox 132 starts there - not on macOS 27. Its
     # Chrome lags (152), so the current Chrome is a pinned Chrome for Testing build (chrome-156 in the config).
-    # Seven macOS parts, five at a time — the most macOS jobs a free account runs together — and two Windows parts beside
+    # Seven macOS parts, five at a time - the most macOS jobs a free account runs together - and two Windows parts beside
     # them, each its own sheet, joined below; VoiceOver on macOS 15, the first with its activedescendant fix, and on macOS
-    # 26; NVDA in Chrome and in Firefox on Windows Server 2025. A push, a pull request and a tag run them all.
+    # 26; NVDA in Chrome and in Firefox on Windows Server 2025. A push, a pull request and a tag run them all - but a
+    # push to main of a commit that a run with every part already passed (the branch's, fast-forwarded) runs none, and
+    # Pages takes that run's sheet.
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
     outputs:
       parts: ${{ steps.plan.outputs.parts }}
       dirs: ${{ steps.plan.outputs.dirs }}
+      verified: ${{ steps.plan.outputs.verified }}
     steps:
       - id: plan
         env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
           WANTED: ${{ inputs.parts }}
           ALL: >-
             [{"name": "chrome", "engines": "chrome-156"},
@@ -49,9 +61,25 @@ jobs:
           fi
           echo "parts=${parts}" >> "$GITHUB_OUTPUT"
           echo "dirs=$(jq -r 'map("parts/part-" + .name) | join(" ")' <<< "$parts")" >> "$GITHUB_OUTPUT"
+          verified=""
+          if [ "${GITHUB_EVENT_NAME}" = push ] && [ "${GITHUB_REF}" = refs/heads/main ]; then
+            want=$(jq -c '[.[] | "probes (" + .name + ")"]' <<< "$ALL")
+            for id in $(gh run list --workflow probes.yml --commit "${GITHUB_SHA}" --status success --limit 20 --json databaseId --jq '.[].databaseId'); do
+              have=$(gh run view "$id" --json jobs --jq '[.jobs[] | select(.conclusion == "success") | .name]')
+              if jq -e --argjson want "$want" '. as $have | ($want - $have) == []' <<< "$have" > /dev/null; then
+                verified="$id"
+                break
+              fi
+            done
+          fi
+          echo "verified=${verified}" >> "$GITHUB_OUTPUT"
+          if [ -n "$verified" ]; then
+            echo "Every part of ${GITHUB_SHA} passed in run ${verified}: no part runs again." >> "$GITHUB_STEP_SUMMARY"
+          fi
 
   probes:
     needs: plan
+    if: needs.plan.outputs.verified == ''
     name: probes (${{ matrix.part.name }})
     runs-on: ${{ matrix.part.runner || 'macos-15' }}
     timeout-minutes: 60
@@ -73,6 +101,7 @@ jobs:
         with:
           path: ${{ runner.os == 'Windows' && '~/AppData/Local/redz-ui' || '~/Library/Caches/redz-ui' }}
           key: probes-${{ matrix.part.name }}-${{ hashFiles('tools/probes/config.json') }}
+          restore-keys: probes-${{ matrix.part.name }}-
 
       - name: Let safaridriver drive Safari and the simulators
         if: matrix.part.name == 'safari' || matrix.part.name == 'ios' || startsWith(matrix.part.name, 'voiceover')
@@ -87,7 +116,11 @@ jobs:
         run: php tools/probe.php nvda-setup
 
       - name: The pages in ${{ matrix.part.engines }}
-        run: php tools/probe.php ${{ matrix.part.engines }}
+        shell: bash
+        env:
+          ENGINES: ${{ matrix.part.engines }}
+          PAGES: ${{ inputs.pages }}
+        run: php tools/probe.php ${PAGES:+"--pages=$PAGES"} $ENGINES
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
@@ -98,7 +131,7 @@ jobs:
 
   sheet:
     needs: [plan, probes]
-    if: always() && needs.plan.result == 'success'
+    if: always() && needs.plan.result == 'success' && needs.plan.outputs.verified == ''
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -131,7 +164,7 @@ jobs:
 
   release:
     # A tag v* becomes a release only when every part of the probes is clean: a draft with the archive and the sheet,
-    # then published — the repository's immutable releases lock the tag and the files and sign an attestation of them.
+    # then published - the repository's immutable releases lock the tag and the files and sign an attestation of them.
     needs: [probes, sheet]
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
@@ -153,7 +186,7 @@ jobs:
           php tools/build.php --check
           php tools/release.php "${GITHUB_REF_NAME}" release
 
-      - name: The release — a draft with the archive and the sheet of the probes, then published
+      - name: The release - a draft with the archive and the sheet of the probes, then published
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}

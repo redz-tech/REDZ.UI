@@ -28,7 +28,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Assemble the site — the latest release at the root, main as next/, a folder per release
+      - name: Assemble the site - the latest release at the root, main as next/, a folder per release
         run: |
           set -eu
           mkdir -p _site/next
@@ -41,15 +41,23 @@ jobs:
           done
           git archive "${latest:-origin/main}" | tar -x -C _site
 
-      - name: Add the sheets of the probes — main's latest as next/checks, each release's own as <version>/checks
+      - name: Add the sheets of the probes - main's latest as next/checks, each release's own as <version>/checks
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
           set -eu
-          run=$(gh run list --workflow probes.yml --branch main --event push --status completed --limit 1 --json databaseId --jq '.[0].databaseId // empty')
-          if [ -n "$run" ]; then
-            gh run download "$run" --name checks --dir _site/next/checks || echo "main's latest probes run has no sheet"
+          # The sheet of main's commit: the newest run of that commit with a sheet - a branch's run when main's push
+          # found the commit already passed and ran no part.
+          sheet=""
+          for run in $(gh run list --workflow probes.yml --commit "$(git rev-parse origin/main)" --status completed --limit 20 --json databaseId --jq '.[].databaseId'); do
+            if gh run download "$run" --name checks --dir _site/next/checks 2>/dev/null; then
+              sheet="$run"
+              break
+            fi
+          done
+          if [ -z "$sheet" ]; then
+            echo "main's commit has no probes run with a sheet"
           fi
           for tag in $(git tag --list 'v*' --sort=v:refname); do
             if gh release download "$tag" --pattern checks.zip --dir "/tmp/checks-$tag" 2>/dev/null; then

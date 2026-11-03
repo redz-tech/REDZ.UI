@@ -388,8 +388,8 @@ function PROBE__NvdaRead(array &$r, array &$h, string $page, array $run, array &
 			}
 			$read[] = ['engine' => $name, 'kind' => $kind, 'item' => $label, 'expect' => $expect, 'said' => $found === null ? '' : $said[$found]];
 			$finding = match (true) {
-				$item['words'] === '' && $kind !== 'landmark' => $name . ' ' . $page . " \u{2014} NVDA's reading by " . strtoupper($key) . ': ' . $label . ' has no words to say',
-				$found === null => $name . ' ' . $page . " \u{2014} NVDA's reading by " . strtoupper($key) . ' never said «' . implode('», «', $expect) . '» of ' . $label,
+				$item['words'] === '' && $kind !== 'landmark' => $name . ' ' . $page . " - NVDA's reading by " . strtoupper($key) . ': ' . $label . ' has no words to say',
+				$found === null => $name . ' ' . $page . " - NVDA's reading by " . strtoupper($key) . ' never said «' . implode('», «', $expect) . '» of ' . $label,
 				default => '',
 			};
 			$at = $found === null ? $at : $found + 1;

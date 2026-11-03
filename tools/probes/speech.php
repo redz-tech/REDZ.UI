@@ -1,22 +1,22 @@
 <?php
-// probes, speech: the config's speech steps heard by a screen reader — VoiceOver in Safari, NVDA in Chrome and Firefox.
+// probes, speech: the config's speech steps heard by a screen reader - VoiceOver in Safari, NVDA in Chrome and Firefox.
 // One list for every reader: each step holds the words the page owns and the reader's own words apart; a reader acts,
 // hears, says a page's words and gets ready for a page its own way through its verbs (Ready, Act, Heard, Says and, for a
 // reader that reads a page whole, Read). A step "unsteady" for an engine, with the reason, misses its words there as a
 // note.
 
-// A reader is not the same twice — a phrase dropped, a hint late: a page is heard again, up to three times, until a
+// A reader is not the same twice - a phrase dropped, a hint late: a page is heard again, up to three times, until a
 // hearing misses no words; otherwise the last hearing's findings stand.
 const PROBE_SPEECH_HEARINGS = 3;
 
-/** Calls the reader's $verb — PROBE__VoiceOverAct, PROBE__NvdaHeard… — on the reader's handle. */
+/** Calls the reader's $verb - PROBE__VoiceOverAct, PROBE__NvdaHeard… - on the reader's handle. */
 function PROBE__Reader(array &$r, string $verb, mixed ...$args): mixed
 {
 	return ('PROBE__' . ucfirst($r['kind']) . $verb)($r, ...$args);
 }
 
-/** The words of $text as a step compares them: letters and digits in lowercase, one space between — a reader may say a
- *  sign as a word or leave it unsaid —, the words split where NVDA's built-in dictionary splits them: GitHub, HTMLParser,
+/** The words of $text as a step compares them: letters and digits in lowercase, one space between - a reader may say a
+ *  sign as a word or leave it unsaid -, the words split where NVDA's built-in dictionary splits them: GitHub, HTMLParser,
  *  Tr0pical. */
 function PROBE__SpeechWords(string $text): string
 {
@@ -57,7 +57,7 @@ function PROBE__SpeechPage(array &$r, array &$h, string $page, array $steps, arr
 		// A reader may carry the keyboard focus along with its own cursor: a key goes where the last step left the focus.
 		$back = $step['do'] === 'focus' || $step['do'] === 'eval' ? null : PROBE__Do($h, 'Eval', '(() => { const kept = document.querySelector("[data-probe-focus]"); if (kept === null || document.activeElement === kept) { return null; } const away = document.activeElement?.outerHTML.slice(0, 60) ?? "none"; kept.focus(); return away; })()');
 		if ($back !== null) {
-			echo 'note: ', $name, ' ', $page, ' — before «', $step['label'], '» the focus was on ', $back, ', put back', "\n";
+			echo 'note: ', $name, ' ', $page, ' - before «', $step['label'], '» the focus was on ', $back, ', put back', "\n";
 			PROBE__Reader($r, 'Heard', microtime(true) * 1000, microtime(true) * 1000, 1.0, 5);
 		}
 		$since = microtime(true) * 1000;
@@ -73,16 +73,16 @@ function PROBE__SpeechPage(array &$r, array &$h, string $page, array $steps, arr
 		$heard = PROBE__Reader($r, 'Heard', $since, microtime(true) * 1000, $r['quiet'], 10);
 		$left = PROBE__Do($h, 'Eval', 'window.REDZ_PROBE_LEFT ?? null');
 		if ($left !== null) {
-			$findings[] = $name . ' ' . $page . ' — ' . $step['label'] . ': a key pressed the link to ' . $left . ', which would leave the page';
+			$findings[] = $name . ' ' . $page . ' - ' . $step['label'] . ': a key pressed the link to ' . $left . ', which would leave the page';
 			PROBE__Do($h, 'Eval', '(delete window.REDZ_PROBE_LEFT, true)');
 		}
 		$expect = [...$step['expect'], ...($step[$r['kind']] ?? [])];
 		$missing = PROBE__SpeechMissing($r, $expect, $heard);
 		$state = PROBE__Do($h, 'Eval', '(() => { const el = document.activeElement; const active = document.getElementById(el.getAttribute("aria-activedescendant") || ""); return (el.id || el.localName) + (active === null ? "" : " → " + active.textContent.trim()) + " · " + (el.matches("input, textarea") ? el.value : el.textContent.trim()).slice(0, 40); })()');
 		$spoken[] = ['engine' => $name, 'step' => $step['label'], 'expect' => $expect, 'said' => $heard, 'state' => $state];
-		$finding = $name . ' ' . $page . ' — ' . $step['label'] . ': ' . $r['reader'] . ' said «' . implode(' · ', $heard) . '», without «' . implode('», «', $missing) . '»';
+		$finding = $name . ' ' . $page . ' - ' . $step['label'] . ': ' . $r['reader'] . ' said «' . implode(' · ', $heard) . '», without «' . implode('», «', $missing) . '»';
 		if ($missing !== [] && isset($step['unsteady'][$name])) {
-			echo 'note: ', $finding, ' — unsteady here: ', $step['unsteady'][$name], "\n";
+			echo 'note: ', $finding, ' - unsteady here: ', $step['unsteady'][$name], "\n";
 		} elseif ($missing !== [] && !PROBE__FindingAllowed($run['config'], $name, $finding, $report)) {
 			$findings[] = $finding;
 		}
@@ -105,7 +105,7 @@ function PROBE__SpeechHear(array &$r, array &$h, array $run, array &$report): vo
 		}
 		$hearing = min($hearing, PROBE_SPEECH_HEARINGS);
 		if ($hearing > 1 && $findings === []) {
-			echo 'note: ', $name, ' ', $page, ' — every step heard on hearing ', $hearing, "\n";
+			echo 'note: ', $name, ' ', $page, ' - every step heard on hearing ', $hearing, "\n";
 		}
 		foreach ($spoken as $entry) {
 			$report['spoken'][$page][] = $entry + ['hearing' => $hearing];
