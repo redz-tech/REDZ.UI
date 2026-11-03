@@ -4,7 +4,7 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
-## Unreleased
+## 0.5.0 — 2026-11-03
 
 ### Forms: tags that create values, inline edit, the one-time code, passwords
 - Tags that create values: a list with `data-create` ends with “Create …” — the page's text `create` — while the
