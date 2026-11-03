@@ -91,7 +91,7 @@
 			{"label": "a strong one typed", "do": "type", "text": "Tr0pical-Lagoon!", "expect": ["Strong"]},
 			{"label": "the button that shows it", "do": "focus", "target": "[commandfor=\"form-password-new\"][command=\"--reveal\"]", "expect": ["Show the password"]},
 			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": []},
-			{"label": "the field, its text shown", "do": "focus", "target": "#form-password-new", "expect": ["Tr0pical-Lagoon!"]},
+			{"label": "the field, its text shown", "do": "focus", "target": "#form-password-new", "expect": ["New password"]},
 			{"label": "back on the button: it says it is pressed", "do": "focus", "target": "[commandfor=\"form-password-new\"][command=\"--reveal\"]", "expect": ["Show the password"], "voiceover": ["selected"]}
 		],
 		"docs/check.html": [

@@ -69,7 +69,7 @@
 	</div>
 
 	<h3>A new password</h3>
-	<p>A button with <code>command="--reveal"</code> for a password field shows its text and hides it again — <code>aria-pressed</code> says which — and the field hides it on its form's submit and when the page comes back from the history. Each element with <code>data-strength</code> naming the field shows its level as it is typed: shorter than its <code>minlength</code>, long enough, then longer or of three kinds of characters, then both — a <code>meter</code> at once, and the words, the page's texts <code>strength.short</code>, <code>.fair</code>, <code>.good</code> and <code>.strong</code>, once the typing pauses, said politely. The level is a hint: the server keeps its own rules.</p>
+	<p>A button with <code>command="--reveal"</code> for a password field shows its text and hides it again — <code>aria-pressed</code> says which — and the field hides it on its form's submit and when the page comes back from the history. Each element with <code>data-strength</code> naming the field shows its level as it is typed: shorter than its <code>minlength</code>, long enough, then longer or of three kinds of characters, then both — a <code>meter</code> at once, and the words, the page's texts <code>strength.short</code>, <code>.fair</code>, <code>.good</code> and <code>.strong</code>, once the typing pauses, said politely by a live region of the field's own — VoiceOver says nothing of a password field's own description changing, so the words' element needs no <code>aria-live</code>. The level is a hint: the server keeps its own rules.</p>
 	<div class="docs-example docs-example-stack" id="form-password">
 		<div class="form-field">
 			<label class="form-label" for="form-password-new">New password</label>

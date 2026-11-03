@@ -406,6 +406,12 @@ const settled = (list) => {
 	}
 };
 
+/** Says the words in the list's status after the next frame: a status emptied and filled again in one task says
+ *  nothing. */
+const sayLater = (list, words) => requestAnimationFrame(() => setTimeout(() => {
+	statusOf(list).textContent = words;
+}));
+
 /** Takes "Create “…”": redz:create asks the page, which may answer {value, label} — an option of the list from then on,
  *  chosen — or reject with words the status says; left alone, the label is held in the field data-create names. The
  *  search empties for the next one, and a list of many, its panel still open, says the new label politely. */
@@ -424,7 +430,7 @@ const create = (option) => {
 		fresh(input);
 		settled(list);
 		if (many) {
-			statusOf(list).textContent = label;
+			sayLater(list, label);
 		}
 		return;
 	}
@@ -439,7 +445,7 @@ const create = (option) => {
 		fresh(input);
 		choose(added);
 		if (many) {
-			statusOf(list).textContent = added.textContent;
+			sayLater(list, added.textContent);
 		}
 	}, (words) => {
 		list.removeAttribute('aria-busy');

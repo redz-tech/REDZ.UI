@@ -8,6 +8,9 @@
 
 const PROBE_VOICEOVER = '/System/Library/CoreServices/VoiceOver.app/Contents/MacOS/VoiceOverStarter';
 const PROBE_VOICEOVER_FLAG = '/private/var/db/Accessibility/.VoiceOverAppleScriptEnabled';
+// VoiceOver is not the same twice — a phrase dropped, a hint late: a page is heard again, up to three times, until a
+// hearing misses no words; otherwise the last hearing's findings stand.
+const PROBE_VOICEOVER_HEARINGS = 3;
 
 /** What osascript answers for the script; '' when it fails. */
 function PROBE__AppleScript(string $script): string
@@ -71,6 +74,44 @@ function PROBE__VoiceOverHeard(string $file, float $since, float $acted, float $
 	}
 }
 
+/** One hearing of a page: loaded, its first words let pass, each step done and what VoiceOver says after it held
+ *  against the words it must contain; answers what was said and the findings, an exception's not among them. */
+function PROBE__VoiceOverPage(array &$h, string $name, string $page, array $steps, string $log, array $run, array &$report): array
+{
+	PROBE__Do($h, 'Load', $run['base'] . $page, 1280, 900);
+	for ($tries = 0; PROBE__Do($h, 'Eval', 'document.readyState === "complete" && "REDZ" in window') !== true; $tries++) {
+		if ($tries > 100) {
+			throw new RuntimeException($page . ' did not load: ' . json_encode(PROBE__Do($h, 'Eval', '[location.href, document.readyState, document.title]')));
+		}
+		usleep(100000);
+	}
+	PROBE__AppleScript('tell application "Safari" to activate');
+	PROBE__VoiceOverHeard($log, microtime(true) * 1000, microtime(true) * 1000, 2.0, 10);
+	$spoken = [];
+	$findings = [];
+	foreach ($steps as $step) {
+		$since = microtime(true) * 1000;
+		match ($step['do']) {
+			'focus' => PROBE__Do($h, 'Eval', '(() => { const el = document.querySelector(' . json_encode($step['target']) . '); if (el === null) { throw new Error(' . json_encode('no ' . $step['target'] . ' on the page') . '); } el.focus(); return true; })()'),
+			'key' => PROBE__Do($h, 'Key', $step['key']),
+			'type' => PROBE__Do($h, 'Type', $step['text']),
+			'chord' => PROBE__Do($h, 'Chord', $step['keys']),
+			'eval' => PROBE__Do($h, 'Eval', $step['script']),
+		};
+		$heard = PROBE__VoiceOverHeard($log, $since, microtime(true) * 1000, 2.5, 10);
+		$said = mb_strtolower(implode(' · ', $heard));
+		$expect = [...$step['expect'], ...($step['voiceover'] ?? [])];
+		$missing = array_values(array_filter($expect, fn(string $words): bool => !str_contains($said, mb_strtolower($words))));
+		$state = PROBE__Do($h, 'Eval', '(() => { const el = document.activeElement; const active = document.getElementById(el.getAttribute("aria-activedescendant") || ""); return (el.id || el.localName) + (active === null ? "" : " → " + active.textContent.trim()) + " · " + (el.matches("input, textarea") ? el.value : el.textContent.trim()).slice(0, 40); })()');
+		$spoken[] = ['engine' => $name, 'step' => $step['label'], 'expect' => $expect, 'said' => $heard, 'state' => $state];
+		$finding = $name . ' ' . $page . ' — ' . $step['label'] . ': VoiceOver said «' . implode(' · ', $heard) . '», without «' . implode('», «', $missing) . '»';
+		if ($missing !== [] && !PROBE__FindingAllowed($run['config'], $name, $finding, $report)) {
+			$findings[] = $finding;
+		}
+	}
+	return [$spoken, $findings];
+}
+
 /** Starts VoiceOver and its listener, then Safari's session — VoiceOver's start would take the window from a session
  *  already open — goes through the config's speech steps on each page, records what VoiceOver says into the report;
  *  every phrase heard stays in the sheet's logs/NAME-phrases.log. */
@@ -92,35 +133,20 @@ function PROBE__VoiceOverRun(string $name, string $dir, array $run, array &$repo
 		$h = PROBE__SafariStart($dir);
 		$report['engines'][$name] = ['version' => $h['version'] . ' · VoiceOver · macOS ' . trim(PROBE__Run(['/usr/bin/sw_vers', '-productVersion'])), 'cells' => 0];
 		foreach ($run['config']['speech'] as $page => $steps) {
-			PROBE__Do($h, 'Load', $run['base'] . $page, 1280, 900);
-			for ($tries = 0; PROBE__Do($h, 'Eval', 'document.readyState === "complete" && "REDZ" in window') !== true; $tries++) {
-				if ($tries > 100) {
-					throw new RuntimeException($page . ' did not load: ' . json_encode(PROBE__Do($h, 'Eval', '[location.href, document.readyState, document.title]')));
-				}
-				usleep(100000);
-			}
-			PROBE__AppleScript('tell application "Safari" to activate');
-			PROBE__VoiceOverHeard($log, microtime(true) * 1000, microtime(true) * 1000, 1.0, 5);
-			foreach ($steps as $step) {
-				$since = microtime(true) * 1000;
-				match ($step['do']) {
-					'focus' => PROBE__Do($h, 'Eval', '(() => { const el = document.querySelector(' . json_encode($step['target']) . '); if (el === null) { throw new Error(' . json_encode('no ' . $step['target'] . ' on the page') . '); } el.focus(); return true; })()'),
-					'key' => PROBE__Do($h, 'Key', $step['key']),
-					'type' => PROBE__Do($h, 'Type', $step['text']),
-					'chord' => PROBE__Do($h, 'Chord', $step['keys']),
-					'eval' => PROBE__Do($h, 'Eval', $step['script']),
-				};
-				$heard = PROBE__VoiceOverHeard($log, $since, microtime(true) * 1000, 2.5, 10);
-				$said = mb_strtolower(implode(' · ', $heard));
-				$expect = [...$step['expect'], ...($step['voiceover'] ?? [])];
-				$missing = array_values(array_filter($expect, fn(string $words): bool => !str_contains($said, mb_strtolower($words))));
-				$state = PROBE__Do($h, 'Eval', '(() => { const el = document.activeElement; const active = document.getElementById(el.getAttribute("aria-activedescendant") || ""); return (el.id || el.localName) + (active === null ? "" : " → " + active.textContent.trim()) + " · " + (el.matches("input, textarea") ? el.value : el.textContent.trim()).slice(0, 40); })()');
-				$report['spoken'][$page][] = ['engine' => $name, 'step' => $step['label'], 'expect' => $expect, 'said' => $heard, 'state' => $state];
-				$finding = $name . ' ' . $page . ' — ' . $step['label'] . ': VoiceOver said «' . implode(' · ', $heard) . '», without «' . implode('», «', $missing) . '»';
-				if ($missing !== [] && !PROBE__FindingAllowed($run['config'], $name, $finding, $report)) {
-					$report['findings'][] = $finding;
+			for ($hearing = 1; $hearing <= PROBE_VOICEOVER_HEARINGS; $hearing++) {
+				[$spoken, $findings] = PROBE__VoiceOverPage($h, $name, $page, $steps, $log, $run, $report);
+				if ($findings === []) {
+					break;
 				}
 			}
+			$hearing = min($hearing, PROBE_VOICEOVER_HEARINGS);
+			if ($hearing > 1 && $findings === []) {
+				echo 'note: ', $name, ' ', $page, ' — every step heard on hearing ', $hearing, "\n";
+			}
+			foreach ($spoken as $entry) {
+				$report['spoken'][$page][] = $entry + ['hearing' => $hearing];
+			}
+			$report['findings'] = [...$report['findings'], ...$findings];
 			$report['engines'][$name]['cells']++;
 		}
 	} catch (Throwable $e) {

@@ -4,7 +4,8 @@
 // nothing, 1 shorter than its minlength (8 without one), 2 long enough, 3 long enough with four characters more or three
 // kinds of characters (small or uncased letters, capitals, digits, the rest), 4 both, or twice the minimum: a meter at
 // once as its value, and the level's words once the typing pauses — a meter's aria-valuetext, any other element's
-// text, said politely when they change.
+// text — said politely when they change by a live region of the field's own: VoiceOver says nothing of a password
+// field's own description changing, live or not.
 import {text} from './text.js';
 
 const COMMAND = '--reveal';
@@ -12,6 +13,20 @@ const PAUSE = 700;
 const WORDS = ['', 'strength.short', 'strength.fair', 'strength.good', 'strength.strong'];
 const KINDS = [/[\p{Ll}\p{Lm}\p{Lo}\p{Lt}]/u, /\p{Lu}/u, /\p{N}/u, /[^\p{L}\p{N}\s]/u];
 const timers = new WeakMap();
+const voices = new WeakMap();
+
+/** The field's polite live region, made at its first key — before the words it says — in its dialog or popover, which
+ *  leaves the page outside inert, else in the body. */
+const voiceOf = (field) => {
+	let voice = voices.get(field);
+	if (voice === undefined) {
+		voice = Object.assign(document.createElement('span'), {className: 'visually-hidden'});
+		voice.setAttribute('aria-live', 'polite');
+		(field.closest('dialog, [popover]') ?? document.body).append(voice);
+		voices.set(field, voice);
+	}
+	return voice;
+};
 
 /** Marks every --reveal button of the field pressed while its text shows. */
 const press = (field, shown) => {
@@ -43,31 +58,29 @@ const levelOf = (field) => {
 	return length >= least * 2 || (longer && varied) ? 4 : (longer || varied ? 3 : 2);
 };
 
-/** Shows the field's level on its meters at once, and its words once the typing pauses — their elements made live at
- *  the first key, before the words change: a region made live with its words says nothing. */
+/** Shows the field's level on its meters at once, and its words once the typing pauses, said by its live region when
+ *  they change. */
 const rate = (field) => {
 	const shows = [...document.querySelectorAll('[data-strength="' + CSS.escape(field.id) + '"]')];
 	const level = levelOf(field);
-	for (const show of shows) {
-		if (show instanceof HTMLMeterElement) {
-			show.value = level;
-		} else if (!show.hasAttribute('aria-live') && show.getAttribute('role') !== 'status') {
-			show.setAttribute('aria-live', 'polite');
-		}
+	const voice = voiceOf(field);
+	for (const meter of shows.filter((show) => show instanceof HTMLMeterElement)) {
+		meter.value = level;
 	}
 	clearTimeout(timers.get(field));
 	timers.set(field, setTimeout(() => {
 		const words = level === 0 ? '' : text(WORDS[level]);
 		for (const show of shows) {
-			if (show instanceof HTMLMeterElement) {
-				if (words === '') {
-					show.removeAttribute('aria-valuetext');
-				} else {
-					show.setAttribute('aria-valuetext', words);
-				}
-			} else if (show.textContent !== words) {
+			if (!(show instanceof HTMLMeterElement)) {
 				show.textContent = words;
+			} else if (words === '') {
+				show.removeAttribute('aria-valuetext');
+			} else {
+				show.setAttribute('aria-valuetext', words);
 			}
+		}
+		if (voice.textContent !== words) {
+			voice.textContent = words;
 		}
 	}, PAUSE));
 };
