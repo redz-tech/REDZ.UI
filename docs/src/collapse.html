@@ -5,10 +5,10 @@
 
 <section class="vstack gap-16" aria-labelledby="collapse-examples">
 	<h2 id="collapse-examples">Examples</h2>
-	<p>The button names its region with <code>commandfor</code> and <code>command="--toggle"</code>, and says in <code>aria-expanded</code> whether the region is open: write it as the region starts, and the library keeps it.</p>
+	<p>The button carries <code>command="--toggle"</code>, names its region in <code>aria-controls</code> and says in <code>aria-expanded</code> whether the region is open: write it as the region starts, and the library keeps it. It takes no <code>commandfor</code>: WebKit would then tell a screen reader the button is collapsed whatever its <code>aria-expanded</code> says.</p>
 	<div class="docs-example docs-example-stack" id="collapse-help">
 		<div class="hstack gap-8">
-			<button class="btn btn-sm" type="button" commandfor="collapse-help-text" command="--toggle" aria-expanded="false" aria-controls="collapse-help-text"><i class="bi bi-question-circle" aria-hidden="true"></i>How prices work</button>
+			<button class="btn btn-sm" type="button" command="--toggle" aria-controls="collapse-help-text" aria-expanded="false"><i class="bi bi-question-circle" aria-hidden="true"></i>How prices work</button>
 		</div>
 		<div id="collapse-help-text" hidden="until-found">
 			<p class="text-muted">A price is per person. Children from four to eleven pay the child price; under four they travel free.</p>
@@ -19,7 +19,7 @@
 	<p>A region without <code>hidden</code> starts open, its button <code>aria-expanded="true"</code>.</p>
 	<div class="docs-example docs-example-stack" id="collapse-open">
 		<div class="hstack gap-8">
-			<button class="btn btn-sm" type="button" commandfor="collapse-open-filters" command="--toggle" aria-expanded="true" aria-controls="collapse-open-filters"><i class="bi bi-funnel" aria-hidden="true"></i>More filters</button>
+			<button class="btn btn-sm" type="button" command="--toggle" aria-controls="collapse-open-filters" aria-expanded="true"><i class="bi bi-funnel" aria-hidden="true"></i>More filters</button>
 		</div>
 		<div id="collapse-open-filters" class="hstack flex-wrap gap-8">
 			<button class="chip" type="button" aria-pressed="true">With lunch</button>

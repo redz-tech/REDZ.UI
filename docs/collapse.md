@@ -6,11 +6,11 @@ A button that opens and closes a region elsewhere on the page — help under a t
 
 ## Examples
 
-The button names its region with `commandfor` and `command="--toggle"`, and says in `aria-expanded` whether the region is open: write it as the region starts, and the library keeps it.
+The button carries `command="--toggle"`, names its region in `aria-controls` and says in `aria-expanded` whether the region is open: write it as the region starts, and the library keeps it. It takes no `commandfor`: WebKit would then tell a screen reader the button is collapsed whatever its `aria-expanded` says.
 
 ```html
 <div class="hstack gap-8">
-	<button class="btn btn-sm" type="button" commandfor="collapse-help-text" command="--toggle" aria-expanded="false" aria-controls="collapse-help-text"><i class="bi bi-question-circle" aria-hidden="true"></i>How prices work</button>
+	<button class="btn btn-sm" type="button" command="--toggle" aria-controls="collapse-help-text" aria-expanded="false"><i class="bi bi-question-circle" aria-hidden="true"></i>How prices work</button>
 </div>
 <div id="collapse-help-text" hidden="until-found">
 	<p class="text-muted">A price is per person. Children from four to eleven pay the child price; under four they travel free.</p>
@@ -23,7 +23,7 @@ A region without `hidden` starts open, its button `aria-expanded="true"`.
 
 ```html
 <div class="hstack gap-8">
-	<button class="btn btn-sm" type="button" commandfor="collapse-open-filters" command="--toggle" aria-expanded="true" aria-controls="collapse-open-filters"><i class="bi bi-funnel" aria-hidden="true"></i>More filters</button>
+	<button class="btn btn-sm" type="button" command="--toggle" aria-controls="collapse-open-filters" aria-expanded="true"><i class="bi bi-funnel" aria-hidden="true"></i>More filters</button>
 </div>
 <div id="collapse-open-filters" class="hstack flex-wrap gap-8">
 	<button class="chip" type="button" aria-pressed="true">With lunch</button>
@@ -49,5 +49,5 @@ A region without `hidden` starts open, its button `aria-expanded="true"`.
 | `collapse` | — | state | closed: hidden="until-found" on the region; open: no hidden; its button has command="--toggle" |
 | `collapse-horizontal` | — | review | not planned: a region opens downward, in its place |
 | `collapsing` | — | remove | the region opens at once |
-| `data-bs-toggle="collapse"` | `commandfor="ID" command="--toggle" aria-expanded="false"` | trigger | the region is hidden="until-found" while closed; in an accordion the item is a <details> |
+| `data-bs-toggle="collapse"` | `command="--toggle" aria-controls="ID" aria-expanded="false"` | trigger | the region is hidden="until-found" while closed; in an accordion the item is a <details> |
 | `bootstrap.Collapse` | `region.hidden = false` | review | and setAttribute('hidden', 'until-found') to close; set aria-expanded on its buttons then — a button with command="--toggle" does both |

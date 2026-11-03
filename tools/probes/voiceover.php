@@ -48,22 +48,23 @@ function PROBE__VoiceOverListen(string $file)
 	return $proc;
 }
 
-/** The phrases the listener wrote since $since (ms), in order: read for at least 1.5 s, until $quiet seconds without a
- *  new one — longer than VoiceOver waits before a hint — or $most seconds. */
-function PROBE__VoiceOverHeard(string $file, float $since, float $quiet, float $most): array
+/** The phrases the listener wrote since the action began at $since (ms), in order: read for at least 1.5 s after it
+ *  ended at $acted, until $quiet seconds without a new one — longer than VoiceOver waits before a hint, and than a
+ *  widget waits for the typing to pause — or $most seconds. */
+function PROBE__VoiceOverHeard(string $file, float $since, float $acted, float $quiet, float $most): array
 {
 	while (true) {
 		$heard = [];
-		$spoke = $since;
+		$spoke = $acted;
 		foreach (file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [] as $line) {
 			[$at, $phrase] = explode("\t", $line, 2) + [1 => ''];
 			if ((float)$at >= $since) {
 				$heard[] = $phrase;
-				$spoke = (float)$at;
+				$spoke = max($spoke, (float)$at);
 			}
 		}
 		$now = microtime(true) * 1000;
-		if ($now - $since >= $most * 1000 || ($now - $since >= 1500 && $now - $spoke >= $quiet * 1000)) {
+		if ($now - $acted >= $most * 1000 || ($now - $acted >= 1500 && $now - $spoke >= $quiet * 1000)) {
 			return $heard;
 		}
 		usleep(100000);
@@ -99,7 +100,7 @@ function PROBE__VoiceOverRun(string $name, string $dir, array $run, array &$repo
 				usleep(100000);
 			}
 			PROBE__AppleScript('tell application "Safari" to activate');
-			PROBE__VoiceOverHeard($log, microtime(true) * 1000, 1.0, 5);
+			PROBE__VoiceOverHeard($log, microtime(true) * 1000, microtime(true) * 1000, 1.0, 5);
 			foreach ($steps as $step) {
 				$since = microtime(true) * 1000;
 				match ($step['do']) {
@@ -109,14 +110,15 @@ function PROBE__VoiceOverRun(string $name, string $dir, array $run, array &$repo
 					'chord' => PROBE__Do($h, 'Chord', $step['keys']),
 					'eval' => PROBE__Do($h, 'Eval', $step['script']),
 				};
-				$heard = PROBE__VoiceOverHeard($log, $since, 2.5, 10);
+				$heard = PROBE__VoiceOverHeard($log, $since, microtime(true) * 1000, 2.5, 10);
 				$said = mb_strtolower(implode(' · ', $heard));
 				$expect = [...$step['expect'], ...($step['voiceover'] ?? [])];
 				$missing = array_values(array_filter($expect, fn(string $words): bool => !str_contains($said, mb_strtolower($words))));
 				$state = PROBE__Do($h, 'Eval', '(() => { const el = document.activeElement; const active = document.getElementById(el.getAttribute("aria-activedescendant") || ""); return (el.id || el.localName) + (active === null ? "" : " → " + active.textContent.trim()) + " · " + (el.matches("input, textarea") ? el.value : el.textContent.trim()).slice(0, 40); })()');
 				$report['spoken'][$page][] = ['engine' => $name, 'step' => $step['label'], 'expect' => $expect, 'said' => $heard, 'state' => $state];
-				if ($missing !== []) {
-					$report['findings'][] = $name . ' ' . $page . ' — ' . $step['label'] . ': VoiceOver said «' . implode(' · ', $heard) . '», without «' . implode('», «', $missing) . '»';
+				$finding = $name . ' ' . $page . ' — ' . $step['label'] . ': VoiceOver said «' . implode(' · ', $heard) . '», without «' . implode('», «', $missing) . '»';
+				if ($missing !== [] && !PROBE__FindingAllowed($run['config'], $name, $finding, $report)) {
+					$report['findings'][] = $finding;
 				}
 			}
 			$report['engines'][$name]['cells']++;

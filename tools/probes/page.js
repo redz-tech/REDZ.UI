@@ -26,6 +26,8 @@ window.REDZ_PROBE = (() => {
 		return box;
 	};
 	const shown = (el) => el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden' && !closed(el);
+	// The element a button works on: its commandfor's, or the region a --toggle button names in aria-controls.
+	const targetOf = (button) => document.getElementById(button.getAttribute('commandfor') || (button.getAttribute('command') === '--toggle' ? (button.getAttribute('aria-controls') || '').trim().split(/\s+/)[0] : ''));
 	// Hidden on purpose: the screen-reader-only pattern clips its box to nothing.
 	const unseen = (el) => getComputedStyle(el).clipPath === 'inset(50%)';
 	// The page's own errors from here on — an engine whose driver brings no events (Safari) shows them only this way.
@@ -119,10 +121,12 @@ window.REDZ_PROBE = (() => {
 				unregioned: unregioned.slice(0, 8),
 				cut: cut.slice(0, 8),
 				busyLive: [...document.querySelectorAll('[aria-busy="true"]')].filter((el) => el.matches(live) || el.querySelector(live) !== null).slice(0, 8).map(name),
-				toggles: [...document.querySelectorAll('button[command="--toggle"][commandfor]')].filter((button) => {
-					const target = document.getElementById(button.getAttribute('commandfor') || '');
+				toggles: [...document.querySelectorAll('button[command="--toggle"]')].filter((button) => {
+					const target = targetOf(button);
 					return target === null || button.getAttribute('aria-expanded') !== String(!target.hidden);
-				}).slice(0, 8).map((button) => name(button) + ' → #' + button.getAttribute('commandfor')),
+				}).slice(0, 8).map((button) => name(button) + ' → #' + (button.getAttribute('aria-controls') || button.getAttribute('commandfor'))),
+				toggleFor: [...document.querySelectorAll('button[command="--toggle"][commandfor]')].slice(0, 8).map(name),
+				tips: [...document.querySelectorAll('[role="tooltip"][popover][id]')].flatMap((tip) => [...document.querySelectorAll('[commandfor="' + CSS.escape(tip.id) + '"]')].filter((button) => !(button.getAttribute('aria-describedby') || '').split(/\s+/).includes(tip.id))).slice(0, 8).map(name),
 				scrollspies: [...document.querySelectorAll('[data-scrollspy]')].filter((nav) => nav.querySelectorAll('[aria-current="location"]').length !== 1).slice(0, 8).map(name),
 				strengths: [...document.querySelectorAll('[data-strength]')].filter((show) => !(document.getElementById(show.dataset.strength) instanceof HTMLInputElement)).slice(0, 8).map(name),
 				edits: [...document.querySelectorAll('.inline-edit-form')].filter((form) => document.getElementById(form.dataset.for || '') === null).slice(0, 8).map(name),
@@ -242,8 +246,8 @@ window.REDZ_PROBE = (() => {
 		keyTargets() {
 			const out = [];
 			const seen = new Set();
-			for (const invoker of document.querySelectorAll('[commandfor]')) {
-				const target = document.getElementById(invoker.getAttribute('commandfor') || '');
+			for (const invoker of document.querySelectorAll('[commandfor], button[command="--toggle"][aria-controls]')) {
+				const target = targetOf(invoker);
 				const command = invoker.getAttribute('command') || '';
 				const kind = invoker.classList.contains('combobox-toggle') && target?.querySelector('[role="listbox"]') ? 'combobox' : (target?.getAttribute('role') === 'menu' && command === 'toggle-popover' ? 'menu' : (target?.localName === 'dialog' && command === 'show-modal' ? 'dialog' : (target && command === '--toggle' ? 'toggle' : (target?.classList.contains('inline-edit-form') && command === '--edit' ? 'edit' : (target?.localName === 'input' && command === '--reveal' ? 'reveal' : '')))));
 				if (kind !== '' && !seen.has(target) && shown(invoker)) {
@@ -370,7 +374,7 @@ window.REDZ_PROBE = (() => {
 			}
 			if (kind === 'trees') {
 				const groups = [...document.getElementById(id).querySelectorAll('.tree-group')].filter((group) => group.childElementCount > 0);
-				return {open: groups.filter((group) => !group.hidden).length, groups: groups.length, said: groups.filter((group) => document.querySelector('[commandfor="' + CSS.escape(group.id) + '"]')?.getAttribute('aria-expanded') === String(!group.hidden)).length};
+				return {open: groups.filter((group) => !group.hidden).length, groups: groups.length, said: groups.filter((group) => document.querySelector('button[command="--toggle"][aria-controls~="' + CSS.escape(group.id) + '"]')?.getAttribute('aria-expanded') === String(!group.hidden)).length};
 			}
 			if (kind === 'reorder') {
 				const list = document.getElementById(id);

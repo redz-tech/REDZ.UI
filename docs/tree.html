@@ -100,7 +100,7 @@
 
 				<section class="vstack gap-16" aria-labelledby="tree-examples">
 					<h2 id="tree-examples">Examples</h2>
-					<p><code>tree</code> on the list, <code>tree-item</code> on each item, its <code>tree-row</code> holding a <code>tree-toggle</code> — a <code>--toggle</code> button for the item's <code>tree-group</code> — and the item's link. The groups close as <code>hidden="until-found"</code>, so the browser's find in page still opens them. A button with <code>command="--expand-all"</code> or <code>"--collapse-all"</code> for the tree opens or closes every group that holds items.</p>
+					<p><code>tree</code> on the list, <code>tree-item</code> on each item, its <code>tree-row</code> holding a <code>tree-toggle</code> — a <code>--toggle</code> button naming the item's <code>tree-group</code> in <code>aria-controls</code>, as on <a href="collapse.html">collapse</a> — and the item's link. The groups close as <code>hidden="until-found"</code>, so the browser's find in page still opens them. A button with <code>command="--expand-all"</code> or <code>"--collapse-all"</code> for the tree opens or closes every group that holds items.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="tree-pages">
 						<div class="hstack gap-8">
 							<button class="btn btn-sm" type="button" commandfor="tree-pages-list" command="--expand-all"><i class="bi bi-arrows-expand" aria-hidden="true"></i>Expand all</button>
@@ -109,7 +109,7 @@
 						<ul class="tree" id="tree-pages-list" aria-label="Pages">
 							<li class="tree-item">
 								<div class="tree-row">
-									<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-excursions" command="--toggle" aria-expanded="true" aria-label="Excursions"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+									<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" command="--toggle" aria-controls="tree-pages-excursions" aria-expanded="true" aria-label="Excursions"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
 									<a href="#tree-pages">Excursions</a>
 								</div>
 								<ul class="tree-group" id="tree-pages-excursions">
@@ -119,7 +119,7 @@
 							</li>
 							<li class="tree-item">
 								<div class="tree-row">
-									<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-islands" command="--toggle" aria-expanded="false" aria-label="Islands"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+									<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" command="--toggle" aria-controls="tree-pages-islands" aria-expanded="false" aria-label="Islands"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
 									<a href="#tree-pages">Islands</a>
 								</div>
 								<ul class="tree-group" id="tree-pages-islands" hidden="until-found">
@@ -129,7 +129,7 @@
 							</li>
 							<li class="tree-item">
 								<div class="tree-row">
-									<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-archive" command="--toggle" aria-expanded="false" aria-label="Archive"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+									<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" command="--toggle" aria-controls="tree-pages-archive" aria-expanded="false" aria-label="Archive"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
 									<a href="#tree-pages">Archive</a>
 								</div>
 								<ul class="tree-group" id="tree-pages-archive" hidden="until-found" data-lazy data-docs-lazy></ul>
@@ -144,7 +144,7 @@
 &lt;ul class="tree" id="tree-pages-list" aria-label="Pages"&gt;
 	&lt;li class="tree-item"&gt;
 		&lt;div class="tree-row"&gt;
-			&lt;button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-excursions" command="--toggle" aria-expanded="true" aria-label="Excursions"&gt;&lt;i class="bi bi-chevron-right" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;
+			&lt;button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" command="--toggle" aria-controls="tree-pages-excursions" aria-expanded="true" aria-label="Excursions"&gt;&lt;i class="bi bi-chevron-right" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;
 			&lt;a href="#tree-pages"&gt;Excursions&lt;/a&gt;
 		&lt;/div&gt;
 		&lt;ul class="tree-group" id="tree-pages-excursions"&gt;
@@ -154,7 +154,7 @@
 	&lt;/li&gt;
 	&lt;li class="tree-item"&gt;
 		&lt;div class="tree-row"&gt;
-			&lt;button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-islands" command="--toggle" aria-expanded="false" aria-label="Islands"&gt;&lt;i class="bi bi-chevron-right" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;
+			&lt;button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" command="--toggle" aria-controls="tree-pages-islands" aria-expanded="false" aria-label="Islands"&gt;&lt;i class="bi bi-chevron-right" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;
 			&lt;a href="#tree-pages"&gt;Islands&lt;/a&gt;
 		&lt;/div&gt;
 		&lt;ul class="tree-group" id="tree-pages-islands" hidden="until-found"&gt;
@@ -164,7 +164,7 @@
 	&lt;/li&gt;
 	&lt;li class="tree-item"&gt;
 		&lt;div class="tree-row"&gt;
-			&lt;button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-archive" command="--toggle" aria-expanded="false" aria-label="Archive"&gt;&lt;i class="bi bi-chevron-right" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;
+			&lt;button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" command="--toggle" aria-controls="tree-pages-archive" aria-expanded="false" aria-label="Archive"&gt;&lt;i class="bi bi-chevron-right" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;
 			&lt;a href="#tree-pages"&gt;Archive&lt;/a&gt;
 		&lt;/div&gt;
 		&lt;ul class="tree-group" id="tree-pages-archive" hidden="until-found" data-lazy data-docs-lazy&gt;&lt;/ul&gt;

@@ -75,8 +75,9 @@ body are `drawer-header`, `drawer-title`, `drawer-body`. It opens like a dialog:
   heading around the button. The items of one group share `name="…"` — that replaces `data-bs-parent` — and the open
   one has `open` instead of `show`. The chevron is `<i class="bi bi-chevron-down accordion-icon" aria-hidden="true">`
   at the end of the summary.
-- A standalone collapse keeps its button and its region where they are: the button gets `commandfor="ID"
-  command="--toggle" aria-expanded="false"` instead of `data-bs-toggle` and `data-bs-target`; the region drops
+- A standalone collapse keeps its button and its region where they are: the button gets `command="--toggle"
+  aria-controls="ID" aria-expanded="false"` instead of `data-bs-toggle` and `data-bs-target` — no `commandfor`, which
+  WebKit would expose as collapsed whatever `aria-expanded` says; the region drops
   `collapse` and gets `hidden="until-found"` while closed (no `hidden` when it starts open, its button
   `aria-expanded="true"`).
 

@@ -6,7 +6,7 @@ Pages under pages, a menu's items, folders: a list whose items open their own li
 
 ## Examples
 
-`tree` on the list, `tree-item` on each item, its `tree-row` holding a `tree-toggle` — a `--toggle` button for the item's `tree-group` — and the item's link. The groups close as `hidden="until-found"`, so the browser's find in page still opens them. A button with `command="--expand-all"` or `"--collapse-all"` for the tree opens or closes every group that holds items.
+`tree` on the list, `tree-item` on each item, its `tree-row` holding a `tree-toggle` — a `--toggle` button naming the item's `tree-group` in `aria-controls`, as on [collapse](collapse.md) — and the item's link. The groups close as `hidden="until-found"`, so the browser's find in page still opens them. A button with `command="--expand-all"` or `"--collapse-all"` for the tree opens or closes every group that holds items.
 
 ```html
 <div class="hstack gap-8">
@@ -16,7 +16,7 @@ Pages under pages, a menu's items, folders: a list whose items open their own li
 <ul class="tree" id="tree-pages-list" aria-label="Pages">
 	<li class="tree-item">
 		<div class="tree-row">
-			<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-excursions" command="--toggle" aria-expanded="true" aria-label="Excursions"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+			<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" command="--toggle" aria-controls="tree-pages-excursions" aria-expanded="true" aria-label="Excursions"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
 			<a href="#tree-pages">Excursions</a>
 		</div>
 		<ul class="tree-group" id="tree-pages-excursions">
@@ -26,7 +26,7 @@ Pages under pages, a menu's items, folders: a list whose items open their own li
 	</li>
 	<li class="tree-item">
 		<div class="tree-row">
-			<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-islands" command="--toggle" aria-expanded="false" aria-label="Islands"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+			<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" command="--toggle" aria-controls="tree-pages-islands" aria-expanded="false" aria-label="Islands"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
 			<a href="#tree-pages">Islands</a>
 		</div>
 		<ul class="tree-group" id="tree-pages-islands" hidden="until-found">
@@ -36,7 +36,7 @@ Pages under pages, a menu's items, folders: a list whose items open their own li
 	</li>
 	<li class="tree-item">
 		<div class="tree-row">
-			<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-archive" command="--toggle" aria-expanded="false" aria-label="Archive"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+			<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" command="--toggle" aria-controls="tree-pages-archive" aria-expanded="false" aria-label="Archive"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
 			<a href="#tree-pages">Archive</a>
 		</div>
 		<ul class="tree-group" id="tree-pages-archive" hidden="until-found" data-lazy data-docs-lazy></ul>

@@ -73,9 +73,10 @@ attaches by delegation on `document`, so nothing is set up per element and marku
 - **Tabs** (`role="tablist"`): the arrow keys select the next tab and show its panel — mirrored right to left — Home
   and End the first and the last; only the selected tab takes Tab. With `data-activation="manual"` — panels that load
   from the server — the keys move the focus only, and Enter or Space selects (`js/tabs.js`).
-- **Regions:** a button with `commandfor` and `command="--toggle"` opens and closes the element it names, closed as
+- **Regions:** a button with `command="--toggle"` opens and closes the element its `aria-controls` names, closed as
   `hidden="until-found"`, so the browser's find in page still reaches its words and opens it; every button for the
-  region says the state in `aria-expanded` (`js/toggle.js`). An accordion needs no script: it is `<details name>`.
+  region says the state in `aria-expanded` (`js/toggle.js`). It takes no `commandfor`, which WebKit would expose as
+  collapsed whatever `aria-expanded` says. An accordion needs no script: it is `<details name>`.
 - **Notices:** `REDZ.ui.toast({title, text, tone, action, persistent})` shows a toast in the live regions of
   `.toast-container` — `role="status"`, `role="alert"` for `danger` — or in an open modal dialog's own. Success and info
   leave after 8 seconds unless the pointer or the focus rests on them; an error and a notice with an action stay until

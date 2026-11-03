@@ -42,7 +42,8 @@ const placeOf = (item, move) => {
 	return places[move] ?? null;
 };
 
-/** The list's polite status, made on first need. */
+/** The list's polite status, made on first need — when its menu of moves opens or a drag starts, before a move: a
+ *  region made with its words says nothing. */
 const statusOf = (list) => {
 	let status = list.parentElement.querySelector(':scope > .reorder-status');
 	if (status === null) {
@@ -150,6 +151,10 @@ document.addEventListener('beforetoggle', (event) => {
 	for (const choice of menu.querySelectorAll('[data-move]')) {
 		choice.setAttribute('aria-disabled', String(placeOf(itemOf(handle), choice.dataset.move) === null));
 	}
+	const list = listOf(handle);
+	if (list !== null) {
+		statusOf(list);
+	}
 }, true);
 
 document.addEventListener('pointerdown', (event) => {
@@ -169,6 +174,7 @@ document.addEventListener('pointermove', (event) => {
 			return;
 		}
 		drag.left = [drag.item.parentElement, drag.item.nextElementSibling];
+		statusOf(listOf(drag.item));
 		drag.grip.setPointerCapture(event.pointerId);
 		drag.item.dataset.dragging = '';
 		listOf(drag.item).classList.add('reordering');

@@ -244,7 +244,8 @@ const filter = (input) => {
 	settle(input);
 };
 
-/** The polite status of the list's scope, made on first need. */
+/** The polite status of the list's scope, made on first need — when its search takes the focus, before anything is
+ *  said: a region made with its words says nothing. */
 const statusOf = (list) => {
 	const scope = scopeOf(list);
 	let status = scope.querySelector(':scope > .combobox-status');
@@ -407,21 +408,24 @@ const settled = (list) => {
 
 /** Takes "Create “…”": redz:create asks the page, which may answer {value, label} — an option of the list from then on,
  *  chosen — or reject with words the status says; left alone, the label is held in the field data-create names. The
- *  search empties for the next one. */
+ *  search empties for the next one, and a list of many, its panel still open, says the new label politely. */
 const create = (option) => {
 	const list = option.closest('[role="listbox"]');
 	const input = searchOf(list);
 	const label = option.dataset.label;
+	const many = list.getAttribute('aria-multiselectable') === 'true';
 	const [taken, answer] = ask(list, 'redz:create', {label});
 	if (taken && answer === null) {
 		return;
 	}
 	keepFirst(list);
 	if (!taken) {
-		const many = list.getAttribute('aria-multiselectable') === 'true';
 		hold(list, [...(many ? pairsOf(list) : []), [label, label, true]]);
 		fresh(input);
 		settled(list);
+		if (many) {
+			statusOf(list).textContent = label;
+		}
 		return;
 	}
 	list.setAttribute('aria-busy', 'true');
@@ -434,6 +438,9 @@ const create = (option) => {
 		list.append(added);
 		fresh(input);
 		choose(added);
+		if (many) {
+			statusOf(list).textContent = added.textContent;
+		}
 	}, (words) => {
 		list.removeAttribute('aria-busy');
 		input.setAttribute('aria-invalid', 'true');
@@ -659,6 +666,13 @@ document.addEventListener('toggle', (event) => {
 		}
 	}
 }, true);
+
+document.addEventListener('focusin', (event) => {
+	const list = event.target instanceof HTMLInputElement && event.target.matches('[role="combobox"]') ? listOf(event.target) : null;
+	if (list !== null) {
+		statusOf(list);
+	}
+});
 
 document.addEventListener('focusout', (event) => {
 	const panel = event.target instanceof Element ? event.target.closest('.combobox-menu:popover-open') : null;

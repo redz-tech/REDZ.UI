@@ -43,12 +43,17 @@ const levelOf = (field) => {
 	return length >= least * 2 || (longer && varied) ? 4 : (longer || varied ? 3 : 2);
 };
 
-/** Shows the field's level on its meters at once, and its words once the typing pauses. */
+/** Shows the field's level on its meters at once, and its words once the typing pauses — their elements made live at
+ *  the first key, before the words change: a region made live with its words says nothing. */
 const rate = (field) => {
 	const shows = [...document.querySelectorAll('[data-strength="' + CSS.escape(field.id) + '"]')];
 	const level = levelOf(field);
-	for (const meter of shows.filter((show) => show instanceof HTMLMeterElement)) {
-		meter.value = level;
+	for (const show of shows) {
+		if (show instanceof HTMLMeterElement) {
+			show.value = level;
+		} else if (!show.hasAttribute('aria-live') && show.getAttribute('role') !== 'status') {
+			show.setAttribute('aria-live', 'polite');
+		}
 	}
 	clearTimeout(timers.get(field));
 	timers.set(field, setTimeout(() => {
@@ -61,9 +66,6 @@ const rate = (field) => {
 					show.setAttribute('aria-valuetext', words);
 				}
 			} else if (show.textContent !== words) {
-				if (!show.hasAttribute('aria-live') && show.getAttribute('role') !== 'status') {
-					show.setAttribute('aria-live', 'polite');
-				}
 				show.textContent = words;
 			}
 		}

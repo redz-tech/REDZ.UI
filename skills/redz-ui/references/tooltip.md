@@ -10,7 +10,7 @@ The tooltip is a `popover` opened by its button's command. It sits above the but
 
 ```html
 <span class="hstack gap-4">Partner license
-	<button class="btn btn-icon btn-xs btn-text" type="button" commandfor="tooltip-why-tip" command="toggle-popover" aria-label="What is a partner license"><i class="bi bi-question-circle" aria-hidden="true"></i></button>
+	<button class="btn btn-icon btn-xs btn-text" type="button" commandfor="tooltip-why-tip" command="toggle-popover" aria-label="What is a partner license" aria-describedby="tooltip-why-tip"><i class="bi bi-question-circle" aria-hidden="true"></i></button>
 </span>
 <div id="tooltip-why-tip" class="tooltip" popover role="tooltip">A partner can hide the brand and set their own help link.</div>
 ```
@@ -18,6 +18,7 @@ The tooltip is a `popover` opened by its button's command. It sits above the but
 ## Keyboard and accessibility
 
 - The button is named after its question; the tooltip's words answer it. Nothing that must be read to use the screen lives only in a tooltip.
+- The button names its tooltip in `aria-describedby`, so a screen reader says the answer with the question, closed or open — opening a popover says nothing of its words.
 - A tooltip on hover and focus waits for `interestfor`, which is outside the browser floor.
 - The label is the page's text color on the page color reversed: 4.5:1 in both themes, an outline in forced colors.
 

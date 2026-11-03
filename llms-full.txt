@@ -1676,7 +1676,7 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `data-bs-toggle="button"` | `aria-pressed` | review | switch aria-pressed in your click handler |
 | `data-bs-toggle="tooltip"` | `commandfor="ID" command="toggle-popover"` | review | a toggletip at the browser floor |
 | `data-bs-toggle="popover"` | — | missing |  |
-| `data-bs-toggle="collapse"` | `commandfor="ID" command="--toggle" aria-expanded="false"` | trigger | the region is hidden="until-found" while closed; in an accordion the item is a <details> |
+| `data-bs-toggle="collapse"` | `command="--toggle" aria-controls="ID" aria-expanded="false"` | trigger | the region is hidden="until-found" while closed; in an accordion the item is a <details> |
 | `data-bs-parent` | `name` | trigger | the same name on every <details> of the group |
 | `data-bs-target` | `commandfor` | trigger | the id alone, without "#" |
 | `data-bs-dismiss="modal"` | `commandfor="ID" command="close"` | trigger |  |
@@ -2860,11 +2860,11 @@ A button that opens and closes a region elsewhere on the page — help under a t
 
 ## Examples
 
-The button names its region with `commandfor` and `command="--toggle"`, and says in `aria-expanded` whether the region is open: write it as the region starts, and the library keeps it.
+The button carries `command="--toggle"`, names its region in `aria-controls` and says in `aria-expanded` whether the region is open: write it as the region starts, and the library keeps it. It takes no `commandfor`: WebKit would then tell a screen reader the button is collapsed whatever its `aria-expanded` says.
 
 ```html
 <div class="hstack gap-8">
-	<button class="btn btn-sm" type="button" commandfor="collapse-help-text" command="--toggle" aria-expanded="false" aria-controls="collapse-help-text"><i class="bi bi-question-circle" aria-hidden="true"></i>How prices work</button>
+	<button class="btn btn-sm" type="button" command="--toggle" aria-controls="collapse-help-text" aria-expanded="false"><i class="bi bi-question-circle" aria-hidden="true"></i>How prices work</button>
 </div>
 <div id="collapse-help-text" hidden="until-found">
 	<p class="text-muted">A price is per person. Children from four to eleven pay the child price; under four they travel free.</p>
@@ -2877,7 +2877,7 @@ A region without `hidden` starts open, its button `aria-expanded="true"`.
 
 ```html
 <div class="hstack gap-8">
-	<button class="btn btn-sm" type="button" commandfor="collapse-open-filters" command="--toggle" aria-expanded="true" aria-controls="collapse-open-filters"><i class="bi bi-funnel" aria-hidden="true"></i>More filters</button>
+	<button class="btn btn-sm" type="button" command="--toggle" aria-controls="collapse-open-filters" aria-expanded="true"><i class="bi bi-funnel" aria-hidden="true"></i>More filters</button>
 </div>
 <div id="collapse-open-filters" class="hstack flex-wrap gap-8">
 	<button class="chip" type="button" aria-pressed="true">With lunch</button>
@@ -2903,7 +2903,7 @@ A region without `hidden` starts open, its button `aria-expanded="true"`.
 | `collapse` | — | state | closed: hidden="until-found" on the region; open: no hidden; its button has command="--toggle" |
 | `collapse-horizontal` | — | review | not planned: a region opens downward, in its place |
 | `collapsing` | — | remove | the region opens at once |
-| `data-bs-toggle="collapse"` | `commandfor="ID" command="--toggle" aria-expanded="false"` | trigger | the region is hidden="until-found" while closed; in an accordion the item is a <details> |
+| `data-bs-toggle="collapse"` | `command="--toggle" aria-controls="ID" aria-expanded="false"` | trigger | the region is hidden="until-found" while closed; in an accordion the item is a <details> |
 | `bootstrap.Collapse` | `region.hidden = false` | review | and setAttribute('hidden', 'until-found') to close; set aria-expanded on its buttons then — a button with command="--toggle" does both |
 
 # List groups
@@ -3039,7 +3039,7 @@ Pages under pages, a menu's items, folders: a list whose items open their own li
 
 ## Examples
 
-`tree` on the list, `tree-item` on each item, its `tree-row` holding a `tree-toggle` — a `--toggle` button for the item's `tree-group` — and the item's link. The groups close as `hidden="until-found"`, so the browser's find in page still opens them. A button with `command="--expand-all"` or `"--collapse-all"` for the tree opens or closes every group that holds items.
+`tree` on the list, `tree-item` on each item, its `tree-row` holding a `tree-toggle` — a `--toggle` button naming the item's `tree-group` in `aria-controls`, as on [collapse](collapse.md) — and the item's link. The groups close as `hidden="until-found"`, so the browser's find in page still opens them. A button with `command="--expand-all"` or `"--collapse-all"` for the tree opens or closes every group that holds items.
 
 ```html
 <div class="hstack gap-8">
@@ -3049,7 +3049,7 @@ Pages under pages, a menu's items, folders: a list whose items open their own li
 <ul class="tree" id="tree-pages-list" aria-label="Pages">
 	<li class="tree-item">
 		<div class="tree-row">
-			<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-excursions" command="--toggle" aria-expanded="true" aria-label="Excursions"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+			<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" command="--toggle" aria-controls="tree-pages-excursions" aria-expanded="true" aria-label="Excursions"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
 			<a href="#tree-pages">Excursions</a>
 		</div>
 		<ul class="tree-group" id="tree-pages-excursions">
@@ -3059,7 +3059,7 @@ Pages under pages, a menu's items, folders: a list whose items open their own li
 	</li>
 	<li class="tree-item">
 		<div class="tree-row">
-			<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-islands" command="--toggle" aria-expanded="false" aria-label="Islands"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+			<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" command="--toggle" aria-controls="tree-pages-islands" aria-expanded="false" aria-label="Islands"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
 			<a href="#tree-pages">Islands</a>
 		</div>
 		<ul class="tree-group" id="tree-pages-islands" hidden="until-found">
@@ -3069,7 +3069,7 @@ Pages under pages, a menu's items, folders: a list whose items open their own li
 	</li>
 	<li class="tree-item">
 		<div class="tree-row">
-			<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" commandfor="tree-pages-archive" command="--toggle" aria-expanded="false" aria-label="Archive"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+			<button class="btn btn-sm btn-icon btn-text tree-toggle" type="button" command="--toggle" aria-controls="tree-pages-archive" aria-expanded="false" aria-label="Archive"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
 			<a href="#tree-pages">Archive</a>
 		</div>
 		<ul class="tree-group" id="tree-pages-archive" hidden="until-found" data-lazy data-docs-lazy></ul>
@@ -3692,7 +3692,7 @@ The tooltip is a `popover` opened by its button's command. It sits above the but
 
 ```html
 <span class="hstack gap-4">Partner license
-	<button class="btn btn-icon btn-xs btn-text" type="button" commandfor="tooltip-why-tip" command="toggle-popover" aria-label="What is a partner license"><i class="bi bi-question-circle" aria-hidden="true"></i></button>
+	<button class="btn btn-icon btn-xs btn-text" type="button" commandfor="tooltip-why-tip" command="toggle-popover" aria-label="What is a partner license" aria-describedby="tooltip-why-tip"><i class="bi bi-question-circle" aria-hidden="true"></i></button>
 </span>
 <div id="tooltip-why-tip" class="tooltip" popover role="tooltip">A partner can hide the brand and set their own help link.</div>
 ```
@@ -3700,6 +3700,7 @@ The tooltip is a `popover` opened by its button's command. It sits above the but
 ## Keyboard and accessibility
 
 - The button is named after its question; the tooltip's words answer it. Nothing that must be read to use the screen lives only in a tooltip.
+- The button names its tooltip in `aria-describedby`, so a screen reader says the answer with the question, closed or open — opening a popover says nothing of its words.
 - A tooltip on hover and focus waits for `interestfor`, which is outside the browser floor.
 - The label is the page's text color on the page color reversed: 4.5:1 in both themes, an outline in forced colors.
 

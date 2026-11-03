@@ -36,7 +36,7 @@ Script that reads or writes these classes changes with them: `el.classList.conta
 | `data-bs-dismiss="modal"` / `"offcanvas"` | `commandfor="ID" command="close"` |
 | `data-bs-toggle="dropdown"` | `commandfor="ID" command="toggle-popover" aria-haspopup="menu"`; the menu gets `popover` and `role="menu"` |
 | `data-bs-toggle="tab"` / `"pill"` | `role="tab" aria-controls="ID"` inside `role="tablist"`; the library selects |
-| `data-bs-toggle="collapse"` | `commandfor="ID" command="--toggle" aria-expanded="false"`; the region is `hidden="until-found"` while closed; in an accordion, the item is a `<details>` |
+| `data-bs-toggle="collapse"` | `command="--toggle" aria-controls="ID" aria-expanded="false"`, no `commandfor`; the region is `hidden="until-found"` while closed; in an accordion, the item is a `<details>` |
 | `data-bs-parent` | `name="…"`, the same on every `<details>` of the group |
 | `data-bs-backdrop="static"` | `closedby="closerequest"` on the dialog (Esc closes, a click outside does not) |
 | `data-bs-keyboard="false"` | `closedby="none"` |

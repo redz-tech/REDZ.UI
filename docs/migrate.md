@@ -543,7 +543,7 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `data-bs-toggle="button"` | `aria-pressed` | review | switch aria-pressed in your click handler |
 | `data-bs-toggle="tooltip"` | `commandfor="ID" command="toggle-popover"` | review | a toggletip at the browser floor |
 | `data-bs-toggle="popover"` | — | missing |  |
-| `data-bs-toggle="collapse"` | `commandfor="ID" command="--toggle" aria-expanded="false"` | trigger | the region is hidden="until-found" while closed; in an accordion the item is a <details> |
+| `data-bs-toggle="collapse"` | `command="--toggle" aria-controls="ID" aria-expanded="false"` | trigger | the region is hidden="until-found" while closed; in an accordion the item is a <details> |
 | `data-bs-parent` | `name` | trigger | the same name on every <details> of the group |
 | `data-bs-target` | `commandfor` | trigger | the id alone, without "#" |
 | `data-bs-dismiss="modal"` | `commandfor="ID" command="close"` | trigger |  |

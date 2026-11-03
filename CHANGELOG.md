@@ -4,6 +4,22 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Every widget that speaks, heard by VoiceOver
+- Removed: `commandfor` on a `--toggle` button. The button names its region in `aria-controls` and carries
+  `command="--toggle"` and `aria-expanded`; `js/toggle.js` takes its click and sends the region the command event,
+  with `command` and `source`, as the platform sends it to a `commandfor`'s target. WebKit exposes a button with
+  `commandfor` and a custom command as collapsed whatever its `aria-expanded` says, so VoiceOver in Safari said
+  "collapsed" of every open region and tree group. The trees' toggles moved too; a button still written with
+  `commandfor` toggles where the browser has commands, and the probes flag it.
+- A tooltip's button names its tooltip in `aria-describedby`: a screen reader says the answer with the question —
+  opening a popover says nothing of its words. The probes flag a tooltip's button its tooltip does not describe.
+- Live regions are made before their first words: a list's status of moves when its menu of moves opens or a drag
+  starts, a combobox's when its search takes the focus, a password's words when the first key is typed. A region made
+  with its words says nothing, so the first move, the first count found and every level of strength went unsaid.
+- A combobox of many says politely the label of a value it creates, its panel still open.
+
 ## 0.6.0 — 2026-11-03
 
 ### Structures: trees, reordering, uploads

@@ -100,17 +100,17 @@
 
 				<section class="vstack gap-16" aria-labelledby="collapse-examples">
 					<h2 id="collapse-examples">Examples</h2>
-					<p>The button names its region with <code>commandfor</code> and <code>command="--toggle"</code>, and says in <code>aria-expanded</code> whether the region is open: write it as the region starts, and the library keeps it.</p>
+					<p>The button carries <code>command="--toggle"</code>, names its region in <code>aria-controls</code> and says in <code>aria-expanded</code> whether the region is open: write it as the region starts, and the library keeps it. It takes no <code>commandfor</code>: WebKit would then tell a screen reader the button is collapsed whatever its <code>aria-expanded</code> says.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="collapse-help">
 						<div class="hstack gap-8">
-							<button class="btn btn-sm" type="button" commandfor="collapse-help-text" command="--toggle" aria-expanded="false" aria-controls="collapse-help-text"><i class="bi bi-question-circle" aria-hidden="true"></i>How prices work</button>
+							<button class="btn btn-sm" type="button" command="--toggle" aria-controls="collapse-help-text" aria-expanded="false"><i class="bi bi-question-circle" aria-hidden="true"></i>How prices work</button>
 						</div>
 						<div id="collapse-help-text" hidden="until-found">
 							<p class="text-muted">A price is per person. Children from four to eleven pay the child price; under four they travel free.</p>
 						</div>
 					</div>
 					<pre class="docs-code" tabindex="0"><code>&lt;div class="hstack gap-8"&gt;
-	&lt;button class="btn btn-sm" type="button" commandfor="collapse-help-text" command="--toggle" aria-expanded="false" aria-controls="collapse-help-text"&gt;&lt;i class="bi bi-question-circle" aria-hidden="true"&gt;&lt;/i&gt;How prices work&lt;/button&gt;
+	&lt;button class="btn btn-sm" type="button" command="--toggle" aria-controls="collapse-help-text" aria-expanded="false"&gt;&lt;i class="bi bi-question-circle" aria-hidden="true"&gt;&lt;/i&gt;How prices work&lt;/button&gt;
 &lt;/div&gt;
 &lt;div id="collapse-help-text" hidden="until-found"&gt;
 	&lt;p class="text-muted"&gt;A price is per person. Children from four to eleven pay the child price; under four they travel free.&lt;/p&gt;
@@ -120,7 +120,7 @@
 					<p>A region without <code>hidden</code> starts open, its button <code>aria-expanded="true"</code>.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="collapse-open">
 						<div class="hstack gap-8">
-							<button class="btn btn-sm" type="button" commandfor="collapse-open-filters" command="--toggle" aria-expanded="true" aria-controls="collapse-open-filters"><i class="bi bi-funnel" aria-hidden="true"></i>More filters</button>
+							<button class="btn btn-sm" type="button" command="--toggle" aria-controls="collapse-open-filters" aria-expanded="true"><i class="bi bi-funnel" aria-hidden="true"></i>More filters</button>
 						</div>
 						<div id="collapse-open-filters" class="hstack flex-wrap gap-8">
 							<button class="chip" type="button" aria-pressed="true">With lunch</button>
@@ -129,7 +129,7 @@
 						</div>
 					</div>
 					<pre class="docs-code" tabindex="0"><code>&lt;div class="hstack gap-8"&gt;
-	&lt;button class="btn btn-sm" type="button" commandfor="collapse-open-filters" command="--toggle" aria-expanded="true" aria-controls="collapse-open-filters"&gt;&lt;i class="bi bi-funnel" aria-hidden="true"&gt;&lt;/i&gt;More filters&lt;/button&gt;
+	&lt;button class="btn btn-sm" type="button" command="--toggle" aria-controls="collapse-open-filters" aria-expanded="true"&gt;&lt;i class="bi bi-funnel" aria-hidden="true"&gt;&lt;/i&gt;More filters&lt;/button&gt;
 &lt;/div&gt;
 &lt;div id="collapse-open-filters" class="hstack flex-wrap gap-8"&gt;
 	&lt;button class="chip" type="button" aria-pressed="true"&gt;With lunch&lt;/button&gt;
@@ -161,7 +161,7 @@
 									<tr><td><code>collapse</code></td><td>—</td><td>state</td><td>closed: hidden=&quot;until-found&quot; on the region; open: no hidden; its button has command=&quot;--toggle&quot;</td></tr>
 									<tr><td><code>collapse-horizontal</code></td><td>—</td><td>review</td><td>not planned: a region opens downward, in its place</td></tr>
 									<tr><td><code>collapsing</code></td><td>—</td><td>remove</td><td>the region opens at once</td></tr>
-									<tr><td><code>data-bs-toggle=&quot;collapse&quot;</code></td><td><code>commandfor=&quot;ID&quot; command=&quot;--toggle&quot; aria-expanded=&quot;false&quot;</code></td><td>trigger</td><td>the region is hidden=&quot;until-found&quot; while closed; in an accordion the item is a &lt;details&gt;</td></tr>
+									<tr><td><code>data-bs-toggle=&quot;collapse&quot;</code></td><td><code>command=&quot;--toggle&quot; aria-controls=&quot;ID&quot; aria-expanded=&quot;false&quot;</code></td><td>trigger</td><td>the region is hidden=&quot;until-found&quot; while closed; in an accordion the item is a &lt;details&gt;</td></tr>
 									<tr><td><code>bootstrap.Collapse</code></td><td><code>region.hidden = false</code></td><td>review</td><td>and setAttribute(&#039;hidden&#039;, &#039;until-found&#039;) to close; set aria-expanded on its buttons then — a button with command=&quot;--toggle&quot; does both</td></tr>
 								</tbody>
 							</table>
