@@ -4500,7 +4500,7 @@
 		"confirm.ok"
 	],
 	"files": {
-		"CHANGELOG.md": "sha256-cEdgKpuz4Z2gvUAAfHfwr3UreQMc9Jo1IjRkGPk0p7Q=",
+		"CHANGELOG.md": "sha256-r3CveZGdxZYJg7mo4wzvZkCTSvULwCbUnWbNM+MmRZ4=",
 		"LICENSE": "sha256-8pEc4ECwd79krplYdY+WVWqMIFNgcosqMOEmO/IRl6E=",
 		"NOTICE": "sha256-kspN6Bvm3sph93yHQc52RmQ1HKUMN/HbFOIH1iKYpMA=",
 		"README.md": "sha256-g8Aezip24x/ydfFr0lA+vchx2u92O2/LSqr10wrsgC4=",
@@ -4549,7 +4549,7 @@
 		"css/tokens.css": "sha256-3ULyqpVHmATk7Qva0MWZafYfTNMjsKSyHkxK5Ros/Z8=",
 		"css/utilities.css": "sha256-FhVHo6Kn8YPC3+qEMapJPKPWrdkHCUy9L3iTYYodMS0=",
 		"dist/redz-ui.min.css": "sha256-6/wkdm2HJVQALG/i/c9338WThD8ZHlIeEX66T0BjBZY=",
-		"dist/redz-ui.min.js": "sha256-dmr/oPsKR91rpxjhMAupC9vlS+/93Wkwbo79+Txv6zs=",
+		"dist/redz-ui.min.js": "sha256-JH6dbSIReTdOy/uTRFmqo1Gq0ZvjKxMKU4/YgUhD4fc=",
 		"floor.json": "sha256-NTRequCJwb2P3IzI0MWFgD1gFuieLVg2sdGKW3lwwLc=",
 		"icons/0-circle-fill.svg": "sha256-CgoKPtvHkyTETBVtMNzXSShQ02LXnyEh/a2K3+BPk1A=",
 		"icons/0-circle.svg": "sha256-KOZBUdwwZYg869+kTm7ge9PRFoHFSq8SGGz3M2DjTWo=",
@@ -6633,7 +6633,7 @@
 		"js/answer.js": "sha256-aopRAxBIdFnEM3GgXneVISyrScgPZBmVSgc05ClbonE=",
 		"js/busy.js": "sha256-50eWAnBpv0g3/L1a5k6cB7Gwp4flnFSXpCZliOkkP5o=",
 		"js/combobox.js": "sha256-RQXSvP1/dTsDKL6pM0/nuecrypQtsrUZquNPb2nAV6Y=",
-		"js/commands.js": "sha256-TmwOvUosSMhX3XCOV9/KBLG55WIg004U/Vl/UgB/aBI=",
+		"js/commands.js": "sha256-ryo+YXSkGjW3qHRp36ccBCUUNDIiPomgqaQKqkffhyY=",
 		"js/confirm.js": "sha256-Xydzsr2Dog5288jHz54v3G1WqlSF0VWI+Pm/gsCo+tM=",
 		"js/dialog.js": "sha256-wbZ3LOoesBjsa7PL+vfsS8F93Qg9/l9yoxkjJgWfwsg=",
 		"js/index.js": "sha256-SVwzhQg2H113n7jq2JrUxD2iDwbPEUtzA2jCm/SZDzU=",

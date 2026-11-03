@@ -100,7 +100,7 @@
 
 				<section class="vstack gap-16" aria-labelledby="menu-examples">
 					<h2 id="menu-examples">Examples</h2>
-					<p>The button opens the menu with the browser's command — <code>commandfor</code> names the menu, <code>command="toggle-popover"</code> opens and closes it — and the browser sets its <code>aria-expanded</code>. No script is needed to open a menu; the library adds the arrow keys.</p>
+					<p>The button opens the menu with the browser's command — <code>commandfor</code> names the menu, <code>command="toggle-popover"</code> opens and closes it — and the library keeps its <code>aria-expanded</code>, which Firefox does not give such a button. No script is needed to open a menu; the library adds the arrow keys.</p>
 					<div class="docs-sample"><div class="docs-example" id="menu-actions">
 						<button class="btn" type="button" commandfor="menu-actions-list" command="toggle-popover" aria-haspopup="menu"><i class="bi bi-three-dots" aria-hidden="true"></i>Actions</button>
 						<div id="menu-actions-list" class="menu" popover role="menu" aria-label="Actions">
@@ -189,7 +189,7 @@
 					</table>
 					<ul>
 						<li>The menu is <code>popover</code> with <code>role="menu"</code> and a name; its items are <code>menuitem</code>, <code>menuitemradio</code> or <code>menuitemcheckbox</code>. A list of site sections is navigation, not a menu — use links.</li>
-						<li>The button carries <code>aria-haspopup="menu"</code>; the browser keeps its <code>aria-expanded</code>, moves the focus back to it on close and closes the menu on a click outside or <kbd>Esc</kbd>.</li>
+						<li>The button carries <code>aria-haspopup="menu"</code>; the library keeps its <code>aria-expanded</code>, and the browser moves the focus back to it on close and closes the menu on a click outside or <kbd>Esc</kbd>.</li>
 						<li>Where an engine does not put the menu beside its button — no anchor positioning below Firefox 147 and Safari 26, no anchor from a popover's button in Chrome 130–132, a table cell in Chrome 135–136, the bottom of a long page in Safari 26 — <code>js/menu-place.js</code> places it, again when the page scrolls or the menu or its button changes size, and the probes record each such place.</li>
 					</ul>
 				</section>

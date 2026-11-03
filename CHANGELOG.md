@@ -10,6 +10,11 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - A combobox's button is collapsed by the time its closing panel hands the focus back to it: its `aria-expanded`
   follows the panel's `beforetoggle`, not its later `toggle`. NVDA in Firefox said the button expanded after a choice
   and never said it collapsed.
+- A button that opens a popover by `commandfor` (`toggle-popover`, `show-popover`) says whether it is open in
+  `aria-expanded` in every browser: `js/commands.js` writes it before the popover opens or closes and when the button
+  takes the focus. Firefox gives such a button no expanded state of its own, so NVDA said a menu's button and a
+  tooltip's button without "collapsed" or "expanded". An open menu's button now also takes the look of
+  `.btn[aria-expanded="true"]`.
 
 ### Every widget that speaks, heard by NVDA too
 - The probes hear NVDA 2026.3 in Chrome and in Firefox on Windows Server 2025 through the same 80 speech steps: a

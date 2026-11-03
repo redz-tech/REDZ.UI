@@ -6,7 +6,7 @@ A menu is a short list of actions or choices that opens from a button: the brows
 
 ## Examples
 
-The button opens the menu with the browser's command — `commandfor` names the menu, `command="toggle-popover"` opens and closes it — and the browser sets its `aria-expanded`. No script is needed to open a menu; the library adds the arrow keys.
+The button opens the menu with the browser's command — `commandfor` names the menu, `command="toggle-popover"` opens and closes it — and the library keeps its `aria-expanded`, which Firefox does not give such a button. No script is needed to open a menu; the library adds the arrow keys.
 
 ```html
 <button class="btn" type="button" commandfor="menu-actions-list" command="toggle-popover" aria-haspopup="menu"><i class="bi bi-three-dots" aria-hidden="true"></i>Actions</button>
@@ -50,7 +50,7 @@ The items of an open menu. `:focus-visible` is where the arrow keys are; `aria-c
 | `Tab` | — | Closes the menu and moves on |
 
 - The menu is `popover` with `role="menu"` and a name; its items are `menuitem`, `menuitemradio` or `menuitemcheckbox`. A list of site sections is navigation, not a menu — use links.
-- The button carries `aria-haspopup="menu"`; the browser keeps its `aria-expanded`, moves the focus back to it on close and closes the menu on a click outside or `Esc`.
+- The button carries `aria-haspopup="menu"`; the library keeps its `aria-expanded`, and the browser moves the focus back to it on close and closes the menu on a click outside or `Esc`.
 - Where an engine does not put the menu beside its button — no anchor positioning below Firefox 147 and Safari 26, no anchor from a popover's button in Chrome 130–132, a table cell in Chrome 135–136, the bottom of a long page in Safari 26 — `js/menu-place.js` places it, again when the page scrolls or the menu or its button changes size, and the probes record each such place.
 
 ## Tokens

@@ -1,7 +1,35 @@
 // REDZ.UI, commands: where the browser has no invoker commands (Chrome before 135, Firefox before 144, Safari before
 // 26.2), stands in for commandfor and command. A popover command becomes the browser's own popovertarget inside the
-// click, so the browser still exposes the expanded state, returns focus and anchors the popover; a dialog command calls
-// the dialog; every command first dispatches the command event, which a listener may cancel, as on the platform.
+// click, so the browser still returns focus and anchors the popover; a dialog command calls the dialog; every command
+// first dispatches the command event, which a listener may cancel, as on the platform. In every browser a button that
+// opens a popover by commandfor says whether it is open in aria-expanded: Firefox gives such a button no expanded state
+// of its own. The state is written before the popover opens or closes, as a closing popover hands the focus back to its
+// button at once, and when the button takes the focus.
+const OPENERS = ['toggle-popover', 'show-popover'];
+
+/** Whether the button opens the popover: a toggle or show command from outside it. */
+const opens = (button, popover) => OPENERS.includes((button.getAttribute('command') || '').toLowerCase()) && !popover.contains(button);
+
+document.addEventListener('beforetoggle', (event) => {
+	const popover = event.target;
+	if (!(popover instanceof HTMLElement) || popover.popover === null || popover.id === '') {
+		return;
+	}
+	for (const button of document.querySelectorAll('button[commandfor="' + CSS.escape(popover.id) + '"]')) {
+		if (opens(button, popover)) {
+			button.setAttribute('aria-expanded', String(event.newState === 'open'));
+		}
+	}
+}, true);
+
+document.addEventListener('focusin', (event) => {
+	const button = event.target instanceof HTMLButtonElement && event.target.hasAttribute('commandfor') && !event.target.hasAttribute('aria-expanded') ? event.target : null;
+	const popover = button === null ? null : document.getElementById(button.getAttribute('commandfor'));
+	if (popover !== null && popover.popover !== null && opens(button, popover)) {
+		button.setAttribute('aria-expanded', String(popover.matches(':popover-open')));
+	}
+});
+
 if (!('command' in HTMLButtonElement.prototype)) {
 	const builtIn = ['show-modal', 'close', 'request-close', 'toggle-popover', 'show-popover', 'hide-popover'];
 
