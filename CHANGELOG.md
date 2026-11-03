@@ -4,6 +4,22 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Every widget that speaks, heard by NVDA too
+- The probes hear NVDA 2026.3 in Chrome and in Firefox on Windows Server 2025 through the same 80 speech steps: a
+  portable copy made from NVDA's official installer, its sha256 checked, on a config of the run. NVDA's own Remote
+  Access serves itself on a port of the run, and the probe joins it over TLS, its certificate pinned by its fingerprint
+  — every utterance comes as a phrase and every key goes in as a user's, so NVDA meets a page in browse mode and
+  switches to focus mode by itself. A page's words are compared as NVDA says them: split where its dictionary splits
+  words, its signs said as its symbol table says them.
+- NVDA also reads each speech page whole by its quick navigation — headings by H, landmarks by D, form fields by F —
+  and every heading, landmark and control the page holds must be among what it says, in order; a control with no
+  words to say is a finding of its own.
+- The probes run on Windows: Chrome's DevTools protocol over a port and a WebSocket where its pipe cannot run, shown
+  windows for a screen reader, the runner's own removal and unpacking. The sheet's "Said by the screen readers" shows
+  every reader; "Read by NVDA" shows each page's reading.
+
 ## 0.7.0 — 2026-11-03
 
 ### Every widget that speaks, heard by VoiceOver

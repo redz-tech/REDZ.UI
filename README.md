@@ -178,11 +178,14 @@ dialog with `closedby` by a click outside it — against the WAI-ARIA patterns, 
 axe-core; checks forced colors and print where the engine has them; and runs the minifier's scripts of `tools/min/` as
 written and minified, and the release's stylesheet as written and squeezed, which must agree. Every docs page runs in the current Chrome,
 Firefox and Safari at 1440 and 390 px. Older engines are fetched once into `~/Library/Caches/redz-ui` and checked
-against their checksums. The engine `voiceover` hears what VoiceOver says in Safari through the combobox and the
-palette, step by step, against the words each step must hold. The sheet of shots and findings is written to
-`.dev/probes/`; the Probes workflow runs it on every commit in seven parts — joined by `php tools/probe.php merge` — on
-macOS 15, VoiceOver also on macOS 26, with a pinned Chrome for Testing build as the current Chrome, as the image's own
-lags; every release publishes its sheet under `checks/` on the site.
+against their checksums. The screen readers go through the speech steps of every widget that speaks, against the words
+each step must hold: `voiceover` hears VoiceOver in Safari; `nvda-chrome` and `nvda-firefox` hear NVDA 2026.3 in Chrome
+and Firefox on Windows — a portable copy made from its official installer, its speech and keys through NVDA's own
+Remote Access, so it meets a page in browse mode as a user does — and NVDA also reads each of those pages whole by its
+quick navigation (headings, landmarks, form fields) against what the page holds. The sheet of shots and findings is
+written to `.dev/probes/`; the Probes workflow runs it on every commit in nine parts — joined by `php tools/probe.php
+merge` — on macOS 15, VoiceOver also on macOS 26, NVDA on Windows Server 2025, with a pinned Chrome for Testing build as
+the current Chrome, as the images' own lag; every release publishes its sheet under `checks/` on the site.
 
 ## Releases
 Every release is an [immutable GitHub release](https://github.com/redz-tech/REDZ.UI/releases): once it is out, neither

@@ -1,17 +1,27 @@
 <?php
-// probes, Chrome: the DevTools protocol over --remote-debugging-pipe — one headless Chrome a run with one page; the
-// viewport, the color scheme and forced colors by emulation; full-page shots, print to PDF, errors from the page's events.
+// probes, Chrome: the DevTools protocol over --remote-debugging-pipe, or over a port and our WebSocket on Windows, where
+// PHP cannot hand a child the pipe's descriptors — one headless Chrome a run with one page, a shown one for a screen
+// reader; the viewport, the color scheme and forced colors by emulation; full-page shots, print to PDF, errors from the
+// page's events.
 
-/** Starts the Chrome at $binary with its profile in $dir and opens the page every load goes to. */
-function PROBE__ChromeStart(string $binary, string $dir): array
+/** Starts the Chrome at $binary with its profile in $dir — headless, or $shown in a window a screen reader can read —
+ *  and opens the page every load goes to. */
+function PROBE__ChromeStart(string $binary, string $dir, bool $shown = false): array
 {
-	$flags = ['--headless', '--remote-debugging-pipe', '--no-first-run', '--no-default-browser-check', '--use-mock-keychain', '--password-store=basic', '--disable-background-networking', '--disable-component-update', '--disable-sync', '--disable-background-timer-throttling', '--disable-renderer-backgrounding', '--disable-backgrounding-occluded-windows', '--user-data-dir=' . $dir . '/profile'];
-	$proc = proc_open([$binary, ...$flags, 'about:blank'], [0 => ['file', '/dev/null', 'r'], 1 => ['file', $dir . '/chrome.log', 'a'], 2 => ['file', $dir . '/chrome.log', 'a'], 3 => ['pipe', 'r'], 4 => ['pipe', 'w']], $pipes);
+	$port = PHP_OS_FAMILY === 'Windows';
+	$window = $shown ? ['--force-renderer-accessibility', '--window-position=0,0', '--window-size=1280,900'] : ['--headless'];
+	$flags = [...$window, $port ? '--remote-debugging-port=0' : '--remote-debugging-pipe', '--no-first-run', '--no-default-browser-check', '--use-mock-keychain', '--password-store=basic', '--disable-background-networking', '--disable-component-update', '--disable-sync', '--disable-background-timer-throttling', '--disable-renderer-backgrounding', '--disable-backgrounding-occluded-windows', '--user-data-dir=' . $dir . '/profile'];
+	$descriptors = [0 => ['file', PROBE_NULL, 'r'], 1 => ['file', $dir . '/chrome.log', 'a'], 2 => ['file', $dir . '/chrome.log', 'a']] + ($port ? [] : [3 => ['pipe', 'r'], 4 => ['pipe', 'w']]);
+	$proc = proc_open([$binary, ...$flags, 'about:blank'], $descriptors, $pipes);
 	if (!is_resource($proc)) {
 		throw new RuntimeException('cannot start ' . $binary);
 	}
-	stream_set_blocking($pipes[4], false);
-	$h = ['kind' => 'chrome', 'proc' => $proc, 'pipes' => $pipes, 'buf' => '', 'id' => 0, 'events' => [], 'session' => ''];
+	$h = ['kind' => 'chrome', 'proc' => $proc, 'pipes' => $pipes, 'socket' => null, 'buf' => '', 'id' => 0, 'events' => [], 'session' => ''];
+	if ($port) {
+		$h['socket'] = PROBE__ChromeSocket($proc, $dir . '/profile');
+	} else {
+		stream_set_blocking($pipes[4], false);
+	}
 	$h['version'] = str_replace('HeadlessChrome', 'Chrome', (string)PROBE__ChromeSend($h, 'Browser.getVersion', [], false)['product']);
 	$target = PROBE__ChromeSend($h, 'Target.createTarget', ['url' => 'about:blank'], false)['targetId'];
 	$h['session'] = PROBE__ChromeSend($h, 'Target.attachToTarget', ['targetId' => $target, 'flatten' => true], false)['sessionId'];
@@ -20,8 +30,26 @@ function PROBE__ChromeStart(string $binary, string $dir): array
 	}
 	PROBE__ChromeSend($h, 'Network.setCacheDisabled', ['cacheDisabled' => true]);
 	PROBE__ChromeSend($h, 'Emulation.setScrollbarsHidden', ['hidden' => true]);
-	PROBE__ChromeSend($h, 'Emulation.setFocusEmulationEnabled', ['enabled' => true]);
+	// A shown window keeps the real focus, which a screen reader follows and the page tells by document.hasFocus().
+	if (!$shown) {
+		PROBE__ChromeSend($h, 'Emulation.setFocusEmulationEnabled', ['enabled' => true]);
+	}
 	return $h;
+}
+
+/** The WebSocket of the browser endpoint Chrome writes into DevToolsActivePort of its profile $profile once it listens. */
+function PROBE__ChromeSocket($proc, string $profile)
+{
+	$file = $profile . '/DevToolsActivePort';
+	$until = microtime(true) + 60;
+	while (count($lines = is_file($file) ? file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [] : []) < 2) {
+		if (microtime(true) > $until || !proc_get_status($proc)['running']) {
+			proc_terminate($proc);
+			throw new RuntimeException('Chrome did not open its DevTools port, see chrome.log');
+		}
+		usleep(100000);
+	}
+	return PROBE__WsOpen((int)$lines[0], $lines[1]);
 }
 
 /** Reads what Chrome writes within $seconds into the handle's messages. */
@@ -29,9 +57,21 @@ function PROBE__ChromePump(array &$h, float $seconds): void
 {
 	$until = microtime(true) + $seconds;
 	do {
-		$read = [$h['pipes'][4]];
 		$write = null;
 		$except = null;
+		if ($h['socket'] !== null) {
+			// A frame read may leave the next ones in the stream's own buffer, which the select does not see.
+			$read = [$h['socket']];
+			if (stream_get_meta_data($h['socket'])['unread_bytes'] > 0 || stream_select($read, $write, $except, 0, 20000) > 0) {
+				$text = PROBE__WsRead($h['socket']);
+				if ($text === null) {
+					throw new RuntimeException('Chrome left');
+				}
+				$h['events'][] = json_decode($text, true);
+			}
+			continue;
+		}
+		$read = [$h['pipes'][4]];
 		if (stream_select($read, $write, $except, 0, 20000) > 0) {
 			$chunk = (string)fread($h['pipes'][4], 1048576);
 			if ($chunk === '' && feof($h['pipes'][4])) {
@@ -51,7 +91,12 @@ function PROBE__ChromeSend(array &$h, string $method, array $params = [], bool $
 {
 	$id = ++$h['id'];
 	$message = ['id' => $id, 'method' => $method, 'params' => (object)$params] + ($page ? ['sessionId' => $h['session']] : []);
-	fwrite($h['pipes'][3], json_encode($message, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\0");
+	$json = json_encode($message, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+	if ($h['socket'] !== null) {
+		PROBE__WsSend($h['socket'], $json);
+	} else {
+		fwrite($h['pipes'][3], $json . "\0");
+	}
 	$until = microtime(true) + 120;
 	while (microtime(true) < $until) {
 		foreach ($h['events'] as $k => $answer) {
@@ -70,7 +115,7 @@ function PROBE__ChromeSend(array &$h, string $method, array $params = [], bool $
 
 /** Loads $url in a $width × $height viewport (a phone below 600 px, two device pixels a CSS pixel) with the color scheme
  *  $scheme and forced colors on or off; answers when the document is complete. */
-function PROBE__ChromeLoad(array &$h, string $url, int $width, int $height, string $scheme, bool $forced): void
+function PROBE__ChromeLoad(array &$h, string $url, int $width, int $height, string $scheme = 'light', bool $forced = false): void
 {
 	$phone = $width < 600;
 	PROBE__ChromeSend($h, 'Emulation.setDeviceMetricsOverride', ['width' => $width, 'height' => $height, 'deviceScaleFactor' => $phone ? 2 : 1, 'mobile' => $phone]);
@@ -150,6 +195,12 @@ function PROBE__ChromeFonts(array &$h, string $selector): array
 	return $fonts;
 }
 
+/** Brings the page's window in front of the others. */
+function PROBE__ChromeFront(array &$h): void
+{
+	PROBE__ChromeSend($h, 'Page.bringToFront');
+}
+
 /** A PNG of the whole page. */
 function PROBE__ChromeShot(array &$h): string
 {
@@ -196,6 +247,9 @@ function PROBE__ChromeStop(array &$h): void
 	}
 	foreach ($h['pipes'] as $pipe) {
 		@fclose($pipe);
+	}
+	if ($h['socket'] !== null) {
+		@fclose($h['socket']);
 	}
 	PROBE__Wait($h['proc']);
 }

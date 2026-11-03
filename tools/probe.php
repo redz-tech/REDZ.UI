@@ -10,22 +10,28 @@
 // which must agree. The pages of the config run that whole way; the docs pages run in the "docs" engines at their
 // widths, without shots or walks. Writes the sheet
 // .dev/probes/index.html with its report.json and exits 1 on any finding; an engine whose cell runs past five minutes
-// stops as stalling, that cell named. The engine voiceover hears what VoiceOver says through the config's steps in
-// Safari. Usage: php tools/probe.php [ENGINE…] — an engine named that cannot run here is a finding, one left out of a
-// full run only a note — or php tools/probe.php merge DIR… — one sheet of the sheets of several runs, as CI's parallel
-// jobs leave them — or php tools/probe.php voiceover-setup, which lets CI's VoiceOver be driven.
+// stops as stalling, that cell named. The screen readers hear the config's speech steps: VoiceOver in Safari on a Mac,
+// NVDA in Chrome and Firefox on Windows, where NVDA also reads each speech page whole by its quick navigation. Usage:
+// php tools/probe.php [ENGINE…] — an engine named that cannot run here is a finding, one left out of a full run only a
+// note — or php tools/probe.php merge DIR… — one sheet of the sheets of several runs, as CI's parallel jobs leave them —
+// or php tools/probe.php voiceover-setup | nvda-setup, which ready CI's machines for the readers.
 
 require __DIR__ . '/lib.php';
 require __DIR__ . '/min.php';
+require __DIR__ . '/probes/ws.php';
 require __DIR__ . '/probes/chrome.php';
 require __DIR__ . '/probes/firefox.php';
 require __DIR__ . '/probes/safari.php';
+require __DIR__ . '/probes/speech.php';
 require __DIR__ . '/probes/voiceover.php';
+require __DIR__ . '/probes/nvda.php';
 require __DIR__ . '/probes/sheet.php';
 
 const PROBE_ROOT = __DIR__ . '/..';
 const PROBE_CONFIG = __DIR__ . '/probes/config.json';
 const PROBE_PAGE = __DIR__ . '/probes/page.js';
+const PROBE_READ = __DIR__ . '/probes/read.js';
+const PROBE_NULL = PHP_OS_FAMILY === 'Windows' ? 'NUL' : '/dev/null';
 const PROBE_SHEET = __DIR__ . '/../.dev/probes';
 const PROBE_FORCED_PREFS = ['browser.display.document_color_use' => 2];
 // The tallest shot, in CSS px: twice that is the most a 2× phone shot can be, under the engines' 16 384 px canvas.
@@ -35,10 +41,11 @@ const PROBE_CELL_MAX = 300;
 // The keys of the keyboard walk: the WebDriver code point (Firefox, Safari), the Windows key code and the text (Chrome).
 const PROBE_KEYS = ['Enter' => ["\u{E006}", 13, "\r"], 'Space' => ["\u{E00D}", 32, ' '], 'Escape' => ["\u{E00C}", 27, ''], 'Tab' => ["\u{E004}", 9, ''], 'ArrowDown' => ["\u{E015}", 40, ''], 'ArrowUp' => ["\u{E013}", 38, ''], 'ArrowLeft' => ["\u{E012}", 37, ''], 'ArrowRight' => ["\u{E014}", 39, ''], 'Home' => ["\u{E011}", 36, ''], 'End' => ["\u{E010}", 35, ''], 'Backspace' => ["\u{E003}", 8, '']];
 
-/** The folder of fetched engines and packages: $REDZ_UI_CACHE, or ~/Library/Caches/redz-ui. */
+/** The folder of fetched engines and packages: $REDZ_UI_CACHE, or ~/Library/Caches/redz-ui, or %LOCALAPPDATA%\redz-ui
+ *  on Windows. */
 function PROBE__Cache(): string
 {
-	return (string)(getenv('REDZ_UI_CACHE') ?: getenv('HOME') . '/Library/Caches/redz-ui');
+	return (string)(getenv('REDZ_UI_CACHE') ?: (PHP_OS_FAMILY === 'Windows' ? getenv('LOCALAPPDATA') . '\\redz-ui' : getenv('HOME') . '/Library/Caches/redz-ui'));
 }
 
 /** A TCP port free on 127.0.0.1 now. */
@@ -56,7 +63,7 @@ function PROBE__FreePort(): int
 /** Runs $command without a shell and answers its output; a failure throws with its message. */
 function PROBE__Run(array $command): string
 {
-	$proc = proc_open($command, [0 => ['file', '/dev/null', 'r'], 1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes);
+	$proc = proc_open($command, [0 => ['file', PROBE_NULL, 'r'], 1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes);
 	if (!is_resource($proc)) {
 		throw new RuntimeException('cannot run ' . $command[0]);
 	}
@@ -86,12 +93,24 @@ function PROBE__Wait($proc): void
 	proc_close($proc);
 }
 
-/** Removes $path and everything under it, if it is there. */
+/** Removes $path and everything under it, if it is there — on Windows by PHP itself, a link removed, never followed. */
 function PROBE__Remove(string $path): void
 {
-	if (file_exists($path)) {
-		PROBE__Run(['/bin/rm', '-rf', $path]);
+	if (!file_exists($path) && !is_link($path)) {
+		return;
 	}
+	if (PHP_OS_FAMILY !== 'Windows') {
+		PROBE__Run(['/bin/rm', '-rf', $path]);
+		return;
+	}
+	if (is_dir($path) && !is_link($path)) {
+		foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $entry) {
+			$entry->isDir() ? rmdir($entry->getPathname()) : unlink($entry->getPathname());
+		}
+		rmdir($path);
+		return;
+	}
+	unlink($path);
 }
 
 /** The first iOS version of the engine's list whose simulator runtime is installed here, or ''. */
@@ -118,6 +137,9 @@ function PROBE__Binary(string $name, array $engine, string &$why): string
 {
 	if (isset($engine['macos']) && preg_match('~^<\s*(\d+)$~', $engine['macos'], $m) === 1 && (int)PROBE__Run(['/usr/bin/sw_vers', '-productVersion']) >= (int)$m[1]) {
 		$why = $engine['why'];
+		return '';
+	}
+	if ($engine['kind'] === 'nvda' && ($why = PROBE__NvdaBlocked()) !== '') {
 		return '';
 	}
 	if ($engine['kind'] === 'voiceover') {
@@ -153,13 +175,13 @@ function PROBE__Binary(string $name, array $engine, string &$why): string
 	return $home . '/' . $engine['fetch']['binary'];
 }
 
-/** Downloads the archive of engine $name, checks its sha256 or sha512 and unpacks it into $home: a zip by ditto, a disk
- *  image by hdiutil. */
-function PROBE__Fetch(string $name, array $fetch, string $home): void
+/** The file of $fetch's url, downloaded once into the cache as $name with its own extension, its sha256 or sha512
+ *  checked. */
+function PROBE__Download(string $name, array $fetch): string
 {
 	$downloads = PROBE__Cache() . '/downloads';
 	@mkdir($downloads, 0777, true);
-	$file = $downloads . '/' . $name . (str_ends_with($fetch['url'], '.dmg') ? '.dmg' : '.zip');
+	$file = $downloads . '/' . $name . '.' . pathinfo((string)parse_url($fetch['url'], PHP_URL_PATH), PATHINFO_EXTENSION);
 	if (!is_file($file)) {
 		echo $name, ': fetching ', $fetch['url'], "\n";
 		TOOL__Download($fetch['url'], $file);
@@ -170,10 +192,24 @@ function PROBE__Fetch(string $name, array $fetch, string $home): void
 			throw new RuntimeException($name . ': the download does not match its ' . $algorithm);
 		}
 	}
+	return $file;
+}
+
+/** Downloads the archive of engine $name and unpacks it into $home: a zip by ditto on a Mac — it keeps an app's links
+ *  and modes — and by ZipArchive elsewhere, a disk image by hdiutil. */
+function PROBE__Fetch(string $name, array $fetch, string $home): void
+{
+	$file = PROBE__Download($name, $fetch);
 	$part = $home . '.part';
 	PROBE__Remove($part);
 	mkdir($part, 0777, true);
-	if (str_ends_with($file, '.zip')) {
+	if (str_ends_with($file, '.zip') && PHP_OS_FAMILY !== 'Darwin') {
+		$zip = new ZipArchive();
+		if ($zip->open($file) !== true || !$zip->extractTo($part)) {
+			throw new RuntimeException($name . ': cannot unpack ' . $file);
+		}
+		$zip->close();
+	} elseif (str_ends_with($file, '.zip')) {
 		PROBE__Run(['/usr/bin/ditto', '-x', '-k', $file, $part]);
 	} else {
 		$mount = $part . '.mount';
@@ -208,7 +244,7 @@ function PROBE__Axe(array $axe): string
 function PROBE__ServerStart(string $dir): array
 {
 	$port = PROBE__FreePort();
-	$proc = proc_open([PHP_BINARY, '-S', '127.0.0.1:' . $port, __DIR__ . '/probes/router.php'], [0 => ['file', '/dev/null', 'r'], 1 => ['file', $dir . '/server.log', 'a'], 2 => ['file', $dir . '/server.log', 'a']], $pipes, PROBE_ROOT);
+	$proc = proc_open([PHP_BINARY, '-S', '127.0.0.1:' . $port, __DIR__ . '/probes/router.php'], [0 => ['file', PROBE_NULL, 'r'], 1 => ['file', $dir . '/server.log', 'a'], 2 => ['file', $dir . '/server.log', 'a']], $pipes, PROBE_ROOT);
 	$base = 'http://127.0.0.1:' . $port . '/';
 	for ($tries = 0; @file_get_contents($base . 'index.html') === false; $tries++) {
 		if ($tries > 50) {
@@ -248,6 +284,10 @@ function PROBE__EngineRun(string $name, array $engine, string $binary, string $d
 {
 	if ($engine['kind'] === 'voiceover') {
 		PROBE__VoiceOverRun($name, $dir, $run, $report);
+		return;
+	}
+	if ($engine['kind'] === 'nvda') {
+		PROBE__NvdaRun($name, $engine, $binary, $dir, $run, $report);
 		return;
 	}
 	$h = match ($engine['kind']) {
@@ -886,6 +926,7 @@ function PROBE__Merge(array $config, array $dirs): int
 			$report['guarded'] = [...$report['guarded'], ...$part['guarded']];
 			$report['walked'] = array_replace_recursive($report['walked'], $part['walked']);
 			$report['spoken'] = array_merge_recursive($report['spoken'], $part['spoken']);
+			$report['read'] = array_merge_recursive($report['read'] ?? [], $part['read'] ?? []);
 			$report['shots'] = array_merge_recursive($report['shots'], $part['shots']);
 		}
 		foreach (['shots', 'print', 'logs'] as $folder) {
@@ -916,6 +957,9 @@ function PROBE__Main(array $argv): int
 	if (($argv[1] ?? '') === 'voiceover-setup') {
 		return PROBE__VoiceOverSetup();
 	}
+	if (($argv[1] ?? '') === 'nvda-setup') {
+		return PROBE__NvdaSetup();
+	}
 	$names = array_slice($argv, 1) ?: array_keys(array_filter($config['engines'], fn(array $engine): bool => $engine['default'] ?? true));
 	foreach ($names as $name) {
 		if (!isset($config['engines'][$name])) {
@@ -929,9 +973,13 @@ function PROBE__Main(array $argv): int
 	foreach ([$tmp, $work . '/shots', $work . '/print'] as $folder) {
 		mkdir($folder, 0777, true);
 	}
-	$commit = trim((string)shell_exec('git -C ' . escapeshellarg(PROBE_ROOT) . ' rev-parse --short HEAD 2>/dev/null'));
-	$report = ['when' => gmdate('Y-m-d H:i') . ' UTC', 'commit' => $commit === '' ? 'no commit' : 'commit ' . $commit, 'widths' => array_keys($config['widths']), 'engines' => [], 'skipped' => [], 'findings' => [], 'guarded' => [], 'walked' => [], 'spoken' => [], 'shots' => [], 'used' => []];
-	$run = ['config' => $config, 'page' => (string)file_get_contents(PROBE_PAGE), 'axe' => PROBE__Axe($config['axe']), 'sheet' => $work];
+	try {
+		$commit = trim(PROBE__Run(['git', '-C', PROBE_ROOT, 'rev-parse', '--short', 'HEAD']));
+	} catch (RuntimeException) {
+		$commit = '';
+	}
+	$report = ['when' => gmdate('Y-m-d H:i') . ' UTC', 'commit' => $commit === '' ? 'no commit' : 'commit ' . $commit, 'widths' => array_keys($config['widths']), 'engines' => [], 'skipped' => [], 'findings' => [], 'guarded' => [], 'walked' => [], 'spoken' => [], 'read' => [], 'shots' => [], 'used' => []];
+	$run = ['config' => $config, 'page' => (string)file_get_contents(PROBE_PAGE), 'read' => (string)file_get_contents(PROBE_READ), 'axe' => PROBE__Axe($config['axe']), 'sheet' => $work];
 	[$server, $run['base']] = PROBE__ServerStart($tmp);
 	register_shutdown_function(fn() => is_resource($server) && proc_terminate($server));
 	if (function_exists('pcntl_async_signals')) {

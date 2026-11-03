@@ -19,9 +19,9 @@ jobs:
   plan:
     # macOS 15: its image has the iOS 18.5 and 26.2 simulators, and Firefox 132 starts there — not on macOS 27. Its
     # Chrome lags (152), so the current Chrome is a pinned Chrome for Testing build (chrome-156 in the config).
-    # Seven parts, five at a time — the most macOS jobs a free account runs together — each its own sheet, joined below;
-    # VoiceOver on macOS 15, the first with its activedescendant fix, and on macOS 26. A push, a pull request and a tag
-    # run them all.
+    # Seven macOS parts, five at a time — the most macOS jobs a free account runs together — and two Windows parts beside
+    # them, each its own sheet, joined below; VoiceOver on macOS 15, the first with its activedescendant fix, and on macOS
+    # 26; NVDA in Chrome and in Firefox on Windows Server 2025. A push, a pull request and a tag run them all.
     runs-on: ubuntu-latest
     outputs:
       parts: ${{ steps.plan.outputs.parts }}
@@ -37,7 +37,9 @@ jobs:
             {"name": "floor", "engines": "chrome-130 firefox-132 chrome-136"},
             {"name": "ios", "engines": "ios-18 ios-26"},
             {"name": "voiceover", "engines": "voiceover"},
-            {"name": "voiceover-tahoe", "engines": "voiceover-tahoe", "runner": "macos-26"}]
+            {"name": "voiceover-tahoe", "engines": "voiceover-tahoe", "runner": "macos-26"},
+            {"name": "nvda-chrome", "engines": "nvda-chrome", "runner": "windows-2025"},
+            {"name": "nvda-firefox", "engines": "nvda-firefox", "runner": "windows-2025"}]
         run: |
           set -eu
           parts=$(jq -c --arg wanted "${WANTED:-}" '($wanted | split(" ") | map(select(. != ""))) as $w | map(select($w == [] or (.name as $n | any($w[]; . == $n))))' <<< "$ALL")
@@ -63,13 +65,13 @@ jobs:
       - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
         with:
           php-version: '8.5'
-          extensions: gd
+          extensions: gd, zip, curl, mbstring, openssl
           coverage: none
           tools: none
 
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: ~/Library/Caches/redz-ui
+          path: ${{ runner.os == 'Windows' && '~/AppData/Local/redz-ui' || '~/Library/Caches/redz-ui' }}
           key: probes-${{ matrix.part.name }}-${{ hashFiles('tools/probes/config.json') }}
 
       - name: Let safaridriver drive Safari and the simulators
@@ -79,6 +81,10 @@ jobs:
       - name: Let AppleScript drive VoiceOver
         if: startsWith(matrix.part.name, 'voiceover')
         run: php tools/probe.php voiceover-setup
+
+      - name: Let the windows NVDA reads come in front
+        if: startsWith(matrix.part.name, 'nvda')
+        run: php tools/probe.php nvda-setup
 
       - name: The pages in ${{ matrix.part.engines }}
         run: php tools/probe.php ${{ matrix.part.engines }}

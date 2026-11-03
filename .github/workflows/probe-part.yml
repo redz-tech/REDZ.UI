@@ -1,7 +1,8 @@
 name: Probe part
 
-# One part of the probes on demand — the engines named, on the macOS image named — for work that only CI can check,
-# iterated on a branch before it lands on main: gh workflow run probe-part.yml --ref BRANCH -f engines=voiceover
+# One part of the probes on demand — the engines named, on the macOS or Windows image named — for work that only CI can
+# check, iterated on a branch before it lands on main: gh workflow run probe-part.yml --ref BRANCH -f engines=voiceover,
+# or -f engines=nvda-chrome -f runner=windows-2025
 on:
   workflow_dispatch:
     inputs:
@@ -9,7 +10,7 @@ on:
         description: The engines, as php tools/probe.php takes them, space-separated
         required: true
       runner:
-        description: The macOS image
+        description: The macOS or Windows image
         default: macos-15
 
 permissions:
@@ -26,13 +27,13 @@ jobs:
       - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
         with:
           php-version: '8.5'
-          extensions: gd
+          extensions: gd, zip, curl, mbstring, openssl
           coverage: none
           tools: none
 
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: ~/Library/Caches/redz-ui
+          path: ${{ runner.os == 'Windows' && '~/AppData/Local/redz-ui' || '~/Library/Caches/redz-ui' }}
           key: probe-part-${{ inputs.runner }}-${{ hashFiles('tools/probes/config.json') }}
 
       - name: Let safaridriver drive Safari and the simulators
@@ -43,7 +44,12 @@ jobs:
         if: contains(inputs.engines, 'voiceover')
         run: php tools/probe.php voiceover-setup
 
+      - name: Let the windows NVDA reads come in front
+        if: contains(inputs.engines, 'nvda')
+        run: php tools/probe.php nvda-setup
+
       - name: The pages in ${{ inputs.engines }}
+        shell: bash
         env:
           ENGINES: ${{ inputs.engines }}
         run: php tools/probe.php $ENGINES

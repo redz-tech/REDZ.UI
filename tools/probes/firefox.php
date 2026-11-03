@@ -1,103 +1,11 @@
 <?php
-// probes, Firefox: WebDriver BiDi over a WebSocket of our own — one headless Firefox a profile; the viewport by
-// browsingContext, forced colors by the profile's pref; full-page shots, print to PDF, errors from log and network events.
+// probes, Firefox: WebDriver BiDi over a WebSocket of our own — one headless Firefox a profile, a shown one for a screen
+// reader; the viewport by browsingContext, forced colors by the profile's pref; full-page shots, print to PDF, errors
+// from log and network events.
 
-/** A WebSocket to ws://127.0.0.1:$port$path, its handshake checked; reads wait at most two minutes. */
-function PROBE__WsOpen(int $port, string $path)
-{
-	$socket = stream_socket_client('tcp://127.0.0.1:' . $port, $errno, $error, 10);
-	if ($socket === false) {
-		throw new RuntimeException('cannot reach 127.0.0.1:' . $port . ': ' . $error);
-	}
-	$key = base64_encode(random_bytes(16));
-	fwrite($socket, "GET $path HTTP/1.1\r\nHost: 127.0.0.1:$port\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Key: $key\r\nSec-WebSocket-Version: 13\r\n\r\n");
-	$head = '';
-	while (!str_contains($head, "\r\n\r\n")) {
-		$chunk = fgets($socket);
-		if ($chunk === false) {
-			throw new RuntimeException('the WebSocket handshake got no answer');
-		}
-		$head .= $chunk;
-	}
-	$accept = base64_encode(sha1($key . '258EAFA5-E914-47DA-95CA-C5AB0DC85B11', true));
-	if (!str_starts_with($head, 'HTTP/1.1 101') || stripos($head, 'Sec-WebSocket-Accept: ' . $accept) === false) {
-		throw new RuntimeException('the WebSocket handshake failed: ' . strtok($head, "\r\n"));
-	}
-	stream_set_timeout($socket, 120);
-	return $socket;
-}
-
-/** Sends one frame of $opcode with $payload, masked as a client must. */
-function PROBE__WsSend($socket, string $payload, int $opcode = 0x1): void
-{
-	$length = strlen($payload);
-	$size = match (true) {
-		$length < 126 => chr(0x80 | $length),
-		$length < 65536 => chr(0x80 | 126) . pack('n', $length),
-		default => chr(0x80 | 127) . pack('J', $length),
-	};
-	$mask = random_bytes(4);
-	$frame = chr(0x80 | $opcode) . $size . $mask . ($payload ^ str_repeat($mask, intdiv($length + 3, 4)));
-	for ($at = 0, $total = strlen($frame); $at < $total; $at += $written) {
-		$written = fwrite($socket, substr($frame, $at));
-		if ($written === false || $written === 0) {
-			throw new RuntimeException('the WebSocket closed while sending');
-		}
-	}
-}
-
-/** Exactly $n bytes from the socket, or an exception when it ends or the read waits too long. */
-function PROBE__WsBytes($socket, int $n): string
-{
-	$out = '';
-	while (strlen($out) < $n) {
-		$chunk = fread($socket, $n - strlen($out));
-		if ($chunk === false || $chunk === '') {
-			throw new RuntimeException(stream_get_meta_data($socket)['timed_out'] ? 'the WebSocket read timed out' : 'the WebSocket closed');
-		}
-		$out .= $chunk;
-	}
-	return $out;
-}
-
-/** The next text message, its fragments joined and pings answered; null when the peer closes. */
-function PROBE__WsRead($socket): ?string
-{
-	$message = '';
-	while (true) {
-		$head = PROBE__WsBytes($socket, 2);
-		$opcode = ord($head[0]) & 0x0F;
-		$length = ord($head[1]) & 0x7F;
-		if ($length === 126) {
-			$length = unpack('n', PROBE__WsBytes($socket, 2))[1];
-		} elseif ($length === 127) {
-			$length = unpack('J', PROBE__WsBytes($socket, 8))[1];
-		}
-		$mask = (ord($head[1]) & 0x80) !== 0 ? PROBE__WsBytes($socket, 4) : '';
-		$data = $length > 0 ? PROBE__WsBytes($socket, $length) : '';
-		if ($mask !== '') {
-			$data ^= str_repeat($mask, intdiv($length + 3, 4));
-		}
-		if ($opcode === 0x8) {
-			return null;
-		}
-		if ($opcode === 0x9) {
-			PROBE__WsSend($socket, $data, 0xA);
-			continue;
-		}
-		if ($opcode === 0xA) {
-			continue;
-		}
-		$message .= $data;
-		if ((ord($head[0]) & 0x80) !== 0) {
-			return $message;
-		}
-	}
-}
-
-/** Starts the Firefox at $binary headless with a fresh profile in $dir and $prefs, opens a BiDi session and subscribes to
- *  the page's log and network events. */
-function PROBE__FirefoxStart(string $binary, string $dir, array $prefs = []): array
+/** Starts the Firefox at $binary with a fresh profile in $dir and $prefs — headless, or $shown in a window a screen
+ *  reader can read —, opens a BiDi session and subscribes to the page's log and network events. */
+function PROBE__FirefoxStart(string $binary, string $dir, array $prefs = [], bool $shown = false): array
 {
 	@mkdir($dir . '/profile', 0777, true);
 	$lines = [];
@@ -107,7 +15,8 @@ function PROBE__FirefoxStart(string $binary, string $dir, array $prefs = []): ar
 	file_put_contents($dir . '/profile/user.js', implode("\n", $lines) . "\n");
 	$port = PROBE__FreePort();
 	$log = $dir . '/firefox.log';
-	$proc = proc_open([$binary, '--headless', '--no-remote', '--profile', $dir . '/profile', '--remote-debugging-port', (string)$port, 'about:blank'], [0 => ['file', '/dev/null', 'r'], 1 => ['file', $log, 'a'], 2 => ['file', $log, 'a']], $pipes);
+	$window = $shown ? ['--width', '1280', '--height', '900'] : ['--headless'];
+	$proc = proc_open([$binary, ...$window, '--no-remote', '--profile', $dir . '/profile', '--remote-debugging-port', (string)$port, 'about:blank'], [0 => ['file', PROBE_NULL, 'r'], 1 => ['file', $log, 'a'], 2 => ['file', $log, 'a']], $pipes);
 	if (!is_resource($proc)) {
 		throw new RuntimeException('cannot start ' . $binary);
 	}
@@ -195,6 +104,12 @@ function PROBE__FirefoxClick(array &$h, int $x, int $y): void
 function PROBE__FirefoxHover(array &$h, int $x, int $y): void
 {
 	PROBE__FirefoxSend($h, 'input.performActions', ['context' => $h['context'], 'actions' => [['type' => 'pointer', 'id' => 'mouse', 'parameters' => ['pointerType' => 'mouse'], 'actions' => [['type' => 'pointerMove', 'x' => $x, 'y' => $y]]]]]);
+}
+
+/** Brings the page's window in front of the others. */
+function PROBE__FirefoxFront(array &$h): void
+{
+	PROBE__FirefoxSend($h, 'browsingContext.activate', ['context' => $h['context']]);
 }
 
 /** A PNG of the whole page. */

@@ -95,10 +95,19 @@ function PROBE__SheetWrite(string $dir, array $report): void
 		$out[] = '</ul></div></section>';
 	}
 	if ($report['spoken'] !== []) {
-		$out[] = '<section class="card"><div class="card-header"><h2>Said by VoiceOver</h2></div><div class="card-body vstack gap-8"><p class="text-muted">What VoiceOver said in Safari after each step, beside the words the step must hold.</p><table class="table"><thead><tr><th scope="col">Page</th><th scope="col">Step</th><th scope="col">Engine</th><th scope="col">Must hold</th><th scope="col">VoiceOver said</th><th scope="col">The focus after it</th></tr></thead><tbody>';
+		$out[] = '<section class="card"><div class="card-header"><h2>Said by the screen readers</h2></div><div class="card-body vstack gap-8"><p class="text-muted">What VoiceOver said in Safari, and NVDA in Chrome and Firefox, after each step, beside the words the step must hold.</p><table class="table"><thead><tr><th scope="col">Page</th><th scope="col">Step</th><th scope="col">Engine</th><th scope="col">Must hold</th><th scope="col">Said</th><th scope="col">The focus after it</th></tr></thead><tbody>';
 		foreach ($report['spoken'] as $page => $steps) {
 			foreach ($steps as $step) {
 				$out[] = '<tr><td>' . PROBE__Html($page) . '</td><td>' . PROBE__Html($step['step']) . '</td><td>' . PROBE__Html($step['engine']) . '</td><td>' . PROBE__Html(implode(', ', $step['expect'])) . '</td><td>' . PROBE__Html(implode(' · ', $step['said'])) . '</td><td>' . PROBE__Html($step['state']) . '</td></tr>';
+			}
+		}
+		$out[] = '</tbody></table></div></section>';
+	}
+	if (($report['read'] ?? []) !== []) {
+		$out[] = '<section class="card"><div class="card-header"><h2>Read by NVDA</h2></div><div class="card-body vstack gap-8"><p class="text-muted">Each speech page read whole by NVDA\'s quick navigation — headings by H, landmarks by D, form fields by F —, each item the page holds beside what NVDA said at it.</p><table class="table"><thead><tr><th scope="col">Page</th><th scope="col">Item</th><th scope="col">Engine</th><th scope="col">Must hold</th><th scope="col">NVDA said</th></tr></thead><tbody>';
+		foreach ($report['read'] as $page => $items) {
+			foreach ($items as $item) {
+				$out[] = '<tr><td>' . PROBE__Html($page) . '</td><td>' . PROBE__Html($item['item']) . '</td><td>' . PROBE__Html($item['engine']) . '</td><td>' . PROBE__Html(implode(', ', $item['expect'])) . '</td><td>' . PROBE__Html($item['said'] === '' ? '—' : $item['said']) . '</td></tr>';
 			}
 		}
 		$out[] = '</tbody></table></div></section>';

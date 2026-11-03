@@ -15,8 +15,11 @@
 		"chrome-156": {"kind": "chrome", "default": false, "why": "The current Chrome for CI, pinned: the macOS 15 image's Chrome lags behind the stable one (152 against 156 in October 2026). Named in CI; locally the installed Chrome is the current one.", "fetch": {"url": "https://storage.googleapis.com/chrome-for-testing-public/156.0.8078.74/mac-arm64/chrome-mac-arm64.zip", "sha256": "a2b4db4905d4b8756228ad4df8eba5b07b0cb5ece62fa928d11169d7f19d035c", "binary": "chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing"}},
 		"ios-26": {"kind": "safari", "ios": ["26.4", "26.5", "26.2"]},
 		"voiceover": {"kind": "voiceover", "default": false, "why": "What VoiceOver says through the speech steps of every widget that speaks, in Safari; VoiceOver must obey AppleScript — CI sets that up, a Mac's owner allows it."},
-		"voiceover-tahoe": {"kind": "voiceover", "default": false, "why": "The same on CI's macOS 26 image."}
+		"voiceover-tahoe": {"kind": "voiceover", "default": false, "why": "The same on CI's macOS 26 image."},
+		"nvda-chrome": {"kind": "nvda", "browser": "chrome", "default": false, "why": "What NVDA says through the speech steps, and how it reads each speech page by its quick navigation, in Chrome; Windows only — CI's windows-2025 runs php tools/probe.php nvda-setup first.", "fetch": {"url": "https://storage.googleapis.com/chrome-for-testing-public/156.0.8078.74/win64/chrome-win64.zip", "sha256": "2806b20b95f61daeb43d524f5cc4130fbf2b963a25788bc310a79a1d7179a670", "binary": "chrome-win64/chrome.exe"}},
+		"nvda-firefox": {"kind": "nvda", "browser": "firefox", "default": false, "why": "The same in the Firefox of CI's windows-2025 image.", "binary": "C:\\Program Files\\Mozilla Firefox\\firefox.exe"}
 	},
+	"nvda": {"version": "2026.3", "url": "https://github.com/nvaccess/nvda/releases/download/release-2026.3/nvda_2026.3.exe", "sha256": "a8a87cb823da0c62cfbae4a444ae5ae238d54dc82ad6d46d3fdb3fef082799b2"},
 	"speech": {
 		"docs/menu.html": [
 			{"label": "the menu's button", "do": "focus", "target": "#menu-actions > button", "expect": ["Actions"]},
