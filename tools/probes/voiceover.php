@@ -1,10 +1,10 @@
 <?php
 // probes, VoiceOver: what VoiceOver says while desktop Safari, driven by the Safari driver, goes through the steps of the
-// config's "speech" pages — its last phrase read by AppleScript until it falls quiet, each step holding the words it
-// must contain, the page's own for every reader and VoiceOver's apart. VoiceOver obeys AppleScript only where the
-// machine allows it: CI runs php tools/probe.php
-// voiceover-setup (the defaults, the flag file and the TCC rows, after @guidepup/setup 0.29.3, MIT); a Mac's owner turns
-// it on in VoiceOver Utility.
+// config's "speech" pages — every phrase written by a listener as it comes, each step holding the words it must
+// contain, the page's own for every reader and VoiceOver's apart; a step "unsteady" for an engine, with the reason,
+// misses its words there as a note. VoiceOver obeys AppleScript only where the machine allows it: CI runs php
+// tools/probe.php voiceover-setup (the defaults, the flag file and the TCC rows, after @guidepup/setup 0.29.3, MIT); a
+// Mac's owner turns it on in VoiceOver Utility.
 
 const PROBE_VOICEOVER = '/System/Library/CoreServices/VoiceOver.app/Contents/MacOS/VoiceOverStarter';
 const PROBE_VOICEOVER_FLAG = '/private/var/db/Accessibility/.VoiceOverAppleScriptEnabled';
@@ -119,7 +119,9 @@ function PROBE__VoiceOverPage(array &$h, string $name, string $page, array $step
 		$state = PROBE__Do($h, 'Eval', '(() => { const el = document.activeElement; const active = document.getElementById(el.getAttribute("aria-activedescendant") || ""); return (el.id || el.localName) + (active === null ? "" : " → " + active.textContent.trim()) + " · " + (el.matches("input, textarea") ? el.value : el.textContent.trim()).slice(0, 40); })()');
 		$spoken[] = ['engine' => $name, 'step' => $step['label'], 'expect' => $expect, 'said' => $heard, 'state' => $state];
 		$finding = $name . ' ' . $page . ' — ' . $step['label'] . ': VoiceOver said «' . implode(' · ', $heard) . '», without «' . implode('», «', $missing) . '»';
-		if ($missing !== [] && !PROBE__FindingAllowed($run['config'], $name, $finding, $report)) {
+		if ($missing !== [] && isset($step['unsteady'][$name])) {
+			echo 'note: ', $finding, ' — unsteady here: ', $step['unsteady'][$name], "\n";
+		} elseif ($missing !== [] && !PROBE__FindingAllowed($run['config'], $name, $finding, $report)) {
 			$findings[] = $finding;
 		}
 	}

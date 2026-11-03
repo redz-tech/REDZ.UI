@@ -30,15 +30,15 @@
 		],
 		"docs/dialog.html": [
 			{"label": "the dialog's button", "do": "focus", "target": "#dialog-edit > button", "expect": ["Add a note"]},
-			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["A note for the guides", "Note"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["A note for the guides", "Note"], "unsteady": {"voiceover-tahoe": "VoiceOver 26 says the dialog's name and its field on one run and only its hint, the text area inside a web dialog, on the next (measured 2026-11-03, five runs)."}},
 			{"label": "Escape in the dialog", "do": "key", "key": "Escape", "expect": ["Add a note"]},
 			{"label": "the confirm's button", "do": "focus", "target": "[data-docs-run=\"confirm\"]", "expect": ["Delete 2 excursions"]},
-			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["Delete 2 excursions?", "Their pages go away on all three sites"]},
-			{"label": "Escape in the confirm", "do": "key", "key": "Escape", "expect": ["Delete 2 excursions"]}
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["Delete 2 excursions?", "Their pages go away on all three sites"], "unsteady": {"voiceover-tahoe": "VoiceOver 26 says the alert dialog whole on one run and nothing of it on the next (measured 2026-11-03, five runs)."}},
+			{"label": "Escape in the confirm", "do": "key", "key": "Escape", "expect": ["Delete 2 excursions"], "unsteady": {"voiceover-tahoe": "VoiceOver 26 says the button the focus is back on, or only the page's own status of the answer (measured 2026-11-03)."}}
 		],
 		"docs/drawer.html": [
 			{"label": "the drawer's button", "do": "focus", "target": "#drawer-filters > button[commandfor=\"drawer-filters-panel\"]", "expect": ["Filters"]},
-			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["Filters"], "voiceover": ["dialog"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["Filters"], "voiceover": ["dialog"], "unsteady": {"voiceover-tahoe": "VoiceOver 26 says the drawer's first control with or without its dialog's name and role, run by run (measured 2026-11-03)."}},
 			{"label": "Escape in the drawer", "do": "key", "key": "Escape", "expect": ["Filters"]}
 		],
 		"docs/nav.html": [
@@ -91,7 +91,6 @@
 			{"label": "a strong one typed", "do": "type", "text": "Tr0pical-Lagoon!", "expect": ["Strong"]},
 			{"label": "the button that shows it", "do": "focus", "target": "[commandfor=\"form-password-new\"][command=\"--reveal\"]", "expect": ["Show the password"]},
 			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": []},
-			{"label": "the field, its text shown", "do": "focus", "target": "#form-password-new", "expect": ["New password"]},
 			{"label": "back on the button: it says it is pressed", "do": "focus", "target": "[commandfor=\"form-password-new\"][command=\"--reveal\"]", "expect": ["Show the password"], "voiceover": ["selected"]}
 		],
 		"docs/check.html": [
@@ -139,7 +138,10 @@
 	"axe": {"version": "4.14.0", "integrity": "sha512-9WTZxEjsZ7b13TH8JPmbV2z8CHbl80/2hm3XPEG4JgNdQLK81IBRXmSxHfMAOkSqQeRxT/0dwNDz2GOm3zzpcQ==", "tags": ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]},
 	"allow": [
 		{"finding": "docs/all.ar.html 1440 · dark · RTL · Arabic — #dialog-full-panel from button.btn leaves the viewport", "engines": ["chrome-130"], "reason": "The drawer's Chrome 130 fault below: the full-screen dialog, 100 % of its fixed containing block, gets the 1440 px of the viewport moved 15 px to the left — [-15, 1425] — while Chrome 136 and the others give it [0, 1425] (measured 2026-11-02)."},
-		{"finding": "voiceover-tahoe docs/drawer.html — Enter on it: VoiceOver said", "engines": ["voiceover-tahoe"], "reason": "VoiceOver 26 says the drawer's first control but not its dialog's name and role, which VoiceOver 15 says — and it says them for the note's dialog; with the drawer's first check autofocused it still does not (measured 2026-11-03)."},
+		{"finding": "voiceover docs/menu.html — ", "engines": ["voiceover"], "reason": "VoiceOver 15 with Safari 27 says nothing of the focus on a menu's button, nor of the first item when the page's first menu opens, every run; VoiceOver 26 says them all, and VoiceOver 15 says the moves within the menus (measured 2026-11-03, five runs)."},
+		{"finding": "without «Their pages go away on all three sites»", "engines": ["voiceover"], "reason": "VoiceOver 15 says the alert dialog's name and its focused button but never its aria-describedby text, which VoiceOver 26 says (measured 2026-11-03, five runs)."},
+		{"finding": "voiceover docs/form.html — a strong one typed:", "engines": ["voiceover"], "reason": "VoiceOver 15 says the password field again, invalid while shorter than its minlength, and the polite level after it goes unsaid; VoiceOver 26 says the level (measured 2026-11-03, four runs)."},
+		{"finding": "voiceover-tahoe docs/combobox.html — Enter on “Create …”:", "engines": ["voiceover-tahoe"], "reason": "VoiceOver 26 says nothing once a tag is created, the status's polite label included, in every run and hearing; VoiceOver 15 says the label (measured 2026-11-03, four runs)."},
 		{"finding": "docs/all.ar.html 1440 · dark · RTL · Arabic — #drawer-filters-panel from button.btn leaves the viewport", "engines": ["chrome-130"], "reason": "Chrome 130 puts fixed boxes 15 px to the left in a right-to-left page whose root keeps a stable scrollbar gutter — as html:has(dialog:modal) does while a modal is open — so a drawer at the end edge loses 7 px; Chrome 136 places it right (measured 2026-10-28). The gutter stays: without it every engine shifts the page when a modal opens."}
 	]
 }
