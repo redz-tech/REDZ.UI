@@ -66,6 +66,35 @@ Text fields, selects and text areas with Bootstrap 5's names: a label floating i
 <select class="form-select form-select-sm" aria-label="Small select"><option>Small select</option></select>
 ```
 
+### A one-time code
+
+`form-control-otp` spaces the digits of a code from an app or a message in one field. One field takes a paste and the code the system offers above the keyboard — a box per digit takes neither — and the form goes by its button, never by the last digit.
+
+```html
+<div class="form-field">
+	<label class="form-label" for="form-otp-code">6-digit code from your app</label>
+	<input class="form-control form-control-otp" id="form-otp-code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9 \-]*" spellcheck="false" enterkeyhint="done" aria-describedby="form-otp-code-hint">
+	<div class="form-text" id="form-otp-code-hint">Spaces and dashes are fine.</div>
+</div>
+```
+
+### A new password
+
+A button with `command="--reveal"` for a password field shows its text and hides it again — `aria-pressed` says which — and the field hides it on its form's submit and when the page comes back from the history. Each element with `data-strength` naming the field shows its level as it is typed: shorter than its `minlength`, long enough, then longer or of three kinds of characters, then both — a `meter` at once, and the words, the page's texts `strength.short`, `.fair`, `.good` and `.strong`, once the typing pauses, said politely. The level is a hint: the server keeps its own rules.
+
+```html
+<div class="form-field">
+	<label class="form-label" for="form-password-new">New password</label>
+	<div class="input-group">
+		<input class="form-control" id="form-password-new" type="password" autocomplete="new-password" minlength="12" spellcheck="false" aria-describedby="form-password-hint form-password-level">
+		<button class="btn btn-icon" type="button" commandfor="form-password-new" command="--reveal" aria-pressed="false" aria-label="Show the password"><i class="bi bi-eye" aria-hidden="true"></i></button>
+	</div>
+	<meter class="meter" min="0" max="4" low="2" high="3" optimum="4" value="0" data-strength="form-password-new" aria-label="Password strength"></meter>
+	<div class="form-text" id="form-password-level" data-strength="form-password-new"></div>
+	<div class="form-text" id="form-password-hint">At least 12 characters. A phrase of a few words is easy to remember.</div>
+</div>
+```
+
 ## States
 
 ## Keyboard and accessibility

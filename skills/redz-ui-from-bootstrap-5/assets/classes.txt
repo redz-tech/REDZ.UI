@@ -2617,6 +2617,7 @@ form-adorn
 form-check
 form-control
 form-control-lg
+form-control-otp
 form-control-sm
 form-field
 form-floating
@@ -2664,6 +2665,7 @@ icon-tile-secondary
 icon-tile-sm
 icon-tile-success
 icon-tile-warning
+inline-edit-form
 input-group
 input-group-sm
 input-group-text

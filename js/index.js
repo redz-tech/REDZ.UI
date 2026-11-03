@@ -8,6 +8,8 @@ import './dialog.js';
 import './combobox.js';
 import './shortcuts.js';
 import './scrollspy.js';
+import './inline-edit.js';
+import './password.js';
 import {toast} from './toast.js';
 import {confirm} from './confirm.js';
 import {busy} from './busy.js';

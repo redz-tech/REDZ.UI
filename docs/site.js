@@ -122,4 +122,14 @@
 			}));
 		}, 400);
 	});
+
+	// The inline edit's "saved by the page" example: a save after 600 ms, an empty title refused.
+	document.addEventListener('redz:save', (event) => {
+		if (!event.target.hasAttribute('data-docs-save')) {
+			return;
+		}
+		event.preventDefault();
+		const value = event.detail.value.trim();
+		event.detail.respondWith(new Promise((saved, refused) => setTimeout(() => (value === '' ? refused('A title cannot be empty') : saved(value)), 600)));
+	});
 })();

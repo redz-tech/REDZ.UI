@@ -91,6 +91,12 @@
 		border-color: var(--redz-danger);
 	}
 
+	.form-control-otp {
+		max-inline-size: 12rem;
+		font-variant-numeric: tabular-nums;
+		letter-spacing: 0.25em;
+	}
+
 	:is(.form-control, .form-select):disabled,
 	.form-control[readonly] {
 		background-color: var(--redz-bg-page);

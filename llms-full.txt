@@ -2034,6 +2034,35 @@ Text fields, selects and text areas with Bootstrap 5's names: a label floating i
 <select class="form-select form-select-sm" aria-label="Small select"><option>Small select</option></select>
 ```
 
+### A one-time code
+
+`form-control-otp` spaces the digits of a code from an app or a message in one field. One field takes a paste and the code the system offers above the keyboard — a box per digit takes neither — and the form goes by its button, never by the last digit.
+
+```html
+<div class="form-field">
+	<label class="form-label" for="form-otp-code">6-digit code from your app</label>
+	<input class="form-control form-control-otp" id="form-otp-code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9 \-]*" spellcheck="false" enterkeyhint="done" aria-describedby="form-otp-code-hint">
+	<div class="form-text" id="form-otp-code-hint">Spaces and dashes are fine.</div>
+</div>
+```
+
+### A new password
+
+A button with `command="--reveal"` for a password field shows its text and hides it again — `aria-pressed` says which — and the field hides it on its form's submit and when the page comes back from the history. Each element with `data-strength` naming the field shows its level as it is typed: shorter than its `minlength`, long enough, then longer or of three kinds of characters, then both — a `meter` at once, and the words, the page's texts `strength.short`, `.fair`, `.good` and `.strong`, once the typing pauses, said politely. The level is a hint: the server keeps its own rules.
+
+```html
+<div class="form-field">
+	<label class="form-label" for="form-password-new">New password</label>
+	<div class="input-group">
+		<input class="form-control" id="form-password-new" type="password" autocomplete="new-password" minlength="12" spellcheck="false" aria-describedby="form-password-hint form-password-level">
+		<button class="btn btn-icon" type="button" commandfor="form-password-new" command="--reveal" aria-pressed="false" aria-label="Show the password"><i class="bi bi-eye" aria-hidden="true"></i></button>
+	</div>
+	<meter class="meter" min="0" max="4" low="2" high="3" optimum="4" value="0" data-strength="form-password-new" aria-label="Password strength"></meter>
+	<div class="form-text" id="form-password-level" data-strength="form-password-new"></div>
+	<div class="form-text" id="form-password-hint">At least 12 characters. A phrase of a few words is easy to remember.</div>
+</div>
+```
+
 ## States
 
 ## Keyboard and accessibility
@@ -2325,6 +2354,43 @@ Where the chosen values are the field's content — categories, tags — the lis
 </div>
 ```
 
+### Tags that create values
+
+A list with `data-create` ends with “Create …” while the search's words are no option's label and no chosen one — the page's text `create`. Taken, the new label is held in a hidden field `data-create` names, beside the list's own; the search empties for the next one. A page that makes the value on its server cancels `redz:create` on the list and answers with a promise of `{value, label}`: the list is busy until it settles, the new value is an option from then on — or, rejected, its words are said.
+
+```html
+<div class="vstack gap-8">
+	<div class="form-floating">
+		<button class="form-select combobox-toggle" type="button" id="combobox-tags-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-tags-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Add a tag…"></span></button>
+		<label for="combobox-tags-face">Tags</label>
+	</div>
+	<div class="combobox-chips" id="combobox-tags-chips"></div>
+</div>
+<div class="menu combobox-menu" id="combobox-tags-panel" popover role="dialog" aria-label="Tags">
+	<div class="combobox-search">
+		<i class="bi bi-search" aria-hidden="true"></i>
+		<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-tags-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find or create a tag" placeholder="Find or create a tag" autocomplete="off" autofocus>
+	</div>
+	<div class="combobox-list" id="combobox-tags-list" role="listbox" aria-label="Tags" aria-multiselectable="true" data-name="tags[]" data-create="tags_new[]" data-chips="combobox-tags-chips">
+		<div class="menu-item" role="option" id="combobox-tags-family" data-value="family" aria-selected="true">Family</div>
+		<div class="menu-item" role="option" id="combobox-tags-sunset" data-value="sunset" aria-selected="false">Sunset</div>
+		<div class="menu-item" role="option" id="combobox-tags-vegan" data-value="vegan" aria-selected="false">Vegetarian lunch</div>
+	</div>
+	<input type="hidden" name="tags[]" value="family" data-label="Family">
+</div>
+```
+
+```js
+document.addEventListener('redz:create', (event) => {
+	if (event.target.id !== 'tags') {
+		return; // the new label goes into the field data-create names
+	}
+	event.preventDefault();
+	event.detail.respondWith(fetch('/tags', {method: 'POST', body: new URLSearchParams({label: event.detail.label})})
+		.then((answer) => answer.ok ? answer.json() : Promise.reject('The tag could not be made')));
+});
+```
+
 ### Groups, descriptions and icons
 
 Options sit in groups — `role="group"` named by its `menu-header` — and carry an icon and a `menu-item-description`, which the search reads too; `data-keywords` adds words the option answers without showing them, and `aria-disabled="true"` keeps an option out of reach.
@@ -2439,6 +2505,7 @@ The library has no words of its own; it reads these from the page's island `#red
 | Key | For | In English |
 | --- | --- | --- |
 | `remove` | A chip's remove button; `{label}` is the value's label | Remove {label} |
+| `create` | The option of a list with `data-create`; `{label}` is the search's words | Create “{label}” |
 | `found.one`, `found.other` | The count of options found; `{count}` in the page's digits | {count} result, {count} results |
 
 ## Tokens
@@ -2446,6 +2513,89 @@ The library has no words of its own; it reads these from the page's island `#red
 From [`css/components/combobox.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/combobox.css), which declares no custom property of its own.
 
 It reads the theme's `--redz-space-8`, `--redz-focus`, `--redz-text-muted`, `--redz-border`, `--redz-space-4`, `--redz-bg-hover`, `--redz-space-12`, `--redz-primary-subtle`, `--redz-primary`.
+
+# Inline edit
+
+A value changed where it shows — a title in a list, a name on a page — behind a real Edit button, in a small form of its own that saves or cancels.
+
+## Examples
+
+The value has an id; the Edit button names the form by `commandfor` with `command="--edit"`; the form, of class `inline-edit-form`, names the value by `data-for` and holds the field, its Save button and a Cancel button with `command="--cancel"`. `--edit` shows the form in place of the value, the field focused and its text selected; `Enter` saves, `Esc` or Cancel puts the field back, and the focus returns to the Edit button. A click elsewhere leaves the form open.
+
+```html
+<section class="card" aria-labelledby="inline-edit-row-title">
+	<div class="card-header"><h2 class="fs-14" id="inline-edit-row-title">Excursions</h2></div>
+	<div class="list-group list-group-flush">
+		<div class="list-group-item hstack gap-8">
+			<span class="table-title flex-fill" id="inline-edit-row-1">Ang Thong: marine park by speedboat</span>
+			<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="inline-edit-row-1-form" command="--edit" aria-label="Edit the title: Ang Thong"><i class="bi bi-pencil" aria-hidden="true"></i></button>
+			<form class="inline-edit-form flex-fill" id="inline-edit-row-1-form" data-for="inline-edit-row-1" hidden>
+				<input class="form-control form-control-sm" name="title" value="Ang Thong: marine park by speedboat" aria-label="Title" required>
+				<button class="btn btn-sm btn-primary" type="submit">Save</button>
+				<button class="btn btn-sm" type="button" commandfor="inline-edit-row-1-form" command="--cancel">Cancel</button>
+				<div class="invalid-feedback" hidden></div>
+			</form>
+		</div>
+		<div class="list-group-item hstack gap-8">
+			<span class="table-title flex-fill" id="inline-edit-row-2">Night market and street food</span>
+			<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="inline-edit-row-2-form" command="--edit" aria-label="Edit the title: Night market"><i class="bi bi-pencil" aria-hidden="true"></i></button>
+			<form class="inline-edit-form flex-fill" id="inline-edit-row-2-form" data-for="inline-edit-row-2" data-docs-save hidden>
+				<input class="form-control form-control-sm" name="title" value="Night market and street food" aria-label="Title">
+				<button class="btn btn-sm btn-primary" type="submit">Save</button>
+				<button class="btn btn-sm" type="button" commandfor="inline-edit-row-2-form" command="--cancel">Cancel</button>
+				<div class="invalid-feedback" hidden></div>
+			</form>
+		</div>
+	</div>
+</section>
+```
+
+### Saved by the page
+
+The form's submit fires `redz:save` on it, with the form and the field's value. A page that saves cancels it and answers with a promise: the Save button is busy until it settles — resolved, the value shows the saved text and the form closes; rejected with words, the form stays open, the field marked invalid and the words in its `invalid-feedback`, said at once. Left alone, the value shows the text and the field keeps it. The second row above answers after 600 ms and refuses an empty title.
+
+```js
+document.addEventListener('redz:save', (event) => {
+	event.preventDefault();
+	event.detail.respondWith(fetch(event.detail.form.action, {method: 'POST', body: new FormData(event.detail.form)})
+		.then((answer) => answer.ok ? answer.text() : answer.text().then((words) => Promise.reject(words))));
+});
+```
+
+### Inside another form
+
+A form cannot sit in a form: where the value lives in one — a settings page with a save bar — the edit form is a `popover="manual"` placed outside it, with the class `menu` for its panel; `--edit` opens it beside the Edit button.
+
+```html
+<div class="hstack gap-8">
+	<span class="fs-16 fw-600" id="inline-edit-popover-name">Lagoon Tours</span>
+	<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="inline-edit-popover-form" command="--edit" aria-label="Edit the company's name"><i class="bi bi-pencil" aria-hidden="true"></i></button>
+</div>
+<form class="menu inline-edit-form" id="inline-edit-popover-form" data-for="inline-edit-popover-name" popover="manual">
+	<input class="form-control form-control-sm" name="company" value="Lagoon Tours" aria-label="The company's name" required>
+	<button class="btn btn-sm btn-primary" type="submit">Save</button>
+	<button class="btn btn-sm" type="button" commandfor="inline-edit-popover-form" command="--cancel">Cancel</button>
+	<div class="invalid-feedback" hidden></div>
+</form>
+```
+
+## Keyboard and accessibility
+
+| Key | Does |
+| --- | --- |
+| `Enter`, `Space` on Edit | Opens the form, the focus in the field, its text selected |
+| `Enter` in the field | Saves |
+| `Esc` | Puts the field back and closes the form, the focus on Edit |
+
+- Edit is a real button named after what it edits — the value's own text may be a link to its record and stays one.
+- The form saves only by its Save button or `Enter`: a blur never commits half an edit, and never throws one away.
+- A refused save keeps the focus in the field; `invalid-feedback` takes `role="alert"`, so the page's words are said at once, and the field names it in `aria-describedby`.
+
+## Tokens
+
+From [`css/components/inline-edit.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/inline-edit.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-space-8`, `--redz-space-12`.
 
 # Cards
 

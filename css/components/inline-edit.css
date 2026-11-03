@@ -1,0 +1,22 @@
+@layer components {
+	.inline-edit-form:not([popover], [hidden]),
+	.inline-edit-form:popover-open {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--redz-space-8);
+	}
+
+	.inline-edit-form[popover] {
+		padding: var(--redz-space-12);
+	}
+
+	.inline-edit-form > .form-control {
+		flex: 1 1 12rem;
+		min-inline-size: 0;
+	}
+
+	.inline-edit-form > .invalid-feedback {
+		flex-basis: 100%;
+	}
+}

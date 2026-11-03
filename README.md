@@ -64,7 +64,7 @@ attaches by delegation on `document`, so nothing is set up per element and marku
 
 ```html
 <script type="module" src="dist/redz-ui.min.js"></script>
-<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results"}</script>
+<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong"}</script>
 ```
 
 - **Menus** (`role="menu"` on a `popover` opened by its button): the arrow keys move through the items, Home and End go
@@ -93,8 +93,19 @@ attaches by delegation on `document`, so nothing is set up per element and marku
   aside, every word found, the best first — the arrow keys move the active option while the focus stays in the field,
   Enter takes it, and once the typing pauses that option is said politely, or the count when nothing is found. In a form, a `combobox-toggle` button shows the value and opens
   the panel, and the value lives in hidden fields named by the list's `data-name`; a page that searches its server
-  cancels `redz:search` and puts the options in. The command palette is the same search in a `<dialog>`, its options
-  links and buttons (`js/combobox.js`).
+  cancels `redz:search` and puts the options in. A list with `data-create` offers “Create …” for words no option has:
+  the new label goes into the hidden field `data-create` names, or the page makes it through `redz:create`. The
+  command palette is the same search in a `<dialog>`, its options links and buttons (`js/combobox.js`).
+- **Inline edit:** a button with `command="--edit"` opens a form of class `inline-edit-form` in place of the value it
+  names, or as a popover beside the button; Enter saves, Escape puts the field back. Its submit fires `redz:save`,
+  which a page that saves answers with a promise: the Save button is busy, a refusal's words show as the field's error
+  (`js/inline-edit.js`).
+- **Passwords:** a button with `command="--reveal"` shows a password field's text and hides it again, `aria-pressed`
+  saying which; elements with `data-strength` naming the field show its level as it is typed — by its length and its
+  kinds of characters — a meter at once, the words after a pause (`js/password.js`).
+- **The page's answers:** a moment only the page can carry out is a cancelable `redz:*` event on the widget; the page
+  that takes it calls `event.preventDefault()` and `event.detail.respondWith(promise)`, and the widget waits for the
+  promise (`js/answer.js`).
 - **Shortcuts:** a button or link whose `aria-keyshortcuts` names a combination with Control, Meta or Alt is pressed by
   it — `Meta+K Control+K` answers ⌘K on Apple's systems and Ctrl K elsewhere (`js/shortcuts.js`).
 - **Scrollspy:** in a nav or list group with `data-scrollspy`, the link to the section in view says so in

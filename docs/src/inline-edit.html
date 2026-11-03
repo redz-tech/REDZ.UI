@@ -1,0 +1,76 @@
+<header class="vstack gap-8">
+	<h1>Inline edit</h1>
+	<p class="docs-lead">A value changed where it shows — a title in a list, a name on a page — behind a real Edit button, in a small form of its own that saves or cancels.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="inline-edit-examples">
+	<h2 id="inline-edit-examples">Examples</h2>
+	<p>The value has an id; the Edit button names the form by <code>commandfor</code> with <code>command="--edit"</code>; the form, of class <code>inline-edit-form</code>, names the value by <code>data-for</code> and holds the field, its Save button and a Cancel button with <code>command="--cancel"</code>. <code>--edit</code> shows the form in place of the value, the field focused and its text selected; <kbd>Enter</kbd> saves, <kbd>Esc</kbd> or Cancel puts the field back, and the focus returns to the Edit button. A click elsewhere leaves the form open.</p>
+	<div class="docs-example docs-example-stack" id="inline-edit-row">
+		<section class="card" aria-labelledby="inline-edit-row-title">
+			<div class="card-header"><h2 class="fs-14" id="inline-edit-row-title">Excursions</h2></div>
+			<div class="list-group list-group-flush">
+				<div class="list-group-item hstack gap-8">
+					<span class="table-title flex-fill" id="inline-edit-row-1">Ang Thong: marine park by speedboat</span>
+					<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="inline-edit-row-1-form" command="--edit" aria-label="Edit the title: Ang Thong"><i class="bi bi-pencil" aria-hidden="true"></i></button>
+					<form class="inline-edit-form flex-fill" id="inline-edit-row-1-form" data-for="inline-edit-row-1" hidden>
+						<input class="form-control form-control-sm" name="title" value="Ang Thong: marine park by speedboat" aria-label="Title" required>
+						<button class="btn btn-sm btn-primary" type="submit">Save</button>
+						<button class="btn btn-sm" type="button" commandfor="inline-edit-row-1-form" command="--cancel">Cancel</button>
+						<div class="invalid-feedback" hidden></div>
+					</form>
+				</div>
+				<div class="list-group-item hstack gap-8">
+					<span class="table-title flex-fill" id="inline-edit-row-2">Night market and street food</span>
+					<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="inline-edit-row-2-form" command="--edit" aria-label="Edit the title: Night market"><i class="bi bi-pencil" aria-hidden="true"></i></button>
+					<form class="inline-edit-form flex-fill" id="inline-edit-row-2-form" data-for="inline-edit-row-2" data-docs-save hidden>
+						<input class="form-control form-control-sm" name="title" value="Night market and street food" aria-label="Title">
+						<button class="btn btn-sm btn-primary" type="submit">Save</button>
+						<button class="btn btn-sm" type="button" commandfor="inline-edit-row-2-form" command="--cancel">Cancel</button>
+						<div class="invalid-feedback" hidden></div>
+					</form>
+				</div>
+			</div>
+		</section>
+	</div>
+
+	<h3>Saved by the page</h3>
+	<p>The form's submit fires <code>redz:save</code> on it, with the form and the field's value. A page that saves cancels it and answers with a promise: the Save button is busy until it settles — resolved, the value shows the saved text and the form closes; rejected with words, the form stays open, the field marked invalid and the words in its <code>invalid-feedback</code>, said at once. Left alone, the value shows the text and the field keeps it. The second row above answers after 600 ms and refuses an empty title.</p>
+	<pre class="docs-code" tabindex="0"><code>document.addEventListener('redz:save', (event) =&gt; {
+	event.preventDefault();
+	event.detail.respondWith(fetch(event.detail.form.action, {method: 'POST', body: new FormData(event.detail.form)})
+		.then((answer) =&gt; answer.ok ? answer.text() : answer.text().then((words) =&gt; Promise.reject(words))));
+});</code></pre>
+
+	<h3>Inside another form</h3>
+	<p>A form cannot sit in a form: where the value lives in one — a settings page with a save bar — the edit form is a <code>popover="manual"</code> placed outside it, with the class <code>menu</code> for its panel; <code>--edit</code> opens it beside the Edit button.</p>
+	<div class="docs-example docs-example-stack" id="inline-edit-popover">
+		<div class="hstack gap-8">
+			<span class="fs-16 fw-600" id="inline-edit-popover-name">Lagoon Tours</span>
+			<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="inline-edit-popover-form" command="--edit" aria-label="Edit the company's name"><i class="bi bi-pencil" aria-hidden="true"></i></button>
+		</div>
+		<form class="menu inline-edit-form" id="inline-edit-popover-form" data-for="inline-edit-popover-name" popover="manual">
+			<input class="form-control form-control-sm" name="company" value="Lagoon Tours" aria-label="The company's name" required>
+			<button class="btn btn-sm btn-primary" type="submit">Save</button>
+			<button class="btn btn-sm" type="button" commandfor="inline-edit-popover-form" command="--cancel">Cancel</button>
+			<div class="invalid-feedback" hidden></div>
+		</form>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="inline-edit-access">
+	<h2 id="inline-edit-access">Keyboard and accessibility</h2>
+	<table class="table docs-table">
+		<thead><tr><th scope="col">Key</th><th scope="col">Does</th></tr></thead>
+		<tbody>
+			<tr><td><kbd>Enter</kbd>, <kbd>Space</kbd> on Edit</td><td>Opens the form, the focus in the field, its text selected</td></tr>
+			<tr><td><kbd>Enter</kbd> in the field</td><td>Saves</td></tr>
+			<tr><td><kbd>Esc</kbd></td><td>Puts the field back and closes the form, the focus on Edit</td></tr>
+		</tbody>
+	</table>
+	<ul>
+		<li>Edit is a real button named after what it edits — the value's own text may be a link to its record and stays one.</li>
+		<li>The form saves only by its Save button or <kbd>Enter</kbd>: a blur never commits half an edit, and never throws one away.</li>
+		<li>A refused save keeps the focus in the field; <code>invalid-feedback</code> takes <code>role="alert"</code>, so the page's words are said at once, and the field names it in <code>aria-describedby</code>.</li>
+	</ul>
+</section>

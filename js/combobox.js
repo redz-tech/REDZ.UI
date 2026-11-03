@@ -2,7 +2,10 @@
 // controls as one types — case and accents aside, every word found, the best first — and the arrow keys move the active
 // option while the focus stays in the field; Enter takes it. A choice in a form: a face button shows the value and opens
 // a panel with the search, the value lives in hidden fields named by the list's data-name; the palette: the same search
-// in a dialog, its options links and buttons. A page that finds options itself cancels redz:search and puts them in.
+// in a dialog, its options links and buttons. A page that finds options itself cancels redz:search and puts them in. A
+// list with data-create offers "Create …" for a search no option's label equals: the page may make the value through
+// redz:create (js/answer.js), else the new label goes into a hidden field data-create names.
+import {ask} from './answer.js';
 import {text, textCount} from './text.js';
 
 const OPTION = '[role="option"]';
@@ -100,7 +103,8 @@ const faceOf = (list) => {
 };
 const optionsOf = (list) => [...list.querySelectorAll(OPTION)];
 const shownOf = (list) => optionsOf(list).filter((option) => !option.hidden && option.closest('[role="group"]')?.hidden !== true);
-const holdersOf = (list) => [...scopeOf(list).querySelectorAll('input[type="hidden"]')].filter((holder) => holder.name === list.dataset.name);
+const holdersOf = (list) => [...scopeOf(list).querySelectorAll('input[type="hidden"]')].filter((holder) => holder.name === list.dataset.name || ('create' in list.dataset && holder.name === list.dataset.create));
+const pairsOf = (list) => holdersOf(list).map((holder) => [holder.value, holder.dataset.label ?? '', holder.name !== list.dataset.name]);
 const isValue = (option) => 'value' in option.dataset;
 const usable = (option) => option.getAttribute('aria-disabled') !== 'true';
 
@@ -170,8 +174,35 @@ const untab = (list) => {
 	}
 };
 
-/** After the options changed: the first shown is active while a query stands, the empty state, the matches. */
+/** Keeps the list's own last option, "Create “…”", while the search's words are no option's label nor a chosen one. */
+const offer = (input) => {
+	const list = listOf(input);
+	if (!('create' in list.dataset)) {
+		return;
+	}
+	const label = input.value.trim().replace(/\s+/g, ' ');
+	const folded = fold(label).folded;
+	let option = list.querySelector(':scope > .combobox-create');
+	const taken = label === '' || list.getAttribute('aria-busy') === 'true' || optionsOf(list).some((other) => other !== option && fold(labelOf(other)).folded === folded) || labelsOf(list).some((held) => fold(held).folded === folded);
+	if (taken) {
+		option?.remove();
+		return;
+	}
+	if (option === null) {
+		option = Object.assign(document.createElement('div'), {className: 'menu-item combobox-create', id: (list.id || 'redz-list') + '-create'});
+		option.setAttribute('role', 'option');
+		list.append(option);
+	}
+	const icon = Object.assign(document.createElement('i'), {className: 'bi bi-plus-lg'});
+	icon.setAttribute('aria-hidden', 'true');
+	option.dataset.label = label;
+	option.replaceChildren(icon, text('create', {label}));
+};
+
+/** After the options changed: "Create …" offered or not, the first shown active while a query stands, the empty state,
+ *  the matches. */
 const settle = (input) => {
+	offer(input);
 	const list = listOf(input);
 	const words = fold(input.value.trim()).folded.split(/\s+/).filter(Boolean);
 	const shown = shownOf(list);
@@ -191,7 +222,7 @@ const filter = (input) => {
 	const query = fold(input.value.trim()).folded.replace(/\s+/g, ' ');
 	const words = query.split(' ').filter(Boolean);
 	for (const box of [list, ...list.querySelectorAll('[role="group"]')]) {
-		const options = [...box.querySelectorAll(':scope > ' + OPTION)];
+		const options = [...box.querySelectorAll(':scope > ' + OPTION + ':not(.combobox-create)')];
 		options.forEach((option, i) => places.has(option) || places.set(option, i));
 		const ranked = options.map((option) => [option, words.length === 0 ? 0 : rankOf(option, words, query)]);
 		for (const [option, rank] of ranked) {
@@ -315,11 +346,11 @@ const paint = (list) => {
 /** Keeps the hidden fields as the page sent them, for the form's reset. */
 const keepFirst = (list) => {
 	if (!firsts.has(list)) {
-		firsts.set(list, holdersOf(list).map((holder) => [holder.value, holder.dataset.label ?? '']));
+		firsts.set(list, pairsOf(list));
 	}
 };
 
-/** Writes the hidden fields: [value, label] pairs. */
+/** Writes the hidden fields: [value, label, made here] — a value made here goes into the field data-create names. */
 const hold = (list, pairs) => {
 	if (!list.dataset.name) {
 		console.error('REDZ.UI: the listbox #' + list.id + ' has no data-name for its value');
@@ -328,8 +359,8 @@ const hold = (list, pairs) => {
 	for (const holder of holdersOf(list)) {
 		holder.remove();
 	}
-	scopeOf(list).append(...pairs.map(([value, label]) => {
-		const holder = Object.assign(document.createElement('input'), {type: 'hidden', name: list.dataset.name, value});
+	scopeOf(list).append(...pairs.map(([value, label, made]) => {
+		const holder = Object.assign(document.createElement('input'), {type: 'hidden', name: made ? list.dataset.create : list.dataset.name, value});
 		holder.dataset.label = label;
 		return holder;
 	}));
@@ -345,6 +376,10 @@ const choose = (option) => {
 	if (!usable(option)) {
 		return;
 	}
+	if (option.classList.contains('combobox-create')) {
+		create(option);
+		return;
+	}
 	if (!isValue(option)) {
 		option.click();
 		return;
@@ -352,16 +387,58 @@ const choose = (option) => {
 	const list = option.closest('[role="listbox"]');
 	const value = option.dataset.value;
 	keepFirst(list);
-	const pairs = holdersOf(list).map((holder) => [holder.value, holder.dataset.label ?? '']);
+	const pairs = pairsOf(list);
 	if (list.getAttribute('aria-multiselectable') === 'true') {
-		hold(list, pairs.some(([held]) => held === value) ? pairs.filter(([held]) => held !== value) : [...pairs, [value, labelOf(option)]]);
+		hold(list, pairs.some(([held, , made]) => held === value && !made) ? pairs.filter(([held, , made]) => held !== value || made) : [...pairs, [value, labelOf(option), false]]);
 		return;
 	}
-	hold(list, [[value, labelOf(option)]]);
+	hold(list, [[value, labelOf(option), false]]);
+	settled(list);
+};
+
+/** A single choice's panel closes a frame after its value is written, so the button's new value reaches a screen
+ *  reader before the focus does. */
+const settled = (list) => {
 	const panel = list.closest('[popover]');
-	if (panel?.matches(':popover-open')) {
+	if (panel?.matches(':popover-open') && list.getAttribute('aria-multiselectable') !== 'true') {
 		requestAnimationFrame(() => setTimeout(() => panel.matches(':popover-open') && panel.hidePopover()));
 	}
+};
+
+/** Takes "Create “…”": redz:create asks the page, which may answer {value, label} — an option of the list from then on,
+ *  chosen — or reject with words the status says; left alone, the label is held in the field data-create names. The
+ *  search empties for the next one. */
+const create = (option) => {
+	const list = option.closest('[role="listbox"]');
+	const input = searchOf(list);
+	const label = option.dataset.label;
+	const [taken, answer] = ask(list, 'redz:create', {label});
+	if (taken && answer === null) {
+		return;
+	}
+	keepFirst(list);
+	if (!taken) {
+		const many = list.getAttribute('aria-multiselectable') === 'true';
+		hold(list, [...(many ? pairsOf(list) : []), [label, label, true]]);
+		fresh(input);
+		settled(list);
+		return;
+	}
+	list.setAttribute('aria-busy', 'true');
+	answer.then((answered) => {
+		const made = typeof answered === 'object' && answered !== null ? answered : {value: answered};
+		list.removeAttribute('aria-busy');
+		const added = Object.assign(document.createElement('div'), {className: 'menu-item', textContent: made.label ?? label});
+		added.setAttribute('role', 'option');
+		added.dataset.value = String(made.value ?? label);
+		list.append(added);
+		fresh(input);
+		choose(added);
+	}, (words) => {
+		list.removeAttribute('aria-busy');
+		input.setAttribute('aria-invalid', 'true');
+		statusOf(list).textContent = String(words ?? '');
+	});
 };
 
 /** Watches the list while the page fills it: its options landing, or aria-busy="false", end the wait. */
@@ -429,6 +506,7 @@ document.addEventListener('input', (event) => {
 		return;
 	}
 	const list = listOf(input);
+	input.removeAttribute('aria-invalid');
 	aborts.get(input)?.abort();
 	const controller = new AbortController();
 	aborts.set(input, controller);
@@ -531,7 +609,7 @@ document.addEventListener('click', (event) => {
 		if (list !== null) {
 			const at = [...box.children].indexOf(dismiss.closest('.chip'));
 			keepFirst(list);
-			hold(list, holdersOf(list).filter((holder) => holder.value !== dismiss.dataset.value).map((holder) => [holder.value, holder.dataset.label ?? '']));
+			hold(list, pairsOf(list).filter((pair, i) => i !== at));
 			(box.children[Math.min(at, box.childElementCount - 1)]?.querySelector('.chip-dismiss') ?? faceOf(list))?.focus();
 		}
 		return;

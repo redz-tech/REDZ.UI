@@ -10,7 +10,7 @@
 	<link rel="alternate" type="text/markdown" href="all.md">
 	<script src="site.js"></script>
 	<script type="module" src="../dist/redz-ui.min.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close":"إغلاق","confirm.ok":"موافق","confirm.cancel":"إلغاء","busy":"جارٍ التحميل…","remove":"إزالة {label}","found.one":"{count} نتيجة","found.other":"{count} نتائج"}</script>
+	<script type="application/json" id="redz-ui-text">{"close":"إغلاق","confirm.ok":"موافق","confirm.cancel":"إلغاء","busy":"جارٍ التحميل…","remove":"إزالة {label}","found.one":"{count} نتيجة","found.other":"{count} نتائج","create":"إنشاء «{label}»","strength.short":"قصيرة جدًا","strength.fair":"مقبولة","strength.good":"جيدة","strength.strong":"قوية"}</script>
 </head>
 <body>
 	<div class="app">
@@ -50,6 +50,7 @@
 			<a class="app-link" href="input-group.html"><i class="bi bi-input-cursor" aria-hidden="true"></i>مجموعات الإدخال</a>
 			<a class="app-link" href="check.html"><i class="bi bi-check2-square" aria-hidden="true"></i>مربعات الاختيار وأزرار الاختيار والمفاتيح</a>
 			<a class="app-link" href="combobox.html"><i class="bi bi-menu-down" aria-hidden="true"></i>مربع التحرير والسرد</a>
+			<a class="app-link" href="inline-edit.html"><i class="bi bi-pencil-square" aria-hidden="true"></i>التحرير في المكان</a>
 			<div class="app-section">المحتوى</div>
 			<a class="app-link" href="card.html"><i class="bi bi-card-text" aria-hidden="true"></i>البطاقات</a>
 			<a class="app-link" href="accordion.html"><i class="bi bi-chevron-bar-expand" aria-hidden="true"></i>الأكورديونات</a>
@@ -506,6 +507,25 @@
 						<input class="form-control form-control-lg" placeholder="كبير" aria-label="حقل كبير">
 						<select class="form-select form-select-sm" aria-label="قائمة اختيار صغيرة"><option>قائمة اختيار صغيرة</option></select>
 					</div>
+					<div class="docs-example docs-example-stack" id="form-otp">
+						<div class="form-field">
+							<label class="form-label" for="form-otp-code">رمز من 6 أرقام من تطبيقك</label>
+							<input class="form-control form-control-otp" id="form-otp-code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9 \-]*" spellcheck="false" enterkeyhint="done" aria-describedby="form-otp-code-hint">
+							<div class="form-text" id="form-otp-code-hint">المسافات والشرطات مقبولة.</div>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="form-password">
+						<div class="form-field">
+							<label class="form-label" for="form-password-new">كلمة مرور جديدة</label>
+							<div class="input-group">
+								<input class="form-control" id="form-password-new" type="password" autocomplete="new-password" minlength="12" spellcheck="false" aria-describedby="form-password-hint form-password-level">
+								<button class="btn btn-icon" type="button" commandfor="form-password-new" command="--reveal" aria-pressed="false" aria-label="إظهار كلمة المرور"><i class="bi bi-eye" aria-hidden="true"></i></button>
+							</div>
+							<meter class="meter" min="0" max="4" low="2" high="3" optimum="4" value="0" data-strength="form-password-new" aria-label="قوة كلمة المرور"></meter>
+							<div class="form-text" id="form-password-level" data-strength="form-password-new"></div>
+							<div class="form-text" id="form-password-hint">12 حرفًا على الأقل. العبارة المكونة من بضع كلمات سهلة التذكر.</div>
+						</div>
+					</div>
 					<div class="docs-states" id="form-states" tabindex="0" role="region" aria-labelledby="form-states-title">
 						<table class="docs-matrix">
 							<thead>
@@ -760,6 +780,27 @@
 							<input type="hidden" name="categories[]" value="temples" data-label="المعابد">
 						</div>
 					</div>
+					<div class="docs-example docs-example-stack" id="combobox-tags">
+						<div class="vstack gap-8">
+							<div class="form-floating">
+								<button class="form-select combobox-toggle" type="button" id="combobox-tags-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-tags-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="أضف وسمًا…"></span></button>
+								<label for="combobox-tags-face">الوسوم</label>
+							</div>
+							<div class="combobox-chips" id="combobox-tags-chips"></div>
+						</div>
+						<div class="menu combobox-menu" id="combobox-tags-panel" popover="" role="dialog" aria-label="الوسوم">
+							<div class="combobox-search">
+								<i class="bi bi-search" aria-hidden="true"></i>
+								<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-tags-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن وسم أو أنشئه" placeholder="ابحث عن وسم أو أنشئه" autocomplete="off" autofocus="">
+							</div>
+							<div class="combobox-list" id="combobox-tags-list" role="listbox" aria-label="الوسوم" aria-multiselectable="true" data-name="tags[]" data-create="tags_new[]" data-chips="combobox-tags-chips">
+								<div class="menu-item" role="option" id="combobox-tags-family" data-value="family" aria-selected="true">العائلة</div>
+								<div class="menu-item" role="option" id="combobox-tags-sunset" data-value="sunset" aria-selected="false">الغروب</div>
+								<div class="menu-item" role="option" id="combobox-tags-vegan" data-value="vegan" aria-selected="false">غداء نباتي</div>
+							</div>
+							<input type="hidden" name="tags[]" value="family" data-label="العائلة">
+						</div>
+					</div>
 					<div class="docs-example docs-example-stack" id="combobox-groups">
 						<div class="form-floating">
 							<button class="form-select combobox-toggle" type="button" id="combobox-groups-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-groups-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="اختر دورًا…">محرر</span></button>
@@ -849,6 +890,49 @@
 								</tr>
 							</tbody>
 						</table>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-inline-edit">
+					<h2 id="all-inline-edit"><a href="inline-edit.html">التحرير في المكان</a></h2>
+					<div class="docs-example docs-example-stack" id="inline-edit-row">
+						<section class="card" aria-labelledby="inline-edit-row-title">
+							<div class="card-header"><h2 class="fs-14" id="inline-edit-row-title">الرحلات</h2></div>
+							<div class="list-group list-group-flush">
+								<div class="list-group-item hstack gap-8">
+									<span class="table-title flex-fill" id="inline-edit-row-1">أنغ ثونغ: الحديقة البحرية بالقارب السريع</span>
+									<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="inline-edit-row-1-form" command="--edit" aria-label="تحرير العنوان: أنغ ثونغ"><i class="bi bi-pencil" aria-hidden="true"></i></button>
+									<form class="inline-edit-form flex-fill" id="inline-edit-row-1-form" data-for="inline-edit-row-1" hidden="">
+										<input class="form-control form-control-sm" name="title" value="Ang Thong: marine park by speedboat" aria-label="العنوان" required="">
+										<button class="btn btn-sm btn-primary" type="submit">حفظ</button>
+										<button class="btn btn-sm" type="button" commandfor="inline-edit-row-1-form" command="--cancel">إلغاء</button>
+										<div class="invalid-feedback" hidden=""></div>
+									</form>
+								</div>
+								<div class="list-group-item hstack gap-8">
+									<span class="table-title flex-fill" id="inline-edit-row-2">السوق الليلي وطعام الشارع</span>
+									<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="inline-edit-row-2-form" command="--edit" aria-label="تحرير العنوان: السوق الليلي"><i class="bi bi-pencil" aria-hidden="true"></i></button>
+									<form class="inline-edit-form flex-fill" id="inline-edit-row-2-form" data-for="inline-edit-row-2" data-docs-save="" hidden="">
+										<input class="form-control form-control-sm" name="title" value="Night market and street food" aria-label="العنوان">
+										<button class="btn btn-sm btn-primary" type="submit">حفظ</button>
+										<button class="btn btn-sm" type="button" commandfor="inline-edit-row-2-form" command="--cancel">إلغاء</button>
+										<div class="invalid-feedback" hidden=""></div>
+									</form>
+								</div>
+							</div>
+						</section>
+					</div>
+					<div class="docs-example docs-example-stack" id="inline-edit-popover">
+						<div class="hstack gap-8">
+							<span class="fs-16 fw-600" id="inline-edit-popover-name">جولات البحيرة</span>
+							<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="inline-edit-popover-form" command="--edit" aria-label="تحرير اسم الشركة"><i class="bi bi-pencil" aria-hidden="true"></i></button>
+						</div>
+						<form class="menu inline-edit-form" id="inline-edit-popover-form" data-for="inline-edit-popover-name" popover="manual">
+							<input class="form-control form-control-sm" name="company" value="Lagoon Tours" aria-label="اسم الشركة" required="">
+							<button class="btn btn-sm btn-primary" type="submit">حفظ</button>
+							<button class="btn btn-sm" type="button" commandfor="inline-edit-popover-form" command="--cancel">إلغاء</button>
+							<div class="invalid-feedback" hidden=""></div>
+						</form>
 					</div>
 				</section>
 

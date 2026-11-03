@@ -95,6 +95,38 @@
 		</div>
 	</div>
 
+	<h3>Tags that create values</h3>
+	<p>A list with <code>data-create</code> ends with <span class="text-nowrap">“Create …”</span> while the search's words are no option's label and no chosen one — the page's text <code>create</code>. Taken, the new label is held in a hidden field <code>data-create</code> names, beside the list's own; the search empties for the next one. A page that makes the value on its server cancels <code>redz:create</code> on the list and answers with a promise of <code>{value, label}</code>: the list is busy until it settles, the new value is an option from then on — or, rejected, its words are said.</p>
+	<div class="docs-example docs-example-stack" id="combobox-tags">
+		<div class="vstack gap-8">
+			<div class="form-floating">
+				<button class="form-select combobox-toggle" type="button" id="combobox-tags-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-tags-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Add a tag…"></span></button>
+				<label for="combobox-tags-face">Tags</label>
+			</div>
+			<div class="combobox-chips" id="combobox-tags-chips"></div>
+		</div>
+		<div class="menu combobox-menu" id="combobox-tags-panel" popover role="dialog" aria-label="Tags">
+			<div class="combobox-search">
+				<i class="bi bi-search" aria-hidden="true"></i>
+				<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-tags-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find or create a tag" placeholder="Find or create a tag" autocomplete="off" autofocus>
+			</div>
+			<div class="combobox-list" id="combobox-tags-list" role="listbox" aria-label="Tags" aria-multiselectable="true" data-name="tags[]" data-create="tags_new[]" data-chips="combobox-tags-chips">
+				<div class="menu-item" role="option" id="combobox-tags-family" data-value="family" aria-selected="true">Family</div>
+				<div class="menu-item" role="option" id="combobox-tags-sunset" data-value="sunset" aria-selected="false">Sunset</div>
+				<div class="menu-item" role="option" id="combobox-tags-vegan" data-value="vegan" aria-selected="false">Vegetarian lunch</div>
+			</div>
+			<input type="hidden" name="tags[]" value="family" data-label="Family">
+		</div>
+	</div>
+	<pre class="docs-code" tabindex="0"><code>document.addEventListener('redz:create', (event) =&gt; {
+	if (event.target.id !== 'tags') {
+		return; // the new label goes into the field data-create names
+	}
+	event.preventDefault();
+	event.detail.respondWith(fetch('/tags', {method: 'POST', body: new URLSearchParams({label: event.detail.label})})
+		.then((answer) =&gt; answer.ok ? answer.json() : Promise.reject('The tag could not be made')));
+});</code></pre>
+
 	<h3>Groups, descriptions and icons</h3>
 	<p>Options sit in groups — <code>role="group"</code> named by its <code>menu-header</code> — and carry an icon and a <code>menu-item-description</code>, which the search reads too; <code>data-keywords</code> adds words the option answers without showing them, and <code>aria-disabled="true"</code> keeps an option out of reach.</p>
 	<div class="docs-example docs-example-stack" id="combobox-groups">
@@ -240,6 +272,7 @@
 		<thead><tr><th scope="col">Key</th><th scope="col">For</th><th scope="col">In English</th></tr></thead>
 		<tbody>
 			<tr><td><code>remove</code></td><td>A chip's remove button; <code>{label}</code> is the value's label</td><td>Remove {label}</td></tr>
+			<tr><td><code>create</code></td><td>The option of a list with <code>data-create</code>; <code>{label}</code> is the search's words</td><td>Create “{label}”</td></tr>
 			<tr><td><code>found.one</code>, <code>found.other</code></td><td>The count of options found; <code>{count}</code> in the page's digits</td><td>{count} result, {count} results</td></tr>
 		</tbody>
 	</table>

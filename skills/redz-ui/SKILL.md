@@ -44,7 +44,7 @@ where the meaning is the same, and like the platform where Bootstrap 6 moved ont
   <link rel="stylesheet" href="redz-ui/dist/redz-ui.min.css">
   <link rel="stylesheet" href="redz-ui/css/icons.css">
   <script type="module" src="redz-ui/dist/redz-ui.min.js"></script>
-  <script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results"}</script>
+  <script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong"}</script>
 </head>
 ```
 
@@ -66,7 +66,7 @@ Check it exists: `grep -x 'CLASS' assets/classes.txt`. A class that is not there
 ## References — one per page of the docs
 
 Start: `references/index.md` (getting started), `layout.md`, `utilities.md`, `tokens.md`, `icons.md`.
-Actions: `btn.md`, `chip.md`, `menu.md`. Forms: `form.md`, `input-group.md`, `check.md`, `combobox.md`. Content: `card.md`,
+Actions: `btn.md`, `chip.md`, `menu.md`. Forms: `form.md`, `input-group.md`, `check.md`, `combobox.md`, `inline-edit.md`. Content: `card.md`,
 `accordion.md`, `collapse.md`, `list-group.md`, `table.md`, `badge.md`, `dot.md`, `avatar.md`, `icon-tile.md`,
 `empty-state.md`, `placeholder.md`. Layers: `dialog.md`, `drawer.md`, `tooltip.md`. Feedback: `alert.md`, `toast.md`,
 `spinner.md`, `progress.md`, `busy.md`, `save-bar.md`, `selection-bar.md`.

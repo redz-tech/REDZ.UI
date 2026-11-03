@@ -371,7 +371,7 @@ function PROBE__Cell(array &$h, string $name, string $page, string $combo, strin
 	if ($m['scroll'] > $m['client']) {
 		$findings[] = 'overflow ' . $m['scroll'] . ' > ' . $m['client'] . ': ' . implode(', ', $m['offenders']);
 	}
-	foreach (['unmasked' => 'icons without a mask', 'unregioned' => 'width prefixes outside a region', 'cut' => 'cut labels', 'busyLive' => 'aria-busy on or around a live region', 'toggles' => '--toggle buttons whose aria-expanded is not their region\'s state', 'comboboxes' => 'comboboxes whose button, active option or chosen values disagree with their list', 'scrollspies' => 'scrollspy navs without exactly one link at aria-current="location"'] as $key => $what) {
+	foreach (['unmasked' => 'icons without a mask', 'unregioned' => 'width prefixes outside a region', 'cut' => 'cut labels', 'busyLive' => 'aria-busy on or around a live region', 'toggles' => '--toggle buttons whose aria-expanded is not their region\'s state', 'comboboxes' => 'comboboxes whose button, active option or chosen values disagree with their list', 'scrollspies' => 'scrollspy navs without exactly one link at aria-current="location"', 'strengths' => 'data-strength displays whose field is missing', 'edits' => 'inline edit forms whose data-for names no value'] as $key => $what) {
 		if ($m[$key] !== []) {
 			$findings[] = $what . ': ' . implode(', ', $m[$key]);
 		}
@@ -577,6 +577,22 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 					continue;
 				}
 			}
+			if ($s['open'] && $s['offers']) {
+				$word = 'Probe tag ' . substr(md5($id), 0, 6);
+				PROBE__Do($h, 'Eval', 'REDZ_PROBE.typeInto(' . json_encode('#' . $id . ' input[role="combobox"]') . ', ' . json_encode($word) . ')');
+				usleep(200000);
+				$s = $state();
+				if (!$s['activeCreate']) {
+					$findings[] = $what . 'a new word in the search: "Create …" is not the active option';
+					continue;
+				}
+				$press('Enter');
+				$s = $state();
+				if (!in_array($word, $s['created'], true)) {
+					$findings[] = $what . 'Enter on "Create …": the new label is not in its field, which holds ' . json_encode($s['created']);
+					continue;
+				}
+			}
 			if ($s['open']) {
 				$press('Escape');
 				$s = $state();
@@ -601,6 +617,38 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 				}
 				if ($open && $s['grouped'] && $s['open'] !== [$s['walked']]) {
 					$findings[] = $what . $key . ': opening item ' . $s['walked'] . ' of a group leaves ' . json_encode($s['open']) . ' open';
+					break;
+				}
+			}
+		} elseif ($kind === 'edit') {
+			$activate($id);
+			$s = $state();
+			if (!$s['open'] || !$s['inField']) {
+				$findings[] = $what . 'Enter on Edit: ' . ($s['open'] ? 'the focus is not in its field' : 'the form does not open');
+				continue;
+			}
+			$press('Escape');
+			$s = $state();
+			if ($s['open'] || !$s['valueShown'] || !$s['onInvoker']) {
+				$findings[] = $what . 'Escape: ' . ($s['open'] ? 'the form stays open' : (!$s['valueShown'] ? 'the value does not show again' : 'the focus is not back on Edit'));
+			}
+		} elseif ($kind === 'strength') {
+			foreach (['correct horse battery staple', ''] as $typed) {
+				PROBE__Do($h, 'Eval', 'REDZ_PROBE.typeInto(' . json_encode('#' . $id) . ', ' . json_encode($typed) . ')');
+				usleep(1000000);
+				$s = $state();
+				$wrong = fn(mixed $shown): bool => ($shown !== null && $shown !== '' && $shown !== 0 && $shown !== 0.0) !== ($typed !== '');
+				if (($s['levels'] === [] && $s['words'] === []) || array_filter([...$s['levels'], ...$s['valuetexts'], ...$s['words']], $wrong) !== []) {
+					$findings[] = $what . ($typed === '' ? 'the field emptied' : 'a password typed') . ': its meters show ' . json_encode($s['levels']) . ' said as ' . json_encode($s['valuetexts']) . ', its words ' . json_encode($s['words']);
+					break;
+				}
+			}
+		} elseif ($kind === 'reveal') {
+			foreach (['text' => 'true', 'password' => 'false'] as $type => $pressed) {
+				$activate($id);
+				$s = $state();
+				if ($s['type'] !== $type || $s['pressed'] !== $pressed) {
+					$findings[] = $what . 'Enter: the field should be ' . $type . ', its button aria-pressed="' . $pressed . '" — it is ' . $s['type'] . ', aria-pressed="' . $s['pressed'] . '"';
 					break;
 				}
 			}

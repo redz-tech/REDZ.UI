@@ -4,6 +4,31 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Forms: tags that create values, inline edit, the one-time code, passwords
+- Tags that create values: a list with `data-create` ends with “Create …” — the page's text `create` — while the
+  search's words are no option's label and no chosen one. Taken, the label goes into a hidden field `data-create`
+  names, beside the list's own, and the search empties for the next one; a page that makes the value on its server
+  cancels `redz:create` and answers `{value, label}`, an option of the list from then on.
+- Inline edit (`js/inline-edit.js`): a button with `command="--edit"` opens a form of class `inline-edit-form` in
+  place of the value it names in `data-for` — or a `popover` form beside the button, for a value inside another form —
+  its field focused and selected. Enter saves, Escape or `--cancel` puts the field back, a blur leaves it open; the
+  submit fires `redz:save`, and a page that answers it with a promise has the Save button busy until it settles, a
+  refusal's words in the form's `invalid-feedback`, said at once.
+- The one-time code: `form-control-otp` — one field, its digits spaced, `autocomplete="one-time-code"`: it takes a
+  paste and the code the system offers; no box per digit, no submit on the last digit.
+- Passwords (`js/password.js`): `--reveal` shows a password field's text and hides it again, `aria-pressed` saying
+  which, and hides it on the form's submit and on a return from the history. Elements with `data-strength` naming the
+  field show its level as it is typed — shorter than its `minlength`, long enough, then four characters longer or of
+  three kinds of characters, then both or twice the minimum — a `meter` at once, the words (`strength.short`,
+  `.fair`, `.good`, `.strong`) once the typing pauses, said politely; a hint beside the server's own rules.
+- The page's answers (`js/answer.js`): every moment only the page can carry out is a cancelable `redz:*` event whose
+  `detail.respondWith(promise)` the widget waits for; cancelled without a promise, the moment is all the page's.
+- The docs: a page for inline edit, new parts on the pages of form fields and of the combobox, 23 Arabic strings; the
+  probes walk each Edit button, each `--reveal`, each strength field and a combobox's “Create …”, and flag a
+  `data-strength` without its field and an inline edit form without its value. 21.3 KB and 11.1 KB gzipped.
+
 ## 0.4.0 — 2026-11-02
 
 ### The ERP's gaps

@@ -124,6 +124,8 @@ window.REDZ_PROBE = (() => {
 					return target === null || button.getAttribute('aria-expanded') !== String(!target.hidden);
 				}).slice(0, 8).map((button) => name(button) + ' → #' + button.getAttribute('commandfor')),
 				scrollspies: [...document.querySelectorAll('[data-scrollspy]')].filter((nav) => nav.querySelectorAll('[aria-current="location"]').length !== 1).slice(0, 8).map(name),
+				strengths: [...document.querySelectorAll('[data-strength]')].filter((show) => !(document.getElementById(show.dataset.strength) instanceof HTMLInputElement)).slice(0, 8).map(name),
+				edits: [...document.querySelectorAll('.inline-edit-form')].filter((form) => document.getElementById(form.dataset.for || '') === null).slice(0, 8).map(name),
 				comboboxes: [...document.querySelectorAll('input[role="combobox"][aria-controls]')].flatMap((input) => {
 					const list = document.getElementById(input.getAttribute('aria-controls') || '');
 					if (list === null) {
@@ -241,7 +243,7 @@ window.REDZ_PROBE = (() => {
 			for (const invoker of document.querySelectorAll('[commandfor]')) {
 				const target = document.getElementById(invoker.getAttribute('commandfor') || '');
 				const command = invoker.getAttribute('command') || '';
-				const kind = invoker.classList.contains('combobox-toggle') && target?.querySelector('[role="listbox"]') ? 'combobox' : (target?.getAttribute('role') === 'menu' && command === 'toggle-popover' ? 'menu' : (target?.localName === 'dialog' && command === 'show-modal' ? 'dialog' : (target && command === '--toggle' ? 'toggle' : '')));
+				const kind = invoker.classList.contains('combobox-toggle') && target?.querySelector('[role="listbox"]') ? 'combobox' : (target?.getAttribute('role') === 'menu' && command === 'toggle-popover' ? 'menu' : (target?.localName === 'dialog' && command === 'show-modal' ? 'dialog' : (target && command === '--toggle' ? 'toggle' : (target?.classList.contains('inline-edit-form') && command === '--edit' ? 'edit' : (target?.localName === 'input' && command === '--reveal' ? 'reveal' : '')))));
 				if (kind !== '' && !seen.has(target) && shown(invoker)) {
 					seen.add(target);
 					invoker.setAttribute('data-probe-invoker', target.id);
@@ -260,7 +262,19 @@ window.REDZ_PROBE = (() => {
 					out.push({kind: 'accordion', id: String(out.length), outside: false});
 				}
 			}
+			for (const field of document.querySelectorAll('input[id]')) {
+				if (shown(field) && document.querySelector('[data-strength="' + CSS.escape(field.id) + '"]') !== null) {
+					out.push({kind: 'strength', id: field.id, outside: false});
+				}
+			}
 			return out;
+		},
+		// Types into a field as a person would, as far as the library hears it: the text, then an input event.
+		typeInto(selector, words) {
+			const field = document.querySelector(selector);
+			field.value = words;
+			field.dispatchEvent(new Event('input', {bubbles: true}));
+			return true;
 		},
 		// The accordion's item the walk drives: the second, or the only one.
 		walkedItem(id) {
@@ -268,7 +282,7 @@ window.REDZ_PROBE = (() => {
 			return items[Math.min(1, items.length - 1)];
 		},
 		focus(kind, id) {
-			const el = kind === 'tabs' ? document.querySelector('[data-probe-tablist="' + id + '"] [role="tab"][aria-selected="true"]') : (kind === 'accordion' ? this.walkedItem(id).querySelector(':scope > summary') : document.querySelector('[data-probe-invoker="' + id + '"]'));
+			const el = kind === 'tabs' ? document.querySelector('[data-probe-tablist="' + id + '"] [role="tab"][aria-selected="true"]') : (kind === 'accordion' ? this.walkedItem(id).querySelector(':scope > summary') : (kind === 'strength' ? document.getElementById(id) : document.querySelector('[data-probe-invoker="' + id + '"]')));
 			el.scrollIntoView({block: 'nearest'});
 			el.focus();
 			return document.activeElement === el;
@@ -289,6 +303,15 @@ window.REDZ_PROBE = (() => {
 				const invoker = document.querySelector('[data-probe-invoker="' + id + '"]');
 				return {open: !document.getElementById(id).hidden, expanded: invoker.getAttribute('aria-expanded'), onInvoker: active === invoker};
 			}
+			if (kind === 'edit') {
+				const form = document.getElementById(id);
+				const value = document.getElementById(form.dataset.for || '');
+				return {open: form.popover === null ? !form.hidden : form.matches(':popover-open'), inField: active !== null && active === form.querySelector('input:not([type="hidden"]), textarea, select'), valueShown: value !== null && shown(value), onInvoker: active === document.querySelector('[data-probe-invoker="' + id + '"]')};
+			}
+			if (kind === 'reveal') {
+				const invoker = document.querySelector('[data-probe-invoker="' + id + '"]');
+				return {type: document.getElementById(id).type, pressed: invoker.getAttribute('aria-pressed')};
+			}
 			if (kind === 'combobox') {
 				const panel = document.getElementById(id);
 				const invoker = document.querySelector('[data-probe-invoker="' + id + '"]');
@@ -304,8 +327,15 @@ window.REDZ_PROBE = (() => {
 					options: [...list.querySelectorAll('[role="option"]')].filter((each) => !each.hidden && each.getAttribute('aria-disabled') !== 'true').length,
 					active: option === null || option.hidden ? null : (option.dataset.value ?? option.id),
 					values: [...scope.querySelectorAll('input[type="hidden"]')].filter((holder) => holder.name === list.dataset.name).map((holder) => holder.value),
-					multiple: list.getAttribute('aria-multiselectable') === 'true'
+					multiple: list.getAttribute('aria-multiselectable') === 'true',
+					offers: 'create' in list.dataset,
+					activeCreate: option !== null && option.classList.contains('combobox-create'),
+					created: [...scope.querySelectorAll('input[type="hidden"]')].filter((holder) => 'create' in list.dataset && holder.name === list.dataset.create).map((holder) => holder.value)
 				};
+			}
+			if (kind === 'strength') {
+				const shows = [...document.querySelectorAll('[data-strength="' + id + '"]')];
+				return {levels: shows.filter((show) => show.localName === 'meter').map((meter) => meter.value), valuetexts: shows.filter((show) => show.localName === 'meter').map((meter) => meter.getAttribute('aria-valuetext')), words: shows.filter((show) => show.localName !== 'meter').map((show) => show.textContent)};
 			}
 			if (kind === 'tabs') {
 				const list = document.querySelector('[data-probe-tablist="' + id + '"]');

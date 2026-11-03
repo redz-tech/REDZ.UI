@@ -101,6 +101,43 @@ Where the chosen values are the field's content — categories, tags — the lis
 </div>
 ```
 
+### Tags that create values
+
+A list with `data-create` ends with “Create …” while the search's words are no option's label and no chosen one — the page's text `create`. Taken, the new label is held in a hidden field `data-create` names, beside the list's own; the search empties for the next one. A page that makes the value on its server cancels `redz:create` on the list and answers with a promise of `{value, label}`: the list is busy until it settles, the new value is an option from then on — or, rejected, its words are said.
+
+```html
+<div class="vstack gap-8">
+	<div class="form-floating">
+		<button class="form-select combobox-toggle" type="button" id="combobox-tags-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-tags-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Add a tag…"></span></button>
+		<label for="combobox-tags-face">Tags</label>
+	</div>
+	<div class="combobox-chips" id="combobox-tags-chips"></div>
+</div>
+<div class="menu combobox-menu" id="combobox-tags-panel" popover role="dialog" aria-label="Tags">
+	<div class="combobox-search">
+		<i class="bi bi-search" aria-hidden="true"></i>
+		<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-tags-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find or create a tag" placeholder="Find or create a tag" autocomplete="off" autofocus>
+	</div>
+	<div class="combobox-list" id="combobox-tags-list" role="listbox" aria-label="Tags" aria-multiselectable="true" data-name="tags[]" data-create="tags_new[]" data-chips="combobox-tags-chips">
+		<div class="menu-item" role="option" id="combobox-tags-family" data-value="family" aria-selected="true">Family</div>
+		<div class="menu-item" role="option" id="combobox-tags-sunset" data-value="sunset" aria-selected="false">Sunset</div>
+		<div class="menu-item" role="option" id="combobox-tags-vegan" data-value="vegan" aria-selected="false">Vegetarian lunch</div>
+	</div>
+	<input type="hidden" name="tags[]" value="family" data-label="Family">
+</div>
+```
+
+```js
+document.addEventListener('redz:create', (event) => {
+	if (event.target.id !== 'tags') {
+		return; // the new label goes into the field data-create names
+	}
+	event.preventDefault();
+	event.detail.respondWith(fetch('/tags', {method: 'POST', body: new URLSearchParams({label: event.detail.label})})
+		.then((answer) => answer.ok ? answer.json() : Promise.reject('The tag could not be made')));
+});
+```
+
 ### Groups, descriptions and icons
 
 Options sit in groups — `role="group"` named by its `menu-header` — and carry an icon and a `menu-item-description`, which the search reads too; `data-keywords` adds words the option answers without showing them, and `aria-disabled="true"` keeps an option out of reach.
@@ -215,6 +252,7 @@ The library has no words of its own; it reads these from the page's island `#red
 | Key | For | In English |
 | --- | --- | --- |
 | `remove` | A chip's remove button; `{label}` is the value's label | Remove {label} |
+| `create` | The option of a list with `data-create`; `{label}` is the search's words | Create “{label}” |
 | `found.one`, `found.other` | The count of options found; `{count}` in the page's digits | {count} result, {count} results |
 
 ## Tokens
