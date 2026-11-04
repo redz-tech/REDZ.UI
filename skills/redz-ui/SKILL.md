@@ -3,7 +3,7 @@ name: redz-ui
 description: Build or change admin screens with REDZ.UI - its class names, states, commands and page skeleton, with one reference per component. Use when writing HTML, PHP templates or JavaScript for a project that links redz-ui/css/index.css, or when asked for a list, form, card, dialog, menu, tabs or notice in REDZ.UI.
 license: MIT
 metadata:
-  version: "0.11.0"
+  version: "0.12.0"
 ---
 
 # Building screens with REDZ.UI

@@ -4,7 +4,7 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
-## Unreleased
+## 0.12.0 - 2026-11-04
 
 The ERP's one list of every screen left to move, asked as #42-#93: commands and overlays, form controls, behaviours
 of regions, tables and lists, status and data, utilities. CI checks each part where it stands, and the behaviour
