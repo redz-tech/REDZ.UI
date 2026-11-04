@@ -6,13 +6,112 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 
 ## Unreleased
 
+The ERP's one list of every screen left to move, asked as #42-#93: commands and overlays, form controls, behaviours
+of regions, tables and lists, status and data, utilities. CI checks each part where it stands, and the behaviour
+checks run in every desktop engine.
+
 ### Added
+- **Commands:**
+  - `command="--copy"` copies its `data-copy`, a field's value or an element's text, says so politely (texts
+    `copy.done`, `copy.failed`), shows a check in place of its icon and fires `redz:copy`; the browser's copy
+    command stands in where the Clipboard API is missing.
+  - `command="--print"` prints the page; printing opens every closed `details` and `--toggle` region for the paper
+    and closes them after; cards are not cut across pages.
+  - `command="--theme"` with `light`, `dark` or `system` sets `data-theme` on `html` and shows which in
+    `aria-pressed`; one button with `toggle` flips light and dark; the page hears `redz:theme`.
+  - `command="--share"` shares through the device's share sheet, or opens its menu, whose `share-*` links the
+    library writes and colours; `share-vk` draws its letters.
+  - `command="--download"` saves a QR tile as a PNG on white (`data-file`, `data-size`).
+  - `command="--step-up"` or `"--step-down"` with `aria-controls` steps a number field, `aria-disabled` at its ends.
+- **Overlays and calls:**
+  - An image viewer: a link with `data-zoom` opens its image in one modal dialog the library makes, in the top
+    layer, above an open dialog too; links with the same word make a set, stepped by the arrow keys and buttons, with
+    a count (texts `viewer.prev`, `viewer.next`, `viewer.count`).
+  - `REDZ.ui.prompt({title, text, label, value, placeholder, type, inputmode, pattern, required, ok, cancel, tone})`
+    asks for one value and answers it, or `null`.
+  - `REDZ.ui.progress(promise)` shows a thin bar along the top of the window: after 150 ms, for at least 400 ms, one
+    for every request at once, still under reduced motion.
+  - `REDZ.ui.status(line, promise | {tone, text})` on a `.form-status`: "Saving…" past 400 ms, then "Saved", which
+    fades, or the refusal's own words, which stay (texts `status.saving`, `status.saved`).
+  - `REDZ.ui.confirm({rows})` shows label and value rows, text only.
+  - A tablist with `data-hash` follows `location.hash`, nested tabs too, and a choice writes the panel's id into the
+    address; `redz:selected` fires after every selection; `REDZ.ui.select(tab)` chooses a tab from code through
+    `redz:select`.
+  - `menuitemcheckbox` and grouped `menuitemradio` items flip `aria-checked`, keep the menu open and fire
+    `redz:check`.
+- **Forms:**
+  - A textarea with `data-grow` starts at its rows and grows with its text: `field-sizing` where the engine has it,
+    the library's script below; a `max-h-*` caps it.
+  - `data-submit="change"` on a form or one of its controls sends the form by `requestSubmit` when it changes.
+  - `data-show-when` and `data-show-in`: a region shows while a field holds one of the values, its fields disabled
+    while it is hidden.
+  - `form-counter` with `data-counter`: the characters typed against `maxlength` or `data-counter-max`,
+    `data-state` `near` and `over`, said once the typing pauses near or over (text `counter`).
+  - `form-control-color` with a hex twin, `data-color-for`; `data-color` sets `--redz-color` through the CSSOM for
+    a `dot`, an `icon-tile`, a `choice-media` and the edges `edge-top-color` and `edge-start-color`.
+  - `data-brand` on `html` or a region makes the primary tone, its subtle fill, its contrast text, the focus ring and
+    the links of one colour, `--redz-brand`, in both themes.
+  - Segmented choices on Bootstrap's `btn-check` in a `btn-group`; a `btn` with `aria-current` drawn pressed;
+    `btn-float`, a button as tall as a floating field.
+  - A combobox with `data-create` and no options takes free values: a comma takes the words, a `pattern` or
+    `type="email"` refuses others (text `chip.invalid`). Options with `data-level` 2 or 3 are indented, and the
+    search shows a match with its parents.
+  - `rating`, stars filled to `data-v`, and `rating-input`, five radios drawn as stars; a page, Ratings.
+  - `choice-danger`; the save bar's `data-state="error"` and `"saved"`; `data-changed` marks a changed field, check
+    or switch.
+  - Repeaters: a list with `data-repeat` and a `<template>` adds rows by `--add` and takes them by `--remove`, `{i}`
+    in their attributes a running index, the count held by `data-min` and `data-max`, `redz:add` and `redz:remove`
+    cancelable.
+- **Regions:**
+  - A search with `data-filter` hides a region's items that lack the typed words, case and accents aside; a tree
+    keeps a match's parents; `data-filter-empty` shows when nothing matches; the count is said.
+  - A tap on a disabled control with a title shows and says why, for three seconds.
+  - `toggle-chevron`, `toggle-open` and `toggle-closed` follow a button's `aria-expanded`.
+  - `time[data-elapsed]` shows a clock since its `datetime`, and `time[data-ago]` says how long ago or how soon in
+    the page's language; one ticker serves them all, paused while the page is hidden.
+- **Tables and lists:**
+  - `table-group` and `table-subtotal` rows; `aria-current`, `aria-selected` and `table-active` rows drawn;
+    `a.table-sort` for a server's sort.
+  - `table-scroll`, sideways in its card, with `table-scroll-first` holding the first column; the head sticks to the
+    page where an element can scroll on one axis alone (Chrome 156), and scrolls away with it elsewhere.
+  - A row whose title link is a `stretched-link` is a link as a whole; its controls stay its own.
+  - `dl.summary`, `dl.totals` with `totals-grand`; `list-group-header`; tree rows draw `aria-current`, hold
+    `tree-actions` and checks.
+  - The media grid as a chooser (`label.media-tile` around a radio or a check), `media-grid-compact`, and
+    `data-cover` for a cover mark.
+- **Status and data:**
+  - `pre.log` with tone lines, following its end with `data-follow`; `div.diff` with `ins` and `del` lines and
+    changed words inside a line; a page, Logs and diffs.
+  - `dot-live` breathes while its `data-state="running"`, still otherwise and with reduced motion.
+  - The step list's states warning, info, ask, waiting, skipped and locked; `step-list-body`, the current, asking and
+    failed blocks tinted; `stage-list`, a pipeline across from a 768 px region, with `stage-list-actions`.
+  - Stat tiles as links (`a.stat`, `aria-current`), with `stat-sub`, `stat-delta` (`data-trend`, `data-good`), a
+    progress or meter slot, `stat-meta`, `stat-emphasis`, and `aria-busy` drawing the number as a placeholder.
+  - Calendar days in a `data-state` (worked, open, pending, absent, off) with `calendar-legend`, drawn as lines in
+    forced colors; `button.calendar-day`.
+  - Charts: `chart-bar` (shares of a whole in one bar), `chart-rows` (breakdown rows) and `chart-values` (each
+    column's number above it).
+  - The charts' eight colours in the main tokens, for categories outside a chart: `dot-chart-1..8`,
+    `edge-top-chart-1..8`, `edge-start-chart-1..8`, `icon-tile-chart-1..8`; `icon-tile-lg`; `drawer-lg`, 38rem.
+- **Utilities:** `fs-11`, `fs-40`, `fs-48`, `text-pre-wrap`, `tracking-wide`, `line-clamp-2`, `line-clamp-3`,
+  `w-56..160`, `h-32/40/72`, `size-32..80`, `min-w-56..288`, `max-w-360`, `max-w-560` and `ratio-1.91x1`.
 - An empty `.alert` takes no room and stays in the accessibility tree: a page keeps its `role="alert"` on the page
   from the start and fills it, so a screen reader says the words. VoiceOver on macOS 15 could miss an alert shown from
   `hidden` at the moment it was filled. The PIN pad's docs fill their alert in place.
 
 ### Changed
 - The budgets: the stylesheet at most 32 KB, the script 30 KB, gzipped (the owner, for the ERP's list #42-#93).
+- `busy()` and `data-cooldown` share a button's `aria-disabled`: neither wakes the other's wait, and the state from
+  before both comes back when the last ends.
+- A table's head sticks to the top of a `dialog-body` or a `card-scroll` card's body.
+- `page-center` lays its column out as a grid, so a child that is a `vstack` or an `hstack` stays centered.
+
+### Fixed
+- `form-adorn` gives a select the start room it gives a field: its value no longer sits under the icon.
+- Row headers (`th` in `tbody`) took the head's sticky offset.
+- `data-cooldown="0"` during a count froze it.
+- A flush list of `list-group-item-action` rows keeps the rows' room, so a hover's tint and the current row's bar no
+  longer sit on the words (#94).
 
 ### Checks
 - CI checks each part where it stands: a part - an engine, or the floor's three - that passed on a commit stays passed

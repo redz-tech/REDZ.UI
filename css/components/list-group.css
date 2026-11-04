@@ -87,6 +87,11 @@
 		padding-inline: 0;
 	}
 
+	/* A flush list of actions keeps its rows' room, so a hover's tint and the current row's bar stand off the words. */
+	.list-group-flush:has(> .list-group-item-action) > .list-group-item {
+		padding-inline: var(--redz-space-12);
+	}
+
 	.list-group-numbered {
 		counter-reset: list-group;
 	}

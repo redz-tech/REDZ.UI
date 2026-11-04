@@ -36,7 +36,7 @@ A column of items in one frame - plain rows, or links and buttons to choose from
 
 ### Flush, numbered, with counts
 
-`list-group-flush` drops the frame, for a list inside a card; `list-group-numbered` on an `<ol>` numbers the items.
+`list-group-flush` drops the frame, for a list inside a card: its rows' words line up with the card's. A flush list of `list-group-item-action` rows keeps the rows' room, so a hover's tint and the current row's bar stand off the words - as in [a card that scrolls](card.md#card-scrolling). `list-group-numbered` on an `<ol>` numbers the items.
 
 ```html
 <div class="card">

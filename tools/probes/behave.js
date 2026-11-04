@@ -1099,6 +1099,14 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a share of ' + cell.dataset.v + ' in a bar ' + Math.round(track) + ' px long is ' + Math.round(cell.getBoundingClientRect().width) + ' px');
 			}
 		}]},
+		flush: {target: '#card-scrolling .list-group-flush', steps: [async (out) => {
+			const current = $('#card-scrolling [aria-current="true"]');
+			const plain = $('#list-group-flush .list-group-item');
+			const start = (el) => parseFloat(getComputedStyle(el).paddingInlineStart);
+			if (start(current) < 8 || start(plain) !== 0) {
+				out.push('a flush list\'s current action row starts its words ' + start(current) + ' px in, a plain flush row ' + start(plain) + ' px');
+			}
+		}]},
 		floating: {target: '#input-group-floating .input-group', steps: [async (out) => {
 			for (const group of $$('#input-group-floating .input-group')) {
 				const floating = $(':scope > .form-floating', group);
