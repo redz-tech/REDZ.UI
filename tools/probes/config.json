@@ -86,7 +86,16 @@
 		"docs/collapse.html": [
 			{"label": "the disclosure's button", "do": "focus", "target": "#collapse-help button", "expect": ["How prices work", "collapsed"]},
 			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["expanded"]},
-			{"label": "an open region's button", "do": "focus", "target": "#collapse-open button", "expect": ["More filters", "expanded"]}
+			{"label": "an open region's button", "do": "focus", "target": "#collapse-open button", "expect": ["More filters", "expanded"]},
+			{"label": "a button whose words follow its state", "do": "focus", "target": "#collapse-chevron button", "expect": ["Show the route", "collapsed"]}
+		],
+		"docs/repeat.html": [
+			{"label": "Add", "do": "focus", "target": "#repeat-phones [command=\"--add\"]", "expect": ["Add a phone"]},
+			{"label": "Enter on it: the new row's field", "do": "key", "key": "Enter", "expect": ["Another phone"]}
+		],
+		"docs/status.html": [
+			{"label": "Save", "do": "focus", "target": "#status-save [data-docs-run=\"status-save\"]", "expect": ["Save"]},
+			{"label": "Enter on it: the line says it saves", "do": "key", "key": "Enter", "expect": ["Saving"]}
 		],
 		"docs/tooltip.html": [
 			{"label": "the tooltip's button, described by its tooltip", "do": "focus", "target": "#tooltip-why button", "expect": ["What is a partner license", "A partner can hide the brand"]},
@@ -171,7 +180,9 @@
 		"docs/list-group.html": [
 			{"label": "an item's handle", "do": "focus", "target": "[aria-label=\"Move: The pier\"]", "expect": ["Move: The pier"]},
 			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["Move down"], "unsteady": {"voiceover": "VoiceOver 15 says the first move of the menu, or only the menu's hint after it, run by run (measured 2026-11-03)."}},
-			{"label": "Enter on “Move down”", "do": "key", "key": "Enter", "expect": ["Moved to 2 of 3"]}
+			{"label": "Enter on “Move down”", "do": "key", "key": "Enter", "expect": ["Moved to 2 of 3"]},
+			{"label": "a search over a list", "do": "focus", "target": "[data-filter=\"list-group-search-list\"]", "expect": ["Find an excursion"]},
+			{"label": "a word typed: the count said", "do": "type", "text": "koh", "expect": ["1 result"]}
 		],
 		"docs/upload.html": [
 			{"label": "the zone", "do": "focus", "target": "#upload-photos .upload-zone", "expect": ["Drop photos here, or choose them", "JPEG, PNG or PDF, up to 2 MB each"]},

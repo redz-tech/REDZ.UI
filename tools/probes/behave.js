@@ -818,6 +818,203 @@ window.REDZ_BEHAVE = (() => {
 				out.push('the window\'s bar: a quick request shows it (' + quick + '), two at once show ' + say(running) + ', and after them it is ' + (open() ? 'still open' : 'gone'));
 			}
 		}]},
+		status: {target: '#status-save-line', steps: [async (out) => {
+			const line = $('#status-save-line');
+			const region = $(':scope > [role="status"]', line);
+			if (region === null) {
+				out.push('a status line holds no polite status from the load');
+			}
+			const words = () => line.textContent.trim();
+			const kept = REDZ.ui.status(line, wait(700));
+			await wait(150);
+			const early = words();
+			await wait(400);
+			const pending = [line.dataset.tone, words(), $('.spinner-border', line) !== null];
+			await kept;
+			await wait(50);
+			const saved = [line.dataset.tone, words(), $('.bi', line)?.classList.contains('bi-check-circle') ?? false];
+			if (early !== '' || pending[0] !== 'pending' || pending[1] === '' || !pending[2] || saved[0] !== 'success' || saved[1] === '' || !saved[2]) {
+				out.push('a save: ' + say(early) + ' at 150 ms, ' + say(pending) + ' at 550 ms, ' + say(saved) + ' when kept');
+			}
+			REDZ.ui.status(line, Promise.reject(new Error('The name is taken.'))).catch(() => {});
+			await wait(50);
+			if (line.dataset.tone !== 'danger' || words() !== 'The name is taken.') {
+				out.push('a refused save shows ' + say([line.dataset.tone, words()]));
+			}
+			REDZ.ui.status(line, {tone: 'warning', text: 'Rebuilding'});
+			await wait(20);
+			if (line.dataset.tone !== 'warning' || words() !== 'Rebuilding' || $(':scope > [role="status"]', line) !== region) {
+				out.push('words of the page show ' + say([line.dataset.tone, words()]) + ', or in another status');
+			}
+		}]},
+		repeat: {target: '#repeat-phones-list', steps: [async (out) => {
+			const list = $('#repeat-phones-list');
+			const add = $('[command="--add"][aria-controls="repeat-phones-list"]');
+			const rows = () => $$(':scope > li', list);
+			const off = (button) => button.getAttribute('aria-disabled') === 'true';
+			if (rows().length !== 1 || !off($('[command="--remove"]', list)) || off(add)) {
+				out.push('at rest with data-min 1: ' + rows().length + ' rows, the only Remove ' + (off($('[command="--remove"]', list)) ? 'off' : 'on') + ', Add ' + (off(add) ? 'off' : 'on'));
+			}
+			add.click();
+			const made = rows()[1];
+			const field = made && $('input', made);
+			if (!field || field.id !== 'repeat-phones-1' || field.name !== 'phones[1]' || $('label', made).htmlFor !== 'repeat-phones-1' || document.activeElement !== field || off($('[command="--remove"]', list))) {
+				out.push('Add makes ' + say(field ? [field.id, field.name, $('label', made).htmlFor] : 'no row') + ', the focus ' + (document.activeElement === field ? 'in' : 'out of') + ' it');
+			}
+			add.click();
+			add.click();
+			if (rows().length !== 4 || !off(add)) {
+				out.push('at data-max 4 there are ' + rows().length + ' rows, Add ' + (off(add) ? 'off' : 'on'));
+			}
+			const third = $('input', rows()[2]);
+			$('[command="--remove"]', rows()[1]).click();
+			if (rows().length !== 3 || document.activeElement !== third || off(add)) {
+				out.push('Remove on the second row leaves ' + rows().length + ' rows, the focus ' + (document.activeElement === third ? 'on the next row' : 'elsewhere') + ', Add ' + (off(add) ? 'off' : 'on'));
+			}
+			list.addEventListener('redz:add', (event) => event.preventDefault(), {once: true});
+			add.click();
+			const cancelled = rows().length;
+			add.click();
+			const latest = $('input', rows().at(-1))?.id;
+			if (cancelled !== 3 || latest !== 'repeat-phones-4') {
+				out.push('a cancelled redz:add leaves ' + cancelled + ' rows, and the next row is ' + say(latest) + ', not a new index');
+			}
+		}]},
+		filter: {target: '#list-group-search-list', steps: [async (out) => {
+			const field = $('[data-filter="list-group-search-list"]');
+			const list = $('#list-group-search-list');
+			const shown = () => $$('.list-group-item:not([data-filter-empty])', list).filter((item) => getComputedStyle(item).display !== 'none').map((item) => item.textContent.trim());
+			const empty = $('[data-filter-empty]', list);
+			input(field, 'KÓH tao');
+			const one = shown();
+			input(field, 'chang');
+			const search = shown();
+			input(field, 'zzz');
+			const none = [shown().length, empty.hidden];
+			await wait(700);
+			const told = $$('[role="status"]').some((status) => /\d/.test(status.textContent));
+			field.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true}));
+			if (say(one) !== say(['Koh Tao and Koh Nang Yuan']) || say(search) !== say(['Elephant sanctuary']) || none[0] !== 0 || none[1] !== false || !told || field.value !== '' || shown().length !== 4 || !empty.hidden) {
+				out.push('a search shows ' + say(one) + ' for "KÓH tao", ' + say(search) + ' for a data-search word, ' + say(none) + ' for none (shown, the empty state hidden), the count ' + (told ? '' : 'not ') + 'said, then Escape leaves ' + say(field.value) + ' and ' + shown().length + ' items');
+			}
+			const tree = $('[data-filter="tree-current-list"]');
+			input(tree, 'night');
+			const pages = $$('#tree-current-list .tree-item').map((item) => (item.hasAttribute('data-filtered') ? '-' : '+') + $(':scope > .tree-row > a', item).textContent);
+			input(tree, '');
+			if (say(pages) !== say(['+Excursions', '-Ang Thong by speedboat', '+Night market and street food'])) {
+				out.push('a tree searched for "night" keeps ' + say(pages) + ', not the parent of the match');
+			}
+		}]},
+		tap: {target: '#tooltip-title [aria-disabled="true"][title]', steps: [async (out) => {
+			const button = $('#tooltip-title [aria-disabled="true"][title]');
+			const title = button.getAttribute('title');
+			button.dispatchEvent(new PointerEvent('pointerdown', {bubbles: true, pointerType: 'touch'}));
+			button.dispatchEvent(new PointerEvent('pointerup', {bubbles: true, pointerType: 'touch'}));
+			button.dispatchEvent(new PointerEvent('pointerout', {bubbles: true, pointerType: 'touch'}));
+			await wait(200);
+			const tip = $('#redz-tooltip');
+			const open = tip?.matches(':popover-open') && tip.textContent === title;
+			const said = $$('[role="status"]').some((status) => status.textContent === title);
+			await wait(3000);
+			if (!open || !said || tip.matches(':popover-open')) {
+				out.push('a tap on a disabled control ' + (open ? 'shows' : 'does not show') + ' its title, ' + (said ? 'says' : 'does not say') + ' it, and ' + (tip?.matches(':popover-open') ? 'keeps it past' : 'hides it after') + ' three seconds');
+			}
+		}]},
+		hold: {target: '#busy-button', steps: [async (out) => {
+			const button = Object.assign(document.createElement('button'), {className: 'btn', type: 'button', textContent: 'Resend the code'});
+			$('#busy-button').append(button);
+			const off = () => button.getAttribute('aria-disabled');
+			const waited = REDZ.ui.busy(button, wait(300));
+			button.dataset.cooldown = '1';
+			await waited;
+			await wait(50);
+			const busyEnded = off();
+			await wait(1100);
+			const countEnded = off();
+			button.dataset.cooldown = '1';
+			await wait(50);
+			const second = REDZ.ui.busy(button, wait(1500));
+			await wait(1200);
+			const busyLeft = off();
+			await second;
+			await wait(50);
+			button.remove();
+			if (busyEnded !== 'true' || countEnded !== null || busyLeft !== 'true' || off() !== null) {
+				out.push('busy() and a cooldown on one button leave aria-disabled ' + say([busyEnded, countEnded, busyLeft, off()]) + ' - the wait ended, the count ended, the count ended under a wait, both ended');
+			}
+		}]},
+		rowLink: {target: '#table-links .stretched-link', steps: [async (out) => {
+			const row = $('#table-links tbody tr');
+			const link = $('.stretched-link', row);
+			let followed = 0;
+			const opened = [];
+			const real = window.open;
+			window.open = (url) => {
+				opened.push(url);
+				return null;
+			};
+			link.addEventListener('click', (event) => {
+				event.preventDefault();
+				followed++;
+			});
+			const cell = row.cells[1];
+			cell.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, button: 0}));
+			$('.table-actions button', row).dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, button: 0}));
+			cell.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, button: 0, ctrlKey: true}));
+			cell.dispatchEvent(new MouseEvent('auxclick', {bubbles: true, cancelable: true, button: 1}));
+			window.open = real;
+			if (followed !== 1 || opened.length !== 2 || opened.some((url) => url !== link.href)) {
+				out.push('a click on the row follows its title ' + followed + ' times (a click on its action button among them, or not), and Ctrl and the middle button open ' + say(opened));
+			}
+		}]},
+		confirmRows: {target: '#summary-confirm', steps: [async (out) => {
+			const asked = REDZ.ui.confirm({title: 'Pay?', rows: [{label: 'To pay', value: 5850}, {label: 'Note', value: '<b>now</b>'}]});
+			await wait(150);
+			const dialog = $('dialog[open]');
+			const pairs = $$('.dialog-body > dl.summary > *', dialog).map((part) => part.localName + ':' + part.textContent).join(' ');
+			$('button[value="cancel"]', dialog).click();
+			await asked;
+			if (pairs !== 'dt:To pay dd:5850 dt:Note dd:<b>now</b>') {
+				out.push('a confirmation with rows shows ' + say(pairs));
+			}
+		}]},
+		chevron: {target: '#collapse-chevron button', steps: [async (out) => {
+			const button = $('#collapse-chevron button');
+			const chevron = $('.toggle-chevron', button);
+			const state = async () => {
+				await Promise.all(chevron.getAnimations().map((animation) => animation.finished));
+				const shown = (selector) => getComputedStyle($(selector, button)).display === 'none' ? 'hidden' : 'shown';
+				return [button.getAttribute('aria-expanded'), getComputedStyle(chevron).rotate, shown('.toggle-open'), shown('.toggle-closed')].join(' ');
+			};
+			const closed = await state();
+			button.click();
+			const open = await state();
+			button.click();
+			if (closed !== 'false none hidden shown' || open !== 'true 180deg shown hidden') {
+				out.push('a toggle\'s chevron and words read ' + say(closed) + ' closed and ' + say(open) + ' open');
+			}
+		}]},
+		scroller: {target: '#table-wide .table-scroll', steps: [async (out) => {
+			const box = $('#table-wide .table-scroll');
+			const first = $('tbody th', box);
+			const head = $('thead th:nth-child(2)', box);
+			box.style.inlineSize = '20rem';
+			box.scrollLeft = box.scrollWidth;
+			await wait(50);
+			const left = Math.round(first.getBoundingClientRect().left - box.getBoundingClientRect().left);
+			box.scrollLeft = 0;
+			const wide = box.scrollWidth > box.clientWidth;
+			box.style.removeProperty('inline-size');
+			const single = CSS.supports('named-feature(single-axis-scroll-container)');
+			const top = getComputedStyle(head).insetBlockStart;
+			if (!wide || left !== 0 || top !== (single ? '52px' : '0px') || getComputedStyle($('tbody td', box)).position !== 'relative') {
+				out.push('a wide table scrolls ' + (wide ? '' : 'not ') + 'sideways, its first column ' + left + ' px from the start when scrolled, its head sticks at ' + top + (single ? ' on one axis' : ''));
+			}
+			const grouped = [...$$('#table-grouped tbody th')].map((th) => getComputedStyle(th).position);
+			if (grouped.some((position) => position === 'sticky')) {
+				out.push('a group band or a row header sticks: ' + say(grouped));
+			}
+		}]},
 		floating: {target: '#input-group-floating .input-group', steps: [async (out) => {
 			for (const group of $$('#input-group-floating .input-group')) {
 				const floating = $(':scope > .form-floating', group);

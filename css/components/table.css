@@ -26,15 +26,101 @@
 		vertical-align: middle;
 	}
 
-	.table > :last-child > tr:last-child > td {
+	.table > tbody > tr > th {
+		position: relative;
+		inset-block-start: auto;
+		z-index: auto;
+		padding-block: var(--redz-row-pad);
+		background: none;
+		color: var(--redz-text);
+		font-size: inherit;
+		white-space: normal;
+	}
+
+	/* In a region that scrolls on its own the head sticks to its top. */
+	:is(.dialog-body, .card-scroll > .card-body) .table > thead th {
+		inset-block-start: 0;
+	}
+
+	.table-scroll {
+		overflow: auto clip;
+	}
+
+	/* A sideways scroller that cannot scroll down holds its head in place; where one axis can scroll alone, the head sticks to the page. */
+	.table-scroll .table > thead th {
+		inset-block-start: 0;
+	}
+
+	@supports named-feature(single-axis-scroll-container) {
+		.table-scroll .table > thead th {
+			inset-block-start: 3.25rem;
+		}
+	}
+
+	.table-scroll-first > .table > * > tr > :first-child {
+		position: sticky;
+		inset-inline-start: 0;
+		z-index: 1;
+		border-inline-end: 1px solid var(--redz-border);
+	}
+
+	:where(.table-scroll-first > .table > * > tr) > :first-child,
+	.table-scroll-first > .table > tbody > tr > th:first-child {
+		background-color: var(--redz-bg);
+	}
+
+	.table-scroll-first > .table > thead > tr > :first-child {
+		z-index: 2;
+	}
+
+	.table > tbody > .table-group > th {
+		position: static;
+		padding-block: var(--redz-space-8);
+		background: var(--redz-bg-page);
+		color: var(--redz-text);
+		font-size: var(--redz-fs-12);
+		font-weight: 600;
+		white-space: normal;
+	}
+
+	.table-group-end {
+		float: inline-end;
+		color: var(--redz-text-muted);
+		font-weight: 400;
+	}
+
+	.table > * > .table-subtotal > :is(td, th) {
+		border-block-start: 1px solid var(--redz-border-strong);
+		color: var(--redz-text);
+		font-weight: 600;
+	}
+
+	.table > * > tr:has(+ .table-subtotal) > :is(td, th) {
 		border-block-end: 0;
 	}
 
-	.table > :last-child > tr:last-child > td:first-child {
+	.table tr:has(.stretched-link) {
+		cursor: pointer;
+	}
+
+	.table tr:has(.stretched-link):is(:hover, :focus-within) > td {
+		background: color-mix(in oklch, var(--redz-bg-hover) 60%, var(--redz-bg));
+	}
+
+	.table td:has(> .stretched-link) :is(a, button, input, select, label):not(.stretched-link) {
+		position: relative;
+		z-index: 2;
+	}
+
+	.table > :last-child > tr:last-child > :is(td, th) {
+		border-block-end: 0;
+	}
+
+	.table > :last-child > tr:last-child > :is(td, th):first-child {
 		border-end-start-radius: var(--redz-radius-12);
 	}
 
-	.table > :last-child > tr:last-child > td:last-child {
+	.table > :last-child > tr:last-child > :is(td, th):last-child {
 		border-end-end-radius: var(--redz-radius-12);
 	}
 
@@ -135,6 +221,10 @@
 		cursor: pointer;
 	}
 
+	a.table-sort {
+		text-decoration: none;
+	}
+
 	.table-sort:hover {
 		color: var(--redz-text);
 	}
@@ -182,13 +272,26 @@
 		--redz-row-mark: var(--redz-warning);
 	}
 
+	.table-active,
+	.table tr[aria-current]:not([aria-current="false"]) {
+		--redz-row-tint: var(--redz-primary-subtle);
+		--redz-row-mark: var(--redz-primary);
+	}
+
 	.table-danger td,
-	.table-warning td {
+	.table-warning td,
+	.table-active td {
 		background: color-mix(in oklch, var(--redz-row-tint) 55%, var(--redz-bg));
 	}
 
+	.table tr[aria-selected="true"] > td {
+		background: color-mix(in oklch, var(--redz-primary) 10%, var(--redz-bg));
+	}
+
 	.table-danger td:first-child::before,
-	.table-warning td:first-child::before {
+	.table-warning td:first-child::before,
+	.table-active td:first-child::before,
+	.table tr[aria-current]:not([aria-current="false"]) > td:first-child::before {
 		content: "";
 		position: absolute;
 		inset-block-start: 50%;
@@ -242,9 +345,17 @@
 
 	@media (forced-colors: active) {
 		.table-danger td:first-child::before,
-		.table-warning td:first-child::before {
+		.table-warning td:first-child::before,
+		.table-active td:first-child::before,
+		.table tr[aria-current]:not([aria-current="false"]) > td:first-child::before {
 			forced-color-adjust: none;
 			background: CanvasText;
+		}
+
+		.table tr[aria-selected="true"] > td {
+			forced-color-adjust: none;
+			background: Highlight;
+			color: HighlightText;
 		}
 	}
 }

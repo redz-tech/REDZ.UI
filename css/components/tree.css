@@ -23,6 +23,41 @@
 		padding-inline-start: var(--redz-control-height-sm);
 	}
 
+	.tree-row:has(> a[aria-current]:not([aria-current="false"])) {
+		border-radius: var(--redz-radius-6);
+		background: var(--redz-primary-subtle);
+	}
+
+	.tree-row > a[aria-current]:not([aria-current="false"]) {
+		color: var(--redz-text);
+		font-weight: 600;
+	}
+
+	.tree-row > .check {
+		flex: none;
+	}
+
+	.tree-actions {
+		display: flex;
+		flex: none;
+		align-items: center;
+		gap: var(--redz-space-4);
+		margin-inline-start: auto;
+	}
+
+	@media (hover: hover) {
+		.tree-row:not(:hover, :focus-within) > .tree-actions {
+			opacity: 0;
+		}
+	}
+
+	@media (forced-colors: active) {
+		.tree-row:has(> a[aria-current]:not([aria-current="false"])) {
+			outline: 2px solid CanvasText;
+			outline-offset: -2px;
+		}
+	}
+
 	.tree-toggle > .bi:dir(rtl) {
 		scale: -1 1;
 	}

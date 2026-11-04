@@ -2,16 +2,17 @@
 // button answer false, and the focus starts on cancel, the safe choice; the words come from the caller or, for the
 // buttons and the field, from the page's texts; the dialog is removed when it closes, and the focus goes back where it
 // was. With a phrase the person types it first: the confirming button waits for it, the focus starts in its field, and
-// Enter there confirms once it matches. A note in a tone and sections - a title over a list, such as what goes and
-// what stays - come between the text and the phrase; every word is text, never HTML.
+// Enter there confirms once it matches. A note in a tone, rows of a summary - a label and its value, such as what a
+// payment is - and sections - a title over a list, such as what goes and what stays - come between the text and the
+// phrase; every word is text, never HTML.
 import {text} from './text.js';
 
 const ICONS = {info: 'info-circle', success: 'check-circle', warning: 'exclamation-triangle', danger: 'x-octagon'};
 
 let made = 0;
 
-/** Asks: {title, text, note: {tone, text}, sections: [{title, items}], ok, cancel, tone, phrase} - tone danger paints the confirming button red; a promise of true. */
-export const confirm = ({title = '', text: detail = '', note = null, sections = [], ok = '', cancel = '', tone = 'primary', phrase = ''} = {}) => new Promise((answer) => {
+/** Asks: {title, text, note: {tone, text}, rows: [{label, value}], sections: [{title, items}], ok, cancel, tone, phrase} - tone danger paints the confirming button red; a promise of true. */
+export const confirm = ({title = '', text: detail = '', note = null, rows = [], sections = [], ok = '', cancel = '', tone = 'primary', phrase = ''} = {}) => new Promise((answer) => {
 	const id = 'redz-confirm-' + ++made;
 	const dialog = document.createElement('dialog');
 	dialog.className = 'dialog dialog-sm';
@@ -33,6 +34,13 @@ export const confirm = ({title = '', text: detail = '', note = null, sections = 
 		box.append(icon, Object.assign(document.createElement('div'), {textContent: note.text}));
 		body.append(box);
 		described.push(id + '-note');
+	}
+	if (rows.length > 0) {
+		const summary = Object.assign(document.createElement('dl'), {className: 'summary'});
+		for (const row of rows) {
+			summary.append(Object.assign(document.createElement('dt'), {textContent: row.label ?? ''}), Object.assign(document.createElement('dd'), {textContent: row.value ?? ''}));
+		}
+		body.append(summary);
 	}
 	for (const section of sections) {
 		const part = Object.assign(document.createElement('div'), {className: 'vstack gap-4'});

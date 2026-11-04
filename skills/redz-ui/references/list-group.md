@@ -50,6 +50,20 @@ A column of items in one frame - plain rows, or links and buttons to choose from
 </div>
 ```
 
+### Headings
+
+`list-group-header` on an item that is not one: a small heading over the items that follow it, in capitals, on the page's own background.
+
+```html
+<ul class="list-group">
+	<li class="list-group-header list-group-item">Today</li>
+	<li class="list-group-item">Ang Thong Marine Park</li>
+	<li class="list-group-item">Night market and street food</li>
+	<li class="list-group-header list-group-item">Tomorrow</li>
+	<li class="list-group-item">Koh Tao and Koh Nang Yuan</li>
+</ul>
+```
+
 ### Side by side
 
 `list-group-horizontal` sets the items in a row; with a width prefix, from that width of the region on: `md:list-group-horizontal`.
@@ -71,6 +85,21 @@ A column of items in one frame - plain rows, or links and buttons to choose from
 	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" checked>angthong.example</label>
 	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox">kohtao.example</label>
 </div>
+```
+
+### Filtered by a search
+
+A search field with `data-filter` naming a region hides, as the person types, the region's items whose words lack one of the typed words - case and accents aside: list items, items with a `data-value`, [media tiles](media.md), [tree items](tree.md) and table rows; an item's `data-search` stands in for its text. A tree keeps the ancestors of a match and opens their groups. An element with `data-filter-empty` in the region shows when nothing matches. The count is said once the typing pauses, in the page's count text `found`; `Esc` in the field clears it. A hidden item carries `data-filtered`.
+
+```html
+<input class="form-control" type="search" data-filter="list-group-search-list" aria-label="Find an excursion" placeholder="Find an excursion" autocomplete="off">
+<ul class="list-group" id="list-group-search-list">
+	<li class="list-group-item">Ang Thong Marine Park</li>
+	<li class="list-group-item">Koh Tao and Koh Nang Yuan</li>
+	<li class="list-group-item">The Five Islands by kayak</li>
+	<li class="list-group-item" data-search="elephant sanctuary chang">Elephant sanctuary</li>
+	<li class="list-group-item text-muted" data-filter-empty hidden>No excursion has these words.</li>
+</ul>
 ```
 
 ### Reordering
@@ -142,7 +171,7 @@ document.addEventListener('redz:move', (event) => {
 
 From [`css/components/list-group.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/list-group.css). It declares `--redz-list-group-row`, `--redz-list-group-column` on its root, never on rows or items.
 
-It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-space-12`, `--redz-space-16`, `--redz-text`, `--redz-bg-hover`, `--redz-primary-subtle`, `--redz-primary`, `--redz-text-faint`, `--redz-text-muted`.
+It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-space-12`, `--redz-space-16`, `--redz-text`, `--redz-space-8`, `--redz-bg-page`, `--redz-text-muted`, `--redz-fs-12`, `--redz-bg-hover`, `--redz-primary-subtle`, `--redz-primary`, `--redz-text-faint`.
 
 ## From Bootstrap 5.3
 

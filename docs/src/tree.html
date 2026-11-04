@@ -93,6 +93,37 @@
 			<button class="menu-item" type="button" role="menuitem" data-move="out"><i class="bi bi-arrow-bar-left flip-rtl" aria-hidden="true"></i>Move out</button>
 		</div>
 	</div>
+
+	<h3 id="tree-rows">The current page, actions and checks</h3>
+	<p>A row whose link has <code>aria-current</code> - the page open now - is tinted and its link bold. <code>tree-actions</code> at the end of a row holds its buttons: quiet until the row is hovered or holds the focus on a pointer screen, always shown on a touch screen. A <code>check</code> in a row posts by its own name, for a batch over the chosen pages. A search with <a href="list-group.html#list-group-filter"><code>data-filter</code></a> keeps the parents of a match.</p>
+	<div class="docs-example docs-example-stack" id="tree-current">
+		<input class="form-control" type="search" data-filter="tree-current-list" aria-label="Find a page" placeholder="Find a page" autocomplete="off">
+		<ul class="tree" id="tree-current-list" aria-label="Pages to publish">
+			<li class="tree-item">
+				<div class="tree-row">
+					<input class="check" type="checkbox" name="pages[]" value="excursions" aria-label="Choose: Excursions">
+					<a href="#tree-current">Excursions</a>
+					<span class="tree-actions"><button class="btn btn-xs btn-icon btn-text" type="button" aria-label="Add a page under Excursions"><i class="bi bi-plus-lg" aria-hidden="true"></i></button></span>
+				</div>
+				<ul class="tree-group">
+					<li class="tree-item">
+						<div class="tree-row">
+							<input class="check" type="checkbox" name="pages[]" value="ang-thong" aria-label="Choose: Ang Thong by speedboat" checked>
+							<a href="#tree-current" aria-current="page">Ang Thong by speedboat</a>
+							<span class="tree-actions"><button class="btn btn-xs btn-icon btn-text" type="button" aria-label="Add a page under Ang Thong by speedboat"><i class="bi bi-plus-lg" aria-hidden="true"></i></button></span>
+						</div>
+					</li>
+					<li class="tree-item">
+						<div class="tree-row">
+							<input class="check" type="checkbox" name="pages[]" value="night-market" aria-label="Choose: Night market and street food">
+							<a href="#tree-current">Night market and street food</a>
+							<span class="tree-actions"><button class="btn btn-xs btn-icon btn-text" type="button" aria-label="Add a page under Night market and street food"><i class="bi bi-plus-lg" aria-hidden="true"></i></button></span>
+						</div>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
 </section>
 
 <section class="vstack gap-12" aria-labelledby="tree-access">

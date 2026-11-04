@@ -27,6 +27,20 @@
 		border-width: 0;
 	}
 
+	.list-group-header {
+		padding-block: var(--redz-space-8);
+		background: var(--redz-bg-page);
+		color: var(--redz-text-muted);
+		font-size: var(--redz-fs-12);
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+	}
+
+	.list-group-flush > .list-group-header {
+		background: none;
+	}
+
 	.list-group-item-action {
 		inline-size: 100%;
 		background: none;

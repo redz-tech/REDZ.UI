@@ -28,6 +28,17 @@
 		</div>
 	</div>
 
+	<h3 id="collapse-words">A chevron and words that follow</h3>
+	<p>Inside a button with <code>aria-expanded</code>, an icon <code>toggle-chevron</code> turns over while the region is open, <code>toggle-open</code> shows only then and <code>toggle-closed</code> only while it is closed - by CSS alone, from the state the button already says.</p>
+	<div class="docs-example docs-example-stack" id="collapse-chevron">
+		<div class="hstack gap-8">
+			<button class="btn btn-sm" type="button" command="--toggle" aria-controls="collapse-chevron-text" aria-expanded="false"><span class="toggle-closed">Show the route</span><span class="toggle-open">Hide the route</span><i class="bi bi-chevron-down toggle-chevron" aria-hidden="true"></i></button>
+		</div>
+		<div id="collapse-chevron-text" hidden="until-found">
+			<p class="text-muted">The pier at 08:30, the emerald lake at 11:00, lunch on Koh Mae Ko, back by 17:00.</p>
+		</div>
+	</div>
+
 	<h3>A details row in a table</h3>
 	<p>A row under a row opens and closes the same way: the region is a <code>&lt;tr&gt;</code> with one cell across the table. A table's row cannot be hidden "until found", so it starts as plain <code>hidden</code> and closes so again; find in page does not open it.</p>
 	<div class="docs-example docs-example-stack" id="collapse-row">

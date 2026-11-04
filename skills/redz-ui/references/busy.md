@@ -31,6 +31,8 @@ The button keeps its focus, ignores clicks until the promise settles and shows a
 <button class="btn btn-primary" type="button" data-busy="Signing in…" data-docs-run="busy-button"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Sign in for 2 seconds</button>
 ```
 
+A button that starts a [cooldown](btn.md#btn-cooldown) while it waits - "Send the code again" with `data-cooldown` set as the code goes - stays disabled until the count ends: the cooldown holds `aria-disabled` while it counts, `busy()` leaves it alone, and the state from before both comes back when the last of them ends.
+
 ## States
 
 What `busy()` sets, written by hand - the overlay appears 400 ms after the page draws it.

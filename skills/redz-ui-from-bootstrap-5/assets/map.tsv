@@ -1900,7 +1900,7 @@ stretched-link	stretched-link	same	class	utilities	a card is its own positioned 
 tab-content		remove	class	nav	panels are siblings with role="tabpanel", hidden when not selected
 tab-pane		remove	class	nav	panels are siblings with role="tabpanel", hidden when not selected
 table	table	same	class	table	
-table-active		review	class	table	aria-selected or aria-current on the row
+table-active	table-active	same	class	table	the row that runs now; aria-current marks the open record, aria-selected="true" a chosen one
 table-bordered	table-bordered	same	class	table	in a card the card's border is the table's frame
 table-borderless	table-borderless	same	class	table	
 table-danger	table-danger	same	class	table	
@@ -1910,12 +1910,12 @@ table-hover	table-hover	same	class	table
 table-info		review	class	table	row tones are danger, warning and secondary
 table-light		review	class	table	row tones are danger, warning and secondary
 table-primary		review	class	table	row tones are danger, warning and secondary
-table-responsive		review	class	table	the card's body holds the table; columns hide below md:
-table-responsive-lg		review	class	table	the card's body holds the table; columns hide below md:
-table-responsive-md		review	class	table	the card's body holds the table; columns hide below md:
-table-responsive-sm		review	class	table	the card's body holds the table; columns hide below md:
-table-responsive-xl		review	class	table	the card's body holds the table; columns hide below md:
-table-responsive-xxl		review	class	table	the card's body holds the table; columns hide below md:
+table-responsive	table-scroll	rename	class	table	the wrapper scrolls sideways, table-scroll-first holds the first column; or columns hide below md:
+table-responsive-lg	table-scroll	review	class	table	it scrolls sideways at every width; hide columns below md: instead where they only help on a wide screen
+table-responsive-md	table-scroll	review	class	table	it scrolls sideways at every width; hide columns below md: instead where they only help on a wide screen
+table-responsive-sm	table-scroll	review	class	table	it scrolls sideways at every width; hide columns below md: instead where they only help on a wide screen
+table-responsive-xl	table-scroll	review	class	table	it scrolls sideways at every width; hide columns below md: instead where they only help on a wide screen
+table-responsive-xxl	table-scroll	review	class	table	it scrolls sideways at every width; hide columns below md: instead where they only help on a wide screen
 table-secondary	table-secondary	same	class	table	
 table-sm		review	class	table	data-density="compact" on the table, its card or <html>
 table-striped	table-striped	same	class	table	

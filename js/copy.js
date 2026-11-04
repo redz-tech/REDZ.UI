@@ -3,7 +3,7 @@
 // place of its icon for a moment, and tells the page in redz:copy (detail.text). Where the Clipboard API is missing - a
 // page over plain http - a hidden field and the browser's copy command stand in. Like --toggle, it has no commandfor.
 import {text} from './text.js';
-import {say} from './say.js';
+import {announce} from './say.js';
 
 const shown = new WeakMap();
 
@@ -51,7 +51,7 @@ document.addEventListener('click', (event) => {
 	}
 	(navigator.clipboard?.writeText ? navigator.clipboard.writeText(words) : byField(words, button)).then(() => {
 		check(button);
-		say(text('copy.done'));
+		announce(text('copy.done'));
 		button.dispatchEvent(new CustomEvent('redz:copy', {bubbles: true, detail: {text: words}}));
-	}, () => say(text('copy.failed')));
+	}, () => announce(text('copy.failed')));
 });

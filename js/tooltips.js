@@ -3,7 +3,11 @@
 // hides when the pointer or the focus leaves, on Escape, on a scroll or a click. The pointer may rest on the tooltip
 // itself. While hovered, the title is held back so the browser does not show its own as well; an element whose only
 // name was its title is named by it meanwhile. The tooltip is hidden from screen readers: they say the title already.
+// A touch has no hover: a tap on a control that cannot run (aria-disabled) shows its title for three seconds and says it.
+import {announce} from './say.js';
+
 const DELAY = 400;
+const TAPPED = 3000;
 let tip = null;
 let shown = null;
 let pending = null;
@@ -112,8 +116,19 @@ document.addEventListener('pointerover', (event) => {
 	timer = setTimeout(() => show(owner), DELAY);
 });
 
+document.addEventListener('pointerup', (event) => {
+	const owner = event.pointerType === 'touch' ? ownerOf(event.target) : null;
+	if (owner === null || !owner.matches('[aria-disabled="true"]')) {
+		return;
+	}
+	hide();
+	show(owner);
+	announce(owner.getAttribute('title') ?? '');
+	timer = setTimeout(hide, TAPPED);
+});
+
 document.addEventListener('pointerout', (event) => {
-	const owner = ownerOf(event.target);
+	const owner = event.pointerType === 'touch' ? null : ownerOf(event.target);
 	const into = event.relatedTarget;
 	if (owner !== null && (owner === shown || owner === pending) && !owner.contains(into) && !(tip?.contains(into) ?? false)) {
 		hide();

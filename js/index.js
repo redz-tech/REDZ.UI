@@ -37,11 +37,15 @@ import './theme.js';
 import './share.js';
 import './time.js';
 import './viewer.js';
+import './repeat.js';
+import './filter.js';
+import './row-link.js';
 import {toast} from './toast.js';
 import {confirm} from './confirm.js';
 import {busy} from './busy.js';
 import {prompt} from './prompt.js';
 import {progress} from './progress.js';
 import {selectTab} from './tabs.js';
+import {status} from './status.js';
 
-globalThis.REDZ = Object.assign(globalThis.REDZ ?? {}, {ui: {...globalThis.REDZ?.ui, toast, confirm, busy, prompt, progress, select: selectTab}});
+globalThis.REDZ = Object.assign(globalThis.REDZ ?? {}, {ui: {...globalThis.REDZ?.ui, toast, confirm, busy, prompt, progress, select: selectTab, status}});

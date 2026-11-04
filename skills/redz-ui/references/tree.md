@@ -102,6 +102,39 @@ A tree with `data-reorder` moves its items as a list does - see [reordering](lis
 </div>
 ```
 
+### The current page, actions and checks
+
+A row whose link has `aria-current` - the page open now - is tinted and its link bold. `tree-actions` at the end of a row holds its buttons: quiet until the row is hovered or holds the focus on a pointer screen, always shown on a touch screen. A `check` in a row posts by its own name, for a batch over the chosen pages. A search with [`data-filter`](list-group.md#list-group-filter) keeps the parents of a match.
+
+```html
+<input class="form-control" type="search" data-filter="tree-current-list" aria-label="Find a page" placeholder="Find a page" autocomplete="off">
+<ul class="tree" id="tree-current-list" aria-label="Pages to publish">
+	<li class="tree-item">
+		<div class="tree-row">
+			<input class="check" type="checkbox" name="pages[]" value="excursions" aria-label="Choose: Excursions">
+			<a href="#tree-current">Excursions</a>
+			<span class="tree-actions"><button class="btn btn-xs btn-icon btn-text" type="button" aria-label="Add a page under Excursions"><i class="bi bi-plus-lg" aria-hidden="true"></i></button></span>
+		</div>
+		<ul class="tree-group">
+			<li class="tree-item">
+				<div class="tree-row">
+					<input class="check" type="checkbox" name="pages[]" value="ang-thong" aria-label="Choose: Ang Thong by speedboat" checked>
+					<a href="#tree-current" aria-current="page">Ang Thong by speedboat</a>
+					<span class="tree-actions"><button class="btn btn-xs btn-icon btn-text" type="button" aria-label="Add a page under Ang Thong by speedboat"><i class="bi bi-plus-lg" aria-hidden="true"></i></button></span>
+				</div>
+			</li>
+			<li class="tree-item">
+				<div class="tree-row">
+					<input class="check" type="checkbox" name="pages[]" value="night-market" aria-label="Choose: Night market and street food">
+					<a href="#tree-current">Night market and street food</a>
+					<span class="tree-actions"><button class="btn btn-xs btn-icon btn-text" type="button" aria-label="Add a page under Night market and street food"><i class="bi bi-plus-lg" aria-hidden="true"></i></button></span>
+				</div>
+			</li>
+		</ul>
+	</li>
+</ul>
+```
+
 ## Keyboard and accessibility
 
 - The tree is a list of lists with buttons and links - the disclosure pattern: Tab goes from one control to the next, `Enter` or `Space` opens or closes a group, and the toggle says it in `aria-expanded`. It is not the ARIA tree widget, which the APG itself keeps for choosing, not for links.
@@ -112,4 +145,4 @@ A tree with `data-reorder` moves its items as a list does - see [reordering](lis
 
 From [`css/components/tree.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/tree.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-12`, `--redz-space-8`, `--redz-border`, `--redz-space-4`, `--redz-control-height`, `--redz-control-height-sm`, `--redz-motion`, `--redz-ease`.
+It reads the theme's `--redz-space-12`, `--redz-space-8`, `--redz-border`, `--redz-space-4`, `--redz-control-height`, `--redz-control-height-sm`, `--redz-radius-6`, `--redz-primary-subtle`, `--redz-text`, `--redz-motion`, `--redz-ease`.

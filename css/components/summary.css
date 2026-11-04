@@ -1,0 +1,67 @@
+@layer components {
+	.summary {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr);
+		gap: var(--redz-space-8) var(--redz-space-16);
+		margin: 0;
+	}
+
+	.summary > dt {
+		color: var(--redz-text-muted);
+		font-weight: 400;
+	}
+
+	.summary > dd {
+		margin: 0;
+		color: var(--redz-text);
+		overflow-wrap: anywhere;
+	}
+
+	@container region (width < 30rem) {
+		.summary {
+			grid-template-columns: minmax(0, 1fr);
+			row-gap: 0;
+		}
+
+		.summary > dd {
+			margin-block-end: var(--redz-space-8);
+		}
+	}
+
+	.totals {
+		display: flex;
+		flex-direction: column;
+		gap: var(--redz-space-4);
+		margin: 0;
+	}
+
+	.totals > div {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: var(--redz-space-16);
+	}
+
+	.totals dt {
+		color: var(--redz-text-muted);
+	}
+
+	.totals dd {
+		margin: 0;
+		color: var(--redz-text);
+		font-variant-numeric: tabular-nums;
+		text-align: end;
+	}
+
+	.totals > .totals-grand {
+		margin-block-start: var(--redz-space-4);
+		padding-block-start: var(--redz-space-8);
+		border-block-start: 1px solid var(--redz-border);
+		font-size: var(--redz-fs-16);
+		font-weight: 600;
+	}
+
+	.totals > .totals-grand dt {
+		color: var(--redz-text);
+	}
+}
