@@ -181,22 +181,32 @@ function PROBE__SafariChord(array &$h, string $combination): void
 	PROBE__SafariCall($h, 'POST', $h['session'] . '/actions', ['actions' => [['type' => 'key', 'id' => 'keyboard', 'actions' => $actions]]]);
 }
 
+/** How far safaridriver's viewport points sit from the page's: it counts from the window's edge, so a page right to
+ *  left, whose scrollbar WebKit draws on the left, moves every point by the scrollbar's width. */
+function PROBE__SafariShift(array &$h): int
+{
+	return (int)PROBE__SafariEval($h, 'getComputedStyle(document.documentElement).direction === "rtl" ? innerWidth - document.documentElement.clientWidth : 0');
+}
+
 /** Clicks the primary mouse button at the point of the viewport. */
 function PROBE__SafariClick(array &$h, int $x, int $y): void
 {
+	$x += PROBE__SafariShift($h);
 	PROBE__SafariCall($h, 'POST', $h['session'] . '/actions', ['actions' => [['type' => 'pointer', 'id' => 'mouse', 'parameters' => ['pointerType' => 'mouse'], 'actions' => [['type' => 'pointerMove', 'origin' => 'viewport', 'x' => $x, 'y' => $y], ['type' => 'pointerDown', 'button' => 0], ['type' => 'pointerUp', 'button' => 0]]]]]);
 }
 
 /** Drags the mouse from one point of the viewport to another with the left button held, in five moves. */
 function PROBE__SafariDrag(array &$h, int $x, int $y, int $toX, int $toY): void
 {
-	$moves = array_map(fn(float $t): array => ['type' => 'pointerMove', 'origin' => 'viewport', 'duration' => 40, 'x' => (int)round($x + ($toX - $x) * $t), 'y' => (int)round($y + ($toY - $y) * $t)], [0.1, 0.3, 0.6, 0.9, 1.0]);
-	PROBE__SafariCall($h, 'POST', $h['session'] . '/actions', ['actions' => [['type' => 'pointer', 'id' => 'mouse', 'parameters' => ['pointerType' => 'mouse'], 'actions' => [['type' => 'pointerMove', 'origin' => 'viewport', 'x' => $x, 'y' => $y], ['type' => 'pointerDown', 'button' => 0], ...$moves, ['type' => 'pointerUp', 'button' => 0]]]]]);
+	$shift = PROBE__SafariShift($h);
+	$moves = array_map(fn(float $t): array => ['type' => 'pointerMove', 'origin' => 'viewport', 'duration' => 40, 'x' => (int)round($x + ($toX - $x) * $t) + $shift, 'y' => (int)round($y + ($toY - $y) * $t)], [0.1, 0.3, 0.6, 0.9, 1.0]);
+	PROBE__SafariCall($h, 'POST', $h['session'] . '/actions', ['actions' => [['type' => 'pointer', 'id' => 'mouse', 'parameters' => ['pointerType' => 'mouse'], 'actions' => [['type' => 'pointerMove', 'origin' => 'viewport', 'x' => $x + $shift, 'y' => $y], ['type' => 'pointerDown', 'button' => 0], ...$moves, ['type' => 'pointerUp', 'button' => 0]]]]]);
 }
 
 /** Moves the mouse to the point of the viewport. */
 function PROBE__SafariHover(array &$h, int $x, int $y): void
 {
+	$x += PROBE__SafariShift($h);
 	PROBE__SafariCall($h, 'POST', $h['session'] . '/actions', ['actions' => [['type' => 'pointer', 'id' => 'mouse', 'parameters' => ['pointerType' => 'mouse'], 'actions' => [['type' => 'pointerMove', 'origin' => 'viewport', 'x' => $x, 'y' => $y]]]]]);
 }
 
