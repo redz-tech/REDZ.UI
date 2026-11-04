@@ -753,11 +753,11 @@ window.REDZ_BEHAVE = (() => {
 			const field = $('input', dialog);
 			const start = [document.activeElement === field, field.selectionStart, field.selectionEnd, $('label', dialog).textContent];
 			input(field, '');
-			$('button[type="submit"]', dialog).click();
+			$('.dialog-footer > .btn:last-child', dialog).click();
 			await wait(50);
 			const empty = dialog.open;
 			input(field, 'Tours 2027');
-			$('button[type="submit"]', dialog).click();
+			field.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true, cancelable: true}));
 			const answer = await Promise.race([asked, wait(500).then(() => 'unanswered')]);
 			const plain = REDZ.ui.prompt({title: 'Plain?'});
 			await wait(100);

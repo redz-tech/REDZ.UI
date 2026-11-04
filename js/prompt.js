@@ -11,7 +11,6 @@ export const prompt = ({title = '', text: detail = '', label = '', value = '', p
 	const id = 'redz-prompt-' + ++made;
 	const dialog = Object.assign(document.createElement('dialog'), {className: 'dialog dialog-sm'});
 	dialog.setAttribute('aria-labelledby', id + '-title');
-	const form = Object.assign(document.createElement('form'), {method: 'dialog'});
 	const header = Object.assign(document.createElement('div'), {className: 'dialog-header'});
 	header.append(Object.assign(document.createElement('h2'), {className: 'dialog-title', id: id + '-title', textContent: title}));
 	const body = Object.assign(document.createElement('div'), {className: 'dialog-body vstack gap-12'});
@@ -31,10 +30,18 @@ export const prompt = ({title = '', text: detail = '', label = '', value = '', p
 	body.append(field);
 	const footer = Object.assign(document.createElement('div'), {className: 'dialog-footer'});
 	const no = Object.assign(document.createElement('button'), {className: 'btn', type: 'button', textContent: cancel || text('confirm.cancel')});
+	const yes = Object.assign(document.createElement('button'), {className: 'btn btn-' + tone, type: 'button', textContent: ok || text('confirm.ok')});
+	const take = () => input.reportValidity() && dialog.close('ok');
 	no.addEventListener('click', () => dialog.close());
-	footer.append(no, Object.assign(document.createElement('button'), {className: 'btn btn-' + tone, type: 'submit', value: 'ok', textContent: ok || text('confirm.ok')}));
-	form.append(header, body, footer);
-	dialog.append(form);
+	yes.addEventListener('click', take);
+	input.addEventListener('keydown', (event) => {
+		if (event.key === 'Enter' && !event.isComposing) {
+			event.preventDefault();
+			take();
+		}
+	});
+	footer.append(no, yes);
+	dialog.append(header, body, footer);
 	dialog.addEventListener('close', () => {
 		answer(dialog.returnValue === 'ok' ? input.value : null);
 		dialog.remove();
