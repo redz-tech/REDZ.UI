@@ -4,9 +4,9 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
-## Unreleased
+## 0.9.0 - 2026-11-04
 
-A site's header by Bootstrap 6's names, for the sites as well as the admin; to be released as 0.9.0.
+A site's header by Bootstrap 6's names, for the sites as well as the admin.
 
 ### Added
 - **Navbars** (`navbar`, `navbar-brand`, `navbar-nav`, `navbar-text`, `navbar-toggler`, `navbar-translucent`,
