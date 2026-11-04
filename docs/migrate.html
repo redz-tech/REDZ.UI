@@ -121,6 +121,7 @@
 				<section class="vstack gap-12" aria-labelledby="migrate-skill">
 					<h2 id="migrate-skill">With an agent</h2>
 					<p>The skill <code>redz-ui-from-bootstrap-5</code> moves a project file by file: <code>scripts/scan.sh</code> finds every Bootstrap class, attribute and call with its replacement and checks every class against the vocabulary; the agent rewrites the whole file in one pass, scans it again until nothing is left, and compares the screens before and after. Install it with <code>npx skills add redz-tech/REDZ.UI</code>.</p>
+					<p>Content kept in a database - page bodies an editor wrote long ago - moves once, with no hand on each body: the skill's <code>scripts/convert.php</code> (PHP 8.4 or later) rewrites a body by the map, gives a row the columns its children's spans need, follows a few rows by their context (a badge's tone, a compact table, a lead paragraph, white text on a tone) and lists what it left for a person to decide.</p>
 				</section>
 
 				<section class="vstack gap-12" aria-labelledby="migrate-map">
@@ -198,9 +199,9 @@
 									<tr><td><code>card-text</code></td><td>-</td><td>review</td><td>a heading and paragraphs in card-body</td></tr>
 									<tr><td><code>card-title</code></td><td>-</td><td>review</td><td>a heading and paragraphs in card-body</td></tr>
 									<tr><td><code>carousel-caption</code></td><td>-</td><td>review</td><td>the slide&#039;s own text, laid out with utilities</td></tr>
-									<tr><td><code>carousel-control-next</code></td><td>-</td><td>review</td><td>a btn btn-icon with command=&quot;--$1&quot; and aria-controls naming the carousel</td></tr>
+									<tr><td><code>carousel-control-next</code></td><td>-</td><td>review</td><td>a btn btn-icon with command=&quot;--next&quot; and aria-controls naming the carousel</td></tr>
 									<tr><td><code>carousel-control-next-icon</code></td><td><code>bi bi-chevron-right</code></td><td>rename</td><td>mirrored right to left</td></tr>
-									<tr><td><code>carousel-control-prev</code></td><td>-</td><td>review</td><td>a btn btn-icon with command=&quot;--$1&quot; and aria-controls naming the carousel</td></tr>
+									<tr><td><code>carousel-control-prev</code></td><td>-</td><td>review</td><td>a btn btn-icon with command=&quot;--prev&quot; and aria-controls naming the carousel</td></tr>
 									<tr><td><code>carousel-control-prev-icon</code></td><td><code>bi bi-chevron-left</code></td><td>rename</td><td>mirrored right to left</td></tr>
 									<tr><td><code>carousel-dark</code></td><td>-</td><td>review</td><td>data-theme=&quot;dark&quot; on the carousel</td></tr>
 									<tr><td><code>carousel-item-end</code></td><td>-</td><td>remove</td><td>the browser scrolls the row</td></tr>
@@ -389,7 +390,6 @@
 									<tr><td><code>list-group-item-warning</code></td><td>-</td><td>review</td><td>no item tones: a badge or a dot in the item says it</td></tr>
 									<tr><td><code>list-inline</code></td><td>-</td><td>review</td><td>hstack flex-wrap</td></tr>
 									<tr><td><code>list-inline-item</code></td><td>-</td><td>review</td><td>hstack flex-wrap</td></tr>
-									<tr><td><code>list-unstyled</code></td><td>-</td><td>review</td><td>vstack, or a component&#039;s own list</td></tr>
 									<tr><td><code>m-1</code></td><td><code>m-4</code></td><td>value</td><td>the number is the pixels</td></tr>
 									<tr><td><code>m-2</code></td><td><code>m-8</code></td><td>value</td><td>reused: m-2 means another thing in REDZ.UI; the number is the pixels</td></tr>
 									<tr><td><code>m-3</code></td><td><code>m-16</code></td><td>value</td><td>the number is the pixels</td></tr>
@@ -580,24 +580,24 @@
 									<tr><td><code>table-primary</code></td><td>-</td><td>review</td><td>row tones are danger, warning and secondary</td></tr>
 									<tr><td><code>table-responsive</code></td><td>-</td><td>review</td><td>the card&#039;s body holds the table; columns hide below md:</td></tr>
 									<tr><td><code>table-success</code></td><td>-</td><td>review</td><td>row tones are danger, warning and secondary</td></tr>
-									<tr><td><code>text-bg-danger</code></td><td><code>badge-danger</code></td><td>review</td><td>on a badge; elsewhere bg-$1 with the tone&#039;s -contrast text in the module&#039;s CSS</td></tr>
+									<tr><td><code>text-bg-danger</code></td><td><code>badge-danger</code></td><td>review</td><td>on a badge; elsewhere bg-danger with the tone&#039;s -contrast text in the module&#039;s CSS</td></tr>
 									<tr><td><code>text-bg-dark</code></td><td><code>badge-inverse</code></td><td>review</td><td>on a badge: the text color as its background, light in the dark theme</td></tr>
-									<tr><td><code>text-bg-info</code></td><td><code>badge-info</code></td><td>review</td><td>on a badge; elsewhere bg-$1 with the tone&#039;s -contrast text in the module&#039;s CSS</td></tr>
+									<tr><td><code>text-bg-info</code></td><td><code>badge-info</code></td><td>review</td><td>on a badge; elsewhere bg-info with the tone&#039;s -contrast text in the module&#039;s CSS</td></tr>
 									<tr><td><code>text-bg-light</code></td><td>-</td><td>review</td><td>a plain badge, or a tone</td></tr>
-									<tr><td><code>text-bg-primary</code></td><td><code>badge-primary</code></td><td>review</td><td>on a badge; elsewhere bg-$1 with the tone&#039;s -contrast text in the module&#039;s CSS</td></tr>
-									<tr><td><code>text-bg-secondary</code></td><td><code>badge-secondary</code></td><td>review</td><td>on a badge; elsewhere bg-$1 with the tone&#039;s -contrast text in the module&#039;s CSS</td></tr>
-									<tr><td><code>text-bg-success</code></td><td><code>badge-success</code></td><td>review</td><td>on a badge; elsewhere bg-$1 with the tone&#039;s -contrast text in the module&#039;s CSS</td></tr>
-									<tr><td><code>text-bg-warning</code></td><td><code>badge-warning</code></td><td>review</td><td>on a badge; elsewhere bg-$1 with the tone&#039;s -contrast text in the module&#039;s CSS</td></tr>
-									<tr><td><code>text-black</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone</td></tr>
-									<tr><td><code>text-black-50</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone</td></tr>
+									<tr><td><code>text-bg-primary</code></td><td><code>badge-primary</code></td><td>review</td><td>on a badge; elsewhere bg-primary with the tone&#039;s -contrast text in the module&#039;s CSS</td></tr>
+									<tr><td><code>text-bg-secondary</code></td><td><code>badge-secondary</code></td><td>review</td><td>on a badge; elsewhere bg-secondary with the tone&#039;s -contrast text in the module&#039;s CSS</td></tr>
+									<tr><td><code>text-bg-success</code></td><td><code>badge-success</code></td><td>review</td><td>on a badge; elsewhere bg-success with the tone&#039;s -contrast text in the module&#039;s CSS</td></tr>
+									<tr><td><code>text-bg-warning</code></td><td><code>badge-warning</code></td><td>review</td><td>on a badge; elsewhere bg-warning with the tone&#039;s -contrast text in the module&#039;s CSS</td></tr>
+									<tr><td><code>text-black</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast</td></tr>
+									<tr><td><code>text-black-50</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast</td></tr>
 									<tr><td><code>text-body-emphasis</code></td><td><code>text-body</code></td><td>rename</td><td></td></tr>
 									<tr><td><code>text-body-secondary</code></td><td><code>text-muted</code></td><td>rename</td><td></td></tr>
 									<tr><td><code>text-body-tertiary</code></td><td><code>text-faint</code></td><td>rename</td><td></td></tr>
 									<tr><td><code>text-danger-emphasis</code></td><td><code>text-danger</code></td><td>rename</td><td>a tone&#039;s text color is already its emphasis</td></tr>
-									<tr><td><code>text-dark</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone</td></tr>
+									<tr><td><code>text-dark</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast</td></tr>
 									<tr><td><code>text-dark-emphasis</code></td><td><code>text-body</code></td><td>review</td><td>no light or dark: the text color</td></tr>
 									<tr><td><code>text-info-emphasis</code></td><td><code>text-info</code></td><td>rename</td><td>a tone&#039;s text color is already its emphasis</td></tr>
-									<tr><td><code>text-light</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone</td></tr>
+									<tr><td><code>text-light</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast</td></tr>
 									<tr><td><code>text-light-emphasis</code></td><td><code>text-body</code></td><td>review</td><td>no light or dark: the text color</td></tr>
 									<tr><td><code>text-opacity-100</code></td><td>-</td><td>review</td><td>Bootstrap 6 dropped it too: text-muted or text-faint</td></tr>
 									<tr><td><code>text-opacity-25</code></td><td>-</td><td>review</td><td>Bootstrap 6 dropped it too: text-muted or text-faint</td></tr>
@@ -607,8 +607,8 @@
 									<tr><td><code>text-secondary-emphasis</code></td><td><code>text-secondary</code></td><td>rename</td><td>a tone&#039;s text color is already its emphasis</td></tr>
 									<tr><td><code>text-success-emphasis</code></td><td><code>text-success</code></td><td>rename</td><td>a tone&#039;s text color is already its emphasis</td></tr>
 									<tr><td><code>text-warning-emphasis</code></td><td><code>text-warning</code></td><td>rename</td><td>a tone&#039;s text color is already its emphasis</td></tr>
-									<tr><td><code>text-white</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone</td></tr>
-									<tr><td><code>text-white-50</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone</td></tr>
+									<tr><td><code>text-white</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast</td></tr>
+									<tr><td><code>text-white-50</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast</td></tr>
 									<tr><td><code>toast-header</code></td><td>-</td><td>review</td><td>REDZ.ui.toast builds the toast from its title, text and tone</td></tr>
 									<tr><td><code>tooltip-arrow</code></td><td>-</td><td>remove</td><td>the tooltip is one element</td></tr>
 									<tr><td><code>tooltip-inner</code></td><td>-</td><td>remove</td><td>the tooltip is one element</td></tr>

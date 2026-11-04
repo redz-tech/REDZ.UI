@@ -503,6 +503,13 @@
 									<tr><td><code>text-danger</code></td><td><code>color: var(--redz-danger);</code></td><td>-</td></tr>
 									<tr><td><code>text-warning</code></td><td><code>color: var(--redz-warning);</code></td><td>-</td></tr>
 									<tr><td><code>text-info</code></td><td><code>color: var(--redz-info);</code></td><td>-</td></tr>
+									<tr><td><code>text-primary-contrast</code></td><td><code>color: var(--redz-primary-contrast);</code></td><td>-</td></tr>
+									<tr><td><code>text-secondary-contrast</code></td><td><code>color: var(--redz-secondary-contrast);</code></td><td>-</td></tr>
+									<tr><td><code>text-success-contrast</code></td><td><code>color: var(--redz-success-contrast);</code></td><td>-</td></tr>
+									<tr><td><code>text-danger-contrast</code></td><td><code>color: var(--redz-danger-contrast);</code></td><td>-</td></tr>
+									<tr><td><code>text-warning-contrast</code></td><td><code>color: var(--redz-warning-contrast);</code></td><td>-</td></tr>
+									<tr><td><code>text-info-contrast</code></td><td><code>color: var(--redz-info-contrast);</code></td><td>-</td></tr>
+									<tr><td><code>list-unstyled</code></td><td><code>padding-inline-start: 0; list-style: none;</code></td><td>-</td></tr>
 									<tr><td><code>bg-body</code></td><td><code>background-color: var(--redz-bg);</code></td><td>-</td></tr>
 									<tr><td><code>bg-page</code></td><td><code>background-color: var(--redz-bg-page);</code></td><td>-</td></tr>
 									<tr><td><code>bg-raised</code></td><td><code>background-color: var(--redz-bg-raised);</code></td><td>-</td></tr>
@@ -799,7 +806,6 @@
 									<tr><td><code>link-warning</code></td><td>-</td><td>review</td><td>a link is the accent; text-* for a tone</td></tr>
 									<tr><td><code>list-inline</code></td><td>-</td><td>review</td><td>hstack flex-wrap</td></tr>
 									<tr><td><code>list-inline-item</code></td><td>-</td><td>review</td><td>hstack flex-wrap</td></tr>
-									<tr><td><code>list-unstyled</code></td><td>-</td><td>review</td><td>vstack, or a component&#039;s own list</td></tr>
 									<tr><td><code>m-1</code></td><td><code>m-4</code></td><td>value</td><td>the number is the pixels</td></tr>
 									<tr><td><code>m-2</code></td><td><code>m-8</code></td><td>value</td><td>reused: m-2 means another thing in REDZ.UI; the number is the pixels</td></tr>
 									<tr><td><code>m-3</code></td><td><code>m-16</code></td><td>value</td><td>the number is the pixels</td></tr>
@@ -923,16 +929,16 @@
 									<tr><td><code>small</code></td><td>-</td><td>review</td><td>fs-12, or the &lt;small&gt; element</td></tr>
 									<tr><td><code>sticky-bottom</code></td><td>-</td><td>review</td><td>position-sticky with top-0 or bottom-0</td></tr>
 									<tr><td><code>sticky-top</code></td><td>-</td><td>review</td><td>position-sticky with top-0 or bottom-0</td></tr>
-									<tr><td><code>text-black</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone</td></tr>
-									<tr><td><code>text-black-50</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone</td></tr>
+									<tr><td><code>text-black</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast</td></tr>
+									<tr><td><code>text-black-50</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast</td></tr>
 									<tr><td><code>text-body-emphasis</code></td><td><code>text-body</code></td><td>rename</td><td></td></tr>
 									<tr><td><code>text-body-secondary</code></td><td><code>text-muted</code></td><td>rename</td><td></td></tr>
 									<tr><td><code>text-body-tertiary</code></td><td><code>text-faint</code></td><td>rename</td><td></td></tr>
 									<tr><td><code>text-danger-emphasis</code></td><td><code>text-danger</code></td><td>rename</td><td>a tone&#039;s text color is already its emphasis</td></tr>
-									<tr><td><code>text-dark</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone</td></tr>
+									<tr><td><code>text-dark</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast</td></tr>
 									<tr><td><code>text-dark-emphasis</code></td><td><code>text-body</code></td><td>review</td><td>no light or dark: the text color</td></tr>
 									<tr><td><code>text-info-emphasis</code></td><td><code>text-info</code></td><td>rename</td><td>a tone&#039;s text color is already its emphasis</td></tr>
-									<tr><td><code>text-light</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone</td></tr>
+									<tr><td><code>text-light</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast</td></tr>
 									<tr><td><code>text-light-emphasis</code></td><td><code>text-body</code></td><td>review</td><td>no light or dark: the text color</td></tr>
 									<tr><td><code>text-opacity-100</code></td><td>-</td><td>review</td><td>Bootstrap 6 dropped it too: text-muted or text-faint</td></tr>
 									<tr><td><code>text-opacity-25</code></td><td>-</td><td>review</td><td>Bootstrap 6 dropped it too: text-muted or text-faint</td></tr>
@@ -942,8 +948,8 @@
 									<tr><td><code>text-secondary-emphasis</code></td><td><code>text-secondary</code></td><td>rename</td><td>a tone&#039;s text color is already its emphasis</td></tr>
 									<tr><td><code>text-success-emphasis</code></td><td><code>text-success</code></td><td>rename</td><td>a tone&#039;s text color is already its emphasis</td></tr>
 									<tr><td><code>text-warning-emphasis</code></td><td><code>text-warning</code></td><td>rename</td><td>a tone&#039;s text color is already its emphasis</td></tr>
-									<tr><td><code>text-white</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone</td></tr>
-									<tr><td><code>text-white-50</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone</td></tr>
+									<tr><td><code>text-white</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast</td></tr>
+									<tr><td><code>text-white-50</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast</td></tr>
 									<tr><td><code>--bs-aspect-ratio</code></td><td>-</td><td>review</td><td>ratio-* for the ratio; the property itself for the rest</td></tr>
 									<tr><td><code>--bs-bg-opacity</code></td><td>-</td><td>review</td><td>a relative color or color-mix in place of the opacity</td></tr>
 									<tr><td><code>--bs-border-opacity</code></td><td>-</td><td>review</td><td>a relative color or color-mix in place of the opacity</td></tr>

@@ -391,6 +391,13 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 | `text-danger` | `color: var(--redz-danger);` | - |
 | `text-warning` | `color: var(--redz-warning);` | - |
 | `text-info` | `color: var(--redz-info);` | - |
+| `text-primary-contrast` | `color: var(--redz-primary-contrast);` | - |
+| `text-secondary-contrast` | `color: var(--redz-secondary-contrast);` | - |
+| `text-success-contrast` | `color: var(--redz-success-contrast);` | - |
+| `text-danger-contrast` | `color: var(--redz-danger-contrast);` | - |
+| `text-warning-contrast` | `color: var(--redz-warning-contrast);` | - |
+| `text-info-contrast` | `color: var(--redz-info-contrast);` | - |
+| `list-unstyled` | `padding-inline-start: 0; list-style: none;` | - |
 | `bg-body` | `background-color: var(--redz-bg);` | - |
 | `bg-page` | `background-color: var(--redz-bg-page);` | - |
 | `bg-raised` | `background-color: var(--redz-bg-raised);` | - |
@@ -683,7 +690,6 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 | `link-warning` | - | review | a link is the accent; text-* for a tone |
 | `list-inline` | - | review | hstack flex-wrap |
 | `list-inline-item` | - | review | hstack flex-wrap |
-| `list-unstyled` | - | review | vstack, or a component's own list |
 | `m-1` | `m-4` | value | the number is the pixels |
 | `m-2` | `m-8` | value | reused: m-2 means another thing in REDZ.UI; the number is the pixels |
 | `m-3` | `m-16` | value | the number is the pixels |
@@ -807,16 +813,16 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 | `small` | - | review | fs-12, or the <small> element |
 | `sticky-bottom` | - | review | position-sticky with top-0 or bottom-0 |
 | `sticky-top` | - | review | position-sticky with top-0 or bottom-0 |
-| `text-black` | - | review | no white, black, light or dark: text-body, text-muted or a tone |
-| `text-black-50` | - | review | no white, black, light or dark: text-body, text-muted or a tone |
+| `text-black` | - | review | no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast |
+| `text-black-50` | - | review | no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast |
 | `text-body-emphasis` | `text-body` | rename |  |
 | `text-body-secondary` | `text-muted` | rename |  |
 | `text-body-tertiary` | `text-faint` | rename |  |
 | `text-danger-emphasis` | `text-danger` | rename | a tone's text color is already its emphasis |
-| `text-dark` | - | review | no white, black, light or dark: text-body, text-muted or a tone |
+| `text-dark` | - | review | no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast |
 | `text-dark-emphasis` | `text-body` | review | no light or dark: the text color |
 | `text-info-emphasis` | `text-info` | rename | a tone's text color is already its emphasis |
-| `text-light` | - | review | no white, black, light or dark: text-body, text-muted or a tone |
+| `text-light` | - | review | no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast |
 | `text-light-emphasis` | `text-body` | review | no light or dark: the text color |
 | `text-opacity-100` | - | review | Bootstrap 6 dropped it too: text-muted or text-faint |
 | `text-opacity-25` | - | review | Bootstrap 6 dropped it too: text-muted or text-faint |
@@ -826,8 +832,8 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 | `text-secondary-emphasis` | `text-secondary` | rename | a tone's text color is already its emphasis |
 | `text-success-emphasis` | `text-success` | rename | a tone's text color is already its emphasis |
 | `text-warning-emphasis` | `text-warning` | rename | a tone's text color is already its emphasis |
-| `text-white` | - | review | no white, black, light or dark: text-body, text-muted or a tone |
-| `text-white-50` | - | review | no white, black, light or dark: text-body, text-muted or a tone |
+| `text-white` | - | review | no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast |
+| `text-white-50` | - | review | no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast |
 | `--bs-aspect-ratio` | - | review | ratio-* for the ratio; the property itself for the rest |
 | `--bs-bg-opacity` | - | review | a relative color or color-mix in place of the opacity |
 | `--bs-border-opacity` | - | review | a relative color or color-mix in place of the opacity |

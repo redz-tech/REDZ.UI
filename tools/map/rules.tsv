@@ -29,7 +29,7 @@ fixed-(top|bottom)		review	utilities	position-fixed with top-0 or bottom-0, star
 (top|bottom|start|end)-(50|100)	$1-$2	same	utilities
 translate-middle(-x|-y)?	translate-middle$1	same	utilities	turns round right to left
 z-(n1|0|1|2|3)	z-$1	same	utilities	dialogs, menus and toasts stack in the top layer without one
-text-(white|black|light|dark)(-50)?		review	utilities	no white, black, light or dark: text-body, text-muted or a tone
+text-(white|black|light|dark)(-50)?		review	utilities	no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast
 text-body-secondary	text-muted	rename	utilities
 text-body-tertiary	text-faint	rename	utilities
 text-body-emphasis	text-body	rename	utilities
@@ -81,7 +81,7 @@ initialism		missing	utilities
 h[1-6]		review	utilities	the h1-h4 sizes are the elements'; fs-* for another
 display-[1-6]	fs-32	review	utilities	the largest size here
 blockquote|blockquote-footer		missing	utilities
-list-unstyled		review	utilities	vstack, or a component's own list
+list-unstyled	list-unstyled	same	utilities	no bullets and no indent
 list-inline|list-inline-item		review	utilities	hstack flex-wrap
 mw-100		review	utilities	max-w-* by px
 mh-100		missing	utilities

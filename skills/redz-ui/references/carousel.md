@@ -87,9 +87,9 @@ It reads the theme's `--redz-space-12`, `--redz-radius-12`, `--redz-space-8`, `-
 | Bootstrap 5.3 | REDZ.UI | Change | Note |
 | --- | --- | --- | --- |
 | `carousel-caption` | - | review | the slide's own text, laid out with utilities |
-| `carousel-control-next` | - | review | a btn btn-icon with command="--$1" and aria-controls naming the carousel |
+| `carousel-control-next` | - | review | a btn btn-icon with command="--next" and aria-controls naming the carousel |
 | `carousel-control-next-icon` | `bi bi-chevron-right` | rename | mirrored right to left |
-| `carousel-control-prev` | - | review | a btn btn-icon with command="--$1" and aria-controls naming the carousel |
+| `carousel-control-prev` | - | review | a btn btn-icon with command="--prev" and aria-controls naming the carousel |
 | `carousel-control-prev-icon` | `bi bi-chevron-left` | rename | mirrored right to left |
 | `carousel-dark` | - | review | data-theme="dark" on the carousel |
 | `carousel-item-end` | - | remove | the browser scrolls the row |

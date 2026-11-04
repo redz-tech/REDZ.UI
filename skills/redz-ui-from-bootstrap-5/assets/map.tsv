@@ -258,9 +258,9 @@ card-text		review	class	card	a heading and paragraphs in card-body
 card-title		review	class	card	a heading and paragraphs in card-body
 carousel	carousel	same	class	carousel	the slide in place is aria-current="true"
 carousel-caption		review	class	carousel	the slide's own text, laid out with utilities
-carousel-control-next		review	class	carousel	a btn btn-icon with command="--$1" and aria-controls naming the carousel
+carousel-control-next		review	class	carousel	a btn btn-icon with command="--next" and aria-controls naming the carousel
 carousel-control-next-icon	bi bi-chevron-right	rename	class	carousel	mirrored right to left
-carousel-control-prev		review	class	carousel	a btn btn-icon with command="--$1" and aria-controls naming the carousel
+carousel-control-prev		review	class	carousel	a btn btn-icon with command="--prev" and aria-controls naming the carousel
 carousel-control-prev-icon	bi bi-chevron-left	rename	class	carousel	mirrored right to left
 carousel-dark		review	class	carousel	data-theme="dark" on the carousel
 carousel-fade	carousel-fade	same	class	carousel	the slide in place is aria-current="true"
@@ -938,7 +938,7 @@ list-group-item-warning		review	class	list-group	no item tones: a badge or a dot
 list-group-numbered	list-group-numbered	same	class	list-group	
 list-inline		review	class	utilities	hstack flex-wrap
 list-inline-item		review	class	utilities	hstack flex-wrap
-list-unstyled		review	class	utilities	vstack, or a component's own list
+list-unstyled	list-unstyled	same	class	utilities	no bullets and no indent
 m-0	m-0	same	class	utilities	
 m-1	m-4	value	class	utilities	the number is the pixels
 m-2	m-8	value	class	utilities	reused: m-2 means another thing in REDZ.UI; the number is the pixels
@@ -1922,16 +1922,16 @@ table-striped	table-striped	same	class	table
 table-striped-columns	table-striped-columns	same	class	table	
 table-success		review	class	table	row tones are danger, warning and secondary
 table-warning	table-warning	same	class	table	
-text-bg-danger	badge-danger	review	class	badge	on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS
+text-bg-danger	badge-danger	review	class	badge	on a badge; elsewhere bg-danger with the tone's -contrast text in the module's CSS
 text-bg-dark	badge-inverse	review	class	badge	on a badge: the text color as its background, light in the dark theme
-text-bg-info	badge-info	review	class	badge	on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS
+text-bg-info	badge-info	review	class	badge	on a badge; elsewhere bg-info with the tone's -contrast text in the module's CSS
 text-bg-light		review	class	badge	a plain badge, or a tone
-text-bg-primary	badge-primary	review	class	badge	on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS
-text-bg-secondary	badge-secondary	review	class	badge	on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS
-text-bg-success	badge-success	review	class	badge	on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS
-text-bg-warning	badge-warning	review	class	badge	on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS
-text-black		review	class	utilities	no white, black, light or dark: text-body, text-muted or a tone
-text-black-50		review	class	utilities	no white, black, light or dark: text-body, text-muted or a tone
+text-bg-primary	badge-primary	review	class	badge	on a badge; elsewhere bg-primary with the tone's -contrast text in the module's CSS
+text-bg-secondary	badge-secondary	review	class	badge	on a badge; elsewhere bg-secondary with the tone's -contrast text in the module's CSS
+text-bg-success	badge-success	review	class	badge	on a badge; elsewhere bg-success with the tone's -contrast text in the module's CSS
+text-bg-warning	badge-warning	review	class	badge	on a badge; elsewhere bg-warning with the tone's -contrast text in the module's CSS
+text-black		review	class	utilities	no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast
+text-black-50		review	class	utilities	no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast
 text-body	text-body	same	class	utilities	
 text-body-emphasis	text-body	rename	class	utilities	
 text-body-secondary	text-muted	rename	class	utilities	
@@ -1941,7 +1941,7 @@ text-capitalize	text-capitalize	same	class	utilities
 text-center	text-center	same	class	utilities	
 text-danger	text-danger	same	class	utilities	
 text-danger-emphasis	text-danger	rename	class	utilities	a tone's text color is already its emphasis
-text-dark		review	class	utilities	no white, black, light or dark: text-body, text-muted or a tone
+text-dark		review	class	utilities	no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast
 text-dark-emphasis	text-body	review	class	utilities	no light or dark: the text color
 text-decoration-line-through	text-decoration-line-through	same	class	utilities	
 text-decoration-none	text-decoration-none	same	class	utilities	
@@ -1952,7 +1952,7 @@ text-info-emphasis	text-info	rename	class	utilities	a tone's text color is alrea
 text-lg-center	lg:text-center	rename	class	utilities	
 text-lg-end	lg:text-end	rename	class	utilities	
 text-lg-start	lg:text-start	rename	class	utilities	
-text-light		review	class	utilities	no white, black, light or dark: text-body, text-muted or a tone
+text-light		review	class	utilities	no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast
 text-light-emphasis	text-body	review	class	utilities	no light or dark: the text color
 text-lowercase	text-lowercase	same	class	utilities	
 text-md-center	md:text-center	rename	class	utilities	
@@ -1979,8 +1979,8 @@ text-truncate	text-truncate	same	class	utilities
 text-uppercase	text-uppercase	same	class	utilities	
 text-warning	text-warning	same	class	utilities	
 text-warning-emphasis	text-warning	rename	class	utilities	a tone's text color is already its emphasis
-text-white		review	class	utilities	no white, black, light or dark: text-body, text-muted or a tone
-text-white-50		review	class	utilities	no white, black, light or dark: text-body, text-muted or a tone
+text-white		review	class	utilities	no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast
+text-white-50		review	class	utilities	no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast
 text-wrap	text-wrap	same	class	utilities	
 text-xl-center	xl:text-center	rename	class	utilities	
 text-xl-end	xl:text-end	rename	class	utilities	

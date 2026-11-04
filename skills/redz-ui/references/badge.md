@@ -65,11 +65,11 @@ It reads the theme's `--redz-bg-hover`, `--redz-text-muted`, `--redz-fs-12`, `--
 
 | Bootstrap 5.3 | REDZ.UI | Change | Note |
 | --- | --- | --- | --- |
-| `text-bg-danger` | `badge-danger` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
+| `text-bg-danger` | `badge-danger` | review | on a badge; elsewhere bg-danger with the tone's -contrast text in the module's CSS |
 | `text-bg-dark` | `badge-inverse` | review | on a badge: the text color as its background, light in the dark theme |
-| `text-bg-info` | `badge-info` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
+| `text-bg-info` | `badge-info` | review | on a badge; elsewhere bg-info with the tone's -contrast text in the module's CSS |
 | `text-bg-light` | - | review | a plain badge, or a tone |
-| `text-bg-primary` | `badge-primary` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
-| `text-bg-secondary` | `badge-secondary` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
-| `text-bg-success` | `badge-success` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
-| `text-bg-warning` | `badge-warning` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
+| `text-bg-primary` | `badge-primary` | review | on a badge; elsewhere bg-primary with the tone's -contrast text in the module's CSS |
+| `text-bg-secondary` | `badge-secondary` | review | on a badge; elsewhere bg-secondary with the tone's -contrast text in the module's CSS |
+| `text-bg-success` | `badge-success` | review | on a badge; elsewhere bg-success with the tone's -contrast text in the module's CSS |
+| `text-bg-warning` | `badge-warning` | review | on a badge; elsewhere bg-warning with the tone's -contrast text in the module's CSS |

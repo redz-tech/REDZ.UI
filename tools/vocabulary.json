@@ -59,6 +59,8 @@
 		{"name": "text-break", "css": "overflow-wrap: anywhere"},
 		{"name": "text-truncate", "css": "overflow: hidden; text-overflow: ellipsis; white-space: nowrap"},
 		{"name": "text", "property": "color", "tones": "var(--redz-{tone})", "values": {"body": "var(--redz-text)", "muted": "var(--redz-text-muted)", "faint": "var(--redz-text-faint)", "reset": "inherit"}},
+		{"name": "text", "property": "color", "tones": "var(--redz-{tone}-contrast)", "suffix": "-contrast"},
+		{"name": "list-unstyled", "css": "padding-inline-start: 0; list-style: none"},
 		{"name": "bg", "property": "background-color", "tones": "var(--redz-{tone})", "values": {"body": "var(--redz-bg)", "page": "var(--redz-bg-page)", "raised": "var(--redz-bg-raised)", "transparent": "transparent"}},
 		{"name": "bg", "property": "background-color", "tones": "var(--redz-{tone}-subtle)", "suffix": "-subtle"},
 		{"name": "border", "css": "border: 1px solid var(--redz-border)"},

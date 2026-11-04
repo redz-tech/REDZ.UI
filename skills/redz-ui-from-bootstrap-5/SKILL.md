@@ -32,6 +32,16 @@ the project switches at once, so migrate on a branch and switch the `<link>` wit
 5. **After.** Compare the screenshots; open the same dialogs, menus and tabs; press Tab through the screen.
 6. **Record** the file as done, and add every correction you had to make to the gotchas of your project.
 
+**Stored content** - page bodies kept in a database, written by an editor long ago - is not rewritten by hand:
+`scripts/convert.php` (PHP 8.4+) rewrites a body once by the map and tells what it left. `php scripts/convert.php
+FILE...` rewrites files in place; `php scripts/convert.php < BODY > NEW` reads and writes a stream; from PHP, define
+`CONVERT_LIBRARY`, require it and call `[$html, $notes] = CONVERT__Body($html)` for each row. Classes of kind `same`,
+`rename`, `value` and `grid` take their form (a `row` gets the `cols-12` its children's spans need), `remove` goes, and
+a few `review` rows follow their context: `text-bg-TONE` on a badge is `badge-TONE` (`badge-inverse` for dark),
+`table-sm` is `data-density="compact"` on the table, `lead` is `fs-16 text-muted`, `display-*` is `fs-32`, `text-white`
+beside `bg-TONE` is `text-TONE-contrast`, and `img-fluid`, `alert-light` and `alert-secondary` go. Every other review
+row, state class, `data-bs-*` attribute and unknown class stays as it was and is in the notes: decide those by hand.
+
 ## What each kind asks
 
 | Kind | Do |

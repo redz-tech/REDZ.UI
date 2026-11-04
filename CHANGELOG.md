@@ -32,6 +32,11 @@ What the ERP's move from Bootstrap 5.3 asked for, and the editor; to be released
   per slide; the slide in place is `aria-current="true"`, each a group named by the island's new text `slide`
   ("{position} of {count}"); `command="--play"` plays them every 5 seconds while pressed, never for less motion,
   paused on hover, focus and a hidden page; a slide a person moves to is told politely, never while it plays.
+- **A one-time converter of stored content** (`scripts/convert.php` in the migration skill, PHP 8.4+): rewrites a
+  Bootstrap 5.3 body into REDZ.UI markup by the map - forms taken, removals dropped, a row's grid given the columns its
+  children's spans need, a few review rows by their context (a badge's tone, a compact table, a lead, a display
+  heading, white text on a tone, a fluid image, a light alert) - and lists what it left; by file, by stream or from PHP.
+- `list-unstyled` and `text-{tone}-contrast` (the tone's contrast text, for white text on a toned shape).
 - **A side navigation folded to a rail** (`command="--fold"`, `data-folded`, `js/fold.js`): a header button with
   `aria-controls` naming `app-sidebar` folds it into a 56 px rail of its icons above 1024 px and back, pressed while
   folded; each link shows its words as a tooltip and keeps them as its name. The library stores nothing: `redz:fold`
@@ -56,6 +61,7 @@ What the ERP's move from Bootstrap 5.3 asked for, and the editor; to be released
   a row group or a cell now closes as plain `hidden` (find in page does not open it).
 - The App shell page's state grid wrote `<navaria-label>` for `<nav aria-label>`.
 - The scan named `references/triggers.md`, which is `references/states-and-triggers.md`.
+- The map's notes wrote a rule's `$1` as it was (`bg-$1`) where its forms had the class's own words.
 
 ## 0.9.0 - 2026-11-04
 

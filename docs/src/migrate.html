@@ -19,6 +19,7 @@
 <section class="vstack gap-12" aria-labelledby="migrate-skill">
 	<h2 id="migrate-skill">With an agent</h2>
 	<p>The skill <code>redz-ui-from-bootstrap-5</code> moves a project file by file: <code>scripts/scan.sh</code> finds every Bootstrap class, attribute and call with its replacement and checks every class against the vocabulary; the agent rewrites the whole file in one pass, scans it again until nothing is left, and compares the screens before and after. Install it with <code>npx skills add redz-tech/REDZ.UI</code>.</p>
+	<p>Content kept in a database - page bodies an editor wrote long ago - moves once, with no hand on each body: the skill's <code>scripts/convert.php</code> (PHP 8.4 or later) rewrites a body by the map, gives a row the columns its children's spans need, follows a few rows by their context (a badge's tone, a compact table, a lead paragraph, white text on a tone) and lists what it left for a person to decide.</p>
 </section>
 
 <section class="vstack gap-12" aria-labelledby="migrate-map">

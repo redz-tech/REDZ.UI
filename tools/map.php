@@ -84,6 +84,7 @@ function MAP__Row(string $class, array $rules, array $ours): ?array
 			continue;
 		}
 		$redz = MAP__Target((string)preg_replace_callback('~\$(\d)~', fn(array $g): string => $found[(int)$g[1]] ?? '', $target));
+		$note = (string)preg_replace_callback('~\$(\d)~', fn(array $g): string => $found[(int)$g[1]] ?? '', $note);
 		if ($prefix !== '' && $redz !== '' && in_array($kind, ['same', 'rename', 'value', 'grid'], true)) {
 			$prefixed = implode(' ', array_map(fn(string $one): string => $prefix . ':' . $one, explode(' ', $redz)));
 			if (array_diff(explode(' ', $prefixed), array_keys($ours)) === []) {

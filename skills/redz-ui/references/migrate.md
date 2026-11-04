@@ -18,6 +18,8 @@ Most of Bootstrap 5's names stay. What changes is the spacing numbers, the grid,
 
 The skill `redz-ui-from-bootstrap-5` moves a project file by file: `scripts/scan.sh` finds every Bootstrap class, attribute and call with its replacement and checks every class against the vocabulary; the agent rewrites the whole file in one pass, scans it again until nothing is left, and compares the screens before and after. Install it with `npx skills add redz-tech/REDZ.UI`.
 
+Content kept in a database - page bodies an editor wrote long ago - moves once, with no hand on each body: the skill's `scripts/convert.php` (PHP 8.4 or later) rewrites a body by the map, gives a row the columns its children's spans need, follows a few rows by their context (a badge's tone, a compact table, a lead paragraph, white text on a tone) and lists what it left for a person to decide.
+
 ## The map
 
 Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not listed keeps its name, and a breakpoint form follows its class - `mb-md-3` is `md:mb-16`. The full map, every class and form, is the skill's `assets/map.tsv`.
@@ -93,9 +95,9 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `card-text` | - | review | a heading and paragraphs in card-body |
 | `card-title` | - | review | a heading and paragraphs in card-body |
 | `carousel-caption` | - | review | the slide's own text, laid out with utilities |
-| `carousel-control-next` | - | review | a btn btn-icon with command="--$1" and aria-controls naming the carousel |
+| `carousel-control-next` | - | review | a btn btn-icon with command="--next" and aria-controls naming the carousel |
 | `carousel-control-next-icon` | `bi bi-chevron-right` | rename | mirrored right to left |
-| `carousel-control-prev` | - | review | a btn btn-icon with command="--$1" and aria-controls naming the carousel |
+| `carousel-control-prev` | - | review | a btn btn-icon with command="--prev" and aria-controls naming the carousel |
 | `carousel-control-prev-icon` | `bi bi-chevron-left` | rename | mirrored right to left |
 | `carousel-dark` | - | review | data-theme="dark" on the carousel |
 | `carousel-item-end` | - | remove | the browser scrolls the row |
@@ -284,7 +286,6 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `list-group-item-warning` | - | review | no item tones: a badge or a dot in the item says it |
 | `list-inline` | - | review | hstack flex-wrap |
 | `list-inline-item` | - | review | hstack flex-wrap |
-| `list-unstyled` | - | review | vstack, or a component's own list |
 | `m-1` | `m-4` | value | the number is the pixels |
 | `m-2` | `m-8` | value | reused: m-2 means another thing in REDZ.UI; the number is the pixels |
 | `m-3` | `m-16` | value | the number is the pixels |
@@ -475,24 +476,24 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `table-primary` | - | review | row tones are danger, warning and secondary |
 | `table-responsive` | - | review | the card's body holds the table; columns hide below md: |
 | `table-success` | - | review | row tones are danger, warning and secondary |
-| `text-bg-danger` | `badge-danger` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
+| `text-bg-danger` | `badge-danger` | review | on a badge; elsewhere bg-danger with the tone's -contrast text in the module's CSS |
 | `text-bg-dark` | `badge-inverse` | review | on a badge: the text color as its background, light in the dark theme |
-| `text-bg-info` | `badge-info` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
+| `text-bg-info` | `badge-info` | review | on a badge; elsewhere bg-info with the tone's -contrast text in the module's CSS |
 | `text-bg-light` | - | review | a plain badge, or a tone |
-| `text-bg-primary` | `badge-primary` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
-| `text-bg-secondary` | `badge-secondary` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
-| `text-bg-success` | `badge-success` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
-| `text-bg-warning` | `badge-warning` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
-| `text-black` | - | review | no white, black, light or dark: text-body, text-muted or a tone |
-| `text-black-50` | - | review | no white, black, light or dark: text-body, text-muted or a tone |
+| `text-bg-primary` | `badge-primary` | review | on a badge; elsewhere bg-primary with the tone's -contrast text in the module's CSS |
+| `text-bg-secondary` | `badge-secondary` | review | on a badge; elsewhere bg-secondary with the tone's -contrast text in the module's CSS |
+| `text-bg-success` | `badge-success` | review | on a badge; elsewhere bg-success with the tone's -contrast text in the module's CSS |
+| `text-bg-warning` | `badge-warning` | review | on a badge; elsewhere bg-warning with the tone's -contrast text in the module's CSS |
+| `text-black` | - | review | no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast |
+| `text-black-50` | - | review | no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast |
 | `text-body-emphasis` | `text-body` | rename |  |
 | `text-body-secondary` | `text-muted` | rename |  |
 | `text-body-tertiary` | `text-faint` | rename |  |
 | `text-danger-emphasis` | `text-danger` | rename | a tone's text color is already its emphasis |
-| `text-dark` | - | review | no white, black, light or dark: text-body, text-muted or a tone |
+| `text-dark` | - | review | no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast |
 | `text-dark-emphasis` | `text-body` | review | no light or dark: the text color |
 | `text-info-emphasis` | `text-info` | rename | a tone's text color is already its emphasis |
-| `text-light` | - | review | no white, black, light or dark: text-body, text-muted or a tone |
+| `text-light` | - | review | no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast |
 | `text-light-emphasis` | `text-body` | review | no light or dark: the text color |
 | `text-opacity-100` | - | review | Bootstrap 6 dropped it too: text-muted or text-faint |
 | `text-opacity-25` | - | review | Bootstrap 6 dropped it too: text-muted or text-faint |
@@ -502,8 +503,8 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `text-secondary-emphasis` | `text-secondary` | rename | a tone's text color is already its emphasis |
 | `text-success-emphasis` | `text-success` | rename | a tone's text color is already its emphasis |
 | `text-warning-emphasis` | `text-warning` | rename | a tone's text color is already its emphasis |
-| `text-white` | - | review | no white, black, light or dark: text-body, text-muted or a tone |
-| `text-white-50` | - | review | no white, black, light or dark: text-body, text-muted or a tone |
+| `text-white` | - | review | no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast |
+| `text-white-50` | - | review | no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast |
 | `toast-header` | - | review | REDZ.ui.toast builds the toast from its title, text and tone |
 | `tooltip-arrow` | - | remove | the tooltip is one element |
 | `tooltip-inner` | - | remove | the tooltip is one element |

@@ -349,6 +349,13 @@
 	.text-danger { color: var(--redz-danger); }
 	.text-warning { color: var(--redz-warning); }
 	.text-info { color: var(--redz-info); }
+	.text-primary-contrast { color: var(--redz-primary-contrast); }
+	.text-secondary-contrast { color: var(--redz-secondary-contrast); }
+	.text-success-contrast { color: var(--redz-success-contrast); }
+	.text-danger-contrast { color: var(--redz-danger-contrast); }
+	.text-warning-contrast { color: var(--redz-warning-contrast); }
+	.text-info-contrast { color: var(--redz-info-contrast); }
+	.list-unstyled { padding-inline-start: 0; list-style: none; }
 	.bg-body { background-color: var(--redz-bg); }
 	.bg-page { background-color: var(--redz-bg-page); }
 	.bg-raised { background-color: var(--redz-bg-raised); }
