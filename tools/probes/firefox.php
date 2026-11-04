@@ -98,6 +98,8 @@ function PROBE__FirefoxKey(array &$h, string $key): void
 function PROBE__FirefoxClick(array &$h, int $x, int $y): void
 {
 	PROBE__FirefoxSend($h, 'input.performActions', ['context' => $h['context'], 'actions' => [['type' => 'pointer', 'id' => 'mouse', 'parameters' => ['pointerType' => 'mouse'], 'actions' => [['type' => 'pointerMove', 'x' => $x, 'y' => $y], ['type' => 'pointerDown', 'button' => 0], ['type' => 'pointerUp', 'button' => 0]]]]]);
+	// The input state lives on between calls, so a second click at the same point soon after is a double click.
+	PROBE__FirefoxSend($h, 'input.releaseActions', ['context' => $h['context']]);
 }
 
 /** Drags the mouse from one point of the viewport to another with the left button held, in five moves. */
@@ -105,6 +107,7 @@ function PROBE__FirefoxDrag(array &$h, int $x, int $y, int $toX, int $toY): void
 {
 	$moves = array_map(fn(float $t): array => ['type' => 'pointerMove', 'duration' => 40, 'x' => (int)round($x + ($toX - $x) * $t), 'y' => (int)round($y + ($toY - $y) * $t)], [0.1, 0.3, 0.6, 0.9, 1.0]);
 	PROBE__FirefoxSend($h, 'input.performActions', ['context' => $h['context'], 'actions' => [['type' => 'pointer', 'id' => 'mouse', 'parameters' => ['pointerType' => 'mouse'], 'actions' => [['type' => 'pointerMove', 'x' => $x, 'y' => $y], ['type' => 'pointerDown', 'button' => 0], ...$moves, ['type' => 'pointerUp', 'button' => 0]]]]]);
+	PROBE__FirefoxSend($h, 'input.releaseActions', ['context' => $h['context']]);
 }
 
 /** Moves the mouse to the point of the viewport. */
