@@ -29,7 +29,9 @@
 			{"label": "the button of a menu of choices", "do": "focus", "target": "#menu-choice > button", "expect": ["All sites"]},
 			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["All sites"]},
 			{"label": "Down to another choice", "do": "key", "key": "ArrowDown", "expect": ["lagoon.example"]},
-			{"label": "Escape in the choices", "do": "key", "key": "Escape", "expect": ["All sites"]}
+			{"label": "Escape in the choices", "do": "key", "key": "Escape", "expect": ["All sites"]},
+			{"label": "the button of a menu of check items", "do": "focus", "target": "#menu-checks > button", "expect": ["Columns"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["Guest"]}
 		],
 		"docs/dialog.html": [
 			{"label": "the dialog's button", "do": "focus", "target": "#dialog-edit > button", "expect": ["Add a note"]},
@@ -37,7 +39,19 @@
 			{"label": "Escape in the dialog", "do": "key", "key": "Escape", "expect": ["Add a note"]},
 			{"label": "the confirm's button", "do": "focus", "target": "[data-docs-run=\"confirm\"]", "expect": ["Delete 2 excursions"]},
 			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["Delete 2 excursions?", "Their pages go away on all three sites"], "unsteady": {"voiceover-tahoe": "VoiceOver 26 says the alert dialog whole on one run and nothing of it on the next (measured 2026-11-03, five runs)."}},
-			{"label": "Escape in the confirm", "do": "key", "key": "Escape", "expect": ["Delete 2 excursions"], "unsteady": {"voiceover-tahoe": "VoiceOver 26 says the button the focus is back on, or only the page's own status of the answer (measured 2026-11-03)."}}
+			{"label": "Escape in the confirm", "do": "key", "key": "Escape", "expect": ["Delete 2 excursions"], "unsteady": {"voiceover-tahoe": "VoiceOver 26 says the button the focus is back on, or only the page's own status of the answer (measured 2026-11-03)."}},
+			{"label": "the prompt's button", "do": "focus", "target": "[data-docs-run=\"prompt\"]", "expect": ["Rename the folder"]},
+			{"label": "Enter on it: its field", "do": "key", "key": "Enter", "expect": ["Name"]}
+		],
+		"docs/commands.html": [
+			{"label": "a copy button", "do": "focus", "target": "#commands-copy-field [aria-controls]", "expect": ["Copy the key"]},
+			{"label": "Enter on it: copied", "do": "key", "key": "Enter", "expect": ["Copied"]},
+			{"label": "the theme's one button", "do": "focus", "target": "#commands-theme-choice [value=\"toggle\"]", "expect": ["Dark theme"]}
+		],
+		"docs/viewer.html": [
+			{"label": "a picture's link", "do": "focus", "target": "#viewer-set a", "expect": ["A lagoon under green hills"]},
+			{"label": "Enter on it: the viewer", "do": "key", "key": "Enter", "expect": ["Close"]},
+			{"label": "Escape in the viewer", "do": "key", "key": "Escape", "expect": ["A lagoon under green hills"]}
 		],
 		"docs/drawer.html": [
 			{"label": "the drawer's button", "do": "focus", "target": "#drawer-filters > button[commandfor=\"drawer-filters-panel\"]", "expect": ["Filters"]},

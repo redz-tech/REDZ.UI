@@ -2,7 +2,10 @@
 // the arrow keys move it, wrapping, Home and End go to the ends and a letter to the next item it starts; Tab closes
 // the menu and goes on from its button, Escape closes it back to the button (the browser's own), an item chosen closes
 // it, and so does the focus leaving it any other way. Option-Tab is Tab here: it is how Safari's users move through
-// buttons. On a closed menu's button the down and up arrows open it on the first or the last item.
+// buttons. On a closed menu's button the down and up arrows open it on the first or the last item. A menuitemcheckbox
+// chosen flips its aria-checked, and a menuitemradio checks itself and unchecks the others of its role="group" - or of
+// the menu -; both tell the page in redz:check (detail: item, checked), and the menu stays open for the next one -
+// except for a menuitemradio outside a group, a choice of one, which closes it.
 const ITEM = '[role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"]';
 let from = 'first';
 
@@ -78,7 +81,23 @@ document.addEventListener('keydown', (event) => {
 document.addEventListener('click', (event) => {
 	const item = event.target instanceof Element ? event.target.closest(ITEM) : null;
 	const menu = item?.closest('[role="menu"]');
-	if (menu?.matches(':popover-open') && item.getAttribute('aria-disabled') !== 'true') {
+	if (!menu || item.getAttribute('aria-disabled') === 'true') {
+		return;
+	}
+	const role = item.getAttribute('role');
+	const group = menu.contains(item.closest('[role="group"]')) ? item.closest('[role="group"]') : null;
+	if (role !== 'menuitem') {
+		const checked = role === 'menuitemradio' || item.getAttribute('aria-checked') !== 'true';
+		if (role === 'menuitemradio') {
+			for (const other of (group ?? menu).querySelectorAll('[role="menuitemradio"]')) {
+				other.setAttribute('aria-checked', String(other === item));
+			}
+		} else {
+			item.setAttribute('aria-checked', String(checked));
+		}
+		item.dispatchEvent(new CustomEvent('redz:check', {bubbles: true, detail: {item, checked}}));
+	}
+	if (menu.matches(':popover-open') && (role === 'menuitem' || (role === 'menuitemradio' && group === null))) {
 		menu.hidePopover();
 	}
 });

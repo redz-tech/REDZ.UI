@@ -29,6 +29,22 @@
 			<button class="menu-item" type="button" role="menuitemradio" aria-checked="false"><i class="bi bi-globe2" aria-hidden="true"></i>angthong.example</button>
 		</div>
 	</div>
+
+	<h3 id="menu-checks-title">Items that stay checked</h3>
+	<p>A <code>menuitemcheckbox</code> chosen flips its <code>aria-checked</code>, and a <code>menuitemradio</code> in a <code>role="group"</code> checks itself and unchecks the others of its group; the menu stays open for the next choice, and the page hears <code>redz:check</code> with <code>detail.item</code> and <code>detail.checked</code>. A <code>menuitemradio</code> outside a group is a choice of one, as above: it checks itself and closes the menu.</p>
+	<div class="docs-example" id="menu-checks">
+		<button class="btn" type="button" commandfor="menu-checks-list" command="toggle-popover" aria-haspopup="menu"><i class="bi bi-layout-three-columns" aria-hidden="true"></i>Columns<i class="bi bi-chevron-down" aria-hidden="true"></i></button>
+		<div id="menu-checks-list" class="menu" popover role="menu" aria-label="Columns">
+			<button class="menu-item" type="button" role="menuitemcheckbox" aria-checked="true">Guest</button>
+			<button class="menu-item" type="button" role="menuitemcheckbox" aria-checked="true">Tour</button>
+			<button class="menu-item" type="button" role="menuitemcheckbox" aria-checked="false">Pickup</button>
+			<div class="menu-header" id="menu-checks-sort">Sort by</div>
+			<div role="group" aria-labelledby="menu-checks-sort">
+				<button class="menu-item" type="button" role="menuitemradio" aria-checked="true">Date</button>
+				<button class="menu-item" type="button" role="menuitemradio" aria-checked="false">Name</button>
+			</div>
+		</div>
+	</div>
 </section>
 
 <section class="vstack gap-16">

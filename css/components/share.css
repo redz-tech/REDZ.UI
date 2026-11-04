@@ -1,0 +1,45 @@
+@layer components {
+	.share-telegram {
+		--redz-share: #26a5e4;
+	}
+
+	.share-facebook,
+	.share-messenger {
+		--redz-share: #0866ff;
+	}
+
+	.share-linkedin {
+		--redz-share: #0a66c2;
+	}
+
+	.share-vk {
+		--redz-share: #0077ff;
+	}
+
+	.share-line {
+		--redz-share: #06c755;
+	}
+
+	.share-whatsapp {
+		--redz-share: #25d366;
+	}
+
+	:is(.share-telegram, .share-facebook, .share-messenger, .share-linkedin, .share-vk, .share-line, .share-whatsapp) > .bi {
+		color: var(--redz-share);
+	}
+
+	.share-vk::before {
+		content: "VK" / "";
+		display: inline-grid;
+		place-items: center;
+		flex: none;
+		inline-size: 1.25rem;
+		block-size: 1.25rem;
+		border-radius: var(--redz-radius-4);
+		background: var(--redz-share);
+		color: #fff;
+		font-size: 0.625rem;
+		font-weight: 700;
+		line-height: 1;
+	}
+}

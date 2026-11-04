@@ -16,6 +16,7 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 ## Actions
 
 - [Buttons](docs/btn.md): A button runs an action; a link drawn as a button goes somewhere. One class, btn, then a tone, a size or an icon when the button needs one.
+- [Button commands](docs/commands.md): Buttons that act without a line of the page's script: copy a value, print the page, switch the theme, share an address. Each carries its command in command and names what it acts on in aria-controls, as --toggle does - no commandfor.
 - [Chips](docs/chip.md): A chip is a small rounded choice: a filter that is on or off, a saved view, an applied filter with its count and a way to remove it.
 - [Menus](docs/menu.md): A menu is a short list of actions or choices that opens from a button: the browser's popover, placed beside the button by CSS anchor positioning, driven by the keyboard as the WAI-ARIA menu button.
 
@@ -51,6 +52,7 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 - [Icon tiles](docs/icon-tile.md): A rounded square with an icon in it: the mark of a screen's subject in its title, of a kind of record, of a drop zone.
 - [Stat tiles](docs/stat.md): A number with its label and an icon in a tone - and, as a button, the filter for what it counts: the numbers a person reads are the buttons they press.
 - [QR codes](docs/qr.md): A white tile for a QR code: a scanner reads dark modules on white, so the tile stays white in the dark theme, in forced colors and on paper.
+- [Ticking times](docs/time.md): A time that keeps itself current: how long a job has been running, how long ago a message came. The page writes the moment; the library writes the words and keeps them right.
 - [Steps and timelines](docs/step-list.md): The steps of a long job as it runs - a release, a publish, an install - each with what it found, and the events of a record's history, one under the other.
 - [Empty states](docs/empty-state.md): What a list, a panel or a search shows when it has nothing yet: what would be here, and the one action that starts it. And the drop zone of a file field.
 - [Placeholders](docs/placeholder.md): Grey bars in the shape of content that is on its way - the first load of a page or a panel. A region that already has content and reloads it gets an overlay instead: see Busy.
@@ -62,6 +64,7 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 - [Drawers](docs/drawer.md): A modal panel at the end of the screen - or at its start with drawer-start - for filters, a record's details, a long form beside the list it belongs to. Bootstrap 5 calls it offcanvas; it is a <dialog> here.
 - [Popovers](docs/popover.md): A small panel that opens beside its button and holds more than a label: a title, a few lines of text, a link. A click outside or Esc closes it; the page under it stays usable.
 - [Tooltips](docs/tooltip.md): A short dark label beside a control. A small button opens it as a toggletip, which a click outside or Esc closes; or an element's own title shows it on hover and focus.
+- [Image viewer](docs/viewer.md): A picture opened large over the page: a link to the full image with data-zoom, and the library does the rest - one modal dialog it makes when first needed, which opens above an open dialog too.
 
 ## Feedback
 

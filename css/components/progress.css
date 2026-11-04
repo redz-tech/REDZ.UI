@@ -100,6 +100,29 @@
 		}
 	}
 
+	.progress-top {
+		position: fixed;
+		inset: 0 0 auto;
+		inline-size: 100%;
+		margin: 0;
+		padding: 0;
+		border-radius: 0;
+		pointer-events: none;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.progress-top:indeterminate {
+			background: currentColor;
+			animation: none;
+		}
+	}
+
+	@media print {
+		.progress-top {
+			display: none;
+		}
+	}
+
 	@media (prefers-reduced-motion: no-preference) {
 		.progress::-webkit-progress-value {
 			transition: inline-size var(--redz-motion) var(--redz-ease);

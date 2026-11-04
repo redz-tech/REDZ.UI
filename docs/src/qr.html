@@ -16,6 +16,13 @@
 			<figcaption class="fs-12 text-muted">7.5rem</figcaption>
 		</figure>
 	</div>
+
+	<h3 id="qr-download">Downloaded as a picture</h3>
+	<p>A button with <code>command="--download"</code> and <code>aria-controls</code> naming the tile downloads its code as a PNG on white, to print on a room's door or a table's card: <code>data-file</code> names the file, <code>code.png</code> by default, and <code>data-size</code> is its side in pixels, 512. An inline <code>svg</code> is drawn through a <code>blob:</code> image, so the page's Content Security Policy needs <code>img-src blob:</code>; an <code>img</code> from another site needs that site's CORS.</p>
+	<div class="docs-example" id="qr-download-room">
+		<div class="qr" id="qr-download-room-code"><img src="img/qr.svg" alt="QR code: the menu of room 12"></div>
+		<button class="btn" type="button" command="--download" aria-controls="qr-download-room-code" data-file="room-12.png" data-size="512"><i class="bi bi-download" aria-hidden="true"></i>Download the code</button>
+	</div>
 </section>
 
 <section class="vstack gap-12" aria-labelledby="qr-access">

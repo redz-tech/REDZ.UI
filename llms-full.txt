@@ -2832,6 +2832,80 @@ It reads the theme's `--redz-bg-hover`, `--redz-text`, `--redz-control-height`, 
 | `btn-outline-light` | - | review | btn-outline-secondary |
 | `data-bs-toggle="button"` | `aria-pressed` | review | switch aria-pressed in your click handler |
 
+# Button commands
+
+Buttons that act without a line of the page's script: copy a value, print the page, switch the theme, share an address. Each carries its command in `command` and names what it acts on in `aria-controls`, as [`--toggle`](collapse.md) does - no `commandfor`.
+
+## Copy
+
+`command="--copy"` copies its `data-copy`, or the value of the field `aria-controls` names, or that element's text. It says politely that it did - the page's texts `copy.done` and `copy.failed` - and shows a check in place of its icon for a moment; the page hears `redz:copy` with `detail.text`. A page served over plain http has no Clipboard API: the browser's copy command stands in.
+
+```html
+<label class="form-label" for="commands-copy-key">The key for the API</label>
+<div class="input-group">
+	<input class="form-control font-monospace" id="commands-copy-key" type="text" value="rz_live_4f9a1c2e7b" readonly>
+	<button class="btn btn-icon" type="button" command="--copy" aria-controls="commands-copy-key" aria-label="Copy the key"><i class="bi bi-copy" aria-hidden="true"></i></button>
+</div>
+<div class="hstack gap-8">
+	<button class="btn" type="button" command="--copy" data-copy="https://lagoon.example/tours/ang-thong"><i class="bi bi-link-45deg" aria-hidden="true"></i>Copy the address</button>
+</div>
+```
+
+## Print
+
+`command="--print"` prints the page. However printing starts - the button, the browser's menu, a key - every closed `details`, an accordion's item among them, and every region a `--toggle` button holds closed open for the paper and close again after. A card is not cut across two pages, and a scrolling card's body prints whole; the shell, toasts, the save bar and anything with `d-print-none` stay off the paper.
+
+```html
+<button class="btn" type="button" command="--print"><i class="bi bi-printer" aria-hidden="true"></i>Print</button>
+```
+
+## Theme
+
+Buttons with `command="--theme"` and the value `light`, `dark` or `system` set the page's theme - `data-theme` on `html`, removed for system - and `aria-pressed` says which shows. One button with the value `toggle` flips the theme shown between light and dark, the system's read from `prefers-color-scheme`: it is pressed while dark, so its words name the dark theme. The page hears `redz:theme` with `detail.theme` and keeps the choice - in a cookie, in the account - and writes `data-theme` on `html` on its server, so the page paints in its theme at once.
+
+```html
+<div class="btn-group" role="group" aria-label="Theme">
+	<button class="btn" type="button" command="--theme" value="light"><i class="bi bi-sun" aria-hidden="true"></i>Light</button>
+	<button class="btn" type="button" command="--theme" value="dark"><i class="bi bi-moon" aria-hidden="true"></i>Dark</button>
+	<button class="btn" type="button" command="--theme" value="system"><i class="bi bi-circle-half" aria-hidden="true"></i>System</button>
+</div>
+<button class="btn btn-icon" type="button" command="--theme" value="toggle" aria-label="Dark theme"><i class="bi bi-moon-stars" aria-hidden="true"></i></button>
+```
+
+## Share
+
+`command="--share"` shares `data-share-url` - the page's own address when it has none - and `data-share-title` through the device's share sheet where it has one, as a phone does. Elsewhere it opens its menu, `aria-controls`, whose links the library writes by their class: `share-telegram`, `share-facebook`, `share-messenger`, `share-linkedin`, `share-vk`, `share-line` and `share-whatsapp`; a `--copy` item without `data-copy` copies the address. Each class gives its icon the network's colour; Bootstrap Icons has no VK mark, so `share-vk` draws its letters. Messenger opens its app, on a phone.
+
+```html
+<button class="btn" type="button" command="--share" aria-controls="commands-share-menu" aria-haspopup="menu" data-share-url="https://lagoon.example/tours/ang-thong" data-share-title="Ang Thong by speedboat"><i class="bi bi-share" aria-hidden="true"></i>Share</button>
+<div id="commands-share-menu" class="menu menu-start" popover role="menu" aria-label="Share">
+	<a class="menu-item share-telegram" role="menuitem"><i class="bi bi-telegram" aria-hidden="true"></i>Telegram</a>
+	<a class="menu-item share-whatsapp" role="menuitem"><i class="bi bi-whatsapp" aria-hidden="true"></i>WhatsApp</a>
+	<a class="menu-item share-line" role="menuitem"><i class="bi bi-line" aria-hidden="true"></i>LINE</a>
+	<a class="menu-item share-facebook" role="menuitem"><i class="bi bi-facebook" aria-hidden="true"></i>Facebook</a>
+	<a class="menu-item share-messenger" role="menuitem"><i class="bi bi-messenger" aria-hidden="true"></i>Messenger</a>
+	<a class="menu-item share-linkedin" role="menuitem"><i class="bi bi-linkedin" aria-hidden="true"></i>LinkedIn</a>
+	<a class="menu-item share-vk" role="menuitem">VK</a>
+	<button class="menu-item" type="button" role="menuitem" command="--copy"><i class="bi bi-link-45deg" aria-hidden="true"></i>Copy the address</button>
+</div>
+```
+
+## Keyboard and accessibility
+
+- Each command is a `button`: `Enter` and `Space` run it, and one that is `aria-disabled` does nothing.
+- A copy is said once, politely, inside an open modal dialog when there is one; the check that shows for a moment is not read out.
+- The theme buttons say which theme shows in `aria-pressed`; the one toggle is pressed while dark, its words the dark theme's.
+- The share menu is a [menu](menu.md): it opens on its first link, the arrow keys move through it, and `Escape` closes it back to its button, which says in `aria-expanded` whether it is open.
+
+## Texts
+
+The library has no words of its own; it reads these from the page's island `#redz-ui-text`.
+
+| Key | For | In English |
+| --- | --- | --- |
+| `copy.done` | Said when a copy is done | Copied |
+| `copy.failed` | Said when the browser refuses it | Could not copy |
+
 # Chips
 
 A chip is a small rounded choice: a filter that is on or off, a saved view, an applied filter with its count and a way to remove it.
@@ -2909,6 +2983,24 @@ A choice of one is a set of `menuitemradio` items, the chosen one `aria-checked=
 	<button class="menu-item" type="button" role="menuitemradio" aria-checked="true"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i>All sites</button>
 	<button class="menu-item" type="button" role="menuitemradio" aria-checked="false"><i class="bi bi-globe2" aria-hidden="true"></i>lagoon.example</button>
 	<button class="menu-item" type="button" role="menuitemradio" aria-checked="false"><i class="bi bi-globe2" aria-hidden="true"></i>angthong.example</button>
+</div>
+```
+
+### Items that stay checked
+
+A `menuitemcheckbox` chosen flips its `aria-checked`, and a `menuitemradio` in a `role="group"` checks itself and unchecks the others of its group; the menu stays open for the next choice, and the page hears `redz:check` with `detail.item` and `detail.checked`. A `menuitemradio` outside a group is a choice of one, as above: it checks itself and closes the menu.
+
+```html
+<button class="btn" type="button" commandfor="menu-checks-list" command="toggle-popover" aria-haspopup="menu"><i class="bi bi-layout-three-columns" aria-hidden="true"></i>Columns<i class="bi bi-chevron-down" aria-hidden="true"></i></button>
+<div id="menu-checks-list" class="menu" popover role="menu" aria-label="Columns">
+	<button class="menu-item" type="button" role="menuitemcheckbox" aria-checked="true">Guest</button>
+	<button class="menu-item" type="button" role="menuitemcheckbox" aria-checked="true">Tour</button>
+	<button class="menu-item" type="button" role="menuitemcheckbox" aria-checked="false">Pickup</button>
+	<div class="menu-header" id="menu-checks-sort">Sort by</div>
+	<div role="group" aria-labelledby="menu-checks-sort">
+		<button class="menu-item" type="button" role="menuitemradio" aria-checked="true">Date</button>
+		<button class="menu-item" type="button" role="menuitemradio" aria-checked="false">Name</button>
+	</div>
 </div>
 ```
 
@@ -5487,6 +5579,15 @@ A white tile for a QR code: a scanner reads dark modules on white, so the tile s
 </figure>
 ```
 
+### Downloaded as a picture
+
+A button with `command="--download"` and `aria-controls` naming the tile downloads its code as a PNG on white, to print on a room's door or a table's card: `data-file` names the file, `code.png` by default, and `data-size` is its side in pixels, 512. An inline `svg` is drawn through a `blob:` image, so the page's Content Security Policy needs `img-src blob:`; an `img` from another site needs that site's CORS.
+
+```html
+<div class="qr" id="qr-download-room-code"><img src="img/qr.svg" alt="QR code: the menu of room 12"></div>
+<button class="btn" type="button" command="--download" aria-controls="qr-download-room-code" data-file="room-12.png" data-size="512"><i class="bi bi-download" aria-hidden="true"></i>Download the code</button>
+```
+
 ## Accessibility
 
 - A code is a picture of something a person may not be able to scan: give the same thing in words beside it - the address, or the secret key a 2FA app can take typed.
@@ -5498,6 +5599,24 @@ A white tile for a QR code: a scanner reads dark modules on white, so the tile s
 From [`css/components/qr.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/qr.css), which declares no custom property of its own.
 
 It reads the theme's `--redz-space-8`, `--redz-border`, `--redz-radius-8`, `--redz-qr-size`.
+
+# Ticking times
+
+A time that keeps itself current: how long a job has been running, how long ago a message came. The page writes the moment; the library writes the words and keeps them right.
+
+## Examples
+
+A `time` whose `datetime` is the moment - ISO, with its zone. With `data-elapsed` it shows the time since then as a clock, `m:ss` under an hour and `h:mm:ss` after; with `data-ago` it says how long ago it was, or how soon it comes, in the page's language, and its `title` holds the full moment. One ticker serves every one on the page: each second while an elapsed time is there, else every 30 seconds, and none while the page is hidden. The page's own words stand inside until the library starts.
+
+```html
+<p>The backup has been running for <time datetime="2026-11-04T08:00:00Z" data-elapsed data-docs-since="95">1:35</time>.</p>
+<p>The last message came <time datetime="2026-11-04T08:00:00Z" data-ago data-docs-since="300">5 minutes ago</time>; the next tour leaves <time datetime="2026-11-04T08:00:00Z" data-ago data-docs-since="-7200">in 2 hours</time>.</p>
+```
+
+## Accessibility
+
+- A ticking time is never read out as it ticks: a reader hears it where it is, as it is at that moment.
+- Say a wait that matters in words once, where it starts - the time beside it is for the eye.
 
 # Steps and timelines
 
@@ -5746,6 +5865,22 @@ await REDZ.ui.confirm({
 });
 ```
 
+### A question for one value
+
+`await REDZ.ui.prompt({title, text, label, value, placeholder, type, inputmode, pattern, required, ok, cancel, tone})` asks for one value in a modal dialog and answers it, or `null` for Cancel and `Esc`. The field takes the focus with its text selected; `Enter` answers once the field is valid - `required`, `pattern` and `type` are held by the browser's own checks. The field is labelled by `label`, or the title; the buttons' words come from the caller or the page's texts.
+
+```html
+<button class="btn" type="button" data-docs-run="prompt"><i class="bi bi-pencil" aria-hidden="true"></i>Rename the folder</button>
+<span class="text-muted fs-12" role="status" data-docs-answer></span>
+```
+
+```js
+const name = await REDZ.ui.prompt({title: 'Rename the folder', label: 'Name', value: 'Tours 2026', required: true, ok: 'Rename'});
+if (name !== null) {
+  // send it
+}
+```
+
 ### On a phone and full screen
 
 On any window a long dialog keeps its header and its footer in view: only `dialog-body` scrolls between them. A `<form>` may hold all three - `<form method="dialog">` right inside the dialog, its submit buttons in the footer - and the body still scrolls alone. On a window narrower than 576 px a dialog fills the screen by itself, while `dialog-sm` and a confirmation stay a card in the middle. `dialog-fullscreen` fills the screen on any window.
@@ -5980,6 +6115,62 @@ It reads the theme's `--redz-space-4`, `--redz-space-8`, `--redz-radius-6`, `--r
 | `data-bs-title` | `title` | rename | the element's own title, inside data-tooltips |
 | `bootstrap.Tooltip` | - | remove | data-tooltips on <html> or a container shows the titles inside |
 
+# Image viewer
+
+A picture opened large over the page: a link to the full image with `data-zoom`, and the library does the rest - one modal dialog it makes when first needed, which opens above an open dialog too.
+
+## Examples
+
+An `a` with `data-zoom` whose `href` is the full image, around its thumbnail. Links with the same word in `data-zoom` make a set, in the page's order: the arrow keys - mirrored right to left - and the viewer's buttons step through it, wrapping, and the count says where it is. The caption is the link's `title`, or its image's `alt`. `Escape`, × and a click beside the image close it, and the focus goes back to the link; a click with a modifier key opens the image as a link does.
+
+```html
+<div class="grid cols-3 gap-12">
+	<a href="img/lagoon.svg" data-zoom="tour" title="The lagoon at Ang Thong"><img class="w-100 ratio-16x9 rounded" src="img/lagoon.svg" alt="A lagoon under green hills"></a>
+	<a href="img/pier.svg" data-zoom="tour" title="The pier at sunset"><img class="w-100 ratio-16x9 rounded" src="img/pier.svg" alt="A wooden pier over the sea"></a>
+	<a href="img/cliffs.svg" data-zoom="tour"><img class="w-100 ratio-16x9 rounded" src="img/cliffs.svg" alt="Cliffs above a bay with a boat"></a>
+</div>
+```
+
+### Above a dialog
+
+The viewer is in the top layer: opened from a dialog, it covers the dialog, and closing it leaves the dialog as it was, the focus back on the link. A link with an empty `data-zoom` opens its image alone.
+
+```html
+<button class="btn" type="button" commandfor="viewer-dialog-room" command="show-modal">The room</button>
+<dialog class="dialog" id="viewer-dialog-room" aria-labelledby="viewer-dialog-room-title" closedby="any">
+	<div class="dialog-header">
+		<h2 class="dialog-title" id="viewer-dialog-room-title">Sea view, room 12</h2>
+		<button class="btn btn-icon btn-text" type="button" commandfor="viewer-dialog-room" command="close" aria-label="Close"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+	</div>
+	<div class="dialog-body vstack gap-12">
+		<a href="img/pier.svg" data-zoom title="The pier below the room"><img class="w-100 ratio-16x9 rounded" src="img/pier.svg" alt="A wooden pier over the sea"></a>
+		<p>Two guests, a terrace, the pier a minute away.</p>
+	</div>
+</dialog>
+```
+
+## Keyboard and accessibility
+
+- The viewer is a modal dialog named by its caption: the focus starts on ×, `Tab` stays inside it, and `Escape` closes it.
+- In a set, `←` and `→` step - mirrored right to left -, and the caption with the count is said politely when it changes.
+- The image keeps the thumbnail's `alt`; a link whose image has none is named by its `title`.
+
+## Texts
+
+The library has no words of its own; it reads these from the page's island `#redz-ui-text`.
+
+| Key | For | In English |
+| --- | --- | --- |
+| `close` | The × button | Close |
+| `viewer.prev`, `viewer.next` | The buttons that step through a set | Previous image, Next image |
+| `viewer.count` | Where the image is in its set; `{position}` and `{count}` | {position} of {count} |
+
+## Tokens
+
+From [`css/components/viewer.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/viewer.css). It declares `--redz-btn-bg`, `--redz-btn-fg`, `--redz-btn-hover` on its root, never on rows or items.
+
+It reads the theme's `--redz-space-64`, `--redz-space-16`, `--redz-space-24`, `--redz-space-12`, `--redz-fs-14`.
+
 # Alerts
 
 A message that stays on the page beside what it is about: a check passed, a suggestion, a warning before an action. A message that comes and goes is a [toast](toast.md).
@@ -6195,6 +6386,18 @@ The browser's own `<progress>` for work under way and `<meter>` for a measure wi
 	<progress class="progress progress-xs progress-warning" value="100" max="100" aria-label="Mail queue, late"></progress>
 	<meter class="meter meter-xs" value="0.71" min="0" max="1" low="0.8" high="0.95" optimum="1" aria-label="Mail queue, 71 percent succeeded">71%</meter>
 </div>
+```
+
+### Along the window's top
+
+`REDZ.ui.progress(promise)` shows a thin bar along the top of the window while a request runs, and answers the promise: it comes after 150 ms, so a quick answer shows nothing, then stays at least 400 ms, so it never flickers; however many requests run at once, there is one bar. It is `progress-top`, in the top layer, and readers do not hear it - what waits says so itself, a [busy](busy.md) region or button. Under reduced motion the bar stands still.
+
+```html
+<button class="btn" type="button" data-docs-run="progress"><i class="bi bi-cloud-arrow-down" aria-hidden="true"></i>Load for 2 seconds</button>
+```
+
+```js
+const rows = await REDZ.ui.progress(fetch('/bookings?page=2').then((answer) => answer.json()));
 ```
 
 ## Keyboard and accessibility
@@ -6432,6 +6635,27 @@ tablist.addEventListener('redz:select', (event) => {
     event.detail.respondWith(REDZ.ui.confirm({title: 'Leave without saving?', ok: 'Leave'}));
   }
 });
+```
+
+### Tabs in the address
+
+A tablist with `data-hash` follows the address: `location.hash` naming a panel, or anything inside one, selects its tab - when the page loads and when the hash changes, a tablist inside a panel too -, and a person's choice writes the panel's id into the address, so a link or a reload opens the same tab. After every selection, the first one too, the tablist fires `redz:selected` with `detail.tab`. `REDZ.ui.select(tab)` chooses a tab from code as a person would - through `redz:select`, so the page can still refuse - and answers a promise of whether it was selected.
+
+```html
+<div class="nav nav-underline" role="tablist" aria-label="Booking" data-hash>
+	<button class="nav-link" type="button" role="tab" id="nav-hash-1" aria-selected="true" aria-controls="nav-hash-guests">Guests</button>
+	<button class="nav-link" type="button" role="tab" id="nav-hash-2" aria-selected="false" aria-controls="nav-hash-payment">Payment</button>
+	<button class="nav-link" type="button" role="tab" id="nav-hash-3" aria-selected="false" aria-controls="nav-hash-history">History</button>
+</div>
+<div id="nav-hash-guests" role="tabpanel" aria-labelledby="nav-hash-1" tabindex="0"><p>Two adults, one child.</p></div>
+<div id="nav-hash-payment" role="tabpanel" aria-labelledby="nav-hash-2" tabindex="0" hidden><p>Paid in full by card on 2 November.</p></div>
+<div id="nav-hash-history" role="tabpanel" aria-labelledby="nav-hash-3" tabindex="0" hidden><p>Booked on 1 November; the date moved once.</p></div>
+<p><a href="#nav-hash-payment">The payment</a> opens its tab.</p>
+```
+
+```js
+tablist.addEventListener('redz:selected', (event) => load(event.detail.tab));
+await REDZ.ui.select(document.getElementById('nav-hash-3'));
 ```
 
 ### Filling the width

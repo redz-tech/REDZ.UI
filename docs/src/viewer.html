@@ -1,0 +1,54 @@
+<header class="vstack gap-8">
+	<h1>Image viewer</h1>
+	<p class="docs-lead">A picture opened large over the page: a link to the full image with <code>data-zoom</code>, and the library does the rest - one modal dialog it makes when first needed, which opens above an open dialog too.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="viewer-examples">
+	<h2 id="viewer-examples">Examples</h2>
+	<p>An <code>a</code> with <code>data-zoom</code> whose <code>href</code> is the full image, around its thumbnail. Links with the same word in <code>data-zoom</code> make a set, in the page's order: the arrow keys - mirrored right to left - and the viewer's buttons step through it, wrapping, and the count says where it is. The caption is the link's <code>title</code>, or its image's <code>alt</code>. <kbd>Escape</kbd>, × and a click beside the image close it, and the focus goes back to the link; a click with a modifier key opens the image as a link does.</p>
+	<div class="docs-example docs-example-stack" id="viewer-set">
+		<div class="grid cols-3 gap-12">
+			<a href="img/lagoon.svg" data-zoom="tour" title="The lagoon at Ang Thong"><img class="w-100 ratio-16x9 rounded" src="img/lagoon.svg" alt="A lagoon under green hills"></a>
+			<a href="img/pier.svg" data-zoom="tour" title="The pier at sunset"><img class="w-100 ratio-16x9 rounded" src="img/pier.svg" alt="A wooden pier over the sea"></a>
+			<a href="img/cliffs.svg" data-zoom="tour"><img class="w-100 ratio-16x9 rounded" src="img/cliffs.svg" alt="Cliffs above a bay with a boat"></a>
+		</div>
+	</div>
+
+	<h3>Above a dialog</h3>
+	<p>The viewer is in the top layer: opened from a dialog, it covers the dialog, and closing it leaves the dialog as it was, the focus back on the link. A link with an empty <code>data-zoom</code> opens its image alone.</p>
+	<div class="docs-example" id="viewer-dialog">
+		<button class="btn" type="button" commandfor="viewer-dialog-room" command="show-modal">The room</button>
+		<dialog class="dialog" id="viewer-dialog-room" aria-labelledby="viewer-dialog-room-title" closedby="any">
+			<div class="dialog-header">
+				<h2 class="dialog-title" id="viewer-dialog-room-title">Sea view, room 12</h2>
+				<button class="btn btn-icon btn-text" type="button" commandfor="viewer-dialog-room" command="close" aria-label="Close"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+			</div>
+			<div class="dialog-body vstack gap-12">
+				<a href="img/pier.svg" data-zoom title="The pier below the room"><img class="w-100 ratio-16x9 rounded" src="img/pier.svg" alt="A wooden pier over the sea"></a>
+				<p>Two guests, a terrace, the pier a minute away.</p>
+			</div>
+		</dialog>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="viewer-access">
+	<h2 id="viewer-access">Keyboard and accessibility</h2>
+	<ul>
+		<li>The viewer is a modal dialog named by its caption: the focus starts on ×, <kbd>Tab</kbd> stays inside it, and <kbd>Escape</kbd> closes it.</li>
+		<li>In a set, <kbd>←</kbd> and <kbd>→</kbd> step - mirrored right to left -, and the caption with the count is said politely when it changes.</li>
+		<li>The image keeps the thumbnail's <code>alt</code>; a link whose image has none is named by its <code>title</code>.</li>
+	</ul>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="viewer-texts">
+	<h2 id="viewer-texts">Texts</h2>
+	<p>The library has no words of its own; it reads these from the page's island <code>#redz-ui-text</code>.</p>
+	<table class="table docs-table">
+		<thead><tr><th scope="col">Key</th><th scope="col">For</th><th scope="col">In English</th></tr></thead>
+		<tbody>
+			<tr><td><code>close</code></td><td>The × button</td><td>Close</td></tr>
+			<tr><td><code>viewer.prev</code>, <code>viewer.next</code></td><td>The buttons that step through a set</td><td>Previous image, Next image</td></tr>
+			<tr><td><code>viewer.count</code></td><td>Where the image is in its set; <code>{position}</code> and <code>{count}</code></td><td>{position} of {count}</td></tr>
+		</tbody>
+	</table>
+</section>

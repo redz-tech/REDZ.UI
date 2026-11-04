@@ -3645,6 +3645,7 @@ progress-secondary
 progress-sm
 progress-striped
 progress-success
+progress-top
 progress-warning
 progress-xs
 prose
@@ -3739,6 +3740,13 @@ shadow-1
 shadow-2
 shadow-3
 shadow-none
+share-facebook
+share-line
+share-linkedin
+share-messenger
+share-telegram
+share-vk
+share-whatsapp
 sm:align-content-around
 sm:align-content-between
 sm:align-content-center
@@ -4173,6 +4181,14 @@ user-select-all
 user-select-auto
 user-select-none
 vh-100
+viewer
+viewer-caption
+viewer-close
+viewer-figure
+viewer-image
+viewer-next
+viewer-prev
+viewer-set
 visible
 visually-hidden
 visually-hidden-focusable

@@ -77,4 +77,14 @@
 	.card > .nav {
 		padding-inline: var(--redz-space-16);
 	}
+
+	@media print {
+		.card {
+			break-inside: avoid;
+		}
+
+		.card-scroll > .card-body {
+			overflow: visible;
+		}
+	}
 }
