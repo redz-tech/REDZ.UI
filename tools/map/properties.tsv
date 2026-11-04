@@ -1,0 +1,53 @@
+# The rules of tools/map.php for Bootstrap 5.3.8's custom properties (tools/map/bootstrap-properties.txt), which a
+# project's own CSS, inline styles and scripts read or set: a name meets the first pattern that matches it whole.
+# Columns as in rules.tsv: pattern, the REDZ.UI form ($1 for a group), the kind, the docs page, a note. A form is one of
+# the library's custom properties.
+
+# The tones.
+--bs-(primary|secondary|success|danger|warning|info)	--redz-$1	rename	tokens
+--bs-(primary|secondary|success|danger|warning|info)-bg-subtle	--redz-$1-subtle	rename	tokens
+--bs-(primary|secondary|success|danger|warning|info)-rgb		review	tokens	a relative color in place of the channels: rgb(from var(--redz-$1) r g b / 50%)
+--bs-(primary|secondary|success|danger|warning|info)-text-emphasis	--redz-$1	review	tokens	the tone itself: REDZ.UI has no darker text of a tone
+--bs-(primary|secondary|success|danger|warning|info)-border-subtle		review	utilities	color-mix(in oklch, var(--redz-$1) 35%, var(--redz-border)), as border-$1-subtle draws it
+--bs-(light|dark)(-rgb|-bg-subtle|-border-subtle|-text-emphasis)?		review	tokens	light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text
+--bs-(white|black|blue|indigo|purple|pink|red|orange|yellow|green|teal|cyan|gray|gray-dark|gray-[0-9]+)(-rgb)?		review	tokens	a palette color: use the tone or the surface that means it
+
+# The page.
+--bs-body-bg	--redz-bg	rename	tokens
+--bs-body-color	--redz-text	rename	tokens
+--bs-emphasis-color	--redz-text	rename	tokens
+--bs-heading-color	--redz-text	rename	tokens
+--bs-secondary-color	--redz-text-muted	rename	tokens
+--bs-tertiary-color	--redz-text-faint	rename	tokens
+--bs-secondary-bg	--redz-bg-hover	rename	tokens
+--bs-tertiary-bg	--redz-bg-page	rename	tokens
+--bs-(body-bg|body-color|emphasis-color|secondary-color|tertiary-color|secondary-bg|tertiary-bg)-rgb		review	tokens	a relative color from the matching --redz-* in place of the channels
+--bs-border-color	--redz-border	rename	tokens
+--bs-border-color-translucent	--redz-border	review	tokens	REDZ.UI's border is solid in both themes
+--bs-border-(width|style)		review	tokens	REDZ.UI's borders are 1px solid: write the value
+--bs-border-radius	--redz-radius-8	rename	tokens
+--bs-border-radius-sm	--redz-radius-6	rename	tokens
+--bs-border-radius-lg	--redz-radius-12	rename	tokens
+--bs-border-radius-(xl|xxl|2xl)	--redz-radius-16	rename	tokens
+--bs-border-radius-pill		review	tokens	999px, as rounded-full writes it
+--bs-box-shadow-sm	--redz-shadow-1	rename	tokens
+--bs-box-shadow	--redz-shadow-2	rename	tokens
+--bs-box-shadow-lg	--redz-shadow-3	rename	tokens
+--bs-box-shadow-inset		remove	tokens	REDZ.UI draws no inset shadow
+--bs-font-sans-serif|--bs-body-font-family	--redz-font-sans	rename	tokens
+--bs-font-monospace	--redz-font-mono	rename	tokens
+--bs-body-font-size		review	tokens	REDZ.UI's text is --redz-fs-14; the scale is --redz-fs-12 to --redz-fs-32
+--bs-body-(font-weight|line-height)		review	tokens	the body's own; lines are --redz-lh-16 to --redz-lh-28
+--bs-link-color	--redz-primary	review	tokens	links take the accent; set it on a link only where it differs
+--bs-link-(color-rgb|hover-color|hover-color-rgb|decoration|opacity|underline-opacity)		review	tokens	a link's own color and line, written on the link
+--bs-focus-ring-(color|width|opacity)	--redz-focus	review	tokens	REDZ.UI draws one focus ring: --redz-focus is its color
+--bs-highlight-(bg|color)		review	tokens	mark is drawn by the base stylesheet
+--bs-code-color		review	tokens	code is the text color in --redz-font-mono
+--bs-gradient		remove	tokens	REDZ.UI draws no gradients
+--bs-breakpoint-.+		remove	layout	REDZ.UI's widths are the region prefixes sm: to 2xl:
+--bs-gutter-[xy]		review	layout	the grid's gap: gap-* on the grid
+--bs-(bg|border|text)-opacity		review	utilities	a relative color or color-mix in place of the opacity
+--bs-(aspect-ratio|position)		review	utilities	ratio-* for the ratio; the property itself for the rest
+
+# The components: their custom properties are Bootstrap's own knobs.
+--bs-(btn|dropdown|modal|accordion|popover|pagination|navbar|nav|card|list-group|toast|table|tooltip|offcanvas|form|alert|progress|breadcrumb|spinner|badge|carousel|backdrop|placeholder)-.+		review	tokens	REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility

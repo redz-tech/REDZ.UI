@@ -13,17 +13,20 @@ The words beside the spinner say what is happening; the ring alone is hidden fro
 <span class="hstack gap-8 text-primary fs-20"><span class="spinner-border" aria-hidden="true"></span>Larger, in the accent</span>
 ```
 
+### A growing dot
+
+`spinner-grow` is a dot that grows and fades in place of the ring, for a calmer sign in a line of text.
+
+```html
+<span class="hstack gap-8"><span class="spinner-grow" aria-hidden="true"></span>Checking the server…</span>
+<span class="hstack gap-8 text-success"><span class="spinner-grow" aria-hidden="true"></span>Syncing the calendar</span>
+```
+
 ## Accessibility
 
-- A spinner turns even for people who ask for less motion - it is the sign that something is happening - and stays a ring in forced colors.
+- A spinner moves even for people who ask for less motion - it is the sign that something is happening - and stays a ring or a dot in forced colors.
 - Say the same in words, in a live region when it starts after an action.
 
 ## Tokens
 
 From [`css/components/spinner.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/spinner.css), which declares no custom property of its own.
-
-## From Bootstrap 5.3
-
-| Bootstrap 5.3 | REDZ.UI | Change | Note |
-| --- | --- | --- | --- |
-| `spinner-grow` | - | missing |  |

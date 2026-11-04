@@ -6,13 +6,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Navs and tabs - REDZ.UI</title>
 	<meta name="description" content="A row of links between views of one thing - nav-underline - or of choices - nav-pills; and the same row as tabs that switch panels on the page, driven by the keyboard as the WAI-ARIA tabs pattern.">
+	<script src="../js/floor.js"></script>
 	<link rel="stylesheet" href="../dist/redz-ui.min.css">
 	<link rel="stylesheet" href="../css/icons.css">
 	<link rel="stylesheet" href="site.css">
 	<link rel="alternate" type="text/markdown" href="nav.md">
 	<script src="site.js"></script>
 	<script type="module" src="../dist/redz-ui.min.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}"}</script>
+	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}"}</script>
 </head>
 <body>
 	<div class="app">
@@ -169,6 +170,35 @@
 &lt;div id="nav-manual-panel-1" role="tabpanel" aria-labelledby="nav-manual-1" tabindex="0"&gt;&lt;p&gt;128 bookings this week.&lt;/p&gt;&lt;/div&gt;
 &lt;div id="nav-manual-panel-2" role="tabpanel" aria-labelledby="nav-manual-2" tabindex="0" hidden&gt;&lt;p&gt;312,400 THB this week.&lt;/p&gt;&lt;/div&gt;
 &lt;div id="nav-manual-panel-3" role="tabpanel" aria-labelledby="nav-manual-3" tabindex="0" hidden&gt;&lt;p&gt;2 refunds this week.&lt;/p&gt;&lt;/div&gt;</code></pre></div>
+
+					<h3>A tab that asks before it is left</h3>
+					<p>Before a person's click or key selects a tab, the tablist fires the cancelable <code>redz:select</code>; its <code>detail</code> holds <code>tab</code>, the one asked for, and <code>from</code>, the one being left. A page that must ask first - a form with unsaved edits - calls <code>event.preventDefault()</code> and <code>event.detail.respondWith(promise)</code>: the tab is selected when the promise gives <code>true</code>, and otherwise the one being left stays, with the focus. Change the note below, then choose another tab.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="nav-guard">
+						<div class="nav nav-underline" role="tablist" aria-label="Excursion">
+							<button class="nav-link" type="button" role="tab" id="nav-guard-1" aria-selected="true" aria-controls="nav-guard-panel-1">Note</button>
+							<button class="nav-link" type="button" role="tab" id="nav-guard-2" aria-selected="false" aria-controls="nav-guard-panel-2">Prices</button>
+						</div>
+						<div id="nav-guard-panel-1" role="tabpanel" aria-labelledby="nav-guard-1" tabindex="0">
+							<label class="form-label" for="nav-guard-note">A note for the guides</label>
+							<input class="form-control" id="nav-guard-note" type="text" value="Meet at the pier at 8:00">
+						</div>
+						<div id="nav-guard-panel-2" role="tabpanel" aria-labelledby="nav-guard-2" tabindex="0" hidden><p>2,900 THB an adult.</p></div>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;div class="nav nav-underline" role="tablist" aria-label="Excursion"&gt;
+	&lt;button class="nav-link" type="button" role="tab" id="nav-guard-1" aria-selected="true" aria-controls="nav-guard-panel-1"&gt;Note&lt;/button&gt;
+	&lt;button class="nav-link" type="button" role="tab" id="nav-guard-2" aria-selected="false" aria-controls="nav-guard-panel-2"&gt;Prices&lt;/button&gt;
+&lt;/div&gt;
+&lt;div id="nav-guard-panel-1" role="tabpanel" aria-labelledby="nav-guard-1" tabindex="0"&gt;
+	&lt;label class="form-label" for="nav-guard-note"&gt;A note for the guides&lt;/label&gt;
+	&lt;input class="form-control" id="nav-guard-note" type="text" value="Meet at the pier at 8:00"&gt;
+&lt;/div&gt;
+&lt;div id="nav-guard-panel-2" role="tabpanel" aria-labelledby="nav-guard-2" tabindex="0" hidden&gt;&lt;p&gt;2,900 THB an adult.&lt;/p&gt;&lt;/div&gt;</code></pre></div>
+					<pre class="docs-code" tabindex="0"><code>tablist.addEventListener('redz:select', (event) =&gt; {
+  if (form.dataset.changed !== undefined) {
+    event.preventDefault();
+    event.detail.respondWith(REDZ.ui.confirm({title: 'Leave without saving?', ok: 'Leave'}));
+  }
+});</code></pre>
 
 					<h3>Filling the width</h3>
 					<p><code>nav-fill</code> lets the links share the width by their length, <code>nav-justified</code> in equal parts.</p>

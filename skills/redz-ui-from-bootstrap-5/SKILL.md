@@ -17,8 +17,10 @@ the project switches at once, so migrate on a branch and switch the `<link>` wit
 ## The loop
 
 1. **Inventory.** `scripts/scan.sh --own PREFIX PATH > before.txt` lists every finding as
-   `FILE:LINE:TOKEN:KIND:REDZ-UI`. Pass `--own` for each prefix of the project's own classes (`--own erp-`), so they
-   are not reported as unknown. Count findings per file; start with three small files.
+   `FILE:LINE:TOKEN:KIND:REDZ-UI` - the REDZ.UI form, or the map's note where there is none. It reads classes,
+   `data-bs-*`, `bootstrap.*` calls and the `--bs-*` custom properties of stylesheets, style attributes and scripts.
+   Pass `--own` for each prefix of the project's own classes (`--own erp-`), so they are not reported as unknown. Count
+   findings per file; start with three small files.
 2. **Before.** Take screenshots of every screen the file renders - with its dialogs, menus, tabs and error states
    open, as screenshots miss what is closed.
 3. **Rewrite the whole file in one pass**, finding by finding, by the kind (below) and `assets/map.tsv` (its `note`
@@ -38,7 +40,7 @@ the project switches at once, so migrate on a branch and switch the `<link>` wit
 | `remove` | Delete it: the wrapper or helper is not needed (`modal-dialog`, `fade`, `nav-item`). |
 | `missing` | REDZ.UI has no such component yet (carousel, figure and a few helpers). Keep the markup in the module's own classes with its prefix, and leave a note; do not invent a REDZ.UI class. |
 | `review` | Decide by context; the map's note proposes the nearest form. |
-| `unknown` | Not a class of REDZ.UI: invented, a Bootstrap 6 habit, or a module class without its prefix. |
+| `unknown` | Not a class of REDZ.UI: invented, a Bootstrap 6 habit, an icon `icons/` does not have, or a module class without its prefix. |
 
 ## Gotchas
 
@@ -56,7 +58,7 @@ the project switches at once, so migrate on a branch and switch the `<link>` wit
   names in a lookup - `['danger' => 'btn-danger', …]` - so the next scan reads them.
 - **Words come from the page.** REDZ.UI has no words of its own: every word it shows reads the island
   `<script type="application/json" id="redz-ui-text">`, whose keys are the passport's `texts` (`redz-ui.json`) -
-  `close`, `confirm.ok`, `confirm.cancel`, `busy`, `remove`, `create`, `moved`, `file.type`, `file.size`,
+  `close`, `confirm.ok`, `confirm.cancel`, `confirm.phrase`, `busy`, `remove`, `create`, `moved`, `more`, `file.type`, `file.size`,
   `strength.short` … `strength.strong`, `found.other` - and, for each key of its `plurals`, the other plural forms
   (`found.one`, `found.few`).
 - **Icons stay**: `bi bi-NAME` keep their classes; swap the Bootstrap Icons font stylesheet for `css/icons.css`.

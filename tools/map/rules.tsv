@@ -47,7 +47,8 @@ bg-opacity-(10|25|50|75|100)		review	utilities	Bootstrap 6 dropped it too: bg-{t
 border-(top|end|bottom|start)-0		missing	utilities	draw only the sides you need: border-top and the others
 border-(3|5)		review	utilities	the widths are 1, 2 and 4 px
 border-(white|black|light|dark)		review	utilities	border-strong, or a tone
-border-(primary|secondary|success|danger|warning|info|light|dark)-subtle		missing	utilities
+border-(primary|secondary|success|danger|warning|info)-subtle	border-$1-subtle	same	utilities
+border-(light|dark)-subtle		review	utilities	border, or border-strong
 border-opacity-(10|25|50|75|100)		missing	utilities
 rounded-1	rounded-4	value	utilities	4 px
 rounded-2	rounded-6	value	utilities	6 px
@@ -129,7 +130,7 @@ offcanvas-start	drawer drawer-start	rename	drawer
 offcanvas-(top|bottom)		missing	drawer
 offcanvas-(header|title|body)	drawer-$1	rename	drawer
 offcanvas-backdrop		remove	drawer	the browser's ::backdrop
-offcanvas-(sm|md|lg|xl|xxl)		missing	drawer	a panel that stays in the page from a width
+offcanvas-(sm|md|lg|xl|xxl)		review	app	a side navigation is the app shell's app-sidebar: a panel opened from the header below 1024 px, in the page above it; anything else is a drawer
 dropdown|dropup|dropend|dropstart|dropdown-center|dropup-center		remove	menu	no wrapper: the menu flips by itself
 dropdown-toggle		review	menu	the button: commandfor + command="toggle-popover" + aria-haspopup="menu"; a chevron is an icon
 dropdown-toggle-split		review	menu	a btn-group of the action and a btn-icon that opens the menu
@@ -147,7 +148,7 @@ btn-outline-(light|dark)		review	btn	btn-outline-secondary
 btn-check		review	btn	a toggle is a btn with aria-pressed; a choice is radio inputs
 btn-close-white		remove	btn	the close glyph takes the text color
 btn-group-(sm|lg)		review	btn	size each button
-btn-group-vertical		missing	btn
+btn-group-vertical	btn-group-vertical	same	btn
 form-check-input		review	check	check, radio or switch on the input, by its type
 form-check-label		remove	check	the label is the form-check around the input
 form-check-inline		review	check	hstack gap-16 around the labels
@@ -186,7 +187,7 @@ table-(primary|success|info|light|dark)		review	table	row tones are danger, warn
 (table-striped|table-striped-columns|table-borderless|table-group-divider)	$1	same	table
 table-bordered	table-bordered	same	table	in a card the card's border is the table's frame
 caption-top		missing	table
-table-sm		review	table	data-density="compact" on <html>
+table-sm		review	table	data-density="compact" on the table, its card or <html>
 table-active		review	table	aria-selected or aria-current on the row
 table-responsive(-.+)?		review	table	the card's body holds the table; columns hide below md:
 toast-header		review	toast	REDZ.ui.toast builds the toast from its title, text and tone
@@ -194,7 +195,8 @@ tooltip-inner|tooltip-arrow|bs-tooltip-.+		remove	tooltip	the tooltip is one ele
 (popover|popover-header|popover-body)	$1	same	popover	the panel has popover, right after its button; with a title and a link in it, role="dialog"
 popover-arrow|bs-popover-.+		remove	popover	no arrow: anchor positioning places and flips the panel
 spinner-border-sm		review	spinner	the spinner is 1 em: set the font size
-spinner-grow|spinner-grow-sm		missing	spinner
+spinner-grow	spinner-grow	same	spinner
+spinner-grow-sm		review	spinner	the spinner is 1 em: set the font size
 placeholder-(xs|sm|lg)		review	placeholder	size by the height of the bar
 placeholder-(glow|wave)		remove	placeholder	placeholders pulse by themselves
 (accordion|accordion-body|accordion-flush)	$1	same	accordion

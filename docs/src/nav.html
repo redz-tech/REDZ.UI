@@ -45,6 +45,26 @@
 		<div id="nav-manual-panel-3" role="tabpanel" aria-labelledby="nav-manual-3" tabindex="0" hidden><p>2 refunds this week.</p></div>
 	</div>
 
+	<h3>A tab that asks before it is left</h3>
+	<p>Before a person's click or key selects a tab, the tablist fires the cancelable <code>redz:select</code>; its <code>detail</code> holds <code>tab</code>, the one asked for, and <code>from</code>, the one being left. A page that must ask first - a form with unsaved edits - calls <code>event.preventDefault()</code> and <code>event.detail.respondWith(promise)</code>: the tab is selected when the promise gives <code>true</code>, and otherwise the one being left stays, with the focus. Change the note below, then choose another tab.</p>
+	<div class="docs-example docs-example-stack" id="nav-guard">
+		<div class="nav nav-underline" role="tablist" aria-label="Excursion">
+			<button class="nav-link" type="button" role="tab" id="nav-guard-1" aria-selected="true" aria-controls="nav-guard-panel-1">Note</button>
+			<button class="nav-link" type="button" role="tab" id="nav-guard-2" aria-selected="false" aria-controls="nav-guard-panel-2">Prices</button>
+		</div>
+		<div id="nav-guard-panel-1" role="tabpanel" aria-labelledby="nav-guard-1" tabindex="0">
+			<label class="form-label" for="nav-guard-note">A note for the guides</label>
+			<input class="form-control" id="nav-guard-note" type="text" value="Meet at the pier at 8:00">
+		</div>
+		<div id="nav-guard-panel-2" role="tabpanel" aria-labelledby="nav-guard-2" tabindex="0" hidden><p>2,900 THB an adult.</p></div>
+	</div>
+	<pre class="docs-code" tabindex="0"><code>tablist.addEventListener('redz:select', (event) =&gt; {
+  if (form.dataset.changed !== undefined) {
+    event.preventDefault();
+    event.detail.respondWith(REDZ.ui.confirm({title: 'Leave without saving?', ok: 'Leave'}));
+  }
+});</code></pre>
+
 	<h3>Filling the width</h3>
 	<p><code>nav-fill</code> lets the links share the width by their length, <code>nav-justified</code> in equal parts.</p>
 	<div class="docs-example docs-example-stack" id="nav-fill">

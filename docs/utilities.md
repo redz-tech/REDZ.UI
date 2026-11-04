@@ -423,6 +423,12 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 | `border-danger` | `border-color: var(--redz-danger);` | - |
 | `border-warning` | `border-color: var(--redz-warning);` | - |
 | `border-info` | `border-color: var(--redz-info);` | - |
+| `border-primary-subtle` | `border-color: color-mix(in oklch, var(--redz-primary) 35%, var(--redz-border));` | - |
+| `border-secondary-subtle` | `border-color: color-mix(in oklch, var(--redz-secondary) 35%, var(--redz-border));` | - |
+| `border-success-subtle` | `border-color: color-mix(in oklch, var(--redz-success) 35%, var(--redz-border));` | - |
+| `border-danger-subtle` | `border-color: color-mix(in oklch, var(--redz-danger) 35%, var(--redz-border));` | - |
+| `border-warning-subtle` | `border-color: color-mix(in oklch, var(--redz-warning) 35%, var(--redz-border));` | - |
+| `border-info-subtle` | `border-color: color-mix(in oklch, var(--redz-info) 35%, var(--redz-border));` | - |
 | `rounded` | `border-radius: var(--redz-radius-8);` | - |
 | `rounded-full` | `border-radius: 999px;` | - |
 | `rounded-0` | `border-radius: var(--redz-radius-0);` | - |
@@ -559,24 +565,18 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 | `border-5` | - | review | the widths are 1, 2 and 4 px |
 | `border-black` | - | review | border-strong, or a tone |
 | `border-bottom-0` | - | missing | draw only the sides you need: border-top and the others |
-| `border-danger-subtle` | - | missing |  |
 | `border-dark` | - | review | border-strong, or a tone |
-| `border-dark-subtle` | - | missing |  |
+| `border-dark-subtle` | - | review | border, or border-strong |
 | `border-end-0` | - | missing | draw only the sides you need: border-top and the others |
-| `border-info-subtle` | - | missing |  |
 | `border-light` | - | review | border-strong, or a tone |
-| `border-light-subtle` | - | missing |  |
+| `border-light-subtle` | - | review | border, or border-strong |
 | `border-opacity-10` | - | missing |  |
 | `border-opacity-100` | - | missing |  |
 | `border-opacity-25` | - | missing |  |
 | `border-opacity-50` | - | missing |  |
 | `border-opacity-75` | - | missing |  |
-| `border-primary-subtle` | - | missing |  |
-| `border-secondary-subtle` | - | missing |  |
 | `border-start-0` | - | missing | draw only the sides you need: border-top and the others |
-| `border-success-subtle` | - | missing |  |
 | `border-top-0` | - | missing | draw only the sides you need: border-top and the others |
-| `border-warning-subtle` | - | missing |  |
 | `border-white` | - | review | border-strong, or a tone |
 | `clearfix` | - | remove | no floats |
 | `column-gap-1` | `column-gap-4` | value | the number is the pixels |
@@ -828,3 +828,14 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 | `text-warning-emphasis` | `text-warning` | rename | a tone's text color is already its emphasis |
 | `text-white` | - | review | no white, black, light or dark: text-body, text-muted or a tone |
 | `text-white-50` | - | review | no white, black, light or dark: text-body, text-muted or a tone |
+| `--bs-aspect-ratio` | - | review | ratio-* for the ratio; the property itself for the rest |
+| `--bs-bg-opacity` | - | review | a relative color or color-mix in place of the opacity |
+| `--bs-border-opacity` | - | review | a relative color or color-mix in place of the opacity |
+| `--bs-danger-border-subtle` | - | review | color-mix(in oklch, var(--redz-danger) 35%, var(--redz-border)), as border-danger-subtle draws it |
+| `--bs-info-border-subtle` | - | review | color-mix(in oklch, var(--redz-info) 35%, var(--redz-border)), as border-info-subtle draws it |
+| `--bs-position` | - | review | ratio-* for the ratio; the property itself for the rest |
+| `--bs-primary-border-subtle` | - | review | color-mix(in oklch, var(--redz-primary) 35%, var(--redz-border)), as border-primary-subtle draws it |
+| `--bs-secondary-border-subtle` | - | review | color-mix(in oklch, var(--redz-secondary) 35%, var(--redz-border)), as border-secondary-subtle draws it |
+| `--bs-success-border-subtle` | - | review | color-mix(in oklch, var(--redz-success) 35%, var(--redz-border)), as border-success-subtle draws it |
+| `--bs-text-opacity` | - | review | a relative color or color-mix in place of the opacity |
+| `--bs-warning-border-subtle` | - | review | color-mix(in oklch, var(--redz-warning) 35%, var(--redz-border)), as border-warning-subtle draws it |

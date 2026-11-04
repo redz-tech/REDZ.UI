@@ -1,11 +1,11 @@
 <?php
-// floor — the browser floor gate: every CSS and HTML feature of the library against MDN's browser-compat-data at the
+// floor - the browser floor gate: every CSS and HTML feature of the library against MDN's browser-compat-data at the
 // versions of tools/floor/rules.json. Usage: php tools/floor.php check [FILE…] | build | refresh [VERSION]
-// check — reports each feature the floor lacks as file:line, exits 1 on any, when floor.json is out of date, and when an
+// check - reports each feature the floor lacks as file:line, exits 1 on any, when floor.json is out of date, and when an
 // exception or a repair of rules.json is outgrown; with files (.css, .html), checks just them; either way first proves
 // itself on the fuses of FLOOR_FUSES;
-// build — writes floor.json, every name the gate knows with its verdict at the floor, for the release;
-// refresh — downloads @mdn/browser-compat-data (the version of tools/floor/bcd.tsv, or VERSION), verifies its sha512 and
+// build - writes floor.json, every name the gate knows with its verdict at the floor, for the release;
+// refresh - downloads @mdn/browser-compat-data (the version of tools/floor/bcd.tsv, or VERSION), verifies its sha512 and
 // writes tools/floor/bcd.tsv.
 
 require __DIR__ . '/lib.php';
@@ -80,7 +80,7 @@ function FLOOR__RepairFindings(array $rules): array
 		if (!is_file(FLOOR_ROOT . '/' . $repair['file'])) {
 			$findings[] = 'tools/floor/rules.json  the repair names ' . $repair['file'] . ', which is not there';
 		} elseif (count($fixed) === count($repair['until'])) {
-			$findings[] = 'tools/floor/rules.json  the repair in ' . $repair['file'] . ' repairs nothing at the floor any more — remove it and its record';
+			$findings[] = 'tools/floor/rules.json  the repair in ' . $repair['file'] . ' repairs nothing at the floor any more - remove it and its record';
 		}
 	}
 	return $findings;
@@ -91,7 +91,7 @@ function FLOOR__Data(): array
 {
 	$lines = file(FLOOR_DATA, FILE_IGNORE_NEW_LINES) ?: [];
 	if (preg_match('~^# @mdn/browser-compat-data (\S+) (sha512-\S+)~', $lines[0] ?? '', $m) !== 1) {
-		throw new RuntimeException('tools/floor/bcd.tsv has no header — run php tools/floor.php refresh');
+		throw new RuntimeException('tools/floor/bcd.tsv has no header - run php tools/floor.php refresh');
 	}
 	$data = ['version' => $m[1], 'integrity' => $m[2], 'rows' => [], 'names' => [], 'lines' => []];
 	foreach ($lines as $line) {
@@ -373,7 +373,7 @@ function FLOOR__Refresh(string $version): int
 	$package = TOOL__NpmFile('@mdn/browser-compat-data', $version, 'package/data.json');
 	$rows = FLOOR__Derive(json_decode($package['body'], true, 512, JSON_THROW_ON_ERROR));
 	$old = is_file(FLOOR_DATA) ? FLOOR__Data()['lines'] : [];
-	$head = '# @mdn/browser-compat-data ' . $package['version'] . ' ' . $package['integrity'] . ' — derived by php tools/floor.php refresh, do not edit';
+	$head = '# @mdn/browser-compat-data ' . $package['version'] . ' ' . $package['integrity'] . ' - derived by php tools/floor.php refresh, do not edit';
 	file_put_contents(FLOOR_DATA, implode("\n", [$head, "# key\tnames\tfeature\t" . implode("\t", FLOOR_BROWSERS), ...$rows]) . "\n");
 	$new = FLOOR__Data()['lines'];
 	$changed = array_keys(array_diff_assoc($new, $old) + array_diff_key($old, $new));
@@ -931,7 +931,7 @@ function FLOOR__HtmlFacts(string $html, array $data): array
 	return $facts;
 }
 
-/** Whether an exception allows $name: by name anywhere, by key in $browser — `key.*` takes the keys under it too;
+/** Whether an exception allows $name: by name anywhere, by key in $browser - `key.*` takes the keys under it too;
  *  marks the exception used. */
 function FLOOR__Allowed(array $rules, array $data, string $name, string $browser, array &$used): bool
 {
@@ -959,22 +959,22 @@ function FLOOR__Findings(array $facts, string $file, array $data, array $rules, 
 		$name = $fact['name'];
 		$where = $file . ':' . $fact['line'] . '  ';
 		if (str_starts_with($name, 'unchecked:')) {
-			$findings[] = $where . substr($name, 10) . ' — not checked by the floor gate: keep CSS in stylesheets and behavior in scripts';
+			$findings[] = $where . substr($name, 10) . ' - not checked by the floor gate: keep CSS in stylesheets and behavior in scripts';
 			continue;
 		}
 		if ($name === 'mixed:vendor-list') {
-			$findings[] = $where . 'a vendor pseudo-element in a list with other selectors drops the whole rule where it is unknown — give it a rule of its own';
+			$findings[] = $where . 'a vendor pseudo-element in a list with other selectors drops the whole rule where it is unknown - give it a rule of its own';
 			continue;
 		}
 		if (!isset($data['names'][$name])) {
 			if (!FLOOR__Allowed($rules, $data, $name, '', $used)) {
-				$findings[] = $where . $name . ' — not in browser-compat-data ' . $data['version'] . ': a typo, or an exception with its reason in tools/floor/rules.json';
+				$findings[] = $where . $name . ' - not in browser-compat-data ' . $data['version'] . ': a typo, or an exception with its reason in tools/floor/rules.json';
 			}
 			continue;
 		}
 		if ($fact['prefix'] !== '' || preg_match('~^(property|selector):-[a-z]~', $name) === 1) {
 			if (FLOOR__SupportedIn($data, $rules, $fact['live'], [$name], $fact['prefix']) === [] && !FLOOR__Allowed($rules, $data, $name, '', $used)) {
-				$findings[] = $where . ($fact['prefix'] === '' ? $name : $name . ' with ' . $fact['prefix']) . ' — no browser at the floor takes this vendor form';
+				$findings[] = $where . ($fact['prefix'] === '' ? $name : $name . ' with ' . $fact['prefix']) . ' - no browser at the floor takes this vendor form';
 			}
 			continue;
 		}
@@ -993,7 +993,7 @@ function FLOOR__Findings(array $facts, string $file, array $data, array $rules, 
 			$lacking[] = $browser . ' ' . $rules['floor'][$browser] . ($verdict === 'partial' ? ' partial' : ($since === '' ? ' none' : ' none, from ' . $since));
 		}
 		if ($lacking !== []) {
-			$findings[] = $where . $name . ' (' . $data['names'][$name][0] . ') — ' . implode(', ', $lacking);
+			$findings[] = $where . $name . ' (' . $data['names'][$name][0] . ') - ' . implode(', ', $lacking);
 		}
 	}
 	return array_values(array_unique($findings));
@@ -1043,7 +1043,7 @@ function FLOOR__SelfTest(array $data, array $rules): array
 }
 
 /** check: the findings of every stylesheet and page of rules.json, or of the files in $paths (.css or .html) alone;
- *  1 on any, or — for the library itself — when an exception allows nothing or floor.json is out of date. */
+ *  1 on any, or - for the library itself - when an exception allows nothing or floor.json is out of date. */
 function FLOOR__Check(array $paths): int
 {
 	$rules = FLOOR__Rules();
@@ -1070,14 +1070,14 @@ function FLOOR__Check(array $paths): int
 	}
 	foreach ($paths === [] ? $rules['allow'] : [] as $k => $entry) {
 		if (!isset($used[$k])) {
-			$findings[] = 'tools/floor/rules.json  the exception ' . ($entry['key'] ?? $entry['name']) . ' allows nothing any more — remove it';
+			$findings[] = 'tools/floor/rules.json  the exception ' . ($entry['key'] ?? $entry['name']) . ' allows nothing any more - remove it';
 		}
 	}
 	if ($paths === []) {
-		$findings = [...$findings, ...FLOOR__RepairFindings($rules)];
+		$findings = [...$findings, ...FLOOR__RepairFindings($rules), ...FLOOR__TestFindings($data, $rules)];
 	}
 	if ($paths === [] && (!is_file(FLOOR_LIST) || file_get_contents(FLOOR_LIST) !== FLOOR__ListText($data, $rules))) {
-		$findings[] = 'floor.json  out of date — run php tools/floor.php build';
+		$findings[] = 'floor.json  out of date - run php tools/floor.php build';
 	}
 	foreach ($findings as $finding) {
 		echo $finding, "\n";
@@ -1085,6 +1085,25 @@ function FLOOR__Check(array $paths): int
 	$floor = implode(' ', array_map(fn(string $browser): string => $browser . ' ' . $rules['floor'][$browser], FLOOR_BROWSERS));
 	printf("floor %s · BCD %s · %d files · %d exceptions · %d repairs · selftest %d/%d · %s\n", $floor, $data['version'], count($files), count($rules['allow']), count($rules['repairs'] ?? []), $fuses, count(FLOOR_FUSES), $findings === [] ? 'CLEAN' : count($findings) . ' findings');
 	return $findings === [] ? 0 : 1;
+}
+
+/**
+ * The tests of js/floor.js that a browser at the floor would fail: each name of tools/floor/tests.json must have full
+ * support at the floor in every browser, or js/floor.js would mark that browser below it.
+ * @return list<string>
+ */
+function FLOOR__TestFindings(array $data, array $rules): array
+{
+	$findings = [];
+	foreach (json_decode((string)file_get_contents(__DIR__ . '/floor/tests.json'), true, 512, JSON_THROW_ON_ERROR)['tests'] as $test) {
+		foreach (FLOOR_BROWSERS as $browser) {
+			$verdict = FLOOR__NameVerdict($data, $rules, $test['name'], $browser);
+			if ($verdict !== 'full') {
+				$findings[] = 'tools/floor/tests.json  ' . $test['name'] . ' is ' . $verdict . ' in ' . $browser . ' ' . $rules['floor'][$browser] . ' - js/floor.js would mark it below the floor';
+			}
+		}
+	}
+	return $findings;
 }
 
 /** The entry point: check [FILE…], build or refresh [VERSION]. */

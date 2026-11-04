@@ -6,13 +6,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Utilities - REDZ.UI</title>
 	<meta name="description" content="Single-purpose classes with Bootstrap 5&#039;s names, where the number is the value: p-16, gap-8, fs-14, rounded-8, w-50. Written once from a vocabulary file and committed - nothing is generated where they are used.">
+	<script src="../js/floor.js"></script>
 	<link rel="stylesheet" href="../dist/redz-ui.min.css">
 	<link rel="stylesheet" href="../css/icons.css">
 	<link rel="stylesheet" href="site.css">
 	<link rel="alternate" type="text/markdown" href="utilities.md">
 	<script src="site.js"></script>
 	<script type="module" src="../dist/redz-ui.min.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}"}</script>
+	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}"}</script>
 </head>
 <body>
 	<div class="app">
@@ -532,6 +533,12 @@
 									<tr><td><code>border-danger</code></td><td><code>border-color: var(--redz-danger);</code></td><td>-</td></tr>
 									<tr><td><code>border-warning</code></td><td><code>border-color: var(--redz-warning);</code></td><td>-</td></tr>
 									<tr><td><code>border-info</code></td><td><code>border-color: var(--redz-info);</code></td><td>-</td></tr>
+									<tr><td><code>border-primary-subtle</code></td><td><code>border-color: color-mix(in oklch, var(--redz-primary) 35%, var(--redz-border));</code></td><td>-</td></tr>
+									<tr><td><code>border-secondary-subtle</code></td><td><code>border-color: color-mix(in oklch, var(--redz-secondary) 35%, var(--redz-border));</code></td><td>-</td></tr>
+									<tr><td><code>border-success-subtle</code></td><td><code>border-color: color-mix(in oklch, var(--redz-success) 35%, var(--redz-border));</code></td><td>-</td></tr>
+									<tr><td><code>border-danger-subtle</code></td><td><code>border-color: color-mix(in oklch, var(--redz-danger) 35%, var(--redz-border));</code></td><td>-</td></tr>
+									<tr><td><code>border-warning-subtle</code></td><td><code>border-color: color-mix(in oklch, var(--redz-warning) 35%, var(--redz-border));</code></td><td>-</td></tr>
+									<tr><td><code>border-info-subtle</code></td><td><code>border-color: color-mix(in oklch, var(--redz-info) 35%, var(--redz-border));</code></td><td>-</td></tr>
 									<tr><td><code>rounded</code></td><td><code>border-radius: var(--redz-radius-8);</code></td><td>-</td></tr>
 									<tr><td><code>rounded-full</code></td><td><code>border-radius: 999px;</code></td><td>-</td></tr>
 									<tr><td><code>rounded-0</code></td><td><code>border-radius: var(--redz-radius-0);</code></td><td>-</td></tr>
@@ -672,24 +679,18 @@
 									<tr><td><code>border-5</code></td><td>-</td><td>review</td><td>the widths are 1, 2 and 4 px</td></tr>
 									<tr><td><code>border-black</code></td><td>-</td><td>review</td><td>border-strong, or a tone</td></tr>
 									<tr><td><code>border-bottom-0</code></td><td>-</td><td>missing</td><td>draw only the sides you need: border-top and the others</td></tr>
-									<tr><td><code>border-danger-subtle</code></td><td>-</td><td>missing</td><td></td></tr>
 									<tr><td><code>border-dark</code></td><td>-</td><td>review</td><td>border-strong, or a tone</td></tr>
-									<tr><td><code>border-dark-subtle</code></td><td>-</td><td>missing</td><td></td></tr>
+									<tr><td><code>border-dark-subtle</code></td><td>-</td><td>review</td><td>border, or border-strong</td></tr>
 									<tr><td><code>border-end-0</code></td><td>-</td><td>missing</td><td>draw only the sides you need: border-top and the others</td></tr>
-									<tr><td><code>border-info-subtle</code></td><td>-</td><td>missing</td><td></td></tr>
 									<tr><td><code>border-light</code></td><td>-</td><td>review</td><td>border-strong, or a tone</td></tr>
-									<tr><td><code>border-light-subtle</code></td><td>-</td><td>missing</td><td></td></tr>
+									<tr><td><code>border-light-subtle</code></td><td>-</td><td>review</td><td>border, or border-strong</td></tr>
 									<tr><td><code>border-opacity-10</code></td><td>-</td><td>missing</td><td></td></tr>
 									<tr><td><code>border-opacity-100</code></td><td>-</td><td>missing</td><td></td></tr>
 									<tr><td><code>border-opacity-25</code></td><td>-</td><td>missing</td><td></td></tr>
 									<tr><td><code>border-opacity-50</code></td><td>-</td><td>missing</td><td></td></tr>
 									<tr><td><code>border-opacity-75</code></td><td>-</td><td>missing</td><td></td></tr>
-									<tr><td><code>border-primary-subtle</code></td><td>-</td><td>missing</td><td></td></tr>
-									<tr><td><code>border-secondary-subtle</code></td><td>-</td><td>missing</td><td></td></tr>
 									<tr><td><code>border-start-0</code></td><td>-</td><td>missing</td><td>draw only the sides you need: border-top and the others</td></tr>
-									<tr><td><code>border-success-subtle</code></td><td>-</td><td>missing</td><td></td></tr>
 									<tr><td><code>border-top-0</code></td><td>-</td><td>missing</td><td>draw only the sides you need: border-top and the others</td></tr>
-									<tr><td><code>border-warning-subtle</code></td><td>-</td><td>missing</td><td></td></tr>
 									<tr><td><code>border-white</code></td><td>-</td><td>review</td><td>border-strong, or a tone</td></tr>
 									<tr><td><code>clearfix</code></td><td>-</td><td>remove</td><td>no floats</td></tr>
 									<tr><td><code>column-gap-1</code></td><td><code>column-gap-4</code></td><td>value</td><td>the number is the pixels</td></tr>
@@ -941,6 +942,17 @@
 									<tr><td><code>text-warning-emphasis</code></td><td><code>text-warning</code></td><td>rename</td><td>a tone&#039;s text color is already its emphasis</td></tr>
 									<tr><td><code>text-white</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone</td></tr>
 									<tr><td><code>text-white-50</code></td><td>-</td><td>review</td><td>no white, black, light or dark: text-body, text-muted or a tone</td></tr>
+									<tr><td><code>--bs-aspect-ratio</code></td><td>-</td><td>review</td><td>ratio-* for the ratio; the property itself for the rest</td></tr>
+									<tr><td><code>--bs-bg-opacity</code></td><td>-</td><td>review</td><td>a relative color or color-mix in place of the opacity</td></tr>
+									<tr><td><code>--bs-border-opacity</code></td><td>-</td><td>review</td><td>a relative color or color-mix in place of the opacity</td></tr>
+									<tr><td><code>--bs-danger-border-subtle</code></td><td>-</td><td>review</td><td>color-mix(in oklch, var(--redz-danger) 35%, var(--redz-border)), as border-danger-subtle draws it</td></tr>
+									<tr><td><code>--bs-info-border-subtle</code></td><td>-</td><td>review</td><td>color-mix(in oklch, var(--redz-info) 35%, var(--redz-border)), as border-info-subtle draws it</td></tr>
+									<tr><td><code>--bs-position</code></td><td>-</td><td>review</td><td>ratio-* for the ratio; the property itself for the rest</td></tr>
+									<tr><td><code>--bs-primary-border-subtle</code></td><td>-</td><td>review</td><td>color-mix(in oklch, var(--redz-primary) 35%, var(--redz-border)), as border-primary-subtle draws it</td></tr>
+									<tr><td><code>--bs-secondary-border-subtle</code></td><td>-</td><td>review</td><td>color-mix(in oklch, var(--redz-secondary) 35%, var(--redz-border)), as border-secondary-subtle draws it</td></tr>
+									<tr><td><code>--bs-success-border-subtle</code></td><td>-</td><td>review</td><td>color-mix(in oklch, var(--redz-success) 35%, var(--redz-border)), as border-success-subtle draws it</td></tr>
+									<tr><td><code>--bs-text-opacity</code></td><td>-</td><td>review</td><td>a relative color or color-mix in place of the opacity</td></tr>
+									<tr><td><code>--bs-warning-border-subtle</code></td><td>-</td><td>review</td><td>color-mix(in oklch, var(--redz-warning) 35%, var(--redz-border)), as border-warning-subtle draws it</td></tr>
 								</tbody>
 							</table>
 						</section>

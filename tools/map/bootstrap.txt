@@ -1,4 +1,4 @@
-# bootstrap 5.3.8 sha512-HP1SZDqaLDPwsNiqRqi5NcP0SSXciX2s9E+RyqJIIqGo+vJeN5AJVM98CXmW/Wux0nQ5L7jeWUdplCEf0Ee+tg== dist/css/bootstrap.css — derived by php tools/map.php refresh, do not edit
+# bootstrap 5.3.8 sha512-HP1SZDqaLDPwsNiqRqi5NcP0SSXciX2s9E+RyqJIIqGo+vJeN5AJVM98CXmW/Wux0nQ5L7jeWUdplCEf0Ee+tg== dist/css/bootstrap.css - derived by php tools/map.php refresh, do not edit
 accordion
 accordion-body
 accordion-button

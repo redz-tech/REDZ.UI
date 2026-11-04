@@ -2,7 +2,7 @@
 
 # Tooltips
 
-A short dark label beside a control, placed by CSS anchor positioning. At the browser floor it is a toggletip: a small button opens it, a click outside or `Esc` closes it.
+A short dark label beside a control. A small button opens it as a toggletip, which a click outside or `Esc` closes; or an element's own title shows it on hover and focus.
 
 ## Examples
 
@@ -15,11 +15,22 @@ The tooltip is a `popover` opened by its button's command. It sits above the but
 <div id="tooltip-why-tip" class="tooltip" popover role="tooltip">A partner can hide the brand and set their own help link.</div>
 ```
 
+### From a title
+
+Inside an element with `data-tooltips` - `<html>` for the whole page - an element's own `title` shows as this tooltip: after a short hover by a mouse, at once when the keyboard's focus lands on it. It says why a control cannot run, what an icon button does, what a dot stands for. No markup but the title.
+
+```html
+<button class="btn btn-icon" type="button" title="Duplicate"><i class="bi bi-copy" aria-hidden="true"></i></button>
+<button class="btn" type="button" aria-disabled="true" title="Publish needs a price for every season">Publish</button>
+<span class="hstack gap-8"><span class="dot dot-warning" title="2 translations are outdated"></span>Ang Thong</span>
+```
+
 ## Keyboard and accessibility
 
 - The button is named after its question; the tooltip's words answer it. Nothing that must be read to use the screen lives only in a tooltip.
 - The button names its tooltip in `aria-describedby`, so a screen reader says the answer with the question, closed or open - opening a popover says nothing of its words.
-- A tooltip on hover and focus waits for `interestfor`, which is outside the browser floor.
+- A tooltip from a title is the title itself to a screen reader: the element keeps its title on focus, and the tooltip is hidden from assistive technology. While a mouse rests on the element the title is held back, so the browser does not show its own as well; an icon button named only by its title keeps that name meanwhile.
+- It stays while the pointer rests on it, hides on `Esc` without moving the focus, and never opens for a touch, which has no hover: on a phone, what a title says must be on the screen too.
 - The label is the page's text color on the page color reversed: 4.5:1 in both themes, an outline in forced colors.
 
 ## Tokens
@@ -39,5 +50,6 @@ It reads the theme's `--redz-space-4`, `--redz-space-8`, `--redz-radius-6`, `--r
 | `bs-tooltip-top` | - | remove | the tooltip is one element |
 | `tooltip-arrow` | - | remove | the tooltip is one element |
 | `tooltip-inner` | - | remove | the tooltip is one element |
-| `data-bs-toggle="tooltip"` | `commandfor="ID" command="toggle-popover"` | review | a toggletip at the browser floor |
-| `bootstrap.Tooltip` | - | remove |  |
+| `data-bs-toggle="tooltip"` | `data-tooltips` | review | keep the title: data-tooltips on <html> or a container shows every title inside as a tooltip; a toggletip for longer words |
+| `data-bs-title` | `title` | rename | the element's own title, inside data-tooltips |
+| `bootstrap.Tooltip` | - | remove | data-tooltips on <html> or a container shows the titles inside |

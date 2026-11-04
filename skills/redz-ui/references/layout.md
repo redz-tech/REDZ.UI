@@ -126,3 +126,6 @@ Regions are the shell's main and side columns, cards, dialogs, drawers, and any 
 | `row-cols-5` | `cols-5` | grid | on the same parent |
 | `row-cols-6` | `cols-6` | grid | on the same parent |
 | `row-cols-auto` | - | review | items as wide as their content: hstack flex-wrap |
+| `--bs-breakpoint-xs` | - | remove | REDZ.UI's widths are the region prefixes sm: to 2xl: |
+| `--bs-gutter-x` | - | review | the grid's gap: gap-* on the grid |
+| `--bs-gutter-y` | - | review | the grid's gap: gap-* on the grid |

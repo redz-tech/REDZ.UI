@@ -86,6 +86,21 @@ A list of records: a title that links to the record, a line under it, a note whe
 </table>
 ```
 
+### Compact rows
+
+`data-density="compact"` tightens the rows and the controls of the element it is on and of everything inside it: a table, the card that holds it, a region, or the whole page on `<html>`. A compact table can stand beside a normal one on the same screen. Bootstrap 5 calls it `table-sm`.
+
+```html
+<table class="table table-bordered" data-density="compact" aria-label="Seasons on Samui, compact">
+	<thead><tr><th scope="col">Season</th><th scope="col">Months</th><th scope="col">The sea</th></tr></thead>
+	<tbody>
+		<tr><td>Dry</td><td>January to April</td><td>Calm</td></tr>
+		<tr><td>Hot</td><td>May to August</td><td>Calm</td></tr>
+		<tr><td>Rainy</td><td>September to December</td><td>Waves</td></tr>
+	</tbody>
+</table>
+```
+
 ## States
 
 A row's tone marks what needs attention: `table-danger` failed, `table-warning` needs a look, `table-secondary` is out of use. On a pointer screen the row's actions show on hover and on focus; on a touch screen they always show.

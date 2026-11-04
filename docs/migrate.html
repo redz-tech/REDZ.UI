@@ -6,13 +6,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>From Bootstrap 5.3 - REDZ.UI</title>
 	<meta name="description" content="Most of Bootstrap 5&#039;s names stay. What changes is the spacing numbers, the grid, the breakpoints, states and triggers, and the three components Bootstrap 6 renamed. The two libraries are never on one page: a project switches its stylesheet at once.">
+	<script src="../js/floor.js"></script>
 	<link rel="stylesheet" href="../dist/redz-ui.min.css">
 	<link rel="stylesheet" href="../css/icons.css">
 	<link rel="stylesheet" href="site.css">
 	<link rel="alternate" type="text/markdown" href="migrate.md">
 	<script src="site.js"></script>
 	<script type="module" src="../dist/redz-ui.min.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}"}</script>
+	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}"}</script>
 </head>
 <body>
 	<div class="app">
@@ -157,24 +158,18 @@
 									<tr><td><code>border-5</code></td><td>-</td><td>review</td><td>the widths are 1, 2 and 4 px</td></tr>
 									<tr><td><code>border-black</code></td><td>-</td><td>review</td><td>border-strong, or a tone</td></tr>
 									<tr><td><code>border-bottom-0</code></td><td>-</td><td>missing</td><td>draw only the sides you need: border-top and the others</td></tr>
-									<tr><td><code>border-danger-subtle</code></td><td>-</td><td>missing</td><td></td></tr>
 									<tr><td><code>border-dark</code></td><td>-</td><td>review</td><td>border-strong, or a tone</td></tr>
-									<tr><td><code>border-dark-subtle</code></td><td>-</td><td>missing</td><td></td></tr>
+									<tr><td><code>border-dark-subtle</code></td><td>-</td><td>review</td><td>border, or border-strong</td></tr>
 									<tr><td><code>border-end-0</code></td><td>-</td><td>missing</td><td>draw only the sides you need: border-top and the others</td></tr>
-									<tr><td><code>border-info-subtle</code></td><td>-</td><td>missing</td><td></td></tr>
 									<tr><td><code>border-light</code></td><td>-</td><td>review</td><td>border-strong, or a tone</td></tr>
-									<tr><td><code>border-light-subtle</code></td><td>-</td><td>missing</td><td></td></tr>
+									<tr><td><code>border-light-subtle</code></td><td>-</td><td>review</td><td>border, or border-strong</td></tr>
 									<tr><td><code>border-opacity-10</code></td><td>-</td><td>missing</td><td></td></tr>
 									<tr><td><code>border-opacity-100</code></td><td>-</td><td>missing</td><td></td></tr>
 									<tr><td><code>border-opacity-25</code></td><td>-</td><td>missing</td><td></td></tr>
 									<tr><td><code>border-opacity-50</code></td><td>-</td><td>missing</td><td></td></tr>
 									<tr><td><code>border-opacity-75</code></td><td>-</td><td>missing</td><td></td></tr>
-									<tr><td><code>border-primary-subtle</code></td><td>-</td><td>missing</td><td></td></tr>
-									<tr><td><code>border-secondary-subtle</code></td><td>-</td><td>missing</td><td></td></tr>
 									<tr><td><code>border-start-0</code></td><td>-</td><td>missing</td><td>draw only the sides you need: border-top and the others</td></tr>
-									<tr><td><code>border-success-subtle</code></td><td>-</td><td>missing</td><td></td></tr>
 									<tr><td><code>border-top-0</code></td><td>-</td><td>missing</td><td>draw only the sides you need: border-top and the others</td></tr>
-									<tr><td><code>border-warning-subtle</code></td><td>-</td><td>missing</td><td></td></tr>
 									<tr><td><code>border-white</code></td><td>-</td><td>review</td><td>border-strong, or a tone</td></tr>
 									<tr><td><code>bs-popover-auto</code></td><td>-</td><td>remove</td><td>no arrow: anchor positioning places and flips the panel</td></tr>
 									<tr><td><code>bs-popover-bottom</code></td><td>-</td><td>remove</td><td>no arrow: anchor positioning places and flips the panel</td></tr>
@@ -189,7 +184,6 @@
 									<tr><td><code>btn-check</code></td><td>-</td><td>review</td><td>a toggle is a btn with aria-pressed; a choice is radio inputs</td></tr>
 									<tr><td><code>btn-close-white</code></td><td>-</td><td>remove</td><td>the close glyph takes the text color</td></tr>
 									<tr><td><code>btn-dark</code></td><td>-</td><td>review</td><td>no light or dark buttons: btn or btn-text</td></tr>
-									<tr><td><code>btn-group-vertical</code></td><td>-</td><td>missing</td><td></td></tr>
 									<tr><td><code>btn-light</code></td><td>-</td><td>review</td><td>no light or dark buttons: btn or btn-text</td></tr>
 									<tr><td><code>btn-outline-dark</code></td><td>-</td><td>review</td><td>btn-outline-secondary</td></tr>
 									<tr><td><code>btn-outline-light</code></td><td>-</td><td>review</td><td>btn-outline-secondary</td></tr>
@@ -578,7 +572,6 @@
 									<tr><td><code>show</code></td><td>-</td><td>state</td><td>the browser&#039;s [open] and :popover-open</td></tr>
 									<tr><td><code>showing</code></td><td>-</td><td>state</td><td>the browser&#039;s [open] and :popover-open</td></tr>
 									<tr><td><code>small</code></td><td>-</td><td>review</td><td>fs-12, or the &lt;small&gt; element</td></tr>
-									<tr><td><code>spinner-grow</code></td><td>-</td><td>missing</td><td></td></tr>
 									<tr><td><code>sticky-bottom</code></td><td>-</td><td>review</td><td>position-sticky with top-0 or bottom-0</td></tr>
 									<tr><td><code>sticky-top</code></td><td>-</td><td>review</td><td>position-sticky with top-0 or bottom-0</td></tr>
 									<tr><td><code>tab-content</code></td><td>-</td><td>remove</td><td>panels are siblings with role=&quot;tabpanel&quot;, hidden when not selected</td></tr>
@@ -625,13 +618,452 @@
 									<tr><td><code>valid-feedback</code></td><td>-</td><td>remove</td><td>fields have no success state</td></tr>
 									<tr><td><code>valid-tooltip</code></td><td>-</td><td>remove</td><td>fields have no success state</td></tr>
 									<tr><td><code>was-validated</code></td><td>-</td><td>state</td><td>the browser&#039;s :user-invalid shows after the person edits</td></tr>
+									<tr><td><code>--bs-accordion-active-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-accordion-active-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-accordion-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-accordion-body-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-accordion-body-padding-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-accordion-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-accordion-border-radius</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-accordion-border-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-accordion-btn-active-icon</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-accordion-btn-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-accordion-btn-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-accordion-btn-focus-box-shadow</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-accordion-btn-icon</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-accordion-btn-icon-transform</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-accordion-btn-icon-transition</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-accordion-btn-icon-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-accordion-btn-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-accordion-btn-padding-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-accordion-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-accordion-inner-border-radius</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-accordion-transition</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-alert-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-alert-border</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-alert-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-alert-border-radius</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-alert-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-alert-link-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-alert-margin-bottom</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-alert-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-alert-padding-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-aspect-ratio</code></td><td>-</td><td>review</td><td>ratio-* for the ratio; the property itself for the rest</td></tr>
+									<tr><td><code>--bs-backdrop-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-backdrop-opacity</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-backdrop-zindex</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-badge-border-radius</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-badge-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-badge-font-size</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-badge-font-weight</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-badge-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-badge-padding-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-bg-opacity</code></td><td>-</td><td>review</td><td>a relative color or color-mix in place of the opacity</td></tr>
+									<tr><td><code>--bs-black</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-black-rgb</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-blue</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-body-bg</code></td><td><code>--redz-bg</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-body-bg-rgb</code></td><td>-</td><td>review</td><td>a relative color from the matching --redz-* in place of the channels</td></tr>
+									<tr><td><code>--bs-body-color</code></td><td><code>--redz-text</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-body-color-rgb</code></td><td>-</td><td>review</td><td>a relative color from the matching --redz-* in place of the channels</td></tr>
+									<tr><td><code>--bs-body-font-family</code></td><td><code>--redz-font-sans</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-body-font-size</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s text is --redz-fs-14; the scale is --redz-fs-12 to --redz-fs-32</td></tr>
+									<tr><td><code>--bs-body-font-weight</code></td><td>-</td><td>review</td><td>the body&#039;s own; lines are --redz-lh-16 to --redz-lh-28</td></tr>
+									<tr><td><code>--bs-body-line-height</code></td><td>-</td><td>review</td><td>the body&#039;s own; lines are --redz-lh-16 to --redz-lh-28</td></tr>
+									<tr><td><code>--bs-border-color</code></td><td><code>--redz-border</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-border-color-translucent</code></td><td><code>--redz-border</code></td><td>review</td><td>REDZ.UI&#039;s border is solid in both themes</td></tr>
+									<tr><td><code>--bs-border-opacity</code></td><td>-</td><td>review</td><td>a relative color or color-mix in place of the opacity</td></tr>
+									<tr><td><code>--bs-border-radius</code></td><td><code>--redz-radius-8</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-border-radius-2xl</code></td><td><code>--redz-radius-16</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-border-radius-pill</code></td><td>-</td><td>review</td><td>999px, as rounded-full writes it</td></tr>
+									<tr><td><code>--bs-border-style</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s borders are 1px solid: write the value</td></tr>
+									<tr><td><code>--bs-border-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s borders are 1px solid: write the value</td></tr>
+									<tr><td><code>--bs-box-shadow</code></td><td><code>--redz-shadow-2</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-box-shadow-inset</code></td><td>-</td><td>remove</td><td>REDZ.UI draws no inset shadow</td></tr>
+									<tr><td><code>--bs-breadcrumb-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-breadcrumb-border-radius</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-breadcrumb-divider-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-breadcrumb-item-active-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-breadcrumb-item-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-breadcrumb-margin-bottom</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-breadcrumb-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-breadcrumb-padding-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-breakpoint-xs</code></td><td>-</td><td>remove</td><td>REDZ.UI&#039;s widths are the region prefixes sm: to 2xl:</td></tr>
+									<tr><td><code>--bs-btn-active-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-active-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-active-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-active-shadow</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-border-radius</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-border-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-box-shadow</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-close-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-close-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-close-disabled-opacity</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-close-filter</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-close-focus-opacity</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-close-focus-shadow</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-close-hover-opacity</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-close-opacity</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-disabled-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-disabled-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-disabled-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-disabled-opacity</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-focus-box-shadow</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-focus-shadow-rgb</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-font-family</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-font-size</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-font-weight</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-hover-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-hover-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-hover-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-line-height</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-btn-padding-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-card-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-card-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-card-border-radius</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-card-border-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-card-box-shadow</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-card-cap-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-card-cap-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-card-cap-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-card-cap-padding-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-card-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-card-group-margin</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-card-height</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-card-img-overlay-padding</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-card-inner-border-radius</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-card-spacer-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-card-spacer-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-card-subtitle-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-card-title-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-card-title-spacer-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-carousel-caption-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-carousel-control-icon-filter</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-carousel-indicator-active-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-code-color</code></td><td>-</td><td>review</td><td>code is the text color in --redz-font-mono</td></tr>
+									<tr><td><code>--bs-cyan</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-danger</code></td><td><code>--redz-danger</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-danger-bg-subtle</code></td><td><code>--redz-danger-subtle</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-danger-border-subtle</code></td><td>-</td><td>review</td><td>color-mix(in oklch, var(--redz-danger) 35%, var(--redz-border)), as border-danger-subtle draws it</td></tr>
+									<tr><td><code>--bs-danger-rgb</code></td><td>-</td><td>review</td><td>a relative color in place of the channels: rgb(from var(--redz-danger) r g b / 50%)</td></tr>
+									<tr><td><code>--bs-danger-text-emphasis</code></td><td><code>--redz-danger</code></td><td>review</td><td>the tone itself: REDZ.UI has no darker text of a tone</td></tr>
+									<tr><td><code>--bs-dark</code></td><td>-</td><td>review</td><td>light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text</td></tr>
+									<tr><td><code>--bs-dark-bg-subtle</code></td><td>-</td><td>review</td><td>light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text</td></tr>
+									<tr><td><code>--bs-dark-border-subtle</code></td><td>-</td><td>review</td><td>light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text</td></tr>
+									<tr><td><code>--bs-dark-rgb</code></td><td>-</td><td>review</td><td>light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text</td></tr>
+									<tr><td><code>--bs-dark-text-emphasis</code></td><td>-</td><td>review</td><td>light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text</td></tr>
+									<tr><td><code>--bs-dropdown-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-border-radius</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-border-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-box-shadow</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-divider-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-divider-margin-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-font-size</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-header-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-header-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-header-padding-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-inner-border-radius</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-item-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-item-padding-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-link-active-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-link-active-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-link-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-link-disabled-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-link-hover-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-link-hover-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-min-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-padding-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-spacer</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-dropdown-zindex</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-emphasis-color</code></td><td><code>--redz-text</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-emphasis-color-rgb</code></td><td>-</td><td>review</td><td>a relative color from the matching --redz-* in place of the channels</td></tr>
+									<tr><td><code>--bs-focus-ring-color</code></td><td><code>--redz-focus</code></td><td>review</td><td>REDZ.UI draws one focus ring: --redz-focus is its color</td></tr>
+									<tr><td><code>--bs-focus-ring-opacity</code></td><td><code>--redz-focus</code></td><td>review</td><td>REDZ.UI draws one focus ring: --redz-focus is its color</td></tr>
+									<tr><td><code>--bs-focus-ring-width</code></td><td><code>--redz-focus</code></td><td>review</td><td>REDZ.UI draws one focus ring: --redz-focus is its color</td></tr>
+									<tr><td><code>--bs-font-monospace</code></td><td><code>--redz-font-mono</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-font-sans-serif</code></td><td><code>--redz-font-sans</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-form-check-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-form-check-bg-image</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-form-invalid-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-form-invalid-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-form-select-bg-icon</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-form-select-bg-img</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-form-switch-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-form-valid-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-form-valid-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-gradient</code></td><td>-</td><td>remove</td><td>REDZ.UI draws no gradients</td></tr>
+									<tr><td><code>--bs-gray</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-gray-100</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-gray-200</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-gray-300</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-gray-400</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-gray-500</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-gray-600</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-gray-700</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-gray-800</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-gray-900</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-gray-dark</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-green</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-gutter-x</code></td><td>-</td><td>review</td><td>the grid&#039;s gap: gap-* on the grid</td></tr>
+									<tr><td><code>--bs-gutter-y</code></td><td>-</td><td>review</td><td>the grid&#039;s gap: gap-* on the grid</td></tr>
+									<tr><td><code>--bs-heading-color</code></td><td><code>--redz-text</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-highlight-bg</code></td><td>-</td><td>review</td><td>mark is drawn by the base stylesheet</td></tr>
+									<tr><td><code>--bs-highlight-color</code></td><td>-</td><td>review</td><td>mark is drawn by the base stylesheet</td></tr>
+									<tr><td><code>--bs-indigo</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-info</code></td><td><code>--redz-info</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-info-bg-subtle</code></td><td><code>--redz-info-subtle</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-info-border-subtle</code></td><td>-</td><td>review</td><td>color-mix(in oklch, var(--redz-info) 35%, var(--redz-border)), as border-info-subtle draws it</td></tr>
+									<tr><td><code>--bs-info-rgb</code></td><td>-</td><td>review</td><td>a relative color in place of the channels: rgb(from var(--redz-info) r g b / 50%)</td></tr>
+									<tr><td><code>--bs-info-text-emphasis</code></td><td><code>--redz-info</code></td><td>review</td><td>the tone itself: REDZ.UI has no darker text of a tone</td></tr>
+									<tr><td><code>--bs-light</code></td><td>-</td><td>review</td><td>light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text</td></tr>
+									<tr><td><code>--bs-light-bg-subtle</code></td><td>-</td><td>review</td><td>light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text</td></tr>
+									<tr><td><code>--bs-light-border-subtle</code></td><td>-</td><td>review</td><td>light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text</td></tr>
+									<tr><td><code>--bs-light-rgb</code></td><td>-</td><td>review</td><td>light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text</td></tr>
+									<tr><td><code>--bs-light-text-emphasis</code></td><td>-</td><td>review</td><td>light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text</td></tr>
+									<tr><td><code>--bs-link-color</code></td><td><code>--redz-primary</code></td><td>review</td><td>links take the accent; set it on a link only where it differs</td></tr>
+									<tr><td><code>--bs-link-color-rgb</code></td><td>-</td><td>review</td><td>a link&#039;s own color and line, written on the link</td></tr>
+									<tr><td><code>--bs-link-decoration</code></td><td>-</td><td>review</td><td>a link&#039;s own color and line, written on the link</td></tr>
+									<tr><td><code>--bs-link-hover-color</code></td><td>-</td><td>review</td><td>a link&#039;s own color and line, written on the link</td></tr>
+									<tr><td><code>--bs-link-hover-color-rgb</code></td><td>-</td><td>review</td><td>a link&#039;s own color and line, written on the link</td></tr>
+									<tr><td><code>--bs-link-opacity</code></td><td>-</td><td>review</td><td>a link&#039;s own color and line, written on the link</td></tr>
+									<tr><td><code>--bs-link-underline-opacity</code></td><td>-</td><td>review</td><td>a link&#039;s own color and line, written on the link</td></tr>
+									<tr><td><code>--bs-list-group-action-active-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-list-group-action-active-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-list-group-action-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-list-group-action-hover-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-list-group-action-hover-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-list-group-active-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-list-group-active-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-list-group-active-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-list-group-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-list-group-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-list-group-border-radius</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-list-group-border-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-list-group-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-list-group-disabled-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-list-group-disabled-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-list-group-item-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-list-group-item-padding-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-modal-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-modal-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-modal-border-radius</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-modal-border-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-modal-box-shadow</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-modal-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-modal-footer-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-modal-footer-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-modal-footer-border-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-modal-footer-gap</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-modal-header-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-modal-header-border-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-modal-header-padding</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-modal-header-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-modal-header-padding-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-modal-inner-border-radius</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-modal-margin</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-modal-padding</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-modal-title-line-height</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-modal-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-modal-zindex</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-nav-link-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-nav-link-disabled-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-nav-link-font-weight</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-nav-link-hover-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-nav-link-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-nav-link-padding-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-nav-pills-border-radius</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-nav-pills-link-active-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-nav-pills-link-active-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-nav-tabs-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-nav-tabs-border-radius</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-nav-tabs-border-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-nav-tabs-link-active-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-nav-tabs-link-active-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-nav-tabs-link-active-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-nav-tabs-link-hover-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-nav-underline-border-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-nav-underline-gap</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-nav-underline-link-active-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-navbar-active-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-navbar-brand-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-navbar-brand-font-size</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-navbar-brand-hover-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-navbar-brand-margin-end</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-navbar-brand-padding-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-navbar-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-navbar-disabled-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-navbar-hover-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-navbar-nav-link-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-navbar-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-navbar-padding-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-navbar-toggler-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-navbar-toggler-border-radius</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-navbar-toggler-focus-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-navbar-toggler-font-size</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-navbar-toggler-icon-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-navbar-toggler-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-navbar-toggler-padding-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-navbar-toggler-transition</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-offcanvas-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-offcanvas-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-offcanvas-border-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-offcanvas-box-shadow</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-offcanvas-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-offcanvas-height</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-offcanvas-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-offcanvas-padding-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-offcanvas-title-line-height</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-offcanvas-transition</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-offcanvas-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-offcanvas-zindex</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-orange</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-pagination-active-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-pagination-active-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-pagination-active-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-pagination-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-pagination-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-pagination-border-radius</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-pagination-border-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-pagination-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-pagination-disabled-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-pagination-disabled-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-pagination-disabled-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-pagination-focus-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-pagination-focus-box-shadow</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-pagination-focus-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-pagination-font-size</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-pagination-hover-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-pagination-hover-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-pagination-hover-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-pagination-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-pagination-padding-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-pink</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-popover-arrow-border</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-popover-arrow-height</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-popover-arrow-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-popover-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-popover-body-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-popover-body-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-popover-body-padding-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-popover-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-popover-border-radius</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-popover-border-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-popover-box-shadow</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-popover-font-size</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-popover-header-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-popover-header-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-popover-header-font-size</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-popover-header-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-popover-header-padding-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-popover-inner-border-radius</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-popover-max-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-popover-zindex</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-position</code></td><td>-</td><td>review</td><td>ratio-* for the ratio; the property itself for the rest</td></tr>
+									<tr><td><code>--bs-primary</code></td><td><code>--redz-primary</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-primary-bg-subtle</code></td><td><code>--redz-primary-subtle</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-primary-border-subtle</code></td><td>-</td><td>review</td><td>color-mix(in oklch, var(--redz-primary) 35%, var(--redz-border)), as border-primary-subtle draws it</td></tr>
+									<tr><td><code>--bs-primary-rgb</code></td><td>-</td><td>review</td><td>a relative color in place of the channels: rgb(from var(--redz-primary) r g b / 50%)</td></tr>
+									<tr><td><code>--bs-primary-text-emphasis</code></td><td><code>--redz-primary</code></td><td>review</td><td>the tone itself: REDZ.UI has no darker text of a tone</td></tr>
+									<tr><td><code>--bs-progress-bar-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-progress-bar-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-progress-bar-transition</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-progress-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-progress-border-radius</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-progress-box-shadow</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-progress-font-size</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-progress-height</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-purple</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-red</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-secondary</code></td><td><code>--redz-secondary</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-secondary-bg</code></td><td><code>--redz-bg-hover</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-secondary-bg-rgb</code></td><td>-</td><td>review</td><td>a relative color from the matching --redz-* in place of the channels</td></tr>
+									<tr><td><code>--bs-secondary-bg-subtle</code></td><td><code>--redz-secondary-subtle</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-secondary-border-subtle</code></td><td>-</td><td>review</td><td>color-mix(in oklch, var(--redz-secondary) 35%, var(--redz-border)), as border-secondary-subtle draws it</td></tr>
+									<tr><td><code>--bs-secondary-color</code></td><td><code>--redz-text-muted</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-secondary-color-rgb</code></td><td>-</td><td>review</td><td>a relative color from the matching --redz-* in place of the channels</td></tr>
+									<tr><td><code>--bs-secondary-rgb</code></td><td>-</td><td>review</td><td>a relative color in place of the channels: rgb(from var(--redz-secondary) r g b / 50%)</td></tr>
+									<tr><td><code>--bs-secondary-text-emphasis</code></td><td><code>--redz-secondary</code></td><td>review</td><td>the tone itself: REDZ.UI has no darker text of a tone</td></tr>
+									<tr><td><code>--bs-spinner-animation-name</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-spinner-animation-speed</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-spinner-border-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-spinner-height</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-spinner-vertical-align</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-spinner-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-success</code></td><td><code>--redz-success</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-success-bg-subtle</code></td><td><code>--redz-success-subtle</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-success-border-subtle</code></td><td>-</td><td>review</td><td>color-mix(in oklch, var(--redz-success) 35%, var(--redz-border)), as border-success-subtle draws it</td></tr>
+									<tr><td><code>--bs-success-rgb</code></td><td>-</td><td>review</td><td>a relative color in place of the channels: rgb(from var(--redz-success) r g b / 50%)</td></tr>
+									<tr><td><code>--bs-success-text-emphasis</code></td><td><code>--redz-success</code></td><td>review</td><td>the tone itself: REDZ.UI has no darker text of a tone</td></tr>
+									<tr><td><code>--bs-table-accent-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-table-active-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-table-active-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-table-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-table-bg-state</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-table-bg-type</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-table-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-table-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-table-color-state</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-table-color-type</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-table-hover-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-table-hover-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-table-striped-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-table-striped-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-teal</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-tertiary-bg</code></td><td><code>--redz-bg-page</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-tertiary-bg-rgb</code></td><td>-</td><td>review</td><td>a relative color from the matching --redz-* in place of the channels</td></tr>
+									<tr><td><code>--bs-tertiary-color</code></td><td><code>--redz-text-faint</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-tertiary-color-rgb</code></td><td>-</td><td>review</td><td>a relative color from the matching --redz-* in place of the channels</td></tr>
+									<tr><td><code>--bs-text-opacity</code></td><td>-</td><td>review</td><td>a relative color or color-mix in place of the opacity</td></tr>
+									<tr><td><code>--bs-toast-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-toast-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-toast-border-radius</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-toast-border-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-toast-box-shadow</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-toast-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-toast-font-size</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-toast-header-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-toast-header-border-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-toast-header-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-toast-max-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-toast-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-toast-padding-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-toast-spacing</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-toast-zindex</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-tooltip-arrow-height</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-tooltip-arrow-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-tooltip-bg</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-tooltip-border-radius</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-tooltip-color</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-tooltip-font-size</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-tooltip-margin</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-tooltip-max-width</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-tooltip-opacity</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-tooltip-padding-x</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-tooltip-padding-y</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-tooltip-zindex</code></td><td>-</td><td>review</td><td>REDZ.UI&#039;s components keep few custom properties: set the property itself on the part, or use a utility</td></tr>
+									<tr><td><code>--bs-warning</code></td><td><code>--redz-warning</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-warning-bg-subtle</code></td><td><code>--redz-warning-subtle</code></td><td>rename</td><td></td></tr>
+									<tr><td><code>--bs-warning-border-subtle</code></td><td>-</td><td>review</td><td>color-mix(in oklch, var(--redz-warning) 35%, var(--redz-border)), as border-warning-subtle draws it</td></tr>
+									<tr><td><code>--bs-warning-rgb</code></td><td>-</td><td>review</td><td>a relative color in place of the channels: rgb(from var(--redz-warning) r g b / 50%)</td></tr>
+									<tr><td><code>--bs-warning-text-emphasis</code></td><td><code>--redz-warning</code></td><td>review</td><td>the tone itself: REDZ.UI has no darker text of a tone</td></tr>
+									<tr><td><code>--bs-white</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-white-rgb</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
+									<tr><td><code>--bs-yellow</code></td><td>-</td><td>review</td><td>a palette color: use the tone or the surface that means it</td></tr>
 									<tr><td><code>data-bs-toggle=&quot;modal&quot;</code></td><td><code>commandfor=&quot;ID&quot; command=&quot;show-modal&quot;</code></td><td>trigger</td><td>on the button; the dialog is a &lt;dialog id=&quot;ID&quot;&gt;</td></tr>
 									<tr><td><code>data-bs-toggle=&quot;offcanvas&quot;</code></td><td><code>commandfor=&quot;ID&quot; command=&quot;show-modal&quot;</code></td><td>trigger</td><td>the drawer is a &lt;dialog id=&quot;ID&quot;&gt;</td></tr>
 									<tr><td><code>data-bs-toggle=&quot;dropdown&quot;</code></td><td><code>commandfor=&quot;ID&quot; command=&quot;toggle-popover&quot; aria-haspopup=&quot;menu&quot;</code></td><td>trigger</td><td>the menu gets popover and role=&quot;menu&quot;</td></tr>
 									<tr><td><code>data-bs-toggle=&quot;tab&quot;</code></td><td><code>role=&quot;tab&quot; aria-controls=&quot;ID&quot;</code></td><td>trigger</td><td>in a role=&quot;tablist&quot;; the library selects and shows the panel</td></tr>
 									<tr><td><code>data-bs-toggle=&quot;pill&quot;</code></td><td><code>role=&quot;tab&quot; aria-controls=&quot;ID&quot;</code></td><td>trigger</td><td>in a role=&quot;tablist&quot;</td></tr>
 									<tr><td><code>data-bs-toggle=&quot;button&quot;</code></td><td><code>aria-pressed</code></td><td>review</td><td>switch aria-pressed in your click handler</td></tr>
-									<tr><td><code>data-bs-toggle=&quot;tooltip&quot;</code></td><td><code>commandfor=&quot;ID&quot; command=&quot;toggle-popover&quot;</code></td><td>review</td><td>a toggletip at the browser floor</td></tr>
+									<tr><td><code>data-bs-toggle=&quot;tooltip&quot;</code></td><td><code>data-tooltips</code></td><td>review</td><td>keep the title: data-tooltips on &lt;html&gt; or a container shows every title inside as a tooltip; a toggletip for longer words</td></tr>
+									<tr><td><code>data-bs-title</code></td><td><code>title</code></td><td>rename</td><td>the element&#039;s own title, inside data-tooltips</td></tr>
 									<tr><td><code>data-bs-toggle=&quot;popover&quot;</code></td><td><code>commandfor=&quot;ID&quot; command=&quot;toggle-popover&quot;</code></td><td>trigger</td><td>the panel is a &lt;div id=&quot;ID&quot; class=&quot;popover&quot; popover&gt; right after the button</td></tr>
 									<tr><td><code>data-bs-toggle=&quot;collapse&quot;</code></td><td><code>command=&quot;--toggle&quot; aria-controls=&quot;ID&quot; aria-expanded=&quot;false&quot;</code></td><td>trigger</td><td>the region is hidden=&quot;until-found&quot; while closed; in an accordion the item is a &lt;details&gt;</td></tr>
 									<tr><td><code>data-bs-parent</code></td><td><code>name</code></td><td>trigger</td><td>the same name on every &lt;details&gt; of the group</td></tr>
@@ -660,7 +1092,7 @@
 									<tr><td><code>bootstrap.Dropdown</code></td><td><code>menu.showPopover(), menu.hidePopover(), menu.togglePopover()</code></td><td>trigger</td><td></td></tr>
 									<tr><td><code>bootstrap.Tab</code></td><td><code>tab.click()</code></td><td>review</td><td>the library selects on click and by the keys</td></tr>
 									<tr><td><code>bootstrap.Toast</code></td><td><code>REDZ.ui.toast({title, text, tone})</code></td><td>trigger</td><td></td></tr>
-									<tr><td><code>bootstrap.Tooltip</code></td><td>-</td><td>remove</td><td></td></tr>
+									<tr><td><code>bootstrap.Tooltip</code></td><td>-</td><td>remove</td><td>data-tooltips on &lt;html&gt; or a container shows the titles inside</td></tr>
 									<tr><td><code>bootstrap.Popover</code></td><td><code>panel.showPopover(), panel.hidePopover(), panel.togglePopover()</code></td><td>trigger</td><td></td></tr>
 									<tr><td><code>bootstrap.Collapse</code></td><td><code>region.hidden = false</code></td><td>review</td><td>and setAttribute(&#039;hidden&#039;, &#039;until-found&#039;) to close; set aria-expanded on its buttons then: a button with command=&quot;--toggle&quot; does both</td></tr>
 									<tr><td><code>show.bs.modal</code></td><td><code>toggle</code></td><td>review</td><td>the dialog&#039;s toggle event, or code right after showModal()</td></tr>

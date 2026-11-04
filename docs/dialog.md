@@ -58,6 +58,13 @@ A button opens the dialog with `commandfor` + `command="show-modal"`; buttons in
 <span class="text-muted fs-12" role="status" data-docs-answer></span>
 ```
 
+For what cannot be undone, `phrase` asks the person to type a word first - the site's name, say: a field under the text, labelled by the page's text `confirm.phrase`, takes the focus, the confirming button waits until the words match, and `Enter` in the field confirms then.
+
+```html
+<button class="btn btn-danger" type="button" data-docs-run="confirm-phrase"><i class="bi bi-trash3" aria-hidden="true"></i>Delete the site</button>
+<span class="text-muted fs-12" role="status" data-docs-answer></span>
+```
+
 ### On a phone and full screen
 
 On a window narrower than 576 px a dialog fills the screen by itself - its body scrolls, its footer stays at the bottom - while `dialog-sm` and a confirmation stay a card in the middle. `dialog-fullscreen` fills the screen on any window.

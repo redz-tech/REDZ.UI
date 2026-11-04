@@ -1,7 +1,7 @@
-// REDZ.UI docs — the site's script, not part of the library. The view: theme and direction from ?theme= and ?dir=,
+// REDZ.UI docs - the site's script, not part of the library. The view: theme and direction from ?theme= and ?dir=,
 // else as last chosen here, set before the page paints; a twin written right to left stays so. The state mirror: every
 // :hover, :focus-visible, :focus and :active rule of the page's stylesheets is copied, in its place, under
-// [data-docs-state~="…"], so a state grid shows those states without a pointer or a key — the probes compare the copy
+// [data-docs-state~="…"], so a state grid shows those states without a pointer or a key - the probes compare the copy
 // with the real state. The examples' buttons with data-docs-run call REDZ.ui.
 (() => {
 	const root = document.documentElement;
@@ -92,6 +92,7 @@
 		'toast-danger': () => REDZ.ui.toast({title: 'Not saved', text: 'The connection was lost; try again.', tone: 'danger'}),
 		'toast-action': () => REDZ.ui.toast({title: 'Moved to the archive', tone: 'info', action: {label: 'Undo', run: () => REDZ.ui.toast({title: 'Restored', tone: 'success'})}}),
 		confirm: async (button) => answer(button, await REDZ.ui.confirm({title: 'Delete 2 excursions?', text: 'Their pages go away on all three sites.', ok: 'Delete', tone: 'danger'}) ? 'Confirmed.' : 'Cancelled.'),
+		'confirm-phrase': async (button) => answer(button, await REDZ.ui.confirm({title: 'Delete the site lagoon.example?', text: 'Its pages, its files and its settings go away for good.', ok: 'Delete the site', tone: 'danger', phrase: 'lagoon.example'}) ? 'Confirmed.' : 'Cancelled.'),
 		'busy-button': (button) => REDZ.ui.busy(button, new Promise((done) => setTimeout(done, 2000))),
 		'busy-region': (button) => REDZ.ui.busy(document.getElementById(button.getAttribute('aria-controls')), new Promise((done) => setTimeout(done, 2000))),
 	};
@@ -121,6 +122,26 @@
 				return option;
 			}));
 		}, 400);
+	});
+
+	// The tabs that ask before they are left: a changed note asks first.
+	document.addEventListener('input', (event) => {
+		if (event.target instanceof HTMLElement && event.target.id === 'nav-guard-note') {
+			event.target.dataset.changed = '';
+		}
+	});
+	document.addEventListener('redz:select', (event) => {
+		const note = document.getElementById('nav-guard-note');
+		if (event.detail.from?.id !== 'nav-guard-1' || note?.dataset.changed === undefined) {
+			return;
+		}
+		event.preventDefault();
+		event.detail.respondWith(REDZ.ui.confirm({title: 'Leave without saving?', text: 'The note for the guides has changes that are not saved.', ok: 'Leave', tone: 'danger'}).then((leave) => {
+			if (leave) {
+				delete note.dataset.changed;
+			}
+			return leave;
+		}));
 	});
 
 	// The tree's lazy Archive: two pages after 400 ms.

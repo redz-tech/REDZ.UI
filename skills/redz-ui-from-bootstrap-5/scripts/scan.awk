@@ -7,7 +7,7 @@ BEGIN {
 FILENAME == ARGV[1] {
 	if (FNR > 1) {
 		kind[$1] = $3
-		target[$1] = $2
+		target[$1] = $2 != "" ? $2 : $6
 	}
 	next
 }
@@ -17,9 +17,18 @@ FILENAME == ARGV[2] {
 	next
 }
 
+FNR == 1 {
+	open = ""
+}
+
 function report(token, what, form) {
-	printf "%s:%d:%s:%s:%s\n", FILENAME, FNR, token, what, form
+	printf "%s:%d:%s:%s:%s\n", FILENAME, at, token, what, form
 	found++
+}
+
+# Whether the text ends inside a class value whose quote is still open: a value written over several lines.
+function unclosed(text) {
+	return text ~ /class(Name)?[ \t]*=[ \t]*"[^"]*$/ || text ~ /class(Name)?[ \t]*=[ \t]*'[^']*$/
 }
 
 function check(token,    i) {
@@ -41,7 +50,7 @@ function check(token,    i) {
 			return
 		}
 	}
-	report(token, "unknown", "")
+	report(token, "unknown", token ~ /^bi-/ ? "no such icon in the library's icons/" : "")
 }
 
 function classes(value,    n, i, tokens) {
@@ -96,7 +105,24 @@ function glued(words, text, before) {
 }
 
 {
-	rest = $0
+	# A class value over several lines is read as one line, told at the line it starts on; a stray quote joins 20 at most.
+	if (open != "") {
+		open = open " " $0
+		if (unclosed(open) && ++joined < 20) {
+			next
+		}
+		line = open
+		open = ""
+	} else if (unclosed($0)) {
+		open = $0
+		at = FNR
+		joined = 0
+		next
+	} else {
+		line = $0
+		at = FNR
+	}
+	rest = line
 	while (match(rest, /class(Name)?[ \t]*=[ \t]*("[^"]*"|'[^']*')/)) {
 		value = substr(rest, RSTART, RLENGTH)
 		rest = substr(rest, RSTART + RLENGTH)
@@ -113,7 +139,7 @@ function glued(words, text, before) {
 		}
 		classes(value)
 	}
-	rest = $0
+	rest = line
 	while (match(rest, /classList\.(add|remove|toggle|contains)\([^)]*\)/)) {
 		value = substr(rest, RSTART, RLENGTH)
 		rest = substr(rest, RSTART + RLENGTH)
@@ -123,7 +149,7 @@ function glued(words, text, before) {
 			value = substr(value, RSTART + RLENGTH)
 		}
 	}
-	rest = $0
+	rest = line
 	while (match(rest, /(querySelector(All)?|closest|matches)\(['"][^'"]*['"]/)) {
 		value = substr(rest, RSTART, RLENGTH)
 		rest = substr(rest, RSTART + RLENGTH)
@@ -132,7 +158,7 @@ function glued(words, text, before) {
 			value = substr(value, RSTART + RLENGTH)
 		}
 	}
-	rest = $0
+	rest = line
 	while (match(rest, /data-bs-[a-z-]+(="[^"]*")?/)) {
 		value = substr(rest, RSTART, RLENGTH)
 		rest = substr(rest, RSTART + RLENGTH)
@@ -143,20 +169,30 @@ function glued(words, text, before) {
 		} else if (name in kind) {
 			report(name, kind[name], target[name])
 		} else {
-			report(name, "review", "no REDZ.UI form: see the skill's references/triggers.md")
+			report(name, "review", "no REDZ.UI form: see the skill's references/states-and-triggers.md")
 		}
 	}
-	rest = $0
+	rest = line
 	while (match(rest, /bootstrap\.[A-Z][A-Za-z]+/)) {
 		value = substr(rest, RSTART, RLENGTH)
 		rest = substr(rest, RSTART + RLENGTH)
 		report(value, value in kind ? kind[value] : "review", value in kind ? target[value] : "")
 	}
-	if ($0 ~ /['"](btn|alert|badge|text|bg|border|col|table|d|m[tbsexy]?|p[tbsexy]?)-['"][ \t]*\./) {
+	# Bootstrap's custom properties, read by var() or set, in stylesheets, style attributes and scripts alike.
+	rest = line
+	while (match(rest, /--bs-[a-z0-9-]*[a-z0-9]/)) {
+		value = substr(rest, RSTART, RLENGTH)
+		rest = substr(rest, RSTART + RLENGTH)
+		report(value, value in kind ? kind[value] : "review", value in kind ? target[value] : "a custom property Bootstrap 5.3 does not define: the project's own, named like Bootstrap's")
+	}
+	if (line ~ /['"](btn|alert|badge|text|bg|border|col|table|d|m[tbsexy]?|p[tbsexy]?)-['"][ \t]*\./) {
 		report("class", "review", "a class built in code: write every class name out whole")
 	}
 }
 
 END {
+	if (open != "") {
+		report("class", "review", "a class value whose quote never closes")
+	}
 	exit found > 0 ? 1 : 0
 }

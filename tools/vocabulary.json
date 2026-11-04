@@ -2,7 +2,7 @@
 	"region": "region",
 	"breakpoints": {"sm": 576, "md": 768, "lg": 1024, "xl": 1280, "2xl": 1536},
 	"tones": ["primary", "secondary", "success", "danger", "warning", "info"],
-	"texts": {"busy": "text", "close": "text", "confirm.cancel": "text", "confirm.ok": "text", "create": "text", "file.size": "text", "file.type": "text", "found": "count", "more": "text", "moved": "text", "remove": "text", "strength.fair": "text", "strength.good": "text", "strength.short": "text", "strength.strong": "text"},
+	"texts": {"busy": "text", "close": "text", "confirm.cancel": "text", "confirm.ok": "text", "confirm.phrase": "text", "create": "text", "file.size": "text", "file.type": "text", "found": "count", "more": "text", "moved": "text", "remove": "text", "strength.fair": "text", "strength.good": "text", "strength.short": "text", "strength.strong": "text"},
 	"scales": {
 		"space": [0, 2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64],
 		"fs": [12, 14, 16, 18, 20, 24, 32],
@@ -68,6 +68,7 @@
 		{"name": "border-end", "css": "border-inline-end: 1px solid var(--redz-border)"},
 		{"name": "border", "property": "border-width", "values": {"0": "0", "1": "1px", "2": "2px", "4": "4px"}},
 		{"name": "border", "property": "border-color", "tones": "var(--redz-{tone})", "values": {"strong": "var(--redz-border-strong)"}},
+		{"name": "border", "property": "border-color", "tones": "color-mix(in oklch, var(--redz-{tone}) 35%, var(--redz-border))", "suffix": "-subtle"},
 		{"name": "rounded", "css": "border-radius: var(--redz-radius-8)"},
 		{"name": "rounded", "property": "border-radius", "scale": "radius", "values": {"full": "999px"}, "bs5": {"4": "1", "6": "2", "8": "3", "16": "4"}},
 		{"name": "rounded-top", "css": "border-start-start-radius: var(--redz-radius-8); border-start-end-radius: var(--redz-radius-8)"},

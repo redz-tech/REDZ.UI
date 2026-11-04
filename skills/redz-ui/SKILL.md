@@ -44,7 +44,7 @@ where the meaning is the same, and like the platform where Bootstrap 6 moved ont
   <link rel="stylesheet" href="redz-ui/dist/redz-ui.min.css">
   <link rel="stylesheet" href="redz-ui/css/icons.css">
   <script type="module" src="redz-ui/dist/redz-ui.min.js"></script>
-  <script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong", "moved": "Moved to {position} of {count}", "more": "More", "file.type": "{name} is not a kind of file this takes", "file.size": "{name} is larger than {size}"}</script>
+  <script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "confirm.phrase": "Type “{phrase}” to confirm", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong", "moved": "Moved to {position} of {count}", "more": "More", "file.type": "{name} is not a kind of file this takes", "file.size": "{name} is larger than {size}"}</script>
 </head>
 ```
 

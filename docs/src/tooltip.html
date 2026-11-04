@@ -1,6 +1,6 @@
 <header class="vstack gap-8">
 	<h1>Tooltips</h1>
-	<p class="docs-lead">A short dark label beside a control, placed by CSS anchor positioning. At the browser floor it is a toggletip: a small button opens it, a click outside or <kbd>Esc</kbd> closes it.</p>
+	<p class="docs-lead">A short dark label beside a control. A small button opens it as a toggletip, which a click outside or <kbd>Esc</kbd> closes; or an element's own title shows it on hover and focus.</p>
 </header>
 
 <section class="vstack gap-16" aria-labelledby="tooltip-examples">
@@ -12,6 +12,14 @@
 		</span>
 		<div id="tooltip-why-tip" class="tooltip" popover role="tooltip">A partner can hide the brand and set their own help link.</div>
 	</div>
+
+	<h3>From a title</h3>
+	<p>Inside an element with <code>data-tooltips</code> - <code>&lt;html&gt;</code> for the whole page - an element's own <code>title</code> shows as this tooltip: after a short hover by a mouse, at once when the keyboard's focus lands on it. It says why a control cannot run, what an icon button does, what a dot stands for. No markup but the title.</p>
+	<div class="docs-example" id="tooltip-title" data-tooltips>
+		<button class="btn btn-icon" type="button" title="Duplicate"><i class="bi bi-copy" aria-hidden="true"></i></button>
+		<button class="btn" type="button" aria-disabled="true" title="Publish needs a price for every season">Publish</button>
+		<span class="hstack gap-8"><span class="dot dot-warning" title="2 translations are outdated"></span>Ang Thong</span>
+	</div>
 </section>
 
 <section class="vstack gap-12" aria-labelledby="tooltip-access">
@@ -19,7 +27,8 @@
 	<ul>
 		<li>The button is named after its question; the tooltip's words answer it. Nothing that must be read to use the screen lives only in a tooltip.</li>
 		<li>The button names its tooltip in <code>aria-describedby</code>, so a screen reader says the answer with the question, closed or open - opening a popover says nothing of its words.</li>
-		<li>A tooltip on hover and focus waits for <code>interestfor</code>, which is outside the browser floor.</li>
+		<li>A tooltip from a title is the title itself to a screen reader: the element keeps its title on focus, and the tooltip is hidden from assistive technology. While a mouse rests on the element the title is held back, so the browser does not show its own as well; an icon button named only by its title keeps that name meanwhile.</li>
+		<li>It stays while the pointer rests on it, hides on <kbd>Esc</kbd> without moving the focus, and never opens for a touch, which has no hover: on a phone, what a title says must be on the screen too.</li>
 		<li>The label is the page's text color on the page color reversed: 4.5:1 in both themes, an outline in forced colors.</li>
 	</ul>
 </section>

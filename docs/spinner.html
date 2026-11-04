@@ -6,13 +6,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Spinners - REDZ.UI</title>
 	<meta name="description" content="A turning ring, 1 em across in the color of the text around it, for something small that is on its way. A button shows its own while busy; a region shows an overlay.">
+	<script src="../js/floor.js"></script>
 	<link rel="stylesheet" href="../dist/redz-ui.min.css">
 	<link rel="stylesheet" href="../css/icons.css">
 	<link rel="stylesheet" href="site.css">
 	<link rel="alternate" type="text/markdown" href="spinner.md">
 	<script src="site.js"></script>
 	<script type="module" src="../dist/redz-ui.min.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}"}</script>
+	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}"}</script>
 </head>
 <body>
 	<div class="app">
@@ -111,12 +112,21 @@
 					</div>
 					<pre class="docs-code" tabindex="0"><code>&lt;span class="hstack gap-8"&gt;&lt;span class="spinner-border" aria-hidden="true"&gt;&lt;/span&gt;Rebuilding 3 pages…&lt;/span&gt;
 &lt;span class="hstack gap-8 text-primary fs-20"&gt;&lt;span class="spinner-border" aria-hidden="true"&gt;&lt;/span&gt;Larger, in the accent&lt;/span&gt;</code></pre></div>
+
+					<h3>A growing dot</h3>
+					<p><code>spinner-grow</code> is a dot that grows and fades in place of the ring, for a calmer sign in a line of text.</p>
+					<div class="docs-sample"><div class="docs-example" id="spinner-grow">
+						<span class="hstack gap-8"><span class="spinner-grow" aria-hidden="true"></span>Checking the server…</span>
+						<span class="hstack gap-8 text-success"><span class="spinner-grow" aria-hidden="true"></span>Syncing the calendar</span>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;span class="hstack gap-8"&gt;&lt;span class="spinner-grow" aria-hidden="true"&gt;&lt;/span&gt;Checking the server…&lt;/span&gt;
+&lt;span class="hstack gap-8 text-success"&gt;&lt;span class="spinner-grow" aria-hidden="true"&gt;&lt;/span&gt;Syncing the calendar&lt;/span&gt;</code></pre></div>
 				</section>
 
 				<section class="vstack gap-12" aria-labelledby="spinner-access">
 					<h2 id="spinner-access">Accessibility</h2>
 					<ul>
-						<li>A spinner turns even for people who ask for less motion - it is the sign that something is happening - and stays a ring in forced colors.</li>
+						<li>A spinner moves even for people who ask for less motion - it is the sign that something is happening - and stays a ring or a dot in forced colors.</li>
 						<li>Say the same in words, in a live region when it starts after an action.</li>
 					</ul>
 				</section>
@@ -124,16 +134,6 @@
 						<section class="vstack gap-12" aria-labelledby="spinner-tokens">
 							<h2 id="spinner-tokens">Tokens</h2>
 							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/spinner.css"><code>css/components/spinner.css</code></a>, which declares no custom property of its own.</p>
-						</section>
-
-						<section class="vstack gap-12" aria-labelledby="spinner-from-bootstrap">
-							<h2 id="spinner-from-bootstrap">From Bootstrap 5.3</h2>
-							<table class="table docs-table">
-								<thead><tr><th scope="col">Bootstrap 5.3</th><th scope="col">REDZ.UI</th><th scope="col">Change</th><th scope="col">Note</th></tr></thead>
-								<tbody>
-									<tr><td><code>spinner-grow</code></td><td>-</td><td>missing</td><td></td></tr>
-								</tbody>
-							</table>
 						</section>
 				<footer class="d-flex flex-wrap justify-content-between gap-8 pt-16 border-top text-muted fs-12">
 					<span>MIT license · © 2026 Red Z Group · includes Bootstrap Icons (MIT)</span>

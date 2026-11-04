@@ -26,7 +26,7 @@ the latest release at the root, of the main branch under `next/`, and of every r
   fixture checked in real engines, with its Arabic twin (see [Documentation](#documentation)).
 - Two agent skills in `skills/`: building screens with REDZ.UI, and moving a project from Bootstrap 5.3 with a scan
   and a map of every Bootstrap class (see [Skills](#skills)).
-- Budgets held on every commit: the stylesheet at most 24 KB and the script 25 KB, gzipped - the two files a project
+- Budgets held on every commit: the stylesheet at most 26 KB and the script 25 KB, gzipped - the two files a project
   serves.
 
 ## How it reads
@@ -64,7 +64,7 @@ attaches by delegation on `document`, so nothing is set up per element and marku
 
 ```html
 <script type="module" src="dist/redz-ui.min.js"></script>
-<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong", "moved": "Moved to {position} of {count}", "more": "More", "file.type": "{name} is not a kind of file this takes", "file.size": "{name} is larger than {size}"}</script>
+<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "confirm.phrase": "Type “{phrase}” to confirm", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong", "moved": "Moved to {position} of {count}", "more": "More", "file.type": "{name} is not a kind of file this takes", "file.size": "{name} is larger than {size}"}</script>
 ```
 
 - **Menus** (`role="menu"` on a `popover` opened by its button): the arrow keys move through the items, Home and End go
@@ -72,7 +72,8 @@ attaches by delegation on `document`, so nothing is set up per element and marku
   button open it on the first or the last item (`js/menu.js`).
 - **Tabs** (`role="tablist"`): the arrow keys select the next tab and show its panel - mirrored right to left - Home
   and End the first and the last; only the selected tab takes Tab. With `data-activation="manual"` - panels that load
-  from the server - the keys move the focus only, and Enter or Space selects (`js/tabs.js`).
+  from the server - the keys move the focus only, and Enter or Space selects. Before a person's choice selects a tab,
+  the tablist fires the cancelable `redz:select` (`tab`, `from`), which a page answers to ask first (`js/tabs.js`).
 - **Nav overflow** (`nav-overflow` around a nav): the links that do not fit the wrapper's own box hide from the end
   into a "More" menu after the nav, the current link and `nav-overflow-keep` ones staying in the row; a plain click on
   an item clicks the hidden link itself; a link that opens a menu folds as a group of its items. It watches the
@@ -88,8 +89,9 @@ attaches by delegation on `document`, so nothing is set up per element and marku
   `.toast-container` - `role="status"`, `role="alert"` for `danger` - or in an open modal dialog's own. Success and info
   leave after 8 seconds unless the pointer or the focus rests on them; an error and a notice with an action stay until
   closed (`js/toast.js`).
-- **Confirmation:** `await REDZ.ui.confirm({title, text, ok, cancel, tone})` asks in a modal alert dialog and answers
-  `true` or `false`; the focus starts on cancel (`js/confirm.js`).
+- **Confirmation:** `await REDZ.ui.confirm({title, text, ok, cancel, tone, phrase})` asks in a modal alert dialog and
+  answers `true` or `false`; the focus starts on cancel. With a `phrase` the person types it first: the confirming
+  button waits for it and the focus starts in its field (`js/confirm.js`).
 - **Busy:** `REDZ.ui.busy(element, promise)` marks the element `aria-busy` until the promise settles. A button is also
   `aria-disabled`, which keeps its focus and swallows its clicks - as on every button, check, radio or switch so
   marked. A region - a card, its body, a dialog's or a drawer's body, any `region` - turns `inert` under an overlay that
@@ -127,6 +129,9 @@ attaches by delegation on `document`, so nothing is set up per element and marku
   it - `Meta+K Control+K` answers ⌘K on Apple's systems and Ctrl K elsewhere (`js/shortcuts.js`).
 - **Scrollspy:** in a nav or list group with `data-scrollspy`, the link to the section in view says so in
   `aria-current="location"` (`js/scrollspy.js`).
+- **Tooltips from titles:** inside an element with `data-tooltips` (`<html>` for the whole page) an element's own
+  `title` shows as the library's tooltip after a short hover and on a keyboard's focus; Escape hides it, and the
+  browser's own is held back meanwhile (`js/tooltips.js`).
 
 The library has no words of its own: every word it shows comes from the caller or from the page's island
 `#redz-ui-text`, and a missing one is named in the console.

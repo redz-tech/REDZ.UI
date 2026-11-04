@@ -4,13 +4,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>جميع المكونات - REDZ.UI</title>
 	<meta name="description" content="Every example and every state of every page on one page.">
+	<script src="../js/floor.js"></script>
 	<link rel="stylesheet" href="../dist/redz-ui.min.css">
 	<link rel="stylesheet" href="../css/icons.css">
 	<link rel="stylesheet" href="site.css">
 	<link rel="alternate" type="text/markdown" href="all.md">
 	<script src="site.js"></script>
 	<script type="module" src="../dist/redz-ui.min.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close":"إغلاق","confirm.ok":"موافق","confirm.cancel":"إلغاء","busy":"جارٍ التحميل…","remove":"إزالة {label}","found.one":"{count} نتيجة","found.other":"{count} نتائج","create":"إنشاء «{label}»","strength.short":"قصيرة جدًا","strength.fair":"مقبولة","strength.good":"جيدة","strength.strong":"قوية","moved":"نُقل إلى {position} من {count}","more":"المزيد","file.type":"{name} ليس من أنواع الملفات المقبولة هنا","file.size":"{name} أكبر من {size}"}</script>
+	<script type="application/json" id="redz-ui-text">{"close":"إغلاق","confirm.ok":"موافق","confirm.cancel":"إلغاء","confirm.phrase":"اكتب «{phrase}» للتأكيد","busy":"جارٍ التحميل…","remove":"إزالة {label}","found.one":"{count} نتيجة","found.other":"{count} نتائج","create":"إنشاء «{label}»","strength.short":"قصيرة جدًا","strength.fair":"مقبولة","strength.good":"جيدة","strength.strong":"قوية","moved":"نُقل إلى {position} من {count}","more":"المزيد","file.type":"{name} ليس من أنواع الملفات المقبولة هنا","file.size":"{name} أكبر من {size}"}</script>
 </head>
 <body>
 	<div class="app">
@@ -206,6 +207,13 @@
 								<button class="btn" type="button">تصدير</button>
 								<button class="btn btn-icon" type="button" aria-label="خيارات التصدير"><i class="bi bi-chevron-down" aria-hidden="true"></i></button>
 							</div>
+						</div>
+					</div>
+					<div class="docs-example" id="btn-group-vertical">
+						<div class="btn-group-vertical" role="group" aria-label="الترتيب">
+							<button class="btn" type="button"><i class="bi bi-arrow-up" aria-hidden="true"></i>انقل للأعلى</button>
+							<button class="btn" type="button"><i class="bi bi-arrow-down" aria-hidden="true"></i>انقل للأسفل</button>
+							<button class="btn" type="button"><i class="bi bi-trash" aria-hidden="true"></i>إزالة</button>
 						</div>
 					</div>
 					<div class="docs-example" id="btn-toggle">
@@ -1347,6 +1355,16 @@
 							</tbody>
 						</table>
 					</div>
+					<div class="docs-example docs-example-stack" id="table-compact">
+						<table class="table table-bordered" data-density="compact" aria-label="المواسم في ساموي، مضغوطة">
+							<thead><tr><th scope="col">الموسم</th><th scope="col">الأشهر</th><th scope="col">البحر</th></tr></thead>
+							<tbody>
+								<tr><td>جاف</td><td>من يناير إلى أبريل</td><td>هادئ</td></tr>
+								<tr><td>حار</td><td>من مايو إلى أغسطس</td><td>هادئ</td></tr>
+								<tr><td>ممطر</td><td>من سبتمبر إلى ديسمبر</td><td>أمواج</td></tr>
+							</tbody>
+						</table>
+					</div>
 					<div class="docs-states" id="table-states" tabindex="0" role="region" aria-labelledby="table-states-title">
 						<table class="docs-matrix">
 							<thead>
@@ -1556,6 +1574,10 @@
 						<button class="btn btn-danger" type="button" data-docs-run="confirm"><i class="bi bi-trash3" aria-hidden="true"></i>حذف رحلتين</button>
 						<span class="text-muted fs-12" role="status" data-docs-answer=""></span>
 					</div>
+					<div class="docs-example" id="dialog-confirm-phrase">
+						<button class="btn btn-danger" type="button" data-docs-run="confirm-phrase"><i class="bi bi-trash3" aria-hidden="true"></i>احذف الموقع</button>
+						<span class="text-muted fs-12" role="status" data-docs-answer=""></span>
+					</div>
 					<div class="docs-example" id="dialog-full">
 						<button class="btn" type="button" commandfor="dialog-full-panel" command="show-modal"><i class="bi bi-arrows-fullscreen" aria-hidden="true"></i>افتح بملء الشاشة</button>
 						<dialog class="dialog dialog-fullscreen" id="dialog-full-panel" aria-labelledby="dialog-full-title">
@@ -1630,6 +1652,11 @@
 						</span>
 						<div id="tooltip-why-tip" class="tooltip" popover="" role="tooltip">يمكن للشريك إخفاء العلامة التجارية وتعيين رابط مساعدة خاص به.</div>
 					</div>
+					<div class="docs-example" id="tooltip-title" data-tooltips="">
+						<button class="btn btn-icon" type="button" title="تكرار"><i class="bi bi-copy" aria-hidden="true"></i></button>
+						<button class="btn" type="button" aria-disabled="true" title="النشر يحتاج إلى سعر لكل موسم">نشر</button>
+						<span class="hstack gap-8"><span class="dot dot-warning" title="ترجمتان قديمتان"></span>أنغ ثونغ</span>
+					</div>
 				</section>
 
 				<section class="vstack gap-16" aria-labelledby="all-alert">
@@ -1676,6 +1703,10 @@
 					<div class="docs-example" id="spinner-inline">
 						<span class="hstack gap-8"><span class="spinner-border" aria-hidden="true"></span>جارٍ إعادة بناء 3 صفحات…</span>
 						<span class="hstack gap-8 text-primary fs-20"><span class="spinner-border" aria-hidden="true"></span>أكبر، بلون التمييز</span>
+					</div>
+					<div class="docs-example" id="spinner-grow">
+						<span class="hstack gap-8"><span class="spinner-grow" aria-hidden="true"></span>جارٍ فحص الخادم…</span>
+						<span class="hstack gap-8 text-success"><span class="spinner-grow" aria-hidden="true"></span>جارٍ مزامنة التقويم</span>
 					</div>
 				</section>
 
@@ -1808,6 +1839,17 @@
 						<div id="nav-manual-panel-1" role="tabpanel" aria-labelledby="nav-manual-1" tabindex="0"><p>128 حجزًا هذا الأسبوع.</p></div>
 						<div id="nav-manual-panel-2" role="tabpanel" aria-labelledby="nav-manual-2" tabindex="0" hidden=""><p>312,400 بات هذا الأسبوع.</p></div>
 						<div id="nav-manual-panel-3" role="tabpanel" aria-labelledby="nav-manual-3" tabindex="0" hidden=""><p>استردادان هذا الأسبوع.</p></div>
+					</div>
+					<div class="docs-example docs-example-stack" id="nav-guard">
+						<div class="nav nav-underline" role="tablist" aria-label="الرحلة">
+							<button class="nav-link" type="button" role="tab" id="nav-guard-1" aria-selected="true" aria-controls="nav-guard-panel-1">ملاحظة</button>
+							<button class="nav-link" type="button" role="tab" id="nav-guard-2" aria-selected="false" aria-controls="nav-guard-panel-2">الأسعار</button>
+						</div>
+						<div id="nav-guard-panel-1" role="tabpanel" aria-labelledby="nav-guard-1" tabindex="0">
+							<label class="form-label" for="nav-guard-note">ملاحظة للمرشدين</label>
+							<input class="form-control" id="nav-guard-note" type="text" value="Meet at the pier at 8:00">
+						</div>
+						<div id="nav-guard-panel-2" role="tabpanel" aria-labelledby="nav-guard-2" tabindex="0" hidden=""><p>2,900 بات للبالغ.</p></div>
 					</div>
 					<div class="docs-example docs-example-stack" id="nav-fill">
 						<nav class="nav nav-underline nav-fill" aria-label="موزعة">

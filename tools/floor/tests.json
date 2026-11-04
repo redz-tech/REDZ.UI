@@ -1,0 +1,12 @@
+{
+	"about": "The tests of js/floor.js, which tools/build.php writes: each the name of a feature the library is built on, as floor.json names it, and the expression that finds it in a browser. php tools/floor.php check holds that every name is ok at the floor, so a browser at the floor never reads as below it.",
+	"tests": [
+		{"name": "function:light-dark", "test": "CSS.supports('color', 'light-dark(#000, #fff)')"},
+		{"name": "attribute:*:popover", "test": "'popover' in HTMLElement.prototype"},
+		{"name": "selector:popover-open", "test": "CSS.supports('selector(:popover-open)')"},
+		{"name": "selector:has", "test": "CSS.supports('selector(:has(a))')"},
+		{"name": "at-rule:container", "test": "CSS.supports('container-type', 'inline-size')"},
+		{"name": "at-rule:starting-style", "test": "typeof CSSStartingStyleRule === 'function'"},
+		{"name": "value:transition-behavior:allow-discrete", "test": "CSS.supports('transition-behavior', 'allow-discrete')"}
+	]
+}

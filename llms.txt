@@ -49,7 +49,7 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 - [Dialogs](docs/dialog.md): The browser's own modal <dialog>: opened by a command, the page behind it inert and dimmed, closed by its buttons, Esc or a click outside. And REDZ.ui.confirm() for a question asked from script.
 - [Drawers](docs/drawer.md): A modal panel at the end of the screen - or at its start with drawer-start - for filters, a record's details, a long form beside the list it belongs to. Bootstrap 5 calls it offcanvas; it is a <dialog> here.
 - [Popovers](docs/popover.md): A small panel that opens beside its button and holds more than a label: a title, a few lines of text, a link. A click outside or Esc closes it; the page under it stays usable.
-- [Tooltips](docs/tooltip.md): A short dark label beside a control, placed by CSS anchor positioning. At the browser floor it is a toggletip: a small button opens it, a click outside or Esc closes it.
+- [Tooltips](docs/tooltip.md): A short dark label beside a control. A small button opens it as a toggletip, which a click outside or Esc closes; or an element's own title shows it on hover and focus.
 
 ## Feedback
 

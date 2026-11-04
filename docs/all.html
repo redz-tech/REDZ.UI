@@ -6,13 +6,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>All components - REDZ.UI</title>
 	<meta name="description" content="Every example and every state of every page on one page.">
+	<script src="../js/floor.js"></script>
 	<link rel="stylesheet" href="../dist/redz-ui.min.css">
 	<link rel="stylesheet" href="../css/icons.css">
 	<link rel="stylesheet" href="site.css">
 	<link rel="alternate" type="text/markdown" href="all.md">
 	<script src="site.js"></script>
 	<script type="module" src="../dist/redz-ui.min.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}"}</script>
+	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}"}</script>
 </head>
 <body>
 	<div class="app">
@@ -208,6 +209,13 @@
 								<button class="btn" type="button">Export</button>
 								<button class="btn btn-icon" type="button" aria-label="Export options"><i class="bi bi-chevron-down" aria-hidden="true"></i></button>
 							</div>
+						</div>
+					</div>
+					<div class="docs-example" id="btn-group-vertical">
+						<div class="btn-group-vertical" role="group" aria-label="Order">
+							<button class="btn" type="button"><i class="bi bi-arrow-up" aria-hidden="true"></i>Move up</button>
+							<button class="btn" type="button"><i class="bi bi-arrow-down" aria-hidden="true"></i>Move down</button>
+							<button class="btn" type="button"><i class="bi bi-trash" aria-hidden="true"></i>Remove</button>
 						</div>
 					</div>
 					<div class="docs-example" id="btn-toggle">
@@ -1349,6 +1357,16 @@
 							</tbody>
 						</table>
 					</div>
+					<div class="docs-example docs-example-stack" id="table-compact">
+						<table class="table table-bordered" data-density="compact" aria-label="Seasons on Samui, compact">
+							<thead><tr><th scope="col">Season</th><th scope="col">Months</th><th scope="col">The sea</th></tr></thead>
+							<tbody>
+								<tr><td>Dry</td><td>January to April</td><td>Calm</td></tr>
+								<tr><td>Hot</td><td>May to August</td><td>Calm</td></tr>
+								<tr><td>Rainy</td><td>September to December</td><td>Waves</td></tr>
+							</tbody>
+						</table>
+					</div>
 					<div class="docs-states" id="table-states" tabindex="0" role="region" aria-labelledby="table-states-title">
 						<table class="docs-matrix">
 							<thead>
@@ -1558,6 +1576,10 @@
 						<button class="btn btn-danger" type="button" data-docs-run="confirm"><i class="bi bi-trash3" aria-hidden="true"></i>Delete 2 excursions</button>
 						<span class="text-muted fs-12" role="status" data-docs-answer></span>
 					</div>
+					<div class="docs-example" id="dialog-confirm-phrase">
+						<button class="btn btn-danger" type="button" data-docs-run="confirm-phrase"><i class="bi bi-trash3" aria-hidden="true"></i>Delete the site</button>
+						<span class="text-muted fs-12" role="status" data-docs-answer></span>
+					</div>
 					<div class="docs-example" id="dialog-full">
 						<button class="btn" type="button" commandfor="dialog-full-panel" command="show-modal"><i class="bi bi-arrows-fullscreen" aria-hidden="true"></i>Open full screen</button>
 						<dialog class="dialog dialog-fullscreen" id="dialog-full-panel" aria-labelledby="dialog-full-title">
@@ -1632,6 +1654,11 @@
 						</span>
 						<div id="tooltip-why-tip" class="tooltip" popover role="tooltip">A partner can hide the brand and set their own help link.</div>
 					</div>
+					<div class="docs-example" id="tooltip-title" data-tooltips>
+						<button class="btn btn-icon" type="button" title="Duplicate"><i class="bi bi-copy" aria-hidden="true"></i></button>
+						<button class="btn" type="button" aria-disabled="true" title="Publish needs a price for every season">Publish</button>
+						<span class="hstack gap-8"><span class="dot dot-warning" title="2 translations are outdated"></span>Ang Thong</span>
+					</div>
 				</section>
 
 				<section class="vstack gap-16" aria-labelledby="all-alert">
@@ -1678,6 +1705,10 @@
 					<div class="docs-example" id="spinner-inline">
 						<span class="hstack gap-8"><span class="spinner-border" aria-hidden="true"></span>Rebuilding 3 pages…</span>
 						<span class="hstack gap-8 text-primary fs-20"><span class="spinner-border" aria-hidden="true"></span>Larger, in the accent</span>
+					</div>
+					<div class="docs-example" id="spinner-grow">
+						<span class="hstack gap-8"><span class="spinner-grow" aria-hidden="true"></span>Checking the server…</span>
+						<span class="hstack gap-8 text-success"><span class="spinner-grow" aria-hidden="true"></span>Syncing the calendar</span>
 					</div>
 				</section>
 
@@ -1810,6 +1841,17 @@
 						<div id="nav-manual-panel-1" role="tabpanel" aria-labelledby="nav-manual-1" tabindex="0"><p>128 bookings this week.</p></div>
 						<div id="nav-manual-panel-2" role="tabpanel" aria-labelledby="nav-manual-2" tabindex="0" hidden><p>312,400 THB this week.</p></div>
 						<div id="nav-manual-panel-3" role="tabpanel" aria-labelledby="nav-manual-3" tabindex="0" hidden><p>2 refunds this week.</p></div>
+					</div>
+					<div class="docs-example docs-example-stack" id="nav-guard">
+						<div class="nav nav-underline" role="tablist" aria-label="Excursion">
+							<button class="nav-link" type="button" role="tab" id="nav-guard-1" aria-selected="true" aria-controls="nav-guard-panel-1">Note</button>
+							<button class="nav-link" type="button" role="tab" id="nav-guard-2" aria-selected="false" aria-controls="nav-guard-panel-2">Prices</button>
+						</div>
+						<div id="nav-guard-panel-1" role="tabpanel" aria-labelledby="nav-guard-1" tabindex="0">
+							<label class="form-label" for="nav-guard-note">A note for the guides</label>
+							<input class="form-control" id="nav-guard-note" type="text" value="Meet at the pier at 8:00">
+						</div>
+						<div id="nav-guard-panel-2" role="tabpanel" aria-labelledby="nav-guard-2" tabindex="0" hidden><p>2,900 THB an adult.</p></div>
 					</div>
 					<div class="docs-example docs-example-stack" id="nav-fill">
 						<nav class="nav nav-underline nav-fill" aria-label="Filled">

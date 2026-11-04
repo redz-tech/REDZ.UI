@@ -36,9 +36,9 @@ The stylesheet, the icons and the scripts, with the page's own words for the few
 </head>
 ```
 
-- `dist/redz-ui.min.css` is the layers, the tokens, the components and the utilities in one file, 21 KB gzipped: the stylesheets `css/index.css` pulls in, squeezed.
-- `css/icons.css` is apart: one mask per Bootstrap Icons file, used only by name.
-- `dist/redz-ui.min.js` is one ES module of the behaviors, 14 KB gzipped: the modules of `js/index.js` joined, squeezed and given short local names. It sets `REDZ.ui` for calls from code.
+- `dist/redz-ui.min.css` is the layers, the tokens, the components and the utilities in one file, within its budget of 26 KB gzipped: the stylesheets `css/index.css` pulls in, squeezed.
+- `css/icons.css` is apart: one mask per Bootstrap Icons file, used only by name. It reaches each file by a URL relative to itself, `../icons/NAME.svg`, so the release's folders keep their shape where a project serves them. A project that marks its static files by their content (`?h=…`) cannot mark the icons this way: it serves each release from a folder of its own version instead, which changes with every release.
+- `dist/redz-ui.min.js` is one ES module of the behaviors, within its budget of 25 KB gzipped: the modules of `js/index.js` joined, squeezed and given short local names. It sets `REDZ.ui` for calls from code.
 - The island `#redz-ui-text` gives the library its words, in the page's language: every key of the passport's `texts`, and for each key of its `plurals` the other forms its language's plural rules name (`found.one`, `found.few`). The example shows four of them.
 - The two files are made from `css/` and `js/`, which stay to read. A project that bundles its own may join the stylesheets in the passport's order instead.
 
@@ -71,6 +71,13 @@ Menus, tabs, dialogs and their keys need no call: the library listens on the doc
 ## Browsers
 
 Bootstrap 6's floor: Chrome and Edge 130+, Firefox 132+, Safari 18+ on macOS and iOS. What must work rests on features of the floor; invoker commands and anchor positioning are written in their final form, and a small script stands in below them. Every page of these docs is checked in real engines at the floor and above - [the checks](https://redz-tech.github.io/REDZ.UI/checks/).
+
+Below the floor a page shows its own words, not a broken screen. `js/floor.js`, a plain script first in the head, before the stylesheets, marks `<html data-floor="below">` when the browser lacks a feature the library is built on; the page's own style shows its "update your browser" then. Every product that loads it judges a browser the same way, and the floor gate holds that no browser at the floor fails it.
+
+```html
+<script src="redz-ui/js/floor.js"></script>
+<style>.floor-notice { display: none; } [data-floor="below"] .floor-notice { display: block; }</style>
+```
 
 ## From Bootstrap 5.3
 

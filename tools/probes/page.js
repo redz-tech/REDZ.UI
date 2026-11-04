@@ -239,6 +239,9 @@ window.REDZ_PROBE = (() => {
 			return found;
 		},
 		errors() {
+			if (document.documentElement.dataset.floor === 'below') {
+				errors.push('floor: js/floor.js marks this engine below the floor');
+			}
 			return errors.splice(0);
 		},
 		// The widgets a keyboard walk tries: each menu, combobox, modal dialog and region a --toggle button opens by its first

@@ -87,3 +87,432 @@ The custom properties on `:root` that the components read: colors by role in pai
 | `--redz-radius-8` | `0.5rem` |
 | `--redz-radius-12` | `0.75rem` |
 | `--redz-radius-16` | `1rem` |
+
+## From Bootstrap 5.3
+
+| Bootstrap 5.3 | REDZ.UI | Change | Note |
+| --- | --- | --- | --- |
+| `--bs-accordion-active-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-accordion-active-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-accordion-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-accordion-body-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-accordion-body-padding-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-accordion-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-accordion-border-radius` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-accordion-border-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-accordion-btn-active-icon` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-accordion-btn-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-accordion-btn-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-accordion-btn-focus-box-shadow` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-accordion-btn-icon` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-accordion-btn-icon-transform` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-accordion-btn-icon-transition` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-accordion-btn-icon-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-accordion-btn-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-accordion-btn-padding-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-accordion-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-accordion-inner-border-radius` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-accordion-transition` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-alert-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-alert-border` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-alert-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-alert-border-radius` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-alert-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-alert-link-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-alert-margin-bottom` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-alert-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-alert-padding-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-backdrop-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-backdrop-opacity` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-backdrop-zindex` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-badge-border-radius` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-badge-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-badge-font-size` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-badge-font-weight` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-badge-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-badge-padding-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-black` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-black-rgb` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-blue` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-body-bg` | `--redz-bg` | rename |  |
+| `--bs-body-bg-rgb` | - | review | a relative color from the matching --redz-* in place of the channels |
+| `--bs-body-color` | `--redz-text` | rename |  |
+| `--bs-body-color-rgb` | - | review | a relative color from the matching --redz-* in place of the channels |
+| `--bs-body-font-family` | `--redz-font-sans` | rename |  |
+| `--bs-body-font-size` | - | review | REDZ.UI's text is --redz-fs-14; the scale is --redz-fs-12 to --redz-fs-32 |
+| `--bs-body-font-weight` | - | review | the body's own; lines are --redz-lh-16 to --redz-lh-28 |
+| `--bs-body-line-height` | - | review | the body's own; lines are --redz-lh-16 to --redz-lh-28 |
+| `--bs-border-color` | `--redz-border` | rename |  |
+| `--bs-border-color-translucent` | `--redz-border` | review | REDZ.UI's border is solid in both themes |
+| `--bs-border-radius` | `--redz-radius-8` | rename |  |
+| `--bs-border-radius-2xl` | `--redz-radius-16` | rename |  |
+| `--bs-border-radius-pill` | - | review | 999px, as rounded-full writes it |
+| `--bs-border-style` | - | review | REDZ.UI's borders are 1px solid: write the value |
+| `--bs-border-width` | - | review | REDZ.UI's borders are 1px solid: write the value |
+| `--bs-box-shadow` | `--redz-shadow-2` | rename |  |
+| `--bs-box-shadow-inset` | - | remove | REDZ.UI draws no inset shadow |
+| `--bs-breadcrumb-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-breadcrumb-border-radius` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-breadcrumb-divider-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-breadcrumb-item-active-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-breadcrumb-item-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-breadcrumb-margin-bottom` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-breadcrumb-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-breadcrumb-padding-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-active-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-active-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-active-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-active-shadow` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-border-radius` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-border-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-box-shadow` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-close-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-close-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-close-disabled-opacity` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-close-filter` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-close-focus-opacity` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-close-focus-shadow` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-close-hover-opacity` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-close-opacity` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-disabled-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-disabled-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-disabled-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-disabled-opacity` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-focus-box-shadow` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-focus-shadow-rgb` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-font-family` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-font-size` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-font-weight` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-hover-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-hover-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-hover-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-line-height` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-btn-padding-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-card-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-card-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-card-border-radius` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-card-border-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-card-box-shadow` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-card-cap-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-card-cap-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-card-cap-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-card-cap-padding-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-card-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-card-group-margin` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-card-height` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-card-img-overlay-padding` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-card-inner-border-radius` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-card-spacer-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-card-spacer-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-card-subtitle-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-card-title-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-card-title-spacer-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-carousel-caption-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-carousel-control-icon-filter` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-carousel-indicator-active-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-code-color` | - | review | code is the text color in --redz-font-mono |
+| `--bs-cyan` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-danger` | `--redz-danger` | rename |  |
+| `--bs-danger-bg-subtle` | `--redz-danger-subtle` | rename |  |
+| `--bs-danger-rgb` | - | review | a relative color in place of the channels: rgb(from var(--redz-danger) r g b / 50%) |
+| `--bs-danger-text-emphasis` | `--redz-danger` | review | the tone itself: REDZ.UI has no darker text of a tone |
+| `--bs-dark` | - | review | light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text |
+| `--bs-dark-bg-subtle` | - | review | light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text |
+| `--bs-dark-border-subtle` | - | review | light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text |
+| `--bs-dark-rgb` | - | review | light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text |
+| `--bs-dark-text-emphasis` | - | review | light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text |
+| `--bs-dropdown-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-border-radius` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-border-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-box-shadow` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-divider-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-divider-margin-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-font-size` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-header-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-header-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-header-padding-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-inner-border-radius` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-item-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-item-padding-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-link-active-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-link-active-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-link-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-link-disabled-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-link-hover-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-link-hover-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-min-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-padding-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-spacer` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-dropdown-zindex` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-emphasis-color` | `--redz-text` | rename |  |
+| `--bs-emphasis-color-rgb` | - | review | a relative color from the matching --redz-* in place of the channels |
+| `--bs-focus-ring-color` | `--redz-focus` | review | REDZ.UI draws one focus ring: --redz-focus is its color |
+| `--bs-focus-ring-opacity` | `--redz-focus` | review | REDZ.UI draws one focus ring: --redz-focus is its color |
+| `--bs-focus-ring-width` | `--redz-focus` | review | REDZ.UI draws one focus ring: --redz-focus is its color |
+| `--bs-font-monospace` | `--redz-font-mono` | rename |  |
+| `--bs-font-sans-serif` | `--redz-font-sans` | rename |  |
+| `--bs-form-check-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-form-check-bg-image` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-form-invalid-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-form-invalid-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-form-select-bg-icon` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-form-select-bg-img` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-form-switch-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-form-valid-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-form-valid-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-gradient` | - | remove | REDZ.UI draws no gradients |
+| `--bs-gray` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-gray-100` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-gray-200` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-gray-300` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-gray-400` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-gray-500` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-gray-600` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-gray-700` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-gray-800` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-gray-900` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-gray-dark` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-green` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-heading-color` | `--redz-text` | rename |  |
+| `--bs-highlight-bg` | - | review | mark is drawn by the base stylesheet |
+| `--bs-highlight-color` | - | review | mark is drawn by the base stylesheet |
+| `--bs-indigo` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-info` | `--redz-info` | rename |  |
+| `--bs-info-bg-subtle` | `--redz-info-subtle` | rename |  |
+| `--bs-info-rgb` | - | review | a relative color in place of the channels: rgb(from var(--redz-info) r g b / 50%) |
+| `--bs-info-text-emphasis` | `--redz-info` | review | the tone itself: REDZ.UI has no darker text of a tone |
+| `--bs-light` | - | review | light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text |
+| `--bs-light-bg-subtle` | - | review | light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text |
+| `--bs-light-border-subtle` | - | review | light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text |
+| `--bs-light-rgb` | - | review | light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text |
+| `--bs-light-text-emphasis` | - | review | light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text |
+| `--bs-link-color` | `--redz-primary` | review | links take the accent; set it on a link only where it differs |
+| `--bs-link-color-rgb` | - | review | a link's own color and line, written on the link |
+| `--bs-link-decoration` | - | review | a link's own color and line, written on the link |
+| `--bs-link-hover-color` | - | review | a link's own color and line, written on the link |
+| `--bs-link-hover-color-rgb` | - | review | a link's own color and line, written on the link |
+| `--bs-link-opacity` | - | review | a link's own color and line, written on the link |
+| `--bs-link-underline-opacity` | - | review | a link's own color and line, written on the link |
+| `--bs-list-group-action-active-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-list-group-action-active-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-list-group-action-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-list-group-action-hover-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-list-group-action-hover-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-list-group-active-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-list-group-active-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-list-group-active-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-list-group-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-list-group-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-list-group-border-radius` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-list-group-border-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-list-group-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-list-group-disabled-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-list-group-disabled-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-list-group-item-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-list-group-item-padding-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-modal-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-modal-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-modal-border-radius` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-modal-border-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-modal-box-shadow` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-modal-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-modal-footer-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-modal-footer-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-modal-footer-border-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-modal-footer-gap` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-modal-header-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-modal-header-border-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-modal-header-padding` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-modal-header-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-modal-header-padding-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-modal-inner-border-radius` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-modal-margin` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-modal-padding` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-modal-title-line-height` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-modal-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-modal-zindex` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-nav-link-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-nav-link-disabled-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-nav-link-font-weight` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-nav-link-hover-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-nav-link-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-nav-link-padding-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-nav-pills-border-radius` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-nav-pills-link-active-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-nav-pills-link-active-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-nav-tabs-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-nav-tabs-border-radius` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-nav-tabs-border-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-nav-tabs-link-active-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-nav-tabs-link-active-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-nav-tabs-link-active-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-nav-tabs-link-hover-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-nav-underline-border-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-nav-underline-gap` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-nav-underline-link-active-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-navbar-active-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-navbar-brand-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-navbar-brand-font-size` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-navbar-brand-hover-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-navbar-brand-margin-end` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-navbar-brand-padding-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-navbar-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-navbar-disabled-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-navbar-hover-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-navbar-nav-link-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-navbar-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-navbar-padding-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-navbar-toggler-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-navbar-toggler-border-radius` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-navbar-toggler-focus-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-navbar-toggler-font-size` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-navbar-toggler-icon-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-navbar-toggler-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-navbar-toggler-padding-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-navbar-toggler-transition` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-offcanvas-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-offcanvas-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-offcanvas-border-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-offcanvas-box-shadow` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-offcanvas-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-offcanvas-height` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-offcanvas-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-offcanvas-padding-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-offcanvas-title-line-height` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-offcanvas-transition` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-offcanvas-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-offcanvas-zindex` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-orange` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-pagination-active-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-pagination-active-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-pagination-active-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-pagination-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-pagination-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-pagination-border-radius` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-pagination-border-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-pagination-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-pagination-disabled-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-pagination-disabled-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-pagination-disabled-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-pagination-focus-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-pagination-focus-box-shadow` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-pagination-focus-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-pagination-font-size` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-pagination-hover-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-pagination-hover-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-pagination-hover-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-pagination-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-pagination-padding-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-pink` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-popover-arrow-border` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-popover-arrow-height` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-popover-arrow-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-popover-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-popover-body-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-popover-body-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-popover-body-padding-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-popover-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-popover-border-radius` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-popover-border-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-popover-box-shadow` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-popover-font-size` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-popover-header-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-popover-header-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-popover-header-font-size` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-popover-header-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-popover-header-padding-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-popover-inner-border-radius` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-popover-max-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-popover-zindex` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-primary` | `--redz-primary` | rename |  |
+| `--bs-primary-bg-subtle` | `--redz-primary-subtle` | rename |  |
+| `--bs-primary-rgb` | - | review | a relative color in place of the channels: rgb(from var(--redz-primary) r g b / 50%) |
+| `--bs-primary-text-emphasis` | `--redz-primary` | review | the tone itself: REDZ.UI has no darker text of a tone |
+| `--bs-progress-bar-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-progress-bar-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-progress-bar-transition` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-progress-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-progress-border-radius` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-progress-box-shadow` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-progress-font-size` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-progress-height` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-purple` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-red` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-secondary` | `--redz-secondary` | rename |  |
+| `--bs-secondary-bg` | `--redz-bg-hover` | rename |  |
+| `--bs-secondary-bg-rgb` | - | review | a relative color from the matching --redz-* in place of the channels |
+| `--bs-secondary-bg-subtle` | `--redz-secondary-subtle` | rename |  |
+| `--bs-secondary-color` | `--redz-text-muted` | rename |  |
+| `--bs-secondary-color-rgb` | - | review | a relative color from the matching --redz-* in place of the channels |
+| `--bs-secondary-rgb` | - | review | a relative color in place of the channels: rgb(from var(--redz-secondary) r g b / 50%) |
+| `--bs-secondary-text-emphasis` | `--redz-secondary` | review | the tone itself: REDZ.UI has no darker text of a tone |
+| `--bs-spinner-animation-name` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-spinner-animation-speed` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-spinner-border-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-spinner-height` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-spinner-vertical-align` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-spinner-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-success` | `--redz-success` | rename |  |
+| `--bs-success-bg-subtle` | `--redz-success-subtle` | rename |  |
+| `--bs-success-rgb` | - | review | a relative color in place of the channels: rgb(from var(--redz-success) r g b / 50%) |
+| `--bs-success-text-emphasis` | `--redz-success` | review | the tone itself: REDZ.UI has no darker text of a tone |
+| `--bs-table-accent-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-table-active-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-table-active-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-table-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-table-bg-state` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-table-bg-type` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-table-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-table-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-table-color-state` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-table-color-type` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-table-hover-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-table-hover-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-table-striped-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-table-striped-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-teal` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-tertiary-bg` | `--redz-bg-page` | rename |  |
+| `--bs-tertiary-bg-rgb` | - | review | a relative color from the matching --redz-* in place of the channels |
+| `--bs-tertiary-color` | `--redz-text-faint` | rename |  |
+| `--bs-tertiary-color-rgb` | - | review | a relative color from the matching --redz-* in place of the channels |
+| `--bs-toast-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-toast-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-toast-border-radius` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-toast-border-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-toast-box-shadow` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-toast-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-toast-font-size` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-toast-header-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-toast-header-border-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-toast-header-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-toast-max-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-toast-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-toast-padding-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-toast-spacing` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-toast-zindex` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-tooltip-arrow-height` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-tooltip-arrow-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-tooltip-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-tooltip-border-radius` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-tooltip-color` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-tooltip-font-size` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-tooltip-margin` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-tooltip-max-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-tooltip-opacity` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-tooltip-padding-x` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-tooltip-padding-y` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-tooltip-zindex` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
+| `--bs-warning` | `--redz-warning` | rename |  |
+| `--bs-warning-bg-subtle` | `--redz-warning-subtle` | rename |  |
+| `--bs-warning-rgb` | - | review | a relative color in place of the channels: rgb(from var(--redz-warning) r g b / 50%) |
+| `--bs-warning-text-emphasis` | `--redz-warning` | review | the tone itself: REDZ.UI has no darker text of a tone |
+| `--bs-white` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-white-rgb` | - | review | a palette color: use the tone or the surface that means it |
+| `--bs-yellow` | - | review | a palette color: use the tone or the surface that means it |

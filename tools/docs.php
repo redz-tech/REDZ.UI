@@ -227,6 +227,7 @@ function DOCS__Page(array $config, string $key, string $title, string $lead, str
 			<meta name="viewport" content="width=device-width, initial-scale=1">
 			<title>{$name} - REDZ.UI</title>
 			<meta name="description" content="{$description}">
+			<script src="../js/floor.js"></script>
 			<link rel="stylesheet" href="../dist/redz-ui.min.css">
 			<link rel="stylesheet" href="../css/icons.css">
 			<link rel="stylesheet" href="site.css">

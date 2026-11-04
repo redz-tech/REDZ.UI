@@ -51,6 +51,31 @@ When a panel comes from the server, the arrows should not load every panel they 
 <div id="nav-manual-panel-3" role="tabpanel" aria-labelledby="nav-manual-3" tabindex="0" hidden><p>2 refunds this week.</p></div>
 ```
 
+### A tab that asks before it is left
+
+Before a person's click or key selects a tab, the tablist fires the cancelable `redz:select`; its `detail` holds `tab`, the one asked for, and `from`, the one being left. A page that must ask first - a form with unsaved edits - calls `event.preventDefault()` and `event.detail.respondWith(promise)`: the tab is selected when the promise gives `true`, and otherwise the one being left stays, with the focus. Change the note below, then choose another tab.
+
+```html
+<div class="nav nav-underline" role="tablist" aria-label="Excursion">
+	<button class="nav-link" type="button" role="tab" id="nav-guard-1" aria-selected="true" aria-controls="nav-guard-panel-1">Note</button>
+	<button class="nav-link" type="button" role="tab" id="nav-guard-2" aria-selected="false" aria-controls="nav-guard-panel-2">Prices</button>
+</div>
+<div id="nav-guard-panel-1" role="tabpanel" aria-labelledby="nav-guard-1" tabindex="0">
+	<label class="form-label" for="nav-guard-note">A note for the guides</label>
+	<input class="form-control" id="nav-guard-note" type="text" value="Meet at the pier at 8:00">
+</div>
+<div id="nav-guard-panel-2" role="tabpanel" aria-labelledby="nav-guard-2" tabindex="0" hidden><p>2,900 THB an adult.</p></div>
+```
+
+```js
+tablist.addEventListener('redz:select', (event) => {
+  if (form.dataset.changed !== undefined) {
+    event.preventDefault();
+    event.detail.respondWith(REDZ.ui.confirm({title: 'Leave without saving?', ok: 'Leave'}));
+  }
+});
+```
+
 ### Filling the width
 
 `nav-fill` lets the links share the width by their length, `nav-justified` in equal parts.

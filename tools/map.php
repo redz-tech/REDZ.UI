@@ -33,6 +33,11 @@ function MAP__Refresh(): int
 	ksort($classes, SORT_STRING);
 	file_put_contents(__DIR__ . '/map/bootstrap.txt', '# bootstrap ' . $package['version'] . ' ' . $package['integrity'] . " dist/css/bootstrap.css - derived by php tools/map.php refresh, do not edit\n" . implode("\n", array_keys($classes)) . "\n");
 	echo 'wrote tools/map/bootstrap.txt · ', count($classes), " classes\n";
+	preg_match_all('~(--bs-[a-z0-9-]+)\s*:~', $css, $declared);
+	$properties = array_unique($declared[1]);
+	sort($properties, SORT_STRING);
+	file_put_contents(__DIR__ . '/map/bootstrap-properties.txt', '# bootstrap ' . $package['version'] . ' ' . $package['integrity'] . " dist/css/bootstrap.css - its custom properties, derived by php tools/map.php refresh, do not edit\n" . implode("\n", $properties) . "\n");
+	echo 'wrote tools/map/bootstrap-properties.txt · ', count($properties), " custom properties\n";
 	return 0;
 }
 
@@ -103,7 +108,21 @@ function MAP__Row(string $class, array $rules, array $ours): ?array
 }
 
 /**
- * The map's rows and what breaks it: a class without a rule, a target the library lacks.
+ * The custom properties the library's stylesheets define, as keys.
+ * @return array<string, true>
+ */
+function MAP__Tokens(): array
+{
+	$tokens = [];
+	foreach ([...glob(MAP_ROOT . '/css/*.css') ?: [], ...glob(MAP_ROOT . '/css/components/*.css') ?: []] as $file) {
+		preg_match_all('~(?<![\w-])(--redz-[a-z0-9-]+)\s*:~', (string)file_get_contents($file), $found);
+		$tokens += array_fill_keys($found[1], true);
+	}
+	return $tokens;
+}
+
+/**
+ * The map's rows and what breaks it: a class or a custom property without a rule, a target the library lacks.
  * @return array{list<list<string>>, list<string>}
  */
 function MAP__Build(): array
@@ -123,6 +142,27 @@ function MAP__Build(): array
 			if (!isset($ours[$target]) && in_array($row[2], ['same', 'rename', 'value', 'grid'], true)) {
 				$errors[] = '"' . $class . '" maps to "' . $target . '", which REDZ.UI does not have';
 			}
+		}
+		$rows[] = $row;
+	}
+	$tokens = MAP__Tokens();
+	$rules = MAP__Rules('properties.tsv');
+	$lines = explode("\n", trim((string)file_get_contents(__DIR__ . '/map/bootstrap-properties.txt')));
+	foreach (array_slice($lines, 1) as $property) {
+		$row = null;
+		foreach ($rules as [$pattern, $target, $kind, $page, $note]) {
+			if (preg_match('~^(?:' . $pattern . ')$~', $property, $found) === 1) {
+				$fill = fn(string $text): string => (string)preg_replace_callback('~\$(\d)~', fn(array $g): string => $found[(int)$g[1]] ?? '', $text);
+				$row = [$property, $fill($target), $kind, 'property', $page, $fill($note)];
+				break;
+			}
+		}
+		if ($row === null) {
+			$errors[] = 'no rule in tools/map/properties.tsv maps the Bootstrap custom property "' . $property . '"';
+			continue;
+		}
+		if ($row[1] !== '' && !isset($tokens[$row[1]])) {
+			$errors[] = '"' . $property . '" maps to "' . $row[1] . '", which REDZ.UI does not define';
 		}
 		$rows[] = $row;
 	}

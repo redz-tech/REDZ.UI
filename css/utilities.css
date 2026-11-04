@@ -381,6 +381,12 @@
 	.border-danger { border-color: var(--redz-danger); }
 	.border-warning { border-color: var(--redz-warning); }
 	.border-info { border-color: var(--redz-info); }
+	.border-primary-subtle { border-color: color-mix(in oklch, var(--redz-primary) 35%, var(--redz-border)); }
+	.border-secondary-subtle { border-color: color-mix(in oklch, var(--redz-secondary) 35%, var(--redz-border)); }
+	.border-success-subtle { border-color: color-mix(in oklch, var(--redz-success) 35%, var(--redz-border)); }
+	.border-danger-subtle { border-color: color-mix(in oklch, var(--redz-danger) 35%, var(--redz-border)); }
+	.border-warning-subtle { border-color: color-mix(in oklch, var(--redz-warning) 35%, var(--redz-border)); }
+	.border-info-subtle { border-color: color-mix(in oklch, var(--redz-info) 35%, var(--redz-border)); }
 	.rounded { border-radius: var(--redz-radius-8); }
 	.rounded-full { border-radius: 999px; }
 	.rounded-0 { border-radius: var(--redz-radius-0); }

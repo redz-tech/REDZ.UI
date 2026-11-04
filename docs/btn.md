@@ -73,6 +73,16 @@ An icon sits beside the words, or alone in a square `btn-icon` whose name is its
 </div>
 ```
 
+`btn-group-vertical` stacks the buttons of a group, each as wide as the widest.
+
+```html
+<div class="btn-group-vertical" role="group" aria-label="Order">
+	<button class="btn" type="button"><i class="bi bi-arrow-up" aria-hidden="true"></i>Move up</button>
+	<button class="btn" type="button"><i class="bi bi-arrow-down" aria-hidden="true"></i>Move down</button>
+	<button class="btn" type="button"><i class="bi bi-trash" aria-hidden="true"></i>Remove</button>
+</div>
+```
+
 ### Toggle and busy
 
 A toggle carries `aria-pressed`. While its action runs, `REDZ.ui.busy(button, promise)` shows a spinner in the button and marks it `aria-disabled`: it keeps the focus and ignores clicks until the promise settles.
@@ -107,7 +117,6 @@ It reads the theme's `--redz-bg-hover`, `--redz-text`, `--redz-control-height`, 
 | `btn-check` | - | review | a toggle is a btn with aria-pressed; a choice is radio inputs |
 | `btn-close-white` | - | remove | the close glyph takes the text color |
 | `btn-dark` | - | review | no light or dark buttons: btn or btn-text |
-| `btn-group-vertical` | - | missing |  |
 | `btn-light` | - | review | no light or dark buttons: btn or btn-text |
 | `btn-outline-dark` | - | review | btn-outline-secondary |
 | `btn-outline-light` | - | review | btn-outline-secondary |

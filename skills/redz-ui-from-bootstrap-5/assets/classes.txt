@@ -2476,15 +2476,21 @@ border-2
 border-4
 border-bottom
 border-danger
+border-danger-subtle
 border-end
 border-info
+border-info-subtle
 border-primary
+border-primary-subtle
 border-secondary
+border-secondary-subtle
 border-start
 border-strong
 border-success
+border-success-subtle
 border-top
 border-warning
+border-warning-subtle
 bottom-0
 bottom-100
 bottom-50
@@ -2494,6 +2500,7 @@ btn
 btn-close
 btn-danger
 btn-group
+btn-group-vertical
 btn-icon
 btn-info
 btn-lg
@@ -3992,6 +3999,7 @@ span-8
 span-9
 span-full
 spinner-border
+spinner-grow
 start-0
 start-100
 start-50
