@@ -634,8 +634,15 @@ export const editor = (host, options = {}) => {
 		at = 0;
 		tools();
 		mark();
+		let frameAsked = 0;
 		sized = new ResizeObserver(() => {
-			frame.style.blockSize = Math.max(192, Math.ceil(body.getBoundingClientRect().height)) + 'px';
+			frameAsked ||= requestAnimationFrame(() => {
+				frameAsked = 0;
+				const height = Math.max(192, Math.ceil(body.getBoundingClientRect().height)) + 'px';
+				if (frame.style.blockSize !== height) {
+					frame.style.blockSize = height;
+				}
+			});
 		});
 		sized.observe(body);
 		on(doc, 'input', () => commit(true));
