@@ -31,7 +31,8 @@ function PROBE__SpeechMissing(array &$r, array $expect, array $heard): array
 	return array_values(array_filter($expect, fn(string $words): bool => !str_contains($said, PROBE__SpeechWords(PROBE__Reader($r, 'Says', $words)))));
 }
 
-/** Loads $page and waits for the library, a link that would leave the page held. */
+/** Loads $page and waits for the library, a link that would leave the page held - judged last, as the click bubbles
+ *  out of the window, so a link the page itself keeps, as the image viewer's, is not taken for one. */
 function PROBE__SpeechLoad(array &$h, string $page, array $run): void
 {
 	PROBE__Do($h, 'Load', $run['base'] . $page, 1280, 900);
@@ -41,7 +42,7 @@ function PROBE__SpeechLoad(array &$h, string $page, array $run): void
 		}
 		usleep(100000);
 	}
-	PROBE__Do($h, 'Eval', '(() => { addEventListener("click", (event) => { const link = event.target instanceof Element ? event.target.closest("a[href]") : null; if (link !== null && (link.origin !== location.origin || link.pathname !== location.pathname)) { event.preventDefault(); window.REDZ_PROBE_LEFT = link.href; } }, true); return true; })()');
+	PROBE__Do($h, 'Eval', '(() => { addEventListener("click", (event) => { const link = event.target instanceof Element ? event.target.closest("a[href]") : null; if (link !== null && !event.defaultPrevented && (link.origin !== location.origin || link.pathname !== location.pathname)) { event.preventDefault(); window.REDZ_PROBE_LEFT = link.href; } }); return true; })()');
 }
 
 /** One hearing of a page's steps: loaded, the reader ready, each step done and what the reader says after it held

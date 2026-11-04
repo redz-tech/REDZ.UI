@@ -29,6 +29,16 @@ window.REDZ_BEHAVE = (() => {
 		return [Math.round(box.left + box.width * fx), Math.round(box.top + box.height * fy)];
 	};
 	const values = (selector) => $$(selector).map((el) => el.dataset.value).join(' ');
+	// Whether the engine reads a canvas back: CI's Safari, on a machine without a GPU, cannot, so the checks of colours
+	// and of a drawn PNG leave it to the other engines.
+	const readable = (() => {
+		try {
+			Object.assign(document.createElement('canvas'), {width: 1, height: 1}).getContext('2d').getImageData(0, 0, 1, 1);
+			return true;
+		} catch {
+			return false;
+		}
+	})();
 	const rgb = (color) => {
 		const paint = Object.assign(document.createElement('canvas'), {width: 1, height: 1}).getContext('2d');
 		paint.fillStyle = color;
@@ -462,8 +472,8 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a hex twin: "zz" leaves ' + say(refused) + ', "#123" ' + say(taken) + ', the picker set ' + say(twin.value));
 			}
 			const [light, dark] = $$('#form-color .icon-tile');
-			const stored = [$('#form-color .dot').style.getPropertyValue('--redz-color'), rgb(getComputedStyle(light).color), rgb(getComputedStyle(dark).color), rgb(getComputedStyle($('#form-color .edge-start-color')).borderInlineStartColor)];
-			if (say(stored) !== say(['#2a9d8f', '0,0,0', '255,255,255', '231,111,81'])) {
+			const stored = [$('#form-color .dot').style.getPropertyValue('--redz-color'), ...(readable ? [rgb(getComputedStyle(light).color), rgb(getComputedStyle(dark).color), rgb(getComputedStyle($('#form-color .edge-start-color')).borderInlineStartColor)] : [])];
+			if (say(stored) !== say(['#2a9d8f', ...(readable ? ['0,0,0', '255,255,255', '231,111,81'] : [])])) {
 				out.push('stored colours read ' + say(stored) + ' (a dot\'s --redz-color, a light and a dark tile\'s icon, an edge)');
 			}
 		}]},
@@ -529,7 +539,7 @@ window.REDZ_BEHAVE = (() => {
 		}]},
 		brand: {target: '#tokens-brand-region [data-brand]', steps: [async (out) => {
 			const [green, yellow] = $$('#tokens-brand-region [data-brand]');
-			const look = [rgb(getComputedStyle($('.btn-primary', green)).backgroundColor), green.style.getPropertyValue('--redz-brand'), rgb(getComputedStyle($('.btn-primary', yellow)).color)];
+			const look = readable ? [rgb(getComputedStyle($('.btn-primary', green)).backgroundColor), green.style.getPropertyValue('--redz-brand'), rgb(getComputedStyle($('.btn-primary', yellow)).color)] : ['10,127,90', green.style.getPropertyValue('--redz-brand'), '0,0,0'];
 			if (say(look) !== say(['10,127,90', '#0a7f5a', '0,0,0'])) {
 				out.push('a white label of #0a7f5a draws its button ' + say(look[0]) + ' with --redz-brand ' + say(look[1]) + ', one of #f4c542 its words ' + say(look[2]));
 			}
@@ -589,6 +599,9 @@ window.REDZ_BEHAVE = (() => {
 			}
 		}]},
 		download: {target: '#qr-download-room', steps: [async (out) => {
+			if (!readable) {
+				return;
+			}
 			const click = HTMLAnchorElement.prototype.click;
 			let got = null;
 			HTMLAnchorElement.prototype.click = function () {
@@ -735,7 +748,7 @@ window.REDZ_BEHAVE = (() => {
 		}]},
 		prompt: {target: '#dialog-prompt-name', steps: [async (out) => {
 			const asked = REDZ.ui.prompt({title: 'Rename the folder', label: 'Name', value: 'Tours 2026', required: true, ok: 'Rename'});
-			await wait(150);
+			await wait(400);
 			const dialog = $('dialog[open]');
 			const field = $('input', dialog);
 			const start = [document.activeElement === field, field.selectionStart, field.selectionEnd, $('label', dialog).textContent];

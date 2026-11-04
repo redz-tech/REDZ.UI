@@ -30,6 +30,10 @@ document.addEventListener('click', (event) => {
 		paint.drawImage(picture, 0, 0, side, side);
 		done();
 		canvas.toBlob((blob) => {
+			if (blob === null) {
+				console.error('REDZ.UI: the picture cannot be downloaded: the browser made no PNG of it');
+				return;
+			}
 			const link = Object.assign(document.createElement('a'), {href: URL.createObjectURL(blob), download: button.dataset.file || 'code.png'});
 			link.click();
 			setTimeout(() => URL.revokeObjectURL(link.href), 1000);

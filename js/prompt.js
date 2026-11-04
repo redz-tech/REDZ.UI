@@ -40,6 +40,11 @@ export const prompt = ({title = '', text: detail = '', label = '', value = '', p
 		dialog.remove();
 	});
 	document.body.append(dialog);
+	// Selected before the dialog gives it the focus, so a screen reader hears the field, not a change of selection;
+	// WebKit drops that selection on focus, so it comes once the field has been said.
+	input.setSelectionRange(0, input.value.length);
 	dialog.showModal();
-	input.select();
+	if (input.selectionEnd !== input.value.length) {
+		setTimeout(() => document.activeElement === input && input.selectionStart === input.selectionEnd && input.select(), 300);
+	}
 });
