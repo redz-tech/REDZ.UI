@@ -30,6 +30,15 @@ An icon, then the words in a `<div>`. The plain `alert` is neutral; the tones fo
 </div>
 ```
 
+### Filled in place
+
+An alert whose words come after an action - a refused sign-in, a wrong code - is on the page from the start, empty, as `role="alert"`, and the page fills it. Empty - no child, not even a space - it takes no room; filled, it shows, and a screen reader says its words. An alert shown from `hidden` at the moment it is filled is not always heard: VoiceOver on macOS 15 can miss it.
+
+```html
+<div class="alert alert-danger" id="alert-fill-words" role="alert"></div>
+<div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="alert-fill">Fill the alert</button></div>
+```
+
 ## Accessibility
 
 - An alert that is on the page from the start is plain content - no live region. One that appears after an action and must be heard goes in a live region, or is a toast.

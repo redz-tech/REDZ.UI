@@ -15,8 +15,10 @@
 // php tools/probe.php [--pages=PAGE,…] [--serial] [ENGINE…] - an engine named that cannot run here is a finding, one left
 // out of a full run only a note; --pages runs only those pages, the exceptions of the others left unjudged; outside CI the
 // engines run at once, a process each (the engines safaridriver drives one after another), unless --serial - or
-// php tools/probe.php merge DIR… - one sheet of the sheets of several runs, as CI's parallel jobs leave them - or php
-// tools/probe.php voiceover-setup | nvda-setup, which ready CI's machines for the readers.
+// php tools/probe.php merge [--base=DIR] DIR… - one sheet of the sheets of several runs, as CI's parallel jobs leave them -
+// or php tools/probe.php affected BASE - what the files changed since BASE ask of each part - or plan | gather, CI's
+// plan of the parts and its one sheet of them - or php tools/probe.php voiceover-setup | nvda-setup, which ready CI's
+// machines for the readers.
 
 require __DIR__ . '/lib.php';
 require __DIR__ . '/min.php';
@@ -33,6 +35,7 @@ const PROBE_ROOT = __DIR__ . '/..';
 const PROBE_CONFIG = __DIR__ . '/probes/config.json';
 const PROBE_PAGE = __DIR__ . '/probes/page.js';
 const PROBE_READ = __DIR__ . '/probes/read.js';
+const PROBE_BEHAVE = __DIR__ . '/probes/behave.js';
 const PROBE_NULL = PHP_OS_FAMILY === 'Windows' ? 'NUL' : '/dev/null';
 const PROBE_SHEET = __DIR__ . '/../.dev/probes';
 const PROBE_FORCED_PREFS = ['browser.display.document_color_use' => 2];
@@ -40,6 +43,24 @@ const PROBE_FORCED_PREFS = ['browser.display.document_color_use' => 2];
 const PROBE_SHOT_MAX = 8000;
 // The longest a cell may run, in seconds: CI's iOS 26 simulator, the slowest engine, spends about a minute on a cell.
 const PROBE_CELL_MAX = 300;
+// The probe code by the engines that run it, as PROBE__Reach's marks: the engines of a kind, "browser:NAME" for a reader
+// in that browser. A file of the probes not named here reaches every engine.
+const PROBE_CODE = [
+	'tools/probes/page.js' => ['kind:chrome', 'kind:firefox', 'kind:safari'],
+	'tools/probes/behave.js' => ['kind:chrome', 'kind:firefox', 'kind:safari'],
+	'tools/probes/ws.php' => ['kind:chrome', 'kind:firefox', 'kind:nvda'],
+	'tools/probes/chrome.php' => ['kind:chrome', 'browser:chrome'],
+	'tools/probes/firefox.php' => ['kind:firefox', 'browser:firefox'],
+	'tools/probes/safari.php' => ['kind:safari', 'kind:voiceover'],
+	'tools/probes/speech.php' => ['kind:voiceover', 'kind:nvda'],
+	'tools/probes/voiceover.php' => ['kind:voiceover'],
+	'tools/probes/nvda.php' => ['kind:nvda'],
+	'tools/probes/read.js' => ['kind:nvda'],
+	'tools/probes/sheet.php' => [],
+	'tools/probes/sheet.css' => [],
+];
+// The folders of the packages: a file of one reaches only the pages that load it.
+const PROBE_PACKAGES = ['charts', 'calendar', 'media', 'editor'];
 // The keys of the keyboard walk: the WebDriver code point (Firefox, Safari), the Windows key code and the text (Chrome).
 const PROBE_KEYS = ['Enter' => ["\u{E006}", 13, "\r"], 'Space' => ["\u{E00D}", 32, ' '], 'Escape' => ["\u{E00C}", 27, ''], 'Tab' => ["\u{E004}", 9, ''], 'ArrowDown' => ["\u{E015}", 40, ''], 'ArrowUp' => ["\u{E013}", 38, ''], 'ArrowLeft' => ["\u{E012}", 37, ''], 'ArrowRight' => ["\u{E014}", 39, ''], 'Home' => ["\u{E011}", 36, ''], 'End' => ["\u{E010}", 35, ''], 'Backspace' => ["\u{E003}", 8, '']];
 
@@ -484,11 +505,53 @@ function PROBE__Cell(array &$h, string $name, string $page, string $combo, strin
 	foreach ($h['kind'] === 'safari' ? PROBE__Do($h, 'Eval', 'REDZ_PROBE.errors()') : PROBE__Do($h, 'Errors') as $error) {
 		$findings[] = 'error ' . $error;
 	}
+	if ($width === 1440 && $mode === 'normal' && $theme === 'light' && $dir === 'ltr') {
+		$walked = [];
+		$findings = [...$findings, ...PROBE__Behave($h, $page, $run['base'] . $shown . '?theme=light&dir=ltr', $height, $run, $walked)];
+		foreach ($walked as $check) {
+			$report['walked'][$page][$check][$name] = true;
+		}
+	}
 	foreach ($findings as $finding) {
 		if (!PROBE__FindingAllowed($run['config'], $name, $where . $finding, $report)) {
 			$report['findings'][] = $where . $finding;
 		}
 	}
+}
+
+/** The behaviour checks of tools/probes/behave.js whose targets $page has, on the page loaded again from $url - each
+ *  check stepped until it answers its findings, its drags made by the engine's own pointer -, and every target found on
+ *  docs/all.html, which holds them all; answers the findings with the page's errors, and the checks in $walked. */
+function PROBE__Behave(array &$h, string $page, string $url, int $height, array $run, array &$walked): array
+{
+	PROBE__Do($h, 'Inject', $run['behave']);
+	$findings = $page === 'docs/all.html' ? array_map(fn(string $check): string => 'the behaviour check "' . $check . '" finds no target', PROBE__Do($h, 'Eval', 'REDZ_BEHAVE.missing()')) : [];
+	$checks = PROBE__Do($h, 'Eval', 'REDZ_BEHAVE.targets()');
+	if ($checks === []) {
+		return $findings;
+	}
+	PROBE__Do($h, 'Load', $url, 1440, $height, 'light', false);
+	PROBE__Do($h, 'Inject', $run['page']);
+	PROBE__Do($h, 'Eval', 'document.fonts.ready.then(() => true)');
+	PROBE__Do($h, 'Inject', $run['behave']);
+	foreach ($checks as $check) {
+		$walked[] = 'the behaviour of ' . $check;
+		for ($step = 0; $step < 10; $step++) {
+			$answer = PROBE__Do($h, 'Eval', 'REDZ_BEHAVE.step(' . json_encode($check) . ')');
+			if (!isset($answer['drag'])) {
+				foreach ($answer['findings'] ?? ['answered nothing'] as $finding) {
+					$findings[] = 'the behaviour of ' . $check . ': ' . $finding;
+				}
+				break;
+			}
+			PROBE__Do($h, 'Drag', ...array_map('intval', $answer['drag']));
+			usleep(200000);
+		}
+	}
+	foreach ($h['kind'] === 'safari' ? PROBE__Do($h, 'Eval', 'REDZ_PROBE.errors()') : PROBE__Do($h, 'Errors') as $error) {
+		$findings[] = 'error ' . $error . ' (in the behaviour checks)';
+	}
+	return $findings;
 }
 
 /** The keyboard walk of a page: each menu, modal dialog, tab list, accordion and --toggle region driven by real keys
@@ -921,14 +984,15 @@ function PROBE__Verdict(array $config, array &$report): int
 	return $report['findings'] === [] ? 0 : 1;
 }
 
-/** merge: one sheet of the sheets in $dirs - their reports joined, their shots, prints and logs copied; the exit code.
- *  On a $base sheet (the last commit every part passed): the base whole, each page the parts checked again taken from
- *  the parts instead, as every engine that runs a page ran it again. */
+/** merge: one sheet of the sheets in $dirs - their reports joined, their shots, prints and logs copied, the commit each
+ *  engine was checked on kept in "from"; the exit code. On a $base sheet (the part's sheet on the commit it stands
+ *  on): the base whole, each page the part checked again taken from it instead. */
 function PROBE__Merge(array $config, array $dirs, string $base = ''): int
 {
 	$work = PROBE_SHEET . '.new';
 	PROBE__Remove($work);
 	$report = null;
+	$from = [];
 	if ($base !== '') {
 		$under = json_decode((string)@file_get_contents($base . '/report.json'), true);
 		if (!is_array($under)) {
@@ -947,6 +1011,9 @@ function PROBE__Merge(array $config, array $dirs, string $base = ''): int
 		if (!is_array($part)) {
 			fwrite(STDERR, $dir . '/report.json is missing or not a report' . "\n");
 			return 2;
+		}
+		foreach ($part['from'] ?? [$part['commit'] => array_keys($part['engines'])] as $commit => $engines) {
+			$from[$commit] = [...$from[$commit] ?? [], ...$engines];
 		}
 		if ($report === null) {
 			$report = $part;
@@ -973,14 +1040,20 @@ function PROBE__Merge(array $config, array $dirs, string $base = ''): int
 		fwrite(STDERR, "merge needs the folders of the sheets to join\n");
 		return 2;
 	}
+	try {
+		$commit = trim(PROBE__Run(['git', '-C', PROBE_ROOT, 'rev-parse', '--short', 'HEAD']));
+	} catch (RuntimeException) {
+		$commit = '';
+	}
+	if ($base === '' && count($dirs) > 1) {
+		$report['when'] = gmdate('Y-m-d H:i') . ' UTC';
+		$report['commit'] = $commit === '' ? 'no commit' : 'commit ' . $commit;
+		$report['from'] = $from;
+	}
 	if ($base !== '') {
-		try {
-			$commit = trim(PROBE__Run(['git', '-C', PROBE_ROOT, 'rev-parse', '--short', 'HEAD']));
-		} catch (RuntimeException) {
-			$commit = '';
-		}
 		$fresh = $report ?? ['when' => gmdate('Y-m-d H:i') . ' UTC', 'commit' => $commit === '' ? 'no commit' : 'commit ' . $commit, 'engines' => [], 'skipped' => [], 'findings' => [], 'guarded' => [], 'walked' => [], 'spoken' => [], 'read' => [], 'shots' => [], 'used' => [], 'only' => []];
 		$report = ['when' => $fresh['when'], 'commit' => $fresh['commit'], 'base' => $under['commit'], 'delta' => $fresh['only'] ?? []] + $under;
+		unset($report['from']);
 		$report['engines'] = $fresh['engines'] + $under['engines'];
 		$report['skipped'] = $fresh['skipped'] + $under['skipped'];
 		$report['used'] = $fresh['used'] + $under['used'];
@@ -1016,25 +1089,85 @@ function PROBE__Only(array $config, array $pages): array
 	return $config;
 }
 
-/**
- * What a changed file asks of the probes: '' when they read nothing of it (texts, skills, the build and release tools,
- * the passport, generated twins of the docs), the page it is when it is one, or '*' when it reaches every page (the
- * stylesheets, the scripts, the icons, the probes themselves, anything else).
- */
-function PROBE__TouchedPage(string $file): string
+/** Every page some engine runs: the config's full pages, the docs pages, the speech pages.
+ *  @return list<string> */
+function PROBE__KnownPages(array $config): array
 {
-	$inert = '~\.md$|^skills/|^llms(-full)?\.txt$|^(LICENSE|NOTICE|\.gitignore|redz-ui\.json)$|^tools/(build|release|map|docs|floor|dashes)\.php$|^tools/(map|floor)/|^tools/(docs|vocabulary)\.json$|^docs/ar\.tsv$|^\.github/workflows/(check|pages|rerun)\.yml$~';
+	return array_values(array_unique([...$config['pages'], ...PROBE__DocsPages($config), ...array_keys($config['speech'])]));
+}
+
+/**
+ * What a file changed since $base asks of the probes, as marks: none when they read nothing of it (texts, skills, the
+ * build and release tools, the passport, the sheet's own code); "page:P" for a page, and for each page that loads a
+ * package's file; what PROBE_CODE says for the probe code and PROBE__ConfigReach for the config; "*" for every engine
+ * and page - the stylesheets, the scripts, the icons, the probe's core, anything else.
+ * @return list<string>
+ */
+function PROBE__Reach(array $config, string $base, string $file): array
+{
+	$inert = '~\.md$|^skills/|^llms(-full)?\.txt$|^(LICENSE|NOTICE|\.gitignore|redz-ui\.json)$|^tools/(build|release|map|docs|floor|dashes)\.php$|^tools/(map|floor)/|^tools/(docs|vocabulary)\.json$|^docs/ar\.tsv$|^\.github/workflows/(check|pages|rerun|probe-part)\.yml$~';
 	if (preg_match($inert, $file) === 1) {
-		return '';
+		return [];
 	}
 	if (preg_match('~^(index\.html)$|^docs/src/([\w-]+)\.html$|^(docs|reference/demo)/([\w-]+?)(\.ar)?\.html$~', $file, $m) === 1) {
-		return match (true) {
+		return ['page:' . match (true) {
 			($m[1] ?? '') !== '' => 'index.html',
 			($m[2] ?? '') !== '' => 'docs/' . $m[2] . '.html',
 			default => $m[3] . '/' . $m[4] . '.html',
-		};
+		}];
 	}
-	return '*';
+	if (array_key_exists($file, PROBE_CODE)) {
+		return PROBE_CODE[$file];
+	}
+	if ($file === 'tools/probes/config.json') {
+		return PROBE__ConfigReach($config, $base);
+	}
+	if (preg_match('~\.(css|js)$~', $file) === 1 && is_file(PROBE_ROOT . '/' . $file) && PROBE__CommentsOnly($base, $file)) {
+		return [];
+	}
+	$folder = (string)strstr($file, '/', true);
+	if (in_array($folder, PROBE_PACKAGES, true)) {
+		return array_map(fn(string $page): string => 'page:' . $page, array_values(array_filter(PROBE__KnownPages($config), fn(string $page): bool => preg_match('~["\'/]' . $folder . '/~', (string)@file_get_contents(PROBE_ROOT . '/' . $page)) === 1)));
+	}
+	return ['*'];
+}
+
+/**
+ * What the config's change since $base reaches, as PROBE__Reach's marks: the engine whose entry changed; the page whose
+ * speech steps changed, or every reader when a page lost them all; the engines an exception added or removed names
+ * (every engine for one that names none); the NVDA engines for NVDA's settings; everything for any other key.
+ * @return list<string>
+ */
+function PROBE__ConfigReach(array $config, string $base): array
+{
+	try {
+		$old = json_decode(PROBE__Run(['git', '-C', PROBE_ROOT, 'show', $base . ':tools/probes/config.json']), true, 512, JSON_THROW_ON_ERROR);
+	} catch (RuntimeException | JsonException) {
+		return ['*'];
+	}
+	$reach = [];
+	foreach (array_unique([...array_keys($old), ...array_keys($config)]) as $key) {
+		$was = $old[$key] ?? [];
+		$is = $config[$key] ?? [];
+		if ($was === $is) {
+			continue;
+		}
+		if ($key === 'engines' || $key === 'speech') {
+			foreach (array_unique([...array_keys($was), ...array_keys($is)]) as $name) {
+				if (($was[$name] ?? null) !== ($is[$name] ?? null)) {
+					$reach = [...$reach, ...($key === 'engines' ? ['engine:' . $name] : (isset($is[$name]) ? ['speech:' . $name] : ['kind:voiceover', 'kind:nvda']))];
+				}
+			}
+		} elseif ($key === 'allow') {
+			$entries = fn(array $list): array => array_map(fn(array $entry): string => json_encode($entry), $list);
+			foreach (array_merge(array_diff($entries($was), $entries($is)), array_diff($entries($is), $entries($was))) as $entry) {
+				$reach = [...$reach, ...array_map(fn(string $name): string => 'engine:' . $name, json_decode($entry, true)['engines'] ?? ['*'])];
+			}
+		} else {
+			$reach[] = $key === 'nvda' ? 'kind:nvda' : '*';
+		}
+	}
+	return array_values(array_unique(array_map(fn(string $mark): string => $mark === 'engine:*' ? '*' : $mark, $reach)));
 }
 
 /** Whether the stylesheet or script $file changed since $base in its comments alone - a whole-line comment, a banner,
@@ -1067,38 +1200,229 @@ function PROBE__EnginePages(array $config, string $name): array
 	};
 }
 
-/** affected: what the files changed since the commit $base ask of CI's parts ($all, the workflow's list), as JSON - the
- *  mode "full" (every part, every page), "pages" (the parts whose engines run a changed page, those pages only) or
- *  "none" (the probes read none of it), the parts, the pages and each file's verdict; the exit code. */
+/** Each file changed between the commit $base and HEAD, with what it asks of the probes (PROBE__Reach's marks).
+ *  @return array<string, list<string>> */
+function PROBE__Changed(array $config, string $base): array
+{
+	$changed = [];
+	foreach (array_filter(explode("\n", PROBE__Run(['git', '-C', PROBE_ROOT, 'diff', '--name-only', $base, 'HEAD']))) as $file) {
+		$changed[$file] = PROBE__Reach($config, $base, $file);
+	}
+	return $changed;
+}
+
+/**
+ * What the changed files $changed ask of a part of CI, whose engines are $part['engines']: "full" - every page of its
+ * engines, as a file reaches the whole of one, or a page no engine knows -, "pages" with the pages of its engines they
+ * reach, or "none".
+ * @param array<string, list<string>> $changed
+ * @return array{mode: string, pages: list<string>}
+ */
+function PROBE__PartRun(array $config, array $changed, array $part): array
+{
+	$known = PROBE__KnownPages($config);
+	$pages = [];
+	foreach (array_unique(array_merge([], ...array_values($changed))) as $mark) {
+		[$what, $value] = explode(':', $mark, 2) + [1 => ''];
+		foreach (preg_split('~\s+~', trim($part['engines'])) as $name) {
+			$engine = $config['engines'][$name] ?? null;
+			$full = $engine === null || match ($what) {
+				'*' => true,
+				'kind' => $engine['kind'] === $value,
+				'browser' => ($engine['browser'] ?? '') === $value,
+				'engine' => $name === $value,
+				'page' => !in_array($value, $known, true),
+				default => false,
+			};
+			if ($full) {
+				return ['mode' => 'full', 'pages' => []];
+			}
+			$reader = in_array($engine['kind'], ['voiceover', 'nvda'], true);
+			if (($what === 'page' || ($what === 'speech' && $reader)) && in_array($value, PROBE__EnginePages($config, $name), true)) {
+				$pages[] = $value;
+			}
+		}
+	}
+	$pages = array_values(array_unique($pages));
+	return ['mode' => $pages === [] ? 'none' : 'pages', 'pages' => $pages];
+}
+
+/** affected: what the files changed since the commit $base ask of each of CI's parts ($all, the workflow's list; each
+ *  engine a part of its own when it is empty), as JSON - each part's mode and pages, and each file's marks; the exit
+ *  code. */
 function PROBE__Affected(array $config, string $base, array $all): int
 {
 	try {
-		$files = array_filter(explode("\n", PROBE__Run(['git', '-C', PROBE_ROOT, 'diff', '--name-only', $base, 'HEAD'])));
+		$changed = PROBE__Changed($config, $base);
 	} catch (RuntimeException $e) {
 		fwrite(STDERR, $e->getMessage() . "\n");
 		return 2;
 	}
-	$touched = [];
-	foreach ($files as $file) {
-		$touched[$file] = PROBE__TouchedPage($file);
-		if ($touched[$file] === '*' && preg_match('~\.(css|js)$~', $file) === 1 && is_file(PROBE_ROOT . '/' . $file) && PROBE__CommentsOnly($base, $file)) {
-			$touched[$file] = '';
-		}
+	$all = $all ?: array_map(fn(string $name): array => ['name' => $name, 'engines' => $name], array_keys($config['engines']));
+	$parts = [];
+	foreach ($all as $part) {
+		$parts[$part['name']] = PROBE__PartRun($config, $changed, $part);
 	}
-	$pages = array_values(array_unique(array_filter($touched, fn(string $page): bool => $page !== '' && $page !== '*')));
-	$known = [...$config['pages'], ...PROBE__DocsPages($config), ...array_keys($config['speech'])];
-	$full = in_array('*', $touched, true) || array_diff($pages, $known) !== [];
-	$parts = $full ? $all : array_values(array_filter($all, function (array $part) use ($config, $pages): bool {
-		foreach (preg_split('~\s+~', trim($part['engines'])) as $name) {
-			if (isset($config['engines'][$name]) && array_intersect(PROBE__EnginePages($config, $name), $pages) !== []) {
-				return true;
+	echo json_encode(['parts' => $parts, 'files' => $changed], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), "\n";
+	return 0;
+}
+
+/** Answers the output of the GitHub CLI run with $args, decoded from JSON when $json. */
+function PROBE__Gh(array $args, bool $json = false): mixed
+{
+	$out = PROBE__Run(['gh', ...$args]);
+	return $json ? json_decode($out, true, 512, JSON_THROW_ON_ERROR) : $out;
+}
+
+/**
+ * plan: what a run of the Probes workflow checks, written to $GITHUB_OUTPUT for its jobs; its parts are $ALL. A manual
+ * run naming parts ($WANTED) or pages ($PAGES) is a lab run: those parts, those pages, and it never counts. Any other
+ * run takes each part where it stands - the nearest commit, this one first, then its first parents, on which a run left
+ * that part clean, by that run's artifact "standing" - and runs it again only on what the files changed since then ask
+ * of it: every page, some pages (merged into the sheet it stands on), or none. The outputs: "mode" (lab, run or none),
+ * "parts" (the parts that run, each with its "pages", '' for all, and "base_run", the run holding the sheet its pages
+ * go into) and "standing" (each part that does not run, with the run that holds its sheet); the exit code.
+ */
+function PROBE__Plan(array $config): int
+{
+	$all = json_decode((string)getenv('ALL'), true) ?: [];
+	$wanted = preg_split('~\s+~', trim((string)getenv('WANTED')), -1, PREG_SPLIT_NO_EMPTY);
+	$pages = trim((string)getenv('PAGES'));
+	$repo = (string)getenv('GH_REPO');
+	$run = [];
+	$standing = [];
+	$summary = [];
+	if (getenv('GITHUB_EVENT_NAME') === 'workflow_dispatch' && ($wanted !== [] || $pages !== '')) {
+		$mode = 'lab';
+		foreach ($all as $part) {
+			if ($wanted === [] || in_array($part['name'], $wanted, true)) {
+				$run[] = $part + ['pages' => $pages, 'base_run' => ''];
 			}
 		}
-		return false;
-	}));
-	$mode = $full ? 'full' : ($parts === [] ? 'none' : 'pages');
-	echo json_encode(['mode' => $mode, 'parts' => $parts, 'pages' => $full ? [] : $pages, 'files' => $touched], JSON_UNESCAPED_SLASHES), "\n";
+		if ($run === []) {
+			fwrite(STDERR, 'no part is named ' . implode(' ', $wanted) . "\n");
+			return 1;
+		}
+		$summary[] = 'A lab run of ' . implode(', ', array_column($run, 'name')) . ' on ' . ($pages === '' ? 'every page' : $pages) . ': it never counts as passed.';
+	} else {
+		$artifacts = [];
+		$names = function (string $id) use (&$artifacts, $repo): array {
+			return $artifacts[$id] ??= PROBE__Gh(['api', 'repos/' . $repo . '/actions/runs/' . $id . '/artifacts?per_page=100', '--jq', '[.artifacts[] | select(.expired | not) | .name]'], true);
+		};
+		$runs = [];
+		foreach (PROBE__Gh(['run', 'list', '--workflow', 'probes.yml', '--status', 'completed', '--limit', '200', '--json', 'databaseId,headSha'], true) as ['databaseId' => $id, 'headSha' => $sha]) {
+			$runs[$sha][] = (string)$id;
+		}
+		$stands = [];
+		$standsOn = function (string $sha) use (&$stands, $names, $runs): array {
+			if (isset($stands[$sha])) {
+				return $stands[$sha];
+			}
+			$stands[$sha] = [];
+			foreach ($runs[$sha] ?? [] as $id) {
+				if (!in_array('standing', $names($id), true)) {
+					continue;
+				}
+				$dir = sys_get_temp_dir() . '/redz-ui-standing-' . $id;
+				PROBE__Remove($dir);
+				PROBE__Gh(['run', 'download', $id, '--name', 'standing', '--dir', $dir]);
+				foreach (json_decode((string)@file_get_contents($dir . '/standing.json'), true)['parts'] ?? [] as $part => $holder) {
+					if (!isset($stands[$sha][$part]) && in_array('part-' . $part, $names((string)$holder), true)) {
+						$stands[$sha][$part] = (string)$holder;
+					}
+				}
+				PROBE__Remove($dir);
+			}
+			return $stands[$sha];
+		};
+		$commits = array_values(array_filter(explode("\n", PROBE__Run(['git', '-C', PROBE_ROOT, 'rev-list', '--first-parent', '--max-count=31', 'HEAD']))));
+		$changed = [];
+		foreach ($all as $part) {
+			$base = null;
+			foreach ($commits as $sha) {
+				$holder = $standsOn($sha)[$part['name']] ?? null;
+				if ($holder !== null) {
+					$base = [$sha, $holder];
+					break;
+				}
+			}
+			if ($base === null) {
+				$run[] = $part + ['pages' => '', 'base_run' => ''];
+				$summary[] = '- ' . $part['name'] . ': it stands on none of the last ' . count($commits) . ' commits - every page.';
+				continue;
+			}
+			[$sha, $holder] = $base;
+			$changed[$sha] ??= PROBE__Changed($config, $sha);
+			$verdict = PROBE__PartRun($config, $changed[$sha], $part);
+			$on = substr($sha, 0, 7) . ' (run ' . $holder . ')';
+			if ($verdict['mode'] === 'none') {
+				$standing[$part['name']] = $holder;
+				$summary[] = '- ' . $part['name'] . ': it stands on ' . $on . ' - nothing changed reaches it.';
+			} else {
+				$run[] = $part + ['pages' => implode(',', $verdict['pages']), 'base_run' => $verdict['mode'] === 'pages' ? $holder : ''];
+				$summary[] = '- ' . $part['name'] . ': it stands on ' . $on . ' - ' . ($verdict['mode'] === 'pages' ? 'again on ' . implode(', ', $verdict['pages']) : 'every page again') . '.';
+			}
+		}
+		foreach ($changed as $sha => $files) {
+			$summary[] = '';
+			$summary[] = 'Changed since ' . substr($sha, 0, 7) . ':';
+			foreach ($files as $file => $marks) {
+				$summary[] = '- `' . $file . '`: ' . ($marks === [] ? 'the probes read none of it' : implode(', ', $marks));
+			}
+		}
+		$mode = $run === [] ? 'none' : 'run';
+	}
+	// No part runs: the matrix still gets a list, as GitHub reads it before the job's condition.
+	$outputs = ['mode' => $mode, 'parts' => json_encode($run === [] ? $all : $run, JSON_UNESCAPED_SLASHES), 'standing' => json_encode((object)$standing, JSON_UNESCAPED_SLASHES)];
+	file_put_contents((string)getenv('GITHUB_OUTPUT') ?: 'php://stdout', implode('', array_map(fn(string $key, string $value): string => $key . '=' . $value . "\n", array_keys($outputs), $outputs)), FILE_APPEND);
+	file_put_contents((string)getenv('GITHUB_STEP_SUMMARY') ?: 'php://stderr', implode("\n", $summary) . "\n", FILE_APPEND);
 	return 0;
+}
+
+/**
+ * gather: one sheet of every part of the run in .dev/probes - each part's sheet from this run when it ran here ($RAN,
+ * the plan's parts, unless $MODE is none) or from the run it stands on ($STANDING) - and, unless a lab run,
+ * .dev/standing/standing.json naming the parts clean in it with the run that holds each one's sheet, and
+ * .dev/verified/verified.json when every part of $ALL is and the sheet is clean; the sheet's exit code, or 1 when a
+ * part's sheet cannot be had.
+ */
+function PROBE__Gather(array $config): int
+{
+	$mode = (string)getenv('MODE');
+	$id = (string)getenv('GITHUB_RUN_ID');
+	$all = json_decode((string)getenv('ALL'), true) ?: [];
+	$ran = $mode === 'none' ? [] : array_column(json_decode((string)getenv('RAN'), true) ?: [], 'name');
+	$standing = json_decode((string)getenv('STANDING'), true) ?: [];
+	$root = PROBE_ROOT . '/.dev/parts';
+	PROBE__Remove($root);
+	$holders = [];
+	$missing = [];
+	foreach ($all as ['name' => $name]) {
+		$holder = in_array($name, $ran, true) ? $id : ($standing[$name] ?? '');
+		if ($holder === '') {
+			continue;
+		}
+		try {
+			PROBE__Gh(['run', 'download', $holder, '--name', 'part-' . $name, '--dir', $root . '/' . $name]);
+			$holders[$name] = $holder;
+		} catch (RuntimeException $e) {
+			$missing[] = $name;
+			fwrite(STDERR, 'no sheet of the part ' . $name . ' in run ' . $holder . ': ' . $e->getMessage() . "\n");
+		}
+	}
+	$status = $holders === [] ? 2 : PROBE__Merge($config, array_map(fn(string $name): string => $root . '/' . $name, array_keys($holders)));
+	if ($mode !== 'lab') {
+		$clean = array_filter($holders, fn(string $holder, string $name): bool => (json_decode((string)@file_get_contents($root . '/' . $name . '/report.json'), true)['findings'] ?? null) === [], ARRAY_FILTER_USE_BOTH);
+		$commit = (string)getenv('GITHUB_SHA');
+		foreach (['standing' => ['commit' => $commit, 'parts' => (object)$clean], 'verified' => ['commit' => $commit, 'mode' => $mode]] as $what => $record) {
+			if ($what === 'verified' && ($status !== 0 || count($clean) !== count($all))) {
+				continue;
+			}
+			@mkdir(PROBE_ROOT . '/.dev/' . $what, 0777, true);
+			file_put_contents(PROBE_ROOT . '/.dev/' . $what . '/' . $what . '.json', json_encode($record, JSON_UNESCAPED_SLASHES) . "\n");
+		}
+	}
+	return $missing === [] ? $status : max($status, 1);
 }
 
 /** Runs the engines at once, a process a group, each writing a sheet of its own, then one sheet of them all: every
@@ -1162,6 +1486,12 @@ function PROBE__Main(array $argv): int
 	if (($args[0] ?? '') === 'affected') {
 		return PROBE__Affected($config, $args[1] ?? '', json_decode((string)getenv('ALL'), true) ?: []);
 	}
+	if (($args[0] ?? '') === 'plan') {
+		return PROBE__Plan($config);
+	}
+	if (($args[0] ?? '') === 'gather') {
+		return PROBE__Gather($config);
+	}
 	if (($args[0] ?? '') === 'voiceover-setup') {
 		return PROBE__VoiceOverSetup();
 	}
@@ -1204,7 +1534,7 @@ function PROBE__Main(array $argv): int
 		$commit = '';
 	}
 	$report = ['when' => gmdate('Y-m-d H:i') . ' UTC', 'commit' => $commit === '' ? 'no commit' : 'commit ' . $commit, 'widths' => array_keys($config['widths']), 'only' => $config['only'] ?? [], 'engines' => [], 'skipped' => [], 'findings' => [], 'guarded' => [], 'walked' => [], 'spoken' => [], 'read' => [], 'shots' => [], 'used' => []];
-	$run = ['config' => $config, 'page' => (string)file_get_contents(PROBE_PAGE), 'read' => (string)file_get_contents(PROBE_READ), 'axe' => PROBE__Axe($config['axe']), 'sheet' => $work];
+	$run = ['config' => $config, 'page' => (string)file_get_contents(PROBE_PAGE), 'read' => (string)file_get_contents(PROBE_READ), 'behave' => (string)file_get_contents(PROBE_BEHAVE), 'axe' => PROBE__Axe($config['axe']), 'sheet' => $work];
 	[$server, $run['base']] = PROBE__ServerStart($tmp);
 	register_shutdown_function(fn() => is_resource($server) && proc_terminate($server));
 	if (function_exists('pcntl_async_signals')) {

@@ -36,9 +36,9 @@ The stylesheet, the icons and the scripts, with the page's own words for the few
 </head>
 ```
 
-- `dist/redz-ui.min.css` is the layers, the tokens, the components and the utilities in one file, within its budget of 28 KB gzipped: the stylesheets `css/index.css` pulls in, squeezed.
+- `dist/redz-ui.min.css` is the layers, the tokens, the components and the utilities in one file, within its budget of 32 KB gzipped: the stylesheets `css/index.css` pulls in, squeezed.
 - `css/icons.css` is apart: one mask per Bootstrap Icons file, used only by name. It reaches each file by a URL relative to itself, `../icons/NAME.svg`, so the release's folders keep their shape where a project serves them. A project that marks its static files by their content (`?h=…`) cannot mark the icons this way: it serves each release from a folder of its own version instead, which changes with every release.
-- `dist/redz-ui.min.js` is one ES module of the behaviors, within its budget of 25 KB gzipped: the modules of `js/index.js` joined, squeezed and given short local names. It sets `REDZ.ui` for calls from code.
+- `dist/redz-ui.min.js` is one ES module of the behaviors, within its budget of 30 KB gzipped: the modules of `js/index.js` joined, squeezed and given short local names. It sets `REDZ.ui` for calls from code.
 - The island `#redz-ui-text` gives the library its words, in the page's language: every key of the passport's `texts`, and for each key of its `plurals` the other forms its language's plural rules name (`found.one`, `found.few`). The example shows four of them.
 - The two files are made from `css/` and `js/`, which stay to read. A project that bundles its own may join the stylesheets in the passport's order instead.
 

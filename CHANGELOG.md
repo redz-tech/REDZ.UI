@@ -4,6 +4,27 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Added
+- An empty `.alert` takes no room and stays in the accessibility tree: a page keeps its `role="alert"` on the page
+  from the start and fills it, so a screen reader says the words. VoiceOver on macOS 15 could miss an alert shown from
+  `hidden` at the moment it was filled. The PIN pad's docs fill their alert in place.
+
+### Changed
+- The budgets: the stylesheet at most 32 KB, the script 30 KB, gzipped (the owner, for the ERP's list #42-#93).
+
+### Checks
+- CI checks each part where it stands: a part - an engine, or the floor's three - that passed on a commit stays passed
+  on a later one whose changes cannot reach it. A fix in one reader's probe runs that reader again, a package's file
+  only the pages that load it, a speech step only its page in the readers. The sheet shows which parts were checked
+  on an earlier commit.
+- The behaviour checks of the widgets are permanent probes (`tools/probes/behave.js`), run on `docs/all.html` in every
+  desktop engine: the PIN pad, cooldowns, a busy button's words, a confirmation's note and lists, charts' numbers and
+  roles, highlights, the media views, scrolling navs, uploads of one file and with thumbnails, a thread's editing,
+  floating labels in input groups, an alert filled in place, and dragging rows and grid cards - by the engine's own
+  pointer, left to right and right to left.
+
 ## 0.11.0 - 2026-11-04
 
 The ERP's sign-in, kiosk, console, list and support screens, asked as #16-#41; charts, calendars and the media

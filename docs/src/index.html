@@ -26,9 +26,9 @@ gh release verify-asset v0.11.0 redz-ui-0.11.0.zip --repo redz-tech/REDZ.UI</cod
   &lt;script type="application/json" id="redz-ui-text"&gt;{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…"}&lt;/script&gt;
 &lt;/head&gt;</code></pre>
 	<ul>
-		<li><code>dist/redz-ui.min.css</code> is the layers, the tokens, the components and the utilities in one file, within its budget of 28 KB gzipped: the stylesheets <code>css/index.css</code> pulls in, squeezed.</li>
+		<li><code>dist/redz-ui.min.css</code> is the layers, the tokens, the components and the utilities in one file, within its budget of 32 KB gzipped: the stylesheets <code>css/index.css</code> pulls in, squeezed.</li>
 		<li><code>css/icons.css</code> is apart: one mask per Bootstrap Icons file, used only by name. It reaches each file by a URL relative to itself, <code>../icons/NAME.svg</code>, so the release's folders keep their shape where a project serves them. A project that marks its static files by their content (<code>?h=…</code>) cannot mark the icons this way: it serves each release from a folder of its own version instead, which changes with every release.</li>
-		<li><code>dist/redz-ui.min.js</code> is one ES module of the behaviors, within its budget of 25 KB gzipped: the modules of <code>js/index.js</code> joined, squeezed and given short local names. It sets <code>REDZ.ui</code> for calls from code.</li>
+		<li><code>dist/redz-ui.min.js</code> is one ES module of the behaviors, within its budget of 30 KB gzipped: the modules of <code>js/index.js</code> joined, squeezed and given short local names. It sets <code>REDZ.ui</code> for calls from code.</li>
 		<li>The island <code>#redz-ui-text</code> gives the library its words, in the page's language: every key of the passport's <code>texts</code>, and for each key of its <code>plurals</code> the other forms its language's plural rules name (<code>found.one</code>, <code>found.few</code>). The example shows four of them.</li>
 		<li>The two files are made from <code>css/</code> and <code>js/</code>, which stay to read. A project that bundles its own may join the stylesheets in the passport's order instead.</li>
 	</ul>

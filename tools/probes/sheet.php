@@ -73,6 +73,10 @@ function PROBE__SheetWrite(string $dir, array $report): void
 	if (($report['only'] ?? []) !== []) {
 		$out[] = '<p class="text-muted">A run of chosen pages only: ' . PROBE__Html(implode(', ', $report['only'])) . '; the exceptions of the others are left unjudged.</p>';
 	}
+	$earlier = array_diff_key($report['from'] ?? [], [$report['commit'] => true]);
+	if ($earlier !== []) {
+		$out[] = '<p class="text-muted">Checked on an earlier commit, as nothing changed since reaches them: ' . PROBE__Html(implode('; ', array_map(fn(string $commit, array $engines): string => implode(', ', $engines) . ' on ' . $commit, array_keys($earlier), $earlier))) . '.</p>';
+	}
 	$out[] = '<div class="hstack flex-wrap gap-8">' . ($total === 0 ? '<span class="badge badge-subtle-success">no findings</span>' : '<span class="badge badge-subtle-danger">' . $total . ' findings</span>');
 	foreach ($report['engines'] as $name => $engine) {
 		$out[] = '<span class="badge">' . PROBE__Html($name . ' · ' . $engine['version'] . ' · ' . $engine['cells'] . ' cells') . '</span>';

@@ -26,6 +26,13 @@
 			</div>
 		</div>
 	</div>
+
+	<h3 id="alert-filled">Filled in place</h3>
+	<p>An alert whose words come after an action - a refused sign-in, a wrong code - is on the page from the start, empty, as <code>role="alert"</code>, and the page fills it. Empty - no child, not even a space - it takes no room; filled, it shows, and a screen reader says its words. An alert shown from <code>hidden</code> at the moment it is filled is not always heard: VoiceOver on macOS 15 can miss it.</p>
+	<div class="docs-example docs-example-stack" id="alert-fill">
+		<div class="alert alert-danger" id="alert-fill-words" role="alert"></div>
+		<div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="alert-fill">Fill the alert</button></div>
+	</div>
 </section>
 
 <section class="vstack gap-12" aria-labelledby="alert-access">

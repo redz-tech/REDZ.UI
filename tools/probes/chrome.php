@@ -1,10 +1,10 @@
 <?php
 // probes, Chrome: the DevTools protocol over --remote-debugging-pipe, or over a port and our WebSocket on Windows, where
-// PHP cannot hand a child the pipe's descriptors — one headless Chrome a run with one page, a shown one for a screen
+// PHP cannot hand a child the pipe's descriptors - one headless Chrome a run with one page, a shown one for a screen
 // reader; the viewport, the color scheme and forced colors by emulation; full-page shots, print to PDF, errors from the
 // page's events.
 
-/** Starts the Chrome at $binary with its profile in $dir — headless, or $shown in a window a screen reader can read —
+/** Starts the Chrome at $binary with its profile in $dir - headless, or $shown in a window a screen reader can read -
  *  and opens the page every load goes to. */
 function PROBE__ChromeStart(string $binary, string $dir, bool $shown = false): array
 {
@@ -86,7 +86,7 @@ function PROBE__ChromePump(array &$h, float $seconds): void
 	} while (microtime(true) < $until);
 }
 
-/** Sends $method — to the page, or to the browser when $page is false — and answers its result; an error answer throws. */
+/** Sends $method - to the page, or to the browser when $page is false - and answers its result; an error answer throws. */
 function PROBE__ChromeSend(array &$h, string $method, array $params = [], bool $page = true): array
 {
 	$id = ++$h['id'];
@@ -165,6 +165,17 @@ function PROBE__ChromeClick(array &$h, int $x, int $y): void
 	foreach (['mousePressed', 'mouseReleased'] as $type) {
 		PROBE__ChromeSend($h, 'Input.dispatchMouseEvent', ['type' => $type, 'x' => $x, 'y' => $y, 'button' => 'left', 'clickCount' => 1]);
 	}
+}
+
+/** Drags the mouse from one point of the viewport to another with the left button held, in five moves. */
+function PROBE__ChromeDrag(array &$h, int $x, int $y, int $toX, int $toY): void
+{
+	PROBE__ChromeSend($h, 'Input.dispatchMouseEvent', ['type' => 'mousePressed', 'x' => $x, 'y' => $y, 'button' => 'left', 'buttons' => 1, 'clickCount' => 1]);
+	foreach ([0.1, 0.3, 0.6, 0.9, 1.0] as $t) {
+		PROBE__ChromeSend($h, 'Input.dispatchMouseEvent', ['type' => 'mouseMoved', 'x' => $x + ($toX - $x) * $t, 'y' => $y + ($toY - $y) * $t, 'button' => 'left', 'buttons' => 1]);
+		usleep(40000);
+	}
+	PROBE__ChromeSend($h, 'Input.dispatchMouseEvent', ['type' => 'mouseReleased', 'x' => $toX, 'y' => $toY, 'button' => 'left', 'buttons' => 0, 'clickCount' => 1]);
 }
 
 /** Moves the mouse to the point of the viewport. */

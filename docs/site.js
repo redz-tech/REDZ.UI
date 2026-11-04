@@ -112,6 +112,10 @@
 			row.classList.add('flash');
 		},
 		'busy-region': (button) => REDZ.ui.busy(document.getElementById(button.getAttribute('aria-controls')), new Promise((done) => setTimeout(done, 2000))),
+		'alert-fill': () => {
+			const words = document.getElementById('alert-fill-words');
+			words.textContent = words.textContent === '' ? 'The code is wrong. Two tries are left.' : '';
+		},
 	};
 	document.addEventListener('click', (event) => {
 		const button = event.target instanceof Element ? event.target.closest('[data-docs-run]') : null;
@@ -185,7 +189,6 @@
 			const right = event.detail.value === '2580';
 			alert.className = right ? 'alert alert-success' : 'alert alert-danger';
 			alert.textContent = right ? 'Unlocked.' : 'Wrong PIN. 4 tries left.';
-			alert.hidden = false;
 			done(right);
 		}, 600)));
 	});

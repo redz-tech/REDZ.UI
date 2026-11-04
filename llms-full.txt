@@ -36,9 +36,9 @@ The stylesheet, the icons and the scripts, with the page's own words for the few
 </head>
 ```
 
-- `dist/redz-ui.min.css` is the layers, the tokens, the components and the utilities in one file, within its budget of 28 KB gzipped: the stylesheets `css/index.css` pulls in, squeezed.
+- `dist/redz-ui.min.css` is the layers, the tokens, the components and the utilities in one file, within its budget of 32 KB gzipped: the stylesheets `css/index.css` pulls in, squeezed.
 - `css/icons.css` is apart: one mask per Bootstrap Icons file, used only by name. It reaches each file by a URL relative to itself, `../icons/NAME.svg`, so the release's folders keep their shape where a project serves them. A project that marks its static files by their content (`?h=…`) cannot mark the icons this way: it serves each release from a folder of its own version instead, which changes with every release.
-- `dist/redz-ui.min.js` is one ES module of the behaviors, within its budget of 25 KB gzipped: the modules of `js/index.js` joined, squeezed and given short local names. It sets `REDZ.ui` for calls from code.
+- `dist/redz-ui.min.js` is one ES module of the behaviors, within its budget of 30 KB gzipped: the modules of `js/index.js` joined, squeezed and given short local names. It sets `REDZ.ui` for calls from code.
 - The island `#redz-ui-text` gives the library its words, in the page's language: every key of the passport's `texts`, and for each key of its `plurals` the other forms its language's plural rules name (`found.one`, `found.few`). The example shows four of them.
 - The two files are made from `css/` and `js/`, which stay to read. A project that bundles its own may join the stylesheets in the passport's order instead.
 
@@ -3796,7 +3796,7 @@ A short number that unlocks a trusted device: dots that fill as it is typed and 
 ```html
 <form class="vstack gap-16 align-items-center" method="post">
 	<label class="form-label" for="pin-unlock-field">Enter your PIN</label>
-	<div class="alert" id="pin-unlock-alert" role="alert" hidden></div>
+	<div class="alert" id="pin-unlock-alert" role="alert"></div>
 	<div class="pin">
 		<input id="pin-unlock-field" name="pin" type="password" inputmode="numeric" maxlength="4" autocomplete="off" aria-describedby="pin-unlock-alert">
 	</div>
@@ -5754,6 +5754,15 @@ An icon, then the words in a `<div>`. The plain `alert` is neutral; the tones fo
 		<div class="hstack gap-8"><button class="btn btn-sm btn-primary" type="button">Use it</button><button class="btn btn-sm btn-text" type="button">Dismiss</button></div>
 	</div>
 </div>
+```
+
+### Filled in place
+
+An alert whose words come after an action - a refused sign-in, a wrong code - is on the page from the start, empty, as `role="alert"`, and the page fills it. Empty - no child, not even a space - it takes no room; filled, it shows, and a screen reader says its words. An alert shown from `hidden` at the moment it is filled is not always heard: VoiceOver on macOS 15 can miss it.
+
+```html
+<div class="alert alert-danger" id="alert-fill-words" role="alert"></div>
+<div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="alert-fill">Fill the alert</button></div>
 ```
 
 ## Accessibility

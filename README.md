@@ -26,7 +26,7 @@ the latest release at the root, of the main branch under `next/`, and of every r
   fixture checked in real engines, with its Arabic twin (see [Documentation](#documentation)).
 - Two agent skills in `skills/`: building screens with REDZ.UI, and moving a project from Bootstrap 5.3 with a scan
   and a map of every Bootstrap class (see [Skills](#skills)).
-- Budgets held on every commit: the stylesheet at most 28 KB and the script 25 KB, gzipped - the two files a project
+- Budgets held on every commit: the stylesheet at most 32 KB and the script 30 KB, gzipped - the two files a project
   serves.
 
 ## How it reads

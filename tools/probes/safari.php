@@ -187,6 +187,13 @@ function PROBE__SafariClick(array &$h, int $x, int $y): void
 	PROBE__SafariCall($h, 'POST', $h['session'] . '/actions', ['actions' => [['type' => 'pointer', 'id' => 'mouse', 'parameters' => ['pointerType' => 'mouse'], 'actions' => [['type' => 'pointerMove', 'origin' => 'viewport', 'x' => $x, 'y' => $y], ['type' => 'pointerDown', 'button' => 0], ['type' => 'pointerUp', 'button' => 0]]]]]);
 }
 
+/** Drags the mouse from one point of the viewport to another with the left button held, in five moves. */
+function PROBE__SafariDrag(array &$h, int $x, int $y, int $toX, int $toY): void
+{
+	$moves = array_map(fn(float $t): array => ['type' => 'pointerMove', 'origin' => 'viewport', 'duration' => 40, 'x' => (int)round($x + ($toX - $x) * $t), 'y' => (int)round($y + ($toY - $y) * $t)], [0.1, 0.3, 0.6, 0.9, 1.0]);
+	PROBE__SafariCall($h, 'POST', $h['session'] . '/actions', ['actions' => [['type' => 'pointer', 'id' => 'mouse', 'parameters' => ['pointerType' => 'mouse'], 'actions' => [['type' => 'pointerMove', 'origin' => 'viewport', 'x' => $x, 'y' => $y], ['type' => 'pointerDown', 'button' => 0], ...$moves, ['type' => 'pointerUp', 'button' => 0]]]]]);
+}
+
 /** Moves the mouse to the point of the viewport. */
 function PROBE__SafariHover(array &$h, int $x, int $y): void
 {

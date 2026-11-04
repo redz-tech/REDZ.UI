@@ -164,7 +164,7 @@
 		],
 		"docs/pin.html": [
 			{"label": "the PIN field", "do": "focus", "target": "#pin-unlock-field", "expect": ["Enter your PIN"]},
-			{"label": "a wrong PIN typed: the alert", "do": "type", "text": "1234", "expect": ["Wrong PIN"], "unsteady": {"voiceover": "VoiceOver 15 says the page's alert, shown from hidden after a wrong PIN, on one run of three, on its second hearing, and nothing of it on two (measured 2026-11-04, three runs); NVDA in Chrome and Firefox and VoiceOver 26 say it every time."}}
+			{"label": "a wrong PIN typed: the alert", "do": "type", "text": "1234", "expect": ["Wrong PIN"]}
 		],
 		"docs/stat.html": [
 			{"label": "a pressed tile", "do": "focus", "target": "#stat-filter [aria-pressed=\"true\"]", "expect": ["All agents"], "voiceover": ["selected"]}

@@ -11,7 +11,7 @@ A short number that unlocks a trusted device: dots that fill as it is typed and 
 ```html
 <form class="vstack gap-16 align-items-center" method="post">
 	<label class="form-label" for="pin-unlock-field">Enter your PIN</label>
-	<div class="alert" id="pin-unlock-alert" role="alert" hidden></div>
+	<div class="alert" id="pin-unlock-alert" role="alert"></div>
 	<div class="pin">
 		<input id="pin-unlock-field" name="pin" type="password" inputmode="numeric" maxlength="4" autocomplete="off" aria-describedby="pin-unlock-alert">
 	</div>
