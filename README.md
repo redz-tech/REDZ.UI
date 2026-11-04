@@ -64,7 +64,7 @@ attaches by delegation on `document`, so nothing is set up per element and marku
 
 ```html
 <script type="module" src="dist/redz-ui.min.js"></script>
-<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "confirm.phrase": "Type “{phrase}” to confirm", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong", "moved": "Moved to {position} of {count}", "more": "More", "file.type": "{name} is not a kind of file this takes", "file.size": "{name} is larger than {size}"}</script>
+<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "confirm.phrase": "Type “{phrase}” to confirm", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong", "moved": "Moved to {position} of {count}", "more": "More", "slide": "{position} of {count}", "file.type": "{name} is not a kind of file this takes", "file.size": "{name} is larger than {size}"}</script>
 ```
 
 - **Menus** (`role="menu"` on a `popover` opened by its button): the arrow keys move through the items, Home and End go
@@ -86,6 +86,10 @@ attaches by delegation on `document`, so nothing is set up per element and marku
   region says the state in `aria-expanded` (`js/toggle.js`); a table's row closes as plain `hidden`. It takes no
   `commandfor`, which WebKit would expose as collapsed whatever `aria-expanded` says. An accordion needs no script: it
   is `<details name>`.
+- **Carousels:** the slides of a `carousel-inner` scroll and snap by the browser; buttons with `command="--prev"` or
+  `"--next"` and `aria-controls` move a slide round the ends, an empty `carousel-indicators` fills with a button per
+  slide, and `command="--play"` plays them while pressed - never for less motion, paused on hover and focus; a slide a
+  person moves to is told politely (`js/carousel.js`).
 - **The folded rail:** a header button with `command="--fold"` and `aria-controls` naming `app-sidebar` folds it into
   a rail of icons on a wide window and back (`aria-pressed`, `data-folded`); `redz:fold` tells the page, which keeps the
   choice (`js/fold.js`).

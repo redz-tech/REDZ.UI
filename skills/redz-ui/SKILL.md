@@ -44,7 +44,7 @@ where the meaning is the same, and like the platform where Bootstrap 6 moved ont
   <link rel="stylesheet" href="redz-ui/dist/redz-ui.min.css">
   <link rel="stylesheet" href="redz-ui/css/icons.css">
   <script type="module" src="redz-ui/dist/redz-ui.min.js"></script>
-  <script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "confirm.phrase": "Type “{phrase}” to confirm", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong", "moved": "Moved to {position} of {count}", "more": "More", "file.type": "{name} is not a kind of file this takes", "file.size": "{name} is larger than {size}"}</script>
+  <script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "confirm.phrase": "Type “{phrase}” to confirm", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong", "moved": "Moved to {position} of {count}", "more": "More", "slide": "{position} of {count}", "file.type": "{name} is not a kind of file this takes", "file.size": "{name} is larger than {size}"}</script>
 </head>
 ```
 
@@ -67,7 +67,7 @@ Check it exists: `grep -x 'CLASS' assets/classes.txt`. A class that is not there
 
 Start: `references/index.md` (getting started), `layout.md`, `utilities.md`, `tokens.md`, `icons.md`.
 Actions: `btn.md`, `chip.md`, `menu.md`. Forms: `form.md`, `input-group.md`, `check.md`, `combobox.md`, `inline-edit.md`, `upload.md`. Content: `card.md`,
-`accordion.md`, `collapse.md`, `list-group.md`, `tree.md`, `table.md`, `badge.md`, `dot.md`, `avatar.md`, `icon-tile.md`,
+`accordion.md`, `carousel.md`, `collapse.md`, `list-group.md`, `tree.md`, `table.md`, `badge.md`, `dot.md`, `avatar.md`, `icon-tile.md`,
 `empty-state.md`, `placeholder.md`, `prose.md`. Layers: `dialog.md`, `drawer.md`, `popover.md`, `tooltip.md`.
 Feedback: `alert.md`, `toast.md`, `spinner.md`, `progress.md`, `busy.md`, `save-bar.md`, `selection-bar.md`.
 Navigation: `nav.md`, `navbar.md`, `breadcrumb.md`, `pagination.md`, `stepper.md`, `palette.md`, `app.md`. The same pages live at

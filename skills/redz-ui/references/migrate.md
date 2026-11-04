@@ -92,21 +92,16 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `card-subtitle` | - | review | a heading and paragraphs in card-body |
 | `card-text` | - | review | a heading and paragraphs in card-body |
 | `card-title` | - | review | a heading and paragraphs in card-body |
-| `carousel` | - | missing | not planned |
-| `carousel-caption` | - | missing | not planned |
-| `carousel-control-next` | - | missing | not planned |
-| `carousel-control-next-icon` | - | missing | not planned |
-| `carousel-control-prev` | - | missing | not planned |
-| `carousel-control-prev-icon` | - | missing | not planned |
-| `carousel-dark` | - | missing | not planned |
-| `carousel-fade` | - | missing | not planned |
-| `carousel-indicators` | - | missing | not planned |
-| `carousel-inner` | - | missing | not planned |
-| `carousel-item` | - | missing | not planned |
-| `carousel-item-end` | - | missing | not planned |
-| `carousel-item-next` | - | missing | not planned |
-| `carousel-item-prev` | - | missing | not planned |
-| `carousel-item-start` | - | missing | not planned |
+| `carousel-caption` | - | review | the slide's own text, laid out with utilities |
+| `carousel-control-next` | - | review | a btn btn-icon with command="--$1" and aria-controls naming the carousel |
+| `carousel-control-next-icon` | `bi bi-chevron-right` | rename | mirrored right to left |
+| `carousel-control-prev` | - | review | a btn btn-icon with command="--$1" and aria-controls naming the carousel |
+| `carousel-control-prev-icon` | `bi bi-chevron-left` | rename | mirrored right to left |
+| `carousel-dark` | - | review | data-theme="dark" on the carousel |
+| `carousel-item-end` | - | remove | the browser scrolls the row |
+| `carousel-item-next` | - | remove | the browser scrolls the row |
+| `carousel-item-prev` | - | remove | the browser scrolls the row |
+| `carousel-item-start` | - | remove | the browser scrolls the row |
 | `clearfix` | - | remove | no floats |
 | `col` | - | grid | equal columns come from the parent's cols-N; the child needs no class |
 | `col-1` | `span-1` | grid | N of 12: the parent is grid cols-12 (or md:cols-12) |
@@ -980,10 +975,12 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `data-bs-boundary` | - | remove | anchor positioning places and flips the menu |
 | `data-bs-popper-config` | - | remove | anchor positioning places and flips the menu |
 | `data-bs-spy` | `data-scrollspy` | trigger | on the nav or list group of the links, not on the scrolled box; the link to the section in view gets aria-current="location" |
-| `data-bs-ride` | - | missing | the carousel |
-| `data-bs-slide` | - | missing | the carousel |
-| `data-bs-slide-to` | - | missing | the carousel |
-| `data-bs-interval` | - | missing | the carousel |
+| `data-bs-slide="prev"` | `command="--prev" aria-controls="ID"` | trigger | the id of the carousel, without commandfor |
+| `data-bs-slide="next"` | `command="--next" aria-controls="ID"` | trigger | the id of the carousel, without commandfor |
+| `data-bs-slide-to` | - | remove | an empty carousel-indicators makes its buttons |
+| `data-bs-ride` | `command="--play" aria-pressed="true"` | review | a play button pressed from the start, which a person who asks for less motion never sees play |
+| `data-bs-interval` | - | remove | slides turn every 5 seconds |
+| `bootstrap.Carousel` | `the --prev and --next buttons` | review | or scrollBy on carousel-inner; the row scrolls by the browser |
 | `bootstrap.Modal` | `dialog.showModal() and dialog.close()` | trigger |  |
 | `bootstrap.Offcanvas` | `dialog.showModal() and dialog.close()` | trigger |  |
 | `bootstrap.Dropdown` | `menu.showPopover(), menu.hidePopover(), menu.togglePopover()` | trigger |  |

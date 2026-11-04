@@ -21,7 +21,12 @@ data-bs-keyboard="false"	closedby="none"	trigger	dialog	only its buttons close i
 data-bs-theme	data-theme	rename	index	light or dark on <html>
 data-bs-placement|data-bs-offset|data-bs-auto-close|data-bs-display|data-bs-reference|data-bs-boundary|data-bs-popper-config		remove	menu	anchor positioning places and flips the menu
 data-bs-spy	data-scrollspy	trigger	nav	on the nav or list group of the links, not on the scrolled box; the link to the section in view gets aria-current="location"
-data-bs-ride|data-bs-slide|data-bs-slide-to|data-bs-interval		missing		the carousel
+data-bs-slide="prev"	command="--prev" aria-controls="ID"	trigger	carousel	the id of the carousel, without commandfor
+data-bs-slide="next"	command="--next" aria-controls="ID"	trigger	carousel	the id of the carousel, without commandfor
+data-bs-slide-to		remove	carousel	an empty carousel-indicators makes its buttons
+data-bs-ride	command="--play" aria-pressed="true"	review	carousel	a play button pressed from the start, which a person who asks for less motion never sees play
+data-bs-interval		remove	carousel	slides turn every 5 seconds
+bootstrap.Carousel	the --prev and --next buttons	review	carousel	or scrollBy on carousel-inner; the row scrolls by the browser
 bootstrap.Modal	dialog.showModal() and dialog.close()	trigger	dialog
 bootstrap.Offcanvas	dialog.showModal() and dialog.close()	trigger	drawer
 bootstrap.Dropdown	menu.showPopover(), menu.hidePopover(), menu.togglePopover()	trigger	menu

@@ -32,6 +32,7 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 
 - [Cards](docs/card.md): A card is a bordered region of a screen: a header with its title and actions, a body, a footer. It is a region - the width prefixes inside it measure the card, not the window.
 - [Accordions](docs/accordion.md): Sections that open one at a time, or each on its own, on the browser's own disclosure - <details> and <summary>: no script, the keys and the open state built in, and the browser's find in page opens a closed section on a match.
+- [Carousels](docs/carousel.md): A row of slides seen one or a few at a time: tours, photos, reviews. The browser scrolls and snaps the row - a swipe, a wheel, the arrow keys - and the buttons move a slide back or on.
 - [Collapse](docs/collapse.md): A button that opens and closes a region elsewhere on the page - help under a toolbar, more filters, the details of a row - by the library's own command, --toggle. A closed region is hidden="until-found", so the browser's find in page still reaches its words and opens it. A section that opens under its own header is an accordion.
 - [List groups](docs/list-group.md): A column of items in one frame - plain rows, or links and buttons to choose from - with the current one and the unavailable ones marked by the same attributes the browser reads.
 - [Trees](docs/tree.md): Pages under pages, a menu's items, folders: a list whose items open their own lists, each a link or a name, and moved by a handle.

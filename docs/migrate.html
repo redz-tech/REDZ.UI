@@ -13,7 +13,7 @@
 	<link rel="alternate" type="text/markdown" href="migrate.md">
 	<script src="site.js"></script>
 	<script type="module" src="../dist/redz-ui.min.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}"}</script>
+	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","slide":"{position} of {count}","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}"}</script>
 </head>
 <body>
 	<div class="app">
@@ -59,6 +59,7 @@
 			<div class="app-section">Content</div>
 			<a class="app-link" href="card.html"><i class="bi bi-card-text" aria-hidden="true"></i>Cards</a>
 			<a class="app-link" href="accordion.html"><i class="bi bi-chevron-bar-expand" aria-hidden="true"></i>Accordions</a>
+			<a class="app-link" href="carousel.html"><i class="bi bi-images" aria-hidden="true"></i>Carousels</a>
 			<a class="app-link" href="collapse.html"><i class="bi bi-arrows-collapse" aria-hidden="true"></i>Collapse</a>
 			<a class="app-link" href="list-group.html"><i class="bi bi-list-ul" aria-hidden="true"></i>List groups</a>
 			<a class="app-link" href="tree.html"><i class="bi bi-diagram-3" aria-hidden="true"></i>Trees</a>
@@ -196,21 +197,16 @@
 									<tr><td><code>card-subtitle</code></td><td>-</td><td>review</td><td>a heading and paragraphs in card-body</td></tr>
 									<tr><td><code>card-text</code></td><td>-</td><td>review</td><td>a heading and paragraphs in card-body</td></tr>
 									<tr><td><code>card-title</code></td><td>-</td><td>review</td><td>a heading and paragraphs in card-body</td></tr>
-									<tr><td><code>carousel</code></td><td>-</td><td>missing</td><td>not planned</td></tr>
-									<tr><td><code>carousel-caption</code></td><td>-</td><td>missing</td><td>not planned</td></tr>
-									<tr><td><code>carousel-control-next</code></td><td>-</td><td>missing</td><td>not planned</td></tr>
-									<tr><td><code>carousel-control-next-icon</code></td><td>-</td><td>missing</td><td>not planned</td></tr>
-									<tr><td><code>carousel-control-prev</code></td><td>-</td><td>missing</td><td>not planned</td></tr>
-									<tr><td><code>carousel-control-prev-icon</code></td><td>-</td><td>missing</td><td>not planned</td></tr>
-									<tr><td><code>carousel-dark</code></td><td>-</td><td>missing</td><td>not planned</td></tr>
-									<tr><td><code>carousel-fade</code></td><td>-</td><td>missing</td><td>not planned</td></tr>
-									<tr><td><code>carousel-indicators</code></td><td>-</td><td>missing</td><td>not planned</td></tr>
-									<tr><td><code>carousel-inner</code></td><td>-</td><td>missing</td><td>not planned</td></tr>
-									<tr><td><code>carousel-item</code></td><td>-</td><td>missing</td><td>not planned</td></tr>
-									<tr><td><code>carousel-item-end</code></td><td>-</td><td>missing</td><td>not planned</td></tr>
-									<tr><td><code>carousel-item-next</code></td><td>-</td><td>missing</td><td>not planned</td></tr>
-									<tr><td><code>carousel-item-prev</code></td><td>-</td><td>missing</td><td>not planned</td></tr>
-									<tr><td><code>carousel-item-start</code></td><td>-</td><td>missing</td><td>not planned</td></tr>
+									<tr><td><code>carousel-caption</code></td><td>-</td><td>review</td><td>the slide&#039;s own text, laid out with utilities</td></tr>
+									<tr><td><code>carousel-control-next</code></td><td>-</td><td>review</td><td>a btn btn-icon with command=&quot;--$1&quot; and aria-controls naming the carousel</td></tr>
+									<tr><td><code>carousel-control-next-icon</code></td><td><code>bi bi-chevron-right</code></td><td>rename</td><td>mirrored right to left</td></tr>
+									<tr><td><code>carousel-control-prev</code></td><td>-</td><td>review</td><td>a btn btn-icon with command=&quot;--$1&quot; and aria-controls naming the carousel</td></tr>
+									<tr><td><code>carousel-control-prev-icon</code></td><td><code>bi bi-chevron-left</code></td><td>rename</td><td>mirrored right to left</td></tr>
+									<tr><td><code>carousel-dark</code></td><td>-</td><td>review</td><td>data-theme=&quot;dark&quot; on the carousel</td></tr>
+									<tr><td><code>carousel-item-end</code></td><td>-</td><td>remove</td><td>the browser scrolls the row</td></tr>
+									<tr><td><code>carousel-item-next</code></td><td>-</td><td>remove</td><td>the browser scrolls the row</td></tr>
+									<tr><td><code>carousel-item-prev</code></td><td>-</td><td>remove</td><td>the browser scrolls the row</td></tr>
+									<tr><td><code>carousel-item-start</code></td><td>-</td><td>remove</td><td>the browser scrolls the row</td></tr>
 									<tr><td><code>clearfix</code></td><td>-</td><td>remove</td><td>no floats</td></tr>
 									<tr><td><code>col</code></td><td>-</td><td>grid</td><td>equal columns come from the parent&#039;s cols-N; the child needs no class</td></tr>
 									<tr><td><code>col-1</code></td><td><code>span-1</code></td><td>grid</td><td>N of 12: the parent is grid cols-12 (or md:cols-12)</td></tr>
@@ -1084,10 +1080,12 @@
 									<tr><td><code>data-bs-boundary</code></td><td>-</td><td>remove</td><td>anchor positioning places and flips the menu</td></tr>
 									<tr><td><code>data-bs-popper-config</code></td><td>-</td><td>remove</td><td>anchor positioning places and flips the menu</td></tr>
 									<tr><td><code>data-bs-spy</code></td><td><code>data-scrollspy</code></td><td>trigger</td><td>on the nav or list group of the links, not on the scrolled box; the link to the section in view gets aria-current=&quot;location&quot;</td></tr>
-									<tr><td><code>data-bs-ride</code></td><td>-</td><td>missing</td><td>the carousel</td></tr>
-									<tr><td><code>data-bs-slide</code></td><td>-</td><td>missing</td><td>the carousel</td></tr>
-									<tr><td><code>data-bs-slide-to</code></td><td>-</td><td>missing</td><td>the carousel</td></tr>
-									<tr><td><code>data-bs-interval</code></td><td>-</td><td>missing</td><td>the carousel</td></tr>
+									<tr><td><code>data-bs-slide=&quot;prev&quot;</code></td><td><code>command=&quot;--prev&quot; aria-controls=&quot;ID&quot;</code></td><td>trigger</td><td>the id of the carousel, without commandfor</td></tr>
+									<tr><td><code>data-bs-slide=&quot;next&quot;</code></td><td><code>command=&quot;--next&quot; aria-controls=&quot;ID&quot;</code></td><td>trigger</td><td>the id of the carousel, without commandfor</td></tr>
+									<tr><td><code>data-bs-slide-to</code></td><td>-</td><td>remove</td><td>an empty carousel-indicators makes its buttons</td></tr>
+									<tr><td><code>data-bs-ride</code></td><td><code>command=&quot;--play&quot; aria-pressed=&quot;true&quot;</code></td><td>review</td><td>a play button pressed from the start, which a person who asks for less motion never sees play</td></tr>
+									<tr><td><code>data-bs-interval</code></td><td>-</td><td>remove</td><td>slides turn every 5 seconds</td></tr>
+									<tr><td><code>bootstrap.Carousel</code></td><td><code>the --prev and --next buttons</code></td><td>review</td><td>or scrollBy on carousel-inner; the row scrolls by the browser</td></tr>
 									<tr><td><code>bootstrap.Modal</code></td><td><code>dialog.showModal() and dialog.close()</code></td><td>trigger</td><td></td></tr>
 									<tr><td><code>bootstrap.Offcanvas</code></td><td><code>dialog.showModal() and dialog.close()</code></td><td>trigger</td><td></td></tr>
 									<tr><td><code>bootstrap.Dropdown</code></td><td><code>menu.showPopover(), menu.hidePopover(), menu.togglePopover()</code></td><td>trigger</td><td></td></tr>

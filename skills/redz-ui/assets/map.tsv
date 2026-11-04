@@ -256,21 +256,21 @@ card-link		review	class	card	a heading and paragraphs in card-body
 card-subtitle		review	class	card	a heading and paragraphs in card-body
 card-text		review	class	card	a heading and paragraphs in card-body
 card-title		review	class	card	a heading and paragraphs in card-body
-carousel		missing	class		not planned
-carousel-caption		missing	class		not planned
-carousel-control-next		missing	class		not planned
-carousel-control-next-icon		missing	class		not planned
-carousel-control-prev		missing	class		not planned
-carousel-control-prev-icon		missing	class		not planned
-carousel-dark		missing	class		not planned
-carousel-fade		missing	class		not planned
-carousel-indicators		missing	class		not planned
-carousel-inner		missing	class		not planned
-carousel-item		missing	class		not planned
-carousel-item-end		missing	class		not planned
-carousel-item-next		missing	class		not planned
-carousel-item-prev		missing	class		not planned
-carousel-item-start		missing	class		not planned
+carousel	carousel	same	class	carousel	the slide in place is aria-current="true"
+carousel-caption		review	class	carousel	the slide's own text, laid out with utilities
+carousel-control-next		review	class	carousel	a btn btn-icon with command="--$1" and aria-controls naming the carousel
+carousel-control-next-icon	bi bi-chevron-right	rename	class	carousel	mirrored right to left
+carousel-control-prev		review	class	carousel	a btn btn-icon with command="--$1" and aria-controls naming the carousel
+carousel-control-prev-icon	bi bi-chevron-left	rename	class	carousel	mirrored right to left
+carousel-dark		review	class	carousel	data-theme="dark" on the carousel
+carousel-fade	carousel-fade	same	class	carousel	the slide in place is aria-current="true"
+carousel-indicators	carousel-indicators	same	class	carousel	left empty, it fills with a button per slide
+carousel-inner	carousel-inner	same	class	carousel	the slide in place is aria-current="true"
+carousel-item	carousel-item	same	class	carousel	the slide in place is aria-current="true"
+carousel-item-end		remove	class	carousel	the browser scrolls the row
+carousel-item-next		remove	class	carousel	the browser scrolls the row
+carousel-item-prev		remove	class	carousel	the browser scrolls the row
+carousel-item-start		remove	class	carousel	the browser scrolls the row
 clearfix		remove	class	utilities	no floats
 col		grid	class	layout	equal columns come from the parent's cols-N; the child needs no class
 col-1	span-1	grid	class	layout	N of 12: the parent is grid cols-12 (or md:cols-12)
@@ -2500,10 +2500,12 @@ data-bs-reference		remove	data-attr	menu	anchor positioning places and flips the
 data-bs-boundary		remove	data-attr	menu	anchor positioning places and flips the menu
 data-bs-popper-config		remove	data-attr	menu	anchor positioning places and flips the menu
 data-bs-spy	data-scrollspy	trigger	data-attr	nav	on the nav or list group of the links, not on the scrolled box; the link to the section in view gets aria-current="location"
-data-bs-ride		missing	data-attr		the carousel
-data-bs-slide		missing	data-attr		the carousel
-data-bs-slide-to		missing	data-attr		the carousel
-data-bs-interval		missing	data-attr		the carousel
+data-bs-slide="prev"	command="--prev" aria-controls="ID"	trigger	data-attr	carousel	the id of the carousel, without commandfor
+data-bs-slide="next"	command="--next" aria-controls="ID"	trigger	data-attr	carousel	the id of the carousel, without commandfor
+data-bs-slide-to		remove	data-attr	carousel	an empty carousel-indicators makes its buttons
+data-bs-ride	command="--play" aria-pressed="true"	review	data-attr	carousel	a play button pressed from the start, which a person who asks for less motion never sees play
+data-bs-interval		remove	data-attr	carousel	slides turn every 5 seconds
+bootstrap.Carousel	the --prev and --next buttons	review	js	carousel	or scrollBy on carousel-inner; the row scrolls by the browser
 bootstrap.Modal	dialog.showModal() and dialog.close()	trigger	js	dialog	
 bootstrap.Offcanvas	dialog.showModal() and dialog.close()	trigger	js	drawer	
 bootstrap.Dropdown	menu.showPopover(), menu.hidePopover(), menu.togglePopover()	trigger	js	menu	

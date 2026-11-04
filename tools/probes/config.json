@@ -78,6 +78,10 @@
 			{"label": "the tooltip's button, described by its tooltip", "do": "focus", "target": "#tooltip-why button", "expect": ["What is a partner license", "A partner can hide the brand"]},
 			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["expanded"]}
 		],
+		"docs/carousel.html": [
+			{"label": "the Next button of a carousel", "do": "focus", "target": "[command=\"--next\"][aria-controls=\"carousel-basic-tours\"]", "expect": ["Next"]},
+			{"label": "Enter on it: the status says the slide", "do": "key", "key": "Enter", "expect": ["2 of 3"]}
+		],
 		"docs/popover.html": [
 			{"label": "the button of a titled popover", "do": "focus", "target": "#popover-titled > button", "expect": ["Park fee"]},
 			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["expanded"]}

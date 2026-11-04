@@ -2534,6 +2534,14 @@ card-img
 card-img-bottom
 card-img-overlay
 card-img-top
+carousel
+carousel-auto
+carousel-center
+carousel-fade
+carousel-indicators
+carousel-inner
+carousel-item
+carousel-overlay
 check
 chip
 chip-count

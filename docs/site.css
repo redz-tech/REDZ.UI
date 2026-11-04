@@ -103,6 +103,12 @@
 		gap: var(--redz-space-12);
 	}
 
+	#carousel-several-reviews {
+		--redz-carousel-items: 2;
+		--redz-carousel-gap: 12px;
+		--redz-carousel-peek: 24px;
+	}
+
 	.docs-sample > .docs-example {
 		border-end-start-radius: 0;
 		border-end-end-radius: 0;

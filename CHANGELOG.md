@@ -25,6 +25,13 @@ What the ERP's move from Bootstrap 5.3 asked for, and the editor; to be released
   the stylesheets, that marks `<html data-floor="below">` when the browser lacks a feature the library is built on, so
   every product judges a browser the same way and shows its own words. `tools/build.php` writes it from
   `tools/floor/tests.json`, and the floor gate holds that every browser at the floor passes it.
+- **Carousels** (`carousel`, `carousel-inner`, `carousel-item`, `carousel-indicators`, `carousel-fade`,
+  `carousel-center`, `carousel-auto`, `carousel-overlay`, `--redz-carousel-items`, `-gap`, `-peek`, `js/carousel.js`),
+  Bootstrap 6's on a scroll-snap row: the browser swipes, scrolls and snaps the slides; buttons with `command="--prev"`
+  or `"--next"` and `aria-controls` move a slide round the ends; an empty `carousel-indicators` fills with a 24 px button
+  per slide; the slide in place is `aria-current="true"`, each a group named by the island's new text `slide`
+  ("{position} of {count}"); `command="--play"` plays them every 5 seconds while pressed, never for less motion,
+  paused on hover, focus and a hidden page; a slide a person moves to is told politely, never while it plays.
 - **A side navigation folded to a rail** (`command="--fold"`, `data-folded`, `js/fold.js`): a header button with
   `aria-controls` naming `app-sidebar` folds it into a 56 px rail of its icons above 1024 px and back, pressed while
   folded; each link shows its words as a tooltip and keeps them as its name. The library stores nothing: `redz:fold`

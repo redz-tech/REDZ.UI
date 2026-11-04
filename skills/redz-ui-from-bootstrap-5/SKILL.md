@@ -41,7 +41,7 @@ the project switches at once, so migrate on a branch and switch the `<link>` wit
 | `state` | Drop the class; set the attribute of the role - `aria-current`, `aria-selected`, `aria-pressed`, `aria-invalid`, `disabled`. See `references/states-and-triggers.md`. |
 | `trigger` | Replace the `data-bs-*` trigger or `bootstrap.*` call with the browser's command or method. See `references/states-and-triggers.md`. |
 | `remove` | Delete it: the wrapper or helper is not needed (`modal-dialog`, `fade`, `nav-item`). |
-| `missing` | REDZ.UI has no such component yet (carousel, figure and a few helpers). Keep the markup in the module's own classes with its prefix, and leave a note; do not invent a REDZ.UI class. |
+| `missing` | REDZ.UI has no such component yet (figure and a few helpers). Keep the markup in the module's own classes with its prefix, and leave a note; do not invent a REDZ.UI class. |
 | `review` | Decide by context; the map's note proposes the nearest form. |
 | `unknown` | Not a class of REDZ.UI: invented, a Bootstrap 6 habit, an icon `icons/` does not have, or a module class without its prefix. |
 
@@ -61,7 +61,7 @@ the project switches at once, so migrate on a branch and switch the `<link>` wit
   names in a lookup - `['danger' => 'btn-danger', …]` - so the next scan reads them.
 - **Words come from the page.** REDZ.UI has no words of its own: every word it shows reads the island
   `<script type="application/json" id="redz-ui-text">`, whose keys are the passport's `texts` (`redz-ui.json`) -
-  `close`, `confirm.ok`, `confirm.cancel`, `confirm.phrase`, `busy`, `remove`, `create`, `moved`, `more`, `file.type`, `file.size`,
+  `close`, `confirm.ok`, `confirm.cancel`, `confirm.phrase`, `busy`, `remove`, `create`, `moved`, `more`, `slide`, `file.type`, `file.size`,
   `strength.short` … `strength.strong`, `found.other` - and, for each key of its `plurals`, the other plural forms
   (`found.one`, `found.few`).
 - **Icons stay**: `bi bi-NAME` keep their classes; swap the Bootstrap Icons font stylesheet for `css/icons.css`.

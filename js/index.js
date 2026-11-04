@@ -12,6 +12,7 @@ import './nav-overflow.js';
 import './navbar.js';
 import './tooltips.js';
 import './fold.js';
+import './carousel.js';
 import './inline-edit.js';
 import './password.js';
 import './tree.js';

@@ -218,7 +218,14 @@ progress-bar-striped	progress-striped	rename	progress
 progress-bar-animated	progress-animated	rename	progress	it moves only while motion is allowed
 progress-stacked		review	progress	not planned: one <progress> a value
 (pagination|pagination-sm|pagination-lg|page-item|page-link)	$1	same	pagination	the current page aria-current="page", a missing one aria-disabled; previous and next with page-text for a list paged by "the next 50"
-carousel|carousel-.+		missing		not planned
+(carousel|carousel-inner|carousel-item|carousel-fade)	$1	same	carousel	the slide in place is aria-current="true"
+carousel-indicators	carousel-indicators	same	carousel	left empty, it fills with a button per slide
+carousel-control-(prev|next)		review	carousel	a btn btn-icon with command="--$1" and aria-controls naming the carousel
+carousel-control-prev-icon	bi bi-chevron-left	rename	carousel	mirrored right to left
+carousel-control-next-icon	bi bi-chevron-right	rename	carousel	mirrored right to left
+carousel-caption		review	carousel	the slide's own text, laid out with utilities
+carousel-dark		review	carousel	data-theme="dark" on the carousel
+carousel-item-(start|end|next|prev)		remove	carousel	the browser scrolls the row
 
 # Everything else keeps its name.
 (.+)	$1	same

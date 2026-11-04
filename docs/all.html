@@ -13,7 +13,7 @@
 	<link rel="alternate" type="text/markdown" href="all.md">
 	<script src="site.js"></script>
 	<script type="module" src="../dist/redz-ui.min.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}"}</script>
+	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","slide":"{position} of {count}","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}"}</script>
 </head>
 <body>
 	<div class="app">
@@ -59,6 +59,7 @@
 			<div class="app-section">Content</div>
 			<a class="app-link" href="card.html"><i class="bi bi-card-text" aria-hidden="true"></i>Cards</a>
 			<a class="app-link" href="accordion.html"><i class="bi bi-chevron-bar-expand" aria-hidden="true"></i>Accordions</a>
+			<a class="app-link" href="carousel.html"><i class="bi bi-images" aria-hidden="true"></i>Carousels</a>
 			<a class="app-link" href="collapse.html"><i class="bi bi-arrows-collapse" aria-hidden="true"></i>Collapse</a>
 			<a class="app-link" href="list-group.html"><i class="bi bi-list-ul" aria-hidden="true"></i>List groups</a>
 			<a class="app-link" href="tree.html"><i class="bi bi-diagram-3" aria-hidden="true"></i>Trees</a>
@@ -1100,6 +1101,55 @@
 								</tr>
 							</tbody>
 						</table>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-carousel">
+					<h2 id="all-carousel"><a href="carousel.html">Carousels</a></h2>
+					<div class="docs-example docs-example-stack" id="carousel-basic">
+						<div class="carousel" id="carousel-basic-tours" role="region" aria-label="Tours">
+							<div class="carousel-inner" tabindex="0" aria-label="Tours">
+								<div class="carousel-item"><div class="p-24 bg-primary-subtle vstack gap-8"><strong>Ang Thong marine park</strong><span>Kayaks, a lagoon and a viewpoint, a day by speedboat.</span></div></div>
+								<div class="carousel-item"><div class="p-24 bg-success-subtle vstack gap-8"><strong>Koh Tao snorkeling</strong><span>Two bays and a coral garden, lunch on board.</span></div></div>
+								<div class="carousel-item"><div class="p-24 bg-warning-subtle vstack gap-8"><strong>Sunset cruise</strong><span>A catamaran round the south coast at dusk.</span></div></div>
+							</div>
+							<div class="hstack gap-8 justify-content-between">
+								<button class="btn btn-icon" type="button" command="--prev" aria-controls="carousel-basic-tours" aria-label="Previous"><i class="bi bi-chevron-left" aria-hidden="true"></i></button>
+								<div class="carousel-indicators"></div>
+								<button class="btn btn-icon" type="button" command="--next" aria-controls="carousel-basic-tours" aria-label="Next"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+							</div>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="carousel-several">
+						<div class="carousel" id="carousel-several-reviews" role="region" aria-label="Reviews">
+							<div class="carousel-inner" tabindex="0" aria-label="Reviews">
+								<div class="carousel-item"><div class="card card-body h-100">“The best day of our trip.” - Anna</div></div>
+								<div class="carousel-item"><div class="card card-body h-100">“Kind guides and a clean boat.” - Mark</div></div>
+								<div class="carousel-item"><div class="card card-body h-100">“The lagoon is worth the climb.” - Somchai</div></div>
+								<div class="carousel-item"><div class="card card-body h-100">“Lunch was a surprise, a good one.” - Leila</div></div>
+							</div>
+							<div class="hstack gap-8 justify-content-end">
+								<button class="btn btn-icon btn-sm" type="button" command="--prev" aria-controls="carousel-several-reviews" aria-label="Previous"><i class="bi bi-chevron-left" aria-hidden="true"></i></button>
+								<button class="btn btn-icon btn-sm" type="button" command="--next" aria-controls="carousel-several-reviews" aria-label="Next"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+							</div>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="carousel-fade">
+						<div class="carousel carousel-fade" id="carousel-fade-island" role="region" aria-label="The island">
+							<div class="carousel-inner" tabindex="0" aria-label="The island">
+								<div class="carousel-item"><div class="p-32 bg-info-subtle text-center"><strong>Beaches</strong></div></div>
+								<div class="carousel-item"><div class="p-32 bg-success-subtle text-center"><strong>Waterfalls</strong></div></div>
+								<div class="carousel-item"><div class="p-32 bg-warning-subtle text-center"><strong>Temples</strong></div></div>
+							</div>
+							<div class="carousel-overlay">
+								<button class="btn btn-icon btn-sm" type="button" command="--prev" aria-controls="carousel-fade-island" aria-label="Previous"><i class="bi bi-chevron-left" aria-hidden="true"></i></button>
+								<button class="btn btn-icon btn-sm" type="button" command="--next" aria-controls="carousel-fade-island" aria-label="Next"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+							</div>
+							<div class="hstack gap-8 justify-content-center">
+								<button class="btn btn-icon btn-sm btn-text" type="button" command="--play" aria-controls="carousel-fade-island" aria-pressed="false" aria-label="Play the slides"><i class="bi bi-play-fill" aria-hidden="true"></i><i class="bi bi-pause-fill" aria-hidden="true"></i></button>
+								<div class="carousel-indicators"></div>
+							</div>
+						</div>
 					</div>
 				</section>
 
