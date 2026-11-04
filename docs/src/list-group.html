@@ -44,6 +44,18 @@
 		</div>
 	</div>
 
+	<h3>Headings</h3>
+	<p><code>list-group-header</code> on an item that is not one: a small heading over the items that follow it, in capitals, on the page's own background.</p>
+	<div class="docs-example docs-example-stack" id="list-group-headers">
+		<ul class="list-group">
+			<li class="list-group-header list-group-item">Today</li>
+			<li class="list-group-item">Ang Thong Marine Park</li>
+			<li class="list-group-item">Night market and street food</li>
+			<li class="list-group-header list-group-item">Tomorrow</li>
+			<li class="list-group-item">Koh Tao and Koh Nang Yuan</li>
+		</ul>
+	</div>
+
 	<h3>Side by side</h3>
 	<p><code>list-group-horizontal</code> sets the items in a row; with a width prefix, from that width of the region on: <code>md:list-group-horizontal</code>.</p>
 	<div class="docs-example docs-example-stack" id="list-group-horizontal">
@@ -62,6 +74,19 @@
 			<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" checked>angthong.example</label>
 			<label class="list-group-item hstack gap-8"><input class="check" type="checkbox">kohtao.example</label>
 		</div>
+	</div>
+
+	<h3 id="list-group-filter">Filtered by a search</h3>
+	<p>A search field with <code>data-filter</code> naming a region hides, as the person types, the region's items whose words lack one of the typed words - case and accents aside: list items, items with a <code>data-value</code>, <a href="media.html">media tiles</a>, <a href="tree.html">tree items</a> and table rows; an item's <code>data-search</code> stands in for its text. A tree keeps the ancestors of a match and opens their groups. An element with <code>data-filter-empty</code> in the region shows when nothing matches. The count is said once the typing pauses, in the page's count text <code>found</code>; <kbd>Esc</kbd> in the field clears it. A hidden item carries <code>data-filtered</code>.</p>
+	<div class="docs-example docs-example-stack" id="list-group-search">
+		<input class="form-control" type="search" data-filter="list-group-search-list" aria-label="Find an excursion" placeholder="Find an excursion" autocomplete="off">
+		<ul class="list-group" id="list-group-search-list">
+			<li class="list-group-item">Ang Thong Marine Park</li>
+			<li class="list-group-item">Koh Tao and Koh Nang Yuan</li>
+			<li class="list-group-item">The Five Islands by kayak</li>
+			<li class="list-group-item" data-search="elephant sanctuary chang">Elephant sanctuary</li>
+			<li class="list-group-item text-muted" data-filter-empty hidden>No excursion has these words.</li>
+		</ul>
 	</div>
 
 	<h3 id="list-group-reorder">Reordering</h3>

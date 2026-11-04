@@ -2124,12 +2124,11 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `sticky-bottom` | - | review | position-sticky with bottom-0 |
 | `tab-content` | - | remove | panels are siblings with role="tabpanel", hidden when not selected |
 | `tab-pane` | - | remove | panels are siblings with role="tabpanel", hidden when not selected |
-| `table-active` | - | review | aria-selected or aria-current on the row |
 | `table-dark` | - | review | row tones are danger, warning and secondary |
 | `table-info` | - | review | row tones are danger, warning and secondary |
 | `table-light` | - | review | row tones are danger, warning and secondary |
 | `table-primary` | - | review | row tones are danger, warning and secondary |
-| `table-responsive` | - | review | the card's body holds the table; columns hide below md: |
+| `table-responsive` | `table-scroll` | rename | the wrapper scrolls sideways, table-scroll-first holds the first column; or columns hide below md: |
 | `table-success` | - | review | row tones are danger, warning and secondary |
 | `text-bg-danger` | `badge-danger` | review | on a badge; elsewhere bg-danger with the tone's -contrast text in the module's CSS |
 | `text-bg-dark` | `badge-inverse` | review | on a badge: the text color as its background, light in the dark theme |
@@ -2750,7 +2749,7 @@ A toggle carries `aria-pressed`. While its action runs, `REDZ.ui.busy(button, pr
 
 ### A wait before it works again
 
-`data-cooldown="N"` makes a button wait N seconds: it is `aria-disabled` - it keeps the focus and ignores clicks - and shows the seconds left after its words, in the page's text `cooldown`; then it wakes and the attribute goes. Setting the attribute again starts the wait again; a page reloaded during a wait renders the seconds left. The count is drawn, not read out every second: say the wait in words once, when it starts - "A new code is on its way; ask again in a minute".
+`data-cooldown="N"` makes a button wait N seconds: it is `aria-disabled` - it keeps the focus and ignores clicks - and shows the seconds left after its words, in the page's text `cooldown`; then it wakes and the attribute goes. Setting the attribute again starts the wait again; a page reloaded during a wait renders the seconds left. The count is drawn, not read out every second: say the wait in words once, when it starts - "A new code is on its way; ask again in a minute". A cooldown set while the button is [busy](busy.md#busy-button) keeps it disabled after the wait, until its count ends.
 
 ```html
 <button class="btn" type="button" data-cooldown="20" data-docs-run="cooldown"><i class="bi bi-arrow-clockwise" aria-hidden="true"></i>Send the code again</button>
@@ -3841,6 +3840,53 @@ From [`css/components/pin.css`](https://github.com/redz-tech/REDZ.UI/blob/main/c
 
 It reads the theme's `--redz-space-24`, `--redz-radius-8`, `--redz-focus`, `--redz-space-12`, `--redz-border-strong`, `--redz-primary`, `--redz-danger`, `--redz-space-8`, `--redz-fs-24`.
 
+# Repeaters
+
+A list of the same few fields a person adds to and takes from: phone numbers, the lines of an invoice, the stops of a route. The page posts every row; the library adds and removes them.
+
+## Examples
+
+The list carries `data-repeat` and holds a `<template>` of one row. A button with `command="--add"` naming the list in `aria-controls` adds a row made from it - every `{i}` in the row's attributes, its names, ids and `for`, turned into a running index that never repeats - and puts the focus in its first field. A row's `command="--remove"` button takes the row away; the focus goes to the next row's first field, else the previous row's, else to Add. `data-min` and `data-max` hold the count: a button that would pass them is `aria-disabled`. Like `--toggle`, the buttons take no `commandfor`.
+
+```html
+<fieldset class="vstack gap-8">
+	<legend class="form-label">Phone numbers</legend>
+	<ul class="list-unstyled vstack gap-8" id="repeat-phones-list" data-repeat data-min="1" data-max="4">
+		<li class="hstack gap-8">
+			<label class="visually-hidden" for="repeat-phones-0">Phone</label>
+			<input class="form-control" id="repeat-phones-0" name="phones[0]" type="tel" value="+66 81 234 5678" autocomplete="off">
+			<button class="btn btn-icon btn-text" type="button" command="--remove" aria-label="Remove this phone"><i class="bi bi-trash" aria-hidden="true"></i></button>
+		</li>
+		<template>
+			<li class="hstack gap-8">
+				<label class="visually-hidden" for="repeat-phones-{i}">Another phone</label>
+				<input class="form-control" id="repeat-phones-{i}" name="phones[{i}]" type="tel" autocomplete="off">
+				<button class="btn btn-icon btn-text" type="button" command="--remove" aria-label="Remove this phone"><i class="bi bi-trash" aria-hidden="true"></i></button>
+			</li>
+		</template>
+	</ul>
+	<div><button class="btn btn-sm" type="button" command="--add" aria-controls="repeat-phones-list"><i class="bi bi-plus-lg" aria-hidden="true"></i>Add a phone</button></div>
+</fieldset>
+```
+
+### The page's say
+
+`redz:add` and `redz:remove` on the list come first, with the row in `detail.row` - the new one before it goes in, or the one about to go. A page that cancels one keeps the list as it is: it asks before a row with saved work goes, or fills the new row's fields first. Rows that carry a `data-value` also move with [`data-reorder`](list-group.md#list-group-reorder).
+
+```js
+document.getElementById('repeat-phones-list').addEventListener('redz:remove', (event) => {
+	if (event.detail.row.querySelector('input').value !== '' && !window.confirm('Remove this phone?')) {
+		event.preventDefault();
+	}
+});
+```
+
+## Keyboard and accessibility
+
+- Add puts the focus in the new row's field and a removal puts it on the next row, so the person goes on typing without looking for it.
+- Each row's field has its own label, hidden where the list's legend says enough; each remove button is named after what it takes away.
+- A button that cannot act stays in the Tab order as `aria-disabled`, its clicks swallowed, so a screen reader still finds it and hears why.
+
 # Editor
 
 A text editor for REDZ.UI markup, a package of the release linked apart: prose edited in place, the library's components as blocks, and a frame of its own where no script of the text ever runs.
@@ -4266,6 +4312,19 @@ A region without `hidden` starts open, its button `aria-expanded="true"`.
 </div>
 ```
 
+### A chevron and words that follow
+
+Inside a button with `aria-expanded`, an icon `toggle-chevron` turns over while the region is open, `toggle-open` shows only then and `toggle-closed` only while it is closed - by CSS alone, from the state the button already says.
+
+```html
+<div class="hstack gap-8">
+	<button class="btn btn-sm" type="button" command="--toggle" aria-controls="collapse-chevron-text" aria-expanded="false"><span class="toggle-closed">Show the route</span><span class="toggle-open">Hide the route</span><i class="bi bi-chevron-down toggle-chevron" aria-hidden="true"></i></button>
+</div>
+<div id="collapse-chevron-text" hidden="until-found">
+	<p class="text-muted">The pier at 08:30, the emerald lake at 11:00, lunch on Koh Mae Ko, back by 17:00.</p>
+</div>
+```
+
 ### A details row in a table
 
 A row under a row opens and closes the same way: the region is a `<tr>` with one cell across the table. A table's row cannot be hidden "until found", so it starts as plain `hidden` and closes so again; find in page does not open it.
@@ -4356,6 +4415,20 @@ A column of items in one frame - plain rows, or links and buttons to choose from
 </div>
 ```
 
+### Headings
+
+`list-group-header` on an item that is not one: a small heading over the items that follow it, in capitals, on the page's own background.
+
+```html
+<ul class="list-group">
+	<li class="list-group-header list-group-item">Today</li>
+	<li class="list-group-item">Ang Thong Marine Park</li>
+	<li class="list-group-item">Night market and street food</li>
+	<li class="list-group-header list-group-item">Tomorrow</li>
+	<li class="list-group-item">Koh Tao and Koh Nang Yuan</li>
+</ul>
+```
+
 ### Side by side
 
 `list-group-horizontal` sets the items in a row; with a width prefix, from that width of the region on: `md:list-group-horizontal`.
@@ -4377,6 +4450,21 @@ A column of items in one frame - plain rows, or links and buttons to choose from
 	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" checked>angthong.example</label>
 	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox">kohtao.example</label>
 </div>
+```
+
+### Filtered by a search
+
+A search field with `data-filter` naming a region hides, as the person types, the region's items whose words lack one of the typed words - case and accents aside: list items, items with a `data-value`, [media tiles](media.md), [tree items](tree.md) and table rows; an item's `data-search` stands in for its text. A tree keeps the ancestors of a match and opens their groups. An element with `data-filter-empty` in the region shows when nothing matches. The count is said once the typing pauses, in the page's count text `found`; `Esc` in the field clears it. A hidden item carries `data-filtered`.
+
+```html
+<input class="form-control" type="search" data-filter="list-group-search-list" aria-label="Find an excursion" placeholder="Find an excursion" autocomplete="off">
+<ul class="list-group" id="list-group-search-list">
+	<li class="list-group-item">Ang Thong Marine Park</li>
+	<li class="list-group-item">Koh Tao and Koh Nang Yuan</li>
+	<li class="list-group-item">The Five Islands by kayak</li>
+	<li class="list-group-item" data-search="elephant sanctuary chang">Elephant sanctuary</li>
+	<li class="list-group-item text-muted" data-filter-empty hidden>No excursion has these words.</li>
+</ul>
 ```
 
 ### Reordering
@@ -4448,7 +4536,7 @@ document.addEventListener('redz:move', (event) => {
 
 From [`css/components/list-group.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/list-group.css). It declares `--redz-list-group-row`, `--redz-list-group-column` on its root, never on rows or items.
 
-It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-space-12`, `--redz-space-16`, `--redz-text`, `--redz-bg-hover`, `--redz-primary-subtle`, `--redz-primary`, `--redz-text-faint`, `--redz-text-muted`.
+It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-space-12`, `--redz-space-16`, `--redz-text`, `--redz-space-8`, `--redz-bg-page`, `--redz-text-muted`, `--redz-fs-12`, `--redz-bg-hover`, `--redz-primary-subtle`, `--redz-primary`, `--redz-text-faint`.
 
 ## From Bootstrap 5.3
 
@@ -4565,6 +4653,39 @@ A tree with `data-reorder` moves its items as a list does - see [reordering](lis
 </div>
 ```
 
+### The current page, actions and checks
+
+A row whose link has `aria-current` - the page open now - is tinted and its link bold. `tree-actions` at the end of a row holds its buttons: quiet until the row is hovered or holds the focus on a pointer screen, always shown on a touch screen. A `check` in a row posts by its own name, for a batch over the chosen pages. A search with [`data-filter`](list-group.md#list-group-filter) keeps the parents of a match.
+
+```html
+<input class="form-control" type="search" data-filter="tree-current-list" aria-label="Find a page" placeholder="Find a page" autocomplete="off">
+<ul class="tree" id="tree-current-list" aria-label="Pages to publish">
+	<li class="tree-item">
+		<div class="tree-row">
+			<input class="check" type="checkbox" name="pages[]" value="excursions" aria-label="Choose: Excursions">
+			<a href="#tree-current">Excursions</a>
+			<span class="tree-actions"><button class="btn btn-xs btn-icon btn-text" type="button" aria-label="Add a page under Excursions"><i class="bi bi-plus-lg" aria-hidden="true"></i></button></span>
+		</div>
+		<ul class="tree-group">
+			<li class="tree-item">
+				<div class="tree-row">
+					<input class="check" type="checkbox" name="pages[]" value="ang-thong" aria-label="Choose: Ang Thong by speedboat" checked>
+					<a href="#tree-current" aria-current="page">Ang Thong by speedboat</a>
+					<span class="tree-actions"><button class="btn btn-xs btn-icon btn-text" type="button" aria-label="Add a page under Ang Thong by speedboat"><i class="bi bi-plus-lg" aria-hidden="true"></i></button></span>
+				</div>
+			</li>
+			<li class="tree-item">
+				<div class="tree-row">
+					<input class="check" type="checkbox" name="pages[]" value="night-market" aria-label="Choose: Night market and street food">
+					<a href="#tree-current">Night market and street food</a>
+					<span class="tree-actions"><button class="btn btn-xs btn-icon btn-text" type="button" aria-label="Add a page under Night market and street food"><i class="bi bi-plus-lg" aria-hidden="true"></i></button></span>
+				</div>
+			</li>
+		</ul>
+	</li>
+</ul>
+```
+
 ## Keyboard and accessibility
 
 - The tree is a list of lists with buttons and links - the disclosure pattern: Tab goes from one control to the next, `Enter` or `Space` opens or closes a group, and the toggle says it in `aria-expanded`. It is not the ARIA tree widget, which the APG itself keeps for choosing, not for links.
@@ -4575,7 +4696,7 @@ A tree with `data-reorder` moves its items as a list does - see [reordering](lis
 
 From [`css/components/tree.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/tree.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-12`, `--redz-space-8`, `--redz-border`, `--redz-space-4`, `--redz-control-height`, `--redz-control-height-sm`, `--redz-motion`, `--redz-ease`.
+It reads the theme's `--redz-space-12`, `--redz-space-8`, `--redz-border`, `--redz-space-4`, `--redz-control-height`, `--redz-control-height-sm`, `--redz-radius-6`, `--redz-primary-subtle`, `--redz-text`, `--redz-motion`, `--redz-ease`.
 
 # Message threads
 
@@ -4988,6 +5109,87 @@ A header that sorts holds a `button class="table-sort"`, and the header's `aria-
 </table>
 ```
 
+Where the server sorts, the header holds a link instead - `a class="table-sort"` to the same list in the other order - drawn the same way.
+
+```html
+<table class="table" aria-label="Owners, sorted by the server">
+	<thead><tr><th scope="col"><a class="table-sort" href="#table-sort-links">Name</a></th><th scope="col" class="text-end" aria-sort="descending"><a class="table-sort" href="#table-sort-links">Paid</a></th></tr></thead>
+	<tbody>
+		<tr><td>Ananda Resort</td><td class="text-end tabular-nums">48,000</td></tr>
+		<tr><td>Coral Divers</td><td class="text-end tabular-nums">21,300</td></tr>
+	</tbody>
+</table>
+```
+
+### Groups and subtotals
+
+A row `table-group` heads the rows under it: one `th scope="rowgroup"` across the table, a band that does not stick, with an end slot `table-group-end` for its count or sum. A row `table-subtotal` closes a group in bold under a line.
+
+```html
+<table class="table" aria-label="Bookings by boat">
+	<thead><tr><th scope="col">Guest</th><th scope="col" class="text-end">Seats</th><th scope="col" class="text-end">Paid</th></tr></thead>
+	<tbody>
+		<tr class="table-group"><th scope="rowgroup" colspan="3">Sea Breeze<span class="table-group-end">2 bookings</span></th></tr>
+		<tr><td>Anong Srisuk</td><td class="text-end tabular-nums">2</td><td class="text-end tabular-nums">5,000</td></tr>
+		<tr><td>Boris Lebedev</td><td class="text-end tabular-nums">3</td><td class="text-end tabular-nums">7,500</td></tr>
+		<tr class="table-subtotal"><th scope="row">Sea Breeze</th><td class="text-end tabular-nums">5</td><td class="text-end tabular-nums">12,500</td></tr>
+		<tr class="table-group"><th scope="rowgroup" colspan="3">Coral Star<span class="table-group-end">1 booking</span></th></tr>
+		<tr><td>Chen Wei</td><td class="text-end tabular-nums">4</td><td class="text-end tabular-nums">10,000</td></tr>
+		<tr class="table-subtotal"><th scope="row">Coral Star</th><td class="text-end tabular-nums">4</td><td class="text-end tabular-nums">10,000</td></tr>
+	</tbody>
+</table>
+```
+
+The head of a table sticks under the app's header as the page scrolls; inside a region that scrolls on its own - a `dialog-body`, a `card-scroll` card's body - it sticks to the region's top.
+
+### Wider than its card
+
+A table with more columns than its card has room for goes in a `table-scroll`: it scrolls sideways inside the card, and `table-scroll-first` holds its first column in place. Where the browser lets an element scroll on one axis alone - Chrome 156 on - the head still sticks to the page as it scrolls down; elsewhere the head scrolls away with the page and the rest works the same. The wrapper is a named region with `tabindex="0"`, so a keyboard can scroll it.
+
+```html
+<section class="card" aria-labelledby="table-wide-title">
+	<div class="card-header"><h2 class="fs-14" id="table-wide-title">Seats by day</h2></div>
+	<div class="table-scroll table-scroll-first" role="region" aria-labelledby="table-wide-title" tabindex="0">
+		<table class="table">
+			<thead><tr><th scope="col">Boat</th><th scope="col" class="text-end">Mon</th><th scope="col" class="text-end">Tue</th><th scope="col" class="text-end">Wed</th><th scope="col" class="text-end">Thu</th><th scope="col" class="text-end">Fri</th><th scope="col" class="text-end">Sat</th><th scope="col" class="text-end">Sun</th><th scope="col" class="text-end">Week</th><th scope="col" class="text-end">Last week</th><th scope="col" class="text-end">Change</th></tr></thead>
+			<tbody>
+				<tr><th scope="row">Sea Breeze</th><td class="text-end tabular-nums">42</td><td class="text-end tabular-nums">38</td><td class="text-end tabular-nums">40</td><td class="text-end tabular-nums">44</td><td class="text-end tabular-nums">46</td><td class="text-end tabular-nums">48</td><td class="text-end tabular-nums">28</td><td class="text-end tabular-nums">286</td><td class="text-end tabular-nums">270</td><td class="text-end tabular-nums">+16</td></tr>
+				<tr><th scope="row">Coral Star</th><td class="text-end tabular-nums">30</td><td class="text-end tabular-nums">28</td><td class="text-end tabular-nums">27</td><td class="text-end tabular-nums">31</td><td class="text-end tabular-nums">33</td><td class="text-end tabular-nums">35</td><td class="text-end tabular-nums">17</td><td class="text-end tabular-nums">201</td><td class="text-end tabular-nums">214</td><td class="text-end tabular-nums">-13</td></tr>
+				<tr><th scope="row">Blue Lagoon</th><td class="text-end tabular-nums">22</td><td class="text-end tabular-nums">20</td><td class="text-end tabular-nums">24</td><td class="text-end tabular-nums">23</td><td class="text-end tabular-nums">25</td><td class="text-end tabular-nums">30</td><td class="text-end tabular-nums">20</td><td class="text-end tabular-nums">164</td><td class="text-end tabular-nums">150</td><td class="text-end tabular-nums">+14</td></tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+```
+
+### The current, the chosen and the running row
+
+A row with `aria-current` - the record open beside the list - carries the accent's mark at its start; a row with `aria-selected="true"`, chosen in a grid of rows, is tinted; `table-active`, Bootstrap's name, marks the row that is running now.
+
+```html
+<table class="table" aria-label="Jobs">
+	<tbody>
+		<tr aria-current="true"><td>Rebuild the Thai pages</td><td class="text-muted">Open on the right</td></tr>
+		<tr aria-selected="true"><td>Import the price list</td><td class="text-muted">Chosen</td></tr>
+		<tr class="table-active"><td>Send the morning letters</td><td class="text-muted">Running now</td></tr>
+		<tr><td>Clean the old photos</td><td class="text-muted">Waiting</td></tr>
+	</tbody>
+</table>
+```
+
+### A whole row as a link
+
+The row's title link with Bootstrap's `stretched-link` makes the whole row a link: a click anywhere on it but on its own controls and their cells (`table-check`, `table-actions`) follows the title - with `Ctrl`, `Cmd` or the middle button into a new tab - unless the person was selecting its text. The title stays the one link a keyboard and a screen reader meet. The library does it by script, as Safari gives a positioned row no box for the link's cover.
+
+```html
+<table class="table" aria-label="Guides">
+	<tbody>
+		<tr><td><a class="table-title stretched-link" href="#table-links">Anong Srisuk</a><div class="table-sub">Thai, English</div></td><td class="tabular-nums">12 tours</td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Message: Anong Srisuk"><i class="bi bi-chat" aria-hidden="true"></i></button></td></tr>
+		<tr><td><a class="table-title stretched-link" href="#table-links">Hiroshi Sato</a><div class="table-sub">Japanese, English</div></td><td class="tabular-nums">7 tours</td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Message: Hiroshi Sato"><i class="bi bi-chat" aria-hidden="true"></i></button></td></tr>
+	</tbody>
+</table>
+```
+
 ## States
 
 A row's tone marks what needs attention: `table-danger` failed, `table-warning` needs a look, `table-secondary` is out of use. On a pointer screen the row's actions show on hover and on focus; on a touch screen they always show.
@@ -5004,20 +5206,73 @@ A row's tone marks what needs attention: `table-danger` failed, `table-warning` 
 
 From [`css/components/table.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css). It declares `--redz-row-tint`, `--redz-row-mark` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-8`, `--redz-space-12`, `--redz-border`, `--redz-bg`, `--redz-text-muted`, `--redz-fs-12`, `--redz-row-pad`, `--redz-radius-12`, `--redz-space-16`, `--redz-text`, `--redz-border-strong`, `--redz-bg-hover`, `--redz-font-mono`, `--redz-space-4`, `--redz-primary`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-bg-page`.
+It reads the theme's `--redz-space-8`, `--redz-space-12`, `--redz-border`, `--redz-bg`, `--redz-text-muted`, `--redz-fs-12`, `--redz-row-pad`, `--redz-text`, `--redz-bg-page`, `--redz-border-strong`, `--redz-bg-hover`, `--redz-radius-12`, `--redz-space-16`, `--redz-font-mono`, `--redz-space-4`, `--redz-primary`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-primary-subtle`.
 
 ## From Bootstrap 5.3
 
 | Bootstrap 5.3 | REDZ.UI | Change | Note |
 | --- | --- | --- | --- |
 | `caption-top` | - | missing |  |
-| `table-active` | - | review | aria-selected or aria-current on the row |
 | `table-dark` | - | review | row tones are danger, warning and secondary |
 | `table-info` | - | review | row tones are danger, warning and secondary |
 | `table-light` | - | review | row tones are danger, warning and secondary |
 | `table-primary` | - | review | row tones are danger, warning and secondary |
-| `table-responsive` | - | review | the card's body holds the table; columns hide below md: |
+| `table-responsive` | `table-scroll` | rename | the wrapper scrolls sideways, table-scroll-first holds the first column; or columns hide below md: |
 | `table-success` | - | review | row tones are danger, warning and secondary |
+
+# Summaries and totals
+
+The facts of one record in pairs - a label and its value - and the sums at the foot of an invoice or a booking.
+
+## Examples
+
+`summary` on a `<dl>`: the terms in a column as wide as the longest, the values beside them; in a region narrower than 30rem each value goes under its term.
+
+```html
+<section class="card" aria-labelledby="summary-booking-title">
+	<div class="card-header"><h2 class="fs-14" id="summary-booking-title">Booking 24-0187</h2></div>
+	<div class="card-body">
+		<dl class="summary">
+			<dt>Excursion</dt><dd>Ang Thong: marine park by speedboat</dd>
+			<dt>Date</dt><dd>14 December 2026, 08:30</dd>
+			<dt>Guests</dt><dd>2 adults, 1 child</dd>
+			<dt>Pickup</dt><dd>Lamai beach, the hotel's lobby</dd>
+		</dl>
+	</div>
+</section>
+```
+
+### Totals
+
+`totals` on a `<dl>` of rows - a `<div>` each, its label and its value - the numbers at the end in `tabular-nums`; `totals-grand` on the last row draws it larger, under a line.
+
+```html
+<dl class="totals">
+	<div><dt>2 adults × 2,500 THB</dt><dd>5,000 THB</dd></div>
+	<div><dt>1 child × 1,500 THB</dt><dd>1,500 THB</dd></div>
+	<div><dt>Discount, early booking</dt><dd>-650 THB</dd></div>
+	<div class="totals-grand"><dt>To pay</dt><dd>5,850 THB</dd></div>
+</dl>
+```
+
+### In a confirmation
+
+`REDZ.ui.confirm({rows: [{label, value}]})` shows the same pairs in its dialog - what a payment is, what a move changes - after its note and before its lists; every word is text, never HTML.
+
+```html
+<button class="btn btn-primary" type="button" data-docs-run="confirm-rows">Pay 5,850 THB</button>
+```
+
+## Accessibility
+
+- A description list tells a screen reader which value belongs to which term, so no heading is needed for each pair.
+- A sum written with its sign - "-650 THB" - says a discount without color.
+
+## Tokens
+
+From [`css/components/summary.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/summary.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-space-8`, `--redz-space-16`, `--redz-text-muted`, `--redz-text`, `--redz-space-4`, `--redz-border`, `--redz-fs-16`.
 
 # Badges
 
@@ -5697,6 +5952,8 @@ Inside an element with `data-tooltips` - `<html>` for the whole page - an elemen
 <span class="hstack gap-8"><span class="dot dot-warning" title="2 translations are outdated"></span>Ang Thong</span>
 ```
 
+A touch screen has no hover: a tap on a control that cannot run - `aria-disabled="true"` with a title, as Publish above - shows its title for three seconds and says it politely, so the person learns why without a mouse.
+
 ## Keyboard and accessibility
 
 - The button is named after its question; the tooltip's words answer it. Nothing that must be read to use the screen lives only in a tooltip.
@@ -5997,6 +6254,8 @@ The button keeps its focus, ignores clicks until the promise settles and shows a
 <button class="btn btn-primary" type="button" data-busy="Signing in…" data-docs-run="busy-button"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Sign in for 2 seconds</button>
 ```
 
+A button that starts a [cooldown](btn.md#btn-cooldown) while it waits - "Send the code again" with `data-cooldown` set as the code goes - stays disabled until the count ends: the cooldown holds `aria-disabled` while it counts, `busy()` leaves it alone, and the state from before both comes back when the last of them ends.
+
 ## States
 
 What `busy()` sets, written by hand - the overlay appears 400 ms after the page draws it.
@@ -6044,6 +6303,48 @@ At rest the bar says everything is saved; with unsaved changes it turns `save-ba
 From [`css/components/save-bar.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/save-bar.css), which declares no custom property of its own.
 
 It reads the theme's `--redz-space-12`, `--redz-space-8`, `--redz-space-16`, `--redz-border`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-2`, `--redz-text-muted`, `--redz-fs-12`, `--redz-warning`, `--redz-warning-subtle`.
+
+# Status lines
+
+A line beside a form's button that says what its save is doing: saving, saved, or why it was refused. It stays where the person looks; a message that comes and goes over the page is a [toast](toast.md).
+
+## Examples
+
+An element `form-status` beside the button, and `REDZ.ui.status(line, promise)` as the save starts. Past 400 ms the line says "Saving…" with a spinner; when the promise is kept it says "Saved" with a check and fades after three seconds; when it is refused it says the refusal's own message with a danger icon, and stays. The words come from the page's texts `status.saving` and `status.saved`.
+
+```html
+<div class="hstack flex-wrap gap-12">
+	<button class="btn btn-primary" type="button" data-docs-run="status-save"><i class="bi bi-floppy" aria-hidden="true"></i>Save</button>
+	<button class="btn" type="button" data-docs-run="status-refuse">Save a taken name</button>
+	<div class="form-status" id="status-save-line"></div>
+</div>
+```
+
+```js
+const line = document.getElementById('status-save-line');
+REDZ.ui.status(line, fetch('/excursions/12', {method: 'PUT', body}).then((answer) => {
+	if (!answer.ok) {
+		throw new Error('The name is taken. Pick another.');
+	}
+}));
+```
+
+### Words of the page
+
+`REDZ.ui.status(line, {tone, text})` says the page's own words at once with the tone's icon: `success` and `info` fade, `warning` and `danger` stay. A later call takes the line over from an earlier one.
+
+```html
+<div class="hstack flex-wrap gap-12">
+	<button class="btn" type="button" data-docs-run="status-words">Publish</button>
+	<div class="form-status" id="status-words-line"></div>
+</div>
+```
+
+## Accessibility
+
+- The line holds a polite status from the page's load, so a screen reader says each message once - "Saving…" only when the save takes longer than 400 ms.
+- A refusal stays until the next save: its words say what to change, not only that something failed.
+- The icon carries the tone; the words carry the meaning, in the page's text colors.
 
 # Selection bar
 

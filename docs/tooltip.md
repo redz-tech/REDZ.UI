@@ -25,6 +25,8 @@ Inside an element with `data-tooltips` - `<html>` for the whole page - an elemen
 <span class="hstack gap-8"><span class="dot dot-warning" title="2 translations are outdated"></span>Ang Thong</span>
 ```
 
+A touch screen has no hover: a tap on a control that cannot run - `aria-disabled="true"` with a title, as Publish above - shows its title for three seconds and says it politely, so the person learns why without a mouse.
+
 ## Keyboard and accessibility
 
 - The button is named after its question; the tooltip's words answer it. Nothing that must be read to use the screen lives only in a tooltip.

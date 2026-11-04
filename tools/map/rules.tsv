@@ -190,8 +190,9 @@ table-(primary|success|info|light|dark)		review	table	row tones are danger, warn
 table-bordered	table-bordered	same	table	in a card the card's border is the table's frame
 caption-top		missing	table
 table-sm		review	table	data-density="compact" on the table, its card or <html>
-table-active		review	table	aria-selected or aria-current on the row
-table-responsive(-.+)?		review	table	the card's body holds the table; columns hide below md:
+table-active	table-active	same	table	the row that runs now; aria-current marks the open record, aria-selected="true" a chosen one
+table-responsive	table-scroll	rename	table	the wrapper scrolls sideways, table-scroll-first holds the first column; or columns hide below md:
+table-responsive-.+	table-scroll	review	table	it scrolls sideways at every width; hide columns below md: instead where they only help on a wide screen
 toast-header		review	toast	REDZ.ui.toast builds the toast from its title, text and tone
 tooltip-inner|tooltip-arrow|bs-tooltip-.+		remove	tooltip	the tooltip is one element
 (popover|popover-header|popover-body)	$1	same	popover	the panel has popover, right after its button; with a title and a link in it, role="dialog"

@@ -468,12 +468,11 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `sticky-bottom` | - | review | position-sticky with bottom-0 |
 | `tab-content` | - | remove | panels are siblings with role="tabpanel", hidden when not selected |
 | `tab-pane` | - | remove | panels are siblings with role="tabpanel", hidden when not selected |
-| `table-active` | - | review | aria-selected or aria-current on the row |
 | `table-dark` | - | review | row tones are danger, warning and secondary |
 | `table-info` | - | review | row tones are danger, warning and secondary |
 | `table-light` | - | review | row tones are danger, warning and secondary |
 | `table-primary` | - | review | row tones are danger, warning and secondary |
-| `table-responsive` | - | review | the card's body holds the table; columns hide below md: |
+| `table-responsive` | `table-scroll` | rename | the wrapper scrolls sideways, table-scroll-first holds the first column; or columns hide below md: |
 | `table-success` | - | review | row tones are danger, warning and secondary |
 | `text-bg-danger` | `badge-danger` | review | on a badge; elsewhere bg-danger with the tone's -contrast text in the module's CSS |
 | `text-bg-dark` | `badge-inverse` | review | on a badge: the text color as its background, light in the dark theme |

@@ -32,6 +32,19 @@ A region without `hidden` starts open, its button `aria-expanded="true"`.
 </div>
 ```
 
+### A chevron and words that follow
+
+Inside a button with `aria-expanded`, an icon `toggle-chevron` turns over while the region is open, `toggle-open` shows only then and `toggle-closed` only while it is closed - by CSS alone, from the state the button already says.
+
+```html
+<div class="hstack gap-8">
+	<button class="btn btn-sm" type="button" command="--toggle" aria-controls="collapse-chevron-text" aria-expanded="false"><span class="toggle-closed">Show the route</span><span class="toggle-open">Hide the route</span><i class="bi bi-chevron-down toggle-chevron" aria-hidden="true"></i></button>
+</div>
+<div id="collapse-chevron-text" hidden="until-found">
+	<p class="text-muted">The pier at 08:30, the emerald lake at 11:00, lunch on Koh Mae Ko, back by 17:00.</p>
+</div>
+```
+
 ### A details row in a table
 
 A row under a row opens and closes the same way: the region is a `<tr>` with one cell across the table. A table's row cannot be hidden "until found", so it starts as plain `hidden` and closes so again; find in page does not open it.

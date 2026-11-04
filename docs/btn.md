@@ -95,7 +95,7 @@ A toggle carries `aria-pressed`. While its action runs, `REDZ.ui.busy(button, pr
 
 ### A wait before it works again
 
-`data-cooldown="N"` makes a button wait N seconds: it is `aria-disabled` - it keeps the focus and ignores clicks - and shows the seconds left after its words, in the page's text `cooldown`; then it wakes and the attribute goes. Setting the attribute again starts the wait again; a page reloaded during a wait renders the seconds left. The count is drawn, not read out every second: say the wait in words once, when it starts - "A new code is on its way; ask again in a minute".
+`data-cooldown="N"` makes a button wait N seconds: it is `aria-disabled` - it keeps the focus and ignores clicks - and shows the seconds left after its words, in the page's text `cooldown`; then it wakes and the attribute goes. Setting the attribute again starts the wait again; a page reloaded during a wait renders the seconds left. The count is drawn, not read out every second: say the wait in words once, when it starts - "A new code is on its way; ask again in a minute". A cooldown set while the button is [busy](busy.md#busy-button) keeps it disabled after the wait, until its count ends.
 
 ```html
 <button class="btn" type="button" data-cooldown="20" data-docs-run="cooldown"><i class="bi bi-arrow-clockwise" aria-hidden="true"></i>Send the code again</button>

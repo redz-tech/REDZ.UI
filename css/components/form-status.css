@@ -1,0 +1,54 @@
+@layer components {
+	.form-status {
+		display: inline-flex;
+		align-items: center;
+		min-block-size: 1lh;
+		color: var(--redz-text-muted);
+		font-size: var(--redz-fs-14);
+	}
+
+	.form-status > [role="status"] {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--redz-space-4);
+	}
+
+	.form-status :is(.bi, .spinner-border) {
+		flex: none;
+	}
+
+	.form-status .spinner-border {
+		inline-size: 0.875em;
+		block-size: 0.875em;
+	}
+
+	.form-status[data-tone="success"] .bi {
+		color: var(--redz-success);
+	}
+
+	.form-status[data-tone="info"] .bi {
+		color: var(--redz-info);
+	}
+
+	.form-status[data-tone="warning"] .bi {
+		color: var(--redz-warning);
+	}
+
+	.form-status[data-tone="danger"] {
+		color: var(--redz-text);
+	}
+
+	.form-status[data-tone="danger"] .bi {
+		color: var(--redz-danger);
+	}
+
+	.form-status[data-fading] {
+		opacity: 0;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.form-status {
+			transition: opacity 0.3s var(--redz-ease);
+		}
+	}
+}

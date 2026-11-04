@@ -17,7 +17,7 @@
 	<link rel="alternate" type="text/markdown" href="all.md">
 	<script src="site.js"></script>
 	<script type="module" src="../dist/redz-ui.min.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","slide":"{position} of {count}","pin.delete":"Delete","pin.enter":"Enter","cooldown":"{seconds} s","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}","file.count":"{name}: up to {count} files","editor.toolbar":"Formatting","editor.body":"Text","editor.source":"HTML source","editor.format":"Format","editor.format.paragraph":"Paragraph","editor.format.heading2":"Heading 2","editor.format.heading3":"Heading 3","editor.format.heading4":"Heading 4","editor.format.quote":"Quote","editor.format.code":"Code","editor.bold":"Bold","editor.italic":"Italic","editor.underline":"Underline","editor.link":"Link","editor.link.href":"Address","editor.link.words":"Words","editor.link.blank":"Open in a new tab","editor.link.nofollow":"Ask search engines not to follow it","editor.color":"Color","editor.color.primary":"Accent","editor.color.secondary":"Secondary","editor.color.success":"Success","editor.color.danger":"Danger","editor.color.warning":"Warning","editor.color.info":"Info","editor.color.none":"No color","editor.bullets":"Bulleted list","editor.numbers":"Numbered list","editor.align":"Align","editor.align.start":"Start","editor.align.center":"Center","editor.align.end":"End","editor.image":"Image","editor.embed":"Video","editor.embed.url":"YouTube or Vimeo address","editor.embed.title":"Title","editor.blocks":"Blocks","editor.group.content":"Content","editor.group.inline":"In a line","editor.group.layout":"Layout","editor.block":"Block","editor.block.up":"Move up","editor.block.down":"Move down","editor.block.edit":"Edit HTML","editor.block.columns":"Columns","editor.block.preview":"Preview","editor.block.delete":"Delete","editor.columns.count":"Columns","editor.columns.from":"From the width","editor.columns.always":"Always","editor.columns.gap":"Gap","editor.clear":"Clear formatting","editor.undo":"Undo","editor.redo":"Redo","editor.block.alert-info":"Note","editor.block.alert-success":"Success note","editor.block.alert-warning":"Warning note","editor.block.alert-danger":"Danger note","editor.block.card":"Card","editor.block.accordion":"Accordion","editor.block.tabs":"Tabs","editor.block.list-group":"List group","editor.block.table":"Table","editor.block.carousel":"Carousel","editor.block.badges":"Badges","editor.block.buttons":"Buttons","editor.block.button-group":"Button group","editor.block.progress":"Progress","editor.block.grid-2":"Two columns","editor.block.grid-3":"Three columns","editor.sample.title":"Title","editor.sample.text":"The block's text.","editor.sample.item":"Item {n}","editor.sample.previous":"Previous","editor.sample.next":"Next"}</script>
+	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","slide":"{position} of {count}","pin.delete":"Delete","pin.enter":"Enter","cooldown":"{seconds} s","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}","file.count":"{name}: up to {count} files","status.saving":"Saving…","status.saved":"Saved","editor.toolbar":"Formatting","editor.body":"Text","editor.source":"HTML source","editor.format":"Format","editor.format.paragraph":"Paragraph","editor.format.heading2":"Heading 2","editor.format.heading3":"Heading 3","editor.format.heading4":"Heading 4","editor.format.quote":"Quote","editor.format.code":"Code","editor.bold":"Bold","editor.italic":"Italic","editor.underline":"Underline","editor.link":"Link","editor.link.href":"Address","editor.link.words":"Words","editor.link.blank":"Open in a new tab","editor.link.nofollow":"Ask search engines not to follow it","editor.color":"Color","editor.color.primary":"Accent","editor.color.secondary":"Secondary","editor.color.success":"Success","editor.color.danger":"Danger","editor.color.warning":"Warning","editor.color.info":"Info","editor.color.none":"No color","editor.bullets":"Bulleted list","editor.numbers":"Numbered list","editor.align":"Align","editor.align.start":"Start","editor.align.center":"Center","editor.align.end":"End","editor.image":"Image","editor.embed":"Video","editor.embed.url":"YouTube or Vimeo address","editor.embed.title":"Title","editor.blocks":"Blocks","editor.group.content":"Content","editor.group.inline":"In a line","editor.group.layout":"Layout","editor.block":"Block","editor.block.up":"Move up","editor.block.down":"Move down","editor.block.edit":"Edit HTML","editor.block.columns":"Columns","editor.block.preview":"Preview","editor.block.delete":"Delete","editor.columns.count":"Columns","editor.columns.from":"From the width","editor.columns.always":"Always","editor.columns.gap":"Gap","editor.clear":"Clear formatting","editor.undo":"Undo","editor.redo":"Redo","editor.block.alert-info":"Note","editor.block.alert-success":"Success note","editor.block.alert-warning":"Warning note","editor.block.alert-danger":"Danger note","editor.block.card":"Card","editor.block.accordion":"Accordion","editor.block.tabs":"Tabs","editor.block.list-group":"List group","editor.block.table":"Table","editor.block.carousel":"Carousel","editor.block.badges":"Badges","editor.block.buttons":"Buttons","editor.block.button-group":"Button group","editor.block.progress":"Progress","editor.block.grid-2":"Two columns","editor.block.grid-3":"Three columns","editor.sample.title":"Title","editor.sample.text":"The block's text.","editor.sample.item":"Item {n}","editor.sample.previous":"Previous","editor.sample.next":"Next"}</script>
 </head>
 <body>
 	<div class="app">
@@ -62,6 +62,7 @@
 			<a class="app-link" href="upload.html"><i class="bi bi-cloud-arrow-up" aria-hidden="true"></i>File upload</a>
 			<a class="app-link" href="choice.html"><i class="bi bi-ui-radios-grid" aria-hidden="true"></i>Choice tiles</a>
 			<a class="app-link" href="pin.html"><i class="bi bi-grid-3x3" aria-hidden="true"></i>PIN pad</a>
+			<a class="app-link" href="repeat.html"><i class="bi bi-plus-square-dotted" aria-hidden="true"></i>Repeaters</a>
 			<a class="app-link" href="editor.html"><i class="bi bi-file-earmark-richtext" aria-hidden="true"></i>Editor</a>
 			<div class="app-section">Content</div>
 			<a class="app-link" href="card.html"><i class="bi bi-card-text" aria-hidden="true"></i>Cards</a>
@@ -75,6 +76,7 @@
 			<a class="app-link" href="calendar.html"><i class="bi bi-calendar3" aria-hidden="true"></i>Calendars</a>
 			<a class="app-link" href="media.html"><i class="bi bi-collection" aria-hidden="true"></i>Media library</a>
 			<a class="app-link" href="table.html"><i class="bi bi-table" aria-hidden="true"></i>Tables</a>
+			<a class="app-link" href="summary.html"><i class="bi bi-receipt" aria-hidden="true"></i>Summaries and totals</a>
 			<a class="app-link" href="badge.html"><i class="bi bi-patch-check" aria-hidden="true"></i>Badges</a>
 			<a class="app-link" href="dot.html"><i class="bi bi-record-circle" aria-hidden="true"></i>Dots</a>
 			<a class="app-link" href="avatar.html"><i class="bi bi-person-circle" aria-hidden="true"></i>Avatars</a>
@@ -97,6 +99,7 @@
 			<a class="app-link" href="progress.html"><i class="bi bi-bar-chart-line" aria-hidden="true"></i>Progress and meters</a>
 			<a class="app-link" href="busy.html"><i class="bi bi-hourglass-split" aria-hidden="true"></i>Busy</a>
 			<a class="app-link" href="save-bar.html"><i class="bi bi-floppy" aria-hidden="true"></i>Save bar</a>
+			<a class="app-link" href="status.html"><i class="bi bi-info-square" aria-hidden="true"></i>Status lines</a>
 			<a class="app-link" href="selection-bar.html"><i class="bi bi-check2-all" aria-hidden="true"></i>Selection bar</a>
 			<div class="app-section">Navigation</div>
 			<a class="app-link" href="nav.html"><i class="bi bi-segmented-nav" aria-hidden="true"></i>Navs and tabs</a>
@@ -1147,6 +1150,30 @@
 					</div>
 				</section>
 
+				<section class="vstack gap-16" aria-labelledby="all-repeat">
+					<h2 id="all-repeat"><a href="repeat.html">Repeaters</a></h2>
+					<div class="docs-example docs-example-stack" id="repeat-phones">
+						<fieldset class="vstack gap-8">
+							<legend class="form-label">Phone numbers</legend>
+							<ul class="list-unstyled vstack gap-8" id="repeat-phones-list" data-repeat data-min="1" data-max="4">
+								<li class="hstack gap-8">
+									<label class="visually-hidden" for="repeat-phones-0">Phone</label>
+									<input class="form-control" id="repeat-phones-0" name="phones[0]" type="tel" value="+66 81 234 5678" autocomplete="off">
+									<button class="btn btn-icon btn-text" type="button" command="--remove" aria-label="Remove this phone"><i class="bi bi-trash" aria-hidden="true"></i></button>
+								</li>
+								<template>
+									<li class="hstack gap-8">
+										<label class="visually-hidden" for="repeat-phones-{i}">Another phone</label>
+										<input class="form-control" id="repeat-phones-{i}" name="phones[{i}]" type="tel" autocomplete="off">
+										<button class="btn btn-icon btn-text" type="button" command="--remove" aria-label="Remove this phone"><i class="bi bi-trash" aria-hidden="true"></i></button>
+									</li>
+								</template>
+							</ul>
+							<div><button class="btn btn-sm" type="button" command="--add" aria-controls="repeat-phones-list"><i class="bi bi-plus-lg" aria-hidden="true"></i>Add a phone</button></div>
+						</fieldset>
+					</div>
+				</section>
+
 				<section class="vstack gap-16" aria-labelledby="all-editor">
 					<h2 id="all-editor"><a href="editor.html">Editor</a></h2>
 					<div class="docs-example docs-example-stack" id="editor-demo">
@@ -1364,6 +1391,14 @@
 							<button class="chip" type="button" aria-pressed="false">Sunset</button>
 						</div>
 					</div>
+					<div class="docs-example docs-example-stack" id="collapse-chevron">
+						<div class="hstack gap-8">
+							<button class="btn btn-sm" type="button" command="--toggle" aria-controls="collapse-chevron-text" aria-expanded="false"><span class="toggle-closed">Show the route</span><span class="toggle-open">Hide the route</span><i class="bi bi-chevron-down toggle-chevron" aria-hidden="true"></i></button>
+						</div>
+						<div id="collapse-chevron-text" hidden="until-found">
+							<p class="text-muted">The pier at 08:30, the emerald lake at 11:00, lunch on Koh Mae Ko, back by 17:00.</p>
+						</div>
+					</div>
 					<div class="docs-example docs-example-stack" id="collapse-row">
 						<table class="table" aria-label="Deleted records">
 							<thead><tr><th scope="col">When</th><th scope="col">What</th><th scope="col"><span class="visually-hidden">Details</span></th></tr></thead>
@@ -1414,6 +1449,15 @@
 							</div>
 						</div>
 					</div>
+					<div class="docs-example docs-example-stack" id="list-group-headers">
+						<ul class="list-group">
+							<li class="list-group-header list-group-item">Today</li>
+							<li class="list-group-item">Ang Thong Marine Park</li>
+							<li class="list-group-item">Night market and street food</li>
+							<li class="list-group-header list-group-item">Tomorrow</li>
+							<li class="list-group-item">Koh Tao and Koh Nang Yuan</li>
+						</ul>
+					</div>
 					<div class="docs-example docs-example-stack" id="list-group-horizontal">
 						<ul class="list-group md:list-group-horizontal">
 							<li class="list-group-item">Transfer</li>
@@ -1428,6 +1472,16 @@
 							<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" checked>angthong.example</label>
 							<label class="list-group-item hstack gap-8"><input class="check" type="checkbox">kohtao.example</label>
 						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="list-group-search">
+						<input class="form-control" type="search" data-filter="list-group-search-list" aria-label="Find an excursion" placeholder="Find an excursion" autocomplete="off">
+						<ul class="list-group" id="list-group-search-list">
+							<li class="list-group-item">Ang Thong Marine Park</li>
+							<li class="list-group-item">Koh Tao and Koh Nang Yuan</li>
+							<li class="list-group-item">The Five Islands by kayak</li>
+							<li class="list-group-item" data-search="elephant sanctuary chang">Elephant sanctuary</li>
+							<li class="list-group-item text-muted" data-filter-empty hidden>No excursion has these words.</li>
+						</ul>
 					</div>
 					<div class="docs-example docs-example-stack" id="list-group-moves">
 						<ul class="list-group" id="list-group-moves-list" aria-label="Stops of the tour" data-reorder="stops[]">
@@ -1561,6 +1615,34 @@
 							<button class="menu-item" type="button" role="menuitem" data-move="in"><i class="bi bi-arrow-return-right flip-rtl" aria-hidden="true"></i>Move into the item above</button>
 							<button class="menu-item" type="button" role="menuitem" data-move="out"><i class="bi bi-arrow-bar-left flip-rtl" aria-hidden="true"></i>Move out</button>
 						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="tree-current">
+						<input class="form-control" type="search" data-filter="tree-current-list" aria-label="Find a page" placeholder="Find a page" autocomplete="off">
+						<ul class="tree" id="tree-current-list" aria-label="Pages to publish">
+							<li class="tree-item">
+								<div class="tree-row">
+									<input class="check" type="checkbox" name="pages[]" value="excursions" aria-label="Choose: Excursions">
+									<a href="#tree-current">Excursions</a>
+									<span class="tree-actions"><button class="btn btn-xs btn-icon btn-text" type="button" aria-label="Add a page under Excursions"><i class="bi bi-plus-lg" aria-hidden="true"></i></button></span>
+								</div>
+								<ul class="tree-group">
+									<li class="tree-item">
+										<div class="tree-row">
+											<input class="check" type="checkbox" name="pages[]" value="ang-thong" aria-label="Choose: Ang Thong by speedboat" checked>
+											<a href="#tree-current" aria-current="page">Ang Thong by speedboat</a>
+											<span class="tree-actions"><button class="btn btn-xs btn-icon btn-text" type="button" aria-label="Add a page under Ang Thong by speedboat"><i class="bi bi-plus-lg" aria-hidden="true"></i></button></span>
+										</div>
+									</li>
+									<li class="tree-item">
+										<div class="tree-row">
+											<input class="check" type="checkbox" name="pages[]" value="night-market" aria-label="Choose: Night market and street food">
+											<a href="#tree-current">Night market and street food</a>
+											<span class="tree-actions"><button class="btn btn-xs btn-icon btn-text" type="button" aria-label="Add a page under Night market and street food"><i class="bi bi-plus-lg" aria-hidden="true"></i></button></span>
+										</div>
+									</li>
+								</ul>
+							</li>
+						</ul>
 					</div>
 				</section>
 
@@ -1848,6 +1930,62 @@
 							</tbody>
 						</table>
 					</div>
+					<div class="docs-example docs-example-stack" id="table-sort-links">
+						<table class="table" aria-label="Owners, sorted by the server">
+							<thead><tr><th scope="col"><a class="table-sort" href="#table-sort-links">Name</a></th><th scope="col" class="text-end" aria-sort="descending"><a class="table-sort" href="#table-sort-links">Paid</a></th></tr></thead>
+							<tbody>
+								<tr><td>Ananda Resort</td><td class="text-end tabular-nums">48,000</td></tr>
+								<tr><td>Coral Divers</td><td class="text-end tabular-nums">21,300</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="docs-example docs-example-stack" id="table-grouped">
+						<table class="table" aria-label="Bookings by boat">
+							<thead><tr><th scope="col">Guest</th><th scope="col" class="text-end">Seats</th><th scope="col" class="text-end">Paid</th></tr></thead>
+							<tbody>
+								<tr class="table-group"><th scope="rowgroup" colspan="3">Sea Breeze<span class="table-group-end">2 bookings</span></th></tr>
+								<tr><td>Anong Srisuk</td><td class="text-end tabular-nums">2</td><td class="text-end tabular-nums">5,000</td></tr>
+								<tr><td>Boris Lebedev</td><td class="text-end tabular-nums">3</td><td class="text-end tabular-nums">7,500</td></tr>
+								<tr class="table-subtotal"><th scope="row">Sea Breeze</th><td class="text-end tabular-nums">5</td><td class="text-end tabular-nums">12,500</td></tr>
+								<tr class="table-group"><th scope="rowgroup" colspan="3">Coral Star<span class="table-group-end">1 booking</span></th></tr>
+								<tr><td>Chen Wei</td><td class="text-end tabular-nums">4</td><td class="text-end tabular-nums">10,000</td></tr>
+								<tr class="table-subtotal"><th scope="row">Coral Star</th><td class="text-end tabular-nums">4</td><td class="text-end tabular-nums">10,000</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="docs-example docs-example-stack" id="table-wide">
+						<section class="card" aria-labelledby="table-wide-title">
+							<div class="card-header"><h2 class="fs-14" id="table-wide-title">Seats by day</h2></div>
+							<div class="table-scroll table-scroll-first" role="region" aria-labelledby="table-wide-title" tabindex="0">
+								<table class="table">
+									<thead><tr><th scope="col">Boat</th><th scope="col" class="text-end">Mon</th><th scope="col" class="text-end">Tue</th><th scope="col" class="text-end">Wed</th><th scope="col" class="text-end">Thu</th><th scope="col" class="text-end">Fri</th><th scope="col" class="text-end">Sat</th><th scope="col" class="text-end">Sun</th><th scope="col" class="text-end">Week</th><th scope="col" class="text-end">Last week</th><th scope="col" class="text-end">Change</th></tr></thead>
+									<tbody>
+										<tr><th scope="row">Sea Breeze</th><td class="text-end tabular-nums">42</td><td class="text-end tabular-nums">38</td><td class="text-end tabular-nums">40</td><td class="text-end tabular-nums">44</td><td class="text-end tabular-nums">46</td><td class="text-end tabular-nums">48</td><td class="text-end tabular-nums">28</td><td class="text-end tabular-nums">286</td><td class="text-end tabular-nums">270</td><td class="text-end tabular-nums">+16</td></tr>
+										<tr><th scope="row">Coral Star</th><td class="text-end tabular-nums">30</td><td class="text-end tabular-nums">28</td><td class="text-end tabular-nums">27</td><td class="text-end tabular-nums">31</td><td class="text-end tabular-nums">33</td><td class="text-end tabular-nums">35</td><td class="text-end tabular-nums">17</td><td class="text-end tabular-nums">201</td><td class="text-end tabular-nums">214</td><td class="text-end tabular-nums">-13</td></tr>
+										<tr><th scope="row">Blue Lagoon</th><td class="text-end tabular-nums">22</td><td class="text-end tabular-nums">20</td><td class="text-end tabular-nums">24</td><td class="text-end tabular-nums">23</td><td class="text-end tabular-nums">25</td><td class="text-end tabular-nums">30</td><td class="text-end tabular-nums">20</td><td class="text-end tabular-nums">164</td><td class="text-end tabular-nums">150</td><td class="text-end tabular-nums">+14</td></tr>
+									</tbody>
+								</table>
+							</div>
+						</section>
+					</div>
+					<div class="docs-example docs-example-stack" id="table-marks">
+						<table class="table" aria-label="Jobs">
+							<tbody>
+								<tr aria-current="true"><td>Rebuild the Thai pages</td><td class="text-muted">Open on the right</td></tr>
+								<tr aria-selected="true"><td>Import the price list</td><td class="text-muted">Chosen</td></tr>
+								<tr class="table-active"><td>Send the morning letters</td><td class="text-muted">Running now</td></tr>
+								<tr><td>Clean the old photos</td><td class="text-muted">Waiting</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="docs-example docs-example-stack" id="table-links">
+						<table class="table" aria-label="Guides">
+							<tbody>
+								<tr><td><a class="table-title stretched-link" href="#table-links">Anong Srisuk</a><div class="table-sub">Thai, English</div></td><td class="tabular-nums">12 tours</td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Message: Anong Srisuk"><i class="bi bi-chat" aria-hidden="true"></i></button></td></tr>
+								<tr><td><a class="table-title stretched-link" href="#table-links">Hiroshi Sato</a><div class="table-sub">Japanese, English</div></td><td class="tabular-nums">7 tours</td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Message: Hiroshi Sato"><i class="bi bi-chat" aria-hidden="true"></i></button></td></tr>
+							</tbody>
+						</table>
+					</div>
 					<div class="docs-states" id="table-states" tabindex="0" role="region" aria-labelledby="table-states-title">
 						<table class="docs-matrix">
 							<thead>
@@ -1876,6 +2014,34 @@
 								</tr>
 							</tbody>
 						</table>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-summary">
+					<h2 id="all-summary"><a href="summary.html">Summaries and totals</a></h2>
+					<div class="docs-example docs-example-stack" id="summary-booking">
+						<section class="card" aria-labelledby="summary-booking-title">
+							<div class="card-header"><h2 class="fs-14" id="summary-booking-title">Booking 24-0187</h2></div>
+							<div class="card-body">
+								<dl class="summary">
+									<dt>Excursion</dt><dd>Ang Thong: marine park by speedboat</dd>
+									<dt>Date</dt><dd>14 December 2026, 08:30</dd>
+									<dt>Guests</dt><dd>2 adults, 1 child</dd>
+									<dt>Pickup</dt><dd>Lamai beach, the hotel's lobby</dd>
+								</dl>
+							</div>
+						</section>
+					</div>
+					<div class="docs-example docs-example-stack" id="summary-totals">
+						<dl class="totals">
+							<div><dt>2 adults × 2,500 THB</dt><dd>5,000 THB</dd></div>
+							<div><dt>1 child × 1,500 THB</dt><dd>1,500 THB</dd></div>
+							<div><dt>Discount, early booking</dt><dd>-650 THB</dd></div>
+							<div class="totals-grand"><dt>To pay</dt><dd>5,850 THB</dd></div>
+						</dl>
+					</div>
+					<div class="docs-example" id="summary-confirm">
+						<button class="btn btn-primary" type="button" data-docs-run="confirm-rows">Pay 5,850 THB</button>
 					</div>
 				</section>
 
@@ -2349,6 +2515,23 @@
 							<span class="save-bar-text">2 unsaved changes: product name, accent color</span>
 							<button class="btn btn-sm" type="button">Discard</button>
 							<button class="btn btn-sm btn-primary" type="button"><i class="bi bi-floppy" aria-hidden="true"></i>Save</button>
+						</div>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-status">
+					<h2 id="all-status"><a href="status.html">Status lines</a></h2>
+					<div class="docs-example" id="status-save">
+						<div class="hstack flex-wrap gap-12">
+							<button class="btn btn-primary" type="button" data-docs-run="status-save"><i class="bi bi-floppy" aria-hidden="true"></i>Save</button>
+							<button class="btn" type="button" data-docs-run="status-refuse">Save a taken name</button>
+							<div class="form-status" id="status-save-line"></div>
+						</div>
+					</div>
+					<div class="docs-example" id="status-words">
+						<div class="hstack flex-wrap gap-12">
+							<button class="btn" type="button" data-docs-run="status-words">Publish</button>
+							<div class="form-status" id="status-words-line"></div>
 						</div>
 					</div>
 				</section>

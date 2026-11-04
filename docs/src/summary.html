@@ -1,0 +1,47 @@
+<header class="vstack gap-8">
+	<h1>Summaries and totals</h1>
+	<p class="docs-lead">The facts of one record in pairs - a label and its value - and the sums at the foot of an invoice or a booking.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="summary-examples">
+	<h2 id="summary-examples">Examples</h2>
+	<p><code>summary</code> on a <code>&lt;dl&gt;</code>: the terms in a column as wide as the longest, the values beside them; in a region narrower than 30rem each value goes under its term.</p>
+	<div class="docs-example docs-example-stack" id="summary-booking">
+		<section class="card" aria-labelledby="summary-booking-title">
+			<div class="card-header"><h2 class="fs-14" id="summary-booking-title">Booking 24-0187</h2></div>
+			<div class="card-body">
+				<dl class="summary">
+					<dt>Excursion</dt><dd>Ang Thong: marine park by speedboat</dd>
+					<dt>Date</dt><dd>14 December 2026, 08:30</dd>
+					<dt>Guests</dt><dd>2 adults, 1 child</dd>
+					<dt>Pickup</dt><dd>Lamai beach, the hotel's lobby</dd>
+				</dl>
+			</div>
+		</section>
+	</div>
+
+	<h3>Totals</h3>
+	<p><code>totals</code> on a <code>&lt;dl&gt;</code> of rows - a <code>&lt;div&gt;</code> each, its label and its value - the numbers at the end in <code>tabular-nums</code>; <code>totals-grand</code> on the last row draws it larger, under a line.</p>
+	<div class="docs-example docs-example-stack" id="summary-totals">
+		<dl class="totals">
+			<div><dt>2 adults × 2,500 THB</dt><dd>5,000 THB</dd></div>
+			<div><dt>1 child × 1,500 THB</dt><dd>1,500 THB</dd></div>
+			<div><dt>Discount, early booking</dt><dd>-650 THB</dd></div>
+			<div class="totals-grand"><dt>To pay</dt><dd>5,850 THB</dd></div>
+		</dl>
+	</div>
+
+	<h3>In a confirmation</h3>
+	<p><code>REDZ.ui.confirm({rows: [{label, value}]})</code> shows the same pairs in its dialog - what a payment is, what a move changes - after its note and before its lists; every word is text, never HTML.</p>
+	<div class="docs-example" id="summary-confirm">
+		<button class="btn btn-primary" type="button" data-docs-run="confirm-rows">Pay 5,850 THB</button>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="summary-access">
+	<h2 id="summary-access">Accessibility</h2>
+	<ul>
+		<li>A description list tells a screen reader which value belongs to which term, so no heading is needed for each pair.</li>
+		<li>A sum written with its sign - "-650 THB" - says a discount without color.</li>
+	</ul>
+</section>

@@ -1,0 +1,46 @@
+<header class="vstack gap-8">
+	<h1>Repeaters</h1>
+	<p class="docs-lead">A list of the same few fields a person adds to and takes from: phone numbers, the lines of an invoice, the stops of a route. The page posts every row; the library adds and removes them.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="repeat-examples">
+	<h2 id="repeat-examples">Examples</h2>
+	<p>The list carries <code>data-repeat</code> and holds a <code>&lt;template&gt;</code> of one row. A button with <code>command="--add"</code> naming the list in <code>aria-controls</code> adds a row made from it - every <code>{i}</code> in the row's attributes, its names, ids and <code>for</code>, turned into a running index that never repeats - and puts the focus in its first field. A row's <code>command="--remove"</code> button takes the row away; the focus goes to the next row's first field, else the previous row's, else to Add. <code>data-min</code> and <code>data-max</code> hold the count: a button that would pass them is <code>aria-disabled</code>. Like <code>--toggle</code>, the buttons take no <code>commandfor</code>.</p>
+	<div class="docs-example docs-example-stack" id="repeat-phones">
+		<fieldset class="vstack gap-8">
+			<legend class="form-label">Phone numbers</legend>
+			<ul class="list-unstyled vstack gap-8" id="repeat-phones-list" data-repeat data-min="1" data-max="4">
+				<li class="hstack gap-8">
+					<label class="visually-hidden" for="repeat-phones-0">Phone</label>
+					<input class="form-control" id="repeat-phones-0" name="phones[0]" type="tel" value="+66 81 234 5678" autocomplete="off">
+					<button class="btn btn-icon btn-text" type="button" command="--remove" aria-label="Remove this phone"><i class="bi bi-trash" aria-hidden="true"></i></button>
+				</li>
+				<template>
+					<li class="hstack gap-8">
+						<label class="visually-hidden" for="repeat-phones-{i}">Another phone</label>
+						<input class="form-control" id="repeat-phones-{i}" name="phones[{i}]" type="tel" autocomplete="off">
+						<button class="btn btn-icon btn-text" type="button" command="--remove" aria-label="Remove this phone"><i class="bi bi-trash" aria-hidden="true"></i></button>
+					</li>
+				</template>
+			</ul>
+			<div><button class="btn btn-sm" type="button" command="--add" aria-controls="repeat-phones-list"><i class="bi bi-plus-lg" aria-hidden="true"></i>Add a phone</button></div>
+		</fieldset>
+	</div>
+
+	<h3>The page's say</h3>
+	<p><code>redz:add</code> and <code>redz:remove</code> on the list come first, with the row in <code>detail.row</code> - the new one before it goes in, or the one about to go. A page that cancels one keeps the list as it is: it asks before a row with saved work goes, or fills the new row's fields first. Rows that carry a <code>data-value</code> also move with <a href="list-group.html#list-group-reorder"><code>data-reorder</code></a>.</p>
+	<pre class="docs-code" tabindex="0"><code>document.getElementById('repeat-phones-list').addEventListener('redz:remove', (event) =&gt; {
+	if (event.detail.row.querySelector('input').value !== '' &amp;&amp; !window.confirm('Remove this phone?')) {
+		event.preventDefault();
+	}
+});</code></pre>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="repeat-access">
+	<h2 id="repeat-access">Keyboard and accessibility</h2>
+	<ul>
+		<li>Add puts the focus in the new row's field and a removal puts it on the next row, so the person goes on typing without looking for it.</li>
+		<li>Each row's field has its own label, hidden where the list's legend says enough; each remove button is named after what it takes away.</li>
+		<li>A button that cannot act stays in the Tab order as <code>aria-disabled</code>, its clicks swallowed, so a screen reader still finds it and hears why.</li>
+	</ul>
+</section>

@@ -1,0 +1,5 @@
+@layer components {
+	[data-filtered] {
+		display: none !important;
+	}
+}

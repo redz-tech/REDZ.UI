@@ -5,8 +5,11 @@
 // a card, its body, a dialog's or a drawer's body, any .region - turns inert under an overlay that shows after 400 ms
 // (css/components/busy.css) and then stays at least 400 ms; once it shows, one polite message says so (the page's text
 // "busy"), and a focus the region dropped comes back to the same element, its namesake by id, or the region. aria-busy
-// is only a styling hook: screen readers mostly ignore it, and on a live region it breaks the region.
+// is only a styling hook: screen readers mostly ignore it, and on a live region it breaks the region. A button that
+// counts a cooldown meanwhile stays disabled until its count ends too (js/hold.js).
 import {text} from './text.js';
+import {announce} from './say.js';
+import {take, leave} from './hold.js';
 
 const SHOW = 400;
 const HOLD = 400;
@@ -20,29 +23,6 @@ document.addEventListener('click', (event) => {
 		event.stopImmediatePropagation();
 	}
 }, true);
-
-/** The hidden polite region of the scope, made now when it has none; whether it was just made. */
-const statusIn = (scope) => {
-	let region = [...scope.children].find((child) => child.matches('.visually-hidden[role="status"]'));
-	if (region !== undefined) {
-		return {region, fresh: false};
-	}
-	region = Object.assign(document.createElement('div'), {className: 'visually-hidden'});
-	region.setAttribute('role', 'status');
-	scope.append(region);
-	return {region, fresh: true};
-};
-
-statusIn(document.body);
-
-/** Says the message politely - inside the open modal dialog, since everything outside one is inert. */
-const announce = (message) => {
-	const {region, fresh} = statusIn([...document.querySelectorAll('dialog:modal')].at(-1) ?? document.body);
-	region.textContent = '';
-	setTimeout(() => {
-		region.textContent = message;
-	}, fresh ? 100 : 0);
-};
 
 /** Holds the region inert under its overlay until the promise settles; answers the promise. */
 const hold = (element, promise) => {
@@ -86,12 +66,11 @@ export const busy = (element, promise) => {
 	if (!button) {
 		console.error('REDZ.UI: busy() takes a button or a region (' + REGIONS + ')');
 	}
-	const disabled = element.getAttribute('aria-disabled');
 	const words = button ? element.dataset.busy ?? '' : '';
 	const kept = [...element.childNodes];
 	element.setAttribute('aria-busy', 'true');
 	if (button) {
-		element.setAttribute('aria-disabled', 'true');
+		take(element, 'busy');
 	}
 	if (words !== '') {
 		const lead = element.firstElementChild?.matches('.bi') ? element.firstElementChild : Object.assign(document.createElement('i'), {className: 'bi'});
@@ -105,8 +84,8 @@ export const busy = (element, promise) => {
 			element.replaceChildren(...kept);
 		}
 		element.removeAttribute('aria-busy');
-		if (button && disabled === null) {
-			element.removeAttribute('aria-disabled');
+		if (button) {
+			leave(element, 'busy');
 		}
 	});
 };

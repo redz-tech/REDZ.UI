@@ -23,8 +23,12 @@ import './pin.js';
 import './cooldown.js';
 import './view.js';
 import './highlight.js';
+import './repeat.js';
+import './filter.js';
+import './row-link.js';
 import {toast} from './toast.js';
 import {confirm} from './confirm.js';
 import {busy} from './busy.js';
+import {status} from './status.js';
 
-globalThis.REDZ = Object.assign(globalThis.REDZ ?? {}, {ui: {...globalThis.REDZ?.ui, toast, confirm, busy}});
+globalThis.REDZ = Object.assign(globalThis.REDZ ?? {}, {ui: {...globalThis.REDZ?.ui, toast, confirm, busy, status}});

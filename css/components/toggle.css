@@ -1,0 +1,16 @@
+@layer components {
+	[aria-expanded="true"] > .toggle-chevron {
+		rotate: 180deg;
+	}
+
+	[aria-expanded="false"] > .toggle-open,
+	[aria-expanded="true"] > .toggle-closed {
+		display: none;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.toggle-chevron {
+			transition: rotate var(--redz-motion) var(--redz-ease);
+		}
+	}
+}

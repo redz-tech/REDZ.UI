@@ -23,6 +23,7 @@
 		<button class="btn btn-primary" type="button" data-docs-run="busy-button">Save for 2 seconds</button>
 		<button class="btn btn-primary" type="button" data-busy="Signing in…" data-docs-run="busy-button"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Sign in for 2 seconds</button>
 	</div>
+	<p>A button that starts a <a href="btn.html#btn-cooldown">cooldown</a> while it waits - "Send the code again" with <code>data-cooldown</code> set as the code goes - stays disabled until the count ends: the cooldown holds <code>aria-disabled</code> while it counts, <code>busy()</code> leaves it alone, and the state from before both comes back when the last of them ends.</p>
 </section>
 
 <section class="vstack gap-16">

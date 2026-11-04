@@ -133,6 +133,87 @@ A header that sorts holds a `button class="table-sort"`, and the header's `aria-
 </table>
 ```
 
+Where the server sorts, the header holds a link instead - `a class="table-sort"` to the same list in the other order - drawn the same way.
+
+```html
+<table class="table" aria-label="Owners, sorted by the server">
+	<thead><tr><th scope="col"><a class="table-sort" href="#table-sort-links">Name</a></th><th scope="col" class="text-end" aria-sort="descending"><a class="table-sort" href="#table-sort-links">Paid</a></th></tr></thead>
+	<tbody>
+		<tr><td>Ananda Resort</td><td class="text-end tabular-nums">48,000</td></tr>
+		<tr><td>Coral Divers</td><td class="text-end tabular-nums">21,300</td></tr>
+	</tbody>
+</table>
+```
+
+### Groups and subtotals
+
+A row `table-group` heads the rows under it: one `th scope="rowgroup"` across the table, a band that does not stick, with an end slot `table-group-end` for its count or sum. A row `table-subtotal` closes a group in bold under a line.
+
+```html
+<table class="table" aria-label="Bookings by boat">
+	<thead><tr><th scope="col">Guest</th><th scope="col" class="text-end">Seats</th><th scope="col" class="text-end">Paid</th></tr></thead>
+	<tbody>
+		<tr class="table-group"><th scope="rowgroup" colspan="3">Sea Breeze<span class="table-group-end">2 bookings</span></th></tr>
+		<tr><td>Anong Srisuk</td><td class="text-end tabular-nums">2</td><td class="text-end tabular-nums">5,000</td></tr>
+		<tr><td>Boris Lebedev</td><td class="text-end tabular-nums">3</td><td class="text-end tabular-nums">7,500</td></tr>
+		<tr class="table-subtotal"><th scope="row">Sea Breeze</th><td class="text-end tabular-nums">5</td><td class="text-end tabular-nums">12,500</td></tr>
+		<tr class="table-group"><th scope="rowgroup" colspan="3">Coral Star<span class="table-group-end">1 booking</span></th></tr>
+		<tr><td>Chen Wei</td><td class="text-end tabular-nums">4</td><td class="text-end tabular-nums">10,000</td></tr>
+		<tr class="table-subtotal"><th scope="row">Coral Star</th><td class="text-end tabular-nums">4</td><td class="text-end tabular-nums">10,000</td></tr>
+	</tbody>
+</table>
+```
+
+The head of a table sticks under the app's header as the page scrolls; inside a region that scrolls on its own - a `dialog-body`, a `card-scroll` card's body - it sticks to the region's top.
+
+### Wider than its card
+
+A table with more columns than its card has room for goes in a `table-scroll`: it scrolls sideways inside the card, and `table-scroll-first` holds its first column in place. Where the browser lets an element scroll on one axis alone - Chrome 156 on - the head still sticks to the page as it scrolls down; elsewhere the head scrolls away with the page and the rest works the same. The wrapper is a named region with `tabindex="0"`, so a keyboard can scroll it.
+
+```html
+<section class="card" aria-labelledby="table-wide-title">
+	<div class="card-header"><h2 class="fs-14" id="table-wide-title">Seats by day</h2></div>
+	<div class="table-scroll table-scroll-first" role="region" aria-labelledby="table-wide-title" tabindex="0">
+		<table class="table">
+			<thead><tr><th scope="col">Boat</th><th scope="col" class="text-end">Mon</th><th scope="col" class="text-end">Tue</th><th scope="col" class="text-end">Wed</th><th scope="col" class="text-end">Thu</th><th scope="col" class="text-end">Fri</th><th scope="col" class="text-end">Sat</th><th scope="col" class="text-end">Sun</th><th scope="col" class="text-end">Week</th><th scope="col" class="text-end">Last week</th><th scope="col" class="text-end">Change</th></tr></thead>
+			<tbody>
+				<tr><th scope="row">Sea Breeze</th><td class="text-end tabular-nums">42</td><td class="text-end tabular-nums">38</td><td class="text-end tabular-nums">40</td><td class="text-end tabular-nums">44</td><td class="text-end tabular-nums">46</td><td class="text-end tabular-nums">48</td><td class="text-end tabular-nums">28</td><td class="text-end tabular-nums">286</td><td class="text-end tabular-nums">270</td><td class="text-end tabular-nums">+16</td></tr>
+				<tr><th scope="row">Coral Star</th><td class="text-end tabular-nums">30</td><td class="text-end tabular-nums">28</td><td class="text-end tabular-nums">27</td><td class="text-end tabular-nums">31</td><td class="text-end tabular-nums">33</td><td class="text-end tabular-nums">35</td><td class="text-end tabular-nums">17</td><td class="text-end tabular-nums">201</td><td class="text-end tabular-nums">214</td><td class="text-end tabular-nums">-13</td></tr>
+				<tr><th scope="row">Blue Lagoon</th><td class="text-end tabular-nums">22</td><td class="text-end tabular-nums">20</td><td class="text-end tabular-nums">24</td><td class="text-end tabular-nums">23</td><td class="text-end tabular-nums">25</td><td class="text-end tabular-nums">30</td><td class="text-end tabular-nums">20</td><td class="text-end tabular-nums">164</td><td class="text-end tabular-nums">150</td><td class="text-end tabular-nums">+14</td></tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+```
+
+### The current, the chosen and the running row
+
+A row with `aria-current` - the record open beside the list - carries the accent's mark at its start; a row with `aria-selected="true"`, chosen in a grid of rows, is tinted; `table-active`, Bootstrap's name, marks the row that is running now.
+
+```html
+<table class="table" aria-label="Jobs">
+	<tbody>
+		<tr aria-current="true"><td>Rebuild the Thai pages</td><td class="text-muted">Open on the right</td></tr>
+		<tr aria-selected="true"><td>Import the price list</td><td class="text-muted">Chosen</td></tr>
+		<tr class="table-active"><td>Send the morning letters</td><td class="text-muted">Running now</td></tr>
+		<tr><td>Clean the old photos</td><td class="text-muted">Waiting</td></tr>
+	</tbody>
+</table>
+```
+
+### A whole row as a link
+
+The row's title link with Bootstrap's `stretched-link` makes the whole row a link: a click anywhere on it but on its own controls and their cells (`table-check`, `table-actions`) follows the title - with `Ctrl`, `Cmd` or the middle button into a new tab - unless the person was selecting its text. The title stays the one link a keyboard and a screen reader meet. The library does it by script, as Safari gives a positioned row no box for the link's cover.
+
+```html
+<table class="table" aria-label="Guides">
+	<tbody>
+		<tr><td><a class="table-title stretched-link" href="#table-links">Anong Srisuk</a><div class="table-sub">Thai, English</div></td><td class="tabular-nums">12 tours</td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Message: Anong Srisuk"><i class="bi bi-chat" aria-hidden="true"></i></button></td></tr>
+		<tr><td><a class="table-title stretched-link" href="#table-links">Hiroshi Sato</a><div class="table-sub">Japanese, English</div></td><td class="tabular-nums">7 tours</td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Message: Hiroshi Sato"><i class="bi bi-chat" aria-hidden="true"></i></button></td></tr>
+	</tbody>
+</table>
+```
+
 ## States
 
 A row's tone marks what needs attention: `table-danger` failed, `table-warning` needs a look, `table-secondary` is out of use. On a pointer screen the row's actions show on hover and on focus; on a touch screen they always show.
@@ -149,17 +230,16 @@ A row's tone marks what needs attention: `table-danger` failed, `table-warning` 
 
 From [`css/components/table.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css). It declares `--redz-row-tint`, `--redz-row-mark` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-8`, `--redz-space-12`, `--redz-border`, `--redz-bg`, `--redz-text-muted`, `--redz-fs-12`, `--redz-row-pad`, `--redz-radius-12`, `--redz-space-16`, `--redz-text`, `--redz-border-strong`, `--redz-bg-hover`, `--redz-font-mono`, `--redz-space-4`, `--redz-primary`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-bg-page`.
+It reads the theme's `--redz-space-8`, `--redz-space-12`, `--redz-border`, `--redz-bg`, `--redz-text-muted`, `--redz-fs-12`, `--redz-row-pad`, `--redz-text`, `--redz-bg-page`, `--redz-border-strong`, `--redz-bg-hover`, `--redz-radius-12`, `--redz-space-16`, `--redz-font-mono`, `--redz-space-4`, `--redz-primary`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-primary-subtle`.
 
 ## From Bootstrap 5.3
 
 | Bootstrap 5.3 | REDZ.UI | Change | Note |
 | --- | --- | --- | --- |
 | `caption-top` | - | missing |  |
-| `table-active` | - | review | aria-selected or aria-current on the row |
 | `table-dark` | - | review | row tones are danger, warning and secondary |
 | `table-info` | - | review | row tones are danger, warning and secondary |
 | `table-light` | - | review | row tones are danger, warning and secondary |
 | `table-primary` | - | review | row tones are danger, warning and secondary |
-| `table-responsive` | - | review | the card's body holds the table; columns hide below md: |
+| `table-responsive` | `table-scroll` | rename | the wrapper scrolls sideways, table-scroll-first holds the first column; or columns hide below md: |
 | `table-success` | - | review | row tones are danger, warning and secondary |
