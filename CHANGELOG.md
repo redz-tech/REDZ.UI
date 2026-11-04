@@ -74,7 +74,7 @@ The ERP's sign-in, kiosk, console and list screens, asked as #16-#37; to be rele
   `thread-bubble`, `thread-files`, `thread-file-remove`): a conversation, the person's own at the end in a tint, edited
   in place by an inline edit.
 - **A card whose body scrolls** (`card-scroll`) between its fixed header and footer, and `max-h-*` utilities, 160 to
-  640 px.
+  640 px; `max-w-80`, `-120`, `-160` and `-240` for the controls of a toolbar.
 - **Utilities:** `edge-top-{tone}` and `edge-start-{tone}`, a 3 px state on an edge; `flash`, a ground lit once;
   `sticky-top`, under the app header in the shell (`--redz-sticky-top`); `offscreen`, outside the page yet rendered -
   a trap field for bots, a badge reader's field.

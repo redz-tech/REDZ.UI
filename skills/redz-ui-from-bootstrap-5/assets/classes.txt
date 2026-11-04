@@ -3088,11 +3088,15 @@ max-h-400
 max-h-480
 max-h-560
 max-h-640
+max-w-120
 max-w-1200
+max-w-160
+max-w-240
 max-w-320
 max-w-480
 max-w-640
 max-w-768
+max-w-80
 max-w-960
 mb-0
 mb-12

@@ -432,6 +432,10 @@
 	.h-75 { block-size: 75%; }
 	.h-100 { block-size: 100%; }
 	.h-auto { block-size: auto; }
+	.max-w-80 { max-inline-size: 5rem; }
+	.max-w-120 { max-inline-size: 7.5rem; }
+	.max-w-160 { max-inline-size: 10rem; }
+	.max-w-240 { max-inline-size: 15rem; }
 	.max-w-320 { max-inline-size: 20rem; }
 	.max-w-480 { max-inline-size: 30rem; }
 	.max-w-640 { max-inline-size: 40rem; }
