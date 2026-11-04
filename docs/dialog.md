@@ -27,7 +27,7 @@ A button opens the dialog with `commandfor` + `command="show-modal"`; buttons in
 
 ### Sizes
 
-`dialog-sm` for a question, the default for a form, `dialog-lg` for a wide table or a preview.
+`dialog-sm` for a question, the default for a form, `dialog-lg` for a wide table or a preview. A dialog is a region, so the width prefixes inside it measure the dialog: `sm:` fires in the default one, and `md:` in `dialog-lg`, 800 px wide.
 
 ```html
 <button class="btn" type="button" commandfor="dialog-sizes-sm" command="show-modal">Small</button>
@@ -67,7 +67,7 @@ For what cannot be undone, `phrase` asks the person to type a word first - the s
 
 ### On a phone and full screen
 
-On a window narrower than 576 px a dialog fills the screen by itself - its body scrolls, its footer stays at the bottom - while `dialog-sm` and a confirmation stay a card in the middle. `dialog-fullscreen` fills the screen on any window.
+On any window a long dialog keeps its header and its footer in view: only `dialog-body` scrolls between them. A `<form>` may hold all three - `<form method="dialog">` right inside the dialog, its submit buttons in the footer - and the body still scrolls alone. On a window narrower than 576 px a dialog fills the screen by itself, while `dialog-sm` and a confirmation stay a card in the middle. `dialog-fullscreen` fills the screen on any window.
 
 ```html
 <button class="btn" type="button" commandfor="dialog-full-panel" command="show-modal"><i class="bi bi-arrows-fullscreen" aria-hidden="true"></i>Open full screen</button>

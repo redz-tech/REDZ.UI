@@ -9,6 +9,18 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 What the ERP's move from Bootstrap 5.3 asked for, and the editor; to be released as one minor release.
 
 ### Added
+- **The editor**, a package of the release linked apart (`editor/editor.css`, `editor/editor.js`,
+  `editor/surface.css`; the passport's `editor`): `REDZ.ui.editor(host, {value, placeholder, lang, dir, styles, scripts,
+  blocks, images, embed, grid, onChange})` → `{getHTML(), setHTML(html), focus(), destroy()}`. It edits REDZ.UI markup
+  only, in a frame whose own Content-Security-Policy runs no script, every value parsed inert and cleaned (no script,
+  no `on*`, no address but a path, a fragment, http(s), mailto or tel). Prose - paragraphs, headings, lists, quotes,
+  code - is edited in place; any other element is a block kept as the markup it came as, with its tools (move, edit its
+  HTML, preview, delete, a grid's columns); the package's blocks are the library's components (notes, a card, an
+  accordion, tabs, a list group, a table, a carousel, badges, buttons, a button group, progress, grids); a block that
+  moves is drawn open and its Preview runs it alive in a dialog's frame of REDZ.UI's own CSS and JS. An APG toolbar
+  (one tab stop, the arrows, Alt+F10 from the text), its own undo and redo, a paste kept to prose, images from the
+  page's sources, YouTube and Vimeo videos; its words are the island's `editor.*` texts (`editor.texts` in the
+  passport). Budgets: 30 KB of script, 5 KB of styles, gzipped.
 - **Tooltips from titles** (`data-tooltips`, `js/tooltips.js`): inside an element with `data-tooltips` (`<html>` for
   the whole page) an element's own `title` shows as the library's tooltip after a short hover and on a keyboard's
   focus; Escape hides it without moving the focus, the pointer may rest on it, a touch never opens it. While hovered
@@ -51,12 +63,16 @@ What the ERP's move from Bootstrap 5.3 asked for, and the editor; to be released
   REDZ.UI's names (`gap-4` is its 4 px) and template code that writes whole names for them, so it scans clean.
 
 ### Changed
+- `dialog-lg` is 50 rem wide (800 px, Bootstrap's `modal-lg`), so `md:` fires inside it (from 48 rem, where it never
+  did).
 - The stylesheet's budget is 26 KB gzipped (from 24).
 - `data-density="compact"` is documented on any element - a table, its card, a region - not only on `<html>`.
 - The map: `offcanvas-*` is the app shell's `app-sidebar` (review), `table-sm` is `data-density="compact"` on the
   table, `data-bs-toggle="tooltip"` is the title inside `data-tooltips`, `data-bs-title` is `title`.
 
 ### Fixed
+- A long dialog keeps its header and its footer in view on any window, only `dialog-body` scrolling between them (above
+  576 px the whole dialog scrolled), with a `<form method="dialog">` holding all three too.
 - `--toggle` closes a table's row: containment cannot hide a row, so `hidden="until-found"` left it on screen; a row,
   a row group or a cell now closes as plain `hidden` (find in page does not open it).
 - The App shell page's state grid wrote `<navaria-label>` for `<nav aria-label>`.

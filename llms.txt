@@ -27,6 +27,7 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 - [Combobox](docs/combobox.md): A choice from a list long enough to search: a button in the look of a select shows the value and opens a panel with a search field and the list. One core - the WAI-ARIA combobox with a listbox - also drives the command palette and a list in the page.
 - [Inline edit](docs/inline-edit.md): A value changed where it shows - a title in a list, a name on a page - behind a real Edit button, in a small form of its own that saves or cancels.
 - [File upload](docs/upload.md): Photos, documents, a price list: chosen, dropped or pasted, each file checked at once and sent on its own, with its own progress and its own error.
+- [Editor](docs/editor.md): A text editor for REDZ.UI markup, a package of the release linked apart: prose edited in place, the library's components as blocks, and a frame of its own where no script of the text ever runs.
 
 ## Content
 

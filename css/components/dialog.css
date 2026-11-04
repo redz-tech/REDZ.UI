@@ -28,16 +28,25 @@
 		border-radius: 0;
 	}
 
-	.dialog-fullscreen[open] {
+	.dialog[open],
+	.dialog > form {
 		display: flex;
 		flex-direction: column;
 	}
 
-	.dialog-fullscreen > .dialog-body {
-		flex: 1;
+	.dialog > form {
+		flex: 1 1 auto;
+		min-block-size: 0;
 	}
 
-	.dialog-fullscreen > .dialog-footer {
+	.dialog > .dialog-body,
+	.dialog > form > .dialog-body {
+		flex: 1 1 auto;
+		min-block-size: 0;
+	}
+
+	.dialog-fullscreen > .dialog-footer,
+	.dialog-fullscreen > form > .dialog-footer {
 		border-radius: 0;
 	}
 
@@ -52,22 +61,14 @@
 			border-radius: 0;
 		}
 
-		.dialog:not(.dialog-sm)[open] {
-			display: flex;
-			flex-direction: column;
-		}
-
-		.dialog:not(.dialog-sm) > .dialog-body {
-			flex: 1;
-		}
-
-		.dialog:not(.dialog-sm) > .dialog-footer {
+		.dialog:not(.dialog-sm) > .dialog-footer,
+		.dialog:not(.dialog-sm) > form > .dialog-footer {
 			border-radius: 0;
 		}
 	}
 
 	.dialog-lg {
-		inline-size: min(48rem, calc(100vw - 2rem));
+		inline-size: min(50rem, calc(100vw - 2rem));
 	}
 
 	.dialog::backdrop {

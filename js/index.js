@@ -22,4 +22,4 @@ import {toast} from './toast.js';
 import {confirm} from './confirm.js';
 import {busy} from './busy.js';
 
-globalThis.REDZ = Object.assign(globalThis.REDZ ?? {}, {ui: {toast, confirm, busy}});
+globalThis.REDZ = Object.assign(globalThis.REDZ ?? {}, {ui: {...globalThis.REDZ?.ui, toast, confirm, busy}});

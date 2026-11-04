@@ -78,6 +78,9 @@
 			{"label": "the tooltip's button, described by its tooltip", "do": "focus", "target": "#tooltip-why button", "expect": ["What is a partner license", "A partner can hide the brand"]},
 			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["expanded"]}
 		],
+		"docs/editor.html": [
+			{"label": "the editor's first toolbar button", "do": "focus", "target": "#editor-demo-host [role=\"toolbar\"] > button", "expect": ["Format"]}
+		],
 		"docs/carousel.html": [
 			{"label": "the Next button of a carousel", "do": "focus", "target": "[command=\"--next\"][aria-controls=\"carousel-basic-tours\"]", "expect": ["Next"]},
 			{"label": "Enter on it: the status says the slide", "do": "key", "key": "Enter", "expect": ["2 of 3"]}

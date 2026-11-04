@@ -1,6 +1,6 @@
 {
 	"floor": {"chrome": "130", "chrome_android": "130", "edge": "130", "firefox": "132", "firefox_android": "132", "safari": "18.0", "safari_ios": "18.0"},
-	"css": ["css/*.css", "css/components/*.css", "reference/demo/*.css", "docs/*.css"],
+	"css": ["css/*.css", "css/components/*.css", "editor/*.css", "reference/demo/*.css", "docs/*.css"],
 	"html": ["*.html", "docs/*.html", "reference/*.html", "reference/demo/*.html"],
 	"allow": [
 		{"key": "css.properties.forced-color-adjust.*", "browsers": ["safari", "safari_ios"], "reviewed": "8.1.7", "reason": "Safari has no forced colors mode, so the property does nothing there; the library writes it only for that mode."},

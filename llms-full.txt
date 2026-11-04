@@ -3573,6 +3573,72 @@ From [`css/components/upload.css`](https://github.com/redz-tech/REDZ.UI/blob/mai
 
 It reads the theme's `--redz-space-8`, `--redz-space-4`, `--redz-space-24`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-primary`, `--redz-bg-hover`.
 
+# Editor
+
+A text editor for REDZ.UI markup, a package of the release linked apart: prose edited in place, the library's components as blocks, and a frame of its own where no script of the text ever runs.
+
+## Example
+
+The page links `editor/editor.css` and the module `editor/editor.js` beside the library's own files, then calls `REDZ.ui.editor(host, options)`. The value is REDZ.UI markup in and out; `onChange` hears every change, and `getHTML()` gives the value at any time.
+
+```html
+<div id="editor-demo-host"></div>
+```
+
+```html
+<link rel="stylesheet" href="redz-ui/editor/editor.css">
+<script type="module" src="redz-ui/editor/editor.js"></script>
+
+const page = REDZ.ui.editor('#body', {
+  value: stored,
+  placeholder: 'The page text',
+  styles: ['/themes/site/content.css'],
+  images: [{id: 'media', label: 'Media library', open: (api) => media.choose().then((file) => api.insert({src: file.url, alt: file.alt}))}],
+  onChange: (html) => form.elements.body.value = html,
+});
+```
+
+## Options and calls
+
+| Option | What it is |
+| --- | --- |
+| `value` | The markup to edit; it is cleaned before it is shown |
+| `placeholder` | The words of an empty text, also the text field's name |
+| `lang`, `dir` | The text's language and direction, the page's by default |
+| `styles`, `scripts` | The theme's stylesheets for the text and the previews, and its scripts for the previews, after REDZ.UI's own |
+| `blocks` | More blocks for the menu, `{id, label, group, html}`, after the package's own |
+| `images` | Sources of images, `{id, label, open(api)}`; a source calls `api.insert({src, alt, width, height, srcset, sizes, sources})` |
+| `embed`, `grid` | Videos from YouTube and Vimeo, and the blocks of columns; both on unless `false` |
+| `onChange(html)` | Called after a pause in typing and after every command |
+
+It answers `getHTML()`, `setHTML(html)`, `focus()` and `destroy()`.
+
+## Prose and blocks
+
+- Paragraphs, headings 2 to 4, lists, quotes, code and rules are prose: written in place, with the alignment and tone utilities.
+- Every other element at the top of the text is a block: kept as the markup it came as, drawn with its tools - move up and down, edit its HTML, preview, delete, and for a grid its columns.
+- The package's blocks are REDZ.UI's components: notes, a card, an accordion, tabs, a list group, a table, a carousel, badges, buttons, a button group, progress and grids of two and three columns.
+- A block that moves is drawn open: every accordion item open, every tab's panel under its tab's words. Its Preview runs it alive, in a dialog's frame of REDZ.UI's own CSS and JS.
+
+## Safety
+
+- The text is edited in a frame whose own Content-Security-Policy runs no script: an `onerror`, a `<script>` or a `javascript:` link in a stored body or on the clipboard never runs, on load, on paste or later.
+- Every value is parsed inert and cleaned before it is shown or given back: no script, style, link, meta, base, object or embed element, no `on*` attribute, no address that is not a path, a fragment, http(s), mailto or tel, no frame that is not https. A paste keeps prose only.
+- The cleaner guards the editing page; the server cleans what it stores as well.
+
+## Keyboard and accessibility
+
+| Key | What it does |
+| --- | --- |
+| `Alt` `F10` | From the text to the toolbar |
+| `→` / `←`, `Home` / `End` | In the toolbar, the next, the previous, the first, the last button - mirrored right to left |
+| `⌘` `B`, `I`, `U`, `K` | Bold, italic, underline, a link |
+| `⌘` `Z`, `⇧` `⌘` `Z` | Undo and redo, the editor's own |
+
+- The toolbar is one tab stop, named; the marks say whether they are on in `aria-pressed`, the menus are REDZ.UI menus, the dialogs REDZ.UI dialogs.
+- The text is a text field of many lines, named by the placeholder; a block's tools are buttons named by what they do.
+- Every word comes from the page's texts, the keys of the passport's `editor.texts`.
+
 # Cards
 
 A card is a bordered region of a screen: a header with its title and actions, a body, a footer. It is a region - the width prefixes inside it measure the card, not the window.
@@ -4615,7 +4681,7 @@ A button opens the dialog with `commandfor` + `command="show-modal"`; buttons in
 
 ### Sizes
 
-`dialog-sm` for a question, the default for a form, `dialog-lg` for a wide table or a preview.
+`dialog-sm` for a question, the default for a form, `dialog-lg` for a wide table or a preview. A dialog is a region, so the width prefixes inside it measure the dialog: `sm:` fires in the default one, and `md:` in `dialog-lg`, 800 px wide.
 
 ```html
 <button class="btn" type="button" commandfor="dialog-sizes-sm" command="show-modal">Small</button>
@@ -4655,7 +4721,7 @@ For what cannot be undone, `phrase` asks the person to type a word first - the s
 
 ### On a phone and full screen
 
-On a window narrower than 576 px a dialog fills the screen by itself - its body scrolls, its footer stays at the bottom - while `dialog-sm` and a confirmation stay a card in the middle. `dialog-fullscreen` fills the screen on any window.
+On any window a long dialog keeps its header and its footer in view: only `dialog-body` scrolls between them. A `<form>` may hold all three - `<form method="dialog">` right inside the dialog, its submit buttons in the footer - and the body still scrolls alone. On a window narrower than 576 px a dialog fills the screen by itself, while `dialog-sm` and a confirmation stay a card in the middle. `dialog-fullscreen` fills the screen on any window.
 
 ```html
 <button class="btn" type="button" commandfor="dialog-full-panel" command="show-modal"><i class="bi bi-arrows-fullscreen" aria-hidden="true"></i>Open full screen</button>

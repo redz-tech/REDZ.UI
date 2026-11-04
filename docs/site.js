@@ -131,6 +131,19 @@
 		}, 400);
 	});
 
+	// The editor's page: the package loaded where its example stands.
+	document.addEventListener('DOMContentLoaded', () => {
+		const host = document.getElementById('editor-demo-host');
+		if (host === null) {
+			return;
+		}
+		document.head.append(Object.assign(document.createElement('link'), {rel: 'stylesheet', href: '../editor/editor.css'}));
+		import('../editor/editor.js').then(({editor}) => editor(host, {
+			placeholder: 'The page text',
+			value: '<h2>A day on Ang Thong</h2><p>The boat leaves the pier at <strong>8:00</strong>; bring a hat and water.</p><div class="alert alert-info"><i class="bi bi-info-circle" aria-hidden="true"></i><div>The park fee is paid at the pier.</div></div><ul><li>Kayaks in the lagoon</li><li>The viewpoint</li></ul><div class="accordion"><details class="accordion-item" name="editor-demo"><summary class="accordion-header">What is included?<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary><div class="accordion-body">Lunch, the gear and the transfer.</div></details></div>',
+		}));
+	});
+
 	// The tabs that ask before they are left: a changed note asks first.
 	document.addEventListener('input', (event) => {
 		if (event.target instanceof HTMLElement && event.target.id === 'nav-guard-note') {

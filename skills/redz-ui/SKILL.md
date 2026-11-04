@@ -66,7 +66,7 @@ Check it exists: `grep -x 'CLASS' assets/classes.txt`. A class that is not there
 ## References - one per page of the docs
 
 Start: `references/index.md` (getting started), `layout.md`, `utilities.md`, `tokens.md`, `icons.md`.
-Actions: `btn.md`, `chip.md`, `menu.md`. Forms: `form.md`, `input-group.md`, `check.md`, `combobox.md`, `inline-edit.md`, `upload.md`. Content: `card.md`,
+Actions: `btn.md`, `chip.md`, `menu.md`. Forms: `form.md`, `input-group.md`, `check.md`, `combobox.md`, `inline-edit.md`, `upload.md`, `editor.md`. Content: `card.md`,
 `accordion.md`, `carousel.md`, `collapse.md`, `list-group.md`, `tree.md`, `table.md`, `badge.md`, `dot.md`, `avatar.md`, `icon-tile.md`,
 `empty-state.md`, `placeholder.md`, `prose.md`. Layers: `dialog.md`, `drawer.md`, `popover.md`, `tooltip.md`.
 Feedback: `alert.md`, `toast.md`, `spinner.md`, `progress.md`, `busy.md`, `save-bar.md`, `selection-bar.md`.

@@ -144,6 +144,16 @@ attaches by delegation on `document`, so nothing is set up per element and marku
 The library has no words of its own: every word it shows comes from the caller or from the page's island
 `#redz-ui-text`, and a missing one is named in the console.
 
+## The editor
+
+A package of the release, linked apart: `editor/editor.css` and the module `editor/editor.js`, which sets
+`REDZ.ui.editor(host, {value, placeholder, lang, dir, styles, scripts, blocks, images, embed, grid, onChange})` and
+answers `getHTML()`, `setHTML(html)`, `focus()`, `destroy()`. It edits REDZ.UI markup only: prose in place, the
+library's components as blocks kept as they came, a block that moves drawn open and previewed alive. The text lives
+in a frame whose own Content-Security-Policy runs no script, and every value is parsed inert and cleaned, so nothing
+in a stored body or on the clipboard runs. Its words are the island's `editor.*` texts, which the passport's
+`editor.texts` lists apart from the library's; its budgets are 30 KB of script and 5 KB of styles, gzipped.
+
 ## Documentation
 `docs/` on the site: getting started, layout, utilities, tokens, icons, the move from Bootstrap 5.3, and a page per
 component - examples whose code is printed from the same markup, every state as a named grid, keyboard and
