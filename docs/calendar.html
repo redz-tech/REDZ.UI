@@ -176,6 +176,41 @@
 &lt;/table&gt;</code></pre></div>
 				</section>
 
+				<section class="vstack gap-16" aria-labelledby="calendar-states">
+					<h2 id="calendar-states">Days in a state</h2>
+					<p>A day's <code>data-state</code> tints it: <code>worked</code>, <code>open</code>, <code>pending</code>, <code>absent</code> and <code>off</code> - a time sheet, the days a person can still book. <code>calendar-legend</code>, a list of items with the same <code>data-state</code>, says what each tint means, and every day says its state in words too - in its button's name, or in a <code>visually-hidden</code> word when it is no button; in forced colors the states draw as a line, a dashed and a dotted one. <code>button.calendar-day</code> makes the day's number a button the page opens or picks the day with - its <code>aria-label</code> the whole date and the state, <code>aria-pressed</code> on the day picked.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="calendar-sheet">
+						<table class="calendar">
+							<caption>Anong Srisuk, November 2026</caption>
+							<thead><tr><th scope="col"><abbr title="Monday">Mon</abbr></th><th scope="col"><abbr title="Tuesday">Tue</abbr></th><th scope="col"><abbr title="Wednesday">Wed</abbr></th><th scope="col"><abbr title="Thursday">Thu</abbr></th><th scope="col"><abbr title="Friday">Fri</abbr></th><th scope="col"><abbr title="Saturday">Sat</abbr></th><th scope="col"><abbr title="Sunday">Sun</abbr></th></tr></thead>
+							<tbody>
+								<tr><td data-state="worked"><button class="calendar-day" type="button" aria-label="November 2, worked" aria-pressed="false">2</button></td><td data-state="worked"><button class="calendar-day" type="button" aria-label="November 3, worked" aria-pressed="false">3</button></td><td data-state="pending" aria-current="date"><button class="calendar-day" type="button" aria-label="November 4, waiting for approval" aria-pressed="true">4</button></td><td data-state="absent"><button class="calendar-day" type="button" aria-label="November 5, absent" aria-pressed="false">5</button></td><td data-state="open"><button class="calendar-day" type="button" aria-label="November 6, open" aria-pressed="false">6</button></td><td data-state="off" data-weekend><button class="calendar-day" type="button" aria-label="November 7, day off" aria-pressed="false">7</button></td><td data-state="off" data-weekend><button class="calendar-day" type="button" aria-label="November 8, day off" aria-pressed="false">8</button></td></tr>
+							</tbody>
+						</table>
+						<ul class="calendar-legend" aria-label="Day states">
+							<li data-state="worked">Worked</li>
+							<li data-state="pending">Waiting for approval</li>
+							<li data-state="absent">Absent</li>
+							<li data-state="open">Open</li>
+							<li data-state="off">Day off</li>
+						</ul>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;table class="calendar"&gt;
+	&lt;caption&gt;Anong Srisuk, November 2026&lt;/caption&gt;
+	&lt;thead&gt;&lt;tr&gt;&lt;th scope="col"&gt;&lt;abbr title="Monday"&gt;Mon&lt;/abbr&gt;&lt;/th&gt;&lt;th scope="col"&gt;&lt;abbr title="Tuesday"&gt;Tue&lt;/abbr&gt;&lt;/th&gt;&lt;th scope="col"&gt;&lt;abbr title="Wednesday"&gt;Wed&lt;/abbr&gt;&lt;/th&gt;&lt;th scope="col"&gt;&lt;abbr title="Thursday"&gt;Thu&lt;/abbr&gt;&lt;/th&gt;&lt;th scope="col"&gt;&lt;abbr title="Friday"&gt;Fri&lt;/abbr&gt;&lt;/th&gt;&lt;th scope="col"&gt;&lt;abbr title="Saturday"&gt;Sat&lt;/abbr&gt;&lt;/th&gt;&lt;th scope="col"&gt;&lt;abbr title="Sunday"&gt;Sun&lt;/abbr&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+	&lt;tbody&gt;
+		&lt;tr&gt;&lt;td data-state="worked"&gt;&lt;button class="calendar-day" type="button" aria-label="November 2, worked" aria-pressed="false"&gt;2&lt;/button&gt;&lt;/td&gt;&lt;td data-state="worked"&gt;&lt;button class="calendar-day" type="button" aria-label="November 3, worked" aria-pressed="false"&gt;3&lt;/button&gt;&lt;/td&gt;&lt;td data-state="pending" aria-current="date"&gt;&lt;button class="calendar-day" type="button" aria-label="November 4, waiting for approval" aria-pressed="true"&gt;4&lt;/button&gt;&lt;/td&gt;&lt;td data-state="absent"&gt;&lt;button class="calendar-day" type="button" aria-label="November 5, absent" aria-pressed="false"&gt;5&lt;/button&gt;&lt;/td&gt;&lt;td data-state="open"&gt;&lt;button class="calendar-day" type="button" aria-label="November 6, open" aria-pressed="false"&gt;6&lt;/button&gt;&lt;/td&gt;&lt;td data-state="off" data-weekend&gt;&lt;button class="calendar-day" type="button" aria-label="November 7, day off" aria-pressed="false"&gt;7&lt;/button&gt;&lt;/td&gt;&lt;td data-state="off" data-weekend&gt;&lt;button class="calendar-day" type="button" aria-label="November 8, day off" aria-pressed="false"&gt;8&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul class="calendar-legend" aria-label="Day states"&gt;
+	&lt;li data-state="worked"&gt;Worked&lt;/li&gt;
+	&lt;li data-state="pending"&gt;Waiting for approval&lt;/li&gt;
+	&lt;li data-state="absent"&gt;Absent&lt;/li&gt;
+	&lt;li data-state="open"&gt;Open&lt;/li&gt;
+	&lt;li data-state="off"&gt;Day off&lt;/li&gt;
+&lt;/ul&gt;</code></pre></div>
+				</section>
+
 				<section class="vstack gap-16" aria-labelledby="calendar-strip">
 					<h2 id="calendar-strip">Days across things</h2>
 					<p><code>table class="schedule"</code>: a column of names, kept in view while the days scroll by, then a column per day with its number and weekday. A cell holds how many are out; <code>data-state="busy"</code> tints it, <code>"over"</code> - more out than there are - marks it, and <code>data-weekend</code> tints a weekend's column. Put it in a scroller: <code>overflow-x-auto</code>.</p>
@@ -211,6 +246,7 @@
 						<li>Both are tables: a screen reader reads a day with its weekday's header, a cell with its thing and its day. Weekdays are <code>abbr</code> with the full name.</li>
 						<li>A day's number is a <code>time</code> with its date; "+2" says "+2 more" with a hidden word.</li>
 						<li>A busy or over cell says its number; the tint repeats it, and an over cell is also outlined in forced colors.</li>
+						<li>A day's state is in words, never in its tint alone; a day that is a button is named by its whole date and its state, "November 4, waiting for approval", and the picked one says <code>aria-pressed="true"</code>.</li>
 					</ul>
 				</section>
 				<footer class="d-flex flex-wrap justify-content-between gap-8 pt-16 border-top text-muted fs-12">

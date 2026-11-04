@@ -4785,6 +4785,52 @@ Series without a tone take the chart colors by their column.
 </table>
 ```
 
+`chart-values` writes each column's number above it - for one series and a few columns, where the numbers are what a person reads.
+
+```html
+<table class="chart chart-values">
+	<caption>Guests per month</caption>
+	<thead><tr><th scope="col">Month</th><th scope="col">Guests</th></tr></thead>
+	<tbody>
+		<tr><th scope="row">Jul</th><td data-v="0.55">220</td></tr>
+		<tr><th scope="row">Aug</th><td data-v="0.7">280</td></tr>
+		<tr><th scope="row">Sep</th><td data-v="0.45">180</td></tr>
+		<tr><th scope="row">Oct</th><td data-v="0.6">240</td></tr>
+		<tr><th scope="row">Nov</th><td data-v="0.85">340</td></tr>
+		<tr><th scope="row">Dec</th><td data-v="1">400</td></tr>
+	</tbody>
+</table>
+```
+
+## Shares of a whole
+
+`chart-bar` with `chart` draws one row as a single bar across: each segment's `data-v` is its share of the whole, and the legend under it names the series - write the share in the legend's words too. The bar is 12 px thick; `--redz-chart-bar-height` sets another.
+
+```html
+<table class="chart chart-bar">
+	<caption>Payments in November</caption>
+	<thead><tr><th scope="col">Method</th><th scope="col">Card, 58%</th><th scope="col">PromptPay, 31%</th><th scope="col">Cash, 11%</th></tr></thead>
+	<tbody>
+		<tr><th scope="row">November</th><td data-v="0.58">58%</td><td data-v="0.31">31%</td><td data-v="0.11">11%</td></tr>
+	</tbody>
+</table>
+```
+
+`table class="chart-rows"` breaks a whole into rows, longest first: each `tr` a label, its count and its share in words, and a bar under them whose length is the row's `data-v`. The header cells name the columns for a screen reader and are hidden from sight. The bars take the first chart color; a row's `data-tone` gives it a state's.
+
+```html
+<table class="chart-rows">
+	<caption>Where bookings came from</caption>
+	<thead><tr><th scope="col">Source</th><th scope="col">Bookings</th><th scope="col">Share</th></tr></thead>
+	<tbody>
+		<tr data-v="0.52"><th scope="row">Search</th><td>182</td><td>52%</td></tr>
+		<tr data-v="0.27"><th scope="row">Partners</th><td>94</td><td>27%</td></tr>
+		<tr data-v="0.14"><th scope="row">Social networks</th><td>49</td><td>14%</td></tr>
+		<tr data-v="0.07" data-tone="secondary"><th scope="row">Other</th><td>25</td><td>7%</td></tr>
+	</tbody>
+</table>
+```
+
 ## Sparklines
 
 `span class="spark"` with `role="img"` and its summary in `aria-label` draws one bar per run, oldest first: `data-v` its share of the longest, `data-state` - `ok`, `running`, `timeout`, `failed` - its color, `title` its tooltip. 18 px high in a row, `spark-md` 34 px, `spark-lg` 64 px; `spark-median` with `data-median` draws the median as a dashed line.
@@ -4828,7 +4874,8 @@ Series without a tone take the chart colors by their column.
 
 ## Accessibility
 
-- A chart is its table: the caption names it, the header cells name the series, each row says its day and its numbers. `charts.js` gives a chart table the table's roles, since WebKit drops them once CSS lays the table out as columns.
+- A chart is its table: the caption names it, the header cells name the series, each row says its day and its numbers. `charts.js` gives a `chart` or `chart-rows` table the table's roles, since WebKit drops them once CSS lays the table out otherwise.
+- A share bar and breakdown rows say their shares in words - the legend's, the rows' - and the bar repeats them.
 - A color never speaks alone: the legend names every series, a state's segment is named by its header cell, and a sparkline's summary is its name.
 - Three of the light theme's series colors are under 3:1 against the page: the legend and the table are what tell them apart.
 - In forced colors every bar is drawn in the text color; the numbers are in the table.
@@ -4874,6 +4921,27 @@ Calendars are linked apart, on the screens that show them, beside the two files;
 </table>
 ```
 
+## Days in a state
+
+A day's `data-state` tints it: `worked`, `open`, `pending`, `absent` and `off` - a time sheet, the days a person can still book. `calendar-legend`, a list of items with the same `data-state`, says what each tint means, and every day says its state in words too - in its button's name, or in a `visually-hidden` word when it is no button; in forced colors the states draw as a line, a dashed and a dotted one. `button.calendar-day` makes the day's number a button the page opens or picks the day with - its `aria-label` the whole date and the state, `aria-pressed` on the day picked.
+
+```html
+<table class="calendar">
+	<caption>Anong Srisuk, November 2026</caption>
+	<thead><tr><th scope="col"><abbr title="Monday">Mon</abbr></th><th scope="col"><abbr title="Tuesday">Tue</abbr></th><th scope="col"><abbr title="Wednesday">Wed</abbr></th><th scope="col"><abbr title="Thursday">Thu</abbr></th><th scope="col"><abbr title="Friday">Fri</abbr></th><th scope="col"><abbr title="Saturday">Sat</abbr></th><th scope="col"><abbr title="Sunday">Sun</abbr></th></tr></thead>
+	<tbody>
+		<tr><td data-state="worked"><button class="calendar-day" type="button" aria-label="November 2, worked" aria-pressed="false">2</button></td><td data-state="worked"><button class="calendar-day" type="button" aria-label="November 3, worked" aria-pressed="false">3</button></td><td data-state="pending" aria-current="date"><button class="calendar-day" type="button" aria-label="November 4, waiting for approval" aria-pressed="true">4</button></td><td data-state="absent"><button class="calendar-day" type="button" aria-label="November 5, absent" aria-pressed="false">5</button></td><td data-state="open"><button class="calendar-day" type="button" aria-label="November 6, open" aria-pressed="false">6</button></td><td data-state="off" data-weekend><button class="calendar-day" type="button" aria-label="November 7, day off" aria-pressed="false">7</button></td><td data-state="off" data-weekend><button class="calendar-day" type="button" aria-label="November 8, day off" aria-pressed="false">8</button></td></tr>
+	</tbody>
+</table>
+<ul class="calendar-legend" aria-label="Day states">
+	<li data-state="worked">Worked</li>
+	<li data-state="pending">Waiting for approval</li>
+	<li data-state="absent">Absent</li>
+	<li data-state="open">Open</li>
+	<li data-state="off">Day off</li>
+</ul>
+```
+
 ## Days across things
 
 `table class="schedule"`: a column of names, kept in view while the days scroll by, then a column per day with its number and weekday. A cell holds how many are out; `data-state="busy"` tints it, `"over"` - more out than there are - marks it, and `data-weekend` tints a weekend's column. Put it in a scroller: `overflow-x-auto`.
@@ -4897,6 +4965,7 @@ Calendars are linked apart, on the screens that show them, beside the two files;
 - Both are tables: a screen reader reads a day with its weekday's header, a cell with its thing and its day. Weekdays are `abbr` with the full name.
 - A day's number is a `time` with its date; "+2" says "+2 more" with a hidden word.
 - A busy or over cell says its number; the tint repeats it, and an over cell is also outlined in forced colors.
+- A day's state is in words, never in its tint alone; a day that is a button is named by its whole date and its state, "November 4, waiting for approval", and the picked one says `aria-pressed="true"`.
 
 # Media library
 
@@ -4942,11 +5011,35 @@ The switch is two buttons with `command="--view"`, `aria-controls` naming the gr
 document.addEventListener('redz:view', (event) => localStorage.setItem('media-view', event.detail.view));
 ```
 
+## Choosing
+
+A chooser of images - the cover of a page, the photos of a tour - is a `fieldset` of tiles, each a `label class="media-tile"` around its `media-tile-check`: a `radio` to pick one, a `check` to pick some. A click anywhere on the tile picks it, and the focus ring goes round the whole tile; the body is made of `span`s, as a label holds no blocks. `media-grid-compact` takes smaller tiles and hides their words from sight - the radio is still named by them. `data-cover` marks a tile with a star and its own words, for the image a page shows first.
+
+```html
+<fieldset class="vstack gap-8">
+	<legend class="form-label">The page's cover image</legend>
+	<div class="media-grid media-grid-compact">
+		<label class="media-tile"><input class="radio media-tile-check" type="radio" name="media-pick-cover" value="lagoon" checked><img class="media-tile-thumb" src="img/lagoon.svg" alt="A lagoon under green hills"><span class="media-tile-body"><span class="media-tile-name"><span>lagoon.svg</span></span></span></label>
+		<label class="media-tile"><input class="radio media-tile-check" type="radio" name="media-pick-cover" value="qr"><img class="media-tile-thumb" src="img/qr.svg" alt="The QR code of the docs"><span class="media-tile-body"><span class="media-tile-name"><span>qr.svg</span></span></span></label>
+		<label class="media-tile"><input class="radio media-tile-check" type="radio" name="media-pick-cover" value="pier"><img class="media-tile-thumb" src="img/lagoon.svg" alt="The pier at dawn"><span class="media-tile-body"><span class="media-tile-name"><span>pier-at-dawn.svg</span></span></span></label>
+	</div>
+</fieldset>
+<fieldset class="vstack gap-8">
+	<legend class="form-label">Photos of the tour</legend>
+	<div class="media-grid">
+		<label class="media-tile" data-cover="Cover"><input class="check media-tile-check" type="checkbox" name="media-pick-photos[]" value="lagoon" checked><img class="media-tile-thumb" src="img/lagoon.svg" alt=""><span class="media-tile-body"><span class="media-tile-name"><span>lagoon.svg</span></span><span class="media-tile-meta">1600×900 · 24 KB</span></span></label>
+		<label class="media-tile"><input class="check media-tile-check" type="checkbox" name="media-pick-photos[]" value="pier" checked><img class="media-tile-thumb" src="img/lagoon.svg" alt=""><span class="media-tile-body"><span class="media-tile-name"><span>pier-at-dawn.svg</span></span><span class="media-tile-meta">2400×1600 · 31 KB</span></span></label>
+		<label class="media-tile"><input class="check media-tile-check" type="checkbox" name="media-pick-photos[]" value="qr"><img class="media-tile-thumb" src="img/qr.svg" alt=""><span class="media-tile-body"><span class="media-tile-name"><span>qr.svg</span></span><span class="media-tile-meta">45×45 · 3 KB</span></span></label>
+	</div>
+</fieldset>
+```
+
 ## Keyboard and accessibility
 
 - Each check, handle and action is named by its image's file - "Select lagoon.svg", "Delete: lagoon.svg" - so a list of them still says which.
 - The view buttons are a named group; the one that shows is pressed. A change of view keeps the focus on the button.
 - A thumbnail's `alt` is the image's own; in rows it is not shown, and the name says the image.
+- A chooser is a `fieldset` whose `legend` says what is chosen; each radio or checkbox is named by its tile's words - the image's `alt` and the file's name, the cover mark too. Arrow keys move among the radios of a chooser of one.
 
 # Tables
 

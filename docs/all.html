@@ -1663,6 +1663,41 @@
 							</tbody>
 						</table>
 					</div>
+					<div class="docs-example docs-example-stack" id="chart-values">
+						<table class="chart chart-values">
+							<caption>Guests per month</caption>
+							<thead><tr><th scope="col">Month</th><th scope="col">Guests</th></tr></thead>
+							<tbody>
+								<tr><th scope="row">Jul</th><td data-v="0.55">220</td></tr>
+								<tr><th scope="row">Aug</th><td data-v="0.7">280</td></tr>
+								<tr><th scope="row">Sep</th><td data-v="0.45">180</td></tr>
+								<tr><th scope="row">Oct</th><td data-v="0.6">240</td></tr>
+								<tr><th scope="row">Nov</th><td data-v="0.85">340</td></tr>
+								<tr><th scope="row">Dec</th><td data-v="1">400</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="docs-example docs-example-stack" id="chart-bar">
+						<table class="chart chart-bar">
+							<caption>Payments in November</caption>
+							<thead><tr><th scope="col">Method</th><th scope="col">Card, 58%</th><th scope="col">PromptPay, 31%</th><th scope="col">Cash, 11%</th></tr></thead>
+							<tbody>
+								<tr><th scope="row">November</th><td data-v="0.58">58%</td><td data-v="0.31">31%</td><td data-v="0.11">11%</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="docs-example docs-example-stack" id="chart-rows">
+						<table class="chart-rows">
+							<caption>Where bookings came from</caption>
+							<thead><tr><th scope="col">Source</th><th scope="col">Bookings</th><th scope="col">Share</th></tr></thead>
+							<tbody>
+								<tr data-v="0.52"><th scope="row">Search</th><td>182</td><td>52%</td></tr>
+								<tr data-v="0.27"><th scope="row">Partners</th><td>94</td><td>27%</td></tr>
+								<tr data-v="0.14"><th scope="row">Social networks</th><td>49</td><td>14%</td></tr>
+								<tr data-v="0.07" data-tone="secondary"><th scope="row">Other</th><td>25</td><td>7%</td></tr>
+							</tbody>
+						</table>
+					</div>
 					<div class="docs-example docs-example-stack" id="chart-sparks">
 						<table class="table" aria-label="Agents">
 							<thead><tr><th scope="col">Agent</th><th scope="col">Last 20 runs</th></tr></thead>
@@ -1722,6 +1757,22 @@
 							</tbody>
 						</table>
 					</div>
+					<div class="docs-example docs-example-stack" id="calendar-sheet">
+						<table class="calendar">
+							<caption>Anong Srisuk, November 2026</caption>
+							<thead><tr><th scope="col"><abbr title="Monday">Mon</abbr></th><th scope="col"><abbr title="Tuesday">Tue</abbr></th><th scope="col"><abbr title="Wednesday">Wed</abbr></th><th scope="col"><abbr title="Thursday">Thu</abbr></th><th scope="col"><abbr title="Friday">Fri</abbr></th><th scope="col"><abbr title="Saturday">Sat</abbr></th><th scope="col"><abbr title="Sunday">Sun</abbr></th></tr></thead>
+							<tbody>
+								<tr><td data-state="worked"><button class="calendar-day" type="button" aria-label="November 2, worked" aria-pressed="false">2</button></td><td data-state="worked"><button class="calendar-day" type="button" aria-label="November 3, worked" aria-pressed="false">3</button></td><td data-state="pending" aria-current="date"><button class="calendar-day" type="button" aria-label="November 4, waiting for approval" aria-pressed="true">4</button></td><td data-state="absent"><button class="calendar-day" type="button" aria-label="November 5, absent" aria-pressed="false">5</button></td><td data-state="open"><button class="calendar-day" type="button" aria-label="November 6, open" aria-pressed="false">6</button></td><td data-state="off" data-weekend><button class="calendar-day" type="button" aria-label="November 7, day off" aria-pressed="false">7</button></td><td data-state="off" data-weekend><button class="calendar-day" type="button" aria-label="November 8, day off" aria-pressed="false">8</button></td></tr>
+							</tbody>
+						</table>
+						<ul class="calendar-legend" aria-label="Day states">
+							<li data-state="worked">Worked</li>
+							<li data-state="pending">Waiting for approval</li>
+							<li data-state="absent">Absent</li>
+							<li data-state="open">Open</li>
+							<li data-state="off">Day off</li>
+						</ul>
+					</div>
 					<div class="docs-example docs-example-stack" id="calendar-days">
 						<div class="overflow-x-auto" tabindex="0" role="region" aria-labelledby="calendar-days-title">
 							<table class="schedule">
@@ -1759,6 +1810,24 @@
 							<button class="menu-item" type="button" role="menuitem" data-move="first">Move to the start</button>
 							<button class="menu-item" type="button" role="menuitem" data-move="last">Move to the end</button>
 						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="media-pick">
+						<fieldset class="vstack gap-8">
+							<legend class="form-label">The page's cover image</legend>
+							<div class="media-grid media-grid-compact">
+								<label class="media-tile"><input class="radio media-tile-check" type="radio" name="media-pick-cover" value="lagoon" checked><img class="media-tile-thumb" src="img/lagoon.svg" alt="A lagoon under green hills"><span class="media-tile-body"><span class="media-tile-name"><span>lagoon.svg</span></span></span></label>
+								<label class="media-tile"><input class="radio media-tile-check" type="radio" name="media-pick-cover" value="qr"><img class="media-tile-thumb" src="img/qr.svg" alt="The QR code of the docs"><span class="media-tile-body"><span class="media-tile-name"><span>qr.svg</span></span></span></label>
+								<label class="media-tile"><input class="radio media-tile-check" type="radio" name="media-pick-cover" value="pier"><img class="media-tile-thumb" src="img/lagoon.svg" alt="The pier at dawn"><span class="media-tile-body"><span class="media-tile-name"><span>pier-at-dawn.svg</span></span></span></label>
+							</div>
+						</fieldset>
+						<fieldset class="vstack gap-8">
+							<legend class="form-label">Photos of the tour</legend>
+							<div class="media-grid">
+								<label class="media-tile" data-cover="Cover"><input class="check media-tile-check" type="checkbox" name="media-pick-photos[]" value="lagoon" checked><img class="media-tile-thumb" src="img/lagoon.svg" alt=""><span class="media-tile-body"><span class="media-tile-name"><span>lagoon.svg</span></span><span class="media-tile-meta">1600×900 · 24 KB</span></span></label>
+								<label class="media-tile"><input class="check media-tile-check" type="checkbox" name="media-pick-photos[]" value="pier" checked><img class="media-tile-thumb" src="img/lagoon.svg" alt=""><span class="media-tile-body"><span class="media-tile-name"><span>pier-at-dawn.svg</span></span><span class="media-tile-meta">2400×1600 · 31 KB</span></span></label>
+								<label class="media-tile"><input class="check media-tile-check" type="checkbox" name="media-pick-photos[]" value="qr"><img class="media-tile-thumb" src="img/qr.svg" alt=""><span class="media-tile-body"><span class="media-tile-name"><span>qr.svg</span></span><span class="media-tile-meta">45×45 · 3 KB</span></span></label>
+							</div>
+						</fieldset>
 					</div>
 				</section>
 

@@ -44,8 +44,32 @@ The switch is two buttons with `command="--view"`, `aria-controls` naming the gr
 document.addEventListener('redz:view', (event) => localStorage.setItem('media-view', event.detail.view));
 ```
 
+## Choosing
+
+A chooser of images - the cover of a page, the photos of a tour - is a `fieldset` of tiles, each a `label class="media-tile"` around its `media-tile-check`: a `radio` to pick one, a `check` to pick some. A click anywhere on the tile picks it, and the focus ring goes round the whole tile; the body is made of `span`s, as a label holds no blocks. `media-grid-compact` takes smaller tiles and hides their words from sight - the radio is still named by them. `data-cover` marks a tile with a star and its own words, for the image a page shows first.
+
+```html
+<fieldset class="vstack gap-8">
+	<legend class="form-label">The page's cover image</legend>
+	<div class="media-grid media-grid-compact">
+		<label class="media-tile"><input class="radio media-tile-check" type="radio" name="media-pick-cover" value="lagoon" checked><img class="media-tile-thumb" src="img/lagoon.svg" alt="A lagoon under green hills"><span class="media-tile-body"><span class="media-tile-name"><span>lagoon.svg</span></span></span></label>
+		<label class="media-tile"><input class="radio media-tile-check" type="radio" name="media-pick-cover" value="qr"><img class="media-tile-thumb" src="img/qr.svg" alt="The QR code of the docs"><span class="media-tile-body"><span class="media-tile-name"><span>qr.svg</span></span></span></label>
+		<label class="media-tile"><input class="radio media-tile-check" type="radio" name="media-pick-cover" value="pier"><img class="media-tile-thumb" src="img/lagoon.svg" alt="The pier at dawn"><span class="media-tile-body"><span class="media-tile-name"><span>pier-at-dawn.svg</span></span></span></label>
+	</div>
+</fieldset>
+<fieldset class="vstack gap-8">
+	<legend class="form-label">Photos of the tour</legend>
+	<div class="media-grid">
+		<label class="media-tile" data-cover="Cover"><input class="check media-tile-check" type="checkbox" name="media-pick-photos[]" value="lagoon" checked><img class="media-tile-thumb" src="img/lagoon.svg" alt=""><span class="media-tile-body"><span class="media-tile-name"><span>lagoon.svg</span></span><span class="media-tile-meta">1600×900 · 24 KB</span></span></label>
+		<label class="media-tile"><input class="check media-tile-check" type="checkbox" name="media-pick-photos[]" value="pier" checked><img class="media-tile-thumb" src="img/lagoon.svg" alt=""><span class="media-tile-body"><span class="media-tile-name"><span>pier-at-dawn.svg</span></span><span class="media-tile-meta">2400×1600 · 31 KB</span></span></label>
+		<label class="media-tile"><input class="check media-tile-check" type="checkbox" name="media-pick-photos[]" value="qr"><img class="media-tile-thumb" src="img/qr.svg" alt=""><span class="media-tile-body"><span class="media-tile-name"><span>qr.svg</span></span><span class="media-tile-meta">45×45 · 3 KB</span></span></label>
+	</div>
+</fieldset>
+```
+
 ## Keyboard and accessibility
 
 - Each check, handle and action is named by its image's file - "Select lagoon.svg", "Delete: lagoon.svg" - so a list of them still says which.
 - The view buttons are a named group; the one that shows is pressed. A change of view keeps the focus on the button.
 - A thumbnail's `alt` is the image's own; in rows it is not shown, and the name says the image.
+- A chooser is a `fieldset` whose `legend` says what is chosen; each radio or checkbox is named by its tile's words - the image's `alt` and the file's name, the cover mark too. Arrow keys move among the radios of a chooser of one.

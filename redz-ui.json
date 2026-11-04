@@ -4820,9 +4820,9 @@
 		"LICENSE": "sha256-8pEc4ECwd79krplYdY+WVWqMIFNgcosqMOEmO/IRl6E=",
 		"NOTICE": "sha256-kspN6Bvm3sph93yHQc52RmQ1HKUMN/HbFOIH1iKYpMA=",
 		"README.md": "sha256-d/ds1M7pUXPujl473eIzQzlK/0aOt3PTSpjTFNxJsWI=",
-		"calendar/calendar.css": "sha256-ZRv6Ub4PYsvUCT6Hh89+NWYjyEu2m7r6JPB084MdaUo=",
-		"charts/charts.css": "sha256-SI0T4CEpIYxnA8VP8Sj6BHnWdIDeV6B8BbDyj1NL1nE=",
-		"charts/charts.js": "sha256-ZMA/pdqaaLbClZSHrCeVUpA6WnwXt/cuSWzWWTJV+lU=",
+		"calendar/calendar.css": "sha256-zl7A7mfyA5aFR+0sfz6shgwjoBXE1xVKwiAaFOrllUc=",
+		"charts/charts.css": "sha256-Md2YT+AzKZMml4YXpx88FEV99KTwYp3golX5ASt4Leg=",
+		"charts/charts.js": "sha256-ZCyt1JvnzR/mCPWT45pZitu7QCokQIe4Yo6R1mCnOxQ=",
 		"css/base.css": "sha256-wQ4BkXAK4Cg0zZpkwGNDNAwAeiAeOcd8129i/n/nciU=",
 		"css/components/accordion.css": "sha256-qzneYb6yrM/iS3d8Kq1v2P8KZg1x2jvnUmITMuXdxxo=",
 		"css/components/alert.css": "sha256-pLBoL+2kWbCUUwhVVmLTCETOqKFsYLiihlURkOqfyfQ=",
@@ -6996,6 +6996,6 @@
 		"js/tree.js": "sha256-cMMv8DiKhU/CJawIT+n1Lh1k4sQPT6vQH1GH42Bh8AQ=",
 		"js/upload.js": "sha256-5GV+16VcCt9C8qUMMfdzH7E1GZ5oQoLy0n+2lP53ee4=",
 		"js/view.js": "sha256-g7/6fNOr9nLgdSBcZChzI5llPCHSvsXco98uHFKPIgQ=",
-		"media/media.css": "sha256-z/DoE5eMrzUZ+a9IuWakScSVRvD8MYNDCBqY3F3G8HY="
+		"media/media.css": "sha256-M4S8ZqXYAgGwf6D+Ucig9v/HkMI3dwitkycGze1XcDU="
 	}
 }
