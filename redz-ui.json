@@ -1,6 +1,6 @@
 {
 	"name": "REDZ.UI",
-	"version": "0.10.0",
+	"version": "0.11.0",
 	"license": "MIT",
 	"site": "https://redz-tech.github.io/REDZ.UI/",
 	"floor": {"chrome":"130","chrome_android":"130","edge":"130","firefox":"132","firefox_android":"132","safari":"18.0","safari_ios":"18.0"},
@@ -4741,10 +4741,10 @@
 	"editor": {"css":"editor/editor.css","js":"editor/editor.js","surface":"editor/surface.css","texts":["editor.align","editor.align.center","editor.align.end","editor.align.start","editor.block","editor.block.accordion","editor.block.alert-danger","editor.block.alert-info","editor.block.alert-success","editor.block.alert-warning","editor.block.badges","editor.block.button-group","editor.block.buttons","editor.block.card","editor.block.carousel","editor.block.columns","editor.block.delete","editor.block.down","editor.block.edit","editor.block.grid-2","editor.block.grid-3","editor.block.list-group","editor.block.preview","editor.block.progress","editor.block.table","editor.block.tabs","editor.block.up","editor.blocks","editor.body","editor.bold","editor.bullets","editor.clear","editor.color","editor.color.danger","editor.color.info","editor.color.none","editor.color.primary","editor.color.secondary","editor.color.success","editor.color.warning","editor.columns.always","editor.columns.count","editor.columns.from","editor.columns.gap","editor.embed","editor.embed.title","editor.embed.url","editor.format","editor.format.code","editor.format.heading2","editor.format.heading3","editor.format.heading4","editor.format.paragraph","editor.format.quote","editor.group.content","editor.group.inline","editor.group.layout","editor.image","editor.italic","editor.link","editor.link.blank","editor.link.href","editor.link.nofollow","editor.link.words","editor.numbers","editor.redo","editor.sample.item","editor.sample.next","editor.sample.previous","editor.sample.text","editor.sample.title","editor.source","editor.toolbar","editor.underline","editor.undo"]},
 	"packages": {"charts":{"css":"charts/charts.css","js":"charts/charts.js"},"calendar":{"css":"calendar/calendar.css"},"media":{"css":"media/media.css"}},
 	"files": {
-		"CHANGELOG.md": "sha256-GpHKMy9XAIzvVrlZOcmbtOd50zdHFmujOqtiZjxwH+g=",
+		"CHANGELOG.md": "sha256-bvdEwiHrv54DZYbpUb0VNKkLhXQF7txlTBD26lbg02s=",
 		"LICENSE": "sha256-8pEc4ECwd79krplYdY+WVWqMIFNgcosqMOEmO/IRl6E=",
 		"NOTICE": "sha256-kspN6Bvm3sph93yHQc52RmQ1HKUMN/HbFOIH1iKYpMA=",
-		"README.md": "sha256-HwAf4vzbIS2JoXjjjwd+jt7Xml2ivqun8fpHYc6AMPk=",
+		"README.md": "sha256-nrS3FgBMnRdjAynp82uD3uaathKlgbAO68sddt9H+qY=",
 		"calendar/calendar.css": "sha256-ZRv6Ub4PYsvUCT6Hh89+NWYjyEu2m7r6JPB084MdaUo=",
 		"charts/charts.css": "sha256-4uZsLXhmwu/OMWsSvowG4JjIXP6sD6v/jzc6oA8ICSs=",
 		"charts/charts.js": "sha256-ZMA/pdqaaLbClZSHrCeVUpA6WnwXt/cuSWzWWTJV+lU=",

@@ -4,9 +4,10 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
-## Unreleased
+## 0.11.0 - 2026-11-04
 
-The ERP's sign-in, kiosk, console and list screens, asked as #16-#37; to be released as one minor release.
+The ERP's sign-in, kiosk, console, list and support screens, asked as #16-#41; charts, calendars and the media
+library as packages of the release.
 
 ### Added
 - **A floating label in an input group:** `.input-group > .form-floating` grows as a field does, its control's joined
