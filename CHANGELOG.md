@@ -4,9 +4,9 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
-## Unreleased
+## 0.10.0 - 2026-11-04
 
-What the ERP's move from Bootstrap 5.3 asked for, and the editor; to be released as one minor release.
+What the ERP's move from Bootstrap 5.3 asked for, and the editor.
 
 ### Added
 - **The editor**, a package of the release linked apart (`editor/editor.css`, `editor/editor.js`,

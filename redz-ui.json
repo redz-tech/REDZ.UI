@@ -1,6 +1,6 @@
 {
 	"name": "REDZ.UI",
-	"version": "0.9.0",
+	"version": "0.10.0",
 	"license": "MIT",
 	"site": "https://redz-tech.github.io/REDZ.UI/",
 	"floor": {"chrome":"130","chrome_android":"130","edge":"130","firefox":"132","firefox_android":"132","safari":"18.0","safari_ios":"18.0"},
@@ -4634,10 +4634,10 @@
 	],
 	"editor": {"css":"editor/editor.css","js":"editor/editor.js","surface":"editor/surface.css","texts":["editor.align","editor.align.center","editor.align.end","editor.align.start","editor.block","editor.block.accordion","editor.block.alert-danger","editor.block.alert-info","editor.block.alert-success","editor.block.alert-warning","editor.block.badges","editor.block.button-group","editor.block.buttons","editor.block.card","editor.block.carousel","editor.block.columns","editor.block.delete","editor.block.down","editor.block.edit","editor.block.grid-2","editor.block.grid-3","editor.block.list-group","editor.block.preview","editor.block.progress","editor.block.table","editor.block.tabs","editor.block.up","editor.blocks","editor.body","editor.bold","editor.bullets","editor.clear","editor.color","editor.color.danger","editor.color.info","editor.color.none","editor.color.primary","editor.color.secondary","editor.color.success","editor.color.warning","editor.columns.always","editor.columns.count","editor.columns.from","editor.columns.gap","editor.embed","editor.embed.title","editor.embed.url","editor.format","editor.format.code","editor.format.heading2","editor.format.heading3","editor.format.heading4","editor.format.paragraph","editor.format.quote","editor.group.content","editor.group.inline","editor.group.layout","editor.image","editor.italic","editor.link","editor.link.blank","editor.link.href","editor.link.nofollow","editor.link.words","editor.numbers","editor.redo","editor.sample.item","editor.sample.next","editor.sample.previous","editor.sample.text","editor.sample.title","editor.source","editor.toolbar","editor.underline","editor.undo"]},
 	"files": {
-		"CHANGELOG.md": "sha256-hdRSNICrpo7ebyLkLnhSMKxzzN8ZzNRH5ohQi6lObWg=",
+		"CHANGELOG.md": "sha256-wj5TEo6qcc2X5ihAJblwKUrj6jJQo8LFSCHy/eIS6Hw=",
 		"LICENSE": "sha256-8pEc4ECwd79krplYdY+WVWqMIFNgcosqMOEmO/IRl6E=",
 		"NOTICE": "sha256-kspN6Bvm3sph93yHQc52RmQ1HKUMN/HbFOIH1iKYpMA=",
-		"README.md": "sha256-H6Okq/ZGPV+naAetg8TV6EE/eDePouAHzbzIilkTHxU=",
+		"README.md": "sha256-8TNbwFfwKjzJB334pcYCi351UjFrQjzUVpggAxZusjo=",
 		"css/base.css": "sha256-38T63VaIi7DZGpyfnyQ82WMUSGP+oMex4dpiYCaeTP8=",
 		"css/components/accordion.css": "sha256-qzneYb6yrM/iS3d8Kq1v2P8KZg1x2jvnUmITMuXdxxo=",
 		"css/components/alert.css": "sha256-20SUa5rJAxlw/fEryb/G+4VJ4tvNDImlc96GH6xQyqM=",
