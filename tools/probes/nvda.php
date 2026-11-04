@@ -381,7 +381,7 @@ function PROBE__NvdaRead(array &$r, array &$h, string $page, array $run, array &
 		$at = 0;
 		foreach ($items as $k => $item) {
 			$label = $kind . ' ' . ($k + 1) . ' of ' . count($items) . ' (' . $item['what'] . ')';
-			$expect = array_values(array_filter([$item['words'], PROBE_NVDA_LANDMARKS[$item['role'] ?? ''] ?? '']));
+			$expect = array_values(array_filter([$item['words'], PROBE_NVDA_LANDMARKS[$item['role'] ?? ''] ?? ''], fn(string $words): bool => $words !== ''));
 			$found = null;
 			for ($i = $at; $found === null && $i < count($said) && $expect !== []; $i++) {
 				$found = PROBE__SpeechMissing($r, $expect, [$said[$i]]) === [] ? $i : null;
