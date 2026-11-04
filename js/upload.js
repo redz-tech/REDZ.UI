@@ -8,9 +8,14 @@
 // resized one say, that file joins the input's files in its place; rejected, the page's words show in its
 // data-file-error, as a refusal shows the page's text file.type, file.size or file.count. Left alone, the file joins
 // the input's files for the form. An input without multiple holds one file: a new one takes the place of the one
-// before, its sending aborted, and of several dropped or pasted only the first is taken. A file dropped elsewhere on
-// the page does not open in the window.
+// before, its sending aborted, and of several dropped or pasted only the first is taken. A row the server wrote for a
+// file it holds carries data-file-stored, its id: its Remove asks the page in the cancelable redz:remove (detail.id,
+// detail.row) - busy while the page's promise runs, gone when it resolves, its words said when it rejects; untaken, the
+// row goes, with any field of its own. After each change the upload fires redz:change with detail.count, the files it
+// holds, stored and new. The zone may be a plain button.btn. A file dropped elsewhere on the page does not open in the
+// window.
 import {ask} from './answer.js';
+import {announce} from './say.js';
 import {text} from './text.js';
 
 const kept = new WeakMap();
@@ -42,6 +47,12 @@ const accepts = (input, file) => {
 const sizeOf = (bytes) => {
 	const mega = bytes >= 1048576;
 	return new Intl.NumberFormat(document.documentElement.lang || 'en', {style: 'unit', unit: mega ? 'megabyte' : 'kilobyte', maximumFractionDigits: 1}).format(bytes / (mega ? 1048576 : 1024));
+};
+
+/** Tells the page how many files the upload holds now, stored and new, refused ones aside. */
+const changed = (upload) => {
+	const count = upload.querySelectorAll('.upload-list > :not([data-state="failed"])').length;
+	upload.dispatchEvent(new CustomEvent('redz:change', {bubbles: true, detail: {count}}));
 };
 
 /** The input holds the files kept for the form. */
@@ -142,6 +153,9 @@ const take = (upload, given) => {
 		}
 	}
 	sync(upload);
+	if (chosen.length > 0) {
+		changed(upload);
+	}
 };
 
 document.addEventListener('click', (event) => {
@@ -154,12 +168,36 @@ document.addEventListener('click', (event) => {
 	const remove = target?.closest('[data-file-remove]');
 	const row = remove?.closest('.upload-list > *');
 	const upload = row?.closest('.upload');
-	if (upload) {
+	if (!upload || row.getAttribute('aria-busy') === 'true') {
+		return;
+	}
+	const leave = () => {
 		kept.set(upload, (kept.get(upload) ?? []).filter((file) => file !== files.get(row)));
 		sync(upload);
 		const next = row.nextElementSibling ?? row.previousElementSibling;
 		drop(row);
 		(next?.querySelector('[data-file-remove]') ?? upload.querySelector('.upload-zone'))?.focus();
+		changed(upload);
+	};
+	if (!row.hasAttribute('data-file-stored')) {
+		leave();
+		return;
+	}
+	const [taken, answer] = ask(upload, 'redz:remove', {id: row.dataset.fileStored, row});
+	if (!taken) {
+		leave();
+	} else if (answer !== null) {
+		row.setAttribute('aria-busy', 'true');
+		answer.then(leave, (words) => {
+			row.removeAttribute('aria-busy');
+			const error = row.querySelector('[data-file-error]');
+			if (error === null) {
+				announce(String(words ?? ''));
+				return;
+			}
+			error.setAttribute('role', 'alert');
+			error.textContent = String(words ?? '');
+		});
 	}
 });
 

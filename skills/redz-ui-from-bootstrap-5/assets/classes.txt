@@ -4256,6 +4256,7 @@ tree-group
 tree-row
 tree-toggle
 upload
+upload-image
 upload-list
 upload-thumbs
 upload-zone

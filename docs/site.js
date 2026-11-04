@@ -198,6 +198,15 @@
 		}));
 	});
 
+	// The stored papers: the server lets a file go after 600 ms, but keeps the contract, which an invoice uses.
+	document.addEventListener('redz:remove', (event) => {
+		if (!event.target.closest('#upload-stored')) {
+			return;
+		}
+		event.preventDefault();
+		event.detail.respondWith(new Promise((done, refuse) => setTimeout(() => (event.detail.id === '41' ? refuse('An invoice uses the contract; it stays.') : done()), 600)));
+	});
+
 	// The PIN pad's check: 2580 opens after 600 ms, any other PIN is wrong.
 	document.addEventListener('redz:pin', (event) => {
 		const alert = document.getElementById('pin-unlock-alert');

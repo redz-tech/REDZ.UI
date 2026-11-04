@@ -90,6 +90,49 @@
 		request.send(file);
 	}));
 });</code></pre>
+
+	<h3 id="upload-stored-files">Files the server holds</h3>
+	<p>The server writes a row for each file it holds, as the template's, with <code>data-file-stored</code> - its id - and the name of its remove button. Remove asks the page in <code>redz:remove</code> with <code>detail.id</code> and <code>detail.row</code>: a page that cancels it and answers with a promise keeps the row busy until it settles - gone when it resolves, its words said in its <code>data-file-error</code> when it rejects. Left alone, the row goes, and a hidden field of its own with it, so the form sends the ids still kept. After each change the upload fires <code>redz:change</code> with <code>detail.count</code>, the files it holds, stored and new; <code>data-max-files</code> counts the stored ones too. Below, the contract is in use by an invoice.</p>
+	<div class="docs-example docs-example-stack" id="upload-stored">
+		<div class="upload" data-max-files="4">
+			<input class="visually-hidden" id="upload-stored-input" type="file" name="papers[]" accept=".pdf,image/*" multiple tabindex="-1" aria-label="Papers">
+			<ul class="upload-list" aria-label="Papers">
+				<li data-file-stored="41"><input type="hidden" name="kept[]" value="41"><i class="bi bi-file-earmark-text" aria-hidden="true"></i><span data-file-name>contract.pdf</span><span class="invalid-feedback" data-file-error></span><button class="btn btn-xs btn-icon" type="button" data-file-remove aria-label="Remove contract.pdf"><i class="bi bi-x-lg" aria-hidden="true"></i></button></li>
+				<li data-file-stored="42"><input type="hidden" name="kept[]" value="42"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span data-file-name>site-plan.png</span><span class="invalid-feedback" data-file-error></span><button class="btn btn-xs btn-icon" type="button" data-file-remove aria-label="Remove site-plan.png"><i class="bi bi-x-lg" aria-hidden="true"></i></button></li>
+			</ul>
+			<button class="upload-zone btn btn-sm" type="button"><i class="bi bi-plus-lg" aria-hidden="true"></i>Add papers</button>
+			<template>
+				<li>
+					<i class="bi bi-file-earmark" aria-hidden="true"></i>
+					<span data-file-name></span>
+					<progress class="progress progress-xs"></progress>
+					<span class="invalid-feedback" data-file-error></span>
+					<button class="btn btn-xs btn-icon" type="button" data-file-remove><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+				</li>
+			</template>
+		</div>
+	</div>
+
+	<h3 id="upload-image-field">An image field</h3>
+	<p><code>upload-image</code> on an upload of one image shows its image whole on white, <code>--redz-upload-image-height</code> tall - 12rem by default - with its remove button in the corner; the zone, a plain button here, replaces it. The <code>capture</code> of the input goes to the browser as it is.</p>
+	<div class="docs-example docs-example-stack" id="upload-image">
+		<div class="upload upload-image max-w-360">
+			<input class="visually-hidden" id="upload-image-input" type="file" name="cover" accept="image/*" tabindex="-1" aria-label="Cover">
+			<ul class="upload-list" aria-label="Cover">
+				<li data-file-stored="7"><input type="hidden" name="cover_kept" value="7"><img data-file-preview src="img/lagoon.svg" alt=""><span data-file-name>lagoon.svg</span><span class="invalid-feedback" data-file-error></span><button class="btn btn-xs btn-icon" type="button" data-file-remove aria-label="Remove lagoon.svg"><i class="bi bi-x-lg" aria-hidden="true"></i></button></li>
+			</ul>
+			<button class="upload-zone btn btn-sm" type="button"><i class="bi bi-image" aria-hidden="true"></i>Choose another image</button>
+			<template>
+				<li>
+					<img data-file-preview alt="">
+					<span data-file-name></span>
+					<progress class="progress progress-xs"></progress>
+					<span class="invalid-feedback" data-file-error></span>
+					<button class="btn btn-xs btn-icon" type="button" data-file-remove><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+				</li>
+			</template>
+		</div>
+	</div>
 </section>
 
 <section class="vstack gap-12" aria-labelledby="upload-access">

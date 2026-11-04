@@ -59,6 +59,10 @@ checks run in every desktop engine.
   - `rating`, stars filled to `data-v`, and `rating-input`, five radios drawn as stars; a page, Ratings.
   - `choice-danger`; the save bar's `data-state="error"` and `"saved"`; `data-changed` marks a changed field, check
     or switch.
+  - Uploads with the files the server holds: rows with `data-file-stored`, whose Remove asks the page in the
+    cancelable `redz:remove` (`detail.id`, `detail.row`), busy until it settles, its words said when it is refused;
+    `redz:change` with `detail.count` after each change; a plain `button.btn` as the zone; `upload-image`, one image
+    shown whole on white with its remove button in the corner.
   - Repeaters: a list with `data-repeat` and a `<template>` adds rows by `--add` and takes them by `--remove`, `{i}`
     in their attributes a running index, the count held by `data-min` and `data-max`, `redz:add` and `redz:remove`
     cancelable.

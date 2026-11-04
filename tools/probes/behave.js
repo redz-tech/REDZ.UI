@@ -1099,6 +1099,33 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a share of ' + cell.dataset.v + ' in a bar ' + Math.round(track) + ' px long is ' + Math.round(cell.getBoundingClientRect().width) + ' px');
 			}
 		}]},
+		stored: {target: '#upload-stored .upload', steps: [async (out) => {
+			const up = $('#upload-stored .upload');
+			const counts = [];
+			up.addEventListener('redz:change', (event) => counts.push(event.detail.count));
+			const row = (id) => $('[data-file-stored="' + id + '"]', up);
+			$('[data-file-remove]', row('42')).click();
+			const busy = row('42')?.getAttribute('aria-busy');
+			await wait(800);
+			$('[data-file-remove]', row('41')).click();
+			await wait(800);
+			const kept = $$(':scope > .upload-list > *', up).map((item) => item.dataset.fileStored).join(' ');
+			const said = $('[data-file-error]', row('41') ?? up)?.textContent ?? '';
+			if (busy !== 'true' || row('42') !== null || kept !== '41' || said === '' || say(counts) !== say([1])) {
+				out.push('stored files: Remove left the row busy ' + busy + ', the rows ' + say(kept) + ' (41 kept), the refusal ' + say(said) + ', redz:change ' + say(counts));
+			}
+			const before = counts.length;
+			choose($('input[type="file"]', up), files(['notes.pdf'], 'application/pdf'));
+			await wait(50);
+			if (counts.length !== before + 1 || counts.at(-1) !== 2) {
+				out.push('a file chosen beside a stored one: redz:change ' + say(counts.slice(before)) + ', not [2]');
+			}
+			const image = $('#upload-image .upload-list > *');
+			const box = $('img', image).getBoundingClientRect();
+			if (getComputedStyle(image).backgroundColor !== 'rgb(255, 255, 255)' || box.height < 100 || getComputedStyle($('#upload-image .upload-zone')).borderStyle.includes('dashed')) {
+				out.push('an image field draws its image ' + Math.round(box.height) + ' px tall on ' + getComputedStyle(image).backgroundColor + ', its button zone ' + getComputedStyle($('#upload-image .upload-zone')).borderStyle);
+			}
+		}]},
 		flush: {target: '#card-scrolling .list-group-flush', steps: [async (out) => {
 			const current = $('#card-scrolling [aria-current="true"]');
 			const plain = $('#list-group-flush .list-group-item');

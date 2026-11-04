@@ -1310,6 +1310,43 @@
 							</template>
 						</div>
 					</div>
+					<div class="docs-example docs-example-stack" id="upload-stored">
+						<div class="upload" data-max-files="4">
+							<input class="visually-hidden" id="upload-stored-input" type="file" name="papers[]" accept=".pdf,image/*" multiple="" tabindex="-1" aria-label="الأوراق">
+							<ul class="upload-list" aria-label="الأوراق">
+								<li data-file-stored="41"><input type="hidden" name="kept[]" value="41"><i class="bi bi-file-earmark-text" aria-hidden="true"></i><span data-file-name="">contract.pdf</span><span class="invalid-feedback" data-file-error=""></span><button class="btn btn-xs btn-icon" type="button" data-file-remove="" aria-label="إزالة contract.pdf"><i class="bi bi-x-lg" aria-hidden="true"></i></button></li>
+								<li data-file-stored="42"><input type="hidden" name="kept[]" value="42"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span data-file-name="">site-plan.png</span><span class="invalid-feedback" data-file-error=""></span><button class="btn btn-xs btn-icon" type="button" data-file-remove="" aria-label="إزالة site-plan.png"><i class="bi bi-x-lg" aria-hidden="true"></i></button></li>
+							</ul>
+							<button class="upload-zone btn btn-sm" type="button"><i class="bi bi-plus-lg" aria-hidden="true"></i>أضف أوراقًا</button>
+							<template>
+								<li>
+									<i class="bi bi-file-earmark" aria-hidden="true"></i>
+									<span data-file-name=""></span>
+									<progress class="progress progress-xs"></progress>
+									<span class="invalid-feedback" data-file-error=""></span>
+									<button class="btn btn-xs btn-icon" type="button" data-file-remove=""><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+								</li>
+							</template>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="upload-image">
+						<div class="upload upload-image max-w-360">
+							<input class="visually-hidden" id="upload-image-input" type="file" name="cover" accept="image/*" tabindex="-1" aria-label="الغلاف">
+							<ul class="upload-list" aria-label="الغلاف">
+								<li data-file-stored="7"><input type="hidden" name="cover_kept" value="7"><img data-file-preview="" src="img/lagoon.svg" alt=""><span data-file-name="">lagoon.svg</span><span class="invalid-feedback" data-file-error=""></span><button class="btn btn-xs btn-icon" type="button" data-file-remove="" aria-label="إزالة lagoon.svg"><i class="bi bi-x-lg" aria-hidden="true"></i></button></li>
+							</ul>
+							<button class="upload-zone btn btn-sm" type="button"><i class="bi bi-image" aria-hidden="true"></i>اختر صورة أخرى</button>
+							<template>
+								<li>
+									<img data-file-preview="" alt="">
+									<span data-file-name=""></span>
+									<progress class="progress progress-xs"></progress>
+									<span class="invalid-feedback" data-file-error=""></span>
+									<button class="btn btn-xs btn-icon" type="button" data-file-remove=""><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+								</li>
+							</template>
+						</div>
+					</div>
 				</section>
 
 				<section class="vstack gap-16" aria-labelledby="all-choice">

@@ -104,6 +104,53 @@ document.addEventListener('redz:files', (event) => {
 });
 ```
 
+### Files the server holds
+
+The server writes a row for each file it holds, as the template's, with `data-file-stored` - its id - and the name of its remove button. Remove asks the page in `redz:remove` with `detail.id` and `detail.row`: a page that cancels it and answers with a promise keeps the row busy until it settles - gone when it resolves, its words said in its `data-file-error` when it rejects. Left alone, the row goes, and a hidden field of its own with it, so the form sends the ids still kept. After each change the upload fires `redz:change` with `detail.count`, the files it holds, stored and new; `data-max-files` counts the stored ones too. Below, the contract is in use by an invoice.
+
+```html
+<div class="upload" data-max-files="4">
+	<input class="visually-hidden" id="upload-stored-input" type="file" name="papers[]" accept=".pdf,image/*" multiple tabindex="-1" aria-label="Papers">
+	<ul class="upload-list" aria-label="Papers">
+		<li data-file-stored="41"><input type="hidden" name="kept[]" value="41"><i class="bi bi-file-earmark-text" aria-hidden="true"></i><span data-file-name>contract.pdf</span><span class="invalid-feedback" data-file-error></span><button class="btn btn-xs btn-icon" type="button" data-file-remove aria-label="Remove contract.pdf"><i class="bi bi-x-lg" aria-hidden="true"></i></button></li>
+		<li data-file-stored="42"><input type="hidden" name="kept[]" value="42"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span data-file-name>site-plan.png</span><span class="invalid-feedback" data-file-error></span><button class="btn btn-xs btn-icon" type="button" data-file-remove aria-label="Remove site-plan.png"><i class="bi bi-x-lg" aria-hidden="true"></i></button></li>
+	</ul>
+	<button class="upload-zone btn btn-sm" type="button"><i class="bi bi-plus-lg" aria-hidden="true"></i>Add papers</button>
+	<template>
+		<li>
+			<i class="bi bi-file-earmark" aria-hidden="true"></i>
+			<span data-file-name></span>
+			<progress class="progress progress-xs"></progress>
+			<span class="invalid-feedback" data-file-error></span>
+			<button class="btn btn-xs btn-icon" type="button" data-file-remove><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+		</li>
+	</template>
+</div>
+```
+
+### An image field
+
+`upload-image` on an upload of one image shows its image whole on white, `--redz-upload-image-height` tall - 12rem by default - with its remove button in the corner; the zone, a plain button here, replaces it. The `capture` of the input goes to the browser as it is.
+
+```html
+<div class="upload upload-image max-w-360">
+	<input class="visually-hidden" id="upload-image-input" type="file" name="cover" accept="image/*" tabindex="-1" aria-label="Cover">
+	<ul class="upload-list" aria-label="Cover">
+		<li data-file-stored="7"><input type="hidden" name="cover_kept" value="7"><img data-file-preview src="img/lagoon.svg" alt=""><span data-file-name>lagoon.svg</span><span class="invalid-feedback" data-file-error></span><button class="btn btn-xs btn-icon" type="button" data-file-remove aria-label="Remove lagoon.svg"><i class="bi bi-x-lg" aria-hidden="true"></i></button></li>
+	</ul>
+	<button class="upload-zone btn btn-sm" type="button"><i class="bi bi-image" aria-hidden="true"></i>Choose another image</button>
+	<template>
+		<li>
+			<img data-file-preview alt="">
+			<span data-file-name></span>
+			<progress class="progress progress-xs"></progress>
+			<span class="invalid-feedback" data-file-error></span>
+			<button class="btn btn-xs btn-icon" type="button" data-file-remove><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+		</li>
+	</template>
+</div>
+```
+
 ## Keyboard and accessibility
 
 - The zone is one real button: `Enter` or `Space` opens the browser's picker; the input itself stays out of the Tab order, and its words - which follow the browser's language, not the page's - never show.
@@ -122,4 +169,4 @@ document.addEventListener('redz:files', (event) => {
 
 From [`css/components/upload.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/upload.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-8`, `--redz-space-4`, `--redz-space-24`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-primary`, `--redz-bg-hover`, `--redz-border`, `--redz-radius-8`, `--redz-bg-page`, `--redz-space-2`.
+It reads the theme's `--redz-space-8`, `--redz-space-4`, `--redz-space-24`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-primary`, `--redz-bg-hover`, `--redz-border`, `--redz-upload-image-height`, `--redz-radius-8`, `--redz-bg-page`, `--redz-space-2`.
