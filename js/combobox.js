@@ -6,7 +6,7 @@
 // list with data-create offers "Create …" for a search no option's label equals: the page may make the value through
 // redz:create (js/answer.js), else the new label goes into a hidden field data-create names. In such a list a comma
 // takes the words as Enter does, and a search with a pattern or type="email" refuses words it does not hold. Options in
-// levels (aria-level) keep the page's order, a match shown with its parents.
+// levels (data-level: an option has no aria-level) keep the page's order, a match shown with its parents.
 import {ask} from './answer.js';
 import {text, textCount} from './text.js';
 
@@ -219,10 +219,10 @@ const settle = (input) => {
 	highlight(list, words);
 };
 
-/** Shows the parents of each shown option of a list in levels - the nearest option before it of a lower aria-level, up
+/** Shows the parents of each shown option of a list in levels - the nearest option before it of a lower data-level, up
  *  to the first level - so a match keeps its place in the tree. */
 const keepAncestors = (options) => {
-	const levelOf = (option) => Number.parseInt(option.getAttribute('aria-level') ?? '1', 10) || 1;
+	const levelOf = (option) => Number.parseInt(option.dataset.level ?? '1', 10) || 1;
 	const matched = options.filter((option) => !option.hidden);
 	for (const option of options) {
 		kept.delete(option);
@@ -254,7 +254,7 @@ const filter = (input) => {
 		for (const [option, rank] of ranked) {
 			option.hidden = rank < 0;
 		}
-		const levelled = options.some((option) => option.hasAttribute('aria-level'));
+		const levelled = options.some((option) => option.hasAttribute('data-level'));
 		if (levelled) {
 			keepAncestors(options);
 		}
