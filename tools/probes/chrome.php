@@ -10,7 +10,8 @@ function PROBE__ChromeStart(string $binary, string $dir, bool $shown = false): a
 {
 	$port = PHP_OS_FAMILY === 'Windows';
 	$window = $shown ? ['--force-renderer-accessibility', '--window-position=0,0', '--window-size=1280,900'] : ['--headless'];
-	$flags = [...$window, $port ? '--remote-debugging-port=0' : '--remote-debugging-pipe', '--no-first-run', '--no-default-browser-check', '--use-mock-keychain', '--password-store=basic', '--disable-background-networking', '--disable-component-update', '--disable-sync', '--disable-background-timer-throttling', '--disable-renderer-backgrounding', '--disable-backgrounding-occluded-windows', '--user-data-dir=' . $dir . '/profile'];
+	// Ubuntu 24.04 keeps unprivileged user namespaces from Chrome's sandbox, so CI's Linux machines run it without one.
+	$flags = [...$window, ...(PHP_OS_FAMILY === 'Linux' ? ['--no-sandbox'] : []), $port ? '--remote-debugging-port=0' : '--remote-debugging-pipe', '--no-first-run', '--no-default-browser-check', '--use-mock-keychain', '--password-store=basic', '--disable-background-networking', '--disable-component-update', '--disable-sync', '--disable-background-timer-throttling', '--disable-renderer-backgrounding', '--disable-backgrounding-occluded-windows', '--user-data-dir=' . $dir . '/profile'];
 	$descriptors = [0 => ['file', PROBE_NULL, 'r'], 1 => ['file', $dir . '/chrome.log', 'a'], 2 => ['file', $dir . '/chrome.log', 'a']] + ($port ? [] : [3 => ['pipe', 'r'], 4 => ['pipe', 'w']]);
 	$proc = proc_open([$binary, ...$flags, 'about:blank'], $descriptors, $pipes);
 	if (!is_resource($proc)) {

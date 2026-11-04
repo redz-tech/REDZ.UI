@@ -81,7 +81,7 @@ Without `name` every item opens and closes by itself.
 
 From [`css/components/accordion.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/accordion.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-border`, `--redz-bg`, `--redz-radius-12`, `--redz-space-12`, `--redz-space-16`, `--redz-text`, `--redz-bg-hover`, `--redz-text-muted`, `--redz-motion`, `--redz-ease`.
+It reads the theme's `--redz-border`, `--redz-bg`, `--redz-radius-12`, `--redz-space-12`, `--redz-space-16`, `--redz-text`, `--redz-bg-hover`, `--redz-text-muted`, `--redz-radius-8`, `--redz-motion`, `--redz-ease`.
 
 ## From Bootstrap 5.3
 

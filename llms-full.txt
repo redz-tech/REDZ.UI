@@ -4651,7 +4651,7 @@ Without `name` every item opens and closes by itself.
 
 From [`css/components/accordion.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/accordion.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-border`, `--redz-bg`, `--redz-radius-12`, `--redz-space-12`, `--redz-space-16`, `--redz-text`, `--redz-bg-hover`, `--redz-text-muted`, `--redz-motion`, `--redz-ease`.
+It reads the theme's `--redz-border`, `--redz-bg`, `--redz-radius-12`, `--redz-space-12`, `--redz-space-16`, `--redz-text`, `--redz-bg-hover`, `--redz-text-muted`, `--redz-radius-8`, `--redz-motion`, `--redz-ease`.
 
 ## From Bootstrap 5.3
 
@@ -4955,7 +4955,7 @@ A search field with `data-filter` naming a region hides, as the person types, th
 
 ### Reordering
 
-A list with `data-reorder` naming a hidden field moves its items, each with a `data-value`, by a `drag-handle`: a button opening the list's menu of moves, whose items carry `data-move` - `up`, `down`, `first`, `last` - or the pointer dragging the handle. A move is done at once, the focus back on the handle, and the page's text `moved` says the new place. Then `redz:move` fires on the item: a page that saves cancels it and answers with a promise - refused, the move is undone and the page's words are said; left alone, hidden fields beside the list hold the new order for the form.
+A list with `data-reorder` naming a hidden field moves its items, each with a `data-value`, by a `drag-handle`: a button opening the list's menu of moves, whose items carry `data-move` - `up`, `down`, `first`, `last` - or the pointer dragging the handle: a lifted copy follows the pointer, the item's place - an empty slot - goes where it will land, and the other items glide aside; near the edge of the box the list scrolls in, it scrolls, and `Escape` takes the item back. A move by the menu glides too; with reduced motion nothing glides. Each move ends with the focus back on the handle, and the page's text `moved` says the new place. Then `redz:move` fires on the item: a page that saves cancels it and answers with a promise - refused, the move is undone and the page's words are said; left alone, hidden fields beside the list hold the new order for the form.
 
 ```html
 <ul class="list-group" id="list-group-moves-list" aria-label="Stops of the tour" data-reorder="stops[]">
@@ -7463,7 +7463,7 @@ Tabs fold the same way. The arrows move between the tabs in the row; a tab chose
 
 From [`css/components/nav.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/nav.css). It declares `--redz-fade-left`, `--redz-fade-right` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-16`, `--redz-space-8`, `--redz-text-muted`, `--redz-text`, `--redz-border`, `--redz-radius-8`, `--redz-bg-hover`, `--redz-space-12`, `--redz-radius-6`, `--redz-fs-12`, `--redz-bg`, `--redz-shadow-1`.
+It reads the theme's `--redz-space-16`, `--redz-space-8`, `--redz-text-muted`, `--redz-text`, `--redz-border`, `--redz-space-4`, `--redz-radius-8`, `--redz-bg-hover`, `--redz-space-12`, `--redz-radius-6`, `--redz-fs-12`, `--redz-bg`, `--redz-shadow-1`.
 
 ## From Bootstrap 5.3
 

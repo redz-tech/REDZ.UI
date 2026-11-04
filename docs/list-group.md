@@ -104,7 +104,7 @@ A search field with `data-filter` naming a region hides, as the person types, th
 
 ### Reordering
 
-A list with `data-reorder` naming a hidden field moves its items, each with a `data-value`, by a `drag-handle`: a button opening the list's menu of moves, whose items carry `data-move` - `up`, `down`, `first`, `last` - or the pointer dragging the handle. A move is done at once, the focus back on the handle, and the page's text `moved` says the new place. Then `redz:move` fires on the item: a page that saves cancels it and answers with a promise - refused, the move is undone and the page's words are said; left alone, hidden fields beside the list hold the new order for the form.
+A list with `data-reorder` naming a hidden field moves its items, each with a `data-value`, by a `drag-handle`: a button opening the list's menu of moves, whose items carry `data-move` - `up`, `down`, `first`, `last` - or the pointer dragging the handle: a lifted copy follows the pointer, the item's place - an empty slot - goes where it will land, and the other items glide aside; near the edge of the box the list scrolls in, it scrolls, and `Escape` takes the item back. A move by the menu glides too; with reduced motion nothing glides. Each move ends with the focus back on the handle, and the page's text `moved` says the new place. Then `redz:move` fires on the item: a page that saves cancels it and answers with a promise - refused, the move is undone and the page's words are said; left alone, hidden fields beside the list hold the new order for the form.
 
 ```html
 <ul class="list-group" id="list-group-moves-list" aria-label="Stops of the tour" data-reorder="stops[]">

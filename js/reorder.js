@@ -1,10 +1,13 @@
 // REDZ.UI, reordering: in a list, a table's tbody, a grid or a tree with data-reorder naming a hidden field, each item
 // with a data-value moves by its drag-handle - a button opening the list's menu of moves by commandfor, whose items
 // carry data-move: up, down, first, last, and in a tree in (to the end of the group of the item above) and out (after
-// its parent) - or by the pointer dragging the handle within its group: down a column, or, where the group lays its
-// items out in a line - a grid of more than one column, a flex row - before or after the item under the pointer by
-// the half of it the pointer is in. A move is done at once, the focus back on the handle and the page's text "moved"
-// said politely; then the cancelable redz:move (js/answer.js) with the item, its list, parent and place: a refusal
+// its parent) - or by the pointer dragging the handle within its group: a lifted copy follows the pointer while the
+// item's place, an empty slot, goes where it will land - down a column, or, where the group lays its items out in a
+// line - a grid of more than one column, a flex row - before or after the item under the pointer by the half of it the
+// pointer is in -, the other items gliding aside; near an edge of the box the list scrolls in, that box scrolls, and
+// Escape takes the item back. A move by the menu glides as well, unless the reader asks for no motion. Each move ends
+// with the focus back on the handle and the page's text "moved" said politely; then the cancelable redz:move
+// (js/answer.js) with the item, its list, parent and place: a refusal
 // undoes the move and says the page's words; left alone, hidden fields beside the list - beside its table for a
 // tbody - hold the order for the form: each value in data-reorder's name, and with data-parent each one's parent under
 // data-parent's name.
@@ -68,8 +71,26 @@ const statusOf = (list) => {
 	return status;
 };
 
+const still = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+const EASE = {duration: 160, easing: 'cubic-bezier(0.2, 0, 0, 1)'};
+
+/** Does MOVE, the items of the group gliding from where they stood to where it leaves them - unless the reader asks
+ *  for no motion; answers what MOVE answers. */
+const glide = (group, move) => {
+	const items = itemsOf(group);
+	const from = still() ? [] : items.map((item) => item.getBoundingClientRect());
+	const answer = move();
+	from.forEach((was, k) => {
+		const now = items[k].getBoundingClientRect();
+		if (was.left !== now.left || was.top !== now.top) {
+			items[k].animate([{translate: (was.left - now.left) + 'px ' + (was.top - now.top) + 'px'}, {translate: '0 0'}], EASE);
+		}
+	});
+	return answer;
+};
+
 /** Puts the item at the place, its group opened and its handle focused; answers the place it left. */
-const put = (item, [group, before]) => {
+const put = (item, [group, before]) => glide(item.parentElement, () => {
 	const left = [item.parentElement, item.nextElementSibling];
 	group.insertBefore(item, before);
 	if (group.hidden) {
@@ -78,7 +99,7 @@ const put = (item, [group, before]) => {
 	}
 	handleOf(item)?.focus();
 	return left;
-};
+});
 
 /** Writes the order into hidden fields beside the list, and says it changed. */
 const hold = (list) => {
@@ -122,17 +143,104 @@ const moved = (item, left) => {
 	});
 };
 
-/** Ends a drag: the item at rest, its move told if it moved. */
-const drop = () => {
+/** The lifted copy of the item that follows the pointer, at the item's place: the item in a shallow copy of its group -
+ *  a row in a copy of its table and tbody, its cells as wide as they are - so it keeps its look; inert, unread. */
+const copyOf = (item, box) => {
+	const group = item.parentElement;
+	const shell = group.matches('tbody') ? group.closest('table').cloneNode(false) : group.cloneNode(false);
+	const inner = group.matches('tbody') ? shell.appendChild(group.cloneNode(false)) : shell;
+	const twin = inner.appendChild(item.cloneNode(true));
+	if (item.matches('tr')) {
+		[...item.children].forEach((cell, k) => {
+			twin.children[k].style.inlineSize = cell.getBoundingClientRect().width + 'px';
+		});
+	}
+	for (const named of [shell, ...shell.querySelectorAll('[id]')]) {
+		named.removeAttribute('id');
+	}
+	shell.removeAttribute('data-reorder');
+	shell.setAttribute('aria-hidden', 'true');
+	shell.inert = true;
+	shell.dataset.dragCopy = '';
+	Object.assign(shell.style, {left: box.left + 'px', top: box.top + 'px', inlineSize: box.width + 'px'}, shell.matches('table') ? {} : {display: 'block'});
+	(item.closest('dialog[open]') ?? document.body).append(shell);
+	return shell;
+};
+
+/** The box the list scrolls in - the nearest ancestor that scrolls, else the page. */
+const scrollerOf = (element) => {
+	for (let up = element.parentElement; up !== null; up = up.parentElement) {
+		if (/auto|scroll/.test(getComputedStyle(up).overflowY) && up.scrollHeight > up.clientHeight) {
+			return up;
+		}
+	}
+	return document.scrollingElement;
+};
+
+/** Moves the item before or after the item under the pointer - by its half, across a line or down a column - unless
+ *  the items still glide from the last move and NOW is not asked. */
+const follow = (now = false) => {
+	if (!now && performance.now() < drag.calm) {
+		return;
+	}
+	for (const other of itemsOf(drag.item.parentElement)) {
+		const box = other.getBoundingClientRect();
+		if (other === drag.item || drag.py <= box.top || drag.py >= box.bottom || (drag.lines && (drag.px <= box.left || drag.px >= box.right))) {
+			continue;
+		}
+		const after = drag.lines ? (drag.px > box.left + box.width / 2) !== drag.rtl : drag.py > box.top + box.height / 2;
+		const before = after ? other.nextElementSibling : other;
+		if (before !== drag.item && before !== drag.item.nextElementSibling) {
+			glide(drag.item.parentElement, () => drag.item.parentElement.insertBefore(drag.item, before));
+			drag.calm = performance.now() + (still() ? 0 : EASE.duration);
+		}
+		break;
+	}
+};
+
+/** Near the top or the bottom of the box the list scrolls in, scrolls it, faster the nearer the edge, every frame. */
+const tick = () => {
+	if (drag === null || drag.left === null) {
+		return;
+	}
+	const page = drag.scroller === document.scrollingElement;
+	const box = page ? {top: 0, bottom: innerHeight} : drag.scroller.getBoundingClientRect();
+	const by = drag.py < box.top + 48 ? -Math.ceil((box.top + 48 - drag.py) / 6) : (drag.py > box.bottom - 48 ? Math.ceil((drag.py - box.bottom + 48) / 6) : 0);
+	if (by !== 0) {
+		drag.scroller.scrollBy(0, by);
+		follow();
+	}
+	drag.frame = requestAnimationFrame(tick);
+};
+
+/** Ends a drag - the copy settling into the item's place, the item at rest, its move told if it moved; CANCEL takes the
+ *  item back where it started. */
+const drop = (cancel = false) => {
 	if (drag?.left) {
-		delete drag.item.dataset.dragging;
-		listOf(drag.item)?.classList.remove('reordering');
+		const {item, copy, left} = drag;
+		cancelAnimationFrame(drag.frame);
+		if (cancel === true) {
+			glide(item.parentElement, () => left[0].insertBefore(item, left[1]));
+		} else {
+			follow(true);
+		}
+		const land = () => {
+			copy.remove();
+			delete item.dataset.dragging;
+			listOf(item)?.classList.remove('reordering');
+		};
+		const to = item.getBoundingClientRect();
+		if (still()) {
+			land();
+		} else {
+			copy.animate([{translate: copy.style.translate || '0 0'}, {translate: (to.left - parseFloat(copy.style.left)) + 'px ' + (to.top - parseFloat(copy.style.top)) + 'px'}], {...EASE, fill: 'forwards'}).finished.then(land, land);
+		}
 		swallow = true;
 		setTimeout(() => {
 			swallow = false;
 		});
-		if (drag.item.parentElement !== drag.left[0] || drag.item.nextElementSibling !== drag.left[1]) {
-			moved(drag.item, drag.left);
+		if (item.parentElement !== left[0] || item.nextElementSibling !== left[1]) {
+			moved(item, left);
 		}
 	}
 	drag = null;
@@ -194,21 +302,26 @@ document.addEventListener('pointermove', (event) => {
 		drag.left = [drag.item.parentElement, drag.item.nextElementSibling];
 		drag.lines = linesOf(drag.item.parentElement);
 		drag.rtl = getComputedStyle(drag.item.parentElement).direction === 'rtl';
+		drag.calm = 0;
+		drag.scroller = scrollerOf(drag.item.parentElement);
 		statusOf(listOf(drag.item));
 		drag.grip.setPointerCapture(event.pointerId);
+		drag.copy = copyOf(drag.item, drag.item.getBoundingClientRect());
 		drag.item.dataset.dragging = '';
 		listOf(drag.item).classList.add('reordering');
+		drag.frame = requestAnimationFrame(tick);
 	}
-	for (const other of itemsOf(drag.item.parentElement)) {
-		const box = other.getBoundingClientRect();
-		if (other === drag.item || event.clientY <= box.top || event.clientY >= box.bottom || (drag.lines && (event.clientX <= box.left || event.clientX >= box.right))) {
-			continue;
-		}
-		const after = drag.lines ? (event.clientX > box.left + box.width / 2) !== drag.rtl : event.clientY > box.top + box.height / 2;
-		drag.item.parentElement.insertBefore(drag.item, after ? other.nextElementSibling : other);
-		break;
-	}
+	drag.px = event.clientX;
+	drag.py = event.clientY;
+	drag.copy.style.translate = (event.clientX - drag.x) + 'px ' + (event.clientY - drag.y) + 'px';
+	follow();
 });
 
-document.addEventListener('pointerup', drop);
-document.addEventListener('pointercancel', drop);
+document.addEventListener('pointerup', () => drop());
+document.addEventListener('pointercancel', () => drop(true));
+document.addEventListener('keydown', (event) => {
+	if (event.key === 'Escape' && drag?.left) {
+		event.preventDefault();
+		drop(true);
+	}
+});

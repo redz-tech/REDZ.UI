@@ -158,7 +158,9 @@ function PROBE__ScreenLocked(): bool
  *  '' with the reason in $why when it cannot run on this machine. */
 function PROBE__Binary(string $name, array $engine, string &$why): string
 {
-	if (isset($engine['macos']) && preg_match('~^<\s*(\d+)$~', $engine['macos'], $m) === 1 && (int)PROBE__Run(['/usr/bin/sw_vers', '-productVersion']) >= (int)$m[1]) {
+	// An engine's build for this system, as CI's Linux machines run Chrome and Firefox.
+	$engine = array_replace($engine, $engine[strtolower(PHP_OS_FAMILY)] ?? []);
+	if (PHP_OS_FAMILY === 'Darwin' && isset($engine['macos']) && preg_match('~^<\s*(\d+)$~', $engine['macos'], $m) === 1 && (int)PROBE__Run(['/usr/bin/sw_vers', '-productVersion']) >= (int)$m[1]) {
 		$why = $engine['why'];
 		return '';
 	}
@@ -229,7 +231,9 @@ function PROBE__Fetch(string $name, array $fetch, string $home): void
 	$part = $home . '.part';
 	PROBE__Remove($part);
 	mkdir($part, 0777, true);
-	if (str_ends_with($file, '.zip') && PHP_OS_FAMILY !== 'Darwin') {
+	if (PHP_OS_FAMILY === 'Linux') {
+		PROBE__Run(str_ends_with($file, '.zip') ? ['unzip', '-q', $file, '-d', $part] : ['tar', '-xf', $file, '-C', $part]);
+	} elseif (str_ends_with($file, '.zip') && PHP_OS_FAMILY !== 'Darwin') {
 		$zip = new ZipArchive();
 		if ($zip->open($file) !== true || !$zip->extractTo($part)) {
 			throw new RuntimeException($name . ': cannot unpack ' . $file);

@@ -28,7 +28,6 @@
 		align-items: center;
 		gap: var(--redz-space-12);
 		padding: var(--redz-space-12) var(--redz-space-16);
-		border-radius: inherit;
 		color: var(--redz-text);
 		font-weight: 550;
 		list-style: none;
@@ -47,9 +46,16 @@
 		outline-offset: -2px;
 	}
 
-	.accordion-item[open] > .accordion-header {
-		border-end-start-radius: 0;
-		border-end-end-radius: 0;
+	/* The header's own corners, inside the item's border: a summary sits in the details' shadow slot and cannot inherit
+	   the item's radius. */
+	.accordion:not(.accordion-flush) > .accordion-item:first-child > .accordion-header {
+		border-start-start-radius: calc(var(--redz-radius-12) - 1px);
+		border-start-end-radius: calc(var(--redz-radius-12) - 1px);
+	}
+
+	.accordion:not(.accordion-flush) > .accordion-item:last-child:not([open]) > .accordion-header {
+		border-end-start-radius: calc(var(--redz-radius-12) - 1px);
+		border-end-end-radius: calc(var(--redz-radius-12) - 1px);
 	}
 
 	.accordion-icon {
@@ -80,13 +86,14 @@
 		border-block-end: 0;
 	}
 
+	/* A flush accordion keeps its rows' room, as a flush list of actions does: the hover's tint stands off the words. */
 	.accordion-flush > .accordion-item > .accordion-header {
-		padding-inline: 0;
-		border-radius: 0;
+		padding-inline: var(--redz-space-12);
+		border-radius: var(--redz-radius-8);
 	}
 
 	.accordion-flush > .accordion-item > .accordion-body {
-		padding-inline: 0;
+		padding-inline: var(--redz-space-12);
 	}
 
 	@media (prefers-reduced-motion: no-preference) {

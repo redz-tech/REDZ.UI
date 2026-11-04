@@ -65,12 +65,16 @@
 		font-variant-numeric: tabular-nums;
 	}
 
+	/* The links keep a little room of their own, so the focus ring, drawn inside them as the nav clips, stands off the
+	   words; the gap gives it back. */
 	.nav-underline {
+		gap: var(--redz-space-8);
 		border-block-end: 1px solid var(--redz-border);
 	}
 
 	.nav-underline > .nav-link {
 		margin-block-end: -1px;
+		padding-inline: var(--redz-space-4);
 		padding-block-end: calc(var(--redz-space-8) + 2px);
 	}
 

@@ -109,15 +109,27 @@ checks run in every desktop engine.
   before both comes back when the last ends.
 - A table's head sticks to the top of a `dialog-body` or a `card-scroll` card's body.
 - `page-center` lays its column out as a grid, so a child that is a `vstack` or an `hstack` stays centered.
+- Dragging an item by its handle: a lifted copy follows the pointer while the item's place - an empty, dashed slot -
+  goes where it will land, the other items gliding aside; near the edge of the box the list scrolls in, it scrolls;
+  `Escape` takes the item back. Moves by the menu glide too. With reduced motion nothing glides.
+- `nav-underline` links keep a little room of their own, the gap between them smaller by as much, so the focus ring
+  stands off the words.
 
 ### Fixed
 - `form-adorn` gives a select the start room it gives a field: its value no longer sits under the icon.
 - Row headers (`th` in `tbody`) took the head's sticky offset.
 - `data-cooldown="0"` during a count froze it.
 - A flush list of `list-group-item-action` rows keeps the rows' room, so a hover's tint and the current row's bar no
-  longer sit on the words (#94).
+  longer sit on the words (#94); a flush accordion keeps its rows' room the same way.
+- An accordion's header has the item's corners: a `summary` cannot inherit them, so its hover and its focus ring were
+  square inside a rounded item.
+- A prompt's field is heard as the dialog opens: the dialog holds no form, and a value is taken once the field is
+  valid.
+- `--download` that the browser cannot draw says so in the console instead of throwing.
 
 ### Checks
+- Chrome and Firefox, the current ones and the floor's, run on Linux in CI, each engine a job of its own; macOS runs
+  Safari, the simulators and VoiceOver.
 - CI checks each part where it stands: a part - an engine, or the floor's three - that passed on a commit stays passed
   on a later one whose changes cannot reach it. A fix in one reader's probe runs that reader again, a package's file
   only the pages that load it, a speech step only its page in the readers. The sheet shows which parts were checked

@@ -161,7 +161,30 @@
 		user-select: none;
 	}
 
+	/* The item's place while it is dragged: an empty slot of its size, where it lands. */
 	.reordering [data-dragging] {
-		opacity: 0.6;
+		outline: 1px dashed var(--redz-border-strong);
+		outline-offset: -1px;
+		background: var(--redz-bg-hover);
+		color: transparent;
+	}
+
+	.reordering [data-dragging] > * {
+		visibility: hidden;
+	}
+
+	/* The lifted copy that follows the pointer. */
+	[data-drag-copy] {
+		position: fixed;
+		z-index: 2147483000;
+		margin: 0;
+		filter: drop-shadow(0 0.5rem 1.25rem rgb(8 10 14 / 0.18));
+		pointer-events: none;
+		cursor: grabbing;
+	}
+
+	table[data-drag-copy] {
+		table-layout: fixed;
+		background: var(--redz-bg);
 	}
 }
