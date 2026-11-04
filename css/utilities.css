@@ -394,12 +394,14 @@
 	.border-danger-subtle { border-color: color-mix(in oklch, var(--redz-danger) 35%, var(--redz-border)); }
 	.border-warning-subtle { border-color: color-mix(in oklch, var(--redz-warning) 35%, var(--redz-border)); }
 	.border-info-subtle { border-color: color-mix(in oklch, var(--redz-info) 35%, var(--redz-border)); }
+	.edge-top-color { border-block-start: 3px solid var(--redz-color); }
 	.edge-top-primary { border-block-start: 3px solid var(--redz-primary); }
 	.edge-top-secondary { border-block-start: 3px solid var(--redz-secondary); }
 	.edge-top-success { border-block-start: 3px solid var(--redz-success); }
 	.edge-top-danger { border-block-start: 3px solid var(--redz-danger); }
 	.edge-top-warning { border-block-start: 3px solid var(--redz-warning); }
 	.edge-top-info { border-block-start: 3px solid var(--redz-info); }
+	.edge-start-color { border-inline-start: 3px solid var(--redz-color); }
 	.edge-start-primary { border-inline-start: 3px solid var(--redz-primary); }
 	.edge-start-secondary { border-inline-start: 3px solid var(--redz-secondary); }
 	.edge-start-success { border-inline-start: 3px solid var(--redz-success); }

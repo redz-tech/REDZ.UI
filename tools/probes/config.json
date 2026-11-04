@@ -119,7 +119,12 @@
 			{"label": "the button that shows it", "do": "focus", "target": "[commandfor=\"form-password-new\"][command=\"--reveal\"]", "expect": ["Show the password"]},
 			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": []},
 			{"label": "the field, its text shown", "do": "focus", "target": "#form-password-new", "expect": []},
-			{"label": "back on the button: it says it is pressed", "do": "focus", "target": "[commandfor=\"form-password-new\"][command=\"--reveal\"]", "expect": ["Show the password"], "voiceover": ["selected"]}
+			{"label": "back on the button: it says it is pressed", "do": "focus", "target": "[commandfor=\"form-password-new\"][command=\"--reveal\"]", "expect": ["Show the password"], "voiceover": ["selected"]},
+			{"label": "a field with a count", "do": "focus", "target": "#form-counter-title", "expect": ["Page title"]},
+			{"label": "a number step button", "do": "focus", "target": "[command=\"--step-up\"][aria-controls=\"form-step-guests\"]", "expect": ["One guest more"]}
+		],
+		"docs/rating.html": [
+			{"label": "the mark given", "do": "focus", "target": "#rating-give-4", "expect": ["4 stars"]}
 		],
 		"docs/check.html": [
 			{"label": "a switch", "do": "focus", "target": "#check-switches input", "expect": ["Show on the site"]},
@@ -177,7 +182,8 @@
 			{"label": "a sortable header", "do": "focus", "target": "#table-sort [aria-sort] .table-sort", "expect": ["Name"]}
 		],
 		"docs/btn.html": [
-			{"label": "a button that waits", "do": "focus", "target": "#btn-cooldown button", "expect": ["Send the code again"]}
+			{"label": "a button that waits", "do": "focus", "target": "#btn-cooldown button", "expect": ["Send the code again"]},
+			{"label": "a segmented choice", "do": "focus", "target": "#btn-segmented-week", "expect": ["Week"]}
 		],
 		"docs/media.html": [
 			{"label": "the rows view button", "do": "focus", "target": "#media-folder [command=\"--view\"][value=\"list\"]", "expect": ["Rows"]}

@@ -29,6 +29,12 @@ window.REDZ_BEHAVE = (() => {
 		return [Math.round(box.left + box.width * fx), Math.round(box.top + box.height * fy)];
 	};
 	const values = (selector) => $$(selector).map((el) => el.dataset.value).join(' ');
+	const rgb = (color) => {
+		const paint = Object.assign(document.createElement('canvas'), {width: 1, height: 1}).getContext('2d');
+		paint.fillStyle = color;
+		paint.fillRect(0, 0, 1, 1);
+		return [...paint.getImageData(0, 0, 1, 1).data.slice(0, 3)].join(',');
+	};
 
 	const checks = {
 		pin: {target: '#pin-unlock .pin', steps: [async (out) => {
@@ -397,6 +403,153 @@ window.REDZ_BEHAVE = (() => {
 			await wait(50);
 			if (empty[0] > 1 || empty[1] !== 'alert' || filled[0] < 20 || !filled[1] || tall() > 1) {
 				out.push('an empty alert is ' + empty[0] + ' px tall, ' + filled[0] + ' px filled, ' + tall() + ' px emptied again');
+			}
+		}]},
+		grow: {target: '#form-grow-text', steps: [async (out) => {
+			const field = $('#form-grow-text');
+			const tall = () => Math.round(field.getBoundingClientRect().height);
+			const one = tall();
+			input(field, field.value + '\nThe second line\nThe third line');
+			await wait(50);
+			const three = tall();
+			input(field, 'One line');
+			await wait(50);
+			if (one > 48 || three < one + 30 || tall() !== one) {
+				out.push('a growing field of one row is ' + one + ' px, ' + three + ' px with three lines, ' + tall() + ' px with one again');
+			}
+		}]},
+		counter: {target: '#form-counter-title-count', steps: [async (out) => {
+			const counter = $('#form-counter-title-count');
+			const field = $('#form-counter-title');
+			const start = [counter.textContent, counter.dataset.state ?? ''];
+			input(field, 'x'.repeat(55));
+			const near = counter.dataset.state;
+			input(field, 'x'.repeat(61));
+			const over = [counter.textContent, counter.dataset.state];
+			await wait(1100);
+			const said = counter.nextElementSibling?.getAttribute('aria-live') === 'polite' ? counter.nextElementSibling.textContent : '';
+			if (start[0] !== field.defaultValue.length + ' / 60' || start[1] !== '' || near !== 'near' || over[0] !== '61 / 60' || over[1] !== 'over' || said === '') {
+				out.push('a counter reads ' + say(start) + ' at rest, ' + say(near) + ' at 55 of 60, ' + say(over) + ' at 61, and says ' + say(said));
+			}
+		}]},
+		step: {target: '#form-step-guests', steps: [async (out) => {
+			const field = $('#form-step-guests');
+			const up = $('[command="--step-up"][aria-controls="form-step-guests"]');
+			const down = $('[command="--step-down"][aria-controls="form-step-guests"]');
+			let changed = 0;
+			field.addEventListener('change', () => changed++);
+			up.click();
+			const once = [field.value, changed];
+			input(field, '12');
+			up.click();
+			const top = [field.value, up.getAttribute('aria-disabled'), down.getAttribute('aria-disabled')];
+			input(field, '1');
+			const bottom = [down.getAttribute('aria-disabled'), up.getAttribute('aria-disabled')];
+			if (say(once) !== say(['3', 1]) || say(top) !== say(['12', 'true', null]) || say(bottom) !== say(['true', null])) {
+				out.push('a step up from 2 gives ' + say(once) + ' (value, changes), at the max ' + say(top) + ' (value, up and down aria-disabled), at the min ' + say(bottom) + ' (down, up)');
+			}
+		}]},
+		color: {target: '#form-color-pick', steps: [async (out) => {
+			const picker = $('#form-color-pick');
+			const twin = $('#form-color-hex');
+			input(twin, 'zz');
+			const refused = [twin.getAttribute('aria-invalid'), picker.value];
+			input(twin, '#123');
+			const taken = [twin.hasAttribute('aria-invalid'), picker.value];
+			picker.value = '#e76f51';
+			picker.dispatchEvent(new Event('input', {bubbles: true}));
+			if (say(refused) !== say(['true', '#2a9d8f']) || say(taken) !== say([false, '#112233']) || twin.value !== '#e76f51') {
+				out.push('a hex twin: "zz" leaves ' + say(refused) + ', "#123" ' + say(taken) + ', the picker set ' + say(twin.value));
+			}
+			const [light, dark] = $$('#form-color .icon-tile');
+			const stored = [$('#form-color .dot').style.getPropertyValue('--redz-color'), rgb(getComputedStyle(light).color), rgb(getComputedStyle(dark).color), rgb(getComputedStyle($('#form-color .edge-start-color')).borderInlineStartColor)];
+			if (say(stored) !== say(['#2a9d8f', '0,0,0', '255,255,255', '231,111,81'])) {
+				out.push('stored colours read ' + say(stored) + ' (a dot\'s --redz-color, a light and a dark tile\'s icon, an edge)');
+			}
+		}]},
+		submit: {target: '#form-submit form', steps: [async (out) => {
+			const form = $('#form-submit form');
+			const sort = $('select', form);
+			sort.value = 'price';
+			sort.dispatchEvent(new Event('change', {bubbles: true}));
+			await wait(50);
+			const sent = $('[data-docs-sent]', form).textContent;
+			if (!sent.includes('sort=price')) {
+				out.push('a form with data-submit="change" sends ' + say(sent) + ' when its select changes');
+			}
+		}]},
+		show: {target: '#form-show-tax-region', steps: [async (out) => {
+			const region = $('#form-show-tax-region');
+			const pay = $('#form-show-pay');
+			const tax = $('#form-show-tax');
+			const state = () => [region.hidden, tax.disabled];
+			const start = state();
+			pay.value = 'invoice';
+			pay.dispatchEvent(new Event('change', {bubbles: true}));
+			const shown = state();
+			pay.value = 'card';
+			pay.dispatchEvent(new Event('change', {bubbles: true}));
+			if (say([start, shown, state()]) !== say([[true, true], [false, false], [true, true]])) {
+				out.push('a region shown by a select is [hidden, its field disabled] ' + say(start) + ' at rest, ' + say(shown) + ' for its value, ' + say(state()) + ' for another');
+			}
+		}]},
+		free: {target: '#combobox-free-list', steps: [async (out) => {
+			const search = $('#combobox-free-search');
+			const held = () => $$('input[type="hidden"][name="to[]"]').map((field) => field.value);
+			const comma = () => search.dispatchEvent(new KeyboardEvent('keydown', {key: ',', bubbles: true, cancelable: true}));
+			input(search, 'guide@example.com');
+			comma();
+			const taken = [held(), search.value];
+			input(search, 'guide@example.com');
+			comma();
+			const twice = held().length;
+			input(search, 'not an address');
+			comma();
+			await wait(100);
+			if (say(taken) !== say([['guide@example.com'], '']) || twice !== 1 || search.getAttribute('aria-invalid') !== 'true' || held().length !== 1 || $$('#combobox-free-chips .chip').length !== 1) {
+				out.push('free values: a comma takes ' + say(taken) + ', the same again leaves ' + twice + ', words that are no address leave aria-invalid ' + say(search.getAttribute('aria-invalid')) + ' and ' + held().length + ' held, ' + $$('#combobox-free-chips .chip').length + ' chips');
+			}
+		}]},
+		levels: {target: '#combobox-levels-list', steps: [async (out) => {
+			const search = $('[aria-controls="combobox-levels-list"]');
+			input(search, 'phuket');
+			const shown = $$('#combobox-levels-list [role="option"]').filter((option) => !option.hidden).map((option) => option.dataset.value);
+			const active = $('#combobox-levels-list [data-active]')?.dataset.value;
+			input(search, '');
+			if (say(shown) !== say(['th', 'th-south', 'phuket']) || active !== 'phuket') {
+				out.push('a search in levels shows ' + say(shown) + ', active ' + say(active) + ' - not Phuket with its parents, Phuket active');
+			}
+		}]},
+		rating: {target: '#rating-display .rating', steps: [async (out) => {
+			const shown = $('#rating-display .rating').style.getPropertyValue('--v');
+			const fills = $$('#rating-give label').map((label) => getComputedStyle(label, '::before').backgroundColor);
+			if (shown !== '0.84' || new Set(fills.slice(0, 4)).size !== 1 || fills[4] === fills[0]) {
+				out.push('a rating of 0.84 has --v ' + say(shown) + '; four stars given fill ' + say(fills));
+			}
+		}]},
+		brand: {target: '#tokens-brand-region [data-brand]', steps: [async (out) => {
+			const [green, yellow] = $$('#tokens-brand-region [data-brand]');
+			const look = [rgb(getComputedStyle($('.btn-primary', green)).backgroundColor), green.style.getPropertyValue('--redz-brand'), rgb(getComputedStyle($('.btn-primary', yellow)).color)];
+			if (say(look) !== say(['10,127,90', '#0a7f5a', '0,0,0'])) {
+				out.push('a white label of #0a7f5a draws its button ' + say(look[0]) + ' with --redz-brand ' + say(look[1]) + ', one of #f4c542 its words ' + say(look[2]));
+			}
+		}]},
+		segmented: {target: '#btn-segmented', steps: [async (out) => {
+			const look = (id) => getComputedStyle($('label[for="' + id + '"]')).backgroundColor;
+			const before = [look('btn-segmented-week'), look('btn-segmented-day')];
+			$('label[for="btn-segmented-day"]').click();
+			await wait(300);
+			const after = [$('#btn-segmented-day').checked, look('btn-segmented-day'), look('btn-segmented-week')];
+			if (before[0] === before[1] || !after[0] || after[1] !== before[0] || after[2] !== before[1]) {
+				out.push('a segmented choice draws the checked ' + say(before) + ' (checked, not), then after a click on Day ' + say(after));
+			}
+		}]},
+		marks: {target: '#save-bar-changed', steps: [async (out) => {
+			const changed = getComputedStyle($('#save-bar-changed-name')).boxShadow;
+			const dot = getComputedStyle($('#save-bar-changed .form-check'), '::after').content;
+			const select = getComputedStyle($('#form-adorn-country')).paddingInlineStart;
+			if (changed === 'none' || dot === 'none' || select !== '34px') {
+				out.push('a changed field\'s mark is ' + say(changed) + ', a changed check\'s ' + say(dot) + ', a select with an icon starts at ' + select);
 			}
 		}]},
 		floating: {target: '#input-group-floating .input-group', steps: [async (out) => {

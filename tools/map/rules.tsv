@@ -147,7 +147,7 @@ dropdown-divider	menu-divider	rename	menu
 dropdown-header	menu-header	rename	menu
 btn-(light|dark)		review	btn	no light or dark buttons: btn or btn-text
 btn-outline-(light|dark)		review	btn	btn-outline-secondary
-btn-check		review	btn	a toggle is a btn with aria-pressed; a choice is radio inputs
+btn-check	btn-check	same	btn	a radio or a check before its label.btn; a toggle that stands alone is a btn with aria-pressed
 btn-close-white		remove	btn	the close glyph takes the text color
 btn-group-(sm|lg)		review	btn	size each button
 btn-group-vertical	btn-group-vertical	same	btn
@@ -158,7 +158,7 @@ form-check-reverse		missing	check
 form-switch		review	check	switch on the input, with role="switch"
 form-range	form-range	same	form	on an <input type="range">, in the accent color
 form-control-plaintext		review	form	readonly on a form-control, or plain text
-form-control-color		review	form	a native <input type="color"> in the module's CSS
+form-control-color	form-control-color	same	form	on an <input type="color">; a text field with data-color-for is its hex twin
 col-form-label(-sm|-lg)?	form-label	review	form	a form-label in a form-field
 (input-group|input-group-sm|input-group-text)	$1	same	input-group
 input-group-lg	input-group	review	input-group	no larger size: the default group, or input-group-sm

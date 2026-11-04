@@ -33,6 +33,20 @@ A group of radios or checks drawn as tiles - a package, a plan, a way to pay - t
 </fieldset>
 ```
 
+### A choice that destroys
+
+`choice-danger` draws a tile in the danger tone when chosen - the way out of a set of ways to keep. A colour beside the words: the tile's words say what it does.
+
+```html
+<fieldset class="vstack gap-8">
+	<legend class="form-label">When you leave</legend>
+	<div class="grid cols-2 gap-12">
+		<label class="choice"><input type="radio" name="choice-leave" value="pause" checked>Pause the account<span class="fs-12 text-muted">Back any time</span></label>
+		<label class="choice choice-danger"><input type="radio" name="choice-leave" value="delete">Delete the account<span class="fs-12 text-muted">With every booking, for good</span></label>
+	</div>
+</fieldset>
+```
+
 ## Keyboard and accessibility
 
 - The input is the control and the tile's words its label: a screen reader says "1,500 THB A quarter, 5% off, radio button, checked, 2 of 3".
@@ -41,6 +55,6 @@ A group of radios or checks drawn as tiles - a package, a plan, a way to pay - t
 
 ## Tokens
 
-From [`css/components/choice.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/choice.css), which declares no custom property of its own.
+From [`css/components/choice.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/choice.css). It declares `--redz-choice-tone`, `--redz-choice-subtle` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-4`, `--redz-space-12`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-primary`, `--redz-primary-subtle`, `--redz-focus`, `--redz-space-8`, `--redz-border`.
+It reads the theme's `--redz-primary`, `--redz-primary-subtle`, `--redz-space-4`, `--redz-space-12`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-danger`, `--redz-danger-subtle`, `--redz-color`, `--redz-focus`, `--redz-space-8`, `--redz-border`.

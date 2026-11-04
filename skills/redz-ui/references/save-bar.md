@@ -21,13 +21,42 @@ At rest the bar says everything is saved; with unsaved changes it turns `save-ba
 </div>
 ```
 
+### Refused and saved
+
+The page sets the bar's `data-state` after a save: `error` in the danger tone, its words saying which fields the server refused; `saved` in the success tone, which fades back to the bar at rest after two seconds; under reduced motion it stays until the page changes it.
+
+```html
+<div class="save-bar" data-state="error" role="region" aria-label="Changes not saved">
+	<i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+	<span class="save-bar-text">2 fields refused: the address is taken, the price is below the child price</span>
+	<button class="btn btn-sm btn-primary" type="button"><i class="bi bi-floppy" aria-hidden="true"></i>Save</button>
+</div>
+<div class="save-bar" data-state="saved" role="region" aria-label="Changes">
+	<i class="bi bi-check2-circle" aria-hidden="true"></i>
+	<span class="save-bar-text">Saved at 14:05</span>
+</div>
+```
+
+### The fields that changed
+
+`data-changed`, set by the page, marks a field whose value differs from the saved one: a bar at the start of a `form-control` or a `form-select` - a combobox's button is one - and a dot after a check or a switch.
+
+```html
+<div class="form-floating">
+	<input class="form-control" id="save-bar-changed-name" value="Ang Thong by speedboat" placeholder="Name" data-changed>
+	<label for="save-bar-changed-name">Name</label>
+</div>
+<label class="form-check" data-changed><input class="check" type="checkbox" checked> Shown on the site</label>
+```
+
 ## Accessibility
 
 - The bar is a region named after what it holds; its words name the changes, not only their count.
 - It does not print, and it never hides the last field of the form: the form keeps room under it.
+- A changed field's mark is drawn, not read out: the bar's words name the changes. In forced colors the mark is a thicker start border.
 
 ## Tokens
 
 From [`css/components/save-bar.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/save-bar.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-12`, `--redz-space-8`, `--redz-space-16`, `--redz-border`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-2`, `--redz-text-muted`, `--redz-fs-12`, `--redz-warning`, `--redz-warning-subtle`.
+It reads the theme's `--redz-space-12`, `--redz-space-8`, `--redz-space-16`, `--redz-border`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-2`, `--redz-text-muted`, `--redz-fs-12`, `--redz-warning`, `--redz-warning-subtle`, `--redz-danger`, `--redz-danger-subtle`, `--redz-success`, `--redz-success-subtle`.

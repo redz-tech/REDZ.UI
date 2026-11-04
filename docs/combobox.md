@@ -138,6 +138,45 @@ document.addEventListener('redz:create', (event) => {
 });
 ```
 
+### Free values
+
+A list with `data-create` and no options of its own takes free values - e-mail addresses, phone numbers, words - as chips: `Enter` or a comma takes the words, a value held already is not taken twice. A search with a `pattern` or `type="email"` refuses words it does not hold: the search is marked `aria-invalid` and the page's text `chip.invalid` says why.
+
+```html
+<div class="card">
+	<div class="card-body vstack gap-8">
+		<label class="form-label" for="combobox-free-search">Send the report to</label>
+		<input class="form-control" id="combobox-free-search" type="email" role="combobox" aria-controls="combobox-free-list" aria-expanded="true" aria-autocomplete="list" placeholder="name@example.com" autocomplete="off">
+		<div class="combobox-list" id="combobox-free-list" role="listbox" aria-label="Addresses" aria-multiselectable="true" data-name="to[]" data-create="to[]" data-chips="combobox-free-chips"></div>
+		<div class="combobox-chips" id="combobox-free-chips"></div>
+	</div>
+</div>
+```
+
+### Options in levels
+
+Options with `data-level` 2 or 3 are indented under the one before them, and a parent can be chosen as any option. The search keeps the page's order and shows a match with its parents, so a city is found with its country. The level is drawn, not said - an option has no `aria-level` in ARIA: an option whose name needs its parent carries it in its words or in its `menu-item-description`.
+
+```html
+<div class="card">
+	<div class="card-body vstack gap-8">
+		<input class="form-control" type="search" role="combobox" aria-controls="combobox-levels-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a destination" placeholder="Find a destination" autocomplete="off">
+		<div class="combobox-list" id="combobox-levels-list" role="listbox" aria-label="Destinations" data-name="destination">
+			<div class="menu-item" role="option" id="combobox-levels-th" data-value="th" data-level="1" aria-selected="false">Thailand</div>
+			<div class="menu-item" role="option" id="combobox-levels-south" data-value="th-south" data-level="2" aria-selected="false">The south</div>
+			<div class="menu-item" role="option" id="combobox-levels-samui" data-value="samui" data-level="3" aria-selected="true">Koh Samui</div>
+			<div class="menu-item" role="option" id="combobox-levels-phuket" data-value="phuket" data-level="3" aria-selected="false">Phuket</div>
+			<div class="menu-item" role="option" id="combobox-levels-north" data-value="th-north" data-level="2" aria-selected="false">The north</div>
+			<div class="menu-item" role="option" id="combobox-levels-chiangmai" data-value="chiangmai" data-level="3" aria-selected="false">Chiang Mai</div>
+			<div class="menu-item" role="option" id="combobox-levels-my" data-value="my" data-level="1" aria-selected="false">Malaysia</div>
+			<div class="menu-item" role="option" id="combobox-levels-langkawi" data-value="langkawi" data-level="2" aria-selected="false">Langkawi</div>
+		</div>
+		<p class="combobox-no-results" hidden>Nothing found</p>
+		<input type="hidden" name="destination" value="samui" data-label="Koh Samui">
+	</div>
+</div>
+```
+
 ### Groups, descriptions and icons
 
 Options sit in groups - `role="group"` named by its `menu-header` - and carry an icon and a `menu-item-description`, which the search reads too; `data-keywords` adds words the option answers without showing them, and `aria-disabled="true"` keeps an option out of reach.
@@ -253,6 +292,7 @@ The library has no words of its own; it reads these from the page's island `#red
 | --- | --- | --- |
 | `remove` | A chip's remove button; `{label}` is the value's label | Remove {label} |
 | `create` | The option of a list with `data-create`; `{label}` is the search's words | Create “{label}” |
+| `chip.invalid` | Words a search with a `pattern` or `type="email"` refuses; `{label}` is the words | {label} is not valid |
 | `found.one`, `found.other` | The count of options found; `{count}` in the page's digits | {count} result, {count} results |
 
 ## Tokens

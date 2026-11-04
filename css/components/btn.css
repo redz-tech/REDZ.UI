@@ -30,6 +30,35 @@
 		color: var(--redz-btn-hover-fg);
 	}
 
+	.btn-check {
+		position: absolute;
+		inline-size: 1px;
+		block-size: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+		pointer-events: none;
+	}
+
+	.btn-check:checked + .btn,
+	.btn[aria-current]:not([aria-current="false"]) {
+		border-color: var(--redz-btn-on-bg, transparent);
+		background: var(--redz-btn-on-bg, var(--redz-btn-hover));
+		color: var(--redz-btn-on-fg, var(--redz-btn-hover-fg));
+	}
+
+	.btn-check:focus-visible + .btn {
+		outline: 2px solid var(--redz-focus);
+		outline-offset: 2px;
+	}
+
+	.btn-check:disabled + .btn {
+		--redz-btn-bg: var(--redz-bg-page);
+		--redz-btn-fg: var(--redz-text-faint);
+		border-color: transparent;
+		cursor: not-allowed;
+	}
+
 	.btn .bi {
 		font-size: 1rem;
 	}
@@ -83,31 +112,43 @@
 	.btn-outline-primary {
 		--redz-btn-fg: var(--redz-primary);
 		--redz-btn-hover: var(--redz-primary-subtle);
+		--redz-btn-on-bg: var(--redz-primary);
+		--redz-btn-on-fg: var(--redz-primary-contrast);
 	}
 
 	.btn-outline-secondary {
 		--redz-btn-fg: var(--redz-secondary);
 		--redz-btn-hover: var(--redz-secondary-subtle);
+		--redz-btn-on-bg: var(--redz-secondary);
+		--redz-btn-on-fg: var(--redz-secondary-contrast);
 	}
 
 	.btn-outline-success {
 		--redz-btn-fg: var(--redz-success);
 		--redz-btn-hover: var(--redz-success-subtle);
+		--redz-btn-on-bg: var(--redz-success);
+		--redz-btn-on-fg: var(--redz-success-contrast);
 	}
 
 	.btn-outline-danger {
 		--redz-btn-fg: var(--redz-danger);
 		--redz-btn-hover: var(--redz-danger-subtle);
+		--redz-btn-on-bg: var(--redz-danger);
+		--redz-btn-on-fg: var(--redz-danger-contrast);
 	}
 
 	.btn-outline-warning {
 		--redz-btn-fg: var(--redz-warning);
 		--redz-btn-hover: var(--redz-warning-subtle);
+		--redz-btn-on-bg: var(--redz-warning);
+		--redz-btn-on-fg: var(--redz-warning-contrast);
 	}
 
 	.btn-outline-info {
 		--redz-btn-fg: var(--redz-info);
 		--redz-btn-hover: var(--redz-info-subtle);
+		--redz-btn-on-bg: var(--redz-info);
+		--redz-btn-on-fg: var(--redz-info-contrast);
 	}
 
 	.btn-subtle-primary {
@@ -217,6 +258,16 @@
 		inline-size: var(--redz-control-height-lg);
 	}
 
+	.btn-float {
+		min-block-size: var(--redz-control-height-float);
+		padding-inline: var(--redz-space-16);
+	}
+
+	.btn-icon.btn-float {
+		inline-size: var(--redz-control-height-float);
+		padding: 0;
+	}
+
 	.btn:disabled,
 	.btn[aria-disabled="true"] {
 		--redz-btn-bg: var(--redz-bg-page);
@@ -293,7 +344,7 @@
 		gap: 1px;
 	}
 
-	.btn-group > .btn:not(:first-child) {
+	.btn-group > .btn:not(:first-child, .btn-check:first-child + .btn) {
 		border-start-start-radius: 0;
 		border-end-start-radius: 0;
 	}
@@ -334,6 +385,8 @@
 	}
 
 	@media (forced-colors: active) {
+		.btn-check:checked + .btn,
+		.btn[aria-current]:not([aria-current="false"]),
 		.btn[aria-pressed="true"] {
 			forced-color-adjust: none;
 			border-color: Highlight;

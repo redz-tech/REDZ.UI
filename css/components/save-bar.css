@@ -32,6 +32,39 @@
 		font-weight: 600;
 	}
 
+	.save-bar[data-state="error"] {
+		border-color: color-mix(in oklch, var(--redz-danger) 45%, transparent);
+		background: var(--redz-danger-subtle);
+	}
+
+	.save-bar[data-state="error"] .save-bar-text {
+		color: var(--redz-danger);
+		font-weight: 600;
+	}
+
+	.save-bar[data-state="saved"] {
+		border-color: color-mix(in oklch, var(--redz-success) 45%, transparent);
+		background: var(--redz-success-subtle);
+	}
+
+	.save-bar[data-state="saved"] .save-bar-text {
+		color: var(--redz-success);
+		font-weight: 600;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.save-bar[data-state="saved"] {
+			animation: save-bar-saved 1s ease-in 2s forwards;
+		}
+	}
+
+	@keyframes save-bar-saved {
+		to {
+			border-color: var(--redz-border);
+			background: var(--redz-bg-raised);
+		}
+	}
+
 	@media print {
 		.save-bar {
 			display: none;

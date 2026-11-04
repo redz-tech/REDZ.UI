@@ -1,0 +1,41 @@
+<header class="vstack gap-8">
+	<h1>Ratings</h1>
+	<p class="docs-lead">Stars that show a mark out of five - an average of reviews, a guide's score - and five radios drawn as stars for giving one.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="rating-examples">
+	<h2 id="rating-examples">Examples</h2>
+	<p><code>rating</code> draws five stars filled to <code>data-v</code>, the mark's share of the most from 0 to 1 - 4.2 of 5 is <code>0.84</code>; the library sets it as <code>--v</code> through the CSSOM, so a page under a strict CSP writes no style. The stars are a picture: <code>role="img"</code> with the mark in <code>aria-label</code>, and the number in words beside them when it matters. They take the size of the text around them.</p>
+	<div class="docs-example docs-example-stack" id="rating-display">
+		<div class="hstack gap-8">
+			<span class="rating" role="img" aria-label="4.2 of 5" data-v="0.84"></span>
+			<span class="fw-600 tabular-nums">4.2</span>
+			<span class="text-muted fs-12">128 reviews</span>
+		</div>
+		<div class="hstack gap-8 fs-24">
+			<span class="rating" role="img" aria-label="3 of 5" data-v="0.6"></span>
+		</div>
+	</div>
+
+	<h3>Giving a mark</h3>
+	<p><code>fieldset class="rating-input"</code> holds five radios, each an input before its <code>label</code>: the library hides the inputs and draws each label as a star, filled up to the one checked - and up to the one under the pointer. The words of each label are for a screen reader, in a <code>visually-hidden</code> span; the <code>legend</code> names the mark. The radios stay the control: the arrow keys move the mark, the form sends it.</p>
+	<div class="docs-example docs-example-stack" id="rating-give">
+		<fieldset class="rating-input">
+			<legend class="visually-hidden">Your mark for the guide</legend>
+			<input type="radio" name="rating-give" id="rating-give-1" value="1"><label for="rating-give-1"><span class="visually-hidden">1 star</span></label>
+			<input type="radio" name="rating-give" id="rating-give-2" value="2"><label for="rating-give-2"><span class="visually-hidden">2 stars</span></label>
+			<input type="radio" name="rating-give" id="rating-give-3" value="3"><label for="rating-give-3"><span class="visually-hidden">3 stars</span></label>
+			<input type="radio" name="rating-give" id="rating-give-4" value="4" checked><label for="rating-give-4"><span class="visually-hidden">4 stars</span></label>
+			<input type="radio" name="rating-give" id="rating-give-5" value="5"><label for="rating-give-5"><span class="visually-hidden">5 stars</span></label>
+		</fieldset>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="rating-access">
+	<h2 id="rating-access">Keyboard and accessibility</h2>
+	<ul>
+		<li>A shown mark is one picture with its words - "4.2 of 5" - not five stars read one by one.</li>
+		<li>A mark given is a group of radios: <kbd>Tab</kbd> into it, the arrows move the mark, a screen reader says "4 stars, radio button, checked, 4 of 5".</li>
+		<li>The stars are drawn in the warning tone on the strong border's grey; in forced colors, in the text colour on grey.</li>
+	</ul>
+</section>

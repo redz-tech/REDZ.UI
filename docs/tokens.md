@@ -10,6 +10,22 @@ The custom properties on `:root` that the components read: colors by role in pai
 - Text is at least 4.5:1 on its background, the borders of fields and the focus ring 3:1, in the light and the dark theme - computed in OKLCH and written as checked hex.
 - A component declares a few properties of its own on its root and never on rows or items: hundreds of properties on small elements slow every style recalculation.
 
+## A white label from one colour
+
+`data-brand` on `html`, or on one region, makes the primary tone of one colour, `--redz-brand`: the library derives the tone, its `-subtle` fill, its `-contrast` text - black or white by the colour's lightness - the focus ring and the links, in both themes; in the dark one the tone is lightened until it reads on the dark ground. `data-brand="#0a7f5a"` gives the colour, which the library sets through the CSSOM after its script loads; a page that knows the colour on its server writes `--redz-brand` in its own stylesheet beside the attribute, and nothing waits for the script. The colour is used as given: one with 4.5:1 on white keeps the light theme's text readable - the library does not fix another. The relative colours it is derived with are on the floor: Chrome 119, Firefox 128, Safari 18.
+
+```html
+<div class="hstack flex-wrap gap-8" data-brand="#0a7f5a">
+	<button class="btn btn-primary" type="button">Book now</button>
+	<button class="btn btn-outline-primary" type="button">Details</button>
+	<span class="badge badge-subtle-primary">New</span>
+	<a href="#tokens-brand">A link</a>
+</div>
+<div class="hstack flex-wrap gap-8" data-brand="#f4c542">
+	<button class="btn btn-primary" type="button">Book now</button>
+</div>
+```
+
 ## Every token, light theme
 
 | Token | Value |
@@ -59,6 +75,7 @@ The custom properties on `:root` that the components read: colors by role in pai
 | `--redz-motion` | `150ms` |
 | `--redz-ease` | `cubic-bezier(0.22, 1, 0.36, 1)` |
 | `--redz-form-select-chevron` | `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23595b5f'%3E%3Cpath d='M1.6 4.6a.6.6 0 0 1 .85 0L8 10.15l5.55-5.55a.6.6 0 1 1 .85.85l-5.98 5.97a.6.6 0 0 1-.84 0L1.6 5.45a.6.6 0 0 1 0-.85'/%3E%3C/svg%3E")` |
+| `--redz-star` | `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-1.5 -1.5 19 19'%3E%3Cpath d='M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z'/%3E%3C/svg%3E")` |
 | `--redz-space-0` | `0` |
 | `--redz-space-2` | `0.125rem` |
 | `--redz-space-4` | `0.25rem` |
