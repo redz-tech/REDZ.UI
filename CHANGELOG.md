@@ -4,6 +4,41 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+What the ERP's move from Bootstrap 5.3 asked for, and the editor; to be released as one minor release.
+
+### Added
+- **Tooltips from titles** (`data-tooltips`, `js/tooltips.js`): inside an element with `data-tooltips` (`<html>` for
+  the whole page) an element's own `title` shows as the library's tooltip after a short hover and on a keyboard's
+  focus; Escape hides it without moving the focus, the pointer may rest on it, a touch never opens it. While hovered
+  the title is held back so the browser does not show its own, and an element named only by its title keeps that
+  name; screen readers hear the title as before.
+- **A tab the page may refuse** (`redz:select`): before a person's click or key selects a tab, the tablist fires the
+  cancelable `redz:select` (`detail.tab`, the tab asked for, and `detail.from`, the one being left); a page that answers
+  with `event.detail.respondWith(promise)` has the tab selected only when the promise gives `true`, and otherwise the
+  tab being left stays, with the focus.
+- **A confirmation with a phrase to type** (`REDZ.ui.confirm({…, phrase})`): a field under the text, labelled by the
+  island's new text `confirm.phrase`, takes the focus; the confirming button waits until the words match, and Enter in
+  the field confirms then.
+- **The browser floor in one script** (`js/floor.js`, the passport's `dist.floor`): a plain script for the head, before
+  the stylesheets, that marks `<html data-floor="below">` when the browser lacks a feature the library is built on, so
+  every product judges a browser the same way and shows its own words. `tools/build.php` writes it from
+  `tools/floor/tests.json`, and the floor gate holds that every browser at the floor passes it.
+- `border-{tone}-subtle`, `spinner-grow` (a dot that grows and fades), `btn-group-vertical`.
+- The migration skill's scan reads Bootstrap's custom properties (`--bs-*`, in stylesheets, style attributes and
+  scripts; the map's 449 new rows from `tools/map/properties.tsv`), class values written over several lines and icon
+  names `icons/` lacks, and prints the map's note where a finding has no form.
+
+### Changed
+- The stylesheet's budget is 26 KB gzipped (from 24).
+- `data-density="compact"` is documented on any element - a table, its card, a region - not only on `<html>`.
+- The map: `offcanvas-*` is the app shell's `app-sidebar` (review), `table-sm` is `data-density="compact"` on the
+  table, `data-bs-toggle="tooltip"` is the title inside `data-tooltips`, `data-bs-title` is `title`.
+
+### Fixed
+- The scan named `references/triggers.md`, which is `references/states-and-triggers.md`.
+
 ## 0.9.0 - 2026-11-04
 
 A site's header by Bootstrap 6's names, for the sites as well as the admin.
