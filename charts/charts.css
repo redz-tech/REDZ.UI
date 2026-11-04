@@ -182,14 +182,12 @@
 		--redz-series: var(--redz-secondary);
 	}
 
-	.chart-values > tbody {
-		margin-block-start: 1rem;
-	}
-
+	/* A column of chart-values is its number's line above its bar: the number never sits on the bar, whatever the font. */
 	.chart-values > tbody td {
-		display: flex;
-		flex-direction: column;
+		position: relative;
+		block-size: calc(var(--v, 0) * (100% - 1rem) + 1rem);
 		overflow: visible;
+		background: none;
 		color: var(--redz-text-muted);
 		font-size: 0.6875rem;
 		line-height: 1rem;
@@ -197,9 +195,13 @@
 		font-variant-numeric: tabular-nums;
 	}
 
-	.chart-values > tbody td::before {
+	.chart-values > tbody td::after {
 		content: "";
-		margin-block-start: -1rem;
+		position: absolute;
+		inset: 1rem 0 0;
+		border-start-start-radius: 4px;
+		border-start-end-radius: 4px;
+		background: var(--redz-series);
 	}
 
 	.chart-bar > tbody {
@@ -512,7 +514,13 @@
 		}
 
 		.chart-values > tbody td {
+			background: none;
 			color: CanvasText;
+		}
+
+		.chart-values > tbody td::after {
+			forced-color-adjust: none;
+			background: CanvasText;
 		}
 	}
 }

@@ -717,8 +717,9 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 			$was = in_array($state()['walked'], $state()['open'], true);
 			foreach (['Enter', 'Space'] as $step => $key) {
 				if ($h['kind'] === 'firefox') {
+					// Two clicks within the system's double-click time are one double click, as Firefox on Linux takes them.
 					PROBE__Do($h, 'Click', ...PROBE__Do($h, 'Eval', 'REDZ_PROBE.summaryPoint(' . json_encode($id) . ')'));
-					usleep(200000);
+					usleep(600000);
 				} else {
 					$press($key);
 				}
