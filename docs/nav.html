@@ -83,6 +83,7 @@
 			<a class="app-link" href="selection-bar.html"><i class="bi bi-check2-all" aria-hidden="true"></i>Selection bar</a>
 			<div class="app-section">Navigation</div>
 			<a class="app-link" href="nav.html" aria-current="page"><i class="bi bi-segmented-nav" aria-hidden="true"></i>Navs and tabs</a>
+			<a class="app-link" href="navbar.html"><i class="bi bi-window-desktop" aria-hidden="true"></i>Navbars</a>
 			<a class="app-link" href="breadcrumb.html"><i class="bi bi-chevron-double-right" aria-hidden="true"></i>Breadcrumbs</a>
 			<a class="app-link" href="pagination.html"><i class="bi bi-123" aria-hidden="true"></i>Pagination</a>
 			<a class="app-link" href="stepper.html"><i class="bi bi-list-ol" aria-hidden="true"></i>Steppers</a>
@@ -228,7 +229,7 @@
 &lt;/div&gt;</code></pre></div>
 
 					<h3>When the links do not fit</h3>
-					<p><code>nav-overflow</code> around a nav keeps it on one line: the links that do not fit hide from the end and come back, in their order, as the items of a menu behind a “More” button after the nav. The link the person is on and a link with <code>nav-overflow-keep</code> stay in the row. It measures the room its own box has, not the window, so a nav in a narrow column folds as early as it needs to. For a row of links the wrapper is the <code>&lt;nav&gt;</code>, so the menu stays inside the landmark.</p>
+					<p><code>nav-overflow</code> around a nav keeps it on one line: the links that do not fit hide from the end and come back, in their order, as the items of a menu behind a “More” button after the nav. The link the person is on and a link with <code>nav-overflow-keep</code> stay in the row. A link that opens a <a href="menu.html">menu</a> folds with it, as a group of its items under the link's words, and stays in the row while its menu holds the page the person is on; a <a href="navbar.html">navbar</a> shows one. It measures the room its own box has, not the window, so a nav in a narrow column folds as early as it needs to. For a row of links the wrapper is the <code>&lt;nav&gt;</code>, so the menu stays inside the landmark.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="nav-overflow">
 						<nav class="nav-overflow max-w-480" aria-label="Excursion sections">
 							<div class="nav nav-underline">

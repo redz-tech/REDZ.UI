@@ -50,7 +50,17 @@
 			{"label": "End in the tabs", "do": "key", "key": "End", "expect": ["History"]},
 			{"label": "the first tab of manual tabs", "do": "focus", "target": "#nav-manual-1", "expect": ["Bookings"]},
 			{"label": "Right on it", "do": "key", "key": "ArrowRight", "expect": ["Revenue"]},
-			{"label": "Enter on that tab", "do": "key", "key": "Enter", "expect": ["Revenue"]}
+			{"label": "Enter on that tab", "do": "key", "key": "Enter", "expect": ["Revenue"]},
+			{"label": "the More button of links that do not fit", "do": "focus", "target": "#nav-overflow .nav-overflow-toggle", "expect": ["More"]},
+			{"label": "Up on it: the menu opens on its last item", "do": "key", "key": "ArrowUp", "expect": ["Questions"]},
+			{"label": "Escape in the menu", "do": "key", "key": "Escape", "expect": ["More"]}
+		],
+		"docs/navbar.html": [
+			{"label": "the More button of a header whose links do not fit", "do": "focus", "target": "#navbar-overflow .nav-overflow-toggle", "expect": ["More"]},
+			{"label": "Up on it: the menu opens on the last item of the folded menu", "do": "key", "key": "ArrowUp", "expect": ["Cancellation policy"]},
+			{"label": "Escape in the menu", "do": "key", "key": "Escape", "expect": ["More"]},
+			{"label": "the button of a header that always folds", "do": "focus", "target": "#navbar-folded .navbar-toggler", "expect": ["Menu"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["expanded"]}
 		],
 		"docs/accordion.html": [
 			{"label": "an open item's summary", "do": "focus", "target": "#accordion-basic summary", "expect": ["What does a day trip include?", "expanded"]},
@@ -65,6 +75,10 @@
 		],
 		"docs/tooltip.html": [
 			{"label": "the tooltip's button, described by its tooltip", "do": "focus", "target": "#tooltip-why button", "expect": ["What is a partner license", "A partner can hide the brand"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["expanded"]}
+		],
+		"docs/popover.html": [
+			{"label": "the button of a titled popover", "do": "focus", "target": "#popover-titled > button", "expect": ["Park fee"]},
 			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["expanded"]}
 		],
 		"docs/toast.html": [

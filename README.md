@@ -75,8 +75,11 @@ attaches by delegation on `document`, so nothing is set up per element and marku
   from the server - the keys move the focus only, and Enter or Space selects (`js/tabs.js`).
 - **Nav overflow** (`nav-overflow` around a nav): the links that do not fit the wrapper's own box hide from the end
   into a "More" menu after the nav, the current link and `nav-overflow-keep` ones staying in the row; a plain click on
-  an item clicks the hidden link itself. It watches the wrapper's size and the nav's links, and takes up a wrapper
-  added later (`js/nav-overflow.js`).
+  an item clicks the hidden link itself; a link that opens a menu folds as a group of its items. It watches the
+  wrapper's size and the nav's links, and takes up a wrapper added later (`js/nav-overflow.js`).
+- **Navbars** (`navbar` with a `navbar-toggler` and a `<nav class="drawer" popover>`): below its `navbar-expand` width
+  the toggler opens the links as a panel, which closes when a link in it is followed, when the focus leaves it for the
+  page and when the header grows wide enough for its row (`js/navbar.js`).
 - **Regions:** a button with `command="--toggle"` opens and closes the element its `aria-controls` names, closed as
   `hidden="until-found"`, so the browser's find in page still reaches its words and opens it; every button for the
   region says the state in `aria-expanded` (`js/toggle.js`). It takes no `commandfor`, which WebKit would expose as

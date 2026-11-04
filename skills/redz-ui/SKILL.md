@@ -70,5 +70,5 @@ Actions: `btn.md`, `chip.md`, `menu.md`. Forms: `form.md`, `input-group.md`, `ch
 `accordion.md`, `collapse.md`, `list-group.md`, `tree.md`, `table.md`, `badge.md`, `dot.md`, `avatar.md`, `icon-tile.md`,
 `empty-state.md`, `placeholder.md`, `prose.md`. Layers: `dialog.md`, `drawer.md`, `popover.md`, `tooltip.md`.
 Feedback: `alert.md`, `toast.md`, `spinner.md`, `progress.md`, `busy.md`, `save-bar.md`, `selection-bar.md`.
-Navigation: `nav.md`, `breadcrumb.md`, `pagination.md`, `stepper.md`, `palette.md`, `app.md`. The same pages live at
+Navigation: `nav.md`, `navbar.md`, `breadcrumb.md`, `pagination.md`, `stepper.md`, `palette.md`, `app.md`. The same pages live at
 `https://redz-tech.github.io/REDZ.UI/docs/`.

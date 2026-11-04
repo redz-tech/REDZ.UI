@@ -2,7 +2,7 @@
 
 # App shell
 
-The frame of an admin screen: `app` with a header, a side navigation, the main column and an optional side column. Below 1024 px the side navigation becomes a panel opened from the header. These docs stand in it.
+The frame of an admin screen: `app` with a header, a side navigation, the main column and an optional side column. Below 1024 px the side navigation becomes a panel opened from the header. These docs stand in it. A site's header is a [navbar](navbar.md).
 
 ## The parts
 
@@ -40,18 +40,3 @@ The [demo screens](https://redz-tech.github.io/REDZ.UI/reference/demo/list.html)
 From [`css/components/app.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/app.css). It declares `--redz-btn-bg`, `--redz-btn-fg`, `--redz-btn-hover` on its root, never on rows or items.
 
 It reads the theme's `--redz-space-8`, `--redz-space-12`, `--redz-bg-page`, `--redz-text`, `--redz-radius-8`, `--redz-primary`, `--redz-primary-contrast`, `--redz-fs-12`, `--redz-bg`, `--redz-text-muted`, `--redz-border`, `--redz-border-strong`, `--redz-space-4`, `--redz-space-16`, `--redz-bg-hover`, `--redz-shadow-1`, `--redz-space-24`, `--redz-space-32`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-3`.
-
-## From Bootstrap 5.3
-
-| Bootstrap 5.3 | REDZ.UI | Change | Note |
-| --- | --- | --- | --- |
-| `navbar` | - | review | the shell's app-header |
-| `navbar-brand` | - | review | the shell's app-header |
-| `navbar-collapse` | - | review | the shell's app-header |
-| `navbar-dark` | - | review | the shell's app-header |
-| `navbar-expand` | - | review | the shell's app-header |
-| `navbar-nav` | - | review | the shell's app-header |
-| `navbar-nav-scroll` | - | review | the shell's app-header |
-| `navbar-text` | - | review | the shell's app-header |
-| `navbar-toggler` | - | review | the shell's app-header |
-| `navbar-toggler-icon` | - | review | the shell's app-header |

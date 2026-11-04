@@ -4,6 +4,32 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+A site's header by Bootstrap 6's names, for the sites as well as the admin; to be released as 0.9.0.
+
+### Added
+- **Navbars** (`navbar`, `navbar-brand`, `navbar-nav`, `navbar-text`, `navbar-toggler`, `navbar-translucent`,
+  `navbar-expand` and its width prefixes `sm:` to `2xl:`, `js/navbar.js`): a header with the site's name and its links,
+  which stand in its row from the header's own width and below it open from the toggler as a `<nav class="drawer"
+  popover>` panel at the side of the screen. The panel closes when a link in it is followed, when the focus leaves it
+  for the page and when the header grows wide enough for its row; the page under it does not scroll while it is open.
+  The link the person is on is underlined. With `nav-overflow` inside, the links that do not fit the row fold into
+  "More" before the whole row goes behind the toggler.
+- The migration skill's map turns Bootstrap 5's `navbar`, `navbar-expand-*`, `navbar-brand`, `navbar-nav`,
+  `navbar-text`, `navbar-toggler` and `navbar-toggler-icon` into these, and names what `navbar-collapse` and
+  `navbar-dark` become.
+- The screen reader probes hear the "More" button of a nav that does not fit, a popover's button and a navbar's toggler.
+
+### Changed
+- **Nav overflow:** a link that opens a menu folds with it, as a group of the menu's items under the link's words, and
+  stays in the row while its menu holds the page the person is on; a menu open under a link that folds closes.
+- A drawer that is a `popover` slides in as a modal drawer does.
+
+### Fixed
+- A drawer on a narrow screen stays inside it where the browser draws a scrollbar beside the page (Firefox): its width
+  counted the window with the scrollbar's place, which an open drawer keeps.
+
 ## 0.8.0 - 2026-11-04
 
 What Bootstrap 6 has that REDZ.UI had not, for the admin of the CMS and the ERP, by Bootstrap 6's names.

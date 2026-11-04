@@ -1,10 +1,11 @@
 // REDZ.UI, nav overflow (the Priority+ pattern): a .nav-overflow wrapper keeps its .nav on one line. The links that do
 // not fit hide from the end and come back, in their order, as the items of a menu behind a "More" button after the nav;
-// the link the person is on (aria-current, or aria-selected="true" for a tab) and a link with nav-overflow-keep stay in
-// the row. It measures the nav against the room the wrapper leaves it, as hiding links changes the nav's own width, and
-// looks again when the wrapper changes size, the fonts load, or the nav's links or their states change. The button and
-// the menu may be the page's own (a .nav-overflow-toggle and a .nav-overflow-menu in the wrapper); else the button says
-// the page's text "more". A wrapper added to the page later is taken up as it comes.
+// the link the person is on (aria-current, or aria-selected="true" for a tab, or a current item in the menu it opens)
+// and a link with nav-overflow-keep stay in the row; a link that opens a menu comes back as a group of that menu's
+// items, named by the link's words. It measures the nav against the room the wrapper leaves it, as hiding links changes
+// the nav's own width, and looks again when the wrapper changes size, the fonts load, or the nav's links or their
+// states change. The button and the menu may be the page's own (a .nav-overflow-toggle and a .nav-overflow-menu in the
+// wrapper); else the button says the page's text "more". A wrapper added to the page later is taken up as it comes.
 import {text} from './text.js';
 
 const state = new WeakMap();
@@ -15,8 +16,14 @@ const pending = new Set();
 /** The nav's links: its children with the nav-link class that the page itself has not hidden. */
 const linksOf = (nav) => [...nav.children].filter((link) => link.classList.contains('nav-link') && (!link.hidden || 'overflow' in link.dataset));
 
-/** Whether the link is the one the person is on. */
-const isCurrent = (link) => (link.hasAttribute('aria-current') && link.getAttribute('aria-current') !== 'false') || link.getAttribute('aria-selected') === 'true';
+/** The menu the link opens, when it opens one: the popover of role menu its commandfor names. */
+const menuOf = (link) => {
+	const menu = link.hasAttribute('commandfor') ? document.getElementById(link.getAttribute('commandfor')) : null;
+	return menu !== null && menu.getAttribute('role') === 'menu' ? menu : null;
+};
+
+/** Whether the person is on the link, or on a page of the menu it opens. */
+const isCurrent = (link) => (link.hasAttribute('aria-current') && link.getAttribute('aria-current') !== 'false') || link.getAttribute('aria-selected') === 'true' || (menuOf(link)?.querySelector('[aria-current]:not([aria-current="false"])') ?? null) !== null;
 
 /** Whether the nav's links fit the room it has, to a pixel. */
 const fits = (nav) => nav.scrollWidth - nav.clientWidth <= 1;
@@ -49,11 +56,32 @@ const itemOf = (link, wrapper) => {
 		item.closest('[role="menu"]')?.hidePopover();
 		link.click();
 		update(wrapper);
-		if (!link.hidden) {
+		if (link.getClientRects().length > 0) {
 			link.focus();
 		}
 	});
 	return item;
+};
+
+/** The group that stands for a hidden link that opens a menu: the link's words over that menu's items. */
+const groupOf = (link, menu, wrapper) => {
+	const group = document.createElement('div');
+	const header = Object.assign(document.createElement('div'), {className: 'menu-header', id: 'redz-nav-overflow-group-' + (++made)});
+	header.textContent = link.getAttribute('aria-label') || link.textContent.replace(/\s+/g, ' ').trim();
+	header.setAttribute('role', 'presentation');
+	group.setAttribute('role', 'group');
+	group.setAttribute('aria-labelledby', header.id);
+	group.append(header, ...[...menu.querySelectorAll('[role="menuitem"]')].map((item) => itemOf(item, wrapper)));
+	return group;
+};
+
+/** The menu's children for the hidden links in their order, a divider on each side of a group. */
+const entriesOf = (moved, wrapper) => {
+	const entries = moved.map((link) => {
+		const menu = menuOf(link);
+		return menu === null ? itemOf(link, wrapper) : groupOf(link, menu, wrapper);
+	});
+	return entries.flatMap((entry, i) => i > 0 && [entry, entries[i - 1]].some((one) => one.getAttribute('role') === 'group') ? [Object.assign(document.createElement('hr'), {className: 'menu-divider'}), entry] : [entry]);
 };
 
 /** The wrapper's button and menu: the page's own, else made once after the nav. */
@@ -104,6 +132,9 @@ const update = (wrapper) => {
 			link.hidden = true;
 			link.dataset.overflow = '';
 			moved.unshift(link);
+			if (menuOf(link)?.matches(':popover-open')) {
+				menuOf(link).hidePopover();
+			}
 		}
 		own.toggle.hidden = moved.length === 0;
 	}
@@ -111,7 +142,7 @@ const update = (wrapper) => {
 		if (moved.length === 0 && own.menu.matches(':popover-open')) {
 			own.menu.hidePopover();
 		}
-		own.menu.replaceChildren(...moved.map((link) => itemOf(link, wrapper)));
+		own.menu.replaceChildren(...entriesOf(moved, wrapper));
 	}
 	own.moved = moved;
 	own.dirty = false;

@@ -187,6 +187,7 @@
 2xl:my-64
 2xl:my-8
 2xl:my-auto
+2xl:navbar-expand
 2xl:order-0
 2xl:order-1
 2xl:order-2
@@ -2883,6 +2884,7 @@ lg:my-48
 lg:my-64
 lg:my-8
 lg:my-auto
+lg:navbar-expand
 lg:order-0
 lg:order-1
 lg:order-2
@@ -3240,6 +3242,7 @@ md:my-48
 md:my-64
 md:my-8
 md:my-auto
+md:navbar-expand
 md:order-0
 md:order-1
 md:order-2
@@ -3451,6 +3454,13 @@ nav-overflow
 nav-overflow-toggle
 nav-pills
 nav-underline
+navbar
+navbar-brand
+navbar-expand
+navbar-nav
+navbar-text
+navbar-toggler
+navbar-translucent
 object-fit-contain
 object-fit-cover
 object-fit-fill
@@ -3841,6 +3851,7 @@ sm:my-48
 sm:my-64
 sm:my-8
 sm:my-auto
+sm:navbar-expand
 sm:order-0
 sm:order-1
 sm:order-2
@@ -4254,6 +4265,7 @@ xl:my-48
 xl:my-64
 xl:my-8
 xl:my-auto
+xl:navbar-expand
 xl:order-0
 xl:order-1
 xl:order-2

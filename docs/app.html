@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>App shell - REDZ.UI</title>
-	<meta name="description" content="The frame of an admin screen: app with a header, a side navigation, the main column and an optional side column. Below 1024 px the side navigation becomes a panel opened from the header. These docs stand in it.">
+	<meta name="description" content="The frame of an admin screen: app with a header, a side navigation, the main column and an optional side column. Below 1024 px the side navigation becomes a panel opened from the header. These docs stand in it. A site&#039;s header is a navbar.">
 	<link rel="stylesheet" href="../dist/redz-ui.min.css">
 	<link rel="stylesheet" href="../css/icons.css">
 	<link rel="stylesheet" href="site.css">
@@ -83,6 +83,7 @@
 			<a class="app-link" href="selection-bar.html"><i class="bi bi-check2-all" aria-hidden="true"></i>Selection bar</a>
 			<div class="app-section">Navigation</div>
 			<a class="app-link" href="nav.html"><i class="bi bi-segmented-nav" aria-hidden="true"></i>Navs and tabs</a>
+			<a class="app-link" href="navbar.html"><i class="bi bi-window-desktop" aria-hidden="true"></i>Navbars</a>
 			<a class="app-link" href="breadcrumb.html"><i class="bi bi-chevron-double-right" aria-hidden="true"></i>Breadcrumbs</a>
 			<a class="app-link" href="pagination.html"><i class="bi bi-123" aria-hidden="true"></i>Pagination</a>
 			<a class="app-link" href="stepper.html"><i class="bi bi-list-ol" aria-hidden="true"></i>Steppers</a>
@@ -98,7 +99,7 @@
 			<article class="docs vstack gap-32">
 				<header class="vstack gap-8">
 					<h1>App shell</h1>
-					<p class="docs-lead">The frame of an admin screen: <code>app</code> with a header, a side navigation, the main column and an optional side column. Below 1024 px the side navigation becomes a panel opened from the header. These docs stand in it.</p>
+					<p class="docs-lead">The frame of an admin screen: <code>app</code> with a header, a side navigation, the main column and an optional side column. Below 1024 px the side navigation becomes a panel opened from the header. These docs stand in it. A site's header is a <a href="navbar.html">navbar</a>.</p>
 				</header>
 
 				<section class="vstack gap-16" aria-labelledby="app-examples">
@@ -154,25 +155,6 @@
 							<h2 id="app-tokens">Tokens</h2>
 							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/app.css"><code>css/components/app.css</code></a>. It declares <code>--redz-btn-bg</code>, <code>--redz-btn-fg</code>, <code>--redz-btn-hover</code> on its root, never on rows or items.</p>
 							<p>It reads the theme's <code>--redz-space-8</code>, <code>--redz-space-12</code>, <code>--redz-bg-page</code>, <code>--redz-text</code>, <code>--redz-radius-8</code>, <code>--redz-primary</code>, <code>--redz-primary-contrast</code>, <code>--redz-fs-12</code>, <code>--redz-bg</code>, <code>--redz-text-muted</code>, <code>--redz-border</code>, <code>--redz-border-strong</code>, <code>--redz-space-4</code>, <code>--redz-space-16</code>, <code>--redz-bg-hover</code>, <code>--redz-shadow-1</code>, <code>--redz-space-24</code>, <code>--redz-space-32</code>, <code>--redz-radius-12</code>, <code>--redz-bg-raised</code>, <code>--redz-shadow-3</code>.</p>
-						</section>
-
-						<section class="vstack gap-12" aria-labelledby="app-from-bootstrap">
-							<h2 id="app-from-bootstrap">From Bootstrap 5.3</h2>
-							<table class="table docs-table">
-								<thead><tr><th scope="col">Bootstrap 5.3</th><th scope="col">REDZ.UI</th><th scope="col">Change</th><th scope="col">Note</th></tr></thead>
-								<tbody>
-									<tr><td><code>navbar</code></td><td>-</td><td>review</td><td>the shell&#039;s app-header</td></tr>
-									<tr><td><code>navbar-brand</code></td><td>-</td><td>review</td><td>the shell&#039;s app-header</td></tr>
-									<tr><td><code>navbar-collapse</code></td><td>-</td><td>review</td><td>the shell&#039;s app-header</td></tr>
-									<tr><td><code>navbar-dark</code></td><td>-</td><td>review</td><td>the shell&#039;s app-header</td></tr>
-									<tr><td><code>navbar-expand</code></td><td>-</td><td>review</td><td>the shell&#039;s app-header</td></tr>
-									<tr><td><code>navbar-nav</code></td><td>-</td><td>review</td><td>the shell&#039;s app-header</td></tr>
-									<tr><td><code>navbar-nav-scroll</code></td><td>-</td><td>review</td><td>the shell&#039;s app-header</td></tr>
-									<tr><td><code>navbar-text</code></td><td>-</td><td>review</td><td>the shell&#039;s app-header</td></tr>
-									<tr><td><code>navbar-toggler</code></td><td>-</td><td>review</td><td>the shell&#039;s app-header</td></tr>
-									<tr><td><code>navbar-toggler-icon</code></td><td>-</td><td>review</td><td>the shell&#039;s app-header</td></tr>
-								</tbody>
-							</table>
 						</section>
 				<footer class="d-flex flex-wrap justify-content-between gap-8 pt-16 border-top text-muted fs-12">
 					<span>MIT license · © 2026 Red Z Group · includes Bootstrap Icons (MIT)</span>

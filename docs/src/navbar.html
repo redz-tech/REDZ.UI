@@ -1,0 +1,120 @@
+<header class="vstack gap-8">
+	<h1>Navbars</h1>
+	<p class="docs-lead">A site's header: its name, its main links and what stands beside them. Where the header is too narrow for the links, a button opens them as a panel at the side of the screen.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="navbar-examples">
+	<h2 id="navbar-examples">Examples</h2>
+	<p><code>navbar</code> on the <code>&lt;header&gt;</code>, <code>navbar-brand</code> on the site's name, <code>navbar-toggler</code> on the button, and the links in a <code>&lt;nav class="drawer" popover&gt;</code> after it: <code>drawer-header</code> with the panel's title and its close button, <code>drawer-body</code> with a <code>nav navbar-nav</code>. <code>md:navbar-expand</code> sets the links in the row where the header is 768 px wide or wider; below that the button opens them. The width is the header's own, so a header in a column folds as one on a phone does.</p>
+	<div class="docs-example docs-example-stack" id="navbar-site">
+		<header class="navbar md:navbar-expand">
+			<a class="navbar-brand" href="#navbar-site"><i class="bi bi-sun" aria-hidden="true"></i>Samui Tours</a>
+			<button class="btn btn-text btn-icon navbar-toggler" type="button" commandfor="navbar-site-menu" command="toggle-popover" aria-label="Menu"><i class="bi bi-list" aria-hidden="true"></i></button>
+			<nav class="drawer" id="navbar-site-menu" popover aria-labelledby="navbar-site-title">
+				<div class="drawer-header">
+					<h2 class="drawer-title" id="navbar-site-title">Menu</h2>
+					<button class="btn-close" type="button" commandfor="navbar-site-menu" command="hide-popover" aria-label="Close"></button>
+				</div>
+				<div class="drawer-body">
+					<div class="nav navbar-nav">
+						<a class="nav-link" href="#navbar-site" aria-current="page">Excursions</a>
+						<a class="nav-link" href="#navbar-site">Transfers</a>
+						<a class="nav-link" href="#navbar-site">Villas</a>
+						<a class="nav-link" href="#navbar-site">Reviews</a>
+					</div>
+					<a class="btn btn-primary" href="#navbar-site">Book a tour</a>
+				</div>
+			</nav>
+		</header>
+	</div>
+
+	<h3>More links than room</h3>
+	<p>With <a href="nav.html"><code>nav-overflow</code></a> around the links, a header that is wide enough for its row but not for all of them keeps the first ones and moves the rest into a “More” menu; only below its width does the whole row go behind the button. A link that opens a <a href="menu.html">menu</a> folds with it: “More” shows that menu's items as a group under the link's words. This header is 640 px wide at most and sets its row from 576 px with <code>sm:navbar-expand</code>.</p>
+	<div class="docs-example docs-example-stack" id="navbar-overflow">
+		<header class="navbar sm:navbar-expand max-w-640">
+			<a class="navbar-brand" href="#navbar-overflow"><i class="bi bi-sun" aria-hidden="true"></i>Samui Tours</a>
+			<button class="btn btn-text btn-icon navbar-toggler" type="button" commandfor="navbar-overflow-menu" command="toggle-popover" aria-label="Menu"><i class="bi bi-list" aria-hidden="true"></i></button>
+			<nav class="drawer" id="navbar-overflow-menu" popover aria-labelledby="navbar-overflow-title">
+				<div class="drawer-header">
+					<h2 class="drawer-title" id="navbar-overflow-title">Menu</h2>
+					<button class="btn-close" type="button" commandfor="navbar-overflow-menu" command="hide-popover" aria-label="Close"></button>
+				</div>
+				<div class="drawer-body">
+					<div class="nav-overflow">
+						<div class="nav navbar-nav">
+							<a class="nav-link" href="#navbar-overflow">Excursions</a>
+							<a class="nav-link" href="#navbar-overflow">Transfers</a>
+							<a class="nav-link" href="#navbar-overflow" aria-current="page">Villas</a>
+							<a class="nav-link" href="#navbar-overflow">Yachts</a>
+							<a class="nav-link" href="#navbar-overflow">Reviews</a>
+							<a class="nav-link" href="#navbar-overflow">Blog</a>
+							<button class="nav-link" type="button" commandfor="navbar-overflow-help" command="toggle-popover" aria-haspopup="menu">Help<i class="bi bi-chevron-down" aria-hidden="true"></i></button>
+							<div class="menu" id="navbar-overflow-help" popover role="menu" aria-label="Help">
+								<a class="menu-item" role="menuitem" href="#navbar-overflow">Questions and answers</a>
+								<a class="menu-item" role="menuitem" href="#navbar-overflow">Contacts</a>
+								<a class="menu-item" role="menuitem" href="#navbar-overflow">Cancellation policy</a>
+							</div>
+						</div>
+					</div>
+					<a class="btn btn-primary" href="#navbar-overflow">Book</a>
+				</div>
+			</nav>
+		</header>
+	</div>
+
+	<h3>Always behind the button</h3>
+	<p>Without a <code>navbar-expand</code> class the links always wait behind the button, for a header that keeps its row for something else. <code>navbar-text</code> is a line of text in the row. <code>data-theme="dark"</code> on the header turns it and its panel dark on a light page, and <code>drawer-start</code> opens the panel at the start edge.</p>
+	<div class="docs-example docs-example-stack" id="navbar-folded">
+		<header class="navbar bg-body" data-theme="dark">
+			<a class="navbar-brand" href="#navbar-folded"><i class="bi bi-sun" aria-hidden="true"></i>Samui Tours</a>
+			<span class="navbar-text ms-auto">Open daily, 8 a.m. to 8 p.m.</span>
+			<button class="btn btn-text btn-icon navbar-toggler" type="button" commandfor="navbar-folded-menu" command="toggle-popover" aria-label="Menu"><i class="bi bi-list" aria-hidden="true"></i></button>
+			<nav class="drawer drawer-start" id="navbar-folded-menu" popover aria-labelledby="navbar-folded-title">
+				<div class="drawer-header">
+					<h2 class="drawer-title" id="navbar-folded-title">Menu</h2>
+					<button class="btn-close" type="button" commandfor="navbar-folded-menu" command="hide-popover" aria-label="Close"></button>
+				</div>
+				<div class="drawer-body">
+					<div class="nav navbar-nav">
+						<a class="nav-link" href="#navbar-folded" aria-current="page">Excursions</a>
+						<a class="nav-link" href="#navbar-folded">Transfers</a>
+						<a class="nav-link" href="#navbar-folded">Villas</a>
+						<a class="nav-link" href="#navbar-folded">Contacts</a>
+					</div>
+				</div>
+			</nav>
+		</header>
+	</div>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="navbar-widths">
+	<h2 id="navbar-widths">Where the row starts</h2>
+	<p>The class says from which width of the header its links stand in the row; below it the button opens them.</p>
+	<table class="table docs-table">
+		<thead><tr><th scope="col">Class</th><th scope="col">The links in the row</th></tr></thead>
+		<tbody>
+			<tr><td><code>navbar-expand</code></td><td>Always</td></tr>
+			<tr><td><code>sm:navbar-expand</code></td><td>From 576 px</td></tr>
+			<tr><td><code>md:navbar-expand</code></td><td>From 768 px</td></tr>
+			<tr><td><code>lg:navbar-expand</code></td><td>From 1024 px</td></tr>
+			<tr><td><code>xl:navbar-expand</code></td><td>From 1280 px</td></tr>
+			<tr><td><code>2xl:navbar-expand</code></td><td>From 1536 px</td></tr>
+			<tr><td>None</td><td>Never: the button opens them</td></tr>
+		</tbody>
+	</table>
+
+	<h3>At the top while the page scrolls</h3>
+	<p>A header that stays at the top takes <code>position-sticky top-0</code> and a background: <code>bg-body</code>, or <code>navbar-translucent</code>, which lets the page show through it, blurred.</p>
+	<pre class="docs-code" tabindex="0"><code>&lt;header class="navbar navbar-translucent md:navbar-expand position-sticky top-0 z-3"&gt;…&lt;/header&gt;</code></pre>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="navbar-access">
+	<h2 id="navbar-access">Keyboard and accessibility</h2>
+	<ul>
+		<li>The header is a <code>&lt;header&gt;</code> and the links a <code>&lt;nav&gt;</code> named by the panel's title, so a screen reader finds the same navigation in the row and in the panel.</li>
+		<li>The button says whether the panel is open. <kbd>Tab</kbd> from it goes into the panel; <kbd>Esc</kbd> or a click outside closes it and brings the focus back to the button. The panel also closes when a link in it is followed, when the focus leaves it for the page, and when the header grows wide enough for its row. The page under it does not scroll while it is open.</li>
+		<li>The link the person is on is <code>aria-current="page"</code>, underlined so it shows without color, in forced colors too.</li>
+		<li>A link that opens a menu is a <code>&lt;button&gt;</code> with <code>aria-haspopup="menu"</code>, and its <a href="menu.html">menu</a> keeps its keys in the row and in the panel.</li>
+		<li><code>js/navbar.js</code> closes the panel; the button, the panel and the row are the browser's commands and CSS.</li>
+	</ul>
+</section>

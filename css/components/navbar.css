@@ -1,0 +1,178 @@
+@layer components {
+	.navbar {
+		container: region / inline-size;
+		position: relative;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--redz-space-8) var(--redz-space-16);
+		min-block-size: 3.5rem;
+		padding: var(--redz-space-8) var(--redz-space-16);
+		color: var(--redz-text);
+	}
+
+	.navbar-brand {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--redz-space-8);
+		color: var(--redz-text);
+		font-size: var(--redz-fs-18);
+		font-weight: 650;
+		text-decoration: none;
+		white-space: nowrap;
+	}
+
+	.navbar-brand > img,
+	.navbar-brand > svg {
+		block-size: 2rem;
+		inline-size: auto;
+	}
+
+	.navbar-text {
+		color: var(--redz-text-muted);
+	}
+
+	.navbar-toggler {
+		flex: none;
+	}
+
+	.navbar-nav > .nav-link[aria-current="page"],
+	.navbar-nav > .nav-link[aria-current="location"] {
+		text-decoration-line: underline;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 0.4em;
+	}
+
+	.navbar .drawer[popover]:not(:popover-open) {
+		position: static;
+		flex: 1 1 auto;
+		align-items: center;
+		gap: var(--redz-space-16);
+		min-inline-size: 0;
+		inline-size: auto;
+		block-size: auto;
+		max-block-size: none;
+		margin: 0;
+		overflow: visible;
+		border: 0;
+		border-radius: 0;
+		background: none;
+		box-shadow: none;
+		color: inherit;
+		transition: none;
+	}
+
+	.navbar .drawer[popover]:not(:popover-open) > .drawer-header {
+		display: none;
+	}
+
+	.navbar .drawer[popover]:not(:popover-open) > .drawer-body {
+		display: flex;
+		flex: 1 1 auto;
+		align-items: center;
+		gap: var(--redz-space-16);
+		min-inline-size: 0;
+		padding: 0;
+		overflow: visible;
+	}
+
+	.navbar > :is(.navbar-nav, .nav-overflow),
+	.navbar .drawer[popover]:not(:popover-open) > .drawer-body > :is(.navbar-nav, .nav-overflow) {
+		flex: 1 1 auto;
+		min-inline-size: 0;
+	}
+
+	.navbar .drawer:popover-open > .drawer-body {
+		display: flex;
+		flex-direction: column;
+		gap: var(--redz-space-16);
+	}
+
+	.navbar .drawer:popover-open .nav-overflow {
+		display: block;
+	}
+
+	.navbar .drawer:popover-open .navbar-nav {
+		flex-direction: column;
+		gap: 0;
+	}
+
+	.navbar .drawer:popover-open .navbar-nav > .nav-link {
+		padding-block: var(--redz-space-12);
+	}
+
+	html:has(.navbar .drawer:popover-open) {
+		overflow: hidden;
+		scrollbar-gutter: stable;
+	}
+
+	.navbar-expand .navbar-toggler {
+		display: none;
+	}
+
+	.navbar-expand .drawer[popover]:not(:popover-open) {
+		display: flex;
+	}
+
+	@container region (width >= 576px) {
+		.sm\:navbar-expand .navbar-toggler {
+			display: none;
+		}
+
+		.sm\:navbar-expand .drawer[popover]:not(:popover-open) {
+			display: flex;
+		}
+	}
+
+	@container region (width >= 768px) {
+		.md\:navbar-expand .navbar-toggler {
+			display: none;
+		}
+
+		.md\:navbar-expand .drawer[popover]:not(:popover-open) {
+			display: flex;
+		}
+	}
+
+	@container region (width >= 1024px) {
+		.lg\:navbar-expand .navbar-toggler {
+			display: none;
+		}
+
+		.lg\:navbar-expand .drawer[popover]:not(:popover-open) {
+			display: flex;
+		}
+	}
+
+	@container region (width >= 1280px) {
+		.xl\:navbar-expand .navbar-toggler {
+			display: none;
+		}
+
+		.xl\:navbar-expand .drawer[popover]:not(:popover-open) {
+			display: flex;
+		}
+	}
+
+	@container region (width >= 1536px) {
+		.\32 xl\:navbar-expand .navbar-toggler {
+			display: none;
+		}
+
+		.\32 xl\:navbar-expand .drawer[popover]:not(:popover-open) {
+			display: flex;
+		}
+	}
+
+	.navbar-translucent {
+		background: color-mix(in oklch, var(--redz-bg) 80%, transparent);
+		backdrop-filter: blur(8px) saturate(180%);
+	}
+
+	@media print {
+		.navbar-toggler {
+			display: none;
+		}
+	}
+}

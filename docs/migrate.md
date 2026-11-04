@@ -349,16 +349,10 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `my-5` | `my-48` | value | the number is the pixels |
 | `nav-item` | - | remove | links sit straight in the nav |
 | `nav-tabs` | `nav-underline` | rename | tabs are drawn as an underline |
-| `navbar` | - | review | the shell's app-header |
-| `navbar-brand` | - | review | the shell's app-header |
-| `navbar-collapse` | - | review | the shell's app-header |
-| `navbar-dark` | - | review | the shell's app-header |
-| `navbar-expand` | - | review | the shell's app-header |
-| `navbar-nav` | - | review | the shell's app-header |
-| `navbar-nav-scroll` | - | review | the shell's app-header |
-| `navbar-text` | - | review | the shell's app-header |
-| `navbar-toggler` | - | review | the shell's app-header |
-| `navbar-toggler-icon` | - | review | the shell's app-header |
+| `navbar-collapse` | `drawer` | review | a <nav class="drawer" popover id="ID"> after the toggler: drawer-header with its title, the links in drawer-body |
+| `navbar-dark` | - | review | data-theme="dark" on the navbar, with a background such as bg-body |
+| `navbar-nav-scroll` | - | remove | the panel scrolls by itself |
+| `navbar-toggler-icon` | `bi bi-list` | rename | an icon in the toggler |
 | `object-fit-scale` | - | review | object-fit-contain is the nearest |
 | `offcanvas` | `drawer` | rename | on a <dialog>, opened by command="show-modal" |
 | `offcanvas-backdrop` | - | remove | the browser's ::backdrop |

@@ -1266,21 +1266,21 @@ nav-link	nav-link	same	class	nav
 nav-pills	nav-pills	same	class	nav	
 nav-tabs	nav-underline	rename	class	nav	tabs are drawn as an underline
 nav-underline	nav-underline	same	class	nav	
-navbar		review	class	app	the shell's app-header
-navbar-brand		review	class	app	the shell's app-header
-navbar-collapse		review	class	app	the shell's app-header
-navbar-dark		review	class	app	the shell's app-header
-navbar-expand		review	class	app	the shell's app-header
-navbar-expand-lg		review	class	app	the shell's app-header
-navbar-expand-md		review	class	app	the shell's app-header
-navbar-expand-sm		review	class	app	the shell's app-header
-navbar-expand-xl		review	class	app	the shell's app-header
-navbar-expand-xxl		review	class	app	the shell's app-header
-navbar-nav		review	class	app	the shell's app-header
-navbar-nav-scroll		review	class	app	the shell's app-header
-navbar-text		review	class	app	the shell's app-header
-navbar-toggler		review	class	app	the shell's app-header
-navbar-toggler-icon		review	class	app	the shell's app-header
+navbar	navbar	same	class	navbar	on a <header>; the <nav> of its links is the drawer inside it
+navbar-brand	navbar-brand	same	class	navbar	
+navbar-collapse	drawer	review	class	navbar	a <nav class="drawer" popover id="ID"> after the toggler: drawer-header with its title, the links in drawer-body
+navbar-dark		review	class	navbar	data-theme="dark" on the navbar, with a background such as bg-body
+navbar-expand	navbar-expand	same	class	navbar	
+navbar-expand-lg	lg:navbar-expand	rename	class	navbar	the width is the navbar's own, not the window's
+navbar-expand-md	md:navbar-expand	rename	class	navbar	the width is the navbar's own, not the window's
+navbar-expand-sm	sm:navbar-expand	rename	class	navbar	the width is the navbar's own, not the window's
+navbar-expand-xl	xl:navbar-expand	rename	class	navbar	the width is the navbar's own, not the window's
+navbar-expand-xxl	2xl:navbar-expand	rename	class	navbar	the width is the navbar's own, not the window's
+navbar-nav	navbar-nav	same	class	navbar	
+navbar-nav-scroll		remove	class	navbar	the panel scrolls by itself
+navbar-text	navbar-text	same	class	navbar	
+navbar-toggler	navbar-toggler	same	class	navbar	with commandfor="ID" command="toggle-popover" to the drawer, not data-bs-toggle="collapse"
+navbar-toggler-icon	bi bi-list	rename	class	navbar	an icon in the toggler
 object-fit-contain	object-fit-contain	same	class	utilities	
 object-fit-cover	object-fit-cover	same	class	utilities	
 object-fit-fill	object-fit-fill	same	class	utilities	

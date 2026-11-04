@@ -172,7 +172,16 @@ nav-tabs	nav-underline	rename	nav	tabs are drawn as an underline
 nav-item		remove	nav	links sit straight in the nav
 (nav-fill|nav-justified)	$1	same	nav
 tab-content|tab-pane		remove	nav	panels are siblings with role="tabpanel", hidden when not selected
-navbar|navbar-.+		review	app	the shell's app-header
+navbar	navbar	same	navbar	on a <header>; the <nav> of its links is the drawer inside it
+navbar-expand	navbar-expand	same	navbar
+navbar-expand-(sm|md|lg|xl)	$1:navbar-expand	rename	navbar	the width is the navbar's own, not the window's
+navbar-expand-xxl	2xl:navbar-expand	rename	navbar	the width is the navbar's own, not the window's
+(navbar-brand|navbar-nav|navbar-text)	$1	same	navbar
+navbar-toggler	navbar-toggler	same	navbar	with commandfor="ID" command="toggle-popover" to the drawer, not data-bs-toggle="collapse"
+navbar-toggler-icon	bi bi-list	rename	navbar	an icon in the toggler
+navbar-collapse	drawer	review	navbar	a <nav class="drawer" popover id="ID"> after the toggler: drawer-header with its title, the links in drawer-body
+navbar-nav-scroll		remove	navbar	the panel scrolls by itself
+navbar-dark		review	navbar	data-theme="dark" on the navbar, with a background such as bg-body
 table-(primary|success|info|light|dark)		review	table	row tones are danger, warning and secondary
 (table-striped|table-striped-columns|table-borderless|table-group-divider)	$1	same	table
 table-bordered	table-bordered	same	table	in a card the card's border is the table's frame

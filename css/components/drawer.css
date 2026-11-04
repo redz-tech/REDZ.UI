@@ -1,7 +1,7 @@
 @layer components {
 	.drawer {
 		container: region / inline-size;
-		inline-size: min(28rem, calc(100vw - 1rem));
+		inline-size: min(28rem, calc(100% - 1rem));
 		block-size: calc(100dvh - 1rem);
 		max-block-size: calc(100dvh - 1rem);
 		margin-block: var(--redz-space-8);
@@ -45,21 +45,21 @@
 		}
 
 		@starting-style {
-			.drawer[open] {
+			.drawer:is([open], :popover-open) {
 				translate: 1.5rem 0;
 				opacity: 0;
 			}
 
-			.drawer[open]:dir(rtl),
-			.drawer-start[open] {
+			.drawer:is([open], :popover-open):dir(rtl),
+			.drawer-start:is([open], :popover-open) {
 				translate: -1.5rem 0;
 			}
 
-			.drawer-start[open]:dir(rtl) {
+			.drawer-start:is([open], :popover-open):dir(rtl) {
 				translate: 1.5rem 0;
 			}
 
-			.drawer[open]::backdrop {
+			.drawer:is([open], :popover-open)::backdrop {
 				opacity: 0;
 			}
 		}

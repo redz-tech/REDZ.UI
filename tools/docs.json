@@ -8,7 +8,7 @@
 		{"title": "Content", "pages": {"card": "Cards", "accordion": "Accordions", "collapse": "Collapse", "list-group": "List groups", "tree": "Trees", "table": "Tables", "badge": "Badges", "dot": "Dots", "avatar": "Avatars", "icon-tile": "Icon tiles", "empty-state": "Empty states", "placeholder": "Placeholders", "prose": "Prose"}},
 		{"title": "Layers", "pages": {"dialog": "Dialogs", "drawer": "Drawers", "popover": "Popovers", "tooltip": "Tooltips"}},
 		{"title": "Feedback", "pages": {"alert": "Alerts", "toast": "Toasts", "spinner": "Spinners", "progress": "Progress and meters", "busy": "Busy", "save-bar": "Save bar", "selection-bar": "Selection bar"}},
-		{"title": "Navigation", "pages": {"nav": "Navs and tabs", "breadcrumb": "Breadcrumbs", "pagination": "Pagination", "stepper": "Steppers", "palette": "Command palette", "app": "App shell"}}
+		{"title": "Navigation", "pages": {"nav": "Navs and tabs", "navbar": "Navbars", "breadcrumb": "Breadcrumbs", "pagination": "Pagination", "stepper": "Steppers", "palette": "Command palette", "app": "App shell"}}
 	],
 	"twins": {"ar": ["docs/all.html", "reference/demo/list.html", "reference/demo/resource.html", "reference/demo/settings.html"]},
 	"icons": {
@@ -18,7 +18,7 @@
 		"card": "card-text", "accordion": "chevron-bar-expand", "collapse": "arrows-collapse", "list-group": "list-ul", "tree": "diagram-3", "table": "table", "badge": "patch-check", "dot": "record-circle", "avatar": "person-circle", "icon-tile": "app", "empty-state": "inbox", "placeholder": "body-text", "prose": "file-text",
 		"dialog": "window", "drawer": "layout-sidebar-reverse", "popover": "chat-left-text", "tooltip": "chat-square-text",
 		"alert": "exclamation-triangle", "toast": "bell", "spinner": "arrow-repeat", "progress": "bar-chart-line", "busy": "hourglass-split", "save-bar": "floppy", "selection-bar": "check2-all",
-		"nav": "segmented-nav", "breadcrumb": "chevron-double-right", "pagination": "123", "stepper": "list-ol", "palette": "command", "app": "window-sidebar",
+		"nav": "segmented-nav", "navbar": "window-desktop", "breadcrumb": "chevron-double-right", "pagination": "123", "stepper": "list-ol", "palette": "command", "app": "window-sidebar",
 		"all": "grid-3x3-gap", "demo": "display", "checks": "clipboard-check"
 	}
 }

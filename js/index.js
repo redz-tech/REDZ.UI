@@ -9,6 +9,7 @@ import './combobox.js';
 import './shortcuts.js';
 import './scrollspy.js';
 import './nav-overflow.js';
+import './navbar.js';
 import './inline-edit.js';
 import './password.js';
 import './tree.js';

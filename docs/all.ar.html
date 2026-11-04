@@ -81,6 +81,7 @@
 			<a class="app-link" href="selection-bar.html"><i class="bi bi-check2-all" aria-hidden="true"></i>شريط التحديد</a>
 			<div class="app-section">التنقل</div>
 			<a class="app-link" href="nav.html"><i class="bi bi-segmented-nav" aria-hidden="true"></i>روابط التنقل والتبويبات</a>
+			<a class="app-link" href="navbar.html"><i class="bi bi-window-desktop" aria-hidden="true"></i>أشرطة التنقل</a>
 			<a class="app-link" href="breadcrumb.html"><i class="bi bi-chevron-double-right" aria-hidden="true"></i>مسار التنقل</a>
 			<a class="app-link" href="pagination.html"><i class="bi bi-123" aria-hidden="true"></i>ترقيم الصفحات</a>
 			<a class="app-link" href="stepper.html"><i class="bi bi-list-ol" aria-hidden="true"></i>مؤشرات الخطوات</a>
@@ -1892,6 +1893,83 @@
 								</tr>
 							</tbody>
 						</table>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-navbar">
+					<h2 id="all-navbar"><a href="navbar.html">أشرطة التنقل</a></h2>
+					<div class="docs-example docs-example-stack" id="navbar-site">
+						<header class="navbar md:navbar-expand">
+							<a class="navbar-brand" href="#navbar-site"><i class="bi bi-sun" aria-hidden="true"></i>Samui Tours</a>
+							<button class="btn btn-text btn-icon navbar-toggler" type="button" commandfor="navbar-site-menu" command="toggle-popover" aria-label="القائمة"><i class="bi bi-list" aria-hidden="true"></i></button>
+							<nav class="drawer" id="navbar-site-menu" popover="" aria-labelledby="navbar-site-title">
+								<div class="drawer-header">
+									<h2 class="drawer-title" id="navbar-site-title">القائمة</h2>
+									<button class="btn-close" type="button" commandfor="navbar-site-menu" command="hide-popover" aria-label="إغلاق"></button>
+								</div>
+								<div class="drawer-body">
+									<div class="nav navbar-nav">
+										<a class="nav-link" href="#navbar-site" aria-current="page">الرحلات</a>
+										<a class="nav-link" href="#navbar-site">التوصيل</a>
+										<a class="nav-link" href="#navbar-site">الفلل</a>
+										<a class="nav-link" href="#navbar-site">المراجعات</a>
+									</div>
+									<a class="btn btn-primary" href="#navbar-site">احجز جولة</a>
+								</div>
+							</nav>
+						</header>
+					</div>
+					<div class="docs-example docs-example-stack" id="navbar-overflow">
+						<header class="navbar sm:navbar-expand max-w-640">
+							<a class="navbar-brand" href="#navbar-overflow"><i class="bi bi-sun" aria-hidden="true"></i>Samui Tours</a>
+							<button class="btn btn-text btn-icon navbar-toggler" type="button" commandfor="navbar-overflow-menu" command="toggle-popover" aria-label="القائمة"><i class="bi bi-list" aria-hidden="true"></i></button>
+							<nav class="drawer" id="navbar-overflow-menu" popover="" aria-labelledby="navbar-overflow-title">
+								<div class="drawer-header">
+									<h2 class="drawer-title" id="navbar-overflow-title">القائمة</h2>
+									<button class="btn-close" type="button" commandfor="navbar-overflow-menu" command="hide-popover" aria-label="إغلاق"></button>
+								</div>
+								<div class="drawer-body">
+									<div class="nav-overflow">
+										<div class="nav navbar-nav">
+											<a class="nav-link" href="#navbar-overflow">الرحلات</a>
+											<a class="nav-link" href="#navbar-overflow">التوصيل</a>
+											<a class="nav-link" href="#navbar-overflow" aria-current="page">الفلل</a>
+											<a class="nav-link" href="#navbar-overflow">اليخوت</a>
+											<a class="nav-link" href="#navbar-overflow">المراجعات</a>
+											<a class="nav-link" href="#navbar-overflow">المدونة</a>
+											<button class="nav-link" type="button" commandfor="navbar-overflow-help" command="toggle-popover" aria-haspopup="menu">المساعدة<i class="bi bi-chevron-down" aria-hidden="true"></i></button>
+											<div class="menu" id="navbar-overflow-help" popover="" role="menu" aria-label="المساعدة">
+												<a class="menu-item" role="menuitem" href="#navbar-overflow">أسئلة وأجوبة</a>
+												<a class="menu-item" role="menuitem" href="#navbar-overflow">جهات الاتصال</a>
+												<a class="menu-item" role="menuitem" href="#navbar-overflow">سياسة الإلغاء</a>
+											</div>
+										</div>
+									</div>
+									<a class="btn btn-primary" href="#navbar-overflow">احجز</a>
+								</div>
+							</nav>
+						</header>
+					</div>
+					<div class="docs-example docs-example-stack" id="navbar-folded">
+						<header class="navbar bg-body" data-theme="dark">
+							<a class="navbar-brand" href="#navbar-folded"><i class="bi bi-sun" aria-hidden="true"></i>Samui Tours</a>
+							<span class="navbar-text ms-auto">مفتوح يوميًا من 8 صباحًا إلى 8 مساءً</span>
+							<button class="btn btn-text btn-icon navbar-toggler" type="button" commandfor="navbar-folded-menu" command="toggle-popover" aria-label="القائمة"><i class="bi bi-list" aria-hidden="true"></i></button>
+							<nav class="drawer drawer-start" id="navbar-folded-menu" popover="" aria-labelledby="navbar-folded-title">
+								<div class="drawer-header">
+									<h2 class="drawer-title" id="navbar-folded-title">القائمة</h2>
+									<button class="btn-close" type="button" commandfor="navbar-folded-menu" command="hide-popover" aria-label="إغلاق"></button>
+								</div>
+								<div class="drawer-body">
+									<div class="nav navbar-nav">
+										<a class="nav-link" href="#navbar-folded" aria-current="page">الرحلات</a>
+										<a class="nav-link" href="#navbar-folded">التوصيل</a>
+										<a class="nav-link" href="#navbar-folded">الفلل</a>
+										<a class="nav-link" href="#navbar-folded">جهات الاتصال</a>
+									</div>
+								</div>
+							</nav>
+						</header>
 					</div>
 				</section>
 

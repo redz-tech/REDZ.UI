@@ -83,6 +83,7 @@
 			<a class="app-link" href="selection-bar.html"><i class="bi bi-check2-all" aria-hidden="true"></i>Selection bar</a>
 			<div class="app-section">Navigation</div>
 			<a class="app-link" href="nav.html"><i class="bi bi-segmented-nav" aria-hidden="true"></i>Navs and tabs</a>
+			<a class="app-link" href="navbar.html"><i class="bi bi-window-desktop" aria-hidden="true"></i>Navbars</a>
 			<a class="app-link" href="breadcrumb.html"><i class="bi bi-chevron-double-right" aria-hidden="true"></i>Breadcrumbs</a>
 			<a class="app-link" href="pagination.html"><i class="bi bi-123" aria-hidden="true"></i>Pagination</a>
 			<a class="app-link" href="stepper.html"><i class="bi bi-list-ol" aria-hidden="true"></i>Steppers</a>
@@ -1894,6 +1895,83 @@
 								</tr>
 							</tbody>
 						</table>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-navbar">
+					<h2 id="all-navbar"><a href="navbar.html">Navbars</a></h2>
+					<div class="docs-example docs-example-stack" id="navbar-site">
+						<header class="navbar md:navbar-expand">
+							<a class="navbar-brand" href="#navbar-site"><i class="bi bi-sun" aria-hidden="true"></i>Samui Tours</a>
+							<button class="btn btn-text btn-icon navbar-toggler" type="button" commandfor="navbar-site-menu" command="toggle-popover" aria-label="Menu"><i class="bi bi-list" aria-hidden="true"></i></button>
+							<nav class="drawer" id="navbar-site-menu" popover aria-labelledby="navbar-site-title">
+								<div class="drawer-header">
+									<h2 class="drawer-title" id="navbar-site-title">Menu</h2>
+									<button class="btn-close" type="button" commandfor="navbar-site-menu" command="hide-popover" aria-label="Close"></button>
+								</div>
+								<div class="drawer-body">
+									<div class="nav navbar-nav">
+										<a class="nav-link" href="#navbar-site" aria-current="page">Excursions</a>
+										<a class="nav-link" href="#navbar-site">Transfers</a>
+										<a class="nav-link" href="#navbar-site">Villas</a>
+										<a class="nav-link" href="#navbar-site">Reviews</a>
+									</div>
+									<a class="btn btn-primary" href="#navbar-site">Book a tour</a>
+								</div>
+							</nav>
+						</header>
+					</div>
+					<div class="docs-example docs-example-stack" id="navbar-overflow">
+						<header class="navbar sm:navbar-expand max-w-640">
+							<a class="navbar-brand" href="#navbar-overflow"><i class="bi bi-sun" aria-hidden="true"></i>Samui Tours</a>
+							<button class="btn btn-text btn-icon navbar-toggler" type="button" commandfor="navbar-overflow-menu" command="toggle-popover" aria-label="Menu"><i class="bi bi-list" aria-hidden="true"></i></button>
+							<nav class="drawer" id="navbar-overflow-menu" popover aria-labelledby="navbar-overflow-title">
+								<div class="drawer-header">
+									<h2 class="drawer-title" id="navbar-overflow-title">Menu</h2>
+									<button class="btn-close" type="button" commandfor="navbar-overflow-menu" command="hide-popover" aria-label="Close"></button>
+								</div>
+								<div class="drawer-body">
+									<div class="nav-overflow">
+										<div class="nav navbar-nav">
+											<a class="nav-link" href="#navbar-overflow">Excursions</a>
+											<a class="nav-link" href="#navbar-overflow">Transfers</a>
+											<a class="nav-link" href="#navbar-overflow" aria-current="page">Villas</a>
+											<a class="nav-link" href="#navbar-overflow">Yachts</a>
+											<a class="nav-link" href="#navbar-overflow">Reviews</a>
+											<a class="nav-link" href="#navbar-overflow">Blog</a>
+											<button class="nav-link" type="button" commandfor="navbar-overflow-help" command="toggle-popover" aria-haspopup="menu">Help<i class="bi bi-chevron-down" aria-hidden="true"></i></button>
+											<div class="menu" id="navbar-overflow-help" popover role="menu" aria-label="Help">
+												<a class="menu-item" role="menuitem" href="#navbar-overflow">Questions and answers</a>
+												<a class="menu-item" role="menuitem" href="#navbar-overflow">Contacts</a>
+												<a class="menu-item" role="menuitem" href="#navbar-overflow">Cancellation policy</a>
+											</div>
+										</div>
+									</div>
+									<a class="btn btn-primary" href="#navbar-overflow">Book</a>
+								</div>
+							</nav>
+						</header>
+					</div>
+					<div class="docs-example docs-example-stack" id="navbar-folded">
+						<header class="navbar bg-body" data-theme="dark">
+							<a class="navbar-brand" href="#navbar-folded"><i class="bi bi-sun" aria-hidden="true"></i>Samui Tours</a>
+							<span class="navbar-text ms-auto">Open daily, 8 a.m. to 8 p.m.</span>
+							<button class="btn btn-text btn-icon navbar-toggler" type="button" commandfor="navbar-folded-menu" command="toggle-popover" aria-label="Menu"><i class="bi bi-list" aria-hidden="true"></i></button>
+							<nav class="drawer drawer-start" id="navbar-folded-menu" popover aria-labelledby="navbar-folded-title">
+								<div class="drawer-header">
+									<h2 class="drawer-title" id="navbar-folded-title">Menu</h2>
+									<button class="btn-close" type="button" commandfor="navbar-folded-menu" command="hide-popover" aria-label="Close"></button>
+								</div>
+								<div class="drawer-body">
+									<div class="nav navbar-nav">
+										<a class="nav-link" href="#navbar-folded" aria-current="page">Excursions</a>
+										<a class="nav-link" href="#navbar-folded">Transfers</a>
+										<a class="nav-link" href="#navbar-folded">Villas</a>
+										<a class="nav-link" href="#navbar-folded">Contacts</a>
+									</div>
+								</div>
+							</nav>
+						</header>
 					</div>
 				</section>
 
