@@ -4,10 +4,9 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
-## Unreleased
+## 0.8.0 - 2026-11-04
 
-What Bootstrap 6 has that REDZ.UI had not, for the admin of the CMS and the ERP, by Bootstrap 6's names; to be
-released as 0.8.0.
+What Bootstrap 6 has that REDZ.UI had not, for the admin of the CMS and the ERP, by Bootstrap 6's names.
 
 ### Added
 - **Steppers** (`stepper`, `stepper-item`, `stepper-horizontal` and its width prefixes `sm:` `md:` `lg:`): the steps
