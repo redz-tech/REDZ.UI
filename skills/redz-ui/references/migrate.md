@@ -481,7 +481,7 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `table-responsive` | - | review | the card's body holds the table; columns hide below md: |
 | `table-success` | - | review | row tones are danger, warning and secondary |
 | `text-bg-danger` | `badge-danger` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
-| `text-bg-dark` | - | review | a plain badge, or a tone |
+| `text-bg-dark` | `badge-inverse` | review | on a badge: the text color as its background, light in the dark theme |
 | `text-bg-info` | `badge-info` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
 | `text-bg-light` | - | review | a plain badge, or a tone |
 | `text-bg-primary` | `badge-primary` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
@@ -724,10 +724,10 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `--bs-light-border-subtle` | - | review | light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text |
 | `--bs-light-rgb` | - | review | light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text |
 | `--bs-light-text-emphasis` | - | review | light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text |
-| `--bs-link-color` | `--redz-primary` | review | links take the accent; set it on a link only where it differs |
+| `--bs-link-color` | `--redz-link` | rename |  |
 | `--bs-link-color-rgb` | - | review | a link's own color and line, written on the link |
 | `--bs-link-decoration` | - | review | a link's own color and line, written on the link |
-| `--bs-link-hover-color` | - | review | a link's own color and line, written on the link |
+| `--bs-link-hover-color` | `--redz-link` | review | a link keeps its color on hover; the underline shows the hover |
 | `--bs-link-hover-color-rgb` | - | review | a link's own color and line, written on the link |
 | `--bs-link-opacity` | - | review | a link's own color and line, written on the link |
 | `--bs-link-underline-opacity` | - | review | a link's own color and line, written on the link |

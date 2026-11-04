@@ -49,6 +49,11 @@
 		--redz-badge-fg: var(--redz-info-contrast);
 	}
 
+	.badge-inverse {
+		--redz-badge-bg: var(--redz-text);
+		--redz-badge-fg: var(--redz-bg);
+	}
+
 	.badge-subtle-primary {
 		--redz-badge-bg: var(--redz-primary-subtle);
 		--redz-badge-fg: var(--redz-primary);

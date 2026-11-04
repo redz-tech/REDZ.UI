@@ -37,7 +37,8 @@ text-(primary|secondary|success|danger|warning|info)-emphasis	text-$1	rename	uti
 text-(light|dark)-emphasis	text-body	review	utilities	no light or dark: the text color
 text-opacity-(25|50|75|100)		review	utilities	Bootstrap 6 dropped it too: text-muted or text-faint
 text-bg-(primary|secondary|success|danger|warning|info)	badge-$1	review	badge	on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS
-text-bg-(light|dark)		review	badge	a plain badge, or a tone
+text-bg-dark	badge-inverse	review	badge	on a badge: the text color as its background, light in the dark theme
+text-bg-light		review	badge	a plain badge, or a tone
 bg-(white|black|light|dark)		review	utilities	bg-body, bg-page, bg-raised or a tone
 bg-body-secondary	bg-page	rename	utilities
 bg-body-tertiary	bg-raised	rename	utilities

@@ -148,6 +148,42 @@
 		gap: var(--redz-space-16);
 	}
 
+	.app:not(:has(> .app-sidebar)) {
+		grid-template-columns: minmax(0, 1fr);
+		grid-template-areas: "header" "main";
+	}
+
+	.app:not(:has(> .app-sidebar)) > .app-main {
+		margin-inline-start: var(--redz-space-8);
+	}
+
+	@media (width >= 64rem) {
+		.app:has(> .app-sidebar[data-folded]) {
+			grid-template-columns: 3.5rem minmax(0, 1fr);
+		}
+
+		.app-sidebar[data-folded] .app-section,
+		.app-sidebar[data-folded] .app-link > :not(.bi) {
+			position: absolute;
+			inline-size: 1px;
+			block-size: 1px;
+			overflow: hidden;
+			clip-path: inset(50%);
+			white-space: nowrap;
+		}
+
+		.app-sidebar[data-folded] .app-link {
+			justify-content: center;
+			gap: 0;
+			padding-inline: 0;
+			font-size: 0;
+		}
+
+		.app-sidebar[data-folded] .app-link .bi {
+			font-size: 1rem;
+		}
+	}
+
 	@media (width < 64rem) {
 		.app {
 			grid-template-columns: minmax(0, 1fr);
@@ -156,6 +192,10 @@
 
 		.app-burger {
 			display: inline-flex;
+		}
+
+		.app-header [command="--fold"] {
+			display: none;
 		}
 
 		.app-sidebar:not(:popover-open) {

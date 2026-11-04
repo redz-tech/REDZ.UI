@@ -35,4 +35,4 @@ Long text that comes from an editor or from Markdown, where no element carries a
 
 From [`css/components/prose.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/prose.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-text`, `--redz-fs-16`, `--redz-fs-32`, `--redz-fs-24`, `--redz-fs-20`, `--redz-fs-18`, `--redz-primary`, `--redz-border`, `--redz-text-muted`, `--redz-radius-4`, `--redz-bg-hover`, `--redz-space-12`, `--redz-space-16`, `--redz-radius-8`, `--redz-bg-page`, `--redz-fs-14`, `--redz-space-8`.
+It reads the theme's `--redz-text`, `--redz-fs-16`, `--redz-fs-32`, `--redz-fs-24`, `--redz-fs-20`, `--redz-fs-18`, `--redz-link`, `--redz-border`, `--redz-text-muted`, `--redz-radius-4`, `--redz-bg-hover`, `--redz-space-12`, `--redz-space-16`, `--redz-radius-8`, `--redz-bg-page`, `--redz-fs-14`, `--redz-space-8`.

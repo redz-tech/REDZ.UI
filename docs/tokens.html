@@ -19,6 +19,7 @@
 	<div class="app">
 		<header class="app-header">
 			<button class="btn btn-text btn-icon app-burger" type="button" commandfor="docs-nav" command="toggle-popover" aria-label="Pages"><i class="bi bi-list" aria-hidden="true"></i></button>
+			<button class="btn btn-text btn-icon" type="button" command="--fold" aria-controls="docs-nav" aria-label="Fold the pages"><i class="bi bi-layout-sidebar" aria-hidden="true"></i></button>
 			<a class="app-brand" href="../index.html"><span class="app-mark">RZ</span><span>REDZ.UI</span></a>
 			<div class="hstack gap-4 ms-auto">
 				<button class="btn btn-text btn-icon" type="button" commandfor="docs-view" command="toggle-popover" aria-haspopup="menu" aria-label="View"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
@@ -106,7 +107,7 @@
 				<section class="vstack gap-12" aria-labelledby="tokens-rules">
 					<h2 id="tokens-rules">How they are made</h2>
 					<ul>
-						<li>Colors by role: <code>--redz-text</code>, <code>-muted</code>, <code>-faint</code>; <code>--redz-bg-page</code>, <code>--redz-bg</code>, <code>-raised</code>, <code>-hover</code>; a tone, its <code>-subtle</code> fill and its <code>-contrast</code> text for primary, secondary, success, danger, warning and info.</li>
+						<li>Colors by role: <code>--redz-text</code>, <code>-muted</code>, <code>-faint</code>; <code>--redz-bg-page</code>, <code>--redz-bg</code>, <code>-raised</code>, <code>-hover</code>; a tone, its <code>-subtle</code> fill and its <code>-contrast</code> text for primary, secondary, success, danger, warning and info. <code>--redz-focus</code> and <code>--redz-link</code> are the primary tone unless a theme gives them their own - a white-label palette sets the links' color in <code>--redz-link</code> alone.</li>
 						<li>Text is at least 4.5:1 on its background, the borders of fields and the focus ring 3:1, in the light and the dark theme - computed in OKLCH and written as checked hex.</li>
 						<li>A component declares a few properties of its own on its root and never on rows or items: hundreds of properties on small elements slow every style recalculation.</li>
 					</ul>
@@ -145,6 +146,7 @@
 									<tr><td><code>--redz-info-subtle</code></td><td><code>light-dark(#e4f3ff, #193043)</code></td></tr>
 									<tr><td><code>--redz-info-contrast</code></td><td><code>light-dark(#ffffff, #000000)</code></td></tr>
 									<tr><td><code>--redz-focus</code></td><td><code>var(--redz-primary)</code></td></tr>
+									<tr><td><code>--redz-link</code></td><td><code>var(--redz-primary)</code></td></tr>
 									<tr><td><code>--redz-shadow-strength</code></td><td><code>1</code></td></tr>
 									<tr><td><code>--redz-shadow-1</code></td><td><code>0 1px 2px rgb(16 18 24 / calc(0.06 * var(--redz-shadow-strength)))</code></td></tr>
 									<tr><td><code>--redz-shadow-2</code></td><td><code>0 2px 6px -1px rgb(16 18 24 / calc(0.06 * var(--redz-shadow-strength))), 0 8px 18px -4px rgb(16 18 24 / calc(0.08 * var(--redz-shadow-strength))), 0 16px 32px -8px rgb(16 18 24 / calc(0.08 * var(--redz-shadow-strength)))</code></td></tr>
@@ -400,10 +402,10 @@
 									<tr><td><code>--bs-light-border-subtle</code></td><td>-</td><td>review</td><td>light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text</td></tr>
 									<tr><td><code>--bs-light-rgb</code></td><td>-</td><td>review</td><td>light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text</td></tr>
 									<tr><td><code>--bs-light-text-emphasis</code></td><td>-</td><td>review</td><td>light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text</td></tr>
-									<tr><td><code>--bs-link-color</code></td><td><code>--redz-primary</code></td><td>review</td><td>links take the accent; set it on a link only where it differs</td></tr>
+									<tr><td><code>--bs-link-color</code></td><td><code>--redz-link</code></td><td>rename</td><td></td></tr>
 									<tr><td><code>--bs-link-color-rgb</code></td><td>-</td><td>review</td><td>a link&#039;s own color and line, written on the link</td></tr>
 									<tr><td><code>--bs-link-decoration</code></td><td>-</td><td>review</td><td>a link&#039;s own color and line, written on the link</td></tr>
-									<tr><td><code>--bs-link-hover-color</code></td><td>-</td><td>review</td><td>a link&#039;s own color and line, written on the link</td></tr>
+									<tr><td><code>--bs-link-hover-color</code></td><td><code>--redz-link</code></td><td>review</td><td>a link keeps its color on hover; the underline shows the hover</td></tr>
 									<tr><td><code>--bs-link-hover-color-rgb</code></td><td>-</td><td>review</td><td>a link&#039;s own color and line, written on the link</td></tr>
 									<tr><td><code>--bs-link-opacity</code></td><td>-</td><td>review</td><td>a link&#039;s own color and line, written on the link</td></tr>
 									<tr><td><code>--bs-link-underline-opacity</code></td><td>-</td><td>review</td><td>a link&#039;s own color and line, written on the link</td></tr>

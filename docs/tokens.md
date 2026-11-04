@@ -6,7 +6,7 @@ The custom properties on `:root` that the components read: colors by role in pai
 
 ## How they are made
 
-- Colors by role: `--redz-text`, `-muted`, `-faint`; `--redz-bg-page`, `--redz-bg`, `-raised`, `-hover`; a tone, its `-subtle` fill and its `-contrast` text for primary, secondary, success, danger, warning and info.
+- Colors by role: `--redz-text`, `-muted`, `-faint`; `--redz-bg-page`, `--redz-bg`, `-raised`, `-hover`; a tone, its `-subtle` fill and its `-contrast` text for primary, secondary, success, danger, warning and info. `--redz-focus` and `--redz-link` are the primary tone unless a theme gives them their own - a white-label palette sets the links' color in `--redz-link` alone.
 - Text is at least 4.5:1 on its background, the borders of fields and the focus ring 3:1, in the light and the dark theme - computed in OKLCH and written as checked hex.
 - A component declares a few properties of its own on its root and never on rows or items: hundreds of properties on small elements slow every style recalculation.
 
@@ -42,6 +42,7 @@ The custom properties on `:root` that the components read: colors by role in pai
 | `--redz-info-subtle` | `light-dark(#e4f3ff, #193043)` |
 | `--redz-info-contrast` | `light-dark(#ffffff, #000000)` |
 | `--redz-focus` | `var(--redz-primary)` |
+| `--redz-link` | `var(--redz-primary)` |
 | `--redz-shadow-strength` | `1` |
 | `--redz-shadow-1` | `0 1px 2px rgb(16 18 24 / calc(0.06 * var(--redz-shadow-strength)))` |
 | `--redz-shadow-2` | `0 2px 6px -1px rgb(16 18 24 / calc(0.06 * var(--redz-shadow-strength))), 0 8px 18px -4px rgb(16 18 24 / calc(0.08 * var(--redz-shadow-strength))), 0 16px 32px -8px rgb(16 18 24 / calc(0.08 * var(--redz-shadow-strength)))` |
@@ -293,10 +294,10 @@ The custom properties on `:root` that the components read: colors by role in pai
 | `--bs-light-border-subtle` | - | review | light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text |
 | `--bs-light-rgb` | - | review | light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text |
 | `--bs-light-text-emphasis` | - | review | light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text |
-| `--bs-link-color` | `--redz-primary` | review | links take the accent; set it on a link only where it differs |
+| `--bs-link-color` | `--redz-link` | rename |  |
 | `--bs-link-color-rgb` | - | review | a link's own color and line, written on the link |
 | `--bs-link-decoration` | - | review | a link's own color and line, written on the link |
-| `--bs-link-hover-color` | - | review | a link's own color and line, written on the link |
+| `--bs-link-hover-color` | `--redz-link` | review | a link keeps its color on hover; the underline shows the hover |
 | `--bs-link-hover-color-rgb` | - | review | a link's own color and line, written on the link |
 | `--bs-link-opacity` | - | review | a link's own color and line, written on the link |
 | `--bs-link-underline-opacity` | - | review | a link's own color and line, written on the link |

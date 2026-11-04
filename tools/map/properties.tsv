@@ -38,8 +38,9 @@
 --bs-font-monospace	--redz-font-mono	rename	tokens
 --bs-body-font-size		review	tokens	REDZ.UI's text is --redz-fs-14; the scale is --redz-fs-12 to --redz-fs-32
 --bs-body-(font-weight|line-height)		review	tokens	the body's own; lines are --redz-lh-16 to --redz-lh-28
---bs-link-color	--redz-primary	review	tokens	links take the accent; set it on a link only where it differs
---bs-link-(color-rgb|hover-color|hover-color-rgb|decoration|opacity|underline-opacity)		review	tokens	a link's own color and line, written on the link
+--bs-link-color	--redz-link	rename	tokens
+--bs-link-hover-color	--redz-link	review	tokens	a link keeps its color on hover; the underline shows the hover
+--bs-link-(color-rgb|hover-color-rgb|decoration|opacity|underline-opacity)		review	tokens	a link's own color and line, written on the link
 --bs-focus-ring-(color|width|opacity)	--redz-focus	review	tokens	REDZ.UI draws one focus ring: --redz-focus is its color
 --bs-highlight-(bg|color)		review	tokens	mark is drawn by the base stylesheet
 --bs-code-color		review	tokens	code is the text color in --redz-font-mono

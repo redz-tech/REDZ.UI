@@ -26,6 +26,18 @@ The shell is the one part of the library that looks at the window; everything in
 
 The [demo screens](https://redz-tech.github.io/REDZ.UI/reference/demo/list.html) show the whole shell: a list, a resource page with its side column, a settings form.
 
+### Folded to a rail
+
+On a wide window the side navigation folds into a rail of its icons and back: a header button with `command="--fold"` and `aria-controls` naming the sidebar puts `data-folded` on it and says so in `aria-pressed`. Folded, each link shows its words as a tooltip and keeps them as its name. The library stores nothing: it tells the page in `redz:fold` (`detail.folded`), and the page that keeps the choice writes `data-folded` back on the sidebar when it loads. These docs fold so - the button beside their burger.
+
+```html
+<button class="btn btn-text btn-icon" type="button" command="--fold" aria-controls="side" aria-label="Fold the sections">…</button>
+
+document.addEventListener('redz:fold', (event) => localStorage.setItem('folded', event.detail.folded ? '1' : ''));
+```
+
+A shell without `app-sidebar` - a page whose role has no sections - is one column by itself: no class to add.
+
 ## States
 
 ## Keyboard and accessibility
@@ -33,6 +45,7 @@ The [demo screens](https://redz-tech.github.io/REDZ.UI/reference/demo/list.html)
 - The header is a `<header>`, the side navigation a named `<nav>`, the main column the page's one `<main>`.
 - On a narrow screen the burger opens the navigation as a popover: `Esc` or a click outside closes it, and the focus goes back to the burger.
 - The current section is `aria-current="page"`, drawn as a bar that stays in forced colors.
+- The fold button is a toggle button, pressed while the rail is folded; it has no `commandfor`, which WebKit would announce as collapsed. On a narrow screen it hides, as the burger opens the whole navigation there.
 - The header and the navigation stay off paper: only the main column prints.
 
 ## Tokens

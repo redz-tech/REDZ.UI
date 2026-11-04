@@ -364,6 +364,7 @@ avatar-sm
 badge
 badge-danger
 badge-info
+badge-inverse
 badge-primary
 badge-secondary
 badge-subtle-danger

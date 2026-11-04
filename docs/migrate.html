@@ -19,6 +19,7 @@
 	<div class="app">
 		<header class="app-header">
 			<button class="btn btn-text btn-icon app-burger" type="button" commandfor="docs-nav" command="toggle-popover" aria-label="Pages"><i class="bi bi-list" aria-hidden="true"></i></button>
+			<button class="btn btn-text btn-icon" type="button" command="--fold" aria-controls="docs-nav" aria-label="Fold the pages"><i class="bi bi-layout-sidebar" aria-hidden="true"></i></button>
 			<a class="app-brand" href="../index.html"><span class="app-mark">RZ</span><span>REDZ.UI</span></a>
 			<div class="hstack gap-4 ms-auto">
 				<button class="btn btn-text btn-icon" type="button" commandfor="docs-view" command="toggle-popover" aria-haspopup="menu" aria-label="View"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
@@ -584,7 +585,7 @@
 									<tr><td><code>table-responsive</code></td><td>-</td><td>review</td><td>the card&#039;s body holds the table; columns hide below md:</td></tr>
 									<tr><td><code>table-success</code></td><td>-</td><td>review</td><td>row tones are danger, warning and secondary</td></tr>
 									<tr><td><code>text-bg-danger</code></td><td><code>badge-danger</code></td><td>review</td><td>on a badge; elsewhere bg-$1 with the tone&#039;s -contrast text in the module&#039;s CSS</td></tr>
-									<tr><td><code>text-bg-dark</code></td><td>-</td><td>review</td><td>a plain badge, or a tone</td></tr>
+									<tr><td><code>text-bg-dark</code></td><td><code>badge-inverse</code></td><td>review</td><td>on a badge: the text color as its background, light in the dark theme</td></tr>
 									<tr><td><code>text-bg-info</code></td><td><code>badge-info</code></td><td>review</td><td>on a badge; elsewhere bg-$1 with the tone&#039;s -contrast text in the module&#039;s CSS</td></tr>
 									<tr><td><code>text-bg-light</code></td><td>-</td><td>review</td><td>a plain badge, or a tone</td></tr>
 									<tr><td><code>text-bg-primary</code></td><td><code>badge-primary</code></td><td>review</td><td>on a badge; elsewhere bg-$1 with the tone&#039;s -contrast text in the module&#039;s CSS</td></tr>
@@ -827,10 +828,10 @@
 									<tr><td><code>--bs-light-border-subtle</code></td><td>-</td><td>review</td><td>light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text</td></tr>
 									<tr><td><code>--bs-light-rgb</code></td><td>-</td><td>review</td><td>light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text</td></tr>
 									<tr><td><code>--bs-light-text-emphasis</code></td><td>-</td><td>review</td><td>light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text</td></tr>
-									<tr><td><code>--bs-link-color</code></td><td><code>--redz-primary</code></td><td>review</td><td>links take the accent; set it on a link only where it differs</td></tr>
+									<tr><td><code>--bs-link-color</code></td><td><code>--redz-link</code></td><td>rename</td><td></td></tr>
 									<tr><td><code>--bs-link-color-rgb</code></td><td>-</td><td>review</td><td>a link&#039;s own color and line, written on the link</td></tr>
 									<tr><td><code>--bs-link-decoration</code></td><td>-</td><td>review</td><td>a link&#039;s own color and line, written on the link</td></tr>
-									<tr><td><code>--bs-link-hover-color</code></td><td>-</td><td>review</td><td>a link&#039;s own color and line, written on the link</td></tr>
+									<tr><td><code>--bs-link-hover-color</code></td><td><code>--redz-link</code></td><td>review</td><td>a link keeps its color on hover; the underline shows the hover</td></tr>
 									<tr><td><code>--bs-link-hover-color-rgb</code></td><td>-</td><td>review</td><td>a link&#039;s own color and line, written on the link</td></tr>
 									<tr><td><code>--bs-link-opacity</code></td><td>-</td><td>review</td><td>a link&#039;s own color and line, written on the link</td></tr>
 									<tr><td><code>--bs-link-underline-opacity</code></td><td>-</td><td>review</td><td>a link&#039;s own color and line, written on the link</td></tr>

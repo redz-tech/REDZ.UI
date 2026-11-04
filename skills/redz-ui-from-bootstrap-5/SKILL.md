@@ -25,7 +25,10 @@ the project switches at once, so migrate on a branch and switch the `<link>` wit
    open, as screenshots miss what is closed.
 3. **Rewrite the whole file in one pass**, finding by finding, by the kind (below) and `assets/map.tsv` (its `note`
    column says why). Never chain find-and-replace over files: `p-4` exists in both libraries with other sizes.
-4. **Scan the file again** - `scripts/scan.sh --own PREFIX FILE` - until it prints nothing. Its exit code is 0 then.
+4. **Scan the file again** - `scripts/scan.sh --moved --own PREFIX FILE` - until it prints nothing. Its exit code is
+   0 then. `--moved` reads a name REDZ.UI has as REDZ.UI's (`gap-4` is its 4 px) and code that writes whole names for
+   those names, so a moved file can scan clean; only half a name glued to code (`'badge-' . $tone`) is still a finding.
+   Leave it off for the inventory of files not yet moved.
 5. **After.** Compare the screenshots; open the same dialogs, menus and tabs; press Tab through the screen.
 6. **Record** the file as done, and add every correction you had to make to the gotchas of your project.
 

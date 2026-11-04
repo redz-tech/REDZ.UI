@@ -6,7 +6,7 @@
 <section class="vstack gap-12" aria-labelledby="tokens-rules">
 	<h2 id="tokens-rules">How they are made</h2>
 	<ul>
-		<li>Colors by role: <code>--redz-text</code>, <code>-muted</code>, <code>-faint</code>; <code>--redz-bg-page</code>, <code>--redz-bg</code>, <code>-raised</code>, <code>-hover</code>; a tone, its <code>-subtle</code> fill and its <code>-contrast</code> text for primary, secondary, success, danger, warning and info.</li>
+		<li>Colors by role: <code>--redz-text</code>, <code>-muted</code>, <code>-faint</code>; <code>--redz-bg-page</code>, <code>--redz-bg</code>, <code>-raised</code>, <code>-hover</code>; a tone, its <code>-subtle</code> fill and its <code>-contrast</code> text for primary, secondary, success, danger, warning and info. <code>--redz-focus</code> and <code>--redz-link</code> are the primary tone unless a theme gives them their own - a white-label palette sets the links' color in <code>--redz-link</code> alone.</li>
 		<li>Text is at least 4.5:1 on its background, the borders of fields and the focus ring 3:1, in the light and the dark theme - computed in OKLCH and written as checked hex.</li>
 		<li>A component declares a few properties of its own on its root and never on rows or items: hundreds of properties on small elements slow every style recalculation.</li>
 	</ul>

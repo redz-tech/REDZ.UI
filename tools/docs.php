@@ -240,6 +240,7 @@ function DOCS__Page(array $config, string $key, string $title, string $lead, str
 			<div class="app">
 				<header class="app-header">
 					<button class="btn btn-text btn-icon app-burger" type="button" commandfor="docs-nav" command="toggle-popover" aria-label="Pages"><i class="bi bi-list" aria-hidden="true"></i></button>
+					<button class="btn btn-text btn-icon" type="button" command="--fold" aria-controls="docs-nav" aria-label="Fold the pages"><i class="bi bi-layout-sidebar" aria-hidden="true"></i></button>
 					<a class="app-brand" href="../index.html"><span class="app-mark">RZ</span><span>REDZ.UI</span></a>
 					<div class="hstack gap-4 ms-auto">
 						<button class="btn btn-text btn-icon" type="button" commandfor="docs-view" command="toggle-popover" aria-haspopup="menu" aria-label="View"><i class="bi bi-circle-half" aria-hidden="true"></i></button>

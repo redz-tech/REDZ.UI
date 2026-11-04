@@ -25,10 +25,18 @@ What the ERP's move from Bootstrap 5.3 asked for, and the editor; to be released
   the stylesheets, that marks `<html data-floor="below">` when the browser lacks a feature the library is built on, so
   every product judges a browser the same way and shows its own words. `tools/build.php` writes it from
   `tools/floor/tests.json`, and the floor gate holds that every browser at the floor passes it.
+- **A side navigation folded to a rail** (`command="--fold"`, `data-folded`, `js/fold.js`): a header button with
+  `aria-controls` naming `app-sidebar` folds it into a 56 px rail of its icons above 1024 px and back, pressed while
+  folded; each link shows its words as a tooltip and keeps them as its name. The library stores nothing: `redz:fold`
+  (`detail.folded`) tells the page, which writes `data-folded` back when it loads. A shell without `app-sidebar` is one
+  column by itself.
+- **`--redz-link`**, the links' color, the primary tone unless a theme or a white-label palette sets its own.
+- **`badge-inverse`**: the text color with the page color on it, for a mark that stands apart from every tone.
 - `border-{tone}-subtle`, `spinner-grow` (a dot that grows and fades), `btn-group-vertical`.
 - The migration skill's scan reads Bootstrap's custom properties (`--bs-*`, in stylesheets, style attributes and
   scripts; the map's 449 new rows from `tools/map/properties.tsv`), class values written over several lines and icon
-  names `icons/` lacks, and prints the map's note where a finding has no form.
+  names `icons/` lacks, and prints the map's note where a finding has no form; `--moved` reads a moved file by
+  REDZ.UI's names (`gap-4` is its 4 px) and template code that writes whole names for them, so it scans clean.
 
 ### Changed
 - The stylesheet's budget is 26 KB gzipped (from 24).
@@ -37,6 +45,9 @@ What the ERP's move from Bootstrap 5.3 asked for, and the editor; to be released
   table, `data-bs-toggle="tooltip"` is the title inside `data-tooltips`, `data-bs-title` is `title`.
 
 ### Fixed
+- `--toggle` closes a table's row: containment cannot hide a row, so `hidden="until-found"` left it on screen; a row,
+  a row group or a cell now closes as plain `hidden` (find in page does not open it).
+- The App shell page's state grid wrote `<navaria-label>` for `<nav aria-label>`.
 - The scan named `references/triggers.md`, which is `references/states-and-triggers.md`.
 
 ## 0.9.0 - 2026-11-04

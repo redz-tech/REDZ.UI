@@ -19,6 +19,7 @@
 	<div class="app">
 		<header class="app-header">
 			<button class="btn btn-text btn-icon app-burger" type="button" commandfor="docs-nav" command="toggle-popover" aria-label="Pages"><i class="bi bi-list" aria-hidden="true"></i></button>
+			<button class="btn btn-text btn-icon" type="button" command="--fold" aria-controls="docs-nav" aria-label="Fold the pages"><i class="bi bi-layout-sidebar" aria-hidden="true"></i></button>
 			<a class="app-brand" href="../index.html"><span class="app-mark">RZ</span><span>REDZ.UI</span></a>
 			<div class="hstack gap-4 ms-auto">
 				<button class="btn btn-text btn-icon" type="button" commandfor="docs-view" command="toggle-popover" aria-haspopup="menu" aria-label="View"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
@@ -140,6 +141,15 @@
 &lt;span class="badge badge-danger"&gt;Overdue&lt;/span&gt;
 &lt;span class="badge badge-warning"&gt;Due today&lt;/span&gt;
 &lt;span class="badge badge-info"&gt;Update&lt;/span&gt;</code></pre></div>
+					<p><code>badge-inverse</code> is the text color with the page color on it - dark in the light theme, light in the dark one - for a mark that must stand apart from every tone: a whole company wiped beside rows deleted for good and rows moved to the bin.</p>
+					<div class="docs-sample"><div class="docs-example" id="badge-inverse">
+						<span class="badge badge-danger">Deleted</span>
+						<span class="badge badge-warning">In the bin</span>
+						<span class="badge badge-inverse">Company wiped</span>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;span class="badge badge-danger"&gt;Deleted&lt;/span&gt;
+&lt;span class="badge badge-warning"&gt;In the bin&lt;/span&gt;
+&lt;span class="badge badge-inverse"&gt;Company wiped&lt;/span&gt;</code></pre></div>
 
 					<h3>Beside other things</h3>
 					<p>A count in a navigation link, a status in a heading.</p>
@@ -168,7 +178,7 @@
 						<section class="vstack gap-12" aria-labelledby="badge-tokens">
 							<h2 id="badge-tokens">Tokens</h2>
 							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/badge.css"><code>css/components/badge.css</code></a>. It declares <code>--redz-badge-bg</code>, <code>--redz-badge-fg</code> on its root, never on rows or items.</p>
-							<p>It reads the theme's <code>--redz-bg-hover</code>, <code>--redz-text-muted</code>, <code>--redz-fs-12</code>, <code>--redz-primary</code>, <code>--redz-primary-contrast</code>, <code>--redz-secondary</code>, <code>--redz-secondary-contrast</code>, <code>--redz-success</code>, <code>--redz-success-contrast</code>, <code>--redz-danger</code>, <code>--redz-danger-contrast</code>, <code>--redz-warning</code>, <code>--redz-warning-contrast</code>, <code>--redz-info</code>, <code>--redz-info-contrast</code>, <code>--redz-primary-subtle</code>, <code>--redz-secondary-subtle</code>, <code>--redz-success-subtle</code>, <code>--redz-danger-subtle</code>, <code>--redz-warning-subtle</code>, <code>--redz-info-subtle</code>.</p>
+							<p>It reads the theme's <code>--redz-bg-hover</code>, <code>--redz-text-muted</code>, <code>--redz-fs-12</code>, <code>--redz-primary</code>, <code>--redz-primary-contrast</code>, <code>--redz-secondary</code>, <code>--redz-secondary-contrast</code>, <code>--redz-success</code>, <code>--redz-success-contrast</code>, <code>--redz-danger</code>, <code>--redz-danger-contrast</code>, <code>--redz-warning</code>, <code>--redz-warning-contrast</code>, <code>--redz-info</code>, <code>--redz-info-contrast</code>, <code>--redz-text</code>, <code>--redz-bg</code>, <code>--redz-primary-subtle</code>, <code>--redz-secondary-subtle</code>, <code>--redz-success-subtle</code>, <code>--redz-danger-subtle</code>, <code>--redz-warning-subtle</code>, <code>--redz-info-subtle</code>.</p>
 						</section>
 
 						<section class="vstack gap-12" aria-labelledby="badge-from-bootstrap">
@@ -177,7 +187,7 @@
 								<thead><tr><th scope="col">Bootstrap 5.3</th><th scope="col">REDZ.UI</th><th scope="col">Change</th><th scope="col">Note</th></tr></thead>
 								<tbody>
 									<tr><td><code>text-bg-danger</code></td><td><code>badge-danger</code></td><td>review</td><td>on a badge; elsewhere bg-$1 with the tone&#039;s -contrast text in the module&#039;s CSS</td></tr>
-									<tr><td><code>text-bg-dark</code></td><td>-</td><td>review</td><td>a plain badge, or a tone</td></tr>
+									<tr><td><code>text-bg-dark</code></td><td><code>badge-inverse</code></td><td>review</td><td>on a badge: the text color as its background, light in the dark theme</td></tr>
 									<tr><td><code>text-bg-info</code></td><td><code>badge-info</code></td><td>review</td><td>on a badge; elsewhere bg-$1 with the tone&#039;s -contrast text in the module&#039;s CSS</td></tr>
 									<tr><td><code>text-bg-light</code></td><td>-</td><td>review</td><td>a plain badge, or a tone</td></tr>
 									<tr><td><code>text-bg-primary</code></td><td><code>badge-primary</code></td><td>review</td><td>on a badge; elsewhere bg-$1 with the tone&#039;s -contrast text in the module&#039;s CSS</td></tr>

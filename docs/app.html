@@ -19,6 +19,7 @@
 	<div class="app">
 		<header class="app-header">
 			<button class="btn btn-text btn-icon app-burger" type="button" commandfor="docs-nav" command="toggle-popover" aria-label="Pages"><i class="bi bi-list" aria-hidden="true"></i></button>
+			<button class="btn btn-text btn-icon" type="button" command="--fold" aria-controls="docs-nav" aria-label="Fold the pages"><i class="bi bi-layout-sidebar" aria-hidden="true"></i></button>
 			<a class="app-brand" href="../index.html"><span class="app-mark">RZ</span><span>REDZ.UI</span></a>
 			<div class="hstack gap-4 ms-auto">
 				<button class="btn btn-text btn-icon" type="button" commandfor="docs-view" command="toggle-popover" aria-haspopup="menu" aria-label="View"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
@@ -120,6 +121,13 @@
   &lt;aside class="app-aside"&gt;…&lt;/aside&gt;
 &lt;/div&gt;</code></pre>
 					<p>The <a href="../reference/demo/list.html">demo screens</a> show the whole shell: a list, a resource page with its side column, a settings form.</p>
+
+					<h3>Folded to a rail</h3>
+					<p>On a wide window the side navigation folds into a rail of its icons and back: a header button with <code>command="--fold"</code> and <code>aria-controls</code> naming the sidebar puts <code>data-folded</code> on it and says so in <code>aria-pressed</code>. Folded, each link shows its words as a tooltip and keeps them as its name. The library stores nothing: it tells the page in <code>redz:fold</code> (<code>detail.folded</code>), and the page that keeps the choice writes <code>data-folded</code> back on the sidebar when it loads. These docs fold so - the button beside their burger.</p>
+					<pre class="docs-code" tabindex="0"><code>&lt;button class="btn btn-text btn-icon" type="button" command="--fold" aria-controls="side" aria-label="Fold the sections"&gt;…&lt;/button&gt;
+
+document.addEventListener('redz:fold', (event) =&gt; localStorage.setItem('folded', event.detail.folded ? '1' : ''));</code></pre>
+					<p>A shell without <code>app-sidebar</code> - a page whose role has no sections - is one column by itself: no class to add.</p>
 				</section>
 
 				<section class="vstack gap-16">
@@ -132,10 +140,10 @@
 							<tbody>
 								<tr>
 									<th scope="row">app-link</th>
-									<td><navaria-label="At rest"><a class="app-link" href="#app-states"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
-									<td><navaria-label="Hovered"><a class="app-link" href="#app-states" data-docs-state="hover"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
-									<td><navaria-label="Focused"><a class="app-link" href="#app-states" data-docs-state="focus-visible"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
-									<td><navaria-label="Current"><a class="app-link" href="#app-states" aria-current="page"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
+									<td><nav aria-label="At rest"><a class="app-link" href="#app-states"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
+									<td><nav aria-label="Hovered"><a class="app-link" href="#app-states" data-docs-state="hover"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
+									<td><nav aria-label="Focused"><a class="app-link" href="#app-states" data-docs-state="focus-visible"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
+									<td><nav aria-label="Current"><a class="app-link" href="#app-states" aria-current="page"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
 								</tr>
 							</tbody>
 						</table>
@@ -148,6 +156,7 @@
 						<li>The header is a <code>&lt;header&gt;</code>, the side navigation a named <code>&lt;nav&gt;</code>, the main column the page's one <code>&lt;main&gt;</code>.</li>
 						<li>On a narrow screen the burger opens the navigation as a popover: <kbd>Esc</kbd> or a click outside closes it, and the focus goes back to the burger.</li>
 						<li>The current section is <code>aria-current="page"</code>, drawn as a bar that stays in forced colors.</li>
+						<li>The fold button is a toggle button, pressed while the rail is folded; it has no <code>commandfor</code>, which WebKit would announce as collapsed. On a narrow screen it hides, as the burger opens the whole navigation there.</li>
 						<li>The header and the navigation stay off paper: only the main column prints.</li>
 					</ul>
 				</section>

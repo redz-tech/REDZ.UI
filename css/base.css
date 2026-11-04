@@ -43,7 +43,7 @@
 	}
 
 	a {
-		color: var(--redz-primary);
+		color: var(--redz-link);
 		text-decoration-thickness: from-font;
 		text-underline-offset: 0.15em;
 	}

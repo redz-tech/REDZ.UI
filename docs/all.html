@@ -19,6 +19,7 @@
 	<div class="app">
 		<header class="app-header">
 			<button class="btn btn-text btn-icon app-burger" type="button" commandfor="docs-nav" command="toggle-popover" aria-label="Pages"><i class="bi bi-list" aria-hidden="true"></i></button>
+			<button class="btn btn-text btn-icon" type="button" command="--fold" aria-controls="docs-nav" aria-label="Fold the pages"><i class="bi bi-layout-sidebar" aria-hidden="true"></i></button>
 			<a class="app-brand" href="../index.html"><span class="app-mark">RZ</span><span>REDZ.UI</span></a>
 			<div class="hstack gap-4 ms-auto">
 				<button class="btn btn-text btn-icon" type="button" commandfor="docs-view" command="toggle-popover" aria-haspopup="menu" aria-label="View"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
@@ -1122,6 +1123,21 @@
 							<button class="chip" type="button" aria-pressed="false">Sunset</button>
 						</div>
 					</div>
+					<div class="docs-example docs-example-stack" id="collapse-row">
+						<table class="table" aria-label="Deleted records">
+							<thead><tr><th scope="col">When</th><th scope="col">What</th><th scope="col"><span class="visually-hidden">Details</span></th></tr></thead>
+							<tbody>
+								<tr>
+									<td class="tabular-nums">12:40</td>
+									<td>3 excursions</td>
+									<td class="text-end"><button class="btn btn-sm btn-text" type="button" command="--toggle" aria-controls="collapse-row-details" aria-expanded="false">Details</button></td>
+								</tr>
+								<tr id="collapse-row-details" hidden>
+									<td colspan="3">Ang Thong, Koh Tao and the sunset cruise, with their photos and reviews.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</section>
 
 				<section class="vstack gap-16" aria-labelledby="all-list-group">
@@ -1417,6 +1433,11 @@
 						<span class="badge badge-danger">Overdue</span>
 						<span class="badge badge-warning">Due today</span>
 						<span class="badge badge-info">Update</span>
+					</div>
+					<div class="docs-example" id="badge-inverse">
+						<span class="badge badge-danger">Deleted</span>
+						<span class="badge badge-warning">In the bin</span>
+						<span class="badge badge-inverse">Company wiped</span>
 					</div>
 					<div class="docs-example docs-example-stack" id="badge-beside">
 						<nav class="nav nav-pills" aria-label="Orders">
@@ -2170,10 +2191,10 @@
 							<tbody>
 								<tr>
 									<th scope="row">app-link</th>
-									<td><navaria-label="At rest"><a class="app-link" href="#app-states"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
-									<td><navaria-label="Hovered"><a class="app-link" href="#app-states" data-docs-state="hover"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
-									<td><navaria-label="Focused"><a class="app-link" href="#app-states" data-docs-state="focus-visible"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
-									<td><navaria-label="Current"><a class="app-link" href="#app-states" aria-current="page"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
+									<td><nav aria-label="At rest"><a class="app-link" href="#app-states"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
+									<td><nav aria-label="Hovered"><a class="app-link" href="#app-states" data-docs-state="hover"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
+									<td><nav aria-label="Focused"><a class="app-link" href="#app-states" data-docs-state="focus-visible"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
+									<td><nav aria-label="Current"><a class="app-link" href="#app-states" aria-current="page"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
 								</tr>
 							</tbody>
 						</table>

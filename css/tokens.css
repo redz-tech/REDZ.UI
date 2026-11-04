@@ -32,6 +32,7 @@
 		--redz-info-contrast: light-dark(#ffffff, #000000);
 
 		--redz-focus: var(--redz-primary);
+		--redz-link: var(--redz-primary);
 		--redz-shadow-strength: 1;
 		--redz-shadow-1: 0 1px 2px rgb(16 18 24 / calc(0.06 * var(--redz-shadow-strength)));
 		--redz-shadow-2: 0 2px 6px -1px rgb(16 18 24 / calc(0.06 * var(--redz-shadow-strength))), 0 8px 18px -4px rgb(16 18 24 / calc(0.08 * var(--redz-shadow-strength))), 0 16px 32px -8px rgb(16 18 24 / calc(0.08 * var(--redz-shadow-strength)));

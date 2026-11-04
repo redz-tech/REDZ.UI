@@ -30,6 +30,14 @@ The plain `badge` is neutral, for a status that needs no attention. `badge-subtl
 <span class="badge badge-info">Update</span>
 ```
 
+`badge-inverse` is the text color with the page color on it - dark in the light theme, light in the dark one - for a mark that must stand apart from every tone: a whole company wiped beside rows deleted for good and rows moved to the bin.
+
+```html
+<span class="badge badge-danger">Deleted</span>
+<span class="badge badge-warning">In the bin</span>
+<span class="badge badge-inverse">Company wiped</span>
+```
+
 ### Beside other things
 
 A count in a navigation link, a status in a heading.
@@ -51,14 +59,14 @@ A count in a navigation link, a status in a heading.
 
 From [`css/components/badge.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/badge.css). It declares `--redz-badge-bg`, `--redz-badge-fg` on its root, never on rows or items.
 
-It reads the theme's `--redz-bg-hover`, `--redz-text-muted`, `--redz-fs-12`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-primary-subtle`, `--redz-secondary-subtle`, `--redz-success-subtle`, `--redz-danger-subtle`, `--redz-warning-subtle`, `--redz-info-subtle`.
+It reads the theme's `--redz-bg-hover`, `--redz-text-muted`, `--redz-fs-12`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-text`, `--redz-bg`, `--redz-primary-subtle`, `--redz-secondary-subtle`, `--redz-success-subtle`, `--redz-danger-subtle`, `--redz-warning-subtle`, `--redz-info-subtle`.
 
 ## From Bootstrap 5.3
 
 | Bootstrap 5.3 | REDZ.UI | Change | Note |
 | --- | --- | --- | --- |
 | `text-bg-danger` | `badge-danger` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
-| `text-bg-dark` | - | review | a plain badge, or a tone |
+| `text-bg-dark` | `badge-inverse` | review | on a badge: the text color as its background, light in the dark theme |
 | `text-bg-info` | `badge-info` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |
 | `text-bg-light` | - | review | a plain badge, or a tone |
 | `text-bg-primary` | `badge-primary` | review | on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS |

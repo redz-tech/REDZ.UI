@@ -36,6 +36,10 @@ function check(token,    i) {
 	if (token == "" || token ~ /[<>{}$()'"]/ || token !~ /[A-Za-z]/) {
 		return
 	}
+	# A file that has moved writes REDZ.UI's names: gap-4 there is REDZ.UI's 4 px, not Bootstrap's 24.
+	if (moved && token in known) {
+		return
+	}
 	if (token in kind) {
 		if (kind[token] != "same") {
 			report(token, kind[token], target[token])
@@ -86,20 +90,26 @@ function templated(value,    pairs, i, at, best, which, end, code, words) {
 		while (match(code, /'[^']*'|"[^"]*"/)) {
 			# A string compared, a key or an index names a value, not a class: $tone === 'x', ['danger' => …], $row['id'].
 			if (substr(code, 1, RSTART - 1) !~ /(==|!=|<|>|\[)[ \t]*$/ && substr(code, RSTART + RLENGTH) !~ /^[ \t]*(==|!=|=>|\])/) {
-				words = words " " substr(code, RSTART + 1, RLENGTH - 2)
+				# A string that ends or starts in a dash is half a name, the code writing the rest: 'badge-' . $tone.
+				if (substr(code, RSTART + 1, RLENGTH - 2) ~ /-$|^-/) {
+					halves++
+				} else {
+					words = words " " substr(code, RSTART + 1, RLENGTH - 2)
+				}
 			}
 			code = substr(code, RSTART + RLENGTH)
 		}
-		if (value !~ /^[ \t]/) {
-			sub(/^[^ \t]+/, "", value)
+		if (value !~ /^[ \t]/ && (!moved || value ~ /^-/)) {
+			halves += sub(/^[^ \t]+/, "", value)
 		}
 	}
 }
 
-# The words before $text joined with its own, the last one dropped when code follows it with no space between.
+# The words before $text joined with its own, the last one dropped when code follows it with no space between - with
+# --moved only when it ends in a dash, as a whole name may stand right before code that adds its own space.
 function glued(words, text, before) {
-	if (before && text !~ /[ \t]$/) {
-		sub(/[^ \t]+$/, "", text)
+	if (before && text !~ /[ \t]$/ && (!moved || text ~ /-$/)) {
+		halves += sub(/[^ \t]+$/, "", text)
 	}
 	return words " " text
 }
@@ -128,13 +138,19 @@ function glued(words, text, before) {
 		rest = substr(rest, RSTART + RLENGTH)
 		sub(/^class(Name)?[ \t]*=[ \t]*./, "", value)
 		sub(/.$/, "", value)
+		# With --moved, code that writes whole names is read for them; only half a name glued to code is a finding.
 		if (value ~ /<\?|\{\{|\{%|\$\{|<%/) {
-			report("class", "review", "a class built in code: write every class name out whole")
+			halves = 0
 			value = templated(value)
+			if (!moved || halves > 0) {
+				report("class", "review", "a class built in code: write every class name out whole")
+			}
 		}
 		# A class value joined in a script's string ('<span class="badge ' + tone + '">') names its variables no class.
 		if (value ~ /['"][ \t]*\+|\+[ \t]*['"]/) {
-			report("class", "review", "a class built in code: write every class name out whole")
+			if (!moved || value ~ /[A-Za-z0-9-]['"][ \t]*\+|\+[ \t]*['"][A-Za-z0-9-]/) {
+				report("class", "review", "a class built in code: write every class name out whole")
+			}
 			gsub(/['"][ \t]*\+[^'"]*(\+[ \t]*['"]|$)/, " ", value)
 		}
 		classes(value)

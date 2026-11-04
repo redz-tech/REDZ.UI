@@ -19,6 +19,7 @@
 	<div class="app">
 		<header class="app-header">
 			<button class="btn btn-text btn-icon app-burger" type="button" commandfor="docs-nav" command="toggle-popover" aria-label="Pages"><i class="bi bi-list" aria-hidden="true"></i></button>
+			<button class="btn btn-text btn-icon" type="button" command="--fold" aria-controls="docs-nav" aria-label="Fold the pages"><i class="bi bi-layout-sidebar" aria-hidden="true"></i></button>
 			<a class="app-brand" href="../index.html"><span class="app-mark">RZ</span><span>REDZ.UI</span></a>
 			<div class="hstack gap-4 ms-auto">
 				<button class="btn btn-text btn-icon" type="button" commandfor="docs-view" command="toggle-popover" aria-haspopup="menu" aria-label="View"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
@@ -141,6 +142,37 @@
 	&lt;button class="chip" type="button" aria-pressed="false"&gt;Private&lt;/button&gt;
 	&lt;button class="chip" type="button" aria-pressed="false"&gt;Sunset&lt;/button&gt;
 &lt;/div&gt;</code></pre></div>
+
+					<h3>A details row in a table</h3>
+					<p>A row under a row opens and closes the same way: the region is a <code>&lt;tr&gt;</code> with one cell across the table. A table's row cannot be hidden "until found", so it starts as plain <code>hidden</code> and closes so again; find in page does not open it.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="collapse-row">
+						<table class="table" aria-label="Deleted records">
+							<thead><tr><th scope="col">When</th><th scope="col">What</th><th scope="col"><span class="visually-hidden">Details</span></th></tr></thead>
+							<tbody>
+								<tr>
+									<td class="tabular-nums">12:40</td>
+									<td>3 excursions</td>
+									<td class="text-end"><button class="btn btn-sm btn-text" type="button" command="--toggle" aria-controls="collapse-row-details" aria-expanded="false">Details</button></td>
+								</tr>
+								<tr id="collapse-row-details" hidden>
+									<td colspan="3">Ang Thong, Koh Tao and the sunset cruise, with their photos and reviews.</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;table class="table" aria-label="Deleted records"&gt;
+	&lt;thead&gt;&lt;tr&gt;&lt;th scope="col"&gt;When&lt;/th&gt;&lt;th scope="col"&gt;What&lt;/th&gt;&lt;th scope="col"&gt;&lt;span class="visually-hidden"&gt;Details&lt;/span&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+	&lt;tbody&gt;
+		&lt;tr&gt;
+			&lt;td class="tabular-nums"&gt;12:40&lt;/td&gt;
+			&lt;td&gt;3 excursions&lt;/td&gt;
+			&lt;td class="text-end"&gt;&lt;button class="btn btn-sm btn-text" type="button" command="--toggle" aria-controls="collapse-row-details" aria-expanded="false"&gt;Details&lt;/button&gt;&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr id="collapse-row-details" hidden&gt;
+			&lt;td colspan="3"&gt;Ang Thong, Koh Tao and the sunset cruise, with their photos and reviews.&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;</code></pre></div>
 				</section>
 
 				<section class="vstack gap-12" aria-labelledby="collapse-access">

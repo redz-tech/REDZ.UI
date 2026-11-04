@@ -1,6 +1,7 @@
 // REDZ.UI, regions a button opens and closes: a button with command="--toggle" and aria-controls naming the element
 // shows it or hides it again as hidden="until-found", so the browser's find in page still reaches the words inside and
-// opens it; every button for that element says whether it is open in aria-expanded — after a find in page too. The
+// opens it - a table's row, which that kind of hiding cannot hide, as plain hidden; every button for that element says
+// whether it is open in aria-expanded - after a find in page too. The
 // button has no commandfor, which WebKit would expose as collapsed whatever its aria-expanded says: its click sends
 // the element the command event, with command and source, as the platform sends it to a commandfor's target.
 const COMMAND = '--toggle';
@@ -33,6 +34,8 @@ document.addEventListener('command', (event) => {
 	}
 	if (target.hidden) {
 		target.hidden = false;
+	} else if (getComputedStyle(target).display.startsWith('table-')) {
+		target.hidden = true;
 	} else {
 		target.setAttribute('hidden', 'until-found');
 	}

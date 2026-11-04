@@ -1923,7 +1923,7 @@ table-striped-columns	table-striped-columns	same	class	table
 table-success		review	class	table	row tones are danger, warning and secondary
 table-warning	table-warning	same	class	table	
 text-bg-danger	badge-danger	review	class	badge	on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS
-text-bg-dark		review	class	badge	a plain badge, or a tone
+text-bg-dark	badge-inverse	review	class	badge	on a badge: the text color as its background, light in the dark theme
 text-bg-info	badge-info	review	class	badge	on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS
 text-bg-light		review	class	badge	a plain badge, or a tone
 text-bg-primary	badge-primary	review	class	badge	on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS
@@ -2244,10 +2244,10 @@ z-n1	z-n1	same	class	utilities	dialogs, menus and toasts stack in the top layer 
 --bs-light-border-subtle		review	property	tokens	light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text
 --bs-light-rgb		review	property	tokens	light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text
 --bs-light-text-emphasis		review	property	tokens	light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text
---bs-link-color	--redz-primary	review	property	tokens	links take the accent; set it on a link only where it differs
+--bs-link-color	--redz-link	rename	property	tokens	
 --bs-link-color-rgb		review	property	tokens	a link's own color and line, written on the link
 --bs-link-decoration		review	property	tokens	a link's own color and line, written on the link
---bs-link-hover-color		review	property	tokens	a link's own color and line, written on the link
+--bs-link-hover-color	--redz-link	review	property	tokens	a link keeps its color on hover; the underline shows the hover
 --bs-link-hover-color-rgb		review	property	tokens	a link's own color and line, written on the link
 --bs-link-opacity		review	property	tokens	a link's own color and line, written on the link
 --bs-link-underline-opacity		review	property	tokens	a link's own color and line, written on the link

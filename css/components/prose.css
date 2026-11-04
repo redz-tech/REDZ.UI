@@ -51,7 +51,7 @@
 	}
 
 	.prose a {
-		color: var(--redz-primary);
+		color: var(--redz-link);
 		text-decoration: underline;
 		text-underline-offset: 0.15em;
 	}

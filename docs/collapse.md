@@ -32,6 +32,26 @@ A region without `hidden` starts open, its button `aria-expanded="true"`.
 </div>
 ```
 
+### A details row in a table
+
+A row under a row opens and closes the same way: the region is a `<tr>` with one cell across the table. A table's row cannot be hidden "until found", so it starts as plain `hidden` and closes so again; find in page does not open it.
+
+```html
+<table class="table" aria-label="Deleted records">
+	<thead><tr><th scope="col">When</th><th scope="col">What</th><th scope="col"><span class="visually-hidden">Details</span></th></tr></thead>
+	<tbody>
+		<tr>
+			<td class="tabular-nums">12:40</td>
+			<td>3 excursions</td>
+			<td class="text-end"><button class="btn btn-sm btn-text" type="button" command="--toggle" aria-controls="collapse-row-details" aria-expanded="false">Details</button></td>
+		</tr>
+		<tr id="collapse-row-details" hidden>
+			<td colspan="3">Ang Thong, Koh Tao and the sunset cruise, with their photos and reviews.</td>
+		</tr>
+	</tbody>
+</table>
+```
+
 ## Keyboard and accessibility
 
 | Key | On the button |

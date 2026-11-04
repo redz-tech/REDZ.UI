@@ -37,6 +37,13 @@
 		}
 	};
 	apply();
+	// The folded pages, kept here as the library keeps nothing.
+	document.addEventListener('redz:fold', (event) => store('folded', event.detail.folded ? '1' : ''));
+	document.addEventListener('DOMContentLoaded', () => {
+		if (stored('folded') === '1') {
+			document.getElementById('docs-nav')?.setAttribute('data-folded', '');
+		}
+	});
 	document.addEventListener('DOMContentLoaded', () => {
 		apply();
 		for (const box of document.querySelectorAll('[data-docs-indeterminate]')) {
