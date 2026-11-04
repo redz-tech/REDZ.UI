@@ -101,6 +101,10 @@ jobs:
           key: probes-${{ matrix.part.name }}-${{ hashFiles('tools/probes/config.json') }}
           restore-keys: probes-${{ matrix.part.name }}-
 
+      - name: Noto on Linux, the fonts Android and ChromeOS draw Arabic and the rest in
+        if: runner.os == 'Linux'
+        run: sudo apt-get install -y -q --no-install-recommends fonts-noto-core
+
       - name: Let safaridriver drive Safari and the simulators
         if: matrix.part.name == 'safari' || matrix.part.name == 'ios' || startsWith(matrix.part.name, 'voiceover')
         run: sudo safaridriver --enable
