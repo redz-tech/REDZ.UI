@@ -2007,6 +2007,24 @@
 							<button class="stat stat-secondary" type="button" aria-pressed="false"><span class="icon-tile"><i class="bi bi-x-octagon" aria-hidden="true"></i></span><span><span class="stat-value">0</span><span class="stat-label">فشل</span></span></button>
 						</div>
 					</div>
+					<div class="docs-example docs-example-stack" id="stat-links-example">
+						<nav class="grid cols-2 md:cols-4 gap-12" aria-label="الحجوزات حسب الحالة">
+							<a class="stat stat-primary" href="#stat-links" aria-current="page"><span class="icon-tile"><i class="bi bi-calendar-check" aria-hidden="true"></i></span><span><span class="stat-value">128</span><span class="stat-label">مؤكدة</span></span></a>
+							<a class="stat stat-warning" href="#stat-links"><span class="icon-tile"><i class="bi bi-hourglass-split" aria-hidden="true"></i></span><span><span class="stat-value">14</span><span class="stat-label">بانتظار</span></span></a>
+							<a class="stat stat-danger" href="#stat-links"><span class="icon-tile"><i class="bi bi-x-circle" aria-hidden="true"></i></span><span><span class="stat-value">3</span><span class="stat-label">ملغاة</span></span></a>
+							<a class="stat" href="#stat-links"><span><span class="stat-value">145</span><span class="stat-label">كل الحجوزات</span></span></a>
+						</nav>
+					</div>
+					<div class="docs-example docs-example-stack" id="stat-parts-example">
+						<div class="grid sm:cols-3 gap-12">
+							<div class="stat stat-success stat-emphasis"><span><span class="stat-value">412,000 بات</span><span class="stat-label">الإيرادات في نوفمبر</span><span class="stat-sub"><span class="stat-delta" data-trend="up">+12%</span> مقارنة بأكتوبر</span></span></div>
+							<div class="stat"><span class="icon-tile"><i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i></span><span><span class="stat-value">6</span><span class="stat-label">المبالغ المستردة</span><span class="stat-sub"><span class="stat-delta" data-trend="up" data-good="down">+2</span> مقارنة بأكتوبر</span></span></div>
+							<div class="stat stat-info"><span class="icon-tile"><i class="bi bi-door-open" aria-hidden="true"></i></span><span><span class="stat-value">68%</span><span class="stat-label">الغرف المشغولة</span><progress class="progress progress-xs progress-info" value="68" max="100" aria-label="الغرف المشغولة، 68 بالمئة"></progress></span><span class="stat-meta">قبل 5 دقائق</span></div>
+						</div>
+						<div class="grid sm:cols-3 gap-12">
+							<div class="stat" aria-busy="true"><span><span class="stat-value">0</span><span class="stat-label">ضيوف اليوم</span></span></div>
+						</div>
+					</div>
 				</section>
 
 				<section class="vstack gap-16" aria-labelledby="all-qr">
@@ -2039,6 +2057,24 @@
 								</ol>
 							</div>
 						</section>
+					</div>
+					<div class="docs-example docs-example-stack" id="step-list-blocks">
+						<ol class="step-list" aria-label="نقل الموقع">
+							<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>نسخ الملفات<span class="step-list-detail">2,140 ملفًا</span></li>
+							<li data-state="warning"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>فحص الروابط<span class="step-list-detail">3 معطلة</span></li>
+							<li data-state="ask" aria-current="step"><i class="bi bi-question-circle-fill" aria-hidden="true"></i>وجّه النطاق إلى هنا<div class="step-list-body vstack gap-8"><p>اضبط سجل A للنطاق lagoon.example على 203.0.113.24 لدى المسجّل، ثم افحصه.</p><div class="hstack gap-8"><button class="btn btn-sm btn-primary" type="button">فحص النطاق</button><button class="btn btn-sm" type="button">تخطٍّ الآن</button></div></div></li>
+							<li data-state="waiting"><i class="bi bi-hourglass-split" aria-hidden="true"></i>إصدار الشهادة<span class="step-list-detail">بعد النطاق</span></li>
+							<li data-state="skipped"><i class="bi bi-skip-forward flip-rtl" aria-hidden="true"></i>استيراد التعليقات القديمة<span class="step-list-detail">تم التخطي</span></li>
+							<li data-state="locked"><i class="bi bi-lock" aria-hidden="true"></i>إيقاف الموقع القديم<span class="step-list-detail">خطوة المالك</span></li>
+						</ol>
+					</div>
+					<div class="docs-example docs-example-stack" id="step-list-pipeline">
+						<ol class="stage-list" aria-label="إصدار 2.4">
+							<li data-state="done"><span class="hstack gap-8"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><strong>البناء</strong></span><span class="fs-12">2 د 14 ث</span><div class="stage-list-actions"><button class="btn btn-sm" type="button">السجل</button></div></li>
+							<li data-state="current" aria-current="step"><span class="hstack gap-8"><i class="bi bi-arrow-repeat" aria-hidden="true"></i><strong>الاختبار</strong></span><span class="fs-12">412 من 580 فحصًا</span><div class="stage-list-actions"><button class="btn btn-sm" type="button">السجل</button><button class="btn btn-sm" type="button">إيقاف</button></div></li>
+							<li data-state="ask"><span class="hstack gap-8"><i class="bi bi-question-circle-fill" aria-hidden="true"></i><strong>الموافقة</strong></span><span class="fs-12">يوافق المالك</span><div class="stage-list-actions"><button class="btn btn-sm btn-primary" type="button">الموافقة</button></div></li>
+							<li data-state="waiting"><span class="hstack gap-8"><i class="bi bi-hourglass-split" aria-hidden="true"></i><strong>النشر</strong></span><span class="fs-12">بعد الموافقة</span></li>
+						</ol>
 					</div>
 					<div class="docs-example docs-example-stack" id="step-list-events">
 						<ol class="timeline" aria-label="سجل الدفعة">

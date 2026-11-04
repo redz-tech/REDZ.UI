@@ -149,6 +149,46 @@
 		&lt;/ol&gt;
 	&lt;/div&gt;
 &lt;/section&gt;</code></pre></div>
+
+					<h3 id="step-list-more">More states, and a step's body</h3>
+					<p>Six more states: <code>warning</code> - done with a warning, <code>info</code>, <code>ask</code> - the job waits for the person, <code>waiting</code> - for something else, <code>skipped</code> and <code>locked</code>. A <code>step-list-body</code> after a step's name is a block under it, for what the step found or asks; in a list with bodies every step is a block, and the current one, the one that asks and the one that failed are tinted.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="step-list-blocks">
+						<ol class="step-list" aria-label="Moving the site">
+							<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Copy the files<span class="step-list-detail">2,140 files</span></li>
+							<li data-state="warning"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>Check the links<span class="step-list-detail">3 broken</span></li>
+							<li data-state="ask" aria-current="step"><i class="bi bi-question-circle-fill" aria-hidden="true"></i>Point the domain here<div class="step-list-body vstack gap-8"><p>Set the A record of lagoon.example to 203.0.113.24 at your registrar, then check it.</p><div class="hstack gap-8"><button class="btn btn-sm btn-primary" type="button">Check the domain</button><button class="btn btn-sm" type="button">Skip for now</button></div></div></li>
+							<li data-state="waiting"><i class="bi bi-hourglass-split" aria-hidden="true"></i>Issue the certificate<span class="step-list-detail">after the domain</span></li>
+							<li data-state="skipped"><i class="bi bi-skip-forward flip-rtl" aria-hidden="true"></i>Import the old comments<span class="step-list-detail">skipped</span></li>
+							<li data-state="locked"><i class="bi bi-lock" aria-hidden="true"></i>Switch off the old site<span class="step-list-detail">an owner's step</span></li>
+						</ol>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;ol class="step-list" aria-label="Moving the site"&gt;
+	&lt;li data-state="done"&gt;&lt;i class="bi bi-check-circle-fill" aria-hidden="true"&gt;&lt;/i&gt;Copy the files&lt;span class="step-list-detail"&gt;2,140 files&lt;/span&gt;&lt;/li&gt;
+	&lt;li data-state="warning"&gt;&lt;i class="bi bi-exclamation-triangle-fill" aria-hidden="true"&gt;&lt;/i&gt;Check the links&lt;span class="step-list-detail"&gt;3 broken&lt;/span&gt;&lt;/li&gt;
+	&lt;li data-state="ask" aria-current="step"&gt;&lt;i class="bi bi-question-circle-fill" aria-hidden="true"&gt;&lt;/i&gt;Point the domain here&lt;div class="step-list-body vstack gap-8"&gt;&lt;p&gt;Set the A record of lagoon.example to 203.0.113.24 at your registrar, then check it.&lt;/p&gt;&lt;div class="hstack gap-8"&gt;&lt;button class="btn btn-sm btn-primary" type="button"&gt;Check the domain&lt;/button&gt;&lt;button class="btn btn-sm" type="button"&gt;Skip for now&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;/li&gt;
+	&lt;li data-state="waiting"&gt;&lt;i class="bi bi-hourglass-split" aria-hidden="true"&gt;&lt;/i&gt;Issue the certificate&lt;span class="step-list-detail"&gt;after the domain&lt;/span&gt;&lt;/li&gt;
+	&lt;li data-state="skipped"&gt;&lt;i class="bi bi-skip-forward flip-rtl" aria-hidden="true"&gt;&lt;/i&gt;Import the old comments&lt;span class="step-list-detail"&gt;skipped&lt;/span&gt;&lt;/li&gt;
+	&lt;li data-state="locked"&gt;&lt;i class="bi bi-lock" aria-hidden="true"&gt;&lt;/i&gt;Switch off the old site&lt;span class="step-list-detail"&gt;an owner's step&lt;/span&gt;&lt;/li&gt;
+&lt;/ol&gt;</code></pre></div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="step-list-stages">
+					<h2 id="step-list-stages">A pipeline</h2>
+					<p><code>stage-list</code> is an <code>ol</code> of stages, each a frame: first a line with its icon and its name, then what it says, and a <code>stage-list-actions</code> slot for its buttons at the bottom. The stages run across from a region of 768 px and down below it, joined by a line; <code>data-state</code> takes the steps' states.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="step-list-pipeline">
+						<ol class="stage-list" aria-label="The release of 2.4">
+							<li data-state="done"><span class="hstack gap-8"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><strong>Build</strong></span><span class="fs-12">2 min 14 s</span><div class="stage-list-actions"><button class="btn btn-sm" type="button">Log</button></div></li>
+							<li data-state="current" aria-current="step"><span class="hstack gap-8"><i class="bi bi-arrow-repeat" aria-hidden="true"></i><strong>Test</strong></span><span class="fs-12">412 of 580 checks</span><div class="stage-list-actions"><button class="btn btn-sm" type="button">Log</button><button class="btn btn-sm" type="button">Stop</button></div></li>
+							<li data-state="ask"><span class="hstack gap-8"><i class="bi bi-question-circle-fill" aria-hidden="true"></i><strong>Approve</strong></span><span class="fs-12">An owner signs off</span><div class="stage-list-actions"><button class="btn btn-sm btn-primary" type="button">Approve</button></div></li>
+							<li data-state="waiting"><span class="hstack gap-8"><i class="bi bi-hourglass-split" aria-hidden="true"></i><strong>Deploy</strong></span><span class="fs-12">After the approval</span></li>
+						</ol>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;ol class="stage-list" aria-label="The release of 2.4"&gt;
+	&lt;li data-state="done"&gt;&lt;span class="hstack gap-8"&gt;&lt;i class="bi bi-check-circle-fill" aria-hidden="true"&gt;&lt;/i&gt;&lt;strong&gt;Build&lt;/strong&gt;&lt;/span&gt;&lt;span class="fs-12"&gt;2 min 14 s&lt;/span&gt;&lt;div class="stage-list-actions"&gt;&lt;button class="btn btn-sm" type="button"&gt;Log&lt;/button&gt;&lt;/div&gt;&lt;/li&gt;
+	&lt;li data-state="current" aria-current="step"&gt;&lt;span class="hstack gap-8"&gt;&lt;i class="bi bi-arrow-repeat" aria-hidden="true"&gt;&lt;/i&gt;&lt;strong&gt;Test&lt;/strong&gt;&lt;/span&gt;&lt;span class="fs-12"&gt;412 of 580 checks&lt;/span&gt;&lt;div class="stage-list-actions"&gt;&lt;button class="btn btn-sm" type="button"&gt;Log&lt;/button&gt;&lt;button class="btn btn-sm" type="button"&gt;Stop&lt;/button&gt;&lt;/div&gt;&lt;/li&gt;
+	&lt;li data-state="ask"&gt;&lt;span class="hstack gap-8"&gt;&lt;i class="bi bi-question-circle-fill" aria-hidden="true"&gt;&lt;/i&gt;&lt;strong&gt;Approve&lt;/strong&gt;&lt;/span&gt;&lt;span class="fs-12"&gt;An owner signs off&lt;/span&gt;&lt;div class="stage-list-actions"&gt;&lt;button class="btn btn-sm btn-primary" type="button"&gt;Approve&lt;/button&gt;&lt;/div&gt;&lt;/li&gt;
+	&lt;li data-state="waiting"&gt;&lt;span class="hstack gap-8"&gt;&lt;i class="bi bi-hourglass-split" aria-hidden="true"&gt;&lt;/i&gt;&lt;strong&gt;Deploy&lt;/strong&gt;&lt;/span&gt;&lt;span class="fs-12"&gt;After the approval&lt;/span&gt;&lt;/li&gt;
+&lt;/ol&gt;</code></pre></div>
 				</section>
 
 				<section class="vstack gap-16" aria-labelledby="step-list-timeline">
@@ -171,7 +211,8 @@
 				<section class="vstack gap-12" aria-labelledby="step-list-access">
 					<h2 id="step-list-access">Accessibility</h2>
 					<ul>
-						<li>The words carry the state; the icon and the color repeat them. Mark the current step <code>aria-current="step"</code>.</li>
+						<li>The words carry the state; the icon and the color repeat them - write the state in the step's detail when its name does not say it. Mark the current step <code>aria-current="step"</code>; a step or a stage that asks the person holds its own buttons.</li>
+						<li>A pipeline's stages are a list in their order, read one after the other wherever they stand on the screen; the current, the asking and the failed one are also outlined in forced colors.</li>
 						<li>A job that runs while the person waits says its new step in a polite live region the page keeps - one line per step, not every tick of the clock.</li>
 						<li>A timeline's times are <code>&lt;time datetime&gt;</code>; its details are a description list, read as pairs.</li>
 					</ul>
@@ -180,7 +221,7 @@
 						<section class="vstack gap-12" aria-labelledby="step-list-tokens">
 							<h2 id="step-list-tokens">Tokens</h2>
 							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/step-list.css"><code>css/components/step-list.css</code></a>, which declares no custom property of its own.</p>
-							<p>It reads the theme's <code>--redz-space-4</code>, <code>--redz-space-8</code>, <code>--redz-text-muted</code>, <code>--redz-text</code>, <code>--redz-success</code>, <code>--redz-primary</code>, <code>--redz-danger</code>, <code>--redz-warning</code>, <code>--redz-space-12</code>, <code>--redz-space-16</code>, <code>--redz-border</code>, <code>--redz-fs-14</code>, <code>--redz-fs-12</code>, <code>--redz-space-2</code>.</p>
+							<p>It reads the theme's <code>--redz-space-4</code>, <code>--redz-space-8</code>, <code>--redz-text-muted</code>, <code>--redz-text</code>, <code>--redz-success</code>, <code>--redz-primary</code>, <code>--redz-danger</code>, <code>--redz-warning</code>, <code>--redz-info</code>, <code>--redz-text-faint</code>, <code>--redz-space-12</code>, <code>--redz-radius-8</code>, <code>--redz-primary-subtle</code>, <code>--redz-warning-subtle</code>, <code>--redz-danger-subtle</code>, <code>--redz-fs-14</code>, <code>--redz-space-16</code>, <code>--redz-border</code>, <code>--redz-border-strong</code>, <code>--redz-radius-12</code>, <code>--redz-bg</code>, <code>--redz-fs-12</code>, <code>--redz-space-2</code>.</p>
 						</section>
 				<footer class="d-flex flex-wrap justify-content-between gap-8 pt-16 border-top text-muted fs-12">
 					<span>MIT license · © 2026 Red Z Group · includes Bootstrap Icons (MIT)</span>

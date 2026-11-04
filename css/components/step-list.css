@@ -45,6 +45,162 @@
 		color: var(--redz-warning);
 	}
 
+	.step-list > :is([data-state="warning"], [data-state="info"], [data-state="ask"]) {
+		color: var(--redz-text);
+	}
+
+	.step-list > [data-state="ask"] {
+		font-weight: 600;
+	}
+
+	.step-list > :is([data-state="warning"], [data-state="ask"]) > .bi:first-child {
+		color: var(--redz-warning);
+	}
+
+	.step-list > [data-state="info"] > .bi:first-child {
+		color: var(--redz-info);
+	}
+
+	.step-list > :is([data-state="skipped"], [data-state="waiting"], [data-state="locked"]) > .bi:first-child {
+		color: var(--redz-text-faint);
+	}
+
+	.step-list > li:has(> .step-list-body) {
+		flex-wrap: wrap;
+	}
+
+	.step-list:has(> li > .step-list-body) > li {
+		padding: var(--redz-space-8) var(--redz-space-12);
+		border-radius: var(--redz-radius-8);
+	}
+
+	.step-list > [data-state="current"]:has(> .step-list-body) {
+		background: var(--redz-primary-subtle);
+	}
+
+	.step-list > [data-state="ask"]:has(> .step-list-body) {
+		background: var(--redz-warning-subtle);
+	}
+
+	.step-list > [data-state="failed"]:has(> .step-list-body) {
+		background: var(--redz-danger-subtle);
+	}
+
+	.step-list-body {
+		flex: 1 0 100%;
+		padding-inline-start: calc(1em + var(--redz-space-8));
+		color: var(--redz-text);
+		font-size: var(--redz-fs-14);
+		font-weight: 400;
+	}
+
+	.stage-list {
+		display: grid;
+		gap: var(--redz-space-16);
+	}
+
+	.stage-list > li {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: var(--redz-space-4);
+		min-inline-size: 0;
+		padding: var(--redz-space-12);
+		border: 1px solid var(--redz-border);
+		border-block-start: 3px solid var(--redz-border-strong);
+		border-radius: var(--redz-radius-12);
+		background: var(--redz-bg);
+		color: var(--redz-text-muted);
+	}
+
+	.stage-list > li:not(:last-child)::after {
+		content: "";
+		position: absolute;
+		inset-block-start: calc(100% + 1px);
+		inset-inline-start: 1.5rem;
+		block-size: var(--redz-space-16);
+		border-inline-start: 2px solid var(--redz-border-strong);
+	}
+
+	.stage-list > :is([data-state="done"], [data-state="current"], [data-state="failed"], [data-state="ask"], [data-state="warning"]) {
+		color: var(--redz-text);
+	}
+
+	.stage-list > [data-state="done"] {
+		border-block-start-color: var(--redz-success);
+	}
+
+	.stage-list > [data-state="current"] {
+		border-color: var(--redz-primary);
+		box-shadow: inset 0 0 0 1px var(--redz-primary);
+	}
+
+	.stage-list > :is([data-state="ask"], [data-state="warning"]) {
+		border-block-start-color: var(--redz-warning);
+	}
+
+	.stage-list > [data-state="ask"] {
+		background: var(--redz-warning-subtle);
+	}
+
+	.stage-list > [data-state="failed"] {
+		border-color: var(--redz-danger);
+		background: var(--redz-danger-subtle);
+	}
+
+	.stage-list > [data-state="done"] > :first-child > .bi:first-child {
+		color: var(--redz-success);
+	}
+
+	.stage-list > [data-state="current"] > :first-child > .bi:first-child {
+		color: var(--redz-primary);
+	}
+
+	.stage-list > :is([data-state="ask"], [data-state="warning"]) > :first-child > .bi:first-child {
+		color: var(--redz-warning);
+	}
+
+	.stage-list > [data-state="failed"] > :first-child > .bi:first-child {
+		color: var(--redz-danger);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.stage-list > [data-state="current"] > :first-child > .bi:first-child {
+			animation: spinner-turn 1.2s linear infinite;
+		}
+	}
+
+	.stage-list-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--redz-space-4);
+		margin-block-start: auto;
+		padding-block-start: var(--redz-space-8);
+	}
+
+	@container region (width >= 768px) {
+		.stage-list {
+			grid-auto-columns: minmax(0, 1fr);
+			grid-auto-flow: column;
+		}
+
+		.stage-list > li:not(:last-child)::after {
+			inset-block-start: 50%;
+			inset-inline-start: calc(100% + 1px);
+			inline-size: calc(var(--redz-space-16) - 2px);
+			block-size: 0;
+			border-block-start: 2px solid var(--redz-border-strong);
+			border-inline-start: 0;
+		}
+	}
+
+	@media (forced-colors: active) {
+		.stage-list > :is([data-state="current"], [data-state="failed"], [data-state="ask"]) {
+			outline: 2px solid CanvasText;
+			outline-offset: -2px;
+		}
+	}
+
 	.step-list-detail {
 		margin-inline-start: auto;
 		padding-inline-start: var(--redz-space-12);

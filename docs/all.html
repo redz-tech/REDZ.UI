@@ -2009,6 +2009,24 @@
 							<button class="stat stat-secondary" type="button" aria-pressed="false"><span class="icon-tile"><i class="bi bi-x-octagon" aria-hidden="true"></i></span><span><span class="stat-value">0</span><span class="stat-label">Failed</span></span></button>
 						</div>
 					</div>
+					<div class="docs-example docs-example-stack" id="stat-links-example">
+						<nav class="grid cols-2 md:cols-4 gap-12" aria-label="Bookings by state">
+							<a class="stat stat-primary" href="#stat-links" aria-current="page"><span class="icon-tile"><i class="bi bi-calendar-check" aria-hidden="true"></i></span><span><span class="stat-value">128</span><span class="stat-label">Confirmed</span></span></a>
+							<a class="stat stat-warning" href="#stat-links"><span class="icon-tile"><i class="bi bi-hourglass-split" aria-hidden="true"></i></span><span><span class="stat-value">14</span><span class="stat-label">Waiting</span></span></a>
+							<a class="stat stat-danger" href="#stat-links"><span class="icon-tile"><i class="bi bi-x-circle" aria-hidden="true"></i></span><span><span class="stat-value">3</span><span class="stat-label">Cancelled</span></span></a>
+							<a class="stat" href="#stat-links"><span><span class="stat-value">145</span><span class="stat-label">All bookings</span></span></a>
+						</nav>
+					</div>
+					<div class="docs-example docs-example-stack" id="stat-parts-example">
+						<div class="grid sm:cols-3 gap-12">
+							<div class="stat stat-success stat-emphasis"><span><span class="stat-value">412,000 THB</span><span class="stat-label">Revenue in November</span><span class="stat-sub"><span class="stat-delta" data-trend="up">+12%</span> on October</span></span></div>
+							<div class="stat"><span class="icon-tile"><i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i></span><span><span class="stat-value">6</span><span class="stat-label">Refunds</span><span class="stat-sub"><span class="stat-delta" data-trend="up" data-good="down">+2</span> on October</span></span></div>
+							<div class="stat stat-info"><span class="icon-tile"><i class="bi bi-door-open" aria-hidden="true"></i></span><span><span class="stat-value">68%</span><span class="stat-label">Rooms filled</span><progress class="progress progress-xs progress-info" value="68" max="100" aria-label="Rooms filled, 68 percent"></progress></span><span class="stat-meta">5 min ago</span></div>
+						</div>
+						<div class="grid sm:cols-3 gap-12">
+							<div class="stat" aria-busy="true"><span><span class="stat-value">0</span><span class="stat-label">Guests today</span></span></div>
+						</div>
+					</div>
 				</section>
 
 				<section class="vstack gap-16" aria-labelledby="all-qr">
@@ -2041,6 +2059,24 @@
 								</ol>
 							</div>
 						</section>
+					</div>
+					<div class="docs-example docs-example-stack" id="step-list-blocks">
+						<ol class="step-list" aria-label="Moving the site">
+							<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Copy the files<span class="step-list-detail">2,140 files</span></li>
+							<li data-state="warning"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>Check the links<span class="step-list-detail">3 broken</span></li>
+							<li data-state="ask" aria-current="step"><i class="bi bi-question-circle-fill" aria-hidden="true"></i>Point the domain here<div class="step-list-body vstack gap-8"><p>Set the A record of lagoon.example to 203.0.113.24 at your registrar, then check it.</p><div class="hstack gap-8"><button class="btn btn-sm btn-primary" type="button">Check the domain</button><button class="btn btn-sm" type="button">Skip for now</button></div></div></li>
+							<li data-state="waiting"><i class="bi bi-hourglass-split" aria-hidden="true"></i>Issue the certificate<span class="step-list-detail">after the domain</span></li>
+							<li data-state="skipped"><i class="bi bi-skip-forward flip-rtl" aria-hidden="true"></i>Import the old comments<span class="step-list-detail">skipped</span></li>
+							<li data-state="locked"><i class="bi bi-lock" aria-hidden="true"></i>Switch off the old site<span class="step-list-detail">an owner's step</span></li>
+						</ol>
+					</div>
+					<div class="docs-example docs-example-stack" id="step-list-pipeline">
+						<ol class="stage-list" aria-label="The release of 2.4">
+							<li data-state="done"><span class="hstack gap-8"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><strong>Build</strong></span><span class="fs-12">2 min 14 s</span><div class="stage-list-actions"><button class="btn btn-sm" type="button">Log</button></div></li>
+							<li data-state="current" aria-current="step"><span class="hstack gap-8"><i class="bi bi-arrow-repeat" aria-hidden="true"></i><strong>Test</strong></span><span class="fs-12">412 of 580 checks</span><div class="stage-list-actions"><button class="btn btn-sm" type="button">Log</button><button class="btn btn-sm" type="button">Stop</button></div></li>
+							<li data-state="ask"><span class="hstack gap-8"><i class="bi bi-question-circle-fill" aria-hidden="true"></i><strong>Approve</strong></span><span class="fs-12">An owner signs off</span><div class="stage-list-actions"><button class="btn btn-sm btn-primary" type="button">Approve</button></div></li>
+							<li data-state="waiting"><span class="hstack gap-8"><i class="bi bi-hourglass-split" aria-hidden="true"></i><strong>Deploy</strong></span><span class="fs-12">After the approval</span></li>
+						</ol>
 					</div>
 					<div class="docs-example docs-example-stack" id="step-list-events">
 						<ol class="timeline" aria-label="The payment's history">

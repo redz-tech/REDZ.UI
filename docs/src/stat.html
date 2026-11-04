@@ -15,13 +15,38 @@
 		</div>
 	</div>
 	<p>Without a button it only reads: a <code>div class="stat"</code>.</p>
+
+	<h3 id="stat-links">Links</h3>
+	<p>As an <code>a</code> a tile leads to the list it counts, filtered on its server; the tile of the list shown carries <code>aria-current="page"</code> and wears its tone's border, as a pressed one does.</p>
+	<div class="docs-example docs-example-stack" id="stat-links-example">
+		<nav class="grid cols-2 md:cols-4 gap-12" aria-label="Bookings by state">
+			<a class="stat stat-primary" href="#stat-links" aria-current="page"><span class="icon-tile"><i class="bi bi-calendar-check" aria-hidden="true"></i></span><span><span class="stat-value">128</span><span class="stat-label">Confirmed</span></span></a>
+			<a class="stat stat-warning" href="#stat-links"><span class="icon-tile"><i class="bi bi-hourglass-split" aria-hidden="true"></i></span><span><span class="stat-value">14</span><span class="stat-label">Waiting</span></span></a>
+			<a class="stat stat-danger" href="#stat-links"><span class="icon-tile"><i class="bi bi-x-circle" aria-hidden="true"></i></span><span><span class="stat-value">3</span><span class="stat-label">Cancelled</span></span></a>
+			<a class="stat" href="#stat-links"><span><span class="stat-value">145</span><span class="stat-label">All bookings</span></span></a>
+		</nav>
+	</div>
+
+	<h3 id="stat-parts">A second line, a trend, a bar and a time</h3>
+	<p><code>stat-sub</code> is a second line under the label. <code>stat-delta</code> shows a change with an arrow: <code>data-trend="up"</code> or <code>"down"</code> turns it, and it is green when the trend is the good one - up, unless <code>data-good="down"</code> says that less is better, as for refunds - and red when not; its words say the change, "+12%", and the arrow only repeats them. A <code>progress</code> or a <code>meter</code> in the tile's words takes their width; <code>stat-meta</code> sits at the end - when the number was counted. A tile with no icon tile lays out its words alone, and <code>stat-emphasis</code> tints the whole tile in its tone, for the one number a screen leads with. <code>aria-busy="true"</code> draws the number as a placeholder while it is counted.</p>
+	<div class="docs-example docs-example-stack" id="stat-parts-example">
+		<div class="grid sm:cols-3 gap-12">
+			<div class="stat stat-success stat-emphasis"><span><span class="stat-value">412,000 THB</span><span class="stat-label">Revenue in November</span><span class="stat-sub"><span class="stat-delta" data-trend="up">+12%</span> on October</span></span></div>
+			<div class="stat"><span class="icon-tile"><i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i></span><span><span class="stat-value">6</span><span class="stat-label">Refunds</span><span class="stat-sub"><span class="stat-delta" data-trend="up" data-good="down">+2</span> on October</span></span></div>
+			<div class="stat stat-info"><span class="icon-tile"><i class="bi bi-door-open" aria-hidden="true"></i></span><span><span class="stat-value">68%</span><span class="stat-label">Rooms filled</span><progress class="progress progress-xs progress-info" value="68" max="100" aria-label="Rooms filled, 68 percent"></progress></span><span class="stat-meta">5 min ago</span></div>
+		</div>
+		<div class="grid sm:cols-3 gap-12">
+			<div class="stat" aria-busy="true"><span><span class="stat-value">0</span><span class="stat-label">Guests today</span></span></div>
+		</div>
+	</div>
 </section>
 
 <section class="vstack gap-12" aria-labelledby="stat-access">
 	<h2 id="stat-access">Accessibility</h2>
 	<ul>
 		<li>A tile button's name is its number and its label, "2 Late"; <code>aria-pressed</code> says it filters. Put the row in a <code>group</code> with a name.</li>
-		<li>The tone repeats the label; it never says alone what the tile counts.</li>
+		<li>The tone repeats the label; it never says alone what the tile counts. A delta's color and arrow repeat its words.</li>
+		<li>A tile link's name is its number and its label; the tile of the list shown says <code>aria-current="page"</code>. A tile counting its number is <code>aria-busy="true"</code>, and its words come when it is done.</li>
 		<li>Pressed, the tile also draws an outline in forced colors.</li>
 	</ul>
 </section>

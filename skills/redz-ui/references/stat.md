@@ -19,14 +19,43 @@ A number with its label and an icon in a tone - and, as a button, the filter for
 
 Without a button it only reads: a `div class="stat"`.
 
+### Links
+
+As an `a` a tile leads to the list it counts, filtered on its server; the tile of the list shown carries `aria-current="page"` and wears its tone's border, as a pressed one does.
+
+```html
+<nav class="grid cols-2 md:cols-4 gap-12" aria-label="Bookings by state">
+	<a class="stat stat-primary" href="#stat-links" aria-current="page"><span class="icon-tile"><i class="bi bi-calendar-check" aria-hidden="true"></i></span><span><span class="stat-value">128</span><span class="stat-label">Confirmed</span></span></a>
+	<a class="stat stat-warning" href="#stat-links"><span class="icon-tile"><i class="bi bi-hourglass-split" aria-hidden="true"></i></span><span><span class="stat-value">14</span><span class="stat-label">Waiting</span></span></a>
+	<a class="stat stat-danger" href="#stat-links"><span class="icon-tile"><i class="bi bi-x-circle" aria-hidden="true"></i></span><span><span class="stat-value">3</span><span class="stat-label">Cancelled</span></span></a>
+	<a class="stat" href="#stat-links"><span><span class="stat-value">145</span><span class="stat-label">All bookings</span></span></a>
+</nav>
+```
+
+### A second line, a trend, a bar and a time
+
+`stat-sub` is a second line under the label. `stat-delta` shows a change with an arrow: `data-trend="up"` or `"down"` turns it, and it is green when the trend is the good one - up, unless `data-good="down"` says that less is better, as for refunds - and red when not; its words say the change, "+12%", and the arrow only repeats them. A `progress` or a `meter` in the tile's words takes their width; `stat-meta` sits at the end - when the number was counted. A tile with no icon tile lays out its words alone, and `stat-emphasis` tints the whole tile in its tone, for the one number a screen leads with. `aria-busy="true"` draws the number as a placeholder while it is counted.
+
+```html
+<div class="grid sm:cols-3 gap-12">
+	<div class="stat stat-success stat-emphasis"><span><span class="stat-value">412,000 THB</span><span class="stat-label">Revenue in November</span><span class="stat-sub"><span class="stat-delta" data-trend="up">+12%</span> on October</span></span></div>
+	<div class="stat"><span class="icon-tile"><i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i></span><span><span class="stat-value">6</span><span class="stat-label">Refunds</span><span class="stat-sub"><span class="stat-delta" data-trend="up" data-good="down">+2</span> on October</span></span></div>
+	<div class="stat stat-info"><span class="icon-tile"><i class="bi bi-door-open" aria-hidden="true"></i></span><span><span class="stat-value">68%</span><span class="stat-label">Rooms filled</span><progress class="progress progress-xs progress-info" value="68" max="100" aria-label="Rooms filled, 68 percent"></progress></span><span class="stat-meta">5 min ago</span></div>
+</div>
+<div class="grid sm:cols-3 gap-12">
+	<div class="stat" aria-busy="true"><span><span class="stat-value">0</span><span class="stat-label">Guests today</span></span></div>
+</div>
+```
+
 ## Accessibility
 
 - A tile button's name is its number and its label, "2 Late"; `aria-pressed` says it filters. Put the row in a `group` with a name.
-- The tone repeats the label; it never says alone what the tile counts.
+- The tone repeats the label; it never says alone what the tile counts. A delta's color and arrow repeat its words.
+- A tile link's name is its number and its label; the tile of the list shown says `aria-current="page"`. A tile counting its number is `aria-busy="true"`, and its words come when it is done.
 - Pressed, the tile also draws an outline in forced colors.
 
 ## Tokens
 
 From [`css/components/stat.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/stat.css). It declares `--redz-stat-tone`, `--redz-tile-bg`, `--redz-tile-fg` on its root, never on rows or items.
 
-It reads the theme's `--redz-text`, `--redz-space-12`, `--redz-space-16`, `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-bg-hover`, `--redz-fs-24`, `--redz-text-muted`, `--redz-fs-12`, `--redz-primary`, `--redz-success`, `--redz-warning`, `--redz-danger`, `--redz-info`.
+It reads the theme's `--redz-text`, `--redz-space-12`, `--redz-space-16`, `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-bg-hover`, `--redz-space-8`, `--redz-text-muted`, `--redz-fs-12`, `--redz-space-2`, `--redz-success`, `--redz-danger`, `--redz-radius-6`, `--redz-fs-24`, `--redz-primary`, `--redz-warning`, `--redz-info`.
