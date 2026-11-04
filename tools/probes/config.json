@@ -57,12 +57,12 @@
 			{"label": "Escape in the menu", "do": "key", "key": "Escape", "expect": ["More"]}
 		],
 		"docs/navbar.html": [
+			{"label": "the button of a header that always folds", "do": "focus", "target": "#navbar-folded .navbar-toggler", "expect": ["Menu"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["expanded"]},
 			{"label": "the More button of a header whose links do not fit", "do": "focus", "target": "#navbar-overflow .nav-overflow-toggle", "expect": ["More"]},
 			{"label": "Enter on it: the menu opens on the first link that folded, which the fonts choose", "do": "key", "key": "Enter", "expect": []},
 			{"label": "End in the menu: the last item of the folded Help menu", "do": "key", "key": "End", "expect": ["Cancellation policy"]},
-			{"label": "Escape in the menu", "do": "key", "key": "Escape", "expect": ["More"]},
-			{"label": "the button of a header that always folds", "do": "focus", "target": "#navbar-folded .navbar-toggler", "expect": ["Menu"]},
-			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["expanded"]}
+			{"label": "Escape in the menu", "do": "key", "key": "Escape", "expect": ["More"]}
 		],
 		"docs/accordion.html": [
 			{"label": "an open item's summary", "do": "focus", "target": "#accordion-basic summary", "expect": ["What does a day trip include?", "expanded"]},
