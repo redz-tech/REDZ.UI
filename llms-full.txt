@@ -678,12 +678,14 @@ row.classList.add('flash');
 | `border-danger-subtle` | `border-color: color-mix(in oklch, var(--redz-danger) 35%, var(--redz-border));` | - |
 | `border-warning-subtle` | `border-color: color-mix(in oklch, var(--redz-warning) 35%, var(--redz-border));` | - |
 | `border-info-subtle` | `border-color: color-mix(in oklch, var(--redz-info) 35%, var(--redz-border));` | - |
+| `edge-top-color` | `border-block-start: 3px solid var(--redz-color);` | - |
 | `edge-top-primary` | `border-block-start: 3px solid var(--redz-primary);` | - |
 | `edge-top-secondary` | `border-block-start: 3px solid var(--redz-secondary);` | - |
 | `edge-top-success` | `border-block-start: 3px solid var(--redz-success);` | - |
 | `edge-top-danger` | `border-block-start: 3px solid var(--redz-danger);` | - |
 | `edge-top-warning` | `border-block-start: 3px solid var(--redz-warning);` | - |
 | `edge-top-info` | `border-block-start: 3px solid var(--redz-info);` | - |
+| `edge-start-color` | `border-inline-start: 3px solid var(--redz-color);` | - |
 | `edge-start-primary` | `border-inline-start: 3px solid var(--redz-primary);` | - |
 | `edge-start-secondary` | `border-inline-start: 3px solid var(--redz-secondary);` | - |
 | `edge-start-success` | `border-inline-start: 3px solid var(--redz-success);` | - |
@@ -1123,6 +1125,22 @@ The custom properties on `:root` that the components read: colors by role in pai
 - Text is at least 4.5:1 on its background, the borders of fields and the focus ring 3:1, in the light and the dark theme - computed in OKLCH and written as checked hex.
 - A component declares a few properties of its own on its root and never on rows or items: hundreds of properties on small elements slow every style recalculation.
 
+## A white label from one colour
+
+`data-brand` on `html`, or on one region, makes the primary tone of one colour, `--redz-brand`: the library derives the tone, its `-subtle` fill, its `-contrast` text - black or white by the colour's lightness - the focus ring and the links, in both themes; in the dark one the tone is lightened until it reads on the dark ground. `data-brand="#0a7f5a"` gives the colour, which the library sets through the CSSOM after its script loads; a page that knows the colour on its server writes `--redz-brand` in its own stylesheet beside the attribute, and nothing waits for the script. The colour is used as given: one with 4.5:1 on white keeps the light theme's text readable - the library does not fix another. The relative colours it is derived with are on the floor: Chrome 119, Firefox 128, Safari 18.
+
+```html
+<div class="hstack flex-wrap gap-8" data-brand="#0a7f5a">
+	<button class="btn btn-primary" type="button">Book now</button>
+	<button class="btn btn-outline-primary" type="button">Details</button>
+	<span class="badge badge-subtle-primary">New</span>
+	<a href="#tokens-brand">A link</a>
+</div>
+<div class="hstack flex-wrap gap-8" data-brand="#f4c542">
+	<button class="btn btn-primary" type="button">Book now</button>
+</div>
+```
+
 ## Every token, light theme
 
 | Token | Value |
@@ -1172,6 +1190,7 @@ The custom properties on `:root` that the components read: colors by role in pai
 | `--redz-motion` | `150ms` |
 | `--redz-ease` | `cubic-bezier(0.22, 1, 0.36, 1)` |
 | `--redz-form-select-chevron` | `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23595b5f'%3E%3Cpath d='M1.6 4.6a.6.6 0 0 1 .85 0L8 10.15l5.55-5.55a.6.6 0 1 1 .85.85l-5.98 5.97a.6.6 0 0 1-.84 0L1.6 5.45a.6.6 0 0 1 0-.85'/%3E%3C/svg%3E")` |
+| `--redz-star` | `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-1.5 -1.5 19 19'%3E%3Cpath d='M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z'/%3E%3C/svg%3E")` |
 | `--redz-space-0` | `0` |
 | `--redz-space-2` | `0.125rem` |
 | `--redz-space-4` | `0.25rem` |
@@ -1736,7 +1755,6 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `bs-tooltip-end` | - | remove | the tooltip is one element |
 | `bs-tooltip-start` | - | remove | the tooltip is one element |
 | `bs-tooltip-top` | - | remove | the tooltip is one element |
-| `btn-check` | - | review | a toggle is a btn with aria-pressed; a choice is radio inputs |
 | `btn-close-white` | - | remove | the close glyph takes the text color |
 | `btn-dark` | - | review | no light or dark buttons: btn or btn-text |
 | `btn-light` | - | review | no light or dark buttons: btn or btn-text |
@@ -1829,7 +1847,6 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `form-check-input` | - | review | check, radio or switch on the input, by its type |
 | `form-check-label` | - | remove | the label is the form-check around the input |
 | `form-check-reverse` | - | missing |  |
-| `form-control-color` | - | review | a native <input type="color"> in the module's CSS |
 | `form-control-plaintext` | - | review | readonly on a form-control, or plain text |
 | `form-switch` | - | review | switch on the input, with role="switch" |
 | `fs-1` | `fs-32` | value | 40 px in Bootstrap; 32 is the largest here |
@@ -2729,6 +2746,35 @@ An icon sits beside the words, or alone in a square `btn-icon` whose name is its
 </div>
 ```
 
+### A choice of one
+
+A segmented choice is Bootstrap's: in a `btn-group`, each `input type="radio" class="btn-check"` before its `label class="btn"`. The radio stays the control - the arrow keys move the choice, the form sends it - and the checked one is drawn pressed, an outline tone filled with its colour; the focus ring goes on the label. A link or a button that is the current one of a group carries `aria-current` and is drawn pressed too.
+
+```html
+<div class="btn-toolbar">
+	<div class="btn-group" role="radiogroup" aria-label="Period">
+		<input class="btn-check" type="radio" name="period" id="btn-segmented-day" value="day">
+		<label class="btn btn-outline-primary" for="btn-segmented-day">Day</label>
+		<input class="btn-check" type="radio" name="period" id="btn-segmented-week" value="week" checked>
+		<label class="btn btn-outline-primary" for="btn-segmented-week">Week</label>
+		<input class="btn-check" type="radio" name="period" id="btn-segmented-month" value="month">
+		<label class="btn btn-outline-primary" for="btn-segmented-month">Month</label>
+	</div>
+	<div class="btn-group" role="radiogroup" aria-label="Status">
+		<input class="btn-check" type="radio" name="state" id="btn-segmented-all" value="all" checked>
+		<label class="btn" for="btn-segmented-all">All</label>
+		<input class="btn-check" type="radio" name="state" id="btn-segmented-open" value="open">
+		<label class="btn" for="btn-segmented-open">Open</label>
+		<input class="btn-check" type="radio" name="state" id="btn-segmented-closed" value="closed">
+		<label class="btn" for="btn-segmented-closed">Closed</label>
+	</div>
+	<nav class="btn-group" aria-label="Year">
+		<a class="btn btn-sm" href="#btn-segmented">2025</a>
+		<a class="btn btn-sm" href="#btn-segmented" aria-current="page">2026</a>
+	</nav>
+</div>
+```
+
 `btn-group-vertical` stacks the buttons of a group, each as wide as the widest.
 
 ```html
@@ -2766,19 +2812,19 @@ A state is the attribute accessibility needs anyway, on the button itself: no `a
 - A button with only an icon takes its name from `aria-label`; the icon is `aria-hidden="true"`.
 - `disabled` takes a button out of the tab order and hides why. `aria-disabled="true"` keeps it focusable - so a tooltip can say why - and the library swallows its clicks.
 - A button that opens a menu or a dialog uses the browser's command: `commandfor` + `command`, never `data-bs-toggle`.
+- A segmented choice is radios: one Tab stop, the arrow keys move the choice, a screen reader says "1 of 3". A group of toggles that each stand alone is buttons with `aria-pressed`.
 - The focus ring is 2 px of `--redz-focus`, 3:1 against the page in both themes.
 
 ## Tokens
 
-From [`css/components/btn.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/btn.css). It declares `--redz-btn-bg`, `--redz-btn-fg`, `--redz-btn-hover`, `--redz-btn-hover-fg` on its root, never on rows or items.
+From [`css/components/btn.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/btn.css). It declares `--redz-btn-bg`, `--redz-btn-fg`, `--redz-btn-hover`, `--redz-btn-hover-fg`, `--redz-btn-on-bg`, `--redz-btn-on-fg` on its root, never on rows or items.
 
-It reads the theme's `--redz-bg-hover`, `--redz-text`, `--redz-control-height`, `--redz-space-12`, `--redz-radius-8`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-primary-subtle`, `--redz-secondary-subtle`, `--redz-success-subtle`, `--redz-danger-subtle`, `--redz-warning-subtle`, `--redz-info-subtle`, `--redz-control-height-xs`, `--redz-radius-6`, `--redz-fs-12`, `--redz-control-height-sm`, `--redz-space-8`, `--redz-control-height-lg`, `--redz-space-16`, `--redz-fs-16`, `--redz-space-24`, `--redz-radius-12`, `--redz-fs-20`, `--redz-bg-page`, `--redz-text-faint`, `--redz-text-muted`, `--redz-motion`.
+It reads the theme's `--redz-bg-hover`, `--redz-text`, `--redz-control-height`, `--redz-space-12`, `--redz-radius-8`, `--redz-focus`, `--redz-bg-page`, `--redz-text-faint`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-primary-subtle`, `--redz-secondary-subtle`, `--redz-success-subtle`, `--redz-danger-subtle`, `--redz-warning-subtle`, `--redz-info-subtle`, `--redz-control-height-xs`, `--redz-radius-6`, `--redz-fs-12`, `--redz-control-height-sm`, `--redz-space-8`, `--redz-control-height-lg`, `--redz-space-16`, `--redz-fs-16`, `--redz-space-24`, `--redz-radius-12`, `--redz-fs-20`, `--redz-control-height-float`, `--redz-text-muted`, `--redz-motion`.
 
 ## From Bootstrap 5.3
 
 | Bootstrap 5.3 | REDZ.UI | Change | Note |
 | --- | --- | --- | --- |
-| `btn-check` | - | review | a toggle is a btn with aria-pressed; a choice is radio inputs |
 | `btn-close-white` | - | remove | the close glyph takes the text color |
 | `btn-dark` | - | review | no light or dark buttons: btn or btn-text |
 | `btn-light` | - | review | no light or dark buttons: btn or btn-text |
@@ -2971,7 +3017,7 @@ Text fields, selects and text areas with Bootstrap 5's names: a label floating i
 
 ### An icon in the field
 
-`form-adorn` puts an icon inside a field, at its start; the field keeps its own name. With `form-floating` on the same element the label starts after the icon, inside the one border - the way a sign-in form draws its fields.
+`form-adorn` puts an icon inside a field or a select, at its start; the field keeps its own name. With `form-floating` on the same element the label starts after the icon, inside the one border - the way a sign-in form draws its fields.
 
 ```html
 <div class="form-adorn">
@@ -2982,6 +3028,11 @@ Text fields, selects and text areas with Bootstrap 5's names: a label floating i
 	<i class="bi bi-envelope" aria-hidden="true"></i>
 	<input class="form-control" id="form-adorn-mail" type="email" placeholder="name@example.com" autocomplete="email">
 	<label for="form-adorn-mail">E-mail</label>
+</div>
+<div class="form-floating form-adorn">
+	<i class="bi bi-globe2" aria-hidden="true"></i>
+	<select class="form-select" id="form-adorn-country" autocomplete="country-name"><option>Thailand</option><option>Malaysia</option><option>Vietnam</option></select>
+	<label for="form-adorn-country">Country</label>
 </div>
 <div class="input-group">
 	<div class="form-floating form-adorn">
@@ -3044,6 +3095,107 @@ A button with `command="--reveal"` for a password field shows its text and hides
 </div>
 ```
 
+### A button beside a floating field
+
+`btn-float` makes a button as tall as a floating field, for the one action beside it; with `btn-icon` it is square.
+
+```html
+<div class="hstack gap-8">
+	<div class="form-floating flex-fill">
+		<input class="form-control" id="form-float-button-code" placeholder="Voucher code">
+		<label for="form-float-button-code">Voucher code</label>
+	</div>
+	<button class="btn btn-secondary btn-float" type="button">Apply</button>
+</div>
+```
+
+### A text that grows
+
+`data-grow` on a `textarea` starts it at its `rows` - `rows="1"` is one line - and grows it with its text, without the five lines a text area takes otherwise. Where the browser has `field-sizing: content` - Chrome 123, Firefox 152, Safari 26.2 - CSS does it; below, the library sizes it from its text as it is typed, reset and loaded. A `max-h-*` caps it, and past the cap it scrolls.
+
+```html
+<div class="form-field">
+	<label class="form-label" for="form-grow-text">Translation</label>
+	<textarea class="form-control max-h-160" id="form-grow-text" rows="1" data-grow>Speedboat to the marine park</textarea>
+</div>
+```
+
+### A count of characters
+
+`form-counter` with `data-counter` naming a field shows how much is typed against its `maxlength`, or against the counter's `data-counter-max`, which lets the text go over - a title the search results cut. From nine tenths it turns to the warning tone, past the most to danger (`data-state` `near` and `over`), and once the typing pauses near or over, the count is said politely in the page's text `counter`. Joined to the field by `aria-describedby`, the count is read with it.
+
+```html
+<div class="form-field">
+	<label class="form-label" for="form-counter-title">Page title</label>
+	<input class="form-control" id="form-counter-title" value="Ang Thong marine park by speedboat" aria-describedby="form-counter-title-count">
+	<div class="form-counter" id="form-counter-title-count" data-counter="form-counter-title" data-counter-max="60"></div>
+</div>
+```
+
+### Number steps
+
+Buttons with `command="--step-up"` or `"--step-down"` and `aria-controls` naming a number field step it by its `step` within its `min` and `max`, and fire `input` and `change` as typing does; at an end a button is `aria-disabled`. The arrow keys in the field step it already: the buttons are for a pointer.
+
+```html
+<div class="form-field">
+	<label class="form-label" for="form-step-guests">Guests</label>
+	<div class="input-group max-w-160">
+		<button class="btn btn-icon" type="button" command="--step-down" aria-controls="form-step-guests" aria-label="One guest fewer"><i class="bi bi-dash-lg" aria-hidden="true"></i></button>
+		<input class="form-control tabular-nums text-center" id="form-step-guests" type="number" min="1" max="12" value="2">
+		<button class="btn btn-icon" type="button" command="--step-up" aria-controls="form-step-guests" aria-label="One guest more"><i class="bi bi-plus-lg" aria-hidden="true"></i></button>
+	</div>
+</div>
+```
+
+### A colour
+
+`form-control-color` is the browser's own colour picker in a field's box. A text field with `data-color-for` naming the picker is its hex twin: each follows the other, and a twin that holds no colour - `#rgb` or `#rrggbb`, the `#` optional - is `aria-invalid`. A stored colour is drawn by `data-color`, which the library sets as `--redz-color` through the CSSOM, so a page under a strict CSP writes no style: on a `dot`, an `icon-tile` - its icon black or white by the colour's lightness -, a `choice-media`, and the edges `edge-top-color` and `edge-start-color`.
+
+```html
+<div class="form-field">
+	<label class="form-label" for="form-color-hex">Label colour</label>
+	<div class="input-group max-w-240">
+		<input class="form-control form-control-color" id="form-color-pick" type="color" value="#2a9d8f" aria-label="Pick the label colour">
+		<input class="form-control font-monospace" id="form-color-hex" data-color-for="form-color-pick" value="#2a9d8f" spellcheck="false" autocomplete="off">
+	</div>
+</div>
+<div class="hstack gap-12">
+	<span class="dot" data-color="#2a9d8f"></span>
+	<span class="icon-tile" data-color="#e9c46a"><i class="bi bi-tag" aria-hidden="true"></i></span>
+	<span class="icon-tile" data-color="#264653"><i class="bi bi-tag" aria-hidden="true"></i></span>
+	<div class="card edge-start-color" data-color="#e76f51"><div class="card-body">Overdue</div></div>
+</div>
+```
+
+### Sent on a change
+
+`data-submit="change"` on a form or on one of its controls sends the form when such a control changes - a filter's select, a sort, a switch - by `requestSubmit`, so the browser's checks and the page's submit listeners run. A text field changes when it is left, not at every key; a combobox's list when a value is chosen.
+
+```html
+<form class="hstack flex-wrap gap-12" action="#form-submit" data-submit="change" data-docs-submit>
+	<select class="form-select max-w-240" name="sort" aria-label="Sort by"><option value="new">Newest first</option><option value="price">Lowest price first</option></select>
+	<label class="form-check"><input class="check" type="checkbox" name="open"> Open now</label>
+	<output class="text-muted" data-docs-sent></output>
+</form>
+```
+
+### Shown by another field
+
+`data-show-when` on a region names a field of its form, and `data-show-in` the values that show it, a space between them; without it, any value does. A checkbox or a radio counts its value when checked. While the region is hidden its fields are disabled, so the form sends none of them; a field the page disabled itself stays disabled.
+
+```html
+<form class="vstack gap-12">
+	<div class="form-floating max-w-320">
+		<select class="form-select" id="form-show-pay" name="pay"><option value="cash">Cash on the day</option><option value="card">Card</option><option value="invoice">Invoice</option></select>
+		<label for="form-show-pay">Payment</label>
+	</div>
+	<div class="form-floating max-w-320" id="form-show-tax-region" data-show-when="pay" data-show-in="invoice">
+		<input class="form-control" id="form-show-tax" name="tax_id" placeholder="Tax ID">
+		<label for="form-show-tax">Tax ID</label>
+	</div>
+</form>
+```
+
 ## States
 
 ## Keyboard and accessibility
@@ -3053,19 +3205,21 @@ A button with `command="--reveal"` for a password field shows its text and hides
 - An error is said in words in `invalid-feedback`, joined to the control by `aria-describedby`; a color alone never tells it.
 - The borders of fields and the focus ring are at least 3:1 against the page in both themes; the text 4.5:1.
 - `form-select` paints its own chevron from the theme, mirrored right to left; a multiple select or one with `size` drops it.
+- A count of characters is said only near or over its most, once the typing pauses; at every key it would drown the typing.
+- Number step buttons are named by `aria-label` and keep their place in the Tab order; from the keyboard the field's own arrow keys step it.
+- A region shown by another field is `hidden` while it does not apply, so a screen reader skips it and the form sends nothing of it.
 
 ## Tokens
 
 From [`css/components/form.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/form.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-4`, `--redz-text`, `--redz-fs-12`, `--redz-text-muted`, `--redz-danger`, `--redz-control-height`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg`, `--redz-focus`, `--redz-space-8`, `--redz-form-select-chevron`, `--redz-bg-page`, `--redz-primary-subtle`, `--redz-control-height-sm`, `--redz-radius-6`, `--redz-control-height-lg`, `--redz-fs-16`, `--redz-control-height-float`, `--redz-fs-14`, `--redz-motion`, `--redz-ease`, `--redz-primary`.
+It reads the theme's `--redz-space-4`, `--redz-text`, `--redz-fs-12`, `--redz-text-muted`, `--redz-danger`, `--redz-control-height`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg`, `--redz-focus`, `--redz-space-8`, `--redz-grow-rows`, `--redz-form-select-chevron`, `--redz-warning`, `--redz-radius-6`, `--redz-bg-page`, `--redz-primary-subtle`, `--redz-control-height-sm`, `--redz-control-height-lg`, `--redz-fs-16`, `--redz-control-height-float`, `--redz-fs-14`, `--redz-motion`, `--redz-ease`, `--redz-primary`.
 
 ## From Bootstrap 5.3
 
 | Bootstrap 5.3 | REDZ.UI | Change | Note |
 | --- | --- | --- | --- |
 | `col-form-label` | `form-label` | review | a form-label in a form-field |
-| `form-control-color` | - | review | a native <input type="color"> in the module's CSS |
 | `form-control-plaintext` | - | review | readonly on a form-control, or plain text |
 | `has-validation` | - | remove | fields have no success state |
 | `invalid-tooltip` | `invalid-feedback` | review | the error under the field |
@@ -3410,6 +3564,45 @@ document.addEventListener('redz:create', (event) => {
 });
 ```
 
+### Free values
+
+A list with `data-create` and no options of its own takes free values - e-mail addresses, phone numbers, words - as chips: `Enter` or a comma takes the words, a value held already is not taken twice. A search with a `pattern` or `type="email"` refuses words it does not hold: the search is marked `aria-invalid` and the page's text `chip.invalid` says why.
+
+```html
+<div class="card">
+	<div class="card-body vstack gap-8">
+		<label class="form-label" for="combobox-free-search">Send the report to</label>
+		<input class="form-control" id="combobox-free-search" type="email" role="combobox" aria-controls="combobox-free-list" aria-expanded="true" aria-autocomplete="list" placeholder="name@example.com" autocomplete="off">
+		<div class="combobox-list" id="combobox-free-list" role="listbox" aria-label="Addresses" aria-multiselectable="true" data-name="to[]" data-create="to[]" data-chips="combobox-free-chips"></div>
+		<div class="combobox-chips" id="combobox-free-chips"></div>
+	</div>
+</div>
+```
+
+### Options in levels
+
+Options with `aria-level` 2 or 3 are indented under the one before them, and a parent can be chosen as any option. The search keeps the page's order and shows a match with its parents, so a city is found with its country.
+
+```html
+<div class="card">
+	<div class="card-body vstack gap-8">
+		<input class="form-control" type="search" role="combobox" aria-controls="combobox-levels-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a destination" placeholder="Find a destination" autocomplete="off">
+		<div class="combobox-list" id="combobox-levels-list" role="listbox" aria-label="Destinations" data-name="destination">
+			<div class="menu-item" role="option" id="combobox-levels-th" data-value="th" aria-level="1" aria-selected="false">Thailand</div>
+			<div class="menu-item" role="option" id="combobox-levels-south" data-value="th-south" aria-level="2" aria-selected="false">The south</div>
+			<div class="menu-item" role="option" id="combobox-levels-samui" data-value="samui" aria-level="3" aria-selected="true">Koh Samui</div>
+			<div class="menu-item" role="option" id="combobox-levels-phuket" data-value="phuket" aria-level="3" aria-selected="false">Phuket</div>
+			<div class="menu-item" role="option" id="combobox-levels-north" data-value="th-north" aria-level="2" aria-selected="false">The north</div>
+			<div class="menu-item" role="option" id="combobox-levels-chiangmai" data-value="chiangmai" aria-level="3" aria-selected="false">Chiang Mai</div>
+			<div class="menu-item" role="option" id="combobox-levels-my" data-value="my" aria-level="1" aria-selected="false">Malaysia</div>
+			<div class="menu-item" role="option" id="combobox-levels-langkawi" data-value="langkawi" aria-level="2" aria-selected="false">Langkawi</div>
+		</div>
+		<p class="combobox-no-results" hidden>Nothing found</p>
+		<input type="hidden" name="destination" value="samui" data-label="Koh Samui">
+	</div>
+</div>
+```
+
 ### Groups, descriptions and icons
 
 Options sit in groups - `role="group"` named by its `menu-header` - and carry an icon and a `menu-item-description`, which the search reads too; `data-keywords` adds words the option answers without showing them, and `aria-disabled="true"` keeps an option out of reach.
@@ -3525,6 +3718,7 @@ The library has no words of its own; it reads these from the page's island `#red
 | --- | --- | --- |
 | `remove` | A chip's remove button; `{label}` is the value's label | Remove {label} |
 | `create` | The option of a list with `data-create`; `{label}` is the search's words | Create “{label}” |
+| `chip.invalid` | Words a search with a `pattern` or `type="email"` refuses; `{label}` is the words | {label} is not valid |
 | `found.one`, `found.other` | The count of options found; `{count}` in the page's digits | {count} result, {count} results |
 
 ## Tokens
@@ -3773,6 +3967,20 @@ A group of radios or checks drawn as tiles - a package, a plan, a way to pay - t
 </fieldset>
 ```
 
+### A choice that destroys
+
+`choice-danger` draws a tile in the danger tone when chosen - the way out of a set of ways to keep. A colour beside the words: the tile's words say what it does.
+
+```html
+<fieldset class="vstack gap-8">
+	<legend class="form-label">When you leave</legend>
+	<div class="grid cols-2 gap-12">
+		<label class="choice"><input type="radio" name="choice-leave" value="pause" checked>Pause the account<span class="fs-12 text-muted">Back any time</span></label>
+		<label class="choice choice-danger"><input type="radio" name="choice-leave" value="delete">Delete the account<span class="fs-12 text-muted">With every booking, for good</span></label>
+	</div>
+</fieldset>
+```
+
 ## Keyboard and accessibility
 
 - The input is the control and the tile's words its label: a screen reader says "1,500 THB A quarter, 5% off, radio button, checked, 2 of 3".
@@ -3781,9 +3989,55 @@ A group of radios or checks drawn as tiles - a package, a plan, a way to pay - t
 
 ## Tokens
 
-From [`css/components/choice.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/choice.css), which declares no custom property of its own.
+From [`css/components/choice.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/choice.css). It declares `--redz-choice-tone`, `--redz-choice-subtle` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-4`, `--redz-space-12`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-primary`, `--redz-primary-subtle`, `--redz-focus`, `--redz-space-8`, `--redz-border`.
+It reads the theme's `--redz-primary`, `--redz-primary-subtle`, `--redz-space-4`, `--redz-space-12`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-danger`, `--redz-danger-subtle`, `--redz-color`, `--redz-focus`, `--redz-space-8`, `--redz-border`.
+
+# Ratings
+
+Stars that show a mark out of five - an average of reviews, a guide's score - and five radios drawn as stars for giving one.
+
+## Examples
+
+`rating` draws five stars filled to `data-v`, the mark's share of the most from 0 to 1 - 4.2 of 5 is `0.84`; the library sets it as `--v` through the CSSOM, so a page under a strict CSP writes no style. The stars are a picture: `role="img"` with the mark in `aria-label`, and the number in words beside them when it matters. They take the size of the text around them.
+
+```html
+<div class="hstack gap-8">
+	<span class="rating" role="img" aria-label="4.2 of 5" data-v="0.84"></span>
+	<span class="fw-600 tabular-nums">4.2</span>
+	<span class="text-muted fs-12">128 reviews</span>
+</div>
+<div class="hstack gap-8 fs-24">
+	<span class="rating" role="img" aria-label="3 of 5" data-v="0.6"></span>
+</div>
+```
+
+### Giving a mark
+
+`fieldset class="rating-input"` holds five radios, each an input before its `label`: the library hides the inputs and draws each label as a star, filled up to the one checked - and up to the one under the pointer. The words of each label are for a screen reader, in a `visually-hidden` span; the `legend` names the mark. The radios stay the control: the arrow keys move the mark, the form sends it.
+
+```html
+<fieldset class="rating-input">
+	<legend class="visually-hidden">Your mark for the guide</legend>
+	<input type="radio" name="rating-give" id="rating-give-1" value="1"><label for="rating-give-1"><span class="visually-hidden">1 star</span></label>
+	<input type="radio" name="rating-give" id="rating-give-2" value="2"><label for="rating-give-2"><span class="visually-hidden">2 stars</span></label>
+	<input type="radio" name="rating-give" id="rating-give-3" value="3"><label for="rating-give-3"><span class="visually-hidden">3 stars</span></label>
+	<input type="radio" name="rating-give" id="rating-give-4" value="4" checked><label for="rating-give-4"><span class="visually-hidden">4 stars</span></label>
+	<input type="radio" name="rating-give" id="rating-give-5" value="5"><label for="rating-give-5"><span class="visually-hidden">5 stars</span></label>
+</fieldset>
+```
+
+## Keyboard and accessibility
+
+- A shown mark is one picture with its words - "4.2 of 5" - not five stars read one by one.
+- A mark given is a group of radios: `Tab` into it, the arrows move the mark, a screen reader says "4 stars, radio button, checked, 4 of 5".
+- The stars are drawn in the warning tone on the strong border's grey; in forced colors, in the text colour on grey.
+
+## Tokens
+
+From [`css/components/rating.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/rating.css). It declares `--redz-rating-fill`, `--redz-warning`, `--redz-border-strong` on its root, never on rows or items.
+
+It reads the theme's `--redz-star`, `--redz-radius-6`, `--redz-focus`.
 
 # PIN pad
 
@@ -5118,7 +5372,7 @@ An 8 px dot of a tone beside a word: online, live, the color of a site. The dot 
 
 From [`css/components/dot.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/dot.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-text-faint`, `--redz-primary`, `--redz-secondary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`.
+It reads the theme's `--redz-text-faint`, `--redz-primary`, `--redz-secondary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-color`.
 
 # Avatars
 
@@ -5181,7 +5435,7 @@ The plain tile is in the accent; the tones and `icon-tile-sm` follow Bootstrap's
 
 From [`css/components/icon-tile.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/icon-tile.css). It declares `--redz-tile-bg`, `--redz-tile-fg` on its root, never on rows or items.
 
-It reads the theme's `--redz-primary-subtle`, `--redz-primary`, `--redz-radius-12`, `--redz-radius-8`, `--redz-secondary-subtle`, `--redz-secondary`, `--redz-success-subtle`, `--redz-success`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-info-subtle`, `--redz-info`.
+It reads the theme's `--redz-primary-subtle`, `--redz-primary`, `--redz-radius-12`, `--redz-radius-8`, `--redz-secondary-subtle`, `--redz-secondary`, `--redz-success-subtle`, `--redz-success`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-info-subtle`, `--redz-info`, `--redz-color`.
 
 # Stat tiles
 
@@ -6034,16 +6288,45 @@ At rest the bar says everything is saved; with unsaved changes it turns `save-ba
 </div>
 ```
 
+### Refused and saved
+
+The page sets the bar's `data-state` after a save: `error` in the danger tone, its words saying which fields the server refused; `saved` in the success tone, which fades back to the bar at rest after two seconds; under reduced motion it stays until the page changes it.
+
+```html
+<div class="save-bar" data-state="error" role="region" aria-label="Changes not saved">
+	<i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+	<span class="save-bar-text">2 fields refused: the address is taken, the price is below the child price</span>
+	<button class="btn btn-sm btn-primary" type="button"><i class="bi bi-floppy" aria-hidden="true"></i>Save</button>
+</div>
+<div class="save-bar" data-state="saved" role="region" aria-label="Changes">
+	<i class="bi bi-check2-circle" aria-hidden="true"></i>
+	<span class="save-bar-text">Saved at 14:05</span>
+</div>
+```
+
+### The fields that changed
+
+`data-changed`, set by the page, marks a field whose value differs from the saved one: a bar at the start of a `form-control` or a `form-select` - a combobox's button is one - and a dot after a check or a switch.
+
+```html
+<div class="form-floating">
+	<input class="form-control" id="save-bar-changed-name" value="Ang Thong by speedboat" placeholder="Name" data-changed>
+	<label for="save-bar-changed-name">Name</label>
+</div>
+<label class="form-check" data-changed><input class="check" type="checkbox" checked> Shown on the site</label>
+```
+
 ## Accessibility
 
 - The bar is a region named after what it holds; its words name the changes, not only their count.
 - It does not print, and it never hides the last field of the form: the form keeps room under it.
+- A changed field's mark is drawn, not read out: the bar's words name the changes. In forced colors the mark is a thicker start border.
 
 ## Tokens
 
 From [`css/components/save-bar.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/save-bar.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-12`, `--redz-space-8`, `--redz-space-16`, `--redz-border`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-2`, `--redz-text-muted`, `--redz-fs-12`, `--redz-warning`, `--redz-warning-subtle`.
+It reads the theme's `--redz-space-12`, `--redz-space-8`, `--redz-space-16`, `--redz-border`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-2`, `--redz-text-muted`, `--redz-fs-12`, `--redz-warning`, `--redz-warning-subtle`, `--redz-danger`, `--redz-danger-subtle`, `--redz-success`, `--redz-success-subtle`.
 
 # Selection bar
 

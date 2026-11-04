@@ -76,6 +76,14 @@
 		background: var(--redz-bg-hover);
 	}
 
+	.combobox-list [role="option"][aria-level="2"] {
+		padding-inline-start: calc(var(--redz-space-8) + 1.25rem);
+	}
+
+	.combobox-list [role="option"][aria-level="3"] {
+		padding-inline-start: calc(var(--redz-space-8) + 2.5rem);
+	}
+
 	.combobox-no-results {
 		margin: 0;
 		padding: var(--redz-space-8) var(--redz-space-12);

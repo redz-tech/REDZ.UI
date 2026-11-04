@@ -34,6 +34,10 @@
 		background: var(--redz-info);
 	}
 
+	.dot[data-color] {
+		background: var(--redz-color);
+	}
+
 	@media (forced-colors: active) {
 		.dot {
 			forced-color-adjust: none;

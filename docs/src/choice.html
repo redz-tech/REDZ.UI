@@ -28,6 +28,18 @@
 			</div>
 		</fieldset>
 	</div>
+
+	<h3>A choice that destroys</h3>
+	<p><code>choice-danger</code> draws a tile in the danger tone when chosen - the way out of a set of ways to keep. A colour beside the words: the tile's words say what it does.</p>
+	<div class="docs-example docs-example-stack" id="choice-danger">
+		<fieldset class="vstack gap-8">
+			<legend class="form-label">When you leave</legend>
+			<div class="grid cols-2 gap-12">
+				<label class="choice"><input type="radio" name="choice-leave" value="pause" checked>Pause the account<span class="fs-12 text-muted">Back any time</span></label>
+				<label class="choice choice-danger"><input type="radio" name="choice-leave" value="delete">Delete the account<span class="fs-12 text-muted">With every booking, for good</span></label>
+			</div>
+		</fieldset>
+	</div>
 </section>
 
 <section class="vstack gap-12" aria-labelledby="choice-access">

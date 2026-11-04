@@ -1,5 +1,7 @@
 @layer components {
 	.choice {
+		--redz-choice-tone: var(--redz-primary);
+		--redz-choice-subtle: var(--redz-primary-subtle);
 		position: relative;
 		display: flex;
 		flex-direction: column;
@@ -27,9 +29,22 @@
 	}
 
 	.choice:has(> input:checked) {
-		border-color: var(--redz-primary);
-		background: var(--redz-primary-subtle);
-		box-shadow: inset 0 0 0 1px var(--redz-primary);
+		border-color: var(--redz-choice-tone);
+		background: var(--redz-choice-subtle);
+		box-shadow: inset 0 0 0 1px var(--redz-choice-tone);
+	}
+
+	.choice-danger {
+		--redz-choice-tone: var(--redz-danger);
+		--redz-choice-subtle: var(--redz-danger-subtle);
+	}
+
+	.choice-danger:hover {
+		border-color: var(--redz-danger);
+	}
+
+	.choice-media[data-color] {
+		background: var(--redz-color);
 	}
 
 	.choice:has(> input:focus-visible) {

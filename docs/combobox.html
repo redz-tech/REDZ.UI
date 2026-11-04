@@ -13,7 +13,7 @@
 	<link rel="alternate" type="text/markdown" href="combobox.md">
 	<script src="site.js"></script>
 	<script type="module" src="../dist/redz-ui.min.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","slide":"{position} of {count}","pin.delete":"Delete","pin.enter":"Enter","cooldown":"{seconds} s","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}","file.count":"{name}: up to {count} files","editor.toolbar":"Formatting","editor.body":"Text","editor.source":"HTML source","editor.format":"Format","editor.format.paragraph":"Paragraph","editor.format.heading2":"Heading 2","editor.format.heading3":"Heading 3","editor.format.heading4":"Heading 4","editor.format.quote":"Quote","editor.format.code":"Code","editor.bold":"Bold","editor.italic":"Italic","editor.underline":"Underline","editor.link":"Link","editor.link.href":"Address","editor.link.words":"Words","editor.link.blank":"Open in a new tab","editor.link.nofollow":"Ask search engines not to follow it","editor.color":"Color","editor.color.primary":"Accent","editor.color.secondary":"Secondary","editor.color.success":"Success","editor.color.danger":"Danger","editor.color.warning":"Warning","editor.color.info":"Info","editor.color.none":"No color","editor.bullets":"Bulleted list","editor.numbers":"Numbered list","editor.align":"Align","editor.align.start":"Start","editor.align.center":"Center","editor.align.end":"End","editor.image":"Image","editor.embed":"Video","editor.embed.url":"YouTube or Vimeo address","editor.embed.title":"Title","editor.blocks":"Blocks","editor.group.content":"Content","editor.group.inline":"In a line","editor.group.layout":"Layout","editor.block":"Block","editor.block.up":"Move up","editor.block.down":"Move down","editor.block.edit":"Edit HTML","editor.block.columns":"Columns","editor.block.preview":"Preview","editor.block.delete":"Delete","editor.columns.count":"Columns","editor.columns.from":"From the width","editor.columns.always":"Always","editor.columns.gap":"Gap","editor.clear":"Clear formatting","editor.undo":"Undo","editor.redo":"Redo","editor.block.alert-info":"Note","editor.block.alert-success":"Success note","editor.block.alert-warning":"Warning note","editor.block.alert-danger":"Danger note","editor.block.card":"Card","editor.block.accordion":"Accordion","editor.block.tabs":"Tabs","editor.block.list-group":"List group","editor.block.table":"Table","editor.block.carousel":"Carousel","editor.block.badges":"Badges","editor.block.buttons":"Buttons","editor.block.button-group":"Button group","editor.block.progress":"Progress","editor.block.grid-2":"Two columns","editor.block.grid-3":"Three columns","editor.sample.title":"Title","editor.sample.text":"The block's text.","editor.sample.item":"Item {n}","editor.sample.previous":"Previous","editor.sample.next":"Next"}</script>
+	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","slide":"{position} of {count}","pin.delete":"Delete","pin.enter":"Enter","cooldown":"{seconds} s","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}","file.count":"{name}: up to {count} files","counter":"{count} of {max}","chip.invalid":"{label} is not valid","editor.toolbar":"Formatting","editor.body":"Text","editor.source":"HTML source","editor.format":"Format","editor.format.paragraph":"Paragraph","editor.format.heading2":"Heading 2","editor.format.heading3":"Heading 3","editor.format.heading4":"Heading 4","editor.format.quote":"Quote","editor.format.code":"Code","editor.bold":"Bold","editor.italic":"Italic","editor.underline":"Underline","editor.link":"Link","editor.link.href":"Address","editor.link.words":"Words","editor.link.blank":"Open in a new tab","editor.link.nofollow":"Ask search engines not to follow it","editor.color":"Color","editor.color.primary":"Accent","editor.color.secondary":"Secondary","editor.color.success":"Success","editor.color.danger":"Danger","editor.color.warning":"Warning","editor.color.info":"Info","editor.color.none":"No color","editor.bullets":"Bulleted list","editor.numbers":"Numbered list","editor.align":"Align","editor.align.start":"Start","editor.align.center":"Center","editor.align.end":"End","editor.image":"Image","editor.embed":"Video","editor.embed.url":"YouTube or Vimeo address","editor.embed.title":"Title","editor.blocks":"Blocks","editor.group.content":"Content","editor.group.inline":"In a line","editor.group.layout":"Layout","editor.block":"Block","editor.block.up":"Move up","editor.block.down":"Move down","editor.block.edit":"Edit HTML","editor.block.columns":"Columns","editor.block.preview":"Preview","editor.block.delete":"Delete","editor.columns.count":"Columns","editor.columns.from":"From the width","editor.columns.always":"Always","editor.columns.gap":"Gap","editor.clear":"Clear formatting","editor.undo":"Undo","editor.redo":"Redo","editor.block.alert-info":"Note","editor.block.alert-success":"Success note","editor.block.alert-warning":"Warning note","editor.block.alert-danger":"Danger note","editor.block.card":"Card","editor.block.accordion":"Accordion","editor.block.tabs":"Tabs","editor.block.list-group":"List group","editor.block.table":"Table","editor.block.carousel":"Carousel","editor.block.badges":"Badges","editor.block.buttons":"Buttons","editor.block.button-group":"Button group","editor.block.progress":"Progress","editor.block.grid-2":"Two columns","editor.block.grid-3":"Three columns","editor.sample.title":"Title","editor.sample.text":"The block's text.","editor.sample.item":"Item {n}","editor.sample.previous":"Previous","editor.sample.next":"Next"}</script>
 </head>
 <body>
 	<div class="app">
@@ -57,6 +57,7 @@
 			<a class="app-link" href="inline-edit.html"><i class="bi bi-pencil-square" aria-hidden="true"></i>Inline edit</a>
 			<a class="app-link" href="upload.html"><i class="bi bi-cloud-arrow-up" aria-hidden="true"></i>File upload</a>
 			<a class="app-link" href="choice.html"><i class="bi bi-ui-radios-grid" aria-hidden="true"></i>Choice tiles</a>
+			<a class="app-link" href="rating.html"><i class="bi bi-star-half" aria-hidden="true"></i>Ratings</a>
 			<a class="app-link" href="pin.html"><i class="bi bi-grid-3x3" aria-hidden="true"></i>PIN pad</a>
 			<a class="app-link" href="editor.html"><i class="bi bi-file-earmark-richtext" aria-hidden="true"></i>Editor</a>
 			<div class="app-section">Content</div>
@@ -337,6 +338,66 @@
 		.then((answer) =&gt; answer.ok ? answer.json() : Promise.reject('The tag could not be made')));
 });</code></pre>
 
+					<h3>Free values</h3>
+					<p>A list with <code>data-create</code> and no options of its own takes free values - e-mail addresses, phone numbers, words - as chips: <kbd>Enter</kbd> or a comma takes the words, a value held already is not taken twice. A search with a <code>pattern</code> or <code>type="email"</code> refuses words it does not hold: the search is marked <code>aria-invalid</code> and the page's text <code>chip.invalid</code> says why.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="combobox-free">
+						<div class="card">
+							<div class="card-body vstack gap-8">
+								<label class="form-label" for="combobox-free-search">Send the report to</label>
+								<input class="form-control" id="combobox-free-search" type="email" role="combobox" aria-controls="combobox-free-list" aria-expanded="true" aria-autocomplete="list" placeholder="name@example.com" autocomplete="off">
+								<div class="combobox-list" id="combobox-free-list" role="listbox" aria-label="Addresses" aria-multiselectable="true" data-name="to[]" data-create="to[]" data-chips="combobox-free-chips"></div>
+								<div class="combobox-chips" id="combobox-free-chips"></div>
+							</div>
+						</div>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;div class="card"&gt;
+	&lt;div class="card-body vstack gap-8"&gt;
+		&lt;label class="form-label" for="combobox-free-search"&gt;Send the report to&lt;/label&gt;
+		&lt;input class="form-control" id="combobox-free-search" type="email" role="combobox" aria-controls="combobox-free-list" aria-expanded="true" aria-autocomplete="list" placeholder="name@example.com" autocomplete="off"&gt;
+		&lt;div class="combobox-list" id="combobox-free-list" role="listbox" aria-label="Addresses" aria-multiselectable="true" data-name="to[]" data-create="to[]" data-chips="combobox-free-chips"&gt;&lt;/div&gt;
+		&lt;div class="combobox-chips" id="combobox-free-chips"&gt;&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/div&gt;</code></pre></div>
+
+					<h3>Options in levels</h3>
+					<p>Options with <code>aria-level</code> 2 or 3 are indented under the one before them, and a parent can be chosen as any option. The search keeps the page's order and shows a match with its parents, so a city is found with its country.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="combobox-levels">
+						<div class="card">
+							<div class="card-body vstack gap-8">
+								<input class="form-control" type="search" role="combobox" aria-controls="combobox-levels-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a destination" placeholder="Find a destination" autocomplete="off">
+								<div class="combobox-list" id="combobox-levels-list" role="listbox" aria-label="Destinations" data-name="destination">
+									<div class="menu-item" role="option" id="combobox-levels-th" data-value="th" aria-level="1" aria-selected="false">Thailand</div>
+									<div class="menu-item" role="option" id="combobox-levels-south" data-value="th-south" aria-level="2" aria-selected="false">The south</div>
+									<div class="menu-item" role="option" id="combobox-levels-samui" data-value="samui" aria-level="3" aria-selected="true">Koh Samui</div>
+									<div class="menu-item" role="option" id="combobox-levels-phuket" data-value="phuket" aria-level="3" aria-selected="false">Phuket</div>
+									<div class="menu-item" role="option" id="combobox-levels-north" data-value="th-north" aria-level="2" aria-selected="false">The north</div>
+									<div class="menu-item" role="option" id="combobox-levels-chiangmai" data-value="chiangmai" aria-level="3" aria-selected="false">Chiang Mai</div>
+									<div class="menu-item" role="option" id="combobox-levels-my" data-value="my" aria-level="1" aria-selected="false">Malaysia</div>
+									<div class="menu-item" role="option" id="combobox-levels-langkawi" data-value="langkawi" aria-level="2" aria-selected="false">Langkawi</div>
+								</div>
+								<p class="combobox-no-results" hidden>Nothing found</p>
+								<input type="hidden" name="destination" value="samui" data-label="Koh Samui">
+							</div>
+						</div>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;div class="card"&gt;
+	&lt;div class="card-body vstack gap-8"&gt;
+		&lt;input class="form-control" type="search" role="combobox" aria-controls="combobox-levels-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a destination" placeholder="Find a destination" autocomplete="off"&gt;
+		&lt;div class="combobox-list" id="combobox-levels-list" role="listbox" aria-label="Destinations" data-name="destination"&gt;
+			&lt;div class="menu-item" role="option" id="combobox-levels-th" data-value="th" aria-level="1" aria-selected="false"&gt;Thailand&lt;/div&gt;
+			&lt;div class="menu-item" role="option" id="combobox-levels-south" data-value="th-south" aria-level="2" aria-selected="false"&gt;The south&lt;/div&gt;
+			&lt;div class="menu-item" role="option" id="combobox-levels-samui" data-value="samui" aria-level="3" aria-selected="true"&gt;Koh Samui&lt;/div&gt;
+			&lt;div class="menu-item" role="option" id="combobox-levels-phuket" data-value="phuket" aria-level="3" aria-selected="false"&gt;Phuket&lt;/div&gt;
+			&lt;div class="menu-item" role="option" id="combobox-levels-north" data-value="th-north" aria-level="2" aria-selected="false"&gt;The north&lt;/div&gt;
+			&lt;div class="menu-item" role="option" id="combobox-levels-chiangmai" data-value="chiangmai" aria-level="3" aria-selected="false"&gt;Chiang Mai&lt;/div&gt;
+			&lt;div class="menu-item" role="option" id="combobox-levels-my" data-value="my" aria-level="1" aria-selected="false"&gt;Malaysia&lt;/div&gt;
+			&lt;div class="menu-item" role="option" id="combobox-levels-langkawi" data-value="langkawi" aria-level="2" aria-selected="false"&gt;Langkawi&lt;/div&gt;
+		&lt;/div&gt;
+		&lt;p class="combobox-no-results" hidden&gt;Nothing found&lt;/p&gt;
+		&lt;input type="hidden" name="destination" value="samui" data-label="Koh Samui"&gt;
+	&lt;/div&gt;
+&lt;/div&gt;</code></pre></div>
+
 					<h3>Groups, descriptions and icons</h3>
 					<p>Options sit in groups - <code>role="group"</code> named by its <code>menu-header</code> - and carry an icon and a <code>menu-item-description</code>, which the search reads too; <code>data-keywords</code> adds words the option answers without showing them, and <code>aria-disabled="true"</code> keeps an option out of reach.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="combobox-groups">
@@ -534,6 +595,7 @@
 						<tbody>
 							<tr><td><code>remove</code></td><td>A chip's remove button; <code>{label}</code> is the value's label</td><td>Remove {label}</td></tr>
 							<tr><td><code>create</code></td><td>The option of a list with <code>data-create</code>; <code>{label}</code> is the search's words</td><td>Create “{label}”</td></tr>
+							<tr><td><code>chip.invalid</code></td><td>Words a search with a <code>pattern</code> or <code>type="email"</code> refuses; <code>{label}</code> is the words</td><td>{label} is not valid</td></tr>
 							<tr><td><code>found.one</code>, <code>found.other</code></td><td>The count of options found; <code>{count}</code> in the page's digits</td><td>{count} result, {count} results</td></tr>
 						</tbody>
 					</table>

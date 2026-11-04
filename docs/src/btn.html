@@ -63,6 +63,32 @@
 			</div>
 		</div>
 	</div>
+	<h3>A choice of one</h3>
+	<p>A segmented choice is Bootstrap's: in a <code>btn-group</code>, each <code>input type="radio" class="btn-check"</code> before its <code>label class="btn"</code>. The radio stays the control - the arrow keys move the choice, the form sends it - and the checked one is drawn pressed, an outline tone filled with its colour; the focus ring goes on the label. A link or a button that is the current one of a group carries <code>aria-current</code> and is drawn pressed too.</p>
+	<div class="docs-example" id="btn-segmented">
+		<div class="btn-toolbar">
+			<div class="btn-group" role="radiogroup" aria-label="Period">
+				<input class="btn-check" type="radio" name="period" id="btn-segmented-day" value="day">
+				<label class="btn btn-outline-primary" for="btn-segmented-day">Day</label>
+				<input class="btn-check" type="radio" name="period" id="btn-segmented-week" value="week" checked>
+				<label class="btn btn-outline-primary" for="btn-segmented-week">Week</label>
+				<input class="btn-check" type="radio" name="period" id="btn-segmented-month" value="month">
+				<label class="btn btn-outline-primary" for="btn-segmented-month">Month</label>
+			</div>
+			<div class="btn-group" role="radiogroup" aria-label="Status">
+				<input class="btn-check" type="radio" name="state" id="btn-segmented-all" value="all" checked>
+				<label class="btn" for="btn-segmented-all">All</label>
+				<input class="btn-check" type="radio" name="state" id="btn-segmented-open" value="open">
+				<label class="btn" for="btn-segmented-open">Open</label>
+				<input class="btn-check" type="radio" name="state" id="btn-segmented-closed" value="closed">
+				<label class="btn" for="btn-segmented-closed">Closed</label>
+			</div>
+			<nav class="btn-group" aria-label="Year">
+				<a class="btn btn-sm" href="#btn-segmented">2025</a>
+				<a class="btn btn-sm" href="#btn-segmented" aria-current="page">2026</a>
+			</nav>
+		</div>
+	</div>
 	<p><code>btn-group-vertical</code> stacks the buttons of a group, each as wide as the widest.</p>
 	<div class="docs-example" id="btn-group-vertical">
 		<div class="btn-group-vertical" role="group" aria-label="Order">
@@ -250,6 +276,7 @@
 		<li>A button with only an icon takes its name from <code>aria-label</code>; the icon is <code>aria-hidden="true"</code>.</li>
 		<li><code>disabled</code> takes a button out of the tab order and hides why. <code>aria-disabled="true"</code> keeps it focusable - so a tooltip can say why - and the library swallows its clicks.</li>
 		<li>A button that opens a menu or a dialog uses the browser's command: <code>commandfor</code> + <code>command</code>, never <code>data-bs-toggle</code>.</li>
+		<li>A segmented choice is radios: one Tab stop, the arrow keys move the choice, a screen reader says "1 of 3". A group of toggles that each stand alone is buttons with <code>aria-pressed</code>.</li>
 		<li>The focus ring is 2 px of <code>--redz-focus</code>, 3:1 against the page in both themes.</li>
 	</ul>
 </section>

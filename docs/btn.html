@@ -13,7 +13,7 @@
 	<link rel="alternate" type="text/markdown" href="btn.md">
 	<script src="site.js"></script>
 	<script type="module" src="../dist/redz-ui.min.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","slide":"{position} of {count}","pin.delete":"Delete","pin.enter":"Enter","cooldown":"{seconds} s","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}","file.count":"{name}: up to {count} files","editor.toolbar":"Formatting","editor.body":"Text","editor.source":"HTML source","editor.format":"Format","editor.format.paragraph":"Paragraph","editor.format.heading2":"Heading 2","editor.format.heading3":"Heading 3","editor.format.heading4":"Heading 4","editor.format.quote":"Quote","editor.format.code":"Code","editor.bold":"Bold","editor.italic":"Italic","editor.underline":"Underline","editor.link":"Link","editor.link.href":"Address","editor.link.words":"Words","editor.link.blank":"Open in a new tab","editor.link.nofollow":"Ask search engines not to follow it","editor.color":"Color","editor.color.primary":"Accent","editor.color.secondary":"Secondary","editor.color.success":"Success","editor.color.danger":"Danger","editor.color.warning":"Warning","editor.color.info":"Info","editor.color.none":"No color","editor.bullets":"Bulleted list","editor.numbers":"Numbered list","editor.align":"Align","editor.align.start":"Start","editor.align.center":"Center","editor.align.end":"End","editor.image":"Image","editor.embed":"Video","editor.embed.url":"YouTube or Vimeo address","editor.embed.title":"Title","editor.blocks":"Blocks","editor.group.content":"Content","editor.group.inline":"In a line","editor.group.layout":"Layout","editor.block":"Block","editor.block.up":"Move up","editor.block.down":"Move down","editor.block.edit":"Edit HTML","editor.block.columns":"Columns","editor.block.preview":"Preview","editor.block.delete":"Delete","editor.columns.count":"Columns","editor.columns.from":"From the width","editor.columns.always":"Always","editor.columns.gap":"Gap","editor.clear":"Clear formatting","editor.undo":"Undo","editor.redo":"Redo","editor.block.alert-info":"Note","editor.block.alert-success":"Success note","editor.block.alert-warning":"Warning note","editor.block.alert-danger":"Danger note","editor.block.card":"Card","editor.block.accordion":"Accordion","editor.block.tabs":"Tabs","editor.block.list-group":"List group","editor.block.table":"Table","editor.block.carousel":"Carousel","editor.block.badges":"Badges","editor.block.buttons":"Buttons","editor.block.button-group":"Button group","editor.block.progress":"Progress","editor.block.grid-2":"Two columns","editor.block.grid-3":"Three columns","editor.sample.title":"Title","editor.sample.text":"The block's text.","editor.sample.item":"Item {n}","editor.sample.previous":"Previous","editor.sample.next":"Next"}</script>
+	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","slide":"{position} of {count}","pin.delete":"Delete","pin.enter":"Enter","cooldown":"{seconds} s","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}","file.count":"{name}: up to {count} files","counter":"{count} of {max}","chip.invalid":"{label} is not valid","editor.toolbar":"Formatting","editor.body":"Text","editor.source":"HTML source","editor.format":"Format","editor.format.paragraph":"Paragraph","editor.format.heading2":"Heading 2","editor.format.heading3":"Heading 3","editor.format.heading4":"Heading 4","editor.format.quote":"Quote","editor.format.code":"Code","editor.bold":"Bold","editor.italic":"Italic","editor.underline":"Underline","editor.link":"Link","editor.link.href":"Address","editor.link.words":"Words","editor.link.blank":"Open in a new tab","editor.link.nofollow":"Ask search engines not to follow it","editor.color":"Color","editor.color.primary":"Accent","editor.color.secondary":"Secondary","editor.color.success":"Success","editor.color.danger":"Danger","editor.color.warning":"Warning","editor.color.info":"Info","editor.color.none":"No color","editor.bullets":"Bulleted list","editor.numbers":"Numbered list","editor.align":"Align","editor.align.start":"Start","editor.align.center":"Center","editor.align.end":"End","editor.image":"Image","editor.embed":"Video","editor.embed.url":"YouTube or Vimeo address","editor.embed.title":"Title","editor.blocks":"Blocks","editor.group.content":"Content","editor.group.inline":"In a line","editor.group.layout":"Layout","editor.block":"Block","editor.block.up":"Move up","editor.block.down":"Move down","editor.block.edit":"Edit HTML","editor.block.columns":"Columns","editor.block.preview":"Preview","editor.block.delete":"Delete","editor.columns.count":"Columns","editor.columns.from":"From the width","editor.columns.always":"Always","editor.columns.gap":"Gap","editor.clear":"Clear formatting","editor.undo":"Undo","editor.redo":"Redo","editor.block.alert-info":"Note","editor.block.alert-success":"Success note","editor.block.alert-warning":"Warning note","editor.block.alert-danger":"Danger note","editor.block.card":"Card","editor.block.accordion":"Accordion","editor.block.tabs":"Tabs","editor.block.list-group":"List group","editor.block.table":"Table","editor.block.carousel":"Carousel","editor.block.badges":"Badges","editor.block.buttons":"Buttons","editor.block.button-group":"Button group","editor.block.progress":"Progress","editor.block.grid-2":"Two columns","editor.block.grid-3":"Three columns","editor.sample.title":"Title","editor.sample.text":"The block's text.","editor.sample.item":"Item {n}","editor.sample.previous":"Previous","editor.sample.next":"Next"}</script>
 </head>
 <body>
 	<div class="app">
@@ -57,6 +57,7 @@
 			<a class="app-link" href="inline-edit.html"><i class="bi bi-pencil-square" aria-hidden="true"></i>Inline edit</a>
 			<a class="app-link" href="upload.html"><i class="bi bi-cloud-arrow-up" aria-hidden="true"></i>File upload</a>
 			<a class="app-link" href="choice.html"><i class="bi bi-ui-radios-grid" aria-hidden="true"></i>Choice tiles</a>
+			<a class="app-link" href="rating.html"><i class="bi bi-star-half" aria-hidden="true"></i>Ratings</a>
 			<a class="app-link" href="pin.html"><i class="bi bi-grid-3x3" aria-hidden="true"></i>PIN pad</a>
 			<a class="app-link" href="editor.html"><i class="bi bi-file-earmark-richtext" aria-hidden="true"></i>Editor</a>
 			<div class="app-section">Content</div>
@@ -212,6 +213,54 @@
 		&lt;button class="btn" type="button"&gt;Export&lt;/button&gt;
 		&lt;button class="btn btn-icon" type="button" aria-label="Export options"&gt;&lt;i class="bi bi-chevron-down" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;
 	&lt;/div&gt;
+&lt;/div&gt;</code></pre></div>
+					<h3>A choice of one</h3>
+					<p>A segmented choice is Bootstrap's: in a <code>btn-group</code>, each <code>input type="radio" class="btn-check"</code> before its <code>label class="btn"</code>. The radio stays the control - the arrow keys move the choice, the form sends it - and the checked one is drawn pressed, an outline tone filled with its colour; the focus ring goes on the label. A link or a button that is the current one of a group carries <code>aria-current</code> and is drawn pressed too.</p>
+					<div class="docs-sample"><div class="docs-example" id="btn-segmented">
+						<div class="btn-toolbar">
+							<div class="btn-group" role="radiogroup" aria-label="Period">
+								<input class="btn-check" type="radio" name="period" id="btn-segmented-day" value="day">
+								<label class="btn btn-outline-primary" for="btn-segmented-day">Day</label>
+								<input class="btn-check" type="radio" name="period" id="btn-segmented-week" value="week" checked>
+								<label class="btn btn-outline-primary" for="btn-segmented-week">Week</label>
+								<input class="btn-check" type="radio" name="period" id="btn-segmented-month" value="month">
+								<label class="btn btn-outline-primary" for="btn-segmented-month">Month</label>
+							</div>
+							<div class="btn-group" role="radiogroup" aria-label="Status">
+								<input class="btn-check" type="radio" name="state" id="btn-segmented-all" value="all" checked>
+								<label class="btn" for="btn-segmented-all">All</label>
+								<input class="btn-check" type="radio" name="state" id="btn-segmented-open" value="open">
+								<label class="btn" for="btn-segmented-open">Open</label>
+								<input class="btn-check" type="radio" name="state" id="btn-segmented-closed" value="closed">
+								<label class="btn" for="btn-segmented-closed">Closed</label>
+							</div>
+							<nav class="btn-group" aria-label="Year">
+								<a class="btn btn-sm" href="#btn-segmented">2025</a>
+								<a class="btn btn-sm" href="#btn-segmented" aria-current="page">2026</a>
+							</nav>
+						</div>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;div class="btn-toolbar"&gt;
+	&lt;div class="btn-group" role="radiogroup" aria-label="Period"&gt;
+		&lt;input class="btn-check" type="radio" name="period" id="btn-segmented-day" value="day"&gt;
+		&lt;label class="btn btn-outline-primary" for="btn-segmented-day"&gt;Day&lt;/label&gt;
+		&lt;input class="btn-check" type="radio" name="period" id="btn-segmented-week" value="week" checked&gt;
+		&lt;label class="btn btn-outline-primary" for="btn-segmented-week"&gt;Week&lt;/label&gt;
+		&lt;input class="btn-check" type="radio" name="period" id="btn-segmented-month" value="month"&gt;
+		&lt;label class="btn btn-outline-primary" for="btn-segmented-month"&gt;Month&lt;/label&gt;
+	&lt;/div&gt;
+	&lt;div class="btn-group" role="radiogroup" aria-label="Status"&gt;
+		&lt;input class="btn-check" type="radio" name="state" id="btn-segmented-all" value="all" checked&gt;
+		&lt;label class="btn" for="btn-segmented-all"&gt;All&lt;/label&gt;
+		&lt;input class="btn-check" type="radio" name="state" id="btn-segmented-open" value="open"&gt;
+		&lt;label class="btn" for="btn-segmented-open"&gt;Open&lt;/label&gt;
+		&lt;input class="btn-check" type="radio" name="state" id="btn-segmented-closed" value="closed"&gt;
+		&lt;label class="btn" for="btn-segmented-closed"&gt;Closed&lt;/label&gt;
+	&lt;/div&gt;
+	&lt;nav class="btn-group" aria-label="Year"&gt;
+		&lt;a class="btn btn-sm" href="#btn-segmented"&gt;2025&lt;/a&gt;
+		&lt;a class="btn btn-sm" href="#btn-segmented" aria-current="page"&gt;2026&lt;/a&gt;
+	&lt;/nav&gt;
 &lt;/div&gt;</code></pre></div>
 					<p><code>btn-group-vertical</code> stacks the buttons of a group, each as wide as the widest.</p>
 					<div class="docs-sample"><div class="docs-example" id="btn-group-vertical">
@@ -408,14 +457,15 @@
 						<li>A button with only an icon takes its name from <code>aria-label</code>; the icon is <code>aria-hidden="true"</code>.</li>
 						<li><code>disabled</code> takes a button out of the tab order and hides why. <code>aria-disabled="true"</code> keeps it focusable - so a tooltip can say why - and the library swallows its clicks.</li>
 						<li>A button that opens a menu or a dialog uses the browser's command: <code>commandfor</code> + <code>command</code>, never <code>data-bs-toggle</code>.</li>
+						<li>A segmented choice is radios: one Tab stop, the arrow keys move the choice, a screen reader says "1 of 3". A group of toggles that each stand alone is buttons with <code>aria-pressed</code>.</li>
 						<li>The focus ring is 2 px of <code>--redz-focus</code>, 3:1 against the page in both themes.</li>
 					</ul>
 				</section>
 
 						<section class="vstack gap-12" aria-labelledby="btn-tokens">
 							<h2 id="btn-tokens">Tokens</h2>
-							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/btn.css"><code>css/components/btn.css</code></a>. It declares <code>--redz-btn-bg</code>, <code>--redz-btn-fg</code>, <code>--redz-btn-hover</code>, <code>--redz-btn-hover-fg</code> on its root, never on rows or items.</p>
-							<p>It reads the theme's <code>--redz-bg-hover</code>, <code>--redz-text</code>, <code>--redz-control-height</code>, <code>--redz-space-12</code>, <code>--redz-radius-8</code>, <code>--redz-primary</code>, <code>--redz-primary-contrast</code>, <code>--redz-secondary</code>, <code>--redz-secondary-contrast</code>, <code>--redz-success</code>, <code>--redz-success-contrast</code>, <code>--redz-danger</code>, <code>--redz-danger-contrast</code>, <code>--redz-warning</code>, <code>--redz-warning-contrast</code>, <code>--redz-info</code>, <code>--redz-info-contrast</code>, <code>--redz-primary-subtle</code>, <code>--redz-secondary-subtle</code>, <code>--redz-success-subtle</code>, <code>--redz-danger-subtle</code>, <code>--redz-warning-subtle</code>, <code>--redz-info-subtle</code>, <code>--redz-control-height-xs</code>, <code>--redz-radius-6</code>, <code>--redz-fs-12</code>, <code>--redz-control-height-sm</code>, <code>--redz-space-8</code>, <code>--redz-control-height-lg</code>, <code>--redz-space-16</code>, <code>--redz-fs-16</code>, <code>--redz-space-24</code>, <code>--redz-radius-12</code>, <code>--redz-fs-20</code>, <code>--redz-bg-page</code>, <code>--redz-text-faint</code>, <code>--redz-text-muted</code>, <code>--redz-motion</code>.</p>
+							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/btn.css"><code>css/components/btn.css</code></a>. It declares <code>--redz-btn-bg</code>, <code>--redz-btn-fg</code>, <code>--redz-btn-hover</code>, <code>--redz-btn-hover-fg</code>, <code>--redz-btn-on-bg</code>, <code>--redz-btn-on-fg</code> on its root, never on rows or items.</p>
+							<p>It reads the theme's <code>--redz-bg-hover</code>, <code>--redz-text</code>, <code>--redz-control-height</code>, <code>--redz-space-12</code>, <code>--redz-radius-8</code>, <code>--redz-focus</code>, <code>--redz-bg-page</code>, <code>--redz-text-faint</code>, <code>--redz-primary</code>, <code>--redz-primary-contrast</code>, <code>--redz-secondary</code>, <code>--redz-secondary-contrast</code>, <code>--redz-success</code>, <code>--redz-success-contrast</code>, <code>--redz-danger</code>, <code>--redz-danger-contrast</code>, <code>--redz-warning</code>, <code>--redz-warning-contrast</code>, <code>--redz-info</code>, <code>--redz-info-contrast</code>, <code>--redz-primary-subtle</code>, <code>--redz-secondary-subtle</code>, <code>--redz-success-subtle</code>, <code>--redz-danger-subtle</code>, <code>--redz-warning-subtle</code>, <code>--redz-info-subtle</code>, <code>--redz-control-height-xs</code>, <code>--redz-radius-6</code>, <code>--redz-fs-12</code>, <code>--redz-control-height-sm</code>, <code>--redz-space-8</code>, <code>--redz-control-height-lg</code>, <code>--redz-space-16</code>, <code>--redz-fs-16</code>, <code>--redz-space-24</code>, <code>--redz-radius-12</code>, <code>--redz-fs-20</code>, <code>--redz-control-height-float</code>, <code>--redz-text-muted</code>, <code>--redz-motion</code>.</p>
 						</section>
 
 						<section class="vstack gap-12" aria-labelledby="btn-from-bootstrap">
@@ -423,7 +473,6 @@
 							<table class="table docs-table">
 								<thead><tr><th scope="col">Bootstrap 5.3</th><th scope="col">REDZ.UI</th><th scope="col">Change</th><th scope="col">Note</th></tr></thead>
 								<tbody>
-									<tr><td><code>btn-check</code></td><td>-</td><td>review</td><td>a toggle is a btn with aria-pressed; a choice is radio inputs</td></tr>
 									<tr><td><code>btn-close-white</code></td><td>-</td><td>remove</td><td>the close glyph takes the text color</td></tr>
 									<tr><td><code>btn-dark</code></td><td>-</td><td>review</td><td>no light or dark buttons: btn or btn-text</td></tr>
 									<tr><td><code>btn-light</code></td><td>-</td><td>review</td><td>no light or dark buttons: btn or btn-text</td></tr>

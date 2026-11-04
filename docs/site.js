@@ -193,6 +193,19 @@
 		}, 600)));
 	});
 
+	// The forms sent on a change: what they would send, written beside them instead of leaving the page.
+	document.addEventListener('submit', (event) => {
+		const form = event.target;
+		if (!(form instanceof HTMLFormElement) || !form.hasAttribute('data-docs-submit')) {
+			return;
+		}
+		event.preventDefault();
+		const sent = form.querySelector('[data-docs-sent]');
+		if (sent !== null) {
+			sent.textContent = new URLSearchParams(new FormData(form)).toString();
+		}
+	});
+
 	// The tree's lazy Archive: two pages after 400 ms.
 	document.addEventListener('redz:expand', (event) => {
 		if (!event.target.hasAttribute('data-docs-lazy')) {

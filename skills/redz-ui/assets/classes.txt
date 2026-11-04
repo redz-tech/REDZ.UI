@@ -2498,9 +2498,11 @@ bottom-50
 breadcrumb
 breadcrumb-item
 btn
+btn-check
 btn-close
 btn-cooldown
 btn-danger
+btn-float
 btn-group
 btn-group-vertical
 btn-icon
@@ -2550,6 +2552,7 @@ chip
 chip-count
 chip-dismiss
 choice
+choice-danger
 choice-media
 cols-1
 cols-10
@@ -2624,12 +2627,14 @@ drawer-body
 drawer-header
 drawer-start
 drawer-title
+edge-start-color
 edge-start-danger
 edge-start-info
 edge-start-primary
 edge-start-secondary
 edge-start-success
 edge-start-warning
+edge-top-color
 edge-top-danger
 edge-top-info
 edge-top-primary
@@ -2662,9 +2667,11 @@ font-monospace
 form-adorn
 form-check
 form-control
+form-control-color
 form-control-lg
 form-control-otp
 form-control-sm
+form-counter
 form-field
 form-floating
 form-label
@@ -3691,6 +3698,8 @@ py-64
 py-8
 qr
 radio
+rating
+rating-input
 ratio-16x9
 ratio-1x1
 ratio-21x9

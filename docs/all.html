@@ -17,7 +17,7 @@
 	<link rel="alternate" type="text/markdown" href="all.md">
 	<script src="site.js"></script>
 	<script type="module" src="../dist/redz-ui.min.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","slide":"{position} of {count}","pin.delete":"Delete","pin.enter":"Enter","cooldown":"{seconds} s","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}","file.count":"{name}: up to {count} files","editor.toolbar":"Formatting","editor.body":"Text","editor.source":"HTML source","editor.format":"Format","editor.format.paragraph":"Paragraph","editor.format.heading2":"Heading 2","editor.format.heading3":"Heading 3","editor.format.heading4":"Heading 4","editor.format.quote":"Quote","editor.format.code":"Code","editor.bold":"Bold","editor.italic":"Italic","editor.underline":"Underline","editor.link":"Link","editor.link.href":"Address","editor.link.words":"Words","editor.link.blank":"Open in a new tab","editor.link.nofollow":"Ask search engines not to follow it","editor.color":"Color","editor.color.primary":"Accent","editor.color.secondary":"Secondary","editor.color.success":"Success","editor.color.danger":"Danger","editor.color.warning":"Warning","editor.color.info":"Info","editor.color.none":"No color","editor.bullets":"Bulleted list","editor.numbers":"Numbered list","editor.align":"Align","editor.align.start":"Start","editor.align.center":"Center","editor.align.end":"End","editor.image":"Image","editor.embed":"Video","editor.embed.url":"YouTube or Vimeo address","editor.embed.title":"Title","editor.blocks":"Blocks","editor.group.content":"Content","editor.group.inline":"In a line","editor.group.layout":"Layout","editor.block":"Block","editor.block.up":"Move up","editor.block.down":"Move down","editor.block.edit":"Edit HTML","editor.block.columns":"Columns","editor.block.preview":"Preview","editor.block.delete":"Delete","editor.columns.count":"Columns","editor.columns.from":"From the width","editor.columns.always":"Always","editor.columns.gap":"Gap","editor.clear":"Clear formatting","editor.undo":"Undo","editor.redo":"Redo","editor.block.alert-info":"Note","editor.block.alert-success":"Success note","editor.block.alert-warning":"Warning note","editor.block.alert-danger":"Danger note","editor.block.card":"Card","editor.block.accordion":"Accordion","editor.block.tabs":"Tabs","editor.block.list-group":"List group","editor.block.table":"Table","editor.block.carousel":"Carousel","editor.block.badges":"Badges","editor.block.buttons":"Buttons","editor.block.button-group":"Button group","editor.block.progress":"Progress","editor.block.grid-2":"Two columns","editor.block.grid-3":"Three columns","editor.sample.title":"Title","editor.sample.text":"The block's text.","editor.sample.item":"Item {n}","editor.sample.previous":"Previous","editor.sample.next":"Next"}</script>
+	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","slide":"{position} of {count}","pin.delete":"Delete","pin.enter":"Enter","cooldown":"{seconds} s","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}","file.count":"{name}: up to {count} files","counter":"{count} of {max}","chip.invalid":"{label} is not valid","editor.toolbar":"Formatting","editor.body":"Text","editor.source":"HTML source","editor.format":"Format","editor.format.paragraph":"Paragraph","editor.format.heading2":"Heading 2","editor.format.heading3":"Heading 3","editor.format.heading4":"Heading 4","editor.format.quote":"Quote","editor.format.code":"Code","editor.bold":"Bold","editor.italic":"Italic","editor.underline":"Underline","editor.link":"Link","editor.link.href":"Address","editor.link.words":"Words","editor.link.blank":"Open in a new tab","editor.link.nofollow":"Ask search engines not to follow it","editor.color":"Color","editor.color.primary":"Accent","editor.color.secondary":"Secondary","editor.color.success":"Success","editor.color.danger":"Danger","editor.color.warning":"Warning","editor.color.info":"Info","editor.color.none":"No color","editor.bullets":"Bulleted list","editor.numbers":"Numbered list","editor.align":"Align","editor.align.start":"Start","editor.align.center":"Center","editor.align.end":"End","editor.image":"Image","editor.embed":"Video","editor.embed.url":"YouTube or Vimeo address","editor.embed.title":"Title","editor.blocks":"Blocks","editor.group.content":"Content","editor.group.inline":"In a line","editor.group.layout":"Layout","editor.block":"Block","editor.block.up":"Move up","editor.block.down":"Move down","editor.block.edit":"Edit HTML","editor.block.columns":"Columns","editor.block.preview":"Preview","editor.block.delete":"Delete","editor.columns.count":"Columns","editor.columns.from":"From the width","editor.columns.always":"Always","editor.columns.gap":"Gap","editor.clear":"Clear formatting","editor.undo":"Undo","editor.redo":"Redo","editor.block.alert-info":"Note","editor.block.alert-success":"Success note","editor.block.alert-warning":"Warning note","editor.block.alert-danger":"Danger note","editor.block.card":"Card","editor.block.accordion":"Accordion","editor.block.tabs":"Tabs","editor.block.list-group":"List group","editor.block.table":"Table","editor.block.carousel":"Carousel","editor.block.badges":"Badges","editor.block.buttons":"Buttons","editor.block.button-group":"Button group","editor.block.progress":"Progress","editor.block.grid-2":"Two columns","editor.block.grid-3":"Three columns","editor.sample.title":"Title","editor.sample.text":"The block's text.","editor.sample.item":"Item {n}","editor.sample.previous":"Previous","editor.sample.next":"Next"}</script>
 </head>
 <body>
 	<div class="app">
@@ -61,6 +61,7 @@
 			<a class="app-link" href="inline-edit.html"><i class="bi bi-pencil-square" aria-hidden="true"></i>Inline edit</a>
 			<a class="app-link" href="upload.html"><i class="bi bi-cloud-arrow-up" aria-hidden="true"></i>File upload</a>
 			<a class="app-link" href="choice.html"><i class="bi bi-ui-radios-grid" aria-hidden="true"></i>Choice tiles</a>
+			<a class="app-link" href="rating.html"><i class="bi bi-star-half" aria-hidden="true"></i>Ratings</a>
 			<a class="app-link" href="pin.html"><i class="bi bi-grid-3x3" aria-hidden="true"></i>PIN pad</a>
 			<a class="app-link" href="editor.html"><i class="bi bi-file-earmark-richtext" aria-hidden="true"></i>Editor</a>
 			<div class="app-section">Content</div>
@@ -180,6 +181,21 @@
 					</div>
 				</section>
 
+				<section class="vstack gap-16" aria-labelledby="all-tokens">
+					<h2 id="all-tokens"><a href="tokens.html">Tokens</a></h2>
+					<div class="docs-example docs-example-stack" id="tokens-brand-region">
+						<div class="hstack flex-wrap gap-8" data-brand="#0a7f5a">
+							<button class="btn btn-primary" type="button">Book now</button>
+							<button class="btn btn-outline-primary" type="button">Details</button>
+							<span class="badge badge-subtle-primary">New</span>
+							<a href="#tokens-brand">A link</a>
+						</div>
+						<div class="hstack flex-wrap gap-8" data-brand="#f4c542">
+							<button class="btn btn-primary" type="button">Book now</button>
+						</div>
+					</div>
+				</section>
+
 				<section class="vstack gap-16" aria-labelledby="all-icons">
 					<h2 id="all-icons"><a href="icons.html">Icons</a></h2>
 					<div class="docs-example" id="icons-sizes">
@@ -237,6 +253,30 @@
 								<button class="btn" type="button">Export</button>
 								<button class="btn btn-icon" type="button" aria-label="Export options"><i class="bi bi-chevron-down" aria-hidden="true"></i></button>
 							</div>
+						</div>
+					</div>
+					<div class="docs-example" id="btn-segmented">
+						<div class="btn-toolbar">
+							<div class="btn-group" role="radiogroup" aria-label="Period">
+								<input class="btn-check" type="radio" name="period" id="btn-segmented-day" value="day">
+								<label class="btn btn-outline-primary" for="btn-segmented-day">Day</label>
+								<input class="btn-check" type="radio" name="period" id="btn-segmented-week" value="week" checked>
+								<label class="btn btn-outline-primary" for="btn-segmented-week">Week</label>
+								<input class="btn-check" type="radio" name="period" id="btn-segmented-month" value="month">
+								<label class="btn btn-outline-primary" for="btn-segmented-month">Month</label>
+							</div>
+							<div class="btn-group" role="radiogroup" aria-label="Status">
+								<input class="btn-check" type="radio" name="state" id="btn-segmented-all" value="all" checked>
+								<label class="btn" for="btn-segmented-all">All</label>
+								<input class="btn-check" type="radio" name="state" id="btn-segmented-open" value="open">
+								<label class="btn" for="btn-segmented-open">Open</label>
+								<input class="btn-check" type="radio" name="state" id="btn-segmented-closed" value="closed">
+								<label class="btn" for="btn-segmented-closed">Closed</label>
+							</div>
+							<nav class="btn-group" aria-label="Year">
+								<a class="btn btn-sm" href="#btn-segmented">2025</a>
+								<a class="btn btn-sm" href="#btn-segmented" aria-current="page">2026</a>
+							</nav>
 						</div>
 					</div>
 					<div class="docs-example" id="btn-group-vertical">
@@ -557,6 +597,11 @@
 							<input class="form-control" id="form-adorn-mail" type="email" placeholder="name@example.com" autocomplete="email">
 							<label for="form-adorn-mail">E-mail</label>
 						</div>
+						<div class="form-floating form-adorn">
+							<i class="bi bi-globe2" aria-hidden="true"></i>
+							<select class="form-select" id="form-adorn-country" autocomplete="country-name"><option>Thailand</option><option>Malaysia</option><option>Vietnam</option></select>
+							<label for="form-adorn-country">Country</label>
+						</div>
 						<div class="input-group">
 							<div class="form-floating form-adorn">
 								<i class="bi bi-key" aria-hidden="true"></i>
@@ -596,6 +641,72 @@
 							<label class="form-label" for="form-range-quality">Photo quality</label>
 							<input class="form-range" id="form-range-quality" type="range" min="40" max="100" step="5" value="80">
 						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="form-float-button">
+						<div class="hstack gap-8">
+							<div class="form-floating flex-fill">
+								<input class="form-control" id="form-float-button-code" placeholder="Voucher code">
+								<label for="form-float-button-code">Voucher code</label>
+							</div>
+							<button class="btn btn-secondary btn-float" type="button">Apply</button>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="form-grow">
+						<div class="form-field">
+							<label class="form-label" for="form-grow-text">Translation</label>
+							<textarea class="form-control max-h-160" id="form-grow-text" rows="1" data-grow>Speedboat to the marine park</textarea>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="form-counter">
+						<div class="form-field">
+							<label class="form-label" for="form-counter-title">Page title</label>
+							<input class="form-control" id="form-counter-title" value="Ang Thong marine park by speedboat" aria-describedby="form-counter-title-count">
+							<div class="form-counter" id="form-counter-title-count" data-counter="form-counter-title" data-counter-max="60"></div>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="form-step">
+						<div class="form-field">
+							<label class="form-label" for="form-step-guests">Guests</label>
+							<div class="input-group max-w-160">
+								<button class="btn btn-icon" type="button" command="--step-down" aria-controls="form-step-guests" aria-label="One guest fewer"><i class="bi bi-dash-lg" aria-hidden="true"></i></button>
+								<input class="form-control tabular-nums text-center" id="form-step-guests" type="number" min="1" max="12" value="2">
+								<button class="btn btn-icon" type="button" command="--step-up" aria-controls="form-step-guests" aria-label="One guest more"><i class="bi bi-plus-lg" aria-hidden="true"></i></button>
+							</div>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="form-color">
+						<div class="form-field">
+							<label class="form-label" for="form-color-hex">Label colour</label>
+							<div class="input-group max-w-240">
+								<input class="form-control form-control-color" id="form-color-pick" type="color" value="#2a9d8f" aria-label="Pick the label colour">
+								<input class="form-control font-monospace" id="form-color-hex" data-color-for="form-color-pick" value="#2a9d8f" spellcheck="false" autocomplete="off">
+							</div>
+						</div>
+						<div class="hstack gap-12">
+							<span class="dot" data-color="#2a9d8f"></span>
+							<span class="icon-tile" data-color="#e9c46a"><i class="bi bi-tag" aria-hidden="true"></i></span>
+							<span class="icon-tile" data-color="#264653"><i class="bi bi-tag" aria-hidden="true"></i></span>
+							<div class="card edge-start-color" data-color="#e76f51"><div class="card-body">Overdue</div></div>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="form-submit">
+						<form class="hstack flex-wrap gap-12" action="#form-submit" data-submit="change" data-docs-submit>
+							<select class="form-select max-w-240" name="sort" aria-label="Sort by"><option value="new">Newest first</option><option value="price">Lowest price first</option></select>
+							<label class="form-check"><input class="check" type="checkbox" name="open"> Open now</label>
+							<output class="text-muted" data-docs-sent></output>
+						</form>
+					</div>
+					<div class="docs-example docs-example-stack" id="form-show">
+						<form class="vstack gap-12">
+							<div class="form-floating max-w-320">
+								<select class="form-select" id="form-show-pay" name="pay"><option value="cash">Cash on the day</option><option value="card">Card</option><option value="invoice">Invoice</option></select>
+								<label for="form-show-pay">Payment</label>
+							</div>
+							<div class="form-floating max-w-320" id="form-show-tax-region" data-show-when="pay" data-show-in="invoice">
+								<input class="form-control" id="form-show-tax" name="tax_id" placeholder="Tax ID">
+								<label for="form-show-tax">Tax ID</label>
+							</div>
+						</form>
 					</div>
 					<div class="docs-states" id="form-states" tabindex="0" role="region" aria-labelledby="form-states-title">
 						<table class="docs-matrix">
@@ -906,6 +1017,35 @@
 							<input type="hidden" name="tags[]" value="family" data-label="Family">
 						</div>
 					</div>
+					<div class="docs-example docs-example-stack" id="combobox-free">
+						<div class="card">
+							<div class="card-body vstack gap-8">
+								<label class="form-label" for="combobox-free-search">Send the report to</label>
+								<input class="form-control" id="combobox-free-search" type="email" role="combobox" aria-controls="combobox-free-list" aria-expanded="true" aria-autocomplete="list" placeholder="name@example.com" autocomplete="off">
+								<div class="combobox-list" id="combobox-free-list" role="listbox" aria-label="Addresses" aria-multiselectable="true" data-name="to[]" data-create="to[]" data-chips="combobox-free-chips"></div>
+								<div class="combobox-chips" id="combobox-free-chips"></div>
+							</div>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="combobox-levels">
+						<div class="card">
+							<div class="card-body vstack gap-8">
+								<input class="form-control" type="search" role="combobox" aria-controls="combobox-levels-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a destination" placeholder="Find a destination" autocomplete="off">
+								<div class="combobox-list" id="combobox-levels-list" role="listbox" aria-label="Destinations" data-name="destination">
+									<div class="menu-item" role="option" id="combobox-levels-th" data-value="th" aria-level="1" aria-selected="false">Thailand</div>
+									<div class="menu-item" role="option" id="combobox-levels-south" data-value="th-south" aria-level="2" aria-selected="false">The south</div>
+									<div class="menu-item" role="option" id="combobox-levels-samui" data-value="samui" aria-level="3" aria-selected="true">Koh Samui</div>
+									<div class="menu-item" role="option" id="combobox-levels-phuket" data-value="phuket" aria-level="3" aria-selected="false">Phuket</div>
+									<div class="menu-item" role="option" id="combobox-levels-north" data-value="th-north" aria-level="2" aria-selected="false">The north</div>
+									<div class="menu-item" role="option" id="combobox-levels-chiangmai" data-value="chiangmai" aria-level="3" aria-selected="false">Chiang Mai</div>
+									<div class="menu-item" role="option" id="combobox-levels-my" data-value="my" aria-level="1" aria-selected="false">Malaysia</div>
+									<div class="menu-item" role="option" id="combobox-levels-langkawi" data-value="langkawi" aria-level="2" aria-selected="false">Langkawi</div>
+								</div>
+								<p class="combobox-no-results" hidden>Nothing found</p>
+								<input type="hidden" name="destination" value="samui" data-label="Koh Samui">
+							</div>
+						</div>
+					</div>
 					<div class="docs-example docs-example-stack" id="combobox-groups">
 						<div class="form-floating">
 							<button class="form-select combobox-toggle" type="button" id="combobox-groups-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-groups-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Choose a role…">Editor</span></button>
@@ -1122,6 +1262,39 @@
 								<label class="choice"><input type="radio" name="choice-method" value="promptpay" checked><span class="choice-media"><img src="img/qr.svg" alt="" width="40" height="40"></span>PromptPay<span class="fs-12 text-muted">Any Thai bank app</span></label>
 								<label class="choice"><input type="radio" name="choice-method" value="card"><span class="choice-media"><i class="bi bi-credit-card fs-24" aria-hidden="true"></i></span>Card<span class="fs-12 text-muted">Visa, Mastercard</span></label>
 							</div>
+						</fieldset>
+					</div>
+					<div class="docs-example docs-example-stack" id="choice-danger">
+						<fieldset class="vstack gap-8">
+							<legend class="form-label">When you leave</legend>
+							<div class="grid cols-2 gap-12">
+								<label class="choice"><input type="radio" name="choice-leave" value="pause" checked>Pause the account<span class="fs-12 text-muted">Back any time</span></label>
+								<label class="choice choice-danger"><input type="radio" name="choice-leave" value="delete">Delete the account<span class="fs-12 text-muted">With every booking, for good</span></label>
+							</div>
+						</fieldset>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-rating">
+					<h2 id="all-rating"><a href="rating.html">Ratings</a></h2>
+					<div class="docs-example docs-example-stack" id="rating-display">
+						<div class="hstack gap-8">
+							<span class="rating" role="img" aria-label="4.2 of 5" data-v="0.84"></span>
+							<span class="fw-600 tabular-nums">4.2</span>
+							<span class="text-muted fs-12">128 reviews</span>
+						</div>
+						<div class="hstack gap-8 fs-24">
+							<span class="rating" role="img" aria-label="3 of 5" data-v="0.6"></span>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="rating-give">
+						<fieldset class="rating-input">
+							<legend class="visually-hidden">Your mark for the guide</legend>
+							<input type="radio" name="rating-give" id="rating-give-1" value="1"><label for="rating-give-1"><span class="visually-hidden">1 star</span></label>
+							<input type="radio" name="rating-give" id="rating-give-2" value="2"><label for="rating-give-2"><span class="visually-hidden">2 stars</span></label>
+							<input type="radio" name="rating-give" id="rating-give-3" value="3"><label for="rating-give-3"><span class="visually-hidden">3 stars</span></label>
+							<input type="radio" name="rating-give" id="rating-give-4" value="4" checked><label for="rating-give-4"><span class="visually-hidden">4 stars</span></label>
+							<input type="radio" name="rating-give" id="rating-give-5" value="5"><label for="rating-give-5"><span class="visually-hidden">5 stars</span></label>
 						</fieldset>
 					</div>
 				</section>
@@ -2350,6 +2523,24 @@
 							<button class="btn btn-sm" type="button">Discard</button>
 							<button class="btn btn-sm btn-primary" type="button"><i class="bi bi-floppy" aria-hidden="true"></i>Save</button>
 						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="save-bar-results">
+						<div class="save-bar" data-state="error" role="region" aria-label="Changes not saved">
+							<i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+							<span class="save-bar-text">2 fields refused: the address is taken, the price is below the child price</span>
+							<button class="btn btn-sm btn-primary" type="button"><i class="bi bi-floppy" aria-hidden="true"></i>Save</button>
+						</div>
+						<div class="save-bar" data-state="saved" role="region" aria-label="Changes">
+							<i class="bi bi-check2-circle" aria-hidden="true"></i>
+							<span class="save-bar-text">Saved at 14:05</span>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="save-bar-changed">
+						<div class="form-floating">
+							<input class="form-control" id="save-bar-changed-name" value="Ang Thong by speedboat" placeholder="Name" data-changed>
+							<label for="save-bar-changed-name">Name</label>
+						</div>
+						<label class="form-check" data-changed><input class="check" type="checkbox" checked> Shown on the site</label>
 					</div>
 				</section>
 

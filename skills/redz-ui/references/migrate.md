@@ -80,7 +80,6 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `bs-tooltip-end` | - | remove | the tooltip is one element |
 | `bs-tooltip-start` | - | remove | the tooltip is one element |
 | `bs-tooltip-top` | - | remove | the tooltip is one element |
-| `btn-check` | - | review | a toggle is a btn with aria-pressed; a choice is radio inputs |
 | `btn-close-white` | - | remove | the close glyph takes the text color |
 | `btn-dark` | - | review | no light or dark buttons: btn or btn-text |
 | `btn-light` | - | review | no light or dark buttons: btn or btn-text |
@@ -173,7 +172,6 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `form-check-input` | - | review | check, radio or switch on the input, by its type |
 | `form-check-label` | - | remove | the label is the form-check around the input |
 | `form-check-reverse` | - | missing |  |
-| `form-control-color` | - | review | a native <input type="color"> in the module's CSS |
 | `form-control-plaintext` | - | review | readonly on a form-control, or plain text |
 | `form-switch` | - | review | switch on the input, with role="switch" |
 | `fs-1` | `fs-32` | value | 40 px in Bootstrap; 32 is the largest here |

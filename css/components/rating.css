@@ -1,0 +1,81 @@
+@layer components {
+	.rating {
+		display: inline-block;
+		flex: none;
+		inline-size: 5em;
+		block-size: 1em;
+		vertical-align: -0.125em;
+		background: linear-gradient(to right, var(--redz-warning) calc(var(--v, 0) * 100%), var(--redz-border-strong) 0);
+		mask: var(--redz-star) 0 0 / 1em 1em repeat-x;
+		-webkit-print-color-adjust: exact;
+		print-color-adjust: exact;
+	}
+
+	.rating:dir(rtl) {
+		scale: -1 1;
+	}
+
+	.rating-input {
+		display: inline-flex;
+		align-items: center;
+		font-size: 1.5rem;
+		line-height: 1;
+	}
+
+	.rating-input > input {
+		position: absolute;
+		inline-size: 1px;
+		block-size: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+	}
+
+	.rating-input > label {
+		--redz-rating-fill: var(--redz-border-strong);
+		display: inline-grid;
+		inline-size: 1.25em;
+		block-size: 1.25em;
+		border-radius: var(--redz-radius-6);
+		cursor: pointer;
+	}
+
+	.rating-input > label::before {
+		content: "";
+		background: var(--redz-rating-fill);
+		mask: var(--redz-star) center / contain no-repeat;
+		-webkit-print-color-adjust: exact;
+		print-color-adjust: exact;
+	}
+
+	.rating-input > :is(label:has(~ input:checked), input:checked + label),
+	.rating-input:hover > label {
+		--redz-rating-fill: var(--redz-warning);
+	}
+
+	.rating-input:hover > label:hover ~ label {
+		--redz-rating-fill: var(--redz-border-strong);
+	}
+
+	.rating-input > input:focus-visible + label {
+		outline: 2px solid var(--redz-focus);
+		outline-offset: -1px;
+	}
+
+	.rating-input:disabled > label {
+		cursor: not-allowed;
+		opacity: 0.6;
+	}
+
+	@media (forced-colors: active) {
+		.rating,
+		.rating-input {
+			--redz-warning: CanvasText;
+			--redz-border-strong: GrayText;
+		}
+
+		.rating,
+		.rating-input > label::before {
+			forced-color-adjust: none;
+		}
+	}
+}

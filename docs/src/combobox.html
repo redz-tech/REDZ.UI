@@ -127,6 +127,41 @@
 		.then((answer) =&gt; answer.ok ? answer.json() : Promise.reject('The tag could not be made')));
 });</code></pre>
 
+	<h3>Free values</h3>
+	<p>A list with <code>data-create</code> and no options of its own takes free values - e-mail addresses, phone numbers, words - as chips: <kbd>Enter</kbd> or a comma takes the words, a value held already is not taken twice. A search with a <code>pattern</code> or <code>type="email"</code> refuses words it does not hold: the search is marked <code>aria-invalid</code> and the page's text <code>chip.invalid</code> says why.</p>
+	<div class="docs-example docs-example-stack" id="combobox-free">
+		<div class="card">
+			<div class="card-body vstack gap-8">
+				<label class="form-label" for="combobox-free-search">Send the report to</label>
+				<input class="form-control" id="combobox-free-search" type="email" role="combobox" aria-controls="combobox-free-list" aria-expanded="true" aria-autocomplete="list" placeholder="name@example.com" autocomplete="off">
+				<div class="combobox-list" id="combobox-free-list" role="listbox" aria-label="Addresses" aria-multiselectable="true" data-name="to[]" data-create="to[]" data-chips="combobox-free-chips"></div>
+				<div class="combobox-chips" id="combobox-free-chips"></div>
+			</div>
+		</div>
+	</div>
+
+	<h3>Options in levels</h3>
+	<p>Options with <code>aria-level</code> 2 or 3 are indented under the one before them, and a parent can be chosen as any option. The search keeps the page's order and shows a match with its parents, so a city is found with its country.</p>
+	<div class="docs-example docs-example-stack" id="combobox-levels">
+		<div class="card">
+			<div class="card-body vstack gap-8">
+				<input class="form-control" type="search" role="combobox" aria-controls="combobox-levels-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a destination" placeholder="Find a destination" autocomplete="off">
+				<div class="combobox-list" id="combobox-levels-list" role="listbox" aria-label="Destinations" data-name="destination">
+					<div class="menu-item" role="option" id="combobox-levels-th" data-value="th" aria-level="1" aria-selected="false">Thailand</div>
+					<div class="menu-item" role="option" id="combobox-levels-south" data-value="th-south" aria-level="2" aria-selected="false">The south</div>
+					<div class="menu-item" role="option" id="combobox-levels-samui" data-value="samui" aria-level="3" aria-selected="true">Koh Samui</div>
+					<div class="menu-item" role="option" id="combobox-levels-phuket" data-value="phuket" aria-level="3" aria-selected="false">Phuket</div>
+					<div class="menu-item" role="option" id="combobox-levels-north" data-value="th-north" aria-level="2" aria-selected="false">The north</div>
+					<div class="menu-item" role="option" id="combobox-levels-chiangmai" data-value="chiangmai" aria-level="3" aria-selected="false">Chiang Mai</div>
+					<div class="menu-item" role="option" id="combobox-levels-my" data-value="my" aria-level="1" aria-selected="false">Malaysia</div>
+					<div class="menu-item" role="option" id="combobox-levels-langkawi" data-value="langkawi" aria-level="2" aria-selected="false">Langkawi</div>
+				</div>
+				<p class="combobox-no-results" hidden>Nothing found</p>
+				<input type="hidden" name="destination" value="samui" data-label="Koh Samui">
+			</div>
+		</div>
+	</div>
+
 	<h3>Groups, descriptions and icons</h3>
 	<p>Options sit in groups - <code>role="group"</code> named by its <code>menu-header</code> - and carry an icon and a <code>menu-item-description</code>, which the search reads too; <code>data-keywords</code> adds words the option answers without showing them, and <code>aria-disabled="true"</code> keeps an option out of reach.</p>
 	<div class="docs-example docs-example-stack" id="combobox-groups">
@@ -273,6 +308,7 @@
 		<tbody>
 			<tr><td><code>remove</code></td><td>A chip's remove button; <code>{label}</code> is the value's label</td><td>Remove {label}</td></tr>
 			<tr><td><code>create</code></td><td>The option of a list with <code>data-create</code>; <code>{label}</code> is the search's words</td><td>Create “{label}”</td></tr>
+			<tr><td><code>chip.invalid</code></td><td>Words a search with a <code>pattern</code> or <code>type="email"</code> refuses; <code>{label}</code> is the words</td><td>{label} is not valid</td></tr>
 			<tr><td><code>found.one</code>, <code>found.other</code></td><td>The count of options found; <code>{count}</code> in the page's digits</td><td>{count} result, {count} results</td></tr>
 		</tbody>
 	</table>

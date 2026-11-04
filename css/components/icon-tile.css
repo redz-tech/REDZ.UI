@@ -46,4 +46,9 @@
 		--redz-tile-bg: var(--redz-info-subtle);
 		--redz-tile-fg: var(--redz-info);
 	}
+
+	.icon-tile[data-color] {
+		--redz-tile-bg: var(--redz-color);
+		--redz-tile-fg: oklch(from var(--redz-color) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+	}
 }

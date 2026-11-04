@@ -57,6 +57,17 @@
 		resize: vertical;
 	}
 
+	textarea.form-control[data-grow] {
+		min-block-size: calc(var(--redz-grow-rows, 1) * 1lh + 2 * var(--redz-space-8) + 2px);
+		resize: none;
+	}
+
+	@supports (field-sizing: content) {
+		textarea.form-control[data-grow] {
+			field-sizing: content;
+		}
+	}
+
 	.form-select {
 		appearance: none;
 		padding-inline-end: 2.25rem;
@@ -84,11 +95,73 @@
 			appearance: auto;
 			background-image: none;
 		}
+
+		:is(.form-control, .form-select)[data-changed] {
+			border-inline-start-width: 3px;
+		}
+
+		.form-check[data-changed]::after {
+			forced-color-adjust: none;
+			background: CanvasText;
+		}
 	}
 
 	:is(.form-control, .form-select)[aria-invalid="true"],
 	:is(.form-control, .form-select):user-invalid {
 		border-color: var(--redz-danger);
+	}
+
+	:is(.form-control, .form-select)[data-changed] {
+		box-shadow: inset 3px 0 0 var(--redz-warning);
+	}
+
+	:is(.form-control, .form-select)[data-changed]:dir(rtl) {
+		box-shadow: inset -3px 0 0 var(--redz-warning);
+	}
+
+	.form-check[data-changed]::after {
+		content: "";
+		flex: none;
+		inline-size: 0.375rem;
+		block-size: 0.375rem;
+		border-radius: 50%;
+		background: var(--redz-warning);
+	}
+
+	.form-counter {
+		color: var(--redz-text-muted);
+		font-size: var(--redz-fs-12);
+		font-variant-numeric: tabular-nums;
+		text-align: end;
+	}
+
+	.form-counter[data-state="near"] {
+		color: var(--redz-warning);
+	}
+
+	.form-counter[data-state="over"] {
+		color: var(--redz-danger);
+		font-weight: 600;
+	}
+
+	.form-control-color {
+		inline-size: 3rem;
+		padding: 0.1875rem;
+		cursor: pointer;
+	}
+
+	.form-control-color::-webkit-color-swatch-wrapper {
+		padding: 0;
+	}
+
+	.form-control-color::-webkit-color-swatch {
+		border: 0;
+		border-radius: var(--redz-radius-6);
+	}
+
+	.form-control-color::-moz-color-swatch {
+		border: 0;
+		border-radius: var(--redz-radius-6);
 	}
 
 	.form-control-otp {
@@ -219,7 +292,7 @@
 		pointer-events: none;
 	}
 
-	.form-adorn > .form-control {
+	.form-adorn > :is(.form-control, .form-select) {
 		padding-inline-start: 2.125rem;
 	}
 

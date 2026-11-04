@@ -1,10 +1,12 @@
 // REDZ.UI, comboboxes (the WAI-ARIA combobox with a listbox): a search field role="combobox" filters the listbox it
-// controls as one types — case and accents aside, every word found, the best first — and the arrow keys move the active
+// controls as one types - case and accents aside, every word found, the best first - and the arrow keys move the active
 // option while the focus stays in the field; Enter takes it. A choice in a form: a face button shows the value and opens
 // a panel with the search, the value lives in hidden fields named by the list's data-name; the palette: the same search
 // in a dialog, its options links and buttons. A page that finds options itself cancels redz:search and puts them in. A
 // list with data-create offers "Create …" for a search no option's label equals: the page may make the value through
-// redz:create (js/answer.js), else the new label goes into a hidden field data-create names.
+// redz:create (js/answer.js), else the new label goes into a hidden field data-create names. In such a list a comma
+// takes the words as Enter does, and a search with a pattern or type="email" refuses words it does not hold. Options in
+// levels (aria-level) keep the page's order, a match shown with its parents.
 import {ask} from './answer.js';
 import {text, textCount} from './text.js';
 
@@ -19,13 +21,14 @@ const aborts = new WeakMap();
 const timers = new WeakMap();
 const watchers = new WeakMap();
 const waiting = new WeakSet();
+const kept = new WeakSet();
 const marks = new Map();
 let pending = '';
 let made = 0;
 
 const langOf = () => document.documentElement.lang || 'en';
 
-/** Folds the text for matching — case, accents and Arabic vowel marks aside — with each folded unit's offset in it. */
+/** Folds the text for matching - case, accents and Arabic vowel marks aside - with each folded unit's offset in it. */
 const fold = (source) => {
 	let folded = '';
 	const at = [];
@@ -212,11 +215,34 @@ const settle = (input) => {
 		empty.hidden = shown.length > 0 || list.getAttribute('aria-busy') === 'true';
 	}
 	const active = list.querySelector('[data-active]');
-	activate(input, words.length > 0 ? shown.find(usable) : (shown.includes(active) ? active : null));
+	activate(input, words.length > 0 ? shown.find((option) => usable(option) && !kept.has(option)) : (shown.includes(active) ? active : null));
 	highlight(list, words);
 };
 
-/** Filters the list by the search: shows what holds every word, best first within each group, the page's order back when the search is empty. */
+/** Shows the parents of each shown option of a list in levels - the nearest option before it of a lower aria-level, up
+ *  to the first level - so a match keeps its place in the tree. */
+const keepAncestors = (options) => {
+	const levelOf = (option) => Number.parseInt(option.getAttribute('aria-level') ?? '1', 10) || 1;
+	const matched = options.filter((option) => !option.hidden);
+	for (const option of options) {
+		kept.delete(option);
+	}
+	for (const option of matched) {
+		let need = levelOf(option) - 1;
+		for (let i = options.indexOf(option) - 1; i >= 0 && need > 0; i--) {
+			if (levelOf(options[i]) <= need) {
+				if (options[i].hidden) {
+					options[i].hidden = false;
+					kept.add(options[i]);
+				}
+				need = levelOf(options[i]) - 1;
+			}
+		}
+	}
+};
+
+/** Filters the list by the search: shows what holds every word, best first within each group, the page's order back
+ *  when the search is empty; a list in levels keeps the page's order, each match with its parents. */
 const filter = (input) => {
 	const list = listOf(input);
 	const query = fold(input.value.trim()).folded.replace(/\s+/g, ' ');
@@ -228,7 +254,11 @@ const filter = (input) => {
 		for (const [option, rank] of ranked) {
 			option.hidden = rank < 0;
 		}
-		const ordered = ranked.toSorted((a, b) => (words.length === 0 ? 0 : a[1] - b[1]) || places.get(a[0]) - places.get(b[0])).map(([option]) => option);
+		const levelled = options.some((option) => option.hasAttribute('aria-level'));
+		if (levelled) {
+			keepAncestors(options);
+		}
+		const ordered = levelled ? options : ranked.toSorted((a, b) => (words.length === 0 ? 0 : a[1] - b[1]) || places.get(a[0]) - places.get(b[0])).map(([option]) => option);
 		if (ordered.some((option, i) => option !== options[i])) {
 			const before = options[0].previousSibling;
 			if (before === null) {
@@ -244,7 +274,7 @@ const filter = (input) => {
 	settle(input);
 };
 
-/** The polite status of the list's scope, made on first need — when its search takes the focus, before anything is
+/** The polite status of the list's scope, made on first need - when its search takes the focus, before anything is
  *  said: a region made with its words says nothing. */
 const statusOf = (list) => {
 	const scope = scopeOf(list);
@@ -257,8 +287,8 @@ const statusOf = (list) => {
 	return status;
 };
 
-/** Once the typing pauses and the page's options have landed, says politely the option Enter would take — a screen
- *  reader, busy with the typed keys, says nothing of it — or, with none, the count found. */
+/** Once the typing pauses and the page's options have landed, says politely the option Enter would take - a screen
+ *  reader, busy with the typed keys, says nothing of it - or, with none, the count found. */
 const announce = (input) => {
 	clearTimeout(timers.get(input));
 	timers.set(input, setTimeout(() => {
@@ -351,7 +381,7 @@ const keepFirst = (list) => {
 	}
 };
 
-/** Writes the hidden fields: [value, label, made here] — a value made here goes into the field data-create names. */
+/** Writes the hidden fields: [value, label, made here] - a value made here goes into the field data-create names. */
 const hold = (list, pairs) => {
 	if (!list.dataset.name) {
 		console.error('REDZ.UI: the listbox #' + list.id + ' has no data-name for its value');
@@ -371,8 +401,8 @@ const hold = (list, pairs) => {
 	}
 };
 
-/** Takes the option: a value is chosen — many toggle; one closes the panel a frame later, so the button's new value
- *  reaches a screen reader before the focus does — a link or a button is pressed. */
+/** Takes the option: a value is chosen - many toggle; one closes the panel a frame later, so the button's new value
+ *  reaches a screen reader before the focus does - a link or a button is pressed. */
 const choose = (option) => {
 	if (!usable(option)) {
 		return;
@@ -412,14 +442,19 @@ const sayLater = (list, words) => requestAnimationFrame(() => setTimeout(() => {
 	statusOf(list).textContent = words;
 }));
 
-/** Takes "Create “…”": redz:create asks the page, which may answer {value, label} — an option of the list from then on,
- *  chosen — or reject with words the status says; left alone, the label is held in the field data-create names. The
+/** Takes "Create “…”": redz:create asks the page, which may answer {value, label} - an option of the list from then on,
+ *  chosen - or reject with words the status says; left alone, the label is held in the field data-create names. The
  *  search empties for the next one, and a list of many, its panel still open, says the new label politely. */
 const create = (option) => {
 	const list = option.closest('[role="listbox"]');
 	const input = searchOf(list);
 	const label = option.dataset.label;
 	const many = list.getAttribute('aria-multiselectable') === 'true';
+	if (input?.validity.patternMismatch || input?.validity.typeMismatch) {
+		input.setAttribute('aria-invalid', 'true');
+		sayLater(list, text('chip.invalid', {label}));
+		return;
+	}
 	const [taken, answer] = ask(list, 'redz:create', {label});
 	if (taken && answer === null) {
 		return;
@@ -570,6 +605,15 @@ document.addEventListener('keydown', (event) => {
 		const active = list.querySelector('[data-active]');
 		if (active !== null) {
 			choose(active);
+		}
+		return;
+	} else if (event.key === ',' && 'create' in list.dataset && !event.isComposing) {
+		event.preventDefault();
+		const pick = list.querySelector(':scope > .combobox-create') ?? list.querySelector('[data-active]');
+		if (pick !== null) {
+			choose(pick);
+		} else if (target.value.trim() !== '') {
+			fresh(target);
 		}
 		return;
 	} else if (event.key === 'Escape') {

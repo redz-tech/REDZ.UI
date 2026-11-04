@@ -46,7 +46,7 @@ Text fields, selects and text areas with Bootstrap 5's names: a label floating i
 
 ### An icon in the field
 
-`form-adorn` puts an icon inside a field, at its start; the field keeps its own name. With `form-floating` on the same element the label starts after the icon, inside the one border - the way a sign-in form draws its fields.
+`form-adorn` puts an icon inside a field or a select, at its start; the field keeps its own name. With `form-floating` on the same element the label starts after the icon, inside the one border - the way a sign-in form draws its fields.
 
 ```html
 <div class="form-adorn">
@@ -57,6 +57,11 @@ Text fields, selects and text areas with Bootstrap 5's names: a label floating i
 	<i class="bi bi-envelope" aria-hidden="true"></i>
 	<input class="form-control" id="form-adorn-mail" type="email" placeholder="name@example.com" autocomplete="email">
 	<label for="form-adorn-mail">E-mail</label>
+</div>
+<div class="form-floating form-adorn">
+	<i class="bi bi-globe2" aria-hidden="true"></i>
+	<select class="form-select" id="form-adorn-country" autocomplete="country-name"><option>Thailand</option><option>Malaysia</option><option>Vietnam</option></select>
+	<label for="form-adorn-country">Country</label>
 </div>
 <div class="input-group">
 	<div class="form-floating form-adorn">
@@ -119,6 +124,107 @@ A button with `command="--reveal"` for a password field shows its text and hides
 </div>
 ```
 
+### A button beside a floating field
+
+`btn-float` makes a button as tall as a floating field, for the one action beside it; with `btn-icon` it is square.
+
+```html
+<div class="hstack gap-8">
+	<div class="form-floating flex-fill">
+		<input class="form-control" id="form-float-button-code" placeholder="Voucher code">
+		<label for="form-float-button-code">Voucher code</label>
+	</div>
+	<button class="btn btn-secondary btn-float" type="button">Apply</button>
+</div>
+```
+
+### A text that grows
+
+`data-grow` on a `textarea` starts it at its `rows` - `rows="1"` is one line - and grows it with its text, without the five lines a text area takes otherwise. Where the browser has `field-sizing: content` - Chrome 123, Firefox 152, Safari 26.2 - CSS does it; below, the library sizes it from its text as it is typed, reset and loaded. A `max-h-*` caps it, and past the cap it scrolls.
+
+```html
+<div class="form-field">
+	<label class="form-label" for="form-grow-text">Translation</label>
+	<textarea class="form-control max-h-160" id="form-grow-text" rows="1" data-grow>Speedboat to the marine park</textarea>
+</div>
+```
+
+### A count of characters
+
+`form-counter` with `data-counter` naming a field shows how much is typed against its `maxlength`, or against the counter's `data-counter-max`, which lets the text go over - a title the search results cut. From nine tenths it turns to the warning tone, past the most to danger (`data-state` `near` and `over`), and once the typing pauses near or over, the count is said politely in the page's text `counter`. Joined to the field by `aria-describedby`, the count is read with it.
+
+```html
+<div class="form-field">
+	<label class="form-label" for="form-counter-title">Page title</label>
+	<input class="form-control" id="form-counter-title" value="Ang Thong marine park by speedboat" aria-describedby="form-counter-title-count">
+	<div class="form-counter" id="form-counter-title-count" data-counter="form-counter-title" data-counter-max="60"></div>
+</div>
+```
+
+### Number steps
+
+Buttons with `command="--step-up"` or `"--step-down"` and `aria-controls` naming a number field step it by its `step` within its `min` and `max`, and fire `input` and `change` as typing does; at an end a button is `aria-disabled`. The arrow keys in the field step it already: the buttons are for a pointer.
+
+```html
+<div class="form-field">
+	<label class="form-label" for="form-step-guests">Guests</label>
+	<div class="input-group max-w-160">
+		<button class="btn btn-icon" type="button" command="--step-down" aria-controls="form-step-guests" aria-label="One guest fewer"><i class="bi bi-dash-lg" aria-hidden="true"></i></button>
+		<input class="form-control tabular-nums text-center" id="form-step-guests" type="number" min="1" max="12" value="2">
+		<button class="btn btn-icon" type="button" command="--step-up" aria-controls="form-step-guests" aria-label="One guest more"><i class="bi bi-plus-lg" aria-hidden="true"></i></button>
+	</div>
+</div>
+```
+
+### A colour
+
+`form-control-color` is the browser's own colour picker in a field's box. A text field with `data-color-for` naming the picker is its hex twin: each follows the other, and a twin that holds no colour - `#rgb` or `#rrggbb`, the `#` optional - is `aria-invalid`. A stored colour is drawn by `data-color`, which the library sets as `--redz-color` through the CSSOM, so a page under a strict CSP writes no style: on a `dot`, an `icon-tile` - its icon black or white by the colour's lightness -, a `choice-media`, and the edges `edge-top-color` and `edge-start-color`.
+
+```html
+<div class="form-field">
+	<label class="form-label" for="form-color-hex">Label colour</label>
+	<div class="input-group max-w-240">
+		<input class="form-control form-control-color" id="form-color-pick" type="color" value="#2a9d8f" aria-label="Pick the label colour">
+		<input class="form-control font-monospace" id="form-color-hex" data-color-for="form-color-pick" value="#2a9d8f" spellcheck="false" autocomplete="off">
+	</div>
+</div>
+<div class="hstack gap-12">
+	<span class="dot" data-color="#2a9d8f"></span>
+	<span class="icon-tile" data-color="#e9c46a"><i class="bi bi-tag" aria-hidden="true"></i></span>
+	<span class="icon-tile" data-color="#264653"><i class="bi bi-tag" aria-hidden="true"></i></span>
+	<div class="card edge-start-color" data-color="#e76f51"><div class="card-body">Overdue</div></div>
+</div>
+```
+
+### Sent on a change
+
+`data-submit="change"` on a form or on one of its controls sends the form when such a control changes - a filter's select, a sort, a switch - by `requestSubmit`, so the browser's checks and the page's submit listeners run. A text field changes when it is left, not at every key; a combobox's list when a value is chosen.
+
+```html
+<form class="hstack flex-wrap gap-12" action="#form-submit" data-submit="change" data-docs-submit>
+	<select class="form-select max-w-240" name="sort" aria-label="Sort by"><option value="new">Newest first</option><option value="price">Lowest price first</option></select>
+	<label class="form-check"><input class="check" type="checkbox" name="open"> Open now</label>
+	<output class="text-muted" data-docs-sent></output>
+</form>
+```
+
+### Shown by another field
+
+`data-show-when` on a region names a field of its form, and `data-show-in` the values that show it, a space between them; without it, any value does. A checkbox or a radio counts its value when checked. While the region is hidden its fields are disabled, so the form sends none of them; a field the page disabled itself stays disabled.
+
+```html
+<form class="vstack gap-12">
+	<div class="form-floating max-w-320">
+		<select class="form-select" id="form-show-pay" name="pay"><option value="cash">Cash on the day</option><option value="card">Card</option><option value="invoice">Invoice</option></select>
+		<label for="form-show-pay">Payment</label>
+	</div>
+	<div class="form-floating max-w-320" id="form-show-tax-region" data-show-when="pay" data-show-in="invoice">
+		<input class="form-control" id="form-show-tax" name="tax_id" placeholder="Tax ID">
+		<label for="form-show-tax">Tax ID</label>
+	</div>
+</form>
+```
+
 ## States
 
 ## Keyboard and accessibility
@@ -128,19 +234,21 @@ A button with `command="--reveal"` for a password field shows its text and hides
 - An error is said in words in `invalid-feedback`, joined to the control by `aria-describedby`; a color alone never tells it.
 - The borders of fields and the focus ring are at least 3:1 against the page in both themes; the text 4.5:1.
 - `form-select` paints its own chevron from the theme, mirrored right to left; a multiple select or one with `size` drops it.
+- A count of characters is said only near or over its most, once the typing pauses; at every key it would drown the typing.
+- Number step buttons are named by `aria-label` and keep their place in the Tab order; from the keyboard the field's own arrow keys step it.
+- A region shown by another field is `hidden` while it does not apply, so a screen reader skips it and the form sends nothing of it.
 
 ## Tokens
 
 From [`css/components/form.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/form.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-4`, `--redz-text`, `--redz-fs-12`, `--redz-text-muted`, `--redz-danger`, `--redz-control-height`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg`, `--redz-focus`, `--redz-space-8`, `--redz-form-select-chevron`, `--redz-bg-page`, `--redz-primary-subtle`, `--redz-control-height-sm`, `--redz-radius-6`, `--redz-control-height-lg`, `--redz-fs-16`, `--redz-control-height-float`, `--redz-fs-14`, `--redz-motion`, `--redz-ease`, `--redz-primary`.
+It reads the theme's `--redz-space-4`, `--redz-text`, `--redz-fs-12`, `--redz-text-muted`, `--redz-danger`, `--redz-control-height`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg`, `--redz-focus`, `--redz-space-8`, `--redz-grow-rows`, `--redz-form-select-chevron`, `--redz-warning`, `--redz-radius-6`, `--redz-bg-page`, `--redz-primary-subtle`, `--redz-control-height-sm`, `--redz-control-height-lg`, `--redz-fs-16`, `--redz-control-height-float`, `--redz-fs-14`, `--redz-motion`, `--redz-ease`, `--redz-primary`.
 
 ## From Bootstrap 5.3
 
 | Bootstrap 5.3 | REDZ.UI | Change | Note |
 | --- | --- | --- | --- |
 | `col-form-label` | `form-label` | review | a form-label in a form-field |
-| `form-control-color` | - | review | a native <input type="color"> in the module's CSS |
 | `form-control-plaintext` | - | review | readonly on a form-control, or plain text |
 | `has-validation` | - | remove | fields have no success state |
 | `invalid-tooltip` | `invalid-feedback` | review | the error under the field |

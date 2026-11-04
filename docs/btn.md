@@ -74,6 +74,35 @@ An icon sits beside the words, or alone in a square `btn-icon` whose name is its
 </div>
 ```
 
+### A choice of one
+
+A segmented choice is Bootstrap's: in a `btn-group`, each `input type="radio" class="btn-check"` before its `label class="btn"`. The radio stays the control - the arrow keys move the choice, the form sends it - and the checked one is drawn pressed, an outline tone filled with its colour; the focus ring goes on the label. A link or a button that is the current one of a group carries `aria-current` and is drawn pressed too.
+
+```html
+<div class="btn-toolbar">
+	<div class="btn-group" role="radiogroup" aria-label="Period">
+		<input class="btn-check" type="radio" name="period" id="btn-segmented-day" value="day">
+		<label class="btn btn-outline-primary" for="btn-segmented-day">Day</label>
+		<input class="btn-check" type="radio" name="period" id="btn-segmented-week" value="week" checked>
+		<label class="btn btn-outline-primary" for="btn-segmented-week">Week</label>
+		<input class="btn-check" type="radio" name="period" id="btn-segmented-month" value="month">
+		<label class="btn btn-outline-primary" for="btn-segmented-month">Month</label>
+	</div>
+	<div class="btn-group" role="radiogroup" aria-label="Status">
+		<input class="btn-check" type="radio" name="state" id="btn-segmented-all" value="all" checked>
+		<label class="btn" for="btn-segmented-all">All</label>
+		<input class="btn-check" type="radio" name="state" id="btn-segmented-open" value="open">
+		<label class="btn" for="btn-segmented-open">Open</label>
+		<input class="btn-check" type="radio" name="state" id="btn-segmented-closed" value="closed">
+		<label class="btn" for="btn-segmented-closed">Closed</label>
+	</div>
+	<nav class="btn-group" aria-label="Year">
+		<a class="btn btn-sm" href="#btn-segmented">2025</a>
+		<a class="btn btn-sm" href="#btn-segmented" aria-current="page">2026</a>
+	</nav>
+</div>
+```
+
 `btn-group-vertical` stacks the buttons of a group, each as wide as the widest.
 
 ```html
@@ -111,19 +140,19 @@ A state is the attribute accessibility needs anyway, on the button itself: no `a
 - A button with only an icon takes its name from `aria-label`; the icon is `aria-hidden="true"`.
 - `disabled` takes a button out of the tab order and hides why. `aria-disabled="true"` keeps it focusable - so a tooltip can say why - and the library swallows its clicks.
 - A button that opens a menu or a dialog uses the browser's command: `commandfor` + `command`, never `data-bs-toggle`.
+- A segmented choice is radios: one Tab stop, the arrow keys move the choice, a screen reader says "1 of 3". A group of toggles that each stand alone is buttons with `aria-pressed`.
 - The focus ring is 2 px of `--redz-focus`, 3:1 against the page in both themes.
 
 ## Tokens
 
-From [`css/components/btn.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/btn.css). It declares `--redz-btn-bg`, `--redz-btn-fg`, `--redz-btn-hover`, `--redz-btn-hover-fg` on its root, never on rows or items.
+From [`css/components/btn.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/btn.css). It declares `--redz-btn-bg`, `--redz-btn-fg`, `--redz-btn-hover`, `--redz-btn-hover-fg`, `--redz-btn-on-bg`, `--redz-btn-on-fg` on its root, never on rows or items.
 
-It reads the theme's `--redz-bg-hover`, `--redz-text`, `--redz-control-height`, `--redz-space-12`, `--redz-radius-8`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-primary-subtle`, `--redz-secondary-subtle`, `--redz-success-subtle`, `--redz-danger-subtle`, `--redz-warning-subtle`, `--redz-info-subtle`, `--redz-control-height-xs`, `--redz-radius-6`, `--redz-fs-12`, `--redz-control-height-sm`, `--redz-space-8`, `--redz-control-height-lg`, `--redz-space-16`, `--redz-fs-16`, `--redz-space-24`, `--redz-radius-12`, `--redz-fs-20`, `--redz-bg-page`, `--redz-text-faint`, `--redz-text-muted`, `--redz-motion`.
+It reads the theme's `--redz-bg-hover`, `--redz-text`, `--redz-control-height`, `--redz-space-12`, `--redz-radius-8`, `--redz-focus`, `--redz-bg-page`, `--redz-text-faint`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-primary-subtle`, `--redz-secondary-subtle`, `--redz-success-subtle`, `--redz-danger-subtle`, `--redz-warning-subtle`, `--redz-info-subtle`, `--redz-control-height-xs`, `--redz-radius-6`, `--redz-fs-12`, `--redz-control-height-sm`, `--redz-space-8`, `--redz-control-height-lg`, `--redz-space-16`, `--redz-fs-16`, `--redz-space-24`, `--redz-radius-12`, `--redz-fs-20`, `--redz-control-height-float`, `--redz-text-muted`, `--redz-motion`.
 
 ## From Bootstrap 5.3
 
 | Bootstrap 5.3 | REDZ.UI | Change | Note |
 | --- | --- | --- | --- |
-| `btn-check` | - | review | a toggle is a btn with aria-pressed; a choice is radio inputs |
 | `btn-close-white` | - | remove | the close glyph takes the text color |
 | `btn-dark` | - | review | no light or dark buttons: btn or btn-text |
 | `btn-light` | - | review | no light or dark buttons: btn or btn-text |

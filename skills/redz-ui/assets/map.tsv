@@ -213,7 +213,7 @@ bs-tooltip-end		remove	class	tooltip	the tooltip is one element
 bs-tooltip-start		remove	class	tooltip	the tooltip is one element
 bs-tooltip-top		remove	class	tooltip	the tooltip is one element
 btn	btn	same	class	btn	
-btn-check		review	class	btn	a toggle is a btn with aria-pressed; a choice is radio inputs
+btn-check	btn-check	same	class	btn	a radio or a check before its label.btn; a toggle that stands alone is a btn with aria-pressed
 btn-close	btn-close	same	class	btn	
 btn-close-white		remove	class	btn	the close glyph takes the text color
 btn-danger	btn-danger	same	class	btn	
@@ -631,7 +631,7 @@ form-check-input		review	class	check	check, radio or switch on the input, by its
 form-check-label		remove	class	check	the label is the form-check around the input
 form-check-reverse		missing	class	check	
 form-control	form-control	same	class	form	
-form-control-color		review	class	form	a native <input type="color"> in the module's CSS
+form-control-color	form-control-color	same	class	form	on an <input type="color">; a text field with data-color-for is its hex twin
 form-control-lg	form-control-lg	same	class	form	
 form-control-plaintext		review	class	form	readonly on a form-control, or plain text
 form-control-sm	form-control-sm	same	class	form	
