@@ -1,0 +1,44 @@
+<header class="vstack gap-8">
+	<h1>Logs and diffs</h1>
+	<p class="docs-lead">What a job printed, line by line as it runs, and what changed between two versions of a text - a template, a setting, a translation.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="log-lines">
+	<h2 id="log-lines">A log</h2>
+	<p><code>pre class="log"</code> sets a job's output in the monospace font, wraps its long lines and scrolls in its own box once a <code>max-h-*</code> utility caps its height - give it <code>tabindex="0"</code> then, so the keyboard scrolls it too. A line in a <code>span</code> with <code>data-tone</code> - <code>success</code>, <code>warning</code>, <code>danger</code>, <code>info</code> or <code>muted</code> - takes that tone; the words still say what happened. With <code>data-follow</code> the end stays in view while lines come in, as in a terminal, unless the reader scrolled up to read an earlier one; back at the end, it follows again.</p>
+	<div class="docs-example docs-example-stack" id="log-follow">
+		<pre class="log max-h-160" id="log-follow-lines" tabindex="0" data-follow aria-label="The import's output" dir="ltr"><span data-tone="muted">09:14:02</span> Import started: excursions.csv, 128 rows
+<span data-tone="muted">09:14:02</span> Columns: title, price, date, seats, language
+<span data-tone="muted">09:14:02</span> Row 1-20 read
+<span data-tone="muted">09:14:02</span> Row 21-40 read
+<span data-tone="warning"><span data-tone="muted">09:14:03</span> Row 41: no price, set to 0</span>
+<span data-tone="muted">09:14:03</span> Row 42-60 read
+<span data-tone="muted">09:14:03</span> Row 61-90 read
+<span data-tone="danger"><span data-tone="muted">09:14:04</span> Row 91: the date 2026-02-30 does not exist, skipped</span>
+<span data-tone="muted">09:14:04</span> Row 92-128 read
+<span data-tone="success"><span data-tone="muted">09:14:05</span> 127 excursions imported, 1 skipped</span></pre>
+		<div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="log-line" aria-controls="log-follow-lines">Add a line</button></div>
+	</div>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="log-diff">
+	<h2 id="log-diff">A diff</h2>
+	<p><code>div class="diff"</code> holds one element a line: an <code>ins</code> is a line added, marked "+" and tinted green, a <code>del</code> a line taken away, "-" and red, anything else a line kept. In a kept line, <code>del</code> and <code>ins</code> show the words changed inside it, side by side. Lines of code carry <code>translate="no"</code>, so a page's translator leaves them as they are, and a log or a diff of code is <code>dir="ltr"</code> on a right-to-left page; a diff of Arabic words keeps the page's direction.</p>
+	<div class="docs-example docs-example-stack" id="log-diff-example">
+		<div class="diff" role="group" aria-label="The changes of the page's title" dir="ltr">
+			<span translate="no">&lt;header class="vstack gap-8"&gt;</span>
+			<del translate="no">	&lt;h1&gt;Ang Thong by speedboat&lt;/h1&gt;</del>
+			<ins translate="no">	&lt;h1&gt;Ang Thong marine park by speedboat&lt;/h1&gt;</ins>
+			<span translate="no">	&lt;p&gt;A day among <del>forty</del><ins>forty-two</ins> islands.&lt;/p&gt;</span>
+			<span translate="no">&lt;/header&gt;</span>
+		</div>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="log-access">
+	<h2 id="log-access">Accessibility</h2>
+	<ul>
+		<li>A log that scrolls is focusable and named, so a keyboard reaches it and a screen reader says what it is. A log the person waits on may be <code>role="log"</code>, a live region that says new lines politely; one that prints many lines a second says a summary instead.</li>
+		<li>A diff says its changes in its signs and its words, not in its colors: a screen reader reads "+" and "-" before a line, and in forced colors an added word is underlined and a removed one struck through.</li>
+	</ul>
+</section>

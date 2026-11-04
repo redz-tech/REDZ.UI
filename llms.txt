@@ -44,6 +44,7 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 - [Calendars](docs/calendar.md): A month of days with what happens on each, and a strip of days across the things that can be busy on them - equipment, rooms, boats.
 - [Media library](docs/media.md): A folder of images as square tiles or as compact rows: checked for actions on many at once, moved by a handle, each with its own actions.
 - [Tables](docs/table.md): A list of records: a title that links to the record, a line under it, a note when something is wrong, a column of checks for batch actions and the row's own actions at the end.
+- [Logs and diffs](docs/log.md): What a job printed, line by line as it runs, and what changed between two versions of a text - a template, a setting, a translation.
 - [Badges](docs/badge.md): A badge is a short label of state or count beside the thing it describes: Published, Draft, 5 new. It never acts - a badge that does something is a chip or a button.
 - [Dots](docs/dot.md): An 8 px dot of a tone beside a word: online, live, the color of a site. The dot repeats what the word says; it never says it alone.
 - [Avatars](docs/avatar.md): A round mark of a person: their initials in the accent, 32 px or 24 px with avatar-sm.

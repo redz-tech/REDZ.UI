@@ -5205,6 +5205,53 @@ It reads the theme's `--redz-space-8`, `--redz-space-12`, `--redz-border`, `--re
 | `table-responsive` | - | review | the card's body holds the table; columns hide below md: |
 | `table-success` | - | review | row tones are danger, warning and secondary |
 
+# Logs and diffs
+
+What a job printed, line by line as it runs, and what changed between two versions of a text - a template, a setting, a translation.
+
+## A log
+
+`pre class="log"` sets a job's output in the monospace font, wraps its long lines and scrolls in its own box once a `max-h-*` utility caps its height - give it `tabindex="0"` then, so the keyboard scrolls it too. A line in a `span` with `data-tone` - `success`, `warning`, `danger`, `info` or `muted` - takes that tone; the words still say what happened. With `data-follow` the end stays in view while lines come in, as in a terminal, unless the reader scrolled up to read an earlier one; back at the end, it follows again.
+
+```html
+		<pre class="log max-h-160" id="log-follow-lines" tabindex="0" data-follow aria-label="The import's output" dir="ltr"><span data-tone="muted">09:14:02</span> Import started: excursions.csv, 128 rows
+<span data-tone="muted">09:14:02</span> Columns: title, price, date, seats, language
+<span data-tone="muted">09:14:02</span> Row 1-20 read
+<span data-tone="muted">09:14:02</span> Row 21-40 read
+<span data-tone="warning"><span data-tone="muted">09:14:03</span> Row 41: no price, set to 0</span>
+<span data-tone="muted">09:14:03</span> Row 42-60 read
+<span data-tone="muted">09:14:03</span> Row 61-90 read
+<span data-tone="danger"><span data-tone="muted">09:14:04</span> Row 91: the date 2026-02-30 does not exist, skipped</span>
+<span data-tone="muted">09:14:04</span> Row 92-128 read
+<span data-tone="success"><span data-tone="muted">09:14:05</span> 127 excursions imported, 1 skipped</span></pre>
+		<div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="log-line" aria-controls="log-follow-lines">Add a line</button></div>
+```
+
+## A diff
+
+`div class="diff"` holds one element a line: an `ins` is a line added, marked "+" and tinted green, a `del` a line taken away, "-" and red, anything else a line kept. In a kept line, `del` and `ins` show the words changed inside it, side by side. Lines of code carry `translate="no"`, so a page's translator leaves them as they are, and a log or a diff of code is `dir="ltr"` on a right-to-left page; a diff of Arabic words keeps the page's direction.
+
+```html
+<div class="diff" role="group" aria-label="The changes of the page's title" dir="ltr">
+	<span translate="no">&lt;header class="vstack gap-8"&gt;</span>
+	<del translate="no">	&lt;h1&gt;Ang Thong by speedboat&lt;/h1&gt;</del>
+	<ins translate="no">	&lt;h1&gt;Ang Thong marine park by speedboat&lt;/h1&gt;</ins>
+	<span translate="no">	&lt;p&gt;A day among <del>forty</del><ins>forty-two</ins> islands.&lt;/p&gt;</span>
+	<span translate="no">&lt;/header&gt;</span>
+</div>
+```
+
+## Accessibility
+
+- A log that scrolls is focusable and named, so a keyboard reaches it and a screen reader says what it is. A log the person waits on may be `role="log"`, a live region that says new lines politely; one that prints many lines a second says a summary instead.
+- A diff says its changes in its signs and its words, not in its colors: a screen reader reads "+" and "-" before a line, and in forced colors an added word is underlined and a removed one struck through.
+
+## Tokens
+
+From [`css/components/log.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/log.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-border`, `--redz-radius-8`, `--redz-text`, `--redz-font-mono`, `--redz-fs-12`, `--redz-lh-20`, `--redz-space-8`, `--redz-space-12`, `--redz-bg-page`, `--redz-success`, `--redz-warning`, `--redz-danger`, `--redz-info`, `--redz-text-muted`, `--redz-bg`, `--redz-success-subtle`, `--redz-danger-subtle`.
+
 # Badges
 
 A badge is a short label of state or count beside the thing it describes: Published, Draft, 5 new. It never acts - a badge that does something is a chip or a button.

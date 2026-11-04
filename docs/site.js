@@ -112,6 +112,13 @@
 			row.classList.add('flash');
 		},
 		'busy-region': (button) => REDZ.ui.busy(document.getElementById(button.getAttribute('aria-controls')), new Promise((done) => setTimeout(done, 2000))),
+		'log-line': (button) => {
+			const log = document.getElementById(button.getAttribute('aria-controls'));
+			const time = document.createElement('span');
+			time.dataset.tone = 'muted';
+			time.textContent = new Date().toTimeString().slice(0, 8);
+			log.append('\n', time, ' A new line, kept in view');
+		},
 		'alert-fill': () => {
 			const words = document.getElementById('alert-fill-words');
 			words.textContent = words.textContent === '' ? 'The code is wrong. Two tries are left.' : '';

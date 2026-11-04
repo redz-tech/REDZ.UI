@@ -2609,6 +2609,7 @@ dialog-header
 dialog-lg
 dialog-sm
 dialog-title
+diff
 divide-x
 divide-y
 dot
@@ -3111,6 +3112,7 @@ list-group-item
 list-group-item-action
 list-group-numbered
 list-unstyled
+log
 m-0
 m-12
 m-16

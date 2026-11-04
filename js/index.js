@@ -23,6 +23,7 @@ import './pin.js';
 import './cooldown.js';
 import './view.js';
 import './highlight.js';
+import './log.js';
 import {toast} from './toast.js';
 import {confirm} from './confirm.js';
 import {busy} from './busy.js';

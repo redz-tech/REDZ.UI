@@ -399,6 +399,34 @@ window.REDZ_BEHAVE = (() => {
 				out.push('an empty alert is ' + empty[0] + ' px tall, ' + filled[0] + ' px filled, ' + tall() + ' px emptied again');
 			}
 		}]},
+		follow: {target: '#log-follow-lines', steps: [async (out) => {
+			const log = $('#log-follow-lines');
+			const line = async (words) => {
+				log.append('\n' + words);
+				await wait(50);
+			};
+			const end = () => log.scrollHeight - log.scrollTop - log.clientHeight < 8;
+			const loaded = log.scrollHeight > log.clientHeight && end();
+			await line('a line while following');
+			const followed = end();
+			log.scrollTop = 0;
+			await wait(50);
+			await line('a line while reading above');
+			const kept = log.scrollTop === 0;
+			log.scrollTop = log.scrollHeight;
+			await wait(50);
+			await line('a line back at the end');
+			if (!loaded || !followed || !kept || !end()) {
+				out.push('a followed log ' + (loaded ? '' : 'does not open at its end, ') + (followed ? '' : 'loses its end to a new line, ') + (kept ? '' : 'jumps to the end while read above, ') + (end() ? '' : 'does not follow again from the end'));
+			}
+			const diff = $('#log-diff-example .diff');
+			const signs = $$(':scope > :is(ins, del)', diff).map((line) => getComputedStyle(line, '::before').content).join(' ');
+			const gaps = $$(':scope > *', diff).map((line) => Math.round(line.getBoundingClientRect().top));
+			const lines = gaps.slice(1).map((top, i) => top - gaps[i]);
+			if (signs !== '"-" "+"' || lines.some((step) => step > 24)) {
+				out.push('a diff signs its lines ' + say(signs) + ' and steps them by ' + say(lines) + ' px');
+			}
+		}]},
 		live: {target: '#dot-live-example', steps: [async (out) => {
 			const [running, done] = $$('#dot-live-example .dot-live');
 			const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
