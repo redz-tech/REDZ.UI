@@ -7,17 +7,45 @@
 	<h2 id="utilities-scales">Scales</h2>
 	<ul>
 		<li>Space, in px: 0 2 4 8 12 16 20 24 32 40 48 64 - for <code>m</code>, <code>p</code> and <code>gap</code> with their sides: <code>mt</code> <code>mb</code> <code>ms</code> <code>me</code> <code>mx</code> <code>my</code>, the same for <code>p</code>. <code>ms</code> and <code>me</code> are the start and the end of the line, so they turn right to left.</li>
-		<li>Font size: 12 14 16 18 20 24 32; line height: 16 20 24 28; radius: 0 4 6 8 12 16 and <code>rounded-full</code>.</li>
+		<li>Font size: 11 12 14 16 18 20 24 32 40 48 - 11 for the smallest caption, 40 and 48 for one hero number; line height: 16 20 24 28; radius: 0 4 6 8 12 16 and <code>rounded-full</code>.</li>
 		<li>Width prefixes come on placement and spacing - display, flex, grid, gaps, order, text alignment, margins and paddings: <code>md:d-none</code>, <code>lg:p-24</code>.</li>
 	</ul>
 </section>
 
 <section class="vstack gap-16" aria-labelledby="utilities-ratio">
 	<h2 id="utilities-ratio">Aspect ratio</h2>
-	<p><code>ratio-1x1</code>, <code>ratio-4x3</code>, <code>ratio-16x9</code> and <code>ratio-21x9</code> keep an element's shape as its width changes - on a video, a map, an image's frame; <code>ratio-auto</code> lets it go. The class goes on the element itself: an image inside a frame fills it with <code>w-100 h-100 object-fit-cover</code>.</p>
+	<p><code>ratio-1x1</code>, <code>ratio-4x3</code>, <code>ratio-16x9</code> and <code>ratio-21x9</code> keep an element's shape as its width changes - on a video, a map, an image's frame; <code>ratio-auto</code> lets it go. <code>ratio-1.91x1</code> is the shape of a link's preview image on social networks, 1200 × 630. The class goes on the element itself: an image inside a frame fills it with <code>w-100 h-100 object-fit-cover</code>.</p>
 	<div class="docs-example" id="utilities-ratio-boxes">
 		<div class="ratio-16x9 w-50 hstack justify-content-center rounded-8 bg-page text-muted">16 × 9</div>
 		<div class="ratio-1x1 w-25 hstack justify-content-center rounded-8 bg-page text-muted">1 × 1</div>
+		<div class="ratio-1.91x1 w-50 hstack justify-content-center rounded-8 bg-page text-muted">1.91 × 1</div>
+	</div>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="utilities-sizes">
+	<h2 id="utilities-sizes">Sizes in pixels</h2>
+	<p>Where a control or a mark needs a fixed size - a narrow field in a toolbar, a column of codes, a thumbnail - the number is the pixels, as with the spaces:</p>
+	<ul>
+		<li><code>w-56</code> <code>w-64</code> <code>w-80</code> <code>w-96</code> <code>w-120</code> <code>w-160</code> beside the shares <code>w-25</code> to <code>w-100</code>; <code>h-32</code> <code>h-40</code> <code>h-72</code> beside <code>h-25</code> to <code>h-100</code>.</li>
+		<li><code>min-w-56</code> <code>min-w-120</code> <code>min-w-160</code> <code>min-w-200</code> <code>min-w-240</code> <code>min-w-288</code>; <code>max-w-80</code> to <code>max-w-1200</code>, with 360 and 560 among them.</li>
+		<li><code>size-32</code> <code>size-48</code> <code>size-64</code> <code>size-80</code> set both sides at once: a square.</li>
+	</ul>
+	<div class="docs-example" id="utilities-sizes-boxes">
+		<span class="size-32 rounded-8 bg-page"></span>
+		<span class="size-48 rounded-8 bg-page"></span>
+		<span class="size-64 rounded-8 bg-page"></span>
+		<span class="size-80 rounded-8 bg-page"></span>
+		<input class="form-control w-120" type="text" aria-label="Code" value="SAMUI-26">
+	</div>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="utilities-text">
+	<h2 id="utilities-text">Text: kept lines, captions, clamps</h2>
+	<p><code>text-pre-wrap</code> keeps the lines and the spaces a person typed - a note, an address - and still wraps a long line. <code>tracking-wide</code> spaces the letters of a caption in capitals. <code>line-clamp-2</code> and <code>line-clamp-3</code> cut a text after two or three lines with an ellipsis; the whole text stays in the page for a screen reader and for search.</p>
+	<div class="docs-example docs-example-stack" id="utilities-text-kinds">
+		<p class="text-pre-wrap">Villa 12, Bophut&#10;Koh Samui 84320</p>
+		<p class="fs-11 text-uppercase tracking-wide text-muted">Last 30 days</p>
+		<p class="line-clamp-2 max-w-360">Ang Thong by speedboat: a day among the forty-two islands of the marine park, with snorkelling at Koh Wua Ta Lap, the emerald lake of Koh Mae Ko and lunch on the beach, back by five.</p>
 	</div>
 </section>
 

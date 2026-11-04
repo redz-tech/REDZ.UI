@@ -12,6 +12,10 @@
 		box-shadow: var(--redz-shadow-3);
 	}
 
+	.drawer-lg {
+		inline-size: min(38rem, calc(100% - 1rem));
+	}
+
 	.drawer-start {
 		margin-inline: var(--redz-space-8) auto;
 	}

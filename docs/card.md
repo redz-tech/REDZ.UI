@@ -107,6 +107,16 @@ The utility `edge-top-{tone}` draws a 3 px line of a state on a card's top edge,
 </ul>
 ```
 
+For a category instead of a state - a site, a team, a kind of job - `edge-top-chart-1` to `-8` and `edge-start-chart-1` to `-8` take the charts' eight colors, so a row matches its series in a [chart](chart.md).
+
+```html
+<ul class="list-group" aria-label="Sites">
+	<li class="list-group-item edge-start-chart-1">Samui</li>
+	<li class="list-group-item edge-start-chart-2">Phuket</li>
+	<li class="list-group-item edge-start-chart-3">Krabi</li>
+</ul>
+```
+
 ## Accessibility
 
 - A card that is a part of the page is a `<section>` with `aria-labelledby` pointing at its heading; a card in a list of cards is an `<article>` or a list item.

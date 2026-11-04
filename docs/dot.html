@@ -136,6 +136,36 @@
 &lt;span class="hstack gap-8"&gt;&lt;span class="dot dot-danger"&gt;&lt;/span&gt;Down&lt;/span&gt;
 &lt;span class="hstack gap-8"&gt;&lt;span class="dot dot-warning"&gt;&lt;/span&gt;Slow&lt;/span&gt;
 &lt;span class="hstack gap-8"&gt;&lt;span class="dot dot-info"&gt;&lt;/span&gt;Updating&lt;/span&gt;</code></pre></div>
+
+					<h3 id="dot-categories">Categories</h3>
+					<p><code>dot-chart-1</code> to <code>dot-chart-8</code> take the charts' eight colors, for a category - a site, a team, a kind of job - not a state: the dot beside a name in a legend or a list matches its series in a <a href="chart.html">chart</a>.</p>
+					<div class="docs-sample"><div class="docs-example" id="dot-chart">
+						<span class="hstack gap-8"><span class="dot dot-chart-1"></span>Samui</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-2"></span>Phuket</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-3"></span>Krabi</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-4"></span>Chiang Mai</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-5"></span>Pattaya</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-6"></span>Hua Hin</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-7"></span>Bangkok</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-8"></span>Koh Tao</span>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;span class="hstack gap-8"&gt;&lt;span class="dot dot-chart-1"&gt;&lt;/span&gt;Samui&lt;/span&gt;
+&lt;span class="hstack gap-8"&gt;&lt;span class="dot dot-chart-2"&gt;&lt;/span&gt;Phuket&lt;/span&gt;
+&lt;span class="hstack gap-8"&gt;&lt;span class="dot dot-chart-3"&gt;&lt;/span&gt;Krabi&lt;/span&gt;
+&lt;span class="hstack gap-8"&gt;&lt;span class="dot dot-chart-4"&gt;&lt;/span&gt;Chiang Mai&lt;/span&gt;
+&lt;span class="hstack gap-8"&gt;&lt;span class="dot dot-chart-5"&gt;&lt;/span&gt;Pattaya&lt;/span&gt;
+&lt;span class="hstack gap-8"&gt;&lt;span class="dot dot-chart-6"&gt;&lt;/span&gt;Hua Hin&lt;/span&gt;
+&lt;span class="hstack gap-8"&gt;&lt;span class="dot dot-chart-7"&gt;&lt;/span&gt;Bangkok&lt;/span&gt;
+&lt;span class="hstack gap-8"&gt;&lt;span class="dot dot-chart-8"&gt;&lt;/span&gt;Koh Tao&lt;/span&gt;</code></pre></div>
+
+					<h3 id="dot-live">Live</h3>
+					<p><code>dot-live</code> breathes while its <code>data-state="running"</code> - a job at work, a stream on air - and is still at any other state, and always with reduced motion. The word beside it says the state.</p>
+					<div class="docs-sample"><div class="docs-example" id="dot-live-example">
+						<span class="hstack gap-8"><span class="dot dot-live dot-primary" data-state="running"></span>Importing</span>
+						<span class="hstack gap-8"><span class="dot dot-live dot-success" data-state="done"></span>Imported</span>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;span class="hstack gap-8"&gt;&lt;span class="dot dot-live dot-primary" data-state="running"&gt;&lt;/span&gt;Importing&lt;/span&gt;
+&lt;span class="hstack gap-8"&gt;&lt;span class="dot dot-live dot-success" data-state="done"&gt;&lt;/span&gt;Imported&lt;/span&gt;</code></pre></div>
 				</section>
 
 				<section class="vstack gap-12" aria-labelledby="dot-access">
@@ -149,7 +179,7 @@
 						<section class="vstack gap-12" aria-labelledby="dot-tokens">
 							<h2 id="dot-tokens">Tokens</h2>
 							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/dot.css"><code>css/components/dot.css</code></a>, which declares no custom property of its own.</p>
-							<p>It reads the theme's <code>--redz-text-faint</code>, <code>--redz-primary</code>, <code>--redz-secondary</code>, <code>--redz-success</code>, <code>--redz-danger</code>, <code>--redz-warning</code>, <code>--redz-info</code>.</p>
+							<p>It reads the theme's <code>--redz-text-faint</code>, <code>--redz-primary</code>, <code>--redz-secondary</code>, <code>--redz-success</code>, <code>--redz-danger</code>, <code>--redz-warning</code>, <code>--redz-info</code>, <code>--redz-chart-1</code>, <code>--redz-chart-2</code>, <code>--redz-chart-3</code>, <code>--redz-chart-4</code>, <code>--redz-chart-5</code>, <code>--redz-chart-6</code>, <code>--redz-chart-7</code>, <code>--redz-chart-8</code>.</p>
 						</section>
 				<footer class="d-flex flex-wrap justify-content-between gap-8 pt-16 border-top text-muted fs-12">
 					<span>MIT license · © 2026 Red Z Group · includes Bootstrap Icons (MIT)</span>

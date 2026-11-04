@@ -158,6 +158,19 @@
 					<div class="docs-example" id="utilities-ratio-boxes">
 						<div class="ratio-16x9 w-50 hstack justify-content-center rounded-8 bg-page text-muted">16 × 9</div>
 						<div class="ratio-1x1 w-25 hstack justify-content-center rounded-8 bg-page text-muted">1 × 1</div>
+						<div class="ratio-1.91x1 w-50 hstack justify-content-center rounded-8 bg-page text-muted">1.91 × 1</div>
+					</div>
+					<div class="docs-example" id="utilities-sizes-boxes">
+						<span class="size-32 rounded-8 bg-page"></span>
+						<span class="size-48 rounded-8 bg-page"></span>
+						<span class="size-64 rounded-8 bg-page"></span>
+						<span class="size-80 rounded-8 bg-page"></span>
+						<input class="form-control w-120" type="text" aria-label="شيفرة" value="SAMUI-26">
+					</div>
+					<div class="docs-example docs-example-stack" id="utilities-text-kinds">
+						<p class="text-pre-wrap">فيلا 12، بوبوت كوه ساموي 84320</p>
+						<p class="fs-11 text-uppercase tracking-wide text-muted">آخر 30 يومًا</p>
+						<p class="line-clamp-2 max-w-360">أنغ ثونغ بالقارب السريع: يوم بين الجزر الاثنتين والأربعين في الحديقة البحرية، مع غوص سطحي عند كوه وا تا لاب، والبحيرة الزمردية في كوه ماي كو، وغداء على الشاطئ، والعودة عند الخامسة.</p>
 					</div>
 					<div class="docs-example" id="utilities-skip">
 						<a class="visually-hidden-focusable btn" href="#utilities-all">انتقل إلى كل الأدوات المساعدة</a>
@@ -1227,6 +1240,13 @@
 							<li class="list-group-item hstack gap-12 edge-start-success bg-page"><span>الموقع والاستضافة<span class="d-block fs-12 text-muted">مشمول في كل خطة</span></span><span class="ms-auto text-muted">مشمول</span></li>
 						</ul>
 					</div>
+					<div class="docs-example docs-example-stack" id="card-edge-chart">
+						<ul class="list-group" aria-label="المواقع">
+							<li class="list-group-item edge-start-chart-1">ساموي</li>
+							<li class="list-group-item edge-start-chart-2">بوكيت</li>
+							<li class="list-group-item edge-start-chart-3">كرابي</li>
+						</ul>
+					</div>
 				</section>
 
 				<section class="vstack gap-16" aria-labelledby="all-accordion">
@@ -1922,6 +1942,20 @@
 						<span class="hstack gap-8"><span class="dot dot-warning"></span>بطيء</span>
 						<span class="hstack gap-8"><span class="dot dot-info"></span>جارٍ التحديث</span>
 					</div>
+					<div class="docs-example" id="dot-chart">
+						<span class="hstack gap-8"><span class="dot dot-chart-1"></span>ساموي</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-2"></span>بوكيت</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-3"></span>كرابي</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-4"></span>شيانغ ماي</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-5"></span>باتايا</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-6"></span>هوا هين</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-7"></span>بانكوك</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-8"></span>كو تاو</span>
+					</div>
+					<div class="docs-example" id="dot-live-example">
+						<span class="hstack gap-8"><span class="dot dot-live dot-primary" data-state="running"></span>جارٍ الاستيراد</span>
+						<span class="hstack gap-8"><span class="dot dot-live dot-success" data-state="done"></span>تم الاستيراد</span>
+					</div>
 				</section>
 
 				<section class="vstack gap-16" aria-labelledby="all-avatar">
@@ -1943,6 +1977,17 @@
 						<span class="icon-tile icon-tile-warning"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></span>
 						<span class="icon-tile icon-tile-info"><i class="bi bi-info-circle" aria-hidden="true"></i></span>
 						<span class="icon-tile icon-tile-sm"><i class="bi bi-upload" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-lg"><i class="bi bi-building" aria-hidden="true"></i></span>
+					</div>
+					<div class="docs-example" id="icon-tile-chart">
+						<span class="icon-tile icon-tile-chart-1"><i class="bi bi-airplane" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-2"><i class="bi bi-car-front" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-3"><i class="bi bi-tree" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-4"><i class="bi bi-sun" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-5"><i class="bi bi-flower1" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-6"><i class="bi bi-bicycle" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-7"><i class="bi bi-moon-stars" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-8"><i class="bi bi-heart" aria-hidden="true"></i></span>
 					</div>
 					<div class="docs-example" id="icon-tile-title">
 						<div class="hstack gap-12">
@@ -2165,6 +2210,16 @@
 								<button class="btn-close" type="button" commandfor="drawer-filters-start" command="close" aria-label="إغلاق"></button>
 							</div>
 							<div class="drawer-body"><p>لوح جانبي عند حافة البداية: اليسار في الإنجليزية، واليمين في العربية.</p></div>
+						</dialog>
+					</div>
+					<div class="docs-example" id="drawer-lg">
+						<button class="btn" type="button" commandfor="drawer-lg-panel" command="show-modal"><i class="bi bi-receipt" aria-hidden="true"></i>تفاصيل الحجز</button>
+						<dialog id="drawer-lg-panel" class="drawer drawer-lg" closedby="any" aria-labelledby="drawer-lg-panel-title">
+							<div class="drawer-header">
+								<h2 class="drawer-title" id="drawer-lg-panel-title">الحجز 2026-0418</h2>
+								<button class="btn-close" type="button" commandfor="drawer-lg-panel" command="close" aria-label="إغلاق"></button>
+							</div>
+							<div class="drawer-body"><p>أنغ ثونغ بالقارب السريع، 4 ضيوف، 12 نوفمبر 2026. مدفوع بالكامل بالبطاقة.</p></div>
 						</dialog>
 					</div>
 				</section>
@@ -2783,7 +2838,10 @@
 									<button class="btn btn-primary btn-lg w-100" type="submit"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>تسجيل الدخول</button>
 								</div>
 							</form>
-							<p class="text-center"><a href="#page-center-example">نسيت كلمة المرور؟</a></p>
+							<div class="hstack flex-wrap justify-content-center row-gap-4 column-gap-16">
+								<a href="#page-center-example">نسيت كلمة المرور؟</a>
+								<a href="#page-center-example">تسجيل الدخول برمز</a>
+							</div>
 						</div>
 					</div>
 				</section>

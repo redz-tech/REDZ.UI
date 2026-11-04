@@ -160,6 +160,19 @@
 					<div class="docs-example" id="utilities-ratio-boxes">
 						<div class="ratio-16x9 w-50 hstack justify-content-center rounded-8 bg-page text-muted">16 × 9</div>
 						<div class="ratio-1x1 w-25 hstack justify-content-center rounded-8 bg-page text-muted">1 × 1</div>
+						<div class="ratio-1.91x1 w-50 hstack justify-content-center rounded-8 bg-page text-muted">1.91 × 1</div>
+					</div>
+					<div class="docs-example" id="utilities-sizes-boxes">
+						<span class="size-32 rounded-8 bg-page"></span>
+						<span class="size-48 rounded-8 bg-page"></span>
+						<span class="size-64 rounded-8 bg-page"></span>
+						<span class="size-80 rounded-8 bg-page"></span>
+						<input class="form-control w-120" type="text" aria-label="Code" value="SAMUI-26">
+					</div>
+					<div class="docs-example docs-example-stack" id="utilities-text-kinds">
+						<p class="text-pre-wrap">Villa 12, Bophut&#10;Koh Samui 84320</p>
+						<p class="fs-11 text-uppercase tracking-wide text-muted">Last 30 days</p>
+						<p class="line-clamp-2 max-w-360">Ang Thong by speedboat: a day among the forty-two islands of the marine park, with snorkelling at Koh Wua Ta Lap, the emerald lake of Koh Mae Ko and lunch on the beach, back by five.</p>
 					</div>
 					<div class="docs-example" id="utilities-skip">
 						<a class="visually-hidden-focusable btn" href="#utilities-all">Skip to every utility</a>
@@ -1229,6 +1242,13 @@
 							<li class="list-group-item hstack gap-12 edge-start-success bg-page"><span>Site and hosting<span class="d-block fs-12 text-muted">Included in every plan</span></span><span class="ms-auto text-muted">Included</span></li>
 						</ul>
 					</div>
+					<div class="docs-example docs-example-stack" id="card-edge-chart">
+						<ul class="list-group" aria-label="Sites">
+							<li class="list-group-item edge-start-chart-1">Samui</li>
+							<li class="list-group-item edge-start-chart-2">Phuket</li>
+							<li class="list-group-item edge-start-chart-3">Krabi</li>
+						</ul>
+					</div>
 				</section>
 
 				<section class="vstack gap-16" aria-labelledby="all-accordion">
@@ -1924,6 +1944,20 @@
 						<span class="hstack gap-8"><span class="dot dot-warning"></span>Slow</span>
 						<span class="hstack gap-8"><span class="dot dot-info"></span>Updating</span>
 					</div>
+					<div class="docs-example" id="dot-chart">
+						<span class="hstack gap-8"><span class="dot dot-chart-1"></span>Samui</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-2"></span>Phuket</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-3"></span>Krabi</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-4"></span>Chiang Mai</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-5"></span>Pattaya</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-6"></span>Hua Hin</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-7"></span>Bangkok</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-8"></span>Koh Tao</span>
+					</div>
+					<div class="docs-example" id="dot-live-example">
+						<span class="hstack gap-8"><span class="dot dot-live dot-primary" data-state="running"></span>Importing</span>
+						<span class="hstack gap-8"><span class="dot dot-live dot-success" data-state="done"></span>Imported</span>
+					</div>
 				</section>
 
 				<section class="vstack gap-16" aria-labelledby="all-avatar">
@@ -1945,6 +1979,17 @@
 						<span class="icon-tile icon-tile-warning"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></span>
 						<span class="icon-tile icon-tile-info"><i class="bi bi-info-circle" aria-hidden="true"></i></span>
 						<span class="icon-tile icon-tile-sm"><i class="bi bi-upload" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-lg"><i class="bi bi-building" aria-hidden="true"></i></span>
+					</div>
+					<div class="docs-example" id="icon-tile-chart">
+						<span class="icon-tile icon-tile-chart-1"><i class="bi bi-airplane" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-2"><i class="bi bi-car-front" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-3"><i class="bi bi-tree" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-4"><i class="bi bi-sun" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-5"><i class="bi bi-flower1" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-6"><i class="bi bi-bicycle" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-7"><i class="bi bi-moon-stars" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-8"><i class="bi bi-heart" aria-hidden="true"></i></span>
 					</div>
 					<div class="docs-example" id="icon-tile-title">
 						<div class="hstack gap-12">
@@ -2167,6 +2212,16 @@
 								<button class="btn-close" type="button" commandfor="drawer-filters-start" command="close" aria-label="Close"></button>
 							</div>
 							<div class="drawer-body"><p>A drawer at the start edge: the left in English, the right in Arabic.</p></div>
+						</dialog>
+					</div>
+					<div class="docs-example" id="drawer-lg">
+						<button class="btn" type="button" commandfor="drawer-lg-panel" command="show-modal"><i class="bi bi-receipt" aria-hidden="true"></i>Booking details</button>
+						<dialog id="drawer-lg-panel" class="drawer drawer-lg" closedby="any" aria-labelledby="drawer-lg-panel-title">
+							<div class="drawer-header">
+								<h2 class="drawer-title" id="drawer-lg-panel-title">Booking 2026-0418</h2>
+								<button class="btn-close" type="button" commandfor="drawer-lg-panel" command="close" aria-label="Close"></button>
+							</div>
+							<div class="drawer-body"><p>Ang Thong by speedboat, 4 guests, 12 November 2026. Paid in full by card.</p></div>
 						</dialog>
 					</div>
 				</section>
@@ -2785,7 +2840,10 @@
 									<button class="btn btn-primary btn-lg w-100" type="submit"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Sign in</button>
 								</div>
 							</form>
-							<p class="text-center"><a href="#page-center-example">Forgot the password?</a></p>
+							<div class="hstack flex-wrap justify-content-center row-gap-4 column-gap-16">
+								<a href="#page-center-example">Forgot the password?</a>
+								<a href="#page-center-example">Sign in with a code</a>
+							</div>
 						</div>
 					</div>
 				</section>

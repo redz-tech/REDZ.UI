@@ -22,6 +22,50 @@
 		font-size: 1rem;
 	}
 
+	.icon-tile-lg {
+		inline-size: 3rem;
+		block-size: 3rem;
+		border-radius: var(--redz-radius-16);
+		font-size: 1.5rem;
+	}
+
+	:is(.icon-tile-chart-1, .icon-tile-chart-2, .icon-tile-chart-3, .icon-tile-chart-4, .icon-tile-chart-5, .icon-tile-chart-6, .icon-tile-chart-7, .icon-tile-chart-8) {
+		--redz-tile-bg: color-mix(in oklch, var(--redz-tile-chart) 16%, var(--redz-bg));
+		--redz-tile-fg: color-mix(in oklch, var(--redz-tile-chart) 75%, var(--redz-text));
+	}
+
+	.icon-tile-chart-1 {
+		--redz-tile-chart: var(--redz-chart-1);
+	}
+
+	.icon-tile-chart-2 {
+		--redz-tile-chart: var(--redz-chart-2);
+	}
+
+	.icon-tile-chart-3 {
+		--redz-tile-chart: var(--redz-chart-3);
+	}
+
+	.icon-tile-chart-4 {
+		--redz-tile-chart: var(--redz-chart-4);
+	}
+
+	.icon-tile-chart-5 {
+		--redz-tile-chart: var(--redz-chart-5);
+	}
+
+	.icon-tile-chart-6 {
+		--redz-tile-chart: var(--redz-chart-6);
+	}
+
+	.icon-tile-chart-7 {
+		--redz-tile-chart: var(--redz-chart-7);
+	}
+
+	.icon-tile-chart-8 {
+		--redz-tile-chart: var(--redz-chart-8);
+	}
+
 	.icon-tile-secondary {
 		--redz-tile-bg: var(--redz-secondary-subtle);
 		--redz-tile-fg: var(--redz-secondary);
