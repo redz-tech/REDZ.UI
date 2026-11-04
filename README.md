@@ -78,6 +78,8 @@ attaches by delegation on `document`, so nothing is set up per element and marku
   into a "More" menu after the nav, the current link and `nav-overflow-keep` ones staying in the row; a plain click on
   an item clicks the hidden link itself; a link that opens a menu folds as a group of its items. It watches the
   wrapper's size and the nav's links, and takes up a wrapper added later (`js/nav-overflow.js`).
+- **Scrolling navs:** a nav or a tab list wider than its box scrolls, the edge it goes on past fades (`data-more`:
+  start, end), and its current item is scrolled into its view when it loads (`js/nav-scroll.js`).
 - **Navbars** (`navbar` with a `navbar-toggler` and a `<nav class="drawer" popover>`): below its `navbar-expand` width
   the toggler opens the links as a panel, which closes when a link in it is followed, when the focus leaves it for the
   page and when the header grows wide enough for its row (`js/navbar.js`).
@@ -135,9 +137,15 @@ attaches by delegation on `document`, so nothing is set up per element and marku
   marked; left alone it submits its form (`js/pin.js`).
 - **Cooldowns:** a button with `data-cooldown="N"` waits N seconds, `aria-disabled`, the seconds left after its words,
   then wakes; setting the attribute again starts it again (`js/cooldown.js`).
+- **Views:** buttons with `command="--view"`, `aria-controls` and a `value` put the value in the list's `data-view` -
+  tiles or rows - press the one that shows and tell the page in `redz:view`, which keeps the choice (`js/view.js`).
+- **Highlights:** elements that share a `data-highlight` key light together on hover and focus - a chart's lane and its
+  row in a table (`js/highlight.js`).
 - **Uploads:** an `upload` takes files chosen, dropped on its `upload-zone` or pasted, checks each against `accept` and
   `data-max-size`, gives each a row from the page's `<template>` and sends each by `redz:files`, with its own progress
-  and its own error (`js/upload.js`).
+  and its own error; an input without `multiple` holds one file, a new one taking the place of the last;
+  `upload-thumbs` shows images as thumbnails, `data-max-files` caps the count, and a page may answer with a prepared
+  file that the form then sends (`js/upload.js`).
 - **The page's answers:** a moment only the page can carry out is a cancelable `redz:*` event on the widget; the page
   that takes it calls `event.preventDefault()` and `event.detail.respondWith(promise)`, and the widget waits for the
   promise (`js/answer.js`).
@@ -161,6 +169,20 @@ library's components as blocks kept as they came, a block that moves drawn open 
 in a frame whose own Content-Security-Policy runs no script, and every value is parsed inert and cleaned, so nothing
 in a stored body or on the clipboard runs. Its words are the island's `editor.*` texts, which the passport's
 `editor.texts` lists apart from the library's; its budgets are 30 KB of script and 5 KB of styles, gzipped.
+
+## Charts, calendars and the media library
+
+Three more packages, linked on the screens that show them, listed in the passport's `packages`:
+- `charts/charts.css` and the module `charts/charts.js` - a chart is the table of its numbers drawn by CSS: columns
+  stacked by day (`chart`), a row's sparkline of runs (`spark`), a board of lanes over a time window (`lanes`). The
+  numbers are `data-v`, `data-at`, `data-from`, `data-to`, `data-median` and `data-now`, shares from 0 to 1, which the
+  module hands to the stylesheet through the CSSOM - a strict CSP that refuses `style` attributes allows it - and a
+  chart table keeps its table roles for screen readers.
+- `calendar/calendar.css` - a month of days (`calendar`) and days across things (`schedule`); no script.
+- `media/media.css` - a folder of images as tiles or rows (`media-grid`, `media-tile`); its view switch is `--view`
+  and its reordering `data-reorder`, both in the main script.
+
+Their budgets, gzipped: charts 3 KB of styles and 2 KB of script, the calendar and the media library 2 KB each.
 
 ## Documentation
 `docs/` on the site: getting started, layout, utilities, tokens, icons, the move from Bootstrap 5.3, and a page per

@@ -729,10 +729,21 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 			PROBE__Do($h, 'Eval', 'REDZ_PROBE.chooseFiles(' . json_encode($id) . ')');
 			usleep(300000);
 			$s = $state();
-			$rows = array_slice($s['rows'], -2);
-			if (count($rows) !== 2 || !in_array($rows[0]['state'], ['sending', 'done', 'ready'], true) || $rows[1]['state'] !== 'failed' || $rows[1]['error'] === '') {
-				$findings[] = $what . 'two files chosen, one it takes and one it refuses: their rows say ' . json_encode($rows);
-				continue;
+			if (!$s['multiple']) {
+				$first = $s['rows'];
+				PROBE__Do($h, 'Eval', 'REDZ_PROBE.chooseFiles(' . json_encode($id) . ', 2)');
+				usleep(300000);
+				$s = $state();
+				if (count($first) !== 1 || $first[0]['state'] !== 'failed' || $first[0]['error'] === '' || count($s['rows']) !== 1 || !in_array($s['rows'][0]['state'], ['sending', 'done', 'ready'], true)) {
+					$findings[] = $what . 'one file at a time: of two chosen the first, refused, and then a good one in its place - the rows say ' . json_encode($first) . ', then ' . json_encode($s['rows']);
+					continue;
+				}
+			} else {
+				$rows = array_slice($s['rows'], -2);
+				if (count($rows) !== 2 || !in_array($rows[0]['state'], ['sending', 'done', 'ready'], true) || $rows[1]['state'] !== 'failed' || $rows[1]['error'] === '') {
+					$findings[] = $what . 'two files chosen, one it takes and one it refuses: their rows say ' . json_encode($rows);
+					continue;
+				}
 			}
 			$count = count($s['rows']);
 			PROBE__Do($h, 'Eval', '(document.getElementById(' . json_encode($id) . ').querySelector(".upload-list > :last-child [data-file-remove]").click(), true)');

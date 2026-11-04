@@ -6,6 +6,22 @@
 		scrollbar-width: none;
 	}
 
+	.nav[data-more] {
+		--redz-fade-left: 0px;
+		--redz-fade-right: 0px;
+		mask-image: linear-gradient(to right, transparent, #000 var(--redz-fade-left), #000 calc(100% - var(--redz-fade-right)), transparent);
+	}
+
+	.nav:dir(ltr)[data-more~="start"],
+	.nav:dir(rtl)[data-more~="end"] {
+		--redz-fade-left: 2.5rem;
+	}
+
+	.nav:dir(ltr)[data-more~="end"],
+	.nav:dir(rtl)[data-more~="start"] {
+		--redz-fade-right: 2.5rem;
+	}
+
 	.nav-link {
 		display: inline-flex;
 		align-items: center;

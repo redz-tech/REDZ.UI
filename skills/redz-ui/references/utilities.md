@@ -507,6 +507,13 @@ row.classList.add('flash');
 | `max-w-768` | `max-inline-size: 48rem;` | - |
 | `max-w-960` | `max-inline-size: 60rem;` | - |
 | `max-w-1200` | `max-inline-size: 75rem;` | - |
+| `max-h-160` | `max-block-size: 10rem;` | - |
+| `max-h-240` | `max-block-size: 15rem;` | - |
+| `max-h-320` | `max-block-size: 20rem;` | - |
+| `max-h-400` | `max-block-size: 25rem;` | - |
+| `max-h-480` | `max-block-size: 30rem;` | - |
+| `max-h-560` | `max-block-size: 35rem;` | - |
+| `max-h-640` | `max-block-size: 40rem;` | - |
 | `min-w-0` | `min-inline-size: 0;` | - |
 | `vw-100` | `inline-size: 100vw;` | - |
 | `min-vw-100` | `min-inline-size: 100vw;` | - |

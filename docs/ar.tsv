@@ -1033,3 +1033,195 @@ Nightly backup, 98 percent succeeded	النسخ الاحتياطي الليلي�
 late by 6 min	متأخر 6 دقائق
 Mail queue, late	طابور البريد، متأخر
 Mail queue, 71 percent succeeded	طابور البريد، نجح 71 بالمئة
+Charts	الرسوم البيانية
+Calendars	التقاويم
+Messages sent per day	الرسائل المرسلة يوميًا
+Day	اليوم
+Free	مجانية
+Nov 1: 120 free, 30 paid, 4 failed	1 نوفمبر: 120 مجانية، 30 مدفوعة، 4 فاشلة
+Nov 1	1 نوفمبر
+Nov 2: 132 free, 28 paid, 2 failed	2 نوفمبر: 132 مجانية، 28 مدفوعة، 2 فاشلة
+Nov 2	2 نوفمبر
+Nov 3: 98 free, 41 paid, 6 failed	3 نوفمبر: 98 مجانية، 41 مدفوعة، 6 فاشلة
+Nov 3	3 نوفمبر
+Nov 4: none	4 نوفمبر: لا شيء
+Nov 4	4 نوفمبر
+Nov 5: 144 free, 35 paid, 3 failed	5 نوفمبر: 144 مجانية، 35 مدفوعة، 3 فاشلة
+Nov 5	5 نوفمبر
+Nov 6: 160 free, 22 paid, 1 failed	6 نوفمبر: 160 مجانية، 22 مدفوعة، 1 فاشلة
+Nov 6	6 نوفمبر
+Nov 7: 110 free, 30 paid, 9 failed	7 نوفمبر: 110 مجانية، 30 مدفوعة، 9 فاشلة
+Nov 7	7 نوفمبر
+Nov 8: 90 free, 25 paid, 2 failed	8 نوفمبر: 90 مجانية، 25 مدفوعة، 2 فاشلة
+Nov 8	8 نوفمبر
+Nov 9: none	9 نوفمبر: لا شيء
+Nov 9	9 نوفمبر
+Nov 10: 150 free, 40 paid, 5 failed	10 نوفمبر: 150 مجانية، 40 مدفوعة، 5 فاشلة
+Nov 10	10 نوفمبر
+Nov 11: 170 free, 12 paid, 0 failed	11 نوفمبر: 170 مجانية، 12 مدفوعة، 0 فاشلة
+Nov 11	11 نوفمبر
+Nov 12: 125 free, 33 paid, 4 failed	12 نوفمبر: 125 مجانية، 33 مدفوعة، 4 فاشلة
+Nov 12	12 نوفمبر
+Nov 13: 140 free, 29 paid, 3 failed	13 نوفمبر: 140 مجانية، 29 مدفوعة، 3 فاشلة
+Nov 13	13 نوفمبر
+Nov 14: 155 free, 31 paid, 2 failed	14 نوفمبر: 155 مجانية، 31 مدفوعة، 2 فاشلة
+Nov 14	14 نوفمبر
+Bookings by channel, this week	الحجوزات حسب القناة، هذا الأسبوع
+Partners	الشركاء
+Walk-in	الحضور المباشر
+Mon: 12 site, 5 partners, 3 walk-in	الاثنين: 12 من الموقع، 5 من الشركاء، 3 حضور مباشر
+Mon	الاثنين
+Tue: 15 site, 6 partners, 2 walk-in	الثلاثاء: 15 من الموقع، 6 من الشركاء، 2 حضور مباشر
+Tue	الثلاثاء
+Wed: 9 site, 8 partners, 4 walk-in	الأربعاء: 9 من الموقع، 8 من الشركاء، 4 حضور مباشر
+Wed	الأربعاء
+Thu: 18 site, 4 partners, 1 walk-in	الخميس: 18 من الموقع، 4 من الشركاء، 1 حضور مباشر
+Thu	الخميس
+Fri: 22 site, 9 partners, 5 walk-in	الجمعة: 22 من الموقع، 9 من الشركاء، 5 حضور مباشر
+Fri	الجمعة
+Sat: 30 site, 12 partners, 6 walk-in	السبت: 30 من الموقع، 12 من الشركاء، 6 حضور مباشر
+Sat	السبت
+Sun: 26 site, 10 partners, 7 walk-in	الأحد: 26 من الموقع، 10 من الشركاء، 7 حضور مباشر
+Sun	الأحد
+Agents	الوكلاء
+Agent	الوكيل
+Last 20 runs	آخر 20 تشغيلًا
+backup.nightly	backup.nightly
+20 runs: 18 OK, 1 timeout, 1 failed	20 تشغيلًا: 18 ناجحة، 1 انتهت مهلته، 1 فاشلة
+OK · 1.2 s	ناجح · 1.2 ث
+OK · 1.1 s	ناجح · 1.1 ث
+OK · 1.4 s	ناجح · 1.4 ث
+OK · 1.3 s	ناجح · 1.3 ث
+Timeout · 3.9 s	انتهت المهلة · 3.9 ث
+OK · 1 s	ناجح · 1 ث
+OK · 1.5 s	ناجح · 1.5 ث
+Failed · 2.8 s	فشل · 2.8 ث
+OK · 1.6 s	ناجح · 1.6 ث
+Running · 0.6 s	قيد التشغيل · 0.6 ث
+20 runs, median 1.2 s, longest 3.9 s	20 تشغيلًا، الوسيط 1.2 ث، الأطول 3.9 ث
+Nov 3, 02:00 · 1.2 s	3 نوفمبر، 02:00 · 1.2 ث
+Nov 3, 03:00 · 1.1 s	3 نوفمبر، 03:00 · 1.1 ث
+Nov 3, 04:00 · 1.4 s	3 نوفمبر، 04:00 · 1.4 ث
+Nov 3, 05:00 · 1.3 s	3 نوفمبر، 05:00 · 1.3 ث
+Nov 3, 06:00 · 3.9 s	3 نوفمبر، 06:00 · 3.9 ث
+Nov 3, 07:00 · 1.2 s	3 نوفمبر، 07:00 · 1.2 ث
+Nov 3, 08:00 · 1 s	3 نوفمبر، 08:00 · 1 ث
+Nov 3, 09:00 · 1.5 s	3 نوفمبر، 09:00 · 1.5 ث
+Nov 3, 10:00 · 1.2 s	3 نوفمبر، 10:00 · 1.2 ث
+Nov 3, 11:00 · 2.8 s	3 نوفمبر، 11:00 · 2.8 ث
+Nov 3, 12:00 · 1.3 s	3 نوفمبر، 12:00 · 1.3 ث
+Nov 3, 13:00 · 1.1 s	3 نوفمبر، 13:00 · 1.1 ث
+Nov 3, 14:00 · 1.2 s	3 نوفمبر، 14:00 · 1.2 ث
+Nov 3, 15:00 · 1.6 s	3 نوفمبر، 15:00 · 1.6 ث
+Nov 3, 16:00 · 1.2 s	3 نوفمبر، 16:00 · 1.2 ث
+Nov 3, 17:00 · 1.3 s	3 نوفمبر، 17:00 · 1.3 ث
+Nov 3, 18:00 · 1.1 s	3 نوفمبر، 18:00 · 1.1 ث
+Nov 3, 19:00 · 1.4 s	3 نوفمبر، 19:00 · 1.4 ث
+Nov 3, 20:00 · 1.2 s	3 نوفمبر، 20:00 · 1.2 ث
+Nov 3, 21:00 · 0.6 s	3 نوفمبر، 21:00 · 0.6 ث
+Median 1.2 s · longest 3.9 s	الوسيط 1.2 ث · الأطول 3.9 ث
+The next 24 hours	الساعات الـ24 القادمة
+now	الآن
+mail.queue	mail.queue
+mail.queue - every minute	mail.queue - كل دقيقة
+continuous	مستمر
+backup.nightly - 02:00	backup.nightly - 02:00
+fx.rates	fx.rates
+fx.rates - 16:00	fx.rates - 16:00
+fx.rates - 20:00	fx.rates - 20:00
+fx.rates - 00:00	fx.rates - 00:00
+fx.rates - 04:00	fx.rates - 04:00
+fx.rates - 08:00	fx.rates - 08:00
+fx.rates - 12:00	fx.rates - 12:00
+Next run	التشغيل التالي
+Every minute	كل دقيقة
+Days	الأيام
+October	أكتوبر
+November 2026	نوفمبر 2026
+December	ديسمبر
+Today	اليوم
+Equipment booked in November 2026	المعدات المحجوزة في نوفمبر 2026
+Monday	الاثنين
+Tuesday	الثلاثاء
+Wednesday	الأربعاء
+Thursday	الخميس
+Friday	الجمعة
+Saturday	السبت
+Sunday	الأحد
+Excavator · Riverside tower	حفارة · برج ريفرسايد
+Excavator	حفارة
+Scaffold set · Somchai Rattanakul	طقم سقالات · سومتشاي راتاناكول
+Scaffold set	طقم سقالات
+Concrete mixer · Harbor view	خلاطة خرسانة · إطلالة الميناء
+Concrete mixer	خلاطة خرسانة
+more	أخرى
+Generator · Harbor view	مولّد · إطلالة الميناء
+Generator	مولّد
+Equipment out, November 2 to 8	المعدات المُعارة، من 2 إلى 8 نوفمبر
+Equipment	المعدات
+Lagoon tours · 4	جولات البحيرة · 4
+Tiles	بطاقات
+Rows	صفوف
+Images of the folder	صور المجلد
+Select lagoon.svg	حدّد lagoon.svg
+Move: lagoon.svg	انقل: lagoon.svg
+lagoon.svg	lagoon.svg
+1600×900 · 24 KB · 4 sizes	1600×900 · 24 KB · 4 مقاسات
+Copy the tag: lagoon.svg	انسخ الوسم: lagoon.svg
+Where it is used: lagoon.svg	أين تُستخدم: lagoon.svg
+Delete: lagoon.svg	احذف: lagoon.svg
+Select qr.svg	حدّد qr.svg
+Move: qr.svg	انقل: qr.svg
+The QR code of the docs	رمز QR للوثائق
+qr.svg	qr.svg
+45×45 · 3 KB · 1 size	45×45 · 3 KB · مقاس واحد
+Copy the tag: qr.svg	انسخ الوسم: qr.svg
+Where it is used: qr.svg	أين تُستخدم: qr.svg
+Delete: qr.svg	احذف: qr.svg
+Select pier-at-dawn.svg	حدّد pier-at-dawn.svg
+Move: pier-at-dawn.svg	انقل: pier-at-dawn.svg
+The pier at dawn	الرصيف عند الفجر
+pier-at-dawn.svg	pier-at-dawn.svg
+2400×1600 · 31 KB · 5 sizes	2400×1600 · 31 KB · 5 مقاسات
+Copy the tag: pier-at-dawn.svg	انسخ الوسم: pier-at-dawn.svg
+Where it is used: pier-at-dawn.svg	أين تُستخدم: pier-at-dawn.svg
+Delete: pier-at-dawn.svg	احذف: pier-at-dawn.svg
+Select boat.svg	حدّد boat.svg
+boat.svg	boat.svg
+Stops	المحطات
+Reference photo	الصورة المرجعية
+Drop a photo here, or choose one	أفلت صورة هنا، أو اختر واحدة
+One image, up to 2 MB	صورة واحدة، حتى 2 ميغابايت
+File	الملف
+Task views	عروض المهام
+Doing	قيد التنفيذ
+Checking	قيد المراجعة
+Returned	مُعادة
+Cancelled	ملغاة
+Message threads	سلاسل الرسائل
+Screenshots	لقطات الشاشة
+Drop or paste screenshots here, or choose them	أفلت لقطات الشاشة هنا أو الصقها، أو اخترها
+Up to 3 images	حتى 3 صور
+Tickets	التذاكر
+The booking page shows the wrong price	صفحة الحجز تعرض سعرًا خاطئًا
+A new language for the site	لغة جديدة للموقع
+The invoice for October	فاتورة أكتوبر
+Photos do not upload from a phone	الصور لا تُرفع من الهاتف
+Change the site's address	تغيير عنوان الموقع
+Two owners for one site	مالكان لموقع واحد
+New ticket	تذكرة جديدة
+AR	AR
+The child price on Ang Thong shows 2,500 THB. It should be 1,900 THB since Monday.	سعر الطفل في أنغ ثونغ يظهر 2,500 بات. يجب أن يكون 1,900 بات منذ الاثنين.
+Screenshot of the price	لقطة شاشة للسعر
+REDZ support	دعم REDZ
+edited	مُعدّلة
+Edit the message	عدّل الرسالة
+Thank you - the price list was published before the change. It is fixed now; please check the page again.	شكرًا - نُشرت قائمة الأسعار قبل التغيير. تم إصلاحها الآن؛ يرجى مراجعة الصفحة مرة أخرى.
+Message	الرسالة
+The fixed page	الصفحة بعد الإصلاح
+Remove the fixed page	أزل الصفحة بعد الإصلاح
+Reply	الرد
+Write a reply	اكتب ردًا
+Send	إرسال
+Close the ticket	أغلق التذكرة
+{name}: up to {count} files	{name}: حتى {count} ملفات

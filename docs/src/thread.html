@@ -1,0 +1,54 @@
+<header class="vstack gap-8">
+	<h1>Message threads</h1>
+	<p class="docs-lead">A conversation in a card: each message with its author, time and files, the person's own at the end in a tint, the other side's at the start - edited in place, the reply box held under the thread.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="thread-examples">
+	<h2 id="thread-examples">Example</h2>
+	<p><code>ol class="thread"</code> of <code>thread-message</code>s; <code>data-mine</code> puts the person's own at the end in a tint. A message holds an <a href="avatar.html">avatar</a> and <code>thread-body</code>: <code>thread-meta</code> - the name, a <code>time</code>, <code>thread-edited</code> and the message's buttons -, <code>thread-bubble</code>, which keeps its line breaks, and <code>thread-files</code> - thumbnails up to 9rem × 7rem, each with a <code>thread-file-remove</code> that shows while the message is edited. Editing is an <a href="inline-edit.html">inline edit</a>: the form takes the bubble's place. In a <code>card card-scroll</code> with a height the thread scrolls between the card's header and its footer, which holds the reply.</p>
+	<div class="docs-example docs-example-stack" id="thread-desk">
+		<section class="card card-scroll max-h-560" aria-labelledby="thread-desk-title">
+			<div class="card-header hstack flex-wrap gap-8"><h2 id="thread-desk-title">The booking page shows the wrong price</h2><span class="badge badge-subtle-warning">Open</span></div>
+			<div class="card-body">
+				<ol class="thread" aria-label="Messages">
+					<li class="thread-message">
+						<span class="avatar avatar-sm" aria-hidden="true">AR</span>
+						<div class="thread-body">
+							<div class="thread-meta"><span>Ananda Resort</span><time datetime="2026-11-04T09:12">09:12</time></div>
+							<div class="thread-bubble">The child price on Ang Thong shows 2,500 THB.&#10;It should be 1,900 THB since Monday.</div>
+							<div class="thread-files"><a href="img/lagoon.svg"><img src="img/lagoon.svg" alt="Screenshot of the price"></a></div>
+						</div>
+					</li>
+					<li class="thread-message" data-mine>
+						<span class="avatar avatar-sm" aria-hidden="true">RZ</span>
+						<div class="thread-body">
+							<div class="thread-meta"><span>REDZ support</span><time datetime="2026-11-04T09:30">09:30</time><span class="thread-edited">edited</span><button class="btn btn-xs btn-icon btn-text" type="button" commandfor="thread-desk-edit" command="--edit" aria-label="Edit the message"><i class="bi bi-pencil" aria-hidden="true"></i></button></div>
+							<div class="thread-bubble" id="thread-desk-reply">Thank you - the price list was published before the change. It is fixed now; please check the page again.</div>
+							<form class="inline-edit-form" id="thread-desk-edit" data-for="thread-desk-reply" hidden>
+								<textarea class="form-control" name="text" aria-label="Message" rows="3">Thank you - the price list was published before the change. It is fixed now; please check the page again.</textarea>
+								<button class="btn btn-sm btn-primary" type="submit">Save</button>
+								<button class="btn btn-sm" type="button" commandfor="thread-desk-edit" command="--cancel">Cancel</button>
+								<div class="invalid-feedback" hidden></div>
+							</form>
+							<div class="thread-files"><span><img src="img/qr.svg" alt="The fixed page"><button class="btn btn-xs btn-icon thread-file-remove" type="button" aria-label="Remove the fixed page"><i class="bi bi-x-lg" aria-hidden="true"></i></button></span></div>
+						</div>
+					</li>
+				</ol>
+			</div>
+			<div class="card-footer">
+				<textarea class="form-control" rows="2" aria-label="Reply" placeholder="Write a reply"></textarea>
+				<button class="btn btn-primary" type="button"><i class="bi bi-send" aria-hidden="true"></i>Send</button>
+				<button class="btn ms-auto" type="button">Close the ticket</button>
+			</div>
+		</section>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="thread-access">
+	<h2 id="thread-access">Accessibility</h2>
+	<ul>
+		<li>The thread is a list with a name; each message starts with its author and time in words, so the side is never told by place or tint alone.</li>
+		<li>A file's thumbnail has the file's own <code>alt</code>; its remove button is named by the file.</li>
+		<li>The scrolling body of a card is reached by <kbd>Tab</kbd> through its buttons and links; give it <code>tabindex="0"</code> and a name when it holds none.</li>
+	</ul>
+</section>

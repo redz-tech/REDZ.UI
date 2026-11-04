@@ -114,6 +114,22 @@ A nav or a list group with `data-scrollspy` marks the link to the section in vie
 </div>
 ```
 
+### A row that scrolls
+
+A nav or a tab list wider than its box scrolls sideways, and the edge it goes on past fades - `data-more` says which, `start`, `end` or both, as the person scrolls; when the page loads, the current or selected item is scrolled into the row's view, the page itself left where it is.
+
+```html
+<nav class="nav nav-underline max-w-320" aria-label="Task views">
+	<a class="nav-link" href="#nav-scrolling">All <span class="badge">48</span></a>
+	<a class="nav-link" href="#nav-scrolling">New <span class="badge">6</span></a>
+	<a class="nav-link" href="#nav-scrolling">Doing <span class="badge">9</span></a>
+	<a class="nav-link" href="#nav-scrolling">Checking <span class="badge">4</span></a>
+	<a class="nav-link" href="#nav-scrolling" aria-current="page">Done <span class="badge">25</span></a>
+	<a class="nav-link" href="#nav-scrolling">Returned <span class="badge">3</span></a>
+	<a class="nav-link" href="#nav-scrolling">Cancelled <span class="badge">1</span></a>
+</nav>
+```
+
 ### When the links do not fit
 
 `nav-overflow` around a nav keeps it on one line: the links that do not fit hide from the end and come back, in their order, as the items of a menu behind a “More” button after the nav. The link the person is on and a link with `nav-overflow-keep` stay in the row. A link that opens a [menu](menu.md) folds with it, as a group of its items under the link's words, and stays in the row while its menu holds the page the person is on; a [navbar](navbar.md) shows one. It measures the room its own box has, not the window, so a nav in a narrow column folds as early as it needs to. For a row of links the wrapper is the `<nav>`, so the menu stays inside the landmark.
@@ -169,7 +185,7 @@ Tabs fold the same way. The arrows move between the tabs in the row; a tab chose
 
 ## Tokens
 
-From [`css/components/nav.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/nav.css), which declares no custom property of its own.
+From [`css/components/nav.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/nav.css). It declares `--redz-fade-left`, `--redz-fade-right` on its root, never on rows or items.
 
 It reads the theme's `--redz-space-16`, `--redz-space-8`, `--redz-text-muted`, `--redz-text`, `--redz-border`, `--redz-radius-8`, `--redz-bg-hover`, `--redz-space-12`, `--redz-radius-6`, `--redz-fs-12`, `--redz-bg`, `--redz-shadow-1`.
 

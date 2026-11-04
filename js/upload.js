@@ -1,18 +1,29 @@
 // REDZ.UI, uploads: an element of class upload holds an input type="file", a button of class upload-zone that opens it
 // and takes the files dropped on it, a <template> of one file's row and a list of class upload-list. Chosen, dropped or
-// pasted while the focus is in the upload, each file is checked against the input's accept and the upload's
-// data-max-size in bytes, gets its row — its name in the row's data-file-name and in the label of its data-file-remove
-// button, by the page's text remove — and fires the cancelable redz:files
-// (js/answer.js) with the file, the row, progress(fraction) for the row's progress bar and a signal its data-file-remove
-// button aborts: the page sends it; resolved, the row is done; rejected, the page's words show in its data-file-error,
-// as a refusal shows the page's text file.type or file.size. Left alone, the file joins the input's files for the form.
-// A file dropped elsewhere on the page does not open in the window.
+// pasted while the focus is in the upload, each file is checked against the input's accept, the upload's data-max-size
+// in bytes and its data-max-files, gets its row - its name in the row's data-file-name and in the label of its
+// data-file-remove button, by the page's text remove, an image's own preview in its img data-file-preview - and fires
+// the cancelable redz:files (js/answer.js) with the file, the row, progress(fraction) for the row's progress bar and a
+// signal its data-file-remove button aborts: the page sends it; resolved, the row is done - resolved with a file, a
+// resized one say, that file joins the input's files in its place; rejected, the page's words show in its
+// data-file-error, as a refusal shows the page's text file.type, file.size or file.count. Left alone, the file joins
+// the input's files for the form. An input without multiple holds one file: a new one takes the place of the one
+// before, its sending aborted, and of several dropped or pasted only the first is taken. A file dropped elsewhere on
+// the page does not open in the window.
 import {ask} from './answer.js';
 import {text} from './text.js';
 
 const kept = new WeakMap();
 const files = new WeakMap();
 const aborts = new WeakMap();
+const previews = new WeakMap();
+
+/** Takes the row away: its sending aborted, its preview let go. */
+const drop = (row) => {
+	aborts.get(row)?.abort();
+	URL.revokeObjectURL(previews.get(row) ?? '');
+	row.remove();
+};
 let over = null;
 let depth = 0;
 
@@ -58,26 +69,44 @@ const end = (row, state, words = '') => {
 	}
 };
 
-/** Checks each file, gives it its row, and asks the page to send it — or keeps it for the form. */
-const take = (upload, chosen) => {
+/** Checks each file, gives it its row, and asks the page to send it - or keeps it for the form. */
+const take = (upload, given) => {
 	const input = inputOf(upload);
+	const chosen = input.multiple ? given : given.slice(0, 1);
+	if (!input.multiple && chosen.length > 0) {
+		upload.querySelectorAll('.upload-list > *').forEach(drop);
+		kept.set(upload, []);
+	}
 	const template = upload.querySelector('template');
+	const list = upload.querySelector('.upload-list');
 	const most = Number(upload.dataset.maxSize || 0);
+	const count = Number(upload.dataset.maxFiles || 0);
 	for (const file of chosen) {
+		const held = list.querySelectorAll(':scope > :not([data-state="failed"])').length;
 		const row = template.content.firstElementChild.cloneNode(true);
 		const name = row.querySelector('[data-file-name]');
 		if (name !== null) {
 			name.textContent = file.name;
 		}
 		row.querySelector('[data-file-remove]')?.setAttribute('aria-label', text('remove', {label: file.name}));
+		const preview = row.querySelector('img[data-file-preview]');
+		if (preview !== null && file.type.startsWith('image/')) {
+			preview.alt = '';
+			preview.src = URL.createObjectURL(file);
+			previews.set(row, preview.src);
+		}
 		files.set(row, file);
-		upload.querySelector('.upload-list').append(row);
+		list.append(row);
 		if (!accepts(input, file)) {
 			end(row, 'failed', text('file.type', {name: file.name}));
 			continue;
 		}
 		if (most > 0 && file.size > most) {
 			end(row, 'failed', text('file.size', {name: file.name, size: sizeOf(most)}));
+			continue;
+		}
+		if (count > 0 && held >= count) {
+			end(row, 'failed', text('file.count', {name: file.name, count}));
 			continue;
 		}
 		const bar = row.querySelector('progress');
@@ -96,7 +125,20 @@ const take = (upload, chosen) => {
 			kept.set(upload, [...(kept.get(upload) ?? []), file]);
 			end(row, 'ready');
 		} else if (answer !== null) {
-			answer.then(() => end(row, 'done'), (words) => controller.signal.aborted || end(row, 'failed', String(words ?? '')));
+			answer.then((made) => {
+				if (controller.signal.aborted) {
+					return;
+				}
+				if (made instanceof Blob) {
+					const own = made instanceof File ? made : new File([made], file.name, {type: made.type});
+					files.set(row, own);
+					kept.set(upload, [...(kept.get(upload) ?? []), own]);
+					sync(upload);
+					end(row, 'ready');
+					return;
+				}
+				end(row, 'done');
+			}, (words) => controller.signal.aborted || end(row, 'failed', String(words ?? '')));
 		}
 	}
 	sync(upload);
@@ -113,11 +155,10 @@ document.addEventListener('click', (event) => {
 	const row = remove?.closest('.upload-list > *');
 	const upload = row?.closest('.upload');
 	if (upload) {
-		aborts.get(row)?.abort();
 		kept.set(upload, (kept.get(upload) ?? []).filter((file) => file !== files.get(row)));
 		sync(upload);
 		const next = row.nextElementSibling ?? row.previousElementSibling;
-		row.remove();
+		drop(row);
 		(next?.querySelector('[data-file-remove]') ?? upload.querySelector('.upload-zone'))?.focus();
 	}
 });

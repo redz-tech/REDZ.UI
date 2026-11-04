@@ -13,7 +13,7 @@
 	<link rel="alternate" type="text/markdown" href="card.md">
 	<script src="site.js"></script>
 	<script type="module" src="../dist/redz-ui.min.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","slide":"{position} of {count}","pin.delete":"Delete","pin.enter":"Enter","cooldown":"{seconds} s","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}","editor.toolbar":"Formatting","editor.body":"Text","editor.source":"HTML source","editor.format":"Format","editor.format.paragraph":"Paragraph","editor.format.heading2":"Heading 2","editor.format.heading3":"Heading 3","editor.format.heading4":"Heading 4","editor.format.quote":"Quote","editor.format.code":"Code","editor.bold":"Bold","editor.italic":"Italic","editor.underline":"Underline","editor.link":"Link","editor.link.href":"Address","editor.link.words":"Words","editor.link.blank":"Open in a new tab","editor.link.nofollow":"Ask search engines not to follow it","editor.color":"Color","editor.color.primary":"Accent","editor.color.secondary":"Secondary","editor.color.success":"Success","editor.color.danger":"Danger","editor.color.warning":"Warning","editor.color.info":"Info","editor.color.none":"No color","editor.bullets":"Bulleted list","editor.numbers":"Numbered list","editor.align":"Align","editor.align.start":"Start","editor.align.center":"Center","editor.align.end":"End","editor.image":"Image","editor.embed":"Video","editor.embed.url":"YouTube or Vimeo address","editor.embed.title":"Title","editor.blocks":"Blocks","editor.group.content":"Content","editor.group.inline":"In a line","editor.group.layout":"Layout","editor.block":"Block","editor.block.up":"Move up","editor.block.down":"Move down","editor.block.edit":"Edit HTML","editor.block.columns":"Columns","editor.block.preview":"Preview","editor.block.delete":"Delete","editor.columns.count":"Columns","editor.columns.from":"From the width","editor.columns.always":"Always","editor.columns.gap":"Gap","editor.clear":"Clear formatting","editor.undo":"Undo","editor.redo":"Redo","editor.block.alert-info":"Note","editor.block.alert-success":"Success note","editor.block.alert-warning":"Warning note","editor.block.alert-danger":"Danger note","editor.block.card":"Card","editor.block.accordion":"Accordion","editor.block.tabs":"Tabs","editor.block.list-group":"List group","editor.block.table":"Table","editor.block.carousel":"Carousel","editor.block.badges":"Badges","editor.block.buttons":"Buttons","editor.block.button-group":"Button group","editor.block.progress":"Progress","editor.block.grid-2":"Two columns","editor.block.grid-3":"Three columns","editor.sample.title":"Title","editor.sample.text":"The block's text.","editor.sample.item":"Item {n}","editor.sample.previous":"Previous","editor.sample.next":"Next"}</script>
+	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","slide":"{position} of {count}","pin.delete":"Delete","pin.enter":"Enter","cooldown":"{seconds} s","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}","file.count":"{name}: up to {count} files","editor.toolbar":"Formatting","editor.body":"Text","editor.source":"HTML source","editor.format":"Format","editor.format.paragraph":"Paragraph","editor.format.heading2":"Heading 2","editor.format.heading3":"Heading 3","editor.format.heading4":"Heading 4","editor.format.quote":"Quote","editor.format.code":"Code","editor.bold":"Bold","editor.italic":"Italic","editor.underline":"Underline","editor.link":"Link","editor.link.href":"Address","editor.link.words":"Words","editor.link.blank":"Open in a new tab","editor.link.nofollow":"Ask search engines not to follow it","editor.color":"Color","editor.color.primary":"Accent","editor.color.secondary":"Secondary","editor.color.success":"Success","editor.color.danger":"Danger","editor.color.warning":"Warning","editor.color.info":"Info","editor.color.none":"No color","editor.bullets":"Bulleted list","editor.numbers":"Numbered list","editor.align":"Align","editor.align.start":"Start","editor.align.center":"Center","editor.align.end":"End","editor.image":"Image","editor.embed":"Video","editor.embed.url":"YouTube or Vimeo address","editor.embed.title":"Title","editor.blocks":"Blocks","editor.group.content":"Content","editor.group.inline":"In a line","editor.group.layout":"Layout","editor.block":"Block","editor.block.up":"Move up","editor.block.down":"Move down","editor.block.edit":"Edit HTML","editor.block.columns":"Columns","editor.block.preview":"Preview","editor.block.delete":"Delete","editor.columns.count":"Columns","editor.columns.from":"From the width","editor.columns.always":"Always","editor.columns.gap":"Gap","editor.clear":"Clear formatting","editor.undo":"Undo","editor.redo":"Redo","editor.block.alert-info":"Note","editor.block.alert-success":"Success note","editor.block.alert-warning":"Warning note","editor.block.alert-danger":"Danger note","editor.block.card":"Card","editor.block.accordion":"Accordion","editor.block.tabs":"Tabs","editor.block.list-group":"List group","editor.block.table":"Table","editor.block.carousel":"Carousel","editor.block.badges":"Badges","editor.block.buttons":"Buttons","editor.block.button-group":"Button group","editor.block.progress":"Progress","editor.block.grid-2":"Two columns","editor.block.grid-3":"Three columns","editor.sample.title":"Title","editor.sample.text":"The block's text.","editor.sample.item":"Item {n}","editor.sample.previous":"Previous","editor.sample.next":"Next"}</script>
 </head>
 <body>
 	<div class="app">
@@ -66,6 +66,10 @@
 			<a class="app-link" href="collapse.html"><i class="bi bi-arrows-collapse" aria-hidden="true"></i>Collapse</a>
 			<a class="app-link" href="list-group.html"><i class="bi bi-list-ul" aria-hidden="true"></i>List groups</a>
 			<a class="app-link" href="tree.html"><i class="bi bi-diagram-3" aria-hidden="true"></i>Trees</a>
+			<a class="app-link" href="thread.html"><i class="bi bi-chat-dots" aria-hidden="true"></i>Message threads</a>
+			<a class="app-link" href="chart.html"><i class="bi bi-bar-chart" aria-hidden="true"></i>Charts</a>
+			<a class="app-link" href="calendar.html"><i class="bi bi-calendar3" aria-hidden="true"></i>Calendars</a>
+			<a class="app-link" href="media.html"><i class="bi bi-collection" aria-hidden="true"></i>Media library</a>
 			<a class="app-link" href="table.html"><i class="bi bi-table" aria-hidden="true"></i>Tables</a>
 			<a class="app-link" href="badge.html"><i class="bi bi-patch-check" aria-hidden="true"></i>Badges</a>
 			<a class="app-link" href="dot.html"><i class="bi bi-record-circle" aria-hidden="true"></i>Dots</a>
@@ -212,6 +216,39 @@
 	&lt;section class="card" aria-labelledby="card-grid-a"&gt;&lt;div class="card-header"&gt;&lt;h2 id="card-grid-a"&gt;Bookings&lt;/h2&gt;&lt;/div&gt;&lt;div class="card-body"&gt;&lt;p class="fs-24 fw-600 tabular-nums"&gt;128&lt;/p&gt;&lt;p class="text-muted"&gt;this week&lt;/p&gt;&lt;/div&gt;&lt;/section&gt;
 	&lt;section class="card" aria-labelledby="card-grid-b"&gt;&lt;div class="card-header"&gt;&lt;h2 id="card-grid-b"&gt;Revenue&lt;/h2&gt;&lt;/div&gt;&lt;div class="card-body"&gt;&lt;p class="fs-24 fw-600 tabular-nums"&gt;312,400 THB&lt;/p&gt;&lt;p class="text-muted"&gt;this week&lt;/p&gt;&lt;/div&gt;&lt;/section&gt;
 &lt;/div&gt;</code></pre></div>
+
+					<h3>A body that scrolls</h3>
+					<p><code>card-scroll</code> with a height - <code>max-h-*</code>, from 160 to 640 px - keeps the card's header and footer in view and scrolls its body between them, as a dialog does: a list of tickets, a <a href="thread.html">thread</a> above its reply box.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="card-scrolling">
+						<section class="card card-scroll max-h-240" aria-labelledby="card-scrolling-title">
+							<div class="card-header"><h2 id="card-scrolling-title">Tickets</h2></div>
+							<div class="card-body" tabindex="0" role="region" aria-labelledby="card-scrolling-title">
+								<div class="list-group list-group-flush">
+									<button class="list-group-item list-group-item-action" type="button" aria-current="true">The booking page shows the wrong price</button>
+									<button class="list-group-item list-group-item-action" type="button">A new language for the site</button>
+									<button class="list-group-item list-group-item-action" type="button">The invoice for October</button>
+									<button class="list-group-item list-group-item-action" type="button">Photos do not upload from a phone</button>
+									<button class="list-group-item list-group-item-action" type="button">Change the site's address</button>
+									<button class="list-group-item list-group-item-action" type="button">Two owners for one site</button>
+								</div>
+							</div>
+							<div class="card-footer"><button class="btn btn-sm" type="button"><i class="bi bi-plus-lg" aria-hidden="true"></i>New ticket</button></div>
+						</section>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;section class="card card-scroll max-h-240" aria-labelledby="card-scrolling-title"&gt;
+	&lt;div class="card-header"&gt;&lt;h2 id="card-scrolling-title"&gt;Tickets&lt;/h2&gt;&lt;/div&gt;
+	&lt;div class="card-body" tabindex="0" role="region" aria-labelledby="card-scrolling-title"&gt;
+		&lt;div class="list-group list-group-flush"&gt;
+			&lt;button class="list-group-item list-group-item-action" type="button" aria-current="true"&gt;The booking page shows the wrong price&lt;/button&gt;
+			&lt;button class="list-group-item list-group-item-action" type="button"&gt;A new language for the site&lt;/button&gt;
+			&lt;button class="list-group-item list-group-item-action" type="button"&gt;The invoice for October&lt;/button&gt;
+			&lt;button class="list-group-item list-group-item-action" type="button"&gt;Photos do not upload from a phone&lt;/button&gt;
+			&lt;button class="list-group-item list-group-item-action" type="button"&gt;Change the site's address&lt;/button&gt;
+			&lt;button class="list-group-item list-group-item-action" type="button"&gt;Two owners for one site&lt;/button&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div class="card-footer"&gt;&lt;button class="btn btn-sm" type="button"&gt;&lt;i class="bi bi-plus-lg" aria-hidden="true"&gt;&lt;/i&gt;New ticket&lt;/button&gt;&lt;/div&gt;
+&lt;/section&gt;</code></pre></div>
 
 					<h3>A state on its edge</h3>
 					<p>The utility <code>edge-top-{tone}</code> draws a 3 px line of a state on a card's top edge, instead of coloring its frame; <code>edge-start-{tone}</code> does it on the start edge of a row. The words still say the state.</p>

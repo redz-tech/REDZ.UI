@@ -13,7 +13,7 @@
 	<link rel="alternate" type="text/markdown" href="table.md">
 	<script src="site.js"></script>
 	<script type="module" src="../dist/redz-ui.min.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","slide":"{position} of {count}","pin.delete":"Delete","pin.enter":"Enter","cooldown":"{seconds} s","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}","editor.toolbar":"Formatting","editor.body":"Text","editor.source":"HTML source","editor.format":"Format","editor.format.paragraph":"Paragraph","editor.format.heading2":"Heading 2","editor.format.heading3":"Heading 3","editor.format.heading4":"Heading 4","editor.format.quote":"Quote","editor.format.code":"Code","editor.bold":"Bold","editor.italic":"Italic","editor.underline":"Underline","editor.link":"Link","editor.link.href":"Address","editor.link.words":"Words","editor.link.blank":"Open in a new tab","editor.link.nofollow":"Ask search engines not to follow it","editor.color":"Color","editor.color.primary":"Accent","editor.color.secondary":"Secondary","editor.color.success":"Success","editor.color.danger":"Danger","editor.color.warning":"Warning","editor.color.info":"Info","editor.color.none":"No color","editor.bullets":"Bulleted list","editor.numbers":"Numbered list","editor.align":"Align","editor.align.start":"Start","editor.align.center":"Center","editor.align.end":"End","editor.image":"Image","editor.embed":"Video","editor.embed.url":"YouTube or Vimeo address","editor.embed.title":"Title","editor.blocks":"Blocks","editor.group.content":"Content","editor.group.inline":"In a line","editor.group.layout":"Layout","editor.block":"Block","editor.block.up":"Move up","editor.block.down":"Move down","editor.block.edit":"Edit HTML","editor.block.columns":"Columns","editor.block.preview":"Preview","editor.block.delete":"Delete","editor.columns.count":"Columns","editor.columns.from":"From the width","editor.columns.always":"Always","editor.columns.gap":"Gap","editor.clear":"Clear formatting","editor.undo":"Undo","editor.redo":"Redo","editor.block.alert-info":"Note","editor.block.alert-success":"Success note","editor.block.alert-warning":"Warning note","editor.block.alert-danger":"Danger note","editor.block.card":"Card","editor.block.accordion":"Accordion","editor.block.tabs":"Tabs","editor.block.list-group":"List group","editor.block.table":"Table","editor.block.carousel":"Carousel","editor.block.badges":"Badges","editor.block.buttons":"Buttons","editor.block.button-group":"Button group","editor.block.progress":"Progress","editor.block.grid-2":"Two columns","editor.block.grid-3":"Three columns","editor.sample.title":"Title","editor.sample.text":"The block's text.","editor.sample.item":"Item {n}","editor.sample.previous":"Previous","editor.sample.next":"Next"}</script>
+	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","slide":"{position} of {count}","pin.delete":"Delete","pin.enter":"Enter","cooldown":"{seconds} s","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}","file.count":"{name}: up to {count} files","editor.toolbar":"Formatting","editor.body":"Text","editor.source":"HTML source","editor.format":"Format","editor.format.paragraph":"Paragraph","editor.format.heading2":"Heading 2","editor.format.heading3":"Heading 3","editor.format.heading4":"Heading 4","editor.format.quote":"Quote","editor.format.code":"Code","editor.bold":"Bold","editor.italic":"Italic","editor.underline":"Underline","editor.link":"Link","editor.link.href":"Address","editor.link.words":"Words","editor.link.blank":"Open in a new tab","editor.link.nofollow":"Ask search engines not to follow it","editor.color":"Color","editor.color.primary":"Accent","editor.color.secondary":"Secondary","editor.color.success":"Success","editor.color.danger":"Danger","editor.color.warning":"Warning","editor.color.info":"Info","editor.color.none":"No color","editor.bullets":"Bulleted list","editor.numbers":"Numbered list","editor.align":"Align","editor.align.start":"Start","editor.align.center":"Center","editor.align.end":"End","editor.image":"Image","editor.embed":"Video","editor.embed.url":"YouTube or Vimeo address","editor.embed.title":"Title","editor.blocks":"Blocks","editor.group.content":"Content","editor.group.inline":"In a line","editor.group.layout":"Layout","editor.block":"Block","editor.block.up":"Move up","editor.block.down":"Move down","editor.block.edit":"Edit HTML","editor.block.columns":"Columns","editor.block.preview":"Preview","editor.block.delete":"Delete","editor.columns.count":"Columns","editor.columns.from":"From the width","editor.columns.always":"Always","editor.columns.gap":"Gap","editor.clear":"Clear formatting","editor.undo":"Undo","editor.redo":"Redo","editor.block.alert-info":"Note","editor.block.alert-success":"Success note","editor.block.alert-warning":"Warning note","editor.block.alert-danger":"Danger note","editor.block.card":"Card","editor.block.accordion":"Accordion","editor.block.tabs":"Tabs","editor.block.list-group":"List group","editor.block.table":"Table","editor.block.carousel":"Carousel","editor.block.badges":"Badges","editor.block.buttons":"Buttons","editor.block.button-group":"Button group","editor.block.progress":"Progress","editor.block.grid-2":"Two columns","editor.block.grid-3":"Three columns","editor.sample.title":"Title","editor.sample.text":"The block's text.","editor.sample.item":"Item {n}","editor.sample.previous":"Previous","editor.sample.next":"Next"}</script>
 </head>
 <body>
 	<div class="app">
@@ -66,6 +66,10 @@
 			<a class="app-link" href="collapse.html"><i class="bi bi-arrows-collapse" aria-hidden="true"></i>Collapse</a>
 			<a class="app-link" href="list-group.html"><i class="bi bi-list-ul" aria-hidden="true"></i>List groups</a>
 			<a class="app-link" href="tree.html"><i class="bi bi-diagram-3" aria-hidden="true"></i>Trees</a>
+			<a class="app-link" href="thread.html"><i class="bi bi-chat-dots" aria-hidden="true"></i>Message threads</a>
+			<a class="app-link" href="chart.html"><i class="bi bi-bar-chart" aria-hidden="true"></i>Charts</a>
+			<a class="app-link" href="calendar.html"><i class="bi bi-calendar3" aria-hidden="true"></i>Calendars</a>
+			<a class="app-link" href="media.html"><i class="bi bi-collection" aria-hidden="true"></i>Media library</a>
 			<a class="app-link" href="table.html" aria-current="page"><i class="bi bi-table" aria-hidden="true"></i>Tables</a>
 			<a class="app-link" href="badge.html"><i class="bi bi-patch-check" aria-hidden="true"></i>Badges</a>
 			<a class="app-link" href="dot.html"><i class="bi bi-record-circle" aria-hidden="true"></i>Dots</a>
@@ -282,6 +286,31 @@
 	&lt;/tbody&gt;
 &lt;/table&gt;</code></pre></div>
 
+					<h3 id="table-highlight">Rows that light together</h3>
+					<p>Elements that share a <code>data-highlight</code> key light together: hovering or focusing one marks every element with its key <code>data-highlighted</code>, tinted - a row here and its lane on a <a href="chart.html#chart-lanes">board</a>, or its marker on a map.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="table-light">
+						<div class="hstack flex-wrap gap-8">
+							<button class="btn btn-sm" type="button" data-highlight="pier">The pier</button>
+							<button class="btn btn-sm" type="button" data-highlight="lake">The emerald lake</button>
+						</div>
+						<table class="table" aria-label="Stops">
+							<tbody>
+								<tr data-highlight="pier"><td>The pier</td><td class="tabular-nums">08:30</td></tr>
+								<tr data-highlight="lake"><td>The emerald lake</td><td class="tabular-nums">11:00</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;div class="hstack flex-wrap gap-8"&gt;
+	&lt;button class="btn btn-sm" type="button" data-highlight="pier"&gt;The pier&lt;/button&gt;
+	&lt;button class="btn btn-sm" type="button" data-highlight="lake"&gt;The emerald lake&lt;/button&gt;
+&lt;/div&gt;
+&lt;table class="table" aria-label="Stops"&gt;
+	&lt;tbody&gt;
+		&lt;tr data-highlight="pier"&gt;&lt;td&gt;The pier&lt;/td&gt;&lt;td class="tabular-nums"&gt;08:30&lt;/td&gt;&lt;/tr&gt;
+		&lt;tr data-highlight="lake"&gt;&lt;td&gt;The emerald lake&lt;/td&gt;&lt;td class="tabular-nums"&gt;11:00&lt;/td&gt;&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;</code></pre></div>
+
 					<h3>Sortable columns</h3>
 					<p>A header that sorts holds a <code>button class="table-sort"</code>, and the header's <code>aria-sort</code> - <code>ascending</code>, <code>descending</code> or none - draws the arrow. The page sorts - on the server or in place - and moves <code>aria-sort</code> to the column it sorted by.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="table-sort">
@@ -352,7 +381,7 @@
 						<section class="vstack gap-12" aria-labelledby="table-tokens">
 							<h2 id="table-tokens">Tokens</h2>
 							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css"><code>css/components/table.css</code></a>. It declares <code>--redz-row-tint</code>, <code>--redz-row-mark</code> on its root, never on rows or items.</p>
-							<p>It reads the theme's <code>--redz-space-8</code>, <code>--redz-space-12</code>, <code>--redz-border</code>, <code>--redz-bg</code>, <code>--redz-text-muted</code>, <code>--redz-fs-12</code>, <code>--redz-row-pad</code>, <code>--redz-radius-12</code>, <code>--redz-space-16</code>, <code>--redz-text</code>, <code>--redz-border-strong</code>, <code>--redz-bg-hover</code>, <code>--redz-font-mono</code>, <code>--redz-space-4</code>, <code>--redz-danger-subtle</code>, <code>--redz-danger</code>, <code>--redz-warning-subtle</code>, <code>--redz-warning</code>, <code>--redz-bg-page</code>.</p>
+							<p>It reads the theme's <code>--redz-space-8</code>, <code>--redz-space-12</code>, <code>--redz-border</code>, <code>--redz-bg</code>, <code>--redz-text-muted</code>, <code>--redz-fs-12</code>, <code>--redz-row-pad</code>, <code>--redz-radius-12</code>, <code>--redz-space-16</code>, <code>--redz-text</code>, <code>--redz-border-strong</code>, <code>--redz-bg-hover</code>, <code>--redz-font-mono</code>, <code>--redz-space-4</code>, <code>--redz-primary</code>, <code>--redz-danger-subtle</code>, <code>--redz-danger</code>, <code>--redz-warning-subtle</code>, <code>--redz-warning</code>, <code>--redz-bg-page</code>.</p>
 						</section>
 
 						<section class="vstack gap-12" aria-labelledby="table-from-bootstrap">

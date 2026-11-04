@@ -44,6 +44,37 @@ The ERP's sign-in, kiosk, console and list screens, asked as #16-#37; to be rele
   color; a white banner for a logo.
 - **Sortable columns** (`table-sort`): a header's button draws the arrow of the header's `aria-sort`.
 - **Hairlines:** `progress-xs` (3 px) and `meter-xs` (2 px).
+- **Charts**, a package of the release (`charts/charts.css`, `charts/charts.js`), linked on the screens that show them:
+  a chart is the table of its numbers drawn by CSS. `chart` stacks each row's cells as a column from its `data-v`, the
+  header cells its legend, eight series colors `--redz-chart-1` to `-8` chosen to stay apart for color-blind eyes in
+  both themes, `data-tone` for a state's color, `data-empty` for a stub; `spark` (`spark-md`, `spark-lg`,
+  `spark-median`) is a row's sparkline of runs by `data-state`; `lanes` is a board over a time window - `lanes-scale`,
+  `lanes-tick`, `lanes-tick-once`, `lanes-span` - with a now line. The script hands the `data-v`, `data-at`,
+  `data-from`, `data-to`, `data-median` and `data-now` numbers to the stylesheet through the CSSOM, which a strict CSP
+  allows, and gives a chart table its table roles.
+- **Calendars**, a package (`calendar/calendar.css`): `calendar`, a month of days with `calendar-day`,
+  `calendar-event` and `calendar-more`, days outside the month, weekends and today; `schedule`, days across things
+  with a sticky name column and `data-state` busy or over.
+- **The media library**, a package (`media/media.css`): `media-grid` of `media-tile`s - a check, a handle, a square
+  `media-tile-thumb`, `-name`, `-meta`, `-actions` - and `data-view="list"`, rows without previews.
+- **Views** (`command="--view"`, `js/view.js`): buttons with `aria-controls` and a `value` put it in the list's
+  `data-view`, press the one that shows and tell the page in `redz:view`.
+- **Highlights** (`data-highlight`, `js/highlight.js`): elements of one key light together on hover and focus,
+  `data-highlighted`.
+- **A nav that scrolls shows it goes on** (`js/nav-scroll.js`): a nav or a tab list wider than its box fades at the
+  edge it goes on past, `data-more` saying which, by scroll position and right to left; its current or selected item
+  is scrolled into its view when it loads, the page left where it is.
+- **An upload of one file:** an input without `multiple` holds one file - a new one takes the place of the one before,
+  its row and its sending, and of several dropped only the first is taken.
+- **Upload thumbnails:** `upload-thumbs` draws the files as 5rem squares, an `img data-file-preview` in the template
+  showing the image itself with the remove button on its corner; `data-max-files` refuses the files past it with the
+  text `file.count`; a page answering `redz:files` with a promise of a file - a resized image - puts that file in the
+  input in the original's place.
+- **Message threads** (`thread`, `thread-message` with `data-mine`, `thread-body`, `thread-meta`, `thread-edited`,
+  `thread-bubble`, `thread-files`, `thread-file-remove`): a conversation, the person's own at the end in a tint, edited
+  in place by an inline edit.
+- **A card whose body scrolls** (`card-scroll`) between its fixed header and footer, and `max-h-*` utilities, 160 to
+  640 px.
 - **Utilities:** `edge-top-{tone}` and `edge-start-{tone}`, a 3 px state on an edge; `flash`, a ground lit once;
   `sticky-top`, under the app header in the shell (`--redz-sticky-top`); `offscreen`, outside the page yet rendered -
   a trap field for bots, a badge reader's field.

@@ -27,6 +27,54 @@
 		</div>
 	</div>
 
+	<h3>One file</h3>
+	<p>An input without <code>multiple</code> holds one file: a new one chosen, dropped or pasted takes the place of the one before - its row, its sending, its place in the input - and of several dropped at once only the first is taken.</p>
+	<div class="docs-example docs-example-stack" id="upload-one">
+		<div class="upload" data-max-size="2097152">
+			<input class="visually-hidden" id="upload-one-input" type="file" name="photo" accept="image/*" tabindex="-1" aria-label="Reference photo">
+			<button class="upload-zone" type="button" aria-describedby="upload-one-hint">
+				<i class="bi bi-image fs-24" aria-hidden="true"></i>
+				<span>Drop a photo here, or choose one</span>
+				<span class="fs-12" id="upload-one-hint">One image, up to 2 MB</span>
+			</button>
+			<ul class="upload-list" aria-label="File"></ul>
+			<template>
+				<li>
+					<i class="bi bi-file-earmark-image" aria-hidden="true"></i>
+					<span class="flex-fill" data-file-name></span>
+					<span class="invalid-feedback" data-file-error></span>
+					<button class="btn btn-sm btn-icon btn-text" type="button" data-file-remove><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+				</li>
+			</template>
+		</div>
+	</div>
+
+	<h3>Thumbnails</h3>
+	<p><code>upload-thumbs</code> on the upload draws its files as 5rem squares: an <code>img data-file-preview</code> in the row's template shows the image itself, cut to fill, its remove button on the corner; a refused file keeps a whole row for its words. <code>data-max-files</code> takes that many and refuses the rest with the page's text <code>file.count</code>. A page that prepares each image first - resized, turned upright - answers <code>redz:files</code> with a promise of the new file, which takes the old one's place in the input.</p>
+	<div class="docs-example docs-example-stack" id="upload-shots">
+		<div class="upload upload-thumbs" data-max-files="3" data-max-size="5242880">
+			<input class="visually-hidden" id="upload-shots-input" type="file" name="shots[]" accept="image/*" multiple tabindex="-1" aria-label="Screenshots">
+			<button class="upload-zone" type="button" aria-describedby="upload-shots-hint">
+				<i class="bi bi-images fs-24" aria-hidden="true"></i>
+				<span>Drop or paste screenshots here, or choose them</span>
+				<span class="fs-12" id="upload-shots-hint">Up to 3 images</span>
+			</button>
+			<ul class="upload-list" aria-label="Screenshots"></ul>
+			<template>
+				<li>
+					<img data-file-preview alt="">
+					<span data-file-name></span>
+					<span class="invalid-feedback" data-file-error></span>
+					<button class="btn btn-xs btn-icon" type="button" data-file-remove><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+				</li>
+			</template>
+		</div>
+	</div>
+	<pre class="docs-code" tabindex="0"><code>upload.addEventListener('redz:files', (event) =&gt; {
+  event.preventDefault();
+  event.detail.respondWith(createImageBitmap(event.detail.file, {imageOrientation: 'from-image'}).then(resize));
+});</code></pre>
+
 	<h3>Sent by the page</h3>
 	<p>Each file fires <code>redz:files</code> on the upload with the file, its row, <code>progress(fraction)</code> for the row's bar and a <code>signal</code> its remove button aborts. A page that sends cancels it and answers with a promise: resolved, the row is done; rejected, the page's words show in the row's <code>data-file-error</code>. One file's error leaves the others. Left alone, the file joins the input's files and goes with the form. The example above answers in a second and a half.</p>
 	<pre class="docs-code" tabindex="0"><code>document.addEventListener('redz:files', (event) =&gt; {

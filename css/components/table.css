@@ -119,6 +119,10 @@
 		margin-inline-start: var(--redz-space-4);
 	}
 
+	[data-highlighted] {
+		background-color: color-mix(in oklch, var(--redz-primary) 10%, transparent);
+	}
+
 	.table-sort {
 		display: inline-flex;
 		align-items: center;

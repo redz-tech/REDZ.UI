@@ -71,6 +71,27 @@ The parent sets the grid; each card measures itself. Under 576 px of the region 
 </div>
 ```
 
+### A body that scrolls
+
+`card-scroll` with a height - `max-h-*`, from 160 to 640 px - keeps the card's header and footer in view and scrolls its body between them, as a dialog does: a list of tickets, a [thread](thread.md) above its reply box.
+
+```html
+<section class="card card-scroll max-h-240" aria-labelledby="card-scrolling-title">
+	<div class="card-header"><h2 id="card-scrolling-title">Tickets</h2></div>
+	<div class="card-body" tabindex="0" role="region" aria-labelledby="card-scrolling-title">
+		<div class="list-group list-group-flush">
+			<button class="list-group-item list-group-item-action" type="button" aria-current="true">The booking page shows the wrong price</button>
+			<button class="list-group-item list-group-item-action" type="button">A new language for the site</button>
+			<button class="list-group-item list-group-item-action" type="button">The invoice for October</button>
+			<button class="list-group-item list-group-item-action" type="button">Photos do not upload from a phone</button>
+			<button class="list-group-item list-group-item-action" type="button">Change the site's address</button>
+			<button class="list-group-item list-group-item-action" type="button">Two owners for one site</button>
+		</div>
+	</div>
+	<div class="card-footer"><button class="btn btn-sm" type="button"><i class="bi bi-plus-lg" aria-hidden="true"></i>New ticket</button></div>
+</section>
+```
+
 ### A state on its edge
 
 The utility `edge-top-{tone}` draws a 3 px line of a state on a card's top edge, instead of coloring its frame; `edge-start-{tone}` does it on the start edge of a row. The words still say the state.

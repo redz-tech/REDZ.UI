@@ -2536,6 +2536,7 @@ card-img
 card-img-bottom
 card-img-overlay
 card-img-top
+card-scroll
 carousel
 carousel-auto
 carousel-center
@@ -3080,6 +3081,13 @@ m-48
 m-64
 m-8
 m-auto
+max-h-160
+max-h-240
+max-h-320
+max-h-400
+max-h-480
+max-h-560
+max-h-640
 max-w-1200
 max-w-320
 max-w-480
@@ -4115,6 +4123,14 @@ text-uppercase
 text-warning
 text-warning-contrast
 text-wrap
+thread
+thread-body
+thread-bubble
+thread-edited
+thread-file-remove
+thread-files
+thread-message
+thread-meta
 timeline
 timeline-time
 toast
@@ -4138,6 +4154,7 @@ tree-row
 tree-toggle
 upload
 upload-list
+upload-thumbs
 upload-zone
 user-select-all
 user-select-auto

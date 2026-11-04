@@ -43,6 +43,62 @@
 		flex: 1 1 8rem;
 	}
 
+	.upload-list [data-file-preview] {
+		display: none;
+	}
+
+	.upload-thumbs .upload-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--redz-space-8);
+	}
+
+	.upload-thumbs .upload-list > :not([data-state="failed"]) {
+		position: relative;
+		display: block;
+		inline-size: 5rem;
+		block-size: 5rem;
+		overflow: hidden;
+		border: 1px solid var(--redz-border);
+		border-radius: var(--redz-radius-8);
+		background: var(--redz-bg-page);
+	}
+
+	.upload-thumbs .upload-list > :not([data-state="failed"]) [data-file-preview] {
+		display: block;
+		inline-size: 100%;
+		block-size: 100%;
+		object-fit: cover;
+	}
+
+	.upload-thumbs .upload-list > :not([data-state="failed"]) > :not([data-file-preview], [data-file-remove], progress) {
+		position: absolute;
+		inline-size: 1px;
+		block-size: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+
+	.upload-thumbs .upload-list > :not([data-state="failed"]) [data-file-remove] {
+		position: absolute;
+		inset-block-start: var(--redz-space-2);
+		inset-inline-end: var(--redz-space-2);
+		background: var(--redz-bg);
+	}
+
+	.upload-thumbs .upload-list > :not([data-state="failed"]) progress {
+		position: absolute;
+		inset-inline: 0;
+		inset-block-end: 0;
+		block-size: 3px;
+		border-radius: 0;
+	}
+
+	.upload-thumbs .upload-list > [data-state="failed"] {
+		flex-basis: 100%;
+	}
+
 	.upload-list > :not([data-state="sending"]) progress {
 		display: none;
 	}

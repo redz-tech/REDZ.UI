@@ -53,6 +53,18 @@
 		padding: var(--redz-space-16);
 	}
 
+	.card-scroll {
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+	}
+
+	.card-scroll > .card-body {
+		flex: 1 1 auto;
+		min-block-size: 0;
+		overflow-y: auto;
+	}
+
 	.card-footer {
 		display: flex;
 		flex-wrap: wrap;

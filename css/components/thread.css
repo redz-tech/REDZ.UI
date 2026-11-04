@@ -1,0 +1,106 @@
+@layer components {
+	.thread {
+		display: grid;
+		gap: var(--redz-space-16);
+	}
+
+	.thread-message {
+		display: flex;
+		align-items: flex-start;
+		gap: var(--redz-space-8);
+		max-inline-size: min(36rem, 88%);
+	}
+
+	.thread-message[data-mine] {
+		flex-direction: row-reverse;
+		margin-inline-start: auto;
+	}
+
+	.thread-message > .avatar {
+		flex: none;
+	}
+
+	.thread-body {
+		display: grid;
+		gap: var(--redz-space-4);
+		min-inline-size: 0;
+	}
+
+	.thread-message[data-mine] .thread-body {
+		justify-items: end;
+	}
+
+	.thread-meta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--redz-space-4) var(--redz-space-8);
+		color: var(--redz-text-muted);
+		font-size: var(--redz-fs-12);
+	}
+
+	.thread-meta > :first-child {
+		color: var(--redz-text);
+		font-weight: 600;
+	}
+
+	.thread-edited {
+		font-style: italic;
+	}
+
+	.thread-bubble {
+		padding: var(--redz-space-8) var(--redz-space-12);
+		overflow-wrap: anywhere;
+		border: 1px solid var(--redz-border);
+		border-radius: var(--redz-radius-12);
+		border-start-start-radius: var(--redz-radius-4);
+		background: var(--redz-bg);
+		white-space: pre-wrap;
+	}
+
+	.thread-message[data-mine] .thread-bubble {
+		border-color: transparent;
+		border-start-start-radius: var(--redz-radius-12);
+		border-start-end-radius: var(--redz-radius-4);
+		background: var(--redz-primary-subtle);
+	}
+
+	.thread-files {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--redz-space-4);
+	}
+
+	.thread-message[data-mine] .thread-files {
+		justify-content: flex-end;
+	}
+
+	.thread-files > * {
+		position: relative;
+	}
+
+	.thread-files img {
+		display: block;
+		inline-size: auto;
+		max-inline-size: 9rem;
+		block-size: 7rem;
+		border: 1px solid var(--redz-border);
+		border-radius: var(--redz-radius-8);
+		object-fit: cover;
+	}
+
+	.thread-file-remove {
+		position: absolute;
+		inset-block-start: var(--redz-space-4);
+		inset-inline-end: var(--redz-space-4);
+		display: none;
+	}
+
+	.thread-message:has(.inline-edit-form:not([hidden])) .thread-file-remove {
+		display: inline-flex;
+	}
+
+	.thread-message .inline-edit-form {
+		inline-size: min(36rem, 100%);
+	}
+}

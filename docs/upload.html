@@ -13,7 +13,7 @@
 	<link rel="alternate" type="text/markdown" href="upload.md">
 	<script src="site.js"></script>
 	<script type="module" src="../dist/redz-ui.min.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","slide":"{position} of {count}","pin.delete":"Delete","pin.enter":"Enter","cooldown":"{seconds} s","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}","editor.toolbar":"Formatting","editor.body":"Text","editor.source":"HTML source","editor.format":"Format","editor.format.paragraph":"Paragraph","editor.format.heading2":"Heading 2","editor.format.heading3":"Heading 3","editor.format.heading4":"Heading 4","editor.format.quote":"Quote","editor.format.code":"Code","editor.bold":"Bold","editor.italic":"Italic","editor.underline":"Underline","editor.link":"Link","editor.link.href":"Address","editor.link.words":"Words","editor.link.blank":"Open in a new tab","editor.link.nofollow":"Ask search engines not to follow it","editor.color":"Color","editor.color.primary":"Accent","editor.color.secondary":"Secondary","editor.color.success":"Success","editor.color.danger":"Danger","editor.color.warning":"Warning","editor.color.info":"Info","editor.color.none":"No color","editor.bullets":"Bulleted list","editor.numbers":"Numbered list","editor.align":"Align","editor.align.start":"Start","editor.align.center":"Center","editor.align.end":"End","editor.image":"Image","editor.embed":"Video","editor.embed.url":"YouTube or Vimeo address","editor.embed.title":"Title","editor.blocks":"Blocks","editor.group.content":"Content","editor.group.inline":"In a line","editor.group.layout":"Layout","editor.block":"Block","editor.block.up":"Move up","editor.block.down":"Move down","editor.block.edit":"Edit HTML","editor.block.columns":"Columns","editor.block.preview":"Preview","editor.block.delete":"Delete","editor.columns.count":"Columns","editor.columns.from":"From the width","editor.columns.always":"Always","editor.columns.gap":"Gap","editor.clear":"Clear formatting","editor.undo":"Undo","editor.redo":"Redo","editor.block.alert-info":"Note","editor.block.alert-success":"Success note","editor.block.alert-warning":"Warning note","editor.block.alert-danger":"Danger note","editor.block.card":"Card","editor.block.accordion":"Accordion","editor.block.tabs":"Tabs","editor.block.list-group":"List group","editor.block.table":"Table","editor.block.carousel":"Carousel","editor.block.badges":"Badges","editor.block.buttons":"Buttons","editor.block.button-group":"Button group","editor.block.progress":"Progress","editor.block.grid-2":"Two columns","editor.block.grid-3":"Three columns","editor.sample.title":"Title","editor.sample.text":"The block's text.","editor.sample.item":"Item {n}","editor.sample.previous":"Previous","editor.sample.next":"Next"}</script>
+	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","slide":"{position} of {count}","pin.delete":"Delete","pin.enter":"Enter","cooldown":"{seconds} s","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}","file.count":"{name}: up to {count} files","editor.toolbar":"Formatting","editor.body":"Text","editor.source":"HTML source","editor.format":"Format","editor.format.paragraph":"Paragraph","editor.format.heading2":"Heading 2","editor.format.heading3":"Heading 3","editor.format.heading4":"Heading 4","editor.format.quote":"Quote","editor.format.code":"Code","editor.bold":"Bold","editor.italic":"Italic","editor.underline":"Underline","editor.link":"Link","editor.link.href":"Address","editor.link.words":"Words","editor.link.blank":"Open in a new tab","editor.link.nofollow":"Ask search engines not to follow it","editor.color":"Color","editor.color.primary":"Accent","editor.color.secondary":"Secondary","editor.color.success":"Success","editor.color.danger":"Danger","editor.color.warning":"Warning","editor.color.info":"Info","editor.color.none":"No color","editor.bullets":"Bulleted list","editor.numbers":"Numbered list","editor.align":"Align","editor.align.start":"Start","editor.align.center":"Center","editor.align.end":"End","editor.image":"Image","editor.embed":"Video","editor.embed.url":"YouTube or Vimeo address","editor.embed.title":"Title","editor.blocks":"Blocks","editor.group.content":"Content","editor.group.inline":"In a line","editor.group.layout":"Layout","editor.block":"Block","editor.block.up":"Move up","editor.block.down":"Move down","editor.block.edit":"Edit HTML","editor.block.columns":"Columns","editor.block.preview":"Preview","editor.block.delete":"Delete","editor.columns.count":"Columns","editor.columns.from":"From the width","editor.columns.always":"Always","editor.columns.gap":"Gap","editor.clear":"Clear formatting","editor.undo":"Undo","editor.redo":"Redo","editor.block.alert-info":"Note","editor.block.alert-success":"Success note","editor.block.alert-warning":"Warning note","editor.block.alert-danger":"Danger note","editor.block.card":"Card","editor.block.accordion":"Accordion","editor.block.tabs":"Tabs","editor.block.list-group":"List group","editor.block.table":"Table","editor.block.carousel":"Carousel","editor.block.badges":"Badges","editor.block.buttons":"Buttons","editor.block.button-group":"Button group","editor.block.progress":"Progress","editor.block.grid-2":"Two columns","editor.block.grid-3":"Three columns","editor.sample.title":"Title","editor.sample.text":"The block's text.","editor.sample.item":"Item {n}","editor.sample.previous":"Previous","editor.sample.next":"Next"}</script>
 </head>
 <body>
 	<div class="app">
@@ -66,6 +66,10 @@
 			<a class="app-link" href="collapse.html"><i class="bi bi-arrows-collapse" aria-hidden="true"></i>Collapse</a>
 			<a class="app-link" href="list-group.html"><i class="bi bi-list-ul" aria-hidden="true"></i>List groups</a>
 			<a class="app-link" href="tree.html"><i class="bi bi-diagram-3" aria-hidden="true"></i>Trees</a>
+			<a class="app-link" href="thread.html"><i class="bi bi-chat-dots" aria-hidden="true"></i>Message threads</a>
+			<a class="app-link" href="chart.html"><i class="bi bi-bar-chart" aria-hidden="true"></i>Charts</a>
+			<a class="app-link" href="calendar.html"><i class="bi bi-calendar3" aria-hidden="true"></i>Calendars</a>
+			<a class="app-link" href="media.html"><i class="bi bi-collection" aria-hidden="true"></i>Media library</a>
 			<a class="app-link" href="table.html"><i class="bi bi-table" aria-hidden="true"></i>Tables</a>
 			<a class="app-link" href="badge.html"><i class="bi bi-patch-check" aria-hidden="true"></i>Badges</a>
 			<a class="app-link" href="dot.html"><i class="bi bi-record-circle" aria-hidden="true"></i>Dots</a>
@@ -156,6 +160,88 @@
 	&lt;/template&gt;
 &lt;/div&gt;</code></pre></div>
 
+					<h3>One file</h3>
+					<p>An input without <code>multiple</code> holds one file: a new one chosen, dropped or pasted takes the place of the one before - its row, its sending, its place in the input - and of several dropped at once only the first is taken.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="upload-one">
+						<div class="upload" data-max-size="2097152">
+							<input class="visually-hidden" id="upload-one-input" type="file" name="photo" accept="image/*" tabindex="-1" aria-label="Reference photo">
+							<button class="upload-zone" type="button" aria-describedby="upload-one-hint">
+								<i class="bi bi-image fs-24" aria-hidden="true"></i>
+								<span>Drop a photo here, or choose one</span>
+								<span class="fs-12" id="upload-one-hint">One image, up to 2 MB</span>
+							</button>
+							<ul class="upload-list" aria-label="File"></ul>
+							<template>
+								<li>
+									<i class="bi bi-file-earmark-image" aria-hidden="true"></i>
+									<span class="flex-fill" data-file-name></span>
+									<span class="invalid-feedback" data-file-error></span>
+									<button class="btn btn-sm btn-icon btn-text" type="button" data-file-remove><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+								</li>
+							</template>
+						</div>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;div class="upload" data-max-size="2097152"&gt;
+	&lt;input class="visually-hidden" id="upload-one-input" type="file" name="photo" accept="image/*" tabindex="-1" aria-label="Reference photo"&gt;
+	&lt;button class="upload-zone" type="button" aria-describedby="upload-one-hint"&gt;
+		&lt;i class="bi bi-image fs-24" aria-hidden="true"&gt;&lt;/i&gt;
+		&lt;span&gt;Drop a photo here, or choose one&lt;/span&gt;
+		&lt;span class="fs-12" id="upload-one-hint"&gt;One image, up to 2 MB&lt;/span&gt;
+	&lt;/button&gt;
+	&lt;ul class="upload-list" aria-label="File"&gt;&lt;/ul&gt;
+	&lt;template&gt;
+		&lt;li&gt;
+			&lt;i class="bi bi-file-earmark-image" aria-hidden="true"&gt;&lt;/i&gt;
+			&lt;span class="flex-fill" data-file-name&gt;&lt;/span&gt;
+			&lt;span class="invalid-feedback" data-file-error&gt;&lt;/span&gt;
+			&lt;button class="btn btn-sm btn-icon btn-text" type="button" data-file-remove&gt;&lt;i class="bi bi-x-lg" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;
+		&lt;/li&gt;
+	&lt;/template&gt;
+&lt;/div&gt;</code></pre></div>
+
+					<h3>Thumbnails</h3>
+					<p><code>upload-thumbs</code> on the upload draws its files as 5rem squares: an <code>img data-file-preview</code> in the row's template shows the image itself, cut to fill, its remove button on the corner; a refused file keeps a whole row for its words. <code>data-max-files</code> takes that many and refuses the rest with the page's text <code>file.count</code>. A page that prepares each image first - resized, turned upright - answers <code>redz:files</code> with a promise of the new file, which takes the old one's place in the input.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="upload-shots">
+						<div class="upload upload-thumbs" data-max-files="3" data-max-size="5242880">
+							<input class="visually-hidden" id="upload-shots-input" type="file" name="shots[]" accept="image/*" multiple tabindex="-1" aria-label="Screenshots">
+							<button class="upload-zone" type="button" aria-describedby="upload-shots-hint">
+								<i class="bi bi-images fs-24" aria-hidden="true"></i>
+								<span>Drop or paste screenshots here, or choose them</span>
+								<span class="fs-12" id="upload-shots-hint">Up to 3 images</span>
+							</button>
+							<ul class="upload-list" aria-label="Screenshots"></ul>
+							<template>
+								<li>
+									<img data-file-preview alt="">
+									<span data-file-name></span>
+									<span class="invalid-feedback" data-file-error></span>
+									<button class="btn btn-xs btn-icon" type="button" data-file-remove><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+								</li>
+							</template>
+						</div>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;div class="upload upload-thumbs" data-max-files="3" data-max-size="5242880"&gt;
+	&lt;input class="visually-hidden" id="upload-shots-input" type="file" name="shots[]" accept="image/*" multiple tabindex="-1" aria-label="Screenshots"&gt;
+	&lt;button class="upload-zone" type="button" aria-describedby="upload-shots-hint"&gt;
+		&lt;i class="bi bi-images fs-24" aria-hidden="true"&gt;&lt;/i&gt;
+		&lt;span&gt;Drop or paste screenshots here, or choose them&lt;/span&gt;
+		&lt;span class="fs-12" id="upload-shots-hint"&gt;Up to 3 images&lt;/span&gt;
+	&lt;/button&gt;
+	&lt;ul class="upload-list" aria-label="Screenshots"&gt;&lt;/ul&gt;
+	&lt;template&gt;
+		&lt;li&gt;
+			&lt;img data-file-preview alt=""&gt;
+			&lt;span data-file-name&gt;&lt;/span&gt;
+			&lt;span class="invalid-feedback" data-file-error&gt;&lt;/span&gt;
+			&lt;button class="btn btn-xs btn-icon" type="button" data-file-remove&gt;&lt;i class="bi bi-x-lg" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;
+		&lt;/li&gt;
+	&lt;/template&gt;
+&lt;/div&gt;</code></pre></div>
+					<pre class="docs-code" tabindex="0"><code>upload.addEventListener('redz:files', (event) =&gt; {
+  event.preventDefault();
+  event.detail.respondWith(createImageBitmap(event.detail.file, {imageOrientation: 'from-image'}).then(resize));
+});</code></pre>
+
 					<h3>Sent by the page</h3>
 					<p>Each file fires <code>redz:files</code> on the upload with the file, its row, <code>progress(fraction)</code> for the row's bar and a <code>signal</code> its remove button aborts. A page that sends cancels it and answers with a promise: resolved, the row is done; rejected, the page's words show in the row's <code>data-file-error</code>. One file's error leaves the others. Left alone, the file joins the input's files and goes with the form. The example above answers in a second and a half.</p>
 					<pre class="docs-code" tabindex="0"><code>document.addEventListener('redz:files', (event) =&gt; {
@@ -197,7 +283,7 @@
 						<section class="vstack gap-12" aria-labelledby="upload-tokens">
 							<h2 id="upload-tokens">Tokens</h2>
 							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/upload.css"><code>css/components/upload.css</code></a>, which declares no custom property of its own.</p>
-							<p>It reads the theme's <code>--redz-space-8</code>, <code>--redz-space-4</code>, <code>--redz-space-24</code>, <code>--redz-space-16</code>, <code>--redz-border-strong</code>, <code>--redz-radius-12</code>, <code>--redz-bg</code>, <code>--redz-text-muted</code>, <code>--redz-primary</code>, <code>--redz-bg-hover</code>.</p>
+							<p>It reads the theme's <code>--redz-space-8</code>, <code>--redz-space-4</code>, <code>--redz-space-24</code>, <code>--redz-space-16</code>, <code>--redz-border-strong</code>, <code>--redz-radius-12</code>, <code>--redz-bg</code>, <code>--redz-text-muted</code>, <code>--redz-primary</code>, <code>--redz-bg-hover</code>, <code>--redz-border</code>, <code>--redz-radius-8</code>, <code>--redz-bg-page</code>, <code>--redz-space-2</code>.</p>
 						</section>
 				<footer class="d-flex flex-wrap justify-content-between gap-8 pt-16 border-top text-muted fs-12">
 					<span>MIT license · © 2026 Red Z Group · includes Bootstrap Icons (MIT)</span>

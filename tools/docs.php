@@ -31,7 +31,7 @@ function DOCS__Config(): array
 			throw new RuntimeException('tools/docs.json gives the menu item "' . $key . '" no icon of icons/');
 		}
 	}
-	return ['site' => $config['site'], 'texts' => $config['texts'], 'pages' => $pages, 'twins' => $config['twins'], 'icons' => $config['icons']];
+	return ['site' => $config['site'], 'texts' => $config['texts'], 'pages' => $pages, 'twins' => $config['twins'], 'icons' => $config['icons'], 'packages' => $config['packages'] ?? []];
 }
 
 /** The text of an HTML fragment: tags gone, entities decoded, white space as single spaces. */
@@ -218,6 +218,10 @@ function DOCS__Page(array $config, string $key, string $title, string $lead, str
 	$name = htmlspecialchars($title);
 	$nav = DOCS__Nav($config, $key);
 	$description = htmlspecialchars($lead);
+	$packages = '';
+	foreach ($key === 'all' ? array_merge(...array_values($config['packages'] ?? [])) : ($config['packages'][$key] ?? []) as $file) {
+		$packages .= "\n\t" . (str_ends_with($file, '.js') ? '<script type="module" src="../' . $file . '"></script>' : '<link rel="stylesheet" href="../' . $file . '">');
+	}
 	return <<<HTML
 		<!doctype html>
 		<!-- {$from} -->
@@ -229,7 +233,7 @@ function DOCS__Page(array $config, string $key, string $title, string $lead, str
 			<meta name="description" content="{$description}">
 			<script src="../js/floor.js"></script>
 			<link rel="stylesheet" href="../dist/redz-ui.min.css">
-			<link rel="stylesheet" href="../css/icons.css">
+			<link rel="stylesheet" href="../css/icons.css">{$packages}
 			<link rel="stylesheet" href="site.css">
 			<link rel="alternate" type="text/markdown" href="{$key}.md">
 			<script src="site.js"></script>

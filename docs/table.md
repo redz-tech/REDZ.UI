@@ -101,6 +101,23 @@ A list of records: a title that links to the record, a line under it, a note whe
 </table>
 ```
 
+### Rows that light together
+
+Elements that share a `data-highlight` key light together: hovering or focusing one marks every element with its key `data-highlighted`, tinted - a row here and its lane on a [board](chart.md#chart-lanes), or its marker on a map.
+
+```html
+<div class="hstack flex-wrap gap-8">
+	<button class="btn btn-sm" type="button" data-highlight="pier">The pier</button>
+	<button class="btn btn-sm" type="button" data-highlight="lake">The emerald lake</button>
+</div>
+<table class="table" aria-label="Stops">
+	<tbody>
+		<tr data-highlight="pier"><td>The pier</td><td class="tabular-nums">08:30</td></tr>
+		<tr data-highlight="lake"><td>The emerald lake</td><td class="tabular-nums">11:00</td></tr>
+	</tbody>
+</table>
+```
+
 ### Sortable columns
 
 A header that sorts holds a `button class="table-sort"`, and the header's `aria-sort` - `ascending`, `descending` or none - draws the arrow. The page sorts - on the server or in place - and moves `aria-sort` to the column it sorted by.
@@ -132,7 +149,7 @@ A row's tone marks what needs attention: `table-danger` failed, `table-warning` 
 
 From [`css/components/table.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css). It declares `--redz-row-tint`, `--redz-row-mark` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-8`, `--redz-space-12`, `--redz-border`, `--redz-bg`, `--redz-text-muted`, `--redz-fs-12`, `--redz-row-pad`, `--redz-radius-12`, `--redz-space-16`, `--redz-text`, `--redz-border-strong`, `--redz-bg-hover`, `--redz-font-mono`, `--redz-space-4`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-bg-page`.
+It reads the theme's `--redz-space-8`, `--redz-space-12`, `--redz-border`, `--redz-bg`, `--redz-text-muted`, `--redz-fs-12`, `--redz-row-pad`, `--redz-radius-12`, `--redz-space-16`, `--redz-text`, `--redz-border-strong`, `--redz-bg-hover`, `--redz-font-mono`, `--redz-space-4`, `--redz-primary`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-bg-page`.
 
 ## From Bootstrap 5.3
 

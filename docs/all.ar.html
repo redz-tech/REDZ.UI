@@ -7,11 +7,15 @@
 	<script src="../js/floor.js"></script>
 	<link rel="stylesheet" href="../dist/redz-ui.min.css">
 	<link rel="stylesheet" href="../css/icons.css">
+	<link rel="stylesheet" href="../charts/charts.css">
+	<script type="module" src="../charts/charts.js"></script>
+	<link rel="stylesheet" href="../calendar/calendar.css">
+	<link rel="stylesheet" href="../media/media.css">
 	<link rel="stylesheet" href="site.css">
 	<link rel="alternate" type="text/markdown" href="all.md">
 	<script src="site.js"></script>
 	<script type="module" src="../dist/redz-ui.min.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close":"إغلاق","confirm.ok":"موافق","confirm.cancel":"إلغاء","confirm.phrase":"اكتب «{phrase}» للتأكيد","busy":"جارٍ التحميل…","remove":"إزالة {label}","found.one":"{count} نتيجة","found.other":"{count} نتائج","create":"إنشاء «{label}»","strength.short":"قصيرة جدًا","strength.fair":"مقبولة","strength.good":"جيدة","strength.strong":"قوية","moved":"نُقل إلى {position} من {count}","more":"المزيد","slide":"{position} من {count}","pin.delete":"حذف","pin.enter":"إدخال","cooldown":"{seconds} ث","file.type":"{name} ليس من أنواع الملفات المقبولة هنا","file.size":"{name} أكبر من {size}","editor.toolbar":"أدوات التنسيق","editor.body":"نص","editor.source":"مصدر HTML","editor.format":"التنسيق","editor.format.paragraph":"فقرة","editor.format.heading2":"عنوان 2","editor.format.heading3":"عنوان 3","editor.format.heading4":"عنوان 4","editor.format.quote":"اقتباس","editor.format.code":"شيفرة","editor.bold":"عريض","editor.italic":"مائل","editor.underline":"تسطير","editor.link":"رابط","editor.link.href":"العنوان","editor.link.words":"الكلمات","editor.link.blank":"افتح في علامة تبويب جديدة","editor.link.nofollow":"اطلب من محركات البحث ألا تتبعه","editor.color":"اللون","editor.color.primary":"اللون المميز","editor.color.secondary":"ثانوي","editor.color.success":"نجاح","editor.color.danger":"خطر","editor.color.warning":"تحذير","editor.color.info":"معلومة","editor.color.none":"بلا لون","editor.bullets":"قائمة نقطية","editor.numbers":"قائمة مرقمة","editor.align":"المحاذاة","editor.align.start":"البداية","editor.align.center":"الوسط","editor.align.end":"النهاية","editor.image":"صورة","editor.embed":"فيديو","editor.embed.url":"عنوان YouTube أو Vimeo","editor.embed.title":"العنوان","editor.blocks":"الكتل","editor.group.content":"المحتوى","editor.group.inline":"في سطر","editor.group.layout":"التخطيط","editor.block":"كتلة","editor.block.up":"انقل للأعلى","editor.block.down":"انقل للأسفل","editor.block.edit":"تحرير HTML","editor.block.columns":"الأعمدة","editor.block.preview":"معاينة","editor.block.delete":"حذف","editor.columns.count":"الأعمدة","editor.columns.from":"من العرض","editor.columns.always":"دائمًا","editor.columns.gap":"المسافة","editor.clear":"مسح التنسيق","editor.undo":"تراجع","editor.redo":"إعادة","editor.block.alert-info":"ملاحظة","editor.block.alert-success":"ملاحظة نجاح","editor.block.alert-warning":"ملاحظة تحذير","editor.block.alert-danger":"ملاحظة خطر","editor.block.card":"بطاقة","editor.block.accordion":"أكورديون","editor.block.tabs":"علامات التبويب","editor.block.list-group":"مجموعة قائمة","editor.block.table":"جدول","editor.block.carousel":"دوّارة","editor.block.badges":"الشارات","editor.block.buttons":"الأزرار","editor.block.button-group":"مجموعة أزرار","editor.block.progress":"التقدم","editor.block.grid-2":"عمودان","editor.block.grid-3":"ثلاثة أعمدة","editor.sample.title":"العنوان","editor.sample.text":"نص الكتلة.","editor.sample.item":"العنصر {n}","editor.sample.previous":"السابق","editor.sample.next":"التالي"}</script>
+	<script type="application/json" id="redz-ui-text">{"close":"إغلاق","confirm.ok":"موافق","confirm.cancel":"إلغاء","confirm.phrase":"اكتب «{phrase}» للتأكيد","busy":"جارٍ التحميل…","remove":"إزالة {label}","found.one":"{count} نتيجة","found.other":"{count} نتائج","create":"إنشاء «{label}»","strength.short":"قصيرة جدًا","strength.fair":"مقبولة","strength.good":"جيدة","strength.strong":"قوية","moved":"نُقل إلى {position} من {count}","more":"المزيد","slide":"{position} من {count}","pin.delete":"حذف","pin.enter":"إدخال","cooldown":"{seconds} ث","file.type":"{name} ليس من أنواع الملفات المقبولة هنا","file.size":"{name} أكبر من {size}","file.count":"{name}: حتى {count} ملفات","editor.toolbar":"أدوات التنسيق","editor.body":"نص","editor.source":"مصدر HTML","editor.format":"التنسيق","editor.format.paragraph":"فقرة","editor.format.heading2":"عنوان 2","editor.format.heading3":"عنوان 3","editor.format.heading4":"عنوان 4","editor.format.quote":"اقتباس","editor.format.code":"شيفرة","editor.bold":"عريض","editor.italic":"مائل","editor.underline":"تسطير","editor.link":"رابط","editor.link.href":"العنوان","editor.link.words":"الكلمات","editor.link.blank":"افتح في علامة تبويب جديدة","editor.link.nofollow":"اطلب من محركات البحث ألا تتبعه","editor.color":"اللون","editor.color.primary":"اللون المميز","editor.color.secondary":"ثانوي","editor.color.success":"نجاح","editor.color.danger":"خطر","editor.color.warning":"تحذير","editor.color.info":"معلومة","editor.color.none":"بلا لون","editor.bullets":"قائمة نقطية","editor.numbers":"قائمة مرقمة","editor.align":"المحاذاة","editor.align.start":"البداية","editor.align.center":"الوسط","editor.align.end":"النهاية","editor.image":"صورة","editor.embed":"فيديو","editor.embed.url":"عنوان YouTube أو Vimeo","editor.embed.title":"العنوان","editor.blocks":"الكتل","editor.group.content":"المحتوى","editor.group.inline":"في سطر","editor.group.layout":"التخطيط","editor.block":"كتلة","editor.block.up":"انقل للأعلى","editor.block.down":"انقل للأسفل","editor.block.edit":"تحرير HTML","editor.block.columns":"الأعمدة","editor.block.preview":"معاينة","editor.block.delete":"حذف","editor.columns.count":"الأعمدة","editor.columns.from":"من العرض","editor.columns.always":"دائمًا","editor.columns.gap":"المسافة","editor.clear":"مسح التنسيق","editor.undo":"تراجع","editor.redo":"إعادة","editor.block.alert-info":"ملاحظة","editor.block.alert-success":"ملاحظة نجاح","editor.block.alert-warning":"ملاحظة تحذير","editor.block.alert-danger":"ملاحظة خطر","editor.block.card":"بطاقة","editor.block.accordion":"أكورديون","editor.block.tabs":"علامات التبويب","editor.block.list-group":"مجموعة قائمة","editor.block.table":"جدول","editor.block.carousel":"دوّارة","editor.block.badges":"الشارات","editor.block.buttons":"الأزرار","editor.block.button-group":"مجموعة أزرار","editor.block.progress":"التقدم","editor.block.grid-2":"عمودان","editor.block.grid-3":"ثلاثة أعمدة","editor.sample.title":"العنوان","editor.sample.text":"نص الكتلة.","editor.sample.item":"العنصر {n}","editor.sample.previous":"السابق","editor.sample.next":"التالي"}</script>
 </head>
 <body>
 	<div class="app">
@@ -64,6 +68,10 @@
 			<a class="app-link" href="collapse.html"><i class="bi bi-arrows-collapse" aria-hidden="true"></i>الطي</a>
 			<a class="app-link" href="list-group.html"><i class="bi bi-list-ul" aria-hidden="true"></i>مجموعات القوائم</a>
 			<a class="app-link" href="tree.html"><i class="bi bi-diagram-3" aria-hidden="true"></i>الأشجار</a>
+			<a class="app-link" href="thread.html"><i class="bi bi-chat-dots" aria-hidden="true"></i>سلاسل الرسائل</a>
+			<a class="app-link" href="chart.html"><i class="bi bi-bar-chart" aria-hidden="true"></i>الرسوم البيانية</a>
+			<a class="app-link" href="calendar.html"><i class="bi bi-calendar3" aria-hidden="true"></i>التقاويم</a>
+			<a class="app-link" href="media.html"><i class="bi bi-collection" aria-hidden="true"></i>مكتبة الوسائط</a>
 			<a class="app-link" href="table.html"><i class="bi bi-table" aria-hidden="true"></i>الجداول</a>
 			<a class="app-link" href="badge.html"><i class="bi bi-patch-check" aria-hidden="true"></i>الشارات</a>
 			<a class="app-link" href="dot.html"><i class="bi bi-record-circle" aria-hidden="true"></i>النقاط</a>
@@ -1053,6 +1061,44 @@
 							</template>
 						</div>
 					</div>
+					<div class="docs-example docs-example-stack" id="upload-one">
+						<div class="upload" data-max-size="2097152">
+							<input class="visually-hidden" id="upload-one-input" type="file" name="photo" accept="image/*" tabindex="-1" aria-label="الصورة المرجعية">
+							<button class="upload-zone" type="button" aria-describedby="upload-one-hint">
+								<i class="bi bi-image fs-24" aria-hidden="true"></i>
+								<span>أفلت صورة هنا، أو اختر واحدة</span>
+								<span class="fs-12" id="upload-one-hint">صورة واحدة، حتى 2 ميغابايت</span>
+							</button>
+							<ul class="upload-list" aria-label="الملف"></ul>
+							<template>
+								<li>
+									<i class="bi bi-file-earmark-image" aria-hidden="true"></i>
+									<span class="flex-fill" data-file-name=""></span>
+									<span class="invalid-feedback" data-file-error=""></span>
+									<button class="btn btn-sm btn-icon btn-text" type="button" data-file-remove=""><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+								</li>
+							</template>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="upload-shots">
+						<div class="upload upload-thumbs" data-max-files="3" data-max-size="5242880">
+							<input class="visually-hidden" id="upload-shots-input" type="file" name="shots[]" accept="image/*" multiple="" tabindex="-1" aria-label="لقطات الشاشة">
+							<button class="upload-zone" type="button" aria-describedby="upload-shots-hint">
+								<i class="bi bi-images fs-24" aria-hidden="true"></i>
+								<span>أفلت لقطات الشاشة هنا أو الصقها، أو اخترها</span>
+								<span class="fs-12" id="upload-shots-hint">حتى 3 صور</span>
+							</button>
+							<ul class="upload-list" aria-label="لقطات الشاشة"></ul>
+							<template>
+								<li>
+									<img data-file-preview="" alt="">
+									<span data-file-name=""></span>
+									<span class="invalid-feedback" data-file-error=""></span>
+									<button class="btn btn-xs btn-icon" type="button" data-file-remove=""><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+								</li>
+							</template>
+						</div>
+					</div>
 				</section>
 
 				<section class="vstack gap-16" aria-labelledby="all-choice">
@@ -1154,6 +1200,22 @@
 							<section class="card" aria-labelledby="card-grid-a"><div class="card-header"><h2 id="card-grid-a">الحجوزات</h2></div><div class="card-body"><p class="fs-24 fw-600 tabular-nums">128</p><p class="text-muted">هذا الأسبوع</p></div></section>
 							<section class="card" aria-labelledby="card-grid-b"><div class="card-header"><h2 id="card-grid-b">الإيرادات</h2></div><div class="card-body"><p class="fs-24 fw-600 tabular-nums">312,400 بات</p><p class="text-muted">هذا الأسبوع</p></div></section>
 						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="card-scrolling">
+						<section class="card card-scroll max-h-240" aria-labelledby="card-scrolling-title">
+							<div class="card-header"><h2 id="card-scrolling-title">التذاكر</h2></div>
+							<div class="card-body" tabindex="0" role="region" aria-labelledby="card-scrolling-title">
+								<div class="list-group list-group-flush">
+									<button class="list-group-item list-group-item-action" type="button" aria-current="true">صفحة الحجز تعرض سعرًا خاطئًا</button>
+									<button class="list-group-item list-group-item-action" type="button">لغة جديدة للموقع</button>
+									<button class="list-group-item list-group-item-action" type="button">فاتورة أكتوبر</button>
+									<button class="list-group-item list-group-item-action" type="button">الصور لا تُرفع من الهاتف</button>
+									<button class="list-group-item list-group-item-action" type="button">تغيير عنوان الموقع</button>
+									<button class="list-group-item list-group-item-action" type="button">مالكان لموقع واحد</button>
+								</div>
+							</div>
+							<div class="card-footer"><button class="btn btn-sm" type="button"><i class="bi bi-plus-lg" aria-hidden="true"></i>تذكرة جديدة</button></div>
+						</section>
 					</div>
 					<div class="docs-example docs-example-stack" id="card-edge">
 						<div class="grid sm:cols-2 gap-16">
@@ -1500,6 +1562,184 @@
 					</div>
 				</section>
 
+				<section class="vstack gap-16" aria-labelledby="all-thread">
+					<h2 id="all-thread"><a href="thread.html">سلاسل الرسائل</a></h2>
+					<div class="docs-example docs-example-stack" id="thread-desk">
+						<section class="card card-scroll max-h-560" aria-labelledby="thread-desk-title">
+							<div class="card-header hstack flex-wrap gap-8"><h2 id="thread-desk-title">صفحة الحجز تعرض سعرًا خاطئًا</h2><span class="badge badge-subtle-warning">فتح</span></div>
+							<div class="card-body">
+								<ol class="thread" aria-label="الرسائل">
+									<li class="thread-message">
+										<span class="avatar avatar-sm" aria-hidden="true">AR</span>
+										<div class="thread-body">
+											<div class="thread-meta"><span>منتجع أناندا</span><time datetime="2026-11-04T09:12">09:12</time></div>
+											<div class="thread-bubble">سعر الطفل في أنغ ثونغ يظهر 2,500 بات. يجب أن يكون 1,900 بات منذ الاثنين.</div>
+											<div class="thread-files"><a href="img/lagoon.svg"><img src="img/lagoon.svg" alt="لقطة شاشة للسعر"></a></div>
+										</div>
+									</li>
+									<li class="thread-message" data-mine="">
+										<span class="avatar avatar-sm" aria-hidden="true">RZ</span>
+										<div class="thread-body">
+											<div class="thread-meta"><span>دعم REDZ</span><time datetime="2026-11-04T09:30">09:30</time><span class="thread-edited">مُعدّلة</span><button class="btn btn-xs btn-icon btn-text" type="button" commandfor="thread-desk-edit" command="--edit" aria-label="عدّل الرسالة"><i class="bi bi-pencil" aria-hidden="true"></i></button></div>
+											<div class="thread-bubble" id="thread-desk-reply">شكرًا - نُشرت قائمة الأسعار قبل التغيير. تم إصلاحها الآن؛ يرجى مراجعة الصفحة مرة أخرى.</div>
+											<form class="inline-edit-form" id="thread-desk-edit" data-for="thread-desk-reply" hidden="">
+												<textarea class="form-control" name="text" aria-label="الرسالة" rows="3">شكرًا - نُشرت قائمة الأسعار قبل التغيير. تم إصلاحها الآن؛ يرجى مراجعة الصفحة مرة أخرى.</textarea>
+												<button class="btn btn-sm btn-primary" type="submit">حفظ</button>
+												<button class="btn btn-sm" type="button" commandfor="thread-desk-edit" command="--cancel">إلغاء</button>
+												<div class="invalid-feedback" hidden=""></div>
+											</form>
+											<div class="thread-files"><span><img src="img/qr.svg" alt="الصفحة بعد الإصلاح"><button class="btn btn-xs btn-icon thread-file-remove" type="button" aria-label="أزل الصفحة بعد الإصلاح"><i class="bi bi-x-lg" aria-hidden="true"></i></button></span></div>
+										</div>
+									</li>
+								</ol>
+							</div>
+							<div class="card-footer">
+								<textarea class="form-control" rows="2" aria-label="الرد" placeholder="اكتب ردًا"></textarea>
+								<button class="btn btn-primary" type="button"><i class="bi bi-send" aria-hidden="true"></i>إرسال</button>
+								<button class="btn ms-auto" type="button">أغلق التذكرة</button>
+							</div>
+						</section>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-chart">
+					<h2 id="all-chart"><a href="chart.html">الرسوم البيانية</a></h2>
+					<div class="docs-example docs-example-stack" id="chart-messages">
+						<table class="chart">
+							<caption>الرسائل المرسلة يوميًا</caption>
+							<thead><tr><th scope="col">اليوم</th><th scope="col" data-tone="success">مجانية</th><th scope="col" data-tone="warning">مدفوع</th><th scope="col" data-tone="danger">فشل</th></tr></thead>
+							<tbody>
+								<tr title="1 نوفمبر: 120 مجانية، 30 مدفوعة، 4 فاشلة"><th scope="row">1 نوفمبر</th><td data-tone="success" data-v="0.615">120</td><td data-tone="warning" data-v="0.154">30</td><td data-tone="danger" data-v="0.021">4</td></tr>
+								<tr title="2 نوفمبر: 132 مجانية، 28 مدفوعة، 2 فاشلة"><th scope="row"><span class="visually-hidden">2 نوفمبر</span></th><td data-tone="success" data-v="0.677">132</td><td data-tone="warning" data-v="0.144">28</td><td data-tone="danger" data-v="0.01">2</td></tr>
+								<tr title="3 نوفمبر: 98 مجانية، 41 مدفوعة، 6 فاشلة"><th scope="row"><span class="visually-hidden">3 نوفمبر</span></th><td data-tone="success" data-v="0.503">98</td><td data-tone="warning" data-v="0.21">41</td><td data-tone="danger" data-v="0.031">6</td></tr>
+								<tr data-empty="" title="4 نوفمبر: لا شيء"><th scope="row">4 نوفمبر</th><td>0</td><td>0</td><td>0</td></tr>
+								<tr title="5 نوفمبر: 144 مجانية، 35 مدفوعة، 3 فاشلة"><th scope="row"><span class="visually-hidden">5 نوفمبر</span></th><td data-tone="success" data-v="0.738">144</td><td data-tone="warning" data-v="0.179">35</td><td data-tone="danger" data-v="0.015">3</td></tr>
+								<tr title="6 نوفمبر: 160 مجانية، 22 مدفوعة، 1 فاشلة"><th scope="row"><span class="visually-hidden">6 نوفمبر</span></th><td data-tone="success" data-v="0.821">160</td><td data-tone="warning" data-v="0.113">22</td><td data-tone="danger" data-v="0.005">1</td></tr>
+								<tr title="7 نوفمبر: 110 مجانية، 30 مدفوعة، 9 فاشلة"><th scope="row">7 نوفمبر</th><td data-tone="success" data-v="0.564">110</td><td data-tone="warning" data-v="0.154">30</td><td data-tone="danger" data-v="0.046">9</td></tr>
+								<tr title="8 نوفمبر: 90 مجانية، 25 مدفوعة، 2 فاشلة"><th scope="row"><span class="visually-hidden">8 نوفمبر</span></th><td data-tone="success" data-v="0.462">90</td><td data-tone="warning" data-v="0.128">25</td><td data-tone="danger" data-v="0.01">2</td></tr>
+								<tr data-empty="" title="9 نوفمبر: لا شيء"><th scope="row"><span class="visually-hidden">9 نوفمبر</span></th><td>0</td><td>0</td><td>0</td></tr>
+								<tr title="10 نوفمبر: 150 مجانية، 40 مدفوعة، 5 فاشلة"><th scope="row">10 نوفمبر</th><td data-tone="success" data-v="0.769">150</td><td data-tone="warning" data-v="0.205">40</td><td data-tone="danger" data-v="0.026">5</td></tr>
+								<tr title="11 نوفمبر: 170 مجانية، 12 مدفوعة، 0 فاشلة"><th scope="row"><span class="visually-hidden">11 نوفمبر</span></th><td data-tone="success" data-v="0.872">170</td><td data-tone="warning" data-v="0.062">12</td><td data-tone="danger" data-v="0">0</td></tr>
+								<tr title="12 نوفمبر: 125 مجانية، 33 مدفوعة، 4 فاشلة"><th scope="row"><span class="visually-hidden">12 نوفمبر</span></th><td data-tone="success" data-v="0.641">125</td><td data-tone="warning" data-v="0.169">33</td><td data-tone="danger" data-v="0.021">4</td></tr>
+								<tr title="13 نوفمبر: 140 مجانية، 29 مدفوعة، 3 فاشلة"><th scope="row">13 نوفمبر</th><td data-tone="success" data-v="0.718">140</td><td data-tone="warning" data-v="0.149">29</td><td data-tone="danger" data-v="0.015">3</td></tr>
+								<tr title="14 نوفمبر: 155 مجانية، 31 مدفوعة، 2 فاشلة"><th scope="row"><span class="visually-hidden">14 نوفمبر</span></th><td data-tone="success" data-v="0.795">155</td><td data-tone="warning" data-v="0.159">31</td><td data-tone="danger" data-v="0.01">2</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="docs-example docs-example-stack" id="chart-channels">
+						<table class="chart">
+							<caption>الحجوزات حسب القناة، هذا الأسبوع</caption>
+							<thead><tr><th scope="col">اليوم</th><th scope="col">الموقع</th><th scope="col">الشركاء</th><th scope="col">الحضور المباشر</th></tr></thead>
+							<tbody>
+								<tr title="الاثنين: 12 من الموقع، 5 من الشركاء، 3 حضور مباشر"><th scope="row">الاثنين</th><td data-v="0.25">12</td><td data-v="0.104">5</td><td data-v="0.062">3</td></tr>
+								<tr title="الثلاثاء: 15 من الموقع، 6 من الشركاء، 2 حضور مباشر"><th scope="row">الثلاثاء</th><td data-v="0.312">15</td><td data-v="0.125">6</td><td data-v="0.042">2</td></tr>
+								<tr title="الأربعاء: 9 من الموقع، 8 من الشركاء، 4 حضور مباشر"><th scope="row">الأربعاء</th><td data-v="0.188">9</td><td data-v="0.167">8</td><td data-v="0.083">4</td></tr>
+								<tr title="الخميس: 18 من الموقع، 4 من الشركاء، 1 حضور مباشر"><th scope="row">الخميس</th><td data-v="0.375">18</td><td data-v="0.083">4</td><td data-v="0.021">1</td></tr>
+								<tr title="الجمعة: 22 من الموقع، 9 من الشركاء، 5 حضور مباشر"><th scope="row">الجمعة</th><td data-v="0.458">22</td><td data-v="0.188">9</td><td data-v="0.104">5</td></tr>
+								<tr title="السبت: 30 من الموقع، 12 من الشركاء، 6 حضور مباشر"><th scope="row">السبت</th><td data-v="0.625">30</td><td data-v="0.25">12</td><td data-v="0.125">6</td></tr>
+								<tr title="الأحد: 26 من الموقع، 10 من الشركاء، 7 حضور مباشر"><th scope="row">الأحد</th><td data-v="0.542">26</td><td data-v="0.208">10</td><td data-v="0.146">7</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="docs-example docs-example-stack" id="chart-sparks">
+						<table class="table" aria-label="الوكلاء">
+							<thead><tr><th scope="col">الوكيل</th><th scope="col">آخر 20 تشغيلًا</th></tr></thead>
+							<tbody>
+								<tr><td class="font-monospace">backup.nightly</td><td><span class="spark" role="img" aria-label="20 تشغيلًا: 18 ناجحة، 1 انتهت مهلته، 1 فاشلة"><i data-state="ok" data-v="0.31" title="ناجح · 1.2 ث"></i><i data-state="ok" data-v="0.28" title="ناجح · 1.1 ث"></i><i data-state="ok" data-v="0.36" title="ناجح · 1.4 ث"></i><i data-state="ok" data-v="0.33" title="ناجح · 1.3 ث"></i><i data-state="timeout" data-v="1" title="انتهت المهلة · 3.9 ث"></i><i data-state="ok" data-v="0.31" title="ناجح · 1.2 ث"></i><i data-state="ok" data-v="0.26" title="ناجح · 1 ث"></i><i data-state="ok" data-v="0.38" title="ناجح · 1.5 ث"></i><i data-state="ok" data-v="0.31" title="ناجح · 1.2 ث"></i><i data-state="failed" data-v="0.72" title="فشل · 2.8 ث"></i><i data-state="ok" data-v="0.33" title="ناجح · 1.3 ث"></i><i data-state="ok" data-v="0.28" title="ناجح · 1.1 ث"></i><i data-state="ok" data-v="0.31" title="ناجح · 1.2 ث"></i><i data-state="ok" data-v="0.41" title="ناجح · 1.6 ث"></i><i data-state="ok" data-v="0.31" title="ناجح · 1.2 ث"></i><i data-state="ok" data-v="0.33" title="ناجح · 1.3 ث"></i><i data-state="ok" data-v="0.28" title="ناجح · 1.1 ث"></i><i data-state="ok" data-v="0.36" title="ناجح · 1.4 ث"></i><i data-state="ok" data-v="0.31" title="ناجح · 1.2 ث"></i><i data-state="running" data-v="0.15" title="قيد التشغيل · 0.6 ث"></i></span></td></tr>
+							</tbody>
+						</table>
+						<figure class="vstack gap-4">
+							<span class="spark spark-lg spark-median" role="img" aria-label="20 تشغيلًا، الوسيط 1.2 ث، الأطول 3.9 ث" data-median="0.31"><i data-state="ok" data-v="0.31" title="3 نوفمبر، 02:00 · 1.2 ث"></i><i data-state="ok" data-v="0.28" title="3 نوفمبر، 03:00 · 1.1 ث"></i><i data-state="ok" data-v="0.36" title="3 نوفمبر، 04:00 · 1.4 ث"></i><i data-state="ok" data-v="0.33" title="3 نوفمبر، 05:00 · 1.3 ث"></i><i data-state="timeout" data-v="1" title="3 نوفمبر، 06:00 · 3.9 ث"></i><i data-state="ok" data-v="0.31" title="3 نوفمبر، 07:00 · 1.2 ث"></i><i data-state="ok" data-v="0.26" title="3 نوفمبر، 08:00 · 1 ث"></i><i data-state="ok" data-v="0.38" title="3 نوفمبر، 09:00 · 1.5 ث"></i><i data-state="ok" data-v="0.31" title="3 نوفمبر، 10:00 · 1.2 ث"></i><i data-state="failed" data-v="0.72" title="3 نوفمبر، 11:00 · 2.8 ث"></i><i data-state="ok" data-v="0.33" title="3 نوفمبر، 12:00 · 1.3 ث"></i><i data-state="ok" data-v="0.28" title="3 نوفمبر، 13:00 · 1.1 ث"></i><i data-state="ok" data-v="0.31" title="3 نوفمبر، 14:00 · 1.2 ث"></i><i data-state="ok" data-v="0.41" title="3 نوفمبر، 15:00 · 1.6 ث"></i><i data-state="ok" data-v="0.31" title="3 نوفمبر، 16:00 · 1.2 ث"></i><i data-state="ok" data-v="0.33" title="3 نوفمبر، 17:00 · 1.3 ث"></i><i data-state="ok" data-v="0.28" title="3 نوفمبر، 18:00 · 1.1 ث"></i><i data-state="ok" data-v="0.36" title="3 نوفمبر، 19:00 · 1.4 ث"></i><i data-state="ok" data-v="0.31" title="3 نوفمبر، 20:00 · 1.2 ث"></i><i data-state="running" data-v="0.15" title="3 نوفمبر، 21:00 · 0.6 ث"></i></span>
+							<figcaption class="fs-12 text-muted tabular-nums">الوسيط 1.2 ث · الأطول 3.9 ث</figcaption>
+						</figure>
+					</div>
+					<div class="docs-example docs-example-stack" id="chart-board">
+						<table class="lanes">
+							<caption>الساعات الـ24 القادمة</caption>
+							<thead><tr><td></td><th class="lanes-scale" scope="col"><span data-at="0">الآن</span><span data-at="0.125">18:00</span><span data-at="0.25">21:00</span><span data-at="0.375">00:00</span><span data-at="0.5">03:00</span><span data-at="0.625">06:00</span><span data-at="0.75">09:00</span><span data-at="0.875">12:00</span><span data-at="1">15:00</span></th></tr></thead>
+							<tbody>
+								<tr data-highlight="mail.queue"><th scope="row">mail.queue</th><td><span class="lanes-span" data-from="0" data-to="1" title="mail.queue - كل دقيقة">مستمر</span></td></tr>
+								<tr data-highlight="backup.nightly"><th scope="row">backup.nightly</th><td><i class="lanes-tick-once lanes-tick" data-at="0.458" title="backup.nightly - 02:00"></i></td></tr>
+								<tr data-highlight="fx.rates"><th scope="row">fx.rates</th><td><i class="lanes-tick" data-at="0.04" title="fx.rates - 16:00"></i><i class="lanes-tick" data-at="0.207" title="fx.rates - 20:00"></i><i class="lanes-tick" data-at="0.373" title="fx.rates - 00:00"></i><i class="lanes-tick" data-at="0.54" title="fx.rates - 04:00"></i><i class="lanes-tick" data-at="0.707" title="fx.rates - 08:00"></i><i class="lanes-tick" data-at="0.873" title="fx.rates - 12:00"></i></td></tr>
+							</tbody>
+						</table>
+						<table class="table" aria-label="الوكلاء">
+							<thead><tr><th scope="col">الوكيل</th><th scope="col">التشغيل التالي</th></tr></thead>
+							<tbody>
+								<tr data-highlight="mail.queue"><td class="font-monospace">mail.queue</td><td>كل دقيقة</td></tr>
+								<tr data-highlight="backup.nightly"><td class="font-monospace">backup.nightly</td><td>02:00</td></tr>
+								<tr data-highlight="fx.rates"><td class="font-monospace">fx.rates</td><td>16:00</td></tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-calendar">
+					<h2 id="all-calendar"><a href="calendar.html">التقاويم</a></h2>
+					<div class="docs-example docs-example-stack" id="calendar-equipment">
+						<div class="hstack flex-wrap gap-8">
+							<div class="btn-group" role="group" aria-label="العرض">
+								<a class="btn btn-sm" href="#calendar-strip">الأيام</a>
+								<a class="btn btn-sm" href="#calendar-equipment" aria-current="page">شهر</a>
+							</div>
+							<a class="btn btn-sm btn-icon" href="#calendar-equipment" aria-label="أكتوبر"><i class="bi bi-chevron-left flip-rtl" aria-hidden="true"></i></a>
+							<h3 class="fs-14">نوفمبر 2026</h3>
+							<a class="btn btn-sm btn-icon" href="#calendar-equipment" aria-label="ديسمبر"><i class="bi bi-chevron-right flip-rtl" aria-hidden="true"></i></a>
+							<a class="btn btn-sm btn-text" href="#calendar-equipment">اليوم</a>
+						</div>
+						<table class="calendar">
+							<caption class="visually-hidden">المعدات المحجوزة في نوفمبر 2026</caption>
+							<thead><tr><th scope="col"><abbr title="الاثنين">الاثنين</abbr></th><th scope="col"><abbr title="الثلاثاء">الثلاثاء</abbr></th><th scope="col"><abbr title="الأربعاء">الأربعاء</abbr></th><th scope="col"><abbr title="الخميس">الخميس</abbr></th><th scope="col"><abbr title="الجمعة">الجمعة</abbr></th><th scope="col"><abbr title="السبت">السبت</abbr></th><th scope="col"><abbr title="الأحد">الأحد</abbr></th></tr></thead>
+							<tbody>
+								<tr><td data-outside=""><time class="calendar-day" datetime="2026-10-26">26</time></td><td data-outside=""><time class="calendar-day" datetime="2026-10-27">27</time></td><td data-outside=""><time class="calendar-day" datetime="2026-10-28">28</time></td><td data-outside=""><time class="calendar-day" datetime="2026-10-29">29</time></td><td data-outside=""><time class="calendar-day" datetime="2026-10-30">30</time></td><td data-outside="" data-weekend=""><time class="calendar-day" datetime="2026-10-31">31</time></td><td data-weekend=""><time class="calendar-day" datetime="2026-11-01">1</time></td></tr>
+								<tr><td><time class="calendar-day" datetime="2026-11-02">2</time><div class="calendar-event" title="حفارة · برج ريفرسايد"><span class="dot dot-primary"></span><span>حفارة</span></div></td><td><time class="calendar-day" datetime="2026-11-03">3</time><div class="calendar-event" title="حفارة · برج ريفرسايد"><span class="dot dot-primary"></span><span>حفارة</span></div></td><td aria-current="date"><time class="calendar-day" datetime="2026-11-04">4</time><div class="calendar-event" title="حفارة · برج ريفرسايد"><span class="dot dot-primary"></span><span>حفارة</span></div><div class="calendar-event" title="طقم سقالات · سومتشاي راتاناكول"><span class="dot dot-info"></span><span>طقم سقالات</span></div><div class="calendar-event" title="خلاطة خرسانة · إطلالة الميناء"><span class="dot dot-primary"></span><span>خلاطة خرسانة</span></div><span class="calendar-more">+2<span class="visually-hidden"> أخرى</span></span></td><td><time class="calendar-day" datetime="2026-11-05">5</time></td><td><time class="calendar-day" datetime="2026-11-06">6</time><div class="calendar-event" title="مولّد · إطلالة الميناء"><span class="dot dot-info"></span><span>مولّد</span></div></td><td data-weekend=""><time class="calendar-day" datetime="2026-11-07">7</time></td><td data-weekend=""><time class="calendar-day" datetime="2026-11-08">8</time></td></tr>
+								<tr><td><time class="calendar-day" datetime="2026-11-09">9</time></td><td><time class="calendar-day" datetime="2026-11-10">10</time></td><td><time class="calendar-day" datetime="2026-11-11">11</time></td><td><time class="calendar-day" datetime="2026-11-12">12</time></td><td><time class="calendar-day" datetime="2026-11-13">13</time></td><td data-weekend=""><time class="calendar-day" datetime="2026-11-14">14</time></td><td data-weekend=""><time class="calendar-day" datetime="2026-11-15">15</time></td></tr>
+								<tr><td><time class="calendar-day" datetime="2026-11-16">16</time></td><td><time class="calendar-day" datetime="2026-11-17">17</time></td><td><time class="calendar-day" datetime="2026-11-18">18</time></td><td><time class="calendar-day" datetime="2026-11-19">19</time></td><td><time class="calendar-day" datetime="2026-11-20">20</time></td><td data-weekend=""><time class="calendar-day" datetime="2026-11-21">21</time></td><td data-weekend=""><time class="calendar-day" datetime="2026-11-22">22</time></td></tr>
+								<tr><td><time class="calendar-day" datetime="2026-11-23">23</time></td><td><time class="calendar-day" datetime="2026-11-24">24</time></td><td><time class="calendar-day" datetime="2026-11-25">25</time></td><td><time class="calendar-day" datetime="2026-11-26">26</time></td><td><time class="calendar-day" datetime="2026-11-27">27</time></td><td data-weekend=""><time class="calendar-day" datetime="2026-11-28">28</time></td><td data-weekend=""><time class="calendar-day" datetime="2026-11-29">29</time></td></tr>
+								<tr><td><time class="calendar-day" datetime="2026-11-30">30</time></td><td data-outside=""><time class="calendar-day" datetime="2026-12-01">1</time></td><td data-outside=""><time class="calendar-day" datetime="2026-12-02">2</time></td><td data-outside=""><time class="calendar-day" datetime="2026-12-03">3</time></td><td data-outside=""><time class="calendar-day" datetime="2026-12-04">4</time></td><td data-outside="" data-weekend=""><time class="calendar-day" datetime="2026-12-05">5</time></td><td data-outside="" data-weekend=""><time class="calendar-day" datetime="2026-12-06">6</time></td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="docs-example docs-example-stack" id="calendar-days">
+						<div class="overflow-x-auto" tabindex="0" role="region" aria-labelledby="calendar-days-title">
+							<table class="schedule">
+								<caption class="visually-hidden" id="calendar-days-title">المعدات المُعارة، من 2 إلى 8 نوفمبر</caption>
+								<thead><tr><th scope="col">المعدات</th><th scope="col">2<abbr title="الاثنين">الاثنين</abbr></th><th scope="col">3<abbr title="الثلاثاء">الثلاثاء</abbr></th><th scope="col">4<abbr title="الأربعاء">الأربعاء</abbr></th><th scope="col">5<abbr title="الخميس">الخميس</abbr></th><th scope="col">6<abbr title="الجمعة">الجمعة</abbr></th><th scope="col" data-weekend="">7<abbr title="السبت">السبت</abbr></th><th scope="col" data-weekend="">8<abbr title="الأحد">الأحد</abbr></th></tr></thead>
+								<tbody>
+									<tr><th scope="row">حفارة <span class="text-muted">(1)</span></th><td data-state="busy">1</td><td data-state="busy">1</td><td data-state="busy">1</td><td></td><td></td><td data-weekend=""></td><td data-weekend=""></td></tr>
+									<tr><th scope="row">طقم سقالات <span class="text-muted">(3)</span></th><td></td><td data-state="busy">2</td><td data-state="over">4</td><td data-state="busy">3</td><td></td><td data-weekend=""></td><td data-weekend=""></td></tr>
+									<tr><th scope="row">مولّد <span class="text-muted">(2)</span></th><td></td><td></td><td></td><td></td><td data-state="busy">1</td><td data-weekend="" data-state="busy">1</td><td data-weekend=""></td></tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-media">
+					<h2 id="all-media"><a href="media.html">مكتبة الوسائط</a></h2>
+					<div class="docs-example docs-example-stack" id="media-folder">
+						<div class="hstack flex-wrap gap-8">
+							<h3 class="fs-14 me-auto">جولات البحيرة · 4</h3>
+							<div class="btn-group" role="group" aria-label="العرض">
+								<button class="btn btn-sm btn-icon" type="button" command="--view" aria-controls="media-folder-grid" value="grid" aria-label="بطاقات"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i></button>
+								<button class="btn btn-sm btn-icon" type="button" command="--view" aria-controls="media-folder-grid" value="list" aria-label="صفوف"><i class="bi bi-list-ul" aria-hidden="true"></i></button>
+							</div>
+						</div>
+						<div class="media-grid" id="media-folder-grid" data-view="grid" data-reorder="media[]" role="list" aria-label="صور المجلد">
+							<div class="media-tile" role="listitem" data-value="lagoon"><input class="check media-tile-check" type="checkbox" aria-label="حدّد lagoon.svg" checked=""><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="media-folder-moves" command="toggle-popover" aria-haspopup="menu" aria-label="انقل: lagoon.svg"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button><img class="media-tile-thumb" src="img/lagoon.svg" alt="بحيرة شاطئية تحت تلال خضراء" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span>lagoon.svg</span></span><span class="media-tile-meta">1600×900 · 24 KB · 4 مقاسات</span></div><div class="media-tile-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="انسخ الوسم: lagoon.svg"><i class="bi bi-clipboard" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon" type="button" aria-label="أين تُستخدم: lagoon.svg"><i class="bi bi-search" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon btn-subtle-danger" type="button" aria-label="احذف: lagoon.svg"><i class="bi bi-trash3" aria-hidden="true"></i></button></div></div>
+							<div class="media-tile" role="listitem" data-value="qr"><input class="check media-tile-check" type="checkbox" aria-label="حدّد qr.svg"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="media-folder-moves" command="toggle-popover" aria-haspopup="menu" aria-label="انقل: qr.svg"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button><img class="media-tile-thumb" src="img/qr.svg" alt="رمز QR للوثائق" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span>qr.svg</span></span><span class="media-tile-meta">45×45 · 3 KB · مقاس واحد</span></div><div class="media-tile-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="انسخ الوسم: qr.svg"><i class="bi bi-clipboard" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon" type="button" aria-label="أين تُستخدم: qr.svg"><i class="bi bi-search" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon btn-subtle-danger" type="button" aria-label="احذف: qr.svg"><i class="bi bi-trash3" aria-hidden="true"></i></button></div></div>
+							<div class="media-tile" role="listitem" data-value="pier"><input class="check media-tile-check" type="checkbox" aria-label="حدّد pier-at-dawn.svg"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="media-folder-moves" command="toggle-popover" aria-haspopup="menu" aria-label="انقل: pier-at-dawn.svg"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button><img class="media-tile-thumb" src="img/lagoon.svg" alt="الرصيف عند الفجر" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span>pier-at-dawn.svg</span></span><span class="media-tile-meta">2400×1600 · 31 KB · 5 مقاسات</span></div><div class="media-tile-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="انسخ الوسم: pier-at-dawn.svg"><i class="bi bi-clipboard" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon" type="button" aria-label="أين تُستخدم: pier-at-dawn.svg"><i class="bi bi-search" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon btn-subtle-danger" type="button" aria-label="احذف: pier-at-dawn.svg"><i class="bi bi-trash3" aria-hidden="true"></i></button></div></div>
+							<div class="media-tile" role="listitem" data-value="hidden" hidden=""><input class="check media-tile-check" type="checkbox" aria-label="حدّد boat.svg"><img class="media-tile-thumb" src="img/lagoon.svg" alt="" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><span>boat.svg</span></span></div></div>
+						</div>
+						<div class="menu" id="media-folder-moves" popover="" role="menu" aria-label="نقل">
+							<button class="menu-item" type="button" role="menuitem" data-move="up"><i class="bi bi-arrow-left flip-rtl" aria-hidden="true"></i>انقل إلى الأمام</button>
+							<button class="menu-item" type="button" role="menuitem" data-move="down"><i class="bi bi-arrow-right flip-rtl" aria-hidden="true"></i>انقل إلى الخلف</button>
+							<button class="menu-item" type="button" role="menuitem" data-move="first">انقل إلى البداية</button>
+							<button class="menu-item" type="button" role="menuitem" data-move="last">انقل إلى النهاية</button>
+						</div>
+					</div>
+				</section>
+
 				<section class="vstack gap-16" aria-labelledby="all-table">
 					<h2 id="all-table"><a href="table.html">الجداول</a></h2>
 					<div class="docs-example docs-example-stack" id="table-list">
@@ -1581,6 +1821,18 @@
 								<tr><td>جاف</td><td>من يناير إلى أبريل</td><td>هادئ</td></tr>
 								<tr><td>حار</td><td>من مايو إلى أغسطس</td><td>هادئ</td></tr>
 								<tr><td>ممطر</td><td>من سبتمبر إلى ديسمبر</td><td>أمواج</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="docs-example docs-example-stack" id="table-light">
+						<div class="hstack flex-wrap gap-8">
+							<button class="btn btn-sm" type="button" data-highlight="pier">الرصيف</button>
+							<button class="btn btn-sm" type="button" data-highlight="lake">البحيرة الزمردية</button>
+						</div>
+						<table class="table" aria-label="المحطات">
+							<tbody>
+								<tr data-highlight="pier"><td>الرصيف</td><td class="tabular-nums">08:30</td></tr>
+								<tr data-highlight="lake"><td>البحيرة الزمردية</td><td class="tabular-nums">11:00</td></tr>
 							</tbody>
 						</table>
 					</div>
@@ -2181,6 +2433,17 @@
 								<section id="nav-spy-back" class="vstack gap-4"><h4 class="fs-14">العودة</h4><p class="mb-0">يغادر القارب المحمية في 15:30 ويصل إلى الرصيف بحلول 17:00؛ وتعيد الحافلة الجميع إلى الفندق.</p></section>
 							</div>
 						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="nav-scrolling">
+						<nav class="nav nav-underline max-w-320" aria-label="عروض المهام">
+							<a class="nav-link" href="#nav-scrolling">الكل <span class="badge">48</span></a>
+							<a class="nav-link" href="#nav-scrolling">جديد <span class="badge">6</span></a>
+							<a class="nav-link" href="#nav-scrolling">قيد التنفيذ <span class="badge">9</span></a>
+							<a class="nav-link" href="#nav-scrolling">قيد المراجعة <span class="badge">4</span></a>
+							<a class="nav-link" href="#nav-scrolling" aria-current="page">تم <span class="badge">25</span></a>
+							<a class="nav-link" href="#nav-scrolling">مُعادة <span class="badge">3</span></a>
+							<a class="nav-link" href="#nav-scrolling">ملغاة <span class="badge">1</span></a>
+						</nav>
 					</div>
 					<div class="docs-example docs-example-stack" id="nav-overflow">
 						<nav class="nav-overflow max-w-480" aria-label="أقسام الرحلة">

@@ -1,0 +1,47 @@
+<header class="vstack gap-8">
+	<h1>Media library</h1>
+	<p class="docs-lead">A folder of images as square tiles or as compact rows: checked for actions on many at once, moved by a handle, each with its own actions.</p>
+</header>
+
+<section class="vstack gap-12" aria-labelledby="media-package">
+	<h2 id="media-package">A package of the release</h2>
+	<p>The media library is linked apart, on the screens that show it, beside the two files; its switch of views and its reordering are the main script's.</p>
+	<pre class="docs-code" tabindex="0"><code>&lt;link rel="stylesheet" href="redz-ui/media/media.css"&gt;</code></pre>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="media-examples">
+	<h2 id="media-examples">A folder</h2>
+	<p><code>media-grid</code> lays <code>media-tile</code>s in as many columns as fit. A tile holds its <code>check</code> of class <code>media-tile-check</code>, a <code>drag-handle</code> when the folder keeps an order, the square <code>media-tile-thumb</code> - cut to fill, so tiles never jump -, <code>media-tile-body</code> with <code>media-tile-name</code> and <code>media-tile-meta</code>, and <code>media-tile-actions</code>. A checked tile is outlined; a tile the search hides is <code>hidden</code>. <code>data-view="list"</code> turns the tiles into rows without previews, the name with its file icon.</p>
+	<p>The switch is two buttons with <code>command="--view"</code>, <code>aria-controls</code> naming the grid and a <code>value</code>: the library puts the value in the grid's <code>data-view</code>, says in <code>aria-pressed</code> which view shows and tells the page in <code>redz:view</code> (<code>detail.view</code>); the library stores nothing - the page that remembers the choice writes <code>data-view</code> when it loads. With <code>data-reorder</code> the tiles move as a <a href="list-group.html#list-group-reorder">list's items</a> do, in two dimensions in the grid. Checked tiles bring up a <a href="selection-bar.html">selection bar</a>.</p>
+	<div class="docs-example docs-example-stack" id="media-folder">
+		<div class="hstack flex-wrap gap-8">
+			<h3 class="fs-14 me-auto">Lagoon tours · 4</h3>
+			<div class="btn-group" role="group" aria-label="View">
+				<button class="btn btn-sm btn-icon" type="button" command="--view" aria-controls="media-folder-grid" value="grid" aria-label="Tiles"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i></button>
+				<button class="btn btn-sm btn-icon" type="button" command="--view" aria-controls="media-folder-grid" value="list" aria-label="Rows"><i class="bi bi-list-ul" aria-hidden="true"></i></button>
+			</div>
+		</div>
+		<div class="media-grid" id="media-folder-grid" data-view="grid" data-reorder="media[]" role="list" aria-label="Images of the folder">
+			<div class="media-tile" role="listitem" data-value="lagoon"><input class="check media-tile-check" type="checkbox" aria-label="Select lagoon.svg" checked><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="media-folder-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: lagoon.svg"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button><img class="media-tile-thumb" src="img/lagoon.svg" alt="A lagoon under green hills" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span>lagoon.svg</span></span><span class="media-tile-meta">1600×900 · 24 KB · 4 sizes</span></div><div class="media-tile-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="Copy the tag: lagoon.svg"><i class="bi bi-clipboard" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon" type="button" aria-label="Where it is used: lagoon.svg"><i class="bi bi-search" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon btn-subtle-danger" type="button" aria-label="Delete: lagoon.svg"><i class="bi bi-trash3" aria-hidden="true"></i></button></div></div>
+			<div class="media-tile" role="listitem" data-value="qr"><input class="check media-tile-check" type="checkbox" aria-label="Select qr.svg"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="media-folder-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: qr.svg"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button><img class="media-tile-thumb" src="img/qr.svg" alt="The QR code of the docs" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span>qr.svg</span></span><span class="media-tile-meta">45×45 · 3 KB · 1 size</span></div><div class="media-tile-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="Copy the tag: qr.svg"><i class="bi bi-clipboard" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon" type="button" aria-label="Where it is used: qr.svg"><i class="bi bi-search" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon btn-subtle-danger" type="button" aria-label="Delete: qr.svg"><i class="bi bi-trash3" aria-hidden="true"></i></button></div></div>
+			<div class="media-tile" role="listitem" data-value="pier"><input class="check media-tile-check" type="checkbox" aria-label="Select pier-at-dawn.svg"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="media-folder-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: pier-at-dawn.svg"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button><img class="media-tile-thumb" src="img/lagoon.svg" alt="The pier at dawn" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span>pier-at-dawn.svg</span></span><span class="media-tile-meta">2400×1600 · 31 KB · 5 sizes</span></div><div class="media-tile-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="Copy the tag: pier-at-dawn.svg"><i class="bi bi-clipboard" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon" type="button" aria-label="Where it is used: pier-at-dawn.svg"><i class="bi bi-search" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon btn-subtle-danger" type="button" aria-label="Delete: pier-at-dawn.svg"><i class="bi bi-trash3" aria-hidden="true"></i></button></div></div>
+			<div class="media-tile" role="listitem" data-value="hidden" hidden><input class="check media-tile-check" type="checkbox" aria-label="Select boat.svg"><img class="media-tile-thumb" src="img/lagoon.svg" alt="" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><span>boat.svg</span></span></div></div>
+		</div>
+		<div class="menu" id="media-folder-moves" popover role="menu" aria-label="Move">
+			<button class="menu-item" type="button" role="menuitem" data-move="up"><i class="bi bi-arrow-left flip-rtl" aria-hidden="true"></i>Move earlier</button>
+			<button class="menu-item" type="button" role="menuitem" data-move="down"><i class="bi bi-arrow-right flip-rtl" aria-hidden="true"></i>Move later</button>
+			<button class="menu-item" type="button" role="menuitem" data-move="first">Move to the start</button>
+			<button class="menu-item" type="button" role="menuitem" data-move="last">Move to the end</button>
+		</div>
+	</div>
+	<pre class="docs-code" tabindex="0"><code>document.addEventListener('redz:view', (event) =&gt; localStorage.setItem('media-view', event.detail.view));</code></pre>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="media-access">
+	<h2 id="media-access">Keyboard and accessibility</h2>
+	<ul>
+		<li>Each check, handle and action is named by its image's file - "Select lagoon.svg", "Delete: lagoon.svg" - so a list of them still says which.</li>
+		<li>The view buttons are a named group; the one that shows is pressed. A change of view keeps the focus on the button.</li>
+		<li>A thumbnail's <code>alt</code> is the image's own; in rows it is not shown, and the name says the image.</li>
+	</ul>
+</section>

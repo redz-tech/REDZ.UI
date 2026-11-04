@@ -302,15 +302,18 @@ window.REDZ_PROBE = (() => {
 		},
 		// Hands the upload two files as a choice would: one its input takes, and one too large for it or of a kind it
 		// does not take.
-		chooseFiles(id) {
+		chooseFiles(id, round = 1) {
 			const upload = document.getElementById(id);
 			const input = upload.querySelector('input[type="file"]');
 			const wanted = input.accept.split(',').map((one) => one.trim()).filter(Boolean)[0] ?? '';
-			const good = wanted.startsWith('.') ? 'probe' + wanted : 'probe.' + (wanted.split('/')[1] || 'bin').replace('*', 'png');
+			const name = wanted.startsWith('.') ? 'probe' + wanted : 'probe.' + (wanted.split('/')[1] || 'bin').replace('*', 'png');
 			const type = wanted.includes('/') ? wanted.replace('*', 'png') : '';
+			const good = new File(['probe'], name, {type});
+			const bad = upload.dataset.maxSize ? new File(['x'.repeat(Number(upload.dataset.maxSize) + 1)], 'big-' + name, {type}) : new File(['probe'], 'probe.refused', {type: 'application/x-probe'});
 			const box = new DataTransfer();
-			box.items.add(new File(['probe'], good, {type}));
-			box.items.add(upload.dataset.maxSize ? new File(['x'.repeat(Number(upload.dataset.maxSize) + 1)], 'big-' + good, {type}) : new File(['probe'], 'probe.refused', {type: 'application/x-probe'}));
+			for (const file of input.multiple ? [good, bad] : (round === 1 ? [bad, good] : [good])) {
+				box.items.add(file);
+			}
 			input.files = box.files;
 			input.dispatchEvent(new Event('change', {bubbles: true}));
 			return true;
@@ -387,7 +390,7 @@ window.REDZ_PROBE = (() => {
 				return {order: [...list.children].filter((child) => child.matches('[data-value]')).map((child) => child.dataset.value), walked: grip.closest('[data-value]').dataset.value, onGrip: active === grip, open: menu?.matches(':popover-open') ?? false, said: beside.parentElement.querySelector(':scope > .reorder-status')?.textContent ?? ''};
 			}
 			if (kind === 'upload') {
-				return {rows: [...document.getElementById(id).querySelectorAll('.upload-list > *')].map((row) => ({state: row.dataset.state ?? '', error: row.querySelector('[data-file-error]')?.textContent ?? ''})), onZone: active?.classList.contains('upload-zone') ?? false, onRemove: active?.hasAttribute('data-file-remove') ?? false};
+				return {multiple: document.getElementById(id).querySelector('input[type="file"]').multiple, rows: [...document.getElementById(id).querySelectorAll('.upload-list > *')].map((row) => ({state: row.dataset.state ?? '', error: row.querySelector('[data-file-error]')?.textContent ?? ''})), onZone: active?.classList.contains('upload-zone') ?? false, onRemove: active?.hasAttribute('data-file-remove') ?? false};
 			}
 			if (kind === 'combobox') {
 				const panel = document.getElementById(id);

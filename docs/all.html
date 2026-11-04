@@ -9,11 +9,15 @@
 	<script src="../js/floor.js"></script>
 	<link rel="stylesheet" href="../dist/redz-ui.min.css">
 	<link rel="stylesheet" href="../css/icons.css">
+	<link rel="stylesheet" href="../charts/charts.css">
+	<script type="module" src="../charts/charts.js"></script>
+	<link rel="stylesheet" href="../calendar/calendar.css">
+	<link rel="stylesheet" href="../media/media.css">
 	<link rel="stylesheet" href="site.css">
 	<link rel="alternate" type="text/markdown" href="all.md">
 	<script src="site.js"></script>
 	<script type="module" src="../dist/redz-ui.min.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","slide":"{position} of {count}","pin.delete":"Delete","pin.enter":"Enter","cooldown":"{seconds} s","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}","editor.toolbar":"Formatting","editor.body":"Text","editor.source":"HTML source","editor.format":"Format","editor.format.paragraph":"Paragraph","editor.format.heading2":"Heading 2","editor.format.heading3":"Heading 3","editor.format.heading4":"Heading 4","editor.format.quote":"Quote","editor.format.code":"Code","editor.bold":"Bold","editor.italic":"Italic","editor.underline":"Underline","editor.link":"Link","editor.link.href":"Address","editor.link.words":"Words","editor.link.blank":"Open in a new tab","editor.link.nofollow":"Ask search engines not to follow it","editor.color":"Color","editor.color.primary":"Accent","editor.color.secondary":"Secondary","editor.color.success":"Success","editor.color.danger":"Danger","editor.color.warning":"Warning","editor.color.info":"Info","editor.color.none":"No color","editor.bullets":"Bulleted list","editor.numbers":"Numbered list","editor.align":"Align","editor.align.start":"Start","editor.align.center":"Center","editor.align.end":"End","editor.image":"Image","editor.embed":"Video","editor.embed.url":"YouTube or Vimeo address","editor.embed.title":"Title","editor.blocks":"Blocks","editor.group.content":"Content","editor.group.inline":"In a line","editor.group.layout":"Layout","editor.block":"Block","editor.block.up":"Move up","editor.block.down":"Move down","editor.block.edit":"Edit HTML","editor.block.columns":"Columns","editor.block.preview":"Preview","editor.block.delete":"Delete","editor.columns.count":"Columns","editor.columns.from":"From the width","editor.columns.always":"Always","editor.columns.gap":"Gap","editor.clear":"Clear formatting","editor.undo":"Undo","editor.redo":"Redo","editor.block.alert-info":"Note","editor.block.alert-success":"Success note","editor.block.alert-warning":"Warning note","editor.block.alert-danger":"Danger note","editor.block.card":"Card","editor.block.accordion":"Accordion","editor.block.tabs":"Tabs","editor.block.list-group":"List group","editor.block.table":"Table","editor.block.carousel":"Carousel","editor.block.badges":"Badges","editor.block.buttons":"Buttons","editor.block.button-group":"Button group","editor.block.progress":"Progress","editor.block.grid-2":"Two columns","editor.block.grid-3":"Three columns","editor.sample.title":"Title","editor.sample.text":"The block's text.","editor.sample.item":"Item {n}","editor.sample.previous":"Previous","editor.sample.next":"Next"}</script>
+	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","slide":"{position} of {count}","pin.delete":"Delete","pin.enter":"Enter","cooldown":"{seconds} s","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}","file.count":"{name}: up to {count} files","editor.toolbar":"Formatting","editor.body":"Text","editor.source":"HTML source","editor.format":"Format","editor.format.paragraph":"Paragraph","editor.format.heading2":"Heading 2","editor.format.heading3":"Heading 3","editor.format.heading4":"Heading 4","editor.format.quote":"Quote","editor.format.code":"Code","editor.bold":"Bold","editor.italic":"Italic","editor.underline":"Underline","editor.link":"Link","editor.link.href":"Address","editor.link.words":"Words","editor.link.blank":"Open in a new tab","editor.link.nofollow":"Ask search engines not to follow it","editor.color":"Color","editor.color.primary":"Accent","editor.color.secondary":"Secondary","editor.color.success":"Success","editor.color.danger":"Danger","editor.color.warning":"Warning","editor.color.info":"Info","editor.color.none":"No color","editor.bullets":"Bulleted list","editor.numbers":"Numbered list","editor.align":"Align","editor.align.start":"Start","editor.align.center":"Center","editor.align.end":"End","editor.image":"Image","editor.embed":"Video","editor.embed.url":"YouTube or Vimeo address","editor.embed.title":"Title","editor.blocks":"Blocks","editor.group.content":"Content","editor.group.inline":"In a line","editor.group.layout":"Layout","editor.block":"Block","editor.block.up":"Move up","editor.block.down":"Move down","editor.block.edit":"Edit HTML","editor.block.columns":"Columns","editor.block.preview":"Preview","editor.block.delete":"Delete","editor.columns.count":"Columns","editor.columns.from":"From the width","editor.columns.always":"Always","editor.columns.gap":"Gap","editor.clear":"Clear formatting","editor.undo":"Undo","editor.redo":"Redo","editor.block.alert-info":"Note","editor.block.alert-success":"Success note","editor.block.alert-warning":"Warning note","editor.block.alert-danger":"Danger note","editor.block.card":"Card","editor.block.accordion":"Accordion","editor.block.tabs":"Tabs","editor.block.list-group":"List group","editor.block.table":"Table","editor.block.carousel":"Carousel","editor.block.badges":"Badges","editor.block.buttons":"Buttons","editor.block.button-group":"Button group","editor.block.progress":"Progress","editor.block.grid-2":"Two columns","editor.block.grid-3":"Three columns","editor.sample.title":"Title","editor.sample.text":"The block's text.","editor.sample.item":"Item {n}","editor.sample.previous":"Previous","editor.sample.next":"Next"}</script>
 </head>
 <body>
 	<div class="app">
@@ -66,6 +70,10 @@
 			<a class="app-link" href="collapse.html"><i class="bi bi-arrows-collapse" aria-hidden="true"></i>Collapse</a>
 			<a class="app-link" href="list-group.html"><i class="bi bi-list-ul" aria-hidden="true"></i>List groups</a>
 			<a class="app-link" href="tree.html"><i class="bi bi-diagram-3" aria-hidden="true"></i>Trees</a>
+			<a class="app-link" href="thread.html"><i class="bi bi-chat-dots" aria-hidden="true"></i>Message threads</a>
+			<a class="app-link" href="chart.html"><i class="bi bi-bar-chart" aria-hidden="true"></i>Charts</a>
+			<a class="app-link" href="calendar.html"><i class="bi bi-calendar3" aria-hidden="true"></i>Calendars</a>
+			<a class="app-link" href="media.html"><i class="bi bi-collection" aria-hidden="true"></i>Media library</a>
 			<a class="app-link" href="table.html"><i class="bi bi-table" aria-hidden="true"></i>Tables</a>
 			<a class="app-link" href="badge.html"><i class="bi bi-patch-check" aria-hidden="true"></i>Badges</a>
 			<a class="app-link" href="dot.html"><i class="bi bi-record-circle" aria-hidden="true"></i>Dots</a>
@@ -1055,6 +1063,44 @@
 							</template>
 						</div>
 					</div>
+					<div class="docs-example docs-example-stack" id="upload-one">
+						<div class="upload" data-max-size="2097152">
+							<input class="visually-hidden" id="upload-one-input" type="file" name="photo" accept="image/*" tabindex="-1" aria-label="Reference photo">
+							<button class="upload-zone" type="button" aria-describedby="upload-one-hint">
+								<i class="bi bi-image fs-24" aria-hidden="true"></i>
+								<span>Drop a photo here, or choose one</span>
+								<span class="fs-12" id="upload-one-hint">One image, up to 2 MB</span>
+							</button>
+							<ul class="upload-list" aria-label="File"></ul>
+							<template>
+								<li>
+									<i class="bi bi-file-earmark-image" aria-hidden="true"></i>
+									<span class="flex-fill" data-file-name></span>
+									<span class="invalid-feedback" data-file-error></span>
+									<button class="btn btn-sm btn-icon btn-text" type="button" data-file-remove><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+								</li>
+							</template>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="upload-shots">
+						<div class="upload upload-thumbs" data-max-files="3" data-max-size="5242880">
+							<input class="visually-hidden" id="upload-shots-input" type="file" name="shots[]" accept="image/*" multiple tabindex="-1" aria-label="Screenshots">
+							<button class="upload-zone" type="button" aria-describedby="upload-shots-hint">
+								<i class="bi bi-images fs-24" aria-hidden="true"></i>
+								<span>Drop or paste screenshots here, or choose them</span>
+								<span class="fs-12" id="upload-shots-hint">Up to 3 images</span>
+							</button>
+							<ul class="upload-list" aria-label="Screenshots"></ul>
+							<template>
+								<li>
+									<img data-file-preview alt="">
+									<span data-file-name></span>
+									<span class="invalid-feedback" data-file-error></span>
+									<button class="btn btn-xs btn-icon" type="button" data-file-remove><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+								</li>
+							</template>
+						</div>
+					</div>
 				</section>
 
 				<section class="vstack gap-16" aria-labelledby="all-choice">
@@ -1156,6 +1202,22 @@
 							<section class="card" aria-labelledby="card-grid-a"><div class="card-header"><h2 id="card-grid-a">Bookings</h2></div><div class="card-body"><p class="fs-24 fw-600 tabular-nums">128</p><p class="text-muted">this week</p></div></section>
 							<section class="card" aria-labelledby="card-grid-b"><div class="card-header"><h2 id="card-grid-b">Revenue</h2></div><div class="card-body"><p class="fs-24 fw-600 tabular-nums">312,400 THB</p><p class="text-muted">this week</p></div></section>
 						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="card-scrolling">
+						<section class="card card-scroll max-h-240" aria-labelledby="card-scrolling-title">
+							<div class="card-header"><h2 id="card-scrolling-title">Tickets</h2></div>
+							<div class="card-body" tabindex="0" role="region" aria-labelledby="card-scrolling-title">
+								<div class="list-group list-group-flush">
+									<button class="list-group-item list-group-item-action" type="button" aria-current="true">The booking page shows the wrong price</button>
+									<button class="list-group-item list-group-item-action" type="button">A new language for the site</button>
+									<button class="list-group-item list-group-item-action" type="button">The invoice for October</button>
+									<button class="list-group-item list-group-item-action" type="button">Photos do not upload from a phone</button>
+									<button class="list-group-item list-group-item-action" type="button">Change the site's address</button>
+									<button class="list-group-item list-group-item-action" type="button">Two owners for one site</button>
+								</div>
+							</div>
+							<div class="card-footer"><button class="btn btn-sm" type="button"><i class="bi bi-plus-lg" aria-hidden="true"></i>New ticket</button></div>
+						</section>
 					</div>
 					<div class="docs-example docs-example-stack" id="card-edge">
 						<div class="grid sm:cols-2 gap-16">
@@ -1502,6 +1564,184 @@
 					</div>
 				</section>
 
+				<section class="vstack gap-16" aria-labelledby="all-thread">
+					<h2 id="all-thread"><a href="thread.html">Message threads</a></h2>
+					<div class="docs-example docs-example-stack" id="thread-desk">
+						<section class="card card-scroll max-h-560" aria-labelledby="thread-desk-title">
+							<div class="card-header hstack flex-wrap gap-8"><h2 id="thread-desk-title">The booking page shows the wrong price</h2><span class="badge badge-subtle-warning">Open</span></div>
+							<div class="card-body">
+								<ol class="thread" aria-label="Messages">
+									<li class="thread-message">
+										<span class="avatar avatar-sm" aria-hidden="true">AR</span>
+										<div class="thread-body">
+											<div class="thread-meta"><span>Ananda Resort</span><time datetime="2026-11-04T09:12">09:12</time></div>
+											<div class="thread-bubble">The child price on Ang Thong shows 2,500 THB.&#10;It should be 1,900 THB since Monday.</div>
+											<div class="thread-files"><a href="img/lagoon.svg"><img src="img/lagoon.svg" alt="Screenshot of the price"></a></div>
+										</div>
+									</li>
+									<li class="thread-message" data-mine>
+										<span class="avatar avatar-sm" aria-hidden="true">RZ</span>
+										<div class="thread-body">
+											<div class="thread-meta"><span>REDZ support</span><time datetime="2026-11-04T09:30">09:30</time><span class="thread-edited">edited</span><button class="btn btn-xs btn-icon btn-text" type="button" commandfor="thread-desk-edit" command="--edit" aria-label="Edit the message"><i class="bi bi-pencil" aria-hidden="true"></i></button></div>
+											<div class="thread-bubble" id="thread-desk-reply">Thank you - the price list was published before the change. It is fixed now; please check the page again.</div>
+											<form class="inline-edit-form" id="thread-desk-edit" data-for="thread-desk-reply" hidden>
+												<textarea class="form-control" name="text" aria-label="Message" rows="3">Thank you - the price list was published before the change. It is fixed now; please check the page again.</textarea>
+												<button class="btn btn-sm btn-primary" type="submit">Save</button>
+												<button class="btn btn-sm" type="button" commandfor="thread-desk-edit" command="--cancel">Cancel</button>
+												<div class="invalid-feedback" hidden></div>
+											</form>
+											<div class="thread-files"><span><img src="img/qr.svg" alt="The fixed page"><button class="btn btn-xs btn-icon thread-file-remove" type="button" aria-label="Remove the fixed page"><i class="bi bi-x-lg" aria-hidden="true"></i></button></span></div>
+										</div>
+									</li>
+								</ol>
+							</div>
+							<div class="card-footer">
+								<textarea class="form-control" rows="2" aria-label="Reply" placeholder="Write a reply"></textarea>
+								<button class="btn btn-primary" type="button"><i class="bi bi-send" aria-hidden="true"></i>Send</button>
+								<button class="btn ms-auto" type="button">Close the ticket</button>
+							</div>
+						</section>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-chart">
+					<h2 id="all-chart"><a href="chart.html">Charts</a></h2>
+					<div class="docs-example docs-example-stack" id="chart-messages">
+						<table class="chart">
+							<caption>Messages sent per day</caption>
+							<thead><tr><th scope="col">Day</th><th scope="col" data-tone="success">Free</th><th scope="col" data-tone="warning">Paid</th><th scope="col" data-tone="danger">Failed</th></tr></thead>
+							<tbody>
+								<tr title="Nov 1: 120 free, 30 paid, 4 failed"><th scope="row">Nov 1</th><td data-tone="success" data-v="0.615">120</td><td data-tone="warning" data-v="0.154">30</td><td data-tone="danger" data-v="0.021">4</td></tr>
+								<tr title="Nov 2: 132 free, 28 paid, 2 failed"><th scope="row"><span class="visually-hidden">Nov 2</span></th><td data-tone="success" data-v="0.677">132</td><td data-tone="warning" data-v="0.144">28</td><td data-tone="danger" data-v="0.01">2</td></tr>
+								<tr title="Nov 3: 98 free, 41 paid, 6 failed"><th scope="row"><span class="visually-hidden">Nov 3</span></th><td data-tone="success" data-v="0.503">98</td><td data-tone="warning" data-v="0.21">41</td><td data-tone="danger" data-v="0.031">6</td></tr>
+								<tr data-empty title="Nov 4: none"><th scope="row">Nov 4</th><td>0</td><td>0</td><td>0</td></tr>
+								<tr title="Nov 5: 144 free, 35 paid, 3 failed"><th scope="row"><span class="visually-hidden">Nov 5</span></th><td data-tone="success" data-v="0.738">144</td><td data-tone="warning" data-v="0.179">35</td><td data-tone="danger" data-v="0.015">3</td></tr>
+								<tr title="Nov 6: 160 free, 22 paid, 1 failed"><th scope="row"><span class="visually-hidden">Nov 6</span></th><td data-tone="success" data-v="0.821">160</td><td data-tone="warning" data-v="0.113">22</td><td data-tone="danger" data-v="0.005">1</td></tr>
+								<tr title="Nov 7: 110 free, 30 paid, 9 failed"><th scope="row">Nov 7</th><td data-tone="success" data-v="0.564">110</td><td data-tone="warning" data-v="0.154">30</td><td data-tone="danger" data-v="0.046">9</td></tr>
+								<tr title="Nov 8: 90 free, 25 paid, 2 failed"><th scope="row"><span class="visually-hidden">Nov 8</span></th><td data-tone="success" data-v="0.462">90</td><td data-tone="warning" data-v="0.128">25</td><td data-tone="danger" data-v="0.01">2</td></tr>
+								<tr data-empty title="Nov 9: none"><th scope="row"><span class="visually-hidden">Nov 9</span></th><td>0</td><td>0</td><td>0</td></tr>
+								<tr title="Nov 10: 150 free, 40 paid, 5 failed"><th scope="row">Nov 10</th><td data-tone="success" data-v="0.769">150</td><td data-tone="warning" data-v="0.205">40</td><td data-tone="danger" data-v="0.026">5</td></tr>
+								<tr title="Nov 11: 170 free, 12 paid, 0 failed"><th scope="row"><span class="visually-hidden">Nov 11</span></th><td data-tone="success" data-v="0.872">170</td><td data-tone="warning" data-v="0.062">12</td><td data-tone="danger" data-v="0">0</td></tr>
+								<tr title="Nov 12: 125 free, 33 paid, 4 failed"><th scope="row"><span class="visually-hidden">Nov 12</span></th><td data-tone="success" data-v="0.641">125</td><td data-tone="warning" data-v="0.169">33</td><td data-tone="danger" data-v="0.021">4</td></tr>
+								<tr title="Nov 13: 140 free, 29 paid, 3 failed"><th scope="row">Nov 13</th><td data-tone="success" data-v="0.718">140</td><td data-tone="warning" data-v="0.149">29</td><td data-tone="danger" data-v="0.015">3</td></tr>
+								<tr title="Nov 14: 155 free, 31 paid, 2 failed"><th scope="row"><span class="visually-hidden">Nov 14</span></th><td data-tone="success" data-v="0.795">155</td><td data-tone="warning" data-v="0.159">31</td><td data-tone="danger" data-v="0.01">2</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="docs-example docs-example-stack" id="chart-channels">
+						<table class="chart">
+							<caption>Bookings by channel, this week</caption>
+							<thead><tr><th scope="col">Day</th><th scope="col">Site</th><th scope="col">Partners</th><th scope="col">Walk-in</th></tr></thead>
+							<tbody>
+								<tr title="Mon: 12 site, 5 partners, 3 walk-in"><th scope="row">Mon</th><td data-v="0.25">12</td><td data-v="0.104">5</td><td data-v="0.062">3</td></tr>
+								<tr title="Tue: 15 site, 6 partners, 2 walk-in"><th scope="row">Tue</th><td data-v="0.312">15</td><td data-v="0.125">6</td><td data-v="0.042">2</td></tr>
+								<tr title="Wed: 9 site, 8 partners, 4 walk-in"><th scope="row">Wed</th><td data-v="0.188">9</td><td data-v="0.167">8</td><td data-v="0.083">4</td></tr>
+								<tr title="Thu: 18 site, 4 partners, 1 walk-in"><th scope="row">Thu</th><td data-v="0.375">18</td><td data-v="0.083">4</td><td data-v="0.021">1</td></tr>
+								<tr title="Fri: 22 site, 9 partners, 5 walk-in"><th scope="row">Fri</th><td data-v="0.458">22</td><td data-v="0.188">9</td><td data-v="0.104">5</td></tr>
+								<tr title="Sat: 30 site, 12 partners, 6 walk-in"><th scope="row">Sat</th><td data-v="0.625">30</td><td data-v="0.25">12</td><td data-v="0.125">6</td></tr>
+								<tr title="Sun: 26 site, 10 partners, 7 walk-in"><th scope="row">Sun</th><td data-v="0.542">26</td><td data-v="0.208">10</td><td data-v="0.146">7</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="docs-example docs-example-stack" id="chart-sparks">
+						<table class="table" aria-label="Agents">
+							<thead><tr><th scope="col">Agent</th><th scope="col">Last 20 runs</th></tr></thead>
+							<tbody>
+								<tr><td class="font-monospace">backup.nightly</td><td><span class="spark" role="img" aria-label="20 runs: 18 OK, 1 timeout, 1 failed"><i data-state="ok" data-v="0.31" title="OK · 1.2 s"></i><i data-state="ok" data-v="0.28" title="OK · 1.1 s"></i><i data-state="ok" data-v="0.36" title="OK · 1.4 s"></i><i data-state="ok" data-v="0.33" title="OK · 1.3 s"></i><i data-state="timeout" data-v="1" title="Timeout · 3.9 s"></i><i data-state="ok" data-v="0.31" title="OK · 1.2 s"></i><i data-state="ok" data-v="0.26" title="OK · 1 s"></i><i data-state="ok" data-v="0.38" title="OK · 1.5 s"></i><i data-state="ok" data-v="0.31" title="OK · 1.2 s"></i><i data-state="failed" data-v="0.72" title="Failed · 2.8 s"></i><i data-state="ok" data-v="0.33" title="OK · 1.3 s"></i><i data-state="ok" data-v="0.28" title="OK · 1.1 s"></i><i data-state="ok" data-v="0.31" title="OK · 1.2 s"></i><i data-state="ok" data-v="0.41" title="OK · 1.6 s"></i><i data-state="ok" data-v="0.31" title="OK · 1.2 s"></i><i data-state="ok" data-v="0.33" title="OK · 1.3 s"></i><i data-state="ok" data-v="0.28" title="OK · 1.1 s"></i><i data-state="ok" data-v="0.36" title="OK · 1.4 s"></i><i data-state="ok" data-v="0.31" title="OK · 1.2 s"></i><i data-state="running" data-v="0.15" title="Running · 0.6 s"></i></span></td></tr>
+							</tbody>
+						</table>
+						<figure class="vstack gap-4">
+							<span class="spark spark-lg spark-median" role="img" aria-label="20 runs, median 1.2 s, longest 3.9 s" data-median="0.31"><i data-state="ok" data-v="0.31" title="Nov 3, 02:00 · 1.2 s"></i><i data-state="ok" data-v="0.28" title="Nov 3, 03:00 · 1.1 s"></i><i data-state="ok" data-v="0.36" title="Nov 3, 04:00 · 1.4 s"></i><i data-state="ok" data-v="0.33" title="Nov 3, 05:00 · 1.3 s"></i><i data-state="timeout" data-v="1" title="Nov 3, 06:00 · 3.9 s"></i><i data-state="ok" data-v="0.31" title="Nov 3, 07:00 · 1.2 s"></i><i data-state="ok" data-v="0.26" title="Nov 3, 08:00 · 1 s"></i><i data-state="ok" data-v="0.38" title="Nov 3, 09:00 · 1.5 s"></i><i data-state="ok" data-v="0.31" title="Nov 3, 10:00 · 1.2 s"></i><i data-state="failed" data-v="0.72" title="Nov 3, 11:00 · 2.8 s"></i><i data-state="ok" data-v="0.33" title="Nov 3, 12:00 · 1.3 s"></i><i data-state="ok" data-v="0.28" title="Nov 3, 13:00 · 1.1 s"></i><i data-state="ok" data-v="0.31" title="Nov 3, 14:00 · 1.2 s"></i><i data-state="ok" data-v="0.41" title="Nov 3, 15:00 · 1.6 s"></i><i data-state="ok" data-v="0.31" title="Nov 3, 16:00 · 1.2 s"></i><i data-state="ok" data-v="0.33" title="Nov 3, 17:00 · 1.3 s"></i><i data-state="ok" data-v="0.28" title="Nov 3, 18:00 · 1.1 s"></i><i data-state="ok" data-v="0.36" title="Nov 3, 19:00 · 1.4 s"></i><i data-state="ok" data-v="0.31" title="Nov 3, 20:00 · 1.2 s"></i><i data-state="running" data-v="0.15" title="Nov 3, 21:00 · 0.6 s"></i></span>
+							<figcaption class="fs-12 text-muted tabular-nums">Median 1.2 s · longest 3.9 s</figcaption>
+						</figure>
+					</div>
+					<div class="docs-example docs-example-stack" id="chart-board">
+						<table class="lanes">
+							<caption>The next 24 hours</caption>
+							<thead><tr><td></td><th class="lanes-scale" scope="col"><span data-at="0">now</span><span data-at="0.125">18:00</span><span data-at="0.25">21:00</span><span data-at="0.375">00:00</span><span data-at="0.5">03:00</span><span data-at="0.625">06:00</span><span data-at="0.75">09:00</span><span data-at="0.875">12:00</span><span data-at="1">15:00</span></th></tr></thead>
+							<tbody>
+								<tr data-highlight="mail.queue"><th scope="row">mail.queue</th><td><span class="lanes-span" data-from="0" data-to="1" title="mail.queue - every minute">continuous</span></td></tr>
+								<tr data-highlight="backup.nightly"><th scope="row">backup.nightly</th><td><i class="lanes-tick-once lanes-tick" data-at="0.458" title="backup.nightly - 02:00"></i></td></tr>
+								<tr data-highlight="fx.rates"><th scope="row">fx.rates</th><td><i class="lanes-tick" data-at="0.04" title="fx.rates - 16:00"></i><i class="lanes-tick" data-at="0.207" title="fx.rates - 20:00"></i><i class="lanes-tick" data-at="0.373" title="fx.rates - 00:00"></i><i class="lanes-tick" data-at="0.54" title="fx.rates - 04:00"></i><i class="lanes-tick" data-at="0.707" title="fx.rates - 08:00"></i><i class="lanes-tick" data-at="0.873" title="fx.rates - 12:00"></i></td></tr>
+							</tbody>
+						</table>
+						<table class="table" aria-label="Agents">
+							<thead><tr><th scope="col">Agent</th><th scope="col">Next run</th></tr></thead>
+							<tbody>
+								<tr data-highlight="mail.queue"><td class="font-monospace">mail.queue</td><td>Every minute</td></tr>
+								<tr data-highlight="backup.nightly"><td class="font-monospace">backup.nightly</td><td>02:00</td></tr>
+								<tr data-highlight="fx.rates"><td class="font-monospace">fx.rates</td><td>16:00</td></tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-calendar">
+					<h2 id="all-calendar"><a href="calendar.html">Calendars</a></h2>
+					<div class="docs-example docs-example-stack" id="calendar-equipment">
+						<div class="hstack flex-wrap gap-8">
+							<div class="btn-group" role="group" aria-label="View">
+								<a class="btn btn-sm" href="#calendar-strip">Days</a>
+								<a class="btn btn-sm" href="#calendar-equipment" aria-current="page">Month</a>
+							</div>
+							<a class="btn btn-sm btn-icon" href="#calendar-equipment" aria-label="October"><i class="bi bi-chevron-left flip-rtl" aria-hidden="true"></i></a>
+							<h3 class="fs-14">November 2026</h3>
+							<a class="btn btn-sm btn-icon" href="#calendar-equipment" aria-label="December"><i class="bi bi-chevron-right flip-rtl" aria-hidden="true"></i></a>
+							<a class="btn btn-sm btn-text" href="#calendar-equipment">Today</a>
+						</div>
+						<table class="calendar">
+							<caption class="visually-hidden">Equipment booked in November 2026</caption>
+							<thead><tr><th scope="col"><abbr title="Monday">Mon</abbr></th><th scope="col"><abbr title="Tuesday">Tue</abbr></th><th scope="col"><abbr title="Wednesday">Wed</abbr></th><th scope="col"><abbr title="Thursday">Thu</abbr></th><th scope="col"><abbr title="Friday">Fri</abbr></th><th scope="col"><abbr title="Saturday">Sat</abbr></th><th scope="col"><abbr title="Sunday">Sun</abbr></th></tr></thead>
+							<tbody>
+								<tr><td data-outside><time class="calendar-day" datetime="2026-10-26">26</time></td><td data-outside><time class="calendar-day" datetime="2026-10-27">27</time></td><td data-outside><time class="calendar-day" datetime="2026-10-28">28</time></td><td data-outside><time class="calendar-day" datetime="2026-10-29">29</time></td><td data-outside><time class="calendar-day" datetime="2026-10-30">30</time></td><td data-outside data-weekend><time class="calendar-day" datetime="2026-10-31">31</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-01">1</time></td></tr>
+								<tr><td><time class="calendar-day" datetime="2026-11-02">2</time><div class="calendar-event" title="Excavator · Riverside tower"><span class="dot dot-primary"></span><span>Excavator</span></div></td><td><time class="calendar-day" datetime="2026-11-03">3</time><div class="calendar-event" title="Excavator · Riverside tower"><span class="dot dot-primary"></span><span>Excavator</span></div></td><td aria-current="date"><time class="calendar-day" datetime="2026-11-04">4</time><div class="calendar-event" title="Excavator · Riverside tower"><span class="dot dot-primary"></span><span>Excavator</span></div><div class="calendar-event" title="Scaffold set · Somchai Rattanakul"><span class="dot dot-info"></span><span>Scaffold set</span></div><div class="calendar-event" title="Concrete mixer · Harbor view"><span class="dot dot-primary"></span><span>Concrete mixer</span></div><span class="calendar-more">+2<span class="visually-hidden"> more</span></span></td><td><time class="calendar-day" datetime="2026-11-05">5</time></td><td><time class="calendar-day" datetime="2026-11-06">6</time><div class="calendar-event" title="Generator · Harbor view"><span class="dot dot-info"></span><span>Generator</span></div></td><td data-weekend><time class="calendar-day" datetime="2026-11-07">7</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-08">8</time></td></tr>
+								<tr><td><time class="calendar-day" datetime="2026-11-09">9</time></td><td><time class="calendar-day" datetime="2026-11-10">10</time></td><td><time class="calendar-day" datetime="2026-11-11">11</time></td><td><time class="calendar-day" datetime="2026-11-12">12</time></td><td><time class="calendar-day" datetime="2026-11-13">13</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-14">14</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-15">15</time></td></tr>
+								<tr><td><time class="calendar-day" datetime="2026-11-16">16</time></td><td><time class="calendar-day" datetime="2026-11-17">17</time></td><td><time class="calendar-day" datetime="2026-11-18">18</time></td><td><time class="calendar-day" datetime="2026-11-19">19</time></td><td><time class="calendar-day" datetime="2026-11-20">20</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-21">21</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-22">22</time></td></tr>
+								<tr><td><time class="calendar-day" datetime="2026-11-23">23</time></td><td><time class="calendar-day" datetime="2026-11-24">24</time></td><td><time class="calendar-day" datetime="2026-11-25">25</time></td><td><time class="calendar-day" datetime="2026-11-26">26</time></td><td><time class="calendar-day" datetime="2026-11-27">27</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-28">28</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-29">29</time></td></tr>
+								<tr><td><time class="calendar-day" datetime="2026-11-30">30</time></td><td data-outside><time class="calendar-day" datetime="2026-12-01">1</time></td><td data-outside><time class="calendar-day" datetime="2026-12-02">2</time></td><td data-outside><time class="calendar-day" datetime="2026-12-03">3</time></td><td data-outside><time class="calendar-day" datetime="2026-12-04">4</time></td><td data-outside data-weekend><time class="calendar-day" datetime="2026-12-05">5</time></td><td data-outside data-weekend><time class="calendar-day" datetime="2026-12-06">6</time></td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="docs-example docs-example-stack" id="calendar-days">
+						<div class="overflow-x-auto" tabindex="0" role="region" aria-labelledby="calendar-days-title">
+							<table class="schedule">
+								<caption class="visually-hidden" id="calendar-days-title">Equipment out, November 2 to 8</caption>
+								<thead><tr><th scope="col">Equipment</th><th scope="col">2<abbr title="Monday">Mon</abbr></th><th scope="col">3<abbr title="Tuesday">Tue</abbr></th><th scope="col">4<abbr title="Wednesday">Wed</abbr></th><th scope="col">5<abbr title="Thursday">Thu</abbr></th><th scope="col">6<abbr title="Friday">Fri</abbr></th><th scope="col" data-weekend>7<abbr title="Saturday">Sat</abbr></th><th scope="col" data-weekend>8<abbr title="Sunday">Sun</abbr></th></tr></thead>
+								<tbody>
+									<tr><th scope="row">Excavator <span class="text-muted">(1)</span></th><td data-state="busy">1</td><td data-state="busy">1</td><td data-state="busy">1</td><td></td><td></td><td data-weekend></td><td data-weekend></td></tr>
+									<tr><th scope="row">Scaffold set <span class="text-muted">(3)</span></th><td></td><td data-state="busy">2</td><td data-state="over">4</td><td data-state="busy">3</td><td></td><td data-weekend></td><td data-weekend></td></tr>
+									<tr><th scope="row">Generator <span class="text-muted">(2)</span></th><td></td><td></td><td></td><td></td><td data-state="busy">1</td><td data-weekend data-state="busy">1</td><td data-weekend></td></tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-media">
+					<h2 id="all-media"><a href="media.html">Media library</a></h2>
+					<div class="docs-example docs-example-stack" id="media-folder">
+						<div class="hstack flex-wrap gap-8">
+							<h3 class="fs-14 me-auto">Lagoon tours · 4</h3>
+							<div class="btn-group" role="group" aria-label="View">
+								<button class="btn btn-sm btn-icon" type="button" command="--view" aria-controls="media-folder-grid" value="grid" aria-label="Tiles"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i></button>
+								<button class="btn btn-sm btn-icon" type="button" command="--view" aria-controls="media-folder-grid" value="list" aria-label="Rows"><i class="bi bi-list-ul" aria-hidden="true"></i></button>
+							</div>
+						</div>
+						<div class="media-grid" id="media-folder-grid" data-view="grid" data-reorder="media[]" role="list" aria-label="Images of the folder">
+							<div class="media-tile" role="listitem" data-value="lagoon"><input class="check media-tile-check" type="checkbox" aria-label="Select lagoon.svg" checked><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="media-folder-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: lagoon.svg"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button><img class="media-tile-thumb" src="img/lagoon.svg" alt="A lagoon under green hills" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span>lagoon.svg</span></span><span class="media-tile-meta">1600×900 · 24 KB · 4 sizes</span></div><div class="media-tile-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="Copy the tag: lagoon.svg"><i class="bi bi-clipboard" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon" type="button" aria-label="Where it is used: lagoon.svg"><i class="bi bi-search" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon btn-subtle-danger" type="button" aria-label="Delete: lagoon.svg"><i class="bi bi-trash3" aria-hidden="true"></i></button></div></div>
+							<div class="media-tile" role="listitem" data-value="qr"><input class="check media-tile-check" type="checkbox" aria-label="Select qr.svg"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="media-folder-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: qr.svg"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button><img class="media-tile-thumb" src="img/qr.svg" alt="The QR code of the docs" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span>qr.svg</span></span><span class="media-tile-meta">45×45 · 3 KB · 1 size</span></div><div class="media-tile-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="Copy the tag: qr.svg"><i class="bi bi-clipboard" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon" type="button" aria-label="Where it is used: qr.svg"><i class="bi bi-search" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon btn-subtle-danger" type="button" aria-label="Delete: qr.svg"><i class="bi bi-trash3" aria-hidden="true"></i></button></div></div>
+							<div class="media-tile" role="listitem" data-value="pier"><input class="check media-tile-check" type="checkbox" aria-label="Select pier-at-dawn.svg"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="media-folder-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: pier-at-dawn.svg"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button><img class="media-tile-thumb" src="img/lagoon.svg" alt="The pier at dawn" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span>pier-at-dawn.svg</span></span><span class="media-tile-meta">2400×1600 · 31 KB · 5 sizes</span></div><div class="media-tile-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="Copy the tag: pier-at-dawn.svg"><i class="bi bi-clipboard" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon" type="button" aria-label="Where it is used: pier-at-dawn.svg"><i class="bi bi-search" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon btn-subtle-danger" type="button" aria-label="Delete: pier-at-dawn.svg"><i class="bi bi-trash3" aria-hidden="true"></i></button></div></div>
+							<div class="media-tile" role="listitem" data-value="hidden" hidden><input class="check media-tile-check" type="checkbox" aria-label="Select boat.svg"><img class="media-tile-thumb" src="img/lagoon.svg" alt="" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><span>boat.svg</span></span></div></div>
+						</div>
+						<div class="menu" id="media-folder-moves" popover role="menu" aria-label="Move">
+							<button class="menu-item" type="button" role="menuitem" data-move="up"><i class="bi bi-arrow-left flip-rtl" aria-hidden="true"></i>Move earlier</button>
+							<button class="menu-item" type="button" role="menuitem" data-move="down"><i class="bi bi-arrow-right flip-rtl" aria-hidden="true"></i>Move later</button>
+							<button class="menu-item" type="button" role="menuitem" data-move="first">Move to the start</button>
+							<button class="menu-item" type="button" role="menuitem" data-move="last">Move to the end</button>
+						</div>
+					</div>
+				</section>
+
 				<section class="vstack gap-16" aria-labelledby="all-table">
 					<h2 id="all-table"><a href="table.html">Tables</a></h2>
 					<div class="docs-example docs-example-stack" id="table-list">
@@ -1583,6 +1823,18 @@
 								<tr><td>Dry</td><td>January to April</td><td>Calm</td></tr>
 								<tr><td>Hot</td><td>May to August</td><td>Calm</td></tr>
 								<tr><td>Rainy</td><td>September to December</td><td>Waves</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="docs-example docs-example-stack" id="table-light">
+						<div class="hstack flex-wrap gap-8">
+							<button class="btn btn-sm" type="button" data-highlight="pier">The pier</button>
+							<button class="btn btn-sm" type="button" data-highlight="lake">The emerald lake</button>
+						</div>
+						<table class="table" aria-label="Stops">
+							<tbody>
+								<tr data-highlight="pier"><td>The pier</td><td class="tabular-nums">08:30</td></tr>
+								<tr data-highlight="lake"><td>The emerald lake</td><td class="tabular-nums">11:00</td></tr>
 							</tbody>
 						</table>
 					</div>
@@ -2183,6 +2435,17 @@
 								<section id="nav-spy-back" class="vstack gap-4"><h4 class="fs-14">Back</h4><p class="mb-0">The boat leaves the park at 15:30 and reaches the pier by 17:00; the transfer brings everyone back to the hotel.</p></section>
 							</div>
 						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="nav-scrolling">
+						<nav class="nav nav-underline max-w-320" aria-label="Task views">
+							<a class="nav-link" href="#nav-scrolling">All <span class="badge">48</span></a>
+							<a class="nav-link" href="#nav-scrolling">New <span class="badge">6</span></a>
+							<a class="nav-link" href="#nav-scrolling">Doing <span class="badge">9</span></a>
+							<a class="nav-link" href="#nav-scrolling">Checking <span class="badge">4</span></a>
+							<a class="nav-link" href="#nav-scrolling" aria-current="page">Done <span class="badge">25</span></a>
+							<a class="nav-link" href="#nav-scrolling">Returned <span class="badge">3</span></a>
+							<a class="nav-link" href="#nav-scrolling">Cancelled <span class="badge">1</span></a>
+						</nav>
 					</div>
 					<div class="docs-example docs-example-stack" id="nav-overflow">
 						<nav class="nav-overflow max-w-480" aria-label="Excursion sections">

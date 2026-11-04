@@ -29,6 +29,61 @@ Photos, documents, a price list: chosen, dropped or pasted, each file checked at
 </div>
 ```
 
+### One file
+
+An input without `multiple` holds one file: a new one chosen, dropped or pasted takes the place of the one before - its row, its sending, its place in the input - and of several dropped at once only the first is taken.
+
+```html
+<div class="upload" data-max-size="2097152">
+	<input class="visually-hidden" id="upload-one-input" type="file" name="photo" accept="image/*" tabindex="-1" aria-label="Reference photo">
+	<button class="upload-zone" type="button" aria-describedby="upload-one-hint">
+		<i class="bi bi-image fs-24" aria-hidden="true"></i>
+		<span>Drop a photo here, or choose one</span>
+		<span class="fs-12" id="upload-one-hint">One image, up to 2 MB</span>
+	</button>
+	<ul class="upload-list" aria-label="File"></ul>
+	<template>
+		<li>
+			<i class="bi bi-file-earmark-image" aria-hidden="true"></i>
+			<span class="flex-fill" data-file-name></span>
+			<span class="invalid-feedback" data-file-error></span>
+			<button class="btn btn-sm btn-icon btn-text" type="button" data-file-remove><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+		</li>
+	</template>
+</div>
+```
+
+### Thumbnails
+
+`upload-thumbs` on the upload draws its files as 5rem squares: an `img data-file-preview` in the row's template shows the image itself, cut to fill, its remove button on the corner; a refused file keeps a whole row for its words. `data-max-files` takes that many and refuses the rest with the page's text `file.count`. A page that prepares each image first - resized, turned upright - answers `redz:files` with a promise of the new file, which takes the old one's place in the input.
+
+```html
+<div class="upload upload-thumbs" data-max-files="3" data-max-size="5242880">
+	<input class="visually-hidden" id="upload-shots-input" type="file" name="shots[]" accept="image/*" multiple tabindex="-1" aria-label="Screenshots">
+	<button class="upload-zone" type="button" aria-describedby="upload-shots-hint">
+		<i class="bi bi-images fs-24" aria-hidden="true"></i>
+		<span>Drop or paste screenshots here, or choose them</span>
+		<span class="fs-12" id="upload-shots-hint">Up to 3 images</span>
+	</button>
+	<ul class="upload-list" aria-label="Screenshots"></ul>
+	<template>
+		<li>
+			<img data-file-preview alt="">
+			<span data-file-name></span>
+			<span class="invalid-feedback" data-file-error></span>
+			<button class="btn btn-xs btn-icon" type="button" data-file-remove><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+		</li>
+	</template>
+</div>
+```
+
+```js
+upload.addEventListener('redz:files', (event) => {
+  event.preventDefault();
+  event.detail.respondWith(createImageBitmap(event.detail.file, {imageOrientation: 'from-image'}).then(resize));
+});
+```
+
 ### Sent by the page
 
 Each file fires `redz:files` on the upload with the file, its row, `progress(fraction)` for the row's bar and a `signal` its remove button aborts. A page that sends cancels it and answers with a promise: resolved, the row is done; rejected, the page's words show in the row's `data-file-error`. One file's error leaves the others. Left alone, the file joins the input's files and goes with the form. The example above answers in a second and a half.
@@ -67,4 +122,4 @@ document.addEventListener('redz:files', (event) => {
 
 From [`css/components/upload.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/upload.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-8`, `--redz-space-4`, `--redz-space-24`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-primary`, `--redz-bg-hover`.
+It reads the theme's `--redz-space-8`, `--redz-space-4`, `--redz-space-24`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-primary`, `--redz-bg-hover`, `--redz-border`, `--redz-radius-8`, `--redz-bg-page`, `--redz-space-2`.

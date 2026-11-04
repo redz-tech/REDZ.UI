@@ -178,6 +178,12 @@
 		],
 		"docs/btn.html": [
 			{"label": "a button that waits", "do": "focus", "target": "#btn-cooldown button", "expect": ["Send the code again"]}
+		],
+		"docs/media.html": [
+			{"label": "the rows view button", "do": "focus", "target": "#media-folder [command=\"--view\"][value=\"list\"]", "expect": ["Rows"]}
+		],
+		"docs/calendar.html": [
+			{"label": "the strip of days, a scrolling region", "do": "focus", "target": "#calendar-days > .overflow-x-auto", "expect": ["Equipment out, November 2 to 8"]}
 		]
 	},
 	"axe": {"version": "4.14.0", "integrity": "sha512-9WTZxEjsZ7b13TH8JPmbV2z8CHbl80/2hm3XPEG4JgNdQLK81IBRXmSxHfMAOkSqQeRxT/0dwNDz2GOm3zzpcQ==", "tags": ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]},

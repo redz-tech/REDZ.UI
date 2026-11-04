@@ -1,0 +1,66 @@
+<header class="vstack gap-8">
+	<h1>Calendars</h1>
+	<p class="docs-lead">A month of days with what happens on each, and a strip of days across the things that can be busy on them - equipment, rooms, boats.</p>
+</header>
+
+<section class="vstack gap-12" aria-labelledby="calendar-package">
+	<h2 id="calendar-package">A package of the release</h2>
+	<p>Calendars are linked apart, on the screens that show them, beside the two files; they need no script.</p>
+	<pre class="docs-code" tabindex="0"><code>&lt;link rel="stylesheet" href="redz-ui/calendar/calendar.css"&gt;</code></pre>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="calendar-month">
+	<h2 id="calendar-month">A month</h2>
+	<p><code>table class="calendar"</code>: a weekday header, the week starting on the day the page chooses, then six weeks of days. A day holds its <code>time class="calendar-day"</code>, its events - <code>calendar-event</code>, a <a href="dot.html">dot</a> of a tone and the words, cut to the width, the whole in its <code>title</code> - and <code>calendar-more</code> for the rest. <code>data-outside</code> quiets a day of another month, <code>data-weekend</code> tints a weekend, <code>aria-current="date"</code> marks today. In a region narrower than 576 px the events fold to their dots. The heading, the previous and next months and the switch of views are the page's links.</p>
+	<div class="docs-example docs-example-stack" id="calendar-equipment">
+		<div class="hstack flex-wrap gap-8">
+			<div class="btn-group" role="group" aria-label="View">
+				<a class="btn btn-sm" href="#calendar-strip">Days</a>
+				<a class="btn btn-sm" href="#calendar-equipment" aria-current="page">Month</a>
+			</div>
+			<a class="btn btn-sm btn-icon" href="#calendar-equipment" aria-label="October"><i class="bi bi-chevron-left flip-rtl" aria-hidden="true"></i></a>
+			<h3 class="fs-14">November 2026</h3>
+			<a class="btn btn-sm btn-icon" href="#calendar-equipment" aria-label="December"><i class="bi bi-chevron-right flip-rtl" aria-hidden="true"></i></a>
+			<a class="btn btn-sm btn-text" href="#calendar-equipment">Today</a>
+		</div>
+		<table class="calendar">
+			<caption class="visually-hidden">Equipment booked in November 2026</caption>
+			<thead><tr><th scope="col"><abbr title="Monday">Mon</abbr></th><th scope="col"><abbr title="Tuesday">Tue</abbr></th><th scope="col"><abbr title="Wednesday">Wed</abbr></th><th scope="col"><abbr title="Thursday">Thu</abbr></th><th scope="col"><abbr title="Friday">Fri</abbr></th><th scope="col"><abbr title="Saturday">Sat</abbr></th><th scope="col"><abbr title="Sunday">Sun</abbr></th></tr></thead>
+			<tbody>
+				<tr><td data-outside><time class="calendar-day" datetime="2026-10-26">26</time></td><td data-outside><time class="calendar-day" datetime="2026-10-27">27</time></td><td data-outside><time class="calendar-day" datetime="2026-10-28">28</time></td><td data-outside><time class="calendar-day" datetime="2026-10-29">29</time></td><td data-outside><time class="calendar-day" datetime="2026-10-30">30</time></td><td data-outside data-weekend><time class="calendar-day" datetime="2026-10-31">31</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-01">1</time></td></tr>
+				<tr><td><time class="calendar-day" datetime="2026-11-02">2</time><div class="calendar-event" title="Excavator · Riverside tower"><span class="dot dot-primary"></span><span>Excavator</span></div></td><td><time class="calendar-day" datetime="2026-11-03">3</time><div class="calendar-event" title="Excavator · Riverside tower"><span class="dot dot-primary"></span><span>Excavator</span></div></td><td aria-current="date"><time class="calendar-day" datetime="2026-11-04">4</time><div class="calendar-event" title="Excavator · Riverside tower"><span class="dot dot-primary"></span><span>Excavator</span></div><div class="calendar-event" title="Scaffold set · Somchai Rattanakul"><span class="dot dot-info"></span><span>Scaffold set</span></div><div class="calendar-event" title="Concrete mixer · Harbor view"><span class="dot dot-primary"></span><span>Concrete mixer</span></div><span class="calendar-more">+2<span class="visually-hidden"> more</span></span></td><td><time class="calendar-day" datetime="2026-11-05">5</time></td><td><time class="calendar-day" datetime="2026-11-06">6</time><div class="calendar-event" title="Generator · Harbor view"><span class="dot dot-info"></span><span>Generator</span></div></td><td data-weekend><time class="calendar-day" datetime="2026-11-07">7</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-08">8</time></td></tr>
+				<tr><td><time class="calendar-day" datetime="2026-11-09">9</time></td><td><time class="calendar-day" datetime="2026-11-10">10</time></td><td><time class="calendar-day" datetime="2026-11-11">11</time></td><td><time class="calendar-day" datetime="2026-11-12">12</time></td><td><time class="calendar-day" datetime="2026-11-13">13</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-14">14</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-15">15</time></td></tr>
+				<tr><td><time class="calendar-day" datetime="2026-11-16">16</time></td><td><time class="calendar-day" datetime="2026-11-17">17</time></td><td><time class="calendar-day" datetime="2026-11-18">18</time></td><td><time class="calendar-day" datetime="2026-11-19">19</time></td><td><time class="calendar-day" datetime="2026-11-20">20</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-21">21</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-22">22</time></td></tr>
+				<tr><td><time class="calendar-day" datetime="2026-11-23">23</time></td><td><time class="calendar-day" datetime="2026-11-24">24</time></td><td><time class="calendar-day" datetime="2026-11-25">25</time></td><td><time class="calendar-day" datetime="2026-11-26">26</time></td><td><time class="calendar-day" datetime="2026-11-27">27</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-28">28</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-29">29</time></td></tr>
+				<tr><td><time class="calendar-day" datetime="2026-11-30">30</time></td><td data-outside><time class="calendar-day" datetime="2026-12-01">1</time></td><td data-outside><time class="calendar-day" datetime="2026-12-02">2</time></td><td data-outside><time class="calendar-day" datetime="2026-12-03">3</time></td><td data-outside><time class="calendar-day" datetime="2026-12-04">4</time></td><td data-outside data-weekend><time class="calendar-day" datetime="2026-12-05">5</time></td><td data-outside data-weekend><time class="calendar-day" datetime="2026-12-06">6</time></td></tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="calendar-strip">
+	<h2 id="calendar-strip">Days across things</h2>
+	<p><code>table class="schedule"</code>: a column of names, kept in view while the days scroll by, then a column per day with its number and weekday. A cell holds how many are out; <code>data-state="busy"</code> tints it, <code>"over"</code> - more out than there are - marks it, and <code>data-weekend</code> tints a weekend's column. Put it in a scroller: <code>overflow-x-auto</code>.</p>
+	<div class="docs-example docs-example-stack" id="calendar-days">
+		<div class="overflow-x-auto" tabindex="0" role="region" aria-labelledby="calendar-days-title">
+			<table class="schedule">
+				<caption class="visually-hidden" id="calendar-days-title">Equipment out, November 2 to 8</caption>
+				<thead><tr><th scope="col">Equipment</th><th scope="col">2<abbr title="Monday">Mon</abbr></th><th scope="col">3<abbr title="Tuesday">Tue</abbr></th><th scope="col">4<abbr title="Wednesday">Wed</abbr></th><th scope="col">5<abbr title="Thursday">Thu</abbr></th><th scope="col">6<abbr title="Friday">Fri</abbr></th><th scope="col" data-weekend>7<abbr title="Saturday">Sat</abbr></th><th scope="col" data-weekend>8<abbr title="Sunday">Sun</abbr></th></tr></thead>
+				<tbody>
+					<tr><th scope="row">Excavator <span class="text-muted">(1)</span></th><td data-state="busy">1</td><td data-state="busy">1</td><td data-state="busy">1</td><td></td><td></td><td data-weekend></td><td data-weekend></td></tr>
+					<tr><th scope="row">Scaffold set <span class="text-muted">(3)</span></th><td></td><td data-state="busy">2</td><td data-state="over">4</td><td data-state="busy">3</td><td></td><td data-weekend></td><td data-weekend></td></tr>
+					<tr><th scope="row">Generator <span class="text-muted">(2)</span></th><td></td><td></td><td></td><td></td><td data-state="busy">1</td><td data-weekend data-state="busy">1</td><td data-weekend></td></tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="calendar-access">
+	<h2 id="calendar-access">Accessibility</h2>
+	<ul>
+		<li>Both are tables: a screen reader reads a day with its weekday's header, a cell with its thing and its day. Weekdays are <code>abbr</code> with the full name.</li>
+		<li>A day's number is a <code>time</code> with its date; "+2" says "+2 more" with a hidden word.</li>
+		<li>A busy or over cell says its number; the tint repeats it, and an over cell is also outlined in forced colors.</li>
+	</ul>
+</section>
