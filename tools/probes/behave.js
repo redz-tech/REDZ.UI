@@ -564,13 +564,14 @@ window.REDZ_BEHAVE = (() => {
 			const chevron = $('.toggle-chevron', button);
 			const state = async () => {
 				await Promise.all(chevron.getAnimations().map((animation) => animation.finished));
-				return [button.getAttribute('aria-expanded'), getComputedStyle(chevron).rotate, getComputedStyle($('.toggle-open', button)).display, getComputedStyle($('.toggle-closed', button)).display].join(' ');
+				const shown = (selector) => getComputedStyle($(selector, button)).display === 'none' ? 'hidden' : 'shown';
+				return [button.getAttribute('aria-expanded'), getComputedStyle(chevron).rotate, shown('.toggle-open'), shown('.toggle-closed')].join(' ');
 			};
 			const closed = await state();
 			button.click();
 			const open = await state();
 			button.click();
-			if (closed !== 'false none none inline' || open !== 'true 180deg inline none') {
+			if (closed !== 'false none hidden shown' || open !== 'true 180deg shown hidden') {
 				out.push('a toggle\'s chevron and words read ' + say(closed) + ' closed and ' + say(open) + ' open');
 			}
 		}]},
@@ -578,14 +579,17 @@ window.REDZ_BEHAVE = (() => {
 			const box = $('#table-wide .table-scroll');
 			const first = $('tbody th', box);
 			const head = $('thead th:nth-child(2)', box);
+			box.style.inlineSize = '20rem';
 			box.scrollLeft = box.scrollWidth;
 			await wait(50);
 			const left = Math.round(first.getBoundingClientRect().left - box.getBoundingClientRect().left);
 			box.scrollLeft = 0;
+			const wide = box.scrollWidth > box.clientWidth;
+			box.style.removeProperty('inline-size');
 			const single = CSS.supports('named-feature(single-axis-scroll-container)');
 			const top = getComputedStyle(head).insetBlockStart;
-			if (box.scrollWidth <= box.clientWidth || left !== 0 || top !== (single ? '52px' : '0px') || getComputedStyle($('tbody td', box)).position !== 'relative') {
-				out.push('a wide table scrolls ' + (box.scrollWidth > box.clientWidth ? '' : 'not ') + 'sideways, its first column ' + left + ' px from the start when scrolled, its head sticks at ' + top + (single ? ' on one axis' : ''));
+			if (!wide || left !== 0 || top !== (single ? '52px' : '0px') || getComputedStyle($('tbody td', box)).position !== 'relative') {
+				out.push('a wide table scrolls ' + (wide ? '' : 'not ') + 'sideways, its first column ' + left + ' px from the start when scrolled, its head sticks at ' + top + (single ? ' on one axis' : ''));
 			}
 			const grouped = [...$$('#table-grouped tbody th')].map((th) => getComputedStyle(th).position);
 			if (grouped.some((position) => position === 'sticky')) {
