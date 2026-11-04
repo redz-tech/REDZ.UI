@@ -41,7 +41,7 @@
 			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["Delete 2 excursions?", "Their pages go away on all three sites"], "unsteady": {"voiceover-tahoe": "VoiceOver 26 says the alert dialog whole on one run and nothing of it on the next (measured 2026-11-03, five runs)."}},
 			{"label": "Escape in the confirm", "do": "key", "key": "Escape", "expect": ["Delete 2 excursions"], "unsteady": {"voiceover-tahoe": "VoiceOver 26 says the button the focus is back on, or only the page's own status of the answer (measured 2026-11-03)."}},
 			{"label": "the prompt's button", "do": "focus", "target": "[data-docs-run=\"prompt\"]", "expect": ["Rename the folder"]},
-			{"label": "Enter on it: its field", "do": "key", "key": "Enter", "expect": ["Name"]}
+			{"label": "Enter on it: its field", "do": "key", "key": "Enter", "expect": ["Name"], "unsteady": {"voiceover-tahoe": "VoiceOver 26 says the prompt's dialog and field on one run of five and nothing on four, as it says the confirmation's on some runs only; VoiceOver 15, without a form around the dialog's parts, says it whole (measured 2026-11-04, three full runs and two of the page alone)."}}
 		],
 		"docs/commands.html": [
 			{"label": "a copy button", "do": "focus", "target": "#commands-copy-field [aria-controls]", "expect": ["Copy the key"]},
@@ -50,8 +50,8 @@
 		],
 		"docs/viewer.html": [
 			{"label": "a picture's link", "do": "focus", "target": "#viewer-set a", "expect": ["A lagoon under green hills"]},
-			{"label": "Enter on it: the viewer", "do": "key", "key": "Enter", "expect": ["Close"]},
-			{"label": "Escape in the viewer", "do": "key", "key": "Escape", "expect": ["A lagoon under green hills"]}
+			{"label": "Enter on it: the viewer", "do": "key", "key": "Enter", "expect": ["Close"], "unsteady": {"voiceover-tahoe": "VoiceOver 26 says the viewer's Close button as it opens on one run of three, and only the link it left on two; then it says nothing of the link the focus comes back to (measured 2026-11-04, three runs); VoiceOver 15 and NVDA say both every run."}},
+			{"label": "Escape in the viewer", "do": "key", "key": "Escape", "expect": ["A lagoon under green hills"], "unsteady": {"voiceover-tahoe": "See the step before: once VoiceOver 26 misses the viewer, it says nothing of the link either (measured 2026-11-04, three runs)."}}
 		],
 		"docs/drawer.html": [
 			{"label": "the drawer's button", "do": "focus", "target": "#drawer-filters > button[commandfor=\"drawer-filters-panel\"]", "expect": ["Filters"]},
@@ -161,7 +161,7 @@
 			{"label": "Enter in the search", "do": "key", "key": "Enter", "expect": ["collapsed", "German"]},
 			{"label": "the button of tags", "do": "focus", "target": "#combobox-tags-face", "expect": []},
 			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": []},
-			{"label": "a new tag typed", "do": "type", "text": "Snorkeling trips", "expect": ["Create", "Snorkeling trips"]},
+			{"label": "a new tag typed", "do": "type", "text": "Snorkeling trips", "expect": ["Create", "Snorkeling trips"], "unsteady": {"voiceover-tahoe": "VoiceOver 26 says the active “Create …” option after the typed words on two runs of three, and only the typed words and the field on one (measured 2026-11-04, three runs); VoiceOver 15 and NVDA say it every run."}},
 			{"label": "Enter on “Create …”", "do": "key", "key": "Enter", "expect": ["Snorkeling trips"], "unsteady": {"voiceover": "VoiceOver 15 says the created tag's polite label on most runs and only the search field again on some (measured 2026-11-03, five runs)."}}
 		],
 		"docs/palette.html": [
@@ -224,9 +224,7 @@
 		{"finding": "docs/all.ar.html 1440 · dark · RTL · Arabic - #dialog-full-panel from button.btn leaves the viewport", "engines": ["chrome-130"], "reason": "The drawer's Chrome 130 fault below: the full-screen dialog, 100 % of its fixed containing block, gets the 1440 px of the viewport moved 15 px to the left - [-15, 1425] - while Chrome 136 and the others give it [0, 1425] (measured 2026-11-02)."},
 		{"finding": "voiceover docs/menu.html - ", "engines": ["voiceover"], "reason": "VoiceOver 15 with Safari 27 says nothing of the focus on a menu's button, nor of the first item when the page's first menu opens, every run; VoiceOver 26 says them all, and VoiceOver 15 says the moves within the menus (measured 2026-11-03, five runs)."},
 		{"finding": "without «Their pages go away on all three sites»", "engines": ["voiceover"], "reason": "VoiceOver 15 says the alert dialog's name and its focused button but never its aria-describedby text, which VoiceOver 26 says (measured 2026-11-03, five runs)."},
-		{"finding": "voiceover-tahoe docs/combobox.html - Enter on “Create …”:", "engines": ["voiceover-tahoe"], "reason": "VoiceOver 26 says nothing once a tag is created, the status's polite label included, in every run and hearing; VoiceOver 15 says the label (measured 2026-11-03, four runs)."},
-		{"finding": "voiceover-tahoe docs/dialog.html - Enter on it: its field:", "engines": ["voiceover-tahoe"], "reason": "VoiceOver 26 says nothing as the prompt's dialog opens with the focus in its field, in four runs of four and every hearing, and nothing of the confirmation in two of them; VoiceOver 15 says the prompt's dialog, its field's name and its value (measured 2026-11-04)."},
-		{"finding": "docs/all.ar.html 1440 · dark · RTL · Arabic - #drawer-filters-panel from button.btn leaves the viewport", "engines": ["chrome-130"], "reason": "Chrome 130 puts fixed boxes 15 px to the left in a right-to-left page whose root keeps a stable scrollbar gutter - as html:has(dialog:modal) does while a modal is open - so a drawer at the end edge loses 7 px; Chrome 136 places it right (measured 2026-10-28). The gutter stays: without it every engine shifts the page when a modal opens."},
+		{"finding": "voiceover-tahoe docs/combobox.html - Enter on “Create …”:", "engines": ["voiceover-tahoe"], "reason": "VoiceOver 26 says nothing once a tag is created, the status's polite label included, in every run and hearing; VoiceOver 15 says the label (measured 2026-11-03, four runs)."},		{"finding": "docs/all.ar.html 1440 · dark · RTL · Arabic - #drawer-filters-panel from button.btn leaves the viewport", "engines": ["chrome-130"], "reason": "Chrome 130 puts fixed boxes 15 px to the left in a right-to-left page whose root keeps a stable scrollbar gutter - as html:has(dialog:modal) does while a modal is open - so a drawer at the end edge loses 7 px; Chrome 136 places it right (measured 2026-10-28). The gutter stays: without it every engine shifts the page when a modal opens."},
 		{"finding": "docs/all.ar.html 1440 · dark · RTL · Arabic - #drawer-lg-panel from button.btn leaves the viewport", "engines": ["chrome-130"], "reason": "The same Chrome 130 fault as the drawer's above: drawer-lg, 608 px, measured at [-7, 601] where Chrome 136 gives [8, 616] (2026-11-04)."}
 	]
 }
