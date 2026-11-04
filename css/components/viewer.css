@@ -1,0 +1,89 @@
+@layer components {
+	.viewer {
+		inline-size: 100%;
+		max-inline-size: none;
+		block-size: 100%;
+		max-block-size: none;
+		margin: 0;
+		padding: var(--redz-space-64) var(--redz-space-16) var(--redz-space-24);
+		border: 0;
+		background: transparent;
+		color: #fff;
+		color-scheme: dark;
+	}
+
+	.viewer[open] {
+		display: grid;
+		place-items: center;
+	}
+
+	.viewer::backdrop {
+		background: rgb(8 10 14 / 0.9);
+	}
+
+	.viewer-figure {
+		display: grid;
+		justify-items: center;
+		gap: var(--redz-space-12);
+		max-inline-size: 100%;
+		margin: 0;
+	}
+
+	.viewer-image {
+		display: block;
+		inline-size: auto;
+		max-inline-size: 100%;
+		block-size: auto;
+		max-block-size: calc(100dvh - 9rem);
+		object-fit: contain;
+	}
+
+	.viewer-caption {
+		max-inline-size: 40rem;
+		font-size: var(--redz-fs-14);
+		text-align: center;
+	}
+
+	.viewer .btn {
+		--redz-btn-bg: rgb(255 255 255 / 0.14);
+		--redz-btn-fg: #fff;
+		--redz-btn-hover: rgb(255 255 255 / 0.28);
+		position: fixed;
+		border-radius: 999px;
+	}
+
+	.viewer-close {
+		inset-block-start: var(--redz-space-12);
+		inset-inline-end: var(--redz-space-12);
+	}
+
+	.viewer-prev,
+	.viewer-next {
+		display: none;
+		inset-block-start: 50%;
+		translate: 0 -50%;
+	}
+
+	.viewer-set .viewer-prev,
+	.viewer-set .viewer-next {
+		display: inline-flex;
+	}
+
+	.viewer-prev {
+		inset-inline-start: var(--redz-space-12);
+	}
+
+	.viewer-next {
+		inset-inline-end: var(--redz-space-12);
+	}
+
+	@media (forced-colors: active) {
+		.viewer {
+			color: CanvasText;
+		}
+
+		.viewer::backdrop {
+			background: Canvas;
+		}
+	}
+}

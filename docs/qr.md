@@ -19,6 +19,15 @@ A white tile for a QR code: a scanner reads dark modules on white, so the tile s
 </figure>
 ```
 
+### Downloaded as a picture
+
+A button with `command="--download"` and `aria-controls` naming the tile downloads its code as a PNG on white, to print on a room's door or a table's card: `data-file` names the file, `code.png` by default, and `data-size` is its side in pixels, 512. An inline `svg` is drawn through a `blob:` image, so the page's Content Security Policy needs `img-src blob:`; an `img` from another site needs that site's CORS.
+
+```html
+<div class="qr" id="qr-download-room-code"><img src="img/qr.svg" alt="QR code: the menu of room 12"></div>
+<button class="btn" type="button" command="--download" aria-controls="qr-download-room-code" data-file="room-12.png" data-size="512"><i class="bi bi-download" aria-hidden="true"></i>Download the code</button>
+```
+
 ## Accessibility
 
 - A code is a picture of something a person may not be able to scan: give the same thing in words beside it - the address, or the secret key a 2FA app can take typed.

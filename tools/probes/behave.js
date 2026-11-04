@@ -399,6 +399,272 @@ window.REDZ_BEHAVE = (() => {
 				out.push('an empty alert is ' + empty[0] + ' px tall, ' + filled[0] + ' px filled, ' + tall() + ' px emptied again');
 			}
 		}]},
+		copy: {target: '#commands-copy-field', steps: [async (out) => {
+			const said = () => $$('[role="status"]').map((status) => status.textContent).join('|');
+			const copied = [];
+			let told = '';
+			document.addEventListener('redz:copy', (event) => {
+				told = event.detail.text;
+			}, {once: true});
+			Object.defineProperty(navigator, 'clipboard', {configurable: true, value: {writeText: async (words) => {
+				copied.push(words);
+			}}});
+			const button = $('#commands-copy-field [aria-controls]');
+			button.click();
+			await wait(200);
+			const icon = $('.bi', button).className;
+			if (copied[0] !== $('#commands-copy-key').value || told !== copied[0] || !said().includes('Copied') || !icon.includes('bi-check-lg')) {
+				out.push('copying a field gives ' + say(copied) + ', redz:copy ' + say(told) + ', the statuses ' + say(said()) + ', the icon ' + say(icon));
+			}
+			$('#commands-copy-field [data-copy]').click();
+			await wait(50);
+			delete navigator.clipboard;
+			Object.defineProperty(navigator, 'clipboard', {configurable: true, value: undefined});
+			const command = document.execCommand;
+			const commanded = [];
+			document.execCommand = (name) => commanded.push(name + ':' + document.activeElement?.value) > 0;
+			button.click();
+			await wait(200);
+			document.execCommand = command;
+			delete navigator.clipboard;
+			if (copied[1] !== $('#commands-copy-field [data-copy]').dataset.copy || commanded[0] !== 'copy:' + $('#commands-copy-key').value || document.activeElement !== button) {
+				out.push('data-copy gives ' + say(copied[1]) + ', and without the Clipboard API the copy command got ' + say(commanded) + ', the focus ' + (document.activeElement === button ? 'back on' : 'not on') + ' the button');
+			}
+			await wait(1500);
+			if ($('.bi', button).className !== 'bi bi-copy') {
+				out.push('the check does not give the icon back: ' + say($('.bi', button).className));
+			}
+		}]},
+		download: {target: '#qr-download-room', steps: [async (out) => {
+			const click = HTMLAnchorElement.prototype.click;
+			let got = null;
+			HTMLAnchorElement.prototype.click = function () {
+				got = {name: this.download, href: this.href};
+			};
+			$('#qr-download-room [command="--download"]').click();
+			for (let waited = 0; got === null && waited < 30; waited++) {
+				await wait(100);
+			}
+			HTMLAnchorElement.prototype.click = click;
+			if (got === null || got.name !== 'room-12.png' || !got.href.startsWith('blob:')) {
+				out.push('the download gives ' + say(got));
+				return;
+			}
+			const picture = await createImageBitmap(await (await fetch(got.href)).blob());
+			const canvas = Object.assign(document.createElement('canvas'), {width: picture.width, height: picture.height});
+			canvas.getContext('2d').drawImage(picture, 0, 0);
+			const corner = [...canvas.getContext('2d').getImageData(1, 1, 1, 1).data].join(',');
+			if (picture.width !== 512 || picture.height !== 512 || corner !== '255,255,255,255') {
+				out.push('the PNG is ' + picture.width + ' × ' + picture.height + ', its corner ' + corner + ', not 512 × 512 on white');
+			}
+		}]},
+		print: {target: '#commands-print-page', steps: [async (out) => {
+			const closed = $$('details:not([open])');
+			const named = closed.filter((details) => details.hasAttribute('name')).map((details) => details.getAttribute('name'));
+			const regions = $$('button[command="--toggle"][aria-expanded="false"][aria-controls]').map((button) => document.getElementById(button.getAttribute('aria-controls'))).filter((region) => region?.hidden);
+			dispatchEvent(new Event('beforeprint'));
+			const opened = [closed.filter((details) => details.open).length, regions.filter((region) => !region.hidden).length];
+			dispatchEvent(new Event('afterprint'));
+			const back = [closed.filter((details) => !details.open).length, regions.filter((region) => region.hidden).length, closed.filter((details) => details.hasAttribute('name')).map((details) => details.getAttribute('name')).join(' ')];
+			if (closed.length === 0 || regions.length === 0 || say(opened) !== say([closed.length, regions.length]) || say(back) !== say([closed.length, regions.length, named.join(' ')])) {
+				out.push('printing opens ' + opened[0] + ' of ' + closed.length + ' closed details and ' + opened[1] + ' of ' + regions.length + ' closed regions, and after it ' + back[0] + ' and ' + back[1] + ' are closed again, the groups named ' + say(back[2]));
+			}
+		}]},
+		theme: {target: '#commands-theme-choice', steps: [async (out) => {
+			const root = document.documentElement;
+			const before = root.dataset.theme;
+			const buttons = $$('#commands-theme-choice [command="--theme"]');
+			const pressed = () => buttons.map((button) => button.value + ':' + button.getAttribute('aria-pressed')).join(' ');
+			let told = '';
+			document.addEventListener('redz:theme', (event) => {
+				told = event.detail.theme;
+			});
+			buttons.find((button) => button.value === 'dark').click();
+			await wait(50);
+			const dark = [root.dataset.theme, told, pressed()];
+			buttons.find((button) => button.value === 'system').click();
+			await wait(50);
+			const system = [root.hasAttribute('data-theme'), told, pressed()];
+			const flipped = matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark';
+			buttons.find((button) => button.value === 'toggle').click();
+			await wait(50);
+			const toggled = [root.dataset.theme, told];
+			if (before === undefined) {
+				delete root.dataset.theme;
+			} else {
+				root.dataset.theme = before;
+			}
+			if (say(dark) !== say(['dark', 'dark', 'light:false dark:true system:false toggle:true']) || system[0] || system[1] !== 'system' || !system[2].includes('system:true') || say(toggled) !== say([flipped, flipped])) {
+				out.push('the theme buttons give ' + say(dark) + ', then for system ' + say(system) + ', then the toggle ' + say(toggled));
+			}
+		}]},
+		share: {target: '#commands-share-tour', steps: [async (out) => {
+			const button = $('#commands-share-tour [command="--share"]');
+			const menu = $('#commands-share-menu');
+			let shared = null;
+			Object.defineProperty(navigator, 'share', {configurable: true, value: async (data) => {
+				shared = data;
+			}});
+			Object.defineProperty(navigator, 'canShare', {configurable: true, value: () => true});
+			button.click();
+			await wait(100);
+			const bySheet = [shared?.url, shared?.title, menu.matches(':popover-open')];
+			Object.defineProperty(navigator, 'share', {configurable: true, value: async () => {
+				throw new DOMException('refused', 'NotAllowedError');
+			}});
+			button.click();
+			await wait(200);
+			const byMenu = [menu.matches(':popover-open'), button.getAttribute('aria-expanded'), $('a.share-telegram', menu).href, $('[command="--copy"]', menu).dataset.copy];
+			menu.hidePopover();
+			delete navigator.share;
+			delete navigator.canShare;
+			const url = button.dataset.shareUrl;
+			if (say(bySheet) !== say([url, button.dataset.shareTitle, false]) || !byMenu[0] || byMenu[1] !== 'true' || !byMenu[2].startsWith('https://t.me/share/url?url=' + encodeURIComponent(url)) || byMenu[3] !== url) {
+				out.push('by the sheet it shares ' + say(bySheet) + '; the sheet failing, the menu ' + say(byMenu));
+			}
+		}]},
+		time: {target: '#time-ticking', steps: [async (out) => {
+			const [elapsed, ago, ahead] = $$('#time-ticking time');
+			const at = [elapsed.textContent, ago.textContent, ahead.textContent, ago.title !== ''];
+			elapsed.dateTime = new Date(Date.now() - 3725000).toISOString();
+			await wait(50);
+			const hour = elapsed.textContent;
+			await wait(1100);
+			const [minutes, seconds] = at[0].split(':').map(Number);
+			if (!/^\d+:\d\d$/.test(at[0]) || minutes * 60 + seconds < 95 || minutes * 60 + seconds > 240 || at[1] !== '5 minutes ago' || at[2] !== 'in 2 hours' || !at[3] || !/^1:02:0[5-7]$/.test(hour) || elapsed.textContent === hour) {
+				out.push('the times read ' + say(at) + ', an elapsed time of an hour and more ' + say(hour) + ' then ' + say(elapsed.textContent));
+			}
+		}]},
+		viewer: {target: '#viewer-set', steps: [async (out) => {
+			const links = $$('#viewer-set a[data-zoom]');
+			links[0].click();
+			await wait(100);
+			const viewer = $('dialog.viewer');
+			const shown = () => [$('.viewer-image', viewer).getAttribute('src').split('/').pop(), $('.viewer-caption', viewer).textContent];
+			const first = [viewer?.open, ...shown()];
+			const key = (name) => viewer.dispatchEvent(new KeyboardEvent('keydown', {key: name, bubbles: true, cancelable: true}));
+			key('ArrowRight');
+			const second = shown();
+			key('ArrowLeft');
+			key('ArrowLeft');
+			const wrapped = shown();
+			document.documentElement.dir = 'rtl';
+			key('ArrowLeft');
+			const mirrored = shown();
+			document.documentElement.dir = 'ltr';
+			$('.viewer-close', viewer).click();
+			await wait(50);
+			if (say(first) !== say([true, 'lagoon.svg', 'The lagoon at Ang Thong · 1 of 3']) || second[0] !== 'pier.svg' || say(wrapped) !== say(['cliffs.svg', 'Cliffs above a bay with a boat · 3 of 3']) || mirrored[0] !== 'lagoon.svg' || viewer.open || document.activeElement !== links[0]) {
+				out.push('a set of three opens ' + say(first) + ', steps to ' + say(second) + ', wraps back to ' + say(wrapped) + ', right to left on to ' + say(mirrored) + ', and closed leaves the focus ' + (document.activeElement === links[0] ? 'on its link' : 'elsewhere'));
+			}
+			let followed = null;
+			const watch = (event) => {
+				followed = !event.defaultPrevented;
+				event.preventDefault();
+			};
+			addEventListener('click', watch, {once: true});
+			links[1].dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, ctrlKey: true}));
+			if (followed !== true || viewer.open) {
+				out.push('a click with Control does not open the image as a link does');
+			}
+			const room = $('#viewer-dialog-room');
+			room.showModal();
+			$('a[data-zoom]', room).click();
+			await wait(100);
+			const above = [viewer.open, room.open];
+			$('.viewer-close', viewer).click();
+			await wait(50);
+			const after = [viewer.open, room.open, room.contains(document.activeElement)];
+			room.close();
+			if (say(above) !== say([true, true]) || say(after) !== say([false, true, true])) {
+				out.push('opened from a dialog the viewer and the dialog are ' + say(above) + ' open, then ' + say(after) + ' with the focus in the dialog');
+			}
+		}]},
+		prompt: {target: '#dialog-prompt-name', steps: [async (out) => {
+			const asked = REDZ.ui.prompt({title: 'Rename the folder', label: 'Name', value: 'Tours 2026', required: true, ok: 'Rename'});
+			await wait(150);
+			const dialog = $('dialog[open]');
+			const field = $('input', dialog);
+			const start = [document.activeElement === field, field.selectionStart, field.selectionEnd, $('label', dialog).textContent];
+			input(field, '');
+			$('button[type="submit"]', dialog).click();
+			await wait(50);
+			const empty = dialog.open;
+			input(field, 'Tours 2027');
+			$('button[type="submit"]', dialog).click();
+			const answer = await Promise.race([asked, wait(500).then(() => 'unanswered')]);
+			const plain = REDZ.ui.prompt({title: 'Plain?'});
+			await wait(100);
+			$('dialog[open] .dialog-footer > .btn:first-child').click();
+			if (say(start) !== say([true, 0, 10, 'Name']) || !empty || answer !== 'Tours 2027' || await plain !== null || $('dialog[open]') !== null) {
+				out.push('a prompt starts ' + say(start) + ', ' + (empty ? 'stays' : 'closes') + ' empty though required, answers ' + say(answer) + ', and Cancel does not answer null');
+			}
+		}]},
+		hash: {target: '#nav-hash', steps: [async (out) => {
+			const tabs = $$('#nav-hash [role="tab"]');
+			const list = tabs[0].closest('[role="tablist"]');
+			const selected = () => tabs.findIndex((tab) => tab.getAttribute('aria-selected') === 'true');
+			const told = [];
+			const hear = (event) => told.push(tabs.indexOf(event.detail.tab));
+			list.addEventListener('redz:selected', hear);
+			tabs[1].click();
+			const written = location.hash;
+			location.hash = '#nav-hash-history';
+			await wait(100);
+			const followed = selected();
+			const refuse = (event) => {
+				event.preventDefault();
+				event.detail.respondWith(Promise.resolve(false));
+			};
+			list.addEventListener('redz:select', refuse, {once: true});
+			const refused = await REDZ.ui.select(tabs[0]);
+			const kept = selected();
+			const taken = await REDZ.ui.select(tabs[0]);
+			list.removeEventListener('redz:selected', hear);
+			history.replaceState(history.state, '', location.pathname + location.search);
+			if (written !== '#nav-hash-payment' || followed !== 2 || refused !== false || kept !== 2 || taken !== true || selected() !== 0 || say(told) !== say([1, 2, 0])) {
+				out.push('a choice writes ' + say(written) + ', the address selects tab ' + followed + ', a refused select answers ' + refused + ' leaving tab ' + kept + ', a taken one ' + taken + ', and redz:selected told ' + say(told));
+			}
+		}]},
+		checks: {target: '#menu-checks', steps: [async (out) => {
+			const menu = $('#menu-checks-list');
+			const item = (words) => $$('.menu-item', menu).find((one) => one.textContent === words);
+			const checked = () => $$('.menu-item', menu).map((one) => one.getAttribute('aria-checked')).join(' ');
+			const told = [];
+			menu.addEventListener('redz:check', (event) => told.push(event.detail.item.textContent + ':' + event.detail.checked));
+			$('#menu-checks > button').click();
+			await wait(100);
+			item('Pickup').click();
+			item('Guest').click();
+			item('Name').click();
+			const open = menu.matches(':popover-open');
+			menu.hidePopover();
+			const choice = $('#menu-choice-list');
+			$('#menu-choice > button').click();
+			await wait(100);
+			$$('.menu-item', choice)[1].click();
+			const one = [$$('.menu-item', choice).map((other) => other.getAttribute('aria-checked')).join(' '), choice.matches(':popover-open')];
+			$$('.menu-item', choice)[0].setAttribute('aria-checked', 'true');
+			$$('.menu-item', choice)[1].setAttribute('aria-checked', 'false');
+			if (checked() !== 'false true true false true' || !open || say(told) !== say(['Pickup:true', 'Guest:false', 'Name:true']) || say(one) !== say(['false true false', false])) {
+				out.push('check items read ' + say(checked()) + ' with the menu ' + (open ? 'open' : 'closed') + ', told ' + say(told) + '; a choice of one ' + say(one));
+			}
+		}]},
+		progress: {target: '#progress-window-run', steps: [async (out) => {
+			const bar = () => $('.progress-top');
+			const open = () => bar()?.matches(':popover-open') ?? false;
+			REDZ.ui.progress(wait(50));
+			await wait(250);
+			const quick = open();
+			REDZ.ui.progress(wait(600));
+			REDZ.ui.progress(wait(300));
+			await wait(300);
+			const running = [open(), $$('.progress-top').length, bar()?.getAttribute('aria-hidden')];
+			await wait(600);
+			if (quick || say(running) !== say([true, 1, 'true']) || open()) {
+				out.push('the window\'s bar: a quick request shows it (' + quick + '), two at once show ' + say(running) + ', and after them it is ' + (open() ? 'still open' : 'gone'));
+			}
+		}]},
 		floating: {target: '#input-group-floating .input-group', steps: [async (out) => {
 			for (const group of $$('#input-group-floating .input-group')) {
 				const floating = $(':scope > .form-floating', group);

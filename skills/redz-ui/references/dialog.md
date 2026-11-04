@@ -84,6 +84,22 @@ await REDZ.ui.confirm({
 });
 ```
 
+### A question for one value
+
+`await REDZ.ui.prompt({title, text, label, value, placeholder, type, inputmode, pattern, required, ok, cancel, tone})` asks for one value in a modal dialog and answers it, or `null` for Cancel and `Esc`. The field takes the focus with its text selected; `Enter` answers once the field is valid - `required`, `pattern` and `type` are held by the browser's own checks. The field is labelled by `label`, or the title; the buttons' words come from the caller or the page's texts.
+
+```html
+<button class="btn" type="button" data-docs-run="prompt"><i class="bi bi-pencil" aria-hidden="true"></i>Rename the folder</button>
+<span class="text-muted fs-12" role="status" data-docs-answer></span>
+```
+
+```js
+const name = await REDZ.ui.prompt({title: 'Rename the folder', label: 'Name', value: 'Tours 2026', required: true, ok: 'Rename'});
+if (name !== null) {
+  // send it
+}
+```
+
 ### On a phone and full screen
 
 On any window a long dialog keeps its header and its footer in view: only `dialog-body` scrolls between them. A `<form>` may hold all three - `<form method="dialog">` right inside the dialog, its submit buttons in the footer - and the body still scrolls alone. On a window narrower than 576 px a dialog fills the screen by itself, while `dialog-sm` and a confirmation stay a card in the middle. `dialog-fullscreen` fills the screen on any window.

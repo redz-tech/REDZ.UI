@@ -5,16 +5,31 @@
 // or Space selects. Before a person's choice selects a tab, the tablist fires the cancelable redz:select (detail: tab,
 // the one asked for, and from, the one being left): a page that takes it and answers with a promise - a form with
 // unsaved edits asking first - has the tab selected when the promise gives true; otherwise the tab being left stays,
-// with the focus.
+// with the focus. After every selection, the first one too, the tablist fires redz:selected (detail: tab).
+// REDZ.ui.select(tab) chooses a tab from code as a person would, and answers a promise of whether it was selected. A
+// tablist with data-hash follows the address: location.hash naming a panel, or anything inside one, selects its tab -
+// at load and when the hash changes, nested tablists too -, and a choice writes the panel's id into the address.
 import {ask} from './answer.js';
 
 const asking = new WeakSet();
 
 const tabsOf = (list) => [...list.querySelectorAll('[role="tab"]')].filter((tab) => tab.closest('[role="tablist"]') === list && !tab.disabled && tab.getAttribute('aria-disabled') !== 'true');
 
-/** Selects the tab: its panel shown, the others' hidden, it alone in the tab order. */
-const select = (tab) => {
-	for (const other of tabsOf(tab.closest('[role="tablist"]'))) {
+/** Tells the page the tab is selected - once its scripts listen, when the library starts before they do. */
+const told = (tab) => {
+	const tell = () => tab.closest('[role="tablist"]')?.dispatchEvent(new CustomEvent('redz:selected', {bubbles: true, detail: {tab}}));
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', tell, {once: true});
+	} else {
+		tell();
+	}
+};
+
+/** Selects the tab: its panel shown, the others' hidden, it alone in the tab order; a person's choice in a tablist
+ *  with data-hash goes into the address. */
+const select = (tab, chosen = false) => {
+	const list = tab.closest('[role="tablist"]');
+	for (const other of tabsOf(list)) {
 		const selected = other === tab;
 		other.setAttribute('aria-selected', String(selected));
 		other.tabIndex = selected ? 0 : -1;
@@ -23,32 +38,69 @@ const select = (tab) => {
 			panel.hidden = !selected;
 		}
 	}
+	const panel = tab.getAttribute('aria-controls') || '';
+	if (chosen && list.hasAttribute('data-hash') && panel !== '') {
+		history.replaceState(history.state, '', '#' + panel);
+	}
+	told(tab);
 };
 
-/** Selects the tab a person chose, unless the page refuses it in redz:select. */
+/** Selects the tab a person chose, unless the page refuses it in redz:select; a promise of whether it is selected. */
 const choose = (tab) => {
 	const list = tab.closest('[role="tablist"]');
 	const from = tabsOf(list).find((one) => one.getAttribute('aria-selected') === 'true') ?? null;
 	if (from === tab || asking.has(list)) {
-		return;
+		return Promise.resolve(from === tab);
 	}
 	const [taken, answer] = ask(list, 'redz:select', {tab, from});
 	if (!taken) {
-		select(tab);
-		return;
+		select(tab, true);
+		return Promise.resolve(true);
 	}
 	if (answer === null) {
-		return;
+		return Promise.resolve(false);
 	}
 	asking.add(list);
-	answer.then((yes) => yes === true).catch(() => false).then((yes) => {
+	return answer.then((yes) => yes === true).catch(() => false).then((yes) => {
 		asking.delete(list);
 		if (yes) {
-			select(tab);
+			select(tab, true);
 		} else if (from !== null && list.contains(document.activeElement)) {
 			from.focus();
 		}
+		return yes;
 	});
+};
+
+/** Chooses a tab from code, as a person would: a promise of whether it is selected. */
+export const selectTab = (tab) => tab?.closest('[role="tablist"]') ? choose(tab) : Promise.resolve(false);
+
+/** The element the address names, or null. */
+const named = () => {
+	try {
+		return location.hash.length > 1 ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
+	} catch {
+		return null;
+	}
+};
+
+/** Selects the tab of every panel of a tablist with data-hash that holds the element the address names, outermost
+ *  first; answers whether one was. */
+const follow = () => {
+	const target = named();
+	const tabs = [];
+	for (let at = target; at !== null; at = at.parentElement) {
+		const tab = at.id === '' ? null : document.querySelector('[role="tab"][aria-controls="' + CSS.escape(at.id) + '"]');
+		if (tab?.closest('[role="tablist"][data-hash]')) {
+			tabs.unshift(tab);
+		}
+	}
+	for (const tab of tabs) {
+		if (tab.getAttribute('aria-selected') !== 'true') {
+			select(tab);
+		}
+	}
+	return tabs.length > 0;
 };
 
 for (const list of document.querySelectorAll('[role="tablist"]')) {
@@ -58,6 +110,12 @@ for (const list of document.querySelectorAll('[role="tablist"]')) {
 		select(selected);
 	}
 }
+
+if (follow()) {
+	named()?.scrollIntoView();
+}
+
+addEventListener('hashchange', follow);
 
 document.addEventListener('click', (event) => {
 	const tab = event.target instanceof Element ? event.target.closest('[role="tab"]') : null;

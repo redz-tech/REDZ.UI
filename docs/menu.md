@@ -34,6 +34,24 @@ A choice of one is a set of `menuitemradio` items, the chosen one `aria-checked=
 </div>
 ```
 
+### Items that stay checked
+
+A `menuitemcheckbox` chosen flips its `aria-checked`, and a `menuitemradio` in a `role="group"` checks itself and unchecks the others of its group; the menu stays open for the next choice, and the page hears `redz:check` with `detail.item` and `detail.checked`. A `menuitemradio` outside a group is a choice of one, as above: it checks itself and closes the menu.
+
+```html
+<button class="btn" type="button" commandfor="menu-checks-list" command="toggle-popover" aria-haspopup="menu"><i class="bi bi-layout-three-columns" aria-hidden="true"></i>Columns<i class="bi bi-chevron-down" aria-hidden="true"></i></button>
+<div id="menu-checks-list" class="menu" popover role="menu" aria-label="Columns">
+	<button class="menu-item" type="button" role="menuitemcheckbox" aria-checked="true">Guest</button>
+	<button class="menu-item" type="button" role="menuitemcheckbox" aria-checked="true">Tour</button>
+	<button class="menu-item" type="button" role="menuitemcheckbox" aria-checked="false">Pickup</button>
+	<div class="menu-header" id="menu-checks-sort">Sort by</div>
+	<div role="group" aria-labelledby="menu-checks-sort">
+		<button class="menu-item" type="button" role="menuitemradio" aria-checked="true">Date</button>
+		<button class="menu-item" type="button" role="menuitemradio" aria-checked="false">Name</button>
+	</div>
+</div>
+```
+
 ## States
 
 The items of an open menu. `:focus-visible` is where the arrow keys are; `aria-current="true"` marks the page a menu of links is on.

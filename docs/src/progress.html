@@ -54,6 +54,13 @@
 			<meter class="meter meter-xs" value="0.71" min="0" max="1" low="0.8" high="0.95" optimum="1" aria-label="Mail queue, 71 percent succeeded">71%</meter>
 		</div>
 	</div>
+
+	<h3 id="progress-window">Along the window's top</h3>
+	<p><code>REDZ.ui.progress(promise)</code> shows a thin bar along the top of the window while a request runs, and answers the promise: it comes after 150 ms, so a quick answer shows nothing, then stays at least 400 ms, so it never flickers; however many requests run at once, there is one bar. It is <code>progress-top</code>, in the top layer, and readers do not hear it - what waits says so itself, a <a href="busy.html">busy</a> region or button. Under reduced motion the bar stands still.</p>
+	<div class="docs-example" id="progress-window-run">
+		<button class="btn" type="button" data-docs-run="progress"><i class="bi bi-cloud-arrow-down" aria-hidden="true"></i>Load for 2 seconds</button>
+	</div>
+	<pre class="docs-code" tabindex="0"><code>const rows = await REDZ.ui.progress(fetch('/bookings?page=2').then((answer) =&gt; answer.json()));</code></pre>
 </section>
 
 <section class="vstack gap-12" aria-labelledby="progress-access">

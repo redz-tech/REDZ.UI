@@ -49,6 +49,10 @@
 		for (const box of document.querySelectorAll('[data-docs-indeterminate]')) {
 			box.indeterminate = true;
 		}
+		// The ticking times' moments, so many seconds before now.
+		for (const time of document.querySelectorAll('time[data-docs-since]')) {
+			time.dateTime = new Date(Date.now() - Number(time.dataset.docsSince) * 1000).toISOString();
+		}
 	});
 	document.addEventListener('click', (event) => {
 		const item = event.target instanceof Element ? event.target.closest('[data-docs-theme], [data-docs-dir]') : null;
@@ -100,8 +104,13 @@
 		'toast-action': () => REDZ.ui.toast({title: 'Moved to the archive', tone: 'info', action: {label: 'Undo', run: () => REDZ.ui.toast({title: 'Restored', tone: 'success'})}}),
 		confirm: async (button) => answer(button, await REDZ.ui.confirm({title: 'Delete 2 excursions?', text: 'Their pages go away on all three sites.', ok: 'Delete', tone: 'danger'}) ? 'Confirmed.' : 'Cancelled.'),
 		'confirm-phrase': async (button) => answer(button, await REDZ.ui.confirm({title: 'Delete the site lagoon.example?', text: 'Its pages, its files and its settings go away for good.', ok: 'Delete the site', tone: 'danger', phrase: 'lagoon.example'}) ? 'Confirmed.' : 'Cancelled.'),
+		prompt: async (button) => {
+			const name = await REDZ.ui.prompt({title: 'Rename the folder', label: 'Name', value: 'Tours 2026', required: true, ok: 'Rename'});
+			answer(button, name === null ? 'Cancelled.' : 'Renamed to ' + name + '.');
+		},
 		'confirm-lists': async (button) => answer(button, await REDZ.ui.confirm({title: 'Delete the project Riverside tower?', note: {tone: 'danger', text: 'This cannot be undone.'}, sections: [{title: 'Will be deleted:', items: ['128 tasks', '342 files', '1,204 log entries']}, {title: 'Kept:', items: ['The audit history']}], ok: 'Delete', tone: 'danger', phrase: 'Riverside tower'}) ? 'Confirmed.' : 'Cancelled.'),
 		'busy-button': (button) => REDZ.ui.busy(button, new Promise((done) => setTimeout(done, 2000))),
+		progress: () => REDZ.ui.progress(new Promise((done) => setTimeout(done, 2000))),
 		'cooldown': (button) => {
 			button.dataset.cooldown = '20';
 		},

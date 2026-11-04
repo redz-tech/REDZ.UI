@@ -76,6 +76,27 @@ tablist.addEventListener('redz:select', (event) => {
 });
 ```
 
+### Tabs in the address
+
+A tablist with `data-hash` follows the address: `location.hash` naming a panel, or anything inside one, selects its tab - when the page loads and when the hash changes, a tablist inside a panel too -, and a person's choice writes the panel's id into the address, so a link or a reload opens the same tab. After every selection, the first one too, the tablist fires `redz:selected` with `detail.tab`. `REDZ.ui.select(tab)` chooses a tab from code as a person would - through `redz:select`, so the page can still refuse - and answers a promise of whether it was selected.
+
+```html
+<div class="nav nav-underline" role="tablist" aria-label="Booking" data-hash>
+	<button class="nav-link" type="button" role="tab" id="nav-hash-1" aria-selected="true" aria-controls="nav-hash-guests">Guests</button>
+	<button class="nav-link" type="button" role="tab" id="nav-hash-2" aria-selected="false" aria-controls="nav-hash-payment">Payment</button>
+	<button class="nav-link" type="button" role="tab" id="nav-hash-3" aria-selected="false" aria-controls="nav-hash-history">History</button>
+</div>
+<div id="nav-hash-guests" role="tabpanel" aria-labelledby="nav-hash-1" tabindex="0"><p>Two adults, one child.</p></div>
+<div id="nav-hash-payment" role="tabpanel" aria-labelledby="nav-hash-2" tabindex="0" hidden><p>Paid in full by card on 2 November.</p></div>
+<div id="nav-hash-history" role="tabpanel" aria-labelledby="nav-hash-3" tabindex="0" hidden><p>Booked on 1 November; the date moved once.</p></div>
+<p><a href="#nav-hash-payment">The payment</a> opens its tab.</p>
+```
+
+```js
+tablist.addEventListener('redz:selected', (event) => load(event.detail.tab));
+await REDZ.ui.select(document.getElementById('nav-hash-3'));
+```
+
 ### Filling the width
 
 `nav-fill` lets the links share the width by their length, `nav-justified` in equal parts.

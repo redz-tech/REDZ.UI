@@ -71,6 +71,17 @@
   ok: 'Delete', tone: 'danger', phrase: 'Riverside tower',
 });</code></pre>
 
+	<h3 id="dialog-prompt">A question for one value</h3>
+	<p><code>await REDZ.ui.prompt({title, text, label, value, placeholder, type, inputmode, pattern, required, ok, cancel, tone})</code> asks for one value in a modal dialog and answers it, or <code>null</code> for Cancel and <kbd>Esc</kbd>. The field takes the focus with its text selected; <kbd>Enter</kbd> answers once the field is valid - <code>required</code>, <code>pattern</code> and <code>type</code> are held by the browser's own checks. The field is labelled by <code>label</code>, or the title; the buttons' words come from the caller or the page's texts.</p>
+	<div class="docs-example" id="dialog-prompt-name">
+		<button class="btn" type="button" data-docs-run="prompt"><i class="bi bi-pencil" aria-hidden="true"></i>Rename the folder</button>
+		<span class="text-muted fs-12" role="status" data-docs-answer></span>
+	</div>
+	<pre class="docs-code" tabindex="0"><code>const name = await REDZ.ui.prompt({title: 'Rename the folder', label: 'Name', value: 'Tours 2026', required: true, ok: 'Rename'});
+if (name !== null) {
+  // send it
+}</code></pre>
+
 	<h3>On a phone and full screen</h3>
 	<p>On any window a long dialog keeps its header and its footer in view: only <code>dialog-body</code> scrolls between them. A <code>&lt;form&gt;</code> may hold all three - <code>&lt;form method="dialog"&gt;</code> right inside the dialog, its submit buttons in the footer - and the body still scrolls alone. On a window narrower than 576 px a dialog fills the screen by itself, while <code>dialog-sm</code> and a confirmation stay a card in the middle. <code>dialog-fullscreen</code> fills the screen on any window.</p>
 	<div class="docs-example" id="dialog-full">

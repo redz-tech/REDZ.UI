@@ -63,6 +63,18 @@ The browser's own `<progress>` for work under way and `<meter>` for a measure wi
 </div>
 ```
 
+### Along the window's top
+
+`REDZ.ui.progress(promise)` shows a thin bar along the top of the window while a request runs, and answers the promise: it comes after 150 ms, so a quick answer shows nothing, then stays at least 400 ms, so it never flickers; however many requests run at once, there is one bar. It is `progress-top`, in the top layer, and readers do not hear it - what waits says so itself, a [busy](busy.md) region or button. Under reduced motion the bar stands still.
+
+```html
+<button class="btn" type="button" data-docs-run="progress"><i class="bi bi-cloud-arrow-down" aria-hidden="true"></i>Load for 2 seconds</button>
+```
+
+```js
+const rows = await REDZ.ui.progress(fetch('/bookings?page=2').then((answer) => answer.json()));
+```
+
 ## Keyboard and accessibility
 
 - Name every bar: a `<label for>`, `aria-label` or `aria-labelledby`. The browser announces the value as a percentage of `max`; the words beside the bar are for the eye.
