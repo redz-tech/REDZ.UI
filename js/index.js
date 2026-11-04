@@ -40,6 +40,7 @@ import './viewer.js';
 import './repeat.js';
 import './filter.js';
 import './row-link.js';
+import './log.js';
 import {toast} from './toast.js';
 import {confirm} from './confirm.js';
 import {busy} from './busy.js';

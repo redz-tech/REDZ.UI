@@ -125,6 +125,13 @@
 		'status-refuse': () => REDZ.ui.status(document.getElementById('status-save-line'), new Promise((done, refuse) => setTimeout(() => refuse(new Error('The name is taken. Pick another.')), 1200))).catch(() => {}),
 		'status-words': () => REDZ.ui.status(document.getElementById('status-words-line'), {tone: 'warning', text: 'Published; the sites rebuild within a minute.'}),
 		'confirm-rows': async (button) => answer(button, await REDZ.ui.confirm({title: 'Pay for booking 24-0187?', rows: [{label: 'Excursion', value: 'Ang Thong by speedboat'}, {label: 'Guests', value: '2 adults, 1 child'}, {label: 'To pay', value: '5,850 THB'}], ok: 'Pay'}) ? 'Paid.' : 'Cancelled.'),
+		'log-line': (button) => {
+			const log = document.getElementById(button.getAttribute('aria-controls'));
+			const time = document.createElement('span');
+			time.dataset.tone = 'muted';
+			time.textContent = new Date().toTimeString().slice(0, 8);
+			log.append('\n', time, ' A new line, kept in view');
+		},
 		'alert-fill': () => {
 			const words = document.getElementById('alert-fill-words');
 			words.textContent = words.textContent === '' ? 'The code is wrong. Two tries are left.' : '';

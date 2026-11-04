@@ -58,6 +58,52 @@ Series without a tone take the chart colors by their column.
 </table>
 ```
 
+`chart-values` writes each column's number above it - for one series and a few columns, where the numbers are what a person reads.
+
+```html
+<table class="chart chart-values">
+	<caption>Guests per month</caption>
+	<thead><tr><th scope="col">Month</th><th scope="col">Guests</th></tr></thead>
+	<tbody>
+		<tr><th scope="row">Jul</th><td data-v="0.55">220</td></tr>
+		<tr><th scope="row">Aug</th><td data-v="0.7">280</td></tr>
+		<tr><th scope="row">Sep</th><td data-v="0.45">180</td></tr>
+		<tr><th scope="row">Oct</th><td data-v="0.6">240</td></tr>
+		<tr><th scope="row">Nov</th><td data-v="0.85">340</td></tr>
+		<tr><th scope="row">Dec</th><td data-v="1">400</td></tr>
+	</tbody>
+</table>
+```
+
+## Shares of a whole
+
+`chart-bar` with `chart` draws one row as a single bar across: each segment's `data-v` is its share of the whole, and the legend under it names the series - write the share in the legend's words too. The bar is 12 px thick; `--redz-chart-bar-height` sets another.
+
+```html
+<table class="chart chart-bar">
+	<caption>Payments in November</caption>
+	<thead><tr><th scope="col">Method</th><th scope="col">Card, 58%</th><th scope="col">PromptPay, 31%</th><th scope="col">Cash, 11%</th></tr></thead>
+	<tbody>
+		<tr><th scope="row">November</th><td data-v="0.58">58%</td><td data-v="0.31">31%</td><td data-v="0.11">11%</td></tr>
+	</tbody>
+</table>
+```
+
+`table class="chart-rows"` breaks a whole into rows, longest first: each `tr` a label, its count and its share in words, and a bar under them whose length is the row's `data-v`. The header cells name the columns for a screen reader and are hidden from sight. The bars take the first chart color; a row's `data-tone` gives it a state's.
+
+```html
+<table class="chart-rows">
+	<caption>Where bookings came from</caption>
+	<thead><tr><th scope="col">Source</th><th scope="col">Bookings</th><th scope="col">Share</th></tr></thead>
+	<tbody>
+		<tr data-v="0.52"><th scope="row">Search</th><td>182</td><td>52%</td></tr>
+		<tr data-v="0.27"><th scope="row">Partners</th><td>94</td><td>27%</td></tr>
+		<tr data-v="0.14"><th scope="row">Social networks</th><td>49</td><td>14%</td></tr>
+		<tr data-v="0.07" data-tone="secondary"><th scope="row">Other</th><td>25</td><td>7%</td></tr>
+	</tbody>
+</table>
+```
+
 ## Sparklines
 
 `span class="spark"` with `role="img"` and its summary in `aria-label` draws one bar per run, oldest first: `data-v` its share of the longest, `data-state` - `ok`, `running`, `timeout`, `failed` - its color, `title` its tooltip. 18 px high in a row, `spark-md` 34 px, `spark-lg` 64 px; `spark-median` with `data-median` draws the median as a dashed line.
@@ -101,7 +147,8 @@ Series without a tone take the chart colors by their column.
 
 ## Accessibility
 
-- A chart is its table: the caption names it, the header cells name the series, each row says its day and its numbers. `charts.js` gives a chart table the table's roles, since WebKit drops them once CSS lays the table out as columns.
+- A chart is its table: the caption names it, the header cells name the series, each row says its day and its numbers. `charts.js` gives a `chart` or `chart-rows` table the table's roles, since WebKit drops them once CSS lays the table out otherwise.
+- A share bar and breakdown rows say their shares in words - the legend's, the rows' - and the bar repeats them.
 - A color never speaks alone: the legend names every series, a state's segment is named by its header cell, and a sparkline's summary is its name.
 - Three of the light theme's series colors are under 3:1 against the page: the legend and the table are what tell them apart.
 - In forced colors every bar is drawn in the text color; the numbers are in the table.

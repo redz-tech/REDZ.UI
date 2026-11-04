@@ -37,11 +37,35 @@
 	<pre class="docs-code" tabindex="0"><code>document.addEventListener('redz:view', (event) =&gt; localStorage.setItem('media-view', event.detail.view));</code></pre>
 </section>
 
+<section class="vstack gap-16" aria-labelledby="media-chooser">
+	<h2 id="media-chooser">Choosing</h2>
+	<p>A chooser of images - the cover of a page, the photos of a tour - is a <code>fieldset</code> of tiles, each a <code>label class="media-tile"</code> around its <code>media-tile-check</code>: a <code>radio</code> to pick one, a <code>check</code> to pick some. A click anywhere on the tile picks it, and the focus ring goes round the whole tile; the body is made of <code>span</code>s, as a label holds no blocks. <code>media-grid-compact</code> takes smaller tiles and hides their words from sight - the radio is still named by them. <code>data-cover</code> marks a tile with a star and its own words, for the image a page shows first.</p>
+	<div class="docs-example docs-example-stack" id="media-pick">
+		<fieldset class="vstack gap-8">
+			<legend class="form-label">The page's cover image</legend>
+			<div class="media-grid media-grid-compact">
+				<label class="media-tile"><input class="radio media-tile-check" type="radio" name="media-pick-cover" value="lagoon" checked><img class="media-tile-thumb" src="img/lagoon.svg" alt="A lagoon under green hills"><span class="media-tile-body"><span class="media-tile-name"><span>lagoon.svg</span></span></span></label>
+				<label class="media-tile"><input class="radio media-tile-check" type="radio" name="media-pick-cover" value="qr"><img class="media-tile-thumb" src="img/qr.svg" alt="The QR code of the docs"><span class="media-tile-body"><span class="media-tile-name"><span>qr.svg</span></span></span></label>
+				<label class="media-tile"><input class="radio media-tile-check" type="radio" name="media-pick-cover" value="pier"><img class="media-tile-thumb" src="img/lagoon.svg" alt="The pier at dawn"><span class="media-tile-body"><span class="media-tile-name"><span>pier-at-dawn.svg</span></span></span></label>
+			</div>
+		</fieldset>
+		<fieldset class="vstack gap-8">
+			<legend class="form-label">Photos of the tour</legend>
+			<div class="media-grid">
+				<label class="media-tile" data-cover="Cover"><input class="check media-tile-check" type="checkbox" name="media-pick-photos[]" value="lagoon" checked><img class="media-tile-thumb" src="img/lagoon.svg" alt=""><span class="media-tile-body"><span class="media-tile-name"><span>lagoon.svg</span></span><span class="media-tile-meta">1600×900 · 24 KB</span></span></label>
+				<label class="media-tile"><input class="check media-tile-check" type="checkbox" name="media-pick-photos[]" value="pier" checked><img class="media-tile-thumb" src="img/lagoon.svg" alt=""><span class="media-tile-body"><span class="media-tile-name"><span>pier-at-dawn.svg</span></span><span class="media-tile-meta">2400×1600 · 31 KB</span></span></label>
+				<label class="media-tile"><input class="check media-tile-check" type="checkbox" name="media-pick-photos[]" value="qr"><img class="media-tile-thumb" src="img/qr.svg" alt=""><span class="media-tile-body"><span class="media-tile-name"><span>qr.svg</span></span><span class="media-tile-meta">45×45 · 3 KB</span></span></label>
+			</div>
+		</fieldset>
+	</div>
+</section>
+
 <section class="vstack gap-12" aria-labelledby="media-access">
 	<h2 id="media-access">Keyboard and accessibility</h2>
 	<ul>
 		<li>Each check, handle and action is named by its image's file - "Select lagoon.svg", "Delete: lagoon.svg" - so a list of them still says which.</li>
 		<li>The view buttons are a named group; the one that shows is pressed. A change of view keeps the focus on the button.</li>
 		<li>A thumbnail's <code>alt</code> is the image's own; in rows it is not shown, and the name says the image.</li>
+		<li>A chooser is a <code>fieldset</code> whose <code>legend</code> says what is chosen; each radio or checkbox is named by its tile's words - the image's <code>alt</code> and the file's name, the cover mark too. Arrow keys move among the radios of a chooser of one.</li>
 	</ul>
 </section>

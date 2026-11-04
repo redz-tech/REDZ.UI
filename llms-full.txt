@@ -222,16 +222,43 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 ## Scales
 
 - Space, in px: 0 2 4 8 12 16 20 24 32 40 48 64 - for `m`, `p` and `gap` with their sides: `mt` `mb` `ms` `me` `mx` `my`, the same for `p`. `ms` and `me` are the start and the end of the line, so they turn right to left.
-- Font size: 12 14 16 18 20 24 32; line height: 16 20 24 28; radius: 0 4 6 8 12 16 and `rounded-full`.
+- Font size: 11 12 14 16 18 20 24 32 40 48 - 11 for the smallest caption, 40 and 48 for one hero number; line height: 16 20 24 28; radius: 0 4 6 8 12 16 and `rounded-full`.
 - Width prefixes come on placement and spacing - display, flex, grid, gaps, order, text alignment, margins and paddings: `md:d-none`, `lg:p-24`.
 
 ## Aspect ratio
 
-`ratio-1x1`, `ratio-4x3`, `ratio-16x9` and `ratio-21x9` keep an element's shape as its width changes - on a video, a map, an image's frame; `ratio-auto` lets it go. The class goes on the element itself: an image inside a frame fills it with `w-100 h-100 object-fit-cover`.
+`ratio-1x1`, `ratio-4x3`, `ratio-16x9` and `ratio-21x9` keep an element's shape as its width changes - on a video, a map, an image's frame; `ratio-auto` lets it go. `ratio-1.91x1` is the shape of a link's preview image on social networks, 1200 × 630. The class goes on the element itself: an image inside a frame fills it with `w-100 h-100 object-fit-cover`.
 
 ```html
 <div class="ratio-16x9 w-50 hstack justify-content-center rounded-8 bg-page text-muted">16 × 9</div>
 <div class="ratio-1x1 w-25 hstack justify-content-center rounded-8 bg-page text-muted">1 × 1</div>
+<div class="ratio-1.91x1 w-50 hstack justify-content-center rounded-8 bg-page text-muted">1.91 × 1</div>
+```
+
+## Sizes in pixels
+
+Where a control or a mark needs a fixed size - a narrow field in a toolbar, a column of codes, a thumbnail - the number is the pixels, as with the spaces:
+
+- `w-56` `w-64` `w-80` `w-96` `w-120` `w-160` beside the shares `w-25` to `w-100`; `h-32` `h-40` `h-72` beside `h-25` to `h-100`.
+- `min-w-56` `min-w-120` `min-w-160` `min-w-200` `min-w-240` `min-w-288`; `max-w-80` to `max-w-1200`, with 360 and 560 among them.
+- `size-32` `size-48` `size-64` `size-80` set both sides at once: a square.
+
+```html
+<span class="size-32 rounded-8 bg-page"></span>
+<span class="size-48 rounded-8 bg-page"></span>
+<span class="size-64 rounded-8 bg-page"></span>
+<span class="size-80 rounded-8 bg-page"></span>
+<input class="form-control w-120" type="text" aria-label="Code" value="SAMUI-26">
+```
+
+## Text: kept lines, captions, clamps
+
+`text-pre-wrap` keeps the lines and the spaces a person typed - a note, an address - and still wraps a long line. `tracking-wide` spaces the letters of a caption in capitals. `line-clamp-2` and `line-clamp-3` cut a text after two or three lines with an ellipsis; the whole text stays in the page for a screen reader and for search.
+
+```html
+<p class="text-pre-wrap">Villa 12, Bophut&#10;Koh Samui 84320</p>
+<p class="fs-11 text-uppercase tracking-wide text-muted">Last 30 days</p>
+<p class="line-clamp-2 max-w-360">Ang Thong by speedboat: a day among the forty-two islands of the marine park, with snorkelling at Koh Wua Ta Lap, the emerald lake of Koh Mae Ko and lunch on the beach, back by five.</p>
 ```
 
 ## Shown when focused
@@ -594,6 +621,7 @@ row.classList.add('flash');
 | `text-start` | `text-align: start;` | yes |
 | `text-end` | `text-align: end;` | yes |
 | `text-center` | `text-align: center;` | yes |
+| `fs-11` | `font-size: var(--redz-fs-11);` | - |
 | `fs-12` | `font-size: var(--redz-fs-12);` | - |
 | `fs-14` | `font-size: var(--redz-fs-14);` | - |
 | `fs-16` | `font-size: var(--redz-fs-16);` | - |
@@ -601,6 +629,8 @@ row.classList.add('flash');
 | `fs-20` | `font-size: var(--redz-fs-20);` | - |
 | `fs-24` | `font-size: var(--redz-fs-24);` | - |
 | `fs-32` | `font-size: var(--redz-fs-32);` | - |
+| `fs-40` | `font-size: var(--redz-fs-40);` | - |
+| `fs-48` | `font-size: var(--redz-fs-48);` | - |
 | `fw-400` | `font-weight: 400;` | - |
 | `fw-500` | `font-weight: 500;` | - |
 | `fw-600` | `font-weight: 600;` | - |
@@ -621,6 +651,10 @@ row.classList.add('flash');
 | `text-capitalize` | `text-transform: capitalize;` | - |
 | `text-wrap` | `white-space: normal;` | - |
 | `text-nowrap` | `white-space: nowrap;` | - |
+| `text-pre-wrap` | `white-space: pre-wrap;` | - |
+| `tracking-wide` | `letter-spacing: 0.06em;` | - |
+| `line-clamp-2` | `display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;` | - |
+| `line-clamp-3` | `display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden;` | - |
 | `text-break` | `overflow-wrap: anywhere;` | - |
 | `text-truncate` | `overflow: hidden; text-overflow: ellipsis; white-space: nowrap;` | - |
 | `text-body` | `color: var(--redz-text);` | - |
@@ -692,6 +726,22 @@ row.classList.add('flash');
 | `edge-start-danger` | `border-inline-start: 3px solid var(--redz-danger);` | - |
 | `edge-start-warning` | `border-inline-start: 3px solid var(--redz-warning);` | - |
 | `edge-start-info` | `border-inline-start: 3px solid var(--redz-info);` | - |
+| `edge-top-chart-1` | `border-block-start: 3px solid var(--redz-chart-1);` | - |
+| `edge-top-chart-2` | `border-block-start: 3px solid var(--redz-chart-2);` | - |
+| `edge-top-chart-3` | `border-block-start: 3px solid var(--redz-chart-3);` | - |
+| `edge-top-chart-4` | `border-block-start: 3px solid var(--redz-chart-4);` | - |
+| `edge-top-chart-5` | `border-block-start: 3px solid var(--redz-chart-5);` | - |
+| `edge-top-chart-6` | `border-block-start: 3px solid var(--redz-chart-6);` | - |
+| `edge-top-chart-7` | `border-block-start: 3px solid var(--redz-chart-7);` | - |
+| `edge-top-chart-8` | `border-block-start: 3px solid var(--redz-chart-8);` | - |
+| `edge-start-chart-1` | `border-inline-start: 3px solid var(--redz-chart-1);` | - |
+| `edge-start-chart-2` | `border-inline-start: 3px solid var(--redz-chart-2);` | - |
+| `edge-start-chart-3` | `border-inline-start: 3px solid var(--redz-chart-3);` | - |
+| `edge-start-chart-4` | `border-inline-start: 3px solid var(--redz-chart-4);` | - |
+| `edge-start-chart-5` | `border-inline-start: 3px solid var(--redz-chart-5);` | - |
+| `edge-start-chart-6` | `border-inline-start: 3px solid var(--redz-chart-6);` | - |
+| `edge-start-chart-7` | `border-inline-start: 3px solid var(--redz-chart-7);` | - |
+| `edge-start-chart-8` | `border-inline-start: 3px solid var(--redz-chart-8);` | - |
 | `rounded` | `border-radius: var(--redz-radius-8);` | - |
 | `rounded-full` | `border-radius: 999px;` | - |
 | `rounded-0` | `border-radius: var(--redz-radius-0);` | - |
@@ -713,17 +763,32 @@ row.classList.add('flash');
 | `w-75` | `inline-size: 75%;` | - |
 | `w-100` | `inline-size: 100%;` | - |
 | `w-auto` | `inline-size: auto;` | - |
+| `w-56` | `inline-size: 3.5rem;` | - |
+| `w-64` | `inline-size: 4rem;` | - |
+| `w-80` | `inline-size: 5rem;` | - |
+| `w-96` | `inline-size: 6rem;` | - |
+| `w-120` | `inline-size: 7.5rem;` | - |
+| `w-160` | `inline-size: 10rem;` | - |
 | `h-25` | `block-size: 25%;` | - |
 | `h-50` | `block-size: 50%;` | - |
 | `h-75` | `block-size: 75%;` | - |
 | `h-100` | `block-size: 100%;` | - |
 | `h-auto` | `block-size: auto;` | - |
+| `h-32` | `block-size: 2rem;` | - |
+| `h-40` | `block-size: 2.5rem;` | - |
+| `h-72` | `block-size: 4.5rem;` | - |
+| `size-32` | `inline-size: 2rem; block-size: 2rem;` | - |
+| `size-48` | `inline-size: 3rem; block-size: 3rem;` | - |
+| `size-64` | `inline-size: 4rem; block-size: 4rem;` | - |
+| `size-80` | `inline-size: 5rem; block-size: 5rem;` | - |
 | `max-w-80` | `max-inline-size: 5rem;` | - |
 | `max-w-120` | `max-inline-size: 7.5rem;` | - |
 | `max-w-160` | `max-inline-size: 10rem;` | - |
 | `max-w-240` | `max-inline-size: 15rem;` | - |
 | `max-w-320` | `max-inline-size: 20rem;` | - |
+| `max-w-360` | `max-inline-size: 22.5rem;` | - |
 | `max-w-480` | `max-inline-size: 30rem;` | - |
+| `max-w-560` | `max-inline-size: 35rem;` | - |
 | `max-w-640` | `max-inline-size: 40rem;` | - |
 | `max-w-768` | `max-inline-size: 48rem;` | - |
 | `max-w-960` | `max-inline-size: 60rem;` | - |
@@ -736,6 +801,12 @@ row.classList.add('flash');
 | `max-h-560` | `max-block-size: 35rem;` | - |
 | `max-h-640` | `max-block-size: 40rem;` | - |
 | `min-w-0` | `min-inline-size: 0;` | - |
+| `min-w-56` | `min-inline-size: 3.5rem;` | - |
+| `min-w-120` | `min-inline-size: 7.5rem;` | - |
+| `min-w-160` | `min-inline-size: 10rem;` | - |
+| `min-w-200` | `min-inline-size: 12.5rem;` | - |
+| `min-w-240` | `min-inline-size: 15rem;` | - |
+| `min-w-288` | `min-inline-size: 18rem;` | - |
 | `vw-100` | `inline-size: 100vw;` | - |
 | `min-vw-100` | `min-inline-size: 100vw;` | - |
 | `vh-100` | `block-size: 100dvh;` | - |
@@ -801,6 +872,7 @@ row.classList.add('flash');
 | `ratio-4x3` | `aspect-ratio: 4 / 3;` | - |
 | `ratio-16x9` | `aspect-ratio: 16 / 9;` | - |
 | `ratio-21x9` | `aspect-ratio: 21 / 9;` | - |
+| `ratio-1.91x1` | `aspect-ratio: 1.91 / 1;` | - |
 | `ratio-auto` | `aspect-ratio: auto;` | - |
 | `visible` | `visibility: visible;` | - |
 | `invisible` | `visibility: hidden;` | - |
@@ -1172,6 +1244,14 @@ The custom properties on `:root` that the components read: colors by role in pai
 | `--redz-info` | `light-dark(#0071bb, #5eaceb)` |
 | `--redz-info-subtle` | `light-dark(#e4f3ff, #193043)` |
 | `--redz-info-contrast` | `light-dark(#ffffff, #000000)` |
+| `--redz-chart-1` | `light-dark(#2a78d6, #3987e5)` |
+| `--redz-chart-2` | `light-dark(#eb6834, #d95926)` |
+| `--redz-chart-3` | `light-dark(#1baf7a, #199e70)` |
+| `--redz-chart-4` | `light-dark(#eda100, #c98500)` |
+| `--redz-chart-5` | `light-dark(#e87ba4, #d55181)` |
+| `--redz-chart-6` | `light-dark(#008300, #008300)` |
+| `--redz-chart-7` | `light-dark(#6250d6, #9085e9)` |
+| `--redz-chart-8` | `light-dark(#e34948, #e66767)` |
 | `--redz-focus` | `var(--redz-primary)` |
 | `--redz-link` | `var(--redz-primary)` |
 | `--redz-shadow-strength` | `1` |
@@ -1203,6 +1283,7 @@ The custom properties on `:root` that the components read: colors by role in pai
 | `--redz-space-40` | `2.5rem` |
 | `--redz-space-48` | `3rem` |
 | `--redz-space-64` | `4rem` |
+| `--redz-fs-11` | `0.6875rem` |
 | `--redz-fs-12` | `0.75rem` |
 | `--redz-fs-14` | `0.875rem` |
 | `--redz-fs-16` | `1rem` |
@@ -1210,6 +1291,8 @@ The custom properties on `:root` that the components read: colors by role in pai
 | `--redz-fs-20` | `1.25rem` |
 | `--redz-fs-24` | `1.5rem` |
 | `--redz-fs-32` | `2rem` |
+| `--redz-fs-40` | `2.5rem` |
+| `--redz-fs-48` | `3rem` |
 | `--redz-lh-16` | `1rem` |
 | `--redz-lh-20` | `1.25rem` |
 | `--redz-lh-24` | `1.5rem` |
@@ -4406,6 +4489,16 @@ The utility `edge-top-{tone}` draws a 3 px line of a state on a card's top edge,
 </ul>
 ```
 
+For a category instead of a state - a site, a team, a kind of job - `edge-top-chart-1` to `-8` and `edge-start-chart-1` to `-8` take the charts' eight colors, so a row matches its series in a [chart](chart.md).
+
+```html
+<ul class="list-group" aria-label="Sites">
+	<li class="list-group-item edge-start-chart-1">Samui</li>
+	<li class="list-group-item edge-start-chart-2">Phuket</li>
+	<li class="list-group-item edge-start-chart-3">Krabi</li>
+</ul>
+```
+
 ## Accessibility
 
 - A card that is a part of the page is a `<section>` with `aria-labelledby` pointing at its heading; a card in a list of cards is an `<article>` or a list item.
@@ -5159,6 +5252,52 @@ Series without a tone take the chart colors by their column.
 </table>
 ```
 
+`chart-values` writes each column's number above it - for one series and a few columns, where the numbers are what a person reads.
+
+```html
+<table class="chart chart-values">
+	<caption>Guests per month</caption>
+	<thead><tr><th scope="col">Month</th><th scope="col">Guests</th></tr></thead>
+	<tbody>
+		<tr><th scope="row">Jul</th><td data-v="0.55">220</td></tr>
+		<tr><th scope="row">Aug</th><td data-v="0.7">280</td></tr>
+		<tr><th scope="row">Sep</th><td data-v="0.45">180</td></tr>
+		<tr><th scope="row">Oct</th><td data-v="0.6">240</td></tr>
+		<tr><th scope="row">Nov</th><td data-v="0.85">340</td></tr>
+		<tr><th scope="row">Dec</th><td data-v="1">400</td></tr>
+	</tbody>
+</table>
+```
+
+## Shares of a whole
+
+`chart-bar` with `chart` draws one row as a single bar across: each segment's `data-v` is its share of the whole, and the legend under it names the series - write the share in the legend's words too. The bar is 12 px thick; `--redz-chart-bar-height` sets another.
+
+```html
+<table class="chart chart-bar">
+	<caption>Payments in November</caption>
+	<thead><tr><th scope="col">Method</th><th scope="col">Card, 58%</th><th scope="col">PromptPay, 31%</th><th scope="col">Cash, 11%</th></tr></thead>
+	<tbody>
+		<tr><th scope="row">November</th><td data-v="0.58">58%</td><td data-v="0.31">31%</td><td data-v="0.11">11%</td></tr>
+	</tbody>
+</table>
+```
+
+`table class="chart-rows"` breaks a whole into rows, longest first: each `tr` a label, its count and its share in words, and a bar under them whose length is the row's `data-v`. The header cells name the columns for a screen reader and are hidden from sight. The bars take the first chart color; a row's `data-tone` gives it a state's.
+
+```html
+<table class="chart-rows">
+	<caption>Where bookings came from</caption>
+	<thead><tr><th scope="col">Source</th><th scope="col">Bookings</th><th scope="col">Share</th></tr></thead>
+	<tbody>
+		<tr data-v="0.52"><th scope="row">Search</th><td>182</td><td>52%</td></tr>
+		<tr data-v="0.27"><th scope="row">Partners</th><td>94</td><td>27%</td></tr>
+		<tr data-v="0.14"><th scope="row">Social networks</th><td>49</td><td>14%</td></tr>
+		<tr data-v="0.07" data-tone="secondary"><th scope="row">Other</th><td>25</td><td>7%</td></tr>
+	</tbody>
+</table>
+```
+
 ## Sparklines
 
 `span class="spark"` with `role="img"` and its summary in `aria-label` draws one bar per run, oldest first: `data-v` its share of the longest, `data-state` - `ok`, `running`, `timeout`, `failed` - its color, `title` its tooltip. 18 px high in a row, `spark-md` 34 px, `spark-lg` 64 px; `spark-median` with `data-median` draws the median as a dashed line.
@@ -5202,7 +5341,8 @@ Series without a tone take the chart colors by their column.
 
 ## Accessibility
 
-- A chart is its table: the caption names it, the header cells name the series, each row says its day and its numbers. `charts.js` gives a chart table the table's roles, since WebKit drops them once CSS lays the table out as columns.
+- A chart is its table: the caption names it, the header cells name the series, each row says its day and its numbers. `charts.js` gives a `chart` or `chart-rows` table the table's roles, since WebKit drops them once CSS lays the table out otherwise.
+- A share bar and breakdown rows say their shares in words - the legend's, the rows' - and the bar repeats them.
 - A color never speaks alone: the legend names every series, a state's segment is named by its header cell, and a sparkline's summary is its name.
 - Three of the light theme's series colors are under 3:1 against the page: the legend and the table are what tell them apart.
 - In forced colors every bar is drawn in the text color; the numbers are in the table.
@@ -5248,6 +5388,27 @@ Calendars are linked apart, on the screens that show them, beside the two files;
 </table>
 ```
 
+## Days in a state
+
+A day's `data-state` tints it: `worked`, `open`, `pending`, `absent` and `off` - a time sheet, the days a person can still book. `calendar-legend`, a list of items with the same `data-state`, says what each tint means, and every day says its state in words too - in its button's name, or in a `visually-hidden` word when it is no button; in forced colors the states draw as a line, a dashed and a dotted one. `button.calendar-day` makes the day's number a button the page opens or picks the day with - its `aria-label` the whole date and the state, `aria-pressed` on the day picked.
+
+```html
+<table class="calendar">
+	<caption>Anong Srisuk, November 2026</caption>
+	<thead><tr><th scope="col"><abbr title="Monday">Mon</abbr></th><th scope="col"><abbr title="Tuesday">Tue</abbr></th><th scope="col"><abbr title="Wednesday">Wed</abbr></th><th scope="col"><abbr title="Thursday">Thu</abbr></th><th scope="col"><abbr title="Friday">Fri</abbr></th><th scope="col"><abbr title="Saturday">Sat</abbr></th><th scope="col"><abbr title="Sunday">Sun</abbr></th></tr></thead>
+	<tbody>
+		<tr><td data-state="worked"><button class="calendar-day" type="button" aria-label="November 2, worked" aria-pressed="false">2</button></td><td data-state="worked"><button class="calendar-day" type="button" aria-label="November 3, worked" aria-pressed="false">3</button></td><td data-state="pending" aria-current="date"><button class="calendar-day" type="button" aria-label="November 4, waiting for approval" aria-pressed="true">4</button></td><td data-state="absent"><button class="calendar-day" type="button" aria-label="November 5, absent" aria-pressed="false">5</button></td><td data-state="open"><button class="calendar-day" type="button" aria-label="November 6, open" aria-pressed="false">6</button></td><td data-state="off" data-weekend><button class="calendar-day" type="button" aria-label="November 7, day off" aria-pressed="false">7</button></td><td data-state="off" data-weekend><button class="calendar-day" type="button" aria-label="November 8, day off" aria-pressed="false">8</button></td></tr>
+	</tbody>
+</table>
+<ul class="calendar-legend" aria-label="Day states">
+	<li data-state="worked">Worked</li>
+	<li data-state="pending">Waiting for approval</li>
+	<li data-state="absent">Absent</li>
+	<li data-state="open">Open</li>
+	<li data-state="off">Day off</li>
+</ul>
+```
+
 ## Days across things
 
 `table class="schedule"`: a column of names, kept in view while the days scroll by, then a column per day with its number and weekday. A cell holds how many are out; `data-state="busy"` tints it, `"over"` - more out than there are - marks it, and `data-weekend` tints a weekend's column. Put it in a scroller: `overflow-x-auto`.
@@ -5271,6 +5432,7 @@ Calendars are linked apart, on the screens that show them, beside the two files;
 - Both are tables: a screen reader reads a day with its weekday's header, a cell with its thing and its day. Weekdays are `abbr` with the full name.
 - A day's number is a `time` with its date; "+2" says "+2 more" with a hidden word.
 - A busy or over cell says its number; the tint repeats it, and an over cell is also outlined in forced colors.
+- A day's state is in words, never in its tint alone; a day that is a button is named by its whole date and its state, "November 4, waiting for approval", and the picked one says `aria-pressed="true"`.
 
 # Media library
 
@@ -5316,11 +5478,35 @@ The switch is two buttons with `command="--view"`, `aria-controls` naming the gr
 document.addEventListener('redz:view', (event) => localStorage.setItem('media-view', event.detail.view));
 ```
 
+## Choosing
+
+A chooser of images - the cover of a page, the photos of a tour - is a `fieldset` of tiles, each a `label class="media-tile"` around its `media-tile-check`: a `radio` to pick one, a `check` to pick some. A click anywhere on the tile picks it, and the focus ring goes round the whole tile; the body is made of `span`s, as a label holds no blocks. `media-grid-compact` takes smaller tiles and hides their words from sight - the radio is still named by them. `data-cover` marks a tile with a star and its own words, for the image a page shows first.
+
+```html
+<fieldset class="vstack gap-8">
+	<legend class="form-label">The page's cover image</legend>
+	<div class="media-grid media-grid-compact">
+		<label class="media-tile"><input class="radio media-tile-check" type="radio" name="media-pick-cover" value="lagoon" checked><img class="media-tile-thumb" src="img/lagoon.svg" alt="A lagoon under green hills"><span class="media-tile-body"><span class="media-tile-name"><span>lagoon.svg</span></span></span></label>
+		<label class="media-tile"><input class="radio media-tile-check" type="radio" name="media-pick-cover" value="qr"><img class="media-tile-thumb" src="img/qr.svg" alt="The QR code of the docs"><span class="media-tile-body"><span class="media-tile-name"><span>qr.svg</span></span></span></label>
+		<label class="media-tile"><input class="radio media-tile-check" type="radio" name="media-pick-cover" value="pier"><img class="media-tile-thumb" src="img/lagoon.svg" alt="The pier at dawn"><span class="media-tile-body"><span class="media-tile-name"><span>pier-at-dawn.svg</span></span></span></label>
+	</div>
+</fieldset>
+<fieldset class="vstack gap-8">
+	<legend class="form-label">Photos of the tour</legend>
+	<div class="media-grid">
+		<label class="media-tile" data-cover="Cover"><input class="check media-tile-check" type="checkbox" name="media-pick-photos[]" value="lagoon" checked><img class="media-tile-thumb" src="img/lagoon.svg" alt=""><span class="media-tile-body"><span class="media-tile-name"><span>lagoon.svg</span></span><span class="media-tile-meta">1600×900 · 24 KB</span></span></label>
+		<label class="media-tile"><input class="check media-tile-check" type="checkbox" name="media-pick-photos[]" value="pier" checked><img class="media-tile-thumb" src="img/lagoon.svg" alt=""><span class="media-tile-body"><span class="media-tile-name"><span>pier-at-dawn.svg</span></span><span class="media-tile-meta">2400×1600 · 31 KB</span></span></label>
+		<label class="media-tile"><input class="check media-tile-check" type="checkbox" name="media-pick-photos[]" value="qr"><img class="media-tile-thumb" src="img/qr.svg" alt=""><span class="media-tile-body"><span class="media-tile-name"><span>qr.svg</span></span><span class="media-tile-meta">45×45 · 3 KB</span></span></label>
+	</div>
+</fieldset>
+```
+
 ## Keyboard and accessibility
 
 - Each check, handle and action is named by its image's file - "Select lagoon.svg", "Delete: lagoon.svg" - so a list of them still says which.
 - The view buttons are a named group; the one that shows is pressed. A change of view keeps the focus on the button.
 - A thumbnail's `alt` is the image's own; in rows it is not shown, and the name says the image.
+- A chooser is a `fieldset` whose `legend` says what is chosen; each radio or checkbox is named by its tile's words - the image's `alt` and the file's name, the cover mark too. Arrow keys move among the radios of a chooser of one.
 
 # Tables
 
@@ -5566,6 +5752,53 @@ It reads the theme's `--redz-space-8`, `--redz-space-12`, `--redz-border`, `--re
 | `table-responsive` | `table-scroll` | rename | the wrapper scrolls sideways, table-scroll-first holds the first column; or columns hide below md: |
 | `table-success` | - | review | row tones are danger, warning and secondary |
 
+# Logs and diffs
+
+What a job printed, line by line as it runs, and what changed between two versions of a text - a template, a setting, a translation.
+
+## A log
+
+`pre class="log"` sets a job's output in the monospace font, wraps its long lines and scrolls in its own box once a `max-h-*` utility caps its height - give it `tabindex="0"` then, so the keyboard scrolls it too. A line in a `span` with `data-tone` - `success`, `warning`, `danger`, `info` or `muted` - takes that tone; the words still say what happened. With `data-follow` the end stays in view while lines come in, as in a terminal, unless the reader scrolled up to read an earlier one; back at the end, it follows again.
+
+```html
+		<pre class="log max-h-160" id="log-follow-lines" tabindex="0" data-follow aria-label="The import's output" dir="ltr"><span data-tone="muted">09:14:02</span> Import started: excursions.csv, 128 rows
+<span data-tone="muted">09:14:02</span> Columns: title, price, date, seats, language
+<span data-tone="muted">09:14:02</span> Row 1-20 read
+<span data-tone="muted">09:14:02</span> Row 21-40 read
+<span data-tone="warning"><span data-tone="muted">09:14:03</span> Row 41: no price, set to 0</span>
+<span data-tone="muted">09:14:03</span> Row 42-60 read
+<span data-tone="muted">09:14:03</span> Row 61-90 read
+<span data-tone="danger"><span data-tone="muted">09:14:04</span> Row 91: the date 2026-02-30 does not exist, skipped</span>
+<span data-tone="muted">09:14:04</span> Row 92-128 read
+<span data-tone="success"><span data-tone="muted">09:14:05</span> 127 excursions imported, 1 skipped</span></pre>
+		<div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="log-line" aria-controls="log-follow-lines">Add a line</button></div>
+```
+
+## A diff
+
+`div class="diff"` holds one element a line: an `ins` is a line added, marked "+" and tinted green, a `del` a line taken away, "-" and red, anything else a line kept. In a kept line, `del` and `ins` show the words changed inside it, side by side. Lines of code carry `translate="no"`, so a page's translator leaves them as they are, and a log or a diff of code is `dir="ltr"` on a right-to-left page; a diff of Arabic words keeps the page's direction.
+
+```html
+<div class="diff" role="group" aria-label="The changes of the page's title" dir="ltr">
+	<span translate="no">&lt;header class="vstack gap-8"&gt;</span>
+	<del translate="no">	&lt;h1&gt;Ang Thong by speedboat&lt;/h1&gt;</del>
+	<ins translate="no">	&lt;h1&gt;Ang Thong marine park by speedboat&lt;/h1&gt;</ins>
+	<span translate="no">	&lt;p&gt;A day among <del>forty</del><ins>forty-two</ins> islands.&lt;/p&gt;</span>
+	<span translate="no">&lt;/header&gt;</span>
+</div>
+```
+
+## Accessibility
+
+- A log that scrolls is focusable and named, so a keyboard reaches it and a screen reader says what it is. A log the person waits on may be `role="log"`, a live region that says new lines politely; one that prints many lines a second says a summary instead.
+- A diff says its changes in its signs and its words, not in its colors: a screen reader reads "+" and "-" before a line, and in forced colors an added word is underlined and a removed one struck through.
+
+## Tokens
+
+From [`css/components/log.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/log.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-border`, `--redz-radius-8`, `--redz-text`, `--redz-font-mono`, `--redz-fs-12`, `--redz-lh-20`, `--redz-space-8`, `--redz-space-12`, `--redz-bg-page`, `--redz-success`, `--redz-warning`, `--redz-danger`, `--redz-info`, `--redz-text-muted`, `--redz-bg`, `--redz-success-subtle`, `--redz-danger-subtle`.
+
 # Summaries and totals
 
 The facts of one record in pairs - a label and its value - and the sums at the foot of an invoice or a booking.
@@ -5710,6 +5943,30 @@ An 8 px dot of a tone beside a word: online, live, the color of a site. The dot 
 <span class="hstack gap-8"><span class="dot dot-info"></span>Updating</span>
 ```
 
+### Categories
+
+`dot-chart-1` to `dot-chart-8` take the charts' eight colors, for a category - a site, a team, a kind of job - not a state: the dot beside a name in a legend or a list matches its series in a [chart](chart.md).
+
+```html
+<span class="hstack gap-8"><span class="dot dot-chart-1"></span>Samui</span>
+<span class="hstack gap-8"><span class="dot dot-chart-2"></span>Phuket</span>
+<span class="hstack gap-8"><span class="dot dot-chart-3"></span>Krabi</span>
+<span class="hstack gap-8"><span class="dot dot-chart-4"></span>Chiang Mai</span>
+<span class="hstack gap-8"><span class="dot dot-chart-5"></span>Pattaya</span>
+<span class="hstack gap-8"><span class="dot dot-chart-6"></span>Hua Hin</span>
+<span class="hstack gap-8"><span class="dot dot-chart-7"></span>Bangkok</span>
+<span class="hstack gap-8"><span class="dot dot-chart-8"></span>Koh Tao</span>
+```
+
+### Live
+
+`dot-live` breathes while its `data-state="running"` - a job at work, a stream on air - and is still at any other state, and always with reduced motion. The word beside it says the state.
+
+```html
+<span class="hstack gap-8"><span class="dot dot-live dot-primary" data-state="running"></span>Importing</span>
+<span class="hstack gap-8"><span class="dot dot-live dot-success" data-state="done"></span>Imported</span>
+```
+
 ## Accessibility
 
 - A dot has no name; the word beside it carries the meaning. In forced colors every dot is drawn in the text color, so the word is what tells them apart.
@@ -5719,7 +5976,7 @@ An 8 px dot of a tone beside a word: online, live, the color of a site. The dot 
 
 From [`css/components/dot.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/dot.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-text-faint`, `--redz-primary`, `--redz-secondary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-color`.
+It reads the theme's `--redz-text-faint`, `--redz-primary`, `--redz-secondary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-color`, `--redz-chart-1`, `--redz-chart-2`, `--redz-chart-3`, `--redz-chart-4`, `--redz-chart-5`, `--redz-chart-6`, `--redz-chart-7`, `--redz-chart-8`.
 
 # Avatars
 
@@ -5762,6 +6019,22 @@ The plain tile is in the accent; the tones and `icon-tile-sm` follow Bootstrap's
 <span class="icon-tile icon-tile-warning"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></span>
 <span class="icon-tile icon-tile-info"><i class="bi bi-info-circle" aria-hidden="true"></i></span>
 <span class="icon-tile icon-tile-sm"><i class="bi bi-upload" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-lg"><i class="bi bi-building" aria-hidden="true"></i></span>
+```
+
+### Categories
+
+`icon-tile-chart-1` to `icon-tile-chart-8` take the charts' eight colors, for a category, not a state - the tile of a kind of record matches its series in a [chart](chart.md) and its [dot](dot.md#dot-categories).
+
+```html
+<span class="icon-tile icon-tile-chart-1"><i class="bi bi-airplane" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-chart-2"><i class="bi bi-car-front" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-chart-3"><i class="bi bi-tree" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-chart-4"><i class="bi bi-sun" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-chart-5"><i class="bi bi-flower1" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-chart-6"><i class="bi bi-bicycle" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-chart-7"><i class="bi bi-moon-stars" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-chart-8"><i class="bi bi-heart" aria-hidden="true"></i></span>
 ```
 
 ### In a title
@@ -5780,9 +6053,9 @@ The plain tile is in the accent; the tones and `icon-tile-sm` follow Bootstrap's
 
 ## Tokens
 
-From [`css/components/icon-tile.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/icon-tile.css). It declares `--redz-tile-bg`, `--redz-tile-fg` on its root, never on rows or items.
+From [`css/components/icon-tile.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/icon-tile.css). It declares `--redz-tile-bg`, `--redz-tile-fg`, `--redz-tile-chart` on its root, never on rows or items.
 
-It reads the theme's `--redz-primary-subtle`, `--redz-primary`, `--redz-radius-12`, `--redz-radius-8`, `--redz-secondary-subtle`, `--redz-secondary`, `--redz-success-subtle`, `--redz-success`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-info-subtle`, `--redz-info`, `--redz-color`.
+It reads the theme's `--redz-primary-subtle`, `--redz-primary`, `--redz-radius-12`, `--redz-radius-8`, `--redz-radius-16`, `--redz-bg`, `--redz-text`, `--redz-chart-1`, `--redz-chart-2`, `--redz-chart-3`, `--redz-chart-4`, `--redz-chart-5`, `--redz-chart-6`, `--redz-chart-7`, `--redz-chart-8`, `--redz-secondary-subtle`, `--redz-secondary`, `--redz-success-subtle`, `--redz-success`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-info-subtle`, `--redz-info`, `--redz-color`.
 
 # Stat tiles
 
@@ -5803,17 +6076,46 @@ A number with its label and an icon in a tone - and, as a button, the filter for
 
 Without a button it only reads: a `div class="stat"`.
 
+### Links
+
+As an `a` a tile leads to the list it counts, filtered on its server; the tile of the list shown carries `aria-current="page"` and wears its tone's border, as a pressed one does.
+
+```html
+<nav class="grid cols-2 md:cols-4 gap-12" aria-label="Bookings by state">
+	<a class="stat stat-primary" href="#stat-links" aria-current="page"><span class="icon-tile"><i class="bi bi-calendar-check" aria-hidden="true"></i></span><span><span class="stat-value">128</span><span class="stat-label">Confirmed</span></span></a>
+	<a class="stat stat-warning" href="#stat-links"><span class="icon-tile"><i class="bi bi-hourglass-split" aria-hidden="true"></i></span><span><span class="stat-value">14</span><span class="stat-label">Waiting</span></span></a>
+	<a class="stat stat-danger" href="#stat-links"><span class="icon-tile"><i class="bi bi-x-circle" aria-hidden="true"></i></span><span><span class="stat-value">3</span><span class="stat-label">Cancelled</span></span></a>
+	<a class="stat" href="#stat-links"><span><span class="stat-value">145</span><span class="stat-label">All bookings</span></span></a>
+</nav>
+```
+
+### A second line, a trend, a bar and a time
+
+`stat-sub` is a second line under the label. `stat-delta` shows a change with an arrow: `data-trend="up"` or `"down"` turns it, and it is green when the trend is the good one - up, unless `data-good="down"` says that less is better, as for refunds - and red when not; its words say the change, "+12%", and the arrow only repeats them. A `progress` or a `meter` in the tile's words takes their width; `stat-meta` sits at the end - when the number was counted. A tile with no icon tile lays out its words alone, and `stat-emphasis` tints the whole tile in its tone, for the one number a screen leads with. `aria-busy="true"` draws the number as a placeholder while it is counted.
+
+```html
+<div class="grid sm:cols-3 gap-12">
+	<div class="stat stat-success stat-emphasis"><span><span class="stat-value">412,000 THB</span><span class="stat-label">Revenue in November</span><span class="stat-sub"><span class="stat-delta" data-trend="up">+12%</span> on October</span></span></div>
+	<div class="stat"><span class="icon-tile"><i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i></span><span><span class="stat-value">6</span><span class="stat-label">Refunds</span><span class="stat-sub"><span class="stat-delta" data-trend="up" data-good="down">+2</span> on October</span></span></div>
+	<div class="stat stat-info"><span class="icon-tile"><i class="bi bi-door-open" aria-hidden="true"></i></span><span><span class="stat-value">68%</span><span class="stat-label">Rooms filled</span><progress class="progress progress-xs progress-info" value="68" max="100" aria-label="Rooms filled, 68 percent"></progress></span><span class="stat-meta">5 min ago</span></div>
+</div>
+<div class="grid sm:cols-3 gap-12">
+	<div class="stat" aria-busy="true"><span><span class="stat-value">0</span><span class="stat-label">Guests today</span></span></div>
+</div>
+```
+
 ## Accessibility
 
 - A tile button's name is its number and its label, "2 Late"; `aria-pressed` says it filters. Put the row in a `group` with a name.
-- The tone repeats the label; it never says alone what the tile counts.
+- The tone repeats the label; it never says alone what the tile counts. A delta's color and arrow repeat its words.
+- A tile link's name is its number and its label; the tile of the list shown says `aria-current="page"`. A tile counting its number is `aria-busy="true"`, and its words come when it is done.
 - Pressed, the tile also draws an outline in forced colors.
 
 ## Tokens
 
 From [`css/components/stat.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/stat.css). It declares `--redz-stat-tone`, `--redz-tile-bg`, `--redz-tile-fg` on its root, never on rows or items.
 
-It reads the theme's `--redz-text`, `--redz-space-12`, `--redz-space-16`, `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-bg-hover`, `--redz-fs-24`, `--redz-text-muted`, `--redz-fs-12`, `--redz-primary`, `--redz-success`, `--redz-warning`, `--redz-danger`, `--redz-info`.
+It reads the theme's `--redz-text`, `--redz-space-12`, `--redz-space-16`, `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-bg-hover`, `--redz-space-8`, `--redz-text-muted`, `--redz-fs-12`, `--redz-space-2`, `--redz-success`, `--redz-danger`, `--redz-radius-6`, `--redz-fs-24`, `--redz-primary`, `--redz-warning`, `--redz-info`.
 
 # QR codes
 
@@ -5897,6 +6199,34 @@ The steps of a long job as it runs - a release, a publish, an install - each wit
 </section>
 ```
 
+### More states, and a step's body
+
+Six more states: `warning` - done with a warning, `info`, `ask` - the job waits for the person, `waiting` - for something else, `skipped` and `locked`. A `step-list-body` after a step's name is a block under it, for what the step found or asks; in a list with bodies every step is a block, and the current one, the one that asks and the one that failed are tinted.
+
+```html
+<ol class="step-list" aria-label="Moving the site">
+	<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Copy the files<span class="step-list-detail">2,140 files</span></li>
+	<li data-state="warning"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>Check the links<span class="step-list-detail">3 broken</span></li>
+	<li data-state="ask" aria-current="step"><i class="bi bi-question-circle-fill" aria-hidden="true"></i>Point the domain here<div class="step-list-body vstack gap-8"><p>Set the A record of lagoon.example to 203.0.113.24 at your registrar, then check it.</p><div class="hstack gap-8"><button class="btn btn-sm btn-primary" type="button">Check the domain</button><button class="btn btn-sm" type="button">Skip for now</button></div></div></li>
+	<li data-state="waiting"><i class="bi bi-hourglass-split" aria-hidden="true"></i>Issue the certificate<span class="step-list-detail">after the domain</span></li>
+	<li data-state="skipped"><i class="bi bi-skip-forward flip-rtl" aria-hidden="true"></i>Import the old comments<span class="step-list-detail">skipped</span></li>
+	<li data-state="locked"><i class="bi bi-lock" aria-hidden="true"></i>Switch off the old site<span class="step-list-detail">an owner's step</span></li>
+</ol>
+```
+
+## A pipeline
+
+`stage-list` is an `ol` of stages, each a frame: first a line with its icon and its name, then what it says, and a `stage-list-actions` slot for its buttons at the bottom. The stages run across from a region of 768 px and down below it, joined by a line; `data-state` takes the steps' states.
+
+```html
+<ol class="stage-list" aria-label="The release of 2.4">
+	<li data-state="done"><span class="hstack gap-8"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><strong>Build</strong></span><span class="fs-12">2 min 14 s</span><div class="stage-list-actions"><button class="btn btn-sm" type="button">Log</button></div></li>
+	<li data-state="current" aria-current="step"><span class="hstack gap-8"><i class="bi bi-arrow-repeat" aria-hidden="true"></i><strong>Test</strong></span><span class="fs-12">412 of 580 checks</span><div class="stage-list-actions"><button class="btn btn-sm" type="button">Log</button><button class="btn btn-sm" type="button">Stop</button></div></li>
+	<li data-state="ask"><span class="hstack gap-8"><i class="bi bi-question-circle-fill" aria-hidden="true"></i><strong>Approve</strong></span><span class="fs-12">An owner signs off</span><div class="stage-list-actions"><button class="btn btn-sm btn-primary" type="button">Approve</button></div></li>
+	<li data-state="waiting"><span class="hstack gap-8"><i class="bi bi-hourglass-split" aria-hidden="true"></i><strong>Deploy</strong></span><span class="fs-12">After the approval</span></li>
+</ol>
+```
+
 ## A timeline
 
 `timeline` is an `ol` of events joined by a line: each starts with an [icon tile](icon-tile.md) in its tone, then a `timeline-time`, the words, and a `dl` of details when it has them.
@@ -5911,7 +6241,8 @@ The steps of a long job as it runs - a release, a publish, an install - each wit
 
 ## Accessibility
 
-- The words carry the state; the icon and the color repeat them. Mark the current step `aria-current="step"`.
+- The words carry the state; the icon and the color repeat them - write the state in the step's detail when its name does not say it. Mark the current step `aria-current="step"`; a step or a stage that asks the person holds its own buttons.
+- A pipeline's stages are a list in their order, read one after the other wherever they stand on the screen; the current, the asking and the failed one are also outlined in forced colors.
 - A job that runs while the person waits says its new step in a polite live region the page keeps - one line per step, not every tick of the clock.
 - A timeline's times are `<time datetime>`; its details are a description list, read as pairs.
 
@@ -5919,7 +6250,7 @@ The steps of a long job as it runs - a release, a publish, an install - each wit
 
 From [`css/components/step-list.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/step-list.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-4`, `--redz-space-8`, `--redz-text-muted`, `--redz-text`, `--redz-success`, `--redz-primary`, `--redz-danger`, `--redz-warning`, `--redz-space-12`, `--redz-space-16`, `--redz-border`, `--redz-fs-14`, `--redz-fs-12`, `--redz-space-2`.
+It reads the theme's `--redz-space-4`, `--redz-space-8`, `--redz-text-muted`, `--redz-text`, `--redz-success`, `--redz-primary`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-text-faint`, `--redz-space-12`, `--redz-radius-8`, `--redz-primary-subtle`, `--redz-warning-subtle`, `--redz-danger-subtle`, `--redz-fs-14`, `--redz-space-16`, `--redz-border`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-fs-12`, `--redz-space-2`.
 
 # Empty states
 
@@ -6230,6 +6561,21 @@ A drawer opens and closes like a dialog: `command="show-modal"` and `command="cl
 		<button class="btn-close" type="button" commandfor="drawer-filters-start" command="close" aria-label="Close"></button>
 	</div>
 	<div class="drawer-body"><p>A drawer at the start edge: the left in English, the right in Arabic.</p></div>
+</dialog>
+```
+
+### Wide
+
+`drawer-lg` is 38rem (608 px) wide instead of 28rem, for a record's details with a table or a form of two columns; on a narrower window it takes the window less a margin, as every drawer does.
+
+```html
+<button class="btn" type="button" commandfor="drawer-lg-panel" command="show-modal"><i class="bi bi-receipt" aria-hidden="true"></i>Booking details</button>
+<dialog id="drawer-lg-panel" class="drawer drawer-lg" closedby="any" aria-labelledby="drawer-lg-panel-title">
+	<div class="drawer-header">
+		<h2 class="drawer-title" id="drawer-lg-panel-title">Booking 2026-0418</h2>
+		<button class="btn-close" type="button" commandfor="drawer-lg-panel" command="close" aria-label="Close"></button>
+	</div>
+	<div class="drawer-body"><p>Ang Thong by speedboat, 4 guests, 12 November 2026. Paid in full by card.</p></div>
 </dialog>
 ```
 
@@ -7535,9 +7881,14 @@ A page without the app shell: the brand, one card and a way on, in a column at t
 			<button class="btn btn-primary btn-lg w-100" type="submit"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Sign in</button>
 		</div>
 	</form>
-	<p class="text-center"><a href="#page-center-example">Forgot the password?</a></p>
+	<div class="hstack flex-wrap justify-content-center row-gap-4 column-gap-16">
+		<a href="#page-center-example">Forgot the password?</a>
+		<a href="#page-center-example">Sign in with a code</a>
+	</div>
 </div>
 ```
+
+Every child but the corner stands in the column, whatever it is itself - a `vstack` or an `hstack` of links under the card stays under the card, not at the start of a wide window.
 
 In a page `page-center` is the `main` and the brand's name its `h1`; here they are a `div` and an `h2` under the page's own.
 

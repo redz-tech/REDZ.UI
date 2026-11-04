@@ -43,10 +43,10 @@ function BUILD__Rem(int $px): string
 	return rtrim(rtrim(sprintf('%.4f', $px / 16), '0'), '.') . 'rem';
 }
 
-/** The selector of the class $class: a colon escaped, a leading digit escaped by its code point. */
+/** The selector of the class $class: a colon and a dot escaped, a leading digit escaped by its code point. */
 function BUILD__Selector(string $class): string
 {
-	$name = str_replace(':', '\\:', $class);
+	$name = str_replace([':', '.'], ['\\:', '\\.'], $class);
 	return '.' . (ctype_digit($name[0]) ? '\\3' . $name[0] . ' ' . substr($name, 1) : $name);
 }
 

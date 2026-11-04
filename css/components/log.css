@@ -1,0 +1,102 @@
+@layer components {
+	.log,
+	.diff {
+		margin: 0;
+		overflow: auto;
+		border: 1px solid var(--redz-border);
+		border-radius: var(--redz-radius-8);
+		color: var(--redz-text);
+		font-family: var(--redz-font-mono);
+		font-size: var(--redz-fs-12);
+		line-height: var(--redz-lh-20);
+		white-space: pre-wrap;
+		overflow-wrap: anywhere;
+		tab-size: 4;
+	}
+
+	.log {
+		padding: var(--redz-space-8) var(--redz-space-12);
+		background: var(--redz-bg-page);
+	}
+
+	.log [data-tone="success"] {
+		color: var(--redz-success);
+	}
+
+	.log [data-tone="warning"] {
+		color: var(--redz-warning);
+	}
+
+	.log [data-tone="danger"] {
+		color: var(--redz-danger);
+	}
+
+	.log [data-tone="info"] {
+		color: var(--redz-info);
+	}
+
+	.log [data-tone="muted"] {
+		color: var(--redz-text-muted);
+	}
+
+	.diff {
+		padding-block: var(--redz-space-8);
+		background: var(--redz-bg);
+		white-space: normal;
+	}
+
+	.diff > * {
+		position: relative;
+		display: block;
+		padding-inline: 3ch 1ch;
+		white-space: pre-wrap;
+	}
+
+	.diff > :is(ins, del) {
+		text-decoration: none;
+	}
+
+	.diff > ins {
+		background: var(--redz-success-subtle);
+	}
+
+	.diff > del {
+		background: var(--redz-danger-subtle);
+	}
+
+	.diff > :is(ins, del)::before {
+		position: absolute;
+		inset-inline-start: 1ch;
+	}
+
+	.diff > ins::before {
+		content: "+";
+		color: var(--redz-success);
+	}
+
+	.diff > del::before {
+		content: "-";
+		color: var(--redz-danger);
+	}
+
+	.diff > :not(ins, del) ins {
+		border-radius: 2px;
+		background: color-mix(in oklch, var(--redz-success) 25%, var(--redz-bg));
+		text-decoration: none;
+	}
+
+	.diff > :not(ins, del) del {
+		border-radius: 2px;
+		background: color-mix(in oklch, var(--redz-danger) 25%, var(--redz-bg));
+	}
+
+	@media (forced-colors: active) {
+		.diff ins {
+			text-decoration: underline;
+		}
+
+		.diff del {
+			text-decoration: line-through;
+		}
+	}
+}

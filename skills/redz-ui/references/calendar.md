@@ -41,6 +41,27 @@ Calendars are linked apart, on the screens that show them, beside the two files;
 </table>
 ```
 
+## Days in a state
+
+A day's `data-state` tints it: `worked`, `open`, `pending`, `absent` and `off` - a time sheet, the days a person can still book. `calendar-legend`, a list of items with the same `data-state`, says what each tint means, and every day says its state in words too - in its button's name, or in a `visually-hidden` word when it is no button; in forced colors the states draw as a line, a dashed and a dotted one. `button.calendar-day` makes the day's number a button the page opens or picks the day with - its `aria-label` the whole date and the state, `aria-pressed` on the day picked.
+
+```html
+<table class="calendar">
+	<caption>Anong Srisuk, November 2026</caption>
+	<thead><tr><th scope="col"><abbr title="Monday">Mon</abbr></th><th scope="col"><abbr title="Tuesday">Tue</abbr></th><th scope="col"><abbr title="Wednesday">Wed</abbr></th><th scope="col"><abbr title="Thursday">Thu</abbr></th><th scope="col"><abbr title="Friday">Fri</abbr></th><th scope="col"><abbr title="Saturday">Sat</abbr></th><th scope="col"><abbr title="Sunday">Sun</abbr></th></tr></thead>
+	<tbody>
+		<tr><td data-state="worked"><button class="calendar-day" type="button" aria-label="November 2, worked" aria-pressed="false">2</button></td><td data-state="worked"><button class="calendar-day" type="button" aria-label="November 3, worked" aria-pressed="false">3</button></td><td data-state="pending" aria-current="date"><button class="calendar-day" type="button" aria-label="November 4, waiting for approval" aria-pressed="true">4</button></td><td data-state="absent"><button class="calendar-day" type="button" aria-label="November 5, absent" aria-pressed="false">5</button></td><td data-state="open"><button class="calendar-day" type="button" aria-label="November 6, open" aria-pressed="false">6</button></td><td data-state="off" data-weekend><button class="calendar-day" type="button" aria-label="November 7, day off" aria-pressed="false">7</button></td><td data-state="off" data-weekend><button class="calendar-day" type="button" aria-label="November 8, day off" aria-pressed="false">8</button></td></tr>
+	</tbody>
+</table>
+<ul class="calendar-legend" aria-label="Day states">
+	<li data-state="worked">Worked</li>
+	<li data-state="pending">Waiting for approval</li>
+	<li data-state="absent">Absent</li>
+	<li data-state="open">Open</li>
+	<li data-state="off">Day off</li>
+</ul>
+```
+
 ## Days across things
 
 `table class="schedule"`: a column of names, kept in view while the days scroll by, then a column per day with its number and weekday. A cell holds how many are out; `data-state="busy"` tints it, `"over"` - more out than there are - marks it, and `data-weekend` tints a weekend's column. Put it in a scroller: `overflow-x-auto`.
@@ -64,3 +85,4 @@ Calendars are linked apart, on the screens that show them, beside the two files;
 - Both are tables: a screen reader reads a day with its weekday's header, a cell with its thing and its day. Weekdays are `abbr` with the full name.
 - A day's number is a `time` with its date; "+2" says "+2 more" with a hidden word.
 - A busy or over cell says its number; the tint repeats it, and an over cell is also outlined in forced colors.
+- A day's state is in words, never in its tint alone; a day that is a button is named by its whole date and its state, "November 4, waiting for approval", and the picked one says `aria-pressed="true"`.

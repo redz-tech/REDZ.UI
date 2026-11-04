@@ -24,6 +24,34 @@ The steps of a long job as it runs - a release, a publish, an install - each wit
 </section>
 ```
 
+### More states, and a step's body
+
+Six more states: `warning` - done with a warning, `info`, `ask` - the job waits for the person, `waiting` - for something else, `skipped` and `locked`. A `step-list-body` after a step's name is a block under it, for what the step found or asks; in a list with bodies every step is a block, and the current one, the one that asks and the one that failed are tinted.
+
+```html
+<ol class="step-list" aria-label="Moving the site">
+	<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Copy the files<span class="step-list-detail">2,140 files</span></li>
+	<li data-state="warning"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>Check the links<span class="step-list-detail">3 broken</span></li>
+	<li data-state="ask" aria-current="step"><i class="bi bi-question-circle-fill" aria-hidden="true"></i>Point the domain here<div class="step-list-body vstack gap-8"><p>Set the A record of lagoon.example to 203.0.113.24 at your registrar, then check it.</p><div class="hstack gap-8"><button class="btn btn-sm btn-primary" type="button">Check the domain</button><button class="btn btn-sm" type="button">Skip for now</button></div></div></li>
+	<li data-state="waiting"><i class="bi bi-hourglass-split" aria-hidden="true"></i>Issue the certificate<span class="step-list-detail">after the domain</span></li>
+	<li data-state="skipped"><i class="bi bi-skip-forward flip-rtl" aria-hidden="true"></i>Import the old comments<span class="step-list-detail">skipped</span></li>
+	<li data-state="locked"><i class="bi bi-lock" aria-hidden="true"></i>Switch off the old site<span class="step-list-detail">an owner's step</span></li>
+</ol>
+```
+
+## A pipeline
+
+`stage-list` is an `ol` of stages, each a frame: first a line with its icon and its name, then what it says, and a `stage-list-actions` slot for its buttons at the bottom. The stages run across from a region of 768 px and down below it, joined by a line; `data-state` takes the steps' states.
+
+```html
+<ol class="stage-list" aria-label="The release of 2.4">
+	<li data-state="done"><span class="hstack gap-8"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><strong>Build</strong></span><span class="fs-12">2 min 14 s</span><div class="stage-list-actions"><button class="btn btn-sm" type="button">Log</button></div></li>
+	<li data-state="current" aria-current="step"><span class="hstack gap-8"><i class="bi bi-arrow-repeat" aria-hidden="true"></i><strong>Test</strong></span><span class="fs-12">412 of 580 checks</span><div class="stage-list-actions"><button class="btn btn-sm" type="button">Log</button><button class="btn btn-sm" type="button">Stop</button></div></li>
+	<li data-state="ask"><span class="hstack gap-8"><i class="bi bi-question-circle-fill" aria-hidden="true"></i><strong>Approve</strong></span><span class="fs-12">An owner signs off</span><div class="stage-list-actions"><button class="btn btn-sm btn-primary" type="button">Approve</button></div></li>
+	<li data-state="waiting"><span class="hstack gap-8"><i class="bi bi-hourglass-split" aria-hidden="true"></i><strong>Deploy</strong></span><span class="fs-12">After the approval</span></li>
+</ol>
+```
+
 ## A timeline
 
 `timeline` is an `ol` of events joined by a line: each starts with an [icon tile](icon-tile.md) in its tone, then a `timeline-time`, the words, and a `dl` of details when it has them.
@@ -38,7 +66,8 @@ The steps of a long job as it runs - a release, a publish, an install - each wit
 
 ## Accessibility
 
-- The words carry the state; the icon and the color repeat them. Mark the current step `aria-current="step"`.
+- The words carry the state; the icon and the color repeat them - write the state in the step's detail when its name does not say it. Mark the current step `aria-current="step"`; a step or a stage that asks the person holds its own buttons.
+- A pipeline's stages are a list in their order, read one after the other wherever they stand on the screen; the current, the asking and the failed one are also outlined in forced colors.
 - A job that runs while the person waits says its new step in a polite live region the page keeps - one line per step, not every tick of the clock.
 - A timeline's times are `<time datetime>`; its details are a description list, read as pairs.
 
@@ -46,4 +75,4 @@ The steps of a long job as it runs - a release, a publish, an install - each wit
 
 From [`css/components/step-list.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/step-list.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-4`, `--redz-space-8`, `--redz-text-muted`, `--redz-text`, `--redz-success`, `--redz-primary`, `--redz-danger`, `--redz-warning`, `--redz-space-12`, `--redz-space-16`, `--redz-border`, `--redz-fs-14`, `--redz-fs-12`, `--redz-space-2`.
+It reads the theme's `--redz-space-4`, `--redz-space-8`, `--redz-text-muted`, `--redz-text`, `--redz-success`, `--redz-primary`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-text-faint`, `--redz-space-12`, `--redz-radius-8`, `--redz-primary-subtle`, `--redz-warning-subtle`, `--redz-danger-subtle`, `--redz-fs-14`, `--redz-space-16`, `--redz-border`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-fs-12`, `--redz-space-2`.

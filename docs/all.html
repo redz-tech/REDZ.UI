@@ -78,6 +78,7 @@
 			<a class="app-link" href="calendar.html"><i class="bi bi-calendar3" aria-hidden="true"></i>Calendars</a>
 			<a class="app-link" href="media.html"><i class="bi bi-collection" aria-hidden="true"></i>Media library</a>
 			<a class="app-link" href="table.html"><i class="bi bi-table" aria-hidden="true"></i>Tables</a>
+			<a class="app-link" href="log.html"><i class="bi bi-terminal" aria-hidden="true"></i>Logs and diffs</a>
 			<a class="app-link" href="summary.html"><i class="bi bi-receipt" aria-hidden="true"></i>Summaries and totals</a>
 			<a class="app-link" href="badge.html"><i class="bi bi-patch-check" aria-hidden="true"></i>Badges</a>
 			<a class="app-link" href="dot.html"><i class="bi bi-record-circle" aria-hidden="true"></i>Dots</a>
@@ -167,6 +168,19 @@
 					<div class="docs-example" id="utilities-ratio-boxes">
 						<div class="ratio-16x9 w-50 hstack justify-content-center rounded-8 bg-page text-muted">16 × 9</div>
 						<div class="ratio-1x1 w-25 hstack justify-content-center rounded-8 bg-page text-muted">1 × 1</div>
+						<div class="ratio-1.91x1 w-50 hstack justify-content-center rounded-8 bg-page text-muted">1.91 × 1</div>
+					</div>
+					<div class="docs-example" id="utilities-sizes-boxes">
+						<span class="size-32 rounded-8 bg-page"></span>
+						<span class="size-48 rounded-8 bg-page"></span>
+						<span class="size-64 rounded-8 bg-page"></span>
+						<span class="size-80 rounded-8 bg-page"></span>
+						<input class="form-control w-120" type="text" aria-label="Code" value="SAMUI-26">
+					</div>
+					<div class="docs-example docs-example-stack" id="utilities-text-kinds">
+						<p class="text-pre-wrap">Villa 12, Bophut&#10;Koh Samui 84320</p>
+						<p class="fs-11 text-uppercase tracking-wide text-muted">Last 30 days</p>
+						<p class="line-clamp-2 max-w-360">Ang Thong by speedboat: a day among the forty-two islands of the marine park, with snorkelling at Koh Wua Ta Lap, the emerald lake of Koh Mae Ko and lunch on the beach, back by five.</p>
 					</div>
 					<div class="docs-example" id="utilities-skip">
 						<a class="visually-hidden-focusable btn" href="#utilities-all">Skip to every utility</a>
@@ -1483,6 +1497,13 @@
 							<li class="list-group-item hstack gap-12 edge-start-success bg-page"><span>Site and hosting<span class="d-block fs-12 text-muted">Included in every plan</span></span><span class="ms-auto text-muted">Included</span></li>
 						</ul>
 					</div>
+					<div class="docs-example docs-example-stack" id="card-edge-chart">
+						<ul class="list-group" aria-label="Sites">
+							<li class="list-group-item edge-start-chart-1">Samui</li>
+							<li class="list-group-item edge-start-chart-2">Phuket</li>
+							<li class="list-group-item edge-start-chart-3">Krabi</li>
+						</ul>
+					</div>
 				</section>
 
 				<section class="vstack gap-16" aria-labelledby="all-accordion">
@@ -1952,6 +1973,41 @@
 							</tbody>
 						</table>
 					</div>
+					<div class="docs-example docs-example-stack" id="chart-values">
+						<table class="chart chart-values">
+							<caption>Guests per month</caption>
+							<thead><tr><th scope="col">Month</th><th scope="col">Guests</th></tr></thead>
+							<tbody>
+								<tr><th scope="row">Jul</th><td data-v="0.55">220</td></tr>
+								<tr><th scope="row">Aug</th><td data-v="0.7">280</td></tr>
+								<tr><th scope="row">Sep</th><td data-v="0.45">180</td></tr>
+								<tr><th scope="row">Oct</th><td data-v="0.6">240</td></tr>
+								<tr><th scope="row">Nov</th><td data-v="0.85">340</td></tr>
+								<tr><th scope="row">Dec</th><td data-v="1">400</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="docs-example docs-example-stack" id="chart-bar">
+						<table class="chart chart-bar">
+							<caption>Payments in November</caption>
+							<thead><tr><th scope="col">Method</th><th scope="col">Card, 58%</th><th scope="col">PromptPay, 31%</th><th scope="col">Cash, 11%</th></tr></thead>
+							<tbody>
+								<tr><th scope="row">November</th><td data-v="0.58">58%</td><td data-v="0.31">31%</td><td data-v="0.11">11%</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="docs-example docs-example-stack" id="chart-rows">
+						<table class="chart-rows">
+							<caption>Where bookings came from</caption>
+							<thead><tr><th scope="col">Source</th><th scope="col">Bookings</th><th scope="col">Share</th></tr></thead>
+							<tbody>
+								<tr data-v="0.52"><th scope="row">Search</th><td>182</td><td>52%</td></tr>
+								<tr data-v="0.27"><th scope="row">Partners</th><td>94</td><td>27%</td></tr>
+								<tr data-v="0.14"><th scope="row">Social networks</th><td>49</td><td>14%</td></tr>
+								<tr data-v="0.07" data-tone="secondary"><th scope="row">Other</th><td>25</td><td>7%</td></tr>
+							</tbody>
+						</table>
+					</div>
 					<div class="docs-example docs-example-stack" id="chart-sparks">
 						<table class="table" aria-label="Agents">
 							<thead><tr><th scope="col">Agent</th><th scope="col">Last 20 runs</th></tr></thead>
@@ -2011,6 +2067,22 @@
 							</tbody>
 						</table>
 					</div>
+					<div class="docs-example docs-example-stack" id="calendar-sheet">
+						<table class="calendar">
+							<caption>Anong Srisuk, November 2026</caption>
+							<thead><tr><th scope="col"><abbr title="Monday">Mon</abbr></th><th scope="col"><abbr title="Tuesday">Tue</abbr></th><th scope="col"><abbr title="Wednesday">Wed</abbr></th><th scope="col"><abbr title="Thursday">Thu</abbr></th><th scope="col"><abbr title="Friday">Fri</abbr></th><th scope="col"><abbr title="Saturday">Sat</abbr></th><th scope="col"><abbr title="Sunday">Sun</abbr></th></tr></thead>
+							<tbody>
+								<tr><td data-state="worked"><button class="calendar-day" type="button" aria-label="November 2, worked" aria-pressed="false">2</button></td><td data-state="worked"><button class="calendar-day" type="button" aria-label="November 3, worked" aria-pressed="false">3</button></td><td data-state="pending" aria-current="date"><button class="calendar-day" type="button" aria-label="November 4, waiting for approval" aria-pressed="true">4</button></td><td data-state="absent"><button class="calendar-day" type="button" aria-label="November 5, absent" aria-pressed="false">5</button></td><td data-state="open"><button class="calendar-day" type="button" aria-label="November 6, open" aria-pressed="false">6</button></td><td data-state="off" data-weekend><button class="calendar-day" type="button" aria-label="November 7, day off" aria-pressed="false">7</button></td><td data-state="off" data-weekend><button class="calendar-day" type="button" aria-label="November 8, day off" aria-pressed="false">8</button></td></tr>
+							</tbody>
+						</table>
+						<ul class="calendar-legend" aria-label="Day states">
+							<li data-state="worked">Worked</li>
+							<li data-state="pending">Waiting for approval</li>
+							<li data-state="absent">Absent</li>
+							<li data-state="open">Open</li>
+							<li data-state="off">Day off</li>
+						</ul>
+					</div>
 					<div class="docs-example docs-example-stack" id="calendar-days">
 						<div class="overflow-x-auto" tabindex="0" role="region" aria-labelledby="calendar-days-title">
 							<table class="schedule">
@@ -2048,6 +2120,24 @@
 							<button class="menu-item" type="button" role="menuitem" data-move="first">Move to the start</button>
 							<button class="menu-item" type="button" role="menuitem" data-move="last">Move to the end</button>
 						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="media-pick">
+						<fieldset class="vstack gap-8">
+							<legend class="form-label">The page's cover image</legend>
+							<div class="media-grid media-grid-compact">
+								<label class="media-tile"><input class="radio media-tile-check" type="radio" name="media-pick-cover" value="lagoon" checked><img class="media-tile-thumb" src="img/lagoon.svg" alt="A lagoon under green hills"><span class="media-tile-body"><span class="media-tile-name"><span>lagoon.svg</span></span></span></label>
+								<label class="media-tile"><input class="radio media-tile-check" type="radio" name="media-pick-cover" value="qr"><img class="media-tile-thumb" src="img/qr.svg" alt="The QR code of the docs"><span class="media-tile-body"><span class="media-tile-name"><span>qr.svg</span></span></span></label>
+								<label class="media-tile"><input class="radio media-tile-check" type="radio" name="media-pick-cover" value="pier"><img class="media-tile-thumb" src="img/lagoon.svg" alt="The pier at dawn"><span class="media-tile-body"><span class="media-tile-name"><span>pier-at-dawn.svg</span></span></span></label>
+							</div>
+						</fieldset>
+						<fieldset class="vstack gap-8">
+							<legend class="form-label">Photos of the tour</legend>
+							<div class="media-grid">
+								<label class="media-tile" data-cover="Cover"><input class="check media-tile-check" type="checkbox" name="media-pick-photos[]" value="lagoon" checked><img class="media-tile-thumb" src="img/lagoon.svg" alt=""><span class="media-tile-body"><span class="media-tile-name"><span>lagoon.svg</span></span><span class="media-tile-meta">1600×900 · 24 KB</span></span></label>
+								<label class="media-tile"><input class="check media-tile-check" type="checkbox" name="media-pick-photos[]" value="pier" checked><img class="media-tile-thumb" src="img/lagoon.svg" alt=""><span class="media-tile-body"><span class="media-tile-name"><span>pier-at-dawn.svg</span></span><span class="media-tile-meta">2400×1600 · 31 KB</span></span></label>
+								<label class="media-tile"><input class="check media-tile-check" type="checkbox" name="media-pick-photos[]" value="qr"><img class="media-tile-thumb" src="img/qr.svg" alt=""><span class="media-tile-body"><span class="media-tile-name"><span>qr.svg</span></span><span class="media-tile-meta">45×45 · 3 KB</span></span></label>
+							</div>
+						</fieldset>
 					</div>
 				</section>
 
@@ -2244,6 +2334,32 @@
 					</div>
 				</section>
 
+				<section class="vstack gap-16" aria-labelledby="all-log">
+					<h2 id="all-log"><a href="log.html">Logs and diffs</a></h2>
+					<div class="docs-example docs-example-stack" id="log-follow">
+						<pre class="log max-h-160" id="log-follow-lines" tabindex="0" data-follow aria-label="The import's output" dir="ltr"><span data-tone="muted">09:14:02</span> Import started: excursions.csv, 128 rows
+<span data-tone="muted">09:14:02</span> Columns: title, price, date, seats, language
+<span data-tone="muted">09:14:02</span> Row 1-20 read
+<span data-tone="muted">09:14:02</span> Row 21-40 read
+<span data-tone="warning"><span data-tone="muted">09:14:03</span> Row 41: no price, set to 0</span>
+<span data-tone="muted">09:14:03</span> Row 42-60 read
+<span data-tone="muted">09:14:03</span> Row 61-90 read
+<span data-tone="danger"><span data-tone="muted">09:14:04</span> Row 91: the date 2026-02-30 does not exist, skipped</span>
+<span data-tone="muted">09:14:04</span> Row 92-128 read
+<span data-tone="success"><span data-tone="muted">09:14:05</span> 127 excursions imported, 1 skipped</span></pre>
+						<div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="log-line" aria-controls="log-follow-lines">Add a line</button></div>
+					</div>
+					<div class="docs-example docs-example-stack" id="log-diff-example">
+						<div class="diff" role="group" aria-label="The changes of the page's title" dir="ltr">
+							<span translate="no">&lt;header class="vstack gap-8"&gt;</span>
+							<del translate="no">	&lt;h1&gt;Ang Thong by speedboat&lt;/h1&gt;</del>
+							<ins translate="no">	&lt;h1&gt;Ang Thong marine park by speedboat&lt;/h1&gt;</ins>
+							<span translate="no">	&lt;p&gt;A day among <del>forty</del><ins>forty-two</ins> islands.&lt;/p&gt;</span>
+							<span translate="no">&lt;/header&gt;</span>
+						</div>
+					</div>
+				</section>
+
 				<section class="vstack gap-16" aria-labelledby="all-summary">
 					<h2 id="all-summary"><a href="summary.html">Summaries and totals</a></h2>
 					<div class="docs-example docs-example-stack" id="summary-booking">
@@ -2317,6 +2433,20 @@
 						<span class="hstack gap-8"><span class="dot dot-warning"></span>Slow</span>
 						<span class="hstack gap-8"><span class="dot dot-info"></span>Updating</span>
 					</div>
+					<div class="docs-example" id="dot-chart">
+						<span class="hstack gap-8"><span class="dot dot-chart-1"></span>Samui</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-2"></span>Phuket</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-3"></span>Krabi</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-4"></span>Chiang Mai</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-5"></span>Pattaya</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-6"></span>Hua Hin</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-7"></span>Bangkok</span>
+						<span class="hstack gap-8"><span class="dot dot-chart-8"></span>Koh Tao</span>
+					</div>
+					<div class="docs-example" id="dot-live-example">
+						<span class="hstack gap-8"><span class="dot dot-live dot-primary" data-state="running"></span>Importing</span>
+						<span class="hstack gap-8"><span class="dot dot-live dot-success" data-state="done"></span>Imported</span>
+					</div>
 				</section>
 
 				<section class="vstack gap-16" aria-labelledby="all-avatar">
@@ -2338,6 +2468,17 @@
 						<span class="icon-tile icon-tile-warning"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></span>
 						<span class="icon-tile icon-tile-info"><i class="bi bi-info-circle" aria-hidden="true"></i></span>
 						<span class="icon-tile icon-tile-sm"><i class="bi bi-upload" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-lg"><i class="bi bi-building" aria-hidden="true"></i></span>
+					</div>
+					<div class="docs-example" id="icon-tile-chart">
+						<span class="icon-tile icon-tile-chart-1"><i class="bi bi-airplane" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-2"><i class="bi bi-car-front" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-3"><i class="bi bi-tree" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-4"><i class="bi bi-sun" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-5"><i class="bi bi-flower1" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-6"><i class="bi bi-bicycle" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-7"><i class="bi bi-moon-stars" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-8"><i class="bi bi-heart" aria-hidden="true"></i></span>
 					</div>
 					<div class="docs-example" id="icon-tile-title">
 						<div class="hstack gap-12">
@@ -2355,6 +2496,24 @@
 							<button class="stat stat-primary" type="button" aria-pressed="false"><span class="icon-tile"><i class="bi bi-play-circle" aria-hidden="true"></i></span><span><span class="stat-value">3</span><span class="stat-label">Running</span></span></button>
 							<button class="stat stat-warning" type="button" aria-pressed="false"><span class="icon-tile"><i class="bi bi-clock-history" aria-hidden="true"></i></span><span><span class="stat-value">2</span><span class="stat-label">Late</span></span></button>
 							<button class="stat stat-secondary" type="button" aria-pressed="false"><span class="icon-tile"><i class="bi bi-x-octagon" aria-hidden="true"></i></span><span><span class="stat-value">0</span><span class="stat-label">Failed</span></span></button>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="stat-links-example">
+						<nav class="grid cols-2 md:cols-4 gap-12" aria-label="Bookings by state">
+							<a class="stat stat-primary" href="#stat-links" aria-current="page"><span class="icon-tile"><i class="bi bi-calendar-check" aria-hidden="true"></i></span><span><span class="stat-value">128</span><span class="stat-label">Confirmed</span></span></a>
+							<a class="stat stat-warning" href="#stat-links"><span class="icon-tile"><i class="bi bi-hourglass-split" aria-hidden="true"></i></span><span><span class="stat-value">14</span><span class="stat-label">Waiting</span></span></a>
+							<a class="stat stat-danger" href="#stat-links"><span class="icon-tile"><i class="bi bi-x-circle" aria-hidden="true"></i></span><span><span class="stat-value">3</span><span class="stat-label">Cancelled</span></span></a>
+							<a class="stat" href="#stat-links"><span><span class="stat-value">145</span><span class="stat-label">All bookings</span></span></a>
+						</nav>
+					</div>
+					<div class="docs-example docs-example-stack" id="stat-parts-example">
+						<div class="grid sm:cols-3 gap-12">
+							<div class="stat stat-success stat-emphasis"><span><span class="stat-value">412,000 THB</span><span class="stat-label">Revenue in November</span><span class="stat-sub"><span class="stat-delta" data-trend="up">+12%</span> on October</span></span></div>
+							<div class="stat"><span class="icon-tile"><i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i></span><span><span class="stat-value">6</span><span class="stat-label">Refunds</span><span class="stat-sub"><span class="stat-delta" data-trend="up" data-good="down">+2</span> on October</span></span></div>
+							<div class="stat stat-info"><span class="icon-tile"><i class="bi bi-door-open" aria-hidden="true"></i></span><span><span class="stat-value">68%</span><span class="stat-label">Rooms filled</span><progress class="progress progress-xs progress-info" value="68" max="100" aria-label="Rooms filled, 68 percent"></progress></span><span class="stat-meta">5 min ago</span></div>
+						</div>
+						<div class="grid sm:cols-3 gap-12">
+							<div class="stat" aria-busy="true"><span><span class="stat-value">0</span><span class="stat-label">Guests today</span></span></div>
 						</div>
 					</div>
 				</section>
@@ -2401,6 +2560,24 @@
 								</ol>
 							</div>
 						</section>
+					</div>
+					<div class="docs-example docs-example-stack" id="step-list-blocks">
+						<ol class="step-list" aria-label="Moving the site">
+							<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Copy the files<span class="step-list-detail">2,140 files</span></li>
+							<li data-state="warning"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>Check the links<span class="step-list-detail">3 broken</span></li>
+							<li data-state="ask" aria-current="step"><i class="bi bi-question-circle-fill" aria-hidden="true"></i>Point the domain here<div class="step-list-body vstack gap-8"><p>Set the A record of lagoon.example to 203.0.113.24 at your registrar, then check it.</p><div class="hstack gap-8"><button class="btn btn-sm btn-primary" type="button">Check the domain</button><button class="btn btn-sm" type="button">Skip for now</button></div></div></li>
+							<li data-state="waiting"><i class="bi bi-hourglass-split" aria-hidden="true"></i>Issue the certificate<span class="step-list-detail">after the domain</span></li>
+							<li data-state="skipped"><i class="bi bi-skip-forward flip-rtl" aria-hidden="true"></i>Import the old comments<span class="step-list-detail">skipped</span></li>
+							<li data-state="locked"><i class="bi bi-lock" aria-hidden="true"></i>Switch off the old site<span class="step-list-detail">an owner's step</span></li>
+						</ol>
+					</div>
+					<div class="docs-example docs-example-stack" id="step-list-pipeline">
+						<ol class="stage-list" aria-label="The release of 2.4">
+							<li data-state="done"><span class="hstack gap-8"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><strong>Build</strong></span><span class="fs-12">2 min 14 s</span><div class="stage-list-actions"><button class="btn btn-sm" type="button">Log</button></div></li>
+							<li data-state="current" aria-current="step"><span class="hstack gap-8"><i class="bi bi-arrow-repeat" aria-hidden="true"></i><strong>Test</strong></span><span class="fs-12">412 of 580 checks</span><div class="stage-list-actions"><button class="btn btn-sm" type="button">Log</button><button class="btn btn-sm" type="button">Stop</button></div></li>
+							<li data-state="ask"><span class="hstack gap-8"><i class="bi bi-question-circle-fill" aria-hidden="true"></i><strong>Approve</strong></span><span class="fs-12">An owner signs off</span><div class="stage-list-actions"><button class="btn btn-sm btn-primary" type="button">Approve</button></div></li>
+							<li data-state="waiting"><span class="hstack gap-8"><i class="bi bi-hourglass-split" aria-hidden="true"></i><strong>Deploy</strong></span><span class="fs-12">After the approval</span></li>
+						</ol>
 					</div>
 					<div class="docs-example docs-example-stack" id="step-list-events">
 						<ol class="timeline" aria-label="The payment's history">
@@ -2576,6 +2753,16 @@
 								<button class="btn-close" type="button" commandfor="drawer-filters-start" command="close" aria-label="Close"></button>
 							</div>
 							<div class="drawer-body"><p>A drawer at the start edge: the left in English, the right in Arabic.</p></div>
+						</dialog>
+					</div>
+					<div class="docs-example" id="drawer-lg">
+						<button class="btn" type="button" commandfor="drawer-lg-panel" command="show-modal"><i class="bi bi-receipt" aria-hidden="true"></i>Booking details</button>
+						<dialog id="drawer-lg-panel" class="drawer drawer-lg" closedby="any" aria-labelledby="drawer-lg-panel-title">
+							<div class="drawer-header">
+								<h2 class="drawer-title" id="drawer-lg-panel-title">Booking 2026-0418</h2>
+								<button class="btn-close" type="button" commandfor="drawer-lg-panel" command="close" aria-label="Close"></button>
+							</div>
+							<div class="drawer-body"><p>Ang Thong by speedboat, 4 guests, 12 November 2026. Paid in full by card.</p></div>
 						</dialog>
 					</div>
 				</section>
@@ -3267,7 +3454,10 @@
 									<button class="btn btn-primary btn-lg w-100" type="submit"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Sign in</button>
 								</div>
 							</form>
-							<p class="text-center"><a href="#page-center-example">Forgot the password?</a></p>
+							<div class="hstack flex-wrap justify-content-center row-gap-4 column-gap-16">
+								<a href="#page-center-example">Forgot the password?</a>
+								<a href="#page-center-example">Sign in with a code</a>
+							</div>
 						</div>
 					</div>
 				</section>

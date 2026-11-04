@@ -41,9 +41,14 @@ A page without the app shell: the brand, one card and a way on, in a column at t
 			<button class="btn btn-primary btn-lg w-100" type="submit"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Sign in</button>
 		</div>
 	</form>
-	<p class="text-center"><a href="#page-center-example">Forgot the password?</a></p>
+	<div class="hstack flex-wrap justify-content-center row-gap-4 column-gap-16">
+		<a href="#page-center-example">Forgot the password?</a>
+		<a href="#page-center-example">Sign in with a code</a>
+	</div>
 </div>
 ```
+
+Every child but the corner stands in the column, whatever it is itself - a `vstack` or an `hstack` of links under the card stays under the card, not at the start of a wide window.
 
 In a page `page-center` is the `main` and the brand's name its `h1`; here they are a `div` and an `h2` under the page's own.
 

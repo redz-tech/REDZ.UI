@@ -38,6 +38,50 @@
 		background: var(--redz-color);
 	}
 
+	.dot-chart-1 {
+		background: var(--redz-chart-1);
+	}
+
+	.dot-chart-2 {
+		background: var(--redz-chart-2);
+	}
+
+	.dot-chart-3 {
+		background: var(--redz-chart-3);
+	}
+
+	.dot-chart-4 {
+		background: var(--redz-chart-4);
+	}
+
+	.dot-chart-5 {
+		background: var(--redz-chart-5);
+	}
+
+	.dot-chart-6 {
+		background: var(--redz-chart-6);
+	}
+
+	.dot-chart-7 {
+		background: var(--redz-chart-7);
+	}
+
+	.dot-chart-8 {
+		background: var(--redz-chart-8);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.dot-live[data-state="running"] {
+			animation: dot-breathe 1.6s ease-in-out infinite;
+		}
+	}
+
+	@keyframes dot-breathe {
+		50% {
+			opacity: 0.35;
+		}
+	}
+
 	@media (forced-colors: active) {
 		.dot {
 			forced-color-adjust: none;

@@ -16,6 +16,30 @@ An 8 px dot of a tone beside a word: online, live, the color of a site. The dot 
 <span class="hstack gap-8"><span class="dot dot-info"></span>Updating</span>
 ```
 
+### Categories
+
+`dot-chart-1` to `dot-chart-8` take the charts' eight colors, for a category - a site, a team, a kind of job - not a state: the dot beside a name in a legend or a list matches its series in a [chart](chart.md).
+
+```html
+<span class="hstack gap-8"><span class="dot dot-chart-1"></span>Samui</span>
+<span class="hstack gap-8"><span class="dot dot-chart-2"></span>Phuket</span>
+<span class="hstack gap-8"><span class="dot dot-chart-3"></span>Krabi</span>
+<span class="hstack gap-8"><span class="dot dot-chart-4"></span>Chiang Mai</span>
+<span class="hstack gap-8"><span class="dot dot-chart-5"></span>Pattaya</span>
+<span class="hstack gap-8"><span class="dot dot-chart-6"></span>Hua Hin</span>
+<span class="hstack gap-8"><span class="dot dot-chart-7"></span>Bangkok</span>
+<span class="hstack gap-8"><span class="dot dot-chart-8"></span>Koh Tao</span>
+```
+
+### Live
+
+`dot-live` breathes while its `data-state="running"` - a job at work, a stream on air - and is still at any other state, and always with reduced motion. The word beside it says the state.
+
+```html
+<span class="hstack gap-8"><span class="dot dot-live dot-primary" data-state="running"></span>Importing</span>
+<span class="hstack gap-8"><span class="dot dot-live dot-success" data-state="done"></span>Imported</span>
+```
+
 ## Accessibility
 
 - A dot has no name; the word beside it carries the meaning. In forced colors every dot is drawn in the text color, so the word is what tells them apart.
@@ -25,4 +49,4 @@ An 8 px dot of a tone beside a word: online, live, the color of a site. The dot 
 
 From [`css/components/dot.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/dot.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-text-faint`, `--redz-primary`, `--redz-secondary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-color`.
+It reads the theme's `--redz-text-faint`, `--redz-primary`, `--redz-secondary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-color`, `--redz-chart-1`, `--redz-chart-2`, `--redz-chart-3`, `--redz-chart-4`, `--redz-chart-5`, `--redz-chart-6`, `--redz-chart-7`, `--redz-chart-8`.

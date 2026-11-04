@@ -74,6 +74,7 @@
 			<a class="app-link" href="calendar.html"><i class="bi bi-calendar3" aria-hidden="true"></i>Calendars</a>
 			<a class="app-link" href="media.html"><i class="bi bi-collection" aria-hidden="true"></i>Media library</a>
 			<a class="app-link" href="table.html"><i class="bi bi-table" aria-hidden="true"></i>Tables</a>
+			<a class="app-link" href="log.html"><i class="bi bi-terminal" aria-hidden="true"></i>Logs and diffs</a>
 			<a class="app-link" href="summary.html"><i class="bi bi-receipt" aria-hidden="true"></i>Summaries and totals</a>
 			<a class="app-link" href="badge.html"><i class="bi bi-patch-check" aria-hidden="true"></i>Badges</a>
 			<a class="app-link" href="dot.html"><i class="bi bi-record-circle" aria-hidden="true"></i>Dots</a>
@@ -161,7 +162,10 @@
 									<button class="btn btn-primary btn-lg w-100" type="submit"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Sign in</button>
 								</div>
 							</form>
-							<p class="text-center"><a href="#page-center-example">Forgot the password?</a></p>
+							<div class="hstack flex-wrap justify-content-center row-gap-4 column-gap-16">
+								<a href="#page-center-example">Forgot the password?</a>
+								<a href="#page-center-example">Sign in with a code</a>
+							</div>
 						</div>
 					</div>
 					<pre class="docs-code" tabindex="0"><code>&lt;div class="page-center"&gt;
@@ -196,8 +200,12 @@
 			&lt;button class="btn btn-primary btn-lg w-100" type="submit"&gt;&lt;i class="bi bi-box-arrow-in-right" aria-hidden="true"&gt;&lt;/i&gt;Sign in&lt;/button&gt;
 		&lt;/div&gt;
 	&lt;/form&gt;
-	&lt;p class="text-center"&gt;&lt;a href="#page-center-example"&gt;Forgot the password?&lt;/a&gt;&lt;/p&gt;
+	&lt;div class="hstack flex-wrap justify-content-center row-gap-4 column-gap-16"&gt;
+		&lt;a href="#page-center-example"&gt;Forgot the password?&lt;/a&gt;
+		&lt;a href="#page-center-example"&gt;Sign in with a code&lt;/a&gt;
+	&lt;/div&gt;
 &lt;/div&gt;</code></pre></div>
+					<p>Every child but the corner stands in the column, whatever it is itself - a <code>vstack</code> or an <code>hstack</code> of links under the card stays under the card, not at the start of a wide window.</p>
 					<p>In a page <code>page-center</code> is the <code>main</code> and the brand's name its <code>h1</code>; here they are a <code>div</code> and an <code>h2</code> under the page's own.</p>
 				</section>
 

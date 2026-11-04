@@ -211,10 +211,12 @@
 			{"label": "a segmented choice", "do": "focus", "target": "#btn-segmented-week", "expect": ["Week"]}
 		],
 		"docs/media.html": [
-			{"label": "the rows view button", "do": "focus", "target": "#media-folder [command=\"--view\"][value=\"list\"]", "expect": ["Rows"]}
+			{"label": "the rows view button", "do": "focus", "target": "#media-folder [command=\"--view\"][value=\"list\"]", "expect": ["Rows"]},
+			{"label": "the cover picked in a chooser", "do": "focus", "target": "#media-pick input:checked", "expect": ["lagoon.svg"]}
 		],
 		"docs/calendar.html": [
-			{"label": "the strip of days, a scrolling region", "do": "focus", "target": "#calendar-days > .overflow-x-auto", "expect": ["Equipment out, November 2 to 8"]}
+			{"label": "the strip of days, a scrolling region", "do": "focus", "target": "#calendar-days > .overflow-x-auto", "expect": ["Equipment out, November 2 to 8"]},
+			{"label": "a day that is a button, picked", "do": "focus", "target": "#calendar-sheet button[aria-pressed=\"true\"]", "expect": ["November 4, waiting for approval"]}
 		]
 	},
 	"axe": {"version": "4.14.0", "integrity": "sha512-9WTZxEjsZ7b13TH8JPmbV2z8CHbl80/2hm3XPEG4JgNdQLK81IBRXmSxHfMAOkSqQeRxT/0dwNDz2GOm3zzpcQ==", "tags": ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]},

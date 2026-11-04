@@ -74,6 +74,7 @@
 			<a class="app-link" href="calendar.html"><i class="bi bi-calendar3" aria-hidden="true"></i>Calendars</a>
 			<a class="app-link" href="media.html"><i class="bi bi-collection" aria-hidden="true"></i>Media library</a>
 			<a class="app-link" href="table.html"><i class="bi bi-table" aria-hidden="true"></i>Tables</a>
+			<a class="app-link" href="log.html"><i class="bi bi-terminal" aria-hidden="true"></i>Logs and diffs</a>
 			<a class="app-link" href="summary.html"><i class="bi bi-receipt" aria-hidden="true"></i>Summaries and totals</a>
 			<a class="app-link" href="badge.html"><i class="bi bi-patch-check" aria-hidden="true"></i>Badges</a>
 			<a class="app-link" href="dot.html"><i class="bi bi-record-circle" aria-hidden="true"></i>Dots</a>
@@ -136,6 +137,7 @@
 						<span class="icon-tile icon-tile-warning"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></span>
 						<span class="icon-tile icon-tile-info"><i class="bi bi-info-circle" aria-hidden="true"></i></span>
 						<span class="icon-tile icon-tile-sm"><i class="bi bi-upload" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-lg"><i class="bi bi-building" aria-hidden="true"></i></span>
 					</div>
 					<pre class="docs-code" tabindex="0"><code>&lt;span class="icon-tile"&gt;&lt;i class="bi bi-compass" aria-hidden="true"&gt;&lt;/i&gt;&lt;/span&gt;
 &lt;span class="icon-tile icon-tile-secondary"&gt;&lt;i class="bi bi-archive" aria-hidden="true"&gt;&lt;/i&gt;&lt;/span&gt;
@@ -143,7 +145,29 @@
 &lt;span class="icon-tile icon-tile-danger"&gt;&lt;i class="bi bi-x-octagon" aria-hidden="true"&gt;&lt;/i&gt;&lt;/span&gt;
 &lt;span class="icon-tile icon-tile-warning"&gt;&lt;i class="bi bi-exclamation-triangle" aria-hidden="true"&gt;&lt;/i&gt;&lt;/span&gt;
 &lt;span class="icon-tile icon-tile-info"&gt;&lt;i class="bi bi-info-circle" aria-hidden="true"&gt;&lt;/i&gt;&lt;/span&gt;
-&lt;span class="icon-tile icon-tile-sm"&gt;&lt;i class="bi bi-upload" aria-hidden="true"&gt;&lt;/i&gt;&lt;/span&gt;</code></pre></div>
+&lt;span class="icon-tile icon-tile-sm"&gt;&lt;i class="bi bi-upload" aria-hidden="true"&gt;&lt;/i&gt;&lt;/span&gt;
+&lt;span class="icon-tile icon-tile-lg"&gt;&lt;i class="bi bi-building" aria-hidden="true"&gt;&lt;/i&gt;&lt;/span&gt;</code></pre></div>
+
+					<h3 id="icon-tile-categories">Categories</h3>
+					<p><code>icon-tile-chart-1</code> to <code>icon-tile-chart-8</code> take the charts' eight colors, for a category, not a state - the tile of a kind of record matches its series in a <a href="chart.html">chart</a> and its <a href="dot.html#dot-categories">dot</a>.</p>
+					<div class="docs-sample"><div class="docs-example" id="icon-tile-chart">
+						<span class="icon-tile icon-tile-chart-1"><i class="bi bi-airplane" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-2"><i class="bi bi-car-front" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-3"><i class="bi bi-tree" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-4"><i class="bi bi-sun" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-5"><i class="bi bi-flower1" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-6"><i class="bi bi-bicycle" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-7"><i class="bi bi-moon-stars" aria-hidden="true"></i></span>
+						<span class="icon-tile icon-tile-chart-8"><i class="bi bi-heart" aria-hidden="true"></i></span>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;span class="icon-tile icon-tile-chart-1"&gt;&lt;i class="bi bi-airplane" aria-hidden="true"&gt;&lt;/i&gt;&lt;/span&gt;
+&lt;span class="icon-tile icon-tile-chart-2"&gt;&lt;i class="bi bi-car-front" aria-hidden="true"&gt;&lt;/i&gt;&lt;/span&gt;
+&lt;span class="icon-tile icon-tile-chart-3"&gt;&lt;i class="bi bi-tree" aria-hidden="true"&gt;&lt;/i&gt;&lt;/span&gt;
+&lt;span class="icon-tile icon-tile-chart-4"&gt;&lt;i class="bi bi-sun" aria-hidden="true"&gt;&lt;/i&gt;&lt;/span&gt;
+&lt;span class="icon-tile icon-tile-chart-5"&gt;&lt;i class="bi bi-flower1" aria-hidden="true"&gt;&lt;/i&gt;&lt;/span&gt;
+&lt;span class="icon-tile icon-tile-chart-6"&gt;&lt;i class="bi bi-bicycle" aria-hidden="true"&gt;&lt;/i&gt;&lt;/span&gt;
+&lt;span class="icon-tile icon-tile-chart-7"&gt;&lt;i class="bi bi-moon-stars" aria-hidden="true"&gt;&lt;/i&gt;&lt;/span&gt;
+&lt;span class="icon-tile icon-tile-chart-8"&gt;&lt;i class="bi bi-heart" aria-hidden="true"&gt;&lt;/i&gt;&lt;/span&gt;</code></pre></div>
 
 					<h3>In a title</h3>
 					<div class="docs-sample"><div class="docs-example" id="icon-tile-title">
@@ -168,8 +192,8 @@
 
 						<section class="vstack gap-12" aria-labelledby="icon-tile-tokens">
 							<h2 id="icon-tile-tokens">Tokens</h2>
-							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/icon-tile.css"><code>css/components/icon-tile.css</code></a>. It declares <code>--redz-tile-bg</code>, <code>--redz-tile-fg</code> on its root, never on rows or items.</p>
-							<p>It reads the theme's <code>--redz-primary-subtle</code>, <code>--redz-primary</code>, <code>--redz-radius-12</code>, <code>--redz-radius-8</code>, <code>--redz-secondary-subtle</code>, <code>--redz-secondary</code>, <code>--redz-success-subtle</code>, <code>--redz-success</code>, <code>--redz-danger-subtle</code>, <code>--redz-danger</code>, <code>--redz-warning-subtle</code>, <code>--redz-warning</code>, <code>--redz-info-subtle</code>, <code>--redz-info</code>, <code>--redz-color</code>.</p>
+							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/icon-tile.css"><code>css/components/icon-tile.css</code></a>. It declares <code>--redz-tile-bg</code>, <code>--redz-tile-fg</code>, <code>--redz-tile-chart</code> on its root, never on rows or items.</p>
+							<p>It reads the theme's <code>--redz-primary-subtle</code>, <code>--redz-primary</code>, <code>--redz-radius-12</code>, <code>--redz-radius-8</code>, <code>--redz-radius-16</code>, <code>--redz-bg</code>, <code>--redz-text</code>, <code>--redz-chart-1</code>, <code>--redz-chart-2</code>, <code>--redz-chart-3</code>, <code>--redz-chart-4</code>, <code>--redz-chart-5</code>, <code>--redz-chart-6</code>, <code>--redz-chart-7</code>, <code>--redz-chart-8</code>, <code>--redz-secondary-subtle</code>, <code>--redz-secondary</code>, <code>--redz-success-subtle</code>, <code>--redz-success</code>, <code>--redz-danger-subtle</code>, <code>--redz-danger</code>, <code>--redz-warning-subtle</code>, <code>--redz-warning</code>, <code>--redz-info-subtle</code>, <code>--redz-info</code>, <code>--redz-color</code>.</p>
 						</section>
 				<footer class="d-flex flex-wrap justify-content-between gap-8 pt-16 border-top text-muted fs-12">
 					<span>MIT license · © 2026 Red Z Group · includes Bootstrap Icons (MIT)</span>

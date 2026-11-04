@@ -76,6 +76,7 @@
 			<a class="app-link" href="calendar.html"><i class="bi bi-calendar3" aria-hidden="true"></i>Calendars</a>
 			<a class="app-link" href="media.html"><i class="bi bi-collection" aria-hidden="true"></i>Media library</a>
 			<a class="app-link" href="table.html"><i class="bi bi-table" aria-hidden="true"></i>Tables</a>
+			<a class="app-link" href="log.html"><i class="bi bi-terminal" aria-hidden="true"></i>Logs and diffs</a>
 			<a class="app-link" href="summary.html"><i class="bi bi-receipt" aria-hidden="true"></i>Summaries and totals</a>
 			<a class="app-link" href="badge.html"><i class="bi bi-patch-check" aria-hidden="true"></i>Badges</a>
 			<a class="app-link" href="dot.html"><i class="bi bi-record-circle" aria-hidden="true"></i>Dots</a>
@@ -208,6 +209,77 @@
 		&lt;tr title="Sun: 26 site, 10 partners, 7 walk-in"&gt;&lt;th scope="row"&gt;Sun&lt;/th&gt;&lt;td data-v="0.542"&gt;26&lt;/td&gt;&lt;td data-v="0.208"&gt;10&lt;/td&gt;&lt;td data-v="0.146"&gt;7&lt;/td&gt;&lt;/tr&gt;
 	&lt;/tbody&gt;
 &lt;/table&gt;</code></pre></div>
+					<p><code>chart-values</code> writes each column's number above it - for one series and a few columns, where the numbers are what a person reads.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="chart-values">
+						<table class="chart chart-values">
+							<caption>Guests per month</caption>
+							<thead><tr><th scope="col">Month</th><th scope="col">Guests</th></tr></thead>
+							<tbody>
+								<tr><th scope="row">Jul</th><td data-v="0.55">220</td></tr>
+								<tr><th scope="row">Aug</th><td data-v="0.7">280</td></tr>
+								<tr><th scope="row">Sep</th><td data-v="0.45">180</td></tr>
+								<tr><th scope="row">Oct</th><td data-v="0.6">240</td></tr>
+								<tr><th scope="row">Nov</th><td data-v="0.85">340</td></tr>
+								<tr><th scope="row">Dec</th><td data-v="1">400</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;table class="chart chart-values"&gt;
+	&lt;caption&gt;Guests per month&lt;/caption&gt;
+	&lt;thead&gt;&lt;tr&gt;&lt;th scope="col"&gt;Month&lt;/th&gt;&lt;th scope="col"&gt;Guests&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+	&lt;tbody&gt;
+		&lt;tr&gt;&lt;th scope="row"&gt;Jul&lt;/th&gt;&lt;td data-v="0.55"&gt;220&lt;/td&gt;&lt;/tr&gt;
+		&lt;tr&gt;&lt;th scope="row"&gt;Aug&lt;/th&gt;&lt;td data-v="0.7"&gt;280&lt;/td&gt;&lt;/tr&gt;
+		&lt;tr&gt;&lt;th scope="row"&gt;Sep&lt;/th&gt;&lt;td data-v="0.45"&gt;180&lt;/td&gt;&lt;/tr&gt;
+		&lt;tr&gt;&lt;th scope="row"&gt;Oct&lt;/th&gt;&lt;td data-v="0.6"&gt;240&lt;/td&gt;&lt;/tr&gt;
+		&lt;tr&gt;&lt;th scope="row"&gt;Nov&lt;/th&gt;&lt;td data-v="0.85"&gt;340&lt;/td&gt;&lt;/tr&gt;
+		&lt;tr&gt;&lt;th scope="row"&gt;Dec&lt;/th&gt;&lt;td data-v="1"&gt;400&lt;/td&gt;&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;</code></pre></div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="chart-shares">
+					<h2 id="chart-shares">Shares of a whole</h2>
+					<p><code>chart-bar</code> with <code>chart</code> draws one row as a single bar across: each segment's <code>data-v</code> is its share of the whole, and the legend under it names the series - write the share in the legend's words too. The bar is 12 px thick; <code>--redz-chart-bar-height</code> sets another.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="chart-bar">
+						<table class="chart chart-bar">
+							<caption>Payments in November</caption>
+							<thead><tr><th scope="col">Method</th><th scope="col">Card, 58%</th><th scope="col">PromptPay, 31%</th><th scope="col">Cash, 11%</th></tr></thead>
+							<tbody>
+								<tr><th scope="row">November</th><td data-v="0.58">58%</td><td data-v="0.31">31%</td><td data-v="0.11">11%</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;table class="chart chart-bar"&gt;
+	&lt;caption&gt;Payments in November&lt;/caption&gt;
+	&lt;thead&gt;&lt;tr&gt;&lt;th scope="col"&gt;Method&lt;/th&gt;&lt;th scope="col"&gt;Card, 58%&lt;/th&gt;&lt;th scope="col"&gt;PromptPay, 31%&lt;/th&gt;&lt;th scope="col"&gt;Cash, 11%&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+	&lt;tbody&gt;
+		&lt;tr&gt;&lt;th scope="row"&gt;November&lt;/th&gt;&lt;td data-v="0.58"&gt;58%&lt;/td&gt;&lt;td data-v="0.31"&gt;31%&lt;/td&gt;&lt;td data-v="0.11"&gt;11%&lt;/td&gt;&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;</code></pre></div>
+					<p><code>table class="chart-rows"</code> breaks a whole into rows, longest first: each <code>tr</code> a label, its count and its share in words, and a bar under them whose length is the row's <code>data-v</code>. The header cells name the columns for a screen reader and are hidden from sight. The bars take the first chart color; a row's <code>data-tone</code> gives it a state's.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="chart-rows">
+						<table class="chart-rows">
+							<caption>Where bookings came from</caption>
+							<thead><tr><th scope="col">Source</th><th scope="col">Bookings</th><th scope="col">Share</th></tr></thead>
+							<tbody>
+								<tr data-v="0.52"><th scope="row">Search</th><td>182</td><td>52%</td></tr>
+								<tr data-v="0.27"><th scope="row">Partners</th><td>94</td><td>27%</td></tr>
+								<tr data-v="0.14"><th scope="row">Social networks</th><td>49</td><td>14%</td></tr>
+								<tr data-v="0.07" data-tone="secondary"><th scope="row">Other</th><td>25</td><td>7%</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;table class="chart-rows"&gt;
+	&lt;caption&gt;Where bookings came from&lt;/caption&gt;
+	&lt;thead&gt;&lt;tr&gt;&lt;th scope="col"&gt;Source&lt;/th&gt;&lt;th scope="col"&gt;Bookings&lt;/th&gt;&lt;th scope="col"&gt;Share&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+	&lt;tbody&gt;
+		&lt;tr data-v="0.52"&gt;&lt;th scope="row"&gt;Search&lt;/th&gt;&lt;td&gt;182&lt;/td&gt;&lt;td&gt;52%&lt;/td&gt;&lt;/tr&gt;
+		&lt;tr data-v="0.27"&gt;&lt;th scope="row"&gt;Partners&lt;/th&gt;&lt;td&gt;94&lt;/td&gt;&lt;td&gt;27%&lt;/td&gt;&lt;/tr&gt;
+		&lt;tr data-v="0.14"&gt;&lt;th scope="row"&gt;Social networks&lt;/th&gt;&lt;td&gt;49&lt;/td&gt;&lt;td&gt;14%&lt;/td&gt;&lt;/tr&gt;
+		&lt;tr data-v="0.07" data-tone="secondary"&gt;&lt;th scope="row"&gt;Other&lt;/th&gt;&lt;td&gt;25&lt;/td&gt;&lt;td&gt;7%&lt;/td&gt;&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;</code></pre></div>
 				</section>
 
 				<section class="vstack gap-16" aria-labelledby="chart-spark">
@@ -281,7 +353,8 @@
 				<section class="vstack gap-12" aria-labelledby="chart-access">
 					<h2 id="chart-access">Accessibility</h2>
 					<ul>
-						<li>A chart is its table: the caption names it, the header cells name the series, each row says its day and its numbers. <code>charts.js</code> gives a chart table the table's roles, since WebKit drops them once CSS lays the table out as columns.</li>
+						<li>A chart is its table: the caption names it, the header cells name the series, each row says its day and its numbers. <code>charts.js</code> gives a <code>chart</code> or <code>chart-rows</code> table the table's roles, since WebKit drops them once CSS lays the table out otherwise.</li>
+						<li>A share bar and breakdown rows say their shares in words - the legend's, the rows' - and the bar repeats them.</li>
 						<li>A color never speaks alone: the legend names every series, a state's segment is named by its header cell, and a sparkline's summary is its name.</li>
 						<li>Three of the light theme's series colors are under 3:1 against the page: the legend and the table are what tell them apart.</li>
 						<li>In forced colors every bar is drawn in the text color; the numbers are in the table.</li>

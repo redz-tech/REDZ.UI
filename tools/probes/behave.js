@@ -1015,6 +1015,90 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a group band or a row header sticks: ' + say(grouped));
 			}
 		}]},
+		follow: {target: '#log-follow-lines', steps: [async (out) => {
+			const log = $('#log-follow-lines');
+			const line = async (words) => {
+				log.append('\n' + words);
+				await wait(50);
+			};
+			const end = () => log.scrollHeight - log.scrollTop - log.clientHeight < 8;
+			const loaded = log.scrollHeight > log.clientHeight && end();
+			await line('a line while following');
+			const followed = end();
+			log.scrollTop = 0;
+			await wait(50);
+			await line('a line while reading above');
+			const kept = log.scrollTop === 0;
+			log.scrollTop = log.scrollHeight;
+			await wait(50);
+			await line('a line back at the end');
+			if (!loaded || !followed || !kept || !end()) {
+				out.push('a followed log ' + (loaded ? '' : 'does not open at its end, ') + (followed ? '' : 'loses its end to a new line, ') + (kept ? '' : 'jumps to the end while read above, ') + (end() ? '' : 'does not follow again from the end'));
+			}
+			const diff = $('#log-diff-example .diff');
+			const signs = $$(':scope > :is(ins, del)', diff).map((line) => getComputedStyle(line, '::before').content).join(' ');
+			const gaps = $$(':scope > *', diff).map((line) => Math.round(line.getBoundingClientRect().top));
+			const lines = gaps.slice(1).map((top, i) => top - gaps[i]);
+			if (signs !== '"-" "+"' || lines.some((step) => step > 24)) {
+				out.push('a diff signs its lines ' + say(signs) + ' and steps them by ' + say(lines) + ' px');
+			}
+		}]},
+		live: {target: '#dot-live-example', steps: [async (out) => {
+			const [running, done] = $$('#dot-live-example .dot-live');
+			const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+			if ((getComputedStyle(running).animationName === 'none') !== still || getComputedStyle(done).animationName !== 'none') {
+				out.push('a live dot running is ' + (getComputedStyle(running).animationName === 'none' ? 'still' : 'moving') + ', done ' + (getComputedStyle(done).animationName === 'none' ? 'still' : 'moving') + (still ? ', with reduced motion' : ''));
+			}
+		}]},
+		trend: {target: '#stat-parts-example .stat-delta', steps: [async (out) => {
+			const [good, bad] = $$('#stat-parts-example .stat-delta');
+			const tone = (name) => {
+				const probe = document.createElement('span');
+				probe.className = 'text-' + name;
+				document.body.append(probe);
+				const color = getComputedStyle(probe).color;
+				probe.remove();
+				return color;
+			};
+			if (getComputedStyle(good).color !== tone('success') || getComputedStyle(bad).color !== tone('danger')) {
+				out.push('a rise that is good is drawn ' + getComputedStyle(good).color + ', a rise of what should fall ' + getComputedStyle(bad).color + ' - not the success and the danger tones');
+			}
+		}]},
+		centered: {target: '#page-center-example .page-center', steps: [async (out) => {
+			const page = $('#page-center-example .page-center');
+			const middle = (el) => {
+				const box = el.getBoundingClientRect();
+				return box.left + box.width / 2;
+			};
+			const off = $$(':scope > :not(.page-center-corner)', page).filter((child) => !near(middle(child), middle(page), 2));
+			if (off.length > 0) {
+				out.push(off.length + ' children of a centered page stand off its middle: ' + say(off.map((child) => child.className)));
+			}
+		}]},
+		chooser: {target: '#media-pick .media-grid-compact', steps: [async (out) => {
+			const [first, second] = $$('#media-pick .media-grid-compact > .media-tile');
+			$('img', second).click();
+			await wait(50);
+			const outlined = (tile) => getComputedStyle(tile).boxShadow !== 'none';
+			if (!$('input', second).checked || $('input', first).checked || !outlined(second) || outlined(first)) {
+				out.push('a click on a tile\'s image picks ' + ($('input', second).checked ? 'it' : 'nothing') + ', leaves the first ' + ($('input', first).checked ? 'picked' : 'free') + ', and outlines ' + [first, second].filter(outlined).length + ' of them');
+			}
+			$('img', first).click();
+		}]},
+		shares: {target: '#chart-rows table.chart-rows', steps: [async (out) => {
+			const rows = $('#chart-rows table.chart-rows');
+			const roles = [rows, $('caption', rows), rows.tBodies[0], $('thead th', rows), $('tbody th', rows), $('tbody td', rows)].map((el) => el.getAttribute('role')).join(' ');
+			const row = $('tbody > tr', rows);
+			if (roles !== 'table caption rowgroup columnheader rowheader cell' || row.style.getPropertyValue('--v') !== row.dataset.v) {
+				out.push('breakdown rows carry the roles ' + say(roles) + ' and a row of ' + row.dataset.v + ' the share ' + say(row.style.getPropertyValue('--v')));
+			}
+			const bar = $('#chart-bar table.chart-bar');
+			const track = $('tbody > tr', bar).getBoundingClientRect().width;
+			const cell = $('tbody td', bar);
+			if (!near(cell.getBoundingClientRect().width, Number(cell.dataset.v) * track, 2)) {
+				out.push('a share of ' + cell.dataset.v + ' in a bar ' + Math.round(track) + ' px long is ' + Math.round(cell.getBoundingClientRect().width) + ' px');
+			}
+		}]},
 		floating: {target: '#input-group-floating .input-group', steps: [async (out) => {
 			for (const group of $$('#input-group-floating .input-group')) {
 				const floating = $(':scope > .form-floating', group);

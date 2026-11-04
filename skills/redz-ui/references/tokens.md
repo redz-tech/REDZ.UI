@@ -57,6 +57,14 @@ The custom properties on `:root` that the components read: colors by role in pai
 | `--redz-info` | `light-dark(#0071bb, #5eaceb)` |
 | `--redz-info-subtle` | `light-dark(#e4f3ff, #193043)` |
 | `--redz-info-contrast` | `light-dark(#ffffff, #000000)` |
+| `--redz-chart-1` | `light-dark(#2a78d6, #3987e5)` |
+| `--redz-chart-2` | `light-dark(#eb6834, #d95926)` |
+| `--redz-chart-3` | `light-dark(#1baf7a, #199e70)` |
+| `--redz-chart-4` | `light-dark(#eda100, #c98500)` |
+| `--redz-chart-5` | `light-dark(#e87ba4, #d55181)` |
+| `--redz-chart-6` | `light-dark(#008300, #008300)` |
+| `--redz-chart-7` | `light-dark(#6250d6, #9085e9)` |
+| `--redz-chart-8` | `light-dark(#e34948, #e66767)` |
 | `--redz-focus` | `var(--redz-primary)` |
 | `--redz-link` | `var(--redz-primary)` |
 | `--redz-shadow-strength` | `1` |
@@ -88,6 +96,7 @@ The custom properties on `:root` that the components read: colors by role in pai
 | `--redz-space-40` | `2.5rem` |
 | `--redz-space-48` | `3rem` |
 | `--redz-space-64` | `4rem` |
+| `--redz-fs-11` | `0.6875rem` |
 | `--redz-fs-12` | `0.75rem` |
 | `--redz-fs-14` | `0.875rem` |
 | `--redz-fs-16` | `1rem` |
@@ -95,6 +104,8 @@ The custom properties on `:root` that the components read: colors by role in pai
 | `--redz-fs-20` | `1.25rem` |
 | `--redz-fs-24` | `1.5rem` |
 | `--redz-fs-32` | `2rem` |
+| `--redz-fs-40` | `2.5rem` |
+| `--redz-fs-48` | `3rem` |
 | `--redz-lh-16` | `1rem` |
 | `--redz-lh-20` | `1.25rem` |
 | `--redz-lh-24` | `1.5rem` |

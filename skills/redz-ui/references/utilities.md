@@ -7,16 +7,43 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 ## Scales
 
 - Space, in px: 0 2 4 8 12 16 20 24 32 40 48 64 - for `m`, `p` and `gap` with their sides: `mt` `mb` `ms` `me` `mx` `my`, the same for `p`. `ms` and `me` are the start and the end of the line, so they turn right to left.
-- Font size: 12 14 16 18 20 24 32; line height: 16 20 24 28; radius: 0 4 6 8 12 16 and `rounded-full`.
+- Font size: 11 12 14 16 18 20 24 32 40 48 - 11 for the smallest caption, 40 and 48 for one hero number; line height: 16 20 24 28; radius: 0 4 6 8 12 16 and `rounded-full`.
 - Width prefixes come on placement and spacing - display, flex, grid, gaps, order, text alignment, margins and paddings: `md:d-none`, `lg:p-24`.
 
 ## Aspect ratio
 
-`ratio-1x1`, `ratio-4x3`, `ratio-16x9` and `ratio-21x9` keep an element's shape as its width changes - on a video, a map, an image's frame; `ratio-auto` lets it go. The class goes on the element itself: an image inside a frame fills it with `w-100 h-100 object-fit-cover`.
+`ratio-1x1`, `ratio-4x3`, `ratio-16x9` and `ratio-21x9` keep an element's shape as its width changes - on a video, a map, an image's frame; `ratio-auto` lets it go. `ratio-1.91x1` is the shape of a link's preview image on social networks, 1200 × 630. The class goes on the element itself: an image inside a frame fills it with `w-100 h-100 object-fit-cover`.
 
 ```html
 <div class="ratio-16x9 w-50 hstack justify-content-center rounded-8 bg-page text-muted">16 × 9</div>
 <div class="ratio-1x1 w-25 hstack justify-content-center rounded-8 bg-page text-muted">1 × 1</div>
+<div class="ratio-1.91x1 w-50 hstack justify-content-center rounded-8 bg-page text-muted">1.91 × 1</div>
+```
+
+## Sizes in pixels
+
+Where a control or a mark needs a fixed size - a narrow field in a toolbar, a column of codes, a thumbnail - the number is the pixels, as with the spaces:
+
+- `w-56` `w-64` `w-80` `w-96` `w-120` `w-160` beside the shares `w-25` to `w-100`; `h-32` `h-40` `h-72` beside `h-25` to `h-100`.
+- `min-w-56` `min-w-120` `min-w-160` `min-w-200` `min-w-240` `min-w-288`; `max-w-80` to `max-w-1200`, with 360 and 560 among them.
+- `size-32` `size-48` `size-64` `size-80` set both sides at once: a square.
+
+```html
+<span class="size-32 rounded-8 bg-page"></span>
+<span class="size-48 rounded-8 bg-page"></span>
+<span class="size-64 rounded-8 bg-page"></span>
+<span class="size-80 rounded-8 bg-page"></span>
+<input class="form-control w-120" type="text" aria-label="Code" value="SAMUI-26">
+```
+
+## Text: kept lines, captions, clamps
+
+`text-pre-wrap` keeps the lines and the spaces a person typed - a note, an address - and still wraps a long line. `tracking-wide` spaces the letters of a caption in capitals. `line-clamp-2` and `line-clamp-3` cut a text after two or three lines with an ellipsis; the whole text stays in the page for a screen reader and for search.
+
+```html
+<p class="text-pre-wrap">Villa 12, Bophut&#10;Koh Samui 84320</p>
+<p class="fs-11 text-uppercase tracking-wide text-muted">Last 30 days</p>
+<p class="line-clamp-2 max-w-360">Ang Thong by speedboat: a day among the forty-two islands of the marine park, with snorkelling at Koh Wua Ta Lap, the emerald lake of Koh Mae Ko and lunch on the beach, back by five.</p>
 ```
 
 ## Shown when focused
@@ -379,6 +406,7 @@ row.classList.add('flash');
 | `text-start` | `text-align: start;` | yes |
 | `text-end` | `text-align: end;` | yes |
 | `text-center` | `text-align: center;` | yes |
+| `fs-11` | `font-size: var(--redz-fs-11);` | - |
 | `fs-12` | `font-size: var(--redz-fs-12);` | - |
 | `fs-14` | `font-size: var(--redz-fs-14);` | - |
 | `fs-16` | `font-size: var(--redz-fs-16);` | - |
@@ -386,6 +414,8 @@ row.classList.add('flash');
 | `fs-20` | `font-size: var(--redz-fs-20);` | - |
 | `fs-24` | `font-size: var(--redz-fs-24);` | - |
 | `fs-32` | `font-size: var(--redz-fs-32);` | - |
+| `fs-40` | `font-size: var(--redz-fs-40);` | - |
+| `fs-48` | `font-size: var(--redz-fs-48);` | - |
 | `fw-400` | `font-weight: 400;` | - |
 | `fw-500` | `font-weight: 500;` | - |
 | `fw-600` | `font-weight: 600;` | - |
@@ -406,6 +436,10 @@ row.classList.add('flash');
 | `text-capitalize` | `text-transform: capitalize;` | - |
 | `text-wrap` | `white-space: normal;` | - |
 | `text-nowrap` | `white-space: nowrap;` | - |
+| `text-pre-wrap` | `white-space: pre-wrap;` | - |
+| `tracking-wide` | `letter-spacing: 0.06em;` | - |
+| `line-clamp-2` | `display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;` | - |
+| `line-clamp-3` | `display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden;` | - |
 | `text-break` | `overflow-wrap: anywhere;` | - |
 | `text-truncate` | `overflow: hidden; text-overflow: ellipsis; white-space: nowrap;` | - |
 | `text-body` | `color: var(--redz-text);` | - |
@@ -477,6 +511,22 @@ row.classList.add('flash');
 | `edge-start-danger` | `border-inline-start: 3px solid var(--redz-danger);` | - |
 | `edge-start-warning` | `border-inline-start: 3px solid var(--redz-warning);` | - |
 | `edge-start-info` | `border-inline-start: 3px solid var(--redz-info);` | - |
+| `edge-top-chart-1` | `border-block-start: 3px solid var(--redz-chart-1);` | - |
+| `edge-top-chart-2` | `border-block-start: 3px solid var(--redz-chart-2);` | - |
+| `edge-top-chart-3` | `border-block-start: 3px solid var(--redz-chart-3);` | - |
+| `edge-top-chart-4` | `border-block-start: 3px solid var(--redz-chart-4);` | - |
+| `edge-top-chart-5` | `border-block-start: 3px solid var(--redz-chart-5);` | - |
+| `edge-top-chart-6` | `border-block-start: 3px solid var(--redz-chart-6);` | - |
+| `edge-top-chart-7` | `border-block-start: 3px solid var(--redz-chart-7);` | - |
+| `edge-top-chart-8` | `border-block-start: 3px solid var(--redz-chart-8);` | - |
+| `edge-start-chart-1` | `border-inline-start: 3px solid var(--redz-chart-1);` | - |
+| `edge-start-chart-2` | `border-inline-start: 3px solid var(--redz-chart-2);` | - |
+| `edge-start-chart-3` | `border-inline-start: 3px solid var(--redz-chart-3);` | - |
+| `edge-start-chart-4` | `border-inline-start: 3px solid var(--redz-chart-4);` | - |
+| `edge-start-chart-5` | `border-inline-start: 3px solid var(--redz-chart-5);` | - |
+| `edge-start-chart-6` | `border-inline-start: 3px solid var(--redz-chart-6);` | - |
+| `edge-start-chart-7` | `border-inline-start: 3px solid var(--redz-chart-7);` | - |
+| `edge-start-chart-8` | `border-inline-start: 3px solid var(--redz-chart-8);` | - |
 | `rounded` | `border-radius: var(--redz-radius-8);` | - |
 | `rounded-full` | `border-radius: 999px;` | - |
 | `rounded-0` | `border-radius: var(--redz-radius-0);` | - |
@@ -498,17 +548,32 @@ row.classList.add('flash');
 | `w-75` | `inline-size: 75%;` | - |
 | `w-100` | `inline-size: 100%;` | - |
 | `w-auto` | `inline-size: auto;` | - |
+| `w-56` | `inline-size: 3.5rem;` | - |
+| `w-64` | `inline-size: 4rem;` | - |
+| `w-80` | `inline-size: 5rem;` | - |
+| `w-96` | `inline-size: 6rem;` | - |
+| `w-120` | `inline-size: 7.5rem;` | - |
+| `w-160` | `inline-size: 10rem;` | - |
 | `h-25` | `block-size: 25%;` | - |
 | `h-50` | `block-size: 50%;` | - |
 | `h-75` | `block-size: 75%;` | - |
 | `h-100` | `block-size: 100%;` | - |
 | `h-auto` | `block-size: auto;` | - |
+| `h-32` | `block-size: 2rem;` | - |
+| `h-40` | `block-size: 2.5rem;` | - |
+| `h-72` | `block-size: 4.5rem;` | - |
+| `size-32` | `inline-size: 2rem; block-size: 2rem;` | - |
+| `size-48` | `inline-size: 3rem; block-size: 3rem;` | - |
+| `size-64` | `inline-size: 4rem; block-size: 4rem;` | - |
+| `size-80` | `inline-size: 5rem; block-size: 5rem;` | - |
 | `max-w-80` | `max-inline-size: 5rem;` | - |
 | `max-w-120` | `max-inline-size: 7.5rem;` | - |
 | `max-w-160` | `max-inline-size: 10rem;` | - |
 | `max-w-240` | `max-inline-size: 15rem;` | - |
 | `max-w-320` | `max-inline-size: 20rem;` | - |
+| `max-w-360` | `max-inline-size: 22.5rem;` | - |
 | `max-w-480` | `max-inline-size: 30rem;` | - |
+| `max-w-560` | `max-inline-size: 35rem;` | - |
 | `max-w-640` | `max-inline-size: 40rem;` | - |
 | `max-w-768` | `max-inline-size: 48rem;` | - |
 | `max-w-960` | `max-inline-size: 60rem;` | - |
@@ -521,6 +586,12 @@ row.classList.add('flash');
 | `max-h-560` | `max-block-size: 35rem;` | - |
 | `max-h-640` | `max-block-size: 40rem;` | - |
 | `min-w-0` | `min-inline-size: 0;` | - |
+| `min-w-56` | `min-inline-size: 3.5rem;` | - |
+| `min-w-120` | `min-inline-size: 7.5rem;` | - |
+| `min-w-160` | `min-inline-size: 10rem;` | - |
+| `min-w-200` | `min-inline-size: 12.5rem;` | - |
+| `min-w-240` | `min-inline-size: 15rem;` | - |
+| `min-w-288` | `min-inline-size: 18rem;` | - |
 | `vw-100` | `inline-size: 100vw;` | - |
 | `min-vw-100` | `min-inline-size: 100vw;` | - |
 | `vh-100` | `block-size: 100dvh;` | - |
@@ -586,6 +657,7 @@ row.classList.add('flash');
 | `ratio-4x3` | `aspect-ratio: 4 / 3;` | - |
 | `ratio-16x9` | `aspect-ratio: 16 / 9;` | - |
 | `ratio-21x9` | `aspect-ratio: 21 / 9;` | - |
+| `ratio-1.91x1` | `aspect-ratio: 1.91 / 1;` | - |
 | `ratio-auto` | `aspect-ratio: auto;` | - |
 | `visible` | `visibility: visible;` | - |
 | `invisible` | `visibility: hidden;` | - |

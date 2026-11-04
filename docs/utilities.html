@@ -74,6 +74,7 @@
 			<a class="app-link" href="calendar.html"><i class="bi bi-calendar3" aria-hidden="true"></i>Calendars</a>
 			<a class="app-link" href="media.html"><i class="bi bi-collection" aria-hidden="true"></i>Media library</a>
 			<a class="app-link" href="table.html"><i class="bi bi-table" aria-hidden="true"></i>Tables</a>
+			<a class="app-link" href="log.html"><i class="bi bi-terminal" aria-hidden="true"></i>Logs and diffs</a>
 			<a class="app-link" href="summary.html"><i class="bi bi-receipt" aria-hidden="true"></i>Summaries and totals</a>
 			<a class="app-link" href="badge.html"><i class="bi bi-patch-check" aria-hidden="true"></i>Badges</a>
 			<a class="app-link" href="dot.html"><i class="bi bi-record-circle" aria-hidden="true"></i>Dots</a>
@@ -129,20 +130,57 @@
 					<h2 id="utilities-scales">Scales</h2>
 					<ul>
 						<li>Space, in px: 0 2 4 8 12 16 20 24 32 40 48 64 - for <code>m</code>, <code>p</code> and <code>gap</code> with their sides: <code>mt</code> <code>mb</code> <code>ms</code> <code>me</code> <code>mx</code> <code>my</code>, the same for <code>p</code>. <code>ms</code> and <code>me</code> are the start and the end of the line, so they turn right to left.</li>
-						<li>Font size: 12 14 16 18 20 24 32; line height: 16 20 24 28; radius: 0 4 6 8 12 16 and <code>rounded-full</code>.</li>
+						<li>Font size: 11 12 14 16 18 20 24 32 40 48 - 11 for the smallest caption, 40 and 48 for one hero number; line height: 16 20 24 28; radius: 0 4 6 8 12 16 and <code>rounded-full</code>.</li>
 						<li>Width prefixes come on placement and spacing - display, flex, grid, gaps, order, text alignment, margins and paddings: <code>md:d-none</code>, <code>lg:p-24</code>.</li>
 					</ul>
 				</section>
 
 				<section class="vstack gap-16" aria-labelledby="utilities-ratio">
 					<h2 id="utilities-ratio">Aspect ratio</h2>
-					<p><code>ratio-1x1</code>, <code>ratio-4x3</code>, <code>ratio-16x9</code> and <code>ratio-21x9</code> keep an element's shape as its width changes - on a video, a map, an image's frame; <code>ratio-auto</code> lets it go. The class goes on the element itself: an image inside a frame fills it with <code>w-100 h-100 object-fit-cover</code>.</p>
+					<p><code>ratio-1x1</code>, <code>ratio-4x3</code>, <code>ratio-16x9</code> and <code>ratio-21x9</code> keep an element's shape as its width changes - on a video, a map, an image's frame; <code>ratio-auto</code> lets it go. <code>ratio-1.91x1</code> is the shape of a link's preview image on social networks, 1200 × 630. The class goes on the element itself: an image inside a frame fills it with <code>w-100 h-100 object-fit-cover</code>.</p>
 					<div class="docs-sample"><div class="docs-example" id="utilities-ratio-boxes">
 						<div class="ratio-16x9 w-50 hstack justify-content-center rounded-8 bg-page text-muted">16 × 9</div>
 						<div class="ratio-1x1 w-25 hstack justify-content-center rounded-8 bg-page text-muted">1 × 1</div>
+						<div class="ratio-1.91x1 w-50 hstack justify-content-center rounded-8 bg-page text-muted">1.91 × 1</div>
 					</div>
 					<pre class="docs-code" tabindex="0"><code>&lt;div class="ratio-16x9 w-50 hstack justify-content-center rounded-8 bg-page text-muted"&gt;16 × 9&lt;/div&gt;
-&lt;div class="ratio-1x1 w-25 hstack justify-content-center rounded-8 bg-page text-muted"&gt;1 × 1&lt;/div&gt;</code></pre></div>
+&lt;div class="ratio-1x1 w-25 hstack justify-content-center rounded-8 bg-page text-muted"&gt;1 × 1&lt;/div&gt;
+&lt;div class="ratio-1.91x1 w-50 hstack justify-content-center rounded-8 bg-page text-muted"&gt;1.91 × 1&lt;/div&gt;</code></pre></div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="utilities-sizes">
+					<h2 id="utilities-sizes">Sizes in pixels</h2>
+					<p>Where a control or a mark needs a fixed size - a narrow field in a toolbar, a column of codes, a thumbnail - the number is the pixels, as with the spaces:</p>
+					<ul>
+						<li><code>w-56</code> <code>w-64</code> <code>w-80</code> <code>w-96</code> <code>w-120</code> <code>w-160</code> beside the shares <code>w-25</code> to <code>w-100</code>; <code>h-32</code> <code>h-40</code> <code>h-72</code> beside <code>h-25</code> to <code>h-100</code>.</li>
+						<li><code>min-w-56</code> <code>min-w-120</code> <code>min-w-160</code> <code>min-w-200</code> <code>min-w-240</code> <code>min-w-288</code>; <code>max-w-80</code> to <code>max-w-1200</code>, with 360 and 560 among them.</li>
+						<li><code>size-32</code> <code>size-48</code> <code>size-64</code> <code>size-80</code> set both sides at once: a square.</li>
+					</ul>
+					<div class="docs-sample"><div class="docs-example" id="utilities-sizes-boxes">
+						<span class="size-32 rounded-8 bg-page"></span>
+						<span class="size-48 rounded-8 bg-page"></span>
+						<span class="size-64 rounded-8 bg-page"></span>
+						<span class="size-80 rounded-8 bg-page"></span>
+						<input class="form-control w-120" type="text" aria-label="Code" value="SAMUI-26">
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;span class="size-32 rounded-8 bg-page"&gt;&lt;/span&gt;
+&lt;span class="size-48 rounded-8 bg-page"&gt;&lt;/span&gt;
+&lt;span class="size-64 rounded-8 bg-page"&gt;&lt;/span&gt;
+&lt;span class="size-80 rounded-8 bg-page"&gt;&lt;/span&gt;
+&lt;input class="form-control w-120" type="text" aria-label="Code" value="SAMUI-26"&gt;</code></pre></div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="utilities-text">
+					<h2 id="utilities-text">Text: kept lines, captions, clamps</h2>
+					<p><code>text-pre-wrap</code> keeps the lines and the spaces a person typed - a note, an address - and still wraps a long line. <code>tracking-wide</code> spaces the letters of a caption in capitals. <code>line-clamp-2</code> and <code>line-clamp-3</code> cut a text after two or three lines with an ellipsis; the whole text stays in the page for a screen reader and for search.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="utilities-text-kinds">
+						<p class="text-pre-wrap">Villa 12, Bophut&#10;Koh Samui 84320</p>
+						<p class="fs-11 text-uppercase tracking-wide text-muted">Last 30 days</p>
+						<p class="line-clamp-2 max-w-360">Ang Thong by speedboat: a day among the forty-two islands of the marine park, with snorkelling at Koh Wua Ta Lap, the emerald lake of Koh Mae Ko and lunch on the beach, back by five.</p>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;p class="text-pre-wrap"&gt;Villa 12, Bophut&amp;#10;Koh Samui 84320&lt;/p&gt;
+&lt;p class="fs-11 text-uppercase tracking-wide text-muted"&gt;Last 30 days&lt;/p&gt;
+&lt;p class="line-clamp-2 max-w-360"&gt;Ang Thong by speedboat: a day among the forty-two islands of the marine park, with snorkelling at Koh Wua Ta Lap, the emerald lake of Koh Mae Ko and lunch on the beach, back by five.&lt;/p&gt;</code></pre></div>
 				</section>
 
 				<section class="vstack gap-16" aria-labelledby="utilities-focus">
@@ -513,6 +551,7 @@ row.classList.add('flash');</code></pre>
 									<tr><td><code>text-start</code></td><td><code>text-align: start;</code></td><td>yes</td></tr>
 									<tr><td><code>text-end</code></td><td><code>text-align: end;</code></td><td>yes</td></tr>
 									<tr><td><code>text-center</code></td><td><code>text-align: center;</code></td><td>yes</td></tr>
+									<tr><td><code>fs-11</code></td><td><code>font-size: var(--redz-fs-11);</code></td><td>-</td></tr>
 									<tr><td><code>fs-12</code></td><td><code>font-size: var(--redz-fs-12);</code></td><td>-</td></tr>
 									<tr><td><code>fs-14</code></td><td><code>font-size: var(--redz-fs-14);</code></td><td>-</td></tr>
 									<tr><td><code>fs-16</code></td><td><code>font-size: var(--redz-fs-16);</code></td><td>-</td></tr>
@@ -520,6 +559,8 @@ row.classList.add('flash');</code></pre>
 									<tr><td><code>fs-20</code></td><td><code>font-size: var(--redz-fs-20);</code></td><td>-</td></tr>
 									<tr><td><code>fs-24</code></td><td><code>font-size: var(--redz-fs-24);</code></td><td>-</td></tr>
 									<tr><td><code>fs-32</code></td><td><code>font-size: var(--redz-fs-32);</code></td><td>-</td></tr>
+									<tr><td><code>fs-40</code></td><td><code>font-size: var(--redz-fs-40);</code></td><td>-</td></tr>
+									<tr><td><code>fs-48</code></td><td><code>font-size: var(--redz-fs-48);</code></td><td>-</td></tr>
 									<tr><td><code>fw-400</code></td><td><code>font-weight: 400;</code></td><td>-</td></tr>
 									<tr><td><code>fw-500</code></td><td><code>font-weight: 500;</code></td><td>-</td></tr>
 									<tr><td><code>fw-600</code></td><td><code>font-weight: 600;</code></td><td>-</td></tr>
@@ -540,6 +581,10 @@ row.classList.add('flash');</code></pre>
 									<tr><td><code>text-capitalize</code></td><td><code>text-transform: capitalize;</code></td><td>-</td></tr>
 									<tr><td><code>text-wrap</code></td><td><code>white-space: normal;</code></td><td>-</td></tr>
 									<tr><td><code>text-nowrap</code></td><td><code>white-space: nowrap;</code></td><td>-</td></tr>
+									<tr><td><code>text-pre-wrap</code></td><td><code>white-space: pre-wrap;</code></td><td>-</td></tr>
+									<tr><td><code>tracking-wide</code></td><td><code>letter-spacing: 0.06em;</code></td><td>-</td></tr>
+									<tr><td><code>line-clamp-2</code></td><td><code>display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;</code></td><td>-</td></tr>
+									<tr><td><code>line-clamp-3</code></td><td><code>display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden;</code></td><td>-</td></tr>
 									<tr><td><code>text-break</code></td><td><code>overflow-wrap: anywhere;</code></td><td>-</td></tr>
 									<tr><td><code>text-truncate</code></td><td><code>overflow: hidden; text-overflow: ellipsis; white-space: nowrap;</code></td><td>-</td></tr>
 									<tr><td><code>text-body</code></td><td><code>color: var(--redz-text);</code></td><td>-</td></tr>
@@ -611,6 +656,22 @@ row.classList.add('flash');</code></pre>
 									<tr><td><code>edge-start-danger</code></td><td><code>border-inline-start: 3px solid var(--redz-danger);</code></td><td>-</td></tr>
 									<tr><td><code>edge-start-warning</code></td><td><code>border-inline-start: 3px solid var(--redz-warning);</code></td><td>-</td></tr>
 									<tr><td><code>edge-start-info</code></td><td><code>border-inline-start: 3px solid var(--redz-info);</code></td><td>-</td></tr>
+									<tr><td><code>edge-top-chart-1</code></td><td><code>border-block-start: 3px solid var(--redz-chart-1);</code></td><td>-</td></tr>
+									<tr><td><code>edge-top-chart-2</code></td><td><code>border-block-start: 3px solid var(--redz-chart-2);</code></td><td>-</td></tr>
+									<tr><td><code>edge-top-chart-3</code></td><td><code>border-block-start: 3px solid var(--redz-chart-3);</code></td><td>-</td></tr>
+									<tr><td><code>edge-top-chart-4</code></td><td><code>border-block-start: 3px solid var(--redz-chart-4);</code></td><td>-</td></tr>
+									<tr><td><code>edge-top-chart-5</code></td><td><code>border-block-start: 3px solid var(--redz-chart-5);</code></td><td>-</td></tr>
+									<tr><td><code>edge-top-chart-6</code></td><td><code>border-block-start: 3px solid var(--redz-chart-6);</code></td><td>-</td></tr>
+									<tr><td><code>edge-top-chart-7</code></td><td><code>border-block-start: 3px solid var(--redz-chart-7);</code></td><td>-</td></tr>
+									<tr><td><code>edge-top-chart-8</code></td><td><code>border-block-start: 3px solid var(--redz-chart-8);</code></td><td>-</td></tr>
+									<tr><td><code>edge-start-chart-1</code></td><td><code>border-inline-start: 3px solid var(--redz-chart-1);</code></td><td>-</td></tr>
+									<tr><td><code>edge-start-chart-2</code></td><td><code>border-inline-start: 3px solid var(--redz-chart-2);</code></td><td>-</td></tr>
+									<tr><td><code>edge-start-chart-3</code></td><td><code>border-inline-start: 3px solid var(--redz-chart-3);</code></td><td>-</td></tr>
+									<tr><td><code>edge-start-chart-4</code></td><td><code>border-inline-start: 3px solid var(--redz-chart-4);</code></td><td>-</td></tr>
+									<tr><td><code>edge-start-chart-5</code></td><td><code>border-inline-start: 3px solid var(--redz-chart-5);</code></td><td>-</td></tr>
+									<tr><td><code>edge-start-chart-6</code></td><td><code>border-inline-start: 3px solid var(--redz-chart-6);</code></td><td>-</td></tr>
+									<tr><td><code>edge-start-chart-7</code></td><td><code>border-inline-start: 3px solid var(--redz-chart-7);</code></td><td>-</td></tr>
+									<tr><td><code>edge-start-chart-8</code></td><td><code>border-inline-start: 3px solid var(--redz-chart-8);</code></td><td>-</td></tr>
 									<tr><td><code>rounded</code></td><td><code>border-radius: var(--redz-radius-8);</code></td><td>-</td></tr>
 									<tr><td><code>rounded-full</code></td><td><code>border-radius: 999px;</code></td><td>-</td></tr>
 									<tr><td><code>rounded-0</code></td><td><code>border-radius: var(--redz-radius-0);</code></td><td>-</td></tr>
@@ -632,17 +693,32 @@ row.classList.add('flash');</code></pre>
 									<tr><td><code>w-75</code></td><td><code>inline-size: 75%;</code></td><td>-</td></tr>
 									<tr><td><code>w-100</code></td><td><code>inline-size: 100%;</code></td><td>-</td></tr>
 									<tr><td><code>w-auto</code></td><td><code>inline-size: auto;</code></td><td>-</td></tr>
+									<tr><td><code>w-56</code></td><td><code>inline-size: 3.5rem;</code></td><td>-</td></tr>
+									<tr><td><code>w-64</code></td><td><code>inline-size: 4rem;</code></td><td>-</td></tr>
+									<tr><td><code>w-80</code></td><td><code>inline-size: 5rem;</code></td><td>-</td></tr>
+									<tr><td><code>w-96</code></td><td><code>inline-size: 6rem;</code></td><td>-</td></tr>
+									<tr><td><code>w-120</code></td><td><code>inline-size: 7.5rem;</code></td><td>-</td></tr>
+									<tr><td><code>w-160</code></td><td><code>inline-size: 10rem;</code></td><td>-</td></tr>
 									<tr><td><code>h-25</code></td><td><code>block-size: 25%;</code></td><td>-</td></tr>
 									<tr><td><code>h-50</code></td><td><code>block-size: 50%;</code></td><td>-</td></tr>
 									<tr><td><code>h-75</code></td><td><code>block-size: 75%;</code></td><td>-</td></tr>
 									<tr><td><code>h-100</code></td><td><code>block-size: 100%;</code></td><td>-</td></tr>
 									<tr><td><code>h-auto</code></td><td><code>block-size: auto;</code></td><td>-</td></tr>
+									<tr><td><code>h-32</code></td><td><code>block-size: 2rem;</code></td><td>-</td></tr>
+									<tr><td><code>h-40</code></td><td><code>block-size: 2.5rem;</code></td><td>-</td></tr>
+									<tr><td><code>h-72</code></td><td><code>block-size: 4.5rem;</code></td><td>-</td></tr>
+									<tr><td><code>size-32</code></td><td><code>inline-size: 2rem; block-size: 2rem;</code></td><td>-</td></tr>
+									<tr><td><code>size-48</code></td><td><code>inline-size: 3rem; block-size: 3rem;</code></td><td>-</td></tr>
+									<tr><td><code>size-64</code></td><td><code>inline-size: 4rem; block-size: 4rem;</code></td><td>-</td></tr>
+									<tr><td><code>size-80</code></td><td><code>inline-size: 5rem; block-size: 5rem;</code></td><td>-</td></tr>
 									<tr><td><code>max-w-80</code></td><td><code>max-inline-size: 5rem;</code></td><td>-</td></tr>
 									<tr><td><code>max-w-120</code></td><td><code>max-inline-size: 7.5rem;</code></td><td>-</td></tr>
 									<tr><td><code>max-w-160</code></td><td><code>max-inline-size: 10rem;</code></td><td>-</td></tr>
 									<tr><td><code>max-w-240</code></td><td><code>max-inline-size: 15rem;</code></td><td>-</td></tr>
 									<tr><td><code>max-w-320</code></td><td><code>max-inline-size: 20rem;</code></td><td>-</td></tr>
+									<tr><td><code>max-w-360</code></td><td><code>max-inline-size: 22.5rem;</code></td><td>-</td></tr>
 									<tr><td><code>max-w-480</code></td><td><code>max-inline-size: 30rem;</code></td><td>-</td></tr>
+									<tr><td><code>max-w-560</code></td><td><code>max-inline-size: 35rem;</code></td><td>-</td></tr>
 									<tr><td><code>max-w-640</code></td><td><code>max-inline-size: 40rem;</code></td><td>-</td></tr>
 									<tr><td><code>max-w-768</code></td><td><code>max-inline-size: 48rem;</code></td><td>-</td></tr>
 									<tr><td><code>max-w-960</code></td><td><code>max-inline-size: 60rem;</code></td><td>-</td></tr>
@@ -655,6 +731,12 @@ row.classList.add('flash');</code></pre>
 									<tr><td><code>max-h-560</code></td><td><code>max-block-size: 35rem;</code></td><td>-</td></tr>
 									<tr><td><code>max-h-640</code></td><td><code>max-block-size: 40rem;</code></td><td>-</td></tr>
 									<tr><td><code>min-w-0</code></td><td><code>min-inline-size: 0;</code></td><td>-</td></tr>
+									<tr><td><code>min-w-56</code></td><td><code>min-inline-size: 3.5rem;</code></td><td>-</td></tr>
+									<tr><td><code>min-w-120</code></td><td><code>min-inline-size: 7.5rem;</code></td><td>-</td></tr>
+									<tr><td><code>min-w-160</code></td><td><code>min-inline-size: 10rem;</code></td><td>-</td></tr>
+									<tr><td><code>min-w-200</code></td><td><code>min-inline-size: 12.5rem;</code></td><td>-</td></tr>
+									<tr><td><code>min-w-240</code></td><td><code>min-inline-size: 15rem;</code></td><td>-</td></tr>
+									<tr><td><code>min-w-288</code></td><td><code>min-inline-size: 18rem;</code></td><td>-</td></tr>
 									<tr><td><code>vw-100</code></td><td><code>inline-size: 100vw;</code></td><td>-</td></tr>
 									<tr><td><code>min-vw-100</code></td><td><code>min-inline-size: 100vw;</code></td><td>-</td></tr>
 									<tr><td><code>vh-100</code></td><td><code>block-size: 100dvh;</code></td><td>-</td></tr>
@@ -720,6 +802,7 @@ row.classList.add('flash');</code></pre>
 									<tr><td><code>ratio-4x3</code></td><td><code>aspect-ratio: 4 / 3;</code></td><td>-</td></tr>
 									<tr><td><code>ratio-16x9</code></td><td><code>aspect-ratio: 16 / 9;</code></td><td>-</td></tr>
 									<tr><td><code>ratio-21x9</code></td><td><code>aspect-ratio: 21 / 9;</code></td><td>-</td></tr>
+									<tr><td><code>ratio-1.91x1</code></td><td><code>aspect-ratio: 1.91 / 1;</code></td><td>-</td></tr>
 									<tr><td><code>ratio-auto</code></td><td><code>aspect-ratio: auto;</code></td><td>-</td></tr>
 									<tr><td><code>visible</code></td><td><code>visibility: visible;</code></td><td>-</td></tr>
 									<tr><td><code>invisible</code></td><td><code>visibility: hidden;</code></td><td>-</td></tr>

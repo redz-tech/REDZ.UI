@@ -16,6 +16,22 @@ The plain tile is in the accent; the tones and `icon-tile-sm` follow Bootstrap's
 <span class="icon-tile icon-tile-warning"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></span>
 <span class="icon-tile icon-tile-info"><i class="bi bi-info-circle" aria-hidden="true"></i></span>
 <span class="icon-tile icon-tile-sm"><i class="bi bi-upload" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-lg"><i class="bi bi-building" aria-hidden="true"></i></span>
+```
+
+### Categories
+
+`icon-tile-chart-1` to `icon-tile-chart-8` take the charts' eight colors, for a category, not a state - the tile of a kind of record matches its series in a [chart](chart.md) and its [dot](dot.md#dot-categories).
+
+```html
+<span class="icon-tile icon-tile-chart-1"><i class="bi bi-airplane" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-chart-2"><i class="bi bi-car-front" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-chart-3"><i class="bi bi-tree" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-chart-4"><i class="bi bi-sun" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-chart-5"><i class="bi bi-flower1" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-chart-6"><i class="bi bi-bicycle" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-chart-7"><i class="bi bi-moon-stars" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-chart-8"><i class="bi bi-heart" aria-hidden="true"></i></span>
 ```
 
 ### In a title
@@ -34,6 +50,6 @@ The plain tile is in the accent; the tones and `icon-tile-sm` follow Bootstrap's
 
 ## Tokens
 
-From [`css/components/icon-tile.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/icon-tile.css). It declares `--redz-tile-bg`, `--redz-tile-fg` on its root, never on rows or items.
+From [`css/components/icon-tile.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/icon-tile.css). It declares `--redz-tile-bg`, `--redz-tile-fg`, `--redz-tile-chart` on its root, never on rows or items.
 
-It reads the theme's `--redz-primary-subtle`, `--redz-primary`, `--redz-radius-12`, `--redz-radius-8`, `--redz-secondary-subtle`, `--redz-secondary`, `--redz-success-subtle`, `--redz-success`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-info-subtle`, `--redz-info`, `--redz-color`.
+It reads the theme's `--redz-primary-subtle`, `--redz-primary`, `--redz-radius-12`, `--redz-radius-8`, `--redz-radius-16`, `--redz-bg`, `--redz-text`, `--redz-chart-1`, `--redz-chart-2`, `--redz-chart-3`, `--redz-chart-4`, `--redz-chart-5`, `--redz-chart-6`, `--redz-chart-7`, `--redz-chart-8`, `--redz-secondary-subtle`, `--redz-secondary`, `--redz-success-subtle`, `--redz-success`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-info-subtle`, `--redz-info`, `--redz-color`.
