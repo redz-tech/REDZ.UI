@@ -465,8 +465,7 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `show` | - | state | the browser's [open] and :popover-open |
 | `showing` | - | state | the browser's [open] and :popover-open |
 | `small` | - | review | fs-12, or the <small> element |
-| `sticky-bottom` | - | review | position-sticky with top-0 or bottom-0 |
-| `sticky-top` | - | review | position-sticky with top-0 or bottom-0 |
+| `sticky-bottom` | - | review | position-sticky with bottom-0 |
 | `tab-content` | - | remove | panels are siblings with role="tabpanel", hidden when not selected |
 | `tab-pane` | - | remove | panels are siblings with role="tabpanel", hidden when not selected |
 | `table-active` | - | review | aria-selected or aria-current on the row |

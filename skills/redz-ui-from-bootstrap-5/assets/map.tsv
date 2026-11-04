@@ -1884,18 +1884,18 @@ spinner-grow-sm		review	class	spinner	the spinner is 1 em: set the font size
 start-0	start-0	same	class	utilities	
 start-100	start-100	same	class	utilities	
 start-50	start-50	same	class	utilities	
-sticky-bottom		review	class	utilities	position-sticky with top-0 or bottom-0
-sticky-lg-bottom		review	class	utilities	position-sticky with top-0 or bottom-0
-sticky-lg-top		review	class	utilities	position-sticky with top-0 or bottom-0
-sticky-md-bottom		review	class	utilities	position-sticky with top-0 or bottom-0
-sticky-md-top		review	class	utilities	position-sticky with top-0 or bottom-0
-sticky-sm-bottom		review	class	utilities	position-sticky with top-0 or bottom-0
-sticky-sm-top		review	class	utilities	position-sticky with top-0 or bottom-0
-sticky-top		review	class	utilities	position-sticky with top-0 or bottom-0
-sticky-xl-bottom		review	class	utilities	position-sticky with top-0 or bottom-0
-sticky-xl-top		review	class	utilities	position-sticky with top-0 or bottom-0
-sticky-xxl-bottom		review	class	utilities	position-sticky with top-0 or bottom-0
-sticky-xxl-top		review	class	utilities	position-sticky with top-0 or bottom-0
+sticky-bottom		review	class	utilities	position-sticky with bottom-0
+sticky-lg-bottom		review	class	utilities	position-sticky with bottom-0
+sticky-lg-top	sticky-top	review	class	utilities	no lg: form here; set it at that width in the module's CSS, or rethink the layout. in the app shell it sticks under the header, elsewhere at --redz-sticky-top
+sticky-md-bottom		review	class	utilities	position-sticky with bottom-0
+sticky-md-top	sticky-top	review	class	utilities	no md: form here; set it at that width in the module's CSS, or rethink the layout. in the app shell it sticks under the header, elsewhere at --redz-sticky-top
+sticky-sm-bottom		review	class	utilities	position-sticky with bottom-0
+sticky-sm-top	sticky-top	review	class	utilities	no sm: form here; set it at that width in the module's CSS, or rethink the layout. in the app shell it sticks under the header, elsewhere at --redz-sticky-top
+sticky-top	sticky-top	same	class	utilities	in the app shell it sticks under the header, elsewhere at --redz-sticky-top
+sticky-xl-bottom		review	class	utilities	position-sticky with bottom-0
+sticky-xl-top	sticky-top	review	class	utilities	no xl: form here; set it at that width in the module's CSS, or rethink the layout. in the app shell it sticks under the header, elsewhere at --redz-sticky-top
+sticky-xxl-bottom		review	class	utilities	position-sticky with bottom-0
+sticky-xxl-top	sticky-top	review	class	utilities	no 2xl: form here; set it at that width in the module's CSS, or rethink the layout. in the app shell it sticks under the header, elsewhere at --redz-sticky-top
 stretched-link	stretched-link	same	class	utilities	a card is its own positioned parent
 tab-content		remove	class	nav	panels are siblings with role="tabpanel", hidden when not selected
 tab-pane		remove	class	nav	panels are siblings with role="tabpanel", hidden when not selected

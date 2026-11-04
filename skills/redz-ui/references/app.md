@@ -50,6 +50,6 @@ A shell without `app-sidebar` - a page whose role has no sections - is one colum
 
 ## Tokens
 
-From [`css/components/app.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/app.css). It declares `--redz-btn-bg`, `--redz-btn-fg`, `--redz-btn-hover` on its root, never on rows or items.
+From [`css/components/app.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/app.css). It declares `--redz-sticky-top`, `--redz-btn-bg`, `--redz-btn-fg`, `--redz-btn-hover` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-8`, `--redz-space-12`, `--redz-bg-page`, `--redz-text`, `--redz-radius-8`, `--redz-primary`, `--redz-primary-contrast`, `--redz-fs-12`, `--redz-bg`, `--redz-text-muted`, `--redz-border`, `--redz-border-strong`, `--redz-space-4`, `--redz-space-16`, `--redz-bg-hover`, `--redz-shadow-1`, `--redz-space-24`, `--redz-space-32`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-3`.
+It reads the theme's `--redz-space-12`, `--redz-space-8`, `--redz-bg-page`, `--redz-text`, `--redz-radius-8`, `--redz-primary`, `--redz-primary-contrast`, `--redz-fs-12`, `--redz-bg`, `--redz-text-muted`, `--redz-border`, `--redz-border-strong`, `--redz-space-4`, `--redz-space-16`, `--redz-bg-hover`, `--redz-shadow-1`, `--redz-space-24`, `--redz-space-32`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-3`.

@@ -71,6 +71,21 @@ The parent sets the grid; each card measures itself. Under 576 px of the region 
 </div>
 ```
 
+### A state on its edge
+
+The utility `edge-top-{tone}` draws a 3 px line of a state on a card's top edge, instead of coloring its frame; `edge-start-{tone}` does it on the start edge of a row. The words still say the state.
+
+```html
+<div class="grid sm:cols-2 gap-16">
+	<section class="card edge-top-success" aria-labelledby="card-edge-a"><div class="card-header"><h2 id="card-edge-a">Dispatcher</h2></div><div class="card-body"><p>Running, last beat 4 s ago</p></div></section>
+	<section class="card edge-top-warning" aria-labelledby="card-edge-b"><div class="card-header"><h2 id="card-edge-b">Mail queue</h2></div><div class="card-body"><p>Late by 6 minutes</p></div></section>
+</div>
+<ul class="list-group" aria-label="Plan items">
+	<li class="list-group-item hstack gap-12 edge-start-primary"><span>Online booking<span class="d-block fs-12 text-muted">Calendar, deposits, reminders</span></span><span class="ms-auto tabular-nums">490 THB</span></li>
+	<li class="list-group-item hstack gap-12 edge-start-success bg-page"><span>Site and hosting<span class="d-block fs-12 text-muted">Included in every plan</span></span><span class="ms-auto text-muted">Included</span></li>
+</ul>
+```
+
 ## Accessibility
 
 - A card that is a part of the page is a `<section>` with `aria-labelledby` pointing at its heading; a card in a list of cards is an `<article>` or a list item.

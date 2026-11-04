@@ -109,6 +109,30 @@
 		--redz-carousel-peek: 24px;
 	}
 
+	#qr-small {
+		--redz-qr-size: 7.5rem;
+	}
+
+	#page-center-example {
+		padding: 0;
+		background: var(--redz-bg-page);
+	}
+
+	#page-center-example > .page-center {
+		flex: 1 1 auto;
+		min-block-size: 40rem;
+	}
+
+	:is(#kiosk-example, #kiosk-states) {
+		padding: 0;
+		overflow: hidden;
+	}
+
+	:is(#kiosk-example, #kiosk-states) > .kiosk {
+		flex: 1 1 auto;
+		min-block-size: 36rem;
+	}
+
 	.docs-sample > .docs-example {
 		border-end-start-radius: 0;
 		border-end-end-radius: 0;

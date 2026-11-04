@@ -1,0 +1,24 @@
+@layer components {
+	.qr {
+		display: inline-block;
+		padding: var(--redz-space-8);
+		border: 1px solid var(--redz-border);
+		border-radius: var(--redz-radius-8);
+		background: #fff;
+		color: #000;
+		color-scheme: light;
+		line-height: 0;
+		forced-color-adjust: none;
+		-webkit-print-color-adjust: exact;
+		print-color-adjust: exact;
+	}
+
+	.qr > :is(svg, img, canvas) {
+		display: block;
+		inline-size: var(--redz-qr-size, 11rem);
+		block-size: auto;
+		aspect-ratio: 1;
+		shape-rendering: crispEdges;
+		image-rendering: pixelated;
+	}
+}

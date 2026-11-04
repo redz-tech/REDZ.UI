@@ -27,6 +27,8 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 - [Combobox](docs/combobox.md): A choice from a list long enough to search: a button in the look of a select shows the value and opens a panel with a search field and the list. One core - the WAI-ARIA combobox with a listbox - also drives the command palette and a list in the page.
 - [Inline edit](docs/inline-edit.md): A value changed where it shows - a title in a list, a name on a page - behind a real Edit button, in a small form of its own that saves or cancels.
 - [File upload](docs/upload.md): Photos, documents, a price list: chosen, dropped or pasted, each file checked at once and sent on its own, with its own progress and its own error.
+- [Choice tiles](docs/choice.md): A group of radios or checks drawn as tiles - a package, a plan, a way to pay - the chosen one the only thing in color.
+- [PIN pad](docs/pin.md): A short number that unlocks a trusted device: dots that fill as it is typed and a keypad for a finger, while the keyboard types as it always does.
 - [Editor](docs/editor.md): A text editor for REDZ.UI markup, a package of the release linked apart: prose edited in place, the library's components as blocks, and a frame of its own where no script of the text ever runs.
 
 ## Content
@@ -42,6 +44,9 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 - [Dots](docs/dot.md): An 8 px dot of a tone beside a word: online, live, the color of a site. The dot repeats what the word says; it never says it alone.
 - [Avatars](docs/avatar.md): A round mark of a person: their initials in the accent, 32 px or 24 px with avatar-sm.
 - [Icon tiles](docs/icon-tile.md): A rounded square with an icon in it: the mark of a screen's subject in its title, of a kind of record, of a drop zone.
+- [Stat tiles](docs/stat.md): A number with its label and an icon in a tone - and, as a button, the filter for what it counts: the numbers a person reads are the buttons they press.
+- [QR codes](docs/qr.md): A white tile for a QR code: a scanner reads dark modules on white, so the tile stays white in the dark theme, in forced colors and on paper.
+- [Steps and timelines](docs/step-list.md): The steps of a long job as it runs - a release, a publish, an install - each with what it found, and the events of a record's history, one under the other.
 - [Empty states](docs/empty-state.md): What a list, a panel or a search shows when it has nothing yet: what would be here, and the one action that starts it. And the drop zone of a file field.
 - [Placeholders](docs/placeholder.md): Grey bars in the shape of content that is on its way - the first load of a page or a panel. A region that already has content and reloads it gets an overlay instead: see Busy.
 - [Prose](docs/prose.md): Long text that comes from an editor or from Markdown, where no element carries a class: a page's content in a preview, a help page, a note. One class on the wrapper sets the size, the rhythm and the measure of everything inside.
@@ -71,7 +76,12 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 - [Pagination](docs/pagination.md): Links to the pages of a long list, with Bootstrap's names: the current page says so in aria-current="page", a page there is none of says so in aria-disabled. A list that pages by "the next 50" shows only previous, next and where you are.
 - [Steppers](docs/stepper.md): The steps of a task that takes more than one screen: a booking, an import, the first run of a site. A list of steps in order, the one the person is on marked by the attribute a screen reader says, the ones before it done by their place.
 - [Command palette](docs/palette.md): One search for every place and action of an app, opened from anywhere by ⌘K or Ctrl K: a dialog with the combobox's search and a list of links and buttons - Enter opens a page by its plain link or runs a button's command.
+
+## Pages
+
 - [App shell](docs/app.md): The frame of an admin screen: app with a header, a side navigation, the main column and an optional side column. Below 1024 px the side navigation becomes a panel opened from the header. These docs stand in it. A site's header is a navbar.
+- [Centered page](docs/page-center.md): A page without the app shell: the brand, one card and a way on, in a column at the middle of the window - sign-in, registration, a password reset, a second factor, an unlock, an enrolment.
+- [Kiosk](docs/kiosk.md): A full screen for a tablet that stays on at a door: a name on top, big language buttons, a huge clock while it waits, one round state and one or two huge actions - read from across a room and pressed with a glove.
 
 ## Skills
 

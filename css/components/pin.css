@@ -1,0 +1,102 @@
+@layer components {
+	.pin {
+		display: grid;
+		justify-items: center;
+		gap: var(--redz-space-24);
+	}
+
+	.pin > input,
+	.pin-dots {
+		grid-area: 1 / 1;
+	}
+
+	.pin > input {
+		z-index: 1;
+		inline-size: 100%;
+		min-block-size: 3rem;
+		border: 0;
+		border-radius: var(--redz-radius-8);
+		background: transparent;
+		color: transparent;
+		caret-color: transparent;
+		font-size: 16px;
+	}
+
+	.pin > input::selection {
+		background: transparent;
+	}
+
+	.pin > input:focus-visible {
+		outline: 2px solid var(--redz-focus);
+	}
+
+	.pin-dots {
+		display: flex;
+		align-items: center;
+		gap: var(--redz-space-12);
+		min-block-size: 3rem;
+	}
+
+	.pin-dots > span {
+		inline-size: 0.875rem;
+		block-size: 0.875rem;
+		border: 2px solid var(--redz-border-strong);
+		border-radius: 50%;
+	}
+
+	.pin-dots > [data-filled] {
+		border-color: var(--redz-primary);
+		background: var(--redz-primary);
+	}
+
+	.pin:has(> input[aria-invalid="true"]) > .pin-dots > span {
+		border-color: var(--redz-danger);
+	}
+
+	.pin-keypad {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--redz-space-8);
+		inline-size: min(100%, 16.5rem);
+	}
+
+	.pin-keypad > .btn {
+		min-block-size: 3.5rem;
+		font-size: var(--redz-fs-24);
+		font-weight: 500;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.pin[aria-busy="true"] > :is(.pin-dots, .pin-keypad) {
+		opacity: 0.5;
+		pointer-events: none;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.pin:has(> input[aria-invalid="true"]) > .pin-dots {
+			animation: pin-shake 0.4s;
+		}
+
+		.pin-keypad > .btn:active {
+			scale: 0.97;
+		}
+	}
+
+	@keyframes pin-shake {
+		25% {
+			translate: -0.5rem;
+		}
+
+		75% {
+			translate: 0.5rem;
+		}
+	}
+
+	@media (forced-colors: active) {
+		.pin-dots > [data-filled] {
+			forced-color-adjust: none;
+			border-color: CanvasText;
+			background: CanvasText;
+		}
+	}
+}

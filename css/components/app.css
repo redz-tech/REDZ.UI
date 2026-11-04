@@ -4,6 +4,7 @@
 	}
 
 	.app {
+		--redz-sticky-top: calc(3.25rem + var(--redz-space-12));
 		display: grid;
 		grid-template-columns: 15rem minmax(0, 1fr);
 		grid-template-rows: auto 1fr;

@@ -1,0 +1,27 @@
+<header class="vstack gap-8">
+	<h1>Stat tiles</h1>
+	<p class="docs-lead">A number with its label and an icon in a tone - and, as a button, the filter for what it counts: the numbers a person reads are the buttons they press.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="stat-examples">
+	<h2 id="stat-examples">Examples</h2>
+	<p><code>stat</code> holds an <a href="icon-tile.html">icon tile</a>, a <code>stat-value</code> and a <code>stat-label</code>; <code>stat-primary</code>, <code>stat-success</code>, <code>stat-warning</code>, <code>stat-danger</code>, <code>stat-info</code> and <code>stat-secondary</code> - a quiet zero - tint the icon and the number. As a <code>button</code> with <code>aria-pressed</code> a tile is a toggle: pressed, it wears its tone's border and the list below shows only what it counts. A row is a grid: two tiles a row on a phone, four from <code>md:</code>.</p>
+	<div class="docs-example docs-example-stack" id="stat-filter">
+		<div class="grid cols-2 md:cols-4 gap-12" role="group" aria-label="Show agents">
+			<button class="stat" type="button" aria-pressed="true"><span class="icon-tile"><i class="bi bi-cpu" aria-hidden="true"></i></span><span><span class="stat-value">24</span><span class="stat-label">All agents</span></span></button>
+			<button class="stat stat-primary" type="button" aria-pressed="false"><span class="icon-tile"><i class="bi bi-play-circle" aria-hidden="true"></i></span><span><span class="stat-value">3</span><span class="stat-label">Running</span></span></button>
+			<button class="stat stat-warning" type="button" aria-pressed="false"><span class="icon-tile"><i class="bi bi-clock-history" aria-hidden="true"></i></span><span><span class="stat-value">2</span><span class="stat-label">Late</span></span></button>
+			<button class="stat stat-secondary" type="button" aria-pressed="false"><span class="icon-tile"><i class="bi bi-x-octagon" aria-hidden="true"></i></span><span><span class="stat-value">0</span><span class="stat-label">Failed</span></span></button>
+		</div>
+	</div>
+	<p>Without a button it only reads: a <code>div class="stat"</code>.</p>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="stat-access">
+	<h2 id="stat-access">Accessibility</h2>
+	<ul>
+		<li>A tile button's name is its number and its label, "2 Late"; <code>aria-pressed</code> says it filters. Put the row in a <code>group</code> with a name.</li>
+		<li>The tone repeats the label; it never says alone what the tile counts.</li>
+		<li>Pressed, the tile also draws an outline in forced colors.</li>
+	</ul>
+</section>

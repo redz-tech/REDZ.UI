@@ -28,6 +28,33 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 <span class="text-muted">The link above shows on focus.</span>
 ```
 
+## A flash and a sticky panel
+
+`flash` lights an element's ground once and lets it fade - a row a click elsewhere changed. To light it again, take the class off, let the browser lay the element out, and put the class back. `sticky-top` keeps an element at the top while the page scrolls: under the app header in the shell, at `--redz-sticky-top` anywhere else.
+
+```html
+<button class="btn" type="button" data-docs-run="flash" aria-controls="utilities-flash-target">Change the row</button>
+<span class="p-8 rounded-8" id="utilities-flash-target">A row a click elsewhere changed</span>
+```
+
+```js
+row.classList.remove('flash');
+void row.offsetWidth;
+row.classList.add('flash');
+```
+
+## Off the screen
+
+`offscreen` puts an element outside the page, where no one sees it, yet it stays rendered: not `display: none`, `visibility: hidden` or the clip of `visually-hidden`, which bots look for. Two uses:
+
+- A form's trap for bots: a field a person never fills. Its wrapper carries `aria-hidden="true"` so no screen reader meets it; the field has `tabindex="-1"`, `autocomplete="off"` and a plausible name, such as `company_url`. The server refuses a form that comes back with it filled. Name the class and the field plainly: bots skip what is called a honeypot.
+- A field that takes what a keyboard-wedge reader types - a badge or a fob read at a kiosk - kept focused while nothing else is.
+
+```html
+<div class="offscreen" aria-hidden="true"><label>Company site<input type="text" name="company_url" tabindex="-1" autocomplete="off"></label></div>
+<span class="text-muted">A field is here, off the screen.</span>
+```
+
 ## Dividers, rules and icon links
 
 `divide-x` and `divide-y` on a parent draw a line between its children, across or down, with no class on any child. `vr` is a rule between the items of a row. `icon-link` lines an icon up with the words of a link.
@@ -436,6 +463,18 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 | `border-danger-subtle` | `border-color: color-mix(in oklch, var(--redz-danger) 35%, var(--redz-border));` | - |
 | `border-warning-subtle` | `border-color: color-mix(in oklch, var(--redz-warning) 35%, var(--redz-border));` | - |
 | `border-info-subtle` | `border-color: color-mix(in oklch, var(--redz-info) 35%, var(--redz-border));` | - |
+| `edge-top-primary` | `border-block-start: 3px solid var(--redz-primary);` | - |
+| `edge-top-secondary` | `border-block-start: 3px solid var(--redz-secondary);` | - |
+| `edge-top-success` | `border-block-start: 3px solid var(--redz-success);` | - |
+| `edge-top-danger` | `border-block-start: 3px solid var(--redz-danger);` | - |
+| `edge-top-warning` | `border-block-start: 3px solid var(--redz-warning);` | - |
+| `edge-top-info` | `border-block-start: 3px solid var(--redz-info);` | - |
+| `edge-start-primary` | `border-inline-start: 3px solid var(--redz-primary);` | - |
+| `edge-start-secondary` | `border-inline-start: 3px solid var(--redz-secondary);` | - |
+| `edge-start-success` | `border-inline-start: 3px solid var(--redz-success);` | - |
+| `edge-start-danger` | `border-inline-start: 3px solid var(--redz-danger);` | - |
+| `edge-start-warning` | `border-inline-start: 3px solid var(--redz-warning);` | - |
+| `edge-start-info` | `border-inline-start: 3px solid var(--redz-info);` | - |
 | `rounded` | `border-radius: var(--redz-radius-8);` | - |
 | `rounded-full` | `border-radius: 999px;` | - |
 | `rounded-0` | `border-radius: var(--redz-radius-0);` | - |
@@ -543,6 +582,9 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 | `pe-none` | `pointer-events: none;` | - |
 | `pe-auto` | `pointer-events: auto;` | - |
 | `visually-hidden` | `position: absolute; inline-size: 1px; block-size: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;` | - |
+| `sticky-top` | `position: sticky; inset-block-start: var(--redz-sticky-top, 0); z-index: 5;` | - |
+| `flash` | `animation: flash 1.2s ease-out;` | - |
+| `offscreen` | `position: absolute; inset-block-start: 0; inset-inline-start: -100vw; inline-size: 1px; block-size: 1px; overflow: hidden;` | - |
 | `stretched-link::after` | `content: ""; position: absolute; inset: 0; z-index: 1;` | - |
 | `vr` | `display: inline-block; align-self: stretch; inline-size: 1px; min-block-size: 1em; background: var(--redz-border-strong);` | - |
 | `icon-link` | `display: inline-flex; align-items: center; gap: 0.375em; text-underline-offset: 0.2em;` | - |
@@ -811,8 +853,7 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 | `row-gap-5` | `row-gap-48` | value | the number is the pixels |
 | `shadow` | `shadow-2` | rename |  |
 | `small` | - | review | fs-12, or the <small> element |
-| `sticky-bottom` | - | review | position-sticky with top-0 or bottom-0 |
-| `sticky-top` | - | review | position-sticky with top-0 or bottom-0 |
+| `sticky-bottom` | - | review | position-sticky with bottom-0 |
 | `text-black` | - | review | no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast |
 | `text-black-50` | - | review | no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast |
 | `text-body-emphasis` | `text-body` | rename |  |

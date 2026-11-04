@@ -94,6 +94,19 @@
 			</tbody>
 		</table>
 	</div>
+
+	<h3>Sortable columns</h3>
+	<p>A header that sorts holds a <code>button class="table-sort"</code>, and the header's <code>aria-sort</code> - <code>ascending</code>, <code>descending</code> or none - draws the arrow. The page sorts - on the server or in place - and moves <code>aria-sort</code> to the column it sorted by.</p>
+	<div class="docs-example docs-example-stack" id="table-sort">
+		<table class="table" aria-label="Owners">
+			<thead><tr><th scope="col" aria-sort="ascending"><button class="table-sort" type="button">Name</button></th><th scope="col"><button class="table-sort" type="button">Sites</button></th><th scope="col" class="text-end"><button class="table-sort" type="button">Paid</button></th></tr></thead>
+			<tbody>
+				<tr><td>Ananda Resort</td><td class="tabular-nums">3</td><td class="text-end tabular-nums">48,000</td></tr>
+				<tr><td>Blue Lagoon Tours</td><td class="tabular-nums">1</td><td class="text-end tabular-nums">9,600</td></tr>
+				<tr><td>Coral Divers</td><td class="tabular-nums">2</td><td class="text-end tabular-nums">21,300</td></tr>
+			</tbody>
+		</table>
+	</div>
 </section>
 
 <section class="vstack gap-16">

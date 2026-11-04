@@ -101,6 +101,21 @@ A list of records: a title that links to the record, a line under it, a note whe
 </table>
 ```
 
+### Sortable columns
+
+A header that sorts holds a `button class="table-sort"`, and the header's `aria-sort` - `ascending`, `descending` or none - draws the arrow. The page sorts - on the server or in place - and moves `aria-sort` to the column it sorted by.
+
+```html
+<table class="table" aria-label="Owners">
+	<thead><tr><th scope="col" aria-sort="ascending"><button class="table-sort" type="button">Name</button></th><th scope="col"><button class="table-sort" type="button">Sites</button></th><th scope="col" class="text-end"><button class="table-sort" type="button">Paid</button></th></tr></thead>
+	<tbody>
+		<tr><td>Ananda Resort</td><td class="tabular-nums">3</td><td class="text-end tabular-nums">48,000</td></tr>
+		<tr><td>Blue Lagoon Tours</td><td class="tabular-nums">1</td><td class="text-end tabular-nums">9,600</td></tr>
+		<tr><td>Coral Divers</td><td class="tabular-nums">2</td><td class="text-end tabular-nums">21,300</td></tr>
+	</tbody>
+</table>
+```
+
 ## States
 
 A row's tone marks what needs attention: `table-danger` failed, `table-warning` needs a look, `table-secondary` is out of use. On a pointer screen the row's actions show on hover and on focus; on a touch screen they always show.

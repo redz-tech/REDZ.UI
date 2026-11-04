@@ -65,6 +65,25 @@ For what cannot be undone, `phrase` asks the person to type a word first - the s
 <span class="text-muted fs-12" role="status" data-docs-answer></span>
 ```
 
+What a deletion takes with it is said by `note` and `sections`: `note: {tone, text}` is an alert under the text - `warning` by default, `danger`, `info` or `success` - and each of `sections: [{title, items}]` a title over a list, such as what goes and what stays. Every word is text, never HTML.
+
+```html
+<button class="btn btn-danger" type="button" data-docs-run="confirm-lists"><i class="bi bi-trash3" aria-hidden="true"></i>Delete the project</button>
+<span class="text-muted fs-12" role="status" data-docs-answer></span>
+```
+
+```js
+await REDZ.ui.confirm({
+  title: 'Delete the project Riverside tower?',
+  note: {tone: 'danger', text: 'This cannot be undone.'},
+  sections: [
+    {title: 'Will be deleted:', items: ['128 tasks', '342 files', '1,204 log entries']},
+    {title: 'Kept:', items: ['The audit history']},
+  ],
+  ok: 'Delete', tone: 'danger', phrase: 'Riverside tower',
+});
+```
+
 ### On a phone and full screen
 
 On any window a long dialog keeps its header and its footer in view: only `dialog-body` scrolls between them. A `<form>` may hold all three - `<form method="dialog">` right inside the dialog, its submit buttons in the footer - and the body still scrolls alone. On a window narrower than 576 px a dialog fills the screen by itself, while `dialog-sm` and a confirmation stay a card in the middle. `dialog-fullscreen` fills the screen on any window.

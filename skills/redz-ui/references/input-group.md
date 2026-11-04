@@ -43,6 +43,45 @@ A `form-select` or a check joins the same way; a check goes inside an `input-gro
 </div>
 ```
 
+### With a floating label
+
+A [`form-floating`](form.md#form-floating) grows in the group as a field does, and its parts take its height: an icon or a unit in `input-group-text`, a `btn` or a square `btn-icon`. A password keeps its `--reveal` button and its strength; the error goes under the group, in a `form-field`.
+
+```html
+<div class="input-group">
+	<span class="input-group-text"><i class="bi bi-envelope" aria-hidden="true"></i></span>
+	<div class="form-floating">
+		<input class="form-control" id="input-group-floating-mail" type="email" placeholder="name@example.com" autocomplete="email">
+		<label for="input-group-floating-mail">E-mail</label>
+	</div>
+</div>
+<div class="form-field">
+	<div class="input-group">
+		<div class="form-floating">
+			<input class="form-control" id="input-group-floating-password" type="password" placeholder="Password" autocomplete="new-password" aria-describedby="input-group-floating-level">
+			<label for="input-group-floating-password">New password</label>
+		</div>
+		<button class="btn btn-icon" type="button" commandfor="input-group-floating-password" command="--reveal" aria-pressed="false" aria-label="Show the password"><i class="bi bi-eye" aria-hidden="true"></i></button>
+	</div>
+	<meter class="meter" min="0" max="4" low="2" high="3" optimum="4" value="0" data-strength="input-group-floating-password" aria-label="Password strength"></meter>
+	<div class="form-text" id="input-group-floating-level" data-strength="input-group-floating-password"></div>
+</div>
+<div class="input-group">
+	<div class="form-floating">
+		<input class="form-control" id="input-group-floating-share" type="text" inputmode="numeric" value="20" aria-describedby="input-group-floating-unit">
+		<label for="input-group-floating-share">Partner share</label>
+	</div>
+	<span class="input-group-text" id="input-group-floating-unit">%</span>
+</div>
+<div class="input-group">
+	<div class="form-floating">
+		<input class="form-control font-monospace" id="input-group-floating-secret" type="text" value="JBSWY3DPEHPK3PXP" readonly>
+		<label for="input-group-floating-secret">Secret key</label>
+	</div>
+	<button class="btn" type="button"><i class="bi bi-clipboard" aria-hidden="true"></i>Copy</button>
+</div>
+```
+
 ### With a menu
 
 The menu sits in the group beside its button; the group joins only what it shows.
@@ -87,4 +126,4 @@ The menu sits in the group beside its button; the group joins only what it shows
 
 From [`css/components/input-group.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/input-group.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-8`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg-page`, `--redz-text-muted`, `--redz-control-height-sm`, `--redz-radius-6`, `--redz-fs-12`.
+It reads the theme's `--redz-control-height-float`, `--redz-space-8`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg-page`, `--redz-text-muted`, `--redz-control-height-sm`, `--redz-radius-6`, `--redz-fs-12`.

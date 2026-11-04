@@ -33,13 +33,14 @@ Quieter forms of the same tones for secondary actions, rows and toolbars. `btn-t
 
 ### Sizes
 
-A size is a word: `btn-xs` 24 px, `btn-sm` 28 px, the default 32 px, `btn-lg` 40 px - the heights of every control of the same size.
+A size is a word: `btn-xs` 24 px, `btn-sm` 28 px, the default 32 px, `btn-lg` 40 px - the heights of every control of the same size. `btn-xl`, 56 px, is for a touch screen and the one action of a page; in a [kiosk](kiosk.md) it grows to a kiosk's size.
 
 ```html
 <button class="btn btn-primary btn-xs" type="button">Extra small</button>
 <button class="btn btn-primary btn-sm" type="button">Small</button>
 <button class="btn btn-primary" type="button">Default</button>
 <button class="btn btn-primary btn-lg" type="button">Large</button>
+<button class="btn btn-primary btn-xl" type="button">Extra large</button>
 ```
 
 ### Icons
@@ -85,11 +86,19 @@ An icon sits beside the words, or alone in a square `btn-icon` whose name is its
 
 ### Toggle and busy
 
-A toggle carries `aria-pressed`. While its action runs, `REDZ.ui.busy(button, promise)` shows a spinner in the button and marks it `aria-disabled`: it keeps the focus and ignores clicks until the promise settles.
+A toggle carries `aria-pressed`. While its action runs, `REDZ.ui.busy(button, promise)` shows a spinner in the button and marks it `aria-disabled`: it keeps the focus and ignores clicks until the promise settles. See [Busy](busy.md) for the words a button says while it waits.
 
 ```html
 <button class="btn" type="button" aria-pressed="false" data-docs-run="toggle"><i class="bi bi-pin-angle" aria-hidden="true"></i>Pin</button>
 <button class="btn btn-primary" type="button" data-docs-run="busy-button">Save for 2 seconds</button>
+```
+
+### A wait before it works again
+
+`data-cooldown="N"` makes a button wait N seconds: it is `aria-disabled` - it keeps the focus and ignores clicks - and shows the seconds left after its words, in the page's text `cooldown`; then it wakes and the attribute goes. Setting the attribute again starts the wait again; a page reloaded during a wait renders the seconds left. The count is drawn, not read out every second: say the wait in words once, when it starts - "A new code is on its way; ask again in a minute".
+
+```html
+<button class="btn" type="button" data-cooldown="20" data-docs-run="cooldown"><i class="bi bi-arrow-clockwise" aria-hidden="true"></i>Send the code again</button>
 ```
 
 ## States
@@ -108,7 +117,7 @@ A state is the attribute accessibility needs anyway, on the button itself: no `a
 
 From [`css/components/btn.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/btn.css). It declares `--redz-btn-bg`, `--redz-btn-fg`, `--redz-btn-hover`, `--redz-btn-hover-fg` on its root, never on rows or items.
 
-It reads the theme's `--redz-bg-hover`, `--redz-text`, `--redz-control-height`, `--redz-space-12`, `--redz-radius-8`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-primary-subtle`, `--redz-secondary-subtle`, `--redz-success-subtle`, `--redz-danger-subtle`, `--redz-warning-subtle`, `--redz-info-subtle`, `--redz-control-height-xs`, `--redz-radius-6`, `--redz-fs-12`, `--redz-control-height-sm`, `--redz-space-8`, `--redz-control-height-lg`, `--redz-space-16`, `--redz-fs-16`, `--redz-bg-page`, `--redz-text-faint`, `--redz-text-muted`, `--redz-motion`.
+It reads the theme's `--redz-bg-hover`, `--redz-text`, `--redz-control-height`, `--redz-space-12`, `--redz-radius-8`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-primary-subtle`, `--redz-secondary-subtle`, `--redz-success-subtle`, `--redz-danger-subtle`, `--redz-warning-subtle`, `--redz-info-subtle`, `--redz-control-height-xs`, `--redz-radius-6`, `--redz-fs-12`, `--redz-control-height-sm`, `--redz-space-8`, `--redz-control-height-lg`, `--redz-space-16`, `--redz-fs-16`, `--redz-space-24`, `--redz-radius-12`, `--redz-fs-20`, `--redz-bg-page`, `--redz-text-faint`, `--redz-text-muted`, `--redz-motion`.
 
 ## From Bootstrap 5.3
 

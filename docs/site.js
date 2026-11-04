@@ -100,7 +100,17 @@
 		'toast-action': () => REDZ.ui.toast({title: 'Moved to the archive', tone: 'info', action: {label: 'Undo', run: () => REDZ.ui.toast({title: 'Restored', tone: 'success'})}}),
 		confirm: async (button) => answer(button, await REDZ.ui.confirm({title: 'Delete 2 excursions?', text: 'Their pages go away on all three sites.', ok: 'Delete', tone: 'danger'}) ? 'Confirmed.' : 'Cancelled.'),
 		'confirm-phrase': async (button) => answer(button, await REDZ.ui.confirm({title: 'Delete the site lagoon.example?', text: 'Its pages, its files and its settings go away for good.', ok: 'Delete the site', tone: 'danger', phrase: 'lagoon.example'}) ? 'Confirmed.' : 'Cancelled.'),
+		'confirm-lists': async (button) => answer(button, await REDZ.ui.confirm({title: 'Delete the project Riverside tower?', note: {tone: 'danger', text: 'This cannot be undone.'}, sections: [{title: 'Will be deleted:', items: ['128 tasks', '342 files', '1,204 log entries']}, {title: 'Kept:', items: ['The audit history']}], ok: 'Delete', tone: 'danger', phrase: 'Riverside tower'}) ? 'Confirmed.' : 'Cancelled.'),
 		'busy-button': (button) => REDZ.ui.busy(button, new Promise((done) => setTimeout(done, 2000))),
+		'cooldown': (button) => {
+			button.dataset.cooldown = '20';
+		},
+		'flash': () => {
+			const row = document.getElementById('utilities-flash-target');
+			row.classList.remove('flash');
+			void row.offsetWidth;
+			row.classList.add('flash');
+		},
 		'busy-region': (button) => REDZ.ui.busy(document.getElementById(button.getAttribute('aria-controls')), new Promise((done) => setTimeout(done, 2000))),
 	};
 	document.addEventListener('click', (event) => {
@@ -162,6 +172,22 @@
 			}
 			return leave;
 		}));
+	});
+
+	// The PIN pad's check: 2580 opens after 600 ms, any other PIN is wrong.
+	document.addEventListener('redz:pin', (event) => {
+		const alert = document.getElementById('pin-unlock-alert');
+		if (alert === null || !event.target.closest('#pin-unlock')) {
+			return;
+		}
+		event.preventDefault();
+		event.detail.respondWith(new Promise((done) => setTimeout(() => {
+			const right = event.detail.value === '2580';
+			alert.className = right ? 'alert alert-success' : 'alert alert-danger';
+			alert.textContent = right ? 'Unlocked.' : 'Wrong PIN. 4 tries left.';
+			alert.hidden = false;
+			done(right);
+		}, 600)));
 	});
 
 	// The tree's lazy Archive: two pages after 400 ms.

@@ -188,6 +188,18 @@
 		font-size: var(--redz-fs-16);
 	}
 
+	.btn-xl {
+		min-block-size: 3.5rem;
+		padding-inline: var(--redz-space-24);
+		border-radius: var(--redz-radius-12);
+		font-size: var(--redz-fs-20);
+		font-weight: 650;
+	}
+
+	.btn-xl .bi {
+		font-size: 1em;
+	}
+
 	.btn-icon {
 		inline-size: var(--redz-control-height);
 		padding: 0;
@@ -216,11 +228,27 @@
 
 	.btn[aria-busy="true"] {
 		position: relative;
-		color: transparent;
 		pointer-events: none;
 	}
 
-	.btn[aria-busy="true"]::after {
+	.btn[aria-busy="true"] > .bi:first-child {
+		mask-image: none;
+		border: 2px solid currentColor;
+		border-inline-end-color: transparent;
+		border-radius: 50%;
+		background: none;
+		animation: spinner-turn 0.7s linear infinite;
+	}
+
+	.btn-cooldown {
+		font-variant-numeric: tabular-nums;
+	}
+
+	.btn[aria-busy="true"]:not(:has(> .bi:first-child)) {
+		color: transparent;
+	}
+
+	.btn[aria-busy="true"]:not(:has(> .bi:first-child))::after {
 		content: "";
 		position: absolute;
 		inline-size: 1rem;
@@ -313,11 +341,15 @@
 			color: HighlightText;
 		}
 
-		.btn[aria-busy="true"]::after {
-			position: static;
+		.btn[aria-busy="true"]::after,
+		.btn[aria-busy="true"] > .bi:first-child {
 			forced-color-adjust: none;
 			border-color: ButtonText;
 			border-inline-end-color: transparent;
+		}
+
+		.btn[aria-busy="true"]::after {
+			position: static;
 		}
 
 		@supports (forced-color-adjust: preserve-parent-color) {

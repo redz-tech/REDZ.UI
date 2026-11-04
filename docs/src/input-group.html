@@ -39,6 +39,43 @@
 		</div>
 	</div>
 
+	<h3>With a floating label</h3>
+	<p>A <a href="form.html#form-floating"><code>form-floating</code></a> grows in the group as a field does, and its parts take its height: an icon or a unit in <code>input-group-text</code>, a <code>btn</code> or a square <code>btn-icon</code>. A password keeps its <code>--reveal</code> button and its strength; the error goes under the group, in a <code>form-field</code>.</p>
+	<div class="docs-example docs-example-stack" id="input-group-floating">
+		<div class="input-group">
+			<span class="input-group-text"><i class="bi bi-envelope" aria-hidden="true"></i></span>
+			<div class="form-floating">
+				<input class="form-control" id="input-group-floating-mail" type="email" placeholder="name@example.com" autocomplete="email">
+				<label for="input-group-floating-mail">E-mail</label>
+			</div>
+		</div>
+		<div class="form-field">
+			<div class="input-group">
+				<div class="form-floating">
+					<input class="form-control" id="input-group-floating-password" type="password" placeholder="Password" autocomplete="new-password" aria-describedby="input-group-floating-level">
+					<label for="input-group-floating-password">New password</label>
+				</div>
+				<button class="btn btn-icon" type="button" commandfor="input-group-floating-password" command="--reveal" aria-pressed="false" aria-label="Show the password"><i class="bi bi-eye" aria-hidden="true"></i></button>
+			</div>
+			<meter class="meter" min="0" max="4" low="2" high="3" optimum="4" value="0" data-strength="input-group-floating-password" aria-label="Password strength"></meter>
+			<div class="form-text" id="input-group-floating-level" data-strength="input-group-floating-password"></div>
+		</div>
+		<div class="input-group">
+			<div class="form-floating">
+				<input class="form-control" id="input-group-floating-share" type="text" inputmode="numeric" value="20" aria-describedby="input-group-floating-unit">
+				<label for="input-group-floating-share">Partner share</label>
+			</div>
+			<span class="input-group-text" id="input-group-floating-unit">%</span>
+		</div>
+		<div class="input-group">
+			<div class="form-floating">
+				<input class="form-control font-monospace" id="input-group-floating-secret" type="text" value="JBSWY3DPEHPK3PXP" readonly>
+				<label for="input-group-floating-secret">Secret key</label>
+			</div>
+			<button class="btn" type="button"><i class="bi bi-clipboard" aria-hidden="true"></i>Copy</button>
+		</div>
+	</div>
+
 	<h3>With a menu</h3>
 	<p>The menu sits in the group beside its button; the group joins only what it shows.</p>
 	<div class="docs-example docs-example-stack" id="input-group-menu">

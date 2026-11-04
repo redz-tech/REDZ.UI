@@ -18,6 +18,8 @@ import './password.js';
 import './tree.js';
 import './reorder.js';
 import './upload.js';
+import './pin.js';
+import './cooldown.js';
 import {toast} from './toast.js';
 import {confirm} from './confirm.js';
 import {busy} from './busy.js';

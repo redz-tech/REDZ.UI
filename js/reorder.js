@@ -1,10 +1,13 @@
-// REDZ.UI, reordering: in a list or a tree with data-reorder naming a hidden field, each item with a data-value moves by
-// its drag-handle — a button opening the list's menu of moves by commandfor, whose items carry data-move: up, down,
-// first, last, and in a tree in (to the end of the group of the item above) and out (after its parent) — or by the
-// pointer dragging the handle within its group. A move is done at once, the focus back on the handle and the page's
-// text "moved" said politely; then the cancelable redz:move (js/answer.js) with the item, its list, parent and place:
-// a refusal undoes the move and says the page's words; left alone, hidden fields beside the list hold the order for the
-// form — each value in data-reorder's name, and with data-parent each one's parent under data-parent's name.
+// REDZ.UI, reordering: in a list, a table's tbody, a grid or a tree with data-reorder naming a hidden field, each item
+// with a data-value moves by its drag-handle - a button opening the list's menu of moves by commandfor, whose items
+// carry data-move: up, down, first, last, and in a tree in (to the end of the group of the item above) and out (after
+// its parent) - or by the pointer dragging the handle within its group: down a column, or, where the group lays its
+// items out in a line - a grid of more than one column, a flex row - before or after the item under the pointer by
+// the half of it the pointer is in. A move is done at once, the focus back on the handle and the page's text "moved"
+// said politely; then the cancelable redz:move (js/answer.js) with the item, its list, parent and place: a refusal
+// undoes the move and says the page's words; left alone, hidden fields beside the list - beside its table for a
+// tbody - hold the order for the form: each value in data-reorder's name, and with data-parent each one's parent under
+// data-parent's name.
 import {ask} from './answer.js';
 import {text} from './text.js';
 import {mark} from './toggle.js';
@@ -17,6 +20,16 @@ const listOf = (element) => element.closest('[data-reorder]');
 const itemOf = (element) => element.closest('[data-value]');
 const itemsOf = (group) => [...group.children].filter((child) => child.matches('[data-value]'));
 const handleOf = (item) => [...item.querySelectorAll('.drag-handle')].find((grip) => itemOf(grip) === item) ?? null;
+const besideOf = (list) => list.matches('tbody') ? list.closest('table') : list;
+
+/** Whether the group lays its items out in a line - a grid of more than one column or a flex row. */
+const linesOf = (group) => {
+	const style = getComputedStyle(group);
+	if (style.display.endsWith('grid')) {
+		return style.gridTemplateColumns.trim().split(/\s+/).length > 1;
+	}
+	return style.display.endsWith('flex') && !style.flexDirection.startsWith('column');
+};
 
 /** The item the item sits in, within its list, or null at the top. */
 const parentOf = (item) => {
@@ -24,7 +37,7 @@ const parentOf = (item) => {
 	return parent !== null && listOf(item).contains(parent) ? parent : null;
 };
 
-/** Where the move takes the item — [its new group, the item it goes before, null for the end] — or null where it cannot go. */
+/** Where the move takes the item - [its new group, the item it goes before, null for the end] - or null where it cannot go. */
 const placeOf = (item, move) => {
 	const group = item.parentElement;
 	const items = itemsOf(group);
@@ -42,14 +55,15 @@ const placeOf = (item, move) => {
 	return places[move] ?? null;
 };
 
-/** The list's polite status, made on first need — when its menu of moves opens or a drag starts, before a move: a
+/** The list's polite status, made on first need - when its menu of moves opens or a drag starts, before a move: a
  *  region made with its words says nothing. */
 const statusOf = (list) => {
-	let status = list.parentElement.querySelector(':scope > .reorder-status');
+	const beside = besideOf(list);
+	let status = beside.parentElement.querySelector(':scope > .reorder-status');
 	if (status === null) {
 		status = Object.assign(document.createElement('div'), {className: 'reorder-status visually-hidden'});
 		status.setAttribute('role', 'status');
-		list.after(status);
+		beside.after(status);
 	}
 	return status;
 };
@@ -69,7 +83,8 @@ const put = (item, [group, before]) => {
 /** Writes the order into hidden fields beside the list, and says it changed. */
 const hold = (list) => {
 	list.id ||= 'redz-reorder-' + Math.random().toString(36).slice(2);
-	for (const field of list.parentElement.querySelectorAll(':scope > input[type="hidden"]')) {
+	const beside = besideOf(list);
+	for (const field of beside.parentElement.querySelectorAll(':scope > input[type="hidden"]')) {
 		if (field.dataset.orderOf === list.id) {
 			field.remove();
 		}
@@ -86,7 +101,7 @@ const hold = (list) => {
 			field(list.dataset.parent + '[' + item.dataset.value + ']', parentOf(item)?.dataset.value ?? '');
 		}
 	}
-	list.after(...fields);
+	beside.after(...fields);
 	list.dispatchEvent(new Event('change', {bubbles: true}));
 };
 
@@ -113,6 +128,9 @@ const drop = () => {
 		delete drag.item.dataset.dragging;
 		listOf(drag.item)?.classList.remove('reordering');
 		swallow = true;
+		setTimeout(() => {
+			swallow = false;
+		});
 		if (drag.item.parentElement !== drag.left[0] || drag.item.nextElementSibling !== drag.left[1]) {
 			moved(drag.item, drag.left);
 		}
@@ -174,6 +192,8 @@ document.addEventListener('pointermove', (event) => {
 			return;
 		}
 		drag.left = [drag.item.parentElement, drag.item.nextElementSibling];
+		drag.lines = linesOf(drag.item.parentElement);
+		drag.rtl = getComputedStyle(drag.item.parentElement).direction === 'rtl';
 		statusOf(listOf(drag.item));
 		drag.grip.setPointerCapture(event.pointerId);
 		drag.item.dataset.dragging = '';
@@ -181,10 +201,12 @@ document.addEventListener('pointermove', (event) => {
 	}
 	for (const other of itemsOf(drag.item.parentElement)) {
 		const box = other.getBoundingClientRect();
-		if (other !== drag.item && event.clientY > box.top && event.clientY < box.bottom) {
-			drag.item.parentElement.insertBefore(drag.item, event.clientY > box.top + box.height / 2 ? other.nextElementSibling : other);
-			break;
+		if (other === drag.item || event.clientY <= box.top || event.clientY >= box.bottom || (drag.lines && (event.clientX <= box.left || event.clientX >= box.right))) {
+			continue;
 		}
+		const after = drag.lines ? (event.clientX > box.left + box.width / 2) !== drag.rtl : event.clientY > box.top + box.height / 2;
+		drag.item.parentElement.insertBefore(drag.item, after ? other.nextElementSibling : other);
+		break;
 	}
 });
 

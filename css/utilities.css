@@ -394,6 +394,18 @@
 	.border-danger-subtle { border-color: color-mix(in oklch, var(--redz-danger) 35%, var(--redz-border)); }
 	.border-warning-subtle { border-color: color-mix(in oklch, var(--redz-warning) 35%, var(--redz-border)); }
 	.border-info-subtle { border-color: color-mix(in oklch, var(--redz-info) 35%, var(--redz-border)); }
+	.edge-top-primary { border-block-start: 3px solid var(--redz-primary); }
+	.edge-top-secondary { border-block-start: 3px solid var(--redz-secondary); }
+	.edge-top-success { border-block-start: 3px solid var(--redz-success); }
+	.edge-top-danger { border-block-start: 3px solid var(--redz-danger); }
+	.edge-top-warning { border-block-start: 3px solid var(--redz-warning); }
+	.edge-top-info { border-block-start: 3px solid var(--redz-info); }
+	.edge-start-primary { border-inline-start: 3px solid var(--redz-primary); }
+	.edge-start-secondary { border-inline-start: 3px solid var(--redz-secondary); }
+	.edge-start-success { border-inline-start: 3px solid var(--redz-success); }
+	.edge-start-danger { border-inline-start: 3px solid var(--redz-danger); }
+	.edge-start-warning { border-inline-start: 3px solid var(--redz-warning); }
+	.edge-start-info { border-inline-start: 3px solid var(--redz-info); }
 	.rounded { border-radius: var(--redz-radius-8); }
 	.rounded-full { border-radius: 999px; }
 	.rounded-0 { border-radius: var(--redz-radius-0); }
@@ -502,6 +514,9 @@
 	.pe-auto { pointer-events: auto; }
 	.visually-hidden { position: absolute; inline-size: 1px; block-size: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 	.visually-hidden-focusable:not(:focus, :focus-within) { position: absolute; inline-size: 1px; block-size: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+	.sticky-top { position: sticky; inset-block-start: var(--redz-sticky-top, 0); z-index: 5; }
+	.flash { animation: flash 1.2s ease-out; }
+	.offscreen { position: absolute; inset-block-start: 0; inset-inline-start: -100vw; inline-size: 1px; block-size: 1px; overflow: hidden; }
 	.stretched-link::after { content: ""; position: absolute; inset: 0; z-index: 1; }
 	.divide-x > * + * { border-inline-start: 1px solid var(--redz-border); }
 	.divide-y > * + * { border-block-start: 1px solid var(--redz-border); }

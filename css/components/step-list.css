@@ -1,0 +1,98 @@
+@layer components {
+	.step-list {
+		display: grid;
+		gap: var(--redz-space-4);
+	}
+
+	.step-list > li {
+		display: flex;
+		align-items: baseline;
+		gap: var(--redz-space-8);
+		color: var(--redz-text-muted);
+	}
+
+	.step-list > li > .bi:first-child {
+		align-self: center;
+	}
+
+	.step-list > :is([data-state="done"], [data-state="current"]) {
+		color: var(--redz-text);
+	}
+
+	.step-list > [data-state="done"] > .bi:first-child {
+		color: var(--redz-success);
+	}
+
+	.step-list > [data-state="current"] {
+		font-weight: 600;
+	}
+
+	.step-list > [data-state="current"] > .bi:first-child {
+		color: var(--redz-primary);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.step-list > [data-state="current"] > .bi:first-child {
+			animation: spinner-turn 1.2s linear infinite;
+		}
+	}
+
+	.step-list > [data-state="failed"] {
+		color: var(--redz-danger);
+	}
+
+	.step-list > [data-state="kept"] {
+		color: var(--redz-warning);
+	}
+
+	.step-list-detail {
+		margin-inline-start: auto;
+		padding-inline-start: var(--redz-space-12);
+		color: var(--redz-text-muted);
+		font-weight: 400;
+		text-align: end;
+	}
+
+	.timeline > li {
+		position: relative;
+		padding-block-end: var(--redz-space-16);
+		padding-inline-start: 2.5rem;
+	}
+
+	.timeline > li:not(:last-child)::before {
+		content: "";
+		position: absolute;
+		inset-block: 2rem 0.25rem;
+		inset-inline-start: calc(0.875rem - 1px);
+		border-inline-start: 2px solid var(--redz-border);
+	}
+
+	.timeline > li > .icon-tile:first-child {
+		position: absolute;
+		inset-block-start: 0;
+		inset-inline-start: 0;
+		inline-size: 1.75rem;
+		block-size: 1.75rem;
+		border-radius: 50%;
+		font-size: var(--redz-fs-14);
+	}
+
+	.timeline-time {
+		display: block;
+		color: var(--redz-text-muted);
+		font-size: var(--redz-fs-12);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.timeline dl {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: var(--redz-space-2) var(--redz-space-12);
+		margin-block-start: var(--redz-space-4);
+		font-size: var(--redz-fs-12);
+	}
+
+	.timeline dt {
+		color: var(--redz-text-muted);
+	}
+}

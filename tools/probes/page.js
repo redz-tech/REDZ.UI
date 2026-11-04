@@ -383,7 +383,8 @@ window.REDZ_PROBE = (() => {
 				const list = document.getElementById(id);
 				const grip = document.querySelector('[data-probe-grip="' + id + '"]');
 				const menu = document.getElementById(grip.getAttribute('commandfor') || '');
-				return {order: [...list.children].filter((child) => child.matches('[data-value]')).map((child) => child.dataset.value), walked: grip.closest('[data-value]').dataset.value, onGrip: active === grip, open: menu?.matches(':popover-open') ?? false, said: list.parentElement.querySelector(':scope > .reorder-status')?.textContent ?? ''};
+				const beside = list.matches('tbody') ? list.closest('table') : list;
+				return {order: [...list.children].filter((child) => child.matches('[data-value]')).map((child) => child.dataset.value), walked: grip.closest('[data-value]').dataset.value, onGrip: active === grip, open: menu?.matches(':popover-open') ?? false, said: beside.parentElement.querySelector(':scope > .reorder-status')?.textContent ?? ''};
 			}
 			if (kind === 'upload') {
 				return {rows: [...document.getElementById(id).querySelectorAll('.upload-list > *')].map((row) => ({state: row.dataset.state ?? '', error: row.querySelector('[data-file-error]')?.textContent ?? ''})), onZone: active?.classList.contains('upload-zone') ?? false, onRemove: active?.hasAttribute('data-file-remove') ?? false};

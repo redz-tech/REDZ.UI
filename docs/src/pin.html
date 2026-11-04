@@ -1,0 +1,48 @@
+<header class="vstack gap-8">
+	<h1>PIN pad</h1>
+	<p class="docs-lead">A short number that unlocks a trusted device: dots that fill as it is typed and a keypad for a finger, while the keyboard types as it always does.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="pin-examples">
+	<h2 id="pin-examples">Example</h2>
+	<p><code>pin</code> around one field - <code>type="password"</code>, <code>inputmode="numeric"</code>, <code>autocomplete="off"</code> and the length in <code>maxlength</code>. The library draws the dots and the keypad: 1 to 9, 0 and delete. The PIN goes when its last digit lands: the pad asks the page in <code>redz:pin</code> with <code>detail.value</code>, and is busy while the page's promise runs. <code>false</code> clears the dots and marks them wrong - the page's alert says why; <code>true</code> leaves the pad as it is while the page goes on. Try 2580.</p>
+	<div class="docs-example docs-example-stack" id="pin-unlock">
+		<form class="vstack gap-16 align-items-center" method="post">
+			<label class="form-label" for="pin-unlock-field">Enter your PIN</label>
+			<div class="alert" id="pin-unlock-alert" role="alert" hidden></div>
+			<div class="pin">
+				<input id="pin-unlock-field" name="pin" type="password" inputmode="numeric" maxlength="4" autocomplete="off" aria-describedby="pin-unlock-alert">
+			</div>
+		</form>
+	</div>
+	<pre class="docs-code" tabindex="0"><code>pad.addEventListener('redz:pin', (event) =&gt; {
+  event.preventDefault();
+  event.detail.respondWith(post({action: 'pin_unlock', pin: event.detail.value}).then((answer) =&gt; {
+    if (answer.ok) {
+      location.assign(answer.redirect);
+    }
+    return answer.ok;
+  }));
+});</code></pre>
+
+	<h3>Any length</h3>
+	<p>A <code>minlength</code> below the <code>maxlength</code> takes any length between them: the dots grow as it is typed, and the keypad gets an Enter key beside its 0. With no page listening the pad submits its form - on Enter, or at the last digit of a fixed length.</p>
+	<div class="docs-example docs-example-stack" id="pin-any">
+		<form class="vstack gap-16 align-items-center" method="post" action="#pin-any">
+			<label class="form-label" for="pin-any-field">The site's enrolment PIN</label>
+			<div class="pin">
+				<input id="pin-any-field" name="pin" type="password" inputmode="numeric" minlength="4" maxlength="8" autocomplete="off">
+			</div>
+		</form>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="pin-access">
+	<h2 id="pin-access">Keyboard and accessibility</h2>
+	<ul>
+		<li>The field is the control: it has the label, takes the digits from any keyboard and is read as a secure field with its length. The dots are drawn for the eyes only.</li>
+		<li>The keypad is for touch: its keys stay out of the <kbd>Tab</kbd> order and never take the focus from the field. The delete and Enter keys are named by the page's texts <code>pin.delete</code> and <code>pin.enter</code>.</li>
+		<li><kbd>Enter</kbd> in the field sends a PIN of a length the field takes.</li>
+		<li>Wrong, the dots turn red and shake once; with reduced motion they only turn red. The words of the page's alert are what says it.</li>
+	</ul>
+</section>

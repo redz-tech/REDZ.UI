@@ -1,7 +1,8 @@
 // REDZ.UI, busy: REDZ.ui.busy() marks an element aria-busy while a promise runs and answers the promise. A button is
 // marked aria-disabled too, which keeps its focus and, as for every button, check, radio or switch so marked, swallows
-// its clicks. A region —
-// a card, its body, a dialog's or a drawer's body, any .region — turns inert under an overlay that shows after 400 ms
+// its clicks; its leading icon turns into a spinner, or a spinner covers its words when it has none, and a data-busy
+// on it says other words while it waits - shown at once, said politely after 400 ms. A region -
+// a card, its body, a dialog's or a drawer's body, any .region - turns inert under an overlay that shows after 400 ms
 // (css/components/busy.css) and then stays at least 400 ms; once it shows, one polite message says so (the page's text
 // "busy"), and a focus the region dropped comes back to the same element, its namesake by id, or the region. aria-busy
 // is only a styling hook: screen readers mostly ignore it, and on a live region it breaks the region.
@@ -34,7 +35,7 @@ const statusIn = (scope) => {
 
 statusIn(document.body);
 
-/** Says the message politely — inside the open modal dialog, since everything outside one is inert. */
+/** Says the message politely - inside the open modal dialog, since everything outside one is inert. */
 const announce = (message) => {
 	const {region, fresh} = statusIn([...document.querySelectorAll('dialog:modal')].at(-1) ?? document.body);
 	region.textContent = '';
@@ -76,7 +77,7 @@ const hold = (element, promise) => {
 /** Marks the element busy until the promise settles; answers the promise. */
 export const busy = (element, promise) => {
 	if (element.matches(LIVE) || element.querySelector(LIVE) !== null) {
-		console.error('REDZ.UI: busy() on or around a live region breaks it in screen readers — mark an element without one');
+		console.error('REDZ.UI: busy() on or around a live region breaks it in screen readers - mark an element without one');
 	}
 	const button = element.matches('button, .btn');
 	if (!button && element.matches(REGIONS)) {
@@ -86,11 +87,23 @@ export const busy = (element, promise) => {
 		console.error('REDZ.UI: busy() takes a button or a region (' + REGIONS + ')');
 	}
 	const disabled = element.getAttribute('aria-disabled');
+	const words = button ? element.dataset.busy ?? '' : '';
+	const kept = [...element.childNodes];
 	element.setAttribute('aria-busy', 'true');
 	if (button) {
 		element.setAttribute('aria-disabled', 'true');
 	}
+	if (words !== '') {
+		const lead = element.firstElementChild?.matches('.bi') ? element.firstElementChild : Object.assign(document.createElement('i'), {className: 'bi'});
+		lead.setAttribute('aria-hidden', 'true');
+		element.replaceChildren(lead, words);
+	}
+	const said = words === '' ? 0 : setTimeout(() => announce(words), SHOW);
 	return Promise.resolve(promise).finally(() => {
+		clearTimeout(said);
+		if (words !== '') {
+			element.replaceChildren(...kept);
+		}
 		element.removeAttribute('aria-busy');
 		if (button && disabled === null) {
 			element.removeAttribute('aria-disabled');

@@ -1,0 +1,53 @@
+<header class="vstack gap-8">
+	<h1>Kiosk</h1>
+	<p class="docs-lead">A full screen for a tablet that stays on at a door: a name on top, big language buttons, a huge clock while it waits, one round state and one or two huge actions - read from across a room and pressed with a glove.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="kiosk-examples">
+	<h2 id="kiosk-examples">Example</h2>
+	<p><code>kiosk</code> fills the window with a column: <code>kiosk-head</code>, <code>kiosk-langs</code>, <code>kiosk-main</code> in the middle - the page's <code>main</code> - and <code>kiosk-foot</code>. It is not selectable and answers a tap at once, without waiting for a double tap. A kiosk is dark: <code>data-theme="dark"</code> on its <code>html</code>, or on the <code>kiosk</code> itself.</p>
+	<div class="docs-example" id="kiosk-example">
+		<div class="kiosk" data-theme="dark">
+			<div class="kiosk-head"><i class="bi bi-geo-alt" aria-hidden="true"></i> Riverside tower</div>
+			<div class="kiosk-langs" role="group" aria-label="Language">
+				<button class="btn btn-xl" type="button" lang="en" aria-pressed="true">English</button>
+				<button class="btn btn-xl" type="button" lang="th" aria-pressed="false">ไทย</button>
+				<button class="btn btn-xl" type="button" lang="my" aria-pressed="false">မြန်မာ</button>
+			</div>
+			<div class="kiosk-main">
+				<div class="kiosk-date">Wednesday, November 4</div>
+				<div class="kiosk-clock">07:42</div>
+				<div class="icon-tile icon-tile-info kiosk-state kiosk-state-idle"><i class="bi bi-person-badge" aria-hidden="true"></i></div>
+				<div class="kiosk-title">Tap your card</div>
+				<div class="kiosk-line">Hold it to the reader under the screen</div>
+			</div>
+			<div class="kiosk-foot">REDZ ERP · Site entrance</div>
+		</div>
+	</div>
+
+	<h3>The states</h3>
+	<p><code>kiosk-state</code> on an <a href="icon-tile.html">icon tile</a> is the round state, in the tile's tones: <code>kiosk-state-idle</code> is smaller and breathes while the screen waits (still when motion is reduced), <code>aria-busy="true"</code> turns a ring round it while a tap is checked. <code>kiosk-title</code> and <code>kiosk-line</code> say what happened; a <code>btn-xl</code> in <code>kiosk-main</code> grows to a kiosk's size. <code>kiosk-corner</code> holds a camera's preview, mirrored, at the bottom end.</p>
+	<div class="docs-example" id="kiosk-states">
+		<div class="kiosk" data-theme="dark">
+			<div class="kiosk-main">
+				<div class="icon-tile icon-tile-success kiosk-state"><i class="bi bi-check-lg" aria-hidden="true"></i></div>
+				<div class="kiosk-title">Somchai Rattanakul</div>
+				<div class="kiosk-line">Last in at 07:02</div>
+				<button class="btn btn-xl btn-success" type="button"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Check in</button>
+				<button class="btn btn-xl btn-warning" type="button"><i class="bi bi-box-arrow-right" aria-hidden="true"></i>Check out</button>
+				<button class="btn btn-text" type="button"><i class="bi bi-x-lg" aria-hidden="true"></i>Cancel</button>
+			</div>
+			<div class="kiosk-corner"></div>
+		</div>
+	</div>
+	<p>A kiosk that reads badges through a keyboard-wedge reader takes what it types in a field kept focused <a href="utilities.html#utilities-offscreen"><code>offscreen</code></a>, with <code>inputmode="none"</code> so no keyboard opens.</p>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="kiosk-access">
+	<h2 id="kiosk-access">Accessibility</h2>
+	<ul>
+		<li>The words carry the state; the tone and the icon repeat them. Say a new state in a polite live region the page keeps - the title is a good one.</li>
+		<li>The language buttons are a named group of <code>btn btn-xl</code> toggles, each with its <code>lang</code> and <code>aria-pressed</code>; the pressed one turns light on dark.</li>
+		<li>The type grows with the screen; nothing is smaller than 14 px, and every button is at least 56 px tall.</li>
+	</ul>
+</section>

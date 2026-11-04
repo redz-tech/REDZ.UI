@@ -4,6 +4,59 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+The ERP's sign-in, kiosk, console and list screens, asked as #16-#37; to be released as one minor release.
+
+### Added
+- **A floating label in an input group:** `.input-group > .form-floating` grows as a field does, its control's joined
+  corners square, and its parts - `input-group-text` for an icon or a unit, a `btn` or a square `btn-icon` - take its
+  height. `form-floating form-adorn` on one element puts an icon inside the field's own border, the label after it.
+- **A centered page** (`page-center`, `page-center-brand`, `page-center-corner`): a page without the shell - sign-in,
+  registration, a reset, a second factor, an unlock, an enrolment - in a column of `--redz-page-center-width` (30rem)
+  at the middle of the window; a card in it is raised, and the corner's theme button scrolls with the page, clear of
+  the logo on a phone.
+- **A PIN pad** (`pin`, `js/pin.js`): around one numeric password field it draws the dots and a keypad of 1-9, 0 and
+  delete, its keys out of the Tab order and never taking the focus; a minlength below the maxlength takes any length
+  and adds an Enter key. A whole PIN asks the page in `redz:pin` (`detail.value`); the pad is busy while the page
+  checks, a wrong one is cleared and marked - red dots and one shake; left alone it submits its form. Texts
+  `pin.delete`, `pin.enter`.
+- **QR codes** (`qr`): a white tile in both themes, in forced colors and on paper, the code sized by `--redz-qr-size`.
+- **A kiosk** (`kiosk` and its `-head`, `-langs`, `-main`, `-date`, `-clock`, `-state`, `-title`, `-line`, `-corner`,
+  `-foot`): a full screen for an always-on tablet - a huge clock, a round state on an icon tile that breathes while
+  it waits and turns a ring while busy, huge actions, a mirrored camera preview in the corner.
+- **`btn-xl`**, 56 px, for a touch screen and a page's one action; a kiosk's grow to its size.
+- **Cooldowns** (`data-cooldown`, `js/cooldown.js`): a button waits N seconds, `aria-disabled`, the seconds left after
+  its words in the text `cooldown`, then wakes; setting the attribute again starts it again.
+- **A busy button's words:** `REDZ.ui.busy()` turns a button's leading icon into its spinner and keeps its words; with
+  `data-busy` the button shows those words while it waits and says them politely after 400 ms.
+- **A confirmation that says what goes:** `REDZ.ui.confirm()` takes `note: {tone, text}`, an alert under the text, and
+  `sections: [{title, items}]`, a title over a list each - what goes, what stays - all of it text.
+- **Reordering a table's rows and a grid:** `data-reorder` on a `tbody` moves its `tr[data-value]`, the order's hidden
+  fields and status after the table; in a grid of more than one column or a flex row the pointer drags in two
+  dimensions, before or after the item under it by the half it is in, right to left too.
+- **Stat tiles** (`stat`, `stat-value`, `stat-label`, `stat-{tone}`): a number, its label and an icon in a tone - and
+  as a button with `aria-pressed`, the filter for what it counts.
+- **Steps and timelines:** `step-list`, the steps of a long job with `data-state` done, current (its own icon turns),
+  failed, kept or pending and a `step-list-detail`; `timeline`, a record's events joined by a line, each with an icon
+  tile, a `timeline-time`, words and a description list.
+- **Choice tiles** (`choice`, `choice-media`): radios or checks drawn as tiles, the chosen one the only thing in
+  color; a white banner for a logo.
+- **Sortable columns** (`table-sort`): a header's button draws the arrow of the header's `aria-sort`.
+- **Hairlines:** `progress-xs` (3 px) and `meter-xs` (2 px).
+- **Utilities:** `edge-top-{tone}` and `edge-start-{tone}`, a 3 px state on an edge; `flash`, a ground lit once;
+  `sticky-top`, under the app header in the shell (`--redz-sticky-top`); `offscreen`, outside the page yet rendered -
+  a trap field for bots, a badge reader's field.
+
+### Changed
+- The main stylesheet's budget is 28 KB gzipped, from 26 KB (the owner's choice for this release).
+- `fieldset` has no frame, margin or padding of its own and `legend` no padding, as in Bootstrap's reboot.
+- Buttons in `.table-actions` sit 4 px apart, whitespace between them or not.
+
+### Fixed
+- After a drag, the next press of a drag handle from the keyboard opened no menu: the click the drag swallows is now
+  only the one that ends it.
+
 ## 0.10.0 - 2026-11-04
 
 What the ERP's move from Bootstrap 5.3 asked for, and the editor.

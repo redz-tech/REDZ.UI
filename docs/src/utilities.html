@@ -30,6 +30,31 @@
 	</div>
 </section>
 
+<section class="vstack gap-16" aria-labelledby="utilities-flash">
+	<h2 id="utilities-flash">A flash and a sticky panel</h2>
+	<p><code>flash</code> lights an element's ground once and lets it fade - a row a click elsewhere changed. To light it again, take the class off, let the browser lay the element out, and put the class back. <code>sticky-top</code> keeps an element at the top while the page scrolls: under the app header in the shell, at <code>--redz-sticky-top</code> anywhere else.</p>
+	<div class="docs-example" id="utilities-flash-row">
+		<button class="btn" type="button" data-docs-run="flash" aria-controls="utilities-flash-target">Change the row</button>
+		<span class="p-8 rounded-8" id="utilities-flash-target">A row a click elsewhere changed</span>
+	</div>
+	<pre class="docs-code" tabindex="0"><code>row.classList.remove('flash');
+void row.offsetWidth;
+row.classList.add('flash');</code></pre>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="utilities-offscreen">
+	<h2 id="utilities-offscreen">Off the screen</h2>
+	<p><code>offscreen</code> puts an element outside the page, where no one sees it, yet it stays rendered: not <code>display: none</code>, <code>visibility: hidden</code> or the clip of <code>visually-hidden</code>, which bots look for. Two uses:</p>
+	<ul>
+		<li>A form's trap for bots: a field a person never fills. Its wrapper carries <code>aria-hidden="true"</code> so no screen reader meets it; the field has <code>tabindex="-1"</code>, <code>autocomplete="off"</code> and a plausible name, such as <code>company_url</code>. The server refuses a form that comes back with it filled. Name the class and the field plainly: bots skip what is called a honeypot.</li>
+		<li>A field that takes what a keyboard-wedge reader types - a badge or a fob read at a kiosk - kept focused while nothing else is.</li>
+	</ul>
+	<div class="docs-example" id="utilities-trap">
+		<div class="offscreen" aria-hidden="true"><label>Company site<input type="text" name="company_url" tabindex="-1" autocomplete="off"></label></div>
+		<span class="text-muted">A field is here, off the screen.</span>
+	</div>
+</section>
+
 <section class="vstack gap-16" aria-labelledby="utilities-dividers">
 	<h2 id="utilities-dividers">Dividers, rules and icon links</h2>
 	<p><code>divide-x</code> and <code>divide-y</code> on a parent draw a line between its children, across or down, with no class on any child. <code>vr</code> is a rule between the items of a row. <code>icon-link</code> lines an icon up with the words of a link.</p>

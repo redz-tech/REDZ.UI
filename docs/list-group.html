@@ -13,7 +13,7 @@
 	<link rel="alternate" type="text/markdown" href="list-group.md">
 	<script src="site.js"></script>
 	<script type="module" src="../dist/redz-ui.min.js"></script>
-	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","slide":"{position} of {count}","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}","editor.toolbar":"Formatting","editor.body":"Text","editor.source":"HTML source","editor.format":"Format","editor.format.paragraph":"Paragraph","editor.format.heading2":"Heading 2","editor.format.heading3":"Heading 3","editor.format.heading4":"Heading 4","editor.format.quote":"Quote","editor.format.code":"Code","editor.bold":"Bold","editor.italic":"Italic","editor.underline":"Underline","editor.link":"Link","editor.link.href":"Address","editor.link.words":"Words","editor.link.blank":"Open in a new tab","editor.link.nofollow":"Ask search engines not to follow it","editor.color":"Color","editor.color.primary":"Accent","editor.color.secondary":"Secondary","editor.color.success":"Success","editor.color.danger":"Danger","editor.color.warning":"Warning","editor.color.info":"Info","editor.color.none":"No color","editor.bullets":"Bulleted list","editor.numbers":"Numbered list","editor.align":"Align","editor.align.start":"Start","editor.align.center":"Center","editor.align.end":"End","editor.image":"Image","editor.embed":"Video","editor.embed.url":"YouTube or Vimeo address","editor.embed.title":"Title","editor.blocks":"Blocks","editor.group.content":"Content","editor.group.inline":"In a line","editor.group.layout":"Layout","editor.block":"Block","editor.block.up":"Move up","editor.block.down":"Move down","editor.block.edit":"Edit HTML","editor.block.columns":"Columns","editor.block.preview":"Preview","editor.block.delete":"Delete","editor.columns.count":"Columns","editor.columns.from":"From the width","editor.columns.always":"Always","editor.columns.gap":"Gap","editor.clear":"Clear formatting","editor.undo":"Undo","editor.redo":"Redo","editor.block.alert-info":"Note","editor.block.alert-success":"Success note","editor.block.alert-warning":"Warning note","editor.block.alert-danger":"Danger note","editor.block.card":"Card","editor.block.accordion":"Accordion","editor.block.tabs":"Tabs","editor.block.list-group":"List group","editor.block.table":"Table","editor.block.carousel":"Carousel","editor.block.badges":"Badges","editor.block.buttons":"Buttons","editor.block.button-group":"Button group","editor.block.progress":"Progress","editor.block.grid-2":"Two columns","editor.block.grid-3":"Three columns","editor.sample.title":"Title","editor.sample.text":"The block's text.","editor.sample.item":"Item {n}","editor.sample.previous":"Previous","editor.sample.next":"Next"}</script>
+	<script type="application/json" id="redz-ui-text">{"close":"Close","confirm.ok":"OK","confirm.cancel":"Cancel","confirm.phrase":"Type “{phrase}” to confirm","busy":"Loading…","remove":"Remove {label}","found.one":"{count} result","found.other":"{count} results","create":"Create “{label}”","strength.short":"Too short","strength.fair":"Fair","strength.good":"Good","strength.strong":"Strong","moved":"Moved to {position} of {count}","more":"More","slide":"{position} of {count}","pin.delete":"Delete","pin.enter":"Enter","cooldown":"{seconds} s","file.type":"{name} is not a kind of file this takes","file.size":"{name} is larger than {size}","editor.toolbar":"Formatting","editor.body":"Text","editor.source":"HTML source","editor.format":"Format","editor.format.paragraph":"Paragraph","editor.format.heading2":"Heading 2","editor.format.heading3":"Heading 3","editor.format.heading4":"Heading 4","editor.format.quote":"Quote","editor.format.code":"Code","editor.bold":"Bold","editor.italic":"Italic","editor.underline":"Underline","editor.link":"Link","editor.link.href":"Address","editor.link.words":"Words","editor.link.blank":"Open in a new tab","editor.link.nofollow":"Ask search engines not to follow it","editor.color":"Color","editor.color.primary":"Accent","editor.color.secondary":"Secondary","editor.color.success":"Success","editor.color.danger":"Danger","editor.color.warning":"Warning","editor.color.info":"Info","editor.color.none":"No color","editor.bullets":"Bulleted list","editor.numbers":"Numbered list","editor.align":"Align","editor.align.start":"Start","editor.align.center":"Center","editor.align.end":"End","editor.image":"Image","editor.embed":"Video","editor.embed.url":"YouTube or Vimeo address","editor.embed.title":"Title","editor.blocks":"Blocks","editor.group.content":"Content","editor.group.inline":"In a line","editor.group.layout":"Layout","editor.block":"Block","editor.block.up":"Move up","editor.block.down":"Move down","editor.block.edit":"Edit HTML","editor.block.columns":"Columns","editor.block.preview":"Preview","editor.block.delete":"Delete","editor.columns.count":"Columns","editor.columns.from":"From the width","editor.columns.always":"Always","editor.columns.gap":"Gap","editor.clear":"Clear formatting","editor.undo":"Undo","editor.redo":"Redo","editor.block.alert-info":"Note","editor.block.alert-success":"Success note","editor.block.alert-warning":"Warning note","editor.block.alert-danger":"Danger note","editor.block.card":"Card","editor.block.accordion":"Accordion","editor.block.tabs":"Tabs","editor.block.list-group":"List group","editor.block.table":"Table","editor.block.carousel":"Carousel","editor.block.badges":"Badges","editor.block.buttons":"Buttons","editor.block.button-group":"Button group","editor.block.progress":"Progress","editor.block.grid-2":"Two columns","editor.block.grid-3":"Three columns","editor.sample.title":"Title","editor.sample.text":"The block's text.","editor.sample.item":"Item {n}","editor.sample.previous":"Previous","editor.sample.next":"Next"}</script>
 </head>
 <body>
 	<div class="app">
@@ -56,6 +56,8 @@
 			<a class="app-link" href="combobox.html"><i class="bi bi-menu-down" aria-hidden="true"></i>Combobox</a>
 			<a class="app-link" href="inline-edit.html"><i class="bi bi-pencil-square" aria-hidden="true"></i>Inline edit</a>
 			<a class="app-link" href="upload.html"><i class="bi bi-cloud-arrow-up" aria-hidden="true"></i>File upload</a>
+			<a class="app-link" href="choice.html"><i class="bi bi-ui-radios-grid" aria-hidden="true"></i>Choice tiles</a>
+			<a class="app-link" href="pin.html"><i class="bi bi-grid-3x3" aria-hidden="true"></i>PIN pad</a>
 			<a class="app-link" href="editor.html"><i class="bi bi-file-earmark-richtext" aria-hidden="true"></i>Editor</a>
 			<div class="app-section">Content</div>
 			<a class="app-link" href="card.html"><i class="bi bi-card-text" aria-hidden="true"></i>Cards</a>
@@ -69,6 +71,9 @@
 			<a class="app-link" href="dot.html"><i class="bi bi-record-circle" aria-hidden="true"></i>Dots</a>
 			<a class="app-link" href="avatar.html"><i class="bi bi-person-circle" aria-hidden="true"></i>Avatars</a>
 			<a class="app-link" href="icon-tile.html"><i class="bi bi-app" aria-hidden="true"></i>Icon tiles</a>
+			<a class="app-link" href="stat.html"><i class="bi bi-speedometer2" aria-hidden="true"></i>Stat tiles</a>
+			<a class="app-link" href="qr.html"><i class="bi bi-qr-code" aria-hidden="true"></i>QR codes</a>
+			<a class="app-link" href="step-list.html"><i class="bi bi-list-check" aria-hidden="true"></i>Steps and timelines</a>
 			<a class="app-link" href="empty-state.html"><i class="bi bi-inbox" aria-hidden="true"></i>Empty states</a>
 			<a class="app-link" href="placeholder.html"><i class="bi bi-body-text" aria-hidden="true"></i>Placeholders</a>
 			<a class="app-link" href="prose.html"><i class="bi bi-file-text" aria-hidden="true"></i>Prose</a>
@@ -92,7 +97,10 @@
 			<a class="app-link" href="pagination.html"><i class="bi bi-123" aria-hidden="true"></i>Pagination</a>
 			<a class="app-link" href="stepper.html"><i class="bi bi-list-ol" aria-hidden="true"></i>Steppers</a>
 			<a class="app-link" href="palette.html"><i class="bi bi-command" aria-hidden="true"></i>Command palette</a>
+			<div class="app-section">Pages</div>
 			<a class="app-link" href="app.html"><i class="bi bi-window-sidebar" aria-hidden="true"></i>App shell</a>
+			<a class="app-link" href="page-center.html"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Centered page</a>
+			<a class="app-link" href="kiosk.html"><i class="bi bi-tablet-landscape" aria-hidden="true"></i>Kiosk</a>
 			<div class="app-section">Reference</div>
 			<a class="app-link" href="all.html"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i>All components</a>
 			<a class="app-link" href="../reference/demo/list.html"><i class="bi bi-display" aria-hidden="true"></i>Demo screens</a>
@@ -228,6 +236,52 @@
 	&lt;button class="menu-item" type="button" role="menuitem" data-move="down"&gt;&lt;i class="bi bi-arrow-down" aria-hidden="true"&gt;&lt;/i&gt;Move down&lt;/button&gt;
 	&lt;button class="menu-item" type="button" role="menuitem" data-move="first"&gt;Move to the top&lt;/button&gt;
 	&lt;button class="menu-item" type="button" role="menuitem" data-move="last"&gt;Move to the bottom&lt;/button&gt;
+&lt;/div&gt;</code></pre></div>
+					<p>A table's rows move the same: <code>data-reorder</code> on the <code>tbody</code>, a <code>data-value</code> on each row and its <code>drag-handle</code> in a cell. The hidden fields and the polite status go after the table.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="list-group-moves-rows">
+						<table class="table" aria-label="Lines of the estimate">
+							<thead><tr><th scope="col"><span class="visually-hidden">Move</span></th><th scope="col">Item</th><th scope="col" class="text-end">Amount</th></tr></thead>
+							<tbody data-reorder="lines[]">
+								<tr data-value="cement"><td><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Cement"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button></td><td>Cement</td><td class="text-end tabular-nums">12,400</td></tr>
+								<tr data-value="steel"><td><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Steel bars"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button></td><td>Steel bars</td><td class="text-end tabular-nums">38,900</td></tr>
+								<tr data-value="labor"><td><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Labor"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button></td><td>Labor</td><td class="text-end tabular-nums">21,000</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;table class="table" aria-label="Lines of the estimate"&gt;
+	&lt;thead&gt;&lt;tr&gt;&lt;th scope="col"&gt;&lt;span class="visually-hidden"&gt;Move&lt;/span&gt;&lt;/th&gt;&lt;th scope="col"&gt;Item&lt;/th&gt;&lt;th scope="col" class="text-end"&gt;Amount&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+	&lt;tbody data-reorder="lines[]"&gt;
+		&lt;tr data-value="cement"&gt;&lt;td&gt;&lt;button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Cement"&gt;&lt;i class="bi bi-grip-vertical" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;&lt;/td&gt;&lt;td&gt;Cement&lt;/td&gt;&lt;td class="text-end tabular-nums"&gt;12,400&lt;/td&gt;&lt;/tr&gt;
+		&lt;tr data-value="steel"&gt;&lt;td&gt;&lt;button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Steel bars"&gt;&lt;i class="bi bi-grip-vertical" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;&lt;/td&gt;&lt;td&gt;Steel bars&lt;/td&gt;&lt;td class="text-end tabular-nums"&gt;38,900&lt;/td&gt;&lt;/tr&gt;
+		&lt;tr data-value="labor"&gt;&lt;td&gt;&lt;button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Labor"&gt;&lt;i class="bi bi-grip-vertical" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;&lt;/td&gt;&lt;td&gt;Labor&lt;/td&gt;&lt;td class="text-end tabular-nums"&gt;21,000&lt;/td&gt;&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;</code></pre></div>
+					<p>In a grid of more than one column, or a row, the pointer drags in two dimensions: the item under it takes the dragged one before or after it, by the half of it the pointer is in. The menu's moves go earlier and later in the order - give them those words.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="list-group-moves-grid">
+						<div class="grid cols-2 md:cols-3 gap-12" aria-label="Dashboard cards" role="list" data-reorder="cards[]">
+							<div class="card" role="listitem" data-value="sales"><div class="card-body hstack gap-8"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-grid-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Sales"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>Sales</div></div>
+							<div class="card" role="listitem" data-value="bookings"><div class="card-body hstack gap-8"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-grid-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Bookings"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>Bookings</div></div>
+							<div class="card span-full md:span-1" role="listitem" data-value="tasks"><div class="card-body hstack gap-8"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-grid-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Tasks"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>Tasks</div></div>
+							<div class="card" role="listitem" data-value="weather"><div class="card-body hstack gap-8"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-grid-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Weather"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>Weather</div></div>
+						</div>
+						<div class="menu" id="list-group-moves-grid-menu" popover role="menu" aria-label="Move">
+							<button class="menu-item" type="button" role="menuitem" data-move="up"><i class="bi bi-arrow-left flip-rtl" aria-hidden="true"></i>Move earlier</button>
+							<button class="menu-item" type="button" role="menuitem" data-move="down"><i class="bi bi-arrow-right flip-rtl" aria-hidden="true"></i>Move later</button>
+							<button class="menu-item" type="button" role="menuitem" data-move="first">Move to the start</button>
+							<button class="menu-item" type="button" role="menuitem" data-move="last">Move to the end</button>
+						</div>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;div class="grid cols-2 md:cols-3 gap-12" aria-label="Dashboard cards" role="list" data-reorder="cards[]"&gt;
+	&lt;div class="card" role="listitem" data-value="sales"&gt;&lt;div class="card-body hstack gap-8"&gt;&lt;button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-grid-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Sales"&gt;&lt;i class="bi bi-grip-vertical" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;Sales&lt;/div&gt;&lt;/div&gt;
+	&lt;div class="card" role="listitem" data-value="bookings"&gt;&lt;div class="card-body hstack gap-8"&gt;&lt;button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-grid-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Bookings"&gt;&lt;i class="bi bi-grip-vertical" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;Bookings&lt;/div&gt;&lt;/div&gt;
+	&lt;div class="card span-full md:span-1" role="listitem" data-value="tasks"&gt;&lt;div class="card-body hstack gap-8"&gt;&lt;button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-grid-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Tasks"&gt;&lt;i class="bi bi-grip-vertical" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;Tasks&lt;/div&gt;&lt;/div&gt;
+	&lt;div class="card" role="listitem" data-value="weather"&gt;&lt;div class="card-body hstack gap-8"&gt;&lt;button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-grid-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Weather"&gt;&lt;i class="bi bi-grip-vertical" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;Weather&lt;/div&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="menu" id="list-group-moves-grid-menu" popover role="menu" aria-label="Move"&gt;
+	&lt;button class="menu-item" type="button" role="menuitem" data-move="up"&gt;&lt;i class="bi bi-arrow-left flip-rtl" aria-hidden="true"&gt;&lt;/i&gt;Move earlier&lt;/button&gt;
+	&lt;button class="menu-item" type="button" role="menuitem" data-move="down"&gt;&lt;i class="bi bi-arrow-right flip-rtl" aria-hidden="true"&gt;&lt;/i&gt;Move later&lt;/button&gt;
+	&lt;button class="menu-item" type="button" role="menuitem" data-move="first"&gt;Move to the start&lt;/button&gt;
+	&lt;button class="menu-item" type="button" role="menuitem" data-move="last"&gt;Move to the end&lt;/button&gt;
 &lt;/div&gt;</code></pre></div>
 					<pre class="docs-code" tabindex="0"><code>document.addEventListener('redz:move', (event) =&gt; {
 	event.preventDefault();

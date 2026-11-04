@@ -46,12 +46,25 @@ Text fields, selects and text areas with Bootstrap 5's names: a label floating i
 
 ### An icon in the field
 
-`form-adorn` puts an icon inside a field, at its start; the field keeps its own name.
+`form-adorn` puts an icon inside a field, at its start; the field keeps its own name. With `form-floating` on the same element the label starts after the icon, inside the one border - the way a sign-in form draws its fields.
 
 ```html
 <div class="form-adorn">
 	<i class="bi bi-search" aria-hidden="true"></i>
 	<input class="form-control" type="search" placeholder="Name, slug or code" aria-label="Search excursions">
+</div>
+<div class="form-floating form-adorn">
+	<i class="bi bi-envelope" aria-hidden="true"></i>
+	<input class="form-control" id="form-adorn-mail" type="email" placeholder="name@example.com" autocomplete="email">
+	<label for="form-adorn-mail">E-mail</label>
+</div>
+<div class="input-group">
+	<div class="form-floating form-adorn">
+		<i class="bi bi-key" aria-hidden="true"></i>
+		<input class="form-control" id="form-adorn-password" type="password" placeholder="Password" autocomplete="current-password">
+		<label for="form-adorn-password">Password</label>
+	</div>
+	<button class="btn btn-icon" type="button" commandfor="form-adorn-password" command="--reveal" aria-pressed="false" aria-label="Show the password"><i class="bi bi-eye" aria-hidden="true"></i></button>
 </div>
 ```
 

@@ -99,6 +99,12 @@
 		accent-color: var(--redz-primary);
 	}
 
+	@keyframes flash {
+		from {
+			background-color: var(--redz-warning-subtle);
+		}
+	}
+
 	.bi {
 		display: inline-block;
 		flex: none;

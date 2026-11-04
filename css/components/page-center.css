@@ -1,0 +1,61 @@
+@layer components {
+	.page-center {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: var(--redz-space-24);
+		min-block-size: 100dvh;
+		padding: calc(var(--redz-control-height) + 2 * var(--redz-space-16)) var(--redz-space-16) var(--redz-space-40);
+	}
+
+	.page-center > :not(.page-center-corner) {
+		inline-size: min(100%, var(--redz-page-center-width, 30rem));
+	}
+
+	.page-center > .card {
+		box-shadow: var(--redz-shadow-3);
+	}
+
+	.page-center-brand {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: var(--redz-space-8);
+		text-align: center;
+	}
+
+	.page-center-brand > :is(img, svg) {
+		inline-size: auto;
+		max-inline-size: 100%;
+		block-size: auto;
+		max-block-size: 7.5rem;
+	}
+
+	.page-center-brand > p {
+		color: var(--redz-text-muted);
+	}
+
+	.page-center-brand > nav {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: var(--redz-space-4) var(--redz-space-16);
+		font-size: var(--redz-fs-12);
+	}
+
+	.page-center-brand > nav [aria-current] {
+		color: var(--redz-text);
+		font-weight: 600;
+		text-decoration: none;
+	}
+
+	.page-center-corner {
+		position: absolute;
+		inset-block-start: var(--redz-space-16);
+		inset-inline-end: var(--redz-space-16);
+		display: flex;
+		gap: var(--redz-space-8);
+	}
+}

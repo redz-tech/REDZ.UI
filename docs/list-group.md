@@ -91,6 +91,36 @@ A list with `data-reorder` naming a hidden field moves its items, each with a `d
 </div>
 ```
 
+A table's rows move the same: `data-reorder` on the `tbody`, a `data-value` on each row and its `drag-handle` in a cell. The hidden fields and the polite status go after the table.
+
+```html
+<table class="table" aria-label="Lines of the estimate">
+	<thead><tr><th scope="col"><span class="visually-hidden">Move</span></th><th scope="col">Item</th><th scope="col" class="text-end">Amount</th></tr></thead>
+	<tbody data-reorder="lines[]">
+		<tr data-value="cement"><td><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Cement"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button></td><td>Cement</td><td class="text-end tabular-nums">12,400</td></tr>
+		<tr data-value="steel"><td><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Steel bars"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button></td><td>Steel bars</td><td class="text-end tabular-nums">38,900</td></tr>
+		<tr data-value="labor"><td><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Labor"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button></td><td>Labor</td><td class="text-end tabular-nums">21,000</td></tr>
+	</tbody>
+</table>
+```
+
+In a grid of more than one column, or a row, the pointer drags in two dimensions: the item under it takes the dragged one before or after it, by the half of it the pointer is in. The menu's moves go earlier and later in the order - give them those words.
+
+```html
+<div class="grid cols-2 md:cols-3 gap-12" aria-label="Dashboard cards" role="list" data-reorder="cards[]">
+	<div class="card" role="listitem" data-value="sales"><div class="card-body hstack gap-8"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-grid-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Sales"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>Sales</div></div>
+	<div class="card" role="listitem" data-value="bookings"><div class="card-body hstack gap-8"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-grid-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Bookings"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>Bookings</div></div>
+	<div class="card span-full md:span-1" role="listitem" data-value="tasks"><div class="card-body hstack gap-8"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-grid-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Tasks"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>Tasks</div></div>
+	<div class="card" role="listitem" data-value="weather"><div class="card-body hstack gap-8"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-grid-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Weather"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>Weather</div></div>
+</div>
+<div class="menu" id="list-group-moves-grid-menu" popover role="menu" aria-label="Move">
+	<button class="menu-item" type="button" role="menuitem" data-move="up"><i class="bi bi-arrow-left flip-rtl" aria-hidden="true"></i>Move earlier</button>
+	<button class="menu-item" type="button" role="menuitem" data-move="down"><i class="bi bi-arrow-right flip-rtl" aria-hidden="true"></i>Move later</button>
+	<button class="menu-item" type="button" role="menuitem" data-move="first">Move to the start</button>
+	<button class="menu-item" type="button" role="menuitem" data-move="last">Move to the end</button>
+</div>
+```
+
 ```js
 document.addEventListener('redz:move', (event) => {
 	event.preventDefault();

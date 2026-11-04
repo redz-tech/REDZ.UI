@@ -115,6 +115,55 @@
 		white-space: nowrap;
 	}
 
+	.table-actions > * + * {
+		margin-inline-start: var(--redz-space-4);
+	}
+
+	.table-sort {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--redz-space-4);
+		padding: 0;
+		border: 0;
+		background: none;
+		color: inherit;
+		font: inherit;
+		cursor: pointer;
+	}
+
+	.table-sort:hover {
+		color: var(--redz-text);
+	}
+
+	.table-sort::after {
+		content: "";
+		inline-size: 0.75rem;
+		block-size: 0.75rem;
+		background: currentColor;
+		mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708m0-2.292a.5.5 0 0 0 .708 0L8 3.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708'/%3E%3C/svg%3E") center / contain no-repeat;
+		opacity: 0.5;
+	}
+
+	:is([aria-sort="ascending"], [aria-sort="descending"]) > .table-sort::after {
+		mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5'/%3E%3C/svg%3E");
+		opacity: 1;
+	}
+
+	[aria-sort="descending"] > .table-sort::after {
+		rotate: 180deg;
+	}
+
+	@media (forced-colors: active) {
+		.table-sort::after {
+			forced-color-adjust: none;
+			background: CanvasText;
+		}
+	}
+
+	:is([aria-sort="ascending"], [aria-sort="descending"]) > .table-sort {
+		color: var(--redz-text);
+	}
+
 	.table-check {
 		inline-size: 1px;
 	}

@@ -1,0 +1,45 @@
+<header class="vstack gap-8">
+	<h1>Steps and timelines</h1>
+	<p class="docs-lead">The steps of a long job as it runs - a release, a publish, an install - each with what it found, and the events of a record's history, one under the other.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="step-list-examples">
+	<h2 id="step-list-examples">A job's steps</h2>
+	<p><code>step-list</code> is an <code>ol</code> of steps, each with an icon, its name and a <code>step-list-detail</code> at the end; <code>data-state</code> says where it is: <code>done</code>, <code>current</code> - its icon turns while motion is allowed, <code>failed</code>, <code>kept</code> - failed with the earlier state kept - and <code>pending</code>. A job's panel is a <code>card</code> with <code>sticky-top</code>, under the app header while the page scrolls, its head a <a href="dot.html">dot</a>, a title and the time, and a <a href="progress.html">progress</a>.</p>
+	<div class="docs-example docs-example-stack" id="step-list-job">
+		<section class="card" aria-labelledby="step-list-job-title">
+			<div class="card-header hstack gap-8"><span class="dot dot-primary"></span><h2 id="step-list-job-title">Publishing the site</h2><span class="ms-auto tabular-nums text-muted">01:42</span></div>
+			<progress class="progress progress-xs" max="5" value="2" aria-labelledby="step-list-job-title"></progress>
+			<div class="card-body">
+				<ol class="step-list">
+					<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Check the templates<span class="step-list-detail">84 pages</span></li>
+					<li data-state="kept"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>Resize the images<span class="step-list-detail">2 failed, the old ones kept</span></li>
+					<li data-state="current" aria-current="step"><i class="bi bi-arrow-repeat" aria-hidden="true"></i>Write the pages<span class="step-list-detail">31 of 84</span></li>
+					<li data-state="pending"><i class="bi bi-circle" aria-hidden="true"></i>Rebuild the sitemap</li>
+					<li data-state="pending"><i class="bi bi-circle" aria-hidden="true"></i>Clear the CDN</li>
+				</ol>
+			</div>
+		</section>
+	</div>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="step-list-timeline">
+	<h2 id="step-list-timeline">A timeline</h2>
+	<p><code>timeline</code> is an <code>ol</code> of events joined by a line: each starts with an <a href="icon-tile.html">icon tile</a> in its tone, then a <code>timeline-time</code>, the words, and a <code>dl</code> of details when it has them.</p>
+	<div class="docs-example docs-example-stack" id="step-list-events">
+		<ol class="timeline" aria-label="The payment's history">
+			<li><span class="icon-tile icon-tile-info"><i class="bi bi-receipt" aria-hidden="true"></i></span><time class="timeline-time" datetime="2026-11-02T09:14">November 2, 09:14</time>Invoice issued<dl><dt>Amount</dt><dd>12,500 THB</dd><dt>Due</dt><dd>November 9</dd></dl></li>
+			<li><span class="icon-tile icon-tile-warning"><i class="bi bi-bell" aria-hidden="true"></i></span><time class="timeline-time" datetime="2026-11-08T10:00">November 8, 10:00</time>Reminder sent</li>
+			<li><span class="icon-tile icon-tile-success"><i class="bi bi-check-lg" aria-hidden="true"></i></span><time class="timeline-time" datetime="2026-11-09T16:41">November 9, 16:41</time>Paid by PromptPay<dl><dt>Reference</dt><dd class="font-monospace">PP-88214</dd></dl></li>
+		</ol>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="step-list-access">
+	<h2 id="step-list-access">Accessibility</h2>
+	<ul>
+		<li>The words carry the state; the icon and the color repeat them. Mark the current step <code>aria-current="step"</code>.</li>
+		<li>A job that runs while the person waits says its new step in a polite live region the page keeps - one line per step, not every tick of the clock.</li>
+		<li>A timeline's times are <code>&lt;time datetime&gt;</code>; its details are a description list, read as pairs.</li>
+	</ul>
+</section>

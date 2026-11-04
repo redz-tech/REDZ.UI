@@ -26,7 +26,7 @@ gh release verify-asset v0.10.0 redz-ui-0.10.0.zip --repo redz-tech/REDZ.UI</cod
   &lt;script type="application/json" id="redz-ui-text"&gt;{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…"}&lt;/script&gt;
 &lt;/head&gt;</code></pre>
 	<ul>
-		<li><code>dist/redz-ui.min.css</code> is the layers, the tokens, the components and the utilities in one file, within its budget of 26 KB gzipped: the stylesheets <code>css/index.css</code> pulls in, squeezed.</li>
+		<li><code>dist/redz-ui.min.css</code> is the layers, the tokens, the components and the utilities in one file, within its budget of 28 KB gzipped: the stylesheets <code>css/index.css</code> pulls in, squeezed.</li>
 		<li><code>css/icons.css</code> is apart: one mask per Bootstrap Icons file, used only by name. It reaches each file by a URL relative to itself, <code>../icons/NAME.svg</code>, so the release's folders keep their shape where a project serves them. A project that marks its static files by their content (<code>?h=…</code>) cannot mark the icons this way: it serves each release from a folder of its own version instead, which changes with every release.</li>
 		<li><code>dist/redz-ui.min.js</code> is one ES module of the behaviors, within its budget of 25 KB gzipped: the modules of <code>js/index.js</code> joined, squeezed and given short local names. It sets <code>REDZ.ui</code> for calls from code.</li>
 		<li>The island <code>#redz-ui-text</code> gives the library its words, in the page's language: every key of the passport's <code>texts</code>, and for each key of its <code>plurals</code> the other forms its language's plural rules name (<code>found.one</code>, <code>found.few</code>). The example shows four of them.</li>
@@ -58,7 +58,7 @@ gh release verify-asset v0.10.0 redz-ui-0.10.0.zip --repo redz-tech/REDZ.UI</cod
 		<thead><tr><th scope="col">Call</th><th scope="col">Does</th></tr></thead>
 		<tbody>
 			<tr><td><code>REDZ.ui.toast({title, text, tone, action, persistent})</code></td><td>Shows a notice; answers a function that closes it. <a href="toast.html">Toasts</a></td></tr>
-			<tr><td><code>await REDZ.ui.confirm({title, text, ok, cancel, tone})</code></td><td>Asks a question in a dialog; answers <code>true</code> or <code>false</code>. <a href="dialog.html">Dialogs</a></td></tr>
+			<tr><td><code>await REDZ.ui.confirm({title, text, note, sections, ok, cancel, tone, phrase})</code></td><td>Asks a question in a dialog; answers <code>true</code> or <code>false</code>. <a href="dialog.html">Dialogs</a></td></tr>
 			<tr><td><code>await REDZ.ui.busy(element, promise)</code></td><td>Marks a button or a region busy until the promise settles. <a href="busy.html">Busy</a></td></tr>
 		</tbody>
 	</table>

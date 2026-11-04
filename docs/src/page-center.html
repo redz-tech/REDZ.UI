@@ -1,0 +1,55 @@
+<header class="vstack gap-8">
+	<h1>Centered page</h1>
+	<p class="docs-lead">A page without the app shell: the brand, one card and a way on, in a column at the middle of the window - sign-in, registration, a password reset, a second factor, an unlock, an enrolment.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="page-center-examples">
+	<h2 id="page-center-examples">Example</h2>
+	<p><code>page-center</code> on the page's <code>main</code> stands its children in a column 30rem (480 px) wide at the middle of the window, and the column grows down when they are taller; <code>--redz-page-center-width</code> sets another width. <code>page-center-brand</code> holds the logo, the name, one line and the language links; a <code>card</code> in the column is raised. <code>page-center-corner</code> holds the theme button at the top end of the page: it scrolls with the page, and the column starts below it, so on a phone it never covers the logo or the card.</p>
+	<div class="docs-example" id="page-center-example">
+		<div class="page-center">
+			<div class="page-center-corner">
+				<button class="btn btn-text btn-icon" type="button" aria-label="Theme"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+			</div>
+			<header class="page-center-brand">
+				<span class="app-mark">RZ</span>
+				<h2>REDZ CMS</h2>
+				<p>Sign in to manage your sites</p>
+				<nav aria-label="Language">
+					<a href="#page-center-example" lang="en" aria-current="page">English</a>
+					<a href="#page-center-example" lang="th">ไทย</a>
+					<a href="#page-center-example" lang="ru">Русский</a>
+				</nav>
+			</header>
+			<form class="card">
+				<div class="card-body vstack gap-16">
+					<div class="form-floating form-adorn">
+						<i class="bi bi-envelope" aria-hidden="true"></i>
+						<input class="form-control" id="page-center-mail" type="email" placeholder="name@example.com" autocomplete="username">
+						<label for="page-center-mail">E-mail</label>
+					</div>
+					<div class="input-group">
+						<div class="form-floating form-adorn">
+							<i class="bi bi-key" aria-hidden="true"></i>
+							<input class="form-control" id="page-center-password" type="password" placeholder="Password" autocomplete="current-password">
+							<label for="page-center-password">Password</label>
+						</div>
+						<button class="btn btn-icon" type="button" commandfor="page-center-password" command="--reveal" aria-pressed="false" aria-label="Show the password"><i class="bi bi-eye" aria-hidden="true"></i></button>
+					</div>
+					<button class="btn btn-primary btn-lg w-100" type="submit"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Sign in</button>
+				</div>
+			</form>
+			<p class="text-center"><a href="#page-center-example">Forgot the password?</a></p>
+		</div>
+	</div>
+	<p>In a page <code>page-center</code> is the <code>main</code> and the brand's name its <code>h1</code>; here they are a <code>div</code> and an <code>h2</code> under the page's own.</p>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="page-center-access">
+	<h2 id="page-center-access">Accessibility</h2>
+	<ul>
+		<li>The page is one <code>main</code>; the language links are a <code>nav</code> with a name, each link with its <code>lang</code>, the current one with <code>aria-current="page"</code>.</li>
+		<li>The corner comes first in the source so <kbd>Tab</kbd> meets it before the form; put it after the form when the form should come first.</li>
+		<li>A logo image has an <code>alt</code> of the name only when the name is not written beside it; otherwise <code>alt=""</code>.</li>
+	</ul>
+</section>

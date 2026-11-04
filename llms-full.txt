@@ -36,7 +36,7 @@ The stylesheet, the icons and the scripts, with the page's own words for the few
 </head>
 ```
 
-- `dist/redz-ui.min.css` is the layers, the tokens, the components and the utilities in one file, within its budget of 26 KB gzipped: the stylesheets `css/index.css` pulls in, squeezed.
+- `dist/redz-ui.min.css` is the layers, the tokens, the components and the utilities in one file, within its budget of 28 KB gzipped: the stylesheets `css/index.css` pulls in, squeezed.
 - `css/icons.css` is apart: one mask per Bootstrap Icons file, used only by name. It reaches each file by a URL relative to itself, `../icons/NAME.svg`, so the release's folders keep their shape where a project serves them. A project that marks its static files by their content (`?h=…`) cannot mark the icons this way: it serves each release from a folder of its own version instead, which changes with every release.
 - `dist/redz-ui.min.js` is one ES module of the behaviors, within its budget of 25 KB gzipped: the modules of `js/index.js` joined, squeezed and given short local names. It sets `REDZ.ui` for calls from code.
 - The island `#redz-ui-text` gives the library its words, in the page's language: every key of the passport's `texts`, and for each key of its `plurals` the other forms its language's plural rules name (`found.one`, `found.few`). The example shows four of them.
@@ -65,7 +65,7 @@ Menus, tabs, dialogs and their keys need no call: the library listens on the doc
 | Call | Does |
 | --- | --- |
 | `REDZ.ui.toast({title, text, tone, action, persistent})` | Shows a notice; answers a function that closes it. [Toasts](toast.md) |
-| `await REDZ.ui.confirm({title, text, ok, cancel, tone})` | Asks a question in a dialog; answers `true` or `false`. [Dialogs](dialog.md) |
+| `await REDZ.ui.confirm({title, text, note, sections, ok, cancel, tone, phrase})` | Asks a question in a dialog; answers `true` or `false`. [Dialogs](dialog.md) |
 | `await REDZ.ui.busy(element, promise)` | Marks a button or a region busy until the promise settles. [Busy](busy.md) |
 
 ## Browsers
@@ -241,6 +241,33 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 ```html
 <a class="visually-hidden-focusable btn" href="#utilities-all">Skip to every utility</a>
 <span class="text-muted">The link above shows on focus.</span>
+```
+
+## A flash and a sticky panel
+
+`flash` lights an element's ground once and lets it fade - a row a click elsewhere changed. To light it again, take the class off, let the browser lay the element out, and put the class back. `sticky-top` keeps an element at the top while the page scrolls: under the app header in the shell, at `--redz-sticky-top` anywhere else.
+
+```html
+<button class="btn" type="button" data-docs-run="flash" aria-controls="utilities-flash-target">Change the row</button>
+<span class="p-8 rounded-8" id="utilities-flash-target">A row a click elsewhere changed</span>
+```
+
+```js
+row.classList.remove('flash');
+void row.offsetWidth;
+row.classList.add('flash');
+```
+
+## Off the screen
+
+`offscreen` puts an element outside the page, where no one sees it, yet it stays rendered: not `display: none`, `visibility: hidden` or the clip of `visually-hidden`, which bots look for. Two uses:
+
+- A form's trap for bots: a field a person never fills. Its wrapper carries `aria-hidden="true"` so no screen reader meets it; the field has `tabindex="-1"`, `autocomplete="off"` and a plausible name, such as `company_url`. The server refuses a form that comes back with it filled. Name the class and the field plainly: bots skip what is called a honeypot.
+- A field that takes what a keyboard-wedge reader types - a badge or a fob read at a kiosk - kept focused while nothing else is.
+
+```html
+<div class="offscreen" aria-hidden="true"><label>Company site<input type="text" name="company_url" tabindex="-1" autocomplete="off"></label></div>
+<span class="text-muted">A field is here, off the screen.</span>
 ```
 
 ## Dividers, rules and icon links
@@ -651,6 +678,18 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 | `border-danger-subtle` | `border-color: color-mix(in oklch, var(--redz-danger) 35%, var(--redz-border));` | - |
 | `border-warning-subtle` | `border-color: color-mix(in oklch, var(--redz-warning) 35%, var(--redz-border));` | - |
 | `border-info-subtle` | `border-color: color-mix(in oklch, var(--redz-info) 35%, var(--redz-border));` | - |
+| `edge-top-primary` | `border-block-start: 3px solid var(--redz-primary);` | - |
+| `edge-top-secondary` | `border-block-start: 3px solid var(--redz-secondary);` | - |
+| `edge-top-success` | `border-block-start: 3px solid var(--redz-success);` | - |
+| `edge-top-danger` | `border-block-start: 3px solid var(--redz-danger);` | - |
+| `edge-top-warning` | `border-block-start: 3px solid var(--redz-warning);` | - |
+| `edge-top-info` | `border-block-start: 3px solid var(--redz-info);` | - |
+| `edge-start-primary` | `border-inline-start: 3px solid var(--redz-primary);` | - |
+| `edge-start-secondary` | `border-inline-start: 3px solid var(--redz-secondary);` | - |
+| `edge-start-success` | `border-inline-start: 3px solid var(--redz-success);` | - |
+| `edge-start-danger` | `border-inline-start: 3px solid var(--redz-danger);` | - |
+| `edge-start-warning` | `border-inline-start: 3px solid var(--redz-warning);` | - |
+| `edge-start-info` | `border-inline-start: 3px solid var(--redz-info);` | - |
 | `rounded` | `border-radius: var(--redz-radius-8);` | - |
 | `rounded-full` | `border-radius: 999px;` | - |
 | `rounded-0` | `border-radius: var(--redz-radius-0);` | - |
@@ -758,6 +797,9 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 | `pe-none` | `pointer-events: none;` | - |
 | `pe-auto` | `pointer-events: auto;` | - |
 | `visually-hidden` | `position: absolute; inline-size: 1px; block-size: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;` | - |
+| `sticky-top` | `position: sticky; inset-block-start: var(--redz-sticky-top, 0); z-index: 5;` | - |
+| `flash` | `animation: flash 1.2s ease-out;` | - |
+| `offscreen` | `position: absolute; inset-block-start: 0; inset-inline-start: -100vw; inline-size: 1px; block-size: 1px; overflow: hidden;` | - |
 | `stretched-link::after` | `content: ""; position: absolute; inset: 0; z-index: 1;` | - |
 | `vr` | `display: inline-block; align-self: stretch; inline-size: 1px; min-block-size: 1em; background: var(--redz-border-strong);` | - |
 | `icon-link` | `display: inline-flex; align-items: center; gap: 0.375em; text-underline-offset: 0.2em;` | - |
@@ -1026,8 +1068,7 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 | `row-gap-5` | `row-gap-48` | value | the number is the pixels |
 | `shadow` | `shadow-2` | rename |  |
 | `small` | - | review | fs-12, or the <small> element |
-| `sticky-bottom` | - | review | position-sticky with top-0 or bottom-0 |
-| `sticky-top` | - | review | position-sticky with top-0 or bottom-0 |
+| `sticky-bottom` | - | review | position-sticky with bottom-0 |
 | `text-black` | - | review | no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast |
 | `text-black-50` | - | review | no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast |
 | `text-body-emphasis` | `text-body` | rename |  |
@@ -2069,8 +2110,7 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `show` | - | state | the browser's [open] and :popover-open |
 | `showing` | - | state | the browser's [open] and :popover-open |
 | `small` | - | review | fs-12, or the <small> element |
-| `sticky-bottom` | - | review | position-sticky with top-0 or bottom-0 |
-| `sticky-top` | - | review | position-sticky with top-0 or bottom-0 |
+| `sticky-bottom` | - | review | position-sticky with bottom-0 |
 | `tab-content` | - | remove | panels are siblings with role="tabpanel", hidden when not selected |
 | `tab-pane` | - | remove | panels are siblings with role="tabpanel", hidden when not selected |
 | `table-active` | - | review | aria-selected or aria-current on the row |
@@ -2637,13 +2677,14 @@ Quieter forms of the same tones for secondary actions, rows and toolbars. `btn-t
 
 ### Sizes
 
-A size is a word: `btn-xs` 24 px, `btn-sm` 28 px, the default 32 px, `btn-lg` 40 px - the heights of every control of the same size.
+A size is a word: `btn-xs` 24 px, `btn-sm` 28 px, the default 32 px, `btn-lg` 40 px - the heights of every control of the same size. `btn-xl`, 56 px, is for a touch screen and the one action of a page; in a [kiosk](kiosk.md) it grows to a kiosk's size.
 
 ```html
 <button class="btn btn-primary btn-xs" type="button">Extra small</button>
 <button class="btn btn-primary btn-sm" type="button">Small</button>
 <button class="btn btn-primary" type="button">Default</button>
 <button class="btn btn-primary btn-lg" type="button">Large</button>
+<button class="btn btn-primary btn-xl" type="button">Extra large</button>
 ```
 
 ### Icons
@@ -2689,11 +2730,19 @@ An icon sits beside the words, or alone in a square `btn-icon` whose name is its
 
 ### Toggle and busy
 
-A toggle carries `aria-pressed`. While its action runs, `REDZ.ui.busy(button, promise)` shows a spinner in the button and marks it `aria-disabled`: it keeps the focus and ignores clicks until the promise settles.
+A toggle carries `aria-pressed`. While its action runs, `REDZ.ui.busy(button, promise)` shows a spinner in the button and marks it `aria-disabled`: it keeps the focus and ignores clicks until the promise settles. See [Busy](busy.md) for the words a button says while it waits.
 
 ```html
 <button class="btn" type="button" aria-pressed="false" data-docs-run="toggle"><i class="bi bi-pin-angle" aria-hidden="true"></i>Pin</button>
 <button class="btn btn-primary" type="button" data-docs-run="busy-button">Save for 2 seconds</button>
+```
+
+### A wait before it works again
+
+`data-cooldown="N"` makes a button wait N seconds: it is `aria-disabled` - it keeps the focus and ignores clicks - and shows the seconds left after its words, in the page's text `cooldown`; then it wakes and the attribute goes. Setting the attribute again starts the wait again; a page reloaded during a wait renders the seconds left. The count is drawn, not read out every second: say the wait in words once, when it starts - "A new code is on its way; ask again in a minute".
+
+```html
+<button class="btn" type="button" data-cooldown="20" data-docs-run="cooldown"><i class="bi bi-arrow-clockwise" aria-hidden="true"></i>Send the code again</button>
 ```
 
 ## States
@@ -2712,7 +2761,7 @@ A state is the attribute accessibility needs anyway, on the button itself: no `a
 
 From [`css/components/btn.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/btn.css). It declares `--redz-btn-bg`, `--redz-btn-fg`, `--redz-btn-hover`, `--redz-btn-hover-fg` on its root, never on rows or items.
 
-It reads the theme's `--redz-bg-hover`, `--redz-text`, `--redz-control-height`, `--redz-space-12`, `--redz-radius-8`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-primary-subtle`, `--redz-secondary-subtle`, `--redz-success-subtle`, `--redz-danger-subtle`, `--redz-warning-subtle`, `--redz-info-subtle`, `--redz-control-height-xs`, `--redz-radius-6`, `--redz-fs-12`, `--redz-control-height-sm`, `--redz-space-8`, `--redz-control-height-lg`, `--redz-space-16`, `--redz-fs-16`, `--redz-bg-page`, `--redz-text-faint`, `--redz-text-muted`, `--redz-motion`.
+It reads the theme's `--redz-bg-hover`, `--redz-text`, `--redz-control-height`, `--redz-space-12`, `--redz-radius-8`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-primary-subtle`, `--redz-secondary-subtle`, `--redz-success-subtle`, `--redz-danger-subtle`, `--redz-warning-subtle`, `--redz-info-subtle`, `--redz-control-height-xs`, `--redz-radius-6`, `--redz-fs-12`, `--redz-control-height-sm`, `--redz-space-8`, `--redz-control-height-lg`, `--redz-space-16`, `--redz-fs-16`, `--redz-space-24`, `--redz-radius-12`, `--redz-fs-20`, `--redz-bg-page`, `--redz-text-faint`, `--redz-text-muted`, `--redz-motion`.
 
 ## From Bootstrap 5.3
 
@@ -2911,12 +2960,25 @@ Text fields, selects and text areas with Bootstrap 5's names: a label floating i
 
 ### An icon in the field
 
-`form-adorn` puts an icon inside a field, at its start; the field keeps its own name.
+`form-adorn` puts an icon inside a field, at its start; the field keeps its own name. With `form-floating` on the same element the label starts after the icon, inside the one border - the way a sign-in form draws its fields.
 
 ```html
 <div class="form-adorn">
 	<i class="bi bi-search" aria-hidden="true"></i>
 	<input class="form-control" type="search" placeholder="Name, slug or code" aria-label="Search excursions">
+</div>
+<div class="form-floating form-adorn">
+	<i class="bi bi-envelope" aria-hidden="true"></i>
+	<input class="form-control" id="form-adorn-mail" type="email" placeholder="name@example.com" autocomplete="email">
+	<label for="form-adorn-mail">E-mail</label>
+</div>
+<div class="input-group">
+	<div class="form-floating form-adorn">
+		<i class="bi bi-key" aria-hidden="true"></i>
+		<input class="form-control" id="form-adorn-password" type="password" placeholder="Password" autocomplete="current-password">
+		<label for="form-adorn-password">Password</label>
+	</div>
+	<button class="btn btn-icon" type="button" commandfor="form-adorn-password" command="--reveal" aria-pressed="false" aria-label="Show the password"><i class="bi bi-eye" aria-hidden="true"></i></button>
 </div>
 ```
 
@@ -3045,6 +3107,45 @@ A `form-select` or a check joins the same way; a check goes inside an `input-gro
 </div>
 ```
 
+### With a floating label
+
+A [`form-floating`](form.md#form-floating) grows in the group as a field does, and its parts take its height: an icon or a unit in `input-group-text`, a `btn` or a square `btn-icon`. A password keeps its `--reveal` button and its strength; the error goes under the group, in a `form-field`.
+
+```html
+<div class="input-group">
+	<span class="input-group-text"><i class="bi bi-envelope" aria-hidden="true"></i></span>
+	<div class="form-floating">
+		<input class="form-control" id="input-group-floating-mail" type="email" placeholder="name@example.com" autocomplete="email">
+		<label for="input-group-floating-mail">E-mail</label>
+	</div>
+</div>
+<div class="form-field">
+	<div class="input-group">
+		<div class="form-floating">
+			<input class="form-control" id="input-group-floating-password" type="password" placeholder="Password" autocomplete="new-password" aria-describedby="input-group-floating-level">
+			<label for="input-group-floating-password">New password</label>
+		</div>
+		<button class="btn btn-icon" type="button" commandfor="input-group-floating-password" command="--reveal" aria-pressed="false" aria-label="Show the password"><i class="bi bi-eye" aria-hidden="true"></i></button>
+	</div>
+	<meter class="meter" min="0" max="4" low="2" high="3" optimum="4" value="0" data-strength="input-group-floating-password" aria-label="Password strength"></meter>
+	<div class="form-text" id="input-group-floating-level" data-strength="input-group-floating-password"></div>
+</div>
+<div class="input-group">
+	<div class="form-floating">
+		<input class="form-control" id="input-group-floating-share" type="text" inputmode="numeric" value="20" aria-describedby="input-group-floating-unit">
+		<label for="input-group-floating-share">Partner share</label>
+	</div>
+	<span class="input-group-text" id="input-group-floating-unit">%</span>
+</div>
+<div class="input-group">
+	<div class="form-floating">
+		<input class="form-control font-monospace" id="input-group-floating-secret" type="text" value="JBSWY3DPEHPK3PXP" readonly>
+		<label for="input-group-floating-secret">Secret key</label>
+	</div>
+	<button class="btn" type="button"><i class="bi bi-clipboard" aria-hidden="true"></i>Copy</button>
+</div>
+```
+
 ### With a menu
 
 The menu sits in the group beside its button; the group joins only what it shows.
@@ -3089,7 +3190,7 @@ The menu sits in the group beside its button; the group joins only what it shows
 
 From [`css/components/input-group.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/input-group.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-8`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg-page`, `--redz-text-muted`, `--redz-control-height-sm`, `--redz-radius-6`, `--redz-fs-12`.
+It reads the theme's `--redz-control-height-float`, `--redz-space-8`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg-page`, `--redz-text-muted`, `--redz-control-height-sm`, `--redz-radius-6`, `--redz-fs-12`.
 
 # Checks, radios and switches
 
@@ -3573,6 +3674,107 @@ From [`css/components/upload.css`](https://github.com/redz-tech/REDZ.UI/blob/mai
 
 It reads the theme's `--redz-space-8`, `--redz-space-4`, `--redz-space-24`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-primary`, `--redz-bg-hover`.
 
+# Choice tiles
+
+A group of radios or checks drawn as tiles - a package, a plan, a way to pay - the chosen one the only thing in color.
+
+## Examples
+
+`label class="choice"` wraps the input and its content; the input covers the tile unseen, so a click anywhere on it chooses, the arrow keys move between radios as always, and the focus ring goes round the tile. A group is a `fieldset` with its `legend`, the tiles laid out by a grid.
+
+```html
+<fieldset class="vstack gap-8">
+	<legend class="form-label">Top up by</legend>
+	<div class="grid cols-2 md:cols-3 gap-12">
+		<label class="choice"><input type="radio" name="choice-amount" value="500"><span class="fs-20 fw-600 tabular-nums">500 THB</span><span class="fs-12 text-muted">About a month</span></label>
+		<label class="choice"><input type="radio" name="choice-amount" value="1500" checked><span class="fs-20 fw-600 tabular-nums">1,500 THB</span><span class="fs-12 text-muted">A quarter, 5% off</span></label>
+		<label class="choice"><input type="radio" name="choice-amount" value="6000"><span class="fs-20 fw-600 tabular-nums">6,000 THB</span><span class="fs-12 text-muted">A year, 15% off</span></label>
+	</div>
+</fieldset>
+```
+
+### With a logo
+
+`choice-media` at the top of a tile is a white banner for a logo, white in both themes, so a logo on a transparent ground reads the same.
+
+```html
+<fieldset class="vstack gap-8">
+	<legend class="form-label">Pay with</legend>
+	<div class="grid cols-2 gap-12">
+		<label class="choice"><input type="radio" name="choice-method" value="promptpay" checked><span class="choice-media"><img src="img/qr.svg" alt="" width="40" height="40"></span>PromptPay<span class="fs-12 text-muted">Any Thai bank app</span></label>
+		<label class="choice"><input type="radio" name="choice-method" value="card"><span class="choice-media"><i class="bi bi-credit-card fs-24" aria-hidden="true"></i></span>Card<span class="fs-12 text-muted">Visa, Mastercard</span></label>
+	</div>
+</fieldset>
+```
+
+## Keyboard and accessibility
+
+- The input is the control and the tile's words its label: a screen reader says "1,500 THB A quarter, 5% off, radio button, checked, 2 of 3".
+- The keys are the input's own: `Tab` into the group, the arrows between radios, `Space` on a check.
+- The chosen tile is told by its border and tint, and by an outline in forced colors.
+
+## Tokens
+
+From [`css/components/choice.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/choice.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-space-4`, `--redz-space-12`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-primary`, `--redz-primary-subtle`, `--redz-focus`, `--redz-space-8`, `--redz-border`.
+
+# PIN pad
+
+A short number that unlocks a trusted device: dots that fill as it is typed and a keypad for a finger, while the keyboard types as it always does.
+
+## Example
+
+`pin` around one field - `type="password"`, `inputmode="numeric"`, `autocomplete="off"` and the length in `maxlength`. The library draws the dots and the keypad: 1 to 9, 0 and delete. The PIN goes when its last digit lands: the pad asks the page in `redz:pin` with `detail.value`, and is busy while the page's promise runs. `false` clears the dots and marks them wrong - the page's alert says why; `true` leaves the pad as it is while the page goes on. Try 2580.
+
+```html
+<form class="vstack gap-16 align-items-center" method="post">
+	<label class="form-label" for="pin-unlock-field">Enter your PIN</label>
+	<div class="alert" id="pin-unlock-alert" role="alert" hidden></div>
+	<div class="pin">
+		<input id="pin-unlock-field" name="pin" type="password" inputmode="numeric" maxlength="4" autocomplete="off" aria-describedby="pin-unlock-alert">
+	</div>
+</form>
+```
+
+```js
+pad.addEventListener('redz:pin', (event) => {
+  event.preventDefault();
+  event.detail.respondWith(post({action: 'pin_unlock', pin: event.detail.value}).then((answer) => {
+    if (answer.ok) {
+      location.assign(answer.redirect);
+    }
+    return answer.ok;
+  }));
+});
+```
+
+### Any length
+
+A `minlength` below the `maxlength` takes any length between them: the dots grow as it is typed, and the keypad gets an Enter key beside its 0. With no page listening the pad submits its form - on Enter, or at the last digit of a fixed length.
+
+```html
+<form class="vstack gap-16 align-items-center" method="post" action="#pin-any">
+	<label class="form-label" for="pin-any-field">The site's enrolment PIN</label>
+	<div class="pin">
+		<input id="pin-any-field" name="pin" type="password" inputmode="numeric" minlength="4" maxlength="8" autocomplete="off">
+	</div>
+</form>
+```
+
+## Keyboard and accessibility
+
+- The field is the control: it has the label, takes the digits from any keyboard and is read as a secure field with its length. The dots are drawn for the eyes only.
+- The keypad is for touch: its keys stay out of the `Tab` order and never take the focus from the field. The delete and Enter keys are named by the page's texts `pin.delete` and `pin.enter`.
+- `Enter` in the field sends a PIN of a length the field takes.
+- Wrong, the dots turn red and shake once; with reduced motion they only turn red. The words of the page's alert are what says it.
+
+## Tokens
+
+From [`css/components/pin.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/pin.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-space-24`, `--redz-radius-8`, `--redz-focus`, `--redz-space-12`, `--redz-border-strong`, `--redz-primary`, `--redz-danger`, `--redz-space-8`, `--redz-fs-24`.
+
 # Editor
 
 A text editor for REDZ.UI markup, a package of the release linked apart: prose edited in place, the library's components as blocks, and a frame of its own where no script of the text ever runs.
@@ -3708,6 +3910,21 @@ The parent sets the grid; each card measures itself. Under 576 px of the region 
 	<section class="card" aria-labelledby="card-grid-a"><div class="card-header"><h2 id="card-grid-a">Bookings</h2></div><div class="card-body"><p class="fs-24 fw-600 tabular-nums">128</p><p class="text-muted">this week</p></div></section>
 	<section class="card" aria-labelledby="card-grid-b"><div class="card-header"><h2 id="card-grid-b">Revenue</h2></div><div class="card-body"><p class="fs-24 fw-600 tabular-nums">312,400 THB</p><p class="text-muted">this week</p></div></section>
 </div>
+```
+
+### A state on its edge
+
+The utility `edge-top-{tone}` draws a 3 px line of a state on a card's top edge, instead of coloring its frame; `edge-start-{tone}` does it on the start edge of a row. The words still say the state.
+
+```html
+<div class="grid sm:cols-2 gap-16">
+	<section class="card edge-top-success" aria-labelledby="card-edge-a"><div class="card-header"><h2 id="card-edge-a">Dispatcher</h2></div><div class="card-body"><p>Running, last beat 4 s ago</p></div></section>
+	<section class="card edge-top-warning" aria-labelledby="card-edge-b"><div class="card-header"><h2 id="card-edge-b">Mail queue</h2></div><div class="card-body"><p>Late by 6 minutes</p></div></section>
+</div>
+<ul class="list-group" aria-label="Plan items">
+	<li class="list-group-item hstack gap-12 edge-start-primary"><span>Online booking<span class="d-block fs-12 text-muted">Calendar, deposits, reminders</span></span><span class="ms-auto tabular-nums">490 THB</span></li>
+	<li class="list-group-item hstack gap-12 edge-start-success bg-page"><span>Site and hosting<span class="d-block fs-12 text-muted">Included in every plan</span></span><span class="ms-auto text-muted">Included</span></li>
+</ul>
 ```
 
 ## Accessibility
@@ -4093,6 +4310,36 @@ A list with `data-reorder` naming a hidden field moves its items, each with a `d
 </div>
 ```
 
+A table's rows move the same: `data-reorder` on the `tbody`, a `data-value` on each row and its `drag-handle` in a cell. The hidden fields and the polite status go after the table.
+
+```html
+<table class="table" aria-label="Lines of the estimate">
+	<thead><tr><th scope="col"><span class="visually-hidden">Move</span></th><th scope="col">Item</th><th scope="col" class="text-end">Amount</th></tr></thead>
+	<tbody data-reorder="lines[]">
+		<tr data-value="cement"><td><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Cement"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button></td><td>Cement</td><td class="text-end tabular-nums">12,400</td></tr>
+		<tr data-value="steel"><td><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Steel bars"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button></td><td>Steel bars</td><td class="text-end tabular-nums">38,900</td></tr>
+		<tr data-value="labor"><td><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Labor"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button></td><td>Labor</td><td class="text-end tabular-nums">21,000</td></tr>
+	</tbody>
+</table>
+```
+
+In a grid of more than one column, or a row, the pointer drags in two dimensions: the item under it takes the dragged one before or after it, by the half of it the pointer is in. The menu's moves go earlier and later in the order - give them those words.
+
+```html
+<div class="grid cols-2 md:cols-3 gap-12" aria-label="Dashboard cards" role="list" data-reorder="cards[]">
+	<div class="card" role="listitem" data-value="sales"><div class="card-body hstack gap-8"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-grid-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Sales"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>Sales</div></div>
+	<div class="card" role="listitem" data-value="bookings"><div class="card-body hstack gap-8"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-grid-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Bookings"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>Bookings</div></div>
+	<div class="card span-full md:span-1" role="listitem" data-value="tasks"><div class="card-body hstack gap-8"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-grid-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Tasks"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>Tasks</div></div>
+	<div class="card" role="listitem" data-value="weather"><div class="card-body hstack gap-8"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-moves-grid-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Weather"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>Weather</div></div>
+</div>
+<div class="menu" id="list-group-moves-grid-menu" popover role="menu" aria-label="Move">
+	<button class="menu-item" type="button" role="menuitem" data-move="up"><i class="bi bi-arrow-left flip-rtl" aria-hidden="true"></i>Move earlier</button>
+	<button class="menu-item" type="button" role="menuitem" data-move="down"><i class="bi bi-arrow-right flip-rtl" aria-hidden="true"></i>Move later</button>
+	<button class="menu-item" type="button" role="menuitem" data-move="first">Move to the start</button>
+	<button class="menu-item" type="button" role="menuitem" data-move="last">Move to the end</button>
+</div>
+```
+
 ```js
 document.addEventListener('redz:move', (event) => {
 	event.preventDefault();
@@ -4344,6 +4591,21 @@ A list of records: a title that links to the record, a line under it, a note whe
 </table>
 ```
 
+### Sortable columns
+
+A header that sorts holds a `button class="table-sort"`, and the header's `aria-sort` - `ascending`, `descending` or none - draws the arrow. The page sorts - on the server or in place - and moves `aria-sort` to the column it sorted by.
+
+```html
+<table class="table" aria-label="Owners">
+	<thead><tr><th scope="col" aria-sort="ascending"><button class="table-sort" type="button">Name</button></th><th scope="col"><button class="table-sort" type="button">Sites</button></th><th scope="col" class="text-end"><button class="table-sort" type="button">Paid</button></th></tr></thead>
+	<tbody>
+		<tr><td>Ananda Resort</td><td class="tabular-nums">3</td><td class="text-end tabular-nums">48,000</td></tr>
+		<tr><td>Blue Lagoon Tours</td><td class="tabular-nums">1</td><td class="text-end tabular-nums">9,600</td></tr>
+		<tr><td>Coral Divers</td><td class="tabular-nums">2</td><td class="text-end tabular-nums">21,300</td></tr>
+	</tbody>
+</table>
+```
+
 ## States
 
 A row's tone marks what needs attention: `table-danger` failed, `table-warning` needs a look, `table-secondary` is out of use. On a pointer screen the row's actions show on hover and on focus; on a touch screen they always show.
@@ -4539,6 +4801,116 @@ From [`css/components/icon-tile.css`](https://github.com/redz-tech/REDZ.UI/blob/
 
 It reads the theme's `--redz-primary-subtle`, `--redz-primary`, `--redz-radius-12`, `--redz-radius-8`, `--redz-secondary-subtle`, `--redz-secondary`, `--redz-success-subtle`, `--redz-success`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-info-subtle`, `--redz-info`.
 
+# Stat tiles
+
+A number with its label and an icon in a tone - and, as a button, the filter for what it counts: the numbers a person reads are the buttons they press.
+
+## Examples
+
+`stat` holds an [icon tile](icon-tile.md), a `stat-value` and a `stat-label`; `stat-primary`, `stat-success`, `stat-warning`, `stat-danger`, `stat-info` and `stat-secondary` - a quiet zero - tint the icon and the number. As a `button` with `aria-pressed` a tile is a toggle: pressed, it wears its tone's border and the list below shows only what it counts. A row is a grid: two tiles a row on a phone, four from `md:`.
+
+```html
+<div class="grid cols-2 md:cols-4 gap-12" role="group" aria-label="Show agents">
+	<button class="stat" type="button" aria-pressed="true"><span class="icon-tile"><i class="bi bi-cpu" aria-hidden="true"></i></span><span><span class="stat-value">24</span><span class="stat-label">All agents</span></span></button>
+	<button class="stat stat-primary" type="button" aria-pressed="false"><span class="icon-tile"><i class="bi bi-play-circle" aria-hidden="true"></i></span><span><span class="stat-value">3</span><span class="stat-label">Running</span></span></button>
+	<button class="stat stat-warning" type="button" aria-pressed="false"><span class="icon-tile"><i class="bi bi-clock-history" aria-hidden="true"></i></span><span><span class="stat-value">2</span><span class="stat-label">Late</span></span></button>
+	<button class="stat stat-secondary" type="button" aria-pressed="false"><span class="icon-tile"><i class="bi bi-x-octagon" aria-hidden="true"></i></span><span><span class="stat-value">0</span><span class="stat-label">Failed</span></span></button>
+</div>
+```
+
+Without a button it only reads: a `div class="stat"`.
+
+## Accessibility
+
+- A tile button's name is its number and its label, "2 Late"; `aria-pressed` says it filters. Put the row in a `group` with a name.
+- The tone repeats the label; it never says alone what the tile counts.
+- Pressed, the tile also draws an outline in forced colors.
+
+## Tokens
+
+From [`css/components/stat.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/stat.css). It declares `--redz-stat-tone`, `--redz-tile-bg`, `--redz-tile-fg` on its root, never on rows or items.
+
+It reads the theme's `--redz-text`, `--redz-space-12`, `--redz-space-16`, `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-bg-hover`, `--redz-fs-24`, `--redz-text-muted`, `--redz-fs-12`, `--redz-primary`, `--redz-success`, `--redz-warning`, `--redz-danger`, `--redz-info`.
+
+# QR codes
+
+A white tile for a QR code: a scanner reads dark modules on white, so the tile stays white in the dark theme, in forced colors and on paper.
+
+## Examples
+
+`qr` around an inline `svg`, an `img` or a `canvas`. The code keeps its own quiet zone - four modules of white round it, drawn by the code's generator; the tile adds 8 px more. `--redz-qr-size` sets the code's width, 11rem (176 px) by default.
+
+```html
+<figure class="vstack gap-8 align-items-center">
+	<div class="qr"><img src="img/qr.svg" alt="QR code: the address of this site"></div>
+	<figcaption class="fs-12 text-muted">Scan to open the docs</figcaption>
+</figure>
+<figure class="vstack gap-8 align-items-center">
+	<div class="qr" id="qr-small"><img src="img/qr.svg" alt="QR code: the address of this site, smaller"></div>
+	<figcaption class="fs-12 text-muted">7.5rem</figcaption>
+</figure>
+```
+
+## Accessibility
+
+- A code is a picture of something a person may not be able to scan: give the same thing in words beside it - the address, or the secret key a 2FA app can take typed.
+- An `img` gets an `alt` that says what the code holds; an inline `svg` gets `role="img"` and an `aria-label`.
+- Forced colors leave the tile alone, so the code is never inverted.
+
+## Tokens
+
+From [`css/components/qr.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/qr.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-space-8`, `--redz-border`, `--redz-radius-8`, `--redz-qr-size`.
+
+# Steps and timelines
+
+The steps of a long job as it runs - a release, a publish, an install - each with what it found, and the events of a record's history, one under the other.
+
+## A job's steps
+
+`step-list` is an `ol` of steps, each with an icon, its name and a `step-list-detail` at the end; `data-state` says where it is: `done`, `current` - its icon turns while motion is allowed, `failed`, `kept` - failed with the earlier state kept - and `pending`. A job's panel is a `card` with `sticky-top`, under the app header while the page scrolls, its head a [dot](dot.md), a title and the time, and a [progress](progress.md).
+
+```html
+<section class="card" aria-labelledby="step-list-job-title">
+	<div class="card-header hstack gap-8"><span class="dot dot-primary"></span><h2 id="step-list-job-title">Publishing the site</h2><span class="ms-auto tabular-nums text-muted">01:42</span></div>
+	<progress class="progress progress-xs" max="5" value="2" aria-labelledby="step-list-job-title"></progress>
+	<div class="card-body">
+		<ol class="step-list">
+			<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Check the templates<span class="step-list-detail">84 pages</span></li>
+			<li data-state="kept"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>Resize the images<span class="step-list-detail">2 failed, the old ones kept</span></li>
+			<li data-state="current" aria-current="step"><i class="bi bi-arrow-repeat" aria-hidden="true"></i>Write the pages<span class="step-list-detail">31 of 84</span></li>
+			<li data-state="pending"><i class="bi bi-circle" aria-hidden="true"></i>Rebuild the sitemap</li>
+			<li data-state="pending"><i class="bi bi-circle" aria-hidden="true"></i>Clear the CDN</li>
+		</ol>
+	</div>
+</section>
+```
+
+## A timeline
+
+`timeline` is an `ol` of events joined by a line: each starts with an [icon tile](icon-tile.md) in its tone, then a `timeline-time`, the words, and a `dl` of details when it has them.
+
+```html
+<ol class="timeline" aria-label="The payment's history">
+	<li><span class="icon-tile icon-tile-info"><i class="bi bi-receipt" aria-hidden="true"></i></span><time class="timeline-time" datetime="2026-11-02T09:14">November 2, 09:14</time>Invoice issued<dl><dt>Amount</dt><dd>12,500 THB</dd><dt>Due</dt><dd>November 9</dd></dl></li>
+	<li><span class="icon-tile icon-tile-warning"><i class="bi bi-bell" aria-hidden="true"></i></span><time class="timeline-time" datetime="2026-11-08T10:00">November 8, 10:00</time>Reminder sent</li>
+	<li><span class="icon-tile icon-tile-success"><i class="bi bi-check-lg" aria-hidden="true"></i></span><time class="timeline-time" datetime="2026-11-09T16:41">November 9, 16:41</time>Paid by PromptPay<dl><dt>Reference</dt><dd class="font-monospace">PP-88214</dd></dl></li>
+</ol>
+```
+
+## Accessibility
+
+- The words carry the state; the icon and the color repeat them. Mark the current step `aria-current="step"`.
+- A job that runs while the person waits says its new step in a polite live region the page keeps - one line per step, not every tick of the clock.
+- A timeline's times are `<time datetime>`; its details are a description list, read as pairs.
+
+## Tokens
+
+From [`css/components/step-list.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/step-list.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-space-4`, `--redz-space-8`, `--redz-text-muted`, `--redz-text`, `--redz-success`, `--redz-primary`, `--redz-danger`, `--redz-warning`, `--redz-space-12`, `--redz-space-16`, `--redz-border`, `--redz-fs-14`, `--redz-fs-12`, `--redz-space-2`.
+
 # Empty states
 
 What a list, a panel or a search shows when it has nothing yet: what would be here, and the one action that starts it. And the drop zone of a file field.
@@ -4717,6 +5089,25 @@ For what cannot be undone, `phrase` asks the person to type a word first - the s
 ```html
 <button class="btn btn-danger" type="button" data-docs-run="confirm-phrase"><i class="bi bi-trash3" aria-hidden="true"></i>Delete the site</button>
 <span class="text-muted fs-12" role="status" data-docs-answer></span>
+```
+
+What a deletion takes with it is said by `note` and `sections`: `note: {tone, text}` is an alert under the text - `warning` by default, `danger`, `info` or `success` - and each of `sections: [{title, items}]` a title over a list, such as what goes and what stays. Every word is text, never HTML.
+
+```html
+<button class="btn btn-danger" type="button" data-docs-run="confirm-lists"><i class="bi bi-trash3" aria-hidden="true"></i>Delete the project</button>
+<span class="text-muted fs-12" role="status" data-docs-answer></span>
+```
+
+```js
+await REDZ.ui.confirm({
+  title: 'Delete the project Riverside tower?',
+  note: {tone: 'danger', text: 'This cannot be undone.'},
+  sections: [
+    {title: 'Will be deleted:', items: ['128 tasks', '342 files', '1,204 log entries']},
+    {title: 'Kept:', items: ['The audit history']},
+  ],
+  ok: 'Delete', tone: 'danger', phrase: 'Riverside tower',
+});
 ```
 
 ### On a phone and full screen
@@ -5144,6 +5535,23 @@ The browser's own `<progress>` for work under way and `<meter>` for a measure wi
 <meter class="meter" value="9.6" min="0" max="10" low="7" high="9" optimum="0" aria-label="Backups, 9.6 of 10 GB">9.6 of 10 GB</meter>
 ```
 
+### Hairlines
+
+`progress-xs`, 3 px, and `meter-xs`, 2 px, sit under a row's words without fighting them: how far a job is between its runs, amber when it is late, and how often it succeeded, colored by the meter's own parts.
+
+```html
+<div class="vstack gap-4">
+	<span>Nightly backup <span class="text-muted fs-12">next in 2 h</span></span>
+	<progress class="progress progress-xs" value="70" max="100" aria-label="Nightly backup, 70 percent of its cycle"></progress>
+	<meter class="meter meter-xs" value="0.98" min="0" max="1" low="0.8" high="0.95" optimum="1" aria-label="Nightly backup, 98 percent succeeded">98%</meter>
+</div>
+<div class="vstack gap-4">
+	<span>Mail queue <span class="text-muted fs-12">late by 6 min</span></span>
+	<progress class="progress progress-xs progress-warning" value="100" max="100" aria-label="Mail queue, late"></progress>
+	<meter class="meter meter-xs" value="0.71" min="0" max="1" low="0.8" high="0.95" optimum="1" aria-label="Mail queue, 71 percent succeeded">71%</meter>
+</div>
+```
+
 ## Keyboard and accessibility
 
 - Name every bar: a `<label for>`, `aria-label` or `aria-labelledby`. The browser announces the value as a percentage of `max`; the words beside the bar are for the eye.
@@ -5191,10 +5599,11 @@ await REDZ.ui.busy(card, fetch(url).then((answer) => answer.text()).then((html) 
 
 ### A button
 
-The button keeps its focus and size, shows a spinner in place of its words and ignores clicks until the promise settles.
+The button keeps its focus, ignores clicks until the promise settles and shows a spinner: in place of its leading icon, or over its words when it has none - then it keeps its size too. `data-busy` on the button gives the words it shows while it waits, said politely once the wait passes 400 ms; set it again before each call when the wait has steps.
 
 ```html
 <button class="btn btn-primary" type="button" data-docs-run="busy-button">Save for 2 seconds</button>
+<button class="btn btn-primary" type="button" data-busy="Signing in…" data-docs-run="busy-button"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Sign in for 2 seconds</button>
 ```
 
 ## States
@@ -5866,6 +6275,124 @@ A shell without `app-sidebar` - a page whose role has no sections - is one colum
 
 ## Tokens
 
-From [`css/components/app.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/app.css). It declares `--redz-btn-bg`, `--redz-btn-fg`, `--redz-btn-hover` on its root, never on rows or items.
+From [`css/components/app.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/app.css). It declares `--redz-sticky-top`, `--redz-btn-bg`, `--redz-btn-fg`, `--redz-btn-hover` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-8`, `--redz-space-12`, `--redz-bg-page`, `--redz-text`, `--redz-radius-8`, `--redz-primary`, `--redz-primary-contrast`, `--redz-fs-12`, `--redz-bg`, `--redz-text-muted`, `--redz-border`, `--redz-border-strong`, `--redz-space-4`, `--redz-space-16`, `--redz-bg-hover`, `--redz-shadow-1`, `--redz-space-24`, `--redz-space-32`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-3`.
+It reads the theme's `--redz-space-12`, `--redz-space-8`, `--redz-bg-page`, `--redz-text`, `--redz-radius-8`, `--redz-primary`, `--redz-primary-contrast`, `--redz-fs-12`, `--redz-bg`, `--redz-text-muted`, `--redz-border`, `--redz-border-strong`, `--redz-space-4`, `--redz-space-16`, `--redz-bg-hover`, `--redz-shadow-1`, `--redz-space-24`, `--redz-space-32`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-3`.
+
+# Centered page
+
+A page without the app shell: the brand, one card and a way on, in a column at the middle of the window - sign-in, registration, a password reset, a second factor, an unlock, an enrolment.
+
+## Example
+
+`page-center` on the page's `main` stands its children in a column 30rem (480 px) wide at the middle of the window, and the column grows down when they are taller; `--redz-page-center-width` sets another width. `page-center-brand` holds the logo, the name, one line and the language links; a `card` in the column is raised. `page-center-corner` holds the theme button at the top end of the page: it scrolls with the page, and the column starts below it, so on a phone it never covers the logo or the card.
+
+```html
+<div class="page-center">
+	<div class="page-center-corner">
+		<button class="btn btn-text btn-icon" type="button" aria-label="Theme"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+	</div>
+	<header class="page-center-brand">
+		<span class="app-mark">RZ</span>
+		<h2>REDZ CMS</h2>
+		<p>Sign in to manage your sites</p>
+		<nav aria-label="Language">
+			<a href="#page-center-example" lang="en" aria-current="page">English</a>
+			<a href="#page-center-example" lang="th">ไทย</a>
+			<a href="#page-center-example" lang="ru">Русский</a>
+		</nav>
+	</header>
+	<form class="card">
+		<div class="card-body vstack gap-16">
+			<div class="form-floating form-adorn">
+				<i class="bi bi-envelope" aria-hidden="true"></i>
+				<input class="form-control" id="page-center-mail" type="email" placeholder="name@example.com" autocomplete="username">
+				<label for="page-center-mail">E-mail</label>
+			</div>
+			<div class="input-group">
+				<div class="form-floating form-adorn">
+					<i class="bi bi-key" aria-hidden="true"></i>
+					<input class="form-control" id="page-center-password" type="password" placeholder="Password" autocomplete="current-password">
+					<label for="page-center-password">Password</label>
+				</div>
+				<button class="btn btn-icon" type="button" commandfor="page-center-password" command="--reveal" aria-pressed="false" aria-label="Show the password"><i class="bi bi-eye" aria-hidden="true"></i></button>
+			</div>
+			<button class="btn btn-primary btn-lg w-100" type="submit"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Sign in</button>
+		</div>
+	</form>
+	<p class="text-center"><a href="#page-center-example">Forgot the password?</a></p>
+</div>
+```
+
+In a page `page-center` is the `main` and the brand's name its `h1`; here they are a `div` and an `h2` under the page's own.
+
+## Accessibility
+
+- The page is one `main`; the language links are a `nav` with a name, each link with its `lang`, the current one with `aria-current="page"`.
+- The corner comes first in the source so `Tab` meets it before the form; put it after the form when the form should come first.
+- A logo image has an `alt` of the name only when the name is not written beside it; otherwise `alt=""`.
+
+## Tokens
+
+From [`css/components/page-center.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/page-center.css), which declares no custom property of its own.
+
+It reads the theme's `--redz-space-24`, `--redz-control-height`, `--redz-space-16`, `--redz-space-40`, `--redz-page-center-width`, `--redz-shadow-3`, `--redz-space-8`, `--redz-text-muted`, `--redz-space-4`, `--redz-fs-12`, `--redz-text`.
+
+# Kiosk
+
+A full screen for a tablet that stays on at a door: a name on top, big language buttons, a huge clock while it waits, one round state and one or two huge actions - read from across a room and pressed with a glove.
+
+## Example
+
+`kiosk` fills the window with a column: `kiosk-head`, `kiosk-langs`, `kiosk-main` in the middle - the page's `main` - and `kiosk-foot`. It is not selectable and answers a tap at once, without waiting for a double tap. A kiosk is dark: `data-theme="dark"` on its `html`, or on the `kiosk` itself.
+
+```html
+<div class="kiosk" data-theme="dark">
+	<div class="kiosk-head"><i class="bi bi-geo-alt" aria-hidden="true"></i> Riverside tower</div>
+	<div class="kiosk-langs" role="group" aria-label="Language">
+		<button class="btn btn-xl" type="button" lang="en" aria-pressed="true">English</button>
+		<button class="btn btn-xl" type="button" lang="th" aria-pressed="false">ไทย</button>
+		<button class="btn btn-xl" type="button" lang="my" aria-pressed="false">မြန်မာ</button>
+	</div>
+	<div class="kiosk-main">
+		<div class="kiosk-date">Wednesday, November 4</div>
+		<div class="kiosk-clock">07:42</div>
+		<div class="icon-tile icon-tile-info kiosk-state kiosk-state-idle"><i class="bi bi-person-badge" aria-hidden="true"></i></div>
+		<div class="kiosk-title">Tap your card</div>
+		<div class="kiosk-line">Hold it to the reader under the screen</div>
+	</div>
+	<div class="kiosk-foot">REDZ ERP · Site entrance</div>
+</div>
+```
+
+### The states
+
+`kiosk-state` on an [icon tile](icon-tile.md) is the round state, in the tile's tones: `kiosk-state-idle` is smaller and breathes while the screen waits (still when motion is reduced), `aria-busy="true"` turns a ring round it while a tap is checked. `kiosk-title` and `kiosk-line` say what happened; a `btn-xl` in `kiosk-main` grows to a kiosk's size. `kiosk-corner` holds a camera's preview, mirrored, at the bottom end.
+
+```html
+<div class="kiosk" data-theme="dark">
+	<div class="kiosk-main">
+		<div class="icon-tile icon-tile-success kiosk-state"><i class="bi bi-check-lg" aria-hidden="true"></i></div>
+		<div class="kiosk-title">Somchai Rattanakul</div>
+		<div class="kiosk-line">Last in at 07:02</div>
+		<button class="btn btn-xl btn-success" type="button"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Check in</button>
+		<button class="btn btn-xl btn-warning" type="button"><i class="bi bi-box-arrow-right" aria-hidden="true"></i>Check out</button>
+		<button class="btn btn-text" type="button"><i class="bi bi-x-lg" aria-hidden="true"></i>Cancel</button>
+	</div>
+	<div class="kiosk-corner"></div>
+</div>
+```
+
+A kiosk that reads badges through a keyboard-wedge reader takes what it types in a field kept focused [`offscreen`](utilities.md#utilities-offscreen), with `inputmode="none"` so no keyboard opens.
+
+## Accessibility
+
+- The words carry the state; the tone and the icon repeat them. Say a new state in a polite live region the page keeps - the title is a good one.
+- The language buttons are a named group of `btn btn-xl` toggles, each with its `lang` and `aria-pressed`; the pressed one turns light on dark.
+- The type grows with the screen; nothing is smaller than 14 px, and every button is at least 56 px tall.
+
+## Tokens
+
+From [`css/components/kiosk.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/kiosk.css). It declares `--redz-btn-hover`, `--redz-btn-hover-fg` on its root, never on rows or items.
+
+It reads the theme's `--redz-space-16`, `--redz-space-20`, `--redz-bg-page`, `--redz-text`, `--redz-space-32`, `--redz-space-12`, `--redz-bg`, `--redz-text-muted`, `--redz-tile-fg`, `--redz-fs-20`, `--redz-radius-16`, `--redz-fs-14`.

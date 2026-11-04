@@ -223,6 +223,10 @@
 		padding-inline-start: 2.125rem;
 	}
 
+	.form-floating.form-adorn > label {
+		padding-inline-start: calc(2.125rem + 1px);
+	}
+
 	.form-check {
 		display: inline-flex;
 		align-items: center;

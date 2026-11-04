@@ -26,7 +26,7 @@ the latest release at the root, of the main branch under `next/`, and of every r
   fixture checked in real engines, with its Arabic twin (see [Documentation](#documentation)).
 - Two agent skills in `skills/`: building screens with REDZ.UI, and moving a project from Bootstrap 5.3 with a scan
   and a map of every Bootstrap class (see [Skills](#skills)).
-- Budgets held on every commit: the stylesheet at most 26 KB and the script 25 KB, gzipped - the two files a project
+- Budgets held on every commit: the stylesheet at most 28 KB and the script 25 KB, gzipped - the two files a project
   serves.
 
 ## How it reads
@@ -97,12 +97,14 @@ attaches by delegation on `document`, so nothing is set up per element and marku
   `.toast-container` - `role="status"`, `role="alert"` for `danger` - or in an open modal dialog's own. Success and info
   leave after 8 seconds unless the pointer or the focus rests on them; an error and a notice with an action stay until
   closed (`js/toast.js`).
-- **Confirmation:** `await REDZ.ui.confirm({title, text, ok, cancel, tone, phrase})` asks in a modal alert dialog and
-  answers `true` or `false`; the focus starts on cancel. With a `phrase` the person types it first: the confirming
-  button waits for it and the focus starts in its field (`js/confirm.js`).
+- **Confirmation:** `await REDZ.ui.confirm({title, text, note, sections, ok, cancel, tone, phrase})` asks in a modal
+  alert dialog and answers `true` or `false`; the focus starts on cancel. A `note` in a tone and `sections` - a title
+  over a list, such as what goes and what stays - say what a deletion takes with it, all of it text. With a `phrase`
+  the person types it first: the confirming button waits for it and the focus starts in its field (`js/confirm.js`).
 - **Busy:** `REDZ.ui.busy(element, promise)` marks the element `aria-busy` until the promise settles. A button is also
   `aria-disabled`, which keeps its focus and swallows its clicks - as on every button, check, radio or switch so
-  marked. A region - a card, its body, a dialog's or a drawer's body, any `region` - turns `inert` under an overlay that
+  marked; its leading icon turns into a spinner, and `data-busy` gives the words it shows and says while it waits. A
+  region - a card, its body, a dialog's or a drawer's body, any `region` - turns `inert` under an overlay that
   shows after 400 ms and stays at least 400 ms; once it shows, one polite message says so, and a focus the region
   dropped comes back to the same element or its namesake in the new content (`js/busy.js`).
 - **Dialogs:** `closedby="any"` closes a modal dialog by a click outside it; a modal dialog locks the page's scroll by
@@ -124,9 +126,15 @@ attaches by delegation on `document`, so nothing is set up per element and marku
 - **Trees:** a list of class `tree` opens its groups by `--toggle` buttons; a group with `data-lazy` asks the page for
   its items by `redz:expand` on its first opening, and `--expand-all` / `--collapse-all` open and close a whole tree
   (`js/tree.js`).
-- **Reordering:** a list or a tree with `data-reorder` moves its items by a `drag-handle` - a button opening the list's
-  menu of moves (up, down, first, last; in and out in a tree) - or by the pointer dragging it; the move is said, then
+- **Reordering:** a list, a table's `tbody`, a grid or a tree with `data-reorder` moves its items by a `drag-handle` -
+  a button opening the list's menu of moves (up, down, first, last; in and out in a tree) - or by the pointer dragging
+  it, down a column or, in a grid or a row, before or after the item under the pointer; the move is said, then
   `redz:move` lets the page save it or refuse it, which undoes it, and hidden fields hold the order (`js/reorder.js`).
+- **PIN pads:** a `pin` around one numeric password field draws its dots and a keypad whose keys never take the focus;
+  when the PIN is whole it asks the page in `redz:pin` and is busy while the page checks, a wrong one cleared and
+  marked; left alone it submits its form (`js/pin.js`).
+- **Cooldowns:** a button with `data-cooldown="N"` waits N seconds, `aria-disabled`, the seconds left after its words,
+  then wakes; setting the attribute again starts it again (`js/cooldown.js`).
 - **Uploads:** an `upload` takes files chosen, dropped on its `upload-zone` or pasted, checks each against `accept` and
   `data-max-size`, gives each a row from the page's `<template>` and sends each by `redz:files`, with its own progress
   and its own error (`js/upload.js`).

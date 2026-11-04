@@ -55,6 +55,14 @@
 		block-size: 0.25rem;
 	}
 
+	.progress-xs {
+		block-size: 3px;
+	}
+
+	.meter-xs {
+		block-size: 2px;
+	}
+
 	.progress-lg {
 		block-size: 1rem;
 	}

@@ -24,7 +24,8 @@ container|container-fluid|container-(sm|md|lg|xl|xxl)		review	layout	the shell's
 # Utilities with other names, numbers or no equivalent.
 float-(start|end|none)	float-$1	same	utilities
 object-fit-scale		review	utilities	object-fit-contain is the nearest
-sticky-(top|bottom)		review	utilities	position-sticky with top-0 or bottom-0
+sticky-top	sticky-top	same	utilities	in the app shell it sticks under the header, elsewhere at --redz-sticky-top
+sticky-bottom		review	utilities	position-sticky with bottom-0
 fixed-(top|bottom)		review	utilities	position-fixed with top-0 or bottom-0, start-0 and end-0
 (top|bottom|start|end)-(50|100)	$1-$2	same	utilities
 translate-middle(-x|-y)?	translate-middle$1	same	utilities	turns round right to left

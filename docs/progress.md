@@ -46,6 +46,23 @@ The browser's own `<progress>` for work under way and `<meter>` for a measure wi
 <meter class="meter" value="9.6" min="0" max="10" low="7" high="9" optimum="0" aria-label="Backups, 9.6 of 10 GB">9.6 of 10 GB</meter>
 ```
 
+### Hairlines
+
+`progress-xs`, 3 px, and `meter-xs`, 2 px, sit under a row's words without fighting them: how far a job is between its runs, amber when it is late, and how often it succeeded, colored by the meter's own parts.
+
+```html
+<div class="vstack gap-4">
+	<span>Nightly backup <span class="text-muted fs-12">next in 2 h</span></span>
+	<progress class="progress progress-xs" value="70" max="100" aria-label="Nightly backup, 70 percent of its cycle"></progress>
+	<meter class="meter meter-xs" value="0.98" min="0" max="1" low="0.8" high="0.95" optimum="1" aria-label="Nightly backup, 98 percent succeeded">98%</meter>
+</div>
+<div class="vstack gap-4">
+	<span>Mail queue <span class="text-muted fs-12">late by 6 min</span></span>
+	<progress class="progress progress-xs progress-warning" value="100" max="100" aria-label="Mail queue, late"></progress>
+	<meter class="meter meter-xs" value="0.71" min="0" max="1" low="0.8" high="0.95" optimum="1" aria-label="Mail queue, 71 percent succeeded">71%</meter>
+</div>
+```
+
 ## Keyboard and accessibility
 
 - Name every bar: a `<label for>`, `aria-label` or `aria-labelledby`. The browser announces the value as a percentage of `max`; the words beside the bar are for the eye.

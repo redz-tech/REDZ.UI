@@ -1,0 +1,40 @@
+<header class="vstack gap-8">
+	<h1>Choice tiles</h1>
+	<p class="docs-lead">A group of radios or checks drawn as tiles - a package, a plan, a way to pay - the chosen one the only thing in color.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="choice-examples">
+	<h2 id="choice-examples">Examples</h2>
+	<p><code>label class="choice"</code> wraps the input and its content; the input covers the tile unseen, so a click anywhere on it chooses, the arrow keys move between radios as always, and the focus ring goes round the tile. A group is a <code>fieldset</code> with its <code>legend</code>, the tiles laid out by a grid.</p>
+	<div class="docs-example docs-example-stack" id="choice-amounts">
+		<fieldset class="vstack gap-8">
+			<legend class="form-label">Top up by</legend>
+			<div class="grid cols-2 md:cols-3 gap-12">
+				<label class="choice"><input type="radio" name="choice-amount" value="500"><span class="fs-20 fw-600 tabular-nums">500 THB</span><span class="fs-12 text-muted">About a month</span></label>
+				<label class="choice"><input type="radio" name="choice-amount" value="1500" checked><span class="fs-20 fw-600 tabular-nums">1,500 THB</span><span class="fs-12 text-muted">A quarter, 5% off</span></label>
+				<label class="choice"><input type="radio" name="choice-amount" value="6000"><span class="fs-20 fw-600 tabular-nums">6,000 THB</span><span class="fs-12 text-muted">A year, 15% off</span></label>
+			</div>
+		</fieldset>
+	</div>
+
+	<h3>With a logo</h3>
+	<p><code>choice-media</code> at the top of a tile is a white banner for a logo, white in both themes, so a logo on a transparent ground reads the same.</p>
+	<div class="docs-example docs-example-stack" id="choice-methods">
+		<fieldset class="vstack gap-8">
+			<legend class="form-label">Pay with</legend>
+			<div class="grid cols-2 gap-12">
+				<label class="choice"><input type="radio" name="choice-method" value="promptpay" checked><span class="choice-media"><img src="img/qr.svg" alt="" width="40" height="40"></span>PromptPay<span class="fs-12 text-muted">Any Thai bank app</span></label>
+				<label class="choice"><input type="radio" name="choice-method" value="card"><span class="choice-media"><i class="bi bi-credit-card fs-24" aria-hidden="true"></i></span>Card<span class="fs-12 text-muted">Visa, Mastercard</span></label>
+			</div>
+		</fieldset>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="choice-access">
+	<h2 id="choice-access">Keyboard and accessibility</h2>
+	<ul>
+		<li>The input is the control and the tile's words its label: a screen reader says "1,500 THB A quarter, 5% off, radio button, checked, 2 of 3".</li>
+		<li>The keys are the input's own: <kbd>Tab</kbd> into the group, the arrows between radios, <kbd>Space</kbd> on a check.</li>
+		<li>The chosen tile is told by its border and tint, and by an outline in forced colors.</li>
+	</ul>
+</section>

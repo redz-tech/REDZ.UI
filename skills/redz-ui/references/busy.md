@@ -24,10 +24,11 @@ await REDZ.ui.busy(card, fetch(url).then((answer) => answer.text()).then((html) 
 
 ### A button
 
-The button keeps its focus and size, shows a spinner in place of its words and ignores clicks until the promise settles.
+The button keeps its focus, ignores clicks until the promise settles and shows a spinner: in place of its leading icon, or over its words when it has none - then it keeps its size too. `data-busy` on the button gives the words it shows while it waits, said politely once the wait passes 400 ms; set it again before each call when the wait has steps.
 
 ```html
 <button class="btn btn-primary" type="button" data-docs-run="busy-button">Save for 2 seconds</button>
+<button class="btn btn-primary" type="button" data-busy="Signing in…" data-docs-run="busy-button"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Sign in for 2 seconds</button>
 ```
 
 ## States

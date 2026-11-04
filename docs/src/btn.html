@@ -28,12 +28,13 @@
 	</div>
 
 	<h3>Sizes</h3>
-	<p>A size is a word: <code>btn-xs</code> 24 px, <code>btn-sm</code> 28 px, the default 32 px, <code>btn-lg</code> 40 px - the heights of every control of the same size.</p>
+	<p>A size is a word: <code>btn-xs</code> 24 px, <code>btn-sm</code> 28 px, the default 32 px, <code>btn-lg</code> 40 px - the heights of every control of the same size. <code>btn-xl</code>, 56 px, is for a touch screen and the one action of a page; in a <a href="kiosk.html">kiosk</a> it grows to a kiosk's size.</p>
 	<div class="docs-example" id="btn-sizes">
 		<button class="btn btn-primary btn-xs" type="button">Extra small</button>
 		<button class="btn btn-primary btn-sm" type="button">Small</button>
 		<button class="btn btn-primary" type="button">Default</button>
 		<button class="btn btn-primary btn-lg" type="button">Large</button>
+		<button class="btn btn-primary btn-xl" type="button">Extra large</button>
 	</div>
 
 	<h3>Icons</h3>
@@ -72,10 +73,16 @@
 	</div>
 
 	<h3>Toggle and busy</h3>
-	<p>A toggle carries <code>aria-pressed</code>. While its action runs, <code>REDZ.ui.busy(button, promise)</code> shows a spinner in the button and marks it <code>aria-disabled</code>: it keeps the focus and ignores clicks until the promise settles.</p>
+	<p>A toggle carries <code>aria-pressed</code>. While its action runs, <code>REDZ.ui.busy(button, promise)</code> shows a spinner in the button and marks it <code>aria-disabled</code>: it keeps the focus and ignores clicks until the promise settles. See <a href="busy.html">Busy</a> for the words a button says while it waits.</p>
 	<div class="docs-example" id="btn-toggle">
 		<button class="btn" type="button" aria-pressed="false" data-docs-run="toggle"><i class="bi bi-pin-angle" aria-hidden="true"></i>Pin</button>
 		<button class="btn btn-primary" type="button" data-docs-run="busy-button">Save for 2 seconds</button>
+	</div>
+
+	<h3>A wait before it works again</h3>
+	<p><code>data-cooldown="N"</code> makes a button wait N seconds: it is <code>aria-disabled</code> - it keeps the focus and ignores clicks - and shows the seconds left after its words, in the page's text <code>cooldown</code>; then it wakes and the attribute goes. Setting the attribute again starts the wait again; a page reloaded during a wait renders the seconds left. The count is drawn, not read out every second: say the wait in words once, when it starts - "A new code is on its way; ask again in a minute".</p>
+	<div class="docs-example" id="btn-cooldown">
+		<button class="btn" type="button" data-cooldown="20" data-docs-run="cooldown"><i class="bi bi-arrow-clockwise" aria-hidden="true"></i>Send the code again</button>
 	</div>
 </section>
 
