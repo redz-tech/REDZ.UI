@@ -9,6 +9,19 @@ window.REDZ_PROBE = (() => {
 		requestAnimationFrame(() => requestAnimationFrame(done));
 		setTimeout(done, 5000);
 	});
+	// The page come to rest after an input: two frames, in which every state the probes read - open, focused, selected,
+	// placed by the menu guard - is set; with a $cap, every finite animation and transition then running - of the layers
+	// themselves, opening or closing, a popover's or a dialog's and its backdrop's, or with $all of anything - done, or
+	// $cap ms, and two frames more. A layer's box is measured at rest whatever its transition (resting), and a focus
+	// ring's fade or a toast's timer bar changes nothing the probes read.
+	const settle = async (cap = 0, all = false) => {
+		await frames();
+		const running = cap === 0 ? [] : document.getAnimations().filter((animation) => animation.playState === 'running' && animation.effect?.getTiming().iterations !== Infinity && (all || animation.effect?.target?.matches?.('[popover], dialog')));
+		if (running.length > 0) {
+			await Promise.race([pause(cap), Promise.all(running.map((animation) => animation.finished.catch(() => null)))]);
+			await frames();
+		}
+	};
 	const closed = (el) => el.closest('[popover]:not(:popover-open), dialog:not([open])') !== null;
 	// The box an opened layer rests in, without the scale or move of its opening transition - a slow engine may not have
 	// run it yet when the probe measures.
@@ -51,6 +64,11 @@ window.REDZ_PROBE = (() => {
 		return false;
 	};
 	return {
+		// The page come to rest after the probe's key, click or drag: true.
+		async settle(cap = 0, all = false) {
+			await settle(cap, all);
+			return true;
+		},
 		// The cell's theme and direction, set with transitions off: an engine that cannot emulate the system's theme
 		// (Safari) first draws the page in the system's, and a button would still be fading to the cell's when measured.
 		async prepare(theme, dir) {
@@ -484,8 +502,7 @@ window.REDZ_PROBE = (() => {
 				invoker.scrollIntoView({block: 'nearest', inline: 'nearest'});
 				await frames();
 				invoker.click();
-				await pause(350);
-				await frames();
+				await settle();
 				const open = command === 'show-modal' ? target.open : target.matches(':popover-open');
 				const r = resting(target);
 				const q = invoker.getBoundingClientRect();
@@ -507,7 +524,7 @@ window.REDZ_PROBE = (() => {
 				} else if (target.matches(':popover-open')) {
 					target.hidePopover();
 				}
-				await pause(250);
+				await settle();
 			}
 			scrollTo(0, 0);
 			return out;

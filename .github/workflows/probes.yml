@@ -22,9 +22,11 @@ permissions:
 env:
   # The parts. Chrome and Firefox - the current ones and the floor's - on Linux, each engine its own job: no macOS runner
   # is needed for them, and macOS runners are scarce, five at a time on a free account. The current Chrome is a pinned
-  # Chrome for Testing build (chrome-156 in the config). macOS 15 for Safari and the iOS 18.5 and 26.2 simulators;
-  # VoiceOver on macOS 15, the first with its activedescendant fix, and on macOS 26; NVDA in Chrome and in Firefox on
-  # Windows Server 2025. Each part is its own sheet, joined below.
+  # Chrome for Testing build (chrome-156 in the config). macOS 15 for Safari and for the iOS 18.5 and 26.2 simulators,
+  # one job each; VoiceOver on macOS 15, the first with its activedescendant fix, and on macOS 26 - five macOS jobs. NVDA
+  # in Chrome and in Firefox on Windows Server 2025, each in two shares of its pages, as a reader waits out its silence
+  # after every step. A part with a "share" K/N runs the K-th of N shares of its engines' pages, split by a hash of each
+  # page's name. Each part is its own sheet, joined below.
   ALL: >-
     [{"name": "chrome", "engines": "chrome-156", "runner": "ubuntu-24.04"},
     {"name": "firefox", "engines": "firefox", "runner": "ubuntu-24.04"},
@@ -32,11 +34,14 @@ env:
     {"name": "floor-chrome-130", "engines": "chrome-130", "runner": "ubuntu-24.04"},
     {"name": "floor-firefox-132", "engines": "firefox-132", "runner": "ubuntu-24.04"},
     {"name": "floor-chrome-136", "engines": "chrome-136", "runner": "ubuntu-24.04"},
-    {"name": "ios", "engines": "ios-18 ios-26"},
+    {"name": "ios-18", "engines": "ios-18"},
+    {"name": "ios-26", "engines": "ios-26"},
     {"name": "voiceover", "engines": "voiceover"},
     {"name": "voiceover-tahoe", "engines": "voiceover-tahoe", "runner": "macos-26"},
-    {"name": "nvda-chrome", "engines": "nvda-chrome", "runner": "windows-2025"},
-    {"name": "nvda-firefox", "engines": "nvda-firefox", "runner": "windows-2025"}]
+    {"name": "nvda-chrome-1", "engines": "nvda-chrome", "share": "1/2", "runner": "windows-2025"},
+    {"name": "nvda-chrome-2", "engines": "nvda-chrome", "share": "2/2", "runner": "windows-2025"},
+    {"name": "nvda-firefox-1", "engines": "nvda-firefox", "share": "1/2", "runner": "windows-2025"},
+    {"name": "nvda-firefox-2", "engines": "nvda-firefox", "share": "2/2", "runner": "windows-2025"}]
 
 jobs:
   plan:
@@ -106,7 +111,7 @@ jobs:
         run: sudo apt-get install -y -q --no-install-recommends fonts-noto-core
 
       - name: Let safaridriver drive Safari and the simulators
-        if: matrix.part.name == 'safari' || matrix.part.name == 'ios' || startsWith(matrix.part.name, 'voiceover')
+        if: matrix.part.name == 'safari' || startsWith(matrix.part.name, 'ios') || startsWith(matrix.part.name, 'voiceover')
         run: sudo safaridriver --enable
 
       - name: Let AppleScript drive VoiceOver
@@ -122,7 +127,8 @@ jobs:
         env:
           ENGINES: ${{ matrix.part.engines }}
           PAGES: ${{ matrix.part.pages }}
-        run: php tools/probe.php ${PAGES:+"--pages=$PAGES"} $ENGINES
+          SHARE: ${{ matrix.part.share }}
+        run: php tools/probe.php ${SHARE:+"--share=$SHARE"} ${PAGES:+"--pages=$PAGES"} $ENGINES
 
       - name: The part's whole sheet - the sheet it stands on, the pages checked again in place
         if: always() && matrix.part.base_run != ''

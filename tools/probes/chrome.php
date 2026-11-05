@@ -53,13 +53,14 @@ function PROBE__ChromeSocket($proc, string $profile)
 	return PROBE__WsOpen((int)$lines[0], $lines[1]);
 }
 
-/** Reads what Chrome writes within $seconds into the handle's messages. */
-function PROBE__ChromePump(array &$h, float $seconds): void
+/** Reads what Chrome writes within $seconds into the handle's messages - with $first only until a message is in. */
+function PROBE__ChromePump(array &$h, float $seconds, bool $first = false): void
 {
 	$until = microtime(true) + $seconds;
 	do {
 		$write = null;
 		$except = null;
+		$had = count($h['events']);
 		if ($h['socket'] !== null) {
 			// A frame read may leave the next ones in the stream's own buffer, which the select does not see.
 			$read = [$h['socket']];
@@ -70,19 +71,22 @@ function PROBE__ChromePump(array &$h, float $seconds): void
 				}
 				$h['events'][] = json_decode($text, true);
 			}
-			continue;
-		}
-		$read = [$h['pipes'][4]];
-		if (stream_select($read, $write, $except, 0, 20000) > 0) {
-			$chunk = (string)fread($h['pipes'][4], 1048576);
-			if ($chunk === '' && feof($h['pipes'][4])) {
-				throw new RuntimeException('Chrome left');
+		} else {
+			$read = [$h['pipes'][4]];
+			if (stream_select($read, $write, $except, 0, 20000) > 0) {
+				$chunk = (string)fread($h['pipes'][4], 1048576);
+				if ($chunk === '' && feof($h['pipes'][4])) {
+					throw new RuntimeException('Chrome left');
+				}
+				$h['buf'] .= $chunk;
 			}
-			$h['buf'] .= $chunk;
+			while (($end = strpos($h['buf'], "\0")) !== false) {
+				$h['events'][] = json_decode(substr($h['buf'], 0, $end), true);
+				$h['buf'] = substr($h['buf'], $end + 1);
+			}
 		}
-		while (($end = strpos($h['buf'], "\0")) !== false) {
-			$h['events'][] = json_decode(substr($h['buf'], 0, $end), true);
-			$h['buf'] = substr($h['buf'], $end + 1);
+		if ($first && count($h['events']) > $had) {
+			return;
 		}
 	} while (microtime(true) < $until);
 }
@@ -109,7 +113,7 @@ function PROBE__ChromeSend(array &$h, string $method, array $params = [], bool $
 				return $answer['result'] ?? [];
 			}
 		}
-		PROBE__ChromePump($h, 0.02);
+		PROBE__ChromePump($h, 0.02, true);
 	}
 	throw new RuntimeException('Chrome gave no answer to ' . $method . (isset($params['expression']) ? ' of ' . substr((string)preg_replace('~^\(async \(\) => JSON\.stringify\(await \(~', '', (string)$params['expression']), 0, 90) : ''));
 }
@@ -128,7 +132,7 @@ function PROBE__ChromeLoad(array &$h, string $url, int $width, int $height, stri
 		if (microtime(true) > $until) {
 			throw new RuntimeException('Chrome did not load ' . $url);
 		}
-		usleep(50000);
+		usleep(10000);
 	}
 }
 
