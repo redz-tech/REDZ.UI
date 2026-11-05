@@ -39,7 +39,7 @@ The page sets the bar's `data-state` after a save: `error` in the danger tone, i
 
 ### The fields that changed
 
-`data-changed`, set by the page, marks a field whose value differs from the saved one: a bar at the start of a `form-control` or a `form-select` - a combobox's button is one - and a dot after a check or a switch. On a tab it is a dot too; there its value is what a screen reader says.
+`data-changed`, set by the page, marks a field whose value differs from the saved one: a bar at the start of a `form-control` or a `form-select` - a combobox's button is one - and a dot after a check or a switch. On a tab it is a dot too.
 
 ```html
 <div class="form-floating">

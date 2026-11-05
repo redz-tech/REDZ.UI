@@ -43,8 +43,8 @@ tone pad, translations side by side, the page's reading, and who wrote what. No 
 - A plain `btn` in an `input-group` wears the field's line, an accent face and weight 600, so the group reads as one control; a plain
   `btn-icon` there reads as `input-group-text`. Solid, outline, subtle and text buttons stay as they are.
 - A click on a control with `aria-disabled="true"` and a title shows the title for three seconds and says it, as a tap always did.
-- The mark of a `table-danger`, `table-warning`, `table-active` or current row stands on the row, so it stays when a phone hides the
-  first cell.
+- The mark of a `table-danger`, `table-warning`, `table-active` or current row stands on the first cell a phone shows, when a `d-none`
+  cell comes first.
 
 ### Fixed
 - The caret in a block whose text changed under it threw in Safari, which stopped undo.
@@ -54,7 +54,7 @@ tone pad, translations side by side, the page's reading, and who wrote what. No 
 ### Added
 - `REDZ.ui.combobox.set(list, values)` sets what a list holds from the page, as a choice does: its hidden fields, its button
   or chips, then `input` and `change`. A form's Discard can go back to the last saved value; `reset` goes back to the first.
-- `data-changed` on a `nav-link` draws the dot a field's mark has; its value is what a screen reader says after the tab's name.
+- `data-changed` on a `nav-link` draws the dot a field's mark has; a `visually-hidden` word in the tab says it to a screen reader.
 - `form-more` on a `details` folds a long hint under a field, with a chevron that turns.
 - `data-tooltip-delay` on a title or around it sets the wait of its tooltip; `0` shows it at once.
 - A folded rail's tooltip stands beside its link, so it covers no other icon.

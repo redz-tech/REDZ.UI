@@ -2839,19 +2839,29 @@ window.REDZ_BEHAVE = (() => {
 		}]},
 		rowMark: {target: 'tr.table-danger', steps: [async (out) => {
 			const row = $('tr.table-danger');
-			const first = row.cells[0];
-			const pin = document.createElement('i');
-			pin.style.cssText = 'position: absolute; inset-block-start: 0; inset-inline-start: 0; inline-size: 3px; block-size: 3px';
-			first.style.display = 'none';
-			row.append(pin);
+			const head = row.closest('table').tHead?.rows[0].cells[0];
+			const shifted = head !== undefined && !near(row.cells[0].getBoundingClientRect().left, head.getBoundingClientRect().left, 1);
+			const frame = document.createElement('iframe');
+			frame.style.cssText = 'position: fixed; inset: 0; inline-size: 400px; block-size: 200px; visibility: hidden';
+			const sheet = document.querySelector('link[rel="stylesheet"][href*="redz-ui"]').href;
+			document.body.append(frame);
+			frame.srcdoc = '<!doctype html><link rel="stylesheet" href="' + sheet + '"><body class="region"><table class="table"><tbody><tr class="table-danger"><td class="d-none md:d-table-cell">Hidden</td><td>Shown</td></tr></tbody></table>';
+			await new Promise((done) => {
+				frame.onload = done;
+			});
+			const inside = frame.contentDocument;
+			const cells = inside.querySelectorAll('td');
+			const marks = (at) => {
+				frame.style.inlineSize = at + 'px';
+				return [...cells].map((one) => frame.contentWindow.getComputedStyle(one, '::before').content !== 'none');
+			};
 			await settled();
-			const [box, spot] = [row.getBoundingClientRect(), pin.getBoundingClientRect()];
-			const mark = getComputedStyle(row, '::before');
-			const seen = [mark.content, mark.position, mark.inlineSize];
-			pin.remove();
-			first.removeAttribute('style');
-			if (!near(spot.left, getComputedStyle(row).direction === 'rtl' ? box.right - 3 : box.left, 2) || !near(spot.top, box.top, 2) || seen[0] === 'none' || seen[1] !== 'absolute') {
-				out.push('a row\'s mark with its first cell hidden: a pin stands ' + say(spot) + ' in a row at ' + say(box) + ', the mark is ' + say(seen));
+			const phone = marks(400);
+			await settled();
+			const wide = marks(1000);
+			frame.remove();
+			if (shifted || !phone[1] || !wide[0] || wide[1]) {
+				out.push('a row\'s mark: the row is ' + (shifted ? 'shifted a column' : 'in its columns') + ', on a phone the cells mark ' + say(phone) + ', wide ' + say(wide));
 			}
 		}]},
 		tabsInView: {target: '#nav-tabs-panel-1', steps: [async (out) => {

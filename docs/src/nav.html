@@ -33,11 +33,11 @@
 	</div>
 
 	<h3>A tab with changes</h3>
-	<p><code>data-changed</code>, set by the page, puts a dot on a tab whose panel holds something not saved yet, the same word as on a field. Its value is what a screen reader says after the tab's name.</p>
+	<p><code>data-changed</code>, set by the page, puts a dot on a tab whose panel holds something not saved yet, the same word as on a field. A <code>visually-hidden</code> word inside the tab says it to a screen reader.</p>
 	<div class="docs-example docs-example-stack" id="nav-changed">
 		<div class="nav nav-underline" role="tablist" aria-label="Settings">
 			<button class="nav-link" type="button" role="tab" id="nav-changed-1" aria-selected="true" aria-controls="nav-changed-panel-1">Company</button>
-			<button class="nav-link" type="button" role="tab" id="nav-changed-2" aria-selected="false" aria-controls="nav-changed-panel-2" data-changed="not saved">Mail</button>
+			<button class="nav-link" type="button" role="tab" id="nav-changed-2" aria-selected="false" aria-controls="nav-changed-panel-2" data-changed>Mail<span class="visually-hidden"> not saved</span></button>
 		</div>
 		<div id="nav-changed-panel-1" role="tabpanel" aria-labelledby="nav-changed-1" tabindex="0"><p>The company's name and address.</p></div>
 		<div id="nav-changed-panel-2" role="tabpanel" aria-labelledby="nav-changed-2" tabindex="0" hidden><p>The address mail is sent from.</p></div>
