@@ -41,7 +41,7 @@ jobs:
           done
           git archive "${latest:-origin/main}" | tar -x -C _site
 
-      - name: Add the sheets of the probes - main's latest as next/checks, each release's own as <version>/checks
+      - name: Add the sheets of the probes - main's latest as next/checks, the latest release's as <version>/checks and checks; an older one stays in its release's checks.zip, as a published site may hold 1 GB
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
@@ -59,15 +59,13 @@ jobs:
           if [ -z "$sheet" ]; then
             echo "main's commit has no probes run with a sheet"
           fi
-          for tag in $(git tag --list 'v*' --sort=v:refname); do
-            if gh release download "$tag" --pattern checks.zip --dir "/tmp/checks-$tag" 2>/dev/null; then
-              mkdir -p "_site/${tag#v}/checks"
-              unzip -q "/tmp/checks-$tag/checks.zip" -d "_site/${tag#v}/checks"
-            fi
-          done
           root=$(git tag --list 'v*' --sort=v:refname | tail -n 1)
           from="_site/next/checks"
           if [ -n "$root" ]; then
+            if gh release download "$root" --pattern checks.zip --dir "/tmp/checks-$root" 2>/dev/null; then
+              mkdir -p "_site/${root#v}/checks"
+              unzip -q "/tmp/checks-$root/checks.zip" -d "_site/${root#v}/checks"
+            fi
             from="_site/${root#v}/checks"
           fi
           if [ -d "$from" ]; then

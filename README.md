@@ -255,7 +255,7 @@ Remote Access, so it meets a page in browse mode as a user does - and NVDA also 
 quick navigation (headings, landmarks, form fields) against what the page holds. The sheet of shots and findings is
 written to `.dev/probes/`; the Probes workflow runs it on every commit in nine parts - joined by `php tools/probe.php
 merge` - on macOS 15, VoiceOver also on macOS 26, NVDA on Windows Server 2025, with a pinned Chrome for Testing build as
-the current Chrome, as the images' own lag; every release publishes its sheet under `checks/` on the site. On a Mac the
+the current Chrome, as the images' own lag; every release carries its sheet, and the site shows the latest under `checks/`. On a Mac the
 engines run at once, a process each (the engines `safaridriver` drives, Safari, VoiceOver and the simulators, one after
 another; `--serial` runs them all so), and `--pages=docs/menu.html,…` checks only those pages, as the workflow's `pages` input does for a lab
 run. CI checks only what changed since the nearest commit that passed (`php tools/probe.php affected BASE` says what and
@@ -271,7 +271,7 @@ probes are clean in every engine; the release carries two files:
   class, custom property, command and text key of the library, and the sha256 of every file in the SRI form.
   `php tools/build.php` writes the folder, and `--check` holds it current on every commit. The sources, the docs and
   `floor.json` stay in the repository and in the tag's source archive;
-- `checks.zip` - the sheet of the probes the release passed, also on the site under `<version>/checks/`.
+- `checks.zip` - the sheet of the probes the release passed; the site shows the latest release's under `checks/`.
 
 The icons are a release of their own, under a tag `icons-<version>` that follows Bootstrap Icons: `redz-ui-icons-<version>.zip`
 holds `css/icons.min.css`, `icons/` and the pack's passport `redz-ui-icons.json`. The library's passport names in `icons`
