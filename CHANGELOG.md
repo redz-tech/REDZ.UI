@@ -4,6 +4,47 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## 0.13.0 - 2026-11-05
+
+The packages built into `dist/` like the main two files, the ERP's #95-#97, and probes that wait for what they read:
+a full CI run in 15 minutes, 25 to 35 before.
+
+### Added
+- Each package's files in `dist/`, built by `tools/min.php` from its folder as the main two are from `css/` and `js/`:
+  `redz-ui-charts.min.css` and `.min.js`, `redz-ui-calendar.min.css`, `redz-ui-media.min.css`,
+  `redz-ui-editor.min.css` and `.min.js`, and `redz-ui-editor-surface.min.css`, which the editor's frame links. The
+  passport's `packages` and `editor` keep their shape, their paths now these, each hashed in `files`; the budgets
+  hold these files; the folders stay to read, and the release archives both. The editor's script is 8.4 KB gzipped,
+  11.0 as written.
+- The class list knows the packages' classes (#97): the passport's `classes` and `assets/classes.txt` of both skills
+  hold `calendar`, `chart`, `spark`, `lanes`, `media-grid` and the rest, so `scan.sh --moved` no longer reports them
+  as unknown; a page that uses one links its package.
+
+### Changed
+- The docs link the packages from `dist/`, the editor's example as the others: the probes run what a project serves.
+
+### Fixed
+- A popover that several buttons open - the handles of a list sharing one menu of moves - marked every one of them
+  `aria-expanded="true"`, drawn pressed and said "expanded" (#96). Only its opener is now: the toggle event's source,
+  else the button just pressed, else the one with the focus, else the only one; the others say `false`.
+- The Print docs named Bootstrap's `d-print-none`; REDZ.UI's class is `print:d-none` (#95).
+
+### Checks
+- The probes wait for what they read, not for fixed pauses: a key, a click or a drag waits two frames, in which every
+  state they read is set, and a layer's transitions only where its box is read live; a popover is measured at rest
+  whatever its transition. Chrome's driver answers as soon as its message is in. `docs/all.html` in Chrome: 5:55 to
+  1:46, the same findings.
+- A part of CI may run a share of its engines' pages, split by a hash of each page's name, so a page keeps its share
+  whatever pages come or go: the current Chrome and NVDA in Chrome and in Firefox run in two shares each, iOS 18 and
+  iOS 26 in a job each - five macOS jobs, no queue. Measured on run 41961288948: Chrome 24 to 13 minutes in one job,
+  Firefox 15 to 7, Safari 18 to 9, iOS 17 to 7 and 9, the floor 7 to 3-4, NVDA 21 to 11-12, VoiceOver 10.
+- Sharper reach: the behaviour checks reach the full pages of the desktop browsers, a package's file the pages that
+  link it; an exception of the config is marked used by its own text, not by its place in the list.
+- The minifier's cell holds each package's stylesheet squeezed against it as written, in every engine.
+- `tools/docs.php` refuses docs prose that names a Bootstrap class the map renames or removes.
+- On the Mac before CI: Chrome, Firefox and Safari Technology Preview (`safari-preview`), whose own driver takes a
+  session while the Mac owner's Safari is open; CI keeps the shipping Safari.
+
 ## 0.12.0 - 2026-11-04
 
 The ERP's one list of every screen left to move, asked as #42-#93: commands and overlays, form controls, behaviours
