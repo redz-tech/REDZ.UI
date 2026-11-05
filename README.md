@@ -3,7 +3,7 @@
 The interface library of the REDZ products: plain CSS and small JavaScript on the browser platform - no framework, no
 build step.
 
-**Status:** 0.14.1 (2026-11-05) - see [Releases](#releases). Three demo screens in `reference/demo/` -
+**Status:** 0.15.0 (2026-11-05) - see [Releases](#releases). Three demo screens in `reference/demo/` -
 a list, a resource page and a settings form - show it in light and dark themes, left-to-right and right-to-left.
 
 **Site:** [redz-tech.github.io/REDZ.UI](https://redz-tech.github.io/REDZ.UI/) - documentation and the demo screens of
@@ -18,10 +18,11 @@ the latest release at the root, of the main branch under `next/`, and of every r
 - Behavior of the widgets that the platform does not give by itself - menus and tabs by keyboard, notices, a
   confirmation, busy buttons, a dialog closed by a click outside it - as small JavaScript modules that attach by
   delegation (see [Scripts](#scripts)).
-- Two files a project serves, made by our own PHP tool (`tools/min.php`) and committed: `dist/redz-ui.min.css`, the
-  stylesheets in one, squeezed, and `dist/redz-ui.min.js`, the modules as one ES module with short local names; each
-  package's files beside them, `dist/redz-ui-charts.min.css` and the rest. Each pass proves its result, the probes run
-  what `dist/` holds in every engine, and `css/`, `js/` and the packages' folders stay to read.
+- Two files a project serves, made by our own PHP tool (`tools/min.php`) and committed: `dist/css/redz-ui.min.css`, the
+  stylesheets in one, squeezed, and `dist/js/redz-ui.min.js`, the modules as one ES module with short local names; each
+  package's files beside them, `dist/css/redz-ui-charts.min.css` and the rest. `dist/` is the folder a project receives,
+  as it is. Each pass proves its result, the probes run what `dist/` holds in every engine, and `css/`, `js/` and the
+  packages' folders stay in the repository to read.
 - Light, dark and system themes; left-to-right and right-to-left from one stylesheet; WCAG 2.2 AA in both themes.
 - Documentation with a page per component, and every component in every state on one page, `docs/all.html` - the
   fixture checked in real engines, with its Arabic twin (see [Documentation](#documentation)).
@@ -46,12 +47,13 @@ One rule for every class:
 
 ## Icons
 [Bootstrap Icons](https://icons.getbootstrap.com/) 1.13.2, one SVG file per icon in `icons/`, under their own class
-names. `css/icons.css` delivers each icon as a CSS mask over its file, so an icon takes the color of the text around it
-and needs no font, no JavaScript and no build:
+names. `css/icons.min.css` delivers each icon as a CSS mask over its file, so an icon takes the color of the text around it
+and needs no font, no JavaScript and no build. They are a pack of their own, released apart under the tag `icons-1.13.2`:
+a project keeps it in a folder of its own, and a new release of the library leaves it alone.
 
 ```html
-<link rel="stylesheet" href="dist/redz-ui.min.css">
-<link rel="stylesheet" href="css/icons.css">
+<link rel="stylesheet" href="redz-ui/css/redz-ui.min.css">
+<link rel="stylesheet" href="redz-ui-icons/css/icons.min.css">
 
 <i class="bi bi-pencil" aria-hidden="true"></i>
 ```
@@ -60,11 +62,11 @@ Such an icon follows the system colors in forced-colors mode and prints, from yo
 CORS headers.
 
 ## Scripts
-One file beside the stylesheet carries them all - `dist/redz-ui.min.js`, the modules of `js/index.js` as one; each
+One file beside the stylesheet carries them all - `js/redz-ui.min.js`, the modules of `js/index.js` as one; each
 attaches by delegation on `document`, so nothing is set up per element and markup added later works the same:
 
 ```html
-<script type="module" src="dist/redz-ui.min.js"></script>
+<script type="module" src="js/redz-ui.min.js"></script>
 <script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "confirm.phrase": "Type “{phrase}” to confirm", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong", "moved": "Moved to {position} of {count}", "more": "More", "slide": "{position} of {count}", "file.type": "{name} is not a kind of file this takes", "file.size": "{name} is larger than {size}"}</script>
 ```
 
@@ -163,7 +165,7 @@ The library has no words of its own: every word it shows comes from the caller o
 
 ## The editor
 
-A package of the release, linked apart: `dist/redz-ui-editor.min.css` and the module `dist/redz-ui-editor.min.js`,
+A package of the release, linked apart: `css/redz-ui-editor.min.css` and the module `js/redz-ui-editor.min.js`,
 built from `editor/` as the main two are from `css/` and `js/`. The module sets
 `REDZ.ui.editor(host, {value, placeholder, lang, dir, styles, scripts, blocks, images, embed, grid, onChange})` and
 answers `getHTML()`, `setHTML(html)`, `focus()`, `destroy()`. It edits REDZ.UI markup only: prose in place, the
@@ -176,13 +178,13 @@ in a stored body or on the clipboard runs. Its words are the island's `editor.*`
 
 Three more packages, linked on the screens that show them, listed in the passport's `packages` - each built into
 `dist/` from its folder, `charts/`, `calendar/` and `media/`, which stay to read:
-- `dist/redz-ui-charts.min.css` and the module `dist/redz-ui-charts.min.js` - a chart is the table of its numbers
+- `css/redz-ui-charts.min.css` and the module `js/redz-ui-charts.min.js` - a chart is the table of its numbers
   drawn by CSS: columns stacked by day (`chart`), a row's sparkline of runs (`spark`), a board of lanes over a time
   window (`lanes`). The numbers are `data-v`, `data-at`, `data-from`, `data-to`, `data-median` and `data-now`, shares
   from 0 to 1, which the module hands to the stylesheet through the CSSOM - a strict CSP that refuses `style`
   attributes allows it - and a chart table keeps its table roles for screen readers.
-- `dist/redz-ui-calendar.min.css` - a month of days (`calendar`) and days across things (`schedule`); no script.
-- `dist/redz-ui-media.min.css` - a folder of images as tiles or rows (`media-grid`, `media-tile`); its view switch is
+- `css/redz-ui-calendar.min.css` - a month of days (`calendar`) and days across things (`schedule`); no script.
+- `css/redz-ui-media.min.css` - a folder of images as tiles or rows (`media-grid`, `media-tile`); its view switch is
   `--view` and its reordering `data-reorder`, both in the main script.
 
 Their budgets, gzipped: charts 3 KB of styles and 2 KB of script, the calendar and the media library 2 KB each.
@@ -259,19 +261,26 @@ never placed on a runner runs its failed jobs once more by itself.
 Every release is an [immutable GitHub release](https://github.com/redz-tech/REDZ.UI/releases): once it is out, neither
 its tag nor its files can change, and GitHub signs an attestation of both. A tag `v*` becomes a release only when the
 probes are clean in every engine; the release carries two files:
-- `redz-ui-<version>.zip` - `dist/`, `css/`, `js/`, `icons/`, `floor.json`, the license files, this README, the
-  changelog and the passport `redz-ui.json`: the version, the floor, the two files a project serves, the stylesheets a
-  bundle joins in their order, the modules of `js/index.js`, every class, custom property, command and text key of the
-  library, and the sha256 of every file in the SRI form. `php tools/build.php` writes the two files and the passport,
-  and `--check` holds them current on every commit;
+- `redz-ui-<version>.zip` - `dist/` of the tag, the folder a project serves as it is: `css/` and `js/` with minified
+  files only, the license files and the passport `redz-ui.json`: the version, the floor, the files to link, every
+  class, custom property, command and text key of the library, and the sha256 of every file in the SRI form.
+  `php tools/build.php` writes the folder, and `--check` holds it current on every commit. The sources, the docs and
+  `floor.json` stay in the repository and in the tag's source archive;
 - `checks.zip` - the sheet of the probes the release passed, also on the site under `<version>/checks/`.
 
+The icons are a release of their own, under a tag `icons-<version>` that follows Bootstrap Icons: `redz-ui-icons-<version>.zip`
+holds `css/icons.min.css`, `icons/` and the pack's passport `redz-ui-icons.json`. The library's passport names in `icons`
+the version it needs. `php tools/build.php --check` refuses icons that changed under a published version.
+
 ```sh
-gh release download v0.14.1 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
-gh release verify-asset v0.14.1 redz-ui-0.14.1.zip --repo redz-tech/REDZ.UI
+gh release download v0.15.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
+gh release verify-asset v0.15.0 redz-ui-0.15.0.zip --repo redz-tech/REDZ.UI
+gh release download icons-1.13.2 --repo redz-tech/REDZ.UI --pattern 'redz-ui-icons-*.zip'
+gh release verify-asset icons-1.13.2 redz-ui-icons-1.13.2.zip --repo redz-tech/REDZ.UI
 ```
 
-jsDelivr serves a release by its tag: `https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.14.1/dist/redz-ui.min.css`. Versions
+jsDelivr serves a release by its tag: `https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.15.0/dist/css/redz-ui.min.css`
+and `https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@icons-1.13.2/css/icons.min.css`. Versions
 follow Semantic Versioning: a class, token, attribute or JavaScript call removed or renamed is a major release, one
 added is a minor release, a fix is a patch; while the version is 0.x, a removal or a rename is a minor release.
 

@@ -11,7 +11,7 @@
 		{"title": "Navigation", "pages": {"nav": "Navs and tabs", "navbar": "Navbars", "breadcrumb": "Breadcrumbs", "pagination": "Pagination", "stepper": "Steppers", "palette": "Command palette"}},
 		{"title": "Pages", "pages": {"app": "App shell", "page-center": "Centered page", "kiosk": "Kiosk"}}
 	],
-	"packages": {"chart": ["dist/redz-ui-charts.min.css", "dist/redz-ui-charts.min.js"], "calendar": ["dist/redz-ui-calendar.min.css"], "media": ["dist/redz-ui-media.min.css"], "editor": ["dist/redz-ui-editor.min.css", "dist/redz-ui-editor.min.js"]},
+	"packages": {"chart": ["dist/css/redz-ui-charts.min.css", "dist/js/redz-ui-charts.min.js"], "calendar": ["dist/css/redz-ui-calendar.min.css"], "media": ["dist/css/redz-ui-media.min.css"], "editor": ["dist/css/redz-ui-editor.min.css", "dist/js/redz-ui-editor.min.js"]},
 	"twins": {"ar": ["docs/all.html","reference/demo/list.html", "reference/demo/resource.html", "reference/demo/settings.html"]},
 	"icons": {
 		"index": "rocket-takeoff", "layout": "grid-1x2", "utilities": "tools", "tokens": "palette", "icons": "emoji-smile", "migrate": "arrow-left-right",

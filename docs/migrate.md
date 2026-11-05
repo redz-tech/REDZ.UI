@@ -12,7 +12,7 @@ Most of Bootstrap 5's names stay. What changes is the spacing numbers, the grid,
 - **States:** classes become attributes - `.active` is `aria-current`, `aria-selected` or `aria-pressed`; `.disabled` is `disabled` or `aria-disabled`; `.is-invalid` is `aria-invalid="true"`.
 - **Triggers:** `data-bs-toggle` becomes the browser's commands - `commandfor` + `command="show-modal"`, `"close"` or `"toggle-popover"`; `bootstrap.Modal` becomes `dialog.showModal()`.
 - **Renamed:** modal → `dialog` on a `<dialog>`, dropdown → `menu` on a popover, offcanvas → `drawer`.
-- **Icons:** Bootstrap Icons keep their classes; swap the font's stylesheet for `css/icons.css`.
+- **Icons:** Bootstrap Icons keep their classes; swap the font's stylesheet for `css/icons.min.css`.
 
 ## With an agent
 

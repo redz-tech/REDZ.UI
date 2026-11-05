@@ -9,7 +9,7 @@ A month of days with what happens on each, and a strip of days across the things
 Calendars are linked apart, on the screens that show them, beside the two files; they need no script.
 
 ```html
-<link rel="stylesheet" href="redz-ui/dist/redz-ui-calendar.min.css">
+<link rel="stylesheet" href="redz-ui/css/redz-ui-calendar.min.css">
 ```
 
 ## A month

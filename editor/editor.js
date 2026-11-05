@@ -11,7 +11,10 @@
 import {text} from '../js/text.js';
 
 const BASE = new URL('..', import.meta.url);
-const LIBRARY = {css: [new URL('dist/redz-ui.min.css', BASE).href, new URL('css/icons.css', BASE).href], js: new URL('dist/redz-ui.min.js', BASE).href, surface: new URL('dist/redz-ui-editor-surface.min.css', BASE).href};
+const LIBRARY = {css: new URL('css/redz-ui.min.css', BASE).href, js: new URL('js/redz-ui.min.js', BASE).href, surface: new URL('css/redz-ui-editor-surface.min.css', BASE).href};
+/** The stylesheets of a frame: the library's, and the icon masks at the address the page links them from now, whatever
+ *  its host and query. */
+const frameSheets = () => [LIBRARY.css, ...[...document.querySelectorAll('link[rel="stylesheet"]')].filter((link) => new URL(link.href, document.baseURI).pathname.endsWith('/icons.min.css')).map((link) => link.href)];
 const PROSE = new Set(['P', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'UL', 'OL', 'BLOCKQUOTE', 'PRE', 'HR']);
 const INLINE = new Set(['A', 'ABBR', 'B', 'BR', 'CITE', 'CODE', 'DEL', 'EM', 'I', 'IMG', 'INS', 'KBD', 'MARK', 'PICTURE', 'Q', 'S', 'SMALL', 'SPAN', 'STRONG', 'SUB', 'SUP', 'TIME', 'U']);
 const PROSE_CLASS = /^(text-(start|center|end|muted|primary|secondary|success|danger|warning|info)|bg-(primary|secondary|success|danger|warning|info)-subtle)$/;
@@ -487,7 +490,7 @@ export const editor = (host, options = {}) => {
 		dialog.setAttribute('aria-labelledby', titled);
 		dialog.setAttribute('closedby', 'any');
 		const texts = document.getElementById('redz-ui-text')?.textContent || '{}';
-		const head = '<meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="script-src \'self\'; object-src \'none\'; base-uri \'none\'; form-action \'none\'">' + [...LIBRARY.css, ...config.styles].map((href) => '<link rel="stylesheet" href="' + escape(href) + '">').join('') + '<script type="application/json" id="redz-ui-text">' + texts.replace(/</g, '\\u003c') + '</script><script type="module" src="' + escape(LIBRARY.js) + '"></script>' + config.scripts.map((src) => '<script type="module" src="' + escape(src) + '"></script>').join('');
+		const head = '<meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="script-src \'self\'; object-src \'none\'; base-uri \'none\'; form-action \'none\'">' + [...frameSheets(), ...config.styles].map((href) => '<link rel="stylesheet" href="' + escape(href) + '">').join('') + '<script type="application/json" id="redz-ui-text">' + texts.replace(/</g, '\\u003c') + '</script><script type="module" src="' + escape(LIBRARY.js) + '"></script>' + config.scripts.map((src) => '<script type="module" src="' + escape(src) + '"></script>').join('');
 		dialog.innerHTML = '<div class="dialog-header"><h2 class="dialog-title" id="' + titled + '">' + escape(say('block.preview')) + '</h2><button class="btn-close" type="button" commandfor="' + titled + '-dialog" command="close" aria-label="' + escape(text('close')) + '"></button></div><div class="dialog-body"><iframe class="editor-preview" title="' + escape(say('block.preview')) + '"></iframe></div>';
 		dialog.id = titled + '-dialog';
 		dialog.querySelector('iframe').srcdoc = '<!doctype html><html lang="' + escape(config.lang) + '" dir="' + escape(config.dir) + '"><head>' + head + '</head><body class="region p-16">' + clean(sources.get(wrap)) + '</body></html>';
@@ -714,7 +717,7 @@ export const editor = (host, options = {}) => {
 	};
 
 	on(frame, 'load', ready, {once: true});
-	frame.srcdoc = '<!doctype html><html lang="' + escape(config.lang) + '" dir="' + escape(config.dir) + '"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="' + CSP + '">' + [...LIBRARY.css, ...config.styles, LIBRARY.surface].map((href) => '<link rel="stylesheet" href="' + escape(href) + '">').join('') + '</head><body></body></html>';
+	frame.srcdoc = '<!doctype html><html lang="' + escape(config.lang) + '" dir="' + escape(config.dir) + '"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="' + CSP + '">' + [...frameSheets(), ...config.styles, LIBRARY.surface].map((href) => '<link rel="stylesheet" href="' + escape(href) + '">').join('') + '</head><body></body></html>';
 
 	return {
 		getHTML: () => (doc === null ? clean(config.value ?? '') : value()),

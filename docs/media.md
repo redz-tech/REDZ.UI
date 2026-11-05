@@ -9,7 +9,7 @@ A folder of images as square tiles or as compact rows: checked for actions on ma
 The media library is linked apart, on the screens that show it, beside the two files; its switch of views and its reordering are the main script's.
 
 ```html
-<link rel="stylesheet" href="redz-ui/dist/redz-ui-media.min.css">
+<link rel="stylesheet" href="redz-ui/css/redz-ui-media.min.css">
 ```
 
 ## A folder

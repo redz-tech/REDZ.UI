@@ -53,7 +53,7 @@ function PROBE__PrintShotWrite(string $pdf, string $file): array
 /** Copies the library's stylesheet into the sheet folder $dir, so its page needs nothing outside it. */
 function PROBE__SheetCss(string $dir): void
 {
-	copy(PROBE_ROOT . '/dist/redz-ui.min.css', $dir . '/redz-ui.min.css');
+	copy(PROBE_ROOT . '/dist/css/redz-ui.min.css', $dir . '/redz-ui.min.css');
 	copy(__DIR__ . '/sheet.css', $dir . '/sheet.css');
 }
 

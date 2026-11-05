@@ -258,7 +258,7 @@ window.REDZ_PROBE = (() => {
 		},
 		errors() {
 			if (document.documentElement.dataset.floor === 'below') {
-				errors.push('floor: js/floor.js marks this engine below the floor');
+				errors.push('floor: js/floor.min.js marks this engine below the floor');
 			}
 			return errors.splice(0);
 		},

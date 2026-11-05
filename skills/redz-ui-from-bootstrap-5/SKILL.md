@@ -3,7 +3,7 @@ name: redz-ui-from-bootstrap-5
 description: Move a project's markup, styles and scripts from Bootstrap 5.3 to REDZ.UI, file by file - find what Bootstrap left with scripts/scan.sh and the map assets/map.tsv, rewrite each file whole, scan again until nothing is left. Use when a project links Bootstrap 5 (bootstrap.css, bootstrap.bundle.js, data-bs-* attributes, row and col grids) and is to run on REDZ.UI instead.
 license: MIT
 metadata:
-  version: "0.14.1"
+  version: "0.15.0"
   from: "bootstrap 5.3.8"
 ---
 
@@ -74,14 +74,14 @@ row, state class, `data-bs-*` attribute and unknown class stays as it was and is
   `close`, `confirm.ok`, `confirm.cancel`, `confirm.phrase`, `busy`, `remove`, `create`, `moved`, `more`, `slide`, `file.type`, `file.size`,
   `strength.short` … `strength.strong`, `found.other` - and, for each key of its `plurals`, the other plural forms
   (`found.one`, `found.few`).
-- **Icons stay**: `bi bi-NAME` keep their classes; swap the Bootstrap Icons font stylesheet for `css/icons.css`.
+- **Icons stay**: `bi bi-NAME` keep their classes; swap the Bootstrap Icons font stylesheet for `css/icons.min.css`.
 
 ## The page
 
 ```html
-<link rel="stylesheet" href="redz-ui/dist/redz-ui.min.css">
-<link rel="stylesheet" href="redz-ui/css/icons.css">
-<script type="module" src="redz-ui/dist/redz-ui.min.js"></script>
+<link rel="stylesheet" href="redz-ui/css/redz-ui.min.css">
+<link rel="stylesheet" href="redz-ui-icons/css/icons.min.css">
+<script type="module" src="redz-ui/js/redz-ui.min.js"></script>
 <script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…"}</script>
 ```
 
@@ -96,4 +96,4 @@ menus, tabs and dialogs need no start-up call.
 - `assets/map.tsv` - every class of Bootstrap 5.3.8 and its REDZ.UI form: `bs5`, `redz`, `kind`, `scope`, `page`,
   `note`. `page` names the docs page: `https://redz-tech.github.io/REDZ.UI/docs/PAGE.html`.
 - `assets/classes.txt` - every class REDZ.UI has, the packages' among them (a page that uses `calendar` links
-  `dist/redz-ui-calendar.min.css`); a class that is not there does not exist.
+  `css/redz-ui-calendar.min.css`); a class that is not there does not exist.

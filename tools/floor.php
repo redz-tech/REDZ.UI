@@ -1088,8 +1088,8 @@ function FLOOR__Check(array $paths): int
 }
 
 /**
- * The tests of js/floor.js that a browser at the floor would fail: each name of tools/floor/tests.json must have full
- * support at the floor in every browser, or js/floor.js would mark that browser below it.
+ * The tests of dist/js/floor.min.js that a browser at the floor would fail: each name of tools/floor/tests.json must have full
+ * support at the floor in every browser, or dist/js/floor.min.js would mark that browser below it.
  * @return list<string>
  */
 function FLOOR__TestFindings(array $data, array $rules): array
@@ -1099,7 +1099,7 @@ function FLOOR__TestFindings(array $data, array $rules): array
 		foreach (FLOOR_BROWSERS as $browser) {
 			$verdict = FLOOR__NameVerdict($data, $rules, $test['name'], $browser);
 			if ($verdict !== 'full') {
-				$findings[] = 'tools/floor/tests.json  ' . $test['name'] . ' is ' . $verdict . ' in ' . $browser . ' ' . $rules['floor'][$browser] . ' - js/floor.js would mark it below the floor';
+				$findings[] = 'tools/floor/tests.json  ' . $test['name'] . ' is ' . $verdict . ' in ' . $browser . ' ' . $rules['floor'][$browser] . ' - dist/js/floor.min.js would mark it below the floor';
 			}
 		}
 	}

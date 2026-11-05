@@ -1,0 +1,40 @@
+name: Icons
+
+# A tag icons-* publishes the icon pack: a release of its own, never the repository's latest. The commit it names has
+# passed the Probes workflow on its branch.
+on:
+  push:
+    tags: ['icons-*']
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: '8.5'
+          coverage: none
+          tools: none
+
+      - name: The pack is current, the tag names its version, and the archive and the notes are written
+        run: |
+          set -eu
+          php tools/build.php --check
+          php tools/release.php "${GITHUB_REF_NAME}" release
+
+      - name: The release - a draft with the archive, then published
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -eu
+          version="${GITHUB_REF_NAME#icons-}"
+          gh release create "${GITHUB_REF_NAME}" --draft --verify-tag --latest=false --title "REDZ.UI icons ${version}" --notes-file release/notes.md "release/redz-ui-icons-${version}.zip"
+          gh release edit "${GITHUB_REF_NAME}" --draft=false --latest=false

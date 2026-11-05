@@ -3,7 +3,7 @@ name: redz-ui
 description: Build or change admin screens with REDZ.UI - its class names, states, commands and page skeleton, with one reference per component. Use when writing HTML, PHP templates or JavaScript for a project that links redz-ui/css/index.css, or when asked for a list, form, card, dialog, menu, tabs or notice in REDZ.UI.
 license: MIT
 metadata:
-  version: "0.14.1"
+  version: "0.15.0"
 ---
 
 # Building screens with REDZ.UI
@@ -41,9 +41,9 @@ where the meaning is the same, and like the platform where Bootstrap 6 moved ont
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="redz-ui/dist/redz-ui.min.css">
-  <link rel="stylesheet" href="redz-ui/css/icons.css">
-  <script type="module" src="redz-ui/dist/redz-ui.min.js"></script>
+  <link rel="stylesheet" href="redz-ui/css/redz-ui.min.css">
+  <link rel="stylesheet" href="redz-ui-icons/css/icons.min.css">
+  <script type="module" src="redz-ui/js/redz-ui.min.js"></script>
   <script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "confirm.phrase": "Type “{phrase}” to confirm", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong", "moved": "Moved to {position} of {count}", "more": "More", "slide": "{position} of {count}", "file.type": "{name} is not a kind of file this takes", "file.size": "{name} is larger than {size}"}</script>
 </head>
 ```
@@ -62,7 +62,7 @@ form the page language's plural rules name (`found.one`, `found.few`, …), else
 
 Check it exists: `grep -x 'CLASS' assets/classes.txt`. A class that is not there does not exist in REDZ.UI - Bootstrap
 6 habits (`md:col-6`, `btn-solid`, `fg-*`) and invented names included. The packages' classes are there too: a page
-that uses one links its package - `chart`, `spark` and `lanes` need `dist/redz-ui-charts.min.css` and .min.js.
+that uses one links its package - `chart`, `spark` and `lanes` need `css/redz-ui-charts.min.css` and .min.js.
 
 ## References - one per page of the docs
 

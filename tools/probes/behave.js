@@ -996,6 +996,42 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a region inside a region, [hidden, sent]: ' + say({heldShut, opened, closedByOwn, shutAgain}) + ' - hidden and not sent while its outer region is hidden, whatever its own field holds');
 			}
 		}]},
+		frameIcons: {target: '#editor-demo-host', steps: [async (out) => {
+			const page = $('link[href*="icons.min.css"]');
+			const sheets = async () => {
+				const host = document.createElement('div');
+				$('#editor-demo-host').after(host);
+				const editor = REDZ.ui.editor(host, {value: '<p>Text</p>', lang: 'en', dir: 'ltr'});
+				await wait(300);
+				const links = $$('link[rel="stylesheet"]', $('iframe', host).contentDocument).map((link) => link.href);
+				editor.destroy();
+				host.remove();
+				return links;
+			};
+			const plain = await sheets();
+			const first = page.href;
+			page.setAttribute('href', first + '?h=walk');
+			const marked = await sheets();
+			const second = page.href;
+			page.setAttribute('href', first);
+			if (!plain.includes(first) || !marked.includes(second)) {
+				out.push('an editor frame links ' + say({plain, marked}) + ' - the icon masks at the address the page links them from, whatever its query');
+			}
+		}]},
+		footRow: {target: '#table-wide .table-scroll', steps: [async (out) => {
+			const table = Object.assign(document.createElement('table'), {className: 'table', innerHTML: '<thead><tr><th scope="col">Boat</th><th scope="col">Seats</th></tr></thead><tbody><tr><th scope="row">Sea Breeze</th><td>5</td></tr></tbody><tfoot><tr><th scope="row">Total</th><td>5</td></tr></tfoot>'});
+			$('#table-wide .table-scroll').parentElement.append(table);
+			const read = (cell) => {
+				const style = getComputedStyle(cell);
+				return [style.position, style.backgroundColor, style.fontSize, style.whiteSpace, style.paddingBlockStart, style.zIndex];
+			};
+			const foot = read($('tfoot th', table));
+			const body = read($('tbody th', table));
+			table.remove();
+			if (say(foot) !== say(body)) {
+				out.push('a th in tfoot reads ' + say(foot) + ' - position, background, size, wrap, padding, stack - where a th in tbody reads ' + say(body));
+			}
+		}]},
 		tableStop: {target: '#table-wide .table-scroll', steps: [async (out) => {
 			const host = $('#table-wide .table-scroll').parentElement;
 			const fits = Object.assign(document.createElement('div'), {className: 'table-scroll', innerHTML: '<table class="table"><tbody><tr><td>Fits</td></tr></tbody></table>'});

@@ -1,7 +1,7 @@
 <?php
-// min - what the release serves: dist/redz-ui.min.css, the stylesheets css/index.css pulls in, squeezed;
-// dist/redz-ui.min.js, the modules js/index.js pulls in, joined into one ES module, squeezed and given short local
-// names; and each package's files the same way, dist/redz-ui-NAME.min.css and .min.js. The JS scanner - strings, regular expressions and a template's text copied as written, white space kept only
+// min - what the release serves: dist/css/redz-ui.min.css, the stylesheets css/index.css pulls in, squeezed;
+// dist/js/redz-ui.min.js, the modules js/index.js pulls in, joined into one ES module, squeezed and given short local
+// names; and each package's files the same way, dist/css/redz-ui-NAME.min.css and dist/js/redz-ui-NAME.min.js. The JS scanner - strings, regular expressions and a template's text copied as written, white space kept only
 // where two tokens would fuse - and its verdict come from the REDZ ERP's kernel minifier; the CSS pass, the joiner and
 // the names are this library's. Every pass proves its result before it is written; the probes run what it writes.
 

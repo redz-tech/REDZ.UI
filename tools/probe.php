@@ -951,10 +951,11 @@ function PROBE__MinCell(array &$h, string $name, array $run, array &$report): vo
 			$report['findings'][] = $name . ' tools/min/' . basename($file) . ' answers ' . substr((string)json_encode($minified, JSON_UNESCAPED_UNICODE), 0, 300) . ' minified, ' . substr((string)json_encode($written, JSON_UNESCAPED_UNICODE), 0, 300) . ' as written';
 		}
 	}
-	$passport = json_decode((string)file_get_contents(PROBE_ROOT . '/redz-ui.json'), true, 512, JSON_THROW_ON_ERROR);
+	$main = 'dist/' . json_decode((string)file_get_contents(PROBE_ROOT . '/dist/redz-ui.json'), true, 512, JSON_THROW_ON_ERROR)['main']['css'];
+	preg_match_all('~^@import url\("([^"]+)"\);~m', (string)file_get_contents(PROBE_ROOT . '/css/index.css'), $imports);
 	$hostile = (string)file_get_contents(PROBE_ROOT . '/tools/min/hostile.css');
 	$sheets = [
-		$passport['dist']['css'] => [implode("\n", array_map(fn(string $file): string => (string)file_get_contents(PROBE_ROOT . '/' . $file), $passport['css'])), (string)file_get_contents(PROBE_ROOT . '/' . $passport['dist']['css'])],
+		$main => [implode("\n", array_map(fn(string $file): string => (string)file_get_contents(PROBE_ROOT . '/css/' . $file), $imports[1])), (string)file_get_contents(PROBE_ROOT . '/' . $main)],
 		'tools/min/hostile.css' => [$hostile, MIN__CssSafe($hostile)],
 	];
 	foreach (PROBE_PACKAGES as $package) {
@@ -1164,7 +1165,7 @@ function PROBE__KnownPages(array $config): array
  */
 function PROBE__Reach(array $config, string $base, string $file): array
 {
-	$inert = '~\.md$|^skills/|^llms(-full)?\.txt$|^(LICENSE|NOTICE|\.gitignore|redz-ui\.json)$|^tools/(build|release|map|docs|floor|dashes)\.php$|^tools/(map|floor)/|^tools/(docs|vocabulary)\.json$|^docs/ar\.tsv$|^\.github/workflows/(check|pages|rerun|probe-part)\.yml$~';
+	$inert = '~\.md$|^skills/|^llms(-full)?\.txt$|^(dist/)?(LICENSE|NOTICE|redz-ui\.json)$|^(\.gitignore|redz-ui-icons\.json)$|^tools/(build|release|map|docs|floor|dashes)\.php$|^tools/(map|floor)/|^tools/(docs|vocabulary)\.json$|^docs/ar\.tsv$|^\.github/workflows/(check|pages|rerun|probe-part)\.yml$~';
 	if (preg_match($inert, $file) === 1) {
 		return [];
 	}
@@ -1185,7 +1186,7 @@ function PROBE__Reach(array $config, string $base, string $file): array
 		return [];
 	}
 	$folder = (string)strstr($file, '/', true);
-	$package = in_array($folder, PROBE_PACKAGES, true) ? $folder : (preg_match('~^dist/redz-ui-([a-z]+)~', $file, $m) === 1 && in_array($m[1], PROBE_PACKAGES, true) ? $m[1] : '');
+	$package = in_array($folder, PROBE_PACKAGES, true) ? $folder : (preg_match('~^dist/(?:css|js)/redz-ui-([a-z]+)~', $file, $m) === 1 && in_array($m[1], PROBE_PACKAGES, true) ? $m[1] : '');
 	if ($package !== '') {
 		return array_map(fn(string $page): string => 'page:' . $page, array_values(array_filter(PROBE__KnownPages($config), fn(string $page): bool => preg_match('~/redz-ui-' . $package . '[.-]~', (string)@file_get_contents(PROBE_ROOT . '/' . $page)) === 1)));
 	}

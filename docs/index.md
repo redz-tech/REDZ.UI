@@ -6,17 +6,20 @@ REDZ.UI is a stylesheet, its icons and one small script on the browser platform.
 
 ## Get it
 
-Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. `redz-ui-0.14.1.zip` holds the library's files and its passport, `redz-ui.json` - the version, the floor, the two files a project serves, the stylesheets and modules they are made of, every class, token, command and text key, and the sha256 of every file. `checks.zip` beside it is the sheet of the probes the release passed in every engine.
+Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. `redz-ui-0.15.0.zip` is the folder a project serves, as it is: `css/` and `js/` with minified files only, the license files and the passport, `redz-ui.json` - the version, the floor, the files to link, every class, token, command and text key, and the sha256 of every file. The icons are a release of their own, `redz-ui-icons-1.13.2.zip`, which changes only with Bootstrap Icons: the passport's `icons` names the version a release needs, and a project keeps it in a folder of its own, so a new release of the library leaves the icons and their cache alone. `checks.zip` beside the library is the sheet of the probes the release passed in every engine.
 
 ```js
-gh release download v0.14.1 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
-gh release verify-asset v0.14.1 redz-ui-0.14.1.zip --repo redz-tech/REDZ.UI
+gh release download v0.15.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
+gh release verify-asset v0.15.0 redz-ui-0.15.0.zip --repo redz-tech/REDZ.UI
+gh release download icons-1.13.2 --repo redz-tech/REDZ.UI --pattern 'redz-ui-icons-*.zip'
+gh release verify-asset icons-1.13.2 redz-ui-icons-1.13.2.zip --repo redz-tech/REDZ.UI
 ```
 
 Or from jsDelivr, which serves a release by its tag:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.14.1/dist/redz-ui.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.15.0/dist/css/redz-ui.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@icons-1.13.2/css/icons.min.css">
 ```
 
 ## Include it
@@ -29,16 +32,16 @@ The stylesheet, the icons and the scripts, with the page's own words for the few
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="redz-ui/dist/redz-ui.min.css">
-  <link rel="stylesheet" href="redz-ui/css/icons.css">
-  <script type="module" src="redz-ui/dist/redz-ui.min.js"></script>
+  <link rel="stylesheet" href="redz-ui/css/redz-ui.min.css">
+  <link rel="stylesheet" href="redz-ui-icons/css/icons.min.css">
+  <script type="module" src="redz-ui/js/redz-ui.min.js"></script>
   <script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "busy": "Loading…"}</script>
 </head>
 ```
 
-- `dist/redz-ui.min.css` is the layers, the tokens, the components and the utilities in one file, within its budget of 32 KB gzipped: the stylesheets `css/index.css` pulls in, squeezed.
-- `css/icons.css` is apart: one mask per Bootstrap Icons file, used only by name. It reaches each file by a URL relative to itself, `../icons/NAME.svg`, so the release's folders keep their shape where a project serves them. A project that marks its static files by their content (`?h=…`) cannot mark the icons this way: it serves each release from a folder of its own version instead, which changes with every release.
-- `dist/redz-ui.min.js` is one ES module of the behaviors, within its budget of 30 KB gzipped: the modules of `js/index.js` joined, squeezed and given short local names. It sets `REDZ.ui` for calls from code.
+- `css/redz-ui.min.css` is the layers, the tokens, the components and the utilities in one file, within its budget of 32 KB gzipped: the stylesheets `css/index.css` pulls in, squeezed.
+- `css/icons.min.css` is apart: one mask per Bootstrap Icons file, used only by name. It reaches each file by a URL relative to itself, `../icons/NAME.svg`, so the pack's folders keep their shape where a project serves them. A project that marks its static files by their content (`?h=…`) cannot mark the icons this way, and needs not: the pack's folder is named by its version, which changes only with Bootstrap Icons.
+- `js/redz-ui.min.js` is one ES module of the behaviors, within its budget of 30 KB gzipped: the modules of `js/index.js` joined, squeezed and given short local names. It sets `REDZ.ui` for calls from code.
 - The island `#redz-ui-text` gives the library its words, in the page's language: every key of the passport's `texts`, and for each key of its `plurals` the other forms its language's plural rules name (`found.one`, `found.few`). The example shows four of them.
 - The two files are made from `css/` and `js/`, which stay to read. A project that bundles its own may join the stylesheets in the passport's order instead.
 
@@ -72,10 +75,10 @@ Menus, tabs, dialogs and their keys need no call: the library listens on the doc
 
 Bootstrap 6's floor: Chrome and Edge 130+, Firefox 132+, Safari 18+ on macOS and iOS. What must work rests on features of the floor; invoker commands and anchor positioning are written in their final form, and a small script stands in below them. Every page of these docs is checked in real engines at the floor and above - [the checks](https://redz-tech.github.io/REDZ.UI/checks/).
 
-Below the floor a page shows its own words, not a broken screen. `js/floor.js`, a plain script first in the head, before the stylesheets, marks `<html data-floor="below">` when the browser lacks a feature the library is built on; the page's own style shows its "update your browser" then. Every product that loads it judges a browser the same way, and the floor gate holds that no browser at the floor fails it.
+Below the floor a page shows its own words, not a broken screen. `js/floor.min.js`, a plain script first in the head, before the stylesheets, marks `<html data-floor="below">` when the browser lacks a feature the library is built on; the page's own style shows its "update your browser" then. Every product that loads it judges a browser the same way, and the floor gate holds that no browser at the floor fails it.
 
 ```html
-<script src="redz-ui/js/floor.js"></script>
+<script src="redz-ui/js/floor.min.js"></script>
 <style>.floor-notice { display: none; } [data-floor="below"] .floor-notice { display: block; }</style>
 ```
 

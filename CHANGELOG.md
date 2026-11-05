@@ -4,6 +4,45 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## 0.15.0 - 2026-11-05
+
+A release is now the folder a project serves, and the icons are a release of their own: 13 files of 480 KB in place of
+2,219 files of 8.9 MB, and a new version of the library no longer moves 2,078 icons nor empties their cache.
+
+### Changed - renames, so update your links
+- The archive `redz-ui-<version>.zip` is the folder a project serves, as it is: `css/`, `js/`, `LICENSE`, `NOTICE` and
+  `redz-ui.json`. There is no `dist/` in it, and every CSS and JS file is minified:
+
+  | Before | Now |
+  | --- | --- |
+  | `dist/redz-ui.min.css`, `dist/redz-ui-NAME.min.css` | `css/redz-ui.min.css`, `css/redz-ui-NAME.min.css` |
+  | `dist/redz-ui.min.js`, `dist/redz-ui-NAME.min.js` | `js/redz-ui.min.js`, `js/redz-ui-NAME.min.js` |
+  | `js/floor.js` | `js/floor.min.js` |
+  | `css/icons.css` | `css/icons.min.css`, in the icon pack |
+
+- The sources, the docs, this file, the README and `floor.json` are no longer in the archive: they stay in the
+  repository and in the tag's source archive.
+- The passport: `dist` is now `main`, `{css, js, floor}`, each path relative to the version's folder, as are the paths of
+  `editor` and `packages`. `icons` is `{name, version, css}`, the pack this release needs. `css` and `js`, the lists of
+  source files, are gone, and `files` lists what the archive holds beside the passport.
+- In the repository `dist/` is that folder, passport included, and a CDN reads `dist/css/...` and `dist/js/...` by a tag.
+
+### Added
+- The icon pack: `redz-ui-icons-1.13.2.zip` under the tag `icons-1.13.2`, a release that changes only with Bootstrap Icons.
+  It holds `css/icons.min.css`, `icons/` and its own passport `redz-ui-icons.json`, with the sha256 of every file. A
+  project keeps it in a folder of its own, whose address does not change with the library's version.
+
+### Fixed
+- A `th` in `tfoot` reads as a row's head, not the table's: it kept the head's band, 12 px, `nowrap` and sticky place (#99).
+
+### Changed in the editor
+- Its frames take the icon masks from the address the page links `icons.min.css` from at that moment, whatever its host
+  and query. A page that links no icons has none in the frame.
+
+### Checks
+- `php tools/build.php --check` refuses icons that changed under a published pack's version; `tools/release.php` refuses
+  an archive that differs from what its passport lists. A behavior check of a `th` in `tfoot`.
+
 ## 0.14.1 - 2026-11-05
 
 Four fixes from a walk of the ERP's screens in Chrome and Safari, and from the ERP's list.

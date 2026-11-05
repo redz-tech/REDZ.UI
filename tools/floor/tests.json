@@ -1,5 +1,5 @@
 {
-	"about": "The tests of js/floor.js, which tools/build.php writes: each the name of a feature the library is built on, as floor.json names it, and the expression that finds it in a browser. php tools/floor.php check holds that every name is ok at the floor, so a browser at the floor never reads as below it.",
+	"about": "The tests of dist/js/floor.min.js, which tools/build.php writes: each the name of a feature the library is built on, as floor.json names it, and the expression that finds it in a browser. php tools/floor.php check holds that every name is ok at the floor, so a browser at the floor never reads as below it.",
 	"tests": [
 		{"name": "function:light-dark", "test": "CSS.supports('color', 'light-dark(#000, #fff)')"},
 		{"name": "attribute:*:popover", "test": "'popover' in HTMLElement.prototype"},

@@ -6,11 +6,11 @@ A chart is the table of its numbers, drawn: columns stacked by day, a sparkline 
 
 ## A package of the release
 
-Charts are linked apart, on the screens that show them, beside the two files: `dist/redz-ui-charts.min.css` draws, and `dist/redz-ui-charts.min.js` hands it the numbers - every `data-v`, `data-at`, `data-from`, `data-to`, `data-median` and `data-now` becomes a custom property through the CSSOM, which a strict CSP allows where it would refuse a `style` attribute. A number is a share, 0 to 1: a value over the largest, a time over the window.
+Charts are linked apart, on the screens that show them, beside the two files: `css/redz-ui-charts.min.css` draws, and `js/redz-ui-charts.min.js` hands it the numbers - every `data-v`, `data-at`, `data-from`, `data-to`, `data-median` and `data-now` becomes a custom property through the CSSOM, which a strict CSP allows where it would refuse a `style` attribute. A number is a share, 0 to 1: a value over the largest, a time over the window.
 
 ```html
-<link rel="stylesheet" href="redz-ui/dist/redz-ui-charts.min.css">
-<script type="module" src="redz-ui/dist/redz-ui-charts.min.js"></script>
+<link rel="stylesheet" href="redz-ui/css/redz-ui-charts.min.css">
+<script type="module" src="redz-ui/js/redz-ui-charts.min.js"></script>
 ```
 
 ## Columns by day
