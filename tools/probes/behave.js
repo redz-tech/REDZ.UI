@@ -1002,8 +1002,11 @@ window.REDZ_BEHAVE = (() => {
 				const host = document.createElement('div');
 				$('#editor-demo-host').after(host);
 				const editor = REDZ.ui.editor(host, {value: '<p>Text</p>', lang: 'en', dir: 'ltr'});
-				await wait(300);
-				const links = $$('link[rel="stylesheet"]', $('iframe', host).contentDocument).map((link) => link.href);
+				let links = [];
+				for (let tries = 0; tries < 100 && links.length === 0; tries++) {
+					await wait(50);
+					links = $$('link[rel="stylesheet"]', $('iframe', host).contentDocument).map((link) => link.href);
+				}
 				editor.destroy();
 				host.remove();
 				return links;
