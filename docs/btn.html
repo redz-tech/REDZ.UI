@@ -147,7 +147,7 @@
 &lt;button class="btn btn-info" type="button"&gt;Preview&lt;/button&gt;</code></pre></div>
 
 					<h3>Outline, subtle, text and link</h3>
-					<p>Quieter forms of the same tones for secondary actions, rows and toolbars. <code>btn-text</code> has no fill until hovered; <code>btn-link</code> reads as a link and keeps a button's size.</p>
+					<p>Quieter forms of the same tones for secondary actions, rows and toolbars. <code>btn-text</code> has no fill until hovered; <code>btn-link</code> reads as a link and keeps a button's size, and it alone wraps a long text.</p>
 					<div class="docs-sample"><div class="docs-example" id="btn-quiet">
 						<button class="btn btn-outline-primary" type="button">Outline</button>
 						<button class="btn btn-outline-danger" type="button">Outline danger</button>
@@ -155,13 +155,15 @@
 						<button class="btn btn-subtle-danger" type="button">Subtle danger</button>
 						<button class="btn btn-text" type="button">Text</button>
 						<button class="btn btn-link" type="button">Link</button>
+						<button class="btn btn-link text-start" type="button">A long link wraps inside its box, like the title of a card that opens a window</button>
 					</div>
 					<pre class="docs-code" tabindex="0"><code>&lt;button class="btn btn-outline-primary" type="button"&gt;Outline&lt;/button&gt;
 &lt;button class="btn btn-outline-danger" type="button"&gt;Outline danger&lt;/button&gt;
 &lt;button class="btn btn-subtle-primary" type="button"&gt;Subtle&lt;/button&gt;
 &lt;button class="btn btn-subtle-danger" type="button"&gt;Subtle danger&lt;/button&gt;
 &lt;button class="btn btn-text" type="button"&gt;Text&lt;/button&gt;
-&lt;button class="btn btn-link" type="button"&gt;Link&lt;/button&gt;</code></pre></div>
+&lt;button class="btn btn-link" type="button"&gt;Link&lt;/button&gt;
+&lt;button class="btn btn-link text-start" type="button"&gt;A long link wraps inside its box, like the title of a card that opens a window&lt;/button&gt;</code></pre></div>
 
 					<h3>Sizes</h3>
 					<p>A size is a word: <code>btn-xs</code> 24 px, <code>btn-sm</code> 28 px, the default 32 px, <code>btn-lg</code> 40 px - the heights of every control of the same size. <code>btn-xl</code>, 56 px, is for a touch screen and the one action of a page; in a <a href="kiosk.html">kiosk</a> it grows to a kiosk's size.</p>

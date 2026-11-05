@@ -183,7 +183,7 @@
 	</div>
 
 	<h3>Shown by another field</h3>
-	<p><code>data-show-when</code> on a region names a field of its form, and <code>data-show-in</code> the values that show it, a space between them; without it, any value does. A checkbox or a radio counts its value when checked. While the region is hidden its fields are disabled, so the form sends none of them; a field the page disabled itself stays disabled.</p>
+	<p><code>data-show-when</code> on a region names a field of its form, and <code>data-show-in</code> the values that show it, a space between them; without it, any value does. A checkbox or a radio counts its value when checked. While the region is hidden its fields are disabled, so the form sends none of them; a field the page disabled itself stays disabled. A region inside a hidden region counts as hidden, whatever its own field holds.</p>
 	<div class="docs-example docs-example-stack" id="form-show">
 		<form class="vstack gap-12">
 			<div class="form-floating max-w-320">

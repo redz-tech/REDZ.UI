@@ -1,7 +1,8 @@
 // REDZ.UI, tooltips from titles: inside an element with data-tooltips (<html> for the whole page) an element's own
-// title shows as the library's tooltip - after a short hover by a mouse or a pen, at once on a keyboard's focus - and
-// hides when the pointer or the focus leaves, on Escape, on a scroll or a click. The pointer may rest on the tooltip
-// itself. While hovered, the title is held back so the browser does not show its own as well; an element whose only
+// title shows as the library's tooltip - after a short hover by a mouse or a pen, at once on a keyboard's focus, but not
+// when the focus comes back from a closed layer - and hides when the pointer or the focus leaves, on Escape, on a scroll
+// or a click. The pointer may rest on the tooltip itself. While hovered, the title is held back so the browser does not
+// show its own as well; an element whose only
 // name was its title is named by it meanwhile. The tooltip is hidden from screen readers: they say the title already.
 // A touch has no hover: a tap on a control that cannot run (aria-disabled) shows its title for three seconds and says it.
 import {announce} from './say.js';
@@ -135,9 +136,12 @@ document.addEventListener('pointerout', (event) => {
 	}
 });
 
+/** Whether the focus left a popover or a dialog that has just closed: it came back to the element that opened it. */
+const cameBack = (event) => event.relatedTarget instanceof Element && event.relatedTarget.closest('[popover]:not(:popover-open), dialog:not([open])') !== null;
+
 document.addEventListener('focusin', (event) => {
 	const owner = ownerOf(event.target);
-	if (owner !== null && owner === event.target && owner.matches(':focus-visible')) {
+	if (owner !== null && owner === event.target && owner.matches(':focus-visible') && !cameBack(event)) {
 		hide();
 		show(owner);
 	}

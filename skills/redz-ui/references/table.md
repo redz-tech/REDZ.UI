@@ -168,12 +168,12 @@ The head of a table sticks under the app's header as the page scrolls; inside a 
 
 ### Wider than its card
 
-A table with more columns than its card has room for goes in a `table-scroll`: it scrolls sideways inside the card, and `table-scroll-first` holds its first column in place. Where the browser lets an element scroll on one axis alone - Chrome 156 on - the head still sticks to the page as it scrolls down; elsewhere the head scrolls away with the page and the rest works the same. The wrapper is a named region with `tabindex="0"`, so a keyboard can scroll it.
+A table with more columns than its card has room for goes in a `table-scroll`: it scrolls sideways inside the card, and `table-scroll-first` holds its first column in place. Where the browser lets an element scroll on one axis alone - Chrome 156 on - the head still sticks to the page as it scrolls down; elsewhere the head scrolls away with the page and the rest works the same. The wrapper is a named region. The library makes it a tab stop while its table is wider than it, so a keyboard can scroll it, and takes the stop away while the table fits.
 
 ```html
 <section class="card" aria-labelledby="table-wide-title">
 	<div class="card-header"><h2 class="fs-14" id="table-wide-title">Seats by day</h2></div>
-	<div class="table-scroll table-scroll-first" role="region" aria-labelledby="table-wide-title" tabindex="0">
+	<div class="table-scroll table-scroll-first" role="region" aria-labelledby="table-wide-title">
 		<table class="table">
 			<thead><tr><th scope="col">Boat</th><th scope="col" class="text-end">Mon</th><th scope="col" class="text-end">Tue</th><th scope="col" class="text-end">Wed</th><th scope="col" class="text-end">Thu</th><th scope="col" class="text-end">Fri</th><th scope="col" class="text-end">Sat</th><th scope="col" class="text-end">Sun</th><th scope="col" class="text-end">Week</th><th scope="col" class="text-end">Last week</th><th scope="col" class="text-end">Change</th></tr></thead>
 			<tbody>

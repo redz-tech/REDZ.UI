@@ -20,7 +20,7 @@ The plain `btn` is neutral. `btn-primary` marks the one main action of a screen;
 
 ### Outline, subtle, text and link
 
-Quieter forms of the same tones for secondary actions, rows and toolbars. `btn-text` has no fill until hovered; `btn-link` reads as a link and keeps a button's size.
+Quieter forms of the same tones for secondary actions, rows and toolbars. `btn-text` has no fill until hovered; `btn-link` reads as a link and keeps a button's size, and it alone wraps a long text.
 
 ```html
 <button class="btn btn-outline-primary" type="button">Outline</button>
@@ -29,6 +29,7 @@ Quieter forms of the same tones for secondary actions, rows and toolbars. `btn-t
 <button class="btn btn-subtle-danger" type="button">Subtle danger</button>
 <button class="btn btn-text" type="button">Text</button>
 <button class="btn btn-link" type="button">Link</button>
+<button class="btn btn-link text-start" type="button">A long link wraps inside its box, like the title of a card that opens a window</button>
 ```
 
 ### Sizes

@@ -938,6 +938,80 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a tap on a disabled control ' + (open ? 'shows' : 'does not show') + ' its title, ' + (said ? 'says' : 'does not say') + ' it, and ' + (tip?.matches(':popover-open') ? 'keeps it past' : 'hides it after') + ' three seconds');
 			}
 		}]},
+		titleBack: {target: '#tooltip-title', steps: [async (out) => {
+			const host = $('#tooltip-title');
+			const button = Object.assign(document.createElement('button'), {className: 'btn', type: 'button', title: 'Moves', textContent: 'Moves'});
+			const other = Object.assign(document.createElement('button'), {className: 'btn', type: 'button', textContent: 'Elsewhere'});
+			const menu = Object.assign(document.createElement('div'), {className: 'menu', popover: 'auto', innerHTML: '<button class="menu-item" type="button">Up</button>'});
+			const dialog = Object.assign(document.createElement('dialog'), {className: 'dialog', innerHTML: '<button class="btn" type="button">Inside</button>'});
+			host.append(button, other, menu, dialog);
+			const tip = () => $('#redz-tooltip')?.matches(':popover-open') ?? false;
+			button.focus();
+			menu.showPopover({source: button});
+			$('button', menu).focus();
+			await wait(50);
+			menu.hidePopover();
+			await wait(50);
+			const fromMenu = [document.activeElement === button, tip()];
+			other.focus();
+			await wait(50);
+			button.focus();
+			await wait(50);
+			// A focus by a script is focus-visible where the engine's heuristic says so: Firefox here says not.
+			const again = tip() || !button.matches(':focus-visible');
+			dialog.showModal();
+			await wait(50);
+			dialog.close();
+			await wait(50);
+			const fromDialog = [document.activeElement === button, tip()];
+			other.focus();
+			button.remove();
+			other.remove();
+			menu.remove();
+			dialog.remove();
+			if (!fromMenu[0] || fromMenu[1] || !again || !fromDialog[0] || fromDialog[1]) {
+				out.push('a title\'s tooltip ' + say({fromMenu, again, fromDialog}) + ' - focus back from a menu without it, shown on a new focus, focus back from a dialog without it');
+			}
+		}]},
+		showNested: {target: '#form-show-tax-region', steps: [async (out) => {
+			const form = document.createElement('form');
+			form.innerHTML = '<select name="walkKind"><option value="simple">Simple</option><option value="bundle">Bundle</option></select><div data-show-when="walkKind" data-show-in="bundle"><select name="walkMode"><option value="auto">Auto</option><option value="manual">Manual</option></select><div data-show-when="walkMode" data-show-in="manual"><input name="walkPrice" value="9"></div></div>';
+			$('#form-show-tax-region').after(form);
+			const kind = form.elements.walkKind;
+			const mode = form.elements.walkMode;
+			const inner = $('[data-show-in="manual"]', form);
+			const set = async (field, value) => {
+				field.value = value;
+				field.dispatchEvent(new Event('change', {bubbles: true}));
+				await wait(0);
+				return [inner.hidden, new FormData(form).has('walkPrice')];
+			};
+			mode.value = 'manual';
+			const heldShut = await set(kind, 'simple');
+			const opened = await set(kind, 'bundle');
+			const closedByOwn = await set(mode, 'auto');
+			const shutAgain = await set(kind, 'simple');
+			form.remove();
+			if (say([heldShut, opened, closedByOwn, shutAgain]) !== say([[true, false], [false, true], [true, false], [true, false]])) {
+				out.push('a region inside a region, [hidden, sent]: ' + say({heldShut, opened, closedByOwn, shutAgain}) + ' - hidden and not sent while its outer region is hidden, whatever its own field holds');
+			}
+		}]},
+		tableStop: {target: '#table-wide .table-scroll', steps: [async (out) => {
+			const host = $('#table-wide .table-scroll').parentElement;
+			const fits = Object.assign(document.createElement('div'), {className: 'table-scroll', innerHTML: '<table class="table"><tbody><tr><td>Fits</td></tr></tbody></table>'});
+			fits.setAttribute('tabindex', '0');
+			host.append(fits);
+			await wait(50);
+			const stopWhenFits = fits.hasAttribute('tabindex');
+			fits.style.inlineSize = '1px';
+			$('td', fits).style.minInlineSize = '200px';
+			await wait(100);
+			const stopWhenNarrow = fits.tabIndex;
+			fits.remove();
+			if (stopWhenFits || stopWhenNarrow !== 0) {
+				out.push('a table-scroll\'s tab stop: ' + say({stopWhenFits, stopWhenNarrow}) + ' - a stop while it overflows, none while its table fits');
+			}
+		}]},
 		hold: {target: '#busy-button', steps: [async (out) => {
 			const button = Object.assign(document.createElement('button'), {className: 'btn', type: 'button', textContent: 'Resend the code'});
 			$('#busy-button').append(button);

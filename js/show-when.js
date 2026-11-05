@@ -1,7 +1,8 @@
 // REDZ.UI, regions that follow a field: data-show-when="NAME" shows the region while the field NAME of its form - of the
 // page outside a form - holds a value data-show-in lists (space-separated; without it, any value); a checkbox or a radio
 // counts its value when checked. While the region is hidden its fields are disabled, so the form sends none of them;
-// a field the page disabled itself stays disabled when the region shows again.
+// a field the page disabled itself stays disabled when the region shows again. A region inside a hidden region counts
+// as hidden, whatever its own field holds.
 const SHOWN = '[data-show-when]';
 const FIELDS = 'input, select, textarea';
 const ours = new WeakSet();
@@ -25,7 +26,8 @@ const valuesOf = (region) => {
 const follow = (region) => {
 	const values = valuesOf(region);
 	const wanted = (region.dataset.showIn ?? '').split(/\s+/).filter(Boolean);
-	const shown = wanted.length === 0 ? values.some((value) => value !== '') : values.some((value) => wanted.includes(value));
+	const held = region.parentElement?.closest(SHOWN)?.hidden ?? false;
+	const shown = !held && (wanted.length === 0 ? values.some((value) => value !== '') : values.some((value) => wanted.includes(value)));
 	region.hidden = !shown;
 	for (const field of region.querySelectorAll(FIELDS)) {
 		if (!shown && !field.disabled) {

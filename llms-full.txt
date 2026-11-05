@@ -6,17 +6,17 @@ REDZ.UI is a stylesheet, its icons and one small script on the browser platform.
 
 ## Get it
 
-Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. `redz-ui-0.14.0.zip` holds the library's files and its passport, `redz-ui.json` - the version, the floor, the two files a project serves, the stylesheets and modules they are made of, every class, token, command and text key, and the sha256 of every file. `checks.zip` beside it is the sheet of the probes the release passed in every engine.
+Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. `redz-ui-0.14.1.zip` holds the library's files and its passport, `redz-ui.json` - the version, the floor, the two files a project serves, the stylesheets and modules they are made of, every class, token, command and text key, and the sha256 of every file. `checks.zip` beside it is the sheet of the probes the release passed in every engine.
 
 ```js
-gh release download v0.14.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
-gh release verify-asset v0.14.0 redz-ui-0.14.0.zip --repo redz-tech/REDZ.UI
+gh release download v0.14.1 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
+gh release verify-asset v0.14.1 redz-ui-0.14.1.zip --repo redz-tech/REDZ.UI
 ```
 
 Or from jsDelivr, which serves a release by its tag:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.14.0/dist/redz-ui.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.14.1/dist/redz-ui.min.css">
 ```
 
 ## Include it
@@ -2774,7 +2774,7 @@ The plain `btn` is neutral. `btn-primary` marks the one main action of a screen;
 
 ### Outline, subtle, text and link
 
-Quieter forms of the same tones for secondary actions, rows and toolbars. `btn-text` has no fill until hovered; `btn-link` reads as a link and keeps a button's size.
+Quieter forms of the same tones for secondary actions, rows and toolbars. `btn-text` has no fill until hovered; `btn-link` reads as a link and keeps a button's size, and it alone wraps a long text.
 
 ```html
 <button class="btn btn-outline-primary" type="button">Outline</button>
@@ -2783,6 +2783,7 @@ Quieter forms of the same tones for secondary actions, rows and toolbars. `btn-t
 <button class="btn btn-subtle-danger" type="button">Subtle danger</button>
 <button class="btn btn-text" type="button">Text</button>
 <button class="btn btn-link" type="button">Link</button>
+<button class="btn btn-link text-start" type="button">A long link wraps inside its box, like the title of a card that opens a window</button>
 ```
 
 ### Sizes
@@ -3355,7 +3356,7 @@ Buttons with `command="--step-up"` or `"--step-down"` and `aria-controls` naming
 
 ### Shown by another field
 
-`data-show-when` on a region names a field of its form, and `data-show-in` the values that show it, a space between them; without it, any value does. A checkbox or a radio counts its value when checked. While the region is hidden its fields are disabled, so the form sends none of them; a field the page disabled itself stays disabled.
+`data-show-when` on a region names a field of its form, and `data-show-in` the values that show it, a space between them; without it, any value does. A checkbox or a radio counts its value when checked. While the region is hidden its fields are disabled, so the form sends none of them; a field the page disabled itself stays disabled. A region inside a hidden region counts as hidden, whatever its own field holds.
 
 ```html
 <form class="vstack gap-12">
@@ -5723,12 +5724,12 @@ The head of a table sticks under the app's header as the page scrolls; inside a 
 
 ### Wider than its card
 
-A table with more columns than its card has room for goes in a `table-scroll`: it scrolls sideways inside the card, and `table-scroll-first` holds its first column in place. Where the browser lets an element scroll on one axis alone - Chrome 156 on - the head still sticks to the page as it scrolls down; elsewhere the head scrolls away with the page and the rest works the same. The wrapper is a named region with `tabindex="0"`, so a keyboard can scroll it.
+A table with more columns than its card has room for goes in a `table-scroll`: it scrolls sideways inside the card, and `table-scroll-first` holds its first column in place. Where the browser lets an element scroll on one axis alone - Chrome 156 on - the head still sticks to the page as it scrolls down; elsewhere the head scrolls away with the page and the rest works the same. The wrapper is a named region. The library makes it a tab stop while its table is wider than it, so a keyboard can scroll it, and takes the stop away while the table fits.
 
 ```html
 <section class="card" aria-labelledby="table-wide-title">
 	<div class="card-header"><h2 class="fs-14" id="table-wide-title">Seats by day</h2></div>
-	<div class="table-scroll table-scroll-first" role="region" aria-labelledby="table-wide-title" tabindex="0">
+	<div class="table-scroll table-scroll-first" role="region" aria-labelledby="table-wide-title">
 		<table class="table">
 			<thead><tr><th scope="col">Boat</th><th scope="col" class="text-end">Mon</th><th scope="col" class="text-end">Tue</th><th scope="col" class="text-end">Wed</th><th scope="col" class="text-end">Thu</th><th scope="col" class="text-end">Fri</th><th scope="col" class="text-end">Sat</th><th scope="col" class="text-end">Sun</th><th scope="col" class="text-end">Week</th><th scope="col" class="text-end">Last week</th><th scope="col" class="text-end">Change</th></tr></thead>
 			<tbody>
@@ -6726,7 +6727,7 @@ The tooltip is a `popover` opened by its button's command. It sits above the but
 
 ### From a title
 
-Inside an element with `data-tooltips` - `<html>` for the whole page - an element's own `title` shows as this tooltip: after a short hover by a mouse, at once when the keyboard's focus lands on it. It says why a control cannot run, what an icon button does, what a dot stands for. No markup but the title.
+Inside an element with `data-tooltips` - `<html>` for the whole page - an element's own `title` shows as this tooltip: after a short hover by a mouse, at once when the keyboard's focus lands on it, but not when the focus comes back from a closed menu or dialog, where the person has just been. It says why a control cannot run, what an icon button does, what a dot stands for. No markup but the title.
 
 ```html
 <button class="btn btn-icon" type="button" title="Duplicate"><i class="bi bi-copy" aria-hidden="true"></i></button>

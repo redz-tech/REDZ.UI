@@ -210,7 +210,7 @@ Buttons with `command="--step-up"` or `"--step-down"` and `aria-controls` naming
 
 ### Shown by another field
 
-`data-show-when` on a region names a field of its form, and `data-show-in` the values that show it, a space between them; without it, any value does. A checkbox or a radio counts its value when checked. While the region is hidden its fields are disabled, so the form sends none of them; a field the page disabled itself stays disabled.
+`data-show-when` on a region names a field of its form, and `data-show-in` the values that show it, a space between them; without it, any value does. A checkbox or a radio counts its value when checked. While the region is hidden its fields are disabled, so the form sends none of them; a field the page disabled itself stays disabled. A region inside a hidden region counts as hidden, whatever its own field holds.
 
 ```html
 <form class="vstack gap-12">

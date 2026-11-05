@@ -388,11 +388,11 @@
 					<p>The head of a table sticks under the app's header as the page scrolls; inside a region that scrolls on its own - a <code>dialog-body</code>, a <code>card-scroll</code> card's body - it sticks to the region's top.</p>
 
 					<h3 id="table-scroll">Wider than its card</h3>
-					<p>A table with more columns than its card has room for goes in a <code>table-scroll</code>: it scrolls sideways inside the card, and <code>table-scroll-first</code> holds its first column in place. Where the browser lets an element scroll on one axis alone - Chrome 156 on - the head still sticks to the page as it scrolls down; elsewhere the head scrolls away with the page and the rest works the same. The wrapper is a named region with <code>tabindex="0"</code>, so a keyboard can scroll it.</p>
+					<p>A table with more columns than its card has room for goes in a <code>table-scroll</code>: it scrolls sideways inside the card, and <code>table-scroll-first</code> holds its first column in place. Where the browser lets an element scroll on one axis alone - Chrome 156 on - the head still sticks to the page as it scrolls down; elsewhere the head scrolls away with the page and the rest works the same. The wrapper is a named region. The library makes it a tab stop while its table is wider than it, so a keyboard can scroll it, and takes the stop away while the table fits.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="table-wide">
 						<section class="card" aria-labelledby="table-wide-title">
 							<div class="card-header"><h2 class="fs-14" id="table-wide-title">Seats by day</h2></div>
-							<div class="table-scroll table-scroll-first" role="region" aria-labelledby="table-wide-title" tabindex="0">
+							<div class="table-scroll table-scroll-first" role="region" aria-labelledby="table-wide-title">
 								<table class="table">
 									<thead><tr><th scope="col">Boat</th><th scope="col" class="text-end">Mon</th><th scope="col" class="text-end">Tue</th><th scope="col" class="text-end">Wed</th><th scope="col" class="text-end">Thu</th><th scope="col" class="text-end">Fri</th><th scope="col" class="text-end">Sat</th><th scope="col" class="text-end">Sun</th><th scope="col" class="text-end">Week</th><th scope="col" class="text-end">Last week</th><th scope="col" class="text-end">Change</th></tr></thead>
 									<tbody>
@@ -406,7 +406,7 @@
 					</div>
 					<pre class="docs-code" tabindex="0"><code>&lt;section class="card" aria-labelledby="table-wide-title"&gt;
 	&lt;div class="card-header"&gt;&lt;h2 class="fs-14" id="table-wide-title"&gt;Seats by day&lt;/h2&gt;&lt;/div&gt;
-	&lt;div class="table-scroll table-scroll-first" role="region" aria-labelledby="table-wide-title" tabindex="0"&gt;
+	&lt;div class="table-scroll table-scroll-first" role="region" aria-labelledby="table-wide-title"&gt;
 		&lt;table class="table"&gt;
 			&lt;thead&gt;&lt;tr&gt;&lt;th scope="col"&gt;Boat&lt;/th&gt;&lt;th scope="col" class="text-end"&gt;Mon&lt;/th&gt;&lt;th scope="col" class="text-end"&gt;Tue&lt;/th&gt;&lt;th scope="col" class="text-end"&gt;Wed&lt;/th&gt;&lt;th scope="col" class="text-end"&gt;Thu&lt;/th&gt;&lt;th scope="col" class="text-end"&gt;Fri&lt;/th&gt;&lt;th scope="col" class="text-end"&gt;Sat&lt;/th&gt;&lt;th scope="col" class="text-end"&gt;Sun&lt;/th&gt;&lt;th scope="col" class="text-end"&gt;Week&lt;/th&gt;&lt;th scope="col" class="text-end"&gt;Last week&lt;/th&gt;&lt;th scope="col" class="text-end"&gt;Change&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
 			&lt;tbody&gt;

@@ -4,6 +4,26 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## 0.14.1 - 2026-11-05
+
+Four fixes from a walk of the ERP's screens in Chrome and Safari, and from the ERP's list.
+
+### Fixed
+- A title's tooltip no longer opens when the focus comes back from a closed menu or dialog. In Chrome it threw
+  `InvalidStateError: Invalid to show a popover during another show operation` on `Esc` from a menu opened by a titled
+  button, such as a drag handle's menu of moves.
+- `btn-link` wraps a long text. On a phone a long title in a `btn-link` stayed on one line and pushed the page sideways;
+  `text-break` alone cannot change that.
+- A `data-show-when` region inside a hidden region counts as hidden: its own field no longer shows it and turns its
+  fields back on, so the form does not send them. It follows its field again once the outer region shows.
+- A `table-scroll` is a tab stop only while its table is wider than it. The library sets and removes `tabindex`, so a
+  page drops its own: a table that fits leaves no stop that does nothing.
+
+### Checks
+- Behaviour checks of each fix: a title's tooltip with the focus back from a menu and a dialog, a region inside a
+  hidden region, the tab stop of a scroller that fits and of one that does not. The docs' long `btn-link` is judged by
+  the overflow check at the phone widths.
+
 ## 0.14.0 - 2026-11-05
 
 The ERP's #98: a file the page sends becomes a stored one when the server answers its id.

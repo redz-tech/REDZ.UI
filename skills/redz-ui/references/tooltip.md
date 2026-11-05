@@ -17,7 +17,7 @@ The tooltip is a `popover` opened by its button's command. It sits above the but
 
 ### From a title
 
-Inside an element with `data-tooltips` - `<html>` for the whole page - an element's own `title` shows as this tooltip: after a short hover by a mouse, at once when the keyboard's focus lands on it. It says why a control cannot run, what an icon button does, what a dot stands for. No markup but the title.
+Inside an element with `data-tooltips` - `<html>` for the whole page - an element's own `title` shows as this tooltip: after a short hover by a mouse, at once when the keyboard's focus lands on it, but not when the focus comes back from a closed menu or dialog, where the person has just been. It says why a control cannot run, what an icon button does, what a dot stands for. No markup but the title.
 
 ```html
 <button class="btn btn-icon" type="button" title="Duplicate"><i class="bi bi-copy" aria-hidden="true"></i></button>

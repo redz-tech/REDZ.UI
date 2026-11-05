@@ -203,6 +203,7 @@
 		--redz-btn-fg: var(--redz-primary);
 		--redz-btn-hover: transparent;
 		padding-inline: 0;
+		white-space: normal;
 	}
 
 	.btn-link:hover {
