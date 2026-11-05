@@ -176,6 +176,7 @@ const page = REDZ.ui.editor('#body', {
 							<tr><td><code>blocks</code></td><td>More blocks for the menu, <code>{id, label, group, icon, html}</code>, after the package's own</td></tr>
 							<tr><td><code>images</code></td><td>Sources of images, <code>{id, label, open(api)}</code>; a source calls <code>api.insert({src, alt, width, height, srcset, sizes, sources})</code></td></tr>
 							<tr><td><code>embed</code>, <code>grid</code></td><td>Videos from YouTube and Vimeo, and the blocks of columns; both on unless <code>false</code></td></tr>
+							<tr><td><code>versions</code></td><td>Each block's stored versions, <code>{id: [{at, by, html}]}</code>, shown in its History beside this session's</td></tr>
 							<tr><td><code>onChange(html)</code></td><td>Called after a pause in typing and after every command</td></tr>
 							<tr><td><code>onReady()</code></td><td>Called once the frame holds the text</td></tr>
 						</tbody>

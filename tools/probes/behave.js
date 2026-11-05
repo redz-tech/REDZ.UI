@@ -907,6 +907,32 @@ window.REDZ_BEHAVE = (() => {
 		const f4 = frame.getBoundingClientRect();
 		say('with no room beside, the card covers no part of its block', sheet.top >= covered.bottom + f4.top || sheet.bottom <= covered.top + f4.top, JSON.stringify([sheet.top, sheet.bottom, covered.top + f4.top, covered.bottom + f4.top]));
 
+		// The languages and the sites of the lens.
+		const told = [];
+		await make({rights: {...ALL, langs: ['en']}, languages: [{code: 'en', label: 'EN'}, {code: 'ar', label: 'AR', dir: 'rtl', value: '<p data-block="z1">نص</p>'}], onLanguage: (code, html) => told.push(code + ':' + html.length), sites: [{id: 'one', label: 'One', styles: []}, {id: 'two', label: 'Two', styles: ['data:text/css,p{}']}], lang: 'en', value: '<p data-block="e1">Words</p>'});
+		const strip = box.querySelector('.editor-lens');
+		yield {click: pt(strip.querySelector('[data-value="ar"]'))};
+		await until(() => doc.documentElement.lang === 'ar');
+		say('the lens moves the text to a language', doc.documentElement.dir === 'rtl' && doc.body.textContent.includes('نص'), doc.documentElement.outerHTML.slice(0, 160));
+		say('the host hears what it leaves', told.length === 1 && told[0].startsWith('ar:'), told.join());
+		say('a language the person may not write is closed', doc.body.contentEditable === 'false', doc.body.contentEditable);
+		yield {click: pt(strip.querySelector('[data-value="en"]'))};
+		await until(() => doc.documentElement.lang === 'en');
+		say('and back', doc.body.contentEditable === 'true' && doc.body.textContent.includes('Words') === false, doc.body.innerHTML);
+		yield {click: pt(strip.querySelector('[data-value="two"]'))};
+		say('the lens puts a site\'s stylesheets under the text', [...doc.querySelectorAll('link')].some((one) => one.href.startsWith('data:text/css')), doc.head.innerHTML.slice(0, 200));
+
+		// Protection and forms.
+		await make({value: '<ul data-block="l2" data-lock="form"><li>One</li><li>Two</li></ul>'});
+		yield {hover: pt(blk('l2').children[0], 0.2)};
+		yield {click: pt(box.querySelector('.editor-handle'))};
+		yield {click: pt(cardEl().querySelector('[data-tab="form"]'))};
+		yield {hover: pt(cardEl().querySelector('[data-form="numbers"]'))};
+		yield {click: pt(cardEl().querySelector('[data-form="numbers"]'))};
+		say('a new form keeps the protection', blk('l2')?.matches('ol') && blk('l2').getAttribute('data-lock') === 'form', doc.body.innerHTML);
+		yield {click: pt(cardEl().querySelector('.btn-close'))};
+		say('closing the card goes back to the text', doc.hasFocus() || document.activeElement === frame, document.activeElement?.tagName);
+
 		// The clean end.
 		say('nothing of the editor in the value', !marks(value()), value().slice(0, 600));
 		page.destroy();

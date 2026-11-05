@@ -73,6 +73,9 @@ export const toForm = (top, name, doc) => {
 	box.innerHTML = writers[name](readers[now](top));
 	const made = box.content.firstElementChild;
 	made.setAttribute('data-block', top.getAttribute('data-block'));
+	if (top.hasAttribute('data-lock')) {
+		made.setAttribute('data-lock', top.getAttribute('data-lock'));
+	}
 	top.replaceWith(made);
 	return made;
 };

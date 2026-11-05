@@ -4415,6 +4415,7 @@ const page = REDZ.ui.editor('#body', {
 | `blocks` | More blocks for the menu, `{id, label, group, icon, html}`, after the package's own |
 | `images` | Sources of images, `{id, label, open(api)}`; a source calls `api.insert({src, alt, width, height, srcset, sizes, sources})` |
 | `embed`, `grid` | Videos from YouTube and Vimeo, and the blocks of columns; both on unless `false` |
+| `versions` | Each block's stored versions, `{id: [{at, by, html}]}`, shown in its History beside this session's |
 | `onChange(html)` | Called after a pause in typing and after every command |
 | `onReady()` | Called once the frame holds the text |
 

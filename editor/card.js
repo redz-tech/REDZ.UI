@@ -300,7 +300,10 @@ export const cardOf = (ed) => {
 			open.tab = tabs[0];
 		}
 		card.innerHTML = '<div class="editor-card-head"><strong>' + say('el.' + (entry?.id ?? 'block')) + '</strong>' + (top.hasAttribute('data-lock') ? '<span class="badge badge-subtle-warning badge-sm">' + say('lock.' + top.getAttribute('data-lock')) + '</span>' : '') + '<button class="btn-close" type="button" aria-label="' + escape(say('close')) + '"></button></div>' + (tabs.length > 1 ? '<div class="editor-card-tabs" role="group" aria-label="' + say('card') + '">' + tabs.map((key) => '<button type="button" data-tab="' + key + '" aria-pressed="' + (key === open.tab) + '">' + say('tab.' + key) + '</button>').join('') + '</div>' : '') + '<div class="editor-card-body"></div>';
-		card.querySelector('.btn-close').onclick = ed.closeCard;
+		card.querySelector('.btn-close').onclick = () => {
+			ed.closeCard();
+			ed.focus();
+		};
 		for (const one of card.querySelectorAll('[data-tab]')) {
 			one.onclick = () => {
 				tryOff();
