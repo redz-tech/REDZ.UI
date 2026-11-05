@@ -212,6 +212,7 @@ export const toolbarOf = (ed) => {
 		const word = toolbar.querySelector('[data-editor-word]');
 		if (word !== null) {
 			word.textContent = say(FORMATS.find(([, name]) => name === tag.toLowerCase())?.[0] ?? (fieldAt(doc) !== null ? 'format.block' : 'format.paragraph'));
+			word.closest('button').setAttribute('aria-label', say('format') + ': ' + word.textContent);
 		}
 		const glyph = toolbar.querySelector('[data-editor-align]');
 		if (glyph !== null) {

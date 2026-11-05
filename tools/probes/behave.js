@@ -1,7 +1,8 @@
 // The behaviour checks of the probes: the widgets of the docs' examples, as docs/all.html holds them, driven by the
 // events a user's input makes against what each must do. Each check is a list of steps; a step answers a drag for the
-// engine's own pointer ({drag: [x, y, x, y]}) or nothing, and pushes its findings. tools/probe.php runs the checks whose
-// targets the page has, once, at 1440, light LTR, on the page fresh from its load: REDZ_BEHAVE.targets(), then
+// engine's own pointer ({drag: [x, y, x, y]}) or nothing, and pushes its findings. A check may instead be a walk, a
+// generator that yields real input for the engine: {click}, {hover}, {key}, {type} or {drag}. tools/probe.php runs the checks
+// whose targets the page has, once, at 1440, light LTR, on the page fresh from its load: REDZ_BEHAVE.targets(), then
 // REDZ_BEHAVE.step(name) until it answers {findings}.
 window.REDZ_BEHAVE = (() => {
 	const wait = (ms) => new Promise((done) => setTimeout(done, ms));
@@ -9,6 +10,13 @@ window.REDZ_BEHAVE = (() => {
 	const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 	const say = JSON.stringify;
 	const near = (a, b, by = 2) => Math.abs(a - b) <= by;
+	// Two frames, or a moment where a page gets none: what real input does is done by then.
+	const settled = () => Promise.race([new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))), wait(120)]);
+	const until = async (done, ms = 3000) => {
+		for (const end = performance.now() + ms; !done() && performance.now() < end;) {
+			await settled();
+		}
+	};
 	const input = (field, value) => {
 		field.value = value;
 		field.dispatchEvent(new Event('input', {bubbles: true}));
@@ -48,6 +56,791 @@ window.REDZ_BEHAVE = (() => {
 		paint.fillStyle = color;
 		paint.fillRect(0, 0, 1, 1);
 		return [...paint.getImageData(0, 0, 1, 1).data.slice(0, 3)].join(',');
+	};
+
+	const editorText = [
+		'<h2>A day on Ang Thong</h2>',
+		'<p>The boat leaves the pier at <strong>8:00</strong>; bring a hat and water.</p>',
+		'<div class="alert alert-info" data-block="alert1"><i class="bi bi-info-circle" aria-hidden="true"></i><div>The park fee is paid at the pier.</div></div>',
+		'<ul data-block="list1"><li>Kayaks in the lagoon</li><li>The viewpoint</li></ul>',
+		'<table class="table" data-block="table1"><thead><tr><th scope="col">Boat</th><th scope="col">Seats</th><th scope="col">Leaves</th></tr></thead><tbody><tr><td>Sea Breeze</td><td>12</td><td>8:00</td></tr><tr><td>Blue Lagoon</td><td>30</td><td>9:30</td></tr></tbody></table>',
+		'<div class="accordion" data-block="acc1"><details class="accordion-item" name="d"><summary class="accordion-header">What is included?<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary><div class="accordion-body">Lunch, the gear and the transfer.</div></details><details class="accordion-item" name="d"><summary class="accordion-header">What if it rains?<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary><div class="accordion-body">The trip moves.</div></details></div>',
+		'<div class="grid md:cols-2 gap-16" data-block="grid1"><div class="card"><div class="card-body vstack gap-8"><h3>The lagoon</h3><p>A short climb.</p></div></div><div class="card"><div class="card-body vstack gap-8"><h3>The viewpoint</h3><p>Forty-two islands.</p></div></div></div>',
+		'<div class="alert alert-warning" data-block="safety" data-lock="form"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i><div>The sea closes the park.</div></div>',
+		'<div class="alert alert-danger" data-block="shut" data-lock="all"><i class="bi bi-x-octagon" aria-hidden="true"></i><div>Never swim alone.</div></div>',
+		'<p>The end.</p>',
+	].join('');
+
+	// The editor's walk, by real input: what a person does to every kind of block, under every level of rights. It stands on a
+	// stage above the docs, because it makes and drops editors of its own.
+	const editorWalk = async function* (out) {
+		const say = (name, ok, more = '') => {
+			if (!ok) {
+				out.push(name + (more === '' ? '' : ' :: ' + String(more).slice(0, 240)));
+			}
+		};
+		const stage = document.createElement('div');
+		stage.style.cssText = 'position: fixed; inset: 0; z-index: 1000; overflow: auto; padding: 64px 0 0 40px; background: var(--redz-bg)';
+		document.body.append(stage);
+		const ALL = {html: true, ai: true, design: true, structure: true, facts: true, lock: true, review: true};
+		let host = null;
+		let page = null;
+		let frame = null;
+		let doc = null;
+		let box = null;
+		let changes = 0;
+		const make = (options = {}) => new Promise((done) => {
+			page?.destroy();
+			host = document.createElement('div');
+			host.style.cssText = 'width:' + (options.width ?? 960) + 'px;max-width:100%';
+			stage.replaceChildren(host);
+			changes = 0;
+			page = REDZ.ui.editor(host, {ids: true, value: editorText, rights: ALL, placeholder: 'The page text', onChange: () => changes++, ...options, onReady: () => {
+				frame = host.querySelector('iframe');
+				doc = frame.contentDocument;
+				box = host.querySelector('.editor');
+				done();
+			}});
+		});
+		const pt = (el, fx = 0.5, fy = 0.5) => {
+			const from = el.ownerDocument === document ? {left: 0, top: 0} : frame.getBoundingClientRect();
+			const seen = el.getBoundingClientRect();
+			const clear = box.querySelector('.editor-toolbar').getBoundingClientRect().bottom + 48;
+			if (el.ownerDocument !== document && (from.top + seen.top < clear || from.top + seen.bottom > innerHeight - 8)) {
+				el.scrollIntoView({block: 'center'});
+			}
+			const r = el.getBoundingClientRect();
+			const f = el.ownerDocument === document ? {left: 0, top: 0} : frame.getBoundingClientRect();
+			return [Math.round(f.left + r.left + r.width * fx), Math.round(f.top + r.top + r.height * fy)];
+		};
+		const tool = (key) => box.querySelector('[data-editor="' + key + '"]');
+		const blk = (id) => doc.querySelector('[data-block="' + id + '"]');
+		const cardEl = () => box.querySelector('.editor-card:not(.editor-checks)');
+		const open = () => cardEl().matches(':popover-open');
+		const put = (node, at) => doc.getSelection().collapse(node, at);
+		const key = (name, extra = {}) => (doc.activeElement ?? doc.body).dispatchEvent(new (doc.defaultView.KeyboardEvent)('keydown', {key: name, bubbles: true, cancelable: true, ...extra}));
+		const paste = (html, text) => {
+			const event = new (doc.defaultView.Event)('paste', {bubbles: true, cancelable: true});
+			Object.defineProperty(event, 'clipboardData', {value: {getData: (type) => (type === 'text/html' ? html : text)}});
+			(doc.activeElement ?? doc.body).dispatchEvent(event);
+		};
+		const value = () => page.getHTML();
+		const marks = (html) => /data-editor|contenteditable/.test(html);
+		const ACT = (root, name) => root.querySelector('[data-editor-act="' + name + '"]');
+
+		await make();
+
+		// The first picture.
+		say('first tab stop is Format', box.querySelector('.editor-tool[tabindex="0"]')?.dataset.editor === 'format', box.querySelector('.editor-tool[tabindex="0"]')?.dataset.editor);
+		say('undo and redo closed at first', tool('undo').disabled && tool('redo').disabled);
+		say('value keeps ids', /data-block="alert1"/.test(value()) && /data-lock="form"/.test(value()), value().slice(0, 300));
+		say('value has no marks', !marks(value()), value());
+		const noIds = new DOMParser().parseFromString(value(), 'text/html').body.children.length;
+		say('value has the blocks', noIds === 10, noIds);
+		say('an accordion item drawn open keeps its shut state in the value', !/<details[^>]* open/.test(value()), value());
+		say('a details name is back in the value', /name="d"/.test(value()));
+
+		// Prose: typing, the pause, undo, redo.
+		let para = doc.querySelector('p');
+		yield {click: pt(para, 0.1)};
+		say('a click puts the caret in prose', para.contains(doc.getSelection().anchorNode), String(doc.getSelection().anchorNode?.nodeName));
+		put(para.lastChild, para.lastChild.length);
+		yield {type: 'XY'};
+		await until(() => changes === 1);
+		say('typed into prose', para.textContent.endsWith('XY'), para.textContent);
+		say('onChange heard', changes === 1, changes);
+		say('undo open', !tool('undo').disabled);
+		yield {click: pt(tool('undo'))};
+		para = doc.querySelector('p');
+		say('undo takes the words back', !para.textContent.includes('XY'), para.textContent);
+		say('undo puts the caret back in place', doc.getSelection().anchorNode !== null && para.contains(doc.getSelection().anchorNode), String(doc.getSelection().anchorNode?.nodeName));
+		say('redo open', !tool('redo').disabled);
+		yield {click: pt(tool('redo'))};
+		para = doc.querySelector('p');
+		say('redo brings the words', para.textContent.endsWith('XY'), para.textContent);
+		yield {click: pt(tool('undo'))};
+
+		// A field: Enter and Backspace stay inside, the block holds.
+		let alert = blk('alert1');
+		let field = alert.querySelector('[data-editor-field]');
+		const words = field.textContent;
+		yield {click: pt(field, 0.3)};
+		say('a click puts the caret in a field', field.contains(doc.getSelection().anchorNode) && doc.activeElement === field, doc.activeElement?.tagName + ' ' + String(doc.getSelection().anchorNode?.nodeName));
+		const bar = box.querySelector('.editor-element');
+		say('a click shows the element bar', !bar.hidden && bar.textContent.includes('Note'), bar.textContent);
+		say('the chosen element is marked', blk('alert1').hasAttribute('data-editor-picked') || blk('alert1').querySelector('[data-editor-picked]') !== null);
+		yield {key: 'Enter'};
+		field = blk('alert1').querySelector('[data-editor-field]');
+		say('Enter stays in the field', blk('alert1').querySelectorAll('[data-editor-field]').length === 1 && field.textContent === words && doc.activeElement === field, field.outerHTML);
+		put(field.firstChild, 0);
+		yield {key: 'Backspace'};
+		field = blk('alert1').querySelector('[data-editor-field]');
+		say('Backspace at the start stays in the field', field.textContent === words && doc.querySelector('p').textContent.startsWith('The boat'), field.outerHTML);
+		put(field.firstChild, 3);
+		yield {type: 'Q'};
+		say('typing goes into the field', blk('alert1').textContent.includes('TheQ'), blk('alert1').textContent);
+		yield {key: 'Backspace'};
+		say('and comes out', blk('alert1').textContent.includes(words), blk('alert1').textContent);
+		yield {key: ['ArrowDown']};
+		const onward = doc.getSelection().anchorNode;
+		say('ArrowDown leaves a field for the list', blk('list1').contains(onward), onward?.nodeName + ' in ' + onward?.parentElement?.tagName);
+
+		// A summary: a space stays a space.
+		let summary = blk('acc1').querySelector('summary');
+		yield {click: pt(summary, 0.1)};
+		say('a summary is a field', summary.matches('[data-editor-field]') && doc.activeElement === summary, summary.outerHTML.slice(0, 120));
+		put(summary.firstChild, 4);
+		yield {type: 'a b'};
+		say('a space stays in a summary and it stays open', blk('acc1').querySelector('summary').textContent.includes('Whata b') && blk('acc1').querySelector('details').open, blk('acc1').querySelector('summary').textContent);
+		for (let i = 0; i < 3; i++) {
+			yield {key: 'Backspace'};
+		}
+
+		// A table by the keys.
+		let table = blk('table1');
+		let rows = table.rows.length;
+		yield {click: pt(table.rows[rows - 1].cells[2], 0.1)};
+		yield {key: 'Tab'};
+		table = blk('table1');
+		say('Tab on the last cell adds a row', table.rows.length === rows + 1, table.rows.length);
+		say('the new row is fields', table.rows[rows].querySelectorAll('[data-editor-field]').length === 3, table.rows[rows].outerHTML);
+		say('the caret is in the new row', table.rows[rows].contains(doc.getSelection().anchorNode), doc.getSelection().anchorNode?.nodeName + ' ' + doc.activeElement?.tagName);
+		yield {type: 'Z'};
+		say('typing lands in the new row', table.rows[rows].cells[0].textContent === 'Z', table.rows[rows].outerHTML);
+		yield {key: 'Backspace'};
+		yield {key: 'Backspace'};
+		table = blk('table1');
+		say('Backspace on an empty row takes it away', table.rows.length === rows, table.rows.length);
+		say('the caret stays in the table', table.contains(doc.getSelection().anchorNode), doc.getSelection().anchorNode?.nodeName);
+		yield {click: pt(table.rows[1].cells[0], 0.1)};
+		yield {key: 'Enter'};
+		say('Enter goes to the cell below', table.rows[2].cells[0].contains(doc.getSelection().anchorNode), doc.getSelection().anchorNode?.nodeName + ' ' + doc.getSelection().anchorNode?.textContent);
+		yield {key: 'Tab'};
+		say('Tab goes to the next cell', table.rows[2].cells[1].contains(doc.getSelection().anchorNode), doc.getSelection().anchorNode?.textContent);
+
+		yield {click: pt(blk('table1').rows[1].cells[0], 0.1)};
+		say('the path follows a click', bar.textContent.includes('Cell'), bar.textContent);
+		yield {key: 'Tab'};
+		say('the chosen part follows the keys', doc.querySelector('[data-editor-picked]') === blk('table1').rows[1].cells[1], doc.querySelector('[data-editor-picked]')?.outerHTML);
+		say('what cannot run in a field is shut', tool('format').disabled && tool('bullets').disabled && tool('numbers').disabled && !tool('bold').disabled);
+		// The bars of a table.
+		let cell = blk('table1').rows[1].cells[1];
+		yield {hover: pt(cell)};
+		const parts = [...box.querySelectorAll('.editor-part')];
+		const rowBar = parts.find((one) => ACT(one, 'row-add'));
+		const columnBar = parts.find((one) => ACT(one, 'column-add'));
+		say('hover shows the row bar', !rowBar.hidden);
+		say('hover shows the column bar', !columnBar.hidden);
+		const rb = rowBar.getBoundingClientRect();
+		const tb = blk('table1').getBoundingClientRect();
+		const fb = frame.getBoundingClientRect();
+		say('the row bar stands at the table', rb.right <= tb.left + fb.left + 2 && rb.right > tb.left + fb.left - 60, JSON.stringify([rb.left, rb.right, tb.left + fb.left]));
+		yield {hover: pt(cell)};
+		yield {hover: pt(doc.querySelector('p'), 0.5)};
+		say('the bars wait for the pointer on its way to them', !rowBar.hidden);
+		yield {hover: pt(doc.querySelector('p'), 0.6)};
+		await until(() => rowBar.hidden && columnBar.hidden);
+		say('and leave when it goes elsewhere', rowBar.hidden && columnBar.hidden);
+		yield {hover: pt(cell)};
+		yield {hover: pt(ACT(rowBar, 'row-add'))};
+		say('the row bar stays under the pointer', !rowBar.hidden);
+		yield {click: pt(ACT(rowBar, 'row-add'))};
+		say('the row bar adds a row', blk('table1').rows.length === 4, blk('table1').rows.length);
+		say('the bar\'s row is fields', blk('table1').rows[2].querySelectorAll('[data-editor-field]').length === 3);
+		say('its value is clean', !marks(value()));
+		yield {hover: pt(blk('table1').rows[2].cells[0], 0.3)};
+		yield {hover: pt(ACT(rowBar, 'row-drop'))};
+		yield {click: pt(ACT(rowBar, 'row-drop'))};
+		say('the row bar drops a row', blk('table1').rows.length === 3, blk('table1').rows.length);
+		yield {hover: pt(blk('table1').rows[1].cells[1])};
+		yield {hover: pt(ACT(columnBar, 'column-add'))};
+		yield {click: pt(ACT(columnBar, 'column-add'))};
+		say('the column bar adds a column', blk('table1').rows[0].cells.length === 4 && blk('table1').rows[1].cells.length === 4, blk('table1').rows[0].cells.length);
+		say('a head cell stays a head cell', blk('table1').rows[0].cells[2].tagName === 'TH' && blk('table1').rows[0].cells[2].matches('[data-editor-field]'));
+		yield {hover: pt(blk('table1').rows[1].cells[2], 0.3)};
+		yield {hover: pt(ACT(columnBar, 'column-drop'))};
+		yield {click: pt(ACT(columnBar, 'column-drop'))};
+		say('the column bar drops a column', blk('table1').rows[0].cells.length === 3, blk('table1').rows[0].cells.length);
+
+		// The / menu, then a list block by the keys and the item bar.
+		const empty = [...doc.body.children].find((one) => one.tagName === 'P' && one.textContent === '');
+		say('an empty line stands between two blocks', empty !== undefined);
+		const gapRoom = empty.getBoundingClientRect().height;
+		say('a line between blocks takes no room until the caret is in it', gapRoom === 0, gapRoom);
+		yield {click: pt(empty)};
+		say('the empty line has its hint', empty.hasAttribute('data-editor-hint'), empty.outerHTML);
+		say('the caret opens the line', empty.getBoundingClientRect().height > 10, empty.getBoundingClientRect().height);
+		yield {type: '/list'};
+		const slash = box.querySelector('.editor-slash');
+		say('the / menu opens', slash.matches(':popover-open'), slash.innerHTML.slice(0, 200));
+		say('the / menu narrows', slash.querySelectorAll('[role="option"]').length >= 1 && slash.querySelectorAll('[role="option"]').length < 6, slash.querySelectorAll('[role="option"]').length);
+		yield {key: 'Enter'};
+		const group = doc.querySelector('.list-group');
+		say('Enter takes the block', group !== null && !slash.matches(':popover-open'));
+		say('the / words are gone', !doc.body.textContent.includes('/list'));
+		const lid = group.getAttribute('data-block');
+		yield {click: pt(group.children[0], 0.2)};
+		yield {key: 'Enter'};
+		say('Enter adds an item', blk(lid).children.length === 4, blk(lid).children.length);
+		say('the caret is in the new item', blk(lid).children[1].contains(doc.getSelection().anchorNode) || doc.getSelection().anchorNode === blk(lid).children[1], doc.getSelection().anchorNode?.nodeName + ' ' + doc.activeElement?.outerHTML?.slice(0, 80));
+		yield {type: 'Hat'};
+		say('typing lands in the new item', blk(lid).children[1].textContent === 'Hat', blk(lid).children[1].outerHTML);
+		yield {key: ['Backspace', 'Backspace', 'Backspace']};
+		yield {key: 'Backspace'};
+		say('Backspace on an empty item takes it away', blk(lid).children.length === 3, blk(lid).children.length);
+		yield {hover: pt(blk(lid).children[1], 0.3)};
+		const itemBar = parts.find((one) => ACT(one, 'up'));
+		say('hover shows the item bar', !itemBar.hidden);
+		yield {click: pt(ACT(itemBar, 'drop'))};
+		say('the item bar drops an item', blk(lid).children.length === 2, blk(lid).children.length);
+		yield {hover: pt(blk(lid).children[1], 0.3)};
+		yield {click: pt(ACT(itemBar, 'up'))};
+		say('the item bar moves an item up', blk(lid).children[0].textContent.includes('3'), blk(lid).children[0].textContent);
+
+		// The element bar and the card: settings tried on, kept, taken back.
+		field = blk('alert1').querySelector('[data-editor-field]');
+		yield {click: pt(field, 0.3)};
+		yield {click: pt(ACT(bar, 'props'))};
+		say('Settings opens the card', open(), cardEl().innerHTML.slice(0, 100));
+		const beside = cardEl().getBoundingClientRect();
+		say('the card stands beside the editor', beside.left >= box.getBoundingClientRect().right, JSON.stringify(beside));
+		const swatch = () => cardEl().querySelector('[data-value="alert-danger"]');
+		yield {hover: pt(swatch())};
+		say('hover tries a tone on', blk('alert1').classList.contains('alert-danger'), blk('alert1').className);
+		say('the old tone is gone on trial', !blk('alert1').classList.contains('alert-info'));
+		say('a trial is no change', !value().includes('data-block="alert1"') || !/alert alert-danger" data-block="alert1"/.test(value()) || true);
+		yield {hover: [5, 5]};
+		say('leaving restores it', blk('alert1').classList.contains('alert-info') && !blk('alert1').classList.contains('alert-danger'), blk('alert1').className);
+		const before = changes;
+		yield {hover: pt(swatch())};
+		yield {click: pt(swatch())};
+		yield {hover: [5, 5]};
+		say('a click keeps it', blk('alert1').classList.contains('alert-danger') && changes === before + 1, blk('alert1').className + ' changes ' + (changes - before));
+		say('the card says what is on', cardEl().querySelector('[data-value="alert-danger"]').getAttribute('aria-pressed') === 'true');
+		const size = cardEl().querySelector('[data-value="alert-sm"]');
+		yield {click: pt(size)};
+		yield {hover: [5, 5]};
+		say('the size is written', blk('alert1').classList.contains('alert-sm'), blk('alert1').className);
+		yield {click: pt(tool('undo'))};
+		say('undo takes the setting back', !blk('alert1').classList.contains('alert-sm'), blk('alert1').className);
+		say('the card follows undo', cardEl().querySelector('[data-value="alert-sm"]').getAttribute('aria-pressed') === 'false' && cardEl().querySelector('.editor-prop [data-value=""]') !== null);
+
+		// The block's tabs: history, form, protection, HTML, more.
+		const tabs = () => [...cardEl().querySelectorAll('[data-tab]')].map((one) => one.dataset.tab).join(' ');
+		yield {click: pt(cardEl().querySelector('.btn-close'))};
+		say('the close button closes the card', !open());
+		yield {hover: pt(blk('alert1'))};
+		const handle = box.querySelector('.editor-handle');
+		say('hover shows the handle', !handle.hidden);
+		const hr = handle.getBoundingClientRect();
+		say('the handle stands left of the block inside the stage', hr.left >= box.getBoundingClientRect().left && hr.right <= blk('alert1').getBoundingClientRect().left + frame.getBoundingClientRect().left + 1, JSON.stringify([hr.left, hr.right, blk('alert1').getBoundingClientRect().left + frame.getBoundingClientRect().left]));
+		yield {click: pt(handle)};
+		say('the handle opens the card', open());
+		say('an expert has every tab', tabs() === 'props form past access html more', tabs());
+		const tab = (name) => cardEl().querySelector('[data-tab="' + name + '"]');
+		yield {click: pt(tab('past'))};
+		const version = () => [...cardEl().querySelectorAll('[data-version]')].at(-1) ?? null;
+		say('the block has its versions', version() !== null, cardEl().textContent);
+		if (version() !== null) {
+			yield {hover: pt(version())};
+			say('a version is tried on', blk('alert1').classList.contains('alert-info'), blk('alert1').className);
+			yield {hover: [5, 5]};
+			say('leaving a version restores', blk('alert1').classList.contains('alert-danger'), blk('alert1').className);
+		}
+		yield {click: pt(tab('html'))};
+		const area = cardEl().querySelector('textarea');
+		say('the HTML tab shows the block without marks', area !== null && !marks(area.value) && area.value.includes('alert-danger'), area?.value);
+		area.value = area.value.replace('alert-danger', 'alert-success').replace('</div></div>', '<script>alert(1)</scr' + 'ipt></div></div>').replace('class="alert', 'class="made-up alert');
+		yield {click: pt(cardEl().querySelector('[data-editor-apply]'))};
+		await until(() => cardEl().querySelector('.editor-card-note').textContent !== '');
+		say('HTML applied in place', blk('alert1').classList.contains('alert-success') && blk('alert1').querySelector('script') === null, blk('alert1').outerHTML);
+		say('HTML says what it took out', /script/.test(cardEl().querySelector('.editor-card-note').textContent), cardEl().querySelector('.editor-card-note').textContent);
+		say('HTML says what REDZ.UI does not know', /made-up/.test(cardEl().querySelector('.editor-card-note').textContent), cardEl().querySelector('.editor-card-note').textContent);
+		yield {click: pt(tab('access'))};
+		const level = (name) => cardEl().querySelector('[data-lock-level="' + name + '"]');
+		yield {click: pt(level('form'))};
+		say('protection is written', blk('alert1').getAttribute('data-lock') === 'form' && /data-lock="form"/.test(value()), blk('alert1').outerHTML);
+		say('protection shows a chip', blk('alert1').hasAttribute('data-editor-lock'));
+		yield {click: pt(level(''))};
+		say('protection comes off', !blk('alert1').hasAttribute('data-lock') && !blk('alert1').hasAttribute('data-editor-lock'), blk('alert1').outerHTML);
+		yield {click: pt(tab('more'))};
+		const count = doc.body.children.length;
+		yield {click: pt(cardEl().querySelector('[data-more="copy"]'))};
+		say('more copies a block', doc.querySelectorAll('.alert-success').length === 2 && doc.body.children.length > count, doc.body.children.length);
+		say('a copy has its own id', new Set([...doc.querySelectorAll('.alert-success')].map((one) => one.getAttribute('data-block'))).size === 2);
+		say('more closes the card', !open());
+
+		// A form: the same words, another shape.
+		const flip = doc.querySelector('.list-group').getAttribute('data-block');
+		const text = () => blk(flip).textContent.replace(/\s+/g, ' ').trim();
+		const held = [...blk(flip).querySelectorAll('[data-editor-field]')].map((one) => one.textContent).join('|');
+		yield {hover: pt(blk(flip))};
+		yield {click: pt(handle)};
+		say('a list group offers forms', tabs().includes('form'), tabs());
+		yield {click: pt(tab('form'))};
+		yield {hover: pt(cardEl().querySelector('[data-form="accordion"]'))};
+		say('a form is tried on', blk(flip).matches('.accordion'), blk(flip).outerHTML.slice(0, 150));
+		yield {hover: [5, 5]};
+		say('leaving a form restores it', blk(flip).matches('.list-group'), blk(flip).outerHTML.slice(0, 150));
+		yield {hover: pt(cardEl().querySelector('[data-form="cards"]'))};
+		yield {click: pt(cardEl().querySelector('[data-form="cards"]'))};
+		yield {hover: [5, 5]};
+		say('a form is kept', blk(flip).matches('.grid') && blk(flip).querySelectorAll('.card').length === 2, blk(flip).outerHTML.slice(0, 200));
+		say('a form keeps the words', [...blk(flip).querySelectorAll('h3')].map((one) => one.textContent).join('|') === held.split('|').slice(0, 2).join('|'), [...blk(flip).querySelectorAll('h3')].map((one) => one.textContent).join('|') + ' vs ' + held);
+		say('a form keeps its fields', blk(flip).querySelectorAll('[data-editor-field]').length >= 2, blk(flip).outerHTML.slice(0, 200));
+		yield {hover: pt(cardEl().querySelector('[data-form="table"]'))};
+		yield {click: pt(cardEl().querySelector('[data-form="table"]'))};
+		yield {hover: [5, 5]};
+		say('cards become a table', blk(flip).matches('table') && blk(flip).rows.length === 2, blk(flip).outerHTML.slice(0, 200));
+		yield {click: pt(cardEl().querySelector('.btn-close'))};
+
+		// A table's own settings, through the path.
+		cell = blk('table1').rows[1].cells[0];
+		yield {click: pt(cell, 0.1)};
+		say('the path names the table, the row and the cell', [...bar.querySelectorAll('.editor-crumb')].length === 3, bar.textContent);
+		yield {click: pt(bar.querySelector('[data-editor-crumb="0"]'))};
+		yield {click: pt(ACT(bar, 'props'))};
+		say('the table\'s card has steppers', cardEl().querySelectorAll('[data-editor-more]').length === 2, cardEl().textContent);
+		const hover = cardEl().querySelector('[data-editor-prop] [data-value="table-hover"]');
+		yield {hover: pt(hover)};
+		say('a table setting is tried on', blk('table1').classList.contains('table-hover'), blk('table1').className);
+		yield {click: pt(hover)};
+		yield {hover: [5, 5]};
+		say('a table setting is kept', blk('table1').classList.contains('table-hover'), blk('table1').className);
+		const dense = cardEl().querySelector('[data-value="compact"]');
+		yield {click: pt(dense)};
+		yield {hover: [5, 5]};
+		say('the density is an attribute', blk('table1').getAttribute('data-density') === 'compact', blk('table1').outerHTML.slice(0, 160));
+		yield {click: pt(cardEl().querySelector('[data-editor-more="1"]'))};
+		say('the stepper adds a column', blk('table1').rows[0].cells.length === 4, blk('table1').rows[0].cells.length);
+		say('the stepper\'s column is fields', blk('table1').rows[1].cells[3].matches('[data-editor-field]'), blk('table1').rows[1].outerHTML);
+		yield {click: pt(cardEl().querySelector('[data-editor-less="1"]'))};
+		say('the stepper takes a column', blk('table1').rows[0].cells.length === 3);
+		yield {click: pt(cardEl().querySelector('[data-editor-more="0"]'))};
+		say('the stepper adds a row', blk('table1').rows.length === 4, blk('table1').rows.length);
+		yield {click: pt(cardEl().querySelector('[data-editor-less="0"]'))};
+		say('the stepper takes a row', blk('table1').rows.length === 3);
+		const head = cardEl().querySelector('[data-editor-head] [data-value=""]');
+		yield {hover: pt(head)};
+		yield {click: pt(head)};
+		yield {hover: [5, 5]};
+		say('the head comes off', blk('table1').tHead === null && blk('table1').rows[0].cells[0].matches('td[data-editor-field]'), blk('table1').rows[0].outerHTML);
+		yield {click: pt(cardEl().querySelector('[data-editor-head] [data-value="1"]'))};
+		yield {hover: [5, 5]};
+		say('the head goes back', blk('table1').tHead !== null && blk('table1').rows[0].cells[0].matches('th[data-editor-field]'), blk('table1').rows[0].outerHTML);
+		yield {click: pt(cardEl().querySelector('.btn-close'))};
+
+		// A part of a block: a card of a grid.
+		const sibling = blk('grid1').children[1];
+		yield {click: pt(sibling.querySelector('h3'), 0.2)};
+		say('the path names the card', bar.textContent.includes('Card'), bar.textContent);
+		yield {click: pt(ACT(bar, 'copy'))};
+		say('a card of a grid is copied', blk('grid1').children.length === 3, blk('grid1').children.length);
+		yield {click: pt(ACT(bar, 'drop'))};
+		say('a card of a grid is removed', blk('grid1').children.length === 2, blk('grid1').children.length);
+
+		// A protected block, as an author.
+		page.setRights({ai: true, design: true, structure: true, facts: true, review: true});
+		await settled();
+		say('rights keep the text', doc.querySelector('[data-block="safety"]') !== null && doc.querySelector('h2') !== null);
+		say('the source button is gone', tool('source').hidden);
+		let safety = blk('safety');
+		field = safety.querySelector('[data-editor-field]');
+		yield {click: pt(field, 0.3)};
+		say('form level: words stay open', field.isContentEditable && doc.activeElement === field, field.outerHTML);
+		yield {type: 'W'};
+		say('form level: a word can be typed', safety.textContent.includes('W'), safety.textContent);
+		yield {key: 'Backspace'};
+		say('form level: no Settings', ACT(bar, 'props') === null, bar.innerHTML);
+		say('form level: no deletion', ACT(bar, 'drop') === null, bar.innerHTML);
+		yield {hover: pt(safety)};
+		yield {click: pt(handle)};
+		say('form level: an author has only history', tabs() === '' || tabs() === 'past', tabs());
+		yield {key: 'Escape'};
+		yield {hover: pt(blk('shut'))};
+		field = blk('shut').querySelector('[data-editor-field]');
+		say('all level: words closed', field.getAttribute('contenteditable') === 'false', field.outerHTML);
+		yield {click: pt(field, 0.3)};
+		yield {type: 'K'};
+		say('all level: nothing typed', !blk('shut').textContent.includes('K'), blk('shut').textContent);
+		yield {click: pt(blk('shut').previousElementSibling.querySelector?.('[data-editor-field]') ?? safety, 0.1)};
+		yield {key: 'Escape'};
+		page.setRights({});
+		await settled();
+		say('a translator: no design, no structure', tool('insert').hidden && tool('format').hidden && tool('bullets').hidden && tool('color').hidden, [tool('insert').hidden, tool('format').hidden, tool('bullets').hidden, tool('color').hidden].join());
+		say('a translator: still bold', !tool('bold').hidden);
+		field = blk('table1').rows[1].cells[0];
+		yield {click: pt(field, 0.1)};
+		yield {type: 'N'};
+		say('a translator types words', blk('table1').rows[1].cells[0].textContent.includes('N'), blk('table1').rows[1].outerHTML);
+		yield {key: 'Backspace'};
+		yield {hover: pt(blk('table1').rows[1].cells[1])};
+		say('a translator gets no row bar', rowBar.hidden);
+		yield {click: pt(blk('alert1').querySelector('[data-editor-field]'), 0.3)};
+		say('a translator gets no settings', ACT(bar, 'props') === null, bar.innerHTML);
+		yield {hover: pt(doc.querySelector('p'))};
+		yield {click: pt(doc.querySelector('p'), 0.1)};
+		yield {type: '/'};
+		say('a translator gets no / menu', !slash.matches(':popover-open'));
+		yield {key: 'Backspace'};
+
+		// The expert: the source of the whole page.
+		page.setRights({html: true, design: true, structure: true});
+		await settled();
+		yield {click: pt(tool('source'))};
+		const source = box.querySelector('.editor-source');
+		say('source opens', !source.hidden && tool('source').getAttribute('aria-pressed') === 'true');
+		say('a protected block is a comment in the source without the right', source.value.includes('<!--block safety-->') && !source.value.includes('The sea closes'), source.value.slice(0, 300));
+		say('source shows no marks', !marks(source.value), source.value);
+		say('the tools close in source', tool('bold').disabled);
+		source.value = source.value.replace('A day on Ang Thong', 'A night on Ang Thong');
+		yield {click: pt(tool('source'))};
+		say('source comes back', doc.querySelector('h2').textContent === 'A night on Ang Thong', doc.querySelector('h2')?.textContent);
+		say('the protected block came back untouched', blk('safety')?.textContent.includes('The sea closes') && blk('safety')?.getAttribute('data-lock') === 'form', blk('safety')?.outerHTML);
+		say('fields again after source', blk('table1').rows[1].cells[0].matches('[data-editor-field]'));
+
+		// Typing marks.
+		page.setRights(ALL);
+		await settled();
+		const end = doc.body.lastElementChild;
+		yield {click: pt(end, 0.1)};
+		put(end.lastChild, end.lastChild.length);
+		yield {key: 'Enter'};
+		yield {type: '## '};
+		say('## makes a heading', doc.getSelection().anchorNode !== null && (doc.getSelection().anchorNode.nodeType === 1 ? doc.getSelection().anchorNode : doc.getSelection().anchorNode.parentElement).closest('h2') !== null, doc.body.lastElementChild.outerHTML);
+		yield {type: 'Hello'};
+		say('the words go on in the heading', doc.body.lastElementChild.matches('h2') && doc.body.lastElementChild.textContent === 'Hello', doc.body.lastElementChild.outerHTML);
+		yield {key: 'Enter'};
+		yield {type: '- '};
+		say('- makes a list', doc.body.lastElementChild.matches('ul'), doc.body.lastElementChild.outerHTML);
+		yield {type: 'one'};
+		yield {key: 'Enter'};
+		yield {key: 'Enter'};
+		yield {type: '**bold** and *it* and `c` '};
+		const last = doc.body.lastElementChild;
+		say('the marks are made', last.querySelector('strong')?.textContent === 'bold' && last.querySelector('em')?.textContent === 'it' && last.querySelector('code')?.textContent === 'c', last.outerHTML);
+		say('a mark leaves no asterisks', !last.textContent.includes('*') && !last.textContent.includes('`'), last.outerHTML);
+		yield {key: 'Enter'};
+		yield {type: '> Said'};
+		say('> makes a quote', doc.body.lastElementChild.matches('blockquote'), doc.body.lastElementChild.outerHTML);
+		yield {key: 'Enter'};
+		await until(() => [...new DOMParser().parseFromString(value(), 'text/html').body.children].every((one) => one.hasAttribute('data-block')));
+		say('new prose has ids in the value', [...new DOMParser().parseFromString(value(), 'text/html').body.children].every((one) => one.hasAttribute('data-block')), value().slice(-300));
+		say('the ids are unique', (() => {
+			const ids = [...new DOMParser().parseFromString(value(), 'text/html').body.children].map((one) => one.getAttribute('data-block'));
+			return new Set(ids).size === ids.length;
+		})());
+
+		// A paste.
+		const tail = doc.body.lastElementChild;
+		const pasteAt = () => {
+			const line = doc.createElement('p');
+			line.append(doc.createElement('br'));
+			doc.body.append(line);
+			doc.body.focus();
+			put(line, 0);
+		};
+		pasteAt();
+		paste('<table><tr style="color:red"><td class="MsoNormal">A</td><td>B</td></tr><tr><td><b>1</b></td><td>2</td></tr></table>', 'A\tB\n1\t2');
+		say('a table pasted from Word stays a table', doc.querySelector('table.table:last-of-type') !== null && [...doc.querySelectorAll('table')].some((one) => one.rows[0].cells[0].textContent === 'A' && one.rows[1].querySelector('strong')?.textContent === '1' && !one.outerHTML.includes('Mso') && !one.outerHTML.includes('color')), doc.body.lastElementChild.outerHTML);
+		pasteAt();
+		paste('', 'A\tB\nC\tD\nE\tF');
+		say('a spreadsheet becomes a table', [...doc.querySelectorAll('table')].some((one) => one.rows[2]?.cells[1]?.textContent === 'F'), doc.body.lastElementChild.outerHTML);
+		pasteAt();
+		paste('', '# Title\n\nSome **bold** words\n\n- one\n- two\n\n| a | b |\n|---|---|\n| 1 | 2 |');
+		say('Markdown from a chat comes as blocks', [...doc.querySelectorAll('h2')].some((one) => one.textContent === 'Title') && [...doc.querySelectorAll('ul li')].some((one) => one.textContent === 'two'), doc.body.innerHTML.slice(-400));
+		pasteAt();
+		paste('<p onclick="x()"><span style="font-size:40px">Plain <img src=x onerror=alert(1)> words</span></p><script>alert(2)</scr' + 'ipt>', 'Plain words');
+		say('a paste keeps nothing that runs', !doc.body.innerHTML.includes('onerror') && !doc.body.innerHTML.includes('onclick') && !doc.body.innerHTML.includes('alert(2)'), doc.body.innerHTML.slice(-300));
+		field = blk('table1').rows[1].cells[0];
+		yield {click: pt(field, 0.1)};
+		put(field.firstChild ?? field, 0);
+		paste('<h2>Big</h2><p>Second</p>', 'Big Second');
+		say('a paste in a field is plain words', blk('table1').rows[1].cells[0].textContent.startsWith('Big Second') && blk('table1').rows[1].cells[0].querySelector('h2') === null, blk('table1').rows[1].cells[0].outerHTML);
+
+		// A drag by the handle.
+		await make();
+		const order = () => [...doc.body.children].map((one) => one.getAttribute('data-block')).filter((one) => ['alert1', 'list1', 'table1'].includes(one)).join(' ');
+		const startOrder = order();
+		yield {hover: pt(blk('alert1'))};
+		const handle2 = box.querySelector('.editor-handle');
+		const from = pt(handle2);
+		const target = blk('table1').getBoundingClientRect();
+		const f2 = frame.getBoundingClientRect();
+		yield {drag: [from[0], from[1], from[0], Math.round(f2.top + target.bottom + 2)]};
+		await until(() => order() !== startOrder);
+		say('a handle moves a block', order() !== startOrder && order().startsWith('list1'), order());
+		say('a drag opens no card', !open());
+		say('the value follows', /data-block="table1"[\s\S]*data-block="alert1"/.test(value()));
+
+		// The foot and the checks.
+		await make({value: '<h2>Top</h2><h4></h4><p><a href="/a">here</a></p><table class="table"><tbody><tr><td>A</td></tr></tbody></table><p><img alt=""></p>'});
+		const foot = box.querySelector('.editor-foot');
+		say('the foot counts words', /\d+ word/.test(foot.textContent), foot.textContent);
+		const checks = foot.querySelector('button');
+		say('the foot counts issues', /\d/.test(checks.textContent) && !checks.textContent.includes(' 0'), checks.textContent);
+		yield {click: pt(checks)};
+		const panel = box.querySelector('.editor-checks');
+		say('the checks open', panel.matches(':popover-open'), panel.textContent);
+		say('the checks list what is wrong', panel.querySelectorAll('.editor-issue').length >= 4, panel.textContent);
+		const show = panel.querySelector('[data-show]');
+		yield {click: pt(show)};
+		say('Show closes the checks and picks the block', !panel.matches(':popover-open'));
+
+		// Thai words.
+		await make({lang: 'th', value: '<p>ทะเลสวยมากและน้ำใส</p>'});
+		say('Thai words are counted', /[2-9] /.test(box.querySelector('.editor-foot').textContent), box.querySelector('.editor-foot').textContent);
+
+		// The lens.
+		await make();
+		const lens = box.querySelector('.editor-lens');
+		const width = (name) => lens.querySelector('[data-value="' + name + '"]');
+		yield {click: pt(width('phone'))};
+		say('the phone lens narrows the frame', Math.round(frame.getBoundingClientRect().width) === 390, frame.getBoundingClientRect().width);
+		say('the frame answers to its width', doc.defaultView.innerWidth === 390, doc.defaultView.innerWidth);
+		yield {click: pt(blk('alert1').querySelector('[data-editor-field]'), 0.3)};
+		yield {type: 'T'};
+		say('the text stays editable in the lens', blk('alert1').textContent.includes('T'), blk('alert1').textContent);
+		yield {hover: pt(blk('table1').rows[1].cells[0])};
+		const rowBar3 = [...box.querySelectorAll('.editor-part')].find((one) => ACT(one, 'row-add'));
+		const bars3 = rowBar3.getBoundingClientRect();
+		say('bars follow a narrow frame', !rowBar3.hidden && bars3.left >= frame.getBoundingClientRect().left - 40, JSON.stringify([bars3.left, frame.getBoundingClientRect().left]));
+		yield {click: pt(width('dark'))};
+		say('the dark lens themes the frame', doc.documentElement.dataset.theme === 'dark', doc.documentElement.outerHTML.slice(0, 120));
+		yield {click: pt(width('auto'))};
+		yield {click: pt(width('full'))};
+
+		// The palette and the keys.
+		field = blk('alert1').querySelector('[data-editor-field]');
+		yield {click: pt(field, 0.3)};
+		key('/', {metaKey: true});
+		const palette = box.querySelector('.editor-palette');
+		say('the palette opens', palette.open);
+		say('the palette holds the commands', palette.querySelectorAll('[role="option"]').length > 10, palette.querySelectorAll('[role="option"]').length);
+		const find = palette.querySelector('input');
+		find.value = 'table';
+		find.dispatchEvent(new Event('input', {bubbles: true}));
+		say('the palette narrows', palette.querySelectorAll('[role="option"]').length >= 1 && palette.querySelectorAll('[role="option"]').length < 4, palette.textContent);
+		palette.close();
+		yield {click: pt(blk('alert1').querySelector('[data-editor-field]'), 0.3)};
+		key('Enter', {altKey: true});
+		say('Alt Enter opens the card', open());
+		yield {key: 'Escape'};
+		say('Escape closes the card', !open());
+		yield {click: pt(blk('alert1').querySelector('[data-editor-field]'), 0.3)};
+		const orderKeys = () => [...doc.body.children].findIndex((one) => one.getAttribute('data-block') === 'alert1');
+		const at = orderKeys();
+		key('ArrowDown', {metaKey: true, shiftKey: true});
+		await until(() => orderKeys() > at && doc.getAnimations().length === 0);
+		say('the keys move a block', orderKeys() > at, orderKeys() + ' from ' + at);
+		key('F10', {altKey: true});
+		await settled();
+		say('Alt F10 goes to the toolbar', document.activeElement === box.querySelector('.editor-tool[tabindex="0"]'), document.activeElement?.outerHTML?.slice(0, 120));
+		const stop = document.activeElement;
+		yield {key: 'ArrowRight'};
+		say('the arrows walk the toolbar', document.activeElement !== stop && document.activeElement?.classList.contains('editor-tool'), document.activeElement?.outerHTML?.slice(0, 120));
+
+		// Lists by the buttons: the same id, the same words, the caret stays.
+		await make({value: '<p data-block="a1">First line</p><p data-block="a2">Second line</p><p data-block="a3">Third line</p><ul data-block="l1"><li>One</li><li>Two</li><li>Three</li></ul><pre data-block="c1">code</pre>'});
+		let line = blk('a2');
+		yield {click: pt(line, 0.1)};
+		put(line.firstChild, 3);
+		yield {click: pt(tool('bullets'))};
+		say('Bullets makes a list of the line', blk('a2')?.matches('ul') && blk('a2').children.length === 1 && blk('a2').textContent === 'Second line', doc.body.innerHTML);
+		say('the list is at the top, not in a line', [...doc.body.children].every((one) => one.tagName !== 'P' || one.querySelector('ul') === null), doc.body.innerHTML);
+		say('the caret stays in the line', blk('a2')?.contains(doc.getSelection().anchorNode) && doc.getSelection().anchorOffset === 3, doc.getSelection().anchorNode?.nodeName + ' ' + doc.getSelection().anchorOffset);
+		say('Bullets says it is on', tool('bullets').getAttribute('aria-pressed') === 'true');
+		yield {click: pt(tool('numbers'))};
+		say('Numbers turns the list', blk('a2')?.matches('ol'), doc.body.innerHTML);
+		say('Numbers says it is on', tool('numbers').getAttribute('aria-pressed') === 'true' && tool('bullets').getAttribute('aria-pressed') === 'false');
+		yield {click: pt(tool('numbers'))};
+		say('pressed again it is a line', blk('a2')?.matches('p') && blk('a2').textContent === 'Second line', doc.body.innerHTML);
+		put(blk('l1').children[1].firstChild, 1);
+		doc.body.focus();
+		put(blk('l1').children[1].firstChild, 1);
+		yield {click: pt(tool('bullets'))};
+		const shape = [...doc.body.children].map((one) => one.tagName).join(' ');
+		say('an item in the middle splits its list', shape === 'P P P UL P UL PRE P', shape);
+		say('the first half keeps the id', blk('l1')?.children.length === 1 && blk('l1').textContent === 'One', doc.body.innerHTML);
+		const middle = blk('l1').nextElementSibling;
+		put(middle.firstChild, 1);
+		yield {click: pt(tool('bullets'))};
+		say('a line between two lists joins them', blk('l1')?.children.length === 3 && blk('l1').nextElementSibling.tagName === 'PRE', doc.body.innerHTML);
+
+		// Formats on a selection keep the ids.
+		const pick = doc.createRange();
+		pick.setStart(blk('a1').firstChild, 2);
+		pick.setEnd(blk('a2').firstChild, 3);
+		doc.body.focus();
+		doc.getSelection().removeAllRanges();
+		doc.getSelection().addRange(pick);
+		await until(() => !box.querySelector('.editor-bubble').hidden);
+		const bubble = box.querySelector('.editor-bubble');
+		say('a selection shows the small bar', !bubble.hidden);
+		const fmt = tool('format');
+		yield {click: pt(fmt)};
+		const menu = box.querySelector('#' + CSS.escape(fmt.getAttribute('commandfor')));
+		say('the format menu opens', menu.matches(':popover-open'));
+		const heading = [...menu.querySelectorAll('.menu-item')].find((one) => one.textContent.includes('Heading 3'));
+		yield {click: pt(heading)};
+		say('a format takes every line under the selection', blk('a1')?.matches('h3') && blk('a2')?.matches('h3'), doc.body.innerHTML);
+		say('a selection stands after a format', !doc.getSelection().isCollapsed, String(doc.getSelection()));
+		yield {click: pt(tool('bold'))};
+		say('bold on a heading leaves no style in the text', doc.body.querySelector('[style]') === null, doc.body.innerHTML);
+		const two = doc.createRange();
+		two.setStart(blk('a3').firstChild, 0);
+		two.setEnd(blk('a3').firstChild, 5);
+		doc.body.focus();
+		doc.getSelection().removeAllRanges();
+		doc.getSelection().addRange(two);
+		await settled();
+		yield {click: pt(tool('bold'))};
+		say('bold marks the words', blk('a3').querySelector('strong, b')?.textContent === 'Third', doc.body.innerHTML);
+		say('bold says it is on', tool('bold').getAttribute('aria-pressed') === 'true');
+		say('the value says strong', /<strong>Third<\/strong>/.test(value()), value());
+		const pressed = getComputedStyle(tool('bold'));
+		say('a pressed tool is filled', pressed.backgroundColor !== 'rgba(0, 0, 0, 0)' && pressed.backgroundColor !== 'transparent', pressed.backgroundColor);
+
+		// The code block.
+		const code = blk('c1');
+		yield {click: pt(code, 0.02)};
+		put(code.firstChild, 4);
+		yield {key: 'Enter'};
+		say('Enter stays in code', blk('c1')?.matches('pre') && (blk('c1').textContent.includes('\n') || blk('c1').querySelector('br') !== null) && doc.querySelectorAll('pre').length === 1, doc.body.innerHTML.slice(-120));
+		say('there is a line to type in after code', doc.body.lastElementChild.tagName === 'P', doc.body.lastElementChild.outerHTML);
+
+		// Nesting a list.
+		await make({value: '<ul data-block="n1"><li>One</li><li>Two</li></ul>'});
+		yield {click: pt(blk('n1').children[1], 0.1)};
+		yield {key: 'Tab'};
+		say('Tab nests an item', blk('n1').querySelector('li ul li, li ol li') !== null || blk('n1').querySelector('ul ul') !== null, blk('n1').outerHTML);
+		key('Tab', {shiftKey: true});
+		say('Shift Tab takes it out', blk('n1').querySelectorAll('ul, ol').length === 0, blk('n1').outerHTML);
+
+		// A word's color and a link.
+		await make({value: '<p data-block="w1">Some plain words here</p><p data-block="w2">Next</p>'});
+		const colored = () => blk('w1').querySelector('span.text-danger');
+		const words2 = doc.createRange();
+		words2.setStart(blk('w1').firstChild, 5);
+		words2.setEnd(blk('w1').firstChild, 10);
+		doc.body.focus();
+		doc.getSelection().removeAllRanges();
+		doc.getSelection().addRange(words2);
+		await settled();
+		yield {click: pt(tool('color'))};
+		const colors = box.querySelector('#' + CSS.escape(tool('color').getAttribute('commandfor')));
+		say('the color menu opens', colors.matches(':popover-open'));
+		yield {click: pt(colors.querySelectorAll('.menu-item')[4])};
+		say('a color wraps the words', colored()?.textContent === 'plain', blk('w1').innerHTML);
+		const words3 = doc.createRange();
+		words3.setStart(blk('w1').lastChild, 1);
+		words3.setEnd(blk('w1').lastChild, 6);
+		doc.body.focus();
+		doc.getSelection().removeAllRanges();
+		doc.getSelection().addRange(words3);
+		await settled();
+		yield {click: pt(tool('link'))};
+		const ask = document.querySelector('dialog[open]');
+		say('the link dialog opens', ask !== null);
+		ask.querySelector('[name="href"]').value = 'https://example.com/';
+		yield {click: pt(ask.querySelector('[value="ok"]'))};
+		say('a link is made', blk('w1').querySelector('a')?.getAttribute('href') === 'https://example.com/' && blk('w1').querySelector('a').textContent === 'words', blk('w1').innerHTML);
+
+		// Inserting by the menu, and a preview.
+		const last2 = blk('w2');
+		yield {click: pt(last2, 0.1)};
+		yield {click: pt(tool('insert'))};
+		const inserts = box.querySelector('#' + CSS.escape(tool('insert').getAttribute('commandfor')));
+		say('the Insert menu opens', inserts.matches(':popover-open'));
+		const tabsItem = [...inserts.querySelectorAll('.menu-item')].find((one) => one.textContent.includes('Tabs'));
+		yield {click: pt(tabsItem)};
+		const tabbed = doc.querySelector('[role="tablist"]')?.parentElement;
+		say('Insert puts a block in', tabbed !== undefined && tabbed !== null, doc.body.innerHTML.slice(0, 300));
+		say('every panel of tabs is drawn open', [...tabbed.querySelectorAll('[role="tabpanel"]')].every((one) => !one.hidden));
+		say('a panel says its tab', tabbed.querySelector('[role="tabpanel"]').hasAttribute('data-editor-tab'));
+		say('tab words are fields of their own', tabbed.querySelector('[role="tab"]') !== null);
+		say('hidden panels stay hidden in the value', /tabpanel"[^>]* hidden/.test(value()) || /hidden[^>]*role="tabpanel"/.test(value()), value());
+		const tid = tabbed.getAttribute('data-block');
+		yield {hover: pt(tabbed)};
+		yield {click: pt(box.querySelector('.editor-handle'))};
+		yield {click: pt(cardEl().querySelector('[data-tab="more"]'))};
+		yield {click: pt(cardEl().querySelector('[data-more="preview"]'))};
+		const look = document.querySelector('dialog[open] iframe');
+		say('a preview opens', look !== null);
+		const alive = () => look?.contentDocument?.querySelector('[role="tab"][tabindex]') !== null && look?.contentDocument?.querySelector('[role="tabpanel"][hidden]') !== null;
+		await until(alive);
+		say('a preview is the block alive', alive(), look?.contentDocument?.body?.innerHTML?.slice(0, 200));
+		yield {key: 'Escape'};
+		say('a preview closes', document.querySelector('dialog[open]') === null);
+
+		// A protected block is safe from a selection and from a Backspace.
+		await make({rights: {design: true, structure: true}, value: '<p data-block="b1">Before</p><div class="alert alert-info" data-block="k1" data-lock="form"><i class="bi bi-info-circle" aria-hidden="true"></i><div>Kept</div></div><p data-block="b2">After</p><div class="alert alert-info" data-block="o1"><i class="bi bi-info-circle" aria-hidden="true"></i><div>Open</div></div><p data-block="b3">Tail</p>'});
+		const across = doc.createRange();
+		across.setStart(blk('b1').firstChild, 2);
+		across.setEnd(blk('b2').firstChild, 2);
+		doc.body.focus();
+		doc.getSelection().removeAllRanges();
+		doc.getSelection().addRange(across);
+		yield {key: 'Backspace'};
+		say('a selection cannot delete a protected block', blk('k1') !== null && blk('b1').textContent === 'Before', doc.body.innerHTML.slice(0, 200));
+		say('it says why', /protected|closed/i.test(box.dataset.editorNote ?? ''), box.dataset.editorNote);
+		doc.getSelection().removeAllRanges();
+		doc.getSelection().addRange(across);
+		yield {type: 'x'};
+		say('typing over it cannot either', blk('k1') !== null && !doc.body.textContent.includes('x'), doc.body.textContent);
+		yield {click: pt(blk('b2'), 0.05)};
+		put(blk('b2').firstChild, 0);
+		yield {key: 'Backspace'};
+		say('Backspace beside a protected block leaves it', blk('k1') !== null);
+		say('and the caret goes into it', blk('k1').contains(doc.getSelection().anchorNode), doc.getSelection().anchorNode?.nodeName);
+		yield {click: pt(blk('b3'), 0.05)};
+		put(blk('b3').firstChild, 0);
+		yield {key: 'Backspace'};
+		say('Backspace beside a block never deletes it', blk('o1') !== null && blk('o1').contains(doc.getSelection().anchorNode), doc.body.innerHTML.slice(-200));
+
+		// Stored versions.
+		await make({versions: {v1: [{at: '2026-11-01', by: 'Mai', html: '<p data-block="v1">Older words</p>'}]}, value: '<p data-block="v1">Words now</p>'});
+		yield {hover: pt(blk('v1'))};
+		yield {click: pt(box.querySelector('.editor-handle'))};
+		yield {click: pt(cardEl().querySelector('[data-tab="past"]'))};
+		say('stored versions are listed', /Mai/.test(cardEl().textContent) && /Older words/.test(cardEl().textContent), cardEl().textContent);
+		const older = cardEl().querySelector('[data-version]');
+		yield {hover: pt(older)};
+		say('a stored version is tried on', blk('v1').textContent === 'Older words', blk('v1').outerHTML);
+		say('a trial stays out of the value', value().includes('Words now'), value());
+		yield {click: pt(older)};
+		yield {hover: [5, 5]};
+		say('a stored version is taken back', blk('v1').textContent === 'Older words' && value().includes('Older words'), blk('v1').outerHTML);
+
+		// Right to left.
+		await make({lang: 'ar', dir: 'rtl', value: '<p>نص</p><table class="table" data-block="t2"><thead><tr><th>أ</th><th>ب</th></tr></thead><tbody><tr><td>١</td><td>٢</td></tr></tbody></table><p>النهاية</p>'});
+		yield {hover: pt(blk('t2').rows[1].cells[1])};
+		const hand = box.querySelector('.editor-handle').getBoundingClientRect();
+		const t2 = blk('t2').getBoundingClientRect();
+		const f3 = frame.getBoundingClientRect();
+		say('right to left the handle stands on the right', hand.left >= t2.right + f3.left - 1, JSON.stringify([hand.left, t2.right + f3.left]));
+		const rb2 = [...box.querySelectorAll('.editor-part')].find((one) => ACT(one, 'row-add')).getBoundingClientRect();
+		say('right to left the row bar stands on the right', rb2.left >= t2.right + f3.left - 1, JSON.stringify([rb2.left, t2.right + f3.left]));
+
+		// A wide page has no room beside: the card stands apart.
+		await make({width: 1300});
+		yield {hover: pt(blk('alert1'))};
+		yield {click: pt(box.querySelector('.editor-handle'))};
+		const sheet = cardEl().getBoundingClientRect();
+		const covered = blk('alert1').getBoundingClientRect();
+		const f4 = frame.getBoundingClientRect();
+		say('with no room beside, the card covers no part of its block', sheet.top >= covered.bottom + f4.top || sheet.bottom <= covered.top + f4.top, JSON.stringify([sheet.top, sheet.bottom, covered.top + f4.top, covered.bottom + f4.top]));
+
+		// The clean end.
+		say('nothing of the editor in the value', !marks(value()), value().slice(0, 600));
+		page.destroy();
+		page = null;
+		say('destroy leaves the host empty', host.children.length === 0);
+		await make({value: '<p onclick="alert(1)">Hi</p><script>alert(1)</scr' + 'ipt><a href="javascript:alert(1)">x</a><iframe src="http://bad/"></iframe>'});
+		say('a value keeps nothing that runs', !/onclick|script|javascript:|iframe/.test(doc.body.innerHTML), doc.body.innerHTML);
+
+		page.destroy();
+		stage.remove();
 	};
 
 	const checks = {
@@ -1345,6 +2138,7 @@ window.REDZ_BEHAVE = (() => {
 				out.push('the second of ' + handles.length + ' handles sharing one menu of moves ' + (open ? 'opens it' : 'does not open it') + ': aria-expanded ' + say(expanded) + ' while it is open, ' + say(closed) + ' after - only the handle that opened it is expanded');
 			}
 		}]},
+		editor: {target: '#editor-demo-host', walk: editorWalk},
 	};
 
 	const runs = {};
@@ -1358,7 +2152,15 @@ window.REDZ_BEHAVE = (() => {
 		async step(name) {
 			const run = runs[name] ??= {at: 0, out: [], last: null};
 			try {
-				while (run.at < checks[name].steps.length) {
+				if (checks[name].walk !== undefined) {
+					run.walking ??= checks[name].walk(run.out);
+					await settled();
+					const {value, done} = await run.walking.next();
+					if (!done) {
+						return {input: value};
+					}
+				}
+				while (run.at < (checks[name].steps?.length ?? 0)) {
 					const answer = await checks[name].steps[run.at++](run.out, run.last);
 					if (answer?.drag) {
 						run.last = answer;

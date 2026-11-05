@@ -157,7 +157,9 @@ document.addEventListener('focusout', (event) => {
 
 document.addEventListener('keydown', (event) => {
 	if (event.key === 'Escape' && shown !== null) {
-		event.preventDefault();
+		if (shown.closest('[role="menu"]') === null) {
+			event.preventDefault();
+		}
 		hide();
 	}
 }, true);

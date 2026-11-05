@@ -18,6 +18,8 @@
 		display: flex;
 		align-items: center;
 		gap: 2px;
+		inline-size: 0;
+		min-inline-size: 100%;
 		padding: 0.375rem;
 		overflow-x: auto;
 		border-block-end: 1px solid var(--redz-border);
@@ -160,6 +162,8 @@
 		display: flex;
 		align-items: center;
 		gap: var(--redz-space-8);
+		inline-size: 0;
+		min-inline-size: 100%;
 		padding: var(--redz-space-4) 0.375rem;
 		overflow-x: auto;
 		border-block-end: 1px solid var(--redz-border);

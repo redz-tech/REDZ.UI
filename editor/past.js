@@ -106,6 +106,9 @@ export const pastOf = (ed) => {
 	};
 
 	ed.changing = () => {
+		if (!dirty) {
+			ed.followCaret();
+		}
 		dirty = true;
 	};
 

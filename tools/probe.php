@@ -41,6 +41,8 @@ const PROBE_SHEET = __DIR__ . '/../.dev/probes';
 const PROBE_FORCED_PREFS = ['browser.display.document_color_use' => 2];
 // The tallest shot, in CSS px: twice that is the most a 2× phone shot can be, under the engines' 16 384 px canvas.
 const PROBE_SHOT_MAX = 8000;
+// The most steps of real input a behaviour check may take.
+const PROBE_BEHAVE_STEPS = 600;
 // The longest a cell may run, in seconds: CI's iOS 26 simulator, the slowest engine, spends about a minute on a cell.
 const PROBE_CELL_MAX = 300;
 // The probe code by the engines that run it, as PROBE__Reach's marks: the engines of a kind, "browser:NAME" for a reader
@@ -529,6 +531,26 @@ function PROBE__Cell(array &$h, string $name, string $page, string $combo, strin
 	}
 }
 
+/** One step of a walk's real input: a click, a move of the pointer, keys, typed text or a drag. */
+function PROBE__Input(array &$h, array $input): void
+{
+	if (isset($input['click'])) {
+		PROBE__Do($h, 'Click', ...array_map('intval', $input['click']));
+	}
+	if (isset($input['hover'])) {
+		PROBE__Do($h, 'Hover', ...array_map('intval', $input['hover']));
+	}
+	foreach ((array)($input['key'] ?? []) as $key) {
+		PROBE__Do($h, 'Key', $key);
+	}
+	if (isset($input['type'])) {
+		PROBE__Do($h, 'Type', $input['type']);
+	}
+	if (isset($input['drag'])) {
+		PROBE__Do($h, 'Drag', ...array_map('intval', $input['drag']));
+	}
+}
+
 /** The behaviour checks of tools/probes/behave.js whose targets $page has, on the page loaded again from $url - each
  *  check stepped until it answers its findings, its drags made by the engine's own pointer -, and every target found on
  *  docs/all.html, which holds them all; answers the findings with the page's errors, and the checks in $walked. */
@@ -546,8 +568,12 @@ function PROBE__Behave(array &$h, string $page, string $url, int $height, array 
 	PROBE__Do($h, 'Inject', $run['behave']);
 	foreach ($checks as $check) {
 		$walked[] = 'the behaviour of ' . $check;
-		for ($step = 0; $step < 10; $step++) {
+		for ($step = 0; $step < PROBE_BEHAVE_STEPS; $step++) {
 			$answer = PROBE__Do($h, 'Eval', 'REDZ_BEHAVE.step(' . json_encode($check) . ')');
+			if (isset($answer['input'])) {
+				PROBE__Input($h, $answer['input']);
+				continue;
+			}
 			if (!isset($answer['drag'])) {
 				foreach ($answer['findings'] ?? ['answered nothing'] as $finding) {
 					$findings[] = 'the behaviour of ' . $check . ': ' . $finding;

@@ -164,6 +164,15 @@ function PROBE__ChromeKey(array &$h, string $key): void
 	PROBE__ChromeSend($h, 'Input.dispatchKeyEvent', ['type' => 'keyUp'] + $event);
 }
 
+/** Types the text key by key, as the user would. */
+function PROBE__ChromeType(array &$h, string $text): void
+{
+	foreach (mb_str_split($text) as $char) {
+		PROBE__ChromeSend($h, 'Input.dispatchKeyEvent', ['type' => 'keyDown', 'text' => $char, 'unmodifiedText' => $char, 'key' => $char]);
+		PROBE__ChromeSend($h, 'Input.dispatchKeyEvent', ['type' => 'keyUp', 'key' => $char]);
+	}
+}
+
 /** Clicks the primary mouse button at the point of the viewport. */
 function PROBE__ChromeClick(array &$h, int $x, int $y): void
 {

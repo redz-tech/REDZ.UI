@@ -94,6 +94,16 @@ function PROBE__FirefoxKey(array &$h, string $key): void
 	PROBE__FirefoxSend($h, 'input.performActions', ['context' => $h['context'], 'actions' => [['type' => 'key', 'id' => 'keyboard', 'actions' => [['type' => 'keyDown', 'value' => $value], ['type' => 'keyUp', 'value' => $value]]]]]);
 }
 
+/** Types the text key by key, as the user would. */
+function PROBE__FirefoxType(array &$h, string $text): void
+{
+	$actions = [];
+	foreach (mb_str_split($text) as $char) {
+		array_push($actions, ['type' => 'keyDown', 'value' => $char], ['type' => 'keyUp', 'value' => $char]);
+	}
+	PROBE__FirefoxSend($h, 'input.performActions', ['context' => $h['context'], 'actions' => [['type' => 'key', 'id' => 'keyboard', 'actions' => $actions]]]);
+}
+
 /** Clicks the primary mouse button at the point of the viewport. */
 function PROBE__FirefoxClick(array &$h, int $x, int $y): void
 {
