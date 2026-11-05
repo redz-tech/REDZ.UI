@@ -54,7 +54,7 @@ tone pad, translations side by side, the page's reading, and who wrote what. No 
 ### Added
 - `REDZ.ui.combobox.set(list, values)` sets what a list holds from the page, as a choice does: its hidden fields, its button
   or chips, then `input` and `change`. A form's Discard can go back to the last saved value; `reset` goes back to the first.
-- `data-changed` on a `nav-link` draws the dot a field's mark has; a `visually-hidden` word in the tab says it to a screen reader.
+- `data-changed` on a `nav-link` draws the dot a field's mark has; the tab's `aria-label` says it to a screen reader.
 - `form-more` on a `details` folds a long hint under a field, with a chevron that turns.
 - `data-tooltip-delay` on a title or around it sets the wait of its tooltip; `0` shows it at once.
 - A folded rail's tooltip stands beside its link, so it covers no other icon.

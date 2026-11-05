@@ -2851,14 +2851,12 @@ window.REDZ_BEHAVE = (() => {
 			});
 			const inside = frame.contentDocument;
 			const cells = inside.querySelectorAll('td');
-			const marks = (at) => {
-				frame.style.inlineSize = at + 'px';
-				return [...cells].map((one) => frame.contentWindow.getComputedStyle(one, '::before').content !== 'none');
-			};
+			const marks = () => [...cells].map((one) => frame.contentWindow.getComputedStyle(one, '::before').content !== 'none');
 			await settled();
-			const phone = marks(400);
-			await settled();
-			const wide = marks(1000);
+			const phone = marks();
+			frame.style.inlineSize = '1000px';
+			await until(() => marks()[0] && !marks()[1], 1000);
+			const wide = marks();
 			frame.remove();
 			if (shifted || !phone[1] || !wide[0] || wide[1]) {
 				out.push('a row\'s mark: the row is ' + (shifted ? 'shifted a column' : 'in its columns') + ', on a phone the cells mark ' + say(phone) + ', wide ' + say(wide));

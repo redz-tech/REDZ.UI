@@ -38,12 +38,12 @@ Tabs switch panels in place: `role="tablist"`, each tab `role="tab"` with `aria-
 
 ### A tab with changes
 
-`data-changed`, set by the page, puts a dot on a tab whose panel holds something not saved yet, the same word as on a field. A `visually-hidden` word inside the tab says it to a screen reader.
+`data-changed`, set by the page, puts a dot on a tab whose panel holds something not saved yet, the same word as on a field. Its `aria-label` says so to a screen reader.
 
 ```html
 <div class="nav nav-underline" role="tablist" aria-label="Settings">
 	<button class="nav-link" type="button" role="tab" id="nav-changed-1" aria-selected="true" aria-controls="nav-changed-panel-1">Company</button>
-	<button class="nav-link" type="button" role="tab" id="nav-changed-2" aria-selected="false" aria-controls="nav-changed-panel-2" data-changed>Mail<span class="visually-hidden"> not saved</span></button>
+	<button class="nav-link" type="button" role="tab" id="nav-changed-2" aria-selected="false" aria-controls="nav-changed-panel-2" aria-label="Mail, not saved" data-changed>Mail</button>
 </div>
 <div id="nav-changed-panel-1" role="tabpanel" aria-labelledby="nav-changed-1" tabindex="0"><p>The company's name and address.</p></div>
 <div id="nav-changed-panel-2" role="tabpanel" aria-labelledby="nav-changed-2" tabindex="0" hidden><p>The address mail is sent from.</p></div>

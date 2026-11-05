@@ -174,18 +174,18 @@
 &lt;div id="nav-tabs-panel-3" role="tabpanel" aria-labelledby="nav-tabs-3" tabindex="0" hidden&gt;&lt;p&gt;Edited yesterday by M. K.; published on three sites.&lt;/p&gt;&lt;/div&gt;</code></pre></div>
 
 					<h3>A tab with changes</h3>
-					<p><code>data-changed</code>, set by the page, puts a dot on a tab whose panel holds something not saved yet, the same word as on a field. A <code>visually-hidden</code> word inside the tab says it to a screen reader.</p>
+					<p><code>data-changed</code>, set by the page, puts a dot on a tab whose panel holds something not saved yet, the same word as on a field. Its <code>aria-label</code> says so to a screen reader.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="nav-changed">
 						<div class="nav nav-underline" role="tablist" aria-label="Settings">
 							<button class="nav-link" type="button" role="tab" id="nav-changed-1" aria-selected="true" aria-controls="nav-changed-panel-1">Company</button>
-							<button class="nav-link" type="button" role="tab" id="nav-changed-2" aria-selected="false" aria-controls="nav-changed-panel-2" data-changed>Mail<span class="visually-hidden"> not saved</span></button>
+							<button class="nav-link" type="button" role="tab" id="nav-changed-2" aria-selected="false" aria-controls="nav-changed-panel-2" aria-label="Mail, not saved" data-changed>Mail</button>
 						</div>
 						<div id="nav-changed-panel-1" role="tabpanel" aria-labelledby="nav-changed-1" tabindex="0"><p>The company's name and address.</p></div>
 						<div id="nav-changed-panel-2" role="tabpanel" aria-labelledby="nav-changed-2" tabindex="0" hidden><p>The address mail is sent from.</p></div>
 					</div>
 					<pre class="docs-code" tabindex="0"><code>&lt;div class="nav nav-underline" role="tablist" aria-label="Settings"&gt;
 	&lt;button class="nav-link" type="button" role="tab" id="nav-changed-1" aria-selected="true" aria-controls="nav-changed-panel-1"&gt;Company&lt;/button&gt;
-	&lt;button class="nav-link" type="button" role="tab" id="nav-changed-2" aria-selected="false" aria-controls="nav-changed-panel-2" data-changed&gt;Mail&lt;span class="visually-hidden"&gt; not saved&lt;/span&gt;&lt;/button&gt;
+	&lt;button class="nav-link" type="button" role="tab" id="nav-changed-2" aria-selected="false" aria-controls="nav-changed-panel-2" aria-label="Mail, not saved" data-changed&gt;Mail&lt;/button&gt;
 &lt;/div&gt;
 &lt;div id="nav-changed-panel-1" role="tabpanel" aria-labelledby="nav-changed-1" tabindex="0"&gt;&lt;p&gt;The company's name and address.&lt;/p&gt;&lt;/div&gt;
 &lt;div id="nav-changed-panel-2" role="tabpanel" aria-labelledby="nav-changed-2" tabindex="0" hidden&gt;&lt;p&gt;The address mail is sent from.&lt;/p&gt;&lt;/div&gt;</code></pre></div>
