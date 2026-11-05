@@ -11,9 +11,13 @@
 		border-color: var(--redz-border-strong);
 	}
 
+	.app .editor {
+		--redz-editor-top: 3.25rem;
+	}
+
 	.editor-toolbar {
 		position: sticky;
-		inset-block-start: 0;
+		inset-block-start: var(--redz-editor-top, 0);
 		z-index: 2;
 		display: flex;
 		align-items: center;

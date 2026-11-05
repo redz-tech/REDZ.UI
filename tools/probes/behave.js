@@ -163,7 +163,7 @@ window.REDZ_BEHAVE = (() => {
 		// A field: Enter and Backspace stay inside, the block holds.
 		let alert = blk('alert1');
 		let field = alert.querySelector('[data-editor-field]');
-		const words = field.textContent;
+		const words = field.innerHTML;
 		yield {click: pt(field, 0.3)};
 		say('a click puts the caret in a field', field.contains(doc.getSelection().anchorNode) && doc.activeElement === field, doc.activeElement?.tagName + ' ' + String(doc.getSelection().anchorNode?.nodeName));
 		const bar = box.querySelector('.editor-element');
@@ -171,7 +171,7 @@ window.REDZ_BEHAVE = (() => {
 		say('the chosen element is marked', blk('alert1').hasAttribute('data-editor-picked') || blk('alert1').querySelector('[data-editor-picked]') !== null);
 		yield {key: 'Enter'};
 		field = blk('alert1').querySelector('[data-editor-field]');
-		say('Enter stays in the field', blk('alert1').querySelectorAll('[data-editor-field]').length === 1 && field.textContent === words && doc.activeElement === field, field.outerHTML);
+		say('Enter stays in the field', blk('alert1').querySelectorAll('[data-editor-field]').length === 1 && field.innerHTML === words && doc.activeElement === field, field.outerHTML);
 		put(field.firstChild, 0);
 		yield {key: 'Backspace'};
 		field = blk('alert1').querySelector('[data-editor-field]');
@@ -236,8 +236,11 @@ window.REDZ_BEHAVE = (() => {
 		const fb = frame.getBoundingClientRect();
 		say('the row bar stands at the table', rb.right <= tb.left + fb.left + 2 && rb.right > tb.left + fb.left - 60, JSON.stringify([rb.left, rb.right, tb.left + fb.left]));
 		yield {hover: pt(cell)};
-		yield {hover: pt(doc.querySelector('p'), 0.5)};
+		yield {hover: [Math.round(fb.left) + 8, pt(cell)[1]]};
 		say('the bars wait for the pointer on its way to them', !rowBar.hidden);
+		yield {hover: pt(cell)};
+		yield {hover: pt(doc.querySelector('p'), 0.5)};
+		say('from a part to prose too', !rowBar.hidden);
 		yield {hover: pt(doc.querySelector('p'), 0.6)};
 		await until(() => rowBar.hidden && columnBar.hidden);
 		say('and leave when it goes elsewhere', rowBar.hidden && columnBar.hidden);
@@ -261,6 +264,14 @@ window.REDZ_BEHAVE = (() => {
 		yield {hover: pt(ACT(columnBar, 'column-drop'))};
 		yield {click: pt(ACT(columnBar, 'column-drop'))};
 		say('the column bar drops a column', blk('table1').rows[0].cells.length === 3, blk('table1').rows[0].cells.length);
+		yield {hover: pt(blk('table1').rows[0].cells[0], 0.3)};
+		yield {hover: pt(ACT(rowBar, 'row-add'))};
+		yield {click: pt(ACT(rowBar, 'row-add'))};
+		say('a row under the head is cells of fields', blk('table1').rows[1].querySelectorAll('td[data-editor-field]').length === 3, blk('table1').rows[1].outerHTML);
+		yield {hover: pt(blk('table1').rows[1].cells[0], 0.3)};
+		yield {hover: pt(ACT(rowBar, 'row-drop'))};
+		yield {click: pt(ACT(rowBar, 'row-drop'))};
+		say('and it goes', blk('table1').rows.length === 3, blk('table1').rows.length);
 
 		// The / menu, then a list block by the keys and the item bar.
 		const empty = [...doc.body.children].find((one) => one.tagName === 'P' && one.textContent === '');
@@ -798,6 +809,71 @@ window.REDZ_BEHAVE = (() => {
 		yield {key: 'Backspace'};
 		say('Backspace beside a block never deletes it', blk('o1') !== null && blk('o1').contains(doc.getSelection().anchorNode), doc.body.innerHTML.slice(-200));
 
+		// Protected prose keeps its edges.
+		await make({rights: {design: true, structure: true}, value: '<p data-block="p1">One</p><p data-block="p2" data-lock="form">Two</p><p data-block="p3">Three</p>'});
+		yield {click: pt(blk('p3'), 0.02)};
+		put(blk('p3').firstChild, 0);
+		yield {key: 'Backspace'};
+		say('Backspace does not join a line to protected prose', blk('p2')?.textContent === 'Two' && blk('p3')?.textContent === 'Three', doc.body.innerHTML);
+		put(blk('p2').firstChild, 0);
+		yield {key: 'Backspace'};
+		say('nor protected prose to the line before', blk('p1')?.textContent === 'One' && blk('p2')?.textContent === 'Two', doc.body.innerHTML);
+		put(blk('p2').firstChild, 1);
+		yield {key: 'Enter'};
+		say('Enter does not split protected prose', doc.querySelectorAll('p').length === 3 && blk('p2').textContent === 'Two', doc.body.innerHTML);
+		yield {type: 'x'};
+		say('its words stay open', blk('p2').textContent.includes('x'), blk('p2').outerHTML);
+		yield {key: 'Backspace'};
+		put(blk('p2').firstChild, 1);
+		yield {click: pt(tool('format'))};
+		const closed = box.querySelector('#' + CSS.escape(tool('format').getAttribute('commandfor')));
+		yield {click: pt([...closed.querySelectorAll('.menu-item')].find((one) => one.textContent.includes('Heading 2')))};
+		say('a format does not reach protected prose', blk('p2').matches('p'), blk('p2').outerHTML);
+
+		// Parts of prose, and what a person without the design right gets.
+		await make({value: '<p data-block="i1">Before <a href="/x">a link</a></p>'});
+		yield {click: pt(blk('i1').querySelector('a'), 0.5)};
+		say('a link in prose is a part', box.querySelector('.editor-element').textContent.includes('Link'), box.querySelector('.editor-element').textContent);
+		await make({rights: {}, value: '<p data-block="i1">Before <img alt="Old words" width="80" height="40"> after</p><table class="table" data-block="t1"><tbody><tr><td>A</td></tr></tbody></table>'});
+		yield {click: pt(blk('i1').querySelector('img'))};
+		const elementBar = box.querySelector('.editor-element');
+		say('an image in prose is a part, for its words', ACT(elementBar, 'props') !== null, elementBar.innerHTML);
+		yield {click: pt(ACT(elementBar, 'props'))};
+		const alt = cardEl().querySelector('input');
+		say('a translator gets the description and nothing else', alt !== null && cardEl().querySelectorAll('.editor-prop').length === 1, cardEl().textContent);
+		alt.value = 'New words';
+		alt.dispatchEvent(new Event('input', {bubbles: true}));
+		await until(() => value().includes('New words'));
+		say('the description is written', value().includes('New words'), value());
+		yield {key: 'Escape'};
+		await make({rights: {design: true}, value: '<table class="table" data-block="t1"><tbody><tr><td>A</td></tr></tbody></table>'});
+		yield {click: pt(blk('t1').rows[0].cells[0], 0.2)};
+		const crumb = box.querySelector('.editor-element [data-editor-crumb="0"]');
+		yield {click: pt(crumb)};
+		yield {click: pt(ACT(box.querySelector('.editor-element'), 'props'))};
+		say('design without structure has no steppers', cardEl().querySelectorAll('[data-editor-more]').length === 0 && cardEl().querySelectorAll('[data-editor-prop]').length > 0, cardEl().textContent);
+		yield {key: 'Escape'};
+
+		// A composing key is left to the keyboard.
+		await make();
+		field = blk('alert1').querySelector('[data-editor-field]');
+		yield {click: pt(field, 0.3)};
+		const composing = new (doc.defaultView.KeyboardEvent)('keydown', {key: 'Enter', keyCode: 229, bubbles: true, cancelable: true});
+		field.dispatchEvent(composing);
+		say('the key that ends a composition is not taken', !composing.defaultPrevented);
+
+		// The frame's theme follows the page.
+		const themed = document.documentElement.dataset.theme;
+		document.documentElement.dataset.theme = themed === 'dark' ? 'light' : 'dark';
+		await until(() => doc.documentElement.dataset.theme === document.documentElement.dataset.theme);
+		say('the frame follows the page\'s theme', doc.documentElement.dataset.theme === document.documentElement.dataset.theme, doc.documentElement.dataset.theme);
+		if (themed === undefined) {
+			delete document.documentElement.dataset.theme;
+		} else {
+			document.documentElement.dataset.theme = themed;
+		}
+		await settled();
+
 		// Stored versions.
 		await make({versions: {v1: [{at: '2026-11-01', by: 'Mai', html: '<p data-block="v1">Older words</p>'}]}, value: '<p data-block="v1">Words now</p>'});
 		yield {hover: pt(blk('v1'))};
@@ -824,10 +900,10 @@ window.REDZ_BEHAVE = (() => {
 
 		// A wide page has no room beside: the card stands apart.
 		await make({width: 1300});
-		yield {hover: pt(blk('alert1'))};
+		yield {hover: pt(blk('shut'))};
 		yield {click: pt(box.querySelector('.editor-handle'))};
 		const sheet = cardEl().getBoundingClientRect();
-		const covered = blk('alert1').getBoundingClientRect();
+		const covered = blk('shut').getBoundingClientRect();
 		const f4 = frame.getBoundingClientRect();
 		say('with no room beside, the card covers no part of its block', sheet.top >= covered.bottom + f4.top || sheet.bottom <= covered.top + f4.top, JSON.stringify([sheet.top, sheet.bottom, covered.top + f4.top, covered.bottom + f4.top]));
 

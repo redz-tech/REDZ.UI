@@ -378,12 +378,12 @@ export const editor = (host, options = {}) => {
 
 	/** The lines under the selection become a heading, a quote or a block of code; a list's items leave it first. */
 	ed.format = (tag) => {
-		for (const one of tops().filter((top) => /^(UL|OL)$/.test(top.tagName) && isProse(top))) {
+		for (const one of tops().filter((top) => /^(UL|OL)$/.test(top.tagName) && isProse(top) && ed.formOpen(top) && ed.placeOpen(top))) {
 			if (one.isConnected) {
 				unlist(one);
 			}
 		}
-		const lines = tops().filter((one) => /^(P|H[2-6]|BLOCKQUOTE|PRE)$/.test(one.tagName) && isProse(one));
+		const lines = tops().filter((one) => /^(P|H[2-6]|BLOCKQUOTE|PRE)$/.test(one.tagName) && isProse(one) && ed.formOpen(one));
 		if (lines.length === 0) {
 			return;
 		}
@@ -805,7 +805,7 @@ export const editor = (host, options = {}) => {
 			bubble();
 		});
 		ed.on(doc, 'keydown', (event) => {
-			if (event.isComposing) {
+			if (event.isComposing || event.keyCode === 229) {
 				return;
 			}
 			const mod = event.metaKey || event.ctrlKey;
@@ -851,10 +851,14 @@ export const editor = (host, options = {}) => {
 				const selection = doc.getSelection();
 				const range = selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
 				const top = topAt(doc);
-				const near = selection.isCollapsed && event.inputType.endsWith('Backward') ? top?.previousElementSibling : (selection.isCollapsed && event.inputType.endsWith('Forward') ? top?.nextElementSibling : null);
+				const back = selection.isCollapsed && event.inputType.endsWith('Backward');
+				const on = selection.isCollapsed && event.inputType.endsWith('Forward');
+				const near = back ? top?.previousElementSibling : (on ? top?.nextElementSibling : null);
+				const at = top === null || !selection.isCollapsed ? -1 : before(doc, top).length;
+				const edge = top !== null && ((back && at === 0) || (on && at >= top.textContent.length)) && (locked(top) || (near !== null && near !== undefined && locked(near)));
 				const hit = (selection.isCollapsed ? [] : [...doc.querySelectorAll('[data-lock]')].filter((one) => locked(one) && range.intersectsNode(one)));
-				const edge = near !== null && near !== undefined && locked(near) && near.getAttribute('contenteditable') === 'false';
-				if (hit.length > 0 || edge) {
+				const split = event.inputType === 'insertParagraph' && top !== null && locked(top);
+				if (hit.length > 0 || edge || split) {
 					event.preventDefault();
 					ed.note(say('lock.refused'));
 					return;

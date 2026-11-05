@@ -4,6 +4,80 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## 0.16.0 - 2026-11-05
+
+The editor is rebuilt around a living block: nobody needs HTML to change a REDZ.UI element, and every setting the
+library has is one click away. Every block has a stable id, so its history, protection and, later, its translations stay
+with it.
+
+### Changed - the editor's words and marks, so update your pages
+- The editor's texts changed: the passport's `editor.texts` lists about 150 new keys, and `editor.block`, `editor.block.up`,
+  `editor.block.down`, `editor.block.edit`, `editor.block.columns`, `editor.block.delete`, `editor.columns.*` and
+  `editor.image` are gone. A page gives its island what the passport lists.
+- `editor/` is split into modules, still one file in `dist/`. The classes `editor-island*` are gone.
+- A block's parts are no longer edited as HTML by everyone: the HTML of a block and of the page is an expert's, under the
+  right `html`.
+- The value holds every block's `data-block` and `data-lock` only with the option `ids`. A CMS passes it.
+
+### Added - the editor
+- **Blocks you can change without HTML:** the words of a block are fields found by walking it, so typing never breaks its
+  markup. Hover a table for the bars of its row and column, a list for the bar of its item, with plus, trash and arrows.
+  Click a word for the element bar: the path of the block down to that word, its settings, copy, move and delete.
+- **The catalog:** `tools/catalog.json` names what can be changed on 19 elements, nested ones too, also in the passport as
+  `editor.catalog`. The build refuses a class the stylesheets do not have, and a variant of a covered component that is
+  neither in the catalog nor set aside with a reason, so a new variant cannot be forgotten.
+- **The card of a block:** settings tried on while hovered or focused and kept by a click, Esc takes them back; a list's
+  words as bullets, numbers, a list group, cards, an accordion, steps or a table of two columns, the words untouched; the
+  block's own history, one block going back while the others stay, `options.versions` adding what the host stored; on a
+  table, the numbers of rows and columns and the header row. It stands beside the editor, and on a phone as a sheet on the
+  side away from its block, so it never covers what it changes.
+- **Rights:** `options.rights`, flags `html`, `ai`, `design`, `structure`, `facts`, `lock`, `review`, and `langs`; left out,
+  all but HTML and protection; given, a key left out is off. `setRights()` changes them on the open page. The passport lists
+  them as `editor.rights`. They only hide controls: the server decides on every save.
+- **Protection:** `data-lock="form"` keeps the words open and closes the form, the place and the removal; `data-lock="all"`
+  closes the words too. Neither a selection nor Backspace deletes a protected block, and in the page's source it is a
+  marker that comes back untouched, even when its line is removed.
+- **The expert mode:** the HTML tab of a block and the source of the page, cleaned, naming what was taken out and the classes
+  REDZ.UI does not know.
+- **Typing:** `##`, `###`, `####`, `>`, `-`, `*`, `1.`, `**bold**`, `*italic*` and `` `code` ``; `/` on an empty line for the
+  blocks; ⌘/ for all the commands; Alt Enter for the card; ⌘⇧ and an arrow to move a block; Tab and Shift Tab to nest a list;
+  Tab through a table and a new row after its last cell.
+- **The handle:** a block moves by dragging it, with a drop line and a View Transition where there is one; pressed, it opens
+  the card.
+- **Paste:** Word, Google Docs, spreadsheets and Markdown from a chat come in as REDZ.UI markup: a table stays a table, a
+  heading a heading, every style and font stays behind. A link pasted over selected words links them.
+- **The lens:** the strip above the text changes the width, the theme, the site's stylesheets and the language under it, and
+  the text stays editable.
+- **The checks:** the foot counts the words by the language's own word breaks, so Thai and Burmese count too, and lists an
+  empty heading, a skipped level, an image without words, a vague link, a long paragraph and a table without a head.
+- **The toolbar:** 36 px buttons with 20 px icons, a filled pressed state, the block's style as a word, an Insert that stands
+  out, one scrolling row on a phone, undo and redo from the editor's own history, the caret back where a change started.
+- Lists and formats are the editor's own: the browser's commands keep a paragraph with attributes around a list. The value
+  says `strong` and `em` whatever the browser wrote.
+- The keys hold in fields in every engine: Safari no longer throws the caret out on Enter or pulls words out on Backspace,
+  Firefox crosses blocks by the arrows. Nothing touches the text while a character is composed.
+- A line to type in between two blocks takes no room until the caret is in it, so the text stands as the page will.
+- The frame follows the page's theme live. The editor's preview names its script hosts: Firefox never matches `'self'` in a
+  frame of its own, and the library may live on another host.
+
+### Added - the library
+- `REDZ.ui.status(line, null)` empties a status line.
+- `data-density="comfortable"` and `"spacious"`, for tables and rows: the editor's sizes of a table.
+- `badge-sm`, `badge-lg`, `alert-sm`, `alert-lg`.
+- `tree-item` is in the class vocabulary.
+
+### Fixed
+- An inline edit in a `thread` keeps the message's full width.
+- Escape closes a menu whose item shows a tooltip: the tooltip no longer holds the first press back.
+- A tooltip survives a page that replaces its body.
+
+### Probes
+- A behaviour check can be a walk that yields real input: clicks, moves of the pointer, keys, typed text and drags. The
+  editor's walk runs on every desktop engine: every kind of block, every level of rights, lists, paste, the lens and the keys.
+
+### Budgets
+- The editor's script has a soft ceiling of 70 KB gzipped, it was 30, and its styles 8 KB, they were 5. It is 30 KB today.
+
 ## 0.15.0 - 2026-11-05
 
 A release is now the folder a project serves, and the icons are a release of their own: 13 files of 480 KB in place of

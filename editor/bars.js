@@ -226,7 +226,7 @@ export const barsOf = (ed) => {
 		const crumbs = sel.chain.map((one, index) => (index > 0 ? '<span class="editor-crumb-sep" aria-hidden="true">›</span>' : '') + '<button class="editor-crumb" type="button" data-editor-crumb="' + index + '"' + (one === here ? ' aria-current="true"' : '') + '>' + name(one) + '</button>').join('');
 		const acts = [];
 		const form = ed.formOpen(top);
-		if (form && ((here?.entry?.props.length ?? 0) > 0 || here?.entry?.glyph || here?.entry?.image || here?.entry?.value)) {
+		if ((form && ((here?.entry?.props.length ?? 0) > 0 || here?.entry?.glyph || here?.entry?.value || here?.entry?.id === 'table')) || (here?.entry?.image && ed.wordsOpen(top))) {
 			acts.push('<button class="btn btn-xs" type="button" data-editor-act="props">' + icon('sliders') + say('settings') + '</button>');
 		}
 		if (form && here?.entry?.link) {
@@ -250,7 +250,8 @@ export const barsOf = (ed) => {
 	ed.pick = (target) => {
 		const element = target.nodeType === Node.ELEMENT_NODE ? target : target.parentElement;
 		const top = element?.closest('[data-block]') ?? null;
-		if (top === null || top.getAttribute('contenteditable') !== 'false' && !top.matches(FIELDS) || top.parentElement !== ed.doc.body) {
+		const prose = top !== null && top.getAttribute('contenteditable') !== 'false' && !top.matches(FIELDS);
+		if (top === null || top.parentElement !== ed.doc.body || (prose && element.closest('img, a') === null)) {
 			ed.pickNone();
 			return;
 		}

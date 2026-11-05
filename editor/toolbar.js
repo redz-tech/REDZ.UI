@@ -97,7 +97,8 @@ export const toolbarOf = (ed) => {
 	const paint = (name) => {
 		const doc = ed.doc;
 		const selection = doc.getSelection();
-		if (selection.rangeCount === 0 || selection.isCollapsed) {
+		const top = topAt(doc);
+		if (selection.rangeCount === 0 || selection.isCollapsed || top === null || !ed.formOpen(top)) {
 			return;
 		}
 		const range = selection.getRangeAt(0);

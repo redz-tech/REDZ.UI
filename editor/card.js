@@ -68,23 +68,24 @@ export const cardOf = (ed) => {
 	const props = (body, top, path) => {
 		const node = nodeAt(top, path);
 		const entry = node === undefined ? null : elementOf(node);
-		const list = entry?.props ?? [];
+		const design = ed.formOpen(top);
+		const list = design ? entry?.props ?? [] : [];
 		const table = node?.matches?.('table') ? node : null;
 		const steps = [];
-		if (table !== null) {
+		if (table !== null && ed.placeOpen(top)) {
 			steps.push(stepRow('rows', rowsOf(table).length - (table.tHead === null ? 0 : 1), 0), stepRow('columns', columnsOf(table), 1));
 		}
 		let extra = '';
-		if (table !== null) {
+		if (table !== null && design) {
 			extra += '<div class="editor-prop"><span>' + say('prop.head') + '</span><div class="editor-choice" role="group" aria-label="' + say('prop.head') + '" data-editor-head>' + [['1', 'value.yes'], ['', 'value.no']].map(([value, key]) => '<button type="button" data-value="' + value + '" aria-pressed="' + ((table.tHead !== null ? '1' : '') === value) + '">' + say(key) + '</button>').join('') + '</div></div>';
 		}
-		if (entry?.value) {
+		if (entry?.value && design) {
 			extra += '<div class="editor-prop"><label for="' + ed.id + '-value">' + say('prop.value') + '</label><input class="form-control form-control-sm" id="' + ed.id + '-value" type="number" min="0" value="' + escape(node.getAttribute('value') ?? '') + '"></div>';
 		}
-		if (entry?.image) {
+		if (entry?.image && ed.wordsOpen(top)) {
 			extra += '<div class="editor-prop editor-prop-wide"><label for="' + ed.id + '-alt">' + say('prop.alt') + '</label><input class="form-control form-control-sm" id="' + ed.id + '-alt" value="' + escape(node.getAttribute('alt') ?? '') + '"></div>';
 		}
-		if (entry?.glyph) {
+		if (entry?.glyph && design) {
 			const has = [...node.classList].find((name) => name.startsWith('bi-'));
 			extra += '<div class="editor-icons" role="group" aria-label="' + say('el.icon') + '">' + ICONS.map((name) => '<button type="button" data-editor-icon="' + name + '" aria-label="' + name + '" aria-pressed="' + (has === 'bi-' + name) + '"><i class="bi bi-' + name + '" aria-hidden="true"></i></button>').join('') + '</div>';
 		}
@@ -294,7 +295,7 @@ export const cardOf = (ed) => {
 			return;
 		}
 		const entry = open.path.length > 0 ? elementOf(nodeAt(top, open.path)) : elementOf(top);
-		const tabs = open.path.length > 0 ? ['props'] : [ed.formOpen(top) ? 'props' : null, ed.formOpen(top) ? 'form' : null, 'past', ed.may('lock') ? 'access' : null, ed.may('html') ? 'html' : null, ed.placeOpen(top) ? 'more' : null].filter(Boolean);
+		const tabs = open.path.length > 0 ? ['props'] : [ed.formOpen(top) ? 'props' : null, ed.formOpen(top) && ed.placeOpen(top) ? 'form' : null, 'past', ed.may('lock') ? 'access' : null, ed.may('html') ? 'html' : null, ed.placeOpen(top) ? 'more' : null].filter(Boolean);
 		if (!tabs.includes(open.tab)) {
 			open.tab = tabs[0];
 		}
@@ -321,9 +322,12 @@ export const cardOf = (ed) => {
 			card.style.left = end + 'px';
 			card.style.top = Math.max(8, Math.min(rect.top + frame.top - 40, innerHeight - card.offsetHeight - 8)) + 'px';
 		} else {
-			top.scrollIntoView({block: 'start'});
+			top.scrollIntoView({block: 'nearest'});
+			const shown = top.getBoundingClientRect();
+			const start = shown.top + ed.frame.getBoundingClientRect().top;
+			const foot = innerHeight - card.offsetHeight - 8;
 			card.style.left = Math.max(8, (innerWidth - width) / 2) + 'px';
-			card.style.top = Math.max(8, innerHeight - card.offsetHeight - 8) + 'px';
+			card.style.top = Math.max(8, start + shown.height > foot && start > card.offsetHeight + 16 ? 8 : foot) + 'px';
 		}
 	};
 
