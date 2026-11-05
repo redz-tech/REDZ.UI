@@ -326,7 +326,13 @@ window.REDZ_PROBE = (() => {
 		},
 		// The middle of the walked list's first handle, a point of the viewport.
 		gripPoint(id) {
-			const box = document.querySelector('[data-probe-grip="' + id + '"]').getBoundingClientRect();
+			return this.pointOf(document.querySelector('[data-probe-grip="' + id + '"]'));
+		},
+		// The middle of the element, a point of the viewport - brought to the middle of its scroller first, clear of a
+		// sticky header that the page's own moves can slide it under.
+		pointOf(el) {
+			el.scrollIntoView({block: 'center', inline: 'nearest', behavior: 'instant'});
+			const box = el.getBoundingClientRect();
 			return [Math.round(box.left + box.width / 2), Math.round(box.top + box.height / 2)];
 		},
 		// The middle of the open moves menu's item for the move, a point of the viewport.
@@ -355,8 +361,7 @@ window.REDZ_PROBE = (() => {
 		},
 		// The middle of the walked accordion item's summary, a point of the viewport.
 		summaryPoint(id) {
-			const box = this.walkedItem(id).querySelector(':scope > summary').getBoundingClientRect();
-			return [Math.round(box.left + box.width / 2), Math.round(box.top + box.height / 2)];
+			return this.pointOf(this.walkedItem(id).querySelector(':scope > summary'));
 		},
 		state(kind, id) {
 			const active = document.activeElement;
@@ -441,8 +446,7 @@ window.REDZ_PROBE = (() => {
 		},
 		// The middle of the widget's invoker, a point of the viewport.
 		invokerPoint(id) {
-			const box = document.querySelector('[data-probe-invoker="' + id + '"]').getBoundingClientRect();
-			return [Math.round(box.left + box.width / 2), Math.round(box.top + box.height / 2)];
+			return this.pointOf(document.querySelector('[data-probe-invoker="' + id + '"]'));
 		},
 		// A point of the viewport outside the open dialog, clear of the edges a scrollbar may take: above it, mid-width.
 		outside(id) {
