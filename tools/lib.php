@@ -1,5 +1,5 @@
 <?php
-// lib — what the library's tools share: fetching over HTTPS within a budget, one file out of a gzipped tar, a file of
+// lib - what the library's tools share: fetching over HTTPS within a budget, one file out of a gzipped tar, a file of
 // an npm package checked against its sha512, and every class of the library's stylesheets.
 
 /** The body at $url over HTTPS within two minutes, or an exception naming the address. */
@@ -61,7 +61,7 @@ function TOOL__TarFile(string $tgz, string $name): string
 	throw new RuntimeException('the package has no ' . $name);
 }
 
-/** The file $name of npm package $package at $version (a version or a tag), checked against the registry's sha512 —
+/** The file $name of npm package $package at $version (a version or a tag), checked against the registry's sha512 -
  *  and against $integrity when given; answers the version, the integrity and the file. */
 function TOOL__NpmFile(string $package, string $version, string $name, string $integrity = ''): array
 {
@@ -78,16 +78,25 @@ function TOOL__NpmFile(string $package, string $version, string $name, string $i
 }
 
 /**
- * Every class of the library's stylesheets, unescaped — components, utilities with their prefixes, icons — with the
- * docs page of its stylesheet ('' for the base layers).
+ * Every class of the library's stylesheets, unescaped - components, utilities with their prefixes, icons, and the
+ * packages' as the docs link them (tools/docs.json's "packages") - with the docs page of its stylesheet ('' for the
+ * base layers).
  * @return array<string, string>
  */
 function TOOL__Classes(): array
 {
-	$classes = [];
+	$sheets = [];
 	foreach ([...glob(dirname(__DIR__) . '/css/*.css'), ...glob(dirname(__DIR__) . '/css/components/*.css')] as $file) {
 		$page = basename($file, '.css');
-		$page = in_array($page, ['base', 'reset', 'tokens', 'scales', 'layers', 'index'], true) ? '' : $page;
+		$sheets[$file] = in_array($page, ['base', 'reset', 'tokens', 'scales', 'layers', 'index'], true) ? '' : $page;
+	}
+	foreach (json_decode((string)file_get_contents(__DIR__ . '/docs.json'), true, 512, JSON_THROW_ON_ERROR)['packages'] ?? [] as $page => $files) {
+		foreach (array_filter($files, fn(string $file): bool => str_ends_with($file, '.css')) as $file) {
+			$sheets[dirname(__DIR__) . '/' . $file] = $page;
+		}
+	}
+	$classes = [];
+	foreach ($sheets as $file => $page) {
 		$css = (string)preg_replace(['~/\*.*?\*/~s', '~url\([^)]*\)~'], '', (string)file_get_contents($file));
 		preg_match_all('~([^{}]+)\{~', $css, $selectors);
 		foreach ($selectors[1] as $selector) {

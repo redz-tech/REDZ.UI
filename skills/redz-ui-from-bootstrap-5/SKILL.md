@@ -95,4 +95,5 @@ menus, tabs and dialogs need no start-up call.
 - `references/components.md` - modal, dropdown, offcanvas, forms, tables, toasts, navs, badges, alerts.
 - `assets/map.tsv` - every class of Bootstrap 5.3.8 and its REDZ.UI form: `bs5`, `redz`, `kind`, `scope`, `page`,
   `note`. `page` names the docs page: `https://redz-tech.github.io/REDZ.UI/docs/PAGE.html`.
-- `assets/classes.txt` - every class REDZ.UI has; a class that is not there does not exist.
+- `assets/classes.txt` - every class REDZ.UI has, the packages' among them (a page that uses `calendar` links
+  `dist/redz-ui-calendar.min.css`); a class that is not there does not exist.

@@ -61,7 +61,8 @@ form the page language's plural rules name (`found.one`, `found.few`, …), else
 ## Before you write a class
 
 Check it exists: `grep -x 'CLASS' assets/classes.txt`. A class that is not there does not exist in REDZ.UI - Bootstrap
-6 habits (`md:col-6`, `btn-solid`, `fg-*`) and invented names included.
+6 habits (`md:col-6`, `btn-solid`, `fg-*`) and invented names included. The packages' classes are there too: a page
+that uses one links its package - `chart`, `spark` and `lanes` need `dist/redz-ui-charts.min.css` and .min.js.
 
 ## References - one per page of the docs
 
