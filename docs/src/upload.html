@@ -76,7 +76,7 @@
 });</code></pre>
 
 	<h3>Sent by the page</h3>
-	<p>Each file fires <code>redz:files</code> on the upload with the file, its row, <code>progress(fraction)</code> for the row's bar and a <code>signal</code> its remove button aborts. A page that sends cancels it and answers with a promise: resolved, the row is done; rejected, the page's words show in the row's <code>data-file-error</code>. One file's error leaves the others. Left alone, the file joins the input's files and goes with the form. The example above answers in a second and a half.</p>
+	<p>Each file fires <code>redz:files</code> on the upload with the file, its row, <code>progress(fraction)</code> for the row's bar and a <code>signal</code> its remove button aborts. A page that sends cancels it and answers with a promise: resolved, the row is done; resolved with the id the server gave the file - a string or a number - the row is a stored one from then on, as the server would write it, <code>data-file-stored</code> its id, and its Remove asks the page in <code>redz:remove</code>; rejected, the page's words show in the row's <code>data-file-error</code>. One file's error leaves the others. Left alone, the file joins the input's files and goes with the form. The example above answers in a second and a half.</p>
 	<pre class="docs-code" tabindex="0"><code>document.addEventListener('redz:files', (event) =&gt; {
 	event.preventDefault();
 	const {file, progress, signal} = event.detail;
@@ -84,7 +84,7 @@
 		const request = new XMLHttpRequest();
 		request.open('POST', '/files');
 		request.upload.onprogress = (step) =&gt; progress(step.loaded / step.total);
-		request.onload = () =&gt; (request.status === 200 ? sent() : failed(request.responseText));
+		request.onload = () =&gt; (request.status === 200 ? sent(request.responseText) : failed(request.responseText));
 		request.onerror = () =&gt; failed('The file did not arrive');
 		signal.addEventListener('abort', () =&gt; request.abort());
 		request.send(file);
@@ -92,7 +92,7 @@
 });</code></pre>
 
 	<h3 id="upload-stored-files">Files the server holds</h3>
-	<p>The server writes a row for each file it holds, as the template's, with <code>data-file-stored</code> - its id - and the name of its remove button. Remove asks the page in <code>redz:remove</code> with <code>detail.id</code> and <code>detail.row</code>: a page that cancels it and answers with a promise keeps the row busy until it settles - gone when it resolves, its words said in its <code>data-file-error</code> when it rejects. Left alone, the row goes, and a hidden field of its own with it, so the form sends the ids still kept. After each change the upload fires <code>redz:change</code> with <code>detail.count</code>, the files it holds, stored and new; <code>data-max-files</code> counts the stored ones too. Below, the contract is in use by an invoice.</p>
+	<p>The server writes a row for each file it holds, as the template's, with <code>data-file-stored</code> - its id - and the name of its remove button. Remove asks the page in <code>redz:remove</code> with <code>detail.id</code> and <code>detail.row</code>: a page that cancels it and answers with a promise keeps the row busy until it settles - gone when it resolves, its words said in its <code>data-file-error</code> when it rejects. Left alone, the row goes, and a hidden field of its own with it, so the form sends the ids still kept. After each change the upload fires <code>redz:change</code> with <code>detail.count</code>, the files it holds, stored and new; <code>data-max-files</code> counts the stored ones too. A file the page sends becomes such a row when its <code>redz:files</code> promise resolves with the id the server gave it. Below, the contract is in use by an invoice, and a paper added is sent and kept under the next id.</p>
 	<div class="docs-example docs-example-stack" id="upload-stored">
 		<div class="upload" data-max-files="4">
 			<input class="visually-hidden" id="upload-stored-input" type="file" name="papers[]" accept=".pdf,image/*" multiple tabindex="-1" aria-label="Papers">

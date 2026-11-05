@@ -86,7 +86,7 @@ upload.addEventListener('redz:files', (event) => {
 
 ### Sent by the page
 
-Each file fires `redz:files` on the upload with the file, its row, `progress(fraction)` for the row's bar and a `signal` its remove button aborts. A page that sends cancels it and answers with a promise: resolved, the row is done; rejected, the page's words show in the row's `data-file-error`. One file's error leaves the others. Left alone, the file joins the input's files and goes with the form. The example above answers in a second and a half.
+Each file fires `redz:files` on the upload with the file, its row, `progress(fraction)` for the row's bar and a `signal` its remove button aborts. A page that sends cancels it and answers with a promise: resolved, the row is done; resolved with the id the server gave the file - a string or a number - the row is a stored one from then on, as the server would write it, `data-file-stored` its id, and its Remove asks the page in `redz:remove`; rejected, the page's words show in the row's `data-file-error`. One file's error leaves the others. Left alone, the file joins the input's files and goes with the form. The example above answers in a second and a half.
 
 ```js
 document.addEventListener('redz:files', (event) => {
@@ -96,7 +96,7 @@ document.addEventListener('redz:files', (event) => {
 		const request = new XMLHttpRequest();
 		request.open('POST', '/files');
 		request.upload.onprogress = (step) => progress(step.loaded / step.total);
-		request.onload = () => (request.status === 200 ? sent() : failed(request.responseText));
+		request.onload = () => (request.status === 200 ? sent(request.responseText) : failed(request.responseText));
 		request.onerror = () => failed('The file did not arrive');
 		signal.addEventListener('abort', () => request.abort());
 		request.send(file);
@@ -106,7 +106,7 @@ document.addEventListener('redz:files', (event) => {
 
 ### Files the server holds
 
-The server writes a row for each file it holds, as the template's, with `data-file-stored` - its id - and the name of its remove button. Remove asks the page in `redz:remove` with `detail.id` and `detail.row`: a page that cancels it and answers with a promise keeps the row busy until it settles - gone when it resolves, its words said in its `data-file-error` when it rejects. Left alone, the row goes, and a hidden field of its own with it, so the form sends the ids still kept. After each change the upload fires `redz:change` with `detail.count`, the files it holds, stored and new; `data-max-files` counts the stored ones too. Below, the contract is in use by an invoice.
+The server writes a row for each file it holds, as the template's, with `data-file-stored` - its id - and the name of its remove button. Remove asks the page in `redz:remove` with `detail.id` and `detail.row`: a page that cancels it and answers with a promise keeps the row busy until it settles - gone when it resolves, its words said in its `data-file-error` when it rejects. Left alone, the row goes, and a hidden field of its own with it, so the form sends the ids still kept. After each change the upload fires `redz:change` with `detail.count`, the files it holds, stored and new; `data-max-files` counts the stored ones too. A file the page sends becomes such a row when its `redz:files` promise resolves with the id the server gave it. Below, the contract is in use by an invoice, and a paper added is sent and kept under the next id.
 
 ```html
 <div class="upload" data-max-files="4">

@@ -1138,6 +1138,17 @@ window.REDZ_BEHAVE = (() => {
 			if (counts.length !== before + 1 || counts.at(-1) !== 2) {
 				out.push('a file chosen beside a stored one: redz:change ' + say(counts.slice(before)) + ', not [2]');
 			}
+			await wait(800);
+			const sent = $$(':scope > .upload-list > *', up).at(-1);
+			const id = sent.dataset.fileStored ?? null;
+			const asked = [];
+			up.addEventListener('redz:remove', (event) => asked.push(event.detail.id));
+			$('[data-file-remove]', sent).click();
+			const sending = sent.getAttribute('aria-busy');
+			await wait(800);
+			if (id !== '43' || say(asked) !== say(['43']) || sending !== 'true' || sent.isConnected) {
+				out.push('a file sent and kept by the server under the id 43: the row says data-file-stored ' + say(id) + ', its Remove asked redz:remove for ' + say(asked) + ', the row busy ' + sending + ' and ' + (sent.isConnected ? 'still there' : 'gone'));
+			}
 			const image = $('#upload-image .upload-list > *');
 			const box = $('img', image).getBoundingClientRect();
 			if (getComputedStyle(image).backgroundColor !== 'rgb(255, 255, 255)' || box.height < 100 || getComputedStyle($('#upload-image .upload-zone')).borderStyle.includes('dashed')) {

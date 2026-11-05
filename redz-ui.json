@@ -5019,7 +5019,7 @@
 		"dist/redz-ui-editor.min.js": "sha256-DDtXW8noqF61V6alSckPx/mo9tHMVS2jq1sHsBBEGgU=",
 		"dist/redz-ui-media.min.css": "sha256-DmfTJtc1q7Lo1OuOFGzzewTcE4IuttVAQTmEdfihN30=",
 		"dist/redz-ui.min.css": "sha256-7eKzglu5/H6Iyf6+bmdD6J+Q/xlaN37uSK5YTTwZ/jE=",
-		"dist/redz-ui.min.js": "sha256-gxoVJNDJoSpesE8Gru+irfpQ9W/BwSZ3QyG8VIvBdKY=",
+		"dist/redz-ui.min.js": "sha256-5xKOD/MZL+ttA5KoUlCuflt5myduaXYKZKEcd7SFlCs=",
 		"editor/editor.css": "sha256-YntMo0kAlk2x9o/7+5eufTGAJB/dxG3Iqzpd7NTG0GU=",
 		"editor/editor.js": "sha256-RZChGS7rESXWHifhIF2Ixu2+/vf6V6gVolF7UI9UKbk=",
 		"editor/surface.css": "sha256-KiLrJ7miBVi50GvrG4HZTpKx2c0r3lKrAFb9OyyyuA4=",
@@ -7154,7 +7154,7 @@
 		"js/toggle.js": "sha256-zHvInzeg6U4ZyijBuzgWQmyarI2mFeGeNS985Bf/i48=",
 		"js/tooltips.js": "sha256-Cqm2aXWFomv/iyiKkypIB12t6kHzYcOjjUpqYvPlU/0=",
 		"js/tree.js": "sha256-cMMv8DiKhU/CJawIT+n1Lh1k4sQPT6vQH1GH42Bh8AQ=",
-		"js/upload.js": "sha256-c+MDAbZ267mr1POJQcDptkfge1uyZV22QaADvYlm274=",
+		"js/upload.js": "sha256-PeaUvJZOOCnprEokhzc4OLOXvuI5U/ed6fKrgtAYtKk=",
 		"js/view.js": "sha256-g7/6fNOr9nLgdSBcZChzI5llPCHSvsXco98uHFKPIgQ=",
 		"js/viewer.js": "sha256-/wsFzJ28GGW6pn49wxIdVmKNCnxlnmRqX5v0aTw1XLU=",
 		"media/media.css": "sha256-M4S8ZqXYAgGwf6D+Ucig9v/HkMI3dwitkycGze1XcDU="

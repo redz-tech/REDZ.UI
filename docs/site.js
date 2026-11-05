@@ -206,6 +206,16 @@
 		event.detail.respondWith(new Promise((done, refuse) => setTimeout(() => (event.detail.id === '41' ? refuse('An invoice uses the contract; it stays.') : done()), 600)));
 	});
 
+	// A paper added to them: sent in 600 ms, the server answering the id it keeps it under.
+	let paper = 42;
+	document.addEventListener('redz:files', (event) => {
+		if (!event.target.closest('#upload-stored')) {
+			return;
+		}
+		event.preventDefault();
+		event.detail.respondWith(new Promise((sent) => setTimeout(() => sent(++paper), 600)));
+	});
+
 	// The PIN pad's check: 2580 opens after 600 ms, any other PIN is wrong.
 	document.addEventListener('redz:pin', (event) => {
 		const alert = document.getElementById('pin-unlock-alert');

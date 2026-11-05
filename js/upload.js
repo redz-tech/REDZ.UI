@@ -5,7 +5,8 @@
 // data-file-remove button, by the page's text remove, an image's own preview in its img data-file-preview - and fires
 // the cancelable redz:files (js/answer.js) with the file, the row, progress(fraction) for the row's progress bar and a
 // signal its data-file-remove button aborts: the page sends it; resolved, the row is done - resolved with a file, a
-// resized one say, that file joins the input's files in its place; rejected, the page's words show in its
+// resized one say, that file joins the input's files in its place; with an id, a string or a number, the server holds
+// the file, and the row is a stored one from then on, data-file-stored its id; rejected, the page's words show in its
 // data-file-error, as a refusal shows the page's text file.type, file.size or file.count. Left alone, the file joins
 // the input's files for the form. An input without multiple holds one file: a new one takes the place of the one
 // before, its sending aborted, and of several dropped or pasted only the first is taken. A row the server wrote for a
@@ -147,6 +148,9 @@ const take = (upload, given) => {
 					sync(upload);
 					end(row, 'ready');
 					return;
+				}
+				if ((typeof made === 'string' && made !== '') || (typeof made === 'number' && Number.isFinite(made))) {
+					row.dataset.fileStored = String(made);
 				}
 				end(row, 'done');
 			}, (words) => controller.signal.aborted || end(row, 'failed', String(words ?? '')));
