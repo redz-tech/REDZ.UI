@@ -17,6 +17,8 @@ The ERP's #98: a file the page sends becomes a stored one when the server answer
 ### Checks
 - The behaviour check of stored files sends one and removes it: kept under the id the docs' server answers, its
   Remove asks the page for that id.
+- An opened layer is measured once its box rests two frames running, within a second: in CI's iOS 18 simulator, which
+  has no anchor positioning, the menu guard placed a menu later than two frames after it opened.
 
 ## 0.13.0 - 2026-11-05
 

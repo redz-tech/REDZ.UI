@@ -503,8 +503,18 @@ window.REDZ_PROBE = (() => {
 				await frames();
 				invoker.click();
 				await settle();
+				// The layer at rest where it is placed: its box the same two frames running - a slow simulator's menu guard
+				// may place it a frame or more after it opens - or a second.
+				let r = resting(target);
+				for (const until = performance.now() + 1000; performance.now() < until;) {
+					await frames();
+					const now = resting(target);
+					if (['left', 'top', 'right', 'bottom'].every((side) => Math.abs(now[side] - r[side]) < 0.5)) {
+						break;
+					}
+					r = now;
+				}
 				const open = command === 'show-modal' ? target.open : target.matches(':popover-open');
-				const r = resting(target);
 				const q = invoker.getBoundingClientRect();
 				const inside = r.left >= -1 && r.top >= -1 && r.right <= root.clientWidth + 1 && r.bottom <= innerHeight + 1;
 				const near = Math.min(Math.abs(r.top - q.bottom), Math.abs(q.top - r.bottom)) <= 12;
