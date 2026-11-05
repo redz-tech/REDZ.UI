@@ -38,6 +38,16 @@ The plain `badge` is neutral, for a status that needs no attention. `badge-subtl
 <span class="badge badge-inverse">Company wiped</span>
 ```
 
+### Sizes
+
+`badge-sm` for a mark inside a dense row, `badge-lg` for one that stands on its own.
+
+```html
+<span class="badge badge-subtle-primary badge-sm">Small</span>
+<span class="badge badge-subtle-primary">Regular</span>
+<span class="badge badge-subtle-primary badge-lg">Large</span>
+```
+
 ### Beside other things
 
 A count in a navigation link, a status in a heading.
@@ -59,7 +69,7 @@ A count in a navigation link, a status in a heading.
 
 From [`css/components/badge.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/badge.css). It declares `--redz-badge-bg`, `--redz-badge-fg` on its root, never on rows or items.
 
-It reads the theme's `--redz-bg-hover`, `--redz-text-muted`, `--redz-fs-12`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-text`, `--redz-bg`, `--redz-primary-subtle`, `--redz-secondary-subtle`, `--redz-success-subtle`, `--redz-danger-subtle`, `--redz-warning-subtle`, `--redz-info-subtle`.
+It reads the theme's `--redz-bg-hover`, `--redz-text-muted`, `--redz-fs-12`, `--redz-fs-11`, `--redz-fs-14`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-text`, `--redz-bg`, `--redz-primary-subtle`, `--redz-secondary-subtle`, `--redz-success-subtle`, `--redz-danger-subtle`, `--redz-warning-subtle`, `--redz-info-subtle`.
 
 ## From Bootstrap 5.3
 

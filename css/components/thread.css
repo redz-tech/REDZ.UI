@@ -100,6 +100,15 @@
 		display: inline-flex;
 	}
 
+	.thread-message:has(.inline-edit-form:not([hidden])) {
+		inline-size: 100%;
+	}
+
+	.thread-message:has(.inline-edit-form:not([hidden])) .thread-body {
+		flex: 1;
+		justify-items: stretch;
+	}
+
 	.thread-message .inline-edit-form {
 		inline-size: min(36rem, 100%);
 	}

@@ -27,7 +27,7 @@ REDZ.ui.status(line, fetch('/excursions/12', {method: 'PUT', body}).then((answer
 
 ### Words of the page
 
-`REDZ.ui.status(line, {tone, text})` says the page's own words at once with the tone's icon: `success` and `info` fade, `warning` and `danger` stay. A later call takes the line over from an earlier one.
+`REDZ.ui.status(line, {tone, text})` says the page's own words at once with the tone's icon: `success` and `info` fade, `warning` and `danger` stay. A later call takes the line over from an earlier one, and `REDZ.ui.status(line, null)` empties the line, for a next step that must not show an old refusal.
 
 ```html
 <div class="hstack flex-wrap gap-12">

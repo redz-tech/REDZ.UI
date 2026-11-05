@@ -38,6 +38,17 @@
 		min-inline-size: 0;
 	}
 
+	.alert-sm {
+		padding: var(--redz-space-8) var(--redz-space-12);
+		border-radius: var(--redz-radius-8);
+		font-size: var(--redz-fs-14);
+	}
+
+	.alert-lg {
+		padding: var(--redz-space-16) var(--redz-space-20);
+		font-size: var(--redz-fs-16);
+	}
+
 	.alert-primary {
 		--redz-alert-bg: var(--redz-primary-subtle);
 		--redz-alert-icon: var(--redz-primary);

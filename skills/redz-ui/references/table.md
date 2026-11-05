@@ -86,9 +86,9 @@ A list of records: a title that links to the record, a line under it, a note whe
 </table>
 ```
 
-### Compact rows
+### Row sizes
 
-`data-density="compact"` tightens the rows and the controls of the element it is on and of everything inside it: a table, the card that holds it, a region, or the whole page on `<html>`. A compact table can stand beside a normal one on the same screen. Bootstrap 5 calls it `table-sm`.
+`data-density="compact"` tightens the rows and the controls of the element it is on and of everything inside it: a table, the card that holds it, a region, or the whole page on `<html>`. A compact table can stand beside a normal one on the same screen. Bootstrap 5 calls it `table-sm`. `data-density="comfortable"` and `data-density="spacious"` open the rows up the other way, for a short table that is the point of a page.
 
 ```html
 <table class="table table-bordered" data-density="compact" aria-label="Seasons on Samui, compact">
@@ -97,6 +97,13 @@ A list of records: a title that links to the record, a line under it, a note whe
 		<tr><td>Dry</td><td>January to April</td><td>Calm</td></tr>
 		<tr><td>Hot</td><td>May to August</td><td>Calm</td></tr>
 		<tr><td>Rainy</td><td>September to December</td><td>Waves</td></tr>
+	</tbody>
+</table>
+<table class="table table-bordered" data-density="spacious" aria-label="Seasons on Samui, spacious">
+	<thead><tr><th scope="col">Season</th><th scope="col">Months</th><th scope="col">The sea</th></tr></thead>
+	<tbody>
+		<tr><td>Dry</td><td>January to April</td><td>Calm</td></tr>
+		<tr><td>Hot</td><td>May to August</td><td>Calm</td></tr>
 	</tbody>
 </table>
 ```
@@ -230,7 +237,7 @@ A row's tone marks what needs attention: `table-danger` failed, `table-warning` 
 
 From [`css/components/table.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css). It declares `--redz-row-tint`, `--redz-row-mark` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-8`, `--redz-space-12`, `--redz-border`, `--redz-bg`, `--redz-text-muted`, `--redz-fs-12`, `--redz-row-pad`, `--redz-text`, `--redz-bg-page`, `--redz-border-strong`, `--redz-bg-hover`, `--redz-radius-12`, `--redz-space-16`, `--redz-font-mono`, `--redz-space-4`, `--redz-primary`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-primary-subtle`.
+It reads the theme's `--redz-space-8`, `--redz-row-pad`, `--redz-space-12`, `--redz-border`, `--redz-bg`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-bg-page`, `--redz-border-strong`, `--redz-bg-hover`, `--redz-radius-12`, `--redz-space-16`, `--redz-font-mono`, `--redz-space-4`, `--redz-primary`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-primary-subtle`.
 
 ## From Bootstrap 5.3
 

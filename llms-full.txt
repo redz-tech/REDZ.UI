@@ -5645,9 +5645,9 @@ A list of records: a title that links to the record, a line under it, a note whe
 </table>
 ```
 
-### Compact rows
+### Row sizes
 
-`data-density="compact"` tightens the rows and the controls of the element it is on and of everything inside it: a table, the card that holds it, a region, or the whole page on `<html>`. A compact table can stand beside a normal one on the same screen. Bootstrap 5 calls it `table-sm`.
+`data-density="compact"` tightens the rows and the controls of the element it is on and of everything inside it: a table, the card that holds it, a region, or the whole page on `<html>`. A compact table can stand beside a normal one on the same screen. Bootstrap 5 calls it `table-sm`. `data-density="comfortable"` and `data-density="spacious"` open the rows up the other way, for a short table that is the point of a page.
 
 ```html
 <table class="table table-bordered" data-density="compact" aria-label="Seasons on Samui, compact">
@@ -5656,6 +5656,13 @@ A list of records: a title that links to the record, a line under it, a note whe
 		<tr><td>Dry</td><td>January to April</td><td>Calm</td></tr>
 		<tr><td>Hot</td><td>May to August</td><td>Calm</td></tr>
 		<tr><td>Rainy</td><td>September to December</td><td>Waves</td></tr>
+	</tbody>
+</table>
+<table class="table table-bordered" data-density="spacious" aria-label="Seasons on Samui, spacious">
+	<thead><tr><th scope="col">Season</th><th scope="col">Months</th><th scope="col">The sea</th></tr></thead>
+	<tbody>
+		<tr><td>Dry</td><td>January to April</td><td>Calm</td></tr>
+		<tr><td>Hot</td><td>May to August</td><td>Calm</td></tr>
 	</tbody>
 </table>
 ```
@@ -5789,7 +5796,7 @@ A row's tone marks what needs attention: `table-danger` failed, `table-warning` 
 
 From [`css/components/table.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css). It declares `--redz-row-tint`, `--redz-row-mark` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-8`, `--redz-space-12`, `--redz-border`, `--redz-bg`, `--redz-text-muted`, `--redz-fs-12`, `--redz-row-pad`, `--redz-text`, `--redz-bg-page`, `--redz-border-strong`, `--redz-bg-hover`, `--redz-radius-12`, `--redz-space-16`, `--redz-font-mono`, `--redz-space-4`, `--redz-primary`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-primary-subtle`.
+It reads the theme's `--redz-space-8`, `--redz-row-pad`, `--redz-space-12`, `--redz-border`, `--redz-bg`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-bg-page`, `--redz-border-strong`, `--redz-bg-hover`, `--redz-radius-12`, `--redz-space-16`, `--redz-font-mono`, `--redz-space-4`, `--redz-primary`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-primary-subtle`.
 
 ## From Bootstrap 5.3
 
@@ -5942,6 +5949,16 @@ The plain `badge` is neutral, for a status that needs no attention. `badge-subtl
 <span class="badge badge-inverse">Company wiped</span>
 ```
 
+### Sizes
+
+`badge-sm` for a mark inside a dense row, `badge-lg` for one that stands on its own.
+
+```html
+<span class="badge badge-subtle-primary badge-sm">Small</span>
+<span class="badge badge-subtle-primary">Regular</span>
+<span class="badge badge-subtle-primary badge-lg">Large</span>
+```
+
 ### Beside other things
 
 A count in a navigation link, a status in a heading.
@@ -5963,7 +5980,7 @@ A count in a navigation link, a status in a heading.
 
 From [`css/components/badge.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/badge.css). It declares `--redz-badge-bg`, `--redz-badge-fg` on its root, never on rows or items.
 
-It reads the theme's `--redz-bg-hover`, `--redz-text-muted`, `--redz-fs-12`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-text`, `--redz-bg`, `--redz-primary-subtle`, `--redz-secondary-subtle`, `--redz-success-subtle`, `--redz-danger-subtle`, `--redz-warning-subtle`, `--redz-info-subtle`.
+It reads the theme's `--redz-bg-hover`, `--redz-text-muted`, `--redz-fs-12`, `--redz-fs-11`, `--redz-fs-14`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-text`, `--redz-bg`, `--redz-primary-subtle`, `--redz-secondary-subtle`, `--redz-success-subtle`, `--redz-danger-subtle`, `--redz-warning-subtle`, `--redz-info-subtle`.
 
 ## From Bootstrap 5.3
 
@@ -6864,6 +6881,15 @@ An alert whose words come after an action - a refused sign-in, a wrong code - is
 <div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="alert-fill">Fill the alert</button></div>
 ```
 
+### Sizes
+
+`alert-sm` for a note inside a card or a form, `alert-lg` for the one message a page is about.
+
+```html
+<div class="alert alert-info alert-sm"><i class="bi bi-info-circle" aria-hidden="true"></i><div>Prices include the park fee.</div></div>
+<div class="alert alert-info alert-lg"><i class="bi bi-info-circle" aria-hidden="true"></i><div>Prices include the park fee.</div></div>
+```
+
 ## Accessibility
 
 - An alert that is on the page from the start is plain content - no live region. One that appears after an action and must be heard goes in a live region, or is a toast.
@@ -6874,7 +6900,7 @@ An alert whose words come after an action - a refused sign-in, a wrong code - is
 
 From [`css/components/alert.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/alert.css). It declares `--redz-alert-bg`, `--redz-alert-icon` on its root, never on rows or items.
 
-It reads the theme's `--redz-secondary-subtle`, `--redz-secondary`, `--redz-space-8`, `--redz-space-12`, `--redz-space-16`, `--redz-radius-12`, `--redz-text`, `--redz-primary-subtle`, `--redz-primary`, `--redz-success-subtle`, `--redz-success`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-info-subtle`, `--redz-info`.
+It reads the theme's `--redz-secondary-subtle`, `--redz-secondary`, `--redz-space-8`, `--redz-space-12`, `--redz-space-16`, `--redz-radius-12`, `--redz-text`, `--redz-radius-8`, `--redz-fs-14`, `--redz-space-20`, `--redz-fs-16`, `--redz-primary-subtle`, `--redz-primary`, `--redz-success-subtle`, `--redz-success`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-info-subtle`, `--redz-info`.
 
 ## From Bootstrap 5.3
 
@@ -7214,7 +7240,7 @@ REDZ.ui.status(line, fetch('/excursions/12', {method: 'PUT', body}).then((answer
 
 ### Words of the page
 
-`REDZ.ui.status(line, {tone, text})` says the page's own words at once with the tone's icon: `success` and `info` fade, `warning` and `danger` stay. A later call takes the line over from an earlier one.
+`REDZ.ui.status(line, {tone, text})` says the page's own words at once with the tone's icon: `success` and `info` fade, `warning` and `danger` stay. A later call takes the line over from an earlier one, and `REDZ.ui.status(line, null)` empties the line, for a next step that must not show an old refusal.
 
 ```html
 <div class="hstack flex-wrap gap-12">

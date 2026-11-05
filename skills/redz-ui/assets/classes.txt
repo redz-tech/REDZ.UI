@@ -322,7 +322,9 @@ accordion-item
 alert
 alert-danger
 alert-info
+alert-lg
 alert-primary
+alert-sm
 alert-success
 alert-warning
 align-baseline
@@ -365,8 +367,10 @@ badge
 badge-danger
 badge-info
 badge-inverse
+badge-lg
 badge-primary
 badge-secondary
+badge-sm
 badge-subtle-danger
 badge-subtle-info
 badge-subtle-primary
@@ -4286,6 +4290,7 @@ translate-middle-y
 tree
 tree-actions
 tree-group
+tree-item
 tree-row
 tree-toggle
 upload

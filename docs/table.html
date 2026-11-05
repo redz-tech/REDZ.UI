@@ -273,8 +273,8 @@
 	&lt;/tbody&gt;
 &lt;/table&gt;</code></pre></div>
 
-					<h3>Compact rows</h3>
-					<p><code>data-density="compact"</code> tightens the rows and the controls of the element it is on and of everything inside it: a table, the card that holds it, a region, or the whole page on <code>&lt;html&gt;</code>. A compact table can stand beside a normal one on the same screen. Bootstrap 5 calls it <code>table-sm</code>.</p>
+					<h3>Row sizes</h3>
+					<p><code>data-density="compact"</code> tightens the rows and the controls of the element it is on and of everything inside it: a table, the card that holds it, a region, or the whole page on <code>&lt;html&gt;</code>. A compact table can stand beside a normal one on the same screen. Bootstrap 5 calls it <code>table-sm</code>. <code>data-density="comfortable"</code> and <code>data-density="spacious"</code> open the rows up the other way, for a short table that is the point of a page.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="table-compact">
 						<table class="table table-bordered" data-density="compact" aria-label="Seasons on Samui, compact">
 							<thead><tr><th scope="col">Season</th><th scope="col">Months</th><th scope="col">The sea</th></tr></thead>
@@ -284,6 +284,13 @@
 								<tr><td>Rainy</td><td>September to December</td><td>Waves</td></tr>
 							</tbody>
 						</table>
+						<table class="table table-bordered" data-density="spacious" aria-label="Seasons on Samui, spacious">
+							<thead><tr><th scope="col">Season</th><th scope="col">Months</th><th scope="col">The sea</th></tr></thead>
+							<tbody>
+								<tr><td>Dry</td><td>January to April</td><td>Calm</td></tr>
+								<tr><td>Hot</td><td>May to August</td><td>Calm</td></tr>
+							</tbody>
+						</table>
 					</div>
 					<pre class="docs-code" tabindex="0"><code>&lt;table class="table table-bordered" data-density="compact" aria-label="Seasons on Samui, compact"&gt;
 	&lt;thead&gt;&lt;tr&gt;&lt;th scope="col"&gt;Season&lt;/th&gt;&lt;th scope="col"&gt;Months&lt;/th&gt;&lt;th scope="col"&gt;The sea&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
@@ -291,6 +298,13 @@
 		&lt;tr&gt;&lt;td&gt;Dry&lt;/td&gt;&lt;td&gt;January to April&lt;/td&gt;&lt;td&gt;Calm&lt;/td&gt;&lt;/tr&gt;
 		&lt;tr&gt;&lt;td&gt;Hot&lt;/td&gt;&lt;td&gt;May to August&lt;/td&gt;&lt;td&gt;Calm&lt;/td&gt;&lt;/tr&gt;
 		&lt;tr&gt;&lt;td&gt;Rainy&lt;/td&gt;&lt;td&gt;September to December&lt;/td&gt;&lt;td&gt;Waves&lt;/td&gt;&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;table class="table table-bordered" data-density="spacious" aria-label="Seasons on Samui, spacious"&gt;
+	&lt;thead&gt;&lt;tr&gt;&lt;th scope="col"&gt;Season&lt;/th&gt;&lt;th scope="col"&gt;Months&lt;/th&gt;&lt;th scope="col"&gt;The sea&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+	&lt;tbody&gt;
+		&lt;tr&gt;&lt;td&gt;Dry&lt;/td&gt;&lt;td&gt;January to April&lt;/td&gt;&lt;td&gt;Calm&lt;/td&gt;&lt;/tr&gt;
+		&lt;tr&gt;&lt;td&gt;Hot&lt;/td&gt;&lt;td&gt;May to August&lt;/td&gt;&lt;td&gt;Calm&lt;/td&gt;&lt;/tr&gt;
 	&lt;/tbody&gt;
 &lt;/table&gt;</code></pre></div>
 
@@ -505,7 +519,7 @@
 						<section class="vstack gap-12" aria-labelledby="table-tokens">
 							<h2 id="table-tokens">Tokens</h2>
 							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css"><code>css/components/table.css</code></a>. It declares <code>--redz-row-tint</code>, <code>--redz-row-mark</code> on its root, never on rows or items.</p>
-							<p>It reads the theme's <code>--redz-space-8</code>, <code>--redz-space-12</code>, <code>--redz-border</code>, <code>--redz-bg</code>, <code>--redz-text-muted</code>, <code>--redz-fs-12</code>, <code>--redz-row-pad</code>, <code>--redz-text</code>, <code>--redz-bg-page</code>, <code>--redz-border-strong</code>, <code>--redz-bg-hover</code>, <code>--redz-radius-12</code>, <code>--redz-space-16</code>, <code>--redz-font-mono</code>, <code>--redz-space-4</code>, <code>--redz-primary</code>, <code>--redz-danger-subtle</code>, <code>--redz-danger</code>, <code>--redz-warning-subtle</code>, <code>--redz-warning</code>, <code>--redz-primary-subtle</code>.</p>
+							<p>It reads the theme's <code>--redz-space-8</code>, <code>--redz-row-pad</code>, <code>--redz-space-12</code>, <code>--redz-border</code>, <code>--redz-bg</code>, <code>--redz-text-muted</code>, <code>--redz-fs-12</code>, <code>--redz-text</code>, <code>--redz-bg-page</code>, <code>--redz-border-strong</code>, <code>--redz-bg-hover</code>, <code>--redz-radius-12</code>, <code>--redz-space-16</code>, <code>--redz-font-mono</code>, <code>--redz-space-4</code>, <code>--redz-primary</code>, <code>--redz-danger-subtle</code>, <code>--redz-danger</code>, <code>--redz-warning-subtle</code>, <code>--redz-warning</code>, <code>--redz-primary-subtle</code>.</p>
 						</section>
 
 						<section class="vstack gap-12" aria-labelledby="table-from-bootstrap">

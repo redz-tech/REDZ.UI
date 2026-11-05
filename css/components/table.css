@@ -9,7 +9,7 @@
 		position: sticky;
 		inset-block-start: 3.25rem;
 		z-index: 1;
-		padding: var(--redz-space-8) var(--redz-space-12);
+		padding: max(var(--redz-space-8), calc(var(--redz-row-pad) - 0.125rem)) var(--redz-space-12);
 		border-block-end: 1px solid var(--redz-border);
 		background: var(--redz-bg);
 		color: var(--redz-text-muted);

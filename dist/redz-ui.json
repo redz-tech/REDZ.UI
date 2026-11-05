@@ -331,7 +331,9 @@
 		"alert",
 		"alert-danger",
 		"alert-info",
+		"alert-lg",
 		"alert-primary",
+		"alert-sm",
 		"alert-success",
 		"alert-warning",
 		"align-baseline",
@@ -374,8 +376,10 @@
 		"badge-danger",
 		"badge-info",
 		"badge-inverse",
+		"badge-lg",
 		"badge-primary",
 		"badge-secondary",
+		"badge-sm",
 		"badge-subtle-danger",
 		"badge-subtle-info",
 		"badge-subtle-primary",
@@ -4295,6 +4299,7 @@
 		"tree",
 		"tree-actions",
 		"tree-group",
+		"tree-item",
 		"tree-row",
 		"tree-toggle",
 		"upload",
@@ -4826,10 +4831,10 @@
 		"css/redz-ui-editor-surface.min.css": "sha256-LKzfcJ8rkkVBvou4SXD0CQqTbm7dFIkklNNWVMPDBKo=",
 		"css/redz-ui-editor.min.css": "sha256-iZG2JiPs1FdF+AwBfCScuvf2tvIm78rh231/es7gVuc=",
 		"css/redz-ui-media.min.css": "sha256-DmfTJtc1q7Lo1OuOFGzzewTcE4IuttVAQTmEdfihN30=",
-		"css/redz-ui.min.css": "sha256-vsVhGdQPNIc/vOmq0QlHpWRl+eF5nOBMt76ZdditPAA=",
+		"css/redz-ui.min.css": "sha256-yTjE8Y7GKQOPF13oNXcRD8nAbnCSislftwxogFCm/pc=",
 		"js/floor.min.js": "sha256-aZC0cy4S2whpQZieB1WW0mLdyQd6ByCvRGGSSW4/z5E=",
 		"js/redz-ui-charts.min.js": "sha256-wvCntsCfFz2C3mmNvxo4pB/WuzM9J1BZo8ZhJciOb80=",
 		"js/redz-ui-editor.min.js": "sha256-RjNE4RLxbS+jJ9PIH99Tx3NJTJelKQXcG2bHISj8H1U=",
-		"js/redz-ui.min.js": "sha256-Dk88coZho4vuSQ7kMDDJLxyVkg+D6rMfBeZHkLrmBBo="
+		"js/redz-ui.min.js": "sha256-ZeSxbaW53jHr6mdblIojzoQNuyb5TNG6IVbXLAry4rY="
 	}
 }

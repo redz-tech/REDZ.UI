@@ -19,6 +19,17 @@
 		print-color-adjust: exact;
 	}
 
+	.badge-sm {
+		padding: 0 0.375rem;
+		font-size: var(--redz-fs-11);
+	}
+
+	.badge-lg {
+		padding: 0.25rem 0.625rem;
+		font-size: var(--redz-fs-14);
+		line-height: 1.25rem;
+	}
+
 	.badge-primary {
 		--redz-badge-bg: var(--redz-primary);
 		--redz-badge-fg: var(--redz-primary-contrast);

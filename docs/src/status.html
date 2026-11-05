@@ -21,7 +21,7 @@ REDZ.ui.status(line, fetch('/excursions/12', {method: 'PUT', body}).then((answer
 }));</code></pre>
 
 	<h3>Words of the page</h3>
-	<p><code>REDZ.ui.status(line, {tone, text})</code> says the page's own words at once with the tone's icon: <code>success</code> and <code>info</code> fade, <code>warning</code> and <code>danger</code> stay. A later call takes the line over from an earlier one.</p>
+	<p><code>REDZ.ui.status(line, {tone, text})</code> says the page's own words at once with the tone's icon: <code>success</code> and <code>info</code> fade, <code>warning</code> and <code>danger</code> stay. A later call takes the line over from an earlier one, and <code>REDZ.ui.status(line, null)</code> empties the line, for a next step that must not show an old refusal.</p>
 	<div class="docs-example" id="status-words">
 		<div class="hstack flex-wrap gap-12">
 			<button class="btn" type="button" data-docs-run="status-words">Publish</button>

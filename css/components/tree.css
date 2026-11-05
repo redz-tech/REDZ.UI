@@ -6,6 +6,10 @@
 		list-style: none;
 	}
 
+	.tree-item {
+		min-inline-size: 0;
+	}
+
 	.tree-group {
 		margin-inline-start: var(--redz-space-12);
 		padding-inline-start: var(--redz-space-8);

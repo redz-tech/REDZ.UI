@@ -81,6 +81,14 @@
 		--redz-row-pad: 0.375rem;
 	}
 
+	[data-density="comfortable"] {
+		--redz-row-pad: 0.875rem;
+	}
+
+	[data-density="spacious"] {
+		--redz-row-pad: 1.125rem;
+	}
+
 	[data-theme="light"] {
 		color-scheme: light;
 		--redz-shadow-strength: 1;

@@ -39,6 +39,15 @@ An alert whose words come after an action - a refused sign-in, a wrong code - is
 <div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="alert-fill">Fill the alert</button></div>
 ```
 
+### Sizes
+
+`alert-sm` for a note inside a card or a form, `alert-lg` for the one message a page is about.
+
+```html
+<div class="alert alert-info alert-sm"><i class="bi bi-info-circle" aria-hidden="true"></i><div>Prices include the park fee.</div></div>
+<div class="alert alert-info alert-lg"><i class="bi bi-info-circle" aria-hidden="true"></i><div>Prices include the park fee.</div></div>
+```
+
 ## Accessibility
 
 - An alert that is on the page from the start is plain content - no live region. One that appears after an action and must be heard goes in a live region, or is a toast.
@@ -49,7 +58,7 @@ An alert whose words come after an action - a refused sign-in, a wrong code - is
 
 From [`css/components/alert.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/alert.css). It declares `--redz-alert-bg`, `--redz-alert-icon` on its root, never on rows or items.
 
-It reads the theme's `--redz-secondary-subtle`, `--redz-secondary`, `--redz-space-8`, `--redz-space-12`, `--redz-space-16`, `--redz-radius-12`, `--redz-text`, `--redz-primary-subtle`, `--redz-primary`, `--redz-success-subtle`, `--redz-success`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-info-subtle`, `--redz-info`.
+It reads the theme's `--redz-secondary-subtle`, `--redz-secondary`, `--redz-space-8`, `--redz-space-12`, `--redz-space-16`, `--redz-radius-12`, `--redz-text`, `--redz-radius-8`, `--redz-fs-14`, `--redz-space-20`, `--redz-fs-16`, `--redz-primary-subtle`, `--redz-primary`, `--redz-success-subtle`, `--redz-success`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-info-subtle`, `--redz-info`.
 
 ## From Bootstrap 5.3
 

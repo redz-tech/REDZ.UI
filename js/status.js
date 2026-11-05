@@ -2,7 +2,8 @@
 // page's text "status.saving" with a spinner once it waits past 400 ms, then "status.saved" with a check, which fades
 // after three seconds, or the rejection's own message with a danger icon, which stays - and answers the promise.
 // REDZ.ui.status(line, {tone, text}) says the words at once with the tone's icon: success and info fade, warning and
-// danger stay. Each line holds a polite status, made at load, that says each message once; a later call wins.
+// danger stay; REDZ.ui.status(line, null) empties the line. Each line holds a polite status, made at load, that says each
+// message once; a later call wins.
 import {text} from './text.js';
 
 const WAIT = 400;
@@ -63,10 +64,16 @@ const put = (line, call, tone, words) => {
 	}
 };
 
-/** Says in the line what the promise does, or the words of {tone, text}; answers the promise. */
+/** Says in the line what the promise does, or the words of {tone, text}, or empties it for null; answers the promise. */
 export const status = (line, what) => {
 	const call = (calls.get(line) ?? 0) + 1;
 	calls.set(line, call);
+	if (what === null) {
+		statusOf(line).region.replaceChildren();
+		delete line.dataset.fading;
+		delete line.dataset.tone;
+		return Promise.resolve();
+	}
 	if (typeof what?.then !== 'function') {
 		put(line, call, what?.tone ?? 'info', what?.text ?? '');
 		return Promise.resolve();
