@@ -33,7 +33,7 @@ const BUILD_RIGHTS = ['html', 'ai', 'design', 'structure', 'facts', 'lock', 'rev
 // The stylesheets the passport's tokens are read from.
 const BUILD_STYLES = ['css/*.css', 'css/components/*.css', 'charts/*.css', 'calendar/*.css', 'media/*.css', 'editor/*.css'];
 // The files of dist/ the passport hashes, relative to dist/.
-const BUILD_ARCHIVED = ['css/*.min.css', 'js/*.min.js', 'LICENSE', 'NOTICE'];
+const BUILD_ARCHIVED = ['css/*.min.css', 'js/*.min.js', 'LICENSE', 'LICENSE-editor', 'NOTICE'];
 // The icon pack: Bootstrap Icons as published, by the version it follows; a change of icons/ is a new version.
 const BUILD_ICONS = ['name' => 'redz-ui-icons', 'version' => '1.13.2', 'css' => 'css/icons.min.css'];
 const BUILD_ICONS_PASSPORT = 'redz-ui-icons.json';
@@ -266,7 +266,8 @@ function BUILD__Package(string $dist): string
 {
 	$source = BUILD_PACKAGE_SOURCES[$dist];
 	$files = str_ends_with($source, '.css') ? [$source] : BUILD__Pulled($source);
-	return MIN__Bundle(BUILD_ROOT, $files, '/*! REDZ.UI · MIT · https://github.com/redz-tech/REDZ.UI - built by tools/build.php from ' . $source . ' */')[0];
+	$license = str_starts_with($source, 'editor/') ? 'the editor © 2026 Red Z Group · PolyForm Strict 1.0.0, see LICENSE-editor: noncommercial use only, no changes, no redistribution' : 'MIT';
+	return MIN__Bundle(BUILD_ROOT, $files, '/*! REDZ.UI · ' . $license . ' · https://github.com/redz-tech/REDZ.UI - built by tools/build.php from ' . $source . ' */')[0];
 }
 
 /** js/floor.min.js: a classic script for the page's head, before the stylesheets, that marks <html data-floor="below">
@@ -319,7 +320,7 @@ function BUILD__Passport(): string
 		'commands' => $list($sorted($commands[1])),
 		'texts' => $list($sorted(array_map(fn(string $key, string $kind): string => $kind === 'count' ? $key . '.other' : $key, array_keys($texts), $texts))),
 		'plurals' => $list($sorted(array_keys(array_filter($texts, fn(string $kind): bool => $kind === 'count')))),
-		'editor' => $encode([...BUILD_EDITOR, 'rights' => BUILD_RIGHTS, 'catalog' => BUILD__Catalog()['elements'], 'texts' => $sorted(array_map(fn(string $key): string => 'editor.' . $key, array_keys((array)BUILD__Vocabulary()->editor->texts)))]),
+		'editor' => $encode([...BUILD_EDITOR, 'license' => 'PolyForm-Strict-1.0.0', 'rights' => BUILD_RIGHTS, 'catalog' => BUILD__Catalog()['elements'], 'write' => BUILD__WriteSchema(), 'texts' => $sorted(array_map(fn(string $key): string => 'editor.' . $key, array_keys((array)BUILD__Vocabulary()->editor->texts)))]),
 		'packages' => $encode(BUILD_PACKAGES),
 		'files' => "{\n\t\t" . implode(",\n\t\t", array_map(fn(string $file, string $hash): string => $encode($file) . ': ' . $encode($hash), array_keys($files), $files)) . "\n\t}",
 	];
@@ -362,7 +363,7 @@ function BUILD__TextsCheck(stdClass $vocab): array
 		}
 	}
 	foreach ($keys as $key => $kind) {
-		if (preg_match('~^(el|prop|value|tone|tab|form|lens|lock|rows|columns)\.~', (string)$key) !== 1 && !str_contains($editor, '\'' . $key . '\'')) {
+		if (preg_match('~^(el|prop|value|tone|tab|form|lens|lock|rows|columns|ai|pair|who)\.~', (string)$key) !== 1 && !str_contains($editor, '\'' . $key . '\'')) {
 			$wrong[] = 'tools/vocabulary.json declares the editor text "' . $key . '", which the editor never names';
 		}
 		$word = 'editor.' . $key . ($kind === 'count' ? '.other' : '');
@@ -380,6 +381,19 @@ function BUILD__TextsCheck(stdClass $vocab): array
 function BUILD__Catalog(): array
 {
 	return json_decode((string)file_get_contents(__DIR__ . '/catalog.json'), true, 512, JSON_THROW_ON_ERROR);
+}
+
+/**
+ * The one flat block an AI answers in, as a JSON schema: what a host gives its model, in the passport as editor.write.
+ * @return array<string, mixed>
+ */
+function BUILD__WriteSchema(): array
+{
+	$write = BUILD__Catalog()['write'];
+	$strings = ['type' => 'array', 'items' => ['type' => 'string']];
+	$item = ['type' => 'object', 'properties' => ['title' => ['type' => 'string'], 'text' => ['type' => 'string']], 'required' => ['title', 'text'], 'additionalProperties' => false];
+	$block = ['kind' => ['type' => 'string', 'enum' => $write['kinds']], 'level' => ['type' => 'integer', 'enum' => $write['levels']], 'tone' => ['type' => 'string', 'enum' => $write['tones']], 'size' => ['type' => 'string', 'enum' => $write['sizes']], 'text' => ['type' => 'string'], 'href' => ['type' => 'string'], 'head' => $strings, 'rows' => ['type' => 'array', 'items' => $strings], 'items' => ['type' => 'array', 'items' => $item]];
+	return ['type' => 'object', 'properties' => ['blocks' => ['type' => 'array', 'items' => ['type' => 'object', 'properties' => $block, 'required' => array_keys($block), 'additionalProperties' => false]]], 'required' => ['blocks'], 'additionalProperties' => false];
 }
 
 /** editor/catalog.js: what the editor reads of the catalog. */
@@ -432,6 +446,12 @@ function BUILD__CatalogCheck(): array
 			}
 		}
 	}
+	$flat = (string)file_get_contents(BUILD_ROOT . '/editor/flat.js');
+	foreach ($catalog['write']['kinds'] as $kind) {
+		if (preg_match('~^\t' . preg_quote($kind, '~') . ': \(~m', $flat) !== 1) {
+			$wrong[] = 'tools/catalog.json lets an AI answer the kind ' . $kind . ', which editor/flat.js does not write';
+		}
+	}
 	foreach ($catalog['covers'] as $component) {
 		preg_match_all('~\.(' . preg_quote(explode('-', $component)[0], '~') . '-[a-z0-9-]+)~', (string)file_get_contents(BUILD_ROOT . '/css/components/' . $component . '.css'), $found);
 		foreach (array_unique($found[1]) as $name) {
@@ -473,7 +493,7 @@ function BUILD__Main(array $argv): int
 	foreach (array_keys(BUILD_PACKAGE_SOURCES) as $dist) {
 		$packages['dist/' . $dist] = fn(): string => BUILD__Package($dist);
 	}
-	$files = ['css/scales.css' => fn(): string => BUILD__ScalesCss($vocab), 'css/utilities.css' => fn(): string => BUILD__UtilitiesCss($vocab), 'editor/catalog.js' => fn(): string => BUILD__CatalogJs(), BUILD_ICONS['css'] => fn(): string => BUILD__IconsCss(), 'dist/' . BUILD_MAIN['css'] => fn(): string => BUILD__Dist('css'), 'dist/' . BUILD_MAIN['js'] => fn(): string => BUILD__Dist('js'), ...$packages, 'dist/' . BUILD_MAIN['floor'] => fn(): string => BUILD__FloorJs(), 'dist/LICENSE' => fn(): string => (string)file_get_contents(BUILD_ROOT . '/LICENSE'), 'dist/NOTICE' => fn(): string => (string)file_get_contents(BUILD_ROOT . '/NOTICE'), BUILD_PASSPORT => fn(): string => BUILD__Passport(), BUILD_ICONS_PASSPORT => fn(): string => BUILD__IconsPassport()];
+	$files = ['css/scales.css' => fn(): string => BUILD__ScalesCss($vocab), 'css/utilities.css' => fn(): string => BUILD__UtilitiesCss($vocab), 'editor/catalog.js' => fn(): string => BUILD__CatalogJs(), BUILD_ICONS['css'] => fn(): string => BUILD__IconsCss(), 'dist/' . BUILD_MAIN['css'] => fn(): string => BUILD__Dist('css'), 'dist/' . BUILD_MAIN['js'] => fn(): string => BUILD__Dist('js'), ...$packages, 'dist/' . BUILD_MAIN['floor'] => fn(): string => BUILD__FloorJs(), 'dist/LICENSE' => fn(): string => (string)file_get_contents(BUILD_ROOT . '/LICENSE'), 'dist/LICENSE-editor' => fn(): string => (string)file_get_contents(BUILD_ROOT . '/editor/LICENSE'), 'dist/NOTICE' => fn(): string => (string)file_get_contents(BUILD_ROOT . '/NOTICE'), BUILD_PASSPORT => fn(): string => BUILD__Passport(), BUILD_ICONS_PASSPORT => fn(): string => BUILD__IconsPassport()];
 	$stale = [];
 	foreach ($files as $file => $made) {
 		$text = $made();

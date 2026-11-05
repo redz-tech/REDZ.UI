@@ -27,8 +27,8 @@ A group of radios or checks drawn as tiles - a package, a plan, a way to pay - t
 <fieldset class="vstack gap-8">
 	<legend class="form-label">Pay with</legend>
 	<div class="grid cols-2 gap-12">
-		<label class="choice"><input type="radio" name="choice-method" value="promptpay" checked><span class="choice-media"><img src="img/qr.svg" alt="" width="40" height="40"></span>PromptPay<span class="fs-12 text-muted">Any Thai bank app</span></label>
-		<label class="choice"><input type="radio" name="choice-method" value="card"><span class="choice-media"><i class="bi bi-credit-card fs-24" aria-hidden="true"></i></span>Card<span class="fs-12 text-muted">Visa, Mastercard</span></label>
+		<label class="choice"><input type="radio" name="choice-method" value="promptpay" checked><span class="choice-media"><img src="img/qr.svg" alt="" width="40" height="40"></span>PromptPay<span class="fs-12 text-muted">Any bank app</span></label>
+		<label class="choice"><input type="radio" name="choice-method" value="card"><span class="choice-media"><i class="bi bi-credit-card fs-24" aria-hidden="true"></i></span>Card<span class="fs-12 text-muted">Any card</span></label>
 	</div>
 </fieldset>
 ```

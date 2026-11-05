@@ -1,6 +1,6 @@
 <header class="vstack gap-8">
 	<h1>Editor</h1>
-	<p class="docs-lead">A text editor for REDZ.UI markup, a package of the release linked apart: words edited in place, the library's components changed through their own settings, and a frame of its own where no script of the text ever runs. Nobody needs HTML; an expert may have it.</p>
+	<p class="docs-lead">A text editor for REDZ.UI markup, a package of the release linked apart: words edited in place, the library's components changed through their own settings, live facts, an AI that only suggests, translations side by side, and a frame of its own where no script of the text ever runs. Nobody needs HTML; an expert may have it.</p>
 </header>
 
 <section class="vstack gap-16" aria-labelledby="editor-examples">
@@ -34,13 +34,18 @@ const page = REDZ.ui.editor('#body', {
 		<thead><tr><th scope="col">Option</th><th scope="col">What it is</th></tr></thead>
 		<tbody>
 			<tr><td><code>value</code></td><td>The markup to edit; it is cleaned before it is shown</td></tr>
-			<tr><td><code>ids</code></td><td><code>true</code> keeps every block's id, <code>data-block</code>, and its protection, <code>data-lock</code>, in the value: what a CMS stores, so a block keeps its history, its translations and its protection</td></tr>
+			<tr><td><code>ids</code></td><td><code>true</code> keeps in the value every block's id, <code>data-block</code>, its protection, <code>data-lock</code>, who wrote it, <code>data-by</code> and <code>data-checked</code>, and what it was translated from, <code>data-from</code>: what a CMS stores, so a block keeps its history, its translations and its protection</td></tr>
 			<tr><td><code>rights</code></td><td>What this person may do, below; left out, all but HTML and protection</td></tr>
 			<tr><td><code>placeholder</code></td><td>The words of an empty text, also the text field's name</td></tr>
 			<tr><td><code>lang</code>, <code>dir</code></td><td>The text's language and direction, the page's by default</td></tr>
 			<tr><td><code>styles</code>, <code>scripts</code></td><td>The theme's stylesheets for the text and the previews, and its scripts for the previews, after REDZ.UI's own</td></tr>
 			<tr><td><code>sites</code></td><td>Other looks of the same text, <code>{id, label, styles}</code>, chosen in the strip above it</td></tr>
-			<tr><td><code>languages</code>, <code>getLanguage(code)</code>, <code>onLanguage(code, html)</code></td><td>The text's languages, <code>{code, label, dir, value}</code>, chosen in the strip; the host keeps each one's value</td></tr>
+			<tr><td><code>languages</code>, <code>getLanguage(code)</code>, <code>onLanguage(code, html)</code></td><td>The text's languages, <code>{code, label, dir, value, versions}</code>, chosen in the strip; the host keeps each one's value, and the session keeps what was written in it until then</td></tr>
+			<tr><td><code>source</code></td><td>The language translations are made from, the first of <code>languages</code> by default</td></tr>
+			<tr><td><code>facts</code>, <code>onFact(key, text)</code></td><td>The page's live facts, a list of <code>{key, label, text, editable}</code>, or a function of the language that answers one; <code>onFact</code> saves a new value and answers <code>false</code> to refuse it</td></tr>
+			<tr><td><code>ai(task, {signal, progress})</code></td><td>The host's way to its AI, below; left out, nothing of the AI shows</td></tr>
+			<tr><td><code>onBatch({id, kind, by, blocks, taken, left})</code></td><td>Called when a task's changes are decided, one call for one task: what a CMS records as one batch</td></tr>
+			<tr><td><code>person</code></td><td><code>{name}</code>, who signs what is checked</td></tr>
 			<tr><td><code>lens</code></td><td><code>false</code> takes the strip away</td></tr>
 			<tr><td><code>blocks</code></td><td>More blocks for the menu, <code>{id, label, group, icon, html}</code>, after the package's own</td></tr>
 			<tr><td><code>images</code></td><td>Sources of images, <code>{id, label, open(api)}</code>; a source calls <code>api.insert({src, alt, width, height, srcset, sizes, sources})</code></td></tr>
@@ -78,7 +83,7 @@ const page = REDZ.ui.editor('#body', {
 			<tr><td><code>structure</code></td><td>Adding, moving and removing blocks, rows, columns and items</td></tr>
 			<tr><td><code>facts</code></td><td>Prices, dates and other live facts in the text</td></tr>
 			<tr><td><code>lock</code></td><td>Protecting a block and editing a protected one</td></tr>
-			<tr><td><code>review</code></td><td>Reviewing suggested changes</td></tr>
+			<tr><td><code>review</code></td><td>Signing text an AI or a machine wrote as checked; without it a suggestion can be taken, and stays unchecked</td></tr>
 			<tr><td><code>langs</code></td><td><code>'*'</code> or a list of the languages this person may write in</td></tr>
 		</tbody>
 	</table>
@@ -97,11 +102,63 @@ const page = REDZ.ui.editor('#body', {
 	</ul>
 </section>
 
+<section class="vstack gap-12" aria-labelledby="editor-facts">
+	<h2 id="editor-facts">Live facts</h2>
+	<p>A price, a date or a phone number is written once and stands in every place it is used: <code>&lt;data value="KEY"&gt;its words&lt;/data&gt;</code>. Type <kbd>@</kbd> in the text to put one in, or open Facts in the foot, which counts the places of each and changes it in all of them.</p>
+	<ul>
+		<li>The words carry the key, not the value, so a price that changes stales no translation, and an AI or a translator gets a token it cannot change.</li>
+		<li>The checks find a value typed by hand where a fact holds it, and offer to make it a fact; a key the page does not know is marked.</li>
+		<li>The server fills in each fact's words when it publishes; the words in the value are what the page shows until then.</li>
+	</ul>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="editor-ai">
+	<h2 id="editor-ai">The AI</h2>
+	<p>The editor never reaches a model: <code>options.ai</code> is the host's, async, and no key is ever in a page. It gets a task and answers it, as late as it likes; <code>signal</code> stops it and <code>progress(partial)</code> shows what came so far. It acts with the person's rights: a closed block is never sent.</p>
+	<table class="table docs-table">
+		<thead><tr><th scope="col"><code>task.kind</code></th><th scope="col">The task also holds</th><th scope="col">It answers</th></tr></thead>
+		<tbody>
+			<tr><td><code>rewrite</code></td><td><code>how</code>: <code>shorter</code>, <code>simpler</code>, <code>warmer</code>, <code>fix</code>; <code>blocks</code></td><td><code>{blocks: [{id, fields}]}</code>, a text for each field</td></tr>
+			<tr><td><code>tones</code></td><td><code>blocks</code>, one block</td><td><code>{grid}</code>, three rows of three versions: rows from shorter to longer, columns from stricter to warmer, each version a list of fields</td></tr>
+			<tr><td><code>translate</code></td><td><code>from</code>, <code>to</code>, <code>blocks</code> of the source's fields, <code>was</code> the translation that stands or <code>null</code></td><td><code>{blocks: [{id, fields}]}</code></td></tr>
+			<tr><td><code>write</code></td><td><code>words</code>, a person's request; <code>facts</code></td><td><code>{blocks}</code> of the passport's schema <code>editor.write</code></td></tr>
+			<tr><td><code>read</code></td><td><code>question</code>, <code>text</code>, the page as a visitor reads it</td><td><code>{text}</code>, from that text alone; <code>progress({text})</code> as it grows</td></tr>
+			<tr><td><code>alt</code></td><td><code>src</code>, an image's address</td><td><code>{text}</code></td></tr>
+		</tbody>
+	</table>
+	<p>Every task has an <code>id</code> and a <code>lang</code>. A block is <code>{id, hash, element, fields}</code>: its words as plain text, one string for each field, a fact as a token <code>⟦KEY⟧</code>. A rewrite answers plain words: marks on the words around a change stay where they are. <code>{refusal: 'why'}</code> says the model declined, shown as what it is, not as an error.</p>
+	<ul>
+		<li><strong>A suggestion never lands by itself.</strong> Its changes are drawn word by word, by the language's own word breaks, each taken or left alone, and the value stays what it was until the last one is decided. One task is one step of undo.</li>
+		<li><strong>An answer can only do so much.</strong> One whose block changed in the meantime, whose fields do not fit or that lost a fact is left out, and the person is told.</li>
+		<li><strong>The catalog holds what an AI writes.</strong> <code>write</code> answers flat blocks, one shape a model is held to while it writes; the editor turns them into REDZ.UI markup by the catalog, so a kind, a tone or a size the library does not have cannot come out.</li>
+		<li><strong>The tone pad</strong> asks for nine versions in one request and opens at once. Each point is tried on the block; a version that lost a fact cannot be chosen.</li>
+		<li><strong>Ask the page</strong> shows what a visitor's assistant would answer from this page alone. What it cannot answer is a gap in the page.</li>
+	</ul>
+	<h3>The host's side</h3>
+	<ul>
+		<li>Call the model from the server. Give it the schema with the API's structured output for <code>write</code>; a union of every kind does not compile, and a pattern inside a schema stalls it.</li>
+		<li>Read the model's stop reason before its JSON: only a finished answer is a result. A cut answer is broken JSON, and a refusal answers <code>{refusal}</code>.</li>
+		<li>Page text is data, not instructions: say so, and tell the model to keep every <code>⟦KEY⟧</code> as it is, to change as few words as it can, and to leave out in silence what it cannot do.</li>
+		<li>The rights hide controls: the server decides again what a person may ask.</li>
+	</ul>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="editor-pair">
+	<h2 id="editor-pair">Side by side</h2>
+	<p>In a language other than the source, <strong>Side by side</strong> in the strip shows the source beside the text, row by row, in a frame of its own. A translated block keeps the hash of the source's words it was made from in <code>data-from</code>, FNV-1a of the words as PHP's <code>hash('fnv1a32')</code> gives it, so only the block that changed goes stale.</p>
+	<ul>
+		<li>A stale row says what changed, when the source's <code>versions</code> hold the words it was made from, and offers to translate again or to say the translation is right.</li>
+		<li>A block the language lacks offers a translation, or the block to write in by hand. Translate all sends every row left as one task.</li>
+		<li>On a phone the two columns scroll sideways.</li>
+	</ul>
+	<p><strong>Who wrote it</strong> in the strip marks each block an AI or a machine wrote, or that was pasted, and who checked it. Text nobody checked is listed in the checks, which is what a site owes its readers where the law asks for it.</p>
+</section>
+
 <section class="vstack gap-12" aria-labelledby="editor-lens">
 	<h2 id="editor-lens">The lens and the checks</h2>
 	<ul>
 		<li>The strip above the text changes the width, the theme, the site and the language of the page under it, and it stays editable: the frame is a real page, so its media queries answer to its width and the site's own stylesheets draw it.</li>
-		<li>The foot counts the words by the language's own word breaks, so Thai and Burmese count too, and lists what a reader, a screen reader or a search engine would stumble on, each with a way to it: an empty heading, a skipped level, an image without words, a vague link, a long paragraph, a table without a head.</li>
+		<li>The foot counts the words by the language's own word breaks, so Thai and Burmese count too, and lists what a reader, a screen reader or a search engine would stumble on, each with a way to it: an empty heading, a skipped level, an image without words, a vague link, a long paragraph, a table without a head, text nobody checked, a value typed by hand where a fact stands, translations left behind.</li>
 	</ul>
 </section>
 
@@ -112,6 +169,11 @@ const page = REDZ.ui.editor('#body', {
 		<li>Every value is parsed inert and cleaned before it is shown or given back: no script, style, link, meta, base, object or embed element, no <code>on*</code> attribute, no address that is not a path, a fragment, http(s), mailto or tel, no frame that is not https.</li>
 		<li>The cleaner guards the editing page; the server cleans what it stores as well.</li>
 	</ul>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="editor-license">
+	<h2 id="editor-license">License</h2>
+	<p>Unlike the library, the editor is not under MIT. From 0.17.0 it is under <a href="https://polyformproject.org/licenses/strict/1.0.0">PolyForm Strict 1.0.0</a>: noncommercial use only, no changes, no redistribution. It comes with REDZ products under their terms; any other commercial use needs a separate license. Versions up to 0.16.0 stay under MIT.</p>
 </section>
 
 <section class="vstack gap-12" aria-labelledby="editor-access">

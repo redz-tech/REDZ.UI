@@ -98,6 +98,11 @@ export const barsOf = (ed) => {
 			hideSoon(false);
 			return;
 		}
+		if (top.hasAttribute('data-editor-review')) {
+			handle.hidden = true;
+			hideParts();
+			return;
+		}
 		hoverTop = top;
 		ed.showHandle(top);
 		if (!ed.placeOpen(top)) {
@@ -251,7 +256,7 @@ export const barsOf = (ed) => {
 		const element = target.nodeType === Node.ELEMENT_NODE ? target : target.parentElement;
 		const top = element?.closest('[data-block]') ?? null;
 		const prose = top !== null && top.getAttribute('contenteditable') !== 'false' && !top.matches(FIELDS);
-		if (top === null || top.parentElement !== ed.doc.body || (prose && element.closest('img, a') === null)) {
+		if (top === null || top.parentElement !== ed.doc.body || top.hasAttribute('data-editor-review') || (prose && element.closest('img, a') === null)) {
 			ed.pickNone();
 			return;
 		}

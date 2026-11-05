@@ -17,7 +17,14 @@ A number with its label and an icon in a tone - and, as a button, the filter for
 </div>
 ```
 
-Without a button it only reads: a `div class="stat"`.
+Without a button it only reads: a `div class="stat"`. One long word breaks instead of running past a narrow tile.
+
+```html
+<div class="grid cols-2 gap-12 max-w-320">
+	<div class="stat"><span><span class="stat-value">14</span><span class="stat-label">Reconfigurations</span></span></div>
+	<div class="stat"><span><span class="stat-value">3</span><span class="stat-label">Refunds</span><span class="stat-sub">Counterbalancing</span></span></div>
+</div>
+```
 
 ### Links
 

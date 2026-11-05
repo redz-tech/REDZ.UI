@@ -24,7 +24,7 @@ An icon, then the words in a `<div>`. The plain `alert` is neutral; the tones fo
 	<i class="bi bi-stars" aria-hidden="true"></i>
 	<div class="vstack gap-8">
 		<strong>A shorter title</strong>
-		<p>“Ang Thong by speedboat” fits the 60 characters search results show.</p>
+		<p>“North Bay by speedboat” fits the 60 characters search results show.</p>
 		<div class="hstack gap-8"><button class="btn btn-sm btn-primary" type="button">Use it</button><button class="btn btn-sm btn-text" type="button">Dismiss</button></div>
 	</div>
 </div>

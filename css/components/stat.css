@@ -62,9 +62,12 @@
 
 	.stat-sub {
 		display: block;
+		min-inline-size: 0;
 		margin-block-start: var(--redz-space-2);
 		color: var(--redz-text-muted);
 		font-size: var(--redz-fs-12);
+		overflow-wrap: anywhere;
+		hyphens: auto;
 	}
 
 	.stat-delta {
@@ -122,8 +125,11 @@
 
 	.stat-label {
 		display: block;
+		min-inline-size: 0;
 		color: var(--redz-text-muted);
 		font-size: var(--redz-fs-12);
+		overflow-wrap: anywhere;
+		hyphens: auto;
 	}
 
 	.stat-primary {

@@ -16,7 +16,7 @@ A filter chip is a toggle button: `aria-pressed` says whether it is on. A chip t
 <div id="chip-site-menu" class="menu menu-start" popover role="menu" aria-label="Site">
 	<button class="menu-item" type="button" role="menuitemradio" aria-checked="true">All sites</button>
 	<button class="menu-item" type="button" role="menuitemradio" aria-checked="false">lagoon.example</button>
-	<button class="menu-item" type="button" role="menuitemradio" aria-checked="false">angthong.example</button>
+	<button class="menu-item" type="button" role="menuitemradio" aria-checked="false">northbay.example</button>
 </div>
 ```
 

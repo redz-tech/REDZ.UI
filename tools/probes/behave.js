@@ -59,11 +59,11 @@ window.REDZ_BEHAVE = (() => {
 	};
 
 	const editorText = [
-		'<h2>A day on Ang Thong</h2>',
+		'<h2>A day on North Bay</h2>',
 		'<p>The boat leaves the pier at <strong>8:00</strong>; bring a hat and water.</p>',
 		'<div class="alert alert-info" data-block="alert1"><i class="bi bi-info-circle" aria-hidden="true"></i><div>The park fee is paid at the pier.</div></div>',
 		'<ul data-block="list1"><li>Kayaks in the lagoon</li><li>The viewpoint</li></ul>',
-		'<table class="table" data-block="table1"><thead><tr><th scope="col">Boat</th><th scope="col">Seats</th><th scope="col">Leaves</th></tr></thead><tbody><tr><td>Sea Breeze</td><td>12</td><td>8:00</td></tr><tr><td>Blue Lagoon</td><td>30</td><td>9:30</td></tr></tbody></table>',
+		'<table class="table" data-block="table1"><thead><tr><th scope="col">Boat</th><th scope="col">Seats</th><th scope="col">Leaves</th></tr></thead><tbody><tr><td>Boat A</td><td>12</td><td>8:00</td></tr><tr><td>Boat B</td><td>30</td><td>9:30</td></tr></tbody></table>',
 		'<div class="accordion" data-block="acc1"><details class="accordion-item" name="d"><summary class="accordion-header">What is included?<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary><div class="accordion-body">Lunch, the gear and the transfer.</div></details><details class="accordion-item" name="d"><summary class="accordion-header">What if it rains?<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary><div class="accordion-body">The trip moves.</div></details></div>',
 		'<div class="grid md:cols-2 gap-16" data-block="grid1"><div class="card"><div class="card-body vstack gap-8"><h3>The lagoon</h3><p>A short climb.</p></div></div><div class="card"><div class="card-body vstack gap-8"><h3>The viewpoint</h3><p>Forty-two islands.</p></div></div></div>',
 		'<div class="alert alert-warning" data-block="safety" data-lock="form"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i><div>The sea closes the park.</div></div>',
@@ -103,14 +103,15 @@ window.REDZ_BEHAVE = (() => {
 			}});
 		});
 		const pt = (el, fx = 0.5, fy = 0.5) => {
-			const from = el.ownerDocument === document ? {left: 0, top: 0} : frame.getBoundingClientRect();
+			const home = el.ownerDocument === document ? null : el.ownerDocument.defaultView.frameElement;
+			const from = home === null ? {left: 0, top: 0} : home.getBoundingClientRect();
 			const seen = el.getBoundingClientRect();
 			const clear = box.querySelector('.editor-toolbar').getBoundingClientRect().bottom + 48;
-			if (el.ownerDocument !== document && (from.top + seen.top < clear || from.top + seen.bottom > innerHeight - 8)) {
+			if (home !== null && (from.top + seen.top < clear || from.top + seen.bottom > innerHeight - 8)) {
 				el.scrollIntoView({block: 'center'});
 			}
 			const r = el.getBoundingClientRect();
-			const f = el.ownerDocument === document ? {left: 0, top: 0} : frame.getBoundingClientRect();
+			const f = home === null ? {left: 0, top: 0} : home.getBoundingClientRect();
 			return [Math.round(f.left + r.left + r.width * fx), Math.round(f.top + r.top + r.height * fy)];
 		};
 		const tool = (key) => box.querySelector('[data-editor="' + key + '"]');
@@ -127,6 +128,7 @@ window.REDZ_BEHAVE = (() => {
 		const value = () => page.getHTML();
 		const marks = (html) => /data-editor|contenteditable/.test(html);
 		const ACT = (root, name) => root.querySelector('[data-editor-act="' + name + '"]');
+		const strip2 = () => box.querySelector('.editor-lens [data-value="en"]');
 
 		await make();
 
@@ -504,9 +506,9 @@ window.REDZ_BEHAVE = (() => {
 		say('a protected block is a comment in the source without the right', source.value.includes('<!--block safety-->') && !source.value.includes('The sea closes'), source.value.slice(0, 300));
 		say('source shows no marks', !marks(source.value), source.value);
 		say('the tools close in source', tool('bold').disabled);
-		source.value = source.value.replace('A day on Ang Thong', 'A night on Ang Thong');
+		source.value = source.value.replace('A day on North Bay', 'A night on North Bay');
 		yield {click: pt(tool('source'))};
-		say('source comes back', doc.querySelector('h2').textContent === 'A night on Ang Thong', doc.querySelector('h2')?.textContent);
+		say('source comes back', doc.querySelector('h2').textContent === 'A night on North Bay', doc.querySelector('h2')?.textContent);
 		say('the protected block came back untouched', blk('safety')?.textContent.includes('The sea closes') && blk('safety')?.getAttribute('data-lock') === 'form', blk('safety')?.outerHTML);
 		say('fields again after source', blk('table1').rows[1].cells[0].matches('[data-editor-field]'));
 
@@ -588,7 +590,7 @@ window.REDZ_BEHAVE = (() => {
 		await make({value: '<h2>Top</h2><h4></h4><p><a href="/a">here</a></p><table class="table"><tbody><tr><td>A</td></tr></tbody></table><p><img alt=""></p>'});
 		const foot = box.querySelector('.editor-foot');
 		say('the foot counts words', /\d+ word/.test(foot.textContent), foot.textContent);
-		const checks = foot.querySelector('button');
+		const checks = foot.querySelector('[data-editor-foot="check"]');
 		say('the foot counts issues', /\d/.test(checks.textContent) && !checks.textContent.includes(' 0'), checks.textContent);
 		yield {click: pt(checks)};
 		const panel = box.querySelector('.editor-checks');
@@ -950,7 +952,7 @@ window.REDZ_BEHAVE = (() => {
 		say('a language the person may not write is closed', doc.body.contentEditable === 'false', doc.body.contentEditable);
 		yield {click: pt(strip.querySelector('[data-value="en"]'))};
 		await until(() => doc.documentElement.lang === 'en');
-		say('and back', doc.body.contentEditable === 'true' && doc.body.textContent.includes('Words') === false, doc.body.innerHTML);
+		say('and back, the words it left are there', doc.body.contentEditable === 'true' && doc.body.textContent.includes('Words'), doc.body.innerHTML);
 		yield {click: pt(strip.querySelector('[data-value="two"]'))};
 		say('the lens puts a site\'s stylesheets under the text', [...doc.querySelectorAll('link')].some((one) => one.href.startsWith('data:text/css')), doc.head.innerHTML.slice(0, 200));
 
@@ -964,6 +966,467 @@ window.REDZ_BEHAVE = (() => {
 		say('a new form keeps the protection', blk('l2')?.matches('ol') && blk('l2').getAttribute('data-lock') === 'form', doc.body.innerHTML);
 		yield {click: pt(cardEl().querySelector('.btn-close'))};
 		say('closing the card goes back to the text', doc.hasFocus() || document.activeElement === frame, document.activeElement?.tagName);
+
+		{
+		// Live facts.
+		const FACTS = [{key: 'adult', label: 'Price, adult', text: '4,500 THB'}, {key: 'depart', label: 'Departure', text: '8:00'}];
+		const footTool = (name) => box.querySelector('[data-editor-foot="' + name + '"]');
+		const fitted = () => until(() => Math.abs(frame.getBoundingClientRect().height - Math.max(192, Math.ceil(doc.body.getBoundingClientRect().height))) < 1);
+		const told2 = () => box.dataset.editorNote ?? '';
+		const told3 = [];
+		await make({value: '<p data-block="f1">A seat costs <data value="adult">1 THB</data> today.</p><div class="alert alert-info" data-block="f2"><i class="bi bi-info-circle" aria-hidden="true"></i><div>Leaves at 8:00 sharp.</div></div><p data-block="f3">Old: <data value="gone">x</data>.</p>', facts: FACTS, onFact: (name, words) => told3.push(name + '=' + words)});
+		const chip = () => blk('f1').querySelector('data');
+		say('a fact shows as it stands now', chip().textContent === '4,500 THB', chip().outerHTML);
+		say('a fact is one thing in the text', chip().getAttribute('contenteditable') === 'false', chip().outerHTML);
+		say('a fact the page does not know is marked', blk('f3').querySelector('data').hasAttribute('data-editor-unknown'), blk('f3').outerHTML);
+		say('the value keeps a fact by its key', value().includes('<data value="adult">4,500 THB</data>') && !marks(value()), value());
+		yield {click: pt(blk('f1'), 0.5)};
+		put(blk('f1').lastChild, blk('f1').lastChild.length);
+		yield {type: ' @pri'};
+		const picker = box.querySelector('.editor-slash');
+		await until(() => picker.matches(':popover-open'));
+		say('@ opens the facts, narrowed', picker.matches(':popover-open') && picker.textContent.includes('Price, adult') && !picker.textContent.includes('Departure'), picker.textContent);
+		yield {key: 'Enter'};
+		await until(() => blk('f1').querySelectorAll('data').length === 2);
+		say('a fact goes in from the keyboard, the @ gone', blk('f1').querySelectorAll('data').length === 2 && !blk('f1').textContent.includes('@'), blk('f1').innerHTML);
+		yield {type: 'z'};
+		say('the caret stands after a new fact', /THB.?z$/u.test(blk('f1').textContent.replaceAll(String.fromCodePoint(0x200b), '')), blk('f1').innerHTML);
+		yield {key: 'Backspace'};
+		yield {key: 'Backspace'};
+		await until(() => blk('f1').querySelectorAll('data').length === 1);
+		say('Backspace takes a fact whole', blk('f1').querySelectorAll('data').length === 1, blk('f1').innerHTML);
+		yield {click: pt(footTool('facts'))};
+		const factsPanel = box.querySelector('.editor-facts');
+		say('the facts open with their places', factsPanel.matches(':popover-open') && factsPanel.textContent.includes('places: 1') && factsPanel.querySelectorAll('.editor-fact').length === 2, factsPanel.textContent);
+		const factField = factsPanel.querySelector('input[data-fact="adult"]');
+		factField.value = '5,000 THB';
+		factField.dispatchEvent(new Event('change', {bubbles: true}));
+		await until(() => chip().textContent === '5,000 THB');
+		say('a fact changes in every place and the host hears it', chip().textContent === '5,000 THB' && told3.join() === 'adult=5,000 THB' && value().includes('>5,000 THB</data>'), told3.join() + ' ' + value().slice(0, 120));
+		yield {click: pt(factsPanel.querySelector('.btn-close'))};
+		yield {click: pt(footTool('check'))};
+		const checksPanel = box.querySelector('.editor-checks');
+		const typedIssue = [...checksPanel.querySelectorAll('.editor-issue')].find((one) => one.textContent.includes('8:00'));
+		say('a value typed by hand where a fact stands is found', typedIssue !== undefined, checksPanel.textContent);
+		say('a fact the page does not know is listed', checksPanel.textContent.includes('gone'), checksPanel.textContent);
+		yield {click: pt(typedIssue.querySelector('[data-fix]'))};
+		await until(() => blk('f2').querySelector('data[value="depart"]') !== null);
+		say('Fix makes it a fact, inside its field', blk('f2').querySelector('[data-editor-field] data[value="depart"]') !== null && blk('f2').textContent.replaceAll(String.fromCodePoint(0x200b), '').includes('Leaves at 8:00 sharp.'), blk('f2').innerHTML);
+		checksPanel.hidePopover();
+		await make({value: '<p data-block="f4">Words</p>', facts: FACTS, rights: {design: true}});
+		yield {click: pt(blk('f4'), 0.5)};
+		yield {type: ' @'};
+		await settled();
+		say('@ is only an @ without the right', !box.querySelector('.editor-slash').matches(':popover-open'), blk('f4').textContent);
+
+		// The AI: nothing lands by itself.
+		const asked = [];
+		let reply = null;
+		const ai = (task, tools) => {
+			asked.push(task);
+			return reply(task, tools);
+		};
+		const aiMenu = () => box.querySelector('[role="menu"][id$="-ai"]');
+		const aiPick = function* (index) {
+			yield {click: pt(footTool('ai'))};
+			yield {click: pt(aiMenu().children[index])};
+		};
+		const bar = () => box.querySelector('.editor-review');
+		const act = (name) => bar().querySelector('[data-review="' + name + '"]');
+		const shown = async () => {
+			await until(() => !bar().hidden);
+			await fitted();
+		};
+		const aiWords = '<p data-block="r1">The boat <strong>leaves the pier</strong> at <data value="depart">8:00</data> and comes back to the harbour before the sun goes down.</p><p data-block="r2">Bring a hat.</p><p data-block="r3" data-lock="all">Closed words.</p><table class="table" data-block="r4"><tbody><tr><td>Boat A</td><td>Twelve seats</td></tr></tbody></table>';
+		const aiRights = {ai: true, design: true, structure: true, review: true, facts: true};
+		await make({value: aiWords, facts: FACTS, ai, rights: aiRights, person: {name: 'Anna'}});
+		const before3 = value();
+		reply = () => ({blocks: [{id: 'r1', fields: ['Our boat leaves the pier at ⟦depart⟧ and comes back to the harbour before sunset.']}]});
+		yield {click: pt(blk('r1'), 0.9)};
+		yield* aiPick(0);
+		await shown();
+		const task = asked.at(-1);
+		say('a task is plain words, a fact a token', task?.kind === 'rewrite' && task.how === 'shorter' && task.blocks[0].id === 'r1' && task.blocks[0].fields[0].startsWith('The boat leaves the pier at ⟦depart⟧') && /^[0-9a-f]{8}$/.test(task.blocks[0].hash) && task.lang !== undefined, JSON.stringify(task));
+		say('a suggestion is drawn word by word', blk('r1').querySelectorAll('del[data-editor-hunk]').length === 2 && blk('r1').querySelectorAll('ins[data-editor-hunk]').length === 2 && blk('r1').querySelector('ins').textContent === 'Our', blk('r1').innerHTML);
+		say('a suggestion is not the value', value() === before3, value());
+		say('a block under review is closed', blk('r1').getAttribute('contenteditable') === 'false', blk('r1').outerHTML.slice(0, 80));
+		say('the review says what the change is', /“The” becomes “Our”/.test(bar().textContent) && bar().textContent.includes('1 of 2'), bar().textContent);
+		yield {click: pt(act('yes'))};
+		say('one change is taken, the next is shown', blk('r1').querySelectorAll('del').length === 1 && blk('r1').textContent.startsWith('Our boat') && bar().textContent.includes('1 of 1'), blk('r1').innerHTML);
+		say('still not the value', value() === before3, value());
+		yield {click: pt(act('no'))};
+		await until(() => bar().hidden);
+		say('the last one decided, it is the value, marks kept', value().includes('Our boat <strong>leaves the pier</strong> at <data value="depart">8:00</data>') && value().includes('before the sun goes down') && !marks(value()), value());
+		say('who took it is signed', blk('r1').getAttribute('data-by') === 'ai' && blk('r1').getAttribute('data-checked') === 'Anna', blk('r1').outerHTML.slice(0, 120));
+		yield {click: pt(tool('undo'))};
+		say('a whole task is one undo', value() === before3, value());
+		reply = () => ({blocks: [{id: 'r1', fields: ['The boat leaves the pier at ⟦depart⟧ and comes back to the harbour before sunset.']}, {id: 'r2', fields: ['Bring a sun hat.']}]});
+		const r1Range = doc.createRange();
+		r1Range.setStart(blk('r1').firstChild, 0);
+		r1Range.setEnd(blk('r2').firstChild, 5);
+		doc.getSelection().removeAllRanges();
+		doc.getSelection().addRange(r1Range);
+		await settled();
+		yield* aiPick(1);
+		await shown();
+		say('a selection sends every block under it', asked.at(-1).blocks.map((one) => one.id).join() === 'r1,r2', JSON.stringify(asked.at(-1)));
+		yield {click: pt(act('all'))};
+		await until(() => bar().hidden);
+		say('Take all takes every block as one step', value().includes('before sunset') && value().includes('Bring a sun hat.'), value());
+		yield {click: pt(tool('undo'))};
+		say('and one undo', value() === before3, value());
+		yield {click: pt(blk('r2'), 0.2)};
+		reply = () => ({blocks: [{id: 'r2', fields: ['A hat.']}]});
+		yield* aiPick(0);
+		await shown();
+		yield {click: pt(act('none'))};
+		await until(() => bar().hidden);
+		say('Leave all changes nothing', value() === before3 && !blk('r2').hasAttribute('data-by'), value());
+		reply = () => ({refusal: 'Not this.'});
+		yield {click: pt(blk('r2'), 0.2)};
+		yield* aiPick(0);
+		await until(() => told2().includes('declined'));
+		say('a refusal is said as a refusal', told2().includes('declined') && told2().includes('Not this.') && bar().hidden, told2());
+		reply = () => Promise.reject(new Error('no'));
+		yield {click: pt(blk('r2'), 0.2)};
+		yield* aiPick(0);
+		await until(() => told2().includes('did not answer'));
+		say('a failure is said and changes nothing', told2().includes('did not answer') && value() === before3, told2());
+		reply = () => ({blocks: [{id: 'r1', fields: ['The boat leaves whenever it likes.']}]});
+		yield {click: pt(blk('r1'), 0.9)};
+		yield* aiPick(0);
+		await until(() => told2().includes('lost a fact'));
+		say('an answer that lost a fact is left out', told2().includes('lost a fact') && bar().hidden, told2());
+		reply = () => ({blocks: [{id: 'r2', fields: ['One', 'Two']}]});
+		yield {click: pt(blk('r2'), 0.2)};
+		yield* aiPick(0);
+		await until(() => told2().includes('does not fit'));
+		say('an answer of another form is left out', told2().includes('does not fit'), told2());
+		let answerNow = null;
+		reply = () => new Promise((done) => {
+			answerNow = done;
+		});
+		yield {click: pt(blk('r2'), 0.2)};
+		yield* aiPick(0);
+		say('a block being worked on is marked', blk('r2').hasAttribute('data-editor-busy') && !box.querySelector('.editor-working').hidden, blk('r2').outerHTML);
+		yield {click: pt(blk('r2'), 0.5)};
+		yield {type: 'Q'};
+		answerNow({blocks: [{id: 'r2', fields: ['A hat.']}]});
+		await until(() => told2().includes('changed while'));
+		say('the AI never overwrites what a person just wrote', told2().includes('changed while') && bar().hidden && blk('r2').textContent.includes('Q'), told2() + ' ' + blk('r2').textContent);
+		let stopped = null;
+		reply = (one, tools) => new Promise((done, fail) => {
+			stopped = tools.signal;
+			tools.signal.addEventListener('abort', () => fail(new DOMException('Stopped', 'AbortError')));
+		});
+		yield {click: pt(blk('r2'), 0.5)};
+		yield* aiPick(0);
+		yield {click: pt(box.querySelector('.editor-working button'))};
+		await until(() => box.querySelector('.editor-working').hidden);
+		say('Stop reaches the host and says nothing else', stopped?.aborted === true && box.querySelector('.editor-working').hidden && !told2().includes('did not answer'), told2());
+		const sentCount = asked.length;
+		yield {click: pt(blk('r3'), 0.5)};
+		yield* aiPick(0);
+		await until(() => told2().includes('may change'));
+		say('a closed block is never sent', asked.length === sentCount && told2().includes('may change'), told2());
+		reply = () => ({blocks: [{id: 'r4', fields: ['Boat A', 'Twelve places']}]});
+		yield {click: pt(blk('r4').rows[0].cells[1], 0.5)};
+		yield* aiPick(0);
+		await shown();
+		say('a block sends its fields', asked.at(-1).blocks[0].fields.join('|') === 'Boat A|Twelve seats', JSON.stringify(asked.at(-1)));
+		yield {click: pt(act('all'))};
+		await until(() => bar().hidden);
+		say('a change lands in its field', blk('r4').rows[0].cells[1].textContent === 'Twelve places' && blk('r4').rows[0].cells[1].getAttribute('contenteditable') === 'true', blk('r4').outerHTML);
+		yield {click: pt(blk('r2'), 0.5)};
+		reply = () => ({blocks: [{id: 'r2', fields: [blk('r2').textContent.replace('hat', 'cap')]}]});
+		yield* aiPick(0);
+		await shown();
+		yield {click: pt(tool('undo'))};
+		await until(() => bar().hidden);
+		say('undo takes a review away first', bar().hidden && blk('r2').querySelector('del') === null, blk('r2').innerHTML);
+
+		// What an AI writes passes the lock.
+		await make({value: '<p data-block="w1">Words</p>', facts: FACTS, ai, rights: aiRights});
+		const before4 = value();
+		const flat = (one) => ({kind: 'paragraph', level: 0, tone: '', size: '', text: '', href: '', head: [], rows: [], items: [], ...one});
+		reply = () => ({blocks: [flat({kind: 'alert', tone: 'purple', size: 'huge', text: 'The **sea** closes at ⟦depart⟧ <script>alert(1)</scr' + 'ipt> ⟦nope⟧'}), flat({kind: 'hero-banner', text: 'No'}), flat({kind: 'heading', level: 9, text: 'Title'}), flat({kind: 'button', tone: 'neon', size: 'xl', text: 'Go', href: 'javascript:alert(1)'}), flat({kind: 'paragraph', text: ''}), flat({kind: 'bullets', items: []}), flat({kind: 'table', head: ['A', 'B'], rows: [['1', '2', '3']]})]});
+		yield {click: pt(blk('w1'), 0.5)};
+		yield* aiPick(5);
+		const writeBox = await (async () => {
+			await until(() => document.querySelector('dialog[open] textarea') !== null);
+			return document.querySelector('dialog[open]');
+		})();
+		yield {click: pt(writeBox.querySelector('textarea'))};
+		yield {type: 'A page'};
+		yield {click: pt(writeBox.querySelector('button[value="ok"]'))};
+		await shown();
+		say('a written page is a suggestion too', asked.at(-1).kind === 'write' && asked.at(-1).words === 'A page' && value() === before4 && doc.querySelectorAll('[data-editor-added]').length === 4, doc.body.innerHTML.slice(0, 300));
+		await fitted();
+		yield {click: pt(act('all'))};
+		await until(() => bar().hidden);
+		const written = value();
+		say('the catalog holds what an AI writes', /<div class="alert"[^>]*><i class="bi bi-info-circle" aria-hidden="true"><\/i><div>The <strong>sea<\/strong> closes at <data value="depart">8:00<\/data> &lt;script&gt;/.test(written) && !/purple|huge|hero|nope|<script|javascript:/.test(written), written);
+		say('a level, a tone and a size it may not have fall to the defaults', /<h2[^>]*>Title<\/h2>/.test(written) && /class="btn btn-primary btn-xl" href="#"/.test(written), written);
+		say('a table takes the widest row', (written.match(/<th /g) ?? []).length === 3 && (written.match(/<td/g) ?? []).length === 3, written);
+
+		// The pad of tones.
+		await make({value: aiWords, facts: FACTS, ai, rights: aiRights, person: {name: 'Anna'}});
+		const before5 = value();
+		const pad = () => box.querySelector('.editor-pad');
+		const point = (x, y) => pad().querySelector('[data-x="' + x + '"][data-y="' + y + '"]');
+		const version = (x, y) => 'The boat ' + x + y + ' at ⟦depart⟧.';
+		let padDone = null;
+		reply = (one, tools) => new Promise((done) => {
+			padDone = () => done({grid: [0, 1, 2].map((y) => [0, 1, 2].map((x) => (x === 2 && y === 0 ? 'A version that lost its fact.' : [version(x, y)])))});
+			tools.progress({grid: [[null, [version(1, 0)], null]]});
+		});
+		yield {click: pt(blk('r1'), 0.9)};
+		yield* aiPick(4);
+		say('the pad opens at once', pad().matches(':popover-open') && asked.at(-1).kind === 'tones', pad().textContent);
+		say('a point that came early is ready, the others wait', !point(1, 0).disabled && point(0, 0).disabled, point(0, 0).disabled);
+		padDone();
+		await until(() => !point(0, 0).disabled);
+		say('a version that lost a fact cannot be chosen', point(2, 0).disabled && !point(0, 2).disabled, pad().innerHTML.slice(0, 200));
+		const boxPad = pad().getBoundingClientRect();
+		const r1Box = blk('r1').getBoundingClientRect();
+		const framePad = frame.getBoundingClientRect();
+		say('the pad never covers its block', boxPad.left >= r1Box.right + framePad.left || boxPad.bottom <= r1Box.top + framePad.top || boxPad.top >= r1Box.bottom + framePad.top, JSON.stringify([boxPad.left, r1Box.right + framePad.left]));
+		point(1, 1).focus();
+		yield {key: 'ArrowUp'};
+		await until(() => blk('r1').textContent.includes('10 at'));
+		say('the arrows try a version on the block', blk('r1').textContent.startsWith('The boat 10 at') && blk('r1').querySelector('data') !== null, blk('r1').innerHTML);
+		say('a version tried is not the value', value() === before5, value());
+		yield {key: 'ArrowLeft'};
+		await until(() => blk('r1').textContent.includes('00 at'));
+		yield {key: 'Escape'};
+		await until(() => !pad().matches(':popover-open'));
+		say('Escape brings the text back', value() === before5 && blk('r1').textContent.includes('comes back'), blk('r1').innerHTML);
+		yield {click: pt(blk('r1'), 0.9)};
+		yield* aiPick(4);
+		padDone();
+		await until(() => !point(0, 2).disabled);
+		yield {click: pt(point(0, 2))};
+		await until(() => blk('r1').textContent.includes('02 at'));
+		yield {click: pt(pad().querySelector('[data-pad="keep"]'))};
+		await until(() => !pad().matches(':popover-open'));
+		say('Keep keeps it, signed', value().includes('The boat 02 at <data value="depart">8:00</data>') && blk('r1').getAttribute('data-by') === 'ai' && blk('r1').getAttribute('data-checked') === 'Anna', value());
+		yield {click: pt(tool('undo'))};
+		say('the pad is one undo', value() === before5, value());
+
+		// The page's reading, who wrote what, and the right.
+		reply = (one, tools) => {
+			tools.progress({text: 'It leaves'});
+			return new Promise((done) => {
+				padDone = () => done({text: 'It leaves at 8:00.'});
+			});
+		};
+		yield* aiPick(6);
+		const askPanel = box.querySelector('.editor-ask');
+		say('the page can be asked', askPanel.matches(':popover-open') && askPanel.querySelectorAll('[data-ask]').length === 3, askPanel.textContent);
+		yield {click: pt(askPanel.querySelector('[data-ask]'))};
+		say('the answer grows as it comes', askPanel.querySelector('.editor-ask-answer').textContent === 'It leaves', askPanel.querySelector('.editor-ask-answer').textContent);
+		say('the page goes as a reader sees it', asked.at(-1).kind === 'read' && asked.at(-1).text.includes('at 8:00 and') && !asked.at(-1).text.includes('⟦') && !asked.at(-1).text.includes('Closed words') === false, asked.at(-1).text);
+		padDone();
+		await until(() => askPanel.querySelector('.editor-ask-answer').textContent === 'It leaves at 8:00.');
+		say('and stands when it is done', askPanel.querySelector('.editor-ask-answer').textContent === 'It leaves at 8:00.', askPanel.querySelector('.editor-ask-answer').textContent);
+		askPanel.hidePopover();
+		await make({value: '<p data-block="a1" data-by="ai">Written by a model.</p><p data-block="a2" data-by="ai" data-checked="Anna">Read by Anna.</p><p data-block="a3" data-by="paste">From a page.</p><p data-block="a4">By hand.</p>', ai, rights: {ai: true, review: true}});
+		const who = box.querySelector('[data-editor-lens="lens.who"]');
+		yield {click: pt(who)};
+		say('who wrote each block shows when asked', who.getAttribute('aria-pressed') === 'true' && doc.body.hasAttribute('data-editor-show-who') && blk('a2').getAttribute('data-editor-who').includes('Anna') && !blk('a4').hasAttribute('data-editor-who'), doc.body.innerHTML.slice(0, 300));
+		say('the value keeps who wrote it', value().includes('data-by="ai" data-checked="Anna"') && !marks(value()), value());
+		await fitted();
+		yield {click: pt(footTool('check'))};
+		const aiIssue = box.querySelector('.editor-checks .editor-issue');
+		say('text nobody checked is listed', aiIssue?.textContent.includes('nobody checked'), box.querySelector('.editor-checks').textContent);
+		yield {click: pt(aiIssue.querySelector('[data-fix]'))};
+		say('and one who may checks it', blk('a1').hasAttribute('data-checked') && box.querySelectorAll('.editor-checks .editor-issue').length === 0, blk('a1').outerHTML);
+		box.querySelector('.editor-checks').hidePopover();
+		await make({value: '<p data-block="a1" data-by="ai">Words</p>', ai, rights: {ai: true}});
+		yield {click: pt(footTool('check'))};
+		say('one who may not sees no Fix', box.querySelector('.editor-checks .editor-issue') !== null && box.querySelector('.editor-checks [data-fix]') === null, box.querySelector('.editor-checks').innerHTML.slice(0, 200));
+		box.querySelector('.editor-checks').hidePopover();
+		await make({value: '<p data-block="n1">Words without a right.</p>', ai, rights: {design: true}});
+		say('without the right the AI has no button', footTool('ai').hidden, footTool('ai').outerHTML);
+		await make({value: '<p data-block="n2">Words without a host.</p>'});
+		say('without a host neither', footTool('ai').hidden, footTool('ai').outerHTML);
+		const refused = [];
+		await make({value: '<p data-block="n4">A failed list of facts leaves the text alone.</p>', facts: () => Promise.reject(new Error('no'))});
+		window.addEventListener('unhandledrejection', (event) => refused.push(String(event.reason)), {once: true});
+		await settled();
+		say('facts that do not come leave the page working', refused.length === 0 && footTool('facts').hidden, refused.join());
+		await make({value: '<p data-block="n3">Words.</p>', ai, ids: false, rights: aiRights});
+		reply = () => ({blocks: [{id: 'n3', fields: ['Other words.']}]});
+		yield {click: pt(blk('n3'), 0.5)};
+		yield* aiPick(0);
+		await shown();
+		yield {click: pt(act('all'))};
+		await until(() => bar().hidden);
+		say('without ids the value is plain', value() === '<p>Other words.</p>', value());
+
+		// Side by side.
+		const fnv = (text) => {
+			let hash = 0x811c9dc5;
+			for (const byte of new TextEncoder().encode(text)) {
+				hash = Math.imul(hash ^ byte, 0x01000193);
+			}
+			return (hash >>> 0).toString(16).padStart(8, '0');
+		};
+		const english = '<h2 data-block="p1">A day at sea</h2><p data-block="p2">The boat leaves at <data value="depart">8:00</data>.</p><p data-block="p3">Bring a long hat and water for the whole day, because there is very little shade on the path up to the viewpoint and the sun is strong.</p><p data-block="p4">New words.</p>';
+		const thai = '<h2 data-block="p1">วันหนึ่งในทะเล</h2><p data-block="p2" data-from="' + fnv('The boat sails at ⟦depart⟧.') + '">เรือออกเวลา <data value="depart">8:00</data></p><p data-block="p3" data-from="' + fnv('Bring a long hat and water for the whole day, because there is very little shade on the path up to the viewpoint and the sun is strong.') + '">นำหมวก</p>';
+		await make({value: thai, lang: 'th', source: 'en', facts: FACTS, ai, rights: aiRights, person: {name: 'Anna'}, languages: [{code: 'en', label: 'EN', value: english, versions: {p2: [{at: 'Monday', html: '<p data-block="p2">The boat sails at <data value="depart">8:00</data>.</p>'}]}}, {code: 'th', label: 'TH'}]});
+		const pairTool = box.querySelector('[data-editor-lens="lens.pair"]');
+		say('the source needs no pair: a translation does', !pairTool.disabled, pairTool.outerHTML);
+		yield {click: pt(pairTool)};
+		await until(() => box.querySelector('.editor-frame-source') !== null && box.querySelector('.editor-frame-source').contentDocument.querySelector('[data-editor-state]') !== null);
+		const left = box.querySelector('.editor-frame-source');
+		const src = left.contentDocument;
+		const from = (id) => src.querySelector('[data-block="' + id + '"]');
+		const row = (id) => from(id).nextElementSibling;
+		const level = (id) => Math.abs(from(id).getBoundingClientRect().top - blk(id).getBoundingClientRect().top);
+		say('the source stands beside the text', left.getBoundingClientRect().right <= frame.getBoundingClientRect().left + 2 && src.documentElement.lang === 'en', JSON.stringify([left.getBoundingClientRect().right, frame.getBoundingClientRect().left]));
+		say('a block that was never checked is stale, and says so', from('p1').getAttribute('data-editor-state') === 'stale' && row('p1').textContent.includes('Not yet compared') && row('p1').querySelector('del') === null, row('p1').textContent);
+		say('a block whose source moved is stale, with what moved', from('p2').getAttribute('data-editor-state') === 'stale' && row('p2').querySelector('del')?.textContent === 'sails' && row('p2').querySelector('ins')?.textContent === 'leaves', row('p2').innerHTML);
+		say('a block made from these words is not', from('p3').getAttribute('data-editor-state') === 'ok', from('p3').getAttribute('data-editor-state'));
+		say('a block the language lacks is missing', from('p4').getAttribute('data-editor-state') === 'missing', from('p4').getAttribute('data-editor-state'));
+		await until(() => level('p3') <= 1);
+		say('the rows stand level', ['p1', 'p2', 'p3'].every((id) => level(id) <= 1), ['p1', 'p2', 'p3'].map(level).join());
+		say('nothing of the rows is in the value', !/margin|data-editor|style=/.test(value()), value());
+		yield {click: pt(blk('p1'), 0.5)};
+		yield {type: 'ก'};
+		yield {click: pt(blk('p2'), 0.1)};
+		put(blk('p2'), blk('p2').childNodes.length);
+		yield {key: 'Enter'};
+		yield {type: 'more lines'};
+		yield {key: 'Enter'};
+		yield {type: 'and more'};
+		await until(() => doc.querySelectorAll('[data-block="p3"]').length === 1 && [...doc.body.children].some((one) => one.textContent === 'and more'));
+		await until(() => level('p3') <= 1 && level('p2') <= 1);
+		say('rows stand level as the text grows', level('p2') <= 1 && level('p3') <= 1, [level('p2'), level('p3')].join());
+		const grown = doc.createTextNode(' more words'.repeat(60));
+		blk('p3').previousElementSibling.append(grown);
+		await until(() => level('p3') > 1, 400);
+		await until(() => level('p3') <= 1, 280);
+		say('rows stand level before a pause in typing', level('p3') <= 1, level('p3'));
+		grown.remove();
+		await until(() => level('p3') <= 1);
+		host.style.width = '680px';
+		await until(() => level('p3') > 1, 400);
+		await until(() => level('p3') <= 1);
+		say('and when the frame narrows', level('p2') <= 1 && level('p3') <= 1, [level('p2'), level('p3')].join());
+		host.style.width = '960px';
+		await until(() => level('p3') > 1, 400);
+		await until(() => level('p3') <= 1);
+		await fitted();
+		say('a line a language splits off is its own, unsigned', [...doc.body.children].filter((one) => one.hasAttribute('data-from')).every((one) => one.hasAttribute('data-block') && ['p2', 'p3'].includes(one.getAttribute('data-block'))), doc.body.innerHTML.slice(0, 300));
+		yield {click: pt(row('p1').querySelector('[data-pair="right"]'))};
+		await until(() => from('p1').getAttribute('data-editor-state') === 'ok');
+		say('"The translation is right" clears a row', from('p1').getAttribute('data-editor-state') === 'ok' && value().includes('data-from="' + fnv('A day at sea') + '"'), value().slice(0, 200));
+		reply = () => ({blocks: [{id: 'p2', fields: ['เรือออกจากท่าเวลา ⟦depart⟧']}, {id: 'p4', fields: ['คำใหม่']}]});
+		yield {click: pt(src.querySelector('[data-pair="all"]'))};
+		await shown();
+		const sentPair = asked.at(-1);
+		say('a translation sends the source, and what stands now', sentPair.kind === 'translate' && sentPair.from === 'en' && sentPair.to === 'th' && sentPair.blocks.length === 2 && sentPair.blocks[0].fields[0] === 'The boat leaves at ⟦depart⟧.' && sentPair.blocks[0].was[0].includes('⟦depart⟧') && sentPair.blocks[1].was === null, JSON.stringify(sentPair));
+		say('words Thai breaks are drawn', blk('p2').querySelector('ins') !== null && blk('p2').querySelector('del')?.textContent !== blk('p2').textContent, blk('p2').innerHTML);
+		yield {click: pt(act('all'))};
+		await until(() => bar().hidden);
+		say('a translation taken is signed and current', from('p2').getAttribute('data-editor-state') === 'ok' && from('p4').getAttribute('data-editor-state') === 'ok' && blk('p2').getAttribute('data-by') === 'mt', doc.body.innerHTML.slice(0, 400));
+		say('a block the language lacked stands in its place', [...doc.body.children].map((one) => one.getAttribute('data-block')).indexOf('p4') > [...doc.body.children].map((one) => one.getAttribute('data-block')).indexOf('p3'), value());
+		say('its words are the language\'s', blk('p4')?.textContent === 'คำใหม่' && blk('p4').getAttribute('data-from') === fnv('New words.'), blk('p4')?.outerHTML);
+		const hashes = value();
+		yield {click: pt(blk('p1'), 0.2)};
+		yield {type: 'ก'};
+		await until(() => from('p1').getAttribute('data-editor-state') === 'ok');
+		page.setHTML(value().replace(/(<h2[^>]*) data-from="[^"]*"/, '$1'));
+		await until(() => from('p1').getAttribute('data-editor-state') === 'stale');
+		const unchanged = blk('p1').textContent;
+		reply = () => ({blocks: [{id: 'p1', fields: [unchanged]}]});
+		yield {click: pt(row('p1').querySelector('[data-pair="again"]'))};
+		await until(() => from('p1').getAttribute('data-editor-state') === 'ok');
+		say('a translation that needed no change is current', from('p1').getAttribute('data-editor-state') === 'ok' && bar().hidden, from('p1').getAttribute('data-editor-state'));
+		const factBy = FACTS.find((one) => one.key === 'depart');
+		factBy.text = '9:00';
+		page.setHTML(value());
+		await until(() => blk('p2').querySelector('data').textContent === '9:00');
+		factBy.text = '8:00';
+		say('a price that changes stales nothing', from('p2').getAttribute('data-editor-state') === 'ok', from('p2').getAttribute('data-editor-state'));
+		yield {click: pt(strip2())};
+		await until(() => doc.documentElement.lang === 'en');
+		say('in the source language the pair closes', box.querySelector('.editor-frame-source') === null && box.querySelector('[data-editor-lens="lens.pair"]').disabled, hashes.slice(0, 60));
+		await make({value: '<p data-block="q1">นี่</p>', lang: 'th', source: 'en', facts: FACTS, rights: {facts: true, langs: ['th']}, languages: [{code: 'en', label: 'EN', value: '<p data-block="q1" onmouseover="alert(1)">One.</p><p data-block="q2">Two.</p>'}, {code: 'th', label: 'TH'}]});
+		yield {click: pt(box.querySelector('[data-editor-lens="lens.pair"]'))};
+		await until(() => (box.querySelector('.editor-frame-source')?.contentDocument.querySelector('[data-pair="copy"]') ?? null) !== null);
+		const src2 = box.querySelector('.editor-frame-source').contentDocument;
+		say('with no AI a row is written by hand', src2.querySelector('[data-pair="again"]') === null && src2.querySelector('[data-pair="copy"]') !== null, src2.body.innerHTML.slice(0, 300));
+		say('the source is cleaned as the text is', src2.querySelector('[onmouseover]') === null, src2.body.innerHTML.slice(0, 300));
+		yield {click: pt(src2.querySelector('[data-pair="copy"]'))};
+		await until(() => blk('q2') !== null);
+		say('a translator gets the block to write in', blk('q2')?.textContent === 'Two.' && blk('q2').previousElementSibling === blk('q1'), doc.body.innerHTML);
+
+		// Without the right to check, a person who takes a suggestion leaves it unchecked.
+		await make({value: '<p data-block="u1">Words here.</p>', ai, rights: {ai: true}});
+		reply = () => ({blocks: [{id: 'u1', fields: ['Other words here.']}]});
+		yield {click: pt(blk('u1'), 0.5)};
+		yield* aiPick(0);
+		await shown();
+		yield {click: pt(act('all'))};
+		await until(() => bar().hidden);
+		say('without the right a suggestion stays unchecked', blk('u1').getAttribute('data-by') === 'ai' && !blk('u1').hasAttribute('data-checked'), blk('u1').outerHTML);
+
+		// An answer that comes while another is being decided waits its turn.
+		await make({value: aiWords, facts: FACTS, ai, rights: aiRights});
+		let lateGo = null;
+		reply = (one) => (one.blocks[0].id === 'r2' ? new Promise((done) => {
+			lateGo = done;
+		}) : {blocks: [{id: 'r1', fields: [one.blocks[0].fields[0].replace('The boat', 'Our boat')]}]});
+		yield {click: pt(blk('r2'), 0.2)};
+		yield* aiPick(0);
+		yield {click: pt(blk('r1'), 0.9)};
+		yield* aiPick(0);
+		await shown();
+		lateGo({blocks: [{id: 'r2', fields: ['A hat.']}]});
+		await until(() => told2().includes('Decide'));
+		say('a late answer drops nothing being decided', !bar().hidden && blk('r1').querySelector('del') !== null && blk('r2').querySelector('del') === null, doc.body.innerHTML.slice(0, 200));
+		yield {click: pt(act('none'))};
+		await until(() => bar().hidden);
+
+		// An image's words: suggested, kept by a person.
+		await make({value: '<div class="ratio-1x1" data-block="i1"><img src="' + new URL('img/lagoon.svg', location.href).href + '" alt="" width="120" height="120"></div>', ai, rights: aiRights});
+		const picture = blk('i1').querySelector('img');
+		await until(() => picture.complete);
+		reply = () => ({text: 'A green lagoon'});
+		yield {click: pt(picture)};
+		yield {click: pt(box.querySelector('[data-editor-act="props"]'))};
+		const suggest = cardEl().querySelector('[data-editor-alt="ask"]');
+		yield {click: pt(suggest)};
+		await until(() => !cardEl().querySelector('[data-editor-alt="keep"]').hidden);
+		say('an image\'s words are a suggestion too', asked.at(-1).kind === 'alt' && asked.at(-1).src.endsWith('lagoon.svg') && cardEl().querySelector('input').value === 'A green lagoon' && !value().includes('A green lagoon'), value());
+		yield {click: pt(cardEl().querySelector('[data-editor-alt="keep"]'))};
+		await until(() => value().includes('alt="A green lagoon"'));
+		say('and stand when kept', value().includes('alt="A green lagoon"'), value());
+		yield {click: pt(cardEl().querySelector('.btn-close'))};
+
+		// Right to left, and on a phone.
+		await make({value: aiWords, facts: FACTS, ai, rights: aiRights, dir: 'rtl', lang: 'ar'});
+		box.dir = 'rtl';
+		reply = () => ({grid: [0, 1, 2].map((y) => [0, 1, 2].map((x) => [version(x, y)]))});
+		yield {click: pt(blk('r1'), 0.1)};
+		yield* aiPick(4);
+		await until(() => !point(2, 1).disabled);
+		point(1, 1).focus();
+		yield {key: 'ArrowLeft'};
+		await until(() => blk('r1').textContent.includes('21 at'));
+		say('right to left the left arrow goes to the point on the left', point(2, 1).getAttribute('aria-checked') === 'true' && point(2, 1).getBoundingClientRect().left < point(1, 1).getBoundingClientRect().left, pad().innerHTML.slice(0, 160));
+		yield {key: 'Escape'};
+		await until(() => !pad().matches(':popover-open'));
+		await make({value: thai, lang: 'th', source: 'en', width: 390, facts: FACTS, rights: aiRights, languages: [{code: 'en', label: 'EN', value: english}, {code: 'th', label: 'TH'}]});
+		yield {click: pt(box.querySelector('[data-editor-lens="lens.pair"]'))};
+		await until(() => box.querySelector('.editor-frame-source') !== null);
+		const scroller = box.querySelector('.editor-stage');
+		scroller.scrollLeft = 120;
+		say('on a phone the two columns scroll sideways, the page does not', scroller.scrollLeft > 0 && box.getBoundingClientRect().width <= 392, JSON.stringify([scroller.scrollLeft, scroller.scrollWidth, scroller.clientWidth, box.getBoundingClientRect().width]));
+
+		}
 
 		// The clean end.
 		say('nothing of the editor in the value', !marks(value()), value().slice(0, 600));
@@ -1454,12 +1917,12 @@ window.REDZ_BEHAVE = (() => {
 		}]},
 		levels: {target: '#combobox-levels-list', steps: [async (out) => {
 			const search = $('[aria-controls="combobox-levels-list"]');
-			input(search, 'phuket');
+			input(search, 'south bay');
 			const shown = $$('#combobox-levels-list [role="option"]').filter((option) => !option.hidden).map((option) => option.dataset.value);
 			const active = $('#combobox-levels-list [data-active]')?.dataset.value;
 			input(search, '');
-			if (say(shown) !== say(['th', 'th-south', 'phuket']) || active !== 'phuket') {
-				out.push('a search in levels shows ' + say(shown) + ', active ' + say(active) + ' - not Phuket with its parents, Phuket active');
+			if (say(shown) !== say(['th', 'th-south', 'south-bay']) || active !== 'south-bay') {
+				out.push('a search in levels shows ' + say(shown) + ', active ' + say(active) + ' - not South Bay with its parents, South Bay active');
 			}
 		}]},
 		rating: {target: '#rating-display .rating', steps: [async (out) => {
@@ -1652,7 +2115,7 @@ window.REDZ_BEHAVE = (() => {
 			document.documentElement.dir = 'ltr';
 			$('.viewer-close', viewer).click();
 			await wait(50);
-			if (say(first) !== say([true, 'lagoon.svg', 'The lagoon at Ang Thong · 1 of 3']) || second[0] !== 'pier.svg' || say(wrapped) !== say(['cliffs.svg', 'Cliffs above a bay with a boat · 3 of 3']) || mirrored[0] !== 'lagoon.svg' || viewer.open || document.activeElement !== links[0]) {
+			if (say(first) !== say([true, 'lagoon.svg', 'The lagoon at North Bay · 1 of 3']) || second[0] !== 'pier.svg' || say(wrapped) !== say(['cliffs.svg', 'Cliffs above a bay with a boat · 3 of 3']) || mirrored[0] !== 'lagoon.svg' || viewer.open || document.activeElement !== links[0]) {
 				out.push('a set of three opens ' + say(first) + ', steps to ' + say(second) + ', wraps back to ' + say(wrapped) + ', right to left on to ' + say(mirrored) + ', and closed leaves the focus ' + (document.activeElement === links[0] ? 'on its link' : 'elsewhere'));
 			}
 			let followed = null;
@@ -1830,7 +2293,7 @@ window.REDZ_BEHAVE = (() => {
 			const list = $('#list-group-search-list');
 			const shown = () => $$('.list-group-item:not([data-filter-empty])', list).filter((item) => getComputedStyle(item).display !== 'none').map((item) => item.textContent.trim());
 			const empty = $('[data-filter-empty]', list);
-			input(field, 'KÓH tao');
+			input(field, 'TÚRTLE cove');
 			const one = shown();
 			input(field, 'chang');
 			const search = shown();
@@ -1839,14 +2302,14 @@ window.REDZ_BEHAVE = (() => {
 			await wait(700);
 			const told = $$('[role="status"]').some((status) => /\d/.test(status.textContent));
 			field.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true}));
-			if (say(one) !== say(['Koh Tao and Koh Nang Yuan']) || say(search) !== say(['Elephant sanctuary']) || none[0] !== 0 || none[1] !== false || !told || field.value !== '' || shown().length !== 4 || !empty.hidden) {
-				out.push('a search shows ' + say(one) + ' for "KÓH tao", ' + say(search) + ' for a data-search word, ' + say(none) + ' for none (shown, the empty state hidden), the count ' + (told ? '' : 'not ') + 'said, then Escape leaves ' + say(field.value) + ' and ' + shown().length + ' items');
+			if (say(one) !== say(['Turtle Cove and Pearl Cove']) || say(search) !== say(['Elephant sanctuary']) || none[0] !== 0 || none[1] !== false || !told || field.value !== '' || shown().length !== 4 || !empty.hidden) {
+				out.push('a search shows ' + say(one) + ' for "TÚRTLE cove", ' + say(search) + ' for a data-search word, ' + say(none) + ' for none (shown, the empty state hidden), the count ' + (told ? '' : 'not ') + 'said, then Escape leaves ' + say(field.value) + ' and ' + shown().length + ' items');
 			}
 			const tree = $('[data-filter="tree-current-list"]');
 			input(tree, 'night');
 			const pages = $$('#tree-current-list .tree-item').map((item) => (item.hasAttribute('data-filtered') ? '-' : '+') + $(':scope > .tree-row > a', item).textContent);
 			input(tree, '');
-			if (say(pages) !== say(['+Excursions', '-Ang Thong by speedboat', '+Night market and street food'])) {
+			if (say(pages) !== say(['+Excursions', '-North Bay by speedboat', '+Night market and street food'])) {
 				out.push('a tree searched for "night" keeps ' + say(pages) + ', not the parent of the match');
 			}
 		}]},
@@ -1949,7 +2412,7 @@ window.REDZ_BEHAVE = (() => {
 			}
 		}]},
 		footRow: {target: '#table-wide .table-scroll', steps: [async (out) => {
-			const table = Object.assign(document.createElement('table'), {className: 'table', innerHTML: '<thead><tr><th scope="col">Boat</th><th scope="col">Seats</th></tr></thead><tbody><tr><th scope="row">Sea Breeze</th><td>5</td></tr></tbody><tfoot><tr><th scope="row">Total</th><td>5</td></tr></tfoot>'});
+			const table = Object.assign(document.createElement('table'), {className: 'table', innerHTML: '<thead><tr><th scope="col">Boat</th><th scope="col">Seats</th></tr></thead><tbody><tr><th scope="row">Boat A</th><td>5</td></tr></tbody><tfoot><tr><th scope="row">Total</th><td>5</td></tr></tfoot>'});
 			$('#table-wide .table-scroll').parentElement.append(table);
 			const read = (cell) => {
 				const style = getComputedStyle(cell);
@@ -2270,6 +2733,239 @@ window.REDZ_BEHAVE = (() => {
 			const closed = said();
 			if (!open || expanded !== handles.map((handle, i) => String(i === 1)).join(' ') || closed !== handles.map(() => 'false').join(' ')) {
 				out.push('the second of ' + handles.length + ' handles sharing one menu of moves ' + (open ? 'opens it' : 'does not open it') + ': aria-expanded ' + say(expanded) + ' while it is open, ' + say(closed) + ' after - only the handle that opened it is expanded');
+			}
+		}]},
+		tipNow: {target: '#tooltip-now', walk: async function* (out) {
+			const tip = () => $('#redz-tooltip')?.matches(':popover-open') ?? false;
+			const spot = async (el) => {
+				el.scrollIntoView({block: 'center', behavior: 'instant'});
+				await settled();
+				await settled();
+				const box = el.getBoundingClientRect();
+				return [Math.round(box.left + box.width / 2), Math.round(box.top + box.height / 2)];
+			};
+			yield {hover: await spot($('#tooltip-title button[title]'))};
+			const waits = tip();
+			yield {hover: [2, 2]};
+			yield {hover: await spot($('#tooltip-now button'))};
+			const now = tip();
+			const words = $('#redz-tooltip')?.textContent;
+			yield {hover: [2, 2]};
+			if (waits || !now || words !== 'Duplicate') {
+				out.push('data-tooltip-delay: a title of the default wait shows ' + (waits ? 'at once' : 'later') + ', one of 0 ' + (now ? 'at once' : 'later') + ', saying ' + say(words));
+			}
+		}},
+		railTip: {target: '.app-sidebar .app-link', walk: async function* (out) {
+			const rail = $('.app-sidebar');
+			const link = $('.app-sidebar .app-link');
+			rail.toggleAttribute('data-folded', true);
+			await until(() => link.hasAttribute('title'));
+			await settled();
+			const box = link.getBoundingClientRect();
+			yield {hover: [Math.round(box.left + box.width / 2), Math.round(box.top + box.height / 2)]};
+			const tip = () => $('#redz-tooltip');
+			await until(() => tip()?.matches(':popover-open') ?? false);
+			const seen = tip()?.getBoundingClientRect();
+			const named = link.getAttribute('aria-label') ?? link.textContent.trim();
+			const rtl = getComputedStyle(link).direction === 'rtl';
+			const clear = seen !== undefined && (rtl ? seen.right <= box.left : seen.left >= box.right);
+			const level = seen !== undefined && near(seen.top + seen.height / 2, box.top + box.height / 2, 2);
+			yield {hover: [Math.round(innerWidth / 2), 4]};
+			rail.toggleAttribute('data-folded', false);
+			await until(() => !link.hasAttribute('title'));
+			if (!clear || !level || named === '') {
+				out.push('a folded rail: the tooltip of a link stands ' + say(seen) + ' beside ' + say(box) + ', the link named ' + say(named));
+			}
+		}},
+		groupButton: {target: '#input-group-basic .btn', steps: [async (out) => {
+			const button = getComputedStyle($('#input-group-basic .btn'));
+			const field = getComputedStyle($('#input-group-basic .form-control'));
+			const words = getComputedStyle($('#input-group-basic .input-group-text'));
+			const stand = document.createElement('i');
+			stand.style.cssText = 'color: var(--redz-primary); background: var(--redz-primary-subtle)';
+			document.body.append(stand);
+			const tint = getComputedStyle(stand);
+			const wanted = [tint.color, tint.backgroundColor];
+			stand.remove();
+			if (button.borderBlockStartColor !== field.borderBlockStartColor || say([button.color, button.backgroundColor]) !== say(wanted) || button.fontWeight !== '600') {
+				out.push('a plain button in a group: its line ' + button.borderBlockStartColor + ', the field\'s ' + field.borderBlockStartColor + '; ink and face ' + say([button.color, button.backgroundColor]) + ' for ' + say(wanted) + ', weight ' + button.fontWeight);
+			}
+			const icon = document.createElement('button');
+			icon.className = 'btn btn-icon';
+			const solid = document.createElement('button');
+			solid.className = 'btn btn-primary';
+			const group = $('#input-group-basic .input-group');
+			group.append(icon, solid);
+			const faces = [getComputedStyle(icon).backgroundColor, getComputedStyle(icon).color, getComputedStyle(solid).borderBlockStartColor];
+			icon.remove();
+			solid.remove();
+			if (faces[0] !== words.backgroundColor || faces[1] !== words.color || faces[2] === field.borderBlockStartColor) {
+				out.push('in a group an icon reads ' + say(faces.slice(0, 2)) + ' for the words\' ' + say([words.backgroundColor, words.color]) + ', a solid button\'s line is ' + faces[2]);
+			}
+		}]},
+		sectionHeads: {target: '.drawer-header', steps: [async (out) => {
+			const main = document.documentElement.style;
+			const heads = {card: '.card-header', drawer: '.drawer-header', dialog: '.dialog-header'};
+			const tints = Object.keys(heads).map((name, index) => {
+				main.setProperty('--redz-' + name + '-header-bg', 'rgb(1, 2, ' + index + ')');
+				return getComputedStyle($(heads[name])).backgroundColor;
+			});
+			main.setProperty('--redz-dialog-header-end', '12px');
+			main.setProperty('--redz-dialog-header-line', '1px solid rgb(9, 9, 9)');
+			const dialog = getComputedStyle($('.dialog-header'));
+			const under = [dialog.paddingBlockEnd, dialog.borderBlockEndWidth];
+			for (const name of ['card-header-bg', 'drawer-header-bg', 'dialog-header-bg', 'dialog-header-end', 'dialog-header-line']) {
+				main.removeProperty('--redz-' + name);
+			}
+			const rest = getComputedStyle($('.dialog-header'));
+			if (say(tints) !== say(['rgb(1, 2, 0)', 'rgb(1, 2, 1)', 'rgb(1, 2, 2)']) || say(under) !== say(['12px', '1px']) || rest.paddingBlockEnd !== '0px' || rest.borderBlockEndWidth !== '0px') {
+				out.push('the heads\' tokens: ' + say(tints) + ', a dialog\'s room and line ' + say(under) + ', at rest ' + rest.paddingBlockEnd + ' and ' + rest.borderBlockEndWidth);
+			}
+		}]},
+		longWord: {target: '#stat-narrow', steps: [async (out) => {
+			const tiles = $$('#stat-narrow .stat');
+			const words = $$('#stat-narrow :is(.stat-label, .stat-sub)');
+			for (const tile of tiles) {
+				tile.style.inlineSize = '5rem';
+			}
+			await settled();
+			const spilled = words.filter((one) => one.getBoundingClientRect().right > one.closest('.stat').getBoundingClientRect().right + 1 || one.scrollWidth > one.clientWidth + 1).map((one) => one.textContent);
+			for (const tile of tiles) {
+				tile.removeAttribute('style');
+			}
+			if (spilled.length > 0) {
+				out.push('a long word runs past a narrow tile: ' + say(spilled));
+			}
+		}]},
+		rowMark: {target: 'tr.table-danger', steps: [async (out) => {
+			const row = $('tr.table-danger');
+			const first = row.cells[0];
+			const pin = document.createElement('i');
+			pin.style.cssText = 'position: absolute; inset-block-start: 0; inset-inline-start: 0; inline-size: 3px; block-size: 3px';
+			first.style.display = 'none';
+			row.append(pin);
+			await settled();
+			const [box, spot] = [row.getBoundingClientRect(), pin.getBoundingClientRect()];
+			const mark = getComputedStyle(row, '::before');
+			const seen = [mark.content, mark.position, mark.inlineSize];
+			pin.remove();
+			first.removeAttribute('style');
+			if (!near(spot.left, getComputedStyle(row).direction === 'rtl' ? box.right - 3 : box.left, 2) || !near(spot.top, box.top, 2) || seen[0] === 'none' || seen[1] !== 'absolute') {
+				out.push('a row\'s mark with its first cell hidden: a pin stands ' + say(spot) + ' in a row at ' + say(box) + ', the mark is ' + say(seen));
+			}
+		}]},
+		tabsInView: {target: '#nav-tabs-panel-1', steps: [async (out) => {
+			const panel = $('#nav-tabs-panel-1');
+			const list = $('#nav-tabs [role="tablist"]');
+			const header = $('.app-header');
+			panel.scrollIntoView({behavior: 'instant'});
+			await settled();
+			const top = list.getBoundingClientRect().top;
+			const floor = header === null ? 0 : header.getBoundingClientRect().bottom;
+			scrollTo({top: 0, behavior: 'instant'});
+			if (top < floor - 1) {
+				out.push('a deep link to a panel leaves its tabs at ' + top + ', under what ends at ' + floor);
+			}
+		}]},
+		reason: {target: '#tooltip-title [aria-disabled="true"][title]', walk: async function* (out) {
+			const button = $('#tooltip-title [aria-disabled="true"]');
+			const title = button.getAttribute('title');
+			button.scrollIntoView({block: 'center', behavior: 'instant'});
+			await settled();
+			await settled();
+			const box = button.getBoundingClientRect();
+			const tip = $('#redz-tooltip');
+			yield {hover: [2, 2]};
+			yield {click: [Math.round(box.left + box.width / 2), Math.round(box.top + box.height / 2)]};
+			const open = $('#redz-tooltip')?.matches(':popover-open') ?? false;
+			const words = $('#redz-tooltip')?.textContent;
+			yield {hover: [2, 2]};
+			await until(() => !($('#redz-tooltip')?.matches(':popover-open') ?? false), 1000);
+			const back = button.getAttribute('title');
+			if (!open || words !== title || back !== title || tip === undefined) {
+				out.push('a click on a control that cannot run: the reason ' + (open ? 'shows' : 'does not show') + ' saying ' + say(words) + ', the title after it ' + say(back));
+			}
+		}},
+		lastColumn: {target: '#table-wide-last .table-scroll', steps: [async (out) => {
+			const scroller = $('#table-wide-last .table-scroll');
+			const cell = $('#table-wide-last tbody tr:first-child td:last-child');
+			const edge = () => near(cell.getBoundingClientRect().right, scroller.getBoundingClientRect().right, 3);
+			scroller.style.inlineSize = '320px';
+			scroller.scrollLeft = 0;
+			await settled();
+			const wide = scroller.scrollWidth > scroller.clientWidth;
+			const held = edge();
+			scroller.removeAttribute('style');
+			if (!wide || !held) {
+				out.push('table-scroll-last: the table is ' + (wide ? 'wider than' : 'not wider than') + ' its scroller, and its last column ' + (held ? 'stays at the end' : 'scrolls away'));
+			}
+		}]},
+		headTokens: {target: '#table-wide-last .table', steps: [async (out) => {
+			const table = $('#table-wide-last .table');
+			const head = $('thead th', table);
+			const row = $('tbody th', table);
+			table.style.setProperty('--redz-table-head-weight', '700');
+			table.style.setProperty('--redz-table-head-border', '2px solid rgb(1, 2, 3)');
+			table.style.setProperty('--redz-table-head-text', 'rgb(4, 5, 6)');
+			table.style.setProperty('--redz-table-head-bg', 'rgb(7, 8, 9)');
+			const seen = [getComputedStyle(head).fontWeight, getComputedStyle(head).borderBlockEndWidth, getComputedStyle(head).color, getComputedStyle(head).backgroundColor, getComputedStyle(row).fontWeight, getComputedStyle(row).borderBlockEndWidth];
+			table.removeAttribute('style');
+			if (say(seen) !== say(['700', '2px', 'rgb(4, 5, 6)', 'rgb(7, 8, 9)', '550', '1px'])) {
+				out.push('the head tokens: ' + say(seen) + ' for the weight, border, text and fill of a head, then the weight and border of a row\'s head');
+			}
+		}]},
+		listSet: {target: '#combobox-inline-list', steps: [async (out) => {
+			const list = $('#combobox-inline-list');
+			const held = () => $$('input[type="hidden"][name="zone"]').map((one) => one.value + '|' + one.dataset.label);
+			const events = [];
+			const hear = (event) => events.push(event.type);
+			list.addEventListener('input', hear);
+			list.addEventListener('change', hear);
+			REDZ.ui.combobox.set('#combobox-inline-list', 'Europe/Berlin');
+			const chosen = [held(), list.querySelector('[data-value="Europe/Berlin"]').getAttribute('aria-selected'), events.join(' ')];
+			REDZ.ui.combobox.set(list, ['Asia/Bangkok', 'Asia/Dubai']);
+			const single = held();
+			list.removeEventListener('input', hear);
+			list.removeEventListener('change', hear);
+			if (say(chosen) !== say([['Europe/Berlin|Berlin · UTC+1'], 'true', 'input change']) || say(single) !== say(['Asia/Bangkok|Bangkok · UTC+7'])) {
+				out.push('combobox.set: it held ' + say(chosen) + ', then from two values on a single list ' + say(single));
+			}
+			const many = $('#combobox-many-list') ?? $('[role="listbox"][aria-multiselectable="true"][data-name]');
+			const name = many.dataset.name;
+			const values = [...many.querySelectorAll('[role="option"]')].slice(0, 2).map((one) => one.dataset.value);
+			REDZ.ui.combobox.set(many, values);
+			const heldMany = () => $$('input[type="hidden"]').filter((one) => one.name === name).map((one) => one.value);
+			const two = heldMany();
+			const word = many.querySelector('[role="option"]').getAttribute('aria-selected');
+			REDZ.ui.combobox.set(many, []);
+			if (say(two) !== say(values) || word !== 'true' || heldMany().length !== 0) {
+				out.push('combobox.set on a list of many: ' + say(two) + ' for ' + say(values) + ', the first option aria-selected ' + say(word) + ', ' + heldMany().length + ' left after an empty list');
+			}
+		}]},
+		twin: {target: '#form-show-on', steps: [async (out) => {
+			const on = $('#form-show-on');
+			const off = $('#form-show-off');
+			const box = $('#form-show input[type="checkbox"]');
+			const was = [on.hidden, off.hidden];
+			box.click();
+			await settled();
+			const now = [on.hidden, off.hidden];
+			box.click();
+			await settled();
+			if (say(was) !== say([true, false]) || say(now) !== say([false, true]) || on.hidden !== true || off.hidden !== false) {
+				out.push('a switch with its hidden twin: off shows ' + say(was) + ' for [on, off] hidden, on ' + say(now));
+			}
+		}]},
+		more: {target: '#form-more', steps: [async (out) => {
+			const icon = $('#form-more summary > .bi');
+			const fold = $('#form-more details');
+			const rest = getComputedStyle(icon).rotate;
+			fold.open = true;
+			await until(() => getComputedStyle(icon).rotate === '90deg');
+			const seen = getComputedStyle(icon).rotate;
+			fold.open = false;
+			if (rest !== 'none' || seen !== '90deg') {
+				out.push('a folded hint: its chevron rotates ' + say(rest) + ' at rest, ' + say(seen) + ' open');
 			}
 		}]},
 		editor: {target: '#editor-demo-host', walk: editorWalk},

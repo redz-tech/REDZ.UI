@@ -32,7 +32,7 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 - [Ratings](docs/rating.md): Stars that show a mark out of five - an average of reviews, a guide's score - and five radios drawn as stars for giving one.
 - [PIN pad](docs/pin.md): A short number that unlocks a trusted device: dots that fill as it is typed and a keypad for a finger, while the keyboard types as it always does.
 - [Repeaters](docs/repeat.md): A list of the same few fields a person adds to and takes from: phone numbers, the lines of an invoice, the stops of a route. The page posts every row; the library adds and removes them.
-- [Editor](docs/editor.md): A text editor for REDZ.UI markup, a package of the release linked apart: words edited in place, the library's components changed through their own settings, and a frame of its own where no script of the text ever runs. Nobody needs HTML; an expert may have it.
+- [Editor](docs/editor.md): A text editor for REDZ.UI markup, a package of the release linked apart: words edited in place, the library's components changed through their own settings, live facts, an AI that only suggests, translations side by side, and a frame of its own where no script of the text ever runs. Nobody needs HTML; an expert may have it.
 
 ## Content
 

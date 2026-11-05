@@ -22,10 +22,19 @@ Inside an element with `data-tooltips` - `<html>` for the whole page - an elemen
 ```html
 <button class="btn btn-icon" type="button" title="Duplicate"><i class="bi bi-copy" aria-hidden="true"></i></button>
 <button class="btn" type="button" aria-disabled="true" title="Publish needs a price for every season">Publish</button>
-<span class="hstack gap-8"><span class="dot dot-warning" title="2 translations are outdated"></span>Ang Thong</span>
+<span class="hstack gap-8"><span class="dot dot-warning" title="2 translations are outdated"></span>North Bay</span>
 ```
 
-A touch screen has no hover: a tap on a control that cannot run - `aria-disabled="true"` with a title, as Publish above - shows its title for three seconds and says it politely, so the person learns why without a mouse.
+`data-tooltip-delay` on that element, or on any element around the title, sets the wait after a hover in milliseconds, 400 unless it says otherwise; `0` shows the tooltip as soon as the pointer is on it.
+
+```html
+<button class="btn btn-icon" type="button" title="Duplicate"><i class="bi bi-copy" aria-hidden="true"></i></button>
+<button class="btn btn-icon" type="button" title="Delete"><i class="bi bi-trash3" aria-hidden="true"></i></button>
+```
+
+On a folded side navigation a link's tooltip stands beside it, at the end of the rail, so it covers no other icon; the rail names its links from their words by itself.
+
+A click or a tap on a control that cannot run - `aria-disabled="true"` with a title, as Publish above - shows its title for three seconds and says it politely, so the person learns why without a mouse.
 
 ## Keyboard and accessibility
 

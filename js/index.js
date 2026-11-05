@@ -42,6 +42,7 @@ import './repeat.js';
 import './filter.js';
 import './row-link.js';
 import './log.js';
+import {setList} from './combobox.js';
 import {toast} from './toast.js';
 import {confirm} from './confirm.js';
 import {busy} from './busy.js';
@@ -50,4 +51,4 @@ import {progress} from './progress.js';
 import {selectTab} from './tabs.js';
 import {status} from './status.js';
 
-globalThis.REDZ = Object.assign(globalThis.REDZ ?? {}, {ui: {...globalThis.REDZ?.ui, toast, confirm, busy, prompt, progress, select: selectTab, status}});
+globalThis.REDZ = Object.assign(globalThis.REDZ ?? {}, {ui: {...globalThis.REDZ?.ui, toast, confirm, busy, prompt, progress, select: selectTab, status, combobox: {set: setList}}});

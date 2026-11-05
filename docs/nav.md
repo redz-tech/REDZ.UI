@@ -36,6 +36,19 @@ Tabs switch panels in place: `role="tablist"`, each tab `role="tab"` with `aria-
 <div id="nav-tabs-panel-3" role="tabpanel" aria-labelledby="nav-tabs-3" tabindex="0" hidden><p>Edited yesterday by M. K.; published on three sites.</p></div>
 ```
 
+### A tab with changes
+
+`data-changed`, set by the page, puts a dot on a tab whose panel holds something not saved yet, the same word as on a field. Its value is what a screen reader says after the tab's name.
+
+```html
+<div class="nav nav-underline" role="tablist" aria-label="Settings">
+	<button class="nav-link" type="button" role="tab" id="nav-changed-1" aria-selected="true" aria-controls="nav-changed-panel-1">Company</button>
+	<button class="nav-link" type="button" role="tab" id="nav-changed-2" aria-selected="false" aria-controls="nav-changed-panel-2" data-changed="not saved">Mail</button>
+</div>
+<div id="nav-changed-panel-1" role="tabpanel" aria-labelledby="nav-changed-1" tabindex="0"><p>The company's name and address.</p></div>
+<div id="nav-changed-panel-2" role="tabpanel" aria-labelledby="nav-changed-2" tabindex="0" hidden><p>The address mail is sent from.</p></div>
+```
+
 ### Tabs whose panels load
 
 When a panel comes from the server, the arrows should not load every panel they pass: `data-activation="manual"` on the tablist makes them move the focus only, and `Enter` or `Space` selects.
@@ -129,7 +142,7 @@ A nav or a list group with `data-scrollspy` marks the link to the section in vie
 	<div class="docs-scroll md:span-8 vstack gap-16" tabindex="0" role="region" aria-label="The day, by section">
 		<section id="nav-spy-plan" class="vstack gap-4"><h4 class="fs-14">Plan</h4><p class="mb-0">Pick-up at the hotel at 7:30, the pier at 8:15. The crew hands out life vests and snorkels before the boat leaves the bay.</p></section>
 		<section id="nav-spy-boat" class="vstack gap-4"><h4 class="fs-14">The boat</h4><p class="mb-0">A speedboat for 30 guests with shade and a toilet; the ride to the park takes an hour across open water.</p></section>
-		<section id="nav-spy-lunch" class="vstack gap-4"><h4 class="fs-14">Lunch</h4><p class="mb-0">Thai lunch on a beach of the park: rice, green curry, fruit and water; vegetarian on request.</p></section>
+		<section id="nav-spy-lunch" class="vstack gap-4"><h4 class="fs-14">Lunch</h4><p class="mb-0">Lunch on a beach of the park: rice, green curry, fruit and water; vegetarian on request.</p></section>
 		<section id="nav-spy-back" class="vstack gap-4"><h4 class="fs-14">Back</h4><p class="mb-0">The boat leaves the park at 15:30 and reaches the pier by 17:00; the transfer brings everyone back to the hotel.</p></section>
 	</div>
 </div>
@@ -182,8 +195,8 @@ Tabs fold the same way. The arrows move between the tabs in the row; a tab chose
 		<button class="nav-link" type="button" role="tab" id="nav-overflow-tabs-5" aria-selected="false" aria-controls="nav-overflow-tabs-panel-5">Notes</button>
 	</div>
 </div>
-<div id="nav-overflow-tabs-panel-1" role="tabpanel" aria-labelledby="nav-overflow-tabs-1" tabindex="0"><p>Anna Petrova, two trips this year.</p></div>
-<div id="nav-overflow-tabs-panel-2" role="tabpanel" aria-labelledby="nav-overflow-tabs-2" tabindex="0" hidden><p>Ang Thong on 12 December, 2 adults.</p></div>
+<div id="nav-overflow-tabs-panel-1" role="tabpanel" aria-labelledby="nav-overflow-tabs-1" tabindex="0"><p>Anna Sample, two trips this year.</p></div>
+<div id="nav-overflow-tabs-panel-2" role="tabpanel" aria-labelledby="nav-overflow-tabs-2" tabindex="0" hidden><p>North Bay on 12 December, 2 adults.</p></div>
 <div id="nav-overflow-tabs-panel-3" role="tabpanel" aria-labelledby="nav-overflow-tabs-3" tabindex="0" hidden><p>Paid in full by card.</p></div>
 <div id="nav-overflow-tabs-panel-4" role="tabpanel" aria-labelledby="nav-overflow-tabs-4" tabindex="0" hidden><p>No messages yet.</p></div>
 <div id="nav-overflow-tabs-panel-5" role="tabpanel" aria-labelledby="nav-overflow-tabs-5" tabindex="0" hidden><p>Vegetarian lunch.</p></div>
@@ -208,7 +221,7 @@ Tabs fold the same way. The arrows move between the tabs in the row; a tab chose
 
 From [`css/components/nav.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/nav.css). It declares `--redz-fade-left`, `--redz-fade-right` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-16`, `--redz-space-8`, `--redz-text-muted`, `--redz-text`, `--redz-border`, `--redz-space-4`, `--redz-radius-8`, `--redz-bg-hover`, `--redz-space-12`, `--redz-radius-6`, `--redz-fs-12`, `--redz-bg`, `--redz-shadow-1`.
+It reads the theme's `--redz-space-16`, `--redz-space-8`, `--redz-text-muted`, `--redz-text`, `--redz-warning`, `--redz-border`, `--redz-space-4`, `--redz-radius-8`, `--redz-bg-hover`, `--redz-space-12`, `--redz-radius-6`, `--redz-fs-12`, `--redz-bg`, `--redz-shadow-1`.
 
 ## From Bootstrap 5.3
 

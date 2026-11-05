@@ -11,7 +11,7 @@ The way up from a record to the list it belongs to, above the record's title. Th
 	<ol class="breadcrumb">
 		<li class="breadcrumb-item"><a href="#breadcrumb-trail">Content</a></li>
 		<li class="breadcrumb-item"><a href="#breadcrumb-trail">Excursions</a></li>
-		<li class="breadcrumb-item" aria-current="page">Ang Thong</li>
+		<li class="breadcrumb-item" aria-current="page">North Bay</li>
 	</ol>
 </nav>
 ```

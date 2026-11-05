@@ -8,7 +8,7 @@
 	<p><code>navbar</code> on the <code>&lt;header&gt;</code>, <code>navbar-brand</code> on the site's name, <code>navbar-toggler</code> on the button, and the links in a <code>&lt;nav class="drawer" popover&gt;</code> after it: <code>drawer-header</code> with the panel's title and its close button, <code>drawer-body</code> with a <code>nav navbar-nav</code>. <code>md:navbar-expand</code> sets the links in the row where the header is 768 px wide or wider; below that the button opens them. The width is the header's own, so a header in a column folds as one on a phone does.</p>
 	<div class="docs-example docs-example-stack" id="navbar-site">
 		<header class="navbar md:navbar-expand">
-			<a class="navbar-brand" href="#navbar-site"><i class="bi bi-sun" aria-hidden="true"></i>Samui Tours</a>
+			<a class="navbar-brand" href="#navbar-site"><i class="bi bi-sun" aria-hidden="true"></i>Example Tours</a>
 			<button class="btn btn-text btn-icon navbar-toggler" type="button" commandfor="navbar-site-menu" command="toggle-popover" aria-label="Menu"><i class="bi bi-list" aria-hidden="true"></i></button>
 			<nav class="drawer" id="navbar-site-menu" popover aria-labelledby="navbar-site-title">
 				<div class="drawer-header">
@@ -32,7 +32,7 @@
 	<p>With <a href="nav.html"><code>nav-overflow</code></a> around the links, a header that is wide enough for its row but not for all of them keeps the first ones and moves the rest into a “More” menu; only below its width does the whole row go behind the button. A link that opens a <a href="menu.html">menu</a> folds with it: “More” shows that menu's items as a group under the link's words. This header is 640 px wide at most and sets its row from 576 px with <code>sm:navbar-expand</code>.</p>
 	<div class="docs-example docs-example-stack" id="navbar-overflow">
 		<header class="navbar sm:navbar-expand max-w-640">
-			<a class="navbar-brand" href="#navbar-overflow"><i class="bi bi-sun" aria-hidden="true"></i>Samui Tours</a>
+			<a class="navbar-brand" href="#navbar-overflow"><i class="bi bi-sun" aria-hidden="true"></i>Example Tours</a>
 			<button class="btn btn-text btn-icon navbar-toggler" type="button" commandfor="navbar-overflow-menu" command="toggle-popover" aria-label="Menu"><i class="bi bi-list" aria-hidden="true"></i></button>
 			<nav class="drawer" id="navbar-overflow-menu" popover aria-labelledby="navbar-overflow-title">
 				<div class="drawer-header">
@@ -66,7 +66,7 @@
 	<p>Without a <code>navbar-expand</code> class the links always wait behind the button, for a header that keeps its row for something else. <code>navbar-text</code> is a line of text in the row. <code>data-theme="dark"</code> on the header turns it and its panel dark on a light page, and <code>drawer-start</code> opens the panel at the start edge.</p>
 	<div class="docs-example docs-example-stack" id="navbar-folded">
 		<header class="navbar bg-body" data-theme="dark">
-			<a class="navbar-brand" href="#navbar-folded"><i class="bi bi-sun" aria-hidden="true"></i>Samui Tours</a>
+			<a class="navbar-brand" href="#navbar-folded"><i class="bi bi-sun" aria-hidden="true"></i>Example Tours</a>
 			<span class="navbar-text ms-auto">Open daily, 8 a.m. to 8 p.m.</span>
 			<button class="btn btn-text btn-icon navbar-toggler" type="button" commandfor="navbar-folded-menu" command="toggle-popover" aria-label="Menu"><i class="bi bi-list" aria-hidden="true"></i></button>
 			<nav class="drawer drawer-start" id="navbar-folded-menu" popover aria-labelledby="navbar-folded-title">

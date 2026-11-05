@@ -18,6 +18,8 @@ const inlineOf = (node) => {
 				out += '<br>';
 			} else if (one.tagName === 'A' && safe(one.getAttribute('href') ?? '') && one.hasAttribute('href')) {
 				out += '<a href="' + escape(one.getAttribute('href')) + '">' + inner + '</a>';
+			} else if (one.tagName === 'DATA' && one.hasAttribute('value')) {
+				out += '<data value="' + escape(one.getAttribute('value')) + '">' + inner + '</data>';
 			} else if (KEEP[one.tagName] !== undefined && inner !== '') {
 				out += '<' + KEEP[one.tagName] + '>' + inner + '</' + KEEP[one.tagName] + '>';
 			} else {
@@ -89,7 +91,8 @@ const fromHTML = (html) => {
 	return out.join('');
 };
 
-const marks = (value) => escape(value).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/\*([^*\s][^*]*)\*/g, '<em>$1</em>').replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2">$1</a>');
+/** Inline marks written as Markdown, as markup. */
+export const marks = (value) => escape(value).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/\*([^*\s][^*]*)\*/g, '<em>$1</em>').replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2">$1</a>');
 
 /** REDZ.UI's markup of Markdown, as a chat's answer comes. */
 const fromMarkdown = (value) => {
@@ -172,7 +175,11 @@ export const pasteOf = (ed) => {
 			made = text.split(/\n{2,}/).map((one) => one.trim()).filter(Boolean).map((one) => '<p>' + escape(one).replace(/\n/g, '<br>') + '</p>').join('');
 		}
 		if (made !== '') {
-			ed.insertBlocks(made, topAt(doc));
+			for (const top of ed.placeBlocks(made, topAt(doc))) {
+				top.setAttribute('data-by', 'paste');
+			}
+			ed.settle();
+			ed.commit();
 			ed.note(say('pasted'));
 		}
 	};

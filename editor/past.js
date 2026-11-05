@@ -41,7 +41,7 @@ export const pastOf = (ed) => {
 			const next = blocksIn(html);
 			for (const [id, markup] of known) {
 				if (next.has(id) && next.get(id) !== markup) {
-					ed.versions.set(id, [...(ed.versions.get(id) ?? []), {at: new Date(), html: markup}]);
+					ed.versions.set(id, [...(ed.versions.get(id) ?? []), {at: new Date(), html: markup, by: ed.config.person?.name}]);
 				}
 			}
 			known = next;
@@ -68,6 +68,14 @@ export const pastOf = (ed) => {
 		known = blocksIn(now.html);
 	};
 
+	/** Takes the text as it stands as the start, when what came late only changed how it is shown. */
+	ed.rebase = () => {
+		if (!dirty && back.length === 0) {
+			now.html = ed.read(true);
+			known = blocksIn(now.html);
+		}
+	};
+
 	ed.commit = (later = false) => {
 		clearTimeout(timer);
 		if (later) {
@@ -78,7 +86,7 @@ export const pastOf = (ed) => {
 	};
 
 	ed.undo = () => {
-		ed.tryOff();
+		ed.calm();
 		save();
 		if (back.length > 0) {
 			ahead.push(now);
@@ -87,7 +95,7 @@ export const pastOf = (ed) => {
 	};
 
 	ed.redo = () => {
-		ed.tryOff();
+		ed.calm();
 		save();
 		if (ahead.length > 0) {
 			back.push(now);

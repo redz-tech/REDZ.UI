@@ -15,7 +15,7 @@ Buttons that act without a line of the page's script: copy a value, print the pa
 	<button class="btn btn-icon" type="button" command="--copy" aria-controls="commands-copy-key" aria-label="Copy the key"><i class="bi bi-copy" aria-hidden="true"></i></button>
 </div>
 <div class="hstack gap-8">
-	<button class="btn" type="button" command="--copy" data-copy="https://lagoon.example/tours/ang-thong"><i class="bi bi-link-45deg" aria-hidden="true"></i>Copy the address</button>
+	<button class="btn" type="button" command="--copy" data-copy="https://lagoon.example/tours/north-bay"><i class="bi bi-link-45deg" aria-hidden="true"></i>Copy the address</button>
 </div>
 ```
 
@@ -45,7 +45,7 @@ Buttons with `command="--theme"` and the value `light`, `dark` or `system` set t
 `command="--share"` shares `data-share-url` - the page's own address when it has none - and `data-share-title` through the device's share sheet where it has one, as a phone does. Elsewhere it opens its menu, `aria-controls`, whose links the library writes by their class: `share-telegram`, `share-facebook`, `share-messenger`, `share-linkedin`, `share-vk`, `share-line` and `share-whatsapp`; a `--copy` item without `data-copy` copies the address. Each class gives its icon the network's colour; Bootstrap Icons has no VK mark, so `share-vk` draws its letters. Messenger opens its app, on a phone.
 
 ```html
-<button class="btn" type="button" command="--share" aria-controls="commands-share-menu" aria-haspopup="menu" data-share-url="https://lagoon.example/tours/ang-thong" data-share-title="Ang Thong by speedboat"><i class="bi bi-share" aria-hidden="true"></i>Share</button>
+<button class="btn" type="button" command="--share" aria-controls="commands-share-menu" aria-haspopup="menu" data-share-url="https://lagoon.example/tours/north-bay" data-share-title="North Bay by speedboat"><i class="bi bi-share" aria-hidden="true"></i>Share</button>
 <div id="commands-share-menu" class="menu menu-start" popover role="menu" aria-label="Share">
 	<a class="menu-item share-telegram" role="menuitem"><i class="bi bi-telegram" aria-hidden="true"></i>Telegram</a>
 	<a class="menu-item share-whatsapp" role="menuitem"><i class="bi bi-whatsapp" aria-hidden="true"></i>WhatsApp</a>

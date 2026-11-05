@@ -8,7 +8,7 @@
 	<p><code>form-floating</code> keeps the label inside the field and lifts it when the field has a value or the focus. The label follows the control, and the control needs a <code>placeholder</code> - it is how CSS knows the field is empty.</p>
 	<div class="docs-example docs-example-stack" id="form-floating">
 		<div class="form-floating">
-			<input class="form-control" id="form-floating-name" value="Ang Thong: marine park by speedboat" placeholder="A name people search for">
+			<input class="form-control" id="form-floating-name" value="North Bay: marine park by speedboat" placeholder="A name people search for">
 			<label for="form-floating-name">Name</label>
 		</div>
 		<div class="form-floating">
@@ -30,13 +30,24 @@
 	<div class="docs-example docs-example-stack" id="form-stacked">
 		<div class="form-field">
 			<label class="form-label" for="form-stacked-slug">Address</label>
-			<input class="form-control font-monospace" id="form-stacked-slug" value="ang-thong" aria-describedby="form-stacked-slug-hint">
-			<div class="form-text" id="form-stacked-slug-hint">Full address /excursions/ang-thong/. The old one answers with a 301 redirect.</div>
+			<input class="form-control font-monospace" id="form-stacked-slug" value="north-bay" aria-describedby="form-stacked-slug-hint">
+			<div class="form-text" id="form-stacked-slug-hint">Full address /excursions/north-bay/. The old one answers with a 301 redirect.</div>
 		</div>
 		<div class="form-field">
 			<label class="form-label" for="form-stacked-price">Adult price, THB</label>
 			<input class="form-control tabular-nums" id="form-stacked-price" type="number" value="2500" min="0" step="100" aria-invalid="true" aria-describedby="form-stacked-price-error">
 			<div class="invalid-feedback" id="form-stacked-price-error"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>Lower than the child price</div>
+		</div>
+	</div>
+
+	<h3>A longer hint</h3>
+	<p>A <code>details</code> with <code>form-more</code> folds what a short hint cannot say. Its chevron turns as it opens.</p>
+	<div class="docs-example docs-example-stack" id="form-more">
+		<div class="form-field">
+			<label class="form-label" for="form-more-keep">Keep the log for, days</label>
+			<input class="form-control tabular-nums" id="form-more-keep" type="number" value="90" min="1" aria-describedby="form-more-hint">
+			<div class="form-text" id="form-more-hint">Older records are removed at night.</div>
+			<details class="form-more form-text"><summary><i class="bi bi-chevron-right" aria-hidden="true"></i>More</summary><div class="mt-4">The count starts from the day a record is written. A record a person marked to keep stays, whatever this number says, until the mark is taken off.</div></details>
 		</div>
 	</div>
 
@@ -54,7 +65,7 @@
 		</div>
 		<div class="form-floating form-adorn">
 			<i class="bi bi-globe2" aria-hidden="true"></i>
-			<select class="form-select" id="form-adorn-country" autocomplete="country-name"><option>Thailand</option><option>Malaysia</option><option>Vietnam</option></select>
+			<select class="form-select" id="form-adorn-country" autocomplete="country-name"><option>Northland</option><option>Southland</option><option>Eastland</option></select>
 			<label for="form-adorn-country">Country</label>
 		</div>
 		<div class="input-group">
@@ -136,7 +147,7 @@
 	<div class="docs-example docs-example-stack" id="form-counter">
 		<div class="form-field">
 			<label class="form-label" for="form-counter-title">Page title</label>
-			<input class="form-control" id="form-counter-title" value="Ang Thong marine park by speedboat" aria-describedby="form-counter-title-count">
+			<input class="form-control" id="form-counter-title" value="North Bay marine park by speedboat" aria-describedby="form-counter-title-count">
 			<div class="form-counter" id="form-counter-title-count" data-counter="form-counter-title" data-counter-max="60"></div>
 		</div>
 	</div>
@@ -183,7 +194,7 @@
 	</div>
 
 	<h3>Shown by another field</h3>
-	<p><code>data-show-when</code> on a region names a field of its form, and <code>data-show-in</code> the values that show it, a space between them; without it, any value does. A checkbox or a radio counts its value when checked. While the region is hidden its fields are disabled, so the form sends none of them; a field the page disabled itself stays disabled. A region inside a hidden region counts as hidden, whatever its own field holds.</p>
+	<p><code>data-show-when</code> on a region names a field of its form, and <code>data-show-in</code> the values that show it, a space between them; without it, any value does. A checkbox or a radio counts its value when checked. A hidden field beside a checkbox of the same name is what the form sends while it is off: <code>data-show-in</code> can name its value, and a region without <code>data-show-in</code> does not count it. While the region is hidden its fields are disabled, so the form sends none of them; a field the page disabled itself stays disabled. A region inside a hidden region counts as hidden, whatever its own field holds.</p>
 	<div class="docs-example docs-example-stack" id="form-show">
 		<form class="vstack gap-12">
 			<div class="form-floating max-w-320">
@@ -193,6 +204,12 @@
 			<div class="form-floating max-w-320" id="form-show-tax-region" data-show-when="pay" data-show-in="invoice">
 				<input class="form-control" id="form-show-tax" name="tax_id" placeholder="Tax ID">
 				<label for="form-show-tax">Tax ID</label>
+			</div>
+			<div class="vstack gap-4">
+				<input type="hidden" name="remind" value="0">
+				<label class="form-check"><input class="switch" type="checkbox" role="switch" name="remind" value="1"> Remind the guest</label>
+				<div class="form-text" id="form-show-on" data-show-when="remind">A message goes out the evening before.</div>
+				<div class="form-text" id="form-show-off" data-show-when="remind" data-show-in="0">The guest is told nothing.</div>
 			</div>
 		</form>
 	</div>
@@ -208,11 +225,11 @@
 			<tbody>
 				<tr>
 					<th scope="row">form-control</th>
-					<td><input class="form-control" value="Ang Thong" aria-label="At rest"></td>
-					<td><input class="form-control" value="Ang Thong" aria-label="Focused" data-docs-state="focus"></td>
-					<td><input class="form-control" value="Ang Thong" aria-label="Invalid" aria-invalid="true"></td>
-					<td><input class="form-control" value="Ang Thong" aria-label="Read only" readonly></td>
-					<td><input class="form-control" value="Ang Thong" aria-label="Disabled" disabled></td>
+					<td><input class="form-control" value="North Bay" aria-label="At rest"></td>
+					<td><input class="form-control" value="North Bay" aria-label="Focused" data-docs-state="focus"></td>
+					<td><input class="form-control" value="North Bay" aria-label="Invalid" aria-invalid="true"></td>
+					<td><input class="form-control" value="North Bay" aria-label="Read only" readonly></td>
+					<td><input class="form-control" value="North Bay" aria-label="Disabled" disabled></td>
 				</tr>
 				<tr>
 					<th scope="row">form-select</th>
@@ -227,8 +244,8 @@
 					<td><div class="form-floating"><input class="form-control" id="form-states-empty" placeholder="Name"><label for="form-states-empty">Name</label></div></td>
 					<td><div class="form-floating"><input class="form-control" id="form-states-focus" placeholder="Name" data-docs-state="focus"><label for="form-states-focus">Name</label></div></td>
 					<td><div class="form-floating"><input class="form-control" id="form-states-invalid" value="A" placeholder="Name" aria-invalid="true"><label for="form-states-invalid">Name</label></div></td>
-					<td><div class="form-floating"><input class="form-control" id="form-states-readonly" value="Ang Thong" placeholder="Name" readonly><label for="form-states-readonly">Name</label></div></td>
-					<td><div class="form-floating"><input class="form-control" id="form-states-disabled" value="Ang Thong" placeholder="Name" disabled><label for="form-states-disabled">Name</label></div></td>
+					<td><div class="form-floating"><input class="form-control" id="form-states-readonly" value="North Bay" placeholder="Name" readonly><label for="form-states-readonly">Name</label></div></td>
+					<td><div class="form-floating"><input class="form-control" id="form-states-disabled" value="North Bay" placeholder="Name" disabled><label for="form-states-disabled">Name</label></div></td>
 				</tr>
 			</tbody>
 		</table>

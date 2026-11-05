@@ -28,11 +28,38 @@ export const lensOf = (ed) => {
 
 	ed.applyTheme = () => {
 		const wanted = theme === 'auto' ? document.documentElement.dataset.theme : theme;
-		if (wanted === undefined) {
-			delete ed.doc.documentElement.dataset.theme;
-		} else {
-			ed.doc.documentElement.dataset.theme = wanted;
+		for (const doc of [ed.doc, ed.pairDoc()]) {
+			if (doc !== null && wanted === undefined) {
+				delete doc.documentElement.dataset.theme;
+			} else if (doc !== null) {
+				doc.documentElement.dataset.theme = wanted;
+			}
 		}
+	};
+
+	const toggle = (key, glyph, act) => {
+		const one = Object.assign(document.createElement('div'), {className: 'editor-choice'});
+		one.innerHTML = '<button type="button" aria-pressed="false" data-editor-lens="' + key + '" aria-label="' + say(key) + '" title="' + say(key) + '"><i class="bi bi-' + glyph + '" aria-hidden="true"></i></button>';
+		one.firstElementChild.addEventListener('click', act);
+		strip.append(one);
+		return one.firstElementChild;
+	};
+	let pair = null;
+	let who = null;
+
+	/** The toggles' states. */
+	ed.lensPaint = () => {
+		who?.setAttribute('aria-pressed', String(ed.doc.body.hasAttribute('data-editor-show-who')));
+		if (pair !== null) {
+			pair.disabled = !ed.pairCan();
+			pair.setAttribute('aria-pressed', String(ed.pairOn()));
+		}
+	};
+
+	/** Shows or hides who wrote each block. */
+	ed.whoToggle = () => {
+		ed.doc.body.toggleAttribute('data-editor-show-who');
+		ed.lensPaint();
 	};
 
 	ed.buildLens = () => {
@@ -81,6 +108,11 @@ export const lensOf = (ed) => {
 				}
 			});
 		}
+		who = toggle('lens.who', 'person-badge', ed.whoToggle);
+		if ((ed.config.languages ?? []).length > 1) {
+			pair = toggle('lens.pair', 'layout-split', ed.pairToggle);
+		}
+		ed.lensPaint();
 		ed.toolbar.after(strip);
 	};
 };

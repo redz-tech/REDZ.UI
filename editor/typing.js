@@ -55,11 +55,31 @@ export const typingOf = (ed) => {
 		}
 		const query = top.textContent.slice(1).toLowerCase();
 		const box = selection.getRangeAt(0).getBoundingClientRect();
-		showPick(ed.insertable().filter((one) => one.label.toLowerCase().includes(query)), (one) => {
+		showPick(ed.insertable().filter((one) => one.label.toLowerCase().includes(query) && (one.need === undefined || ed.may(one.need))), (one) => {
 			closePick();
 			top.replaceChildren(doc.createElement('br'));
 			one.run();
 		}, box.height > 0 ? box : top.getBoundingClientRect());
+	};
+
+	/** @ at the start of a word opens the page's facts, narrowed by what follows it. */
+	const mention = () => {
+		const doc = ed.doc;
+		const selection = doc.getSelection();
+		const node = selection.anchorNode;
+		const typed = node?.nodeType === Node.TEXT_NODE && selection.isCollapsed && ed.may('facts') ? /(?:^|\s)@([^\s@]*)$/.exec(node.data.slice(0, selection.anchorOffset)) : null;
+		if (typed === null || typed === undefined) {
+			return;
+		}
+		const query = typed[1].toLowerCase();
+		const at = selection.anchorOffset;
+		showPick([...ed.facts.values()].filter((one) => one.label.toLowerCase().includes(query)).map((one) => ({key: one.key, icon: 'tag', label: one.label + ' · ' + one.text})), (one) => {
+			closePick();
+			const range = doc.createRange();
+			range.setStart(node, at - typed[1].length - 1);
+			range.setEnd(node, at);
+			ed.putFact(one.key, range);
+		}, selection.getRangeAt(0).getBoundingClientRect());
 	};
 
 	/** A line that starts as Markdown does becomes that element, and a run closed by its marks becomes that mark. */
@@ -124,6 +144,7 @@ export const typingOf = (ed) => {
 		}
 		rules(event);
 		slash();
+		mention();
 	};
 
 	/** The keys of an open / menu; true when one was taken. */

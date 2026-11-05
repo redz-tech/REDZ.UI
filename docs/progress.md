@@ -75,6 +75,8 @@ The browser's own `<progress>` for work under way and `<meter>` for a measure wi
 const rows = await REDZ.ui.progress(fetch('/bookings?page=2').then((answer) => answer.json()));
 ```
 
+A product sets how much it shows in its tokens: `--redz-progress-top-size`, `--redz-progress-top-track` and `--redz-progress-top-glow`, a `box-shadow`.
+
 ## Keyboard and accessibility
 
 - Name every bar: a `<label for>`, `aria-label` or `aria-labelledby`. The browser announces the value as a percentage of `max`; the words beside the bar are for the eye.
@@ -84,9 +86,9 @@ const rows = await REDZ.ui.progress(fetch('/bookings?page=2').then((answer) => a
 
 ## Tokens
 
-From [`css/components/progress.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/progress.css), which declares no custom property of its own.
+From [`css/components/progress.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/progress.css). It declares `--redz-track` on its root, never on rows or items.
 
-It reads the theme's `--redz-bg-hover`, `--redz-primary`, `--redz-secondary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-motion`, `--redz-ease`.
+It reads the theme's `--redz-bg-hover`, `--redz-primary`, `--redz-secondary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-progress-top-track`, `--redz-progress-top-size`, `--redz-progress-top-glow`, `--redz-motion`, `--redz-ease`.
 
 ## From Bootstrap 5.3
 

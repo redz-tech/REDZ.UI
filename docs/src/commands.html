@@ -13,7 +13,7 @@
 			<button class="btn btn-icon" type="button" command="--copy" aria-controls="commands-copy-key" aria-label="Copy the key"><i class="bi bi-copy" aria-hidden="true"></i></button>
 		</div>
 		<div class="hstack gap-8">
-			<button class="btn" type="button" command="--copy" data-copy="https://lagoon.example/tours/ang-thong"><i class="bi bi-link-45deg" aria-hidden="true"></i>Copy the address</button>
+			<button class="btn" type="button" command="--copy" data-copy="https://lagoon.example/tours/north-bay"><i class="bi bi-link-45deg" aria-hidden="true"></i>Copy the address</button>
 		</div>
 	</div>
 </section>
@@ -43,7 +43,7 @@
 	<h2 id="commands-share">Share</h2>
 	<p><code>command="--share"</code> shares <code>data-share-url</code> - the page's own address when it has none - and <code>data-share-title</code> through the device's share sheet where it has one, as a phone does. Elsewhere it opens its menu, <code>aria-controls</code>, whose links the library writes by their class: <code>share-telegram</code>, <code>share-facebook</code>, <code>share-messenger</code>, <code>share-linkedin</code>, <code>share-vk</code>, <code>share-line</code> and <code>share-whatsapp</code>; a <code>--copy</code> item without <code>data-copy</code> copies the address. Each class gives its icon the network's colour; Bootstrap Icons has no VK mark, so <code>share-vk</code> draws its letters. Messenger opens its app, on a phone.</p>
 	<div class="docs-example" id="commands-share-tour">
-		<button class="btn" type="button" command="--share" aria-controls="commands-share-menu" aria-haspopup="menu" data-share-url="https://lagoon.example/tours/ang-thong" data-share-title="Ang Thong by speedboat"><i class="bi bi-share" aria-hidden="true"></i>Share</button>
+		<button class="btn" type="button" command="--share" aria-controls="commands-share-menu" aria-haspopup="menu" data-share-url="https://lagoon.example/tours/north-bay" data-share-title="North Bay by speedboat"><i class="bi bi-share" aria-hidden="true"></i>Share</button>
 		<div id="commands-share-menu" class="menu menu-start" popover role="menu" aria-label="Share">
 			<a class="menu-item share-telegram" role="menuitem"><i class="bi bi-telegram" aria-hidden="true"></i>Telegram</a>
 			<a class="menu-item share-whatsapp" role="menuitem"><i class="bi bi-whatsapp" aria-hidden="true"></i>WhatsApp</a>

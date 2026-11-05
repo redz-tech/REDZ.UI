@@ -10,11 +10,11 @@
 		inset-block-start: 3.25rem;
 		z-index: 1;
 		padding: max(var(--redz-space-8), calc(var(--redz-row-pad) - 0.125rem)) var(--redz-space-12);
-		border-block-end: 1px solid var(--redz-border);
-		background: var(--redz-bg);
-		color: var(--redz-text-muted);
+		border-block-end: var(--redz-table-head-border, 1px solid var(--redz-border));
+		background: var(--redz-table-head-bg, var(--redz-bg));
+		color: var(--redz-table-head-text, var(--redz-text-muted));
 		font-size: var(--redz-fs-12);
-		font-weight: 550;
+		font-weight: var(--redz-table-head-weight, 550);
 		text-align: start;
 		white-space: nowrap;
 	}
@@ -27,6 +27,8 @@
 	}
 
 	.table > :is(tbody, tfoot) > tr > th {
+		--redz-table-head-border: 1px solid var(--redz-border);
+		--redz-table-head-weight: 550;
 		position: relative;
 		inset-block-start: auto;
 		z-index: auto;
@@ -70,6 +72,22 @@
 	}
 
 	.table-scroll-first > .table > thead > tr > :first-child {
+		z-index: 2;
+	}
+
+	.table-scroll-last > .table > * > tr > :last-child {
+		position: sticky;
+		inset-inline-end: 0;
+		z-index: 1;
+		border-inline-start: 1px solid var(--redz-border);
+	}
+
+	:where(.table-scroll-last > .table > * > tr) > :last-child,
+	.table-scroll-last > .table > tbody > tr > th:last-child {
+		background-color: var(--redz-bg);
+	}
+
+	.table-scroll-last > .table > thead > tr > :last-child {
 		z-index: 2;
 	}
 
@@ -288,14 +306,19 @@
 		background: color-mix(in oklch, var(--redz-primary) 10%, var(--redz-bg));
 	}
 
-	.table-danger td:first-child::before,
-	.table-warning td:first-child::before,
-	.table-active td:first-child::before,
-	.table tr[aria-current]:not([aria-current="false"]) > td:first-child::before {
+	tr:is(.table-danger, .table-warning, .table-active),
+	.table tr[aria-current]:not([aria-current="false"]) {
+		position: relative;
+	}
+
+	/* The row's own mark: a phone may hide its first cell. */
+	tr:is(.table-danger, .table-warning, .table-active)::before,
+	.table tr[aria-current]:not([aria-current="false"])::before {
 		content: "";
 		position: absolute;
 		inset-block-start: 50%;
 		inset-inline-start: 0;
+		z-index: 2;
 		inline-size: 3px;
 		block-size: 1.25rem;
 		border-radius: 3px;
@@ -344,10 +367,8 @@
 	}
 
 	@media (forced-colors: active) {
-		.table-danger td:first-child::before,
-		.table-warning td:first-child::before,
-		.table-active td:first-child::before,
-		.table tr[aria-current]:not([aria-current="false"]) > td:first-child::before {
+		tr:is(.table-danger, .table-warning, .table-active)::before,
+		.table tr[aria-current]:not([aria-current="false"])::before {
 			forced-color-adjust: none;
 			background: CanvasText;
 		}

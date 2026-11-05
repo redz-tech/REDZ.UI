@@ -11,10 +11,10 @@
 			<div class="card-header"><h2 class="fs-14" id="inline-edit-row-title">Excursions</h2></div>
 			<div class="list-group list-group-flush">
 				<div class="list-group-item hstack gap-8">
-					<span class="table-title flex-fill" id="inline-edit-row-1">Ang Thong: marine park by speedboat</span>
-					<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="inline-edit-row-1-form" command="--edit" aria-label="Edit the title: Ang Thong"><i class="bi bi-pencil" aria-hidden="true"></i></button>
+					<span class="table-title flex-fill" id="inline-edit-row-1">North Bay: marine park by speedboat</span>
+					<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="inline-edit-row-1-form" command="--edit" aria-label="Edit the title: North Bay"><i class="bi bi-pencil" aria-hidden="true"></i></button>
 					<form class="inline-edit-form flex-fill" id="inline-edit-row-1-form" data-for="inline-edit-row-1" hidden>
-						<input class="form-control form-control-sm" name="title" value="Ang Thong: marine park by speedboat" aria-label="Title" required>
+						<input class="form-control form-control-sm" name="title" value="North Bay: marine park by speedboat" aria-label="Title" required>
 						<button class="btn btn-sm btn-primary" type="submit">Save</button>
 						<button class="btn btn-sm" type="button" commandfor="inline-edit-row-1-form" command="--cancel">Cancel</button>
 						<div class="invalid-feedback" hidden></div>
@@ -46,11 +46,11 @@
 	<p>A form cannot sit in a form: where the value lives in one - a settings page with a save bar - the edit form is a <code>popover="manual"</code> placed outside it, with the class <code>menu</code> for its panel; <code>--edit</code> opens it beside the Edit button.</p>
 	<div class="docs-example docs-example-stack" id="inline-edit-popover">
 		<div class="hstack gap-8">
-			<span class="fs-16 fw-600" id="inline-edit-popover-name">Lagoon Tours</span>
+			<span class="fs-16 fw-600" id="inline-edit-popover-name">Example Cruises</span>
 			<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="inline-edit-popover-form" command="--edit" aria-label="Edit the company's name"><i class="bi bi-pencil" aria-hidden="true"></i></button>
 		</div>
 		<form class="menu inline-edit-form" id="inline-edit-popover-form" data-for="inline-edit-popover-name" popover="manual">
-			<input class="form-control form-control-sm" name="company" value="Lagoon Tours" aria-label="The company's name" required>
+			<input class="form-control form-control-sm" name="company" value="Example Cruises" aria-label="The company's name" required>
 			<button class="btn btn-sm btn-primary" type="submit">Save</button>
 			<button class="btn btn-sm" type="button" commandfor="inline-edit-popover-form" command="--cancel">Cancel</button>
 			<div class="invalid-feedback" hidden></div>

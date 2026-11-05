@@ -36,7 +36,7 @@ A child's exception: `span-N` or `span-full`, with a prefix where it changes.
 <div class="grid cols-min-160 gap-12">
 	<div class="card"><div class="card-body">lagoon.example</div></div>
 	<div class="card"><div class="card-body">villas.lagoon.example</div></div>
-	<div class="card"><div class="card-body">angthong.example</div></div>
+	<div class="card"><div class="card-body">northbay.example</div></div>
 </div>
 ```
 

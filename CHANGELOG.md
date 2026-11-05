@@ -4,6 +4,72 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## 0.17.0 - 2026-11-05
+
+The editor gets the rest of what was decided on the mockup: live facts, an AI that only suggests, a review word by word, the
+tone pad, translations side by side, the page's reading, and who wrote what. No model is ever called from a page.
+
+### Changed - the license of the editor
+- From this release the editor, `editor/` and its built files, is under PolyForm Strict 1.0.0, in `dist/LICENSE-editor`: noncommercial
+  use only, no changes, no redistribution. It comes with REDZ products under their terms; anything else needs a separate license, see
+  `LICENSING.md`. The library stays under MIT, and versions up to 0.16.0 stay under MIT as released.
+
+### Added - the editor
+- **Live facts:** `<data value="KEY">` stands in every place a price, a date or a phone number is used, by `options.facts`.
+  `@` in the text puts one in, Facts in the foot counts its places and changes it in all of them through `options.onFact`.
+  A value typed by hand where a fact holds it is found by the checks.
+- **The AI's seam:** `options.ai(task, {signal, progress})` is the host's and async. Tasks `rewrite`, `tones`, `translate`,
+  `write`, `read` and `alt` carry plain words, a fact as a token `⟦KEY⟧`. A refusal answers `{refusal}` and is said as one. A
+  closed block is never sent, and an answer whose block changed, whose fields do not fit or that lost a fact is left out.
+- **The review:** a suggestion is drawn word by word by `Intl.Segmenter`, each change taken or left alone, and the value stays
+  what it was until the last one is decided. Marks on the words around a change stay. One task is one step of undo, and
+  `options.onBatch` hears it as one batch.
+- **The lock on what an AI writes:** it answers flat blocks of the passport's schema `editor.write`, and the editor writes them
+  as REDZ.UI markup by the catalog, so a kind, a tone or a size the library does not have cannot come out.
+- **The tone pad:** nine versions from one request, shorter to longer and stricter to warmer, opened at once and tried on the block.
+- **Side by side:** the source language in a frame of its own, row by row. `data-from` keeps the hash of the source's words a block
+  was made from, so only the block that changed goes stale; a price that changes stales nothing. A stale row says what changed, by
+  `languages[].versions`. Translate all sends every row left as one task. `options.source` names the language.
+- **Ask the page:** what a visitor's assistant would answer from this page alone.
+- **Who wrote it:** `data-by` and `data-checked` on a block, shown by the strip, kept with `ids`. Text nobody checked is listed in the
+  checks. The right `review` signs it; a person without it can take a suggestion, and it stays unchecked.
+
+### Changed
+- `languages`: a language the session left keeps what was written in it when the session comes back to it, also without `getLanguage`.
+- The foot holds the AI's menu, Facts and Check. A page that looked for the Check button as the foot's first button looks for
+  `[data-editor-foot="check"]`.
+
+### Changed - the library
+- A plain `btn` in an `input-group` wears the field's line, an accent face and weight 600, so the group reads as one control; a plain
+  `btn-icon` there reads as `input-group-text`. Solid, outline, subtle and text buttons stay as they are.
+- A click on a control with `aria-disabled="true"` and a title shows the title for three seconds and says it, as a tap always did.
+- The mark of a `table-danger`, `table-warning`, `table-active` or current row stands on the row, so it stays when a phone hides the
+  first cell.
+
+### Fixed
+- The caret in a block whose text changed under it threw in Safari, which stopped undo.
+- `stat-label` and `stat-sub` break one long word instead of running past a narrow tile.
+- A deep link to a tab's panel leaves the tabs in view, under a sticky header too.
+
+### Added
+- `REDZ.ui.combobox.set(list, values)` sets what a list holds from the page, as a choice does: its hidden fields, its button
+  or chips, then `input` and `change`. A form's Discard can go back to the last saved value; `reset` goes back to the first.
+- `data-changed` on a `nav-link` draws the dot a field's mark has; its value is what a screen reader says after the tab's name.
+- `form-more` on a `details` folds a long hint under a field, with a chevron that turns.
+- `data-tooltip-delay` on a title or around it sets the wait of its tooltip; `0` shows it at once.
+- A folded rail's tooltip stands beside its link, so it covers no other icon.
+- `--redz-progress-top-size`, `--redz-progress-top-track` and `--redz-progress-top-glow` set how much the request bar shows.
+- A flush list group with `edge-start-*` rows keeps every row's start in line, and the edge off the words.
+- `--redz-card-header-bg`, `--redz-drawer-header-bg` and `--redz-dialog-header-bg` tint a section's head; a dialog's takes
+  `--redz-dialog-header-end` and `--redz-dialog-header-line` for the room and the line under it.
+- `table-scroll-last` holds a wide table's last column in place, where a row's buttons stay in view.
+- `--redz-table-head-bg`, `--redz-table-head-text`, `--redz-table-head-weight` and `--redz-table-head-border` set the look of every
+  table head from a product's tokens.
+
+### Fixed
+- `data-show-when` and a switch's hidden twin: a hidden field beside a checkbox or a radio of its name is what the form sends
+  while none is checked, so `data-show-in` can name its value and a region without `data-show-in` no longer counts it.
+
 ## 0.16.0 - 2026-11-05
 
 The editor is rebuilt around a living block: nobody needs HTML to change a REDZ.UI element, and every setting the

@@ -10,7 +10,7 @@ A site's header: its name, its main links and what stands beside them. Where the
 
 ```html
 <header class="navbar md:navbar-expand">
-	<a class="navbar-brand" href="#navbar-site"><i class="bi bi-sun" aria-hidden="true"></i>Samui Tours</a>
+	<a class="navbar-brand" href="#navbar-site"><i class="bi bi-sun" aria-hidden="true"></i>Example Tours</a>
 	<button class="btn btn-text btn-icon navbar-toggler" type="button" commandfor="navbar-site-menu" command="toggle-popover" aria-label="Menu"><i class="bi bi-list" aria-hidden="true"></i></button>
 	<nav class="drawer" id="navbar-site-menu" popover aria-labelledby="navbar-site-title">
 		<div class="drawer-header">
@@ -36,7 +36,7 @@ With [`nav-overflow`](nav.md) around the links, a header that is wide enough for
 
 ```html
 <header class="navbar sm:navbar-expand max-w-640">
-	<a class="navbar-brand" href="#navbar-overflow"><i class="bi bi-sun" aria-hidden="true"></i>Samui Tours</a>
+	<a class="navbar-brand" href="#navbar-overflow"><i class="bi bi-sun" aria-hidden="true"></i>Example Tours</a>
 	<button class="btn btn-text btn-icon navbar-toggler" type="button" commandfor="navbar-overflow-menu" command="toggle-popover" aria-label="Menu"><i class="bi bi-list" aria-hidden="true"></i></button>
 	<nav class="drawer" id="navbar-overflow-menu" popover aria-labelledby="navbar-overflow-title">
 		<div class="drawer-header">
@@ -72,7 +72,7 @@ Without a `navbar-expand` class the links always wait behind the button, for a h
 
 ```html
 <header class="navbar bg-body" data-theme="dark">
-	<a class="navbar-brand" href="#navbar-folded"><i class="bi bi-sun" aria-hidden="true"></i>Samui Tours</a>
+	<a class="navbar-brand" href="#navbar-folded"><i class="bi bi-sun" aria-hidden="true"></i>Example Tours</a>
 	<span class="navbar-text ms-auto">Open daily, 8 a.m. to 8 p.m.</span>
 	<button class="btn btn-text btn-icon navbar-toggler" type="button" commandfor="navbar-folded-menu" command="toggle-popover" aria-label="Menu"><i class="bi bi-list" aria-hidden="true"></i></button>
 	<nav class="drawer drawer-start" id="navbar-folded-menu" popover aria-labelledby="navbar-folded-title">

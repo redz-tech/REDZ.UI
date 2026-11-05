@@ -63,7 +63,7 @@ The main column -	العمود الرئيسي -
 The side -	الجانب -
 lagoon.example	lagoon.example
 villas.lagoon.example	villas.lagoon.example
-angthong.example	angthong.example
+northbay.example	northbay.example
 Draft	مسودة
 Edited 2 hours ago	عُدّل قبل ساعتين
 Preview	معاينة
@@ -169,7 +169,7 @@ On	تشغيل
 Price	السعر
 in the base currency THB	بالعملة الأساسية، البات
 The visitor's currency is an estimate.	عملة الزائر تقديرية.
-Ang Thong	أنغ ثونغ
+North Bay	الخليج الشمالي
 Prices	الأسعار
 Adults 2,500 · children 1,900.	البالغون 2,500 · الأطفال 1,900.
 Bookings	الحجوزات
@@ -182,11 +182,11 @@ Select all	تحديد الكل
 Excursion	الرحلة
 Price from	السعر ابتداءً من
 Status	الحالة
-Select: Ang Thong	تحديد: أنغ ثونغ
-Ang Thong: marine park by speedboat	أنغ ثونغ: الحديقة البحرية بالقارب السريع
-/excursions/ang-thong/	/excursions/ang-thong/
+Select: North Bay	تحديد: الخليج الشمالي
+North Bay: marine park by speedboat	الخليج الشمالي: الحديقة البحرية بالقارب السريع
+/excursions/north-bay/	/excursions/north-bay/
 2,500 THB	2,500 بات
-Edit: Ang Thong	تعديل: أنغ ثونغ
+Edit: North Bay	تعديل: الخليج الشمالي
 Select: Elephant sanctuary	تحديد: محمية الفيلة
 Elephant sanctuary: feeding and a walk	محمية الفيلة: إطعام ونزهة
 2,600 THB	2,600 بات
@@ -197,15 +197,15 @@ Night market and street food	السوق الليلي وطعام الشارع
 900 THB	900 بات
 Stale	قديم
 Edit: Night market	تعديل: السوق الليلي
-Select: Muay Thai	تحديد: مواي تاي
-Muay Thai: an evening at the stadium	مواي تاي: أمسية في الملعب
+Select: Folk dance	تحديد: الرقص الشعبي
+Folk dance: an evening at the stadium	الرقص الشعبي: أمسية في الملعب
 withdrawn from the sites	مسحوب من المواقع
 1,500 THB	1,500 بات
 Withdrawn	مسحوب
-Edit: Muay Thai	تعديل: مواي تاي
+Edit: Folk dance	تعديل: الرقص الشعبي
 Elephant sanctuary	محمية الفيلة
 Night market	السوق الليلي
-Muay Thai	مواي تاي
+Folk dance	الرقص الشعبي
 Paid	مدفوع
 Machine translation	ترجمة آلية
 New	جديد
@@ -255,9 +255,9 @@ Saved	تم الحفظ
 Import started	بدأ الاستيراد
 Not saved	لم يُحفظ
 With an action	مع إجراء
-Ang Thong · 3 pages rebuilt	أنغ ثونغ · أُعيد بناء 3 صفحات
+North Bay · 3 pages rebuilt	الخليج الشمالي · أُعيد بناء 3 صفحات
 You can leave this page.	يمكنك مغادرة هذه الصفحة.
-Saved without the Thai text	حُفظ دون النص التايلاندي
+Saved without the Thai text	حُفظ دون النص الالأرض الشماليةي
 The connection was lost; try again.	انقطع الاتصال؛ حاول مرة أخرى.
 Moved to the archive	نُقل إلى الأرشيف
 Undo	تراجع
@@ -341,8 +341,8 @@ EN	EN
 TH	TH
 today 11:20	اليوم 11:20
 Rebuild	إعادة البناء
-Select: Koh Tao and Nang Yuan	تحديد: كو تاو ونانغ يوان
-/excursions/koh-tao-nangyuan/	/excursions/koh-tao-nangyuan/
+Select: Turtle Cove and Pearl Cove	تحديد: خليج السلحفاة وخليج اللؤلؤ
+/excursions/turtle-cove/	/excursions/turtle-cove/
 2,900 THB	2,900 بات
 yesterday 18:05	أمس 18:05
 draft waiting	مسودة بانتظار المراجعة
@@ -359,8 +359,8 @@ Deep sea fishing	صيد أعالي البحار
 3,900 THB	3,900 بات
 nowhere	لا مكان
 Sep 27	27 سبتمبر
-Select: Muay Thai night	تحديد: ليلة مواي تاي
-/excursions/muay-thai-night/	/excursions/muay-thai-night/
+Select: Folk dance night	تحديد: ليلة الرقص الشعبي
+/excursions/folk-dance-night/	/excursions/folk-dance-night/
 withdrawn	مسحوب
 Sep 20	20 سبتمبر
 Showing 6 of 28	عرض 6 من 28
@@ -390,7 +390,7 @@ Translate side by side	الترجمة جنبًا إلى جنب
 Values: shared by all sites	القيم: مشتركة بين جميع المواقع
 Values of	قيم
 Shared by all sites	مشتركة بين جميع المواقع
-angthong.example · 2 own values	angthong.example · قيمتان خاصتان
+northbay.example · 2 own values	northbay.example · قيمتان خاصتان
 Basics	الأساسيات
 RU · EN · TH	RU · EN · TH
 Latin letters and dashes	أحرف لاتينية وشرطات
@@ -443,7 +443,7 @@ AI assistants find no answer to:	لا يجد مساعدو الذكاء الاص�
 the meeting point on a map	نقطة الالتقاء على الخريطة
 whether it suits pregnant guests	هل تناسب الضيفات الحوامل
 Suggest values	اقتراح قيم
-Ang Thong - REDZ.UI demo	أنغ ثونغ - عرض REDZ.UI التوضيحي
+North Bay - REDZ.UI demo	الخليج الشمالي - عرض REDZ.UI التوضيحي
 AZ, profile	AZ، الملف الشخصي
 AZ	AZ
 General	عام
@@ -479,36 +479,36 @@ Sign in with a passkey	تسجيل الدخول بمفتاح المرور
 Help	المساعدة
 Admin branding - REDZ.UI demo	هوية لوحة الإدارة - عرض REDZ.UI التوضيحي
 Every example and every state of every page on one page - the fixture the probes shoot in each engine, at each width, in both themes and directions, in forced colors and in print.	كل مثال وكل حالة من كل صفحة في صفحة واحدة - المرجع الذي تلتقطه الفحوص في كل محرك، وبكل عرض، وفي السمتين والاتجاهين، وبالألوان القسرية وعند الطباعة.
-Full address /excursions/ang-thong/. The old one answers with a 301 redirect.	العنوان الكامل /excursions/ang-thong/. والعنوان القديم يجيب بإعادة توجيه 301.
+Full address /excursions/north-bay/. The old one answers with a 301 redirect.	العنوان الكامل /excursions/north-bay/. والعنوان القديم يجيب بإعادة توجيه 301.
 Adults 2,500 · children 1,900 · under four free.	البالغون 2,500 · الأطفال 1,900 · مجانًا لمن هم دون الرابعة.
 A day at sea: snorkelling at two reefs, lunch on the boat.	يوم في البحر: غوص سطحي عند شعبتين مرجانيتين، وغداء على القارب.
 Did not rebuild: a PHP warning in the theme template	لم يُعَد البناء: تحذير PHP في قالب السمة
-The Thai translation is older than the English	الترجمة التايلاندية أقدم من الإنجليزية
+The Thai translation is older than the English	الترجمة الالأرض الشماليةية أقدم من الإنجليزية
 An excursion is a page with a price, a schedule and a booking form.	الرحلة صفحة لها سعر وجدول مواعيد ونموذج حجز.
-Edited yesterday by M. K.; published on three sites; the Thai translation updated today.	عدّلها أمس م. ك.؛ ونُشرت على ثلاثة مواقع؛ وحُدّثت الترجمة التايلاندية اليوم.
+Edited yesterday by M. K.; published on three sites; the Thai translation updated today.	عدّلها أمس م. ك.؛ ونُشرت على ثلاثة مواقع؛ وحُدّثت الترجمة الالأرض الشماليةية اليوم.
 A drawer at the start edge: the left in English, the right in Arabic.	لوح جانبي عند حافة البداية: اليسار في الإنجليزية، واليمين في العربية.
 A partner can hide the brand and set their own help link.	يمكن للشريك إخفاء العلامة التجارية وتعيين رابط مساعدة خاص به.
 A shorter title would fit the search results.	العنوان الأقصر يناسب نتائج البحث.
 White text on it: 5.6:1, AA in both themes.	النص الأبيض عليه: 5.6:1، بمستوى AA في السمتين.
-The Thai translation is older than the English.	الترجمة التايلاندية أقدم من الإنجليزية.
+The Thai translation is older than the English.	الترجمة الالأرض الشماليةية أقدم من الإنجليزية.
 The theme template raised a PHP warning; the page did not rebuild.	أطلق قالب السمة تحذير PHP؛ ولم يُعَد بناء الصفحة.
 Translated by machine; a person has not read it yet.	مترجمة آليًا؛ ولم يقرأها إنسان بعد.
-“Ang Thong by speedboat” fits the 60 characters search results show.	«أنغ ثونغ بالقارب السريع» يناسب الأحرف الستين التي تعرضها نتائج البحث.
+“North Bay by speedboat” fits the 60 characters search results show.	«الخليج الشمالي بالقارب السريع» يناسب الأحرف الستين التي تعرضها نتائج البحث.
 2 unsaved changes: product name, accent color	تغييران غير محفوظين: اسم المنتج ولون التمييز
 Edited yesterday by M. K.; published on three sites.	عدّلها أمس م. ك.؛ ونُشرت على ثلاثة مواقع.
 MIT license · © 2026 Red Z Group · includes Bootstrap Icons (MIT)	ترخيص MIT · © 2026 Red Z Group · يتضمن Bootstrap Icons (MIT)
 Content type · 28 items · shown on 2 sites of 3	نوع المحتوى · 28 عنصرًا · معروض على موقعين من 3
 1 page did not rebuild, 2 translations are out of date	صفحة واحدة لم يُعَد بناؤها، وترجمتان قديمتان
-Koh Tao and Nang Yuan: snorkelling two islands	كو تاو ونانغ يوان: غوص سطحي عند جزيرتين
-Their pages on lagoon.example and angthong.example go away, and 6 pages × 3 languages are rebuilt.	تختفي صفحاتها على lagoon.example وangthong.example، ويُعاد بناء 6 صفحات × 3 لغات.
+Turtle Cove and Pearl Cove: snorkelling two islands	خليج السلحفاة وخليج اللؤلؤ: غوص سطحي عند جزيرتين
+Their pages on lagoon.example and northbay.example go away, and 6 pages × 3 languages are rebuilt.	تختفي صفحاتها على lagoon.example وnorthbay.example، ويُعاد بناء 6 صفحات × 3 لغات.
 Revisions are kept for 30 days in the journal.	تُحفظ المراجعات 30 يومًا في السجل.
-Ang Thong · 3 pages × 3 languages rebuilt	أنغ ثونغ · أُعيد بناء 3 صفحات × 3 لغات
-Ang Thong: marine national park by speedboat	أنغ ثونغ: الحديقة الوطنية البحرية بالقارب السريع
+North Bay · 3 pages × 3 languages rebuilt	الخليج الشمالي · أُعيد بناء 3 صفحات × 3 لغات
+North Bay: marine national park by speedboat	الخليج الشمالي: الحديقة الوطنية البحرية بالقارب السريع
 translatable fields carry their languages	الحقول القابلة للترجمة تحمل لغاتها
 Two sentences for the card and search results	جملتان للبطاقة ونتائج البحث
 Emerald Lake, kayaks along the cliffs and lunch on an island - all in one day by speedboat.	البحيرة الزمردية، وقوارب الكاياك على امتداد المنحدرات، وغداء على جزيرة - كل ذلك في يوم واحد بالقارب السريع.
 · from the facts of this excursion · 1 of 3	· من حقائق هذه الرحلة · 1 من 3
-One day: the Emerald Lake on Koh Mae Ko, kayaks along the cliffs and lunch on an island. Hotel pick-up, a Russian-speaking guide, free cancellation up to 24 hours.	يوم واحد: البحيرة الزمردية في كو ماي كو، وقوارب الكاياك على امتداد المنحدرات، وغداء على جزيرة. استقبال من الفندق، ومرشد يتحدث الروسية، وإلغاء مجاني حتى 24 ساعة.
+One day: the Emerald Lake on Emerald Islet, kayaks along the cliffs and lunch on an island. Hotel pick-up, a Russian-speaking guide, free cancellation up to 24 hours.	يوم واحد: البحيرة الزمردية في جزيرة الزمرد، وقوارب الكاياك على امتداد المنحدرات، وغداء على جزيرة. استقبال من الفندق، ومرشد يتحدث الروسية، وإلغاء مجاني حتى 24 ساعة.
 AI saves nothing: the text goes into the draft.	لا يحفظ الذكاء الاصطناعي شيئًا: يذهب النص إلى المسودة.
 shared by every language and site · the page, schema.org and AI answers are built from them	مشتركة بين كل اللغات والمواقع · تُبنى منها الصفحة وschema.org وأجوبة الذكاء الاصطناعي
 in the base currency THB · the visitor's currency is an estimate	بالعملة الأساسية، البات · عملة الزائر تقديرية
@@ -518,7 +518,7 @@ by the rule «Excursions», canonical here	بحسب القاعدة «الرحل�
 White label: the name, logos, accent, sign-in screen, e-mails and help links - settings of this install, not code	العلامة البيضاء: الاسم والشعارات ولون التمييز وشاشة تسجيل الدخول ورسائل البريد وروابط المساعدة - إعدادات لهذا التثبيت، لا شيفرة
 Every interface string names the product through {product} - translators never touch the brand.	كل نص في الواجهة يسمّي المنتج عبر {product} - ولا يلمس المترجمون العلامة التجارية أبدًا.
 White text on it: 5.6:1, AA in the light and the dark theme. Hover and background shades are derived from it.	النص الأبيض عليه: 5.6:1، بمستوى AA في السمة الفاتحة والداكنة. وتُشتق منه درجات التمرير والخلفية.
-New order AT-09-1201 on lagoon.example: «Ang Thong», 2 adults, November 5.	طلب جديد AT-09-1201 على lagoon.example: «أنغ ثونغ»، بالغان، 5 نوفمبر.
+New order AT-09-1201 on lagoon.example: «North Bay», 2 adults, November 5.	طلب جديد AT-09-1201 على lagoon.example: «الخليج الشمالي»، بالغان، 5 نوفمبر.
 Sent on behalf of Lagoon Panel · unsubscribe in your profile	أُرسلت نيابةً عن Lagoon Panel · يمكنك إلغاء الاشتراك من ملفك الشخصي
 Input groups	مجموعات الإدخال
 Accordions	الأكورديونات
@@ -551,7 +551,7 @@ Free of charge up to 24 hours before the start; later, half the price is kept.	�
 Are children welcome?	هل يُرحَّب بالأطفال؟
 From four years old; under four they travel free.	من عمر أربع سنوات؛ ومن هم دون الرابعة يسافرون مجانًا.
 Pickup	الاستقبال
-07:30 at the pier, 07:00 from the hotels of Chaweng.	07:30 عند الرصيف، و07:00 من فنادق تشاوينغ.
+07:30 at the pier, 07:00 from the hotels of the old town.	07:30 عند الرصيف، و07:00 من فنادق البلدة القديمة.
 What to bring	ما الذي تحضره
 Swimwear, a towel and a sunscreen that spares the reef.	ملابس السباحة ومنشفة وواقٍ من الشمس لا يضر بالشعاب المرجانية.
 07:30 at the pier.	07:30 عند الرصيف.
@@ -561,20 +561,20 @@ More filters	مزيد من عوامل التصفية
 With lunch	مع الغداء
 Private	خاصة
 Sunset	الغروب
-Ang Thong Marine Park	حديقة أنغ ثونغ البحرية
-Koh Tao and Koh Nang Yuan	كو تاو وكو نانغ يوان
+North Bay Marine Park	حديقة الخليج الشمالي البحرية
+Turtle Cove and Pearl Cove	خليج السلحفاة وخليج اللؤلؤ
 The Five Islands by kayak	الجزر الخمس بقوارب الكاياك
 archive.example	archive.example
 Import from	الاستيراد من
 A CSV file	ملف CSV
 Another site	موقع آخر
 The old catalog	الكتالوج القديم
-Koh Tao	كو تاو
+Turtle Cove	خليج السلحفاة
 The Five Islands	الجزر الخمس
 Boat	القارب
 Park fee	رسوم الحديقة
 Show on	العرض على
-kohtao.example	kohtao.example
+turtlecove.example	turtlecove.example
 Uploading photos	رفع الصور
 Rebuilding pages	إعادة بناء الصفحات
 Published, 75 percent	منشور، 75 بالمئة
@@ -592,7 +592,7 @@ Command palette	لوحة الأوامر
 Default language	اللغة الافتراضية
 Choose a language…	اختر لغة…
 Find a language	ابحث عن لغة
-Thai	التايلاندية
+Thai	الالأرض الشماليةية
 English	الإنجليزية
 Russian	الروسية
 German	الألمانية
@@ -603,11 +603,11 @@ Japanese	اليابانية
 Korean	الكورية
 Arabic	العربية
 Hebrew	العبرية
-Vietnamese	الفيتنامية
+Vietnamese	الالأرض الشرقيةية
 Nothing found	لم يُعثر على شيء
 Site languages	لغات الموقع
 Choose languages…	اختر اللغات…
-English, Thai, and Russian	الإنجليزية والتايلاندية والروسية
+English, Thai, and Russian	الإنجليزية والالأرض الشماليةية والروسية
 Categories	الفئات
 Add a category…	أضف فئة…
 Find a category	ابحث عن فئة
@@ -691,20 +691,20 @@ Back	العودة
 The day, by section	اليوم، قسمًا قسمًا
 Pick-up at the hotel at 7:30, the pier at 8:15. The crew hands out life vests and snorkels before the boat leaves the bay.	الاصطحاب من الفندق في 7:30، والرصيف في 8:15. يوزع الطاقم سترات النجاة وأنابيب الغطس قبل أن يغادر القارب الخليج.
 A speedboat for 30 guests with shade and a toilet; the ride to the park takes an hour across open water.	قارب سريع لثلاثين ضيفًا مع مظلة ودورة مياه؛ تستغرق الرحلة إلى المحمية ساعة عبر المياه المفتوحة.
-Thai lunch on a beach of the park: rice, green curry, fruit and water; vegetarian on request.	غداء تايلاندي على شاطئ في المحمية: أرز وكاري أخضر وفاكهة وماء؛ وجبة نباتية عند الطلب.
+Lunch on a beach of the park: rice, green curry, fruit and water; vegetarian on request.	غداء الأرض الشماليةي على شاطئ في المحمية: أرز وكاري أخضر وفاكهة وماء؛ وجبة نباتية عند الطلب.
 The boat leaves the park at 15:30 and reaches the pier by 17:00; the transfer brings everyone back to the hotel.	يغادر القارب المحمية في 15:30 ويصل إلى الرصيف بحلول 17:00؛ وتعيد الحافلة الجميع إلى الفندق.
 A lagoon under green hills	بحيرة شاطئية تحت تلال خضراء
-Ang Thong by speedboat	أنغ ثونغ بالقارب السريع
+North Bay by speedboat	الخليج الشمالي بالقارب السريع
 From 2 500 THB · a day	من 2 500 بات · يوم كامل
 The emerald lake	البحيرة الزمردية
 Boats this week	القوارب هذا الأسبوع
 Trips	الرحلات
 Seats sold	المقاعد المباعة
-Sea Breeze	نسيم البحر
-Coral Star	نجمة المرجان
-Blue Lagoon	البحيرة الزرقاء
+Boat A	القارب أ
+Boat C	القارب ج
+Boat B	القارب ب
 All boats	كل القوارب
-Seasons on Samui	المواسم في ساموي
+Seasons on Main Island	المواسم في الجزيرة الرئيسية
 Season	الموسم
 Months	الأشهر
 The sea	البحر
@@ -718,7 +718,7 @@ September to December	من سبتمبر إلى ديسمبر
 Waves	أمواج
 Open full screen	افتح بملء الشاشة
 Route of the day	مسار اليوم
-Pick-up at the hotel at 7:30, the pier at 8:15, Ang Thong at 9:30; snorkeling, the emerald lake, lunch on the boat, back by 17:00.	الاصطحاب من الفندق في 7:30، والرصيف في 8:15، وأنغ ثونغ في 9:30؛ غطس، والبحيرة الزمردية، وغداء على القارب، والعودة بحلول 17:00.
+Pick-up at the hotel at 7:30, the pier at 8:15, North Bay at 9:30; snorkeling, the emerald lake, lunch on the boat, back by 17:00.	الاصطحاب من الفندق في 7:30، والرصيف في 8:15، والخليج الشمالي في 9:30؛ غطس، والبحيرة الزمردية، وغداء على القارب، والعودة بحلول 17:00.
 Done	تم
 Skip to every utility	انتقل إلى كل الأدوات المساعدة
 The link above shows on focus.	يظهر الرابط أعلاه عند التركيز عليه.
@@ -734,10 +734,10 @@ Tags	الوسوم
 Find or create a tag	ابحث عن وسم أو أنشئه
 Family	العائلة
 Vegetarian lunch	غداء نباتي
-Edit the title: Ang Thong	تحرير العنوان: أنغ ثونغ
+Edit the title: North Bay	تحرير العنوان: الخليج الشمالي
 Title	العنوان
 Edit the title: Night market	تحرير العنوان: السوق الليلي
-Lagoon Tours	جولات البحيرة
+Example Cruises	Example Cruises
 Edit the company's name	تحرير اسم الشركة
 The company's name	اسم الشركة
 Create “{label}”	إنشاء «{label}»
@@ -764,7 +764,7 @@ Move to the top	انقل إلى البداية
 Move to the bottom	انقل إلى النهاية
 Expand all	توسيع الكل
 Collapse all	طي الكل
-Koh Phangan	كو فانغان
+Moon Cove	خليج القمر
 Contacts	جهات الاتصال
 The site's menu	قائمة الموقع
 Move: Home	نقل: الرئيسية
@@ -793,7 +793,7 @@ On the first step	عند الخطوة الأولى
 On a middle step	عند خطوة في المنتصف
 On the last step	عند الخطوة الأخيرة
 Prose	النصوص الطويلة
-A day at Ang Thong	يوم في أنغ ثونغ
+A day at North Bay	يوم في الخليج الشمالي
 The boat leaves the pier at eight and is back before sunset. Lunch is on the beach, and the water is calm from December to April.	يغادر القارب الرصيف في الثامنة ويعود قبل الغروب. الغداء على الشاطئ، والبحر هادئ من ديسمبر إلى أبريل.
 Shoes for the climb to the lookout	حذاء للصعود إلى نقطة المشاهدة
 A hat and water	قبعة وماء
@@ -803,7 +803,7 @@ The booking code is	رمز الحجز هو
 ; show it at the pier.	؛ أظهره عند الرصيف.
 Photo quality	جودة الصور
 Popovers	النوافذ المنبثقة
-Ang Thong marine park	متنزه أنغ ثونغ البحري
+North Bay marine park	متنزه الخليج الشمالي البحري
 The fee is paid in cash at the pier and is not part of the tour price.	تُدفع الرسوم نقدًا عند الرصيف وليست جزءًا من سعر الجولة.
 The park rules	قواعد المتنزه
 Pickup time	موعد الاصطحاب
@@ -816,13 +816,13 @@ Guest	الضيف
 Payments	المدفوعات
 Messages	الرسائل
 Notes	الملاحظات
-Anna Petrova, two trips this year.	آنا بتروفا، رحلتان هذا العام.
-Ang Thong on 12 December, 2 adults.	أنغ ثونغ في 12 ديسمبر، شخصان بالغان.
+Anna Sample, two trips this year.	Anna Sample، رحلتان هذا العام.
+North Bay on 12 December, 2 adults.	الخليج الشمالي في 12 ديسمبر، شخصان بالغان.
 Paid in full by card.	مدفوع بالكامل بالبطاقة.
 No messages yet.	لا رسائل بعد.
 Vegetarian lunch.	غداء نباتي.
 Navbars	أشرطة التنقل
-Samui Tours	Samui Tours
+Example Tours	Example Tours
 Menu	القائمة
 Transfers	التوصيل
 Book a tour	احجز جولة
@@ -832,7 +832,7 @@ Cancellation policy	سياسة الإلغاء
 Book	احجز
 Open daily, 8 a.m. to 8 p.m.	مفتوح يوميًا من 8 صباحًا إلى 8 مساءً
 Order	الترتيب
-Seasons on Samui, compact	المواسم في ساموي، مضغوطة
+Seasons on Main Island, compact	المواسم في الجزيرة الرئيسية، مضغوطة
 Checking the server…	جارٍ فحص الخادم…
 Syncing the calendar	جارٍ مزامنة التقويم
 Delete the site	احذف الموقع
@@ -845,13 +845,13 @@ Deleted records	السجلات المحذوفة
 When	متى
 What	ماذا
 3 excursions	3 رحلات
-Ang Thong, Koh Tao and the sunset cruise, with their photos and reviews.	أنغ ثونغ وكو تاو ورحلة الغروب، مع صورها ومراجعاتها.
+North Bay, Turtle Cove and the sunset cruise, with their photos and reviews.	الخليج الشمالي وخليج السلحفاة ورحلة الغروب، مع صورها ومراجعاتها.
 Deleted	محذوف
 In the bin	في سلة المهملات
 Company wiped	مُسحت الشركة
 Carousels	الدوّارات
 Kayaks, a lagoon and a viewpoint, a day by speedboat.	قوارب الكاياك وبحيرة ومطل، يوم بالقارب السريع.
-Koh Tao snorkeling	الغطس في كو تاو
+Turtle Cove snorkeling	الغطس في خليج السلحفاة
 Two bays and a coral garden, lunch on board.	خليجان وحديقة مرجانية، والغداء على متن القارب.
 Sunset cruise	رحلة الغروب
 A catamaran round the south coast at dusk.	قارب كاتاماران حول الساحل الجنوبي عند الغسق.
@@ -947,7 +947,7 @@ Wednesday, November 4	الأربعاء، 4 نوفمبر
 Tap your card	المس بطاقتك
 Hold it to the reader under the screen	قرّبها من القارئ تحت الشاشة
 REDZ ERP · Site entrance	REDZ ERP · مدخل الموقع
-Somchai Rattanakul	سومتشاي راتاناكول
+Sid Sample	Sid Sample
 Last in at 07:02	آخر دخول في 07:02
 Check in	تسجيل الحضور
 Check out	تسجيل الانصراف
@@ -966,8 +966,8 @@ A quarter, 5% off	ربع سنة، خصم 5%
 A year, 15% off	سنة، خصم 15%
 Pay with	ادفع عبر
 PromptPay	PromptPay
-Any Thai bank app	أي تطبيق مصرفي تايلاندي
-Visa, Mastercard	Visa وMastercard
+Any bank app	أي تطبيق مصرفي الأرض الشماليةي
+Any card	أي بطاقة
 Dispatcher	المُوزِّع
 Running, last beat 4 s ago	يعمل، آخر نبضة قبل 4 ث
 Mail queue	طابور البريد
@@ -999,9 +999,8 @@ Move later	انقل إلى الخلف
 Move to the start	انقل إلى البداية
 Move to the end	انقل إلى النهاية
 Owners	الملّاك
-Ananda Resort	منتجع أناندا
-Blue Lagoon Tours	جولات البحيرة الزرقاء
-Coral Divers	غواصو المرجان
+Example Resort	Example Resort
+Example Divers	Example Divers
 Show agents	اعرض الوكلاء
 All agents	كل الوكلاء
 Running	قيد التشغيل
@@ -1150,7 +1149,7 @@ Saturday	السبت
 Sunday	الأحد
 Excavator · Riverside tower	حفارة · برج ريفرسايد
 Excavator	حفارة
-Scaffold set · Somchai Rattanakul	طقم سقالات · سومتشاي راتاناكول
+Scaffold set · Sid Sample	طقم سقالات · Sid Sample
 Scaffold set	طقم سقالات
 Concrete mixer · Harbor view	خلاطة خرسانة · إطلالة الميناء
 Concrete mixer	خلاطة خرسانة
@@ -1159,7 +1158,7 @@ Generator · Harbor view	مولّد · إطلالة الميناء
 Generator	مولّد
 Equipment out, November 2 to 8	المعدات المُعارة، من 2 إلى 8 نوفمبر
 Equipment	المعدات
-Lagoon tours · 4	جولات البحيرة · 4
+Lagoon tours · 4	Example Cruises · 4
 Tiles	بطاقات
 Rows	صفوف
 Images of the folder	صور المجلد
@@ -1211,7 +1210,7 @@ Change the site's address	تغيير عنوان الموقع
 Two owners for one site	مالكان لموقع واحد
 New ticket	تذكرة جديدة
 AR	AR
-The child price on Ang Thong shows 2,500 THB. It should be 1,900 THB since Monday.	سعر الطفل في أنغ ثونغ يظهر 2,500 بات. يجب أن يكون 1,900 بات منذ الاثنين.
+The child price on North Bay shows 2,500 THB. It should be 1,900 THB since Monday.	سعر الطفل في الخليج الشمالي يظهر 2,500 بات. يجب أن يكون 1,900 بات منذ الاثنين.
 Screenshot of the price	لقطة شاشة للسعر
 REDZ support	دعم REDZ
 edited	مُعدّلة
@@ -1230,9 +1229,9 @@ Ratings	التقييمات
 Book now	احجز الآن
 A link	رابط
 Closed	مغلقة
-Thailand	تايلاند
-Malaysia	ماليزيا
-Vietnam	فيتنام
+Northland	الأرض الشمالية
+Southland	الأرض الجنوبية
+Eastland	الأرض الشرقية
 Country	البلد
 Voucher code	رمز القسيمة
 Apply	تطبيق
@@ -1255,11 +1254,11 @@ Addresses	العناوين
 Find a destination	ابحث عن وجهة
 Destinations	الوجهات
 The south	الجنوب
-Koh Samui	كو ساموي
-Phuket	بوكيت
+Main Island	الجزيرة الرئيسية
+South Bay	الخليج الجنوبي
 The north	الشمال
-Chiang Mai	تشيانغ ماي
-Langkawi	لنكاوي
+Hill Town	مدينة التلال
+Pearl Isle	لنكاوي
 When you leave	عند المغادرة
 Pause the account	إيقاف الحساب مؤقتًا
 Back any time	العودة في أي وقت
@@ -1297,7 +1296,6 @@ Messenger	Messenger
 LinkedIn	LinkedIn
 VK	VK
 Tour	الجولة
-Sort by	الترتيب حسب
 Date	التاريخ
 QR code: the menu of room 12	رمز QR: قائمة الغرفة 12
 Download the code	نزّل الرمز
@@ -1307,7 +1305,7 @@ The last message came	وصلت آخر رسالة
 ; the next tour leaves	، والجولة التالية تنطلق
 in 2 hours	بعد ساعتين
 Rename the folder	أعد تسمية المجلد
-The lagoon at Ang Thong	البحيرة في أنغ ثونغ
+The lagoon at North Bay	البحيرة في الخليج الشمالي
 The pier at sunset	الرصيف عند الغروب
 A wooden pier over the sea	رصيف خشبي فوق البحر
 Cliffs above a bay with a boat	منحدرات فوق خليج فيه قارب
@@ -1336,35 +1334,34 @@ Next image	الصورة التالية
 5,000 THB	5,000 بات
 5,850 THB	5,850 بات
 7 tours	7 جولات
-Add a page under Ang Thong by speedboat	أضف صفحة تحت أنغ ثونغ بالقارب السريع
+Add a page under North Bay by speedboat	أضف صفحة تحت الخليج الشمالي بالقارب السريع
 Add a page under Excursions	أضف صفحة تحت الرحلات
 Add a page under Night market and street food	أضف صفحة تحت السوق الليلي وطعام الشارع
 Add a phone	أضف هاتفًا
-Anong Srisuk	أنونغ سريسوك
+Alex Sample	Alex Sample
 Booking 24-0187	الحجز 24-0187
 Bookings by boat	الحجوزات حسب القارب
-Boris Lebedev	بوريس ليبيديف
+Ben Sample	Ben Sample
 Change	التغير
-Chen Wei	تشن وي
-Choose: Ang Thong by speedboat	اختيار: أنغ ثونغ بالقارب السريع
+Chris Sample	Chris Sample
+Choose: North Bay by speedboat	اختيار: الخليج الشمالي بالقارب السريع
 Choose: Excursions	اختيار: الرحلات
 Choose: Night market and street food	اختيار: السوق الليلي وطعام الشارع
 Chosen	مختار
 Clean the old photos	تنظيف الصور القديمة
-Date	التاريخ
 Discount, early booking	خصم الحجز المبكر
 Find a page	ابحث عن صفحة
 Find an excursion	ابحث عن رحلة
 Guides	المرشدون
 Hide the route	إخفاء المسار
-Hiroshi Sato	هيروشي ساتو
+Hana Sample	Hana Sample
 Import the price list	استيراد قائمة الأسعار
 Japanese, English	اليابانية، الإنجليزية
 Jobs	المهام
-Lamai beach, the hotel's lobby	شاطئ لاماي، بهو الفندق
+East beach, the hotel's lobby	الشاطئ الشرقي، بهو الفندق
 Last week	الأسبوع الماضي
-Message: Anong Srisuk	رسالة: أنونغ سريسوك
-Message: Hiroshi Sato	رسالة: هيروشي ساتو
+Message: Alex Sample	رسالة: Alex Sample
+Message: Hana Sample	رسالة: Hana Sample
 No excursion has these words.	لا توجد رحلة بهذه الكلمات.
 Open on the right	مفتوح على اليمين
 Owners, sorted by the server	الملاك، مرتبون من الخادم
@@ -1372,7 +1369,7 @@ Pages to publish	صفحات للنشر
 Pay 5,850 THB	ادفع 5,850 بات
 Phone numbers	أرقام الهاتف
 Phone	الهاتف
-Rebuild the Thai pages	إعادة بناء الصفحات التايلاندية
+Rebuild the Thai pages	إعادة بناء الصفحات الالأرض الشماليةية
 Remove this phone	إزالة هذا الهاتف
 Repeaters	المكررات
 Running now	قيد التشغيل الآن
@@ -1384,30 +1381,26 @@ Send the morning letters	إرسال رسائل الصباح
 Show the route	إظهار المسار
 Status lines	أسطر الحالة
 Summaries and totals	الملخصات والمجاميع
-Thai, English	التايلاندية، الإنجليزية
-The pier at 08:30, the emerald lake at 11:00, lunch on Koh Mae Ko, back by 17:00.	الرصيف في 08:30، والبحيرة الزمردية في 11:00، والغداء في جزيرة ماي كو، والعودة بحلول 17:00.
+Thai, English	الالأرض الشماليةية، الإنجليزية
+The pier at 08:30, the emerald lake at 11:00, lunch on Emerald Islet, back by 17:00.	الرصيف في 08:30، والبحيرة الزمردية في 11:00، والغداء في جزيرة الزمرد، والعودة بحلول 17:00.
 To pay	المطلوب دفعه
 Tomorrow	غدًا
 Waiting	في الانتظار
-Villa 12, Bophut Koh Samui 84320	فيلا 12، بوبوت كوه ساموي 84320
+Villa 12, Harbor Road Main Island 00000	فيلا 12، طريق الميناء الجزيرة الرئيسية 00000
 Last 30 days	آخر 30 يومًا
-Ang Thong by speedboat: a day among the forty-two islands of the marine park, with snorkelling at Koh Wua Ta Lap, the emerald lake of Koh Mae Ko and lunch on the beach, back by five.	أنغ ثونغ بالقارب السريع: يوم بين الجزر الاثنتين والأربعين في الحديقة البحرية، مع غوص سطحي عند كوه وا تا لاب، والبحيرة الزمردية في كوه ماي كو، وغداء على الشاطئ، والعودة عند الخامسة.
-Samui	ساموي
-Phuket	بوكيت
-Krabi	كرابي
-Chiang Mai	شيانغ ماي
-Pattaya	باتايا
-Hua Hin	هوا هين
-Bangkok	بانكوك
+North Bay by speedboat: a day among the forty-two islands of the marine park, with snorkelling at Reef Islet, the emerald lake of Emerald Islet and lunch on the beach, back by five.	الخليج الشمالي بالقارب السريع: يوم بين الجزر الاثنتين والأربعين في الحديقة البحرية، مع غوص سطحي عند كوه وا تا لاب، والبحيرة الزمردية في كوه ماي كو، وغداء على الشاطئ، والعودة عند الخامسة.
+West Bay	الخليج الغربي
+East Bay	الخليج الشرقي
+Beach Town	مدينة الشاطئ
+Harbor Town	مدينة الميناء
 Importing	جارٍ الاستيراد
 Imported	تم الاستيراد
 Booking details	تفاصيل الحجز
 Booking 2026-0418	الحجز 2026-0418
-Ang Thong by speedboat, 4 guests, 12 November 2026. Paid in full by card.	أنغ ثونغ بالقارب السريع، 4 ضيوف، 12 نوفمبر 2026. مدفوع بالكامل بالبطاقة.
+North Bay by speedboat, 4 guests, 12 November 2026. Paid in full by card.	الخليج الشمالي بالقارب السريع، 4 ضيوف، 12 نوفمبر 2026. مدفوع بالكامل بالبطاقة.
 Sign in with a code	تسجيل الدخول برمز
 Bookings by state	الحجوزات حسب الحالة
 Confirmed	مؤكدة
-Waiting	بانتظار
 All bookings	كل الحجوزات
 412,000 THB	412,000 بات
 Revenue in November	الإيرادات في نوفمبر
@@ -1457,11 +1450,10 @@ Cash, 11%	نقدًا، 11%
 November	نوفمبر
 Where bookings came from	من أين جاءت الحجوزات
 Source	المصدر
-Share	الحصة
 Search	البحث
 Social networks	الشبكات الاجتماعية
 Other	أخرى
-Anong Srisuk, November 2026	أنونغ سريسوك، نوفمبر 2026
+Alex Sample, November 2026	Alex Sample، نوفمبر 2026
 November 2, worked	2 نوفمبر، يوم عمل
 November 3, worked	3 نوفمبر، يوم عمل
 November 4, waiting for approval	4 نوفمبر، بانتظار الموافقة
@@ -1492,7 +1484,7 @@ Add papers	أضف أوراقًا
 Remove lagoon.svg	إزالة lagoon.svg
 Choose another image	اختر صورة أخرى
 A long link wraps inside its box, like the title of a card that opens a window	يلتف الرابط الطويل داخل إطاره، مثل عنوان بطاقة تفتح نافذة
-Seasons on Samui, spacious	مواسم ساموي، بمساحة واسعة
+Seasons on Main Island, spacious	مواسم الجزيرة الرئيسية، بمساحة واسعة
 Regular	عادي
 Prices include the park fee.	تشمل الأسعار رسوم الحديقة.
 Whose rights the example shows	صلاحيات من يعرضها المثال
@@ -1604,3 +1596,111 @@ Fill	ملء
 Even	متساوٍ
 Highlighted	مميز
 Bullets	نقاط
+A longer hint	تلميح أطول
+Keep the log for, days	مدة الاحتفاظ بالسجل، بالأيام
+Older records are removed at night.	تُحذف السجلات الأقدم ليلًا.
+The count starts from the day a record is written. A record a person marked to keep stays, whatever this number says, until the mark is taken off.	يبدأ العد من يوم كتابة السجل. ويبقى السجل الذي علّمه شخص للاحتفاظ به، مهما كان هذا الرقم، حتى تُزال العلامة.
+Remind the guest	تذكير الضيف
+A message goes out the evening before.	تُرسل رسالة في المساء السابق.
+The guest is told nothing.	لا يُبلَّغ الضيف بشيء.
+A tab with changes	تبويب فيه تغييرات
+Company	الشركة
+Mail	البريد
+The company's name and address.	اسم الشركة وعنوانها.
+The address mail is sent from.	العنوان الذي يُرسل منه البريد.
+not saved	غير محفوظ
+A value set from the page	قيمة تضبطها الصفحة
+AI	الذكاء الاصطناعي
+Shorter	أقصر
+Simpler	أبسط
+Warmer	أدفأ
+Fix mistakes	تصحيح الأخطاء
+Write with AI	الكتابة بالذكاء الاصطناعي
+What should it write?	ماذا يكتب؟
+Put the caret in a block the AI may change.	ضع المؤشر في كتلة يحق للذكاء الاصطناعي تغييرها.
+The AI is working	الذكاء الاصطناعي يعمل
+The AI did not answer. Nothing changed.	لم يُجب الذكاء الاصطناعي. لم يتغير شيء.
+The AI declined this. Nothing changed.	رفض الذكاء الاصطناعي هذا الطلب. لم يتغير شيء.
+The AI declined this: {why} Nothing changed.	رفض الذكاء الاصطناعي هذا الطلب: {why} لم يتغير شيء.
+A block changed while the AI worked, so its answer was left out.	تغيرت كتلة أثناء عمل الذكاء الاصطناعي، فاستُبعدت إجابته.
+The AI answered in a form that does not fit, so its answer was left out.	أجاب الذكاء الاصطناعي بصيغة لا تناسب، فاستُبعدت إجابته.
+The AI lost a fact, so its answer was left out.	فقد الذكاء الاصطناعي حقيقة، فاستُبعدت إجابته.
+Keep these words	الاحتفاظ بهذه الكلمات
+Suggested changes	التغييرات المقترحة
+The change before	التغيير السابق
+The next change	التغيير التالي
+Take	قبول
+Leave	ترك
+Take all	قبول الكل
+Leave all	ترك الكل
+What the AI answered	ما أجاب به الذكاء الاصطناعي
+Change {at} of {all}	التغيير {at} من {all}
+a new block	كتلة جديدة
+adds “{ins}”	يضيف «{ins}»
+drops “{del}”	يحذف «{del}»
+“{del}” becomes “{ins}”	«{del}» تصبح «{ins}»
+Done. The block’s history shows an AI wrote this and a person took it.	تم. يُظهر سجل الكتلة أن الذكاء الاصطناعي كتب هذا وأن شخصًا قبله.
+Nothing changed.	لم يتغير شيء.
+The AI has nothing to change here.	لا يجد الذكاء الاصطناعي ما يغيره هنا.
+Decide the changes on the page first.	احسم التغييرات في الصفحة أولًا.
+Tone pad	لوحة النبرة
+Longer	أطول
+Stricter	أكثر رسمية
+As it is	كما هو
+Keep	احتفاظ
+As it was	كما كان
+The AI is writing nine versions in one request.	يكتب الذكاء الاصطناعي تسع نسخ في طلب واحد.
+Move the point, or use the arrow keys.	حرّك النقطة أو استخدم مفاتيح الأسهم.
+Some versions lost a fact and cannot be chosen.	فقدت بعض النسخ حقيقة ولا يمكن اختيارها.
+No versions came back. Nothing changed.	لم تصل أي نسخة. لم يتغير شيء.
+Ask the page	اسأل الصفحة
+What a visitor’s assistant would answer from this page alone. What it cannot answer is a gap in the page.	ما سيجيب به مساعد الزائر من هذه الصفحة وحدها. وما لا يستطيع الإجابة عنه نقص في الصفحة.
+What is this page about?	عمّ تتحدث هذه الصفحة؟
+What does it cost?	كم التكلفة؟
+When does it happen?	متى يحدث ذلك؟
+A visitor’s question	سؤال زائر
+Ask	اسأل
+Reading the page	تجري قراءة الصفحة
+No answer came.	لم تصل إجابة.
+Fact	حقيقة
+A fact stands in every place it is used, in every language. Changing it stales no translation. Type @ in the text to put one in.	تظهر الحقيقة في كل مكان تُستخدم فيه وبكل لغة. وتغييرها لا يجعل أي ترجمة قديمة. اكتب @ في النص لإدراج واحدة.
+This page has no facts.	لا حقائق في هذه الصفحة.
+places: {count}	الأماكن: {count}
+Put in	إدراج
+Put the caret in the text first.	ضع المؤشر في النص أولًا.
+The fact changed in every place.	تغيرت الحقيقة في كل مكان.
+The fact was not changed.	لم تتغير الحقيقة.
+Side by side	جنبًا إلى جنب
+Who wrote it	من كتبه
+The source changed after this was translated	تغير المصدر بعد ترجمة هذا
+No translation yet	لا ترجمة بعد
+Translate again	ترجمة من جديد
+Translate	ترجمة
+The translation is right	الترجمة صحيحة
+Write it by hand	كتابتها يدويًا
+Translate all	ترجمة الكل
+Stale: {stale}. Missing: {missing}.	قديمة: {stale}. ناقصة: {missing}.
+This block’s parts differ from the source, so it was left out.	تختلف أجزاء هذه الكتلة عن المصدر، فاستُبعدت.
+AI, not checked	ذكاء اصطناعي، لم يُراجَع
+AI, checked: {name}	ذكاء اصطناعي، راجعه: {name}
+Machine translation, not checked	ترجمة آلية، لم تُراجَع
+Machine translation, checked: {name}	ترجمة آلية، راجعها: {name}
+Pasted	ملصق
+a person	شخص
+An AI wrote this and nobody checked it yet.	كتب هذا ذكاء اصطناعي ولم يراجعه أحد بعد.
+“{words}” is typed by hand; the fact “{label}” holds it.	كُتبت «{words}» يدويًا، والحقيقة «{label}» تحملها.
+A fact this page does not know: {key}.	حقيقة لا تعرفها هذه الصفحة: {key}.
+Translations: stale {stale}, missing {missing}.	الترجمات: قديمة {stale}، ناقصة {missing}.
+{count} change suggested	تغيير مقترح واحد
+{count} changes suggested	{count} من التغييرات المقترحة
+Not yet compared with the source	لم تُقارن بالمصدر بعد
+Rates	الأسعار
+Low	منخفض
+High	مرتفع
+Peak	الذروة
+Children	الأطفال
+Groups	المجموعات
+Fuel	الوقود
+Insurance	التأمين
+Reconfigurations	إعادة التهيئة
+Counterbalancing	الموازنة

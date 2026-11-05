@@ -750,6 +750,21 @@ document.addEventListener('close', (event) => {
 	}
 }, true);
 
+/** Sets what a list holds from the page, as a choice does: its fields, its face, then input and change. */
+export const setList = (target, values) => {
+	const list = typeof target === 'string' ? document.querySelector(target) : target;
+	if (!(list instanceof HTMLElement)) {
+		throw new TypeError('REDZ.ui.combobox.set: no list ' + String(target));
+	}
+	keepFirst(list);
+	const held = pairsOf(list);
+	const wanted = [values].flat().map(String).filter((value) => value !== '');
+	hold(list, (list.getAttribute('aria-multiselectable') === 'true' ? wanted : wanted.slice(0, 1)).map((value) => {
+		const option = [...list.querySelectorAll('[role="option"]')].find((one) => one.dataset.value === value);
+		return option === undefined ? held.find(([one]) => one === value) ?? [value, value, 'create' in list.dataset] : [value, labelOf(option), false];
+	}));
+};
+
 document.addEventListener('reset', (event) => {
 	const form = event.target;
 	setTimeout(() => {

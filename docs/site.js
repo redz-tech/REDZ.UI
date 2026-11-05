@@ -98,7 +98,7 @@
 	};
 	const calls = {
 		toggle: (button) => button.setAttribute('aria-pressed', String(button.getAttribute('aria-pressed') !== 'true')),
-		'toast-success': () => REDZ.ui.toast({title: 'Saved', text: 'Ang Thong · 3 pages rebuilt', tone: 'success'}),
+		'toast-success': () => REDZ.ui.toast({title: 'Saved', text: 'North Bay · 3 pages rebuilt', tone: 'success'}),
 		'toast-info': () => REDZ.ui.toast({title: 'Import started', text: 'You can leave this page.', tone: 'info'}),
 		'toast-danger': () => REDZ.ui.toast({title: 'Not saved', text: 'The connection was lost; try again.', tone: 'danger'}),
 		'toast-action': () => REDZ.ui.toast({title: 'Moved to the archive', tone: 'info', action: {label: 'Undo', run: () => REDZ.ui.toast({title: 'Restored', tone: 'success'})}}),
@@ -124,7 +124,7 @@
 		'status-save': () => REDZ.ui.status(document.getElementById('status-save-line'), new Promise((done) => setTimeout(done, 1200))),
 		'status-refuse': () => REDZ.ui.status(document.getElementById('status-save-line'), new Promise((done, refuse) => setTimeout(() => refuse(new Error('The name is taken. Pick another.')), 1200))).catch(() => {}),
 		'status-words': () => REDZ.ui.status(document.getElementById('status-words-line'), {tone: 'warning', text: 'Published; the sites rebuild within a minute.'}),
-		'confirm-rows': async (button) => answer(button, await REDZ.ui.confirm({title: 'Pay for booking 24-0187?', rows: [{label: 'Excursion', value: 'Ang Thong by speedboat'}, {label: 'Guests', value: '2 adults, 1 child'}, {label: 'To pay', value: '5,850 THB'}], ok: 'Pay'}) ? 'Paid.' : 'Cancelled.'),
+		'confirm-rows': async (button) => answer(button, await REDZ.ui.confirm({title: 'Pay for booking 24-0187?', rows: [{label: 'Excursion', value: 'North Bay by speedboat'}, {label: 'Guests', value: '2 adults, 1 child'}, {label: 'To pay', value: '5,850 THB'}], ok: 'Pay'}) ? 'Paid.' : 'Cancelled.'),
 		'log-line': (button) => {
 			const log = document.getElementById(button.getAttribute('aria-controls'));
 			const time = document.createElement('span');
@@ -144,7 +144,7 @@
 		}
 	});
 
-	const people = ['Anong Srisuk', 'Boris Lebedev', 'Chen Wei', 'Dao Nguyen', 'Elena Petrova', 'Farid Haddad', 'Grace Kim', 'Hiroshi Sato', 'Ingrid Berg', 'Kanya Thongchai', 'Leila Nasser', 'Maria Lopez', 'Niran Pongsak', 'Olga Ivanova', 'Somchai Wong'];
+	const people = ['Alex Sample', 'Ben Sample', 'Chris Sample', 'Dana Sample', 'Ella Sample', 'Frank Sample', 'Grace Sample', 'Hana Sample', 'Iris Sample', 'Kim Sample', 'Lena Sample', 'Mia Sample', 'Nick Sample', 'Olive Sample', 'Sam Sample'];
 	document.addEventListener('redz:search', (event) => {
 		const list = document.getElementById(event.target.getAttribute('aria-controls') || '');
 		const query = event.detail.query.toLowerCase();
@@ -174,19 +174,42 @@
 		const people = {
 			expert: {html: true, ai: true, design: true, structure: true, facts: true, lock: true, review: true},
 			author: {ai: true, design: true, structure: true, facts: true, review: true},
-			translator: {review: true},
+			translator: {ai: true},
 		};
 		const value = [
-			'<h2>A day on Ang Thong</h2>',
-			'<p>The boat leaves the pier at <strong>8:00</strong>; bring a hat and water.</p>',
+			'<h2 data-block="title">A day on North Bay</h2>',
+			'<p data-block="boat">The boat leaves the pier at <data value="depart">8:00</data> and a seat costs <data value="adult">2,500 THB</data>, so bring a hat, water and something warm for the way back.</p>',
 			'<div class="alert alert-info"><i class="bi bi-info-circle" aria-hidden="true"></i><div>The park fee is paid at the pier.</div></div>',
 			'<ul><li>Kayaks in the lagoon</li><li>The viewpoint</li></ul>',
-			'<table class="table"><thead><tr><th scope="col">Boat</th><th scope="col">Seats</th><th scope="col">Leaves</th></tr></thead><tbody><tr><td>Sea Breeze</td><td>12</td><td>8:00</td></tr><tr><td>Blue Lagoon</td><td>30</td><td>9:30</td></tr></tbody></table>',
+			'<table class="table"><thead><tr><th scope="col">Boat</th><th scope="col">Seats</th><th scope="col">Leaves</th></tr></thead><tbody><tr><td>Boat A</td><td>12</td><td>8:00</td></tr><tr><td>Boat B</td><td>30</td><td>9:30</td></tr></tbody></table>',
 			'<div class="accordion"><details class="accordion-item" name="editor-demo"><summary class="accordion-header">What is included?<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary><div class="accordion-body">Lunch, the gear and the transfer.</div></details><details class="accordion-item" name="editor-demo"><summary class="accordion-header">What if it rains?<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary><div class="accordion-body">The trip moves to the next dry day.</div></details></div>',
 			'<div class="grid md:cols-2 gap-16"><div class="card"><div class="card-body vstack gap-8"><h3>The lagoon</h3><p>A short climb to a green lake inside the rock.</p></div></div><div class="card"><div class="card-body vstack gap-8"><h3>The viewpoint</h3><p>Forty-two islands from one steep path.</p></div></div></div>',
 			'<div class="alert alert-warning" data-block="safety" data-lock="form"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i><div>The sea closes the park from October to December.</div></div>',
 		].join('');
-		const page = REDZ.ui.editor(host, {placeholder: 'The page text', ids: true, rights: people.expert, value});
+		const facts = [{key: 'depart', label: 'Departure', text: '8:00'}, {key: 'adult', label: 'Price, adult', text: '2,500 THB'}];
+		const thai = '<h2 data-block="title" data-by="mt">หนึ่งวันที่อ่าวเหนือ</h2><p data-block="boat">เรือออกจากท่าเวลา <data value="depart">8:00</data></p>';
+		// A stand-in for the host's AI: it calls no model, so the example runs anywhere and shows the seam.
+		const shorter = (words) => words.split(/[,;](?![^⟦]*⟧)/)[0].replace(/\.?$/, '.');
+		const answers = {
+			rewrite: (task) => ({blocks: task.blocks.map((block) => ({id: block.id, fields: block.fields.map((words) => {
+				const short = shorter(words);
+				const keeps = (words.match(/⟦[\w.-]+⟧/g) ?? []).every((token) => short.includes(token));
+				return {shorter: keeps ? short : words, simpler: words.replace('leaves the pier', 'goes'), warmer: words + ' We look forward to seeing you.', fix: words}[task.how];
+			})}))}),
+			tones: (task) => ({grid: [(words) => words, (words) => words, (words) => words + ' Ask us anything.'].map((length) => [(words) => 'Please note: ' + words, (words) => words, (words) => words + ' Welcome aboard!'].map((tone) => task.blocks[0].fields.map((words) => tone(length(words)))))}),
+			translate: (task) => ({blocks: task.blocks.map((block) => ({id: block.id, fields: block.fields.map((words) => 'TH: ' + words)}))}),
+			write: () => ({blocks: [{kind: 'heading', level: 2, tone: '', size: '', text: 'Before you go', href: '', head: [], rows: [], items: []}, {kind: 'alert', level: 0, tone: 'warning', size: '', text: 'The **sea** closes the park from October to December.', href: '', head: [], rows: [], items: []}]}),
+			read: (task) => ({text: task.text.split(/\n|(?<=\.)\s/).find((line) => task.question.toLowerCase().split(/\W+/).some((word) => word.length > 3 && line.toLowerCase().includes(word))) ?? 'The page does not say.'}),
+			alt: () => ({text: 'A green lagoon inside the rock'}),
+		};
+		const ai = (task, tools) => new Promise((done, fail) => {
+			const timer = setTimeout(() => done(answers[task.kind](task)), 700);
+			tools.signal.addEventListener('abort', () => {
+				clearTimeout(timer);
+				fail(new DOMException('Stopped', 'AbortError'));
+			});
+		});
+		const page = REDZ.ui.editor(host, {placeholder: 'The page text', ids: true, rights: people.expert, value, facts, onFact: () => true, ai, source: 'en', languages: [{code: 'en', label: 'EN', value}, {code: 'th', label: 'TH', value: thai}], person: {name: 'Anna'}});
 		document.getElementById('editor-demo-rights').addEventListener('click', (event) => {
 			const one = event.target.closest('[data-rights]');
 			if (one !== null) {
@@ -272,7 +295,7 @@
 		}
 		event.preventDefault();
 		event.detail.respondWith(new Promise((done) => setTimeout(() => {
-			event.target.innerHTML = '<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Songkran 2025</a></div></li><li class="tree-item"><div class="tree-row"><a href="#tree-pages">Loy Krathong 2025</a></div></li>';
+			event.target.innerHTML = '<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Water Festival 2025</a></div></li><li class="tree-item"><div class="tree-row"><a href="#tree-pages">Lantern Festival 2025</a></div></li>';
 			done();
 		}, 400)));
 	});

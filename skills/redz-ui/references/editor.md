@@ -2,7 +2,7 @@
 
 # Editor
 
-A text editor for REDZ.UI markup, a package of the release linked apart: words edited in place, the library's components changed through their own settings, and a frame of its own where no script of the text ever runs. Nobody needs HTML; an expert may have it.
+A text editor for REDZ.UI markup, a package of the release linked apart: words edited in place, the library's components changed through their own settings, live facts, an AI that only suggests, translations side by side, and a frame of its own where no script of the text ever runs. Nobody needs HTML; an expert may have it.
 
 ## Example
 
@@ -37,13 +37,18 @@ const page = REDZ.ui.editor('#body', {
 | Option | What it is |
 | --- | --- |
 | `value` | The markup to edit; it is cleaned before it is shown |
-| `ids` | `true` keeps every block's id, `data-block`, and its protection, `data-lock`, in the value: what a CMS stores, so a block keeps its history, its translations and its protection |
+| `ids` | `true` keeps in the value every block's id, `data-block`, its protection, `data-lock`, who wrote it, `data-by` and `data-checked`, and what it was translated from, `data-from`: what a CMS stores, so a block keeps its history, its translations and its protection |
 | `rights` | What this person may do, below; left out, all but HTML and protection |
 | `placeholder` | The words of an empty text, also the text field's name |
 | `lang`, `dir` | The text's language and direction, the page's by default |
 | `styles`, `scripts` | The theme's stylesheets for the text and the previews, and its scripts for the previews, after REDZ.UI's own |
 | `sites` | Other looks of the same text, `{id, label, styles}`, chosen in the strip above it |
-| `languages`, `getLanguage(code)`, `onLanguage(code, html)` | The text's languages, `{code, label, dir, value}`, chosen in the strip; the host keeps each one's value |
+| `languages`, `getLanguage(code)`, `onLanguage(code, html)` | The text's languages, `{code, label, dir, value, versions}`, chosen in the strip; the host keeps each one's value, and the session keeps what was written in it until then |
+| `source` | The language translations are made from, the first of `languages` by default |
+| `facts`, `onFact(key, text)` | The page's live facts, a list of `{key, label, text, editable}`, or a function of the language that answers one; `onFact` saves a new value and answers `false` to refuse it |
+| `ai(task, {signal, progress})` | The host's way to its AI, below; left out, nothing of the AI shows |
+| `onBatch({id, kind, by, blocks, taken, left})` | Called when a task's changes are decided, one call for one task: what a CMS records as one batch |
+| `person` | `{name}`, who signs what is checked |
 | `lens` | `false` takes the strip away |
 | `blocks` | More blocks for the menu, `{id, label, group, icon, html}`, after the package's own |
 | `images` | Sources of images, `{id, label, open(api)}`; a source calls `api.insert({src, alt, width, height, srcset, sizes, sources})` |
@@ -76,7 +81,7 @@ What can be changed comes from the catalog, `tools/catalog.json`, also in the pa
 | `structure` | Adding, moving and removing blocks, rows, columns and items |
 | `facts` | Prices, dates and other live facts in the text |
 | `lock` | Protecting a block and editing a protected one |
-| `review` | Reviewing suggested changes |
+| `review` | Signing text an AI or a machine wrote as checked; without it a suggestion can be taken, and stays unchecked |
 | `langs` | `'*'` or a list of the languages this person may write in |
 
 The words of a block stay open to everyone allowed that language, so `rights: {}` is a translator or a proofreader. Given rights are all there is: a key left out is off.
@@ -92,16 +97,66 @@ Protection is `data-lock` on a block. `"form"` leaves the words open and closes 
 - A paste from Word, Google Docs or a spreadsheet, and Markdown from a chat, come in as REDZ.UI markup: a table stays a table, a heading a heading, every style and font stays behind. A link pasted over selected words links them. Inside a field a paste is plain words.
 - Undo takes the caret back to where the change started. Nothing touches the text while a character is being composed: Thai and Burmese keyboards read the words around the caret.
 
+## Live facts
+
+A price, a date or a phone number is written once and stands in every place it is used: `<data value="KEY">its words</data>`. Type `@` in the text to put one in, or open Facts in the foot, which counts the places of each and changes it in all of them.
+
+- The words carry the key, not the value, so a price that changes stales no translation, and an AI or a translator gets a token it cannot change.
+- The checks find a value typed by hand where a fact holds it, and offer to make it a fact; a key the page does not know is marked.
+- The server fills in each fact's words when it publishes; the words in the value are what the page shows until then.
+
+## The AI
+
+The editor never reaches a model: `options.ai` is the host's, async, and no key is ever in a page. It gets a task and answers it, as late as it likes; `signal` stops it and `progress(partial)` shows what came so far. It acts with the person's rights: a closed block is never sent.
+
+| `task.kind` | The task also holds | It answers |
+| --- | --- | --- |
+| `rewrite` | `how`: `shorter`, `simpler`, `warmer`, `fix`; `blocks` | `{blocks: [{id, fields}]}`, a text for each field |
+| `tones` | `blocks`, one block | `{grid}`, three rows of three versions: rows from shorter to longer, columns from stricter to warmer, each version a list of fields |
+| `translate` | `from`, `to`, `blocks` of the source's fields, `was` the translation that stands or `null` | `{blocks: [{id, fields}]}` |
+| `write` | `words`, a person's request; `facts` | `{blocks}` of the passport's schema `editor.write` |
+| `read` | `question`, `text`, the page as a visitor reads it | `{text}`, from that text alone; `progress({text})` as it grows |
+| `alt` | `src`, an image's address | `{text}` |
+
+Every task has an `id` and a `lang`. A block is `{id, hash, element, fields}`: its words as plain text, one string for each field, a fact as a token `⟦KEY⟧`. A rewrite answers plain words: marks on the words around a change stay where they are. `{refusal: 'why'}` says the model declined, shown as what it is, not as an error.
+
+- **A suggestion never lands by itself.** Its changes are drawn word by word, by the language's own word breaks, each taken or left alone, and the value stays what it was until the last one is decided. One task is one step of undo.
+- **An answer can only do so much.** One whose block changed in the meantime, whose fields do not fit or that lost a fact is left out, and the person is told.
+- **The catalog holds what an AI writes.** `write` answers flat blocks, one shape a model is held to while it writes; the editor turns them into REDZ.UI markup by the catalog, so a kind, a tone or a size the library does not have cannot come out.
+- **The tone pad** asks for nine versions in one request and opens at once. Each point is tried on the block; a version that lost a fact cannot be chosen.
+- **Ask the page** shows what a visitor's assistant would answer from this page alone. What it cannot answer is a gap in the page.
+
+### The host's side
+
+- Call the model from the server. Give it the schema with the API's structured output for `write`; a union of every kind does not compile, and a pattern inside a schema stalls it.
+- Read the model's stop reason before its JSON: only a finished answer is a result. A cut answer is broken JSON, and a refusal answers `{refusal}`.
+- Page text is data, not instructions: say so, and tell the model to keep every `⟦KEY⟧` as it is, to change as few words as it can, and to leave out in silence what it cannot do.
+- The rights hide controls: the server decides again what a person may ask.
+
+## Side by side
+
+In a language other than the source, **Side by side** in the strip shows the source beside the text, row by row, in a frame of its own. A translated block keeps the hash of the source's words it was made from in `data-from`, FNV-1a of the words as PHP's `hash('fnv1a32')` gives it, so only the block that changed goes stale.
+
+- A stale row says what changed, when the source's `versions` hold the words it was made from, and offers to translate again or to say the translation is right.
+- A block the language lacks offers a translation, or the block to write in by hand. Translate all sends every row left as one task.
+- On a phone the two columns scroll sideways.
+
+**Who wrote it** in the strip marks each block an AI or a machine wrote, or that was pasted, and who checked it. Text nobody checked is listed in the checks, which is what a site owes its readers where the law asks for it.
+
 ## The lens and the checks
 
 - The strip above the text changes the width, the theme, the site and the language of the page under it, and it stays editable: the frame is a real page, so its media queries answer to its width and the site's own stylesheets draw it.
-- The foot counts the words by the language's own word breaks, so Thai and Burmese count too, and lists what a reader, a screen reader or a search engine would stumble on, each with a way to it: an empty heading, a skipped level, an image without words, a vague link, a long paragraph, a table without a head.
+- The foot counts the words by the language's own word breaks, so Thai and Burmese count too, and lists what a reader, a screen reader or a search engine would stumble on, each with a way to it: an empty heading, a skipped level, an image without words, a vague link, a long paragraph, a table without a head, text nobody checked, a value typed by hand where a fact stands, translations left behind.
 
 ## Safety
 
 - The text is edited in a frame whose own Content-Security-Policy runs no script: an `onerror`, a `<script>` or a `javascript:` link in a stored body or on the clipboard never runs, on load, on paste or later.
 - Every value is parsed inert and cleaned before it is shown or given back: no script, style, link, meta, base, object or embed element, no `on*` attribute, no address that is not a path, a fragment, http(s), mailto or tel, no frame that is not https.
 - The cleaner guards the editing page; the server cleans what it stores as well.
+
+## License
+
+Unlike the library, the editor is not under MIT. From 0.17.0 it is under [PolyForm Strict 1.0.0](https://polyformproject.org/licenses/strict/1.0.0): noncommercial use only, no changes, no redistribution. It comes with REDZ products under their terms; any other commercial use needs a separate license. Versions up to 0.16.0 stay under MIT.
 
 ## Keyboard and accessibility
 

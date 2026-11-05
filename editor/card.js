@@ -83,7 +83,7 @@ export const cardOf = (ed) => {
 			extra += '<div class="editor-prop"><label for="' + ed.id + '-value">' + say('prop.value') + '</label><input class="form-control form-control-sm" id="' + ed.id + '-value" type="number" min="0" value="' + escape(node.getAttribute('value') ?? '') + '"></div>';
 		}
 		if (entry?.image && ed.wordsOpen(top)) {
-			extra += '<div class="editor-prop editor-prop-wide"><label for="' + ed.id + '-alt">' + say('prop.alt') + '</label><input class="form-control form-control-sm" id="' + ed.id + '-alt" value="' + escape(node.getAttribute('alt') ?? '') + '"></div>';
+			extra += '<div class="editor-prop editor-prop-wide"><label for="' + ed.id + '-alt">' + say('prop.alt') + '</label><input class="form-control form-control-sm" id="' + ed.id + '-alt" value="' + escape(node.getAttribute('alt') ?? '') + '">' + (ed.aiOpen() ? '<span class="hstack gap-4"><button class="btn btn-xs" type="button" data-editor-alt="ask"><i class="bi bi-stars" aria-hidden="true"></i>' + say('ai.alt') + '</button><button class="btn btn-xs btn-primary" type="button" data-editor-alt="keep" hidden>' + say('ai.alt.keep') + '</button></span>' : '') + '</div>';
 		}
 		if (entry?.glyph && design) {
 			const has = [...node.classList].find((name) => name.startsWith('bi-'));
@@ -154,6 +154,24 @@ export const cardOf = (ed) => {
 				nodeAt(blockNow(), path).setAttribute('alt', alt.value);
 				ed.commit(true);
 			};
+			const asks = body.querySelector('[data-editor-alt="ask"]');
+			const takes = body.querySelector('[data-editor-alt="keep"]');
+			if (asks !== null) {
+				asks.onclick = async () => {
+					const now = blockNow();
+					const words = await ed.aiAlt(nodeAt(now, path), now);
+					if (words !== null && alt.isConnected) {
+						alt.value = words;
+						takes.hidden = false;
+						takes.focus();
+					}
+				};
+				takes.onclick = () => {
+					nodeAt(blockNow(), path).setAttribute('alt', alt.value);
+					takes.hidden = true;
+					ed.commit();
+				};
+			}
 		}
 		for (const one of body.querySelectorAll('[data-editor-icon]')) {
 			const set = (fresh) => {
@@ -312,29 +330,33 @@ export const cardOf = (ed) => {
 			};
 		}
 		TABS[open.tab](card.querySelector('.editor-card-body'), top, open.path);
-		place(top);
+		ed.placeBeside(card, top);
 	};
 
-	const place = (top) => {
+	/** Stands a panel beside the editor, or as a sheet that leaves the block seen, so it never covers what it changes. */
+	ed.placeBeside = (panel, top) => {
 		const box = ed.box.getBoundingClientRect();
-		const width = card.offsetWidth;
+		const width = panel.offsetWidth;
 		const rect = top.getBoundingClientRect();
 		const frame = ed.frame.getBoundingClientRect();
 		const end = ed.config.dir === 'rtl' ? box.left - width - 8 : box.right + 8;
 		if (end >= 8 && end + width <= innerWidth - 8) {
-			card.style.left = end + 'px';
-			card.style.top = Math.max(8, Math.min(rect.top + frame.top - 40, innerHeight - card.offsetHeight - 8)) + 'px';
+			panel.style.left = end + 'px';
+			panel.style.top = Math.max(8, Math.min(rect.top + frame.top - 40, innerHeight - panel.offsetHeight - 8)) + 'px';
 		} else {
 			top.scrollIntoView({block: 'nearest'});
 			const shown = top.getBoundingClientRect();
 			const start = shown.top + ed.frame.getBoundingClientRect().top;
-			const foot = innerHeight - card.offsetHeight - 8;
-			card.style.left = Math.max(8, (innerWidth - width) / 2) + 'px';
-			card.style.top = Math.max(8, start + shown.height > foot && start > card.offsetHeight + 16 ? 8 : foot) + 'px';
+			const foot = innerHeight - panel.offsetHeight - 8;
+			panel.style.left = Math.max(8, (innerWidth - width) / 2) + 'px';
+			panel.style.top = Math.max(8, start + shown.height > foot && start > panel.offsetHeight + 16 ? 8 : foot) + 'px';
 		}
 	};
 
 	ed.openCard = (top, tab = 'props', path = []) => {
+		if (top.hasAttribute('data-editor-review')) {
+			return;
+		}
 		ed.closeCard();
 		open = {id: top.getAttribute('data-block'), tab, path};
 		card.showPopover();

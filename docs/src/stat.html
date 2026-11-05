@@ -14,7 +14,13 @@
 			<button class="stat stat-secondary" type="button" aria-pressed="false"><span class="icon-tile"><i class="bi bi-x-octagon" aria-hidden="true"></i></span><span><span class="stat-value">0</span><span class="stat-label">Failed</span></span></button>
 		</div>
 	</div>
-	<p>Without a button it only reads: a <code>div class="stat"</code>.</p>
+	<p>Without a button it only reads: a <code>div class="stat"</code>. One long word breaks instead of running past a narrow tile.</p>
+	<div class="docs-example docs-example-stack" id="stat-narrow">
+		<div class="grid cols-2 gap-12 max-w-320">
+			<div class="stat"><span><span class="stat-value">14</span><span class="stat-label">Reconfigurations</span></span></div>
+			<div class="stat"><span><span class="stat-value">3</span><span class="stat-label">Refunds</span><span class="stat-sub">Counterbalancing</span></span></div>
+		</div>
+	</div>
 
 	<h3 id="stat-links">Links</h3>
 	<p>As an <code>a</code> a tile leads to the list it counts, filtered on its server; the tile of the list shown carries <code>aria-current="page"</code> and wears its tone's border, as a pressed one does.</p>

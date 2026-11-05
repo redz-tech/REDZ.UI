@@ -30,6 +30,7 @@
 		gap: var(--redz-space-12);
 		padding: var(--redz-space-16) var(--redz-space-16) var(--redz-space-12);
 		border-block-end: 1px solid var(--redz-border);
+		background: var(--redz-drawer-header-bg, none);
 	}
 
 	.drawer-title {

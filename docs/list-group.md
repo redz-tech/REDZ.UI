@@ -10,8 +10,8 @@ A column of items in one frame - plain rows, or links and buttons to choose from
 
 ```html
 <ul class="list-group">
-	<li class="list-group-item">Ang Thong Marine Park</li>
-	<li class="list-group-item">Koh Tao and Koh Nang Yuan</li>
+	<li class="list-group-item">North Bay Marine Park</li>
+	<li class="list-group-item">Turtle Cove and Pearl Cove</li>
 	<li class="list-group-item">The Five Islands by kayak</li>
 </ul>
 ```
@@ -24,7 +24,7 @@ A column of items in one frame - plain rows, or links and buttons to choose from
 <nav class="list-group" aria-label="Sites">
 	<a class="list-group-item list-group-item-action" href="#list-group-action" aria-current="page">All sites</a>
 	<a class="list-group-item list-group-item-action" href="#list-group-action">lagoon.example</a>
-	<a class="list-group-item list-group-item-action" href="#list-group-action">angthong.example</a>
+	<a class="list-group-item list-group-item-action" href="#list-group-action">northbay.example</a>
 	<a class="list-group-item list-group-item-action" aria-disabled="true">archive.example</a>
 </nav>
 <div class="list-group" role="group" aria-label="Import from">
@@ -42,8 +42,8 @@ A column of items in one frame - plain rows, or links and buttons to choose from
 <div class="card">
 	<div class="card-body">
 		<ol class="list-group list-group-flush list-group-numbered">
-			<li class="list-group-item hstack gap-8"><span class="flex-fill">Ang Thong Marine Park</span><span class="badge">28</span></li>
-			<li class="list-group-item hstack gap-8"><span class="flex-fill">Koh Tao</span><span class="badge">11</span></li>
+			<li class="list-group-item hstack gap-8"><span class="flex-fill">North Bay Marine Park</span><span class="badge">28</span></li>
+			<li class="list-group-item hstack gap-8"><span class="flex-fill">Turtle Cove</span><span class="badge">11</span></li>
 			<li class="list-group-item hstack gap-8"><span class="flex-fill">The Five Islands</span><span class="badge badge-subtle-warning">3</span></li>
 		</ol>
 	</div>
@@ -57,10 +57,10 @@ A column of items in one frame - plain rows, or links and buttons to choose from
 ```html
 <ul class="list-group">
 	<li class="list-group-header list-group-item">Today</li>
-	<li class="list-group-item">Ang Thong Marine Park</li>
+	<li class="list-group-item">North Bay Marine Park</li>
 	<li class="list-group-item">Night market and street food</li>
 	<li class="list-group-header list-group-item">Tomorrow</li>
-	<li class="list-group-item">Koh Tao and Koh Nang Yuan</li>
+	<li class="list-group-item">Turtle Cove and Pearl Cove</li>
 </ul>
 ```
 
@@ -82,8 +82,8 @@ A column of items in one frame - plain rows, or links and buttons to choose from
 ```html
 <div class="list-group" role="group" aria-label="Show on">
 	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" checked>lagoon.example</label>
-	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" checked>angthong.example</label>
-	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox">kohtao.example</label>
+	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" checked>northbay.example</label>
+	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox">turtlecove.example</label>
 </div>
 ```
 
@@ -94,8 +94,8 @@ A search field with `data-filter` naming a region hides, as the person types, th
 ```html
 <input class="form-control" type="search" data-filter="list-group-search-list" aria-label="Find an excursion" placeholder="Find an excursion" autocomplete="off">
 <ul class="list-group" id="list-group-search-list">
-	<li class="list-group-item">Ang Thong Marine Park</li>
-	<li class="list-group-item">Koh Tao and Koh Nang Yuan</li>
+	<li class="list-group-item">North Bay Marine Park</li>
+	<li class="list-group-item">Turtle Cove and Pearl Cove</li>
 	<li class="list-group-item">The Five Islands by kayak</li>
 	<li class="list-group-item" data-search="elephant sanctuary chang">Elephant sanctuary</li>
 	<li class="list-group-item text-muted" data-filter-empty hidden>No excursion has these words.</li>

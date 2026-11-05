@@ -24,11 +24,11 @@ A list of records: a title that links to the record, a line under it, a note whe
 			</thead>
 			<tbody>
 				<tr>
-					<td><input class="check" type="checkbox" aria-label="Select: Ang Thong"></td>
-					<td><a class="table-title" href="#table-list">Ang Thong: marine park by speedboat</a><div class="table-sub d-none md:d-block">/excursions/ang-thong/</div></td>
+					<td><input class="check" type="checkbox" aria-label="Select: North Bay"></td>
+					<td><a class="table-title" href="#table-list">North Bay: marine park by speedboat</a><div class="table-sub d-none md:d-block">/excursions/north-bay/</div></td>
 					<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">2,500 THB</td>
 					<td class="d-none md:d-table-cell"><span class="badge"><i class="bi bi-check2" aria-hidden="true"></i>Published</span></td>
-					<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Ang Thong"><i class="bi bi-pencil" aria-hidden="true"></i></button></td>
+					<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: North Bay"><i class="bi bi-pencil" aria-hidden="true"></i></button></td>
 				</tr>
 				<tr class="table-danger">
 					<td><input class="check" type="checkbox" aria-label="Select: Elephant sanctuary"></td>
@@ -45,11 +45,11 @@ A list of records: a title that links to the record, a line under it, a note whe
 					<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Night market"><i class="bi bi-pencil" aria-hidden="true"></i></button></td>
 				</tr>
 				<tr class="table-secondary">
-					<td><input class="check" type="checkbox" aria-label="Select: Muay Thai"></td>
-					<td><a class="table-title" href="#table-list">Muay Thai: an evening at the stadium</a><div class="table-sub d-none md:d-block">withdrawn from the sites</div></td>
+					<td><input class="check" type="checkbox" aria-label="Select: Folk dance"></td>
+					<td><a class="table-title" href="#table-list">Folk dance: an evening at the stadium</a><div class="table-sub d-none md:d-block">withdrawn from the sites</div></td>
 					<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">1,500 THB</td>
 					<td class="d-none md:d-table-cell"><span class="badge"><i class="bi bi-eye-slash" aria-hidden="true"></i>Withdrawn</span></td>
-					<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Muay Thai"><i class="bi bi-pencil" aria-hidden="true"></i></button></td>
+					<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Folk dance"><i class="bi bi-pencil" aria-hidden="true"></i></button></td>
 				</tr>
 			</tbody>
 		</table>
@@ -67,16 +67,16 @@ A list of records: a title that links to the record, a line under it, a note whe
 	<table class="table table-striped table-hover">
 		<thead><tr><th scope="col">Boat</th><th class="text-end" scope="col">Trips</th><th class="text-end" scope="col">Seats sold</th></tr></thead>
 		<tbody>
-			<tr><td>Sea Breeze</td><td class="text-end tabular-nums">12</td><td class="text-end tabular-nums">286</td></tr>
-			<tr><td>Coral Star</td><td class="text-end tabular-nums">9</td><td class="text-end tabular-nums">201</td></tr>
-			<tr><td>Blue Lagoon</td><td class="text-end tabular-nums">7</td><td class="text-end tabular-nums">164</td></tr>
+			<tr><td>Boat A</td><td class="text-end tabular-nums">12</td><td class="text-end tabular-nums">286</td></tr>
+			<tr><td>Boat C</td><td class="text-end tabular-nums">9</td><td class="text-end tabular-nums">201</td></tr>
+			<tr><td>Boat B</td><td class="text-end tabular-nums">7</td><td class="text-end tabular-nums">164</td></tr>
 		</tbody>
 		<tbody class="table-group-divider">
 			<tr><td>All boats</td><td class="text-end tabular-nums">28</td><td class="text-end tabular-nums">651</td></tr>
 		</tbody>
 	</table>
 </section>
-<table class="table table-bordered" aria-label="Seasons on Samui">
+<table class="table table-bordered" aria-label="Seasons on Main Island">
 	<thead><tr><th scope="col">Season</th><th scope="col">Months</th><th scope="col">The sea</th></tr></thead>
 	<tbody>
 		<tr><td>Dry</td><td>January to April</td><td>Calm</td></tr>
@@ -91,7 +91,7 @@ A list of records: a title that links to the record, a line under it, a note whe
 `data-density="compact"` tightens the rows and the controls of the element it is on and of everything inside it: a table, the card that holds it, a region, or the whole page on `<html>`. A compact table can stand beside a normal one on the same screen. Bootstrap 5 calls it `table-sm`. `data-density="comfortable"` and `data-density="spacious"` open the rows up the other way, for a short table that is the point of a page.
 
 ```html
-<table class="table table-bordered" data-density="compact" aria-label="Seasons on Samui, compact">
+<table class="table table-bordered" data-density="compact" aria-label="Seasons on Main Island, compact">
 	<thead><tr><th scope="col">Season</th><th scope="col">Months</th><th scope="col">The sea</th></tr></thead>
 	<tbody>
 		<tr><td>Dry</td><td>January to April</td><td>Calm</td></tr>
@@ -99,7 +99,7 @@ A list of records: a title that links to the record, a line under it, a note whe
 		<tr><td>Rainy</td><td>September to December</td><td>Waves</td></tr>
 	</tbody>
 </table>
-<table class="table table-bordered" data-density="spacious" aria-label="Seasons on Samui, spacious">
+<table class="table table-bordered" data-density="spacious" aria-label="Seasons on Main Island, spacious">
 	<thead><tr><th scope="col">Season</th><th scope="col">Months</th><th scope="col">The sea</th></tr></thead>
 	<tbody>
 		<tr><td>Dry</td><td>January to April</td><td>Calm</td></tr>
@@ -133,9 +133,9 @@ A header that sorts holds a `button class="table-sort"`, and the header's `aria-
 <table class="table" aria-label="Owners">
 	<thead><tr><th scope="col" aria-sort="ascending"><button class="table-sort" type="button">Name</button></th><th scope="col"><button class="table-sort" type="button">Sites</button></th><th scope="col" class="text-end"><button class="table-sort" type="button">Paid</button></th></tr></thead>
 	<tbody>
-		<tr><td>Ananda Resort</td><td class="tabular-nums">3</td><td class="text-end tabular-nums">48,000</td></tr>
-		<tr><td>Blue Lagoon Tours</td><td class="tabular-nums">1</td><td class="text-end tabular-nums">9,600</td></tr>
-		<tr><td>Coral Divers</td><td class="tabular-nums">2</td><td class="text-end tabular-nums">21,300</td></tr>
+		<tr><td>Example Resort</td><td class="tabular-nums">3</td><td class="text-end tabular-nums">48,000</td></tr>
+		<tr><td>Example Cruises</td><td class="tabular-nums">1</td><td class="text-end tabular-nums">9,600</td></tr>
+		<tr><td>Example Divers</td><td class="tabular-nums">2</td><td class="text-end tabular-nums">21,300</td></tr>
 	</tbody>
 </table>
 ```
@@ -146,8 +146,8 @@ Where the server sorts, the header holds a link instead - `a class="table-sort"`
 <table class="table" aria-label="Owners, sorted by the server">
 	<thead><tr><th scope="col"><a class="table-sort" href="#table-sort-links">Name</a></th><th scope="col" class="text-end" aria-sort="descending"><a class="table-sort" href="#table-sort-links">Paid</a></th></tr></thead>
 	<tbody>
-		<tr><td>Ananda Resort</td><td class="text-end tabular-nums">48,000</td></tr>
-		<tr><td>Coral Divers</td><td class="text-end tabular-nums">21,300</td></tr>
+		<tr><td>Example Resort</td><td class="text-end tabular-nums">48,000</td></tr>
+		<tr><td>Example Divers</td><td class="text-end tabular-nums">21,300</td></tr>
 	</tbody>
 </table>
 ```
@@ -160,13 +160,13 @@ A row `table-group` heads the rows under it: one `th scope="rowgroup"` across th
 <table class="table" aria-label="Bookings by boat">
 	<thead><tr><th scope="col">Guest</th><th scope="col" class="text-end">Seats</th><th scope="col" class="text-end">Paid</th></tr></thead>
 	<tbody>
-		<tr class="table-group"><th scope="rowgroup" colspan="3">Sea Breeze<span class="table-group-end">2 bookings</span></th></tr>
-		<tr><td>Anong Srisuk</td><td class="text-end tabular-nums">2</td><td class="text-end tabular-nums">5,000</td></tr>
-		<tr><td>Boris Lebedev</td><td class="text-end tabular-nums">3</td><td class="text-end tabular-nums">7,500</td></tr>
-		<tr class="table-subtotal"><th scope="row">Sea Breeze</th><td class="text-end tabular-nums">5</td><td class="text-end tabular-nums">12,500</td></tr>
-		<tr class="table-group"><th scope="rowgroup" colspan="3">Coral Star<span class="table-group-end">1 booking</span></th></tr>
-		<tr><td>Chen Wei</td><td class="text-end tabular-nums">4</td><td class="text-end tabular-nums">10,000</td></tr>
-		<tr class="table-subtotal"><th scope="row">Coral Star</th><td class="text-end tabular-nums">4</td><td class="text-end tabular-nums">10,000</td></tr>
+		<tr class="table-group"><th scope="rowgroup" colspan="3">Boat A<span class="table-group-end">2 bookings</span></th></tr>
+		<tr><td>Alex Sample</td><td class="text-end tabular-nums">2</td><td class="text-end tabular-nums">5,000</td></tr>
+		<tr><td>Ben Sample</td><td class="text-end tabular-nums">3</td><td class="text-end tabular-nums">7,500</td></tr>
+		<tr class="table-subtotal"><th scope="row">Boat A</th><td class="text-end tabular-nums">5</td><td class="text-end tabular-nums">12,500</td></tr>
+		<tr class="table-group"><th scope="rowgroup" colspan="3">Boat C<span class="table-group-end">1 booking</span></th></tr>
+		<tr><td>Chris Sample</td><td class="text-end tabular-nums">4</td><td class="text-end tabular-nums">10,000</td></tr>
+		<tr class="table-subtotal"><th scope="row">Boat C</th><td class="text-end tabular-nums">4</td><td class="text-end tabular-nums">10,000</td></tr>
 	</tbody>
 </table>
 ```
@@ -175,7 +175,7 @@ The head of a table sticks under the app's header as the page scrolls; inside a 
 
 ### Wider than its card
 
-A table with more columns than its card has room for goes in a `table-scroll`: it scrolls sideways inside the card, and `table-scroll-first` holds its first column in place. Where the browser lets an element scroll on one axis alone - Chrome 156 on - the head still sticks to the page as it scrolls down; elsewhere the head scrolls away with the page and the rest works the same. The wrapper is a named region. The library makes it a tab stop while its table is wider than it, so a keyboard can scroll it, and takes the stop away while the table fits.
+A table with more columns than its card has room for goes in a `table-scroll`: it scrolls sideways inside the card, and `table-scroll-first` holds its first column in place, `table-scroll-last` its last, where a row's buttons stay in view. Where the browser lets an element scroll on one axis alone - Chrome 156 on - the head still sticks to the page as it scrolls down; elsewhere the head scrolls away with the page and the rest works the same. The wrapper is a named region. The library makes it a tab stop while its table is wider than it, so a keyboard can scroll it, and takes the stop away while the table fits.
 
 ```html
 <section class="card" aria-labelledby="table-wide-title">
@@ -184,14 +184,31 @@ A table with more columns than its card has room for goes in a `table-scroll`: i
 		<table class="table">
 			<thead><tr><th scope="col">Boat</th><th scope="col" class="text-end">Mon</th><th scope="col" class="text-end">Tue</th><th scope="col" class="text-end">Wed</th><th scope="col" class="text-end">Thu</th><th scope="col" class="text-end">Fri</th><th scope="col" class="text-end">Sat</th><th scope="col" class="text-end">Sun</th><th scope="col" class="text-end">Week</th><th scope="col" class="text-end">Last week</th><th scope="col" class="text-end">Change</th></tr></thead>
 			<tbody>
-				<tr><th scope="row">Sea Breeze</th><td class="text-end tabular-nums">42</td><td class="text-end tabular-nums">38</td><td class="text-end tabular-nums">40</td><td class="text-end tabular-nums">44</td><td class="text-end tabular-nums">46</td><td class="text-end tabular-nums">48</td><td class="text-end tabular-nums">28</td><td class="text-end tabular-nums">286</td><td class="text-end tabular-nums">270</td><td class="text-end tabular-nums"><bdi>+16</bdi></td></tr>
-				<tr><th scope="row">Coral Star</th><td class="text-end tabular-nums">30</td><td class="text-end tabular-nums">28</td><td class="text-end tabular-nums">27</td><td class="text-end tabular-nums">31</td><td class="text-end tabular-nums">33</td><td class="text-end tabular-nums">35</td><td class="text-end tabular-nums">17</td><td class="text-end tabular-nums">201</td><td class="text-end tabular-nums">214</td><td class="text-end tabular-nums"><bdi>-13</bdi></td></tr>
-				<tr><th scope="row">Blue Lagoon</th><td class="text-end tabular-nums">22</td><td class="text-end tabular-nums">20</td><td class="text-end tabular-nums">24</td><td class="text-end tabular-nums">23</td><td class="text-end tabular-nums">25</td><td class="text-end tabular-nums">30</td><td class="text-end tabular-nums">20</td><td class="text-end tabular-nums">164</td><td class="text-end tabular-nums">150</td><td class="text-end tabular-nums"><bdi>+14</bdi></td></tr>
+				<tr><th scope="row">Boat A</th><td class="text-end tabular-nums">42</td><td class="text-end tabular-nums">38</td><td class="text-end tabular-nums">40</td><td class="text-end tabular-nums">44</td><td class="text-end tabular-nums">46</td><td class="text-end tabular-nums">48</td><td class="text-end tabular-nums">28</td><td class="text-end tabular-nums">286</td><td class="text-end tabular-nums">270</td><td class="text-end tabular-nums"><bdi>+16</bdi></td></tr>
+				<tr><th scope="row">Boat C</th><td class="text-end tabular-nums">30</td><td class="text-end tabular-nums">28</td><td class="text-end tabular-nums">27</td><td class="text-end tabular-nums">31</td><td class="text-end tabular-nums">33</td><td class="text-end tabular-nums">35</td><td class="text-end tabular-nums">17</td><td class="text-end tabular-nums">201</td><td class="text-end tabular-nums">214</td><td class="text-end tabular-nums"><bdi>-13</bdi></td></tr>
+				<tr><th scope="row">Boat B</th><td class="text-end tabular-nums">22</td><td class="text-end tabular-nums">20</td><td class="text-end tabular-nums">24</td><td class="text-end tabular-nums">23</td><td class="text-end tabular-nums">25</td><td class="text-end tabular-nums">30</td><td class="text-end tabular-nums">20</td><td class="text-end tabular-nums">164</td><td class="text-end tabular-nums">150</td><td class="text-end tabular-nums"><bdi>+14</bdi></td></tr>
 			</tbody>
 		</table>
 	</div>
 </section>
 ```
+
+```html
+<section class="card" aria-labelledby="table-wide-last-title">
+	<div class="card-header"><h2 class="fs-14" id="table-wide-last-title">Rates</h2></div>
+	<div class="table-scroll table-scroll-last" role="region" aria-labelledby="table-wide-last-title">
+		<table class="table">
+			<thead><tr><th scope="col">Boat</th><th scope="col" class="text-end">Low</th><th scope="col" class="text-end">High</th><th scope="col" class="text-end">Peak</th><th scope="col" class="text-end">Children</th><th scope="col" class="text-end">Groups</th><th scope="col" class="text-end">Agents</th><th scope="col" class="text-end">Guides</th><th scope="col" class="text-end">Fuel</th><th scope="col" class="text-end">Park fee</th><th scope="col" class="text-end">Insurance</th><th scope="col" class="text-end">Status</th></tr></thead>
+			<tbody>
+				<tr><th scope="row">Boat A</th><td class="text-end tabular-nums">2,500</td><td class="text-end tabular-nums">2,900</td><td class="text-end tabular-nums">3,400</td><td class="text-end tabular-nums">1,900</td><td class="text-end tabular-nums">2,200</td><td class="text-end tabular-nums">2,100</td><td class="text-end tabular-nums">900</td><td class="text-end tabular-nums">300</td><td class="text-end tabular-nums">300</td><td class="text-end tabular-nums">120</td><td class="text-end"><button class="btn btn-xs btn-primary" type="button">Save</button></td></tr>
+				<tr><th scope="row">Boat C</th><td class="text-end tabular-nums">2,200</td><td class="text-end tabular-nums">2,600</td><td class="text-end tabular-nums">3,000</td><td class="text-end tabular-nums">1,700</td><td class="text-end tabular-nums">2,000</td><td class="text-end tabular-nums">1,900</td><td class="text-end tabular-nums">800</td><td class="text-end tabular-nums">280</td><td class="text-end tabular-nums">300</td><td class="text-end tabular-nums">110</td><td class="text-end"><button class="btn btn-xs btn-primary" type="button">Save</button></td></tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+```
+
+A product sets the look of every table head in its tokens: `--redz-table-head-bg`, `--redz-table-head-text`, `--redz-table-head-weight`, and `--redz-table-head-border`, the whole line under it.
 
 ### The current, the chosen and the running row
 
@@ -215,8 +232,8 @@ The row's title link with Bootstrap's `stretched-link` makes the whole row a lin
 ```html
 <table class="table" aria-label="Guides">
 	<tbody>
-		<tr><td><a class="table-title stretched-link" href="#table-links">Anong Srisuk</a><div class="table-sub">Thai, English</div></td><td class="tabular-nums">12 tours</td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Message: Anong Srisuk"><i class="bi bi-chat" aria-hidden="true"></i></button></td></tr>
-		<tr><td><a class="table-title stretched-link" href="#table-links">Hiroshi Sato</a><div class="table-sub">Japanese, English</div></td><td class="tabular-nums">7 tours</td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Message: Hiroshi Sato"><i class="bi bi-chat" aria-hidden="true"></i></button></td></tr>
+		<tr><td><a class="table-title stretched-link" href="#table-links">Alex Sample</a><div class="table-sub">Thai, English</div></td><td class="tabular-nums">12 tours</td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Message: Alex Sample"><i class="bi bi-chat" aria-hidden="true"></i></button></td></tr>
+		<tr><td><a class="table-title stretched-link" href="#table-links">Hana Sample</a><div class="table-sub">Japanese, English</div></td><td class="tabular-nums">7 tours</td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Message: Hana Sample"><i class="bi bi-chat" aria-hidden="true"></i></button></td></tr>
 	</tbody>
 </table>
 ```
@@ -227,17 +244,17 @@ A row's tone marks what needs attention: `table-danger` failed, `table-warning` 
 
 ## Keyboard and accessibility
 
-- The row's title is a link; its actions are buttons named with the record - "Edit: Ang Thong", not a column of identical "Edit".
-- The column of actions has a hidden header, and each check its own name: "Select: Ang Thong".
+- The row's title is a link; its actions are buttons named with the record - "Edit: North Bay", not a column of identical "Edit".
+- The column of actions has a hidden header, and each check its own name: "Select: North Bay".
 - A tone is never the only sign: a failed row also says why in its `table-note`, with an icon.
 - Numbers sit at the end of their cells with `tabular-nums`, so their digits line up.
 - A table being reloaded turns busy on its card's body: `REDZ.ui.busy(body, promise)` - not on the `<table>`, which cannot hold an overlay.
 
 ## Tokens
 
-From [`css/components/table.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css). It declares `--redz-row-tint`, `--redz-row-mark` on its root, never on rows or items.
+From [`css/components/table.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css). It declares `--redz-table-head-border`, `--redz-table-head-weight`, `--redz-row-tint`, `--redz-row-mark` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-8`, `--redz-row-pad`, `--redz-space-12`, `--redz-border`, `--redz-bg`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-bg-page`, `--redz-border-strong`, `--redz-bg-hover`, `--redz-radius-12`, `--redz-space-16`, `--redz-font-mono`, `--redz-space-4`, `--redz-primary`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-primary-subtle`.
+It reads the theme's `--redz-space-8`, `--redz-row-pad`, `--redz-space-12`, `--redz-border`, `--redz-table-head-bg`, `--redz-bg`, `--redz-table-head-text`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-bg-page`, `--redz-border-strong`, `--redz-bg-hover`, `--redz-radius-12`, `--redz-space-16`, `--redz-font-mono`, `--redz-space-4`, `--redz-primary`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-primary-subtle`.
 
 ## From Bootstrap 5.3
 

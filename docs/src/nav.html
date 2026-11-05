@@ -32,6 +32,17 @@
 		<div id="nav-tabs-panel-3" role="tabpanel" aria-labelledby="nav-tabs-3" tabindex="0" hidden><p>Edited yesterday by M. K.; published on three sites.</p></div>
 	</div>
 
+	<h3>A tab with changes</h3>
+	<p><code>data-changed</code>, set by the page, puts a dot on a tab whose panel holds something not saved yet, the same word as on a field. Its value is what a screen reader says after the tab's name.</p>
+	<div class="docs-example docs-example-stack" id="nav-changed">
+		<div class="nav nav-underline" role="tablist" aria-label="Settings">
+			<button class="nav-link" type="button" role="tab" id="nav-changed-1" aria-selected="true" aria-controls="nav-changed-panel-1">Company</button>
+			<button class="nav-link" type="button" role="tab" id="nav-changed-2" aria-selected="false" aria-controls="nav-changed-panel-2" data-changed="not saved">Mail</button>
+		</div>
+		<div id="nav-changed-panel-1" role="tabpanel" aria-labelledby="nav-changed-1" tabindex="0"><p>The company's name and address.</p></div>
+		<div id="nav-changed-panel-2" role="tabpanel" aria-labelledby="nav-changed-2" tabindex="0" hidden><p>The address mail is sent from.</p></div>
+	</div>
+
 	<h3>Tabs whose panels load</h3>
 	<p>When a panel comes from the server, the arrows should not load every panel they pass: <code>data-activation="manual"</code> on the tablist makes them move the focus only, and <kbd>Enter</kbd> or <kbd>Space</kbd> selects.</p>
 	<div class="docs-example docs-example-stack" id="nav-manual">
@@ -109,7 +120,7 @@ await REDZ.ui.select(document.getElementById('nav-hash-3'));</code></pre>
 			<div class="docs-scroll md:span-8 vstack gap-16" tabindex="0" role="region" aria-label="The day, by section">
 				<section id="nav-spy-plan" class="vstack gap-4"><h4 class="fs-14">Plan</h4><p class="mb-0">Pick-up at the hotel at 7:30, the pier at 8:15. The crew hands out life vests and snorkels before the boat leaves the bay.</p></section>
 				<section id="nav-spy-boat" class="vstack gap-4"><h4 class="fs-14">The boat</h4><p class="mb-0">A speedboat for 30 guests with shade and a toilet; the ride to the park takes an hour across open water.</p></section>
-				<section id="nav-spy-lunch" class="vstack gap-4"><h4 class="fs-14">Lunch</h4><p class="mb-0">Thai lunch on a beach of the park: rice, green curry, fruit and water; vegetarian on request.</p></section>
+				<section id="nav-spy-lunch" class="vstack gap-4"><h4 class="fs-14">Lunch</h4><p class="mb-0">Lunch on a beach of the park: rice, green curry, fruit and water; vegetarian on request.</p></section>
 				<section id="nav-spy-back" class="vstack gap-4"><h4 class="fs-14">Back</h4><p class="mb-0">The boat leaves the park at 15:30 and reaches the pier by 17:00; the transfer brings everyone back to the hotel.</p></section>
 			</div>
 		</div>
@@ -157,8 +168,8 @@ await REDZ.ui.select(document.getElementById('nav-hash-3'));</code></pre>
 				<button class="nav-link" type="button" role="tab" id="nav-overflow-tabs-5" aria-selected="false" aria-controls="nav-overflow-tabs-panel-5">Notes</button>
 			</div>
 		</div>
-		<div id="nav-overflow-tabs-panel-1" role="tabpanel" aria-labelledby="nav-overflow-tabs-1" tabindex="0"><p>Anna Petrova, two trips this year.</p></div>
-		<div id="nav-overflow-tabs-panel-2" role="tabpanel" aria-labelledby="nav-overflow-tabs-2" tabindex="0" hidden><p>Ang Thong on 12 December, 2 adults.</p></div>
+		<div id="nav-overflow-tabs-panel-1" role="tabpanel" aria-labelledby="nav-overflow-tabs-1" tabindex="0"><p>Anna Sample, two trips this year.</p></div>
+		<div id="nav-overflow-tabs-panel-2" role="tabpanel" aria-labelledby="nav-overflow-tabs-2" tabindex="0" hidden><p>North Bay on 12 December, 2 adults.</p></div>
 		<div id="nav-overflow-tabs-panel-3" role="tabpanel" aria-labelledby="nav-overflow-tabs-3" tabindex="0" hidden><p>Paid in full by card.</p></div>
 		<div id="nav-overflow-tabs-panel-4" role="tabpanel" aria-labelledby="nav-overflow-tabs-4" tabindex="0" hidden><p>No messages yet.</p></div>
 		<div id="nav-overflow-tabs-panel-5" role="tabpanel" aria-labelledby="nav-overflow-tabs-5" tabindex="0" hidden><p>Vegetarian lunch.</p></div>

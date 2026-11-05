@@ -11,7 +11,7 @@ A small panel that opens beside its button and holds more than a label: a title,
 ```html
 <button class="btn btn-secondary" type="button" commandfor="popover-titled-panel" command="toggle-popover">Park fee</button>
 <div id="popover-titled-panel" class="popover" popover role="dialog" aria-labelledby="popover-titled-title">
-	<div class="popover-header" id="popover-titled-title">Ang Thong marine park</div>
+	<div class="popover-header" id="popover-titled-title">North Bay marine park</div>
 	<div class="popover-body">The fee is paid in cash at the pier and is not part of the tour price. <a href="#popover-titled">The park rules</a></div>
 </div>
 ```

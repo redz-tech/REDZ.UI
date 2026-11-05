@@ -15,6 +15,42 @@
 		font-size: var(--redz-fs-12);
 	}
 
+	.form-more > summary {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--redz-space-4);
+		min-block-size: 1.5rem;
+		color: var(--redz-link);
+		cursor: pointer;
+		list-style: none;
+	}
+
+	.form-more > summary::-webkit-details-marker {
+		display: none;
+	}
+
+	.form-more > summary > .bi {
+		font-size: 0.75em;
+	}
+
+	.form-more:dir(rtl) > summary > .bi {
+		scale: -1 1;
+	}
+
+	.form-more[open] > summary > .bi {
+		rotate: 90deg;
+	}
+
+	.form-more[open]:dir(rtl) > summary > .bi {
+		rotate: -90deg;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.form-more > summary > .bi {
+			transition: rotate var(--redz-motion) var(--redz-ease);
+		}
+	}
+
 	.invalid-feedback {
 		display: flex;
 		align-items: center;

@@ -2682,6 +2682,8 @@ edge-top-secondary
 edge-top-success
 edge-top-warning
 editor
+editor-ask
+editor-ask-answer
 editor-bubble
 editor-card
 editor-card-body
@@ -2695,13 +2697,19 @@ editor-crumb-sep
 editor-crumbs
 editor-drop
 editor-element
+editor-fact
 editor-foot
+editor-foot-tools
 editor-frame
+editor-frame-source
 editor-handle
 editor-icons
 editor-issue
 editor-layer
 editor-lens
+editor-pad-axes
+editor-pad-ends
+editor-pad-grid
 editor-palette
 editor-palette-list
 editor-part
@@ -2710,6 +2718,9 @@ editor-past
 editor-preview
 editor-prop
 editor-prop-wide
+editor-raw-words
+editor-review
+editor-review-say
 editor-slash
 editor-source
 editor-stage
@@ -2725,6 +2736,7 @@ editor-tool-letter
 editor-tool-sep
 editor-tool-word
 editor-toolbar
+editor-working
 empty-state
 empty-state-drop
 end-0
@@ -2759,6 +2771,7 @@ form-counter
 form-field
 form-floating
 form-label
+form-more
 form-range
 form-select
 form-select-lg
@@ -4256,6 +4269,7 @@ table-hover
 table-note
 table-scroll
 table-scroll-first
+table-scroll-last
 table-secondary
 table-sort
 table-striped

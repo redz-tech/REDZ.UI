@@ -41,6 +41,8 @@ A drawer opens and closes like a dialog: `command="show-modal"` and `command="cl
 </dialog>
 ```
 
+A product tints the head of every drawer with `--redz-drawer-header-bg`.
+
 ### Wide
 
 `drawer-lg` is 38rem (608 px) wide instead of 28rem, for a record's details with a table or a form of two columns; on a narrower window it takes the window less a margin, as every drawer does.
@@ -52,7 +54,7 @@ A drawer opens and closes like a dialog: `command="show-modal"` and `command="cl
 		<h2 class="drawer-title" id="drawer-lg-panel-title">Booking 2026-0418</h2>
 		<button class="btn-close" type="button" commandfor="drawer-lg-panel" command="close" aria-label="Close"></button>
 	</div>
-	<div class="drawer-body"><p>Ang Thong by speedboat, 4 guests, 12 November 2026. Paid in full by card.</p></div>
+	<div class="drawer-body"><p>North Bay by speedboat, 4 guests, 12 November 2026. Paid in full by card.</p></div>
 </dialog>
 ```
 
@@ -66,7 +68,7 @@ A drawer opens and closes like a dialog: `command="show-modal"` and `command="cl
 
 From [`css/components/drawer.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/drawer.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-8`, `--redz-border`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-3`, `--redz-space-12`, `--redz-space-16`, `--redz-fs-16`, `--redz-ease`.
+It reads the theme's `--redz-space-8`, `--redz-border`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-3`, `--redz-space-12`, `--redz-space-16`, `--redz-drawer-header-bg`, `--redz-fs-16`, `--redz-ease`.
 
 ## From Bootstrap 5.3
 

@@ -22,6 +22,8 @@ A card that is a section of the screen is a `<section>` named by its heading. Th
 </section>
 ```
 
+A product tints the head of every card with `--redz-card-header-bg`.
+
 ### Images
 
 `card-img-top` and `card-img-bottom` round the image with the card's corners; `card-img-overlay` lays the card's words over a `card-img`. A `stretched-link` makes the whole card its link.
@@ -31,7 +33,7 @@ A card that is a section of the screen is a `<section>` named by its heading. Th
 	<section class="card" aria-labelledby="card-images-title">
 		<img class="card-img-top ratio-16x9" src="img/lagoon.svg" alt="A lagoon under green hills">
 		<div class="card-body vstack gap-4">
-			<h2 class="fs-16" id="card-images-title"><a class="stretched-link" href="#card-images">Ang Thong by speedboat</a></h2>
+			<h2 class="fs-16" id="card-images-title"><a class="stretched-link" href="#card-images">North Bay by speedboat</a></h2>
 			<p class="text-muted mb-0">From 2 500 THB · a day</p>
 		</div>
 	</section>
@@ -50,8 +52,8 @@ A `nav` placed straight in the card lines up with the header's padding.
 
 ```html
 <section class="card" aria-labelledby="card-tabs-title">
-	<div class="card-header"><h2 id="card-tabs-title">Ang Thong</h2></div>
-	<div class="nav nav-underline" role="tablist" aria-label="Ang Thong">
+	<div class="card-header"><h2 id="card-tabs-title">North Bay</h2></div>
+	<div class="nav nav-underline" role="tablist" aria-label="North Bay">
 		<button class="nav-link" type="button" role="tab" id="card-tabs-1" aria-selected="true" aria-controls="card-tabs-panel-1">Details</button>
 		<button class="nav-link" type="button" role="tab" id="card-tabs-2" aria-selected="false" aria-controls="card-tabs-panel-2">Prices</button>
 	</div>
@@ -111,9 +113,9 @@ For a category instead of a state - a site, a team, a kind of job - `edge-top-ch
 
 ```html
 <ul class="list-group" aria-label="Sites">
-	<li class="list-group-item edge-start-chart-1">Samui</li>
-	<li class="list-group-item edge-start-chart-2">Phuket</li>
-	<li class="list-group-item edge-start-chart-3">Krabi</li>
+	<li class="list-group-item edge-start-chart-1">Main Island</li>
+	<li class="list-group-item edge-start-chart-2">South Bay</li>
+	<li class="list-group-item edge-start-chart-3">West Bay</li>
 </ul>
 ```
 
@@ -127,7 +129,7 @@ For a category instead of a state - a site, a team, a kind of job - `edge-top-ch
 
 From [`css/components/card.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/card.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-space-16`, `--redz-space-8`, `--redz-space-12`, `--redz-text-muted`.
+It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-space-16`, `--redz-space-8`, `--redz-space-12`, `--redz-card-header-bg`, `--redz-text-muted`.
 
 ## From Bootstrap 5.3
 

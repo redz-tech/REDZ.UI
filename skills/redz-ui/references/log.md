@@ -29,8 +29,8 @@ What a job printed, line by line as it runs, and what changed between two versio
 ```html
 <div class="diff" role="group" aria-label="The changes of the page's title" dir="ltr">
 	<span translate="no">&lt;header class="vstack gap-8"&gt;</span>
-	<del translate="no">	&lt;h1&gt;Ang Thong by speedboat&lt;/h1&gt;</del>
-	<ins translate="no">	&lt;h1&gt;Ang Thong marine park by speedboat&lt;/h1&gt;</ins>
+	<del translate="no">	&lt;h1&gt;North Bay by speedboat&lt;/h1&gt;</del>
+	<ins translate="no">	&lt;h1&gt;North Bay marine park by speedboat&lt;/h1&gt;</ins>
 	<span translate="no">	&lt;p&gt;A day among <del>forty</del><ins>forty-two</ins> islands.&lt;/p&gt;</span>
 	<span translate="no">&lt;/header&gt;</span>
 </div>

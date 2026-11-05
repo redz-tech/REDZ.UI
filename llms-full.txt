@@ -6,11 +6,11 @@ REDZ.UI is a stylesheet, its icons and one small script on the browser platform.
 
 ## Get it
 
-Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. `redz-ui-0.16.0.zip` is the folder a project serves, as it is: `css/` and `js/` with minified files only, the license files and the passport, `redz-ui.json` - the version, the floor, the files to link, every class, token, command and text key, and the sha256 of every file. The icons are a release of their own, `redz-ui-icons-1.13.2.zip`, which changes only with Bootstrap Icons: the passport's `icons` names the version a release needs, and a project keeps it in a folder of its own, so a new release of the library leaves the icons and their cache alone. `checks.zip` beside the library is the sheet of the probes the release passed in every engine.
+Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. `redz-ui-0.17.0.zip` is the folder a project serves, as it is: `css/` and `js/` with minified files only, the license files and the passport, `redz-ui.json` - the version, the floor, the files to link, every class, token, command and text key, and the sha256 of every file. The icons are a release of their own, `redz-ui-icons-1.13.2.zip`, which changes only with Bootstrap Icons: the passport's `icons` names the version a release needs, and a project keeps it in a folder of its own, so a new release of the library leaves the icons and their cache alone. `checks.zip` beside the library is the sheet of the probes the release passed in every engine.
 
 ```js
-gh release download v0.16.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
-gh release verify-asset v0.16.0 redz-ui-0.16.0.zip --repo redz-tech/REDZ.UI
+gh release download v0.17.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
+gh release verify-asset v0.17.0 redz-ui-0.17.0.zip --repo redz-tech/REDZ.UI
 gh release download icons-1.13.2 --repo redz-tech/REDZ.UI --pattern 'redz-ui-icons-*.zip'
 gh release verify-asset icons-1.13.2 redz-ui-icons-1.13.2.zip --repo redz-tech/REDZ.UI
 ```
@@ -18,7 +18,7 @@ gh release verify-asset icons-1.13.2 redz-ui-icons-1.13.2.zip --repo redz-tech/R
 Or from jsDelivr, which serves a release by its tag:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.16.0/dist/css/redz-ui.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.17.0/dist/css/redz-ui.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@icons-1.13.2/css/icons.min.css">
 ```
 
@@ -124,7 +124,7 @@ A child's exception: `span-N` or `span-full`, with a prefix where it changes.
 <div class="grid cols-min-160 gap-12">
 	<div class="card"><div class="card-body">lagoon.example</div></div>
 	<div class="card"><div class="card-body">villas.lagoon.example</div></div>
-	<div class="card"><div class="card-body">angthong.example</div></div>
+	<div class="card"><div class="card-body">northbay.example</div></div>
 </div>
 ```
 
@@ -251,7 +251,7 @@ Where a control or a mark needs a fixed size - a narrow field in a toolbar, a co
 <span class="size-48 rounded-8 bg-page"></span>
 <span class="size-64 rounded-8 bg-page"></span>
 <span class="size-80 rounded-8 bg-page"></span>
-<input class="form-control w-120" type="text" aria-label="Code" value="SAMUI-26">
+<input class="form-control w-120" type="text" aria-label="Code" value="SPRING-26">
 ```
 
 ## Text: kept lines, captions, clamps
@@ -259,9 +259,9 @@ Where a control or a mark needs a fixed size - a narrow field in a toolbar, a co
 `text-pre-wrap` keeps the lines and the spaces a person typed - a note, an address - and still wraps a long line. `tracking-wide` spaces the letters of a caption in capitals. `line-clamp-2` and `line-clamp-3` cut a text after two or three lines with an ellipsis; the whole text stays in the page for a screen reader and for search.
 
 ```html
-<p class="text-pre-wrap">Villa 12, Bophut&#10;Koh Samui 84320</p>
+<p class="text-pre-wrap">Villa 12, Harbor Road&#10;Main Island 00000</p>
 <p class="fs-11 text-uppercase tracking-wide text-muted">Last 30 days</p>
-<p class="line-clamp-2 max-w-360">Ang Thong by speedboat: a day among the forty-two islands of the marine park, with snorkelling at Koh Wua Ta Lap, the emerald lake of Koh Mae Ko and lunch on the beach, back by five.</p>
+<p class="line-clamp-2 max-w-360">North Bay by speedboat: a day among the forty-two islands of the marine park, with snorkelling at Reef Islet, the emerald lake of Emerald Islet and lunch on the beach, back by five.</p>
 ```
 
 ## Shown when focused
@@ -2933,7 +2933,7 @@ Buttons that act without a line of the page's script: copy a value, print the pa
 	<button class="btn btn-icon" type="button" command="--copy" aria-controls="commands-copy-key" aria-label="Copy the key"><i class="bi bi-copy" aria-hidden="true"></i></button>
 </div>
 <div class="hstack gap-8">
-	<button class="btn" type="button" command="--copy" data-copy="https://lagoon.example/tours/ang-thong"><i class="bi bi-link-45deg" aria-hidden="true"></i>Copy the address</button>
+	<button class="btn" type="button" command="--copy" data-copy="https://lagoon.example/tours/north-bay"><i class="bi bi-link-45deg" aria-hidden="true"></i>Copy the address</button>
 </div>
 ```
 
@@ -2963,7 +2963,7 @@ Buttons with `command="--theme"` and the value `light`, `dark` or `system` set t
 `command="--share"` shares `data-share-url` - the page's own address when it has none - and `data-share-title` through the device's share sheet where it has one, as a phone does. Elsewhere it opens its menu, `aria-controls`, whose links the library writes by their class: `share-telegram`, `share-facebook`, `share-messenger`, `share-linkedin`, `share-vk`, `share-line` and `share-whatsapp`; a `--copy` item without `data-copy` copies the address. Each class gives its icon the network's colour; Bootstrap Icons has no VK mark, so `share-vk` draws its letters. Messenger opens its app, on a phone.
 
 ```html
-<button class="btn" type="button" command="--share" aria-controls="commands-share-menu" aria-haspopup="menu" data-share-url="https://lagoon.example/tours/ang-thong" data-share-title="Ang Thong by speedboat"><i class="bi bi-share" aria-hidden="true"></i>Share</button>
+<button class="btn" type="button" command="--share" aria-controls="commands-share-menu" aria-haspopup="menu" data-share-url="https://lagoon.example/tours/north-bay" data-share-title="North Bay by speedboat"><i class="bi bi-share" aria-hidden="true"></i>Share</button>
 <div id="commands-share-menu" class="menu menu-start" popover role="menu" aria-label="Share">
 	<a class="menu-item share-telegram" role="menuitem"><i class="bi bi-telegram" aria-hidden="true"></i>Telegram</a>
 	<a class="menu-item share-whatsapp" role="menuitem"><i class="bi bi-whatsapp" aria-hidden="true"></i>WhatsApp</a>
@@ -3008,7 +3008,7 @@ A filter chip is a toggle button: `aria-pressed` says whether it is on. A chip t
 <div id="chip-site-menu" class="menu menu-start" popover role="menu" aria-label="Site">
 	<button class="menu-item" type="button" role="menuitemradio" aria-checked="true">All sites</button>
 	<button class="menu-item" type="button" role="menuitemradio" aria-checked="false">lagoon.example</button>
-	<button class="menu-item" type="button" role="menuitemradio" aria-checked="false">angthong.example</button>
+	<button class="menu-item" type="button" role="menuitemradio" aria-checked="false">northbay.example</button>
 </div>
 ```
 
@@ -3068,7 +3068,7 @@ A choice of one is a set of `menuitemradio` items, the chosen one `aria-checked=
 	<div class="menu-header">Work context</div>
 	<button class="menu-item" type="button" role="menuitemradio" aria-checked="true"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i>All sites</button>
 	<button class="menu-item" type="button" role="menuitemradio" aria-checked="false"><i class="bi bi-globe2" aria-hidden="true"></i>lagoon.example</button>
-	<button class="menu-item" type="button" role="menuitemradio" aria-checked="false"><i class="bi bi-globe2" aria-hidden="true"></i>angthong.example</button>
+	<button class="menu-item" type="button" role="menuitemradio" aria-checked="false"><i class="bi bi-globe2" aria-hidden="true"></i>northbay.example</button>
 </div>
 ```
 
@@ -3159,7 +3159,7 @@ Text fields, selects and text areas with Bootstrap 5's names: a label floating i
 
 ```html
 <div class="form-floating">
-	<input class="form-control" id="form-floating-name" value="Ang Thong: marine park by speedboat" placeholder="A name people search for">
+	<input class="form-control" id="form-floating-name" value="North Bay: marine park by speedboat" placeholder="A name people search for">
 	<label for="form-floating-name">Name</label>
 </div>
 <div class="form-floating">
@@ -3183,13 +3183,26 @@ Text fields, selects and text areas with Bootstrap 5's names: a label floating i
 ```html
 <div class="form-field">
 	<label class="form-label" for="form-stacked-slug">Address</label>
-	<input class="form-control font-monospace" id="form-stacked-slug" value="ang-thong" aria-describedby="form-stacked-slug-hint">
-	<div class="form-text" id="form-stacked-slug-hint">Full address /excursions/ang-thong/. The old one answers with a 301 redirect.</div>
+	<input class="form-control font-monospace" id="form-stacked-slug" value="north-bay" aria-describedby="form-stacked-slug-hint">
+	<div class="form-text" id="form-stacked-slug-hint">Full address /excursions/north-bay/. The old one answers with a 301 redirect.</div>
 </div>
 <div class="form-field">
 	<label class="form-label" for="form-stacked-price">Adult price, THB</label>
 	<input class="form-control tabular-nums" id="form-stacked-price" type="number" value="2500" min="0" step="100" aria-invalid="true" aria-describedby="form-stacked-price-error">
 	<div class="invalid-feedback" id="form-stacked-price-error"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>Lower than the child price</div>
+</div>
+```
+
+### A longer hint
+
+A `details` with `form-more` folds what a short hint cannot say. Its chevron turns as it opens.
+
+```html
+<div class="form-field">
+	<label class="form-label" for="form-more-keep">Keep the log for, days</label>
+	<input class="form-control tabular-nums" id="form-more-keep" type="number" value="90" min="1" aria-describedby="form-more-hint">
+	<div class="form-text" id="form-more-hint">Older records are removed at night.</div>
+	<details class="form-more form-text"><summary><i class="bi bi-chevron-right" aria-hidden="true"></i>More</summary><div class="mt-4">The count starts from the day a record is written. A record a person marked to keep stays, whatever this number says, until the mark is taken off.</div></details>
 </div>
 ```
 
@@ -3209,7 +3222,7 @@ Text fields, selects and text areas with Bootstrap 5's names: a label floating i
 </div>
 <div class="form-floating form-adorn">
 	<i class="bi bi-globe2" aria-hidden="true"></i>
-	<select class="form-select" id="form-adorn-country" autocomplete="country-name"><option>Thailand</option><option>Malaysia</option><option>Vietnam</option></select>
+	<select class="form-select" id="form-adorn-country" autocomplete="country-name"><option>Northland</option><option>Southland</option><option>Eastland</option></select>
 	<label for="form-adorn-country">Country</label>
 </div>
 <div class="input-group">
@@ -3305,7 +3318,7 @@ A button with `command="--reveal"` for a password field shows its text and hides
 ```html
 <div class="form-field">
 	<label class="form-label" for="form-counter-title">Page title</label>
-	<input class="form-control" id="form-counter-title" value="Ang Thong marine park by speedboat" aria-describedby="form-counter-title-count">
+	<input class="form-control" id="form-counter-title" value="North Bay marine park by speedboat" aria-describedby="form-counter-title-count">
 	<div class="form-counter" id="form-counter-title-count" data-counter="form-counter-title" data-counter-max="60"></div>
 </div>
 ```
@@ -3359,7 +3372,7 @@ Buttons with `command="--step-up"` or `"--step-down"` and `aria-controls` naming
 
 ### Shown by another field
 
-`data-show-when` on a region names a field of its form, and `data-show-in` the values that show it, a space between them; without it, any value does. A checkbox or a radio counts its value when checked. While the region is hidden its fields are disabled, so the form sends none of them; a field the page disabled itself stays disabled. A region inside a hidden region counts as hidden, whatever its own field holds.
+`data-show-when` on a region names a field of its form, and `data-show-in` the values that show it, a space between them; without it, any value does. A checkbox or a radio counts its value when checked. A hidden field beside a checkbox of the same name is what the form sends while it is off: `data-show-in` can name its value, and a region without `data-show-in` does not count it. While the region is hidden its fields are disabled, so the form sends none of them; a field the page disabled itself stays disabled. A region inside a hidden region counts as hidden, whatever its own field holds.
 
 ```html
 <form class="vstack gap-12">
@@ -3370,6 +3383,12 @@ Buttons with `command="--step-up"` or `"--step-down"` and `aria-controls` naming
 	<div class="form-floating max-w-320" id="form-show-tax-region" data-show-when="pay" data-show-in="invoice">
 		<input class="form-control" id="form-show-tax" name="tax_id" placeholder="Tax ID">
 		<label for="form-show-tax">Tax ID</label>
+	</div>
+	<div class="vstack gap-4">
+		<input type="hidden" name="remind" value="0">
+		<label class="form-check"><input class="switch" type="checkbox" role="switch" name="remind" value="1"> Remind the guest</label>
+		<div class="form-text" id="form-show-on" data-show-when="remind">A message goes out the evening before.</div>
+		<div class="form-text" id="form-show-off" data-show-when="remind" data-show-in="0">The guest is told nothing.</div>
 	</div>
 </form>
 ```
@@ -3391,7 +3410,7 @@ Buttons with `command="--step-up"` or `"--step-down"` and `aria-controls` naming
 
 From [`css/components/form.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/form.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-4`, `--redz-text`, `--redz-fs-12`, `--redz-text-muted`, `--redz-danger`, `--redz-control-height`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg`, `--redz-focus`, `--redz-space-8`, `--redz-grow-rows`, `--redz-form-select-chevron`, `--redz-warning`, `--redz-radius-6`, `--redz-bg-page`, `--redz-primary-subtle`, `--redz-control-height-sm`, `--redz-control-height-lg`, `--redz-fs-16`, `--redz-control-height-float`, `--redz-fs-14`, `--redz-motion`, `--redz-ease`, `--redz-primary`.
+It reads the theme's `--redz-space-4`, `--redz-text`, `--redz-fs-12`, `--redz-text-muted`, `--redz-link`, `--redz-motion`, `--redz-ease`, `--redz-danger`, `--redz-control-height`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg`, `--redz-focus`, `--redz-space-8`, `--redz-grow-rows`, `--redz-form-select-chevron`, `--redz-warning`, `--redz-radius-6`, `--redz-bg-page`, `--redz-primary-subtle`, `--redz-control-height-sm`, `--redz-control-height-lg`, `--redz-fs-16`, `--redz-control-height-float`, `--redz-fs-14`, `--redz-primary`.
 
 ## From Bootstrap 5.3
 
@@ -3422,13 +3441,15 @@ A field joined to what belongs to it - a unit, a prefix, a button, a choice - in
 </div>
 <div class="input-group">
 	<span class="input-group-text">https://</span>
-	<input class="form-control" type="text" value="angthong.example" aria-label="Site address">
+	<input class="form-control" type="text" value="northbay.example" aria-label="Site address">
 </div>
 <div class="input-group">
 	<input class="form-control" type="text" value="R7K2-9QXM" readonly aria-label="Access code">
 	<button class="btn" type="button"><i class="bi bi-clipboard" aria-hidden="true"></i>Copy</button>
 </div>
 ```
+
+A plain `btn` wears the field's line and an accent face, so the group reads as one control; a plain `btn-icon` reads as `input-group-text`. A solid, outline, subtle or text button keeps its own look.
 
 ### With a choice
 
@@ -3531,9 +3552,9 @@ The menu sits in the group beside its button; the group joins only what it shows
 
 ## Tokens
 
-From [`css/components/input-group.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/input-group.css), which declares no custom property of its own.
+From [`css/components/input-group.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/input-group.css). It declares `--redz-btn-bg`, `--redz-btn-fg`, `--redz-btn-hover`, `--redz-btn-hover-fg`, `--redz-group-bg`, `--redz-group-fg`, `--redz-group-hover`, `--redz-group-hover-fg` on its root, never on rows or items.
 
-It reads the theme's `--redz-control-height-float`, `--redz-space-8`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg-page`, `--redz-text-muted`, `--redz-control-height-sm`, `--redz-radius-6`, `--redz-fs-12`.
+It reads the theme's `--redz-control-height-float`, `--redz-primary-subtle`, `--redz-primary`, `--redz-text`, `--redz-border-strong`, `--redz-bg-page`, `--redz-text-muted`, `--redz-bg-hover`, `--redz-space-8`, `--redz-space-12`, `--redz-radius-8`, `--redz-control-height-sm`, `--redz-radius-6`, `--redz-fs-12`.
 
 # Checks, radios and switches
 
@@ -3766,17 +3787,17 @@ Options with `data-level` 2 or 3 are indented under the one before them, and a p
 	<div class="card-body vstack gap-8">
 		<input class="form-control" type="search" role="combobox" aria-controls="combobox-levels-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a destination" placeholder="Find a destination" autocomplete="off">
 		<div class="combobox-list" id="combobox-levels-list" role="listbox" aria-label="Destinations" data-name="destination">
-			<div class="menu-item" role="option" id="combobox-levels-th" data-value="th" data-level="1" aria-selected="false">Thailand</div>
+			<div class="menu-item" role="option" id="combobox-levels-th" data-value="th" data-level="1" aria-selected="false">Northland</div>
 			<div class="menu-item" role="option" id="combobox-levels-south" data-value="th-south" data-level="2" aria-selected="false">The south</div>
-			<div class="menu-item" role="option" id="combobox-levels-samui" data-value="samui" data-level="3" aria-selected="true">Koh Samui</div>
-			<div class="menu-item" role="option" id="combobox-levels-phuket" data-value="phuket" data-level="3" aria-selected="false">Phuket</div>
+			<div class="menu-item" role="option" id="combobox-levels-main-island" data-value="main-island" data-level="3" aria-selected="true">Main Island</div>
+			<div class="menu-item" role="option" id="combobox-levels-south-bay" data-value="south-bay" data-level="3" aria-selected="false">South Bay</div>
 			<div class="menu-item" role="option" id="combobox-levels-north" data-value="th-north" data-level="2" aria-selected="false">The north</div>
-			<div class="menu-item" role="option" id="combobox-levels-chiangmai" data-value="chiangmai" data-level="3" aria-selected="false">Chiang Mai</div>
-			<div class="menu-item" role="option" id="combobox-levels-my" data-value="my" data-level="1" aria-selected="false">Malaysia</div>
-			<div class="menu-item" role="option" id="combobox-levels-langkawi" data-value="langkawi" data-level="2" aria-selected="false">Langkawi</div>
+			<div class="menu-item" role="option" id="combobox-levels-hill-town" data-value="hill-town" data-level="3" aria-selected="false">Hill Town</div>
+			<div class="menu-item" role="option" id="combobox-levels-my" data-value="my" data-level="1" aria-selected="false">Southland</div>
+			<div class="menu-item" role="option" id="combobox-levels-pearl-isle" data-value="pearl-isle" data-level="2" aria-selected="false">Pearl Isle</div>
 		</div>
 		<p class="combobox-no-results" hidden>Nothing found</p>
-		<input type="hidden" name="destination" value="samui" data-label="Koh Samui">
+		<input type="hidden" name="destination" value="main-island" data-label="Main Island">
 	</div>
 </div>
 ```
@@ -3845,6 +3866,10 @@ document.addEventListener('redz:search', (event) => {
 		.catch(() => signal.aborted || list.setAttribute('aria-busy', 'false'));
 });
 ```
+
+### A value set from the page
+
+`REDZ.ui.combobox.set(list, values)` sets what a list holds as a choice does: its hidden fields, its button or chips, then `input` and `change`. `list` is the listbox or its selector, `values` one value or a list of them. A form's own `reset` goes back to the value the page came with; a Discard that goes back to the last saved value calls this.
 
 ### A list in the page
 
@@ -3918,10 +3943,10 @@ The value has an id; the Edit button names the form by `commandfor` with `comman
 	<div class="card-header"><h2 class="fs-14" id="inline-edit-row-title">Excursions</h2></div>
 	<div class="list-group list-group-flush">
 		<div class="list-group-item hstack gap-8">
-			<span class="table-title flex-fill" id="inline-edit-row-1">Ang Thong: marine park by speedboat</span>
-			<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="inline-edit-row-1-form" command="--edit" aria-label="Edit the title: Ang Thong"><i class="bi bi-pencil" aria-hidden="true"></i></button>
+			<span class="table-title flex-fill" id="inline-edit-row-1">North Bay: marine park by speedboat</span>
+			<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="inline-edit-row-1-form" command="--edit" aria-label="Edit the title: North Bay"><i class="bi bi-pencil" aria-hidden="true"></i></button>
 			<form class="inline-edit-form flex-fill" id="inline-edit-row-1-form" data-for="inline-edit-row-1" hidden>
-				<input class="form-control form-control-sm" name="title" value="Ang Thong: marine park by speedboat" aria-label="Title" required>
+				<input class="form-control form-control-sm" name="title" value="North Bay: marine park by speedboat" aria-label="Title" required>
 				<button class="btn btn-sm btn-primary" type="submit">Save</button>
 				<button class="btn btn-sm" type="button" commandfor="inline-edit-row-1-form" command="--cancel">Cancel</button>
 				<div class="invalid-feedback" hidden></div>
@@ -3959,11 +3984,11 @@ A form cannot sit in a form: where the value lives in one - a settings page with
 
 ```html
 <div class="hstack gap-8">
-	<span class="fs-16 fw-600" id="inline-edit-popover-name">Lagoon Tours</span>
+	<span class="fs-16 fw-600" id="inline-edit-popover-name">Example Cruises</span>
 	<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="inline-edit-popover-form" command="--edit" aria-label="Edit the company's name"><i class="bi bi-pencil" aria-hidden="true"></i></button>
 </div>
 <form class="menu inline-edit-form" id="inline-edit-popover-form" data-for="inline-edit-popover-name" popover="manual">
-	<input class="form-control form-control-sm" name="company" value="Lagoon Tours" aria-label="The company's name" required>
+	<input class="form-control form-control-sm" name="company" value="Example Cruises" aria-label="The company's name" required>
 	<button class="btn btn-sm btn-primary" type="submit">Save</button>
 	<button class="btn btn-sm" type="button" commandfor="inline-edit-popover-form" command="--cancel">Cancel</button>
 	<div class="invalid-feedback" hidden></div>
@@ -4186,8 +4211,8 @@ A group of radios or checks drawn as tiles - a package, a plan, a way to pay - t
 <fieldset class="vstack gap-8">
 	<legend class="form-label">Pay with</legend>
 	<div class="grid cols-2 gap-12">
-		<label class="choice"><input type="radio" name="choice-method" value="promptpay" checked><span class="choice-media"><img src="img/qr.svg" alt="" width="40" height="40"></span>PromptPay<span class="fs-12 text-muted">Any Thai bank app</span></label>
-		<label class="choice"><input type="radio" name="choice-method" value="card"><span class="choice-media"><i class="bi bi-credit-card fs-24" aria-hidden="true"></i></span>Card<span class="fs-12 text-muted">Visa, Mastercard</span></label>
+		<label class="choice"><input type="radio" name="choice-method" value="promptpay" checked><span class="choice-media"><img src="img/qr.svg" alt="" width="40" height="40"></span>PromptPay<span class="fs-12 text-muted">Any bank app</span></label>
+		<label class="choice"><input type="radio" name="choice-method" value="card"><span class="choice-media"><i class="bi bi-credit-card fs-24" aria-hidden="true"></i></span>Card<span class="fs-12 text-muted">Any card</span></label>
 	</div>
 </fieldset>
 ```
@@ -4334,7 +4359,7 @@ The list carries `data-repeat` and holds a `<template>` of one row. A button wit
 	<ul class="list-unstyled vstack gap-8" id="repeat-phones-list" data-repeat data-min="1" data-max="4">
 		<li class="hstack gap-8">
 			<label class="visually-hidden" for="repeat-phones-0">Phone</label>
-			<input class="form-control" id="repeat-phones-0" name="phones[0]" type="tel" value="+66 81 234 5678" autocomplete="off">
+			<input class="form-control" id="repeat-phones-0" name="phones[0]" type="tel" value="+1 202 555 0143" autocomplete="off">
 			<button class="btn btn-icon btn-text" type="button" command="--remove" aria-label="Remove this phone"><i class="bi bi-trash" aria-hidden="true"></i></button>
 		</li>
 		<template>
@@ -4369,7 +4394,7 @@ document.getElementById('repeat-phones-list').addEventListener('redz:remove', (e
 
 # Editor
 
-A text editor for REDZ.UI markup, a package of the release linked apart: words edited in place, the library's components changed through their own settings, and a frame of its own where no script of the text ever runs. Nobody needs HTML; an expert may have it.
+A text editor for REDZ.UI markup, a package of the release linked apart: words edited in place, the library's components changed through their own settings, live facts, an AI that only suggests, translations side by side, and a frame of its own where no script of the text ever runs. Nobody needs HTML; an expert may have it.
 
 ## Example
 
@@ -4404,13 +4429,18 @@ const page = REDZ.ui.editor('#body', {
 | Option | What it is |
 | --- | --- |
 | `value` | The markup to edit; it is cleaned before it is shown |
-| `ids` | `true` keeps every block's id, `data-block`, and its protection, `data-lock`, in the value: what a CMS stores, so a block keeps its history, its translations and its protection |
+| `ids` | `true` keeps in the value every block's id, `data-block`, its protection, `data-lock`, who wrote it, `data-by` and `data-checked`, and what it was translated from, `data-from`: what a CMS stores, so a block keeps its history, its translations and its protection |
 | `rights` | What this person may do, below; left out, all but HTML and protection |
 | `placeholder` | The words of an empty text, also the text field's name |
 | `lang`, `dir` | The text's language and direction, the page's by default |
 | `styles`, `scripts` | The theme's stylesheets for the text and the previews, and its scripts for the previews, after REDZ.UI's own |
 | `sites` | Other looks of the same text, `{id, label, styles}`, chosen in the strip above it |
-| `languages`, `getLanguage(code)`, `onLanguage(code, html)` | The text's languages, `{code, label, dir, value}`, chosen in the strip; the host keeps each one's value |
+| `languages`, `getLanguage(code)`, `onLanguage(code, html)` | The text's languages, `{code, label, dir, value, versions}`, chosen in the strip; the host keeps each one's value, and the session keeps what was written in it until then |
+| `source` | The language translations are made from, the first of `languages` by default |
+| `facts`, `onFact(key, text)` | The page's live facts, a list of `{key, label, text, editable}`, or a function of the language that answers one; `onFact` saves a new value and answers `false` to refuse it |
+| `ai(task, {signal, progress})` | The host's way to its AI, below; left out, nothing of the AI shows |
+| `onBatch({id, kind, by, blocks, taken, left})` | Called when a task's changes are decided, one call for one task: what a CMS records as one batch |
+| `person` | `{name}`, who signs what is checked |
 | `lens` | `false` takes the strip away |
 | `blocks` | More blocks for the menu, `{id, label, group, icon, html}`, after the package's own |
 | `images` | Sources of images, `{id, label, open(api)}`; a source calls `api.insert({src, alt, width, height, srcset, sizes, sources})` |
@@ -4443,7 +4473,7 @@ What can be changed comes from the catalog, `tools/catalog.json`, also in the pa
 | `structure` | Adding, moving and removing blocks, rows, columns and items |
 | `facts` | Prices, dates and other live facts in the text |
 | `lock` | Protecting a block and editing a protected one |
-| `review` | Reviewing suggested changes |
+| `review` | Signing text an AI or a machine wrote as checked; without it a suggestion can be taken, and stays unchecked |
 | `langs` | `'*'` or a list of the languages this person may write in |
 
 The words of a block stay open to everyone allowed that language, so `rights: {}` is a translator or a proofreader. Given rights are all there is: a key left out is off.
@@ -4459,16 +4489,66 @@ Protection is `data-lock` on a block. `"form"` leaves the words open and closes 
 - A paste from Word, Google Docs or a spreadsheet, and Markdown from a chat, come in as REDZ.UI markup: a table stays a table, a heading a heading, every style and font stays behind. A link pasted over selected words links them. Inside a field a paste is plain words.
 - Undo takes the caret back to where the change started. Nothing touches the text while a character is being composed: Thai and Burmese keyboards read the words around the caret.
 
+## Live facts
+
+A price, a date or a phone number is written once and stands in every place it is used: `<data value="KEY">its words</data>`. Type `@` in the text to put one in, or open Facts in the foot, which counts the places of each and changes it in all of them.
+
+- The words carry the key, not the value, so a price that changes stales no translation, and an AI or a translator gets a token it cannot change.
+- The checks find a value typed by hand where a fact holds it, and offer to make it a fact; a key the page does not know is marked.
+- The server fills in each fact's words when it publishes; the words in the value are what the page shows until then.
+
+## The AI
+
+The editor never reaches a model: `options.ai` is the host's, async, and no key is ever in a page. It gets a task and answers it, as late as it likes; `signal` stops it and `progress(partial)` shows what came so far. It acts with the person's rights: a closed block is never sent.
+
+| `task.kind` | The task also holds | It answers |
+| --- | --- | --- |
+| `rewrite` | `how`: `shorter`, `simpler`, `warmer`, `fix`; `blocks` | `{blocks: [{id, fields}]}`, a text for each field |
+| `tones` | `blocks`, one block | `{grid}`, three rows of three versions: rows from shorter to longer, columns from stricter to warmer, each version a list of fields |
+| `translate` | `from`, `to`, `blocks` of the source's fields, `was` the translation that stands or `null` | `{blocks: [{id, fields}]}` |
+| `write` | `words`, a person's request; `facts` | `{blocks}` of the passport's schema `editor.write` |
+| `read` | `question`, `text`, the page as a visitor reads it | `{text}`, from that text alone; `progress({text})` as it grows |
+| `alt` | `src`, an image's address | `{text}` |
+
+Every task has an `id` and a `lang`. A block is `{id, hash, element, fields}`: its words as plain text, one string for each field, a fact as a token `⟦KEY⟧`. A rewrite answers plain words: marks on the words around a change stay where they are. `{refusal: 'why'}` says the model declined, shown as what it is, not as an error.
+
+- **A suggestion never lands by itself.** Its changes are drawn word by word, by the language's own word breaks, each taken or left alone, and the value stays what it was until the last one is decided. One task is one step of undo.
+- **An answer can only do so much.** One whose block changed in the meantime, whose fields do not fit or that lost a fact is left out, and the person is told.
+- **The catalog holds what an AI writes.** `write` answers flat blocks, one shape a model is held to while it writes; the editor turns them into REDZ.UI markup by the catalog, so a kind, a tone or a size the library does not have cannot come out.
+- **The tone pad** asks for nine versions in one request and opens at once. Each point is tried on the block; a version that lost a fact cannot be chosen.
+- **Ask the page** shows what a visitor's assistant would answer from this page alone. What it cannot answer is a gap in the page.
+
+### The host's side
+
+- Call the model from the server. Give it the schema with the API's structured output for `write`; a union of every kind does not compile, and a pattern inside a schema stalls it.
+- Read the model's stop reason before its JSON: only a finished answer is a result. A cut answer is broken JSON, and a refusal answers `{refusal}`.
+- Page text is data, not instructions: say so, and tell the model to keep every `⟦KEY⟧` as it is, to change as few words as it can, and to leave out in silence what it cannot do.
+- The rights hide controls: the server decides again what a person may ask.
+
+## Side by side
+
+In a language other than the source, **Side by side** in the strip shows the source beside the text, row by row, in a frame of its own. A translated block keeps the hash of the source's words it was made from in `data-from`, FNV-1a of the words as PHP's `hash('fnv1a32')` gives it, so only the block that changed goes stale.
+
+- A stale row says what changed, when the source's `versions` hold the words it was made from, and offers to translate again or to say the translation is right.
+- A block the language lacks offers a translation, or the block to write in by hand. Translate all sends every row left as one task.
+- On a phone the two columns scroll sideways.
+
+**Who wrote it** in the strip marks each block an AI or a machine wrote, or that was pasted, and who checked it. Text nobody checked is listed in the checks, which is what a site owes its readers where the law asks for it.
+
 ## The lens and the checks
 
 - The strip above the text changes the width, the theme, the site and the language of the page under it, and it stays editable: the frame is a real page, so its media queries answer to its width and the site's own stylesheets draw it.
-- The foot counts the words by the language's own word breaks, so Thai and Burmese count too, and lists what a reader, a screen reader or a search engine would stumble on, each with a way to it: an empty heading, a skipped level, an image without words, a vague link, a long paragraph, a table without a head.
+- The foot counts the words by the language's own word breaks, so Thai and Burmese count too, and lists what a reader, a screen reader or a search engine would stumble on, each with a way to it: an empty heading, a skipped level, an image without words, a vague link, a long paragraph, a table without a head, text nobody checked, a value typed by hand where a fact stands, translations left behind.
 
 ## Safety
 
 - The text is edited in a frame whose own Content-Security-Policy runs no script: an `onerror`, a `<script>` or a `javascript:` link in a stored body or on the clipboard never runs, on load, on paste or later.
 - Every value is parsed inert and cleaned before it is shown or given back: no script, style, link, meta, base, object or embed element, no `on*` attribute, no address that is not a path, a fragment, http(s), mailto or tel, no frame that is not https.
 - The cleaner guards the editing page; the server cleans what it stores as well.
+
+## License
+
+Unlike the library, the editor is not under MIT. From 0.17.0 it is under [PolyForm Strict 1.0.0](https://polyformproject.org/licenses/strict/1.0.0): noncommercial use only, no changes, no redistribution. It comes with REDZ products under their terms; any other commercial use needs a separate license. Versions up to 0.16.0 stay under MIT.
 
 ## Keyboard and accessibility
 
@@ -4510,6 +4590,8 @@ A card that is a section of the screen is a `<section>` named by its heading. Th
 </section>
 ```
 
+A product tints the head of every card with `--redz-card-header-bg`.
+
 ### Images
 
 `card-img-top` and `card-img-bottom` round the image with the card's corners; `card-img-overlay` lays the card's words over a `card-img`. A `stretched-link` makes the whole card its link.
@@ -4519,7 +4601,7 @@ A card that is a section of the screen is a `<section>` named by its heading. Th
 	<section class="card" aria-labelledby="card-images-title">
 		<img class="card-img-top ratio-16x9" src="img/lagoon.svg" alt="A lagoon under green hills">
 		<div class="card-body vstack gap-4">
-			<h2 class="fs-16" id="card-images-title"><a class="stretched-link" href="#card-images">Ang Thong by speedboat</a></h2>
+			<h2 class="fs-16" id="card-images-title"><a class="stretched-link" href="#card-images">North Bay by speedboat</a></h2>
 			<p class="text-muted mb-0">From 2 500 THB · a day</p>
 		</div>
 	</section>
@@ -4538,8 +4620,8 @@ A `nav` placed straight in the card lines up with the header's padding.
 
 ```html
 <section class="card" aria-labelledby="card-tabs-title">
-	<div class="card-header"><h2 id="card-tabs-title">Ang Thong</h2></div>
-	<div class="nav nav-underline" role="tablist" aria-label="Ang Thong">
+	<div class="card-header"><h2 id="card-tabs-title">North Bay</h2></div>
+	<div class="nav nav-underline" role="tablist" aria-label="North Bay">
 		<button class="nav-link" type="button" role="tab" id="card-tabs-1" aria-selected="true" aria-controls="card-tabs-panel-1">Details</button>
 		<button class="nav-link" type="button" role="tab" id="card-tabs-2" aria-selected="false" aria-controls="card-tabs-panel-2">Prices</button>
 	</div>
@@ -4599,9 +4681,9 @@ For a category instead of a state - a site, a team, a kind of job - `edge-top-ch
 
 ```html
 <ul class="list-group" aria-label="Sites">
-	<li class="list-group-item edge-start-chart-1">Samui</li>
-	<li class="list-group-item edge-start-chart-2">Phuket</li>
-	<li class="list-group-item edge-start-chart-3">Krabi</li>
+	<li class="list-group-item edge-start-chart-1">Main Island</li>
+	<li class="list-group-item edge-start-chart-2">South Bay</li>
+	<li class="list-group-item edge-start-chart-3">West Bay</li>
 </ul>
 ```
 
@@ -4615,7 +4697,7 @@ For a category instead of a state - a site, a team, a kind of job - `edge-top-ch
 
 From [`css/components/card.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/card.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-space-16`, `--redz-space-8`, `--redz-space-12`, `--redz-text-muted`.
+It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-space-16`, `--redz-space-8`, `--redz-space-12`, `--redz-card-header-bg`, `--redz-text-muted`.
 
 ## From Bootstrap 5.3
 
@@ -4662,7 +4744,7 @@ Without `name` every item opens and closes by itself.
 <div class="accordion">
 	<details class="accordion-item" open>
 		<summary class="accordion-header">Pickup<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
-		<div class="accordion-body">07:30 at the pier, 07:00 from the hotels of Chaweng.</div>
+		<div class="accordion-body">07:30 at the pier, 07:00 from the hotels of the old town.</div>
 	</details>
 	<details class="accordion-item">
 		<summary class="accordion-header">What to bring<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
@@ -4733,8 +4815,8 @@ A row of slides seen one or a few at a time: tours, photos, reviews. The browser
 ```html
 <div class="carousel" id="carousel-basic-tours" role="region" aria-label="Tours">
 	<div class="carousel-inner" tabindex="0" aria-label="Tours">
-		<div class="carousel-item"><div class="p-24 bg-primary-subtle vstack gap-8"><strong>Ang Thong marine park</strong><span>Kayaks, a lagoon and a viewpoint, a day by speedboat.</span></div></div>
-		<div class="carousel-item"><div class="p-24 bg-success-subtle vstack gap-8"><strong>Koh Tao snorkeling</strong><span>Two bays and a coral garden, lunch on board.</span></div></div>
+		<div class="carousel-item"><div class="p-24 bg-primary-subtle vstack gap-8"><strong>North Bay marine park</strong><span>Kayaks, a lagoon and a viewpoint, a day by speedboat.</span></div></div>
+		<div class="carousel-item"><div class="p-24 bg-success-subtle vstack gap-8"><strong>Turtle Cove snorkeling</strong><span>Two bays and a coral garden, lunch on board.</span></div></div>
 		<div class="carousel-item"><div class="p-24 bg-warning-subtle vstack gap-8"><strong>Sunset cruise</strong><span>A catamaran round the south coast at dusk.</span></div></div>
 	</div>
 	<div class="hstack gap-8 justify-content-between">
@@ -4866,7 +4948,7 @@ Inside a button with `aria-expanded`, an icon `toggle-chevron` turns over while 
 	<button class="btn btn-sm" type="button" command="--toggle" aria-controls="collapse-chevron-text" aria-expanded="false"><span class="toggle-closed">Show the route</span><span class="toggle-open">Hide the route</span><i class="bi bi-chevron-down toggle-chevron" aria-hidden="true"></i></button>
 </div>
 <div id="collapse-chevron-text" hidden="until-found">
-	<p class="text-muted">The pier at 08:30, the emerald lake at 11:00, lunch on Koh Mae Ko, back by 17:00.</p>
+	<p class="text-muted">The pier at 08:30, the emerald lake at 11:00, lunch on Emerald Islet, back by 17:00.</p>
 </div>
 ```
 
@@ -4884,7 +4966,7 @@ A row under a row opens and closes the same way: the region is a `<tr>` with one
 			<td class="text-end"><button class="btn btn-sm btn-text" type="button" command="--toggle" aria-controls="collapse-row-details" aria-expanded="false">Details</button></td>
 		</tr>
 		<tr id="collapse-row-details" hidden>
-			<td colspan="3">Ang Thong, Koh Tao and the sunset cruise, with their photos and reviews.</td>
+			<td colspan="3">North Bay, Turtle Cove and the sunset cruise, with their photos and reviews.</td>
 		</tr>
 	</tbody>
 </table>
@@ -4920,8 +5002,8 @@ A column of items in one frame - plain rows, or links and buttons to choose from
 
 ```html
 <ul class="list-group">
-	<li class="list-group-item">Ang Thong Marine Park</li>
-	<li class="list-group-item">Koh Tao and Koh Nang Yuan</li>
+	<li class="list-group-item">North Bay Marine Park</li>
+	<li class="list-group-item">Turtle Cove and Pearl Cove</li>
 	<li class="list-group-item">The Five Islands by kayak</li>
 </ul>
 ```
@@ -4934,7 +5016,7 @@ A column of items in one frame - plain rows, or links and buttons to choose from
 <nav class="list-group" aria-label="Sites">
 	<a class="list-group-item list-group-item-action" href="#list-group-action" aria-current="page">All sites</a>
 	<a class="list-group-item list-group-item-action" href="#list-group-action">lagoon.example</a>
-	<a class="list-group-item list-group-item-action" href="#list-group-action">angthong.example</a>
+	<a class="list-group-item list-group-item-action" href="#list-group-action">northbay.example</a>
 	<a class="list-group-item list-group-item-action" aria-disabled="true">archive.example</a>
 </nav>
 <div class="list-group" role="group" aria-label="Import from">
@@ -4952,8 +5034,8 @@ A column of items in one frame - plain rows, or links and buttons to choose from
 <div class="card">
 	<div class="card-body">
 		<ol class="list-group list-group-flush list-group-numbered">
-			<li class="list-group-item hstack gap-8"><span class="flex-fill">Ang Thong Marine Park</span><span class="badge">28</span></li>
-			<li class="list-group-item hstack gap-8"><span class="flex-fill">Koh Tao</span><span class="badge">11</span></li>
+			<li class="list-group-item hstack gap-8"><span class="flex-fill">North Bay Marine Park</span><span class="badge">28</span></li>
+			<li class="list-group-item hstack gap-8"><span class="flex-fill">Turtle Cove</span><span class="badge">11</span></li>
 			<li class="list-group-item hstack gap-8"><span class="flex-fill">The Five Islands</span><span class="badge badge-subtle-warning">3</span></li>
 		</ol>
 	</div>
@@ -4967,10 +5049,10 @@ A column of items in one frame - plain rows, or links and buttons to choose from
 ```html
 <ul class="list-group">
 	<li class="list-group-header list-group-item">Today</li>
-	<li class="list-group-item">Ang Thong Marine Park</li>
+	<li class="list-group-item">North Bay Marine Park</li>
 	<li class="list-group-item">Night market and street food</li>
 	<li class="list-group-header list-group-item">Tomorrow</li>
-	<li class="list-group-item">Koh Tao and Koh Nang Yuan</li>
+	<li class="list-group-item">Turtle Cove and Pearl Cove</li>
 </ul>
 ```
 
@@ -4992,8 +5074,8 @@ A column of items in one frame - plain rows, or links and buttons to choose from
 ```html
 <div class="list-group" role="group" aria-label="Show on">
 	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" checked>lagoon.example</label>
-	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" checked>angthong.example</label>
-	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox">kohtao.example</label>
+	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" checked>northbay.example</label>
+	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox">turtlecove.example</label>
 </div>
 ```
 
@@ -5004,8 +5086,8 @@ A search field with `data-filter` naming a region hides, as the person types, th
 ```html
 <input class="form-control" type="search" data-filter="list-group-search-list" aria-label="Find an excursion" placeholder="Find an excursion" autocomplete="off">
 <ul class="list-group" id="list-group-search-list">
-	<li class="list-group-item">Ang Thong Marine Park</li>
-	<li class="list-group-item">Koh Tao and Koh Nang Yuan</li>
+	<li class="list-group-item">North Bay Marine Park</li>
+	<li class="list-group-item">Turtle Cove and Pearl Cove</li>
 	<li class="list-group-item">The Five Islands by kayak</li>
 	<li class="list-group-item" data-search="elephant sanctuary chang">Elephant sanctuary</li>
 	<li class="list-group-item text-muted" data-filter-empty hidden>No excursion has these words.</li>
@@ -5116,7 +5198,7 @@ Pages under pages, a menu's items, folders: a list whose items open their own li
 			<a href="#tree-pages">Excursions</a>
 		</div>
 		<ul class="tree-group" id="tree-pages-excursions">
-			<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Ang Thong by speedboat</a></div></li>
+			<li class="tree-item"><div class="tree-row"><a href="#tree-pages">North Bay by speedboat</a></div></li>
 			<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Night market and street food</a></div></li>
 		</ul>
 	</li>
@@ -5126,8 +5208,8 @@ Pages under pages, a menu's items, folders: a list whose items open their own li
 			<a href="#tree-pages">Islands</a>
 		</div>
 		<ul class="tree-group" id="tree-pages-islands" hidden="until-found">
-			<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Koh Tao</a></div></li>
-			<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Koh Phangan</a></div></li>
+			<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Turtle Cove</a></div></li>
+			<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Moon Cove</a></div></li>
 		</ul>
 	</li>
 	<li class="tree-item">
@@ -5214,9 +5296,9 @@ A row whose link has `aria-current` - the page open now - is tinted and its link
 		<ul class="tree-group">
 			<li class="tree-item">
 				<div class="tree-row">
-					<input class="check" type="checkbox" name="pages[]" value="ang-thong" aria-label="Choose: Ang Thong by speedboat" checked>
-					<a href="#tree-current" aria-current="page">Ang Thong by speedboat</a>
-					<span class="tree-actions"><button class="btn btn-xs btn-icon btn-text" type="button" aria-label="Add a page under Ang Thong by speedboat"><i class="bi bi-plus-lg" aria-hidden="true"></i></button></span>
+					<input class="check" type="checkbox" name="pages[]" value="north-bay" aria-label="Choose: North Bay by speedboat" checked>
+					<a href="#tree-current" aria-current="page">North Bay by speedboat</a>
+					<span class="tree-actions"><button class="btn btn-xs btn-icon btn-text" type="button" aria-label="Add a page under North Bay by speedboat"><i class="bi bi-plus-lg" aria-hidden="true"></i></button></span>
 				</div>
 			</li>
 			<li class="tree-item">
@@ -5259,8 +5341,8 @@ A conversation in a card: each message with its author, time and files, the pers
 			<li class="thread-message">
 				<span class="avatar avatar-sm" aria-hidden="true">AR</span>
 				<div class="thread-body">
-					<div class="thread-meta"><span>Ananda Resort</span><time datetime="2026-11-04T09:12">09:12</time></div>
-					<div class="thread-bubble">The child price on Ang Thong shows 2,500 THB.&#10;It should be 1,900 THB since Monday.</div>
+					<div class="thread-meta"><span>Example Resort</span><time datetime="2026-11-04T09:12">09:12</time></div>
+					<div class="thread-bubble">The child price on North Bay shows 2,500 THB.&#10;It should be 1,900 THB since Monday.</div>
 					<div class="thread-files"><a href="img/lagoon.svg"><img src="img/lagoon.svg" alt="Screenshot of the price"></a></div>
 				</div>
 			</li>
@@ -5485,7 +5567,7 @@ Calendars are linked apart, on the screens that show them, beside the two files;
 	<thead><tr><th scope="col"><abbr title="Monday">Mon</abbr></th><th scope="col"><abbr title="Tuesday">Tue</abbr></th><th scope="col"><abbr title="Wednesday">Wed</abbr></th><th scope="col"><abbr title="Thursday">Thu</abbr></th><th scope="col"><abbr title="Friday">Fri</abbr></th><th scope="col"><abbr title="Saturday">Sat</abbr></th><th scope="col"><abbr title="Sunday">Sun</abbr></th></tr></thead>
 	<tbody>
 		<tr><td data-outside><time class="calendar-day" datetime="2026-10-26">26</time></td><td data-outside><time class="calendar-day" datetime="2026-10-27">27</time></td><td data-outside><time class="calendar-day" datetime="2026-10-28">28</time></td><td data-outside><time class="calendar-day" datetime="2026-10-29">29</time></td><td data-outside><time class="calendar-day" datetime="2026-10-30">30</time></td><td data-outside data-weekend><time class="calendar-day" datetime="2026-10-31">31</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-01">1</time></td></tr>
-		<tr><td><time class="calendar-day" datetime="2026-11-02">2</time><div class="calendar-event" title="Excavator · Riverside tower"><span class="dot dot-primary"></span><span>Excavator</span></div></td><td><time class="calendar-day" datetime="2026-11-03">3</time><div class="calendar-event" title="Excavator · Riverside tower"><span class="dot dot-primary"></span><span>Excavator</span></div></td><td aria-current="date"><time class="calendar-day" datetime="2026-11-04">4</time><div class="calendar-event" title="Excavator · Riverside tower"><span class="dot dot-primary"></span><span>Excavator</span></div><div class="calendar-event" title="Scaffold set · Somchai Rattanakul"><span class="dot dot-info"></span><span>Scaffold set</span></div><div class="calendar-event" title="Concrete mixer · Harbor view"><span class="dot dot-primary"></span><span>Concrete mixer</span></div><span class="calendar-more">+2<span class="visually-hidden"> more</span></span></td><td><time class="calendar-day" datetime="2026-11-05">5</time></td><td><time class="calendar-day" datetime="2026-11-06">6</time><div class="calendar-event" title="Generator · Harbor view"><span class="dot dot-info"></span><span>Generator</span></div></td><td data-weekend><time class="calendar-day" datetime="2026-11-07">7</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-08">8</time></td></tr>
+		<tr><td><time class="calendar-day" datetime="2026-11-02">2</time><div class="calendar-event" title="Excavator · Riverside tower"><span class="dot dot-primary"></span><span>Excavator</span></div></td><td><time class="calendar-day" datetime="2026-11-03">3</time><div class="calendar-event" title="Excavator · Riverside tower"><span class="dot dot-primary"></span><span>Excavator</span></div></td><td aria-current="date"><time class="calendar-day" datetime="2026-11-04">4</time><div class="calendar-event" title="Excavator · Riverside tower"><span class="dot dot-primary"></span><span>Excavator</span></div><div class="calendar-event" title="Scaffold set · Sid Sample"><span class="dot dot-info"></span><span>Scaffold set</span></div><div class="calendar-event" title="Concrete mixer · Harbor view"><span class="dot dot-primary"></span><span>Concrete mixer</span></div><span class="calendar-more">+2<span class="visually-hidden"> more</span></span></td><td><time class="calendar-day" datetime="2026-11-05">5</time></td><td><time class="calendar-day" datetime="2026-11-06">6</time><div class="calendar-event" title="Generator · Harbor view"><span class="dot dot-info"></span><span>Generator</span></div></td><td data-weekend><time class="calendar-day" datetime="2026-11-07">7</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-08">8</time></td></tr>
 		<tr><td><time class="calendar-day" datetime="2026-11-09">9</time></td><td><time class="calendar-day" datetime="2026-11-10">10</time></td><td><time class="calendar-day" datetime="2026-11-11">11</time></td><td><time class="calendar-day" datetime="2026-11-12">12</time></td><td><time class="calendar-day" datetime="2026-11-13">13</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-14">14</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-15">15</time></td></tr>
 		<tr><td><time class="calendar-day" datetime="2026-11-16">16</time></td><td><time class="calendar-day" datetime="2026-11-17">17</time></td><td><time class="calendar-day" datetime="2026-11-18">18</time></td><td><time class="calendar-day" datetime="2026-11-19">19</time></td><td><time class="calendar-day" datetime="2026-11-20">20</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-21">21</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-22">22</time></td></tr>
 		<tr><td><time class="calendar-day" datetime="2026-11-23">23</time></td><td><time class="calendar-day" datetime="2026-11-24">24</time></td><td><time class="calendar-day" datetime="2026-11-25">25</time></td><td><time class="calendar-day" datetime="2026-11-26">26</time></td><td><time class="calendar-day" datetime="2026-11-27">27</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-28">28</time></td><td data-weekend><time class="calendar-day" datetime="2026-11-29">29</time></td></tr>
@@ -5500,7 +5582,7 @@ A day's `data-state` tints it: `worked`, `open`, `pending`, `absent` and `off` -
 
 ```html
 <table class="calendar">
-	<caption>Anong Srisuk, November 2026</caption>
+	<caption>Alex Sample, November 2026</caption>
 	<thead><tr><th scope="col"><abbr title="Monday">Mon</abbr></th><th scope="col"><abbr title="Tuesday">Tue</abbr></th><th scope="col"><abbr title="Wednesday">Wed</abbr></th><th scope="col"><abbr title="Thursday">Thu</abbr></th><th scope="col"><abbr title="Friday">Fri</abbr></th><th scope="col"><abbr title="Saturday">Sat</abbr></th><th scope="col"><abbr title="Sunday">Sun</abbr></th></tr></thead>
 	<tbody>
 		<tr><td data-state="worked"><button class="calendar-day" type="button" aria-label="November 2, worked" aria-pressed="false">2</button></td><td data-state="worked"><button class="calendar-day" type="button" aria-label="November 3, worked" aria-pressed="false">3</button></td><td data-state="pending" aria-current="date"><button class="calendar-day" type="button" aria-label="November 4, waiting for approval" aria-pressed="true">4</button></td><td data-state="absent"><button class="calendar-day" type="button" aria-label="November 5, absent" aria-pressed="false">5</button></td><td data-state="open"><button class="calendar-day" type="button" aria-label="November 6, open" aria-pressed="false">6</button></td><td data-state="off" data-weekend><button class="calendar-day" type="button" aria-label="November 7, day off" aria-pressed="false">7</button></td><td data-state="off" data-weekend><button class="calendar-day" type="button" aria-label="November 8, day off" aria-pressed="false">8</button></td></tr>
@@ -5638,11 +5720,11 @@ A list of records: a title that links to the record, a line under it, a note whe
 			</thead>
 			<tbody>
 				<tr>
-					<td><input class="check" type="checkbox" aria-label="Select: Ang Thong"></td>
-					<td><a class="table-title" href="#table-list">Ang Thong: marine park by speedboat</a><div class="table-sub d-none md:d-block">/excursions/ang-thong/</div></td>
+					<td><input class="check" type="checkbox" aria-label="Select: North Bay"></td>
+					<td><a class="table-title" href="#table-list">North Bay: marine park by speedboat</a><div class="table-sub d-none md:d-block">/excursions/north-bay/</div></td>
 					<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">2,500 THB</td>
 					<td class="d-none md:d-table-cell"><span class="badge"><i class="bi bi-check2" aria-hidden="true"></i>Published</span></td>
-					<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Ang Thong"><i class="bi bi-pencil" aria-hidden="true"></i></button></td>
+					<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: North Bay"><i class="bi bi-pencil" aria-hidden="true"></i></button></td>
 				</tr>
 				<tr class="table-danger">
 					<td><input class="check" type="checkbox" aria-label="Select: Elephant sanctuary"></td>
@@ -5659,11 +5741,11 @@ A list of records: a title that links to the record, a line under it, a note whe
 					<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Night market"><i class="bi bi-pencil" aria-hidden="true"></i></button></td>
 				</tr>
 				<tr class="table-secondary">
-					<td><input class="check" type="checkbox" aria-label="Select: Muay Thai"></td>
-					<td><a class="table-title" href="#table-list">Muay Thai: an evening at the stadium</a><div class="table-sub d-none md:d-block">withdrawn from the sites</div></td>
+					<td><input class="check" type="checkbox" aria-label="Select: Folk dance"></td>
+					<td><a class="table-title" href="#table-list">Folk dance: an evening at the stadium</a><div class="table-sub d-none md:d-block">withdrawn from the sites</div></td>
 					<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">1,500 THB</td>
 					<td class="d-none md:d-table-cell"><span class="badge"><i class="bi bi-eye-slash" aria-hidden="true"></i>Withdrawn</span></td>
-					<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Muay Thai"><i class="bi bi-pencil" aria-hidden="true"></i></button></td>
+					<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Folk dance"><i class="bi bi-pencil" aria-hidden="true"></i></button></td>
 				</tr>
 			</tbody>
 		</table>
@@ -5681,16 +5763,16 @@ A list of records: a title that links to the record, a line under it, a note whe
 	<table class="table table-striped table-hover">
 		<thead><tr><th scope="col">Boat</th><th class="text-end" scope="col">Trips</th><th class="text-end" scope="col">Seats sold</th></tr></thead>
 		<tbody>
-			<tr><td>Sea Breeze</td><td class="text-end tabular-nums">12</td><td class="text-end tabular-nums">286</td></tr>
-			<tr><td>Coral Star</td><td class="text-end tabular-nums">9</td><td class="text-end tabular-nums">201</td></tr>
-			<tr><td>Blue Lagoon</td><td class="text-end tabular-nums">7</td><td class="text-end tabular-nums">164</td></tr>
+			<tr><td>Boat A</td><td class="text-end tabular-nums">12</td><td class="text-end tabular-nums">286</td></tr>
+			<tr><td>Boat C</td><td class="text-end tabular-nums">9</td><td class="text-end tabular-nums">201</td></tr>
+			<tr><td>Boat B</td><td class="text-end tabular-nums">7</td><td class="text-end tabular-nums">164</td></tr>
 		</tbody>
 		<tbody class="table-group-divider">
 			<tr><td>All boats</td><td class="text-end tabular-nums">28</td><td class="text-end tabular-nums">651</td></tr>
 		</tbody>
 	</table>
 </section>
-<table class="table table-bordered" aria-label="Seasons on Samui">
+<table class="table table-bordered" aria-label="Seasons on Main Island">
 	<thead><tr><th scope="col">Season</th><th scope="col">Months</th><th scope="col">The sea</th></tr></thead>
 	<tbody>
 		<tr><td>Dry</td><td>January to April</td><td>Calm</td></tr>
@@ -5705,7 +5787,7 @@ A list of records: a title that links to the record, a line under it, a note whe
 `data-density="compact"` tightens the rows and the controls of the element it is on and of everything inside it: a table, the card that holds it, a region, or the whole page on `<html>`. A compact table can stand beside a normal one on the same screen. Bootstrap 5 calls it `table-sm`. `data-density="comfortable"` and `data-density="spacious"` open the rows up the other way, for a short table that is the point of a page.
 
 ```html
-<table class="table table-bordered" data-density="compact" aria-label="Seasons on Samui, compact">
+<table class="table table-bordered" data-density="compact" aria-label="Seasons on Main Island, compact">
 	<thead><tr><th scope="col">Season</th><th scope="col">Months</th><th scope="col">The sea</th></tr></thead>
 	<tbody>
 		<tr><td>Dry</td><td>January to April</td><td>Calm</td></tr>
@@ -5713,7 +5795,7 @@ A list of records: a title that links to the record, a line under it, a note whe
 		<tr><td>Rainy</td><td>September to December</td><td>Waves</td></tr>
 	</tbody>
 </table>
-<table class="table table-bordered" data-density="spacious" aria-label="Seasons on Samui, spacious">
+<table class="table table-bordered" data-density="spacious" aria-label="Seasons on Main Island, spacious">
 	<thead><tr><th scope="col">Season</th><th scope="col">Months</th><th scope="col">The sea</th></tr></thead>
 	<tbody>
 		<tr><td>Dry</td><td>January to April</td><td>Calm</td></tr>
@@ -5747,9 +5829,9 @@ A header that sorts holds a `button class="table-sort"`, and the header's `aria-
 <table class="table" aria-label="Owners">
 	<thead><tr><th scope="col" aria-sort="ascending"><button class="table-sort" type="button">Name</button></th><th scope="col"><button class="table-sort" type="button">Sites</button></th><th scope="col" class="text-end"><button class="table-sort" type="button">Paid</button></th></tr></thead>
 	<tbody>
-		<tr><td>Ananda Resort</td><td class="tabular-nums">3</td><td class="text-end tabular-nums">48,000</td></tr>
-		<tr><td>Blue Lagoon Tours</td><td class="tabular-nums">1</td><td class="text-end tabular-nums">9,600</td></tr>
-		<tr><td>Coral Divers</td><td class="tabular-nums">2</td><td class="text-end tabular-nums">21,300</td></tr>
+		<tr><td>Example Resort</td><td class="tabular-nums">3</td><td class="text-end tabular-nums">48,000</td></tr>
+		<tr><td>Example Cruises</td><td class="tabular-nums">1</td><td class="text-end tabular-nums">9,600</td></tr>
+		<tr><td>Example Divers</td><td class="tabular-nums">2</td><td class="text-end tabular-nums">21,300</td></tr>
 	</tbody>
 </table>
 ```
@@ -5760,8 +5842,8 @@ Where the server sorts, the header holds a link instead - `a class="table-sort"`
 <table class="table" aria-label="Owners, sorted by the server">
 	<thead><tr><th scope="col"><a class="table-sort" href="#table-sort-links">Name</a></th><th scope="col" class="text-end" aria-sort="descending"><a class="table-sort" href="#table-sort-links">Paid</a></th></tr></thead>
 	<tbody>
-		<tr><td>Ananda Resort</td><td class="text-end tabular-nums">48,000</td></tr>
-		<tr><td>Coral Divers</td><td class="text-end tabular-nums">21,300</td></tr>
+		<tr><td>Example Resort</td><td class="text-end tabular-nums">48,000</td></tr>
+		<tr><td>Example Divers</td><td class="text-end tabular-nums">21,300</td></tr>
 	</tbody>
 </table>
 ```
@@ -5774,13 +5856,13 @@ A row `table-group` heads the rows under it: one `th scope="rowgroup"` across th
 <table class="table" aria-label="Bookings by boat">
 	<thead><tr><th scope="col">Guest</th><th scope="col" class="text-end">Seats</th><th scope="col" class="text-end">Paid</th></tr></thead>
 	<tbody>
-		<tr class="table-group"><th scope="rowgroup" colspan="3">Sea Breeze<span class="table-group-end">2 bookings</span></th></tr>
-		<tr><td>Anong Srisuk</td><td class="text-end tabular-nums">2</td><td class="text-end tabular-nums">5,000</td></tr>
-		<tr><td>Boris Lebedev</td><td class="text-end tabular-nums">3</td><td class="text-end tabular-nums">7,500</td></tr>
-		<tr class="table-subtotal"><th scope="row">Sea Breeze</th><td class="text-end tabular-nums">5</td><td class="text-end tabular-nums">12,500</td></tr>
-		<tr class="table-group"><th scope="rowgroup" colspan="3">Coral Star<span class="table-group-end">1 booking</span></th></tr>
-		<tr><td>Chen Wei</td><td class="text-end tabular-nums">4</td><td class="text-end tabular-nums">10,000</td></tr>
-		<tr class="table-subtotal"><th scope="row">Coral Star</th><td class="text-end tabular-nums">4</td><td class="text-end tabular-nums">10,000</td></tr>
+		<tr class="table-group"><th scope="rowgroup" colspan="3">Boat A<span class="table-group-end">2 bookings</span></th></tr>
+		<tr><td>Alex Sample</td><td class="text-end tabular-nums">2</td><td class="text-end tabular-nums">5,000</td></tr>
+		<tr><td>Ben Sample</td><td class="text-end tabular-nums">3</td><td class="text-end tabular-nums">7,500</td></tr>
+		<tr class="table-subtotal"><th scope="row">Boat A</th><td class="text-end tabular-nums">5</td><td class="text-end tabular-nums">12,500</td></tr>
+		<tr class="table-group"><th scope="rowgroup" colspan="3">Boat C<span class="table-group-end">1 booking</span></th></tr>
+		<tr><td>Chris Sample</td><td class="text-end tabular-nums">4</td><td class="text-end tabular-nums">10,000</td></tr>
+		<tr class="table-subtotal"><th scope="row">Boat C</th><td class="text-end tabular-nums">4</td><td class="text-end tabular-nums">10,000</td></tr>
 	</tbody>
 </table>
 ```
@@ -5789,7 +5871,7 @@ The head of a table sticks under the app's header as the page scrolls; inside a 
 
 ### Wider than its card
 
-A table with more columns than its card has room for goes in a `table-scroll`: it scrolls sideways inside the card, and `table-scroll-first` holds its first column in place. Where the browser lets an element scroll on one axis alone - Chrome 156 on - the head still sticks to the page as it scrolls down; elsewhere the head scrolls away with the page and the rest works the same. The wrapper is a named region. The library makes it a tab stop while its table is wider than it, so a keyboard can scroll it, and takes the stop away while the table fits.
+A table with more columns than its card has room for goes in a `table-scroll`: it scrolls sideways inside the card, and `table-scroll-first` holds its first column in place, `table-scroll-last` its last, where a row's buttons stay in view. Where the browser lets an element scroll on one axis alone - Chrome 156 on - the head still sticks to the page as it scrolls down; elsewhere the head scrolls away with the page and the rest works the same. The wrapper is a named region. The library makes it a tab stop while its table is wider than it, so a keyboard can scroll it, and takes the stop away while the table fits.
 
 ```html
 <section class="card" aria-labelledby="table-wide-title">
@@ -5798,14 +5880,31 @@ A table with more columns than its card has room for goes in a `table-scroll`: i
 		<table class="table">
 			<thead><tr><th scope="col">Boat</th><th scope="col" class="text-end">Mon</th><th scope="col" class="text-end">Tue</th><th scope="col" class="text-end">Wed</th><th scope="col" class="text-end">Thu</th><th scope="col" class="text-end">Fri</th><th scope="col" class="text-end">Sat</th><th scope="col" class="text-end">Sun</th><th scope="col" class="text-end">Week</th><th scope="col" class="text-end">Last week</th><th scope="col" class="text-end">Change</th></tr></thead>
 			<tbody>
-				<tr><th scope="row">Sea Breeze</th><td class="text-end tabular-nums">42</td><td class="text-end tabular-nums">38</td><td class="text-end tabular-nums">40</td><td class="text-end tabular-nums">44</td><td class="text-end tabular-nums">46</td><td class="text-end tabular-nums">48</td><td class="text-end tabular-nums">28</td><td class="text-end tabular-nums">286</td><td class="text-end tabular-nums">270</td><td class="text-end tabular-nums"><bdi>+16</bdi></td></tr>
-				<tr><th scope="row">Coral Star</th><td class="text-end tabular-nums">30</td><td class="text-end tabular-nums">28</td><td class="text-end tabular-nums">27</td><td class="text-end tabular-nums">31</td><td class="text-end tabular-nums">33</td><td class="text-end tabular-nums">35</td><td class="text-end tabular-nums">17</td><td class="text-end tabular-nums">201</td><td class="text-end tabular-nums">214</td><td class="text-end tabular-nums"><bdi>-13</bdi></td></tr>
-				<tr><th scope="row">Blue Lagoon</th><td class="text-end tabular-nums">22</td><td class="text-end tabular-nums">20</td><td class="text-end tabular-nums">24</td><td class="text-end tabular-nums">23</td><td class="text-end tabular-nums">25</td><td class="text-end tabular-nums">30</td><td class="text-end tabular-nums">20</td><td class="text-end tabular-nums">164</td><td class="text-end tabular-nums">150</td><td class="text-end tabular-nums"><bdi>+14</bdi></td></tr>
+				<tr><th scope="row">Boat A</th><td class="text-end tabular-nums">42</td><td class="text-end tabular-nums">38</td><td class="text-end tabular-nums">40</td><td class="text-end tabular-nums">44</td><td class="text-end tabular-nums">46</td><td class="text-end tabular-nums">48</td><td class="text-end tabular-nums">28</td><td class="text-end tabular-nums">286</td><td class="text-end tabular-nums">270</td><td class="text-end tabular-nums"><bdi>+16</bdi></td></tr>
+				<tr><th scope="row">Boat C</th><td class="text-end tabular-nums">30</td><td class="text-end tabular-nums">28</td><td class="text-end tabular-nums">27</td><td class="text-end tabular-nums">31</td><td class="text-end tabular-nums">33</td><td class="text-end tabular-nums">35</td><td class="text-end tabular-nums">17</td><td class="text-end tabular-nums">201</td><td class="text-end tabular-nums">214</td><td class="text-end tabular-nums"><bdi>-13</bdi></td></tr>
+				<tr><th scope="row">Boat B</th><td class="text-end tabular-nums">22</td><td class="text-end tabular-nums">20</td><td class="text-end tabular-nums">24</td><td class="text-end tabular-nums">23</td><td class="text-end tabular-nums">25</td><td class="text-end tabular-nums">30</td><td class="text-end tabular-nums">20</td><td class="text-end tabular-nums">164</td><td class="text-end tabular-nums">150</td><td class="text-end tabular-nums"><bdi>+14</bdi></td></tr>
 			</tbody>
 		</table>
 	</div>
 </section>
 ```
+
+```html
+<section class="card" aria-labelledby="table-wide-last-title">
+	<div class="card-header"><h2 class="fs-14" id="table-wide-last-title">Rates</h2></div>
+	<div class="table-scroll table-scroll-last" role="region" aria-labelledby="table-wide-last-title">
+		<table class="table">
+			<thead><tr><th scope="col">Boat</th><th scope="col" class="text-end">Low</th><th scope="col" class="text-end">High</th><th scope="col" class="text-end">Peak</th><th scope="col" class="text-end">Children</th><th scope="col" class="text-end">Groups</th><th scope="col" class="text-end">Agents</th><th scope="col" class="text-end">Guides</th><th scope="col" class="text-end">Fuel</th><th scope="col" class="text-end">Park fee</th><th scope="col" class="text-end">Insurance</th><th scope="col" class="text-end">Status</th></tr></thead>
+			<tbody>
+				<tr><th scope="row">Boat A</th><td class="text-end tabular-nums">2,500</td><td class="text-end tabular-nums">2,900</td><td class="text-end tabular-nums">3,400</td><td class="text-end tabular-nums">1,900</td><td class="text-end tabular-nums">2,200</td><td class="text-end tabular-nums">2,100</td><td class="text-end tabular-nums">900</td><td class="text-end tabular-nums">300</td><td class="text-end tabular-nums">300</td><td class="text-end tabular-nums">120</td><td class="text-end"><button class="btn btn-xs btn-primary" type="button">Save</button></td></tr>
+				<tr><th scope="row">Boat C</th><td class="text-end tabular-nums">2,200</td><td class="text-end tabular-nums">2,600</td><td class="text-end tabular-nums">3,000</td><td class="text-end tabular-nums">1,700</td><td class="text-end tabular-nums">2,000</td><td class="text-end tabular-nums">1,900</td><td class="text-end tabular-nums">800</td><td class="text-end tabular-nums">280</td><td class="text-end tabular-nums">300</td><td class="text-end tabular-nums">110</td><td class="text-end"><button class="btn btn-xs btn-primary" type="button">Save</button></td></tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+```
+
+A product sets the look of every table head in its tokens: `--redz-table-head-bg`, `--redz-table-head-text`, `--redz-table-head-weight`, and `--redz-table-head-border`, the whole line under it.
 
 ### The current, the chosen and the running row
 
@@ -5829,8 +5928,8 @@ The row's title link with Bootstrap's `stretched-link` makes the whole row a lin
 ```html
 <table class="table" aria-label="Guides">
 	<tbody>
-		<tr><td><a class="table-title stretched-link" href="#table-links">Anong Srisuk</a><div class="table-sub">Thai, English</div></td><td class="tabular-nums">12 tours</td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Message: Anong Srisuk"><i class="bi bi-chat" aria-hidden="true"></i></button></td></tr>
-		<tr><td><a class="table-title stretched-link" href="#table-links">Hiroshi Sato</a><div class="table-sub">Japanese, English</div></td><td class="tabular-nums">7 tours</td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Message: Hiroshi Sato"><i class="bi bi-chat" aria-hidden="true"></i></button></td></tr>
+		<tr><td><a class="table-title stretched-link" href="#table-links">Alex Sample</a><div class="table-sub">Thai, English</div></td><td class="tabular-nums">12 tours</td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Message: Alex Sample"><i class="bi bi-chat" aria-hidden="true"></i></button></td></tr>
+		<tr><td><a class="table-title stretched-link" href="#table-links">Hana Sample</a><div class="table-sub">Japanese, English</div></td><td class="tabular-nums">7 tours</td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Message: Hana Sample"><i class="bi bi-chat" aria-hidden="true"></i></button></td></tr>
 	</tbody>
 </table>
 ```
@@ -5841,17 +5940,17 @@ A row's tone marks what needs attention: `table-danger` failed, `table-warning` 
 
 ## Keyboard and accessibility
 
-- The row's title is a link; its actions are buttons named with the record - "Edit: Ang Thong", not a column of identical "Edit".
-- The column of actions has a hidden header, and each check its own name: "Select: Ang Thong".
+- The row's title is a link; its actions are buttons named with the record - "Edit: North Bay", not a column of identical "Edit".
+- The column of actions has a hidden header, and each check its own name: "Select: North Bay".
 - A tone is never the only sign: a failed row also says why in its `table-note`, with an icon.
 - Numbers sit at the end of their cells with `tabular-nums`, so their digits line up.
 - A table being reloaded turns busy on its card's body: `REDZ.ui.busy(body, promise)` - not on the `<table>`, which cannot hold an overlay.
 
 ## Tokens
 
-From [`css/components/table.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css). It declares `--redz-row-tint`, `--redz-row-mark` on its root, never on rows or items.
+From [`css/components/table.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css). It declares `--redz-table-head-border`, `--redz-table-head-weight`, `--redz-row-tint`, `--redz-row-mark` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-8`, `--redz-row-pad`, `--redz-space-12`, `--redz-border`, `--redz-bg`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-bg-page`, `--redz-border-strong`, `--redz-bg-hover`, `--redz-radius-12`, `--redz-space-16`, `--redz-font-mono`, `--redz-space-4`, `--redz-primary`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-primary-subtle`.
+It reads the theme's `--redz-space-8`, `--redz-row-pad`, `--redz-space-12`, `--redz-border`, `--redz-table-head-bg`, `--redz-bg`, `--redz-table-head-text`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-bg-page`, `--redz-border-strong`, `--redz-bg-hover`, `--redz-radius-12`, `--redz-space-16`, `--redz-font-mono`, `--redz-space-4`, `--redz-primary`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-primary-subtle`.
 
 ## From Bootstrap 5.3
 
@@ -5894,8 +5993,8 @@ What a job printed, line by line as it runs, and what changed between two versio
 ```html
 <div class="diff" role="group" aria-label="The changes of the page's title" dir="ltr">
 	<span translate="no">&lt;header class="vstack gap-8"&gt;</span>
-	<del translate="no">	&lt;h1&gt;Ang Thong by speedboat&lt;/h1&gt;</del>
-	<ins translate="no">	&lt;h1&gt;Ang Thong marine park by speedboat&lt;/h1&gt;</ins>
+	<del translate="no">	&lt;h1&gt;North Bay by speedboat&lt;/h1&gt;</del>
+	<ins translate="no">	&lt;h1&gt;North Bay marine park by speedboat&lt;/h1&gt;</ins>
 	<span translate="no">	&lt;p&gt;A day among <del>forty</del><ins>forty-two</ins> islands.&lt;/p&gt;</span>
 	<span translate="no">&lt;/header&gt;</span>
 </div>
@@ -5925,10 +6024,10 @@ The facts of one record in pairs - a label and its value - and the sums at the f
 	<div class="card-header"><h2 class="fs-14" id="summary-booking-title">Booking 24-0187</h2></div>
 	<div class="card-body">
 		<dl class="summary">
-			<dt>Excursion</dt><dd>Ang Thong: marine park by speedboat</dd>
+			<dt>Excursion</dt><dd>North Bay: marine park by speedboat</dd>
 			<dt>Date</dt><dd>14 December 2026, 08:30</dd>
 			<dt>Guests</dt><dd>2 adults, 1 child</dd>
-			<dt>Pickup</dt><dd>Lamai beach, the hotel's lobby</dd>
+			<dt>Pickup</dt><dd>East beach, the hotel's lobby</dd>
 		</dl>
 	</div>
 </section>
@@ -6023,7 +6122,7 @@ A count in a navigation link, a status in a heading.
 	<a class="nav-link" href="#badge-beside" aria-current="page">New<span class="badge badge-subtle-primary">5</span></a>
 	<a class="nav-link" href="#badge-beside">Paid<span class="badge">128</span></a>
 </nav>
-<h3 class="hstack gap-8 fs-16">Ang Thong <span class="badge badge-subtle-warning"><i class="bi bi-clock-history" aria-hidden="true"></i>Stale</span></h3>
+<h3 class="hstack gap-8 fs-16">North Bay <span class="badge badge-subtle-warning"><i class="bi bi-clock-history" aria-hidden="true"></i>Stale</span></h3>
 ```
 
 ## Accessibility
@@ -6071,14 +6170,14 @@ An 8 px dot of a tone beside a word: online, live, the color of a site. The dot 
 `dot-chart-1` to `dot-chart-8` take the charts' eight colors, for a category - a site, a team, a kind of job - not a state: the dot beside a name in a legend or a list matches its series in a [chart](chart.md).
 
 ```html
-<span class="hstack gap-8"><span class="dot dot-chart-1"></span>Samui</span>
-<span class="hstack gap-8"><span class="dot dot-chart-2"></span>Phuket</span>
-<span class="hstack gap-8"><span class="dot dot-chart-3"></span>Krabi</span>
-<span class="hstack gap-8"><span class="dot dot-chart-4"></span>Chiang Mai</span>
-<span class="hstack gap-8"><span class="dot dot-chart-5"></span>Pattaya</span>
-<span class="hstack gap-8"><span class="dot dot-chart-6"></span>Hua Hin</span>
-<span class="hstack gap-8"><span class="dot dot-chart-7"></span>Bangkok</span>
-<span class="hstack gap-8"><span class="dot dot-chart-8"></span>Koh Tao</span>
+<span class="hstack gap-8"><span class="dot dot-chart-1"></span>Main Island</span>
+<span class="hstack gap-8"><span class="dot dot-chart-2"></span>South Bay</span>
+<span class="hstack gap-8"><span class="dot dot-chart-3"></span>West Bay</span>
+<span class="hstack gap-8"><span class="dot dot-chart-4"></span>Hill Town</span>
+<span class="hstack gap-8"><span class="dot dot-chart-5"></span>East Bay</span>
+<span class="hstack gap-8"><span class="dot dot-chart-6"></span>Beach Town</span>
+<span class="hstack gap-8"><span class="dot dot-chart-7"></span>Harbor Town</span>
+<span class="hstack gap-8"><span class="dot dot-chart-8"></span>Turtle Cove</span>
 ```
 
 ### Live
@@ -6197,7 +6296,14 @@ A number with its label and an icon in a tone - and, as a button, the filter for
 </div>
 ```
 
-Without a button it only reads: a `div class="stat"`.
+Without a button it only reads: a `div class="stat"`. One long word breaks instead of running past a narrow tile.
+
+```html
+<div class="grid cols-2 gap-12 max-w-320">
+	<div class="stat"><span><span class="stat-value">14</span><span class="stat-label">Reconfigurations</span></span></div>
+	<div class="stat"><span><span class="stat-value">3</span><span class="stat-label">Refunds</span><span class="stat-sub">Counterbalancing</span></span></div>
+</div>
+```
 
 ### Links
 
@@ -6463,7 +6569,7 @@ Long text that comes from an editor or from Markdown, where no element carries a
 
 ```html
 <article class="prose">
-	<h2>A day at Ang Thong</h2>
+	<h2>A day at North Bay</h2>
 	<p>The boat leaves the pier at eight and is back before sunset. Lunch is on the beach, and the water is calm from December to April.</p>
 	<h3>What to bring</h3>
 	<ul>
@@ -6514,6 +6620,8 @@ A button opens the dialog with `commandfor` + `command="show-modal"`; buttons in
 	</div>
 </dialog>
 ```
+
+A product tints the head of every dialog with `--redz-dialog-header-bg`; `--redz-dialog-header-end` gives it room below and `--redz-dialog-header-line` a line under it.
 
 ### Sizes
 
@@ -6601,7 +6709,7 @@ On any window a long dialog keeps its header and its footer in view: only `dialo
 		<h2 class="dialog-title" id="dialog-full-title">Route of the day</h2>
 		<button class="btn-close" type="button" commandfor="dialog-full-panel" command="close" aria-label="Close"></button>
 	</div>
-	<div class="dialog-body"><p>Pick-up at the hotel at 7:30, the pier at 8:15, Ang Thong at 9:30; snorkeling, the emerald lake, lunch on the boat, back by 17:00.</p></div>
+	<div class="dialog-body"><p>Pick-up at the hotel at 7:30, the pier at 8:15, North Bay at 9:30; snorkeling, the emerald lake, lunch on the boat, back by 17:00.</p></div>
 	<div class="dialog-footer"><button class="btn btn-primary" type="button" commandfor="dialog-full-panel" command="close">Done</button></div>
 </dialog>
 ```
@@ -6618,7 +6726,7 @@ On any window a long dialog keeps its header and its footer in view: only `dialo
 
 From [`css/components/dialog.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/dialog.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-border`, `--redz-radius-16`, `--redz-bg-raised`, `--redz-shadow-3`, `--redz-space-12`, `--redz-space-16`, `--redz-space-24`, `--redz-fs-16`, `--redz-text-muted`, `--redz-space-8`, `--redz-bg-page`, `--redz-ease`.
+It reads the theme's `--redz-border`, `--redz-radius-16`, `--redz-bg-raised`, `--redz-shadow-3`, `--redz-space-12`, `--redz-space-16`, `--redz-space-24`, `--redz-dialog-header-end`, `--redz-dialog-header-line`, `--redz-dialog-header-bg`, `--redz-fs-16`, `--redz-text-muted`, `--redz-space-8`, `--redz-bg-page`, `--redz-ease`.
 
 ## From Bootstrap 5.3
 
@@ -6687,6 +6795,8 @@ A drawer opens and closes like a dialog: `command="show-modal"` and `command="cl
 </dialog>
 ```
 
+A product tints the head of every drawer with `--redz-drawer-header-bg`.
+
 ### Wide
 
 `drawer-lg` is 38rem (608 px) wide instead of 28rem, for a record's details with a table or a form of two columns; on a narrower window it takes the window less a margin, as every drawer does.
@@ -6698,7 +6808,7 @@ A drawer opens and closes like a dialog: `command="show-modal"` and `command="cl
 		<h2 class="drawer-title" id="drawer-lg-panel-title">Booking 2026-0418</h2>
 		<button class="btn-close" type="button" commandfor="drawer-lg-panel" command="close" aria-label="Close"></button>
 	</div>
-	<div class="drawer-body"><p>Ang Thong by speedboat, 4 guests, 12 November 2026. Paid in full by card.</p></div>
+	<div class="drawer-body"><p>North Bay by speedboat, 4 guests, 12 November 2026. Paid in full by card.</p></div>
 </dialog>
 ```
 
@@ -6712,7 +6822,7 @@ A drawer opens and closes like a dialog: `command="show-modal"` and `command="cl
 
 From [`css/components/drawer.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/drawer.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-8`, `--redz-border`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-3`, `--redz-space-12`, `--redz-space-16`, `--redz-fs-16`, `--redz-ease`.
+It reads the theme's `--redz-space-8`, `--redz-border`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-3`, `--redz-space-12`, `--redz-space-16`, `--redz-drawer-header-bg`, `--redz-fs-16`, `--redz-ease`.
 
 ## From Bootstrap 5.3
 
@@ -6742,7 +6852,7 @@ A small panel that opens beside its button and holds more than a label: a title,
 ```html
 <button class="btn btn-secondary" type="button" commandfor="popover-titled-panel" command="toggle-popover">Park fee</button>
 <div id="popover-titled-panel" class="popover" popover role="dialog" aria-labelledby="popover-titled-title">
-	<div class="popover-header" id="popover-titled-title">Ang Thong marine park</div>
+	<div class="popover-header" id="popover-titled-title">North Bay marine park</div>
 	<div class="popover-body">The fee is paid in cash at the pier and is not part of the tour price. <a href="#popover-titled">The park rules</a></div>
 </div>
 ```
@@ -6807,10 +6917,19 @@ Inside an element with `data-tooltips` - `<html>` for the whole page - an elemen
 ```html
 <button class="btn btn-icon" type="button" title="Duplicate"><i class="bi bi-copy" aria-hidden="true"></i></button>
 <button class="btn" type="button" aria-disabled="true" title="Publish needs a price for every season">Publish</button>
-<span class="hstack gap-8"><span class="dot dot-warning" title="2 translations are outdated"></span>Ang Thong</span>
+<span class="hstack gap-8"><span class="dot dot-warning" title="2 translations are outdated"></span>North Bay</span>
 ```
 
-A touch screen has no hover: a tap on a control that cannot run - `aria-disabled="true"` with a title, as Publish above - shows its title for three seconds and says it politely, so the person learns why without a mouse.
+`data-tooltip-delay` on that element, or on any element around the title, sets the wait after a hover in milliseconds, 400 unless it says otherwise; `0` shows the tooltip as soon as the pointer is on it.
+
+```html
+<button class="btn btn-icon" type="button" title="Duplicate"><i class="bi bi-copy" aria-hidden="true"></i></button>
+<button class="btn btn-icon" type="button" title="Delete"><i class="bi bi-trash3" aria-hidden="true"></i></button>
+```
+
+On a folded side navigation a link's tooltip stands beside it, at the end of the rail, so it covers no other icon; the rail names its links from their words by itself.
+
+A click or a tap on a control that cannot run - `aria-disabled="true"` with a title, as Publish above - shows its title for three seconds and says it politely, so the person learns why without a mouse.
 
 ## Keyboard and accessibility
 
@@ -6851,7 +6970,7 @@ An `a` with `data-zoom` whose `href` is the full image, around its thumbnail. Li
 
 ```html
 <div class="grid cols-3 gap-12">
-	<a href="img/lagoon.svg" data-zoom="tour" title="The lagoon at Ang Thong"><img class="w-100 ratio-16x9 rounded" src="img/lagoon.svg" alt="A lagoon under green hills"></a>
+	<a href="img/lagoon.svg" data-zoom="tour" title="The lagoon at North Bay"><img class="w-100 ratio-16x9 rounded" src="img/lagoon.svg" alt="A lagoon under green hills"></a>
 	<a href="img/pier.svg" data-zoom="tour" title="The pier at sunset"><img class="w-100 ratio-16x9 rounded" src="img/pier.svg" alt="A wooden pier over the sea"></a>
 	<a href="img/cliffs.svg" data-zoom="tour"><img class="w-100 ratio-16x9 rounded" src="img/cliffs.svg" alt="Cliffs above a bay with a boat"></a>
 </div>
@@ -6921,7 +7040,7 @@ An icon, then the words in a `<div>`. The plain `alert` is neutral; the tones fo
 	<i class="bi bi-stars" aria-hidden="true"></i>
 	<div class="vstack gap-8">
 		<strong>A shorter title</strong>
-		<p>“Ang Thong by speedboat” fits the 60 characters search results show.</p>
+		<p>“North Bay by speedboat” fits the 60 characters search results show.</p>
 		<div class="hstack gap-8"><button class="btn btn-sm btn-primary" type="button">Use it</button><button class="btn btn-sm btn-text" type="button">Dismiss</button></div>
 	</div>
 </div>
@@ -7001,7 +7120,7 @@ The page carries the stack from the start, so that screen readers know its live 
 ### How a toast looks
 
 ```html
-<div class="toast toast-success"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><div class="toast-body"><strong>Saved</strong><div class="text-muted fs-12">Ang Thong · 3 pages rebuilt</div></div><button class="btn-close" type="button" aria-label="Close"></button></div>
+<div class="toast toast-success"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><div class="toast-body"><strong>Saved</strong><div class="text-muted fs-12">North Bay · 3 pages rebuilt</div></div><button class="btn-close" type="button" aria-label="Close"></button></div>
 <div class="toast toast-info"><i class="bi bi-info-circle-fill" aria-hidden="true"></i><div class="toast-body"><strong>Import started</strong><div class="text-muted fs-12">You can leave this page.</div></div><button class="btn-close" type="button" aria-label="Close"></button></div>
 <div class="toast toast-warning"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i><div class="toast-body"><strong>Saved without the Thai text</strong></div><button class="btn-close" type="button" aria-label="Close"></button></div>
 <div class="toast toast-danger"><i class="bi bi-x-octagon-fill" aria-hidden="true"></i><div class="toast-body"><strong>Not saved</strong><div class="text-muted fs-12">The connection was lost; try again.</div></div><button class="btn-close" type="button" aria-label="Close"></button></div>
@@ -7135,6 +7254,8 @@ The browser's own `<progress>` for work under way and `<meter>` for a measure wi
 const rows = await REDZ.ui.progress(fetch('/bookings?page=2').then((answer) => answer.json()));
 ```
 
+A product sets how much it shows in its tokens: `--redz-progress-top-size`, `--redz-progress-top-track` and `--redz-progress-top-glow`, a `box-shadow`.
+
 ## Keyboard and accessibility
 
 - Name every bar: a `<label for>`, `aria-label` or `aria-labelledby`. The browser announces the value as a percentage of `max`; the words beside the bar are for the eye.
@@ -7144,9 +7265,9 @@ const rows = await REDZ.ui.progress(fetch('/bookings?page=2').then((answer) => a
 
 ## Tokens
 
-From [`css/components/progress.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/progress.css), which declares no custom property of its own.
+From [`css/components/progress.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/progress.css). It declares `--redz-track` on its root, never on rows or items.
 
-It reads the theme's `--redz-bg-hover`, `--redz-primary`, `--redz-secondary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-motion`, `--redz-ease`.
+It reads the theme's `--redz-bg-hover`, `--redz-primary`, `--redz-secondary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-progress-top-track`, `--redz-progress-top-size`, `--redz-progress-top-glow`, `--redz-motion`, `--redz-ease`.
 
 ## From Bootstrap 5.3
 
@@ -7246,11 +7367,11 @@ The page sets the bar's `data-state` after a save: `error` in the danger tone, i
 
 ### The fields that changed
 
-`data-changed`, set by the page, marks a field whose value differs from the saved one: a bar at the start of a `form-control` or a `form-select` - a combobox's button is one - and a dot after a check or a switch.
+`data-changed`, set by the page, marks a field whose value differs from the saved one: a bar at the start of a `form-control` or a `form-select` - a combobox's button is one - and a dot after a check or a switch. On a tab it is a dot too; there its value is what a screen reader says.
 
 ```html
 <div class="form-floating">
-	<input class="form-control" id="save-bar-changed-name" value="Ang Thong by speedboat" placeholder="Name" data-changed>
+	<input class="form-control" id="save-bar-changed-name" value="North Bay by speedboat" placeholder="Name" data-changed>
 	<label for="save-bar-changed-name">Name</label>
 </div>
 <label class="form-check" data-changed><input class="check" type="checkbox" checked> Shown on the site</label>
@@ -7376,6 +7497,19 @@ Tabs switch panels in place: `role="tablist"`, each tab `role="tab"` with `aria-
 <div id="nav-tabs-panel-3" role="tabpanel" aria-labelledby="nav-tabs-3" tabindex="0" hidden><p>Edited yesterday by M. K.; published on three sites.</p></div>
 ```
 
+### A tab with changes
+
+`data-changed`, set by the page, puts a dot on a tab whose panel holds something not saved yet, the same word as on a field. Its value is what a screen reader says after the tab's name.
+
+```html
+<div class="nav nav-underline" role="tablist" aria-label="Settings">
+	<button class="nav-link" type="button" role="tab" id="nav-changed-1" aria-selected="true" aria-controls="nav-changed-panel-1">Company</button>
+	<button class="nav-link" type="button" role="tab" id="nav-changed-2" aria-selected="false" aria-controls="nav-changed-panel-2" data-changed="not saved">Mail</button>
+</div>
+<div id="nav-changed-panel-1" role="tabpanel" aria-labelledby="nav-changed-1" tabindex="0"><p>The company's name and address.</p></div>
+<div id="nav-changed-panel-2" role="tabpanel" aria-labelledby="nav-changed-2" tabindex="0" hidden><p>The address mail is sent from.</p></div>
+```
+
 ### Tabs whose panels load
 
 When a panel comes from the server, the arrows should not load every panel they pass: `data-activation="manual"` on the tablist makes them move the focus only, and `Enter` or `Space` selects.
@@ -7469,7 +7603,7 @@ A nav or a list group with `data-scrollspy` marks the link to the section in vie
 	<div class="docs-scroll md:span-8 vstack gap-16" tabindex="0" role="region" aria-label="The day, by section">
 		<section id="nav-spy-plan" class="vstack gap-4"><h4 class="fs-14">Plan</h4><p class="mb-0">Pick-up at the hotel at 7:30, the pier at 8:15. The crew hands out life vests and snorkels before the boat leaves the bay.</p></section>
 		<section id="nav-spy-boat" class="vstack gap-4"><h4 class="fs-14">The boat</h4><p class="mb-0">A speedboat for 30 guests with shade and a toilet; the ride to the park takes an hour across open water.</p></section>
-		<section id="nav-spy-lunch" class="vstack gap-4"><h4 class="fs-14">Lunch</h4><p class="mb-0">Thai lunch on a beach of the park: rice, green curry, fruit and water; vegetarian on request.</p></section>
+		<section id="nav-spy-lunch" class="vstack gap-4"><h4 class="fs-14">Lunch</h4><p class="mb-0">Lunch on a beach of the park: rice, green curry, fruit and water; vegetarian on request.</p></section>
 		<section id="nav-spy-back" class="vstack gap-4"><h4 class="fs-14">Back</h4><p class="mb-0">The boat leaves the park at 15:30 and reaches the pier by 17:00; the transfer brings everyone back to the hotel.</p></section>
 	</div>
 </div>
@@ -7522,8 +7656,8 @@ Tabs fold the same way. The arrows move between the tabs in the row; a tab chose
 		<button class="nav-link" type="button" role="tab" id="nav-overflow-tabs-5" aria-selected="false" aria-controls="nav-overflow-tabs-panel-5">Notes</button>
 	</div>
 </div>
-<div id="nav-overflow-tabs-panel-1" role="tabpanel" aria-labelledby="nav-overflow-tabs-1" tabindex="0"><p>Anna Petrova, two trips this year.</p></div>
-<div id="nav-overflow-tabs-panel-2" role="tabpanel" aria-labelledby="nav-overflow-tabs-2" tabindex="0" hidden><p>Ang Thong on 12 December, 2 adults.</p></div>
+<div id="nav-overflow-tabs-panel-1" role="tabpanel" aria-labelledby="nav-overflow-tabs-1" tabindex="0"><p>Anna Sample, two trips this year.</p></div>
+<div id="nav-overflow-tabs-panel-2" role="tabpanel" aria-labelledby="nav-overflow-tabs-2" tabindex="0" hidden><p>North Bay on 12 December, 2 adults.</p></div>
 <div id="nav-overflow-tabs-panel-3" role="tabpanel" aria-labelledby="nav-overflow-tabs-3" tabindex="0" hidden><p>Paid in full by card.</p></div>
 <div id="nav-overflow-tabs-panel-4" role="tabpanel" aria-labelledby="nav-overflow-tabs-4" tabindex="0" hidden><p>No messages yet.</p></div>
 <div id="nav-overflow-tabs-panel-5" role="tabpanel" aria-labelledby="nav-overflow-tabs-5" tabindex="0" hidden><p>Vegetarian lunch.</p></div>
@@ -7548,7 +7682,7 @@ Tabs fold the same way. The arrows move between the tabs in the row; a tab chose
 
 From [`css/components/nav.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/nav.css). It declares `--redz-fade-left`, `--redz-fade-right` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-16`, `--redz-space-8`, `--redz-text-muted`, `--redz-text`, `--redz-border`, `--redz-space-4`, `--redz-radius-8`, `--redz-bg-hover`, `--redz-space-12`, `--redz-radius-6`, `--redz-fs-12`, `--redz-bg`, `--redz-shadow-1`.
+It reads the theme's `--redz-space-16`, `--redz-space-8`, `--redz-text-muted`, `--redz-text`, `--redz-warning`, `--redz-border`, `--redz-space-4`, `--redz-radius-8`, `--redz-bg-hover`, `--redz-space-12`, `--redz-radius-6`, `--redz-fs-12`, `--redz-bg`, `--redz-shadow-1`.
 
 ## From Bootstrap 5.3
 
@@ -7574,7 +7708,7 @@ A site's header: its name, its main links and what stands beside them. Where the
 
 ```html
 <header class="navbar md:navbar-expand">
-	<a class="navbar-brand" href="#navbar-site"><i class="bi bi-sun" aria-hidden="true"></i>Samui Tours</a>
+	<a class="navbar-brand" href="#navbar-site"><i class="bi bi-sun" aria-hidden="true"></i>Example Tours</a>
 	<button class="btn btn-text btn-icon navbar-toggler" type="button" commandfor="navbar-site-menu" command="toggle-popover" aria-label="Menu"><i class="bi bi-list" aria-hidden="true"></i></button>
 	<nav class="drawer" id="navbar-site-menu" popover aria-labelledby="navbar-site-title">
 		<div class="drawer-header">
@@ -7600,7 +7734,7 @@ With [`nav-overflow`](nav.md) around the links, a header that is wide enough for
 
 ```html
 <header class="navbar sm:navbar-expand max-w-640">
-	<a class="navbar-brand" href="#navbar-overflow"><i class="bi bi-sun" aria-hidden="true"></i>Samui Tours</a>
+	<a class="navbar-brand" href="#navbar-overflow"><i class="bi bi-sun" aria-hidden="true"></i>Example Tours</a>
 	<button class="btn btn-text btn-icon navbar-toggler" type="button" commandfor="navbar-overflow-menu" command="toggle-popover" aria-label="Menu"><i class="bi bi-list" aria-hidden="true"></i></button>
 	<nav class="drawer" id="navbar-overflow-menu" popover aria-labelledby="navbar-overflow-title">
 		<div class="drawer-header">
@@ -7636,7 +7770,7 @@ Without a `navbar-expand` class the links always wait behind the button, for a h
 
 ```html
 <header class="navbar bg-body" data-theme="dark">
-	<a class="navbar-brand" href="#navbar-folded"><i class="bi bi-sun" aria-hidden="true"></i>Samui Tours</a>
+	<a class="navbar-brand" href="#navbar-folded"><i class="bi bi-sun" aria-hidden="true"></i>Example Tours</a>
 	<span class="navbar-text ms-auto">Open daily, 8 a.m. to 8 p.m.</span>
 	<button class="btn btn-text btn-icon navbar-toggler" type="button" commandfor="navbar-folded-menu" command="toggle-popover" aria-label="Menu"><i class="bi bi-list" aria-hidden="true"></i></button>
 	<nav class="drawer drawer-start" id="navbar-folded-menu" popover aria-labelledby="navbar-folded-title">
@@ -7712,7 +7846,7 @@ The way up from a record to the list it belongs to, above the record's title. Th
 	<ol class="breadcrumb">
 		<li class="breadcrumb-item"><a href="#breadcrumb-trail">Content</a></li>
 		<li class="breadcrumb-item"><a href="#breadcrumb-trail">Excursions</a></li>
-		<li class="breadcrumb-item" aria-current="page">Ang Thong</li>
+		<li class="breadcrumb-item" aria-current="page">North Bay</li>
 	</ol>
 </nav>
 ```
@@ -8071,7 +8205,7 @@ A full screen for a tablet that stays on at a door: a name on top, big language 
 <div class="kiosk" data-theme="dark">
 	<div class="kiosk-main">
 		<div class="icon-tile icon-tile-success kiosk-state"><i class="bi bi-check-lg" aria-hidden="true"></i></div>
-		<div class="kiosk-title">Somchai Rattanakul</div>
+		<div class="kiosk-title">Sid Sample</div>
 		<div class="kiosk-line">Last in at 07:02</div>
 		<button class="btn btn-xl btn-success" type="button"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Check in</button>
 		<button class="btn btn-xl btn-warning" type="button"><i class="bi bi-box-arrow-right" aria-hidden="true"></i>Check out</button>

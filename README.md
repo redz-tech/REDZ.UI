@@ -3,7 +3,7 @@
 The interface library of the REDZ products: plain CSS and small JavaScript on the browser platform - no framework, no
 build step.
 
-**Status:** 0.16.0 (2026-11-05) - see [Releases](#releases). Three demo screens in `reference/demo/` -
+**Status:** 0.17.0 (2026-11-05) - see [Releases](#releases). Three demo screens in `reference/demo/` -
 a list, a resource page and a settings form - show it in light and dark themes, left-to-right and right-to-left.
 
 **Site:** [redz-tech.github.io/REDZ.UI](https://redz-tech.github.io/REDZ.UI/) - documentation and the demo screens of
@@ -167,12 +167,14 @@ The library has no words of its own: every word it shows comes from the caller o
 
 A package of the release, linked apart: `css/redz-ui-editor.min.css` and the module `js/redz-ui-editor.min.js`,
 built from `editor/` as the main two are from `css/` and `js/`. The module sets
-`REDZ.ui.editor(host, {value, ids, rights, placeholder, lang, dir, styles, scripts, sites, languages, blocks, images,
-embed, grid, onChange, onReady})` and answers `getHTML()`, `setHTML(html)`, `setRights(rights)`, `focus()`, `destroy()`. It
+`REDZ.ui.editor(host, {value, ids, rights, placeholder, lang, dir, styles, scripts, sites, languages, source, facts, onFact,
+ai, onBatch, person, blocks, images, embed, grid, onChange, onReady})` and answers `getHTML()`, `setHTML(html)`, `setRights(rights)`, `focus()`, `destroy()`. It
 edits REDZ.UI markup only: prose in place, and every other top element a block with a stable id, closed to the browser, its
 words fields. What can be changed on an element comes from the catalog, `tools/catalog.json`, also the passport's
 `editor.catalog`, which the build holds against the stylesheets, so nobody needs HTML; an expert may have it, under a
-right. Rights only hide controls: the server decides on every save. The text lives in a frame whose own
+right. A price or a date is a live fact, `<data value>`, written once. The AI is the host's, `options.ai`, no key is ever in a
+page: a suggestion is drawn word by word and taken or left, what it writes passes through the catalog, and a translation
+stands beside its source, row by row, so only the block that changed goes stale. Rights only hide controls: the server decides on every save. The text lives in a frame whose own
 Content-Security-Policy runs no script, and every value is parsed inert and cleaned, so nothing in a stored body or on
 the clipboard runs. Its words are the island's `editor.*` texts, which the passport's `editor.texts` lists apart from the
 library's; its soft ceilings are 70 KB of script and 8 KB of styles, gzipped.
@@ -276,16 +278,16 @@ holds `css/icons.min.css`, `icons/` and the pack's passport `redz-ui-icons.json`
 the version it needs. `php tools/build.php --check` refuses icons that changed under a published version.
 
 ```sh
-gh release download v0.16.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
-gh release verify-asset v0.16.0 redz-ui-0.16.0.zip --repo redz-tech/REDZ.UI
+gh release download v0.17.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
+gh release verify-asset v0.17.0 redz-ui-0.17.0.zip --repo redz-tech/REDZ.UI
 gh release download icons-1.13.2 --repo redz-tech/REDZ.UI --pattern 'redz-ui-icons-*.zip'
 gh release verify-asset icons-1.13.2 redz-ui-icons-1.13.2.zip --repo redz-tech/REDZ.UI
 ```
 
-jsDelivr serves a release by its tag: `https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.16.0/dist/css/redz-ui.min.css`
+jsDelivr serves a release by its tag: `https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.17.0/dist/css/redz-ui.min.css`
 and `https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@icons-1.13.2/css/icons.min.css`. Versions
 follow Semantic Versioning: a class, token, attribute or JavaScript call removed or renamed is a major release, one
 added is a minor release, a fix is a patch; while the version is 0.x, a removal or a rename is a minor release.
 
 ## License
-MIT - see [LICENSE](LICENSE). Pieces taken from other MIT-licensed projects are listed with their notices in `NOTICE`.
+The library is under MIT, see [LICENSE](LICENSE). The editor is under [PolyForm Strict 1.0.0](editor/LICENSE) from 0.17.0: noncommercial use only, no changes, no redistribution; versions up to 0.16.0 stay under MIT. See [LICENSING.md](LICENSING.md). Pieces taken from other MIT-licensed projects are listed with their notices in `NOTICE`.

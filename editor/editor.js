@@ -17,6 +17,12 @@ import {pasteOf} from './paste.js';
 import {toolbarOf} from './toolbar.js';
 import {lensOf} from './lens.js';
 import {checksOf} from './checks.js';
+import {factsOf} from './facts.js';
+import {reviewOf} from './review.js';
+import {aiOf} from './ai.js';
+import {padOf} from './pad.js';
+import {askOf} from './ask.js';
+import {pairOf} from './pair.js';
 import {templates} from './templates.js';
 
 const BASE = new URL('..', import.meta.url);
@@ -58,6 +64,14 @@ export const editor = (host, options = {}) => {
 	let watcher = null;
 	let noteTimer = 0;
 	let sheets = config.styles;
+	const bodies = new Map();
+
+	/** Who wrote a block, in words: an AI, a machine translation, a paste; a person's text has no mark. */
+	const whoOf = (top) => {
+		const by = top.getAttribute('data-by');
+		const checked = top.getAttribute('data-checked');
+		return say(by === 'ai' || by === 'mt' ? 'who.' + by + (checked === null ? '' : '.checked') : 'who.paste', {name: checked === '1' ? say('who.someone') : checked});
+	};
 
 	/** Listens on a target, and forgets it on destroy. */
 	ed.on = (target, type, handler, extra) => {
@@ -67,6 +81,7 @@ export const editor = (host, options = {}) => {
 	ed.may = (key) => ed.rights[key] === true;
 	const langOpen = () => ed.rights.langs === '*' || ed.rights.langs.includes(config.lang);
 	const locked = (top) => top.hasAttribute('data-lock') && !ed.may('lock');
+	const closed = (top) => locked(top) || top.hasAttribute('data-editor-review');
 	ed.wordsOpen = (top) => langOpen() && !(locked(top) && top.getAttribute('data-lock') === 'all');
 	ed.formOpen = (top) => ed.may('design') && !locked(top);
 	ed.placeOpen = (top) => ed.may('structure') && !locked(top);
@@ -94,6 +109,12 @@ export const editor = (host, options = {}) => {
 	pasteOf(ed);
 	lensOf(ed);
 	checksOf(ed);
+	factsOf(ed);
+	reviewOf(ed);
+	aiOf(ed);
+	padOf(ed);
+	askOf(ed);
+	pairOf(ed);
 
 	/** Says a thing that happened to the page's reader and on the screen for a moment. */
 	ed.note = (words) => {
@@ -103,11 +124,21 @@ export const editor = (host, options = {}) => {
 		noteTimer = setTimeout(() => delete box.dataset.editorNote, 4000);
 	};
 
+	/** Takes back whatever is only being tried or suggested. */
+	ed.calm = () => {
+		ed.tryOff();
+		ed.padOff();
+		ed.reviewOff();
+	};
+
 	/** The top elements of the text as stored: empty paragraphs and the editor's marks left out. */
 	ed.read = (ids) => {
 		const parts = [];
 		for (const each of [...ed.doc.body.childNodes]) {
-			const node = ed.kept(each);
+			const node = ed.held(ed.kept(each));
+			if (node === null) {
+				continue;
+			}
 			if (node.nodeType === Node.ELEMENT_NODE) {
 				if (isProse(node) && node.textContent.trim() === '' && node.querySelector('img, iframe, hr, br:not(:only-child)') === null && node.tagName !== 'HR') {
 					continue;
@@ -124,6 +155,7 @@ export const editor = (host, options = {}) => {
 	/** Fills the frame's body with a value: prose as it is, every other top-level element a block. */
 	ed.fill = (html) => {
 		const doc = ed.doc;
+		ed.calm();
 		const holder = new DOMParser().parseFromString('<!doctype html><body>' + clean(html), 'text/html').body;
 		doc.body.replaceChildren();
 		let run = null;
@@ -172,7 +204,11 @@ export const editor = (host, options = {}) => {
 			if (own === null) {
 				top.setAttribute('data-block', blockId());
 			} else if (twin !== undefined) {
-				(twin.textContent.length < top.textContent.length ? twin : top).setAttribute('data-block', blockId());
+				const fresh = twin.textContent.length < top.textContent.length ? twin : top;
+				fresh.setAttribute('data-block', blockId());
+				for (const name of ['data-from', 'data-by', 'data-checked']) {
+					fresh.removeAttribute(name);
+				}
 			}
 			seen.set(own, top);
 			seen.set(top.getAttribute('data-block'), top);
@@ -199,6 +235,10 @@ export const editor = (host, options = {}) => {
 		for (const top of body.querySelectorAll('[data-lock]')) {
 			top.setAttribute('data-editor-lock', say('lock.' + top.getAttribute('data-lock')));
 		}
+		for (const top of body.querySelectorAll(':scope > [data-by]')) {
+			top.setAttribute('data-editor-who', whoOf(top));
+		}
+		ed.drawFacts();
 	};
 
 	/** Draws a block again from its own markup. */
@@ -259,6 +299,8 @@ export const editor = (host, options = {}) => {
 		const range = selection.getRangeAt(0);
 		return selection.isCollapsed ? [topAt(ed.doc)].filter(Boolean) : [...ed.doc.body.children].filter((one) => range.intersectsNode(one));
 	};
+
+	ed.tops = tops;
 
 	/** Selects whole top elements after they were changed. */
 	const holdLines = (first, last) => {
@@ -399,26 +441,35 @@ export const editor = (host, options = {}) => {
 		ed.commit();
 	};
 
-	/** Puts cleaned markup in after a top element, or in the place of an empty paragraph. */
-	ed.insertBlocks = (html, near) => {
+	/** Puts cleaned markup in after a top element, or in the place of an empty paragraph, nothing recorded yet. */
+	ed.placeBlocks = (html, near) => {
 		const doc = ed.doc;
 		const holder = new DOMParser().parseFromString('<!doctype html><body>' + clean(html), 'text/html').body;
 		const tops = [...holder.children].map((node) => {
 			const top = doc.importNode(node, true);
 			return drawTop(top, true);
 		});
-		const emptyLine = near !== null && near !== undefined && near.tagName === 'P' && near.textContent.trim() === '' && near.querySelector('img') === null;
-		if (near === null || near === undefined) {
+		const emptyLine = near?.tagName === 'P' && near.textContent.trim() === '' && near.querySelector('img') === null;
+		if (near === 'start') {
+			doc.body.prepend(...tops);
+		} else if (near === null || near === undefined) {
 			doc.body.append(...tops);
 		} else if (emptyLine) {
 			near.replaceWith(...tops);
 		} else {
 			near.after(...tops);
 		}
+		return tops;
+	};
+	ed.insertBlocks = (html, near) => {
+		const tops = ed.placeBlocks(html, near);
 		ed.settle();
 		ed.commit();
 		return tops;
 	};
+
+	/** A block's markup as a value holds it. */
+	ed.markup = (top) => unmark(top.cloneNode(true), true).outerHTML;
 
 	/** What can be inserted: images, a video, the package's blocks and the page's own. */
 	ed.insertable = () => {
@@ -426,14 +477,18 @@ export const editor = (host, options = {}) => {
 			ed.insertBlocks(one.html.replaceAll('{id}', 'redz-block-' + blockId()), topAt(ed.doc));
 		}}));
 		const media = [...config.images.map((from) => ({label: from.label, icon: 'image', group: 'media', run: () => image(from)})), ...(config.embed ? [{label: say('embed'), icon: 'play-btn', group: 'media', run: embed}] : [])];
-		return [...media, ...blocks];
+		const items = [...(typeof config.ai === 'function' ? [{label: say('ai.write'), icon: 'stars', group: 'ai', need: 'ai', run: ed.aiWrite}] : []), ...media, ...blocks];
+		if (config.facts !== undefined) {
+			items.splice(items.findIndex((one) => one.group === 'inline'), 0, {label: say('fact'), icon: 'tag', group: 'inline', need: 'facts', run: ed.openFacts});
+		}
+		return items;
 	};
 
 	/** One list of commands, for the palette today and for agents later. */
 	ed.commands = () => {
 		const top = topAt(ed.doc);
 		return [
-			...(ed.may('structure') ? ed.insertable().map((one) => ({label: say('insert') + ': ' + one.label, icon: one.icon, run: one.run})) : []),
+			...(ed.may('structure') ? ed.insertable().filter((one) => one.need === undefined || ed.may(one.need)).map((one) => ({label: say('insert') + ': ' + one.label, icon: one.icon, run: one.run})) : []),
 			{label: say('bold'), icon: 'type-bold', keys: '⌘B', run: () => ed.exec('bold')},
 			{label: say('italic'), icon: 'type-italic', keys: '⌘I', run: () => ed.exec('italic')},
 			{label: say('underline'), icon: 'type-underline', keys: '⌘U', run: () => ed.exec('underline')},
@@ -441,6 +496,11 @@ export const editor = (host, options = {}) => {
 			{label: say('undo'), icon: 'arrow-counterclockwise', keys: '⌘Z', run: ed.undo},
 			{label: say('redo'), icon: 'arrow-clockwise', keys: '⇧⌘Z', run: ed.redo},
 			...(top !== null ? [{label: say('card'), icon: 'sliders', keys: '⌥↩', run: () => ed.openCard(top)}] : []),
+			...(ed.aiOpen() ? ed.aiCommands() : []),
+			...(ed.facts.size > 0 ? [{label: say('facts'), icon: 'tag', run: ed.openFacts}] : []),
+			...(ed.pairCan() ? [{label: say('lens.pair'), icon: 'layout-split', run: ed.pairToggle}] : []),
+			{label: say('lens.who'), icon: 'person-badge', run: ed.whoToggle},
+			{label: say('check'), icon: 'clipboard-check', run: ed.openChecks},
 			...(ed.may('html') ? [{label: say('source'), icon: 'code-slash', run: ed.toggleSource}] : []),
 		];
 	};
@@ -743,13 +803,13 @@ export const editor = (host, options = {}) => {
 
 	const buildBubble = () => {
 		const panel = ed.layer.bubble;
-		panel.innerHTML = [['bold', 'type-bold'], ['italic', 'type-italic'], ['underline', 'type-underline'], ['link', 'link-45deg'], ['clear', 'eraser']].map(([key, icon]) => '<button class="btn btn-text btn-sm btn-icon" type="button" data-editor-bubble="' + key + '" aria-label="' + say(key) + '" title="' + say(key) + '"><i class="bi bi-' + icon + '" aria-hidden="true"></i></button>').join('');
+		panel.innerHTML = [['bold', 'type-bold'], ['italic', 'type-italic'], ['underline', 'type-underline'], ['link', 'link-45deg'], ['clear', 'eraser']].map(([key, icon]) => '<button class="btn btn-text btn-sm btn-icon" type="button" data-editor-bubble="' + key + '" aria-label="' + say(key) + '" title="' + say(key) + '"><i class="bi bi-' + icon + '" aria-hidden="true"></i></button>').join('') + (typeof config.ai === 'function' ? '<button class="btn btn-text btn-sm btn-icon" type="button" data-editor-bubble="ai" commandfor="' + ed.aiMenuId + '" command="toggle-popover" aria-haspopup="menu" aria-label="' + say('ai') + '" title="' + say('ai') + '"><i class="bi bi-stars" aria-hidden="true"></i></button>' : '');
 		panel.addEventListener('pointerdown', (event) => event.preventDefault());
 		panel.addEventListener('click', (event) => {
 			const act = event.target.closest('[data-editor-bubble]')?.dataset.editorBubble;
 			if (act === 'link') {
 				ed.link();
-			} else if (act !== undefined) {
+			} else if (act !== undefined && act !== 'ai') {
 				ed.exec(act === 'clear' ? 'removeFormat' : act);
 			}
 		});
@@ -770,13 +830,20 @@ export const editor = (host, options = {}) => {
 		ed.applyTheme();
 		watcher = new MutationObserver(ed.applyTheme);
 		watcher.observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
+		const facts = ed.loadFacts();
 		ed.fill(config.value ?? '');
 		ed.start();
+		ed.aiBuild();
 		ed.buildTools();
 		ed.buildLens();
 		buildBubble();
 		ed.mark();
 		ed.changed();
+		facts?.then(() => {
+			ed.drawFacts();
+			ed.rebase();
+			ed.changed();
+		});
 		let asked = 0;
 		sized = new doc.defaultView.ResizeObserver(() => {
 			asked ||= requestAnimationFrame(() => {
@@ -785,6 +852,7 @@ export const editor = (host, options = {}) => {
 				if (frame.style.blockSize !== height) {
 					frame.style.blockSize = height;
 				}
+				ed.pairAlign();
 			});
 		});
 		sized.observe(body);
@@ -850,6 +918,10 @@ export const editor = (host, options = {}) => {
 				(event.inputType === 'historyUndo' ? ed.undo : ed.redo)();
 				return;
 			}
+			if (event.inputType === 'deleteContentBackward' && ed.factBack()) {
+				event.preventDefault();
+				return;
+			}
 			if (event.inputType.startsWith('delete') || event.inputType.startsWith('insert')) {
 				const selection = doc.getSelection();
 				const range = selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
@@ -858,9 +930,9 @@ export const editor = (host, options = {}) => {
 				const on = selection.isCollapsed && event.inputType.endsWith('Forward');
 				const near = back ? top?.previousElementSibling : (on ? top?.nextElementSibling : null);
 				const at = top === null || !selection.isCollapsed ? -1 : before(doc, top).length;
-				const edge = top !== null && ((back && at === 0) || (on && at >= top.textContent.length)) && (locked(top) || (near !== null && near !== undefined && locked(near)));
-				const hit = (selection.isCollapsed ? [] : [...doc.querySelectorAll('[data-lock]')].filter((one) => locked(one) && range.intersectsNode(one)));
-				const split = event.inputType === 'insertParagraph' && top !== null && locked(top);
+				const edge = top !== null && ((back && at === 0) || (on && at >= top.textContent.length)) && (closed(top) || (near !== null && near !== undefined && closed(near)));
+				const hit = (selection.isCollapsed ? [] : [...doc.querySelectorAll('[data-lock], [data-editor-review]')].filter((one) => closed(one) && range.intersectsNode(one)));
+				const split = event.inputType === 'insertParagraph' && top !== null && closed(top);
 				if (hit.length > 0 || edge || split) {
 					event.preventDefault();
 					ed.note(say('lock.refused'));
@@ -887,7 +959,10 @@ export const editor = (host, options = {}) => {
 			if (target?.closest('a, summary, button') !== null && target !== null) {
 				event.preventDefault();
 			}
-			if (target !== null) {
+			const hunk = target?.closest('[data-editor-hunk]') ?? null;
+			if (hunk !== null) {
+				ed.reviewAt(+hunk.getAttribute('data-editor-hunk'));
+			} else if (target !== null) {
 				ed.pick(target);
 			}
 		});
@@ -900,7 +975,7 @@ export const editor = (host, options = {}) => {
 		config.onReady?.();
 	};
 
-	const frameDocument = () => '<!doctype html><html lang="' + escape(config.lang) + '" dir="' + escape(config.dir) + '"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="' + CSP + '">' + [...frameSheets(), ...sheets, LIBRARY.surface].map((href) => '<link rel="stylesheet" href="' + escape(href) + '">').join('') + '</head><body></body></html>';
+	ed.frameDocument = (lang, dir) => '<!doctype html><html lang="' + escape(lang) + '" dir="' + escape(dir) + '"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="' + CSP + '">' + [...frameSheets(), ...sheets, LIBRARY.surface].map((href) => '<link rel="stylesheet" href="' + escape(href) + '">').join('') + '</head><body></body></html>';
 
 	/** Replaces the theme's stylesheets of the frame, for the lens. */
 	ed.setStyles = (styles) => {
@@ -927,17 +1002,30 @@ export const editor = (host, options = {}) => {
 			return;
 		}
 		ed.commit();
+		bodies.set(config.lang, ed.read(true));
 		await config.onLanguage?.(code, ed.value());
-		const html = await (one.value ?? config.getLanguage?.(code)) ?? '';
+		const html = await ed.valueOf(code);
 		config.lang = code;
 		config.dir = one.dir ?? 'ltr';
 		ed.doc.documentElement.lang = code;
 		ed.doc.documentElement.dir = config.dir;
 		ed.doc.body.contentEditable = langOpen() ? 'true' : 'false';
+		await ed.loadFacts();
 		ed.fill(html);
 		ed.start();
 		ed.changed();
 		ed.mark();
+		await ed.pairReload();
+		ed.lensPaint();
+	};
+
+	/** A language's value now: what this session holds of it, or the host's. */
+	ed.valueOf = async (code) => {
+		if (code === config.lang) {
+			return ed.read(true);
+		}
+		const one = (config.languages ?? []).find((each) => each.code === code);
+		return bodies.get(code) ?? (await (one?.value ?? config.getLanguage?.(code))) ?? '';
 	};
 
 	ed.focus = () => {
@@ -948,7 +1036,7 @@ export const editor = (host, options = {}) => {
 		}
 	};
 	ed.on(frame, 'load', ready, {once: true});
-	frame.srcdoc = frameDocument();
+	frame.srcdoc = ed.frameDocument(config.lang, config.dir);
 
 	return {
 		getHTML: () => (ed.doc === null ? clean(config.value ?? '') : ed.value()),
@@ -971,6 +1059,8 @@ export const editor = (host, options = {}) => {
 				ed.closeCard();
 				ed.pickNone();
 				ed.mark();
+				ed.pairAgain();
+				ed.aiPaint();
 			}
 		},
 		focus: ed.focus,
@@ -981,7 +1071,10 @@ export const editor = (host, options = {}) => {
 			sized?.disconnect();
 			watcher?.disconnect();
 			ed.stop();
+			ed.aiStop();
 			ed.closeCard();
+			ed.calm();
+			ed.pairOff();
 			clearTimeout(noteTimer);
 			root.replaceChildren();
 		},

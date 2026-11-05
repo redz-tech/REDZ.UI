@@ -1,10 +1,11 @@
 // REDZ.UI, tooltips from titles: inside an element with data-tooltips (<html> for the whole page) an element's own
-// title shows as the library's tooltip - after a short hover by a mouse or a pen, at once on a keyboard's focus, but not
+// title shows as the library's tooltip - after a short hover by a mouse or a pen, data-tooltip-delay ms on that element or
+// around it, 0 for none, at once on a keyboard's focus, but not
 // when the focus comes back from a closed layer - and hides when the pointer or the focus leaves, on Escape, on a scroll
 // or a click. The pointer may rest on the tooltip itself. While hovered, the title is held back so the browser does not
 // show its own as well; an element whose only
 // name was its title is named by it meanwhile. The tooltip is hidden from screen readers: they say the title already.
-// A touch has no hover: a tap on a control that cannot run (aria-disabled) shows its title for three seconds and says it.
+// A tap or a click on a control that cannot run (aria-disabled) shows its title for three seconds and says it.
 import {announce} from './say.js';
 
 const DELAY = 400;
@@ -71,7 +72,7 @@ const release = (owner) => {
 	}
 };
 
-/** Shows the tooltip above the element, or below where there is no room, its start edge on the element's. */
+/** Shows the tooltip above the element, or below where there is no room, its start edge on the element's; on a folded rail, beside it. */
 const show = (owner) => {
 	const words = (held.get(owner)?.title ?? owner.getAttribute('title') ?? '').trim();
 	pending = null;
@@ -89,8 +90,10 @@ const show = (owner) => {
 	const rtl = getComputedStyle(owner).direction === 'rtl';
 	const width = one.offsetWidth;
 	const height = one.offsetHeight;
-	one.style.top = (box.top - height - 6 >= 4 ? box.top - height - 6 : box.bottom + 6) + 'px';
-	one.style.left = Math.min(Math.max(4, rtl ? box.right - width : box.left), document.documentElement.clientWidth - width - 4) + 'px';
+	const beside = owner.closest('[data-folded]') !== null;
+	const start = beside ? (rtl ? box.left - width - 6 : box.right + 6) : (rtl ? box.right - width : box.left);
+	one.style.top = (beside ? box.top + (box.height - height) / 2 : (box.top - height - 6 >= 4 ? box.top - height - 6 : box.bottom + 6)) + 'px';
+	one.style.left = Math.min(Math.max(4, start), document.documentElement.clientWidth - width - 4) + 'px';
 };
 
 /** Hides the tooltip, stops a wait for one, and gives the titles back. */
@@ -116,17 +119,26 @@ document.addEventListener('pointerover', (event) => {
 	hide();
 	hold(owner);
 	pending = owner;
-	timer = setTimeout(() => show(owner), DELAY);
+	const wait = owner.closest('[data-tooltip-delay]')?.dataset.tooltipDelay ?? DELAY;
+	if (+wait === 0) {
+		show(owner);
+	} else {
+		timer = setTimeout(() => show(owner), +wait);
+	}
 });
 
 document.addEventListener('pointerup', (event) => {
-	const owner = event.pointerType === 'touch' ? ownerOf(event.target) : null;
+	const owner = ownerOf(event.target);
 	if (owner === null || !owner.matches('[aria-disabled="true"]')) {
 		return;
 	}
 	hide();
+	const words = owner.getAttribute('title') ?? '';
+	if (event.pointerType !== 'touch') {
+		hold(owner);
+	}
 	show(owner);
-	announce(owner.getAttribute('title') ?? '');
+	announce(words);
 	timer = setTimeout(hide, TAPPED);
 });
 

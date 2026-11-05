@@ -33,7 +33,7 @@ Where a control or a mark needs a fixed size - a narrow field in a toolbar, a co
 <span class="size-48 rounded-8 bg-page"></span>
 <span class="size-64 rounded-8 bg-page"></span>
 <span class="size-80 rounded-8 bg-page"></span>
-<input class="form-control w-120" type="text" aria-label="Code" value="SAMUI-26">
+<input class="form-control w-120" type="text" aria-label="Code" value="SPRING-26">
 ```
 
 ## Text: kept lines, captions, clamps
@@ -41,9 +41,9 @@ Where a control or a mark needs a fixed size - a narrow field in a toolbar, a co
 `text-pre-wrap` keeps the lines and the spaces a person typed - a note, an address - and still wraps a long line. `tracking-wide` spaces the letters of a caption in capitals. `line-clamp-2` and `line-clamp-3` cut a text after two or three lines with an ellipsis; the whole text stays in the page for a screen reader and for search.
 
 ```html
-<p class="text-pre-wrap">Villa 12, Bophut&#10;Koh Samui 84320</p>
+<p class="text-pre-wrap">Villa 12, Harbor Road&#10;Main Island 00000</p>
 <p class="fs-11 text-uppercase tracking-wide text-muted">Last 30 days</p>
-<p class="line-clamp-2 max-w-360">Ang Thong by speedboat: a day among the forty-two islands of the marine park, with snorkelling at Koh Wua Ta Lap, the emerald lake of Koh Mae Ko and lunch on the beach, back by five.</p>
+<p class="line-clamp-2 max-w-360">North Bay by speedboat: a day among the forty-two islands of the marine park, with snorkelling at Reef Islet, the emerald lake of Emerald Islet and lunch on the beach, back by five.</p>
 ```
 
 ## Shown when focused

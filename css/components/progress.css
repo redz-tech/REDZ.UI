@@ -78,7 +78,7 @@
 	}
 
 	.progress:indeterminate {
-		background: linear-gradient(to right, transparent 35%, currentColor 35% 65%, transparent 65%) 100% 0 / 300% 100% no-repeat, var(--redz-bg-hover);
+		background: linear-gradient(to right, transparent 35%, currentColor 35% 65%, transparent 65%) 100% 0 / 300% 100% no-repeat, var(--redz-track, var(--redz-bg-hover));
 		animation: progress-sweep 1.4s linear infinite;
 	}
 
@@ -103,10 +103,14 @@
 	.progress-top {
 		position: fixed;
 		inset: 0 0 auto;
+		--redz-track: var(--redz-progress-top-track, var(--redz-bg-hover));
 		inline-size: 100%;
+		block-size: var(--redz-progress-top-size, 3px);
 		margin: 0;
 		padding: 0;
 		border-radius: 0;
+		background-color: var(--redz-track);
+		box-shadow: var(--redz-progress-top-glow, none);
 		pointer-events: none;
 	}
 

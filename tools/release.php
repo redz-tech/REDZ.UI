@@ -25,7 +25,7 @@ function RELEASE__Section(string $version): string
 function RELEASE__Notes(string $tag, string $version, string $section, string $icons): string
 {
 	return $section . "\n\n---\n\n"
-		. '**Files.** `redz-ui-' . $version . '.zip` - the folder a project serves, as it is: `css/`, `js/`, `LICENSE`, `NOTICE` and `redz-ui.json`, the passport (the version, the floor, the files to link, the vocabulary and the sha256 of every file). This release needs the icon pack `' . $icons . '`, a release of its own. `checks.zip` - the sheet of the probes this release passed in every engine, also at ' . RELEASE_SITE . $version . "/checks/.\n\n"
+		. '**Files.** `redz-ui-' . $version . '.zip` - the folder a project serves, as it is: `css/`, `js/`, `LICENSE`, `LICENSE-editor`, `NOTICE` and `redz-ui.json`, the passport (the version, the floor, the files to link, the vocabulary and the sha256 of every file). This release needs the icon pack `' . $icons . '`, a release of its own. `checks.zip` - the sheet of the probes this release passed in every engine, also at ' . RELEASE_SITE . $version . "/checks/.\n\n"
 		. '**Check the archive:** `gh release verify-asset ' . $tag . ' redz-ui-' . $version . '.zip --repo ' . RELEASE_REPO . "`.\n";
 }
 

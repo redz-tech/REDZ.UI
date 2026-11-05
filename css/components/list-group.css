@@ -87,6 +87,12 @@
 		padding-inline: 0;
 	}
 
+	/* A flush list with marked rows keeps every row's start where the marked ones have theirs, and their edge off the words. */
+	.list-group-flush:has(> [class*="edge-start-"]) > .list-group-item {
+		padding-inline-start: var(--redz-space-8);
+		border-inline-start: 3px solid transparent;
+	}
+
 	/* A flush list of actions keeps its rows' room, so a hover's tint and the current row's bar stand off the words. */
 	.list-group-flush:has(> .list-group-item-action) > .list-group-item {
 		padding-inline: var(--redz-space-12);

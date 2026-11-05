@@ -25,6 +25,8 @@ A button opens the dialog with `commandfor` + `command="show-modal"`; buttons in
 </dialog>
 ```
 
+A product tints the head of every dialog with `--redz-dialog-header-bg`; `--redz-dialog-header-end` gives it room below and `--redz-dialog-header-line` a line under it.
+
 ### Sizes
 
 `dialog-sm` for a question, the default for a form, `dialog-lg` for a wide table or a preview. A dialog is a region, so the width prefixes inside it measure the dialog: `sm:` fires in the default one, and `md:` in `dialog-lg`, 800 px wide.
@@ -111,7 +113,7 @@ On any window a long dialog keeps its header and its footer in view: only `dialo
 		<h2 class="dialog-title" id="dialog-full-title">Route of the day</h2>
 		<button class="btn-close" type="button" commandfor="dialog-full-panel" command="close" aria-label="Close"></button>
 	</div>
-	<div class="dialog-body"><p>Pick-up at the hotel at 7:30, the pier at 8:15, Ang Thong at 9:30; snorkeling, the emerald lake, lunch on the boat, back by 17:00.</p></div>
+	<div class="dialog-body"><p>Pick-up at the hotel at 7:30, the pier at 8:15, North Bay at 9:30; snorkeling, the emerald lake, lunch on the boat, back by 17:00.</p></div>
 	<div class="dialog-footer"><button class="btn btn-primary" type="button" commandfor="dialog-full-panel" command="close">Done</button></div>
 </dialog>
 ```
@@ -128,7 +130,7 @@ On any window a long dialog keeps its header and its footer in view: only `dialo
 
 From [`css/components/dialog.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/dialog.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-border`, `--redz-radius-16`, `--redz-bg-raised`, `--redz-shadow-3`, `--redz-space-12`, `--redz-space-16`, `--redz-space-24`, `--redz-fs-16`, `--redz-text-muted`, `--redz-space-8`, `--redz-bg-page`, `--redz-ease`.
+It reads the theme's `--redz-border`, `--redz-radius-16`, `--redz-bg-raised`, `--redz-shadow-3`, `--redz-space-12`, `--redz-space-16`, `--redz-space-24`, `--redz-dialog-header-end`, `--redz-dialog-header-line`, `--redz-dialog-header-bg`, `--redz-fs-16`, `--redz-text-muted`, `--redz-space-8`, `--redz-bg-page`, `--redz-ease`.
 
 ## From Bootstrap 5.3
 

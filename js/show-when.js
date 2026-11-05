@@ -2,7 +2,8 @@
 // page outside a form - holds a value data-show-in lists (space-separated; without it, any value); a checkbox or a radio
 // counts its value when checked. While the region is hidden its fields are disabled, so the form sends none of them;
 // a field the page disabled itself stays disabled when the region shows again. A region inside a hidden region counts
-// as hidden, whatever its own field holds.
+// as hidden, whatever its own field holds. A hidden field beside a checkbox or a radio of its name is what the form sends
+// while none is checked: data-show-in can name it, and it is not a value for a region without data-show-in.
 const SHOWN = '[data-show-when]';
 const FIELDS = 'input, select, textarea';
 const ours = new WeakSet();
@@ -11,7 +12,10 @@ const ours = new WeakSet();
 const valuesOf = (region) => {
 	const name = region.dataset.showWhen;
 	const scope = region.closest('form') ?? document;
-	return [...scope.querySelectorAll(FIELDS)].filter((field) => field.name === name && !region.contains(field)).flatMap((field) => {
+	const fields = [...scope.querySelectorAll(FIELDS)].filter((field) => field.name === name && !region.contains(field));
+	const boxes = fields.filter((field) => field.type === 'checkbox' || field.type === 'radio');
+	const twin = boxes.length > 0 && (region.dataset.showIn === undefined || boxes.some((field) => field.checked));
+	return fields.filter((field) => !(twin && field.type === 'hidden')).flatMap((field) => {
 		if (field instanceof HTMLSelectElement) {
 			return [...field.selectedOptions].map((option) => option.value);
 		}

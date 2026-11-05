@@ -13,10 +13,10 @@ The facts of one record in pairs - a label and its value - and the sums at the f
 	<div class="card-header"><h2 class="fs-14" id="summary-booking-title">Booking 24-0187</h2></div>
 	<div class="card-body">
 		<dl class="summary">
-			<dt>Excursion</dt><dd>Ang Thong: marine park by speedboat</dd>
+			<dt>Excursion</dt><dd>North Bay: marine park by speedboat</dd>
 			<dt>Date</dt><dd>14 December 2026, 08:30</dd>
 			<dt>Guests</dt><dd>2 adults, 1 child</dd>
-			<dt>Pickup</dt><dd>Lamai beach, the hotel's lobby</dd>
+			<dt>Pickup</dt><dd>East beach, the hotel's lobby</dd>
 		</dl>
 	</div>
 </section>

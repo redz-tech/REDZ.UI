@@ -24,8 +24,9 @@ export const fieldAt = (doc) => anchor(doc)?.closest(FIELDS) ?? null;
 export const before = (doc, host) => {
 	const selection = doc.getSelection();
 	const range = doc.createRange();
+	const node = selection.anchorNode;
 	range.selectNodeContents(host);
-	range.setEnd(selection.anchorNode, selection.anchorOffset);
+	range.setEnd(node, Math.min(selection.anchorOffset, node.nodeType === Node.TEXT_NODE ? node.length : node.childNodes.length));
 	return range.toString();
 };
 

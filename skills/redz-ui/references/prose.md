@@ -10,7 +10,7 @@ Long text that comes from an editor or from Markdown, where no element carries a
 
 ```html
 <article class="prose">
-	<h2>A day at Ang Thong</h2>
+	<h2>A day at North Bay</h2>
 	<p>The boat leaves the pier at eight and is back before sunset. Lunch is on the beach, and the water is calm from December to April.</p>
 	<h3>What to bring</h3>
 	<ul>

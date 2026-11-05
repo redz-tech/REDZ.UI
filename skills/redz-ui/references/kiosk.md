@@ -35,7 +35,7 @@ A full screen for a tablet that stays on at a door: a name on top, big language 
 <div class="kiosk" data-theme="dark">
 	<div class="kiosk-main">
 		<div class="icon-tile icon-tile-success kiosk-state"><i class="bi bi-check-lg" aria-hidden="true"></i></div>
-		<div class="kiosk-title">Somchai Rattanakul</div>
+		<div class="kiosk-title">Sid Sample</div>
 		<div class="kiosk-line">Last in at 07:02</div>
 		<button class="btn btn-xl btn-success" type="button"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Check in</button>
 		<button class="btn btn-xl btn-warning" type="button"><i class="bi bi-box-arrow-right" aria-hidden="true"></i>Check out</button>

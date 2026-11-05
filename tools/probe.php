@@ -42,7 +42,7 @@ const PROBE_FORCED_PREFS = ['browser.display.document_color_use' => 2];
 // The tallest shot, in CSS px: twice that is the most a 2× phone shot can be, under the engines' 16 384 px canvas.
 const PROBE_SHOT_MAX = 8000;
 // The most steps of real input a behaviour check may take.
-const PROBE_BEHAVE_STEPS = 600;
+const PROBE_BEHAVE_STEPS = 1200;
 // The longest a cell may run, in seconds: CI's iOS 26 simulator, the slowest engine, spends about a minute on a cell.
 const PROBE_CELL_MAX = 300;
 // The probe code by the engines that run it, as PROBE__Reach's marks: the engines of a kind, "browser:NAME" for a reader

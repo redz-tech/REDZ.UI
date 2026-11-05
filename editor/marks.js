@@ -9,6 +9,7 @@ const INLINE = new Set(['A', 'ABBR', 'B', 'BIG', 'BR', 'CITE', 'CODE', 'DATA', '
 const TEXT = new Set(['P', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'LI', 'TD', 'TH', 'DD', 'DT', 'FIGCAPTION', 'BLOCKQUOTE', 'CAPTION', 'SUMMARY']);
 const SKIP = 'i.bi, img, picture, svg, iframe, video, audio, progress, meter, hr, br, input, select, textarea, [role="tab"], .carousel-indicators';
 const OWN = '.btn, .badge, .chip';
+const KEPT = ['data-block', 'data-lock', 'data-by', 'data-checked', 'data-from'];
 let serial = 0;
 
 /** Whether an element at the top of the text is prose, edited in place, rather than a block. */
@@ -28,7 +29,7 @@ const words = (element) => {
 const field = (element, open) => {
 	element.setAttribute(FIELD, '');
 	element.setAttribute('contenteditable', String(open));
-	for (const one of element.querySelectorAll('i.bi, .fact')) {
+	for (const one of element.querySelectorAll('i.bi')) {
 		one.setAttribute('contenteditable', 'false');
 	}
 };
@@ -76,6 +77,9 @@ export const drawTop = (element, open) => {
 	if (!element.hasAttribute('data-block')) {
 		element.setAttribute('data-block', blockId());
 	}
+	for (const one of element.querySelectorAll('data[value]')) {
+		one.setAttribute('contenteditable', 'false');
+	}
 	if (isProse(element)) {
 		if (!open) {
 			element.setAttribute('contenteditable', 'false');
@@ -110,8 +114,9 @@ export const unmark = (copy, ids) => {
 			}
 		}
 		if (!ids) {
-			one.removeAttribute('data-block');
-			one.removeAttribute('data-lock');
+			for (const name of KEPT) {
+				one.removeAttribute(name);
+			}
 		}
 		if (one !== copy && (one.tagName === 'B' || (one.tagName === 'I' && one.attributes.length === 0))) {
 			const meant = one.ownerDocument.createElement(one.tagName === 'B' ? 'strong' : 'em');

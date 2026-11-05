@@ -21,14 +21,14 @@ An 8 px dot of a tone beside a word: online, live, the color of a site. The dot 
 `dot-chart-1` to `dot-chart-8` take the charts' eight colors, for a category - a site, a team, a kind of job - not a state: the dot beside a name in a legend or a list matches its series in a [chart](chart.md).
 
 ```html
-<span class="hstack gap-8"><span class="dot dot-chart-1"></span>Samui</span>
-<span class="hstack gap-8"><span class="dot dot-chart-2"></span>Phuket</span>
-<span class="hstack gap-8"><span class="dot dot-chart-3"></span>Krabi</span>
-<span class="hstack gap-8"><span class="dot dot-chart-4"></span>Chiang Mai</span>
-<span class="hstack gap-8"><span class="dot dot-chart-5"></span>Pattaya</span>
-<span class="hstack gap-8"><span class="dot dot-chart-6"></span>Hua Hin</span>
-<span class="hstack gap-8"><span class="dot dot-chart-7"></span>Bangkok</span>
-<span class="hstack gap-8"><span class="dot dot-chart-8"></span>Koh Tao</span>
+<span class="hstack gap-8"><span class="dot dot-chart-1"></span>Main Island</span>
+<span class="hstack gap-8"><span class="dot dot-chart-2"></span>South Bay</span>
+<span class="hstack gap-8"><span class="dot dot-chart-3"></span>West Bay</span>
+<span class="hstack gap-8"><span class="dot dot-chart-4"></span>Hill Town</span>
+<span class="hstack gap-8"><span class="dot dot-chart-5"></span>East Bay</span>
+<span class="hstack gap-8"><span class="dot dot-chart-6"></span>Beach Town</span>
+<span class="hstack gap-8"><span class="dot dot-chart-7"></span>Harbor Town</span>
+<span class="hstack gap-8"><span class="dot dot-chart-8"></span>Turtle Cove</span>
 ```
 
 ### Live

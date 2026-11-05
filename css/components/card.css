@@ -43,6 +43,9 @@
 		gap: var(--redz-space-8);
 		padding: var(--redz-space-12) var(--redz-space-16);
 		border-block-end: 1px solid var(--redz-border);
+		border-start-start-radius: inherit;
+		border-start-end-radius: inherit;
+		background: var(--redz-card-header-bg, none);
 	}
 
 	.card-header > .bi {

@@ -162,17 +162,17 @@ Options with `data-level` 2 or 3 are indented under the one before them, and a p
 	<div class="card-body vstack gap-8">
 		<input class="form-control" type="search" role="combobox" aria-controls="combobox-levels-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a destination" placeholder="Find a destination" autocomplete="off">
 		<div class="combobox-list" id="combobox-levels-list" role="listbox" aria-label="Destinations" data-name="destination">
-			<div class="menu-item" role="option" id="combobox-levels-th" data-value="th" data-level="1" aria-selected="false">Thailand</div>
+			<div class="menu-item" role="option" id="combobox-levels-th" data-value="th" data-level="1" aria-selected="false">Northland</div>
 			<div class="menu-item" role="option" id="combobox-levels-south" data-value="th-south" data-level="2" aria-selected="false">The south</div>
-			<div class="menu-item" role="option" id="combobox-levels-samui" data-value="samui" data-level="3" aria-selected="true">Koh Samui</div>
-			<div class="menu-item" role="option" id="combobox-levels-phuket" data-value="phuket" data-level="3" aria-selected="false">Phuket</div>
+			<div class="menu-item" role="option" id="combobox-levels-main-island" data-value="main-island" data-level="3" aria-selected="true">Main Island</div>
+			<div class="menu-item" role="option" id="combobox-levels-south-bay" data-value="south-bay" data-level="3" aria-selected="false">South Bay</div>
 			<div class="menu-item" role="option" id="combobox-levels-north" data-value="th-north" data-level="2" aria-selected="false">The north</div>
-			<div class="menu-item" role="option" id="combobox-levels-chiangmai" data-value="chiangmai" data-level="3" aria-selected="false">Chiang Mai</div>
-			<div class="menu-item" role="option" id="combobox-levels-my" data-value="my" data-level="1" aria-selected="false">Malaysia</div>
-			<div class="menu-item" role="option" id="combobox-levels-langkawi" data-value="langkawi" data-level="2" aria-selected="false">Langkawi</div>
+			<div class="menu-item" role="option" id="combobox-levels-hill-town" data-value="hill-town" data-level="3" aria-selected="false">Hill Town</div>
+			<div class="menu-item" role="option" id="combobox-levels-my" data-value="my" data-level="1" aria-selected="false">Southland</div>
+			<div class="menu-item" role="option" id="combobox-levels-pearl-isle" data-value="pearl-isle" data-level="2" aria-selected="false">Pearl Isle</div>
 		</div>
 		<p class="combobox-no-results" hidden>Nothing found</p>
-		<input type="hidden" name="destination" value="samui" data-label="Koh Samui">
+		<input type="hidden" name="destination" value="main-island" data-label="Main Island">
 	</div>
 </div>
 ```
@@ -241,6 +241,10 @@ document.addEventListener('redz:search', (event) => {
 		.catch(() => signal.aborted || list.setAttribute('aria-busy', 'false'));
 });
 ```
+
+### A value set from the page
+
+`REDZ.ui.combobox.set(list, values)` sets what a list holds as a choice does: its hidden fields, its button or chips, then `input` and `change`. `list` is the listbox or its selector, `values` one value or a list of them. A form's own `reset` goes back to the value the page came with; a Discard that goes back to the last saved value calls this.
 
 ### A list in the page
 

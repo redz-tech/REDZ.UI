@@ -63,6 +63,7 @@
 			{"label": "the first tab", "do": "focus", "target": "#nav-tabs-1", "expect": ["Details"]},
 			{"label": "Right on it", "do": "key", "key": "ArrowRight", "expect": ["Prices"]},
 			{"label": "End in the tabs", "do": "key", "key": "End", "expect": ["History"]},
+			{"label": "a tab with changes, its dot named", "do": "focus", "target": "#nav-changed-2", "expect": ["Mail", "not saved"]},
 			{"label": "the first tab of manual tabs", "do": "focus", "target": "#nav-manual-1", "expect": ["Bookings"]},
 			{"label": "Right on it", "do": "key", "key": "ArrowRight", "expect": ["Revenue"]},
 			{"label": "Enter on that tab", "do": "key", "key": "Enter", "expect": ["Revenue"]},
@@ -106,9 +107,10 @@
 			{"label": "the toolbar's stop says the format and what stands here", "do": "focus", "target": "#editor-demo-host [role=\"toolbar\"] > button[tabindex=\"0\"]", "expect": ["Format", "Paragraph"]},
 			{"label": "a mark", "do": "focus", "target": "#editor-demo-host [data-editor=\"bold\"]", "expect": ["Bold"]},
 			{"label": "a width of the lens", "do": "focus", "target": "#editor-demo-host .editor-lens [data-value=\"phone\"]", "expect": ["Phone"]},
-			{"label": "the checks", "do": "focus", "target": "#editor-demo-host .editor-foot button", "expect": ["Check"]},
+			{"label": "the checks", "do": "focus", "target": "#editor-demo-host [data-editor-foot=\"check\"]", "expect": ["Check"]},
+			{"label": "the AI's menu", "do": "focus", "target": "#editor-demo-host [data-editor-foot=\"ai\"]", "expect": ["AI"]},
 			{"label": "the menu of blocks", "do": "focus", "target": "#editor-demo-host [data-editor=\"insert\"]", "expect": ["Insert"]},
-			{"label": "Enter on it: its first item", "do": "key", "key": "Enter", "expect": ["Video"]}
+			{"label": "Enter on it: its first item", "do": "key", "key": "Enter", "expect": ["Write with AI"]}
 		],
 		"docs/carousel.html": [
 			{"label": "the Next button of a carousel", "do": "focus", "target": "[command=\"--next\"][aria-controls=\"carousel-basic-tours\"]", "expect": ["Next"]},
@@ -131,9 +133,9 @@
 			{"label": "Enter on it: its words said", "do": "key", "key": "Enter", "expect": ["Signing in"]}
 		],
 		"docs/inline-edit.html": [
-			{"label": "an Edit button", "do": "focus", "target": "[commandfor=\"inline-edit-row-1-form\"][command=\"--edit\"]", "expect": ["Edit the title: Ang Thong"]},
-			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["Title", "Ang Thong: marine park by speedboat"]},
-			{"label": "Escape in the field", "do": "key", "key": "Escape", "expect": ["Edit the title: Ang Thong"]},
+			{"label": "an Edit button", "do": "focus", "target": "[commandfor=\"inline-edit-row-1-form\"][command=\"--edit\"]", "expect": ["Edit the title: North Bay"]},
+			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["Title", "North Bay: marine park by speedboat"]},
+			{"label": "Escape in the field", "do": "key", "key": "Escape", "expect": ["Edit the title: North Bay"]},
 			{"label": "the Edit button of a value the page saves", "do": "focus", "target": "[commandfor=\"inline-edit-row-2-form\"][command=\"--edit\"]", "expect": ["Edit the title: Night market"]},
 			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["Title"]},
 			{"label": "the field's text selected", "do": "chord", "keys": "Meta+A", "expect": []},
@@ -185,7 +187,7 @@
 		],
 		"docs/list-group.html": [
 			{"label": "a search over a list", "do": "focus", "target": "[data-filter=\"list-group-search-list\"]", "expect": ["Find an excursion"]},
-			{"label": "a word typed: the count said", "do": "type", "text": "koh", "expect": ["1 result"]},
+			{"label": "a word typed: the count said", "do": "type", "text": "turtle", "expect": ["1 result"]},
 			{"label": "an item's handle", "do": "focus", "target": "[aria-label=\"Move: The pier\"]", "expect": ["Move: The pier"]},
 			{"label": "Enter on it", "do": "key", "key": "Enter", "expect": ["Move down"], "unsteady": {"voiceover": "VoiceOver 15 says the first move of the menu, or only the menu's hint after it, run by run (measured 2026-11-03)."}},
 			{"label": "Enter on “Move down”", "do": "key", "key": "Enter", "expect": ["Moved to 2 of 3"]}

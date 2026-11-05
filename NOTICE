@@ -12,3 +12,15 @@ Bootstrap Icons 1.13.2
   Source:  https://github.com/guidepup/setup (release 0.29.3, 2026-10-14)
   License: MIT
   Copyright (c) 2023 Craig Morten
+
+modern-normalize 3.0.1
+  Where:   css/reset.css (the normalisations of form controls and summary still needed at the floor)
+  Source:  https://github.com/sindresorhus/modern-normalize
+  License: MIT
+  Copyright (c) Sindre Sorhus
+
+Bootstrap 6 Reboot
+  Where:   css/reset.css (as above)
+  Source:  https://github.com/twbs/bootstrap
+  License: MIT
+  Copyright (c) 2011-2026 The Bootstrap Authors

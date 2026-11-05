@@ -15,13 +15,15 @@ A field joined to what belongs to it - a unit, a prefix, a button, a choice - in
 </div>
 <div class="input-group">
 	<span class="input-group-text">https://</span>
-	<input class="form-control" type="text" value="angthong.example" aria-label="Site address">
+	<input class="form-control" type="text" value="northbay.example" aria-label="Site address">
 </div>
 <div class="input-group">
 	<input class="form-control" type="text" value="R7K2-9QXM" readonly aria-label="Access code">
 	<button class="btn" type="button"><i class="bi bi-clipboard" aria-hidden="true"></i>Copy</button>
 </div>
 ```
+
+A plain `btn` wears the field's line and an accent face, so the group reads as one control; a plain `btn-icon` reads as `input-group-text`. A solid, outline, subtle or text button keeps its own look.
 
 ### With a choice
 
@@ -124,6 +126,6 @@ The menu sits in the group beside its button; the group joins only what it shows
 
 ## Tokens
 
-From [`css/components/input-group.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/input-group.css), which declares no custom property of its own.
+From [`css/components/input-group.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/input-group.css). It declares `--redz-btn-bg`, `--redz-btn-fg`, `--redz-btn-hover`, `--redz-btn-hover-fg`, `--redz-group-bg`, `--redz-group-fg`, `--redz-group-hover`, `--redz-group-hover-fg` on its root, never on rows or items.
 
-It reads the theme's `--redz-control-height-float`, `--redz-space-8`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg-page`, `--redz-text-muted`, `--redz-control-height-sm`, `--redz-radius-6`, `--redz-fs-12`.
+It reads the theme's `--redz-control-height-float`, `--redz-primary-subtle`, `--redz-primary`, `--redz-text`, `--redz-border-strong`, `--redz-bg-page`, `--redz-text-muted`, `--redz-bg-hover`, `--redz-space-8`, `--redz-space-12`, `--redz-radius-8`, `--redz-control-height-sm`, `--redz-radius-6`, `--redz-fs-12`.

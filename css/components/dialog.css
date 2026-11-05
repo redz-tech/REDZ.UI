@@ -79,7 +79,9 @@
 		display: flex;
 		align-items: center;
 		gap: var(--redz-space-12);
-		padding: var(--redz-space-16) var(--redz-space-24) 0;
+		padding: var(--redz-space-16) var(--redz-space-24) var(--redz-dialog-header-end, 0);
+		border-block-end: var(--redz-dialog-header-line, 0);
+		background: var(--redz-dialog-header-bg, none);
 	}
 
 	.dialog-title {

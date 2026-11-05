@@ -186,14 +186,20 @@ export const toolbarOf = (ed) => {
 		divider();
 		const insert = menu('insert', icon('plus-lg') + '<span class="editor-tool-word">' + escape(say('insert')) + '</span>', {need: 'structure'});
 		insert.one.classList.add('editor-tool-insert');
-		const groups = {media: say('group.media'), content: say('group.content'), inline: say('group.inline'), layout: say('group.layout')};
+		const groups = {ai: say('group.ai'), media: say('group.media'), content: say('group.content'), inline: say('group.inline'), layout: say('group.layout')};
 		let group = null;
 		for (const one of ed.insertable()) {
 			if (one.group !== group) {
 				group = one.group;
 				insert.list.append(Object.assign(document.createElement('div'), {className: 'menu-header', textContent: groups[group] ?? group}));
+				if (group === 'ai') {
+					insert.list.lastElementChild.dataset.editorNeed = 'ai';
+				}
 			}
-			item(insert.list, one.label, one.run, icon(one.icon));
+			const entry = item(insert.list, one.label, one.run, icon(one.icon));
+			if (one.need !== undefined) {
+				entry.dataset.editorNeed = one.need;
+			}
 		}
 		toolbar.append(Object.assign(document.createElement('span'), {className: 'editor-tool-gap'}));
 		button('clear', icon('eraser'), () => ed.exec('removeFormat'), {need: 'design'});
@@ -227,6 +233,9 @@ export const toolbarOf = (ed) => {
 			if (one.dataset.editorNeed !== undefined) {
 				one.hidden = !ed.may(one.dataset.editorNeed);
 			}
+		}
+		for (const one of toolbar.querySelectorAll('.menu [data-editor-need]')) {
+			one.hidden = !ed.may(one.dataset.editorNeed);
 		}
 		toolbar.querySelector('[data-editor="undo"]').disabled = source || !ed.canUndo();
 		toolbar.querySelector('[data-editor="redo"]').disabled = source || !ed.canRedo();

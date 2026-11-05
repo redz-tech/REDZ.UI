@@ -10,7 +10,7 @@ Text fields, selects and text areas with Bootstrap 5's names: a label floating i
 
 ```html
 <div class="form-floating">
-	<input class="form-control" id="form-floating-name" value="Ang Thong: marine park by speedboat" placeholder="A name people search for">
+	<input class="form-control" id="form-floating-name" value="North Bay: marine park by speedboat" placeholder="A name people search for">
 	<label for="form-floating-name">Name</label>
 </div>
 <div class="form-floating">
@@ -34,13 +34,26 @@ Text fields, selects and text areas with Bootstrap 5's names: a label floating i
 ```html
 <div class="form-field">
 	<label class="form-label" for="form-stacked-slug">Address</label>
-	<input class="form-control font-monospace" id="form-stacked-slug" value="ang-thong" aria-describedby="form-stacked-slug-hint">
-	<div class="form-text" id="form-stacked-slug-hint">Full address /excursions/ang-thong/. The old one answers with a 301 redirect.</div>
+	<input class="form-control font-monospace" id="form-stacked-slug" value="north-bay" aria-describedby="form-stacked-slug-hint">
+	<div class="form-text" id="form-stacked-slug-hint">Full address /excursions/north-bay/. The old one answers with a 301 redirect.</div>
 </div>
 <div class="form-field">
 	<label class="form-label" for="form-stacked-price">Adult price, THB</label>
 	<input class="form-control tabular-nums" id="form-stacked-price" type="number" value="2500" min="0" step="100" aria-invalid="true" aria-describedby="form-stacked-price-error">
 	<div class="invalid-feedback" id="form-stacked-price-error"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>Lower than the child price</div>
+</div>
+```
+
+### A longer hint
+
+A `details` with `form-more` folds what a short hint cannot say. Its chevron turns as it opens.
+
+```html
+<div class="form-field">
+	<label class="form-label" for="form-more-keep">Keep the log for, days</label>
+	<input class="form-control tabular-nums" id="form-more-keep" type="number" value="90" min="1" aria-describedby="form-more-hint">
+	<div class="form-text" id="form-more-hint">Older records are removed at night.</div>
+	<details class="form-more form-text"><summary><i class="bi bi-chevron-right" aria-hidden="true"></i>More</summary><div class="mt-4">The count starts from the day a record is written. A record a person marked to keep stays, whatever this number says, until the mark is taken off.</div></details>
 </div>
 ```
 
@@ -60,7 +73,7 @@ Text fields, selects and text areas with Bootstrap 5's names: a label floating i
 </div>
 <div class="form-floating form-adorn">
 	<i class="bi bi-globe2" aria-hidden="true"></i>
-	<select class="form-select" id="form-adorn-country" autocomplete="country-name"><option>Thailand</option><option>Malaysia</option><option>Vietnam</option></select>
+	<select class="form-select" id="form-adorn-country" autocomplete="country-name"><option>Northland</option><option>Southland</option><option>Eastland</option></select>
 	<label for="form-adorn-country">Country</label>
 </div>
 <div class="input-group">
@@ -156,7 +169,7 @@ A button with `command="--reveal"` for a password field shows its text and hides
 ```html
 <div class="form-field">
 	<label class="form-label" for="form-counter-title">Page title</label>
-	<input class="form-control" id="form-counter-title" value="Ang Thong marine park by speedboat" aria-describedby="form-counter-title-count">
+	<input class="form-control" id="form-counter-title" value="North Bay marine park by speedboat" aria-describedby="form-counter-title-count">
 	<div class="form-counter" id="form-counter-title-count" data-counter="form-counter-title" data-counter-max="60"></div>
 </div>
 ```
@@ -210,7 +223,7 @@ Buttons with `command="--step-up"` or `"--step-down"` and `aria-controls` naming
 
 ### Shown by another field
 
-`data-show-when` on a region names a field of its form, and `data-show-in` the values that show it, a space between them; without it, any value does. A checkbox or a radio counts its value when checked. While the region is hidden its fields are disabled, so the form sends none of them; a field the page disabled itself stays disabled. A region inside a hidden region counts as hidden, whatever its own field holds.
+`data-show-when` on a region names a field of its form, and `data-show-in` the values that show it, a space between them; without it, any value does. A checkbox or a radio counts its value when checked. A hidden field beside a checkbox of the same name is what the form sends while it is off: `data-show-in` can name its value, and a region without `data-show-in` does not count it. While the region is hidden its fields are disabled, so the form sends none of them; a field the page disabled itself stays disabled. A region inside a hidden region counts as hidden, whatever its own field holds.
 
 ```html
 <form class="vstack gap-12">
@@ -221,6 +234,12 @@ Buttons with `command="--step-up"` or `"--step-down"` and `aria-controls` naming
 	<div class="form-floating max-w-320" id="form-show-tax-region" data-show-when="pay" data-show-in="invoice">
 		<input class="form-control" id="form-show-tax" name="tax_id" placeholder="Tax ID">
 		<label for="form-show-tax">Tax ID</label>
+	</div>
+	<div class="vstack gap-4">
+		<input type="hidden" name="remind" value="0">
+		<label class="form-check"><input class="switch" type="checkbox" role="switch" name="remind" value="1"> Remind the guest</label>
+		<div class="form-text" id="form-show-on" data-show-when="remind">A message goes out the evening before.</div>
+		<div class="form-text" id="form-show-off" data-show-when="remind" data-show-in="0">The guest is told nothing.</div>
 	</div>
 </form>
 ```
@@ -242,7 +261,7 @@ Buttons with `command="--step-up"` or `"--step-down"` and `aria-controls` naming
 
 From [`css/components/form.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/form.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-4`, `--redz-text`, `--redz-fs-12`, `--redz-text-muted`, `--redz-danger`, `--redz-control-height`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg`, `--redz-focus`, `--redz-space-8`, `--redz-grow-rows`, `--redz-form-select-chevron`, `--redz-warning`, `--redz-radius-6`, `--redz-bg-page`, `--redz-primary-subtle`, `--redz-control-height-sm`, `--redz-control-height-lg`, `--redz-fs-16`, `--redz-control-height-float`, `--redz-fs-14`, `--redz-motion`, `--redz-ease`, `--redz-primary`.
+It reads the theme's `--redz-space-4`, `--redz-text`, `--redz-fs-12`, `--redz-text-muted`, `--redz-link`, `--redz-motion`, `--redz-ease`, `--redz-danger`, `--redz-control-height`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg`, `--redz-focus`, `--redz-space-8`, `--redz-grow-rows`, `--redz-form-select-chevron`, `--redz-warning`, `--redz-radius-6`, `--redz-bg-page`, `--redz-primary-subtle`, `--redz-control-height-sm`, `--redz-control-height-lg`, `--redz-fs-16`, `--redz-control-height-float`, `--redz-fs-14`, `--redz-primary`.
 
 ## From Bootstrap 5.3
 

@@ -11,8 +11,8 @@ A row of slides seen one or a few at a time: tours, photos, reviews. The browser
 ```html
 <div class="carousel" id="carousel-basic-tours" role="region" aria-label="Tours">
 	<div class="carousel-inner" tabindex="0" aria-label="Tours">
-		<div class="carousel-item"><div class="p-24 bg-primary-subtle vstack gap-8"><strong>Ang Thong marine park</strong><span>Kayaks, a lagoon and a viewpoint, a day by speedboat.</span></div></div>
-		<div class="carousel-item"><div class="p-24 bg-success-subtle vstack gap-8"><strong>Koh Tao snorkeling</strong><span>Two bays and a coral garden, lunch on board.</span></div></div>
+		<div class="carousel-item"><div class="p-24 bg-primary-subtle vstack gap-8"><strong>North Bay marine park</strong><span>Kayaks, a lagoon and a viewpoint, a day by speedboat.</span></div></div>
+		<div class="carousel-item"><div class="p-24 bg-success-subtle vstack gap-8"><strong>Turtle Cove snorkeling</strong><span>Two bays and a coral garden, lunch on board.</span></div></div>
 		<div class="carousel-item"><div class="p-24 bg-warning-subtle vstack gap-8"><strong>Sunset cruise</strong><span>A catamaran round the south coast at dusk.</span></div></div>
 	</div>
 	<div class="hstack gap-8 justify-content-between">

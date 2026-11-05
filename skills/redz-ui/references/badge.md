@@ -57,7 +57,7 @@ A count in a navigation link, a status in a heading.
 	<a class="nav-link" href="#badge-beside" aria-current="page">New<span class="badge badge-subtle-primary">5</span></a>
 	<a class="nav-link" href="#badge-beside">Paid<span class="badge">128</span></a>
 </nav>
-<h3 class="hstack gap-8 fs-16">Ang Thong <span class="badge badge-subtle-warning"><i class="bi bi-clock-history" aria-hidden="true"></i>Stale</span></h3>
+<h3 class="hstack gap-8 fs-16">North Bay <span class="badge badge-subtle-warning"><i class="bi bi-clock-history" aria-hidden="true"></i>Stale</span></h3>
 ```
 
 ## Accessibility

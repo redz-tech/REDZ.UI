@@ -33,7 +33,7 @@ Without `name` every item opens and closes by itself.
 <div class="accordion">
 	<details class="accordion-item" open>
 		<summary class="accordion-header">Pickup<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
-		<div class="accordion-body">07:30 at the pier, 07:00 from the hotels of Chaweng.</div>
+		<div class="accordion-body">07:30 at the pier, 07:00 from the hotels of the old town.</div>
 	</details>
 	<details class="accordion-item">
 		<summary class="accordion-header">What to bring<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>

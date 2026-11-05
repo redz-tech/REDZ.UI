@@ -30,7 +30,7 @@ A choice of one is a set of `menuitemradio` items, the chosen one `aria-checked=
 	<div class="menu-header">Work context</div>
 	<button class="menu-item" type="button" role="menuitemradio" aria-checked="true"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i>All sites</button>
 	<button class="menu-item" type="button" role="menuitemradio" aria-checked="false"><i class="bi bi-globe2" aria-hidden="true"></i>lagoon.example</button>
-	<button class="menu-item" type="button" role="menuitemradio" aria-checked="false"><i class="bi bi-globe2" aria-hidden="true"></i>angthong.example</button>
+	<button class="menu-item" type="button" role="menuitemradio" aria-checked="false"><i class="bi bi-globe2" aria-hidden="true"></i>northbay.example</button>
 </div>
 ```
 

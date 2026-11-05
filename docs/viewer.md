@@ -10,7 +10,7 @@ An `a` with `data-zoom` whose `href` is the full image, around its thumbnail. Li
 
 ```html
 <div class="grid cols-3 gap-12">
-	<a href="img/lagoon.svg" data-zoom="tour" title="The lagoon at Ang Thong"><img class="w-100 ratio-16x9 rounded" src="img/lagoon.svg" alt="A lagoon under green hills"></a>
+	<a href="img/lagoon.svg" data-zoom="tour" title="The lagoon at North Bay"><img class="w-100 ratio-16x9 rounded" src="img/lagoon.svg" alt="A lagoon under green hills"></a>
 	<a href="img/pier.svg" data-zoom="tour" title="The pier at sunset"><img class="w-100 ratio-16x9 rounded" src="img/pier.svg" alt="A wooden pier over the sea"></a>
 	<a href="img/cliffs.svg" data-zoom="tour"><img class="w-100 ratio-16x9 rounded" src="img/cliffs.svg" alt="Cliffs above a bay with a boat"></a>
 </div>
