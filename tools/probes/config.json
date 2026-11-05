@@ -93,7 +93,7 @@
 		],
 		"docs/repeat.html": [
 			{"label": "Add", "do": "focus", "target": "#repeat-phones [command=\"--add\"]", "expect": ["Add a phone"]},
-			{"label": "Enter on it: the new row's field", "do": "key", "key": "Enter", "expect": ["Another phone"]}
+			{"label": "Enter on it: the new row's field", "do": "key", "key": "Enter", "expect": ["Another phone"], "unsteady": {"voiceover-tahoe": "VoiceOver 26 says the new row's field when the page runs alone, on the first hearing or the second, and in a full run gives only the Add button's hint (measured 2026-11-06: missed in three full runs, heard in three of the page alone, two of them on the second hearing); no other part reported this page in those runs, and the script did not change since 0.16.0."}}
 		],
 		"docs/status.html": [
 			{"label": "Save", "do": "focus", "target": "#status-save [data-docs-run=\"status-save\"]", "expect": ["Save"]},
