@@ -5,7 +5,7 @@ export const FIELD = 'data-editor-field';
 export const FIELDS = '[data-editor-field]';
 const PROSE = new Set(['P', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'UL', 'OL', 'BLOCKQUOTE', 'PRE', 'HR']);
 const PROSE_CLASS = /^(text-(start|center|end|muted|primary|secondary|success|danger|warning|info)|bg-(primary|secondary|success|danger|warning|info)-subtle)$/;
-const INLINE = new Set(['A', 'ABBR', 'B', 'BR', 'CITE', 'CODE', 'DATA', 'DEL', 'EM', 'I', 'IMG', 'INS', 'KBD', 'MARK', 'PICTURE', 'Q', 'S', 'SMALL', 'SPAN', 'STRONG', 'SUB', 'SUP', 'TIME', 'U']);
+const INLINE = new Set(['A', 'ABBR', 'B', 'BIG', 'BR', 'CITE', 'CODE', 'DATA', 'DEL', 'EM', 'FONT', 'I', 'IMG', 'INS', 'KBD', 'LABEL', 'MARK', 'NOBR', 'PICTURE', 'Q', 'S', 'SMALL', 'SPAN', 'STRIKE', 'STRONG', 'SUB', 'SUP', 'TIME', 'TT', 'U']);
 const TEXT = new Set(['P', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'LI', 'TD', 'TH', 'DD', 'DT', 'FIGCAPTION', 'BLOCKQUOTE', 'CAPTION', 'SUMMARY']);
 const SKIP = 'i.bi, img, picture, svg, iframe, video, audio, progress, meter, hr, br, input, select, textarea, [role="tab"], .carousel-indicators';
 const OWN = '.btn, .badge, .chip';

@@ -57,6 +57,8 @@ with it.
 - The keys hold in fields in every engine: Safari no longer throws the caret out on Enter or pulls words out on Backspace,
   Firefox crosses blocks by the arrows. Nothing touches the text while a character is composed.
 - A line to type in between two blocks takes no room until the caret is in it, so the text stands as the page will.
+- Markup the catalog does not know, as a migrated body has it, comes back as it came: old `font` and `center`, styles, tables
+  with `colspan`. Its words can be typed, and a command takes away only what it wrote itself.
 - The frame follows the page's theme live. The editor's preview names its script hosts: Firefox never matches `'self'` in a
   frame of its own, and the library may live on another host.
 

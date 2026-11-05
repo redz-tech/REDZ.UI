@@ -222,9 +222,12 @@ export const editor = (host, options = {}) => {
 			return;
 		}
 		ed.focusIn(fieldAt(ed.doc) ?? ed.doc.body);
+		const known = new Set(ed.doc.body.querySelectorAll('span[style], font'));
 		ed.doc.execCommand(command, false, value);
 		for (const one of ed.doc.body.querySelectorAll('span[style], font')) {
-			one.replaceWith(...one.childNodes);
+			if (!known.has(one)) {
+				one.replaceWith(...one.childNodes);
+			}
 		}
 		ed.commit();
 	};

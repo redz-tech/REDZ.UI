@@ -874,6 +874,38 @@ window.REDZ_BEHAVE = (() => {
 		}
 		await settled();
 
+		// Markup the catalog does not know, as a migrated body has it: it comes back untouched, and its words can be typed.
+		const foreign = '<div class="old-box" style="color: red" data-block="f1"><h3>Title</h3><p>Words <font color="red">red</font> and <span style="color: rgb(255, 0, 0)">span</span></p></div>\n<p data-block="f2">Plain <span style="color: blue">blue</span> words</p>\n<table border="1" data-block="f3"><tbody><tr><td colspan="2">Wide</td></tr><tr><td>A</td><td>B</td></tr></tbody></table>\n<center data-block="f4"><font size="4">Old</font> text</center>';
+		await make({value: foreign});
+		say('foreign markup comes back as it came', value() === foreign, value());
+		yield {click: pt(blk('f2'), 0.05)};
+		const plainWords = doc.createRange();
+		plainWords.setStart(blk('f2').firstChild, 0);
+		plainWords.setEnd(blk('f2').firstChild, 5);
+		doc.getSelection().removeAllRanges();
+		doc.getSelection().addRange(plainWords);
+		await settled();
+		yield {click: pt(tool('bold'))};
+		say('a command leaves the styles it did not write', blk('f2').querySelector('span[style]') !== null && blk('f1').querySelector('span[style]') !== null && blk('f1').querySelector('font') !== null, doc.body.innerHTML);
+		yield {click: pt(tool('undo'))};
+		field = blk('f1').querySelector('p');
+		say('its words are a field', field.matches('[data-editor-field]'), blk('f1').outerHTML);
+		yield {click: pt(field, 0.05)};
+		put(field.firstChild, 0);
+		yield {type: 'Q'};
+		say('a word goes in', blk('f1').querySelector('p').textContent.startsWith('Q') && blk('f1').querySelector('font') !== null, blk('f1').outerHTML);
+		yield {key: 'Backspace'};
+		await until(() => value() === foreign);
+		say('and comes out, the markup as it was', value() === foreign, value());
+		yield {hover: pt(blk('f3').rows[1].cells[0], 0.2)};
+		say('a foreign table has its bars', !box.querySelector('.editor-part').hidden || [...box.querySelectorAll('.editor-part')].some((one) => !one.hidden));
+		yield {hover: pt(blk('f1'))};
+		yield {click: pt(box.querySelector('.editor-handle'))};
+		say('a foreign block has a card', open(), cardEl().textContent);
+		yield {click: pt(cardEl().querySelector('[data-tab="more"]'))};
+		yield {click: pt(cardEl().querySelector('[data-more="drop"]'))};
+		say('a foreign block can be removed', blk('f1') === null, doc.body.innerHTML.slice(0, 120));
+
 		// Stored versions.
 		await make({versions: {v1: [{at: '2026-11-01', by: 'Mai', html: '<p data-block="v1">Older words</p>'}]}, value: '<p data-block="v1">Words now</p>'});
 		yield {hover: pt(blk('v1'))};

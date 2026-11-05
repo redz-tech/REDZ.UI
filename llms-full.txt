@@ -4431,7 +4431,7 @@ It answers `getHTML()`, `setHTML(html)`, `setRights(rights)`, `focus()` and `des
 - A block's History takes that one block back and leaves the others as they are.
 - A block that moves is drawn open: every accordion item open, every tab's panel under its tab's words. Its Preview runs it alive, in a dialog's frame of REDZ.UI's own CSS and JS.
 
-What can be changed comes from the catalog, `tools/catalog.json`, also in the passport as `editor.catalog`. The build refuses a class the stylesheets do not have, and a variant of a covered component that is neither in the catalog nor set aside with a reason, so a new variant cannot be forgotten. Markup the catalog does not know stays as it is: it can be moved and deleted, and an expert can edit it.
+What can be changed comes from the catalog, `tools/catalog.json`, also in the passport as `editor.catalog`. The build refuses a class the stylesheets do not have, and a variant of a covered component that is neither in the catalog nor set aside with a reason, so a new variant cannot be forgotten. Markup the catalog does not know, as a migrated body has it, comes back as it came: its words can be typed, it can be moved and deleted, and an expert can edit it.
 
 ## Rights and protection
 
