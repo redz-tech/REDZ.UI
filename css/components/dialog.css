@@ -28,10 +28,15 @@
 		border-radius: 0;
 	}
 
+	/* The direction stays while the dialog closes: its display is held for the transition, [open] is already gone. */
+	.dialog,
+	.dialog > form {
+		flex-direction: column;
+	}
+
 	.dialog[open],
 	.dialog > form {
 		display: flex;
-		flex-direction: column;
 	}
 
 	.dialog > form {

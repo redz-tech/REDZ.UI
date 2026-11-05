@@ -48,6 +48,7 @@ tone pad, translations side by side, the page's reading, and who wrote what. No 
 
 ### Fixed
 - The caret in a block whose text changed under it threw in Safari, which stopped undo.
+- A dialog and the palette keep their column while they close: for 0.2 s the header, the body and the footer stood in a row.
 - `stat-label` and `stat-sub` break one long word instead of running past a narrow tile.
 - A deep link to a tab's panel leaves the tabs in view, under a sticky header too.
 

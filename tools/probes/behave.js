@@ -2894,6 +2894,21 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a click on a control that cannot run: the reason ' + (open ? 'shows' : 'does not show') + ' saying ' + say(words) + ', the title after it ' + say(back));
 			}
 		}},
+		closing: {target: '#dialog-edit-note', steps: [async (out) => {
+			const dialog = $('#dialog-edit-note');
+			const head = dialog.querySelector('.dialog-header');
+			const body = dialog.querySelector('.dialog-body');
+			dialog.showModal();
+			await settled();
+			dialog.close();
+			const drawn = getComputedStyle(dialog).display !== 'none';
+			const stacked = head.getBoundingClientRect().bottom <= body.getBoundingClientRect().top + 1;
+			const rows = $$('dialog.dialog, dialog.palette').filter((one) => !one.open && getComputedStyle(one).flexDirection !== 'column').map((one) => one.id);
+			await settled();
+			if ((drawn && !stacked) || rows.length > 0) {
+				out.push('a dialog that closes: ' + (drawn ? 'still drawn, its head ' + (stacked ? 'above' : 'beside') + ' its body' : 'gone at once') + ', out of a column ' + say(rows));
+			}
+		}]},
 		lastColumn: {target: '#table-wide-last .table-scroll', steps: [async (out) => {
 			const scroller = $('#table-wide-last .table-scroll');
 			const cell = $('#table-wide-last tbody tr:first-child td:last-child');

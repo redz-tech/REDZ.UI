@@ -11,9 +11,12 @@
 		color: var(--redz-text);
 	}
 
+	.palette {
+		flex-direction: column;
+	}
+
 	.palette[open] {
 		display: flex;
-		flex-direction: column;
 	}
 
 	.palette::backdrop {
