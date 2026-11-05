@@ -5,12 +5,12 @@
 
 <section class="vstack gap-16" aria-labelledby="editor-examples">
 	<h2 id="editor-examples">Example</h2>
-	<p>The page links <code>editor/editor.css</code> and the module <code>editor/editor.js</code> beside the library's own files, then calls <code>REDZ.ui.editor(host, options)</code>. The value is REDZ.UI markup in and out; <code>onChange</code> hears every change, and <code>getHTML()</code> gives the value at any time.</p>
+	<p>The page links <code>dist/redz-ui-editor.min.css</code> and the module <code>dist/redz-ui-editor.min.js</code> beside the library's own files, then calls <code>REDZ.ui.editor(host, options)</code>. The value is REDZ.UI markup in and out; <code>onChange</code> hears every change, and <code>getHTML()</code> gives the value at any time.</p>
 	<div class="docs-example docs-example-stack" id="editor-demo">
 		<div id="editor-demo-host"></div>
 	</div>
-	<pre class="docs-code" tabindex="0"><code>&lt;link rel="stylesheet" href="redz-ui/editor/editor.css"&gt;
-&lt;script type="module" src="redz-ui/editor/editor.js"&gt;&lt;/script&gt;
+	<pre class="docs-code" tabindex="0"><code>&lt;link rel="stylesheet" href="redz-ui/dist/redz-ui-editor.min.css"&gt;
+&lt;script type="module" src="redz-ui/dist/redz-ui-editor.min.js"&gt;&lt;/script&gt;
 
 const page = REDZ.ui.editor('#body', {
   value: stored,

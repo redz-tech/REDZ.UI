@@ -1,8 +1,8 @@
 <?php
-// min — what the release serves: dist/redz-ui.min.css, the stylesheets css/index.css pulls in, squeezed; and
+// min - what the release serves: dist/redz-ui.min.css, the stylesheets css/index.css pulls in, squeezed;
 // dist/redz-ui.min.js, the modules js/index.js pulls in, joined into one ES module, squeezed and given short local
-// names. The JS scanner — strings, regular expressions and a template's text copied as written, white space kept only
-// where two tokens would fuse — and its verdict come from the REDZ ERP's kernel minifier; the CSS pass, the joiner and
+// names; and each package's files the same way, dist/redz-ui-NAME.min.css and .min.js. The JS scanner - strings, regular expressions and a template's text copied as written, white space kept only
+// where two tokens would fuse - and its verdict come from the REDZ ERP's kernel minifier; the CSS pass, the joiner and
 // the names are this library's. Every pass proves its result before it is written; the probes run what it writes.
 
 // The at-rules whose block holds rules, and those whose block holds declarations.
@@ -29,7 +29,7 @@ function MIN__CssNameByte(string $c): bool
 }
 
 /**
- * Whether the white space between $p, the byte written last, and $c, the next, means something — in a declaration
+ * Whether the white space between $p, the byte written last, and $c, the next, means something - in a declaration
  * block, a selector or an at-rule's prelude. In a selector it is the descendant combinator, also before `:`; an
  * at-rule's prelude keeps it all, as `@supports` keeps its condition's text.
  */
@@ -72,7 +72,7 @@ function MIN__CssValue(string $css, int $i): string
 
 /**
  * The stylesheet squeezed: comments gone; strings and escapes as written; white space kept only where it means
- * something — and wherever it stood but before a value the engine keeps as written, a custom property's or one with
+ * something - and wherever it stood but before a value the engine keeps as written, a custom property's or one with
  * `var()` or `env()`, as Firefox 132 keeps even its trailing space; a declaration block's last `;` dropped. A comment
  * between two names, an unquoted `url(`, a rule nested in declarations and an at-rule not named above stop it.
  */
@@ -180,7 +180,7 @@ function MIN__Css(string $css): string
 	return $out;
 }
 
-/** The stylesheet without comments, white space outside strings and a block's last `;` — what squeezing keeps. */
+/** The stylesheet without comments, white space outside strings and a block's last `;` - what squeezing keeps. */
 function MIN__CssBare(string $css): string
 {
 	$bare = (string)preg_replace_callback('~"(?:\\\\.|[^"\\\\\n])*"|\'(?:\\\\.|[^\'\\\\\n])*\'|/\*.*?\*/|\s+~s', fn(array $m): string => $m[0][0] === '"' || $m[0][0] === "'" ? $m[0] : '', $css);
@@ -408,7 +408,7 @@ function MIN__JsScan(string $js, int $from = 0, bool $inner = false): array
 			if (!$comment && MIN__JsGlue($prev, $next, $lastWord)) {
 				$out .= ' ';
 			}
-			// Two expressions a newline alone keeps apart — a literal after a literal or a name — become one once joined.
+			// Two expressions a newline alone keeps apart - a literal after a literal or a name - become one once joined.
 			if ($newline && ($next === "'" || $next === '"' || $next === '`') && (str_contains(')]}\'"`', $prev) && $prev !== '' || MIN__JsWord($prev))) {
 				$hazards[] = substr($out, -60);
 			}
@@ -454,7 +454,7 @@ function MIN__JsSafe(string $js): string
 {
 	[$min, $tokens, $hazards] = MIN__JsScan($js);
 	if ($hazards !== []) {
-		throw new RuntimeException('a newline is the only separator at ' . count($hazards) . ' place(s) — add the operator or `;` it lacks: …' . trim($hazards[0]));
+		throw new RuntimeException('a newline is the only separator at ' . count($hazards) . ' place(s) - add the operator or `;` it lacks: …' . trim($hazards[0]));
 	}
 	if (trim($js) !== '' && $min === '') {
 		throw new RuntimeException('the squeezed script is empty');
@@ -479,13 +479,18 @@ function MIN__JsSafe(string $js): string
 /**
  * The modules $files, paths under $root each after those it imports, as one ES module: a module that exports runs in
  * a function returning its exports, any other in a block, and each starts by reading what it imports. Only `import
- * {a, b} from './x.js'`, `import './x.js'` and `export const` are taken; any other form stops the build.
+ * {a, b} from './x.js'`, `import './x.js'` - or from a folder beside, '../js/x.js' -, `export const` and `import.meta`
+ * are taken; any other form, or two modules of one name, stops the build.
  * @param list<string> $files
  */
 function MIN__JsJoin(string $root, array $files): string
 {
 	$holder = fn(string $module): string => 'REDZ_UI_' . preg_replace('~\W~', '_', $module);
 	$all = implode("\n", array_map(fn(string $file): string => (string)file_get_contents($root . '/' . $file), $files));
+	$named = array_count_values(array_map(fn(string $file): string => basename($file, '.js'), $files));
+	if (max($named) > 1) {
+		throw new RuntimeException('two modules are named ' . array_search(max($named), $named, true) . '.js, which the joiner tells apart by name alone');
+	}
 	$exports = [];
 	$parts = [];
 	foreach ($files as $file) {
@@ -497,7 +502,7 @@ function MIN__JsJoin(string $root, array $files): string
 		$names = [];
 		$body = [];
 		foreach (explode("\n", (string)file_get_contents($root . '/' . $file)) as $line) {
-			if (preg_match('~^import \{([\w, ]+)\} from \'\./([\w-]+)\.js\';$~', $line, $m) === 1) {
+			if (preg_match('~^import \{([\w, ]+)\} from \'(?:\./|\.\./[\w-]+/)([\w-]+)\.js\';$~', $line, $m) === 1) {
 				$wanted = array_map('trim', explode(',', $m[1]));
 				$missing = array_diff($wanted, $exports[$holder($m[2])] ?? []);
 				if ($missing !== []) {
@@ -506,7 +511,7 @@ function MIN__JsJoin(string $root, array $files): string
 				$reads[] = 'const {' . implode(', ', $wanted) . '} = ' . $holder($m[2]) . ';';
 				continue;
 			}
-			if (preg_match('~^import \'\./[\w-]+\.js\';$~', $line) === 1) {
+			if (preg_match('~^import \'(?:\./|\.\./[\w-]+/)[\w-]+\.js\';$~', $line) === 1) {
 				continue;
 			}
 			if (preg_match('~^export const (\w+)~', $line, $m) === 1) {
@@ -516,8 +521,11 @@ function MIN__JsJoin(string $root, array $files): string
 			$body[] = $line;
 		}
 		$code = implode("\n", $reads) . "\n" . implode("\n", $body);
-		if (array_intersect(MIN__JsScan($code)[1], ['Wimport', 'Wexport']) !== []) {
-			throw new RuntimeException($file . ' has an import or an export the joiner does not take: only import {…} from \'./x.js\', import \'./x.js\' and export const');
+		$tokens = MIN__JsScan($code)[1];
+		foreach ($tokens as $k => $token) {
+			if ($token === 'Wexport' || ($token === 'Wimport' && ($tokens[$k + 1] ?? '') !== 'P.')) {
+				throw new RuntimeException($file . ' has an import or an export the joiner does not take: only import {…} from \'./x.js\', import \'./x.js\', export const and import.meta');
+			}
 		}
 		$exports[$own] = $names;
 		$parts[] = $names === [] ? "{\n" . $code . "\n}" : 'const ' . $own . " = (() => {\n" . $code . "\nreturn {" . implode(', ', $names) . "};\n})();";
@@ -526,8 +534,8 @@ function MIN__JsJoin(string $root, array $files): string
 }
 
 /**
- * The tokens of a squeezed script, [kind, text]: name, number, string, template — a template's text from its backtick
- * or the `}` ending an interpolation to the next `${` or backtick —, regexp and punctuator. A `/` after `}` stops it:
+ * The tokens of a squeezed script, [kind, text]: name, number, string, template - a template's text from its backtick
+ * or the `}` ending an interpolation to the next `${` or backtick -, regexp and punctuator. A `/` after `}` stops it:
  * the end of a block and of an object read it differently.
  * @return list<array{string, string}>
  */
@@ -630,8 +638,8 @@ function MIN__JsLex(string $js): array
 }
 
 /**
- * The names of a squeezed script's tokens: which declaration each name token uses — by the scopes of `const`, `let`,
- * arrow parameters, `catch`, `for` heads and blocks — and which names are free, the page's globals. A property, an
+ * The names of a squeezed script's tokens: which declaration each name token uses - by the scopes of `const`, `let`,
+ * arrow parameters, `catch`, `for` heads and blocks - and which names are free, the page's globals. A property, an
  * object key or a word of the language is no use; a shorthand `{a}` is one, which the names pass writes out as
  * `{a:x}`. `var`, `function`, `class`, labels, accessors and methods with computed or modified keys, generators,
  * `import`, `export`, `eval`, `arguments`, and a `for` or `catch` body without braces stop it: the library's scripts
@@ -733,6 +741,10 @@ function MIN__JsScopes(array $tokens): array
 				continue;
 			}
 			if (in_array($text, MIN_JS_KEYWORDS, true)) {
+				// import.meta declares and reads no name: the module's own address.
+				if ($text === 'import' && $next === '.' && ($tokens[$t + 2][1] ?? '') === 'meta') {
+					continue;
+				}
 				if (in_array($text, ['var', 'function', 'class', 'with', 'import', 'export', 'yield', 'enum'], true)) {
 					throw new RuntimeException($text . ' at token ' . $t . ' is not read by the names pass');
 				}

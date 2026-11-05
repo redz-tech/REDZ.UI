@@ -21,7 +21,7 @@ Buttons that act without a line of the page's script: copy a value, print the pa
 
 ## Print
 
-`command="--print"` prints the page. However printing starts - the button, the browser's menu, a key - every closed `details`, an accordion's item among them, and every region a `--toggle` button holds closed open for the paper and close again after. A card is not cut across two pages, and a scrolling card's body prints whole; the shell, toasts, the save bar and anything with `d-print-none` stay off the paper.
+`command="--print"` prints the page. However printing starts - the button, the browser's menu, a key - every closed `details`, an accordion's item among them, and every region a `--toggle` button holds closed open for the paper and close again after. A card is not cut across two pages, and a scrolling card's body prints whole; the shell, toasts, the save bar and anything with `print:d-none` stay off the paper.
 
 ```html
 <button class="btn" type="button" command="--print"><i class="bi bi-printer" aria-hidden="true"></i>Print</button>

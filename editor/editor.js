@@ -11,7 +11,7 @@
 import {text} from '../js/text.js';
 
 const BASE = new URL('..', import.meta.url);
-const LIBRARY = {css: [new URL('dist/redz-ui.min.css', BASE).href, new URL('css/icons.css', BASE).href], js: new URL('dist/redz-ui.min.js', BASE).href, surface: new URL('editor/surface.css', BASE).href};
+const LIBRARY = {css: [new URL('dist/redz-ui.min.css', BASE).href, new URL('css/icons.css', BASE).href], js: new URL('dist/redz-ui.min.js', BASE).href, surface: new URL('dist/redz-ui-editor-surface.min.css', BASE).href};
 const PROSE = new Set(['P', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'UL', 'OL', 'BLOCKQUOTE', 'PRE', 'HR']);
 const INLINE = new Set(['A', 'ABBR', 'B', 'BR', 'CITE', 'CODE', 'DEL', 'EM', 'I', 'IMG', 'INS', 'KBD', 'MARK', 'PICTURE', 'Q', 'S', 'SMALL', 'SPAN', 'STRONG', 'SUB', 'SUP', 'TIME', 'U']);
 const PROSE_CLASS = /^(text-(start|center|end|muted|primary|secondary|success|danger|warning|info)|bg-(primary|secondary|success|danger|warning|info)-subtle)$/;

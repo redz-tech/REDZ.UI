@@ -2935,7 +2935,7 @@ Buttons that act without a line of the page's script: copy a value, print the pa
 
 ## Print
 
-`command="--print"` prints the page. However printing starts - the button, the browser's menu, a key - every closed `details`, an accordion's item among them, and every region a `--toggle` button holds closed open for the paper and close again after. A card is not cut across two pages, and a scrolling card's body prints whole; the shell, toasts, the save bar and anything with `d-print-none` stay off the paper.
+`command="--print"` prints the page. However printing starts - the button, the browser's menu, a key - every closed `details`, an accordion's item among them, and every region a `--toggle` button holds closed open for the paper and close again after. A card is not cut across two pages, and a scrolling card's body prints whole; the shell, toasts, the save bar and anything with `print:d-none` stay off the paper.
 
 ```html
 <button class="btn" type="button" command="--print"><i class="bi bi-printer" aria-hidden="true"></i>Print</button>
@@ -4369,15 +4369,15 @@ A text editor for REDZ.UI markup, a package of the release linked apart: prose e
 
 ## Example
 
-The page links `editor/editor.css` and the module `editor/editor.js` beside the library's own files, then calls `REDZ.ui.editor(host, options)`. The value is REDZ.UI markup in and out; `onChange` hears every change, and `getHTML()` gives the value at any time.
+The page links `dist/redz-ui-editor.min.css` and the module `dist/redz-ui-editor.min.js` beside the library's own files, then calls `REDZ.ui.editor(host, options)`. The value is REDZ.UI markup in and out; `onChange` hears every change, and `getHTML()` gives the value at any time.
 
 ```html
 <div id="editor-demo-host"></div>
 ```
 
 ```html
-<link rel="stylesheet" href="redz-ui/editor/editor.css">
-<script type="module" src="redz-ui/editor/editor.js"></script>
+<link rel="stylesheet" href="redz-ui/dist/redz-ui-editor.min.css">
+<script type="module" src="redz-ui/dist/redz-ui-editor.min.js"></script>
 
 const page = REDZ.ui.editor('#body', {
   value: stored,
@@ -5247,11 +5247,11 @@ A chart is the table of its numbers, drawn: columns stacked by day, a sparkline 
 
 ## A package of the release
 
-Charts are linked apart, on the screens that show them, beside the two files: `charts/charts.css` draws, and `charts/charts.js` hands it the numbers - every `data-v`, `data-at`, `data-from`, `data-to`, `data-median` and `data-now` becomes a custom property through the CSSOM, which a strict CSP allows where it would refuse a `style` attribute. A number is a share, 0 to 1: a value over the largest, a time over the window.
+Charts are linked apart, on the screens that show them, beside the two files: `dist/redz-ui-charts.min.css` draws, and `dist/redz-ui-charts.min.js` hands it the numbers - every `data-v`, `data-at`, `data-from`, `data-to`, `data-median` and `data-now` becomes a custom property through the CSSOM, which a strict CSP allows where it would refuse a `style` attribute. A number is a share, 0 to 1: a value over the largest, a time over the window.
 
 ```html
-<link rel="stylesheet" href="redz-ui/charts/charts.css">
-<script type="module" src="redz-ui/charts/charts.js"></script>
+<link rel="stylesheet" href="redz-ui/dist/redz-ui-charts.min.css">
+<script type="module" src="redz-ui/dist/redz-ui-charts.min.js"></script>
 ```
 
 ## Columns by day
@@ -5403,7 +5403,7 @@ A month of days with what happens on each, and a strip of days across the things
 Calendars are linked apart, on the screens that show them, beside the two files; they need no script.
 
 ```html
-<link rel="stylesheet" href="redz-ui/calendar/calendar.css">
+<link rel="stylesheet" href="redz-ui/dist/redz-ui-calendar.min.css">
 ```
 
 ## A month
@@ -5490,7 +5490,7 @@ A folder of images as square tiles or as compact rows: checked for actions on ma
 The media library is linked apart, on the screens that show it, beside the two files; its switch of views and its reordering are the main script's.
 
 ```html
-<link rel="stylesheet" href="redz-ui/media/media.css">
+<link rel="stylesheet" href="redz-ui/dist/redz-ui-media.min.css">
 ```
 
 ## A folder

@@ -6,15 +6,15 @@ A text editor for REDZ.UI markup, a package of the release linked apart: prose e
 
 ## Example
 
-The page links `editor/editor.css` and the module `editor/editor.js` beside the library's own files, then calls `REDZ.ui.editor(host, options)`. The value is REDZ.UI markup in and out; `onChange` hears every change, and `getHTML()` gives the value at any time.
+The page links `dist/redz-ui-editor.min.css` and the module `dist/redz-ui-editor.min.js` beside the library's own files, then calls `REDZ.ui.editor(host, options)`. The value is REDZ.UI markup in and out; `onChange` hears every change, and `getHTML()` gives the value at any time.
 
 ```html
 <div id="editor-demo-host"></div>
 ```
 
 ```html
-<link rel="stylesheet" href="redz-ui/editor/editor.css">
-<script type="module" src="redz-ui/editor/editor.js"></script>
+<link rel="stylesheet" href="redz-ui/dist/redz-ui-editor.min.css">
+<script type="module" src="redz-ui/dist/redz-ui-editor.min.js"></script>
 
 const page = REDZ.ui.editor('#body', {
   value: stored,

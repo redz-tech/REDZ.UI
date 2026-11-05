@@ -1206,6 +1206,21 @@ window.REDZ_BEHAVE = (() => {
 				}
 			},
 		]},
+		opener: {target: '#list-group-moves-list', steps: [async (out) => {
+			const menu = $('#list-group-moves-menu');
+			const handles = $$('button[commandfor="list-group-moves-menu"]');
+			const said = () => handles.map((handle) => handle.getAttribute('aria-expanded') ?? '-').join(' ');
+			handles[1].click();
+			await wait(100);
+			const open = menu.matches(':popover-open');
+			const expanded = said();
+			handles[1].click();
+			await wait(100);
+			const closed = said();
+			if (!open || expanded !== handles.map((handle, i) => String(i === 1)).join(' ') || closed !== handles.map(() => 'false').join(' ')) {
+				out.push('the second of ' + handles.length + ' handles sharing one menu of moves ' + (open ? 'opens it' : 'does not open it') + ': aria-expanded ' + say(expanded) + ' while it is open, ' + say(closed) + ' after - only the handle that opened it is expanded');
+			}
+		}]},
 	};
 
 	const runs = {};

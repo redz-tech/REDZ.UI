@@ -1,24 +1,35 @@
 // REDZ.UI, commands: where the browser has no invoker commands (Chrome before 135, Firefox before 144, Safari before
 // 26.2), stands in for commandfor and command. A popover command becomes the browser's own popovertarget inside the
 // click, so the browser still returns focus and anchors the popover; a dialog command calls the dialog; every command
-// first dispatches the command event, which a listener may cancel, as on the platform. In every browser a button that
-// opens a popover by commandfor says whether it is open in aria-expanded: Firefox gives such a button no expanded state
-// of its own. The state is written before the popover opens or closes, as a closing popover hands the focus back to its
-// button at once, and when the button takes the focus.
+// first dispatches the command event, which a listener may cancel, as on the platform. In every browser the button that
+// opened a popover by commandfor says it is open in aria-expanded, and every other button opening the same popover - the
+// handles of a list sharing one menu of moves - says it is not: Firefox gives such a button no expanded state of its
+// own. The opener is the toggle event's source where the engine names it, else the button just pressed, else the one
+// with the focus, else the only one there is. The state is written before the popover opens or closes, as a closing
+// popover hands the focus back to its button at once, and when the button takes the focus.
 const OPENERS = ['toggle-popover', 'show-popover'];
+// The button each open popover was opened by.
+const openers = new WeakMap();
+let pressed = null;
 
 /** Whether the button opens the popover: a toggle or show command from outside it. */
 const opens = (button, popover) => OPENERS.includes((button.getAttribute('command') || '').toLowerCase()) && !popover.contains(button);
+
+document.addEventListener('click', (event) => {
+	pressed = event.target instanceof Element ? event.target.closest('button[commandfor]') : null;
+}, true);
 
 document.addEventListener('beforetoggle', (event) => {
 	const popover = event.target;
 	if (!(popover instanceof HTMLElement) || popover.popover === null || popover.id === '') {
 		return;
 	}
-	for (const button of document.querySelectorAll('button[commandfor="' + CSS.escape(popover.id) + '"]')) {
-		if (opens(button, popover)) {
-			button.setAttribute('aria-expanded', String(event.newState === 'open'));
-		}
+	const buttons = [...document.querySelectorAll('button[commandfor="' + CSS.escape(popover.id) + '"]')].filter((button) => opens(button, popover));
+	const opener = event.newState !== 'open' ? null : [event.source, pressed, document.activeElement].find((button) => buttons.includes(button)) ?? (buttons.length === 1 ? buttons[0] : null);
+	pressed = null;
+	openers.set(popover, opener);
+	for (const button of buttons) {
+		button.setAttribute('aria-expanded', String(button === opener));
 	}
 }, true);
 
@@ -26,7 +37,7 @@ document.addEventListener('focusin', (event) => {
 	const button = event.target instanceof HTMLButtonElement && event.target.hasAttribute('commandfor') && !event.target.hasAttribute('aria-expanded') ? event.target : null;
 	const popover = button === null ? null : document.getElementById(button.getAttribute('commandfor'));
 	if (popover !== null && popover.popover !== null && opens(button, popover)) {
-		button.setAttribute('aria-expanded', String(popover.matches(':popover-open')));
+		button.setAttribute('aria-expanded', String(popover.matches(':popover-open') && openers.get(popover) === button));
 	}
 });
 

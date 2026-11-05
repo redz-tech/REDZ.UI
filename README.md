@@ -19,8 +19,9 @@ the latest release at the root, of the main branch under `next/`, and of every r
   confirmation, busy buttons, a dialog closed by a click outside it - as small JavaScript modules that attach by
   delegation (see [Scripts](#scripts)).
 - Two files a project serves, made by our own PHP tool (`tools/min.php`) and committed: `dist/redz-ui.min.css`, the
-  stylesheets in one, squeezed, and `dist/redz-ui.min.js`, the modules as one ES module with short local names. Each
-  pass proves its result, the probes run the two files in every engine, and `css/` and `js/` stay to read.
+  stylesheets in one, squeezed, and `dist/redz-ui.min.js`, the modules as one ES module with short local names; each
+  package's files beside them, `dist/redz-ui-charts.min.css` and the rest. Each pass proves its result, the probes run
+  what `dist/` holds in every engine, and `css/`, `js/` and the packages' folders stay to read.
 - Light, dark and system themes; left-to-right and right-to-left from one stylesheet; WCAG 2.2 AA in both themes.
 - Documentation with a page per component, and every component in every state on one page, `docs/all.html` - the
   fixture checked in real engines, with its Arabic twin (see [Documentation](#documentation)).
@@ -162,7 +163,8 @@ The library has no words of its own: every word it shows comes from the caller o
 
 ## The editor
 
-A package of the release, linked apart: `editor/editor.css` and the module `editor/editor.js`, which sets
+A package of the release, linked apart: `dist/redz-ui-editor.min.css` and the module `dist/redz-ui-editor.min.js`,
+built from `editor/` as the main two are from `css/` and `js/`. The module sets
 `REDZ.ui.editor(host, {value, placeholder, lang, dir, styles, scripts, blocks, images, embed, grid, onChange})` and
 answers `getHTML()`, `setHTML(html)`, `focus()`, `destroy()`. It edits REDZ.UI markup only: prose in place, the
 library's components as blocks kept as they came, a block that moves drawn open and previewed alive. The text lives
@@ -172,15 +174,16 @@ in a stored body or on the clipboard runs. Its words are the island's `editor.*`
 
 ## Charts, calendars and the media library
 
-Three more packages, linked on the screens that show them, listed in the passport's `packages`:
-- `charts/charts.css` and the module `charts/charts.js` - a chart is the table of its numbers drawn by CSS: columns
-  stacked by day (`chart`), a row's sparkline of runs (`spark`), a board of lanes over a time window (`lanes`). The
-  numbers are `data-v`, `data-at`, `data-from`, `data-to`, `data-median` and `data-now`, shares from 0 to 1, which the
-  module hands to the stylesheet through the CSSOM - a strict CSP that refuses `style` attributes allows it - and a
-  chart table keeps its table roles for screen readers.
-- `calendar/calendar.css` - a month of days (`calendar`) and days across things (`schedule`); no script.
-- `media/media.css` - a folder of images as tiles or rows (`media-grid`, `media-tile`); its view switch is `--view`
-  and its reordering `data-reorder`, both in the main script.
+Three more packages, linked on the screens that show them, listed in the passport's `packages` - each built into
+`dist/` from its folder, `charts/`, `calendar/` and `media/`, which stay to read:
+- `dist/redz-ui-charts.min.css` and the module `dist/redz-ui-charts.min.js` - a chart is the table of its numbers
+  drawn by CSS: columns stacked by day (`chart`), a row's sparkline of runs (`spark`), a board of lanes over a time
+  window (`lanes`). The numbers are `data-v`, `data-at`, `data-from`, `data-to`, `data-median` and `data-now`, shares
+  from 0 to 1, which the module hands to the stylesheet through the CSSOM - a strict CSP that refuses `style`
+  attributes allows it - and a chart table keeps its table roles for screen readers.
+- `dist/redz-ui-calendar.min.css` - a month of days (`calendar`) and days across things (`schedule`); no script.
+- `dist/redz-ui-media.min.css` - a folder of images as tiles or rows (`media-grid`, `media-tile`); its view switch is
+  `--view` and its reordering `data-reorder`, both in the main script.
 
 Their budgets, gzipped: charts 3 KB of styles and 2 KB of script, the calendar and the media library 2 KB each.
 
