@@ -3,18 +3,21 @@
 // simulator; one session at a time, no headless mode; viewport shots; no print command and no events, so errors stay
 // unseen here.
 
-/** Starts safaridriver with its log in $dir and a session: Safari on this Mac, or the Safari of iOS $ios in a simulator
- *  booted for it. A run that ends without PROBE__SafariStop - stopped by a signal, which skips finally - still ends its
- *  session at shutdown. Only the session ends: the Safari it runs in is the Mac owner's browser too, with the owner's
- *  windows, and is never quit. */
-function PROBE__SafariStart(string $dir, string $ios = ''): array
+/** Starts the safaridriver at $driver with its log in $dir and a session of the browser $browser: Safari on this Mac -
+ *  or Safari Technology Preview with its own driver -, or the Safari of iOS $ios in a simulator booted for it. A run
+ *  that ends without PROBE__SafariStop - stopped by a signal, which skips finally - still ends its session at
+ *  shutdown. Only the session ends: the Safari it runs in is the Mac owner's browser too, with the owner's windows,
+ *  and is never quit. */
+function PROBE__SafariStart(string $dir, string $ios = '', string $driver = '/usr/bin/safaridriver', string $browser = 'safari'): array
 {
 	$port = PROBE__FreePort();
-	$proc = proc_open(['/usr/bin/safaridriver', '-p', (string)$port], [0 => ['file', '/dev/null', 'r'], 1 => ['file', $dir . '/safaridriver.log', 'a'], 2 => ['file', $dir . '/safaridriver.log', 'a']], $pipes);
+	$proc = proc_open([$driver, '-p', (string)$port], [0 => ['file', '/dev/null', 'r'], 1 => ['file', $dir . '/safaridriver.log', 'a'], 2 => ['file', $dir . '/safaridriver.log', 'a']], $pipes);
 	if (!is_resource($proc)) {
 		throw new RuntimeException('cannot start safaridriver');
 	}
-	$h = ['kind' => 'safari', 'proc' => $proc, 'base' => 'http://127.0.0.1:' . $port, 'session' => '', 'ios' => $ios, 'booted' => ''];
+	// A browser of its own that the session starts, not the Mac owner's Safari, is quit after it: open, it would refuse
+	// the next run's session.
+	$h = ['kind' => 'safari', 'proc' => $proc, 'base' => 'http://127.0.0.1:' . $port, 'session' => '', 'ios' => $ios, 'booted' => '', 'quit' => $ios === '' && $browser !== 'safari' ? $browser : ''];
 	for ($tries = 0; !PROBE__SafariReady($h); $tries++) {
 		if ($tries > 40) {
 			PROBE__SafariStop($h);
@@ -22,7 +25,7 @@ function PROBE__SafariStart(string $dir, string $ios = ''): array
 		}
 		usleep(250000);
 	}
-	$caps = ['browserName' => 'safari'];
+	$caps = ['browserName' => $browser];
 	$udid = '';
 	if ($ios !== '') {
 		[$udid, $h['booted'], $version] = PROBE__SafariSimulator($ios);
@@ -59,16 +62,17 @@ function PROBE__SafariStart(string $dir, string $ios = ''): array
 	return $h;
 }
 
-/** Why desktop Safari cannot be driven here now; '' when it can: Safari 27 takes an automation session only in a Safari
- *  safaridriver starts ("Safari was not launched for automation"), and the Mac owner's open Safari is never quit. */
-function PROBE__SafariBusy(): string
+/** Why the desktop browser $app - Safari, or Safari Technology Preview - cannot be driven here now; '' when it can:
+ *  Safari 27 takes an automation session only in a Safari safaridriver starts ("Safari was not launched for
+ *  automation"), and the Mac owner's open browser is never quit. */
+function PROBE__SafariBusy(string $app = 'Safari'): string
 {
 	try {
-		PROBE__Run(['/usr/bin/pgrep', '-x', 'Safari']);
+		PROBE__Run(['/usr/bin/pgrep', '-x', $app]);
 	} catch (RuntimeException) {
 		return '';
 	}
-	return 'Safari is open as the Mac owner\'s browser, and Safari takes an automation session only when safaridriver starts it - close Safari to run it here; CI runs it';
+	return $app === 'Safari' ? 'Safari is open as the Mac owner\'s browser, and Safari takes an automation session only when safaridriver starts it - close Safari to run it here, or run safari-preview; CI runs it' : $app . ' is open, and it takes an automation session only when its safaridriver starts it - close it to run it here';
 }
 
 /** Whether safaridriver answers its status. */
@@ -242,5 +246,12 @@ function PROBE__SafariStop(array &$h): void
 	PROBE__Wait($h['proc']);
 	if ($h['booted'] !== '') {
 		PROBE__Run(['xcrun', 'simctl', 'shutdown', $h['booted']]);
+	}
+	if (($h['quit'] ?? '') !== '') {
+		try {
+			PROBE__Run(['/usr/bin/osascript', '-e', 'tell application ' . json_encode($h['quit']) . ' to quit']);
+		} catch (RuntimeException) {
+			// Already gone with its session.
+		}
 	}
 }

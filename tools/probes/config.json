@@ -1,6 +1,6 @@
 {
 	"pages": ["index.html", "docs/all.html", "reference/demo/list.html", "reference/demo/resource.html", "reference/demo/settings.html"],
-	"docs": {"engines": ["chrome", "chrome-156", "firefox", "safari"], "widths": [1440, 390]},
+	"docs": {"engines": ["chrome", "chrome-156", "firefox", "safari", "safari-preview"], "widths": [1440, 390]},
 	"widths": {"1440": 900, "1024": 768, "390": 844, "320": 568},
 	"shots": [1440, 390],
 	"combos": {"light-ltr": ["light", "ltr"], "dark-rtl": ["dark", "rtl"]},
@@ -17,7 +17,8 @@
 		"voiceover": {"kind": "voiceover", "default": false, "why": "What VoiceOver says through the speech steps of every widget that speaks, in Safari; VoiceOver must obey AppleScript - CI sets that up, a Mac's owner allows it."},
 		"voiceover-tahoe": {"kind": "voiceover", "default": false, "why": "The same on CI's macOS 26 image."},
 		"nvda-chrome": {"kind": "nvda", "browser": "chrome", "default": false, "why": "What NVDA says through the speech steps, and how it reads each speech page by its quick navigation, in Chrome; Windows only - CI's windows-2025 runs php tools/probe.php nvda-setup first.", "fetch": {"url": "https://storage.googleapis.com/chrome-for-testing-public/156.0.8078.74/win64/chrome-win64.zip", "sha256": "2806b20b95f61daeb43d524f5cc4130fbf2b963a25788bc310a79a1d7179a670", "binary": "chrome-win64/chrome.exe"}},
-		"nvda-firefox": {"kind": "nvda", "browser": "firefox", "default": false, "why": "The same in the Firefox of CI's windows-2025 image.", "binary": "C:\\Program Files\\Mozilla Firefox\\firefox.exe"}
+		"nvda-firefox": {"kind": "nvda", "browser": "firefox", "default": false, "why": "The same in the Firefox of CI's windows-2025 image.", "binary": "C:\\Program Files\\Mozilla Firefox\\firefox.exe"},
+		"safari-preview": {"kind": "safari", "driver": "/Applications/Safari Technology Preview.app/Contents/MacOS/safaridriver", "app": "Safari Technology Preview", "why": "WebKit a step ahead of the shipping Safari, with a driver of its own, so it runs on a Mac whose owner keeps Safari open, where safaridriver cannot take Safari; on the Mac before CI, which runs the shipping Safari."}
 	},
 	"nvda": {"version": "2026.3", "url": "https://github.com/nvaccess/nvda/releases/download/release-2026.3/nvda_2026.3.exe", "sha256": "a8a87cb823da0c62cfbae4a444ae5ae238d54dc82ad6d46d3fdb3fef082799b2"},
 	"speech": {

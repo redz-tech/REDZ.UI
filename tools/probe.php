@@ -174,8 +174,9 @@ function PROBE__Binary(string $name, array $engine, string &$why): string
 		return $why === '' ? PROBE_VOICEOVER : '';
 	}
 	if ($engine['kind'] === 'safari') {
-		if (!is_file('/usr/bin/safaridriver')) {
-			$why = 'no safaridriver on this machine';
+		$driver = $engine['driver'] ?? '/usr/bin/safaridriver';
+		if (!is_file($driver)) {
+			$why = isset($engine['driver']) ? 'not installed at ' . $driver : 'no safaridriver on this machine';
 			return '';
 		}
 		if (isset($engine['ios']) && PROBE__IosRuntime($engine) === '') {
@@ -186,10 +187,10 @@ function PROBE__Binary(string $name, array $engine, string &$why): string
 			$why = 'the screen is locked, and Safari on the Mac draws no frames until it is unlocked';
 			return '';
 		}
-		if (!isset($engine['ios']) && ($why = PROBE__SafariBusy()) !== '') {
+		if (!isset($engine['ios']) && ($why = PROBE__SafariBusy($engine['app'] ?? 'Safari')) !== '') {
 			return '';
 		}
-		return '/usr/bin/safaridriver';
+		return $driver;
 	}
 	if (isset($engine['binary'])) {
 		if (!is_file($engine['binary'])) {
@@ -326,7 +327,7 @@ function PROBE__EngineRun(string $name, array $engine, string $binary, string $d
 	$h = match ($engine['kind']) {
 		'chrome' => PROBE__ChromeStart($binary, $dir),
 		'firefox' => PROBE__FirefoxStart($binary, $dir),
-		'safari' => PROBE__SafariStart($dir, isset($engine['ios']) ? PROBE__IosRuntime($engine) : ''),
+		'safari' => PROBE__SafariStart($dir, isset($engine['ios']) ? PROBE__IosRuntime($engine) : '', $binary, $engine['app'] ?? 'safari'),
 	};
 	$report['engines'][$name] = ['version' => $h['version'], 'cells' => 0];
 	try {
