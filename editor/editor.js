@@ -1,96 +1,37 @@
-// REDZ.UI, the editor (a package of the release, linked apart): REDZ.ui.editor(host, options) edits REDZ.UI markup in
-// a frame of its own. The frame's document holds REDZ.UI's stylesheet, the theme's (options.styles) and the editor's
-// marks, and its own Content-Security-Policy runs no script at all, so nothing in a body or on the clipboard ever runs;
-// the editor's code works on it from the page. Every value is parsed inert and cleaned first. Prose - paragraphs,
-// headings 2-4, lists, quotes, code - is edited in place; any other top-level element is a block, kept as the string
-// it came as and drawn with its tools (move, edit its HTML, preview, delete; a grid's columns); a block that moves is
-// drawn open - every <details> open, every tab's panel shown under its tab's words - and its Preview runs it alive in
-// a dialog's frame of REDZ.UI's own CSS and JS, again with no script of the content. The toolbar is one tab stop with
-// the arrow keys (Alt+F10 reaches it from the text); undo and redo are the editor's own. Every word comes from the
-// page's texts, editor.*.
-import {text} from '../js/text.js';
+// REDZ.UI, the editor (a package of the release, linked apart): REDZ.ui.editor(host, options) edits REDZ.UI markup in a frame of its own. The
+// frame's document holds REDZ.UI's stylesheet, the theme's (options.styles) and the editor's marks, and its own Content-Security-Policy runs no
+// script at all, so nothing in a body or on the clipboard ever runs; the editor's code works on it from the page. Prose is edited in place; any
+// other top-level element is a block: closed to the browser, its words fields, its parts and properties changed through the catalog of
+// tools/catalog.json, so a person without the right never sees HTML. A block keeps a stable id, data-block, in the value with options.ids.
+// options.rights says what the person may do, and only the server's check on save makes that true. Every word comes from the page's texts.
+import {say} from './words.js';
+import {clean, escape, safe} from './clean.js';
+import {drawTop, FIELDS, isInline, isProse, blockId, repeats, unmark} from './marks.js';
+import {before, caretPut, caretTo, fieldAt, guard, topAt} from './caret.js';
+import {pastOf} from './past.js';
+import {partDo, rowDrop, rowsOf} from './parts.js';
+import {barsOf} from './bars.js';
+import {cardOf} from './card.js';
+import {typingOf} from './typing.js';
+import {pasteOf} from './paste.js';
+import {toolbarOf} from './toolbar.js';
+import {lensOf} from './lens.js';
+import {checksOf} from './checks.js';
+import {templates} from './templates.js';
 
 const BASE = new URL('..', import.meta.url);
-const LIBRARY = {css: new URL('css/redz-ui.min.css', BASE).href, js: new URL('js/redz-ui.min.js', BASE).href, surface: new URL('css/redz-ui-editor-surface.min.css', BASE).href};
+const LIBRARY = {css: new URL('css/redz-ui.min.css', BASE).href, js: new URL('js/redz-ui.min.js', BASE).href, surface: new URL('css/redz-ui-editor-surface.min.css', BASE).href, passport: new URL('redz-ui.json', BASE).href};
 /** The stylesheets of a frame: the library's, and the icon masks at the address the page links them from now, whatever
  *  its host and query. */
 const frameSheets = () => [LIBRARY.css, ...[...document.querySelectorAll('link[rel="stylesheet"]')].filter((link) => new URL(link.href, document.baseURI).pathname.endsWith('/icons.min.css')).map((link) => link.href)];
-const PROSE = new Set(['P', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'UL', 'OL', 'BLOCKQUOTE', 'PRE', 'HR']);
-const INLINE = new Set(['A', 'ABBR', 'B', 'BR', 'CITE', 'CODE', 'DEL', 'EM', 'I', 'IMG', 'INS', 'KBD', 'MARK', 'PICTURE', 'Q', 'S', 'SMALL', 'SPAN', 'STRONG', 'SUB', 'SUP', 'TIME', 'U']);
-const PROSE_CLASS = /^(text-(start|center|end|muted|primary|secondary|success|danger|warning|info)|bg-(primary|secondary|success|danger|warning|info)-subtle)$/;
-const DROP = new Set(['SCRIPT', 'STYLE', 'LINK', 'META', 'BASE', 'OBJECT', 'EMBED', 'NOSCRIPT', 'TEMPLATE', 'FRAME', 'FRAMESET', 'APPLET']);
-const URLS = new Set(['href', 'src', 'action', 'poster', 'cite', 'data', 'xlink:href', 'background']);
-const PASTE = new Set(['P', 'BR', 'STRONG', 'B', 'EM', 'I', 'U', 'A', 'UL', 'OL', 'LI', 'H2', 'H3', 'H4', 'BLOCKQUOTE', 'CODE', 'PRE']);
-const ALIGN = ['text-start', 'text-center', 'text-end'];
 const CSP = "script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'";
+const RIGHTS = ['html', 'ai', 'design', 'structure', 'facts', 'lock', 'review'];
 let made = 0;
 
-/** The words of an island text of the editor. */
-const say = (key, args) => text('editor.' + key, args);
-
-/** Escapes text for an attribute or an element's words. */
-const escape = (value) => String(value).replace(/[&<>"']/g, (c) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'})[c]);
-
-/** Whether a URL may stay: a path, a fragment, or http(s), mailto, tel. */
-const safe = (value) => !/^\s*[a-z][a-z0-9+.-]*:/i.test(value) || /^\s*(https?|mailto|tel):/i.test(value);
-
-/** The HTML with nothing that runs or reaches away; for a paste, prose only, links' addresses only. */
-export const clean = (html, paste = false) => {
-	const doc = new DOMParser().parseFromString('<!doctype html><body>' + html, 'text/html');
-	const walk = (node) => {
-		for (const child of [...node.childNodes]) {
-			if (child.nodeType === Node.COMMENT_NODE) {
-				child.remove();
-				continue;
-			}
-			if (child.nodeType !== Node.ELEMENT_NODE) {
-				continue;
-			}
-			if (DROP.has(child.tagName) || (child.tagName === 'IFRAME' && (paste || !/^\s*https:/i.test(child.getAttribute('src') || '')))) {
-				child.remove();
-				continue;
-			}
-			for (const attribute of [...child.attributes]) {
-				const name = attribute.name.toLowerCase();
-				if (name.startsWith('on') || name === 'srcdoc' || name === 'formaction' || (URLS.has(name) && !safe(attribute.value)) || (paste && !(child.tagName === 'A' && name === 'href'))) {
-					child.removeAttribute(attribute.name);
-				}
-			}
-			walk(child);
-			if (paste && !PASTE.has(child.tagName)) {
-				child.replaceWith(...child.childNodes);
-			}
-		}
-	};
-	walk(doc.body);
-	return doc.body.innerHTML;
-};
-
-/** Whether a top-level element is prose, edited in place, rather than a block. */
-const prose = (element) => PROSE.has(element.tagName) && [...element.classList].every((name) => PROSE_CLASS.test(name));
-
-/** The package's blocks of REDZ.UI markup, their sample words from the page's texts; {id} becomes a fresh id. */
-const blocks = () => {
-	const title = say('sample.title');
-	const words = say('sample.text');
-	const item = (n) => say('sample.item', {n});
-	const tones = [['info', 'block.alert-info'], ['success', 'block.alert-success'], ['warning', 'block.alert-warning'], ['danger', 'block.alert-danger']].map(([tone, key]) => ({id: 'alert-' + tone, group: 'content', label: say(key), html:'<div class="alert alert-' + tone + '"><i class="bi bi-info-circle" aria-hidden="true"></i><div>' + words + '</div></div>'}));
-	return [
-		...tones,
-		{id: 'card', group: 'content', label: say('block.card'), html: '<div class="card"><div class="card-body vstack gap-8"><h3>' + title + '</h3><p>' + words + '</p></div></div>'},
-		{id: 'accordion', group: 'content', label: say('block.accordion'), html: '<div class="accordion">' + [1, 2, 3].map((n) => '<details class="accordion-item" name="{id}"><summary class="accordion-header">' + item(n) + '<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary><div class="accordion-body">' + words + '</div></details>').join('') + '</div>'},
-		{id: 'tabs', group: 'content', label: say('block.tabs'), html: '<div class="vstack gap-12"><div class="nav nav-underline" role="tablist" aria-label="' + title + '">' + [1, 2, 3].map((n) => '<button class="nav-link" type="button" role="tab" id="{id}-' + n + '" aria-selected="' + (n === 1) + '" aria-controls="{id}-panel-' + n + '">' + item(n) + '</button>').join('') + '</div>' + [1, 2, 3].map((n) => '<div id="{id}-panel-' + n + '" role="tabpanel" aria-labelledby="{id}-' + n + '" tabindex="0"' + (n === 1 ? '' : ' hidden') + '><p>' + words + '</p></div>').join('') + '</div>'},
-		{id: 'list-group', group: 'content', label: say('block.list-group'), html: '<ul class="list-group">' + [1, 2, 3].map((n) => '<li class="list-group-item">' + item(n) + '</li>').join('') + '</ul>'},
-		{id: 'table', group: 'content', label: say('block.table'), html: '<table class="table"><thead><tr><th scope="col">' + item(1) + '</th><th scope="col">' + item(2) + '</th></tr></thead><tbody><tr><td>' + words + '</td><td>' + words + '</td></tr></tbody></table>'},
-		{id: 'carousel', group: 'content', label: say('block.carousel'), html: '<div class="carousel" id="{id}" role="region" aria-label="' + title + '"><div class="carousel-inner" tabindex="0" aria-label="' + title + '">' + [1, 2, 3].map((n) => '<div class="carousel-item"><div class="p-24 bg-primary-subtle"><strong>' + item(n) + '</strong></div></div>').join('') + '</div><div class="hstack gap-8 justify-content-between"><button class="btn btn-icon" type="button" command="--prev" aria-controls="{id}" aria-label="' + say('sample.previous') + '"><i class="bi bi-chevron-left" aria-hidden="true"></i></button><div class="carousel-indicators"></div><button class="btn btn-icon" type="button" command="--next" aria-controls="{id}" aria-label="' + say('sample.next') + '"><i class="bi bi-chevron-right" aria-hidden="true"></i></button></div></div>'},
-		{id: 'badges', group: 'inline', label: say('block.badges'), html: '<p class="hstack flex-wrap gap-8"><span class="badge badge-primary">' + item(1) + '</span><span class="badge badge-subtle-success">' + item(2) + '</span><span class="badge">' + item(3) + '</span></p>'},
-		{id: 'buttons', group: 'inline', label: say('block.buttons'), html: '<p class="hstack flex-wrap gap-8"><a class="btn btn-primary" href="#">' + item(1) + '</a><a class="btn" href="#">' + item(2) + '</a></p>'},
-		{id: 'button-group', group: 'inline', label: say('block.button-group'), html: '<div class="btn-group" role="group" aria-label="' + title + '">' + [1, 2, 3].map((n) => '<a class="btn" href="#">' + item(n) + '</a>').join('') + '</div>'},
-		{id: 'progress', group: 'inline', label: say('block.progress'), html: '<p class="vstack gap-4"><span>' + title + '</span><progress class="progress" value="40" max="100" aria-label="' + title + '">40%</progress></p>'},
-		{id: 'grid-2', group: 'layout', label: say('block.grid-2'), html: '<div class="grid md:cols-2 gap-16"><div><p>' + words + '</p></div><div><p>' + words + '</p></div></div>'},
-		{id: 'grid-3', group: 'layout', label: say('block.grid-3'), html: '<div class="grid md:cols-3 gap-16"><div><p>' + words + '</p></div><div><p>' + words + '</p></div><div><p>' + words + '</p></div></div>'},
-	];
-};
+/** What the person may do: given, only what is said; not given, all but HTML and protection. */
+const rightsOf = (given) => (given === undefined
+	? {html: false, ai: true, design: true, structure: true, facts: true, lock: false, review: true, langs: '*'}
+	: {...Object.fromEntries(RIGHTS.map((key) => [key, given[key] === true])), langs: given.langs ?? '*'});
 
 /** A video address as the address of its player, or null: YouTube and Vimeo. */
 const player = (address) => {
@@ -110,174 +51,84 @@ export const editor = (host, options = {}) => {
 	}
 	const id = 'redz-editor-' + ++made;
 	const config = {styles: [], scripts: [], blocks: [], images: [], embed: true, grid: true, placeholder: '', lang: document.documentElement.lang || 'en', dir: document.documentElement.dir || 'ltr', ...options};
-	const catalog = [...blocks(), ...config.blocks];
-	const sources = new Map();
-	const history = [];
-	let at = -1;
-	let changed = 0;
-	let doc = null;
+	const listeners = [];
+	const ed = {id, config, rights: rightsOf(options.rights), doc: null, sel: null, composing: false};
 	let source = false;
 	let sized = null;
-	const listeners = [];
+	let watcher = null;
+	let noteTimer = 0;
+	let sheets = config.styles;
 
 	/** Listens on a target, and forgets it on destroy. */
-	const on = (target, type, handler, extra) => {
+	ed.on = (target, type, handler, extra) => {
 		target.addEventListener(type, handler, extra);
 		listeners.push(() => target.removeEventListener(type, handler, extra));
 	};
+	ed.may = (key) => ed.rights[key] === true;
+	const langOpen = () => ed.rights.langs === '*' || ed.rights.langs.includes(config.lang);
+	const locked = (top) => top.hasAttribute('data-lock') && !ed.may('lock');
+	ed.wordsOpen = (top) => langOpen() && !(locked(top) && top.getAttribute('data-lock') === 'all');
+	ed.formOpen = (top) => ed.may('design') && !locked(top);
+	ed.placeOpen = (top) => ed.may('structure') && !locked(top);
+	ed.isSource = () => source;
 
 	root.replaceChildren();
 	const box = Object.assign(document.createElement('div'), {className: 'editor', id});
-	const toolbar = Object.assign(document.createElement('div'), {className: 'editor-toolbar'});
-	toolbar.setAttribute('role', 'toolbar');
-	toolbar.setAttribute('aria-label', say('toolbar'));
-	toolbar.setAttribute('aria-controls', id + '-frame');
+	box.setAttribute('data-tooltips', '');
+	const stage = Object.assign(document.createElement('div'), {className: 'editor-stage'});
 	const frame = Object.assign(document.createElement('iframe'), {className: 'editor-frame', id: id + '-frame', title: config.placeholder || say('body')});
 	const area = Object.assign(document.createElement('textarea'), {className: 'editor-source', hidden: true, spellcheck: false});
 	area.setAttribute('aria-label', say('source'));
-	box.append(toolbar, frame, area);
+	const note = Object.assign(document.createElement('div'), {className: 'visually-hidden'});
+	note.setAttribute('role', 'status');
+	Object.assign(ed, {box, stage, frame});
+	toolbarOf(ed);
+	ed.toolbar.setAttribute('aria-controls', id + '-frame');
+	stage.append(frame);
+	box.append(ed.toolbar, stage, area, note);
 	root.append(box);
+	pastOf(ed);
+	barsOf(ed);
+	cardOf(ed);
+	typingOf(ed);
+	pasteOf(ed);
+	lensOf(ed);
+	checksOf(ed);
 
-	/** A toolbar button: an icon, its name, its action; toggles report aria-pressed. */
-	const button = (icon, key, act, toggle = false) => {
-		const one = Object.assign(document.createElement('button'), {type: 'button', className: 'btn btn-text btn-sm btn-icon', tabIndex: -1});
-		one.setAttribute('aria-label', say(key));
-		one.title = say(key);
-		one.dataset.editor = key;
-		one.innerHTML = '<i class="bi bi-' + icon + '" aria-hidden="true"></i>';
-		if (toggle) {
-			one.setAttribute('aria-pressed', 'false');
-		}
-		one.addEventListener('click', act);
-		toolbar.append(one);
-		return one;
+	/** Says a thing that happened to the page's reader and on the screen for a moment. */
+	ed.note = (words) => {
+		note.textContent = words;
+		box.dataset.editorNote = words;
+		clearTimeout(noteTimer);
+		noteTimer = setTimeout(() => delete box.dataset.editorNote, 4000);
 	};
 
-	/** A toolbar menu: a button that opens a REDZ.UI menu of items, each with its action. */
-	const menu = (icon, key, items) => {
-		const list = Object.assign(document.createElement('div'), {className: 'menu', id: id + '-' + key.replace(/\W/g, '-')});
-		list.popover = 'auto';
-		list.setAttribute('role', 'menu');
-		list.setAttribute('aria-label', say(key));
-		for (const [label, act, group] of items) {
-			if (group !== undefined) {
-				const header = Object.assign(document.createElement('div'), {className: 'menu-header', textContent: group});
-				list.append(header);
-			}
-			const item = Object.assign(document.createElement('button'), {type: 'button', className: 'menu-item', textContent: label});
-			item.setAttribute('role', 'menuitem');
-			item.addEventListener('click', () => {
-				list.hidePopover();
-				act();
-			});
-			list.append(item);
-		}
-		const one = button(icon, key, () => {});
-		one.setAttribute('commandfor', list.id);
-		one.setAttribute('command', 'toggle-popover');
-		one.setAttribute('aria-haspopup', 'menu');
-		one.innerHTML += '<i class="bi bi-chevron-down fs-12" aria-hidden="true"></i>';
-		toolbar.append(list);
-		return one;
-	};
-
-	const divider = () => toolbar.append(Object.assign(document.createElement('span'), {className: 'vr'}));
-
-	/** Puts cleaned HTML at the caret by the browser, then takes off the styles WebKit writes on what it puts. */
-	const put = (html) => {
-		const styled = new Set(doc.body.querySelectorAll('[style]'));
-		doc.body.focus();
-		doc.execCommand('insertHTML', false, html);
-		for (const one of doc.body.querySelectorAll('[style]')) {
-			if (!styled.has(one) && one.closest('.editor-island') === null) {
-				one.removeAttribute('style');
-				if (one.tagName === 'SPAN' && one.attributes.length === 0) {
-					one.replaceWith(...one.childNodes);
+	/** The top elements of the text as stored: empty paragraphs and the editor's marks left out. */
+	ed.read = (ids) => {
+		const parts = [];
+		for (const each of [...ed.doc.body.childNodes]) {
+			const node = ed.kept(each);
+			if (node.nodeType === Node.ELEMENT_NODE) {
+				if (isProse(node) && node.textContent.trim() === '' && node.querySelector('img, iframe, hr, br:not(:only-child)') === null && node.tagName !== 'HR') {
+					continue;
 				}
+				parts.push(unmark(node.cloneNode(true), ids).outerHTML.replace(/​/g, ''));
+			} else if (node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '') {
+				parts.push('<p>' + escape(node.textContent) + '</p>');
 			}
 		}
-		commit();
+		return clean(parts.join('\n'));
 	};
-
-	/** Runs a browser editing command on the frame's document and records it. */
-	const exec = (command, value = null) => {
-		doc.body.focus();
-		doc.execCommand(command, false, value);
-		commit();
-	};
-
-	/** The top-level element of the frame's body that holds the selection, or null. */
-	const blockAt = () => {
-		const selection = doc.getSelection();
-		let node = selection.rangeCount > 0 ? selection.getRangeAt(0).startContainer : null;
-		while (node !== null && node.parentNode !== doc.body) {
-			node = node.parentNode;
-		}
-		return node instanceof doc.defaultView.Element ? node : null;
-	};
-
-	/** Inserts a block after the one holding the selection, or at the end. */
-	const insert = (html) => {
-		const block = blockAt();
-		const fresh = 'redz-block-' + ++made;
-		const one = island(clean(html.replaceAll('{id}', fresh)));
-		if (block === null) {
-			doc.body.append(one);
-		} else {
-			block.after(one);
-		}
-		settle();
-		commit();
-	};
-
-	/** The block's drawing in the frame: its source drawn, moving parts open, its tools over it. */
-	const island = (html) => {
-		const wrap = doc.createElement('div');
-		wrap.className = 'editor-island';
-		wrap.contentEditable = 'false';
-		const view = doc.createElement('div');
-		view.innerHTML = html;
-		for (const details of view.querySelectorAll('details')) {
-			details.removeAttribute('name');
-			details.open = true;
-		}
-		for (const panel of view.querySelectorAll('[role="tabpanel"]')) {
-			panel.hidden = false;
-			const tab = view.querySelector('#' + CSS.escape(panel.getAttribute('aria-labelledby') || ''));
-			if (tab !== null) {
-				panel.dataset.editorTab = tab.textContent.trim();
-			}
-		}
-		const name = doc.createElement('span');
-		name.className = 'editor-island-name';
-		name.textContent = say('block');
-		const tools = doc.createElement('div');
-		tools.className = 'editor-island-tools';
-		const grid = view.firstElementChild?.classList.contains('grid') ?? false;
-		for (const [icon, key] of [['arrow-up', 'block.up'], ['arrow-down', 'block.down'], ['code-slash', 'block.edit'], ...(grid && config.grid ? [['layout-three-columns', 'block.columns']] : []), ['eye', 'block.preview'], ['trash3', 'block.delete']]) {
-			const one = doc.createElement('button');
-			one.type = 'button';
-			one.className = 'btn btn-text btn-xs btn-icon';
-			one.dataset.editorBlock = key;
-			one.setAttribute('aria-label', say(key));
-			one.title = say(key);
-			one.innerHTML = '<i class="bi bi-' + icon + '" aria-hidden="true"></i>';
-			tools.append(one);
-		}
-		wrap.append(name, tools, view);
-		sources.set(wrap, html);
-		return wrap;
-	};
+	ed.value = () => (source ? clean(fromSource()) : ed.read(config.ids === true));
 
 	/** Fills the frame's body with a value: prose as it is, every other top-level element a block. */
-	const fill = (html) => {
-		sources.clear();
+	ed.fill = (html) => {
+		const doc = ed.doc;
 		const holder = new DOMParser().parseFromString('<!doctype html><body>' + clean(html), 'text/html').body;
 		doc.body.replaceChildren();
 		let run = null;
 		for (const node of [...holder.childNodes]) {
-			const inline = node.nodeType === Node.TEXT_NODE || (node.nodeType === Node.ELEMENT_NODE && INLINE.has(node.tagName));
-			if (inline) {
+			if (isInline(node)) {
 				if (run === null && node.textContent.trim() === '' && node.nodeType === Node.TEXT_NODE) {
 					continue;
 				}
@@ -286,135 +137,367 @@ export const editor = (host, options = {}) => {
 				continue;
 			}
 			run = null;
-			if (node.nodeType !== Node.ELEMENT_NODE) {
-				continue;
+			if (node.nodeType === Node.ELEMENT_NODE) {
+				const top = doc.importNode(node, true);
+				doc.body.append(drawTop(top, ed.wordsOpen(top)));
 			}
-			doc.body.append(prose(node) ? doc.importNode(node, true) : island(node.outerHTML));
 		}
-		settle();
+		ed.settle();
 	};
 
-	/** Keeps a paragraph to type in between blocks and after the last one, and marks an empty body. */
-	const settle = () => {
+	/** Keeps every top element an element with its own id, and a paragraph to type in between blocks. */
+	ed.settle = () => {
+		const doc = ed.doc;
 		const body = doc.body;
-		const empty = () => {
+		const empty = (gap) => {
 			const p = doc.createElement('p');
 			p.append(doc.createElement('br'));
+			p.setAttribute('data-block', blockId());
+			if (gap) {
+				p.setAttribute('data-editor-gap', '');
+			}
 			return p;
 		};
-		for (const wrap of [...body.querySelectorAll(':scope > .editor-island')]) {
-			if (wrap.nextElementSibling === null || wrap.nextElementSibling.classList.contains('editor-island')) {
-				wrap.after(empty());
+		for (const node of [...body.childNodes]) {
+			if (node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '') {
+				const p = doc.createElement('p');
+				node.replaceWith(p);
+				p.append(node);
 			}
 		}
-		if (body.firstElementChild === null) {
-			body.append(empty());
+		const seen = new Map();
+		for (const top of body.children) {
+			const own = top.getAttribute('data-block');
+			const twin = seen.get(own);
+			if (own === null) {
+				top.setAttribute('data-block', blockId());
+			} else if (twin !== undefined) {
+				(twin.textContent.length < top.textContent.length ? twin : top).setAttribute('data-block', blockId());
+			}
+			seen.set(own, top);
+			seen.set(top.getAttribute('data-block'), top);
 		}
-		body.classList.toggle('editor-empty', body.textContent.trim() === '' && sources.size === 0);
-	};
-
-	/** The value: prose as written, blocks as their sources; empty paragraphs and the editor's marks left out. */
-	const value = () => {
-		if (source) {
-			return clean(area.value);
-		}
-		const parts = [];
-		for (const node of [...doc.body.childNodes]) {
-			if (node.nodeType === Node.ELEMENT_NODE && sources.has(node)) {
-				parts.push(sources.get(node));
-			} else if (node.nodeType === Node.ELEMENT_NODE) {
-				if (node.textContent.trim() === '' && node.querySelector('img, iframe, hr, br:not(:only-child)') === null && node.tagName !== 'HR') {
-					continue;
-				}
-				const copy = node.cloneNode(true);
-				for (const one of copy.querySelectorAll('[contenteditable]')) {
-					one.removeAttribute('contenteditable');
-				}
-				parts.push(copy.outerHTML);
-			} else if (node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '') {
-				parts.push('<p>' + escape(node.textContent) + '</p>');
+		for (const top of [...body.children]) {
+			if (top.getAttribute('contenteditable') === 'false' && !isProse(top) && (top.nextElementSibling === null || top.nextElementSibling.getAttribute('contenteditable') === 'false')) {
+				top.after(empty(true));
 			}
 		}
-		return clean(parts.join('\n'));
-	};
-
-	/** Records the value in the history and tells the page, after a pause in typing or at once after a command. */
-	const commit = (later = false) => {
-		clearTimeout(changed);
-		const now = () => {
-			const html = value();
-			if (history[at] !== html) {
-				history.splice(at + 1);
-				history.push(html);
-				at = history.length - 1;
-				config.onChange?.(html);
+		if (body.firstElementChild === null || body.lastElementChild.tagName === 'PRE') {
+			body.append(empty(body.firstElementChild !== null));
+		}
+		if (body.firstElementChild.getAttribute('contenteditable') === 'false') {
+			body.prepend(empty(true));
+		}
+		for (const gap of body.querySelectorAll(':scope > [data-editor-gap]')) {
+			if (gap.textContent !== '') {
+				gap.removeAttribute('data-editor-gap');
+			} else if (gap.previousElementSibling?.hasAttribute('data-editor-gap')) {
+				gap.remove();
 			}
-			doc.body.classList.toggle('editor-empty', doc.body.textContent.trim() === '' && sources.size === 0);
-			mark();
-		};
-		if (later) {
-			changed = setTimeout(now, 300);
-		} else {
-			now();
+		}
+		body.classList.toggle('editor-empty', body.textContent.trim() === '' && body.querySelector('[contenteditable="false"]') === null);
+		for (const top of body.querySelectorAll('[data-lock]')) {
+			top.setAttribute('data-editor-lock', say('lock.' + top.getAttribute('data-lock')));
 		}
 	};
 
-	/** Steps the history back or on: the value restored, the caret at the end of the text. */
-	const step = (by) => {
-		if (history[at + by] === undefined) {
+	/** Draws a block again from its own markup. */
+	ed.redraw = (top) => {
+		const keep = top.getAttribute('data-block');
+		unmark(top, true);
+		top.setAttribute('data-block', keep);
+		drawTop(top, ed.wordsOpen(top));
+	};
+
+	/** Focuses an element of the frame, the frame first: Firefox leaves the focus in the page otherwise. */
+	ed.focusIn = (element) => {
+		frame.contentWindow.focus();
+		element.focus();
+	};
+
+	/** Runs a browser editing command on the frame's document and records it. */
+	ed.exec = (command, value = null) => {
+		const top = topAt(ed.doc);
+		if (top !== null && !ed.wordsOpen(top)) {
 			return;
 		}
-		at += by;
-		fill(history[at]);
-		const selection = doc.getSelection();
-		selection.selectAllChildren(doc.body);
-		selection.collapseToEnd();
-		config.onChange?.(history[at]);
-		mark();
+		ed.focusIn(fieldAt(ed.doc) ?? ed.doc.body);
+		ed.doc.execCommand(command, false, value);
+		for (const one of ed.doc.body.querySelectorAll('span[style], font')) {
+			one.replaceWith(...one.childNodes);
+		}
+		ed.commit();
 	};
 
-	/** The toolbar's pressed states by the selection. */
-	const mark = () => {
-		for (const [key, command] of [['bold', 'bold'], ['italic', 'italic'], ['underline', 'underline']]) {
-			toolbar.querySelector('[data-editor="' + key + '"]')?.setAttribute('aria-pressed', String(!source && doc.queryCommandState(command)));
+	/** A copy of an element under another tag, with its class and id; the caret stays where it was. */
+	ed.retagged = (top, tag) => {
+		const fresh = top.ownerDocument.createElement(tag);
+		for (const attribute of top.attributes) {
+			fresh.setAttribute(attribute.name, attribute.value);
 		}
-		toolbar.querySelector('[data-editor="source"]')?.setAttribute('aria-pressed', String(source));
-		for (const one of toolbar.querySelectorAll('button[data-editor]')) {
-			if (one.dataset.editor !== 'source') {
-				one.disabled = source;
+		fresh.append(...top.childNodes);
+		if (fresh.textContent === '' && fresh.querySelector('br, img') === null) {
+			fresh.replaceChildren(top.ownerDocument.createElement('br'));
+		}
+		top.replaceWith(fresh);
+		return fresh;
+	};
+	ed.retag = (top, tag) => {
+		const at = before(ed.doc, top).length;
+		caretTo(ed.doc, ed.retagged(top, tag), at);
+	};
+
+	/** The top elements under the selection. */
+	const tops = () => {
+		const selection = ed.doc.getSelection();
+		if (selection.rangeCount === 0) {
+			return [];
+		}
+		const range = selection.getRangeAt(0);
+		return selection.isCollapsed ? [topAt(ed.doc)].filter(Boolean) : [...ed.doc.body.children].filter((one) => range.intersectsNode(one));
+	};
+
+	/** Selects whole top elements after they were changed. */
+	const holdLines = (first, last) => {
+		const range = ed.doc.createRange();
+		range.setStart(first, 0);
+		range.setEnd(last, last.childNodes.length);
+		const selection = ed.doc.getSelection();
+		selection.removeAllRanges();
+		selection.addRange(range);
+	};
+
+	/** A line of a list item, and the lists nested in it after the line. */
+	const lineOf = (item) => {
+		const line = ed.doc.createElement('p');
+		const nested = [...item.children].filter((one) => one.matches('ul, ol'));
+		line.append(...[...item.childNodes].filter((one) => !nested.includes(one)));
+		if (line.textContent.trim() === '' && line.querySelector('br, img') === null) {
+			line.replaceChildren(ed.doc.createElement('br'));
+		}
+		return [line, ...nested];
+	};
+
+	/** Takes the items under the selection out of a list: those before stay, those after become a list of their own. */
+	const unlist = (list) => {
+		const selection = ed.doc.getSelection();
+		const range = selection.getRangeAt(0);
+		const items = [...list.children].filter((one) => (selection.isCollapsed ? one.contains(range.startContainer) : range.intersectsNode(one)));
+		const rest = [];
+		for (let next = items.at(-1)?.nextElementSibling ?? null; next !== null; next = next.nextElementSibling) {
+			rest.push(next);
+		}
+		const at = selection.isCollapsed ? before(ed.doc, items[0]).length : -1;
+		const lines = items.map(lineOf);
+		const tail = list.cloneNode(false);
+		tail.removeAttribute('data-block');
+		tail.append(...rest);
+		list.after(...lines.flat(), ...(rest.length > 0 ? [tail] : []));
+		for (const item of items) {
+			item.remove();
+		}
+		if (list.children.length === 0) {
+			if (list.hasAttribute('data-block')) {
+				lines[0][0].setAttribute('data-block', list.getAttribute('data-block'));
+			}
+			list.remove();
+		}
+		if (at === -1) {
+			holdLines(lines[0][0], lines.at(-1)[0]);
+		} else {
+			caretTo(ed.doc, lines[0][0], at);
+		}
+	};
+
+	/** Makes the lines under the selection a list, takes a list's items out of it, or turns a list into the other kind. */
+	ed.list = (tag) => {
+		const doc = ed.doc;
+		const lines = tops().filter((one) => /^(P|H[2-6]|BLOCKQUOTE|UL|OL)$/.test(one.tagName) && isProse(one) && ed.placeOpen(one));
+		if (lines.length === 0 || fieldAt(doc) !== null) {
+			return;
+		}
+		const name = tag.toUpperCase();
+		const only = lines.length === 1 ? lines[0] : null;
+		if (only?.tagName === name) {
+			const start = doc.getSelection().getRangeAt(0).startContainer;
+			const item = (start.nodeType === Node.ELEMENT_NODE ? start : start.parentElement).closest('li');
+			if (item !== null && item.parentElement !== only) {
+				doc.execCommand('outdent');
+			} else {
+				unlist(only);
+			}
+			ed.commit();
+			return;
+		}
+		const collapsed = doc.getSelection().isCollapsed;
+		const at = collapsed ? before(doc, lines[0]).length : 0;
+		if (only !== null && /^(UL|OL)$/.test(only.tagName)) {
+			caretTo(doc, ed.retagged(only, tag), at);
+			ed.commit();
+			return;
+		}
+		let list = doc.createElement(tag);
+		if (lines[0].hasAttribute('data-block')) {
+			list.setAttribute('data-block', lines[0].getAttribute('data-block'));
+		}
+		for (const line of lines) {
+			if (/^(UL|OL)$/.test(line.tagName)) {
+				list.append(...line.children);
+			} else {
+				const item = doc.createElement('li');
+				item.append(...line.childNodes);
+				list.append(item);
 			}
 		}
+		lines[0].replaceWith(list);
+		for (const line of lines.slice(1)) {
+			line.remove();
+		}
+		const like = (one) => one?.tagName === name && isProse(one) && ed.placeOpen(one);
+		if (like(list.previousElementSibling)) {
+			const above = list.previousElementSibling;
+			const offset = above.textContent.length;
+			above.append(...list.children);
+			list.remove();
+			list = above;
+			if (collapsed) {
+				caretTo(doc, list, offset + at);
+			}
+		} else if (collapsed) {
+			caretTo(doc, list, at);
+		}
+		if (like(list.nextElementSibling)) {
+			list.append(...list.nextElementSibling.children);
+			list.nextElementSibling.remove();
+		}
+		if (!collapsed) {
+			holdLines(list, list);
+		}
+		ed.commit();
+	};
+
+	/** The lines under the selection become a heading, a quote or a block of code; a list's items leave it first. */
+	ed.format = (tag) => {
+		for (const one of tops().filter((top) => /^(UL|OL)$/.test(top.tagName) && isProse(top))) {
+			if (one.isConnected) {
+				unlist(one);
+			}
+		}
+		const lines = tops().filter((one) => /^(P|H[2-6]|BLOCKQUOTE|PRE)$/.test(one.tagName) && isProse(one));
+		if (lines.length === 0) {
+			return;
+		}
+		if (ed.doc.getSelection().isCollapsed) {
+			ed.retag(lines[0], tag);
+		} else {
+			const made = lines.map((one) => ed.retagged(one, tag));
+			holdLines(made[0], made.at(-1));
+		}
+		ed.commit();
+	};
+
+	/** Puts cleaned markup in after a top element, or in the place of an empty paragraph. */
+	ed.insertBlocks = (html, near) => {
+		const doc = ed.doc;
+		const holder = new DOMParser().parseFromString('<!doctype html><body>' + clean(html), 'text/html').body;
+		const tops = [...holder.children].map((node) => {
+			const top = doc.importNode(node, true);
+			return drawTop(top, true);
+		});
+		const emptyLine = near !== null && near !== undefined && near.tagName === 'P' && near.textContent.trim() === '' && near.querySelector('img') === null;
+		if (near === null || near === undefined) {
+			doc.body.append(...tops);
+		} else if (emptyLine) {
+			near.replaceWith(...tops);
+		} else {
+			near.after(...tops);
+		}
+		ed.settle();
+		ed.commit();
+		return tops;
+	};
+
+	/** What can be inserted: images, a video, the package's blocks and the page's own. */
+	ed.insertable = () => {
+		const blocks = [...templates(), ...config.blocks].filter((one) => config.grid || one.group !== 'layout').map((one) => ({...one, icon: one.icon ?? 'square', run: () => {
+			ed.insertBlocks(one.html.replaceAll('{id}', 'redz-block-' + blockId()), topAt(ed.doc));
+		}}));
+		const media = [...config.images.map((from) => ({label: from.label, icon: 'image', group: 'media', run: () => image(from)})), ...(config.embed ? [{label: say('embed'), icon: 'play-btn', group: 'media', run: embed}] : [])];
+		return [...media, ...blocks];
+	};
+
+	/** One list of commands, for the palette today and for agents later. */
+	ed.commands = () => {
+		const top = topAt(ed.doc);
+		return [
+			...(ed.may('structure') ? ed.insertable().map((one) => ({label: say('insert') + ': ' + one.label, icon: one.icon, run: one.run})) : []),
+			{label: say('bold'), icon: 'type-bold', keys: '⌘B', run: () => ed.exec('bold')},
+			{label: say('italic'), icon: 'type-italic', keys: '⌘I', run: () => ed.exec('italic')},
+			{label: say('underline'), icon: 'type-underline', keys: '⌘U', run: () => ed.exec('underline')},
+			{label: say('link'), icon: 'link-45deg', keys: '⌘K', run: ed.link},
+			{label: say('undo'), icon: 'arrow-counterclockwise', keys: '⌘Z', run: ed.undo},
+			{label: say('redo'), icon: 'arrow-clockwise', keys: '⇧⌘Z', run: ed.redo},
+			...(top !== null ? [{label: say('card'), icon: 'sliders', keys: '⌥↩', run: () => ed.openCard(top)}] : []),
+			...(ed.may('html') ? [{label: say('source'), icon: 'code-slash', run: ed.toggleSource}] : []),
+		];
+	};
+
+	/** Moves a top element before another, or to the end, with a View Transition where there is one. */
+	ed.moveTop = (top, anchor) => {
+		const change = () => {
+			ed.doc.body.insertBefore(top, anchor);
+			ed.settle();
+			ed.commit();
+			ed.pickNone();
+		};
+		if (ed.doc.startViewTransition !== undefined && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			ed.doc.startViewTransition(change);
+		} else {
+			change();
+		}
+	};
+	ed.moveBy = (top, step) => {
+		if (ed.placeOpen(top)) {
+			const near = step < 0 ? top.previousElementSibling : top.nextElementSibling?.nextElementSibling ?? null;
+			if (step < 0 ? near !== null : top.nextElementSibling !== null) {
+				ed.moveTop(top, near);
+			}
+		}
+	};
+	ed.copyTop = (top) => {
+		const copy = top.cloneNode(true);
+		copy.setAttribute('data-block', blockId());
+		top.after(copy);
+		ed.settle();
+		ed.commit();
 	};
 
 	/** A REDZ.UI dialog with a form: its fields, OK and Cancel; answers the form's values, or null. */
-	const ask = (title, fields) => new Promise((answer) => {
+	ed.ask = (title, fields) => new Promise((answer) => {
 		const dialog = Object.assign(document.createElement('dialog'), {className: 'dialog'});
 		const titled = id + '-dialog-' + ++made;
 		dialog.setAttribute('aria-labelledby', titled);
-		dialog.innerHTML = '<form method="dialog" class="vstack"><div class="dialog-header"><h2 class="dialog-title" id="' + titled + '">' + escape(title) + '</h2></div><div class="dialog-body vstack gap-12">' + fields + '</div><div class="dialog-footer"><button class="btn" type="submit" value="cancel" formnovalidate>' + escape(text('confirm.cancel')) + '</button><button class="btn btn-primary" type="submit" value="ok">' + escape(text('confirm.ok')) + '</button></div></form>';
+		dialog.innerHTML = '<form method="dialog" class="vstack"><div class="dialog-header"><h2 class="dialog-title" id="' + titled + '">' + escape(title) + '</h2></div><div class="dialog-body vstack gap-12">' + fields + '</div><div class="dialog-footer"><button class="btn" type="submit" value="cancel" formnovalidate>' + escape(say('cancel')) + '</button><button class="btn btn-primary" type="submit" value="ok">' + escape(say('ok')) + '</button></div></form>';
 		dialog.addEventListener('close', () => {
 			const form = dialog.querySelector('form');
 			answer(dialog.returnValue === 'ok' ? Object.fromEntries(new FormData(form)) : null);
 			dialog.remove();
-			doc.body.focus();
+			ed.focus();
 		});
 		document.body.append(dialog);
 		dialog.showModal();
 	});
-
-	/** A text field of a dialog. */
-	const field = (name, key, value = '', type = 'text') => '<div class="vstack gap-4"><label class="form-label" for="' + id + '-' + name + '">' + escape(say(key)) + '</label><input class="form-control" id="' + id + '-' + name + '" name="' + name + '" type="' + type + '" value="' + escape(value) + '"></div>';
-
-	/** A check of a dialog. */
-	const check = (name, key, on = false) => '<label class="form-check"><input class="check" type="checkbox" name="' + name + '"' + (on ? ' checked' : '') + '>' + escape(say(key)) + '</label>';
+	ed.fieldHTML = (name, key, value = '', type = 'text') => '<div class="vstack gap-4"><label class="form-label" for="' + id + '-' + name + '">' + escape(say(key)) + '</label><input class="form-control" id="' + id + '-' + name + '" name="' + name + '" type="' + type + '" value="' + escape(value) + '"></div>';
+	ed.checkField = (name, key, on = false) => '<label class="form-check"><input class="check" type="checkbox" name="' + name + '"' + (on ? ' checked' : '') + '>' + escape(say(key)) + '</label>';
 
 	/** The link dialog: the address, the words, a new tab, nofollow; the link written or changed in place. */
-	const link = async () => {
+	ed.link = async () => {
+		const doc = ed.doc;
 		const selection = doc.getSelection();
 		const range = selection.rangeCount > 0 ? selection.getRangeAt(0).cloneRange() : null;
 		const old = range?.startContainer.parentElement?.closest('a') ?? null;
 		const rel = (old?.getAttribute('rel') || '').split(/\s+/);
-		const values = await ask(say('link'), field('href', 'link.href', old?.getAttribute('href') || '', 'url') + field('words', 'link.words', old?.textContent || range?.toString() || '') + check('blank', 'link.blank', old?.target === '_blank') + check('nofollow', 'link.nofollow', rel.includes('nofollow')));
+		const values = await ed.ask(say('link'), ed.fieldHTML('href', 'link.href', old?.getAttribute('href') || '', 'url') + ed.fieldHTML('words', 'link.words', old?.textContent || range?.toString() || '') + ed.checkField('blank', 'link.blank', old?.target === '_blank') + ed.checkField('nofollow', 'link.nofollow', rel.includes('nofollow')));
 		if (values === null || range === null) {
 			return;
 		}
@@ -440,207 +523,261 @@ export const editor = (host, options = {}) => {
 			range.deleteContents();
 			range.insertNode(a);
 		}
-		commit();
+		ed.commit();
 	};
 
-	/** The embed dialog: a YouTube or Vimeo address and a title; a block of its player at the ratio chosen. */
+	/** The embed dialog: a YouTube or Vimeo address and a title; a block of its player. */
 	const embed = async () => {
-		const values = await ask(say('embed'), field('url', 'embed.url', '', 'url') + field('title', 'embed.title'));
+		const values = await ed.ask(say('embed'), ed.fieldHTML('url', 'embed.url', '', 'url') + ed.fieldHTML('title', 'embed.title'));
 		const src = values === null ? null : player(values.url.trim());
 		if (src !== null) {
-			insert('<iframe class="w-100 ratio-16x9 rounded-8" src="' + escape(src) + '" title="' + escape(values.title.trim() || say('embed')) + '" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>');
+			ed.insertBlocks('<iframe class="w-100 ratio-16x9 rounded-8" src="' + escape(src) + '" title="' + escape(values.title.trim() || say('embed')) + '" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>', topAt(ed.doc));
 		}
 	};
 
-	/** The grid dialog: how many columns, from which width, how far apart; only those classes change. */
-	const columns = async (wrap) => {
-		const html = sources.get(wrap);
-		const holder = doc.createElement('div');
-		holder.innerHTML = html;
-		const grid = holder.firstElementChild;
-		const classes = [...grid.classList];
-		const now = classes.find((name) => /^(?:(?:sm|md|lg):)?cols-\d+$/.test(name)) ?? 'md:cols-2';
-		const [, from = '', count = '2'] = now.match(/^(?:(sm|md|lg):)?cols-(\d+)$/) ?? [];
-		const gap = (classes.find((name) => /^gap-\d+$/.test(name)) ?? 'gap-16').slice(4);
-		const pick = (name, key, options, chosen) => '<div class="vstack gap-4"><label class="form-label" for="' + id + '-' + name + '">' + escape(say(key)) + '</label><select class="form-select" id="' + id + '-' + name + '" name="' + name + '">' + options.map(([option, label]) => '<option value="' + option + '"' + (option === chosen ? ' selected' : '') + '>' + escape(label) + '</option>').join('') + '</select></div>';
-		const values = await ask(say('block.columns'), pick('count', 'columns.count', ['2', '3', '4'].map((n) => [n, n]), count) + pick('from', 'columns.from', [['', say('columns.always')], ['sm', 'sm'], ['md', 'md'], ['lg', 'lg']], from) + pick('gap', 'columns.gap', ['8', '16', '24'].map((n) => [n, n + ' px']), gap));
-		if (values === null) {
-			return;
-		}
-		for (const name of classes.filter((one) => /^(?:(?:sm|md|lg):)?cols-\d+$|^gap-\d+$/.test(one))) {
-			grid.classList.remove(name);
-		}
-		grid.classList.add((values.from === '' ? '' : values.from + ':') + 'cols-' + values.count, 'gap-' + values.gap);
-		replace(wrap, holder.innerHTML);
+	/** Opens the image source; its image goes in at the caret. */
+	const image = (from) => {
+		from.open({
+			insert: (spec) => {
+				const img = '<img src="' + escape(spec.src) + '" alt="' + escape(spec.alt ?? '') + '"' + (spec.width ? ' width="' + escape(spec.width) + '"' : '') + (spec.height ? ' height="' + escape(spec.height) + '"' : '') + (spec.srcset ? ' srcset="' + escape(spec.srcset) + '"' : '') + (spec.sizes ? ' sizes="' + escape(spec.sizes) + '"' : '') + ' loading="lazy" decoding="async">';
+				const html = Array.isArray(spec.sources) && spec.sources.length > 0 ? '<picture>' + spec.sources.map((one) => '<source' + (one.media ? ' media="' + escape(one.media) + '"' : '') + (one.type ? ' type="' + escape(one.type) + '"' : '') + ' srcset="' + escape(one.srcset) + '">').join('') + img + '</picture>' : img;
+				ed.exec('insertHTML', clean(html));
+			},
+		});
 	};
 
-	/** Puts a block's new source in the place of its drawing. */
-	const replace = (wrap, html) => {
-		const fresh = island(clean(html));
-		wrap.replaceWith(fresh);
-		sources.delete(wrap);
-		settle();
-		commit();
+	/** Names what an expert wrote that REDZ.UI does not know, from the passport. */
+	ed.checkHTML = async (value) => {
+		const notes = [];
+		const parsed = new DOMParser().parseFromString('<!doctype html><body>' + value, 'text/html').body;
+		const removed = new Set();
+		for (const one of parsed.querySelectorAll('script, style, object, embed, link, meta, base')) {
+			removed.add(one.tagName.toLowerCase());
+		}
+		for (const one of parsed.querySelectorAll('*')) {
+			for (const attribute of one.attributes) {
+				if (/^on/i.test(attribute.name) || (/^(href|src)$/i.test(attribute.name) && !safe(attribute.value))) {
+					removed.add(attribute.name);
+				}
+			}
+		}
+		if (removed.size > 0) {
+			notes.push(say('html.removed', {what: [...removed].join(', ')}));
+		}
+		const known = await fetch(LIBRARY.passport).then((answer) => (answer.ok ? answer.json() : null)).catch(() => null);
+		if (known !== null) {
+			const names = new Set(Array.isArray(known.classes) ? known.classes : Object.keys(known.classes));
+			const unknown = new Set([...parsed.querySelectorAll('[class]')].flatMap((one) => [...one.classList]).filter((name) => !names.has(name) && !name.startsWith('bi-')));
+			if (unknown.size > 0) {
+				notes.push(say('html.unknown', {what: [...unknown].join(', ')}));
+			}
+		}
+		return notes;
 	};
 
-	/** The Preview dialog: the block alive in a frame of REDZ.UI's own CSS and JS, where the content runs no script. */
-	const preview = (wrap) => {
+	/** The Preview dialog: a block alive in a frame of REDZ.UI's own CSS and JS, where the content runs no script. */
+	const preview = (top) => {
 		const dialog = Object.assign(document.createElement('dialog'), {className: 'dialog dialog-lg'});
 		const titled = id + '-preview-' + ++made;
 		dialog.setAttribute('aria-labelledby', titled);
 		dialog.setAttribute('closedby', 'any');
 		const texts = document.getElementById('redz-ui-text')?.textContent || '{}';
-		const head = '<meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="script-src \'self\'; object-src \'none\'; base-uri \'none\'; form-action \'none\'">' + [...frameSheets(), ...config.styles].map((href) => '<link rel="stylesheet" href="' + escape(href) + '">').join('') + '<script type="application/json" id="redz-ui-text">' + texts.replace(/</g, '\\u003c') + '</script><script type="module" src="' + escape(LIBRARY.js) + '"></script>' + config.scripts.map((src) => '<script type="module" src="' + escape(src) + '"></script>').join('');
-		dialog.innerHTML = '<div class="dialog-header"><h2 class="dialog-title" id="' + titled + '">' + escape(say('block.preview')) + '</h2><button class="btn-close" type="button" commandfor="' + titled + '-dialog" command="close" aria-label="' + escape(text('close')) + '"></button></div><div class="dialog-body"><iframe class="editor-preview" title="' + escape(say('block.preview')) + '"></iframe></div>';
+		const hosts = [...new Set([LIBRARY.js, ...config.scripts].map((src) => new URL(src, document.baseURI).origin))].join(' ');
+		const head = '<meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="script-src ' + escape(hosts) + '; object-src \'none\'; base-uri \'none\'; form-action \'none\'">' + [...frameSheets(), ...sheets].map((href) => '<link rel="stylesheet" href="' + escape(href) + '">').join('') + '<script type="application/json" id="redz-ui-text">' + texts.replace(/</g, '\\u003c') + '</script><script type="module" src="' + escape(LIBRARY.js) + '"></script>' + config.scripts.map((src) => '<script type="module" src="' + escape(src) + '"></script>').join('');
+		dialog.innerHTML = '<div class="dialog-header"><h2 class="dialog-title" id="' + titled + '">' + escape(say('block.preview')) + '</h2><button class="btn-close" type="button" commandfor="' + titled + '-dialog" command="close" aria-label="' + escape(say('close')) + '"></button></div><div class="dialog-body"><iframe class="editor-preview" title="' + escape(say('block.preview')) + '"></iframe></div>';
 		dialog.id = titled + '-dialog';
-		dialog.querySelector('iframe').srcdoc = '<!doctype html><html lang="' + escape(config.lang) + '" dir="' + escape(config.dir) + '"><head>' + head + '</head><body class="region p-16">' + clean(sources.get(wrap)) + '</body></html>';
+		const theme = document.documentElement.dataset.theme;
+		dialog.querySelector('iframe').srcdoc = '<!doctype html><html lang="' + escape(config.lang) + '" dir="' + escape(config.dir) + '"' + (theme === undefined ? '' : ' data-theme="' + escape(theme) + '"') + '><head>' + head + '</head><body class="region p-16">' + clean(unmark(top.cloneNode(true), false).outerHTML) + '</body></html>';
 		dialog.addEventListener('close', () => dialog.remove());
 		document.body.append(dialog);
 		dialog.showModal();
 	};
-
-	/** Opens the image source; its image goes in at the caret. */
-	const image = (from) => {
-		const api = {
-			insert: (spec) => {
-				const img = '<img src="' + escape(spec.src) + '" alt="' + escape(spec.alt ?? '') + '"' + (spec.width ? ' width="' + escape(spec.width) + '"' : '') + (spec.height ? ' height="' + escape(spec.height) + '"' : '') + (spec.srcset ? ' srcset="' + escape(spec.srcset) + '"' : '') + (spec.sizes ? ' sizes="' + escape(spec.sizes) + '"' : '') + ' loading="lazy" decoding="async">';
-				const html = Array.isArray(spec.sources) && spec.sources.length > 0 ? '<picture>' + spec.sources.map((one) => '<source' + (one.media ? ' media="' + escape(one.media) + '"' : '') + (one.type ? ' type="' + escape(one.type) + '"' : '') + ' srcset="' + escape(one.srcset) + '">').join('') + img + '</picture>' : img;
-				put(clean(html));
-			},
-		};
-		from.open(api);
-	};
+	ed.preview = preview;
 
 	/** Shows the source view of the value, or the text again with the source's value. */
-	const toggleSource = () => {
+	ed.toggleSource = () => {
+		if (!ed.may('html')) {
+			return;
+		}
+		ed.closeCard();
 		if (source) {
+			const html = fromSource();
 			source = false;
-			fill(area.value);
+			ed.fill(html);
 			area.hidden = true;
-			frame.hidden = false;
-			commit();
-			doc.body.focus();
+			stage.hidden = false;
+			ed.commit();
+			ed.focus();
 		} else {
-			area.value = value();
+			const parts = [...ed.doc.body.children].filter((top) => top.textContent.trim() !== '' || !isProse(top));
+			area.value = parts.map((top) => (locked(top) ? '<!--block ' + top.getAttribute('data-block') + '-->' : unmark(top.cloneNode(true), config.ids === true).outerHTML)).join('\n');
 			source = true;
-			frame.hidden = true;
+			stage.hidden = true;
 			area.hidden = false;
 			area.focus();
 		}
-		mark();
+		ed.pickNone();
+		ed.mark();
 	};
 
-	/** Builds the toolbar. */
-	const tools = () => {
-		menu('type', 'format', [['format.paragraph', 'p'], ['format.heading2', 'h2'], ['format.heading3', 'h3'], ['format.heading4', 'h4'], ['format.quote', 'blockquote'], ['format.code', 'pre']].map(([key, tag]) => [say(key), () => exec('formatBlock', tag)]));
-		divider();
-		button('type-bold', 'bold', () => exec('bold'), true);
-		button('type-italic', 'italic', () => exec('italic'), true);
-		button('type-underline', 'underline', () => exec('underline'), true);
-		button('link-45deg', 'link', link);
-		menu('palette', 'color', [['color.primary', 'text-primary'], ['color.secondary', 'text-secondary'], ['color.success', 'text-success'], ['color.danger', 'text-danger'], ['color.warning', 'text-warning'], ['color.info', 'text-info'], ['color.none', '']].map(([key, name]) => [say(key), () => paint(name)]));
-		divider();
-		button('list-ul', 'bullets', () => exec('insertUnorderedList'));
-		button('list-ol', 'numbers', () => exec('insertOrderedList'));
-		menu('text-left', 'align', [['align.start', 'text-start'], ['align.center', 'text-center'], ['align.end', 'text-end']].map(([key, name]) => [say(key), () => align(name)]));
-		divider();
-		if (config.images.length === 1) {
-			button('image', 'image', () => image(config.images[0]));
-		} else if (config.images.length > 1) {
-			menu('image', 'image', config.images.map((from) => [from.label, () => image(from)]));
+	/** The source's text as a value: every protected block in its place, even when its line was removed. */
+	const fromSource = () => {
+		const kept = new Map([...ed.doc.querySelectorAll('[data-lock]')].filter(locked).map((one) => [one.getAttribute('data-block'), unmark(one.cloneNode(true), true).outerHTML]));
+		const html = area.value.replace(/<!--block ([\w-]+)-->/g, (match, one) => {
+			const block = kept.get(one) ?? '';
+			kept.delete(one);
+			return block;
+		});
+		return html + [...kept.values()].join('');
+	};
+
+	const hooks = {
+		enter: (field, top, event) => {
+			if (event.shiftKey) {
+				return false;
+			}
+			const cell = field.closest('td, th');
+			if (cell !== null) {
+				const table = cell.closest('table');
+				const rows = rowsOf(table);
+				const below = rows[rows.indexOf(cell.parentElement) + 1]?.cells[cell.cellIndex];
+				if (below !== undefined) {
+					caretPut(ed.doc, {id: top.getAttribute('data-block'), field: [...top.querySelectorAll(FIELDS), top].indexOf(below), at: below.textContent.length});
+				}
+				return true;
+			}
+			const item = field.closest('li');
+			if (item !== null && ed.placeOpen(top)) {
+				const fresh = partDo(item, 'add');
+				ed.redraw(top);
+				ed.commit();
+				caretPut(ed.doc, {id: top.getAttribute('data-block'), field: [...top.querySelectorAll(FIELDS), top].indexOf(fresh.matches(FIELDS) ? fresh : fresh.querySelector(FIELDS)), at: 0});
+				return true;
+			}
+			return false;
+		},
+		tab: (field, top, event) => {
+			const cell = field.closest('td, th');
+			if (cell === null) {
+				return false;
+			}
+			const all = [...top.querySelectorAll(FIELDS)];
+			const next = all.indexOf(field) + (event.shiftKey ? -1 : 1);
+			if (next >= all.length && ed.placeOpen(top)) {
+				const rows = rowsOf(cell.closest('table'));
+				partDo(rows.at(-1), 'add');
+				ed.redraw(top);
+				ed.commit();
+				caretPut(ed.doc, {id: top.getAttribute('data-block'), field: [...top.querySelectorAll(FIELDS)].length - rows.at(-1).cells.length, at: 0});
+			} else if (all[next] !== undefined) {
+				caretPut(ed.doc, {id: top.getAttribute('data-block'), field: next, at: all[next].textContent.length});
+			}
+			return true;
+		},
+		backspace: (field, top) => {
+			if (!ed.placeOpen(top)) {
+				return;
+			}
+			const cell = field.closest('td, th');
+			if (cell !== null) {
+				const table = cell.closest('table');
+				const row = cell.parentElement;
+				if (row.parentElement.tagName !== 'THEAD' && [...row.cells].every((one) => one.textContent.trim() === '')) {
+					const rows = rowsOf(table);
+					const near = rows[rows.indexOf(row) - 1];
+					if (rowDrop(table, rows.indexOf(row))) {
+						ed.commit();
+						caretPut(ed.doc, {id: top.getAttribute('data-block'), field: [...top.querySelectorAll(FIELDS), top].indexOf(near.cells[0]), at: near.cells[0].textContent.length});
+					} else {
+						top.remove();
+						ed.settle();
+						ed.commit();
+						ed.note(say('last.table'));
+					}
+				}
+				return;
+			}
+			const item = field.closest('li');
+			if (item !== null && item.textContent.trim() === '' && repeats(item)) {
+				const near = item.previousElementSibling ?? item.nextElementSibling;
+				partDo(item, 'drop');
+				ed.commit();
+				caretPut(ed.doc, {id: top.getAttribute('data-block'), field: [...top.querySelectorAll(FIELDS), top].indexOf(near.matches(FIELDS) ? near : near.querySelector(FIELDS)), at: near.textContent.length});
+			}
+		},
+	};
+
+	const hint = () => {
+		if (ed.composing) {
+			return;
 		}
-		if (config.embed) {
-			button('play-btn', 'embed', embed);
+		for (const one of ed.doc.querySelectorAll('[data-editor-hint]')) {
+			one.removeAttribute('data-editor-hint');
 		}
-		const groups = {content: say('group.content'), inline: say('group.inline'), layout: say('group.layout')};
-		const shown = new Set();
-		menu('grid-1x2', 'blocks', catalog.filter((one) => config.grid || one.group !== 'layout').map((one) => {
-			const group = shown.has(one.group) ? undefined : (shown.add(one.group), groups[one.group] ?? one.group);
-			return [one.label, () => insert(one.html), group];
-		}));
-		divider();
-		button('eraser', 'clear', () => exec('removeFormat'));
-		button('arrow-counterclockwise', 'undo', () => step(-1));
-		button('arrow-clockwise', 'redo', () => step(1));
-		button('code-slash', 'source', toggleSource, true);
-		const first = toolbar.querySelector('button');
-		if (first !== null) {
-			first.tabIndex = 0;
+		const top = topAt(ed.doc);
+		if (top?.hasAttribute('data-editor-gap') && top.textContent !== '') {
+			top.removeAttribute('data-editor-gap');
+		}
+		if (top !== null && top.tagName === 'P' && top.textContent === '' && ed.doc.body.textContent.trim() !== '') {
+			top.setAttribute('data-editor-hint', ed.may('structure') ? say('hint') : '');
 		}
 	};
 
-	/** Writes a tone on the selected words, or takes the tones off them. */
-	const paint = (name) => {
+	const bubble = () => {
+		const doc = ed.doc;
 		const selection = doc.getSelection();
-		if (selection.rangeCount === 0 || selection.isCollapsed) {
+		const panel = ed.layer.bubble;
+		if (matchMedia('(pointer: coarse)').matches || selection === null || selection.rangeCount === 0 || selection.isCollapsed || selection.toString().trim() === '') {
+			panel.hidden = true;
 			return;
 		}
-		const range = selection.getRangeAt(0);
-		const span = doc.createElement('span');
-		span.append(range.extractContents());
-		for (const inner of span.querySelectorAll('span')) {
-			if ([...inner.classList].every((one) => /^text-/.test(one))) {
-				inner.replaceWith(...inner.childNodes);
-			}
-		}
-		if (name === '') {
-			range.insertNode(doc.createRange().createContextualFragment(span.innerHTML));
-		} else {
-			span.className = name;
-			range.insertNode(span);
-		}
-		commit();
+		const rect = selection.getRangeAt(0).getBoundingClientRect();
+		panel.hidden = false;
+		const over = rect.top + frame.offsetTop - panel.offsetHeight - 8;
+		panel.style.insetBlockStart = (over < frame.offsetTop ? rect.bottom + frame.offsetTop + 8 : over) + 'px';
+		panel.style.left = Math.max(0, Math.min(rect.left + frame.offsetLeft + rect.width / 2 - panel.offsetWidth / 2, stage.clientWidth - panel.offsetWidth)) + 'px';
 	};
 
-	/** Aligns the paragraph holding the selection. */
-	const align = (name) => {
-		const block = blockAt();
-		if (block !== null && !sources.has(block)) {
-			block.classList.remove(...ALIGN);
-			if (name !== 'text-start') {
-				block.classList.add(name);
+	const buildBubble = () => {
+		const panel = ed.layer.bubble;
+		panel.innerHTML = [['bold', 'type-bold'], ['italic', 'type-italic'], ['underline', 'type-underline'], ['link', 'link-45deg'], ['clear', 'eraser']].map(([key, icon]) => '<button class="btn btn-text btn-sm btn-icon" type="button" data-editor-bubble="' + key + '" aria-label="' + say(key) + '" title="' + say(key) + '"><i class="bi bi-' + icon + '" aria-hidden="true"></i></button>').join('');
+		panel.addEventListener('pointerdown', (event) => event.preventDefault());
+		panel.addEventListener('click', (event) => {
+			const act = event.target.closest('[data-editor-bubble]')?.dataset.editorBubble;
+			if (act === 'link') {
+				ed.link();
+			} else if (act !== undefined) {
+				ed.exec(act === 'clear' ? 'removeFormat' : act);
 			}
-			commit();
-		}
+		});
 	};
-
-	/** The toolbar's keys: one tab stop, the arrows, Home and End. */
-	on(toolbar, 'keydown', (event) => {
-		const buttons = [...toolbar.querySelectorAll(':scope > button')];
-		const at = buttons.indexOf(event.target);
-		const rtl = getComputedStyle(toolbar).direction === 'rtl';
-		const to = {ArrowRight: rtl ? at - 1 : at + 1, ArrowLeft: rtl ? at + 1 : at - 1, Home: 0, End: buttons.length - 1}[event.key];
-		if (at === -1 || to === undefined) {
-			return;
-		}
-		event.preventDefault();
-		const next = buttons[(to + buttons.length) % buttons.length];
-		for (const one of buttons) {
-			one.tabIndex = one === next ? 0 : -1;
-		}
-		next.focus();
-	});
 
 	/** The frame: its document written, then the value put in and watched. */
 	const ready = () => {
-		doc = frame.contentDocument;
+		const doc = frame.contentDocument;
+		ed.doc = doc;
 		const body = doc.body;
 		body.className = 'prose';
-		body.contentEditable = 'true';
+		body.contentEditable = langOpen() ? 'true' : 'false';
 		body.setAttribute('role', 'textbox');
 		body.setAttribute('aria-multiline', 'true');
 		body.setAttribute('aria-label', config.placeholder || say('body'));
 		body.dataset.placeholder = config.placeholder;
 		doc.execCommand('defaultParagraphSeparator', false, 'p');
-		fill(config.value ?? '');
-		history.push(value());
-		at = 0;
-		tools();
-		mark();
-		let frameAsked = 0;
-		sized = new ResizeObserver(() => {
-			frameAsked ||= requestAnimationFrame(() => {
-				frameAsked = 0;
+		ed.applyTheme();
+		watcher = new MutationObserver(ed.applyTheme);
+		watcher.observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
+		ed.fill(config.value ?? '');
+		ed.start();
+		ed.buildTools();
+		ed.buildLens();
+		buildBubble();
+		ed.mark();
+		ed.changed();
+		let asked = 0;
+		sized = new doc.defaultView.ResizeObserver(() => {
+			asked ||= requestAnimationFrame(() => {
+				asked = 0;
 				const height = Math.max(192, Math.ceil(body.getBoundingClientRect().height)) + 'px';
 				if (frame.style.blockSize !== height) {
 					frame.style.blockSize = height;
@@ -648,98 +785,197 @@ export const editor = (host, options = {}) => {
 			});
 		});
 		sized.observe(body);
-		on(doc, 'input', () => commit(true));
-		on(doc, 'selectionchange', mark);
-		on(doc, 'keydown', (event) => {
-			const mod = event.metaKey || event.ctrlKey;
-			if (event.altKey && event.key === 'F10') {
-				event.preventDefault();
-				(toolbar.querySelector('button[tabindex="0"]') ?? toolbar.querySelector('button'))?.focus();
-			} else if (mod && event.key.toLowerCase() === 'z') {
-				event.preventDefault();
-				step(event.shiftKey ? 1 : -1);
-			} else if (mod && event.key.toLowerCase() === 'y') {
-				event.preventDefault();
-				step(1);
-			} else if (mod && event.key.toLowerCase() === 'k') {
-				event.preventDefault();
-				link();
-			}
+		ed.on(doc, 'compositionstart', () => {
+			ed.composing = true;
 		});
-		on(doc, 'beforeinput', (event) => {
-			if (event.inputType === 'historyUndo' || event.inputType === 'historyRedo') {
-				event.preventDefault();
-				step(event.inputType === 'historyUndo' ? -1 : 1);
-			}
+		ed.on(doc, 'compositionend', (event) => {
+			ed.composing = false;
+			ed.typed(event);
+			ed.commit(true);
 		});
-		on(doc, 'paste', (event) => {
-			const html = event.clipboardData?.getData('text/html') || '';
-			const plain = event.clipboardData?.getData('text/plain') || '';
-			event.preventDefault();
-			put(html !== '' ? clean(html, true) : escape(plain).replace(/\n/g, '<br>'));
+		ed.on(doc, 'input', (event) => {
+			ed.typed(event);
+			ed.commit(true);
 		});
-		on(doc, 'drop', (event) => event.preventDefault());
-		on(doc, 'click', (event) => {
-			const tool = event.target instanceof doc.defaultView.Element ? event.target.closest('[data-editor-block]') : null;
-			const wrap = tool?.closest('.editor-island') ?? null;
-			if (tool === null || wrap === null) {
+		ed.on(doc, 'selectionchange', () => {
+			ed.mark();
+			ed.followCaret();
+			ed.pickFollow();
+			hint();
+			bubble();
+		});
+		ed.on(doc, 'keydown', (event) => {
+			if (event.isComposing) {
 				return;
 			}
-			const act = tool.dataset.editorBlock;
-			if (act === 'block.up' || act === 'block.down') {
-				const near = act === 'block.up' ? wrap.previousElementSibling?.previousElementSibling ?? wrap.previousElementSibling : wrap.nextElementSibling?.nextElementSibling ?? wrap.nextElementSibling;
-				if (near !== null && near !== undefined) {
-					if (act === 'block.up') {
-						near.before(wrap);
-					} else {
-						near.after(wrap);
-					}
-					settle();
-					commit();
-				}
-			} else if (act === 'block.edit') {
-				ask(say('block.edit'), '<textarea class="form-control font-monospace fs-12" name="html" rows="12" aria-label="' + escape(say('block.edit')) + '">' + escape(sources.get(wrap)) + '</textarea>').then((values) => {
-					if (values !== null) {
-						replace(wrap, values.html);
-					}
-				});
-			} else if (act === 'block.columns') {
-				columns(wrap);
-			} else if (act === 'block.preview') {
-				preview(wrap);
-			} else if (act === 'block.delete') {
-				sources.delete(wrap);
-				wrap.remove();
-				settle();
-				commit();
+			const mod = event.metaKey || event.ctrlKey;
+			const key = event.key.toLowerCase();
+			if (ed.pickKeys(event)) {
+				return;
+			}
+			if (event.altKey && event.key === 'F10') {
+				event.preventDefault();
+				(ed.toolbar.querySelector('button[tabindex="0"]') ?? ed.toolbar.querySelector('button'))?.focus();
+			} else if (mod && key === 'z') {
+				event.preventDefault();
+				(event.shiftKey ? ed.redo : ed.undo)();
+			} else if (mod && key === 'y') {
+				event.preventDefault();
+				ed.redo();
+			} else if (mod && key === 'k') {
+				event.preventDefault();
+				ed.link();
+			} else if (mod && key === '/') {
+				event.preventDefault();
+				ed.openPalette();
+			} else if (event.altKey && event.key === 'Enter' && topAt(doc) !== null) {
+				event.preventDefault();
+				ed.openCard(topAt(doc));
+			} else if (mod && event.shiftKey && (event.key === 'ArrowUp' || event.key === 'ArrowDown') && topAt(doc) !== null) {
+				event.preventDefault();
+				ed.moveBy(topAt(doc), event.key === 'ArrowUp' ? -1 : 1);
+			} else if (event.key === 'Escape') {
+				ed.closeCard();
+				ed.pickNone();
+			} else {
+				guard(doc, event, hooks);
 			}
 		});
+		ed.on(doc, 'beforeinput', (event) => {
+			if (event.inputType === 'historyUndo' || event.inputType === 'historyRedo') {
+				event.preventDefault();
+				(event.inputType === 'historyUndo' ? ed.undo : ed.redo)();
+				return;
+			}
+			if (event.inputType.startsWith('delete') || event.inputType.startsWith('insert')) {
+				const selection = doc.getSelection();
+				const range = selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+				const top = topAt(doc);
+				const near = selection.isCollapsed && event.inputType.endsWith('Backward') ? top?.previousElementSibling : (selection.isCollapsed && event.inputType.endsWith('Forward') ? top?.nextElementSibling : null);
+				const hit = (selection.isCollapsed ? [] : [...doc.querySelectorAll('[data-lock]')].filter((one) => locked(one) && range.intersectsNode(one)));
+				const edge = near !== null && near !== undefined && locked(near) && near.getAttribute('contenteditable') === 'false';
+				if (hit.length > 0 || edge) {
+					event.preventDefault();
+					ed.note(say('lock.refused'));
+					return;
+				}
+			}
+			ed.changing();
+		});
+		ed.on(doc, 'paste', (event) => {
+			event.preventDefault();
+			ed.paste({html: event.clipboardData?.getData('text/html') || '', text: event.clipboardData?.getData('text/plain') || ''});
+		});
+		ed.on(doc, 'drop', (event) => event.preventDefault());
+		ed.on(doc, 'mousedown', (event) => {
+			const gap = event.target instanceof doc.defaultView.Element ? event.target.closest('[data-editor-gap]') : null;
+			if (gap !== null) {
+				event.preventDefault();
+				ed.focusIn(doc.body);
+				caretTo(doc, gap, 0);
+			}
+		});
+		ed.on(doc, 'click', (event) => {
+			const target = event.target instanceof doc.defaultView.Element ? event.target : null;
+			if (target?.closest('a, summary, button') !== null && target !== null) {
+				event.preventDefault();
+			}
+			if (target !== null) {
+				ed.pick(target);
+			}
+		});
+		ed.on(doc, 'pointermove', (event) => {
+			const rect = frame.getBoundingClientRect();
+			if (document.elementFromPoint(rect.left + event.clientX, rect.top + event.clientY) === frame) {
+				ed.layer.follow(event.target);
+			}
+		});
+		config.onReady?.();
 	};
 
-	on(frame, 'load', ready, {once: true});
-	frame.srcdoc = '<!doctype html><html lang="' + escape(config.lang) + '" dir="' + escape(config.dir) + '"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="' + CSP + '">' + [...frameSheets(), ...config.styles, LIBRARY.surface].map((href) => '<link rel="stylesheet" href="' + escape(href) + '">').join('') + '</head><body></body></html>';
+	const frameDocument = () => '<!doctype html><html lang="' + escape(config.lang) + '" dir="' + escape(config.dir) + '"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="' + CSP + '">' + [...frameSheets(), ...sheets, LIBRARY.surface].map((href) => '<link rel="stylesheet" href="' + escape(href) + '">').join('') + '</head><body></body></html>';
+
+	/** Replaces the theme's stylesheets of the frame, for the lens. */
+	ed.setStyles = (styles) => {
+		const doc = ed.doc;
+		sheets = styles;
+		const links = [...doc.querySelectorAll('link[rel="stylesheet"]')];
+		for (const link of links.filter((one) => config.styles.includes(one.getAttribute('href')) || one.dataset.editorSite !== undefined)) {
+			link.remove();
+		}
+		const surface = links.find((one) => one.href === LIBRARY.surface);
+		for (const href of styles) {
+			const link = doc.createElement('link');
+			link.rel = 'stylesheet';
+			link.href = href;
+			link.dataset.editorSite = '';
+			doc.head.insertBefore(link, surface ?? null);
+		}
+	};
+
+	/** Moves the text to another language: the host answers its value and direction. */
+	ed.setLanguage = async (code) => {
+		const one = (config.languages ?? []).find((each) => each.code === code);
+		if (one === undefined) {
+			return;
+		}
+		ed.commit();
+		await config.onLanguage?.(code, ed.value());
+		const html = await (one.value ?? config.getLanguage?.(code)) ?? '';
+		config.lang = code;
+		config.dir = one.dir ?? 'ltr';
+		ed.doc.documentElement.lang = code;
+		ed.doc.documentElement.dir = config.dir;
+		ed.doc.body.contentEditable = langOpen() ? 'true' : 'false';
+		ed.fill(html);
+		ed.start();
+		ed.changed();
+		ed.mark();
+	};
+
+	ed.focus = () => {
+		if (source) {
+			area.focus();
+		} else if (ed.doc !== null) {
+			ed.focusIn(ed.doc.body);
+		}
+	};
+	ed.on(frame, 'load', ready, {once: true});
+	frame.srcdoc = frameDocument();
 
 	return {
-		getHTML: () => (doc === null ? clean(config.value ?? '') : value()),
+		getHTML: () => (ed.doc === null ? clean(config.value ?? '') : ed.value()),
 		setHTML: (html) => {
-			if (doc === null) {
+			if (ed.doc === null) {
 				config.value = html;
 			} else if (source) {
 				area.value = clean(html);
 			} else {
-				fill(html);
-			}
-			if (doc !== null) {
-				commit();
+				ed.fill(html);
+				ed.commit();
 			}
 		},
-		focus: () => (source ? area : doc?.body)?.focus(),
+		setRights: (given) => {
+			ed.rights = rightsOf(given);
+			if (ed.doc !== null) {
+				const value = ed.read(true);
+				ed.doc.body.contentEditable = langOpen() ? 'true' : 'false';
+				ed.fill(value);
+				ed.closeCard();
+				ed.pickNone();
+				ed.mark();
+			}
+		},
+		focus: ed.focus,
 		destroy: () => {
 			for (const off of listeners) {
 				off();
 			}
 			sized?.disconnect();
-			clearTimeout(changed);
+			watcher?.disconnect();
+			ed.stop();
+			ed.closeCard();
+			clearTimeout(noteTimer);
 			root.replaceChildren();
 		},
 	};

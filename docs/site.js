@@ -165,15 +165,36 @@
 		}, 400);
 	});
 
-	// The editor's example, on the pages that link the package.
+	// The editor's example, on the pages that link the package: the same text under three people's rights.
 	document.addEventListener('DOMContentLoaded', () => {
 		const host = document.getElementById('editor-demo-host');
 		if (host === null) {
 			return;
 		}
-		REDZ.ui.editor(host, {
-			placeholder: 'The page text',
-			value: '<h2>A day on Ang Thong</h2><p>The boat leaves the pier at <strong>8:00</strong>; bring a hat and water.</p><div class="alert alert-info"><i class="bi bi-info-circle" aria-hidden="true"></i><div>The park fee is paid at the pier.</div></div><ul><li>Kayaks in the lagoon</li><li>The viewpoint</li></ul><div class="accordion"><details class="accordion-item" name="editor-demo"><summary class="accordion-header">What is included?<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary><div class="accordion-body">Lunch, the gear and the transfer.</div></details></div>',
+		const people = {
+			expert: {html: true, ai: true, design: true, structure: true, facts: true, lock: true, review: true},
+			author: {ai: true, design: true, structure: true, facts: true, review: true},
+			translator: {review: true},
+		};
+		const value = [
+			'<h2>A day on Ang Thong</h2>',
+			'<p>The boat leaves the pier at <strong>8:00</strong>; bring a hat and water.</p>',
+			'<div class="alert alert-info"><i class="bi bi-info-circle" aria-hidden="true"></i><div>The park fee is paid at the pier.</div></div>',
+			'<ul><li>Kayaks in the lagoon</li><li>The viewpoint</li></ul>',
+			'<table class="table"><thead><tr><th scope="col">Boat</th><th scope="col">Seats</th><th scope="col">Leaves</th></tr></thead><tbody><tr><td>Sea Breeze</td><td>12</td><td>8:00</td></tr><tr><td>Blue Lagoon</td><td>30</td><td>9:30</td></tr></tbody></table>',
+			'<div class="accordion"><details class="accordion-item" name="editor-demo"><summary class="accordion-header">What is included?<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary><div class="accordion-body">Lunch, the gear and the transfer.</div></details><details class="accordion-item" name="editor-demo"><summary class="accordion-header">What if it rains?<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary><div class="accordion-body">The trip moves to the next dry day.</div></details></div>',
+			'<div class="grid md:cols-2 gap-16"><div class="card"><div class="card-body vstack gap-8"><h3>The lagoon</h3><p>A short climb to a green lake inside the rock.</p></div></div><div class="card"><div class="card-body vstack gap-8"><h3>The viewpoint</h3><p>Forty-two islands from one steep path.</p></div></div></div>',
+			'<div class="alert alert-warning" data-block="safety" data-lock="form"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i><div>The sea closes the park from October to December.</div></div>',
+		].join('');
+		const page = REDZ.ui.editor(host, {placeholder: 'The page text', ids: true, rights: people.expert, value});
+		document.getElementById('editor-demo-rights').addEventListener('click', (event) => {
+			const one = event.target.closest('[data-rights]');
+			if (one !== null) {
+				for (const each of event.currentTarget.children) {
+					each.setAttribute('aria-pressed', String(each === one));
+				}
+				page.setRights(people[one.dataset.rights]);
+			}
 		});
 	});
 

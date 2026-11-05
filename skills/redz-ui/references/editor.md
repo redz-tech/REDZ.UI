@@ -2,13 +2,18 @@
 
 # Editor
 
-A text editor for REDZ.UI markup, a package of the release linked apart: prose edited in place, the library's components as blocks, and a frame of its own where no script of the text ever runs.
+A text editor for REDZ.UI markup, a package of the release linked apart: words edited in place, the library's components changed through their own settings, and a frame of its own where no script of the text ever runs. Nobody needs HTML; an expert may have it.
 
 ## Example
 
 The page links `css/redz-ui-editor.min.css` and the module `js/redz-ui-editor.min.js` beside the library's own files, then calls `REDZ.ui.editor(host, options)`. The value is REDZ.UI markup in and out; `onChange` hears every change, and `getHTML()` gives the value at any time.
 
 ```html
+<div class="btn-group" id="editor-demo-rights" role="group" aria-label="Whose rights the example shows">
+	<button class="btn btn-sm" type="button" data-rights="expert" aria-pressed="true">Expert</button>
+	<button class="btn btn-sm" type="button" data-rights="author" aria-pressed="false">Author</button>
+	<button class="btn btn-sm" type="button" data-rights="translator" aria-pressed="false">Translator</button>
+</div>
 <div id="editor-demo-host"></div>
 ```
 
@@ -18,6 +23,8 @@ The page links `css/redz-ui-editor.min.css` and the module `js/redz-ui-editor.mi
 
 const page = REDZ.ui.editor('#body', {
   value: stored,
+  ids: true,
+  rights: {design: true, structure: true, facts: true, review: true},
   placeholder: 'The page text',
   styles: ['/themes/site/content.css'],
   images: [{id: 'media', label: 'Media library', open: (api) => media.choose().then((file) => api.insert({src: file.url, alt: file.alt}))}],
@@ -30,27 +37,69 @@ const page = REDZ.ui.editor('#body', {
 | Option | What it is |
 | --- | --- |
 | `value` | The markup to edit; it is cleaned before it is shown |
+| `ids` | `true` keeps every block's id, `data-block`, and its protection, `data-lock`, in the value: what a CMS stores, so a block keeps its history, its translations and its protection |
+| `rights` | What this person may do, below; left out, all but HTML and protection |
 | `placeholder` | The words of an empty text, also the text field's name |
 | `lang`, `dir` | The text's language and direction, the page's by default |
 | `styles`, `scripts` | The theme's stylesheets for the text and the previews, and its scripts for the previews, after REDZ.UI's own |
-| `blocks` | More blocks for the menu, `{id, label, group, html}`, after the package's own |
+| `sites` | Other looks of the same text, `{id, label, styles}`, chosen in the strip above it |
+| `languages`, `getLanguage(code)`, `onLanguage(code, html)` | The text's languages, `{code, label, dir, value}`, chosen in the strip; the host keeps each one's value |
+| `lens` | `false` takes the strip away |
+| `blocks` | More blocks for the menu, `{id, label, group, icon, html}`, after the package's own |
 | `images` | Sources of images, `{id, label, open(api)}`; a source calls `api.insert({src, alt, width, height, srcset, sizes, sources})` |
 | `embed`, `grid` | Videos from YouTube and Vimeo, and the blocks of columns; both on unless `false` |
 | `onChange(html)` | Called after a pause in typing and after every command |
+| `onReady()` | Called once the frame holds the text |
 
-It answers `getHTML()`, `setHTML(html)`, `focus()` and `destroy()`.
+It answers `getHTML()`, `setHTML(html)`, `setRights(rights)`, `focus()` and `destroy()`.
 
 ## Prose and blocks
 
 - Paragraphs, headings 2 to 4, lists, quotes, code and rules are prose: written in place, with the alignment and tone utilities.
-- Every other element at the top of the text is a block: kept as the markup it came as, drawn with its tools - move up and down, edit its HTML, preview, delete, and for a grid its columns.
-- The package's blocks are REDZ.UI's components: notes, a card, an accordion, tabs, a list group, a table, a carousel, badges, buttons, a button group, progress and grids of two and three columns.
+- Every other element at the top of the text is a block, closed to the browser's editing. The words inside it are fields, found by walking it, so typing never breaks its markup, and every block carries a stable id.
+- Hover a table for the bars of its row and column, a list for the bar of its item. Click a word for the element bar: its path, its settings and what can be done to it. The handle at a block's edge moves it, and opens its card when pressed.
+- The card of a block holds its Settings, its Form, its History, and for those allowed its Protection and HTML. A setting is tried on while it is hovered or focused; nothing stays until it is chosen.
+- A list of words can become bullets, numbers, a list group, cards, an accordion, steps or a table of two columns in the Form tab, without touching a word.
+- A block's History takes that one block back and leaves the others as they are.
 - A block that moves is drawn open: every accordion item open, every tab's panel under its tab's words. Its Preview runs it alive, in a dialog's frame of REDZ.UI's own CSS and JS.
+
+What can be changed comes from the catalog, `tools/catalog.json`, also in the passport as `editor.catalog`. The build refuses a class the stylesheets do not have, and a variant of a covered component that is neither in the catalog nor set aside with a reason, so a new variant cannot be forgotten. Markup the catalog does not know stays as it is: it can be moved and deleted, and an expert can edit it.
+
+## Rights and protection
+
+| Right | What it opens |
+| --- | --- |
+| `html` | The source of the page and of a block: the expert mode |
+| `ai` | What the AI can do; it acts with the person's own rights |
+| `design` | Settings, forms, the style of a block, color and alignment |
+| `structure` | Adding, moving and removing blocks, rows, columns and items |
+| `facts` | Prices, dates and other live facts in the text |
+| `lock` | Protecting a block and editing a protected one |
+| `review` | Reviewing suggested changes |
+| `langs` | `'*'` or a list of the languages this person may write in |
+
+The words of a block stay open to everyone allowed that language, so `rights: {}` is a translator or a proofreader. Given rights are all there is: a key left out is off.
+
+Protection is `data-lock` on a block. `"form"` leaves the words open and closes the form, the place and the removal; `"all"` closes the words too. In the whole page's source a protected block shows as `<!--block ID-->` to those without the right, and comes back untouched.
+
+**The rights only hide controls.** Whatever the browser sends can be forged, so the server compares every save with what the person may do, at every door that writes: the block's id says what changed.
+
+## Typing and paste
+
+- At the start of a line, `##`, `###`, `####`, `>`, `-`, `*` and `1.` with a space become a heading, a quote or a list; `**bold**`, `*italic*` and ``code`` become their marks.
+- `/` on an empty line opens the blocks, narrowed by what follows it.
+- A paste from Word, Google Docs or a spreadsheet, and Markdown from a chat, come in as REDZ.UI markup: a table stays a table, a heading a heading, every style and font stays behind. A link pasted over selected words links them. Inside a field a paste is plain words.
+- Undo takes the caret back to where the change started. Nothing touches the text while a character is being composed: Thai and Burmese keyboards read the words around the caret.
+
+## The lens and the checks
+
+- The strip above the text changes the width, the theme, the site and the language of the page under it, and it stays editable: the frame is a real page, so its media queries answer to its width and the site's own stylesheets draw it.
+- The foot counts the words by the language's own word breaks, so Thai and Burmese count too, and lists what a reader, a screen reader or a search engine would stumble on, each with a way to it: an empty heading, a skipped level, an image without words, a vague link, a long paragraph, a table without a head.
 
 ## Safety
 
 - The text is edited in a frame whose own Content-Security-Policy runs no script: an `onerror`, a `<script>` or a `javascript:` link in a stored body or on the clipboard never runs, on load, on paste or later.
-- Every value is parsed inert and cleaned before it is shown or given back: no script, style, link, meta, base, object or embed element, no `on*` attribute, no address that is not a path, a fragment, http(s), mailto or tel, no frame that is not https. A paste keeps prose only.
+- Every value is parsed inert and cleaned before it is shown or given back: no script, style, link, meta, base, object or embed element, no `on*` attribute, no address that is not a path, a fragment, http(s), mailto or tel, no frame that is not https.
 - The cleaner guards the editing page; the server cleans what it stores as well.
 
 ## Keyboard and accessibility
@@ -58,9 +107,14 @@ It answers `getHTML()`, `setHTML(html)`, `focus()` and `destroy()`.
 | Key | What it does |
 | --- | --- |
 | `Alt` `F10` | From the text to the toolbar |
-| `→` / `←`, `Home` / `End` | In the toolbar, the next, the previous, the first, the last button - mirrored right to left |
+| `→` / `←`, `Home` / `End` | In the toolbar, the next, the previous, the first, the last button, mirrored right to left |
 | `⌘` `B`, `I`, `U`, `K` | Bold, italic, underline, a link |
 | `⌘` `Z`, `⇧` `⌘` `Z` | Undo and redo, the editor's own |
+| `⌘` `/` | All the commands, by name |
+| `Alt` `Enter` | The card of the block under the caret |
+| `⌘` `⇧` `↑` / `↓` | Moves the block under the caret |
+| `Tab`, `Enter` in a table | The next cell, a new row after the last; the cell below |
+| `Enter`, `Backspace` in a list block | A new item; an empty item away |
 
 - The toolbar is one tab stop, named; the marks say whether they are on in `aria-pressed`, the menus are REDZ.UI menus, the dialogs REDZ.UI dialogs.
 - The text is a text field of many lines, named by the placeholder; a block's tools are buttons named by what they do.

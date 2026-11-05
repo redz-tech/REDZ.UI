@@ -1495,3 +1495,112 @@ A long link wraps inside its box, like the title of a card that opens a window	�
 Seasons on Samui, spacious	مواسم ساموي، بمساحة واسعة
 Regular	عادي
 Prices include the park fee.	تشمل الأسعار رسوم الحديقة.
+Whose rights the example shows	صلاحيات من يعرضها المثال
+Expert	خبير
+Author	مؤلف
+Block: settings and moving	الكتلة: الإعدادات والنقل
+Add a row below	إضافة صف أدناه
+Delete this row	حذف هذا الصف
+Add a column after	إضافة عمود بعده
+Delete this column	حذف هذا العمود
+Add after this	إضافة بعد هذا
+The chosen part	الجزء المحدد
+Marks of the selection	تنسيق التحديد
+That was the last part, so the table is gone. Undo brings it back.	كان ذلك آخر جزء، فاختفى الجدول. التراجع يعيده.
+That was the last item, so the list is gone. Undo brings it back.	كان ذلك آخر عنصر، فاختفت القائمة. التراجع يعيدها.
+Block deleted. Undo brings it back.	حُذفت الكتلة. التراجع يعيدها.
+Block settings	إعدادات الكتلة
+One row fewer	صف أقل
+One row more	صف إضافي
+One column fewer	عمود أقل
+One column more	عمود إضافي
+Header row	صف الرأس
+Value	القيمة
+Description for people who cannot see it	وصف لمن لا يستطيع رؤيتها
+Nothing to set here. Pick a part of the block: a badge, a button, a card.	لا شيء لضبطه هنا. اختر جزءًا من الكتلة: شارة أو زرًا أو بطاقة.
+Point at a choice: the block changes on the page. A click keeps it.	أشر إلى خيار فتتغير الكتلة في الصفحة. النقرة تثبّته.
+Point at a form: the block changes on the page, the words stay.	أشر إلى شكل فتتغير الكتلة في الصفحة وتبقى الكلمات.
+This block has no other forms.	ليس لهذه الكتلة أشكال أخرى.
+Point at a version to try it. Only this block goes back, other changes stay.	أشر إلى نسخة لتجربتها. تعود هذه الكتلة وحدها وتبقى التغييرات الأخرى.
+This block has not changed yet.	لم تتغير هذه الكتلة بعد.
+This block went back. Other changes stay.	عادت هذه الكتلة. تبقى التغييرات الأخرى.
+Protection holds in every language. Only the server makes it real: it checks on every save.	تسري الحماية في كل لغة. الخادم وحده يجعلها حقيقية: يتحقق عند كل حفظ.
+Anyone with the rights edits it.	يحررها كل من يملك الصلاحية.
+Form fixed	الشكل ثابت
+Words can change. Its form, place and deletion cannot.	يمكن تغيير الكلمات، أما شكلها ومكانها وحذفها فلا.
+Protected	محمية
+Nothing can change, except by someone who may protect blocks.	لا يتغير شيء إلا على يد من يحق له حماية الكتل.
+A protected block cannot be changed.	لا يمكن تغيير كتلة محمية.
+Expert mode. What runs is removed, and classes REDZ.UI does not know are named.	وضع الخبير. يُزال ما يُنفَّذ، وتُذكر الفئات التي لا يعرفها REDZ.UI.
+Applied, nothing to note.	طُبّق، ولا ملاحظات.
+Removed: {what}.	أُزيل: {what}.
+Not in REDZ.UI: {what}.	ليس في REDZ.UI: {what}.
+Copy the block	نسخ الكتلة
+Keys: Option Enter opens this card, Command Shift and an arrow move the block.	المفاتيح: Option مع Enter تفتح هذه البطاقة، وCommand مع Shift وسهم تنقل الكتلة.
+Form	الشكل
+Access	الوصول
+HTML	HTML
+Insert	إدراج
+Press / to insert a block	اضغط / لإدراج كتلة
+Pasted.	تم اللصق.
+All commands	كل الأوامر
+What to do?	ماذا تريد أن تفعل؟
+Steps	الخطوات
+{count} word	{count} كلمة
+{count} words	{count} كلمات
+{minutes} min to read	{minutes} د للقراءة
+Cell	خلية
+Check	فحص
+Nothing to fix.	لا شيء لإصلاحه.
+Show	إظهار
+Fix	إصلاح
+An empty heading.	عنوان فارغ.
+Heading {to} right after heading {from}: a level is skipped.	العنوان {to} بعد العنوان {from} مباشرة: تم تخطي مستوى.
+An image has no description.	صورة بلا وصف.
+A link that says “{words}” does not say where it goes.	رابط يقول «{words}» لا يوضح إلى أين يؤدي.
+here, click here, this, link, more, read more	هنا, انقر هنا, هذا, رابط, المزيد, اقرأ المزيد
+A long paragraph: on a phone it fills the screen.	فقرة طويلة: تملأ الشاشة على الهاتف.
+A table without a header row.	جدول بلا صف رأس.
+Width	العرض
+Computer	حاسوب
+Tablet	جهاز لوحي
+As the page	كالصفحة
+Part	جزء
+Row	صف
+Grid	شبكة
+Button	زر
+Badge	شارة
+Figure	رقم
+Icon tile	مربع أيقونة
+Icon	أيقونة
+Size	الحجم
+Row highlight	تمييز الصف
+Stripes	أشرطة
+Lines	الخطوط
+Row size	حجم الصف
+Subtotal	مجموع فرعي
+Shadow	الظل
+Style	النمط
+No frame	بلا إطار
+Look	المظهر
+Numbers	الأرقام
+In a row	في صف
+Plays by itself	يعمل تلقائيًا
+Centered	في الوسط
+Fades	يتلاشى
+Emphasis	إبراز
+Corners	الزوايا
+Yes	نعم
+No	لا
+None	بلا
+Soft	ناعم
+Solid	مصمت
+Plain	عادي
+Column	عمود
+Line	خط
+Pills	أقراص
+Auto	تلقائي
+Fill	ملء
+Even	متساوٍ
+Highlighted	مميز
+Bullets	نقاط

@@ -1,0 +1,92 @@
+{
+	"about": "What the editor can change on every REDZ.UI element without HTML. tools/build.php writes editor/catalog.js and the passport's editor.catalog from this file, refuses a class that is not in the CSS, and refuses a variant of a covered component that is neither here nor in exclude.",
+	"elements": [
+		{"id": "alert", "match": ".alert", "icon": "info-circle", "props": [
+			{"key": "tone", "kind": "tone", "family": ["", "alert-primary", "alert-info", "alert-success", "alert-warning", "alert-danger"]},
+			{"key": "size", "kind": "size", "family": ["alert-sm", "", "alert-lg"]}
+		]},
+		{"id": "table", "match": "table.table", "icon": "table", "props": [
+			{"key": "hover", "family": ["", "table-hover"]},
+			{"key": "stripes", "family": ["", "table-striped", "table-striped-columns"], "labels": ["none", "rows", "columns"]},
+			{"key": "lines", "family": ["", "table-bordered", "table-borderless"], "labels": ["rows", "all", "none"]},
+			{"key": "density", "kind": "size", "attr": "data-density", "family": ["compact", "", "comfortable", "spacious"]}
+		]},
+		{"id": "row", "match": "tr", "props": [
+			{"key": "tone", "kind": "tone", "family": ["", "table-active", "table-secondary", "table-warning", "table-danger"]},
+			{"key": "subtotal", "family": ["", "table-subtotal"]}
+		]},
+		{"id": "card", "match": ".card", "icon": "card-text", "props": [
+			{"key": "shadow", "family": ["", "shadow-1", "shadow-2"], "labels": ["none", "soft", "strong"]}
+		]},
+		{"id": "grid", "match": ".grid", "icon": "grid-1x2", "props": [
+			{"key": "columns", "family": ["md:cols-2", "md:cols-3", "md:cols-4"], "labels": ["2", "3", "4"]},
+			{"key": "gap", "kind": "size", "family": ["gap-8", "gap-16", "gap-24"]}
+		]},
+		{"id": "button", "match": ".btn", "link": true, "props": [
+			{"key": "style", "compose": "btn-{style}{tone}", "family": ["", "outline-", "subtle-", "text", "link"], "labels": ["solid", "outline", "soft", "plain", "link"]},
+			{"key": "tone", "kind": "tone", "compose": "btn-{style}{tone}", "family": ["", "primary", "secondary", "success", "danger", "warning", "info"]},
+			{"key": "size", "kind": "size", "family": ["btn-xs", "btn-sm", "", "btn-lg", "btn-xl"]}
+		]},
+		{"id": "buttons", "match": ".btn-group, .btn-group-vertical", "props": [
+			{"key": "direction", "family": ["btn-group", "btn-group-vertical"], "labels": ["row", "column"]}
+		]},
+		{"id": "badge", "match": ".badge", "props": [
+			{"key": "style", "compose": "badge-{style}{tone}", "family": ["", "subtle-"], "labels": ["solid", "soft"]},
+			{"key": "tone", "kind": "tone", "compose": "badge-{style}{tone}", "family": ["", "primary", "secondary", "success", "danger", "warning", "info"]},
+			{"key": "size", "kind": "size", "family": ["badge-sm", "", "badge-lg"]}
+		]},
+		{"id": "accordion", "match": ".accordion", "icon": "chevron-bar-expand", "props": [
+			{"key": "flush", "family": ["", "accordion-flush"]}
+		]},
+		{"id": "tabs", "match": "[role=\"tablist\"]", "icon": "segmented-nav", "props": [
+			{"key": "look", "family": ["nav-underline", "nav-pills"], "labels": ["line", "pills"]},
+			{"key": "width", "family": ["", "nav-fill", "nav-justified"], "labels": ["auto", "fill", "even"]}
+		]},
+		{"id": "list", "match": ".list-group", "icon": "list-task", "props": [
+			{"key": "flush", "family": ["", "list-group-flush"]},
+			{"key": "numbered", "family": ["", "list-group-numbered"]},
+			{"key": "row", "family": ["", "list-group-horizontal"]}
+		]},
+		{"id": "carousel", "match": ".carousel", "icon": "images", "props": [
+			{"key": "auto", "family": ["", "carousel-auto"]},
+			{"key": "center", "family": ["", "carousel-center"]},
+			{"key": "fade", "family": ["", "carousel-fade"]}
+		]},
+		{"id": "progress", "match": ".progress", "icon": "bar-chart-steps", "value": true, "props": [
+			{"key": "tone", "kind": "tone", "family": ["", "progress-secondary", "progress-success", "progress-warning", "progress-danger", "progress-info"]},
+			{"key": "size", "kind": "size", "family": ["progress-xs", "progress-sm", "", "progress-lg"]},
+			{"key": "stripes", "family": ["", "progress-striped"]}
+		]},
+		{"id": "stepper", "match": ".stepper", "icon": "signpost-split", "props": [
+			{"key": "row", "family": ["", "stepper-horizontal"]}
+		]},
+		{"id": "stat", "match": ".stat", "icon": "123", "props": [
+			{"key": "tone", "kind": "tone", "family": ["", "stat-primary", "stat-secondary", "stat-success", "stat-danger", "stat-warning", "stat-info"]},
+			{"key": "emphasis", "family": ["", "stat-emphasis"]}
+		]},
+		{"id": "tile", "match": ".icon-tile", "props": [
+			{"key": "tone", "kind": "tone", "family": ["", "icon-tile-secondary", "icon-tile-success", "icon-tile-danger", "icon-tile-warning", "icon-tile-info"]},
+			{"key": "size", "kind": "size", "family": ["icon-tile-sm", "", "icon-tile-lg"]}
+		]},
+		{"id": "image", "match": "img", "image": true, "props": [
+			{"key": "rounded", "family": ["", "rounded-8", "rounded-16"], "labels": ["none", "soft", "strong"]}
+		]},
+		{"id": "icon", "match": "i.bi", "glyph": true, "props": []},
+		{"id": "link", "match": "a", "link": true, "props": []}
+	],
+	"covers": ["alert", "table", "card", "btn", "badge", "accordion", "list-group", "carousel", "progress", "stepper", "stat", "icon-tile"],
+	"exclude": {
+		"alert": {},
+		"table": {"table-actions": "a cell of row buttons, for screens", "table-check": "a column of checks, for screens", "table-group": "a group row needs its own head, an expert writes it", "table-group-divider": "as a group row", "table-group-end": "as a group row", "table-note": "a note row of screens", "table-scroll": "the wrapper a wide table gets from the theme", "table-scroll-first": "as table-scroll", "table-sort": "sorting belongs to screens", "table-sub": "a cell's second line, written as words", "table-title": "a row's link of screens"},
+		"card": {"card-body": "structure", "card-footer": "structure", "card-header": "structure", "card-img": "structure", "card-img-bottom": "structure", "card-img-overlay": "structure", "card-img-top": "structure", "card-scroll": "a screen's scrolling card"},
+		"btn": {"btn-check": "a form control", "btn-close": "a dialog's control", "btn-cooldown": "a form's state", "btn-float": "a screen's floating action", "btn-icon": "follows the button's words", "btn-toolbar": "a screen's row of groups"},
+		"badge": {"badge-inverse": "marks a whole company wiped, for screens"},
+		"accordion": {"accordion-body": "structure", "accordion-header": "structure", "accordion-icon": "structure", "accordion-item": "structure"},
+		"list-group": {"list-group-header": "structure", "list-group-item": "structure", "list-group-item-action": "follows a link inside"},
+		"carousel": {"carousel-indicators": "structure", "carousel-inner": "structure", "carousel-item": "structure", "carousel-overlay": "structure"},
+		"progress": {"meter": "a value of a screen", "meter-xs": "as meter", "progress-animated": "moves on the page by itself", "progress-top": "a screen's page progress"},
+		"stepper": {"stepper-item": "structure"},
+		"stat": {"stat-delta": "structure", "stat-label": "structure", "stat-meta": "structure", "stat-sub": "structure", "stat-value": "structure"},
+		"icon-tile": {"icon-tile-chart-1": "a chart's series", "icon-tile-chart-2": "a chart's series", "icon-tile-chart-3": "a chart's series", "icon-tile-chart-4": "a chart's series", "icon-tile-chart-5": "a chart's series", "icon-tile-chart-6": "a chart's series", "icon-tile-chart-7": "a chart's series", "icon-tile-chart-8": "a chart's series"}
+	}
+}

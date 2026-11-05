@@ -37,6 +37,8 @@ const tooltip = () => {
 				hide();
 			}
 		});
+	}
+	if (!tip.isConnected) {
 		document.body.append(tip);
 	}
 	return tip;
