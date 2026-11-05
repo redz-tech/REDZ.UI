@@ -20,7 +20,7 @@ The switch is two buttons with `command="--view"`, `aria-controls` naming the gr
 
 ```html
 <div class="hstack flex-wrap gap-8">
-	<h3 class="fs-14 me-auto">Lagoon tours · 4</h3>
+	<h3 class="fs-14 me-auto">Bay tours · 4</h3>
 	<div class="btn-group" role="group" aria-label="View">
 		<button class="btn btn-sm btn-icon" type="button" command="--view" aria-controls="media-folder-grid" value="grid" aria-label="Tiles"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i></button>
 		<button class="btn btn-sm btn-icon" type="button" command="--view" aria-controls="media-folder-grid" value="list" aria-label="Rows"><i class="bi bi-list-ul" aria-hidden="true"></i></button>

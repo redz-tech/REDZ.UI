@@ -1,5 +1,5 @@
-// The minifier's fixture: objects and patterns — shorthands, keys, defaults and rests keep their names and values.
-const title = 'Ang Thong';
+// The minifier's fixture: objects and patterns: shorthands, keys, defaults and rests keep their names and values.
+const title = 'North Bay';
 const price = 2500;
 const tour = {title, price, 'price-label': price + ' THB', [title.length]: 'computed', nested: {title}};
 const {title: name, price: cost = 0, missing = 'default', ...others} = {title: 'Coral', price: 900, seats: 30, boat: 'Star'};
