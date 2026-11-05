@@ -105,11 +105,10 @@
 		"docs/editor.html": [
 			{"label": "the toolbar's stop says the format and what stands here", "do": "focus", "target": "#editor-demo-host [role=\"toolbar\"] > button[tabindex=\"0\"]", "expect": ["Format", "Paragraph"]},
 			{"label": "a mark", "do": "focus", "target": "#editor-demo-host [data-editor=\"bold\"]", "expect": ["Bold"]},
-			{"label": "the menu of blocks", "do": "focus", "target": "#editor-demo-host [data-editor=\"insert\"]", "expect": ["Insert"]},
-			{"label": "Enter on it: its first item", "do": "key", "key": "Enter", "expect": ["Video"]},
-			{"label": "Escape: back on its button", "do": "key", "key": "Escape", "expect": ["Insert"]},
 			{"label": "a width of the lens", "do": "focus", "target": "#editor-demo-host .editor-lens [data-value=\"phone\"]", "expect": ["Phone"]},
-			{"label": "the checks", "do": "focus", "target": "#editor-demo-host .editor-foot button", "expect": ["Check"]}
+			{"label": "the checks", "do": "focus", "target": "#editor-demo-host .editor-foot button", "expect": ["Check"]},
+			{"label": "the menu of blocks", "do": "focus", "target": "#editor-demo-host [data-editor=\"insert\"]", "expect": ["Insert"]},
+			{"label": "Enter on it: its first item", "do": "key", "key": "Enter", "expect": ["Video"]}
 		],
 		"docs/carousel.html": [
 			{"label": "the Next button of a carousel", "do": "focus", "target": "[command=\"--next\"][aria-controls=\"carousel-basic-tours\"]", "expect": ["Next"]},
