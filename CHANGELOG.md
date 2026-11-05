@@ -4,6 +4,20 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## 0.14.0 - 2026-11-05
+
+The ERP's #98: a file the page sends becomes a stored one when the server answers its id.
+
+### Added
+- An upload's `redz:files` promise resolved with a string or a number is the id the server keeps the file under: the
+  row gets `data-file-stored`, and from then on its Remove asks the page in `redz:remove`, as a row the server wrote
+  does. Resolved with a Blob, or with nothing, it works as before. The row gets no field of its own: a form that
+  posts the ids it keeps adds one, or reads `data-file-stored`.
+
+### Checks
+- The behaviour check of stored files sends one and removes it: kept under the id the docs' server answers, its
+  Remove asks the page for that id.
+
 ## 0.13.0 - 2026-11-05
 
 The packages built into `dist/` like the main two files, the ERP's #95-#97, and probes that wait for what they read:
