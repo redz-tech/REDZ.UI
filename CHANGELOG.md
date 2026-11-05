@@ -40,6 +40,7 @@ tone pad, translations side by side, the page's reading, and who wrote what. No 
   `[data-editor-foot="check"]`.
 
 ### Changed - the library
+- The budgets: the stylesheet at most 36 KB, the script 34 KB, gzipped.
 - A plain `btn` in an `input-group` wears the field's line, an accent face and weight 600, so the group reads as one control; a plain
   `btn-icon` there reads as `input-group-text`. Solid, outline, subtle and text buttons stay as they are.
 - A click on a control with `aria-disabled="true"` and a title shows the title for three seconds and says it, as a tap always did.
