@@ -307,11 +307,11 @@
 	}
 
 	/* The row's mark stands on its first cell, and on a phone on the first one the phone shows: a pseudo-element of a row would take a column in Chrome. */
-	.table-danger td:first-child::before,
-	.table-warning td:first-child::before,
-	.table-active td:first-child::before,
-	.table tr[aria-current]:not([aria-current="false"]) > td:first-child::before {
+	:is(.table-danger, .table-warning, .table-active, .table tr[aria-current]:not([aria-current="false"])) > td:first-child::before {
 		content: "";
+	}
+
+	:is(.table-danger, .table-warning, .table-active, .table tr[aria-current]:not([aria-current="false"])) > td::before {
 		position: absolute;
 		inset-block-start: 50%;
 		inset-inline-start: 0;
@@ -325,14 +325,6 @@
 	@container region (width < 768px) {
 		:is(.table-danger, .table-warning, .table-active, .table tr[aria-current]:not([aria-current="false"])) > td:nth-child(1 of :not(.d-none))::before {
 			content: "";
-			position: absolute;
-			inset-block-start: 50%;
-			inset-inline-start: 0;
-			inline-size: 3px;
-			block-size: 1.25rem;
-			border-radius: 3px;
-			background: var(--redz-row-mark);
-			translate: 0 -50%;
 		}
 	}
 
@@ -377,10 +369,7 @@
 	}
 
 	@media (forced-colors: active) {
-		.table-danger td::before,
-		.table-warning td::before,
-		.table-active td::before,
-		.table tr[aria-current]:not([aria-current="false"]) > td::before {
+		:is(.table-danger, .table-warning, .table-active, .table tr[aria-current]:not([aria-current="false"])) > td::before {
 			forced-color-adjust: none;
 			background: CanvasText;
 		}

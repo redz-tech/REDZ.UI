@@ -87,9 +87,12 @@
 		padding-inline: 0;
 	}
 
-	/* A flush list with marked rows keeps every row's start where the marked ones have theirs, and their edge off the words. */
+	/* A flush list with an edged, tinted or alert row gives every row a card's room, so nothing touches the edge or the end. */
+	.list-group-flush:has(> :is([class*="edge-start-"], [class*="-subtle"], .alert)) > .list-group-item {
+		padding-inline: var(--redz-space-16);
+	}
+
 	.list-group-flush:has(> [class*="edge-start-"]) > .list-group-item {
-		padding-inline-start: var(--redz-space-8);
 		border-inline-start: 3px solid transparent;
 	}
 

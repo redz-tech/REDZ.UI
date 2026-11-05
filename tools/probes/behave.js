@@ -2894,6 +2894,21 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a click on a control that cannot run: the reason ' + (open ? 'shows' : 'does not show') + ' saying ' + say(words) + ', the title after it ' + say(back));
 			}
 		}},
+		flushRoom: {target: '.list-group-flush > .list-group-item', steps: [async (out) => {
+			const list = $('.list-group-flush');
+			const rows = [...list.children].filter((one) => one.matches('.list-group-item'));
+			const room = () => rows.map((one) => getComputedStyle(one).paddingInlineStart + '/' + getComputedStyle(one).paddingInlineEnd + '/' + getComputedStyle(one).borderInlineStartWidth);
+			rows[0].classList.add('edge-start-primary');
+			const edged = room();
+			rows[0].classList.remove('edge-start-primary');
+			rows[0].classList.add('bg-primary-subtle');
+			const tinted = room();
+			rows[0].classList.remove('bg-primary-subtle');
+			const sixteen = '16px';
+			if (edged.some((one) => one !== sixteen + '/' + sixteen + '/3px') || tinted.some((one) => !one.startsWith(sixteen + '/' + sixteen))) {
+				out.push('a flush list\'s rows: with an edge ' + say(edged) + ', tinted ' + say(tinted));
+			}
+		}]},
 		closing: {target: '#dialog-edit-note', steps: [async (out) => {
 			const dialog = $('#dialog-edit-note');
 			const head = dialog.querySelector('.dialog-header');

@@ -60,7 +60,8 @@ tone pad, translations side by side, the page's reading, and who wrote what. No 
 - `data-tooltip-delay` on a title or around it sets the wait of its tooltip; `0` shows it at once.
 - A folded rail's tooltip stands beside its link, so it covers no other icon.
 - `--redz-progress-top-size`, `--redz-progress-top-track` and `--redz-progress-top-glow` set how much the request bar shows.
-- A flush list group with `edge-start-*` rows keeps every row's start in line, and the edge off the words.
+- A flush list group with an `edge-start-*`, a tinted `bg-*-subtle` or an `alert` row gives every row a card's side room, and edged rows keep
+  their starts in line.
 - `--redz-card-header-bg`, `--redz-drawer-header-bg` and `--redz-dialog-header-bg` tint a section's head; a dialog's takes
   `--redz-dialog-header-end` and `--redz-dialog-header-line` for the room and the line under it.
 - `table-scroll-last` holds a wide table's last column in place, where a row's buttons stay in view.
