@@ -2518,7 +2518,7 @@ window.REDZ_BEHAVE = (() => {
 			}
 		}]},
 		stepDetail: {target: '#step-list-narrow .step-list', steps: [async (out) => {
-			const [short, long, badge, empty] = $$('#step-list-narrow .step-list > li');
+			const [short, wrapped, long, badge, empty] = $$('#step-list-narrow .step-list > li');
 			const room = (li) => {
 				const box = li.getBoundingClientRect();
 				return {box, start: box.left + parseFloat(getComputedStyle(li).paddingInlineStart), line: parseFloat(getComputedStyle(li).lineHeight)};
@@ -2531,21 +2531,36 @@ window.REDZ_BEHAVE = (() => {
 			if (!beside(short) || !beside(badge)) {
 				out.push('a detail that fits leaves the end of the line: ' + say([short, badge].map((li) => li.getBoundingClientRect().height)));
 			}
-			const {box, start, line} = room(long);
-			const under = $('.step-list-detail', long).getBoundingClientRect();
-			if (!near(under.left, start, 1) || under.top < box.top + line - 1) {
-				out.push('a detail that does not fit stays beside the name or leaves its start: ' + say([under.left, start, under.top - box.top, line]));
+			for (const li of [wrapped, long]) {
+				const {box, start, line} = room(li);
+				const under = $('.step-list-detail', li).getBoundingClientRect();
+				if (!near(under.left, start, 1) || under.top < box.top + line - 1) {
+					out.push('a detail that does not fit stays beside the name or leaves its start: ' + say([under.left, start, under.top - box.top, line]));
+				}
+				if (li.scrollWidth > li.clientWidth + 1) {
+					out.push('a long detail runs past its step');
+				}
 			}
-			if (long.scrollWidth > long.clientWidth + 1) {
-				out.push('a long detail runs past its step');
-			}
-			if (!near(empty.getBoundingClientRect().height, room(empty).line, 1)) {
+			if (getComputedStyle($('.step-list-detail', empty)).display !== 'none' || !near(empty.getBoundingClientRect().height, room(empty).line, 1)) {
 				out.push('an empty detail takes room: ' + empty.getBoundingClientRect().height + ' for a line of ' + room(empty).line);
 			}
 			const icon = $('.bi', short).getBoundingClientRect();
-			if (!near(icon.top + icon.height / 2, box.top - long.getBoundingClientRect().top + short.getBoundingClientRect().top + line / 2, 2)) {
+			if (!near(icon.top + icon.height / 2, short.getBoundingClientRect().top + room(short).line / 2, 2)) {
 				out.push('a step\'s icon leaves the middle of its first line');
 			}
+		}]},
+		foldedTab: {target: '#nav-tabs [role="tablist"]', steps: [async (out) => {
+			const tabs = $$('#nav-tabs [role="tab"]');
+			tabs[1].dataset.overflow = '';
+			tabs[0].focus();
+			tabs[0].dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true, cancelable: true}));
+			await settled();
+			if (document.activeElement !== tabs[2]) {
+				out.push('an arrow key lands on a folded tab: ' + document.activeElement.textContent);
+			}
+			delete tabs[1].dataset.overflow;
+			tabs[0].click();
+			await settled();
 		}]},
 		readyStep: {target: '#step-list-pipeline-ready [data-state="ready"]', steps: [async (out) => {
 			const stage = $('#step-list-pipeline-ready [data-state="ready"]');
