@@ -4,6 +4,40 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## 0.18.0 - 2026-11-06
+
+What the ERP's walk and the move of its screens left: a step that waits for a press, step details that fit a phone without a
+width in sight, and every table lighting its row.
+
+### Changed
+- Every `table` lights the row under the pointer, on a device with hover, so `table-hover` does nothing now and can go.
+  `--redz-row-hover` sets the light, on the page or on one table, and `table-static` keeps a table's rows still. A tinted row keeps
+  its tone and a selected one its color. The editor's Hover property writes `table-static` for no.
+- A `step-list-detail` stays at the end of the line while the name and it fit, and falls under the name, aligned with it, when
+  they do not, at any width of the page. An empty one takes no room. The step's icon stands in its padding, out of the flow.
+- `.diff` scrolls in its own box past 25rem and prints in full; a `max-h-*` utility sets another height. One that may scroll
+  takes `tabindex="0"` and a name.
+- A link `nav-overflow` folds is marked `data-overflow` alone, so `hidden` is always the page's. A page that read `.hidden` to
+  find a folded link reads `[data-overflow]`.
+
+### Added
+- `data-state="ready"` on `step-list` and `stage-list`: next, it waits for a press. It wears the look of `current`, and its icon
+  stays still.
+- `data-highlighted="hold"`: a mark the page sets itself stays until the page takes it away, whatever the pointer does.
+- `--redz-lanes-track`, the color of a board's track.
+
+### Fixed
+- `d-none` beats every display class on its element, `vstack`, `hstack` and `grid` among them; a width prefix still beats it.
+- `nav-overflow` looks again when the page sets or clears `hidden` on a link, a folded one too.
+- A `stat` keeps the tone of an `icon-tile-*` on its tile.
+- A `vstack` as an `alert`'s words stays beside the icon however long its text.
+- `REDZ.ui.confirm({title})` with nothing else has no empty body.
+- A lit lane of a board tints its track too, the grid on top.
+- A row with a `stretched-link` lights in the row's color, not a gray of its own.
+
+### Documentation
+- Icons from another host: a browser fetches a mask in CORS mode, so that host must send `Access-Control-Allow-Origin` on `.svg`.
+
 ## 0.17.0 - 2026-11-05
 
 The editor gets the rest of what was decided on the mockup: live facts, an AI that only suggests, a review word by word, the
