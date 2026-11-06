@@ -78,5 +78,6 @@ jobs:
         with:
           path: _site
 
+      # A deployment is keyed by its commit and cancelled at 10 minutes while its sync goes on: repeat with a new commit, once /pages/deployments/SHA says finished_file_sync.
       - id: deployment
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
