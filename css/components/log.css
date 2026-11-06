@@ -40,9 +40,17 @@
 	}
 
 	.diff {
+		max-block-size: 25rem;
 		padding-block: var(--redz-space-8);
 		background: var(--redz-bg);
 		white-space: normal;
+	}
+
+	@media print {
+		.diff {
+			max-block-size: none;
+			overflow: visible;
+		}
 	}
 
 	.diff > * {

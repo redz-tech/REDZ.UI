@@ -143,6 +143,17 @@
 	&lt;button class="stat stat-warning" type="button" aria-pressed="false"&gt;&lt;span class="icon-tile"&gt;&lt;i class="bi bi-clock-history" aria-hidden="true"&gt;&lt;/i&gt;&lt;/span&gt;&lt;span&gt;&lt;span class="stat-value"&gt;2&lt;/span&gt;&lt;span class="stat-label"&gt;Late&lt;/span&gt;&lt;/span&gt;&lt;/button&gt;
 	&lt;button class="stat stat-secondary" type="button" aria-pressed="false"&gt;&lt;span class="icon-tile"&gt;&lt;i class="bi bi-x-octagon" aria-hidden="true"&gt;&lt;/i&gt;&lt;/span&gt;&lt;span&gt;&lt;span class="stat-value"&gt;0&lt;/span&gt;&lt;span class="stat-label"&gt;Failed&lt;/span&gt;&lt;/span&gt;&lt;/button&gt;
 &lt;/div&gt;</code></pre></div>
+					<p>A tile takes the stat's tone unless it has its own: <code>icon-tile-chart-3</code> or <code>icon-tile-success</code> on the tile stays, for a category in a neutral stat.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="stat-tile-tone">
+						<div class="grid cols-2 gap-12 max-w-480">
+							<div class="stat"><span class="icon-tile icon-tile-chart-3"><i class="bi bi-cloud-arrow-up" aria-hidden="true"></i></span><span><span class="stat-value">14</span><span class="stat-label">Uploaded</span></span></div>
+							<div class="stat stat-success"><span class="icon-tile"><i class="bi bi-check-lg" aria-hidden="true"></i></span><span><span class="stat-value">2,126</span><span class="stat-label">Matched</span></span></div>
+						</div>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;div class="grid cols-2 gap-12 max-w-480"&gt;
+	&lt;div class="stat"&gt;&lt;span class="icon-tile icon-tile-chart-3"&gt;&lt;i class="bi bi-cloud-arrow-up" aria-hidden="true"&gt;&lt;/i&gt;&lt;/span&gt;&lt;span&gt;&lt;span class="stat-value"&gt;14&lt;/span&gt;&lt;span class="stat-label"&gt;Uploaded&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;
+	&lt;div class="stat stat-success"&gt;&lt;span class="icon-tile"&gt;&lt;i class="bi bi-check-lg" aria-hidden="true"&gt;&lt;/i&gt;&lt;/span&gt;&lt;span&gt;&lt;span class="stat-value"&gt;2,126&lt;/span&gt;&lt;span class="stat-label"&gt;Matched&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre></div>
 					<p>Without a button it only reads: a <code>div class="stat"</code>. One long word breaks instead of running past a narrow tile.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="stat-narrow">
 						<div class="grid cols-2 gap-12 max-w-320">
@@ -206,7 +217,7 @@
 
 						<section class="vstack gap-12" aria-labelledby="stat-tokens">
 							<h2 id="stat-tokens">Tokens</h2>
-							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/stat.css"><code>css/components/stat.css</code></a>. It declares <code>--redz-stat-tone</code>, <code>--redz-tile-bg</code>, <code>--redz-tile-fg</code> on its root, never on rows or items.</p>
+							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/stat.css"><code>css/components/stat.css</code></a>. It declares <code>--redz-stat-tone</code>, <code>--redz-tile-base-bg</code>, <code>--redz-tile-base-fg</code> on its root, never on rows or items.</p>
 							<p>It reads the theme's <code>--redz-text</code>, <code>--redz-space-12</code>, <code>--redz-space-16</code>, <code>--redz-border</code>, <code>--redz-radius-12</code>, <code>--redz-bg</code>, <code>--redz-bg-hover</code>, <code>--redz-space-8</code>, <code>--redz-text-muted</code>, <code>--redz-fs-12</code>, <code>--redz-space-2</code>, <code>--redz-success</code>, <code>--redz-danger</code>, <code>--redz-radius-6</code>, <code>--redz-fs-24</code>, <code>--redz-primary</code>, <code>--redz-warning</code>, <code>--redz-info</code>.</p>
 						</section>
 				<footer class="d-flex flex-wrap justify-content-between gap-8 pt-16 border-top text-muted fs-12">

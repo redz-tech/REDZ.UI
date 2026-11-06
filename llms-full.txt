@@ -227,6 +227,7 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 - Space, in px: 0 2 4 8 12 16 20 24 32 40 48 64 - for `m`, `p` and `gap` with their sides: `mt` `mb` `ms` `me` `mx` `my`, the same for `p`. `ms` and `me` are the start and the end of the line, so they turn right to left.
 - Font size: 11 12 14 16 18 20 24 32 40 48 - 11 for the smallest caption, 40 and 48 for one hero number; line height: 16 20 24 28; radius: 0 4 6 8 12 16 and `rounded-full`.
 - Width prefixes come on placement and spacing - display, flex, grid, gaps, order, text alignment, margins and paddings: `md:d-none`, `lg:p-24`.
+- `d-none` beats every other display class and component on its element, and a width prefix beats it: `d-none md:d-flex` shows from `md`. Page styles outside the layers beat it too: use `hidden` there.
 
 ## Aspect ratio
 
@@ -314,7 +315,6 @@ row.classList.add('flash');
 
 | Class | Declarations | Width prefixes |
 | --- | --- | --- |
-| `d-none` | `display: none;` | yes |
 | `d-inline` | `display: inline;` | yes |
 | `d-inline-block` | `display: inline-block;` | yes |
 | `d-block` | `display: block;` | yes |
@@ -892,6 +892,7 @@ row.classList.add('flash');
 | `vr` | `display: inline-block; align-self: stretch; inline-size: 1px; min-block-size: 1em; background: var(--redz-border-strong);` | - |
 | `icon-link` | `display: inline-flex; align-items: center; gap: 0.375em; text-underline-offset: 0.2em;` | - |
 | `flip-rtl:dir(rtl)` | `scale: -1 1;` | - |
+| `d-none` | `display: none;` | yes |
 
 ## From Bootstrap 5.3
 
@@ -1755,6 +1756,10 @@ An icon takes the size of the text and its color: a utility or the parent sets b
 
 The names are Bootstrap Icons' own - look one up at [icons.getbootstrap.com](https://icons.getbootstrap.com/). A name the set does not have paints a filled square, and the checks flag it.
 
+## From another host
+
+A browser fetches a mask in CORS mode, as it does a font. Served from another origin, every icon stays blank unless that host sends `Access-Control-Allow-Origin` on `.svg`. jsDelivr and GitHub Pages do; on your own CDN, add `svg` to the types that get the header. A file already fetched without it stays broken in the browser's cache for its whole lifetime when it is `immutable`, so a change of header alone does not reach those visitors: give the files a new address too.
+
 ## Accessibility
 
 - An icon beside words is `aria-hidden="true"`. An icon alone takes its meaning from its parent: the button's `aria-label`, or hidden words.
@@ -2228,6 +2233,7 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `tab-content` | - | remove | panels are siblings with role="tabpanel", hidden when not selected |
 | `tab-pane` | - | remove | panels are siblings with role="tabpanel", hidden when not selected |
 | `table-dark` | - | review | row tones are danger, warning and secondary |
+| `table-hover` | - | remove | every table lights its row under the pointer; table-static keeps one still |
 | `table-info` | - | review | row tones are danger, warning and secondary |
 | `table-light` | - | review | row tones are danger, warning and secondary |
 | `table-primary` | - | review | row tones are danger, warning and secondary |
@@ -5505,7 +5511,7 @@ Series without a tone take the chart colors by their column.
 
 ## A board of lanes
 
-`table class="lanes"` lays a time window across: a header cell `lanes-scale` holds the captions, each at its `data-at`, and each row is a lane - its name in the `th`, which may hold a button, and its track in the `td`. In a track `lanes-tick` marks a run at `data-at`, `lanes-tick-once` a single one, and `lanes-span` from `data-from` to `data-to` a run that goes on, hatched, with its caption. The red line is now, at the table's `data-now` - 0, the start, by default; the grid has `--redz-lanes-steps` parts, 8. Elements that share a [`data-highlight`](table.md#table-highlight) key light together: a lane and its row in a table.
+`table class="lanes"` lays a time window across: a header cell `lanes-scale` holds the captions, each at its `data-at`, and each row is a lane - its name in the `th`, which may hold a button, and its track in the `td`. In a track `lanes-tick` marks a run at `data-at`, `lanes-tick-once` a single one, and `lanes-span` from `data-from` to `data-to` a run that goes on, hatched, with its caption. The red line is now, at the table's `data-now` - 0, the start, by default; the grid has `--redz-lanes-steps` parts, 8. Elements that share a [`data-highlight`](table.md#table-highlight) key light together: a lane, its track included, and its row in a table.
 
 ```html
 <table class="lanes">
@@ -5702,13 +5708,13 @@ A list of records: a title that links to the record, a line under it, a note whe
 
 ## Examples
 
-`table` on the `<table>`; `table-hover` lights the row under the pointer. The head stays at the top of the screen as the page scrolls. Columns that only help on a wide screen hide below `md` of their card.
+`table` on the `<table>`; the row under the pointer lights on a device with one, in the color of `--redz-row-hover`, set on the page or on one table, and `table-static` keeps a table's rows still. The head stays at the top of the screen as the page scrolls. Columns that only help on a wide screen hide below `md` of their card.
 
 ```html
 <section class="card" aria-labelledby="table-list-title">
 	<div class="card-header"><h2 id="table-list-title">Excursions</h2><span class="text-muted fs-12">3 of 28</span></div>
 	<div class="card-body p-0">
-		<table class="table table-hover">
+		<table class="table">
 			<thead>
 				<tr>
 					<th class="table-check"><input class="check" type="checkbox" aria-label="Select all"></th>
@@ -5760,7 +5766,7 @@ A list of records: a title that links to the record, a line under it, a note whe
 ```html
 <section class="card" aria-labelledby="table-variants-title">
 	<div class="card-header"><h2 class="fs-14" id="table-variants-title">Boats this week</h2></div>
-	<table class="table table-striped table-hover">
+	<table class="table table-striped">
 		<thead><tr><th scope="col">Boat</th><th class="text-end" scope="col">Trips</th><th class="text-end" scope="col">Seats sold</th></tr></thead>
 		<tbody>
 			<tr><td>Boat A</td><td class="text-end tabular-nums">12</td><td class="text-end tabular-nums">286</td></tr>
@@ -5804,9 +5810,28 @@ A list of records: a title that links to the record, a line under it, a note whe
 </table>
 ```
 
+### Rows that stay still
+
+Every table lights the row under the pointer. `table-static` keeps the rows of one still, for a table with nothing to do in a row.
+
+```html
+<table class="table" aria-label="Departures">
+	<tbody>
+		<tr><td>North Bay</td><td>08:00</td></tr>
+		<tr><td>Turtle Cove</td><td>10:30</td></tr>
+	</tbody>
+</table>
+<table class="table table-static" aria-label="Fares">
+	<tbody>
+		<tr><td>Adult</td><td>1,200</td></tr>
+		<tr><td>Child</td><td>600</td></tr>
+	</tbody>
+</table>
+```
+
 ### Rows that light together
 
-Elements that share a `data-highlight` key light together: hovering or focusing one marks every element with its key `data-highlighted`, tinted - a row here and its lane on a [board](chart.md#chart-lanes), or its marker on a map.
+Elements that share a `data-highlight` key light together: hovering or focusing one marks every element with its key `data-highlighted`, tinted - a row here and its lane on a [board](chart.md#chart-lanes), or its marker on a map. A mark the page sets itself, `data-highlighted="hold"`, stays until the page takes it away: a row flashed after a jump to it, say.
 
 ```html
 <div class="hstack flex-wrap gap-8">
@@ -5950,7 +5975,7 @@ A row's tone marks what needs attention: `table-danger` failed, `table-warning` 
 
 From [`css/components/table.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css). It declares `--redz-table-head-border`, `--redz-table-head-weight`, `--redz-row-tint`, `--redz-row-mark` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-8`, `--redz-row-pad`, `--redz-space-12`, `--redz-border`, `--redz-table-head-bg`, `--redz-bg`, `--redz-table-head-text`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-bg-page`, `--redz-border-strong`, `--redz-bg-hover`, `--redz-radius-12`, `--redz-space-16`, `--redz-font-mono`, `--redz-space-4`, `--redz-primary`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-primary-subtle`.
+It reads the theme's `--redz-space-8`, `--redz-row-pad`, `--redz-space-12`, `--redz-border`, `--redz-table-head-bg`, `--redz-bg`, `--redz-table-head-text`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-bg-page`, `--redz-border-strong`, `--redz-row-hover`, `--redz-primary`, `--redz-radius-12`, `--redz-space-16`, `--redz-font-mono`, `--redz-space-4`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-primary-subtle`.
 
 ## From Bootstrap 5.3
 
@@ -5958,6 +5983,7 @@ It reads the theme's `--redz-space-8`, `--redz-row-pad`, `--redz-space-12`, `--r
 | --- | --- | --- | --- |
 | `caption-top` | - | missing |  |
 | `table-dark` | - | review | row tones are danger, warning and secondary |
+| `table-hover` | - | remove | every table lights its row under the pointer; table-static keeps one still |
 | `table-info` | - | review | row tones are danger, warning and secondary |
 | `table-light` | - | review | row tones are danger, warning and secondary |
 | `table-primary` | - | review | row tones are danger, warning and secondary |
@@ -5988,7 +6014,7 @@ What a job printed, line by line as it runs, and what changed between two versio
 
 ## A diff
 
-`div class="diff"` holds one element a line: an `ins` is a line added, marked "+" and tinted green, a `del` a line taken away, "-" and red, anything else a line kept. In a kept line, `del` and `ins` show the words changed inside it, side by side. Lines of code carry `translate="no"`, so a page's translator leaves them as they are, and a log or a diff of code is `dir="ltr"` on a right-to-left page; a diff of Arabic words keeps the page's direction.
+`div class="diff"` holds one element a line: an `ins` is a line added, marked "+" and tinted green, a `del` a line taken away, "-" and red, anything else a line kept. In a kept line, `del` and `ins` show the words changed inside it, side by side. It scrolls in its own box past 25rem, a `max-h-*` utility sets another height, and it prints in full; one that may scroll takes `tabindex="0"` and a name, so a keyboard reaches it. Lines of code carry `translate="no"`, so a page's translator leaves them as they are, and a log or a diff of code is `dir="ltr"` on a right-to-left page; a diff of Arabic words keeps the page's direction.
 
 ```html
 <div class="diff" role="group" aria-label="The changes of the page's title" dir="ltr">
@@ -6277,7 +6303,7 @@ The plain tile is in the accent; the tones and `icon-tile-sm` follow Bootstrap's
 
 From [`css/components/icon-tile.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/icon-tile.css). It declares `--redz-tile-bg`, `--redz-tile-fg`, `--redz-tile-chart` on its root, never on rows or items.
 
-It reads the theme's `--redz-primary-subtle`, `--redz-primary`, `--redz-radius-12`, `--redz-radius-8`, `--redz-radius-16`, `--redz-bg`, `--redz-text`, `--redz-chart-1`, `--redz-chart-2`, `--redz-chart-3`, `--redz-chart-4`, `--redz-chart-5`, `--redz-chart-6`, `--redz-chart-7`, `--redz-chart-8`, `--redz-secondary-subtle`, `--redz-secondary`, `--redz-success-subtle`, `--redz-success`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-info-subtle`, `--redz-info`, `--redz-color`.
+It reads the theme's `--redz-tile-base-bg`, `--redz-primary-subtle`, `--redz-tile-base-fg`, `--redz-primary`, `--redz-radius-12`, `--redz-radius-8`, `--redz-radius-16`, `--redz-bg`, `--redz-text`, `--redz-chart-1`, `--redz-chart-2`, `--redz-chart-3`, `--redz-chart-4`, `--redz-chart-5`, `--redz-chart-6`, `--redz-chart-7`, `--redz-chart-8`, `--redz-secondary-subtle`, `--redz-secondary`, `--redz-success-subtle`, `--redz-success`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-info-subtle`, `--redz-info`, `--redz-color`.
 
 # Stat tiles
 
@@ -6293,6 +6319,15 @@ A number with its label and an icon in a tone - and, as a button, the filter for
 	<button class="stat stat-primary" type="button" aria-pressed="false"><span class="icon-tile"><i class="bi bi-play-circle" aria-hidden="true"></i></span><span><span class="stat-value">3</span><span class="stat-label">Running</span></span></button>
 	<button class="stat stat-warning" type="button" aria-pressed="false"><span class="icon-tile"><i class="bi bi-clock-history" aria-hidden="true"></i></span><span><span class="stat-value">2</span><span class="stat-label">Late</span></span></button>
 	<button class="stat stat-secondary" type="button" aria-pressed="false"><span class="icon-tile"><i class="bi bi-x-octagon" aria-hidden="true"></i></span><span><span class="stat-value">0</span><span class="stat-label">Failed</span></span></button>
+</div>
+```
+
+A tile takes the stat's tone unless it has its own: `icon-tile-chart-3` or `icon-tile-success` on the tile stays, for a category in a neutral stat.
+
+```html
+<div class="grid cols-2 gap-12 max-w-480">
+	<div class="stat"><span class="icon-tile icon-tile-chart-3"><i class="bi bi-cloud-arrow-up" aria-hidden="true"></i></span><span><span class="stat-value">14</span><span class="stat-label">Uploaded</span></span></div>
+	<div class="stat stat-success"><span class="icon-tile"><i class="bi bi-check-lg" aria-hidden="true"></i></span><span><span class="stat-value">2,126</span><span class="stat-label">Matched</span></span></div>
 </div>
 ```
 
@@ -6342,7 +6377,7 @@ As an `a` a tile leads to the list it counts, filtered on its server; the tile o
 
 ## Tokens
 
-From [`css/components/stat.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/stat.css). It declares `--redz-stat-tone`, `--redz-tile-bg`, `--redz-tile-fg` on its root, never on rows or items.
+From [`css/components/stat.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/stat.css). It declares `--redz-stat-tone`, `--redz-tile-base-bg`, `--redz-tile-base-fg` on its root, never on rows or items.
 
 It reads the theme's `--redz-text`, `--redz-space-12`, `--redz-space-16`, `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-bg-hover`, `--redz-space-8`, `--redz-text-muted`, `--redz-fs-12`, `--redz-space-2`, `--redz-success`, `--redz-danger`, `--redz-radius-6`, `--redz-fs-24`, `--redz-primary`, `--redz-warning`, `--redz-info`.
 
@@ -6410,7 +6445,7 @@ The steps of a long job as it runs - a release, a publish, an install - each wit
 
 ## A job's steps
 
-`step-list` is an `ol` of steps, each with an icon, its name and a `step-list-detail` at the end; `data-state` says where it is: `done`, `current` - its icon turns while motion is allowed, `failed`, `kept` - failed with the earlier state kept - and `pending`. A job's panel is a `card` with `sticky-top`, under the app header while the page scrolls, its head a [dot](dot.md), a title and the time, and a [progress](progress.md).
+`step-list` is an `ol` of steps, each with an icon, its name and a `step-list-detail` at the end; `data-state` says where it is: `done`, `current` - its icon turns while motion is allowed, `ready` - next, it waits for a press and its icon stays still, `failed`, `kept` - failed with the earlier state kept - and `pending`. A job's panel is a `card` with `sticky-top`, under the app header while the page scrolls, its head a [dot](dot.md), a title and the time, and a [progress](progress.md).
 
 ```html
 <section class="card" aria-labelledby="step-list-job-title">
@@ -6426,6 +6461,19 @@ The steps of a long job as it runs - a release, a publish, an install - each wit
 		</ol>
 	</div>
 </section>
+```
+
+### In a narrow box
+
+A `step-list-detail` stays at the end of the line while the name and it fit, and falls under the name, aligned with it, when they do not, at any width of the page. An empty one takes no room, so it can wait for its words, and it can hold a [badge](badge.md).
+
+```html
+<ol class="step-list max-w-320" aria-label="Updating the site">
+	<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Download<span class="step-list-detail">4.6 MB</span></li>
+	<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Compare the files<span class="step-list-detail">matched 2,126 · fetched 14 · 4.6 MB · 2 migrations · 1 seed</span></li>
+	<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Check the schema<span class="step-list-detail"><span class="badge badge-subtle-success">Clean</span></span></li>
+	<li data-state="ready"><i class="bi bi-play-circle" aria-hidden="true"></i>Switch to the new version<span class="step-list-detail"></span></li>
+</ol>
 ```
 
 ### More states, and a step's body
@@ -6456,6 +6504,16 @@ Six more states: `warning` - done with a warning, `info`, `ask` - the job waits 
 </ol>
 ```
 
+A stage that is next and waits for a press is `ready`: it wears the frame of `current`, and its icon stays still.
+
+```html
+<ol class="stage-list" aria-label="The update">
+	<li data-state="done"><span class="hstack gap-8"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><strong>Download</strong></span><span class="fs-12">4.6 MB</span></li>
+	<li data-state="ready" aria-current="step"><span class="hstack gap-8"><i class="bi bi-play-circle" aria-hidden="true"></i><strong>Install</strong></span><span class="fs-12">Waits for your press</span><div class="stage-list-actions"><button class="btn btn-sm btn-primary" type="button">Start</button></div></li>
+	<li data-state="pending"><span class="hstack gap-8"><i class="bi bi-circle" aria-hidden="true"></i><strong>Verify</strong></span><span class="fs-12">After the install</span></li>
+</ol>
+```
+
 ## A timeline
 
 `timeline` is an `ol` of events joined by a line: each starts with an [icon tile](icon-tile.md) in its tone, then a `timeline-time`, the words, and a `dl` of details when it has them.
@@ -6477,9 +6535,9 @@ Six more states: `warning` - done with a warning, `info`, `ask` - the job waits 
 
 ## Tokens
 
-From [`css/components/step-list.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/step-list.css), which declares no custom property of its own.
+From [`css/components/step-list.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/step-list.css). It declares `--redz-step-edge`, `--redz-step-top` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-4`, `--redz-space-8`, `--redz-text-muted`, `--redz-text`, `--redz-success`, `--redz-primary`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-text-faint`, `--redz-space-12`, `--redz-radius-8`, `--redz-primary-subtle`, `--redz-warning-subtle`, `--redz-danger-subtle`, `--redz-fs-14`, `--redz-space-16`, `--redz-border`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-fs-12`, `--redz-space-2`.
+It reads the theme's `--redz-space-4`, `--redz-space-2`, `--redz-space-16`, `--redz-text-muted`, `--redz-space-8`, `--redz-text`, `--redz-success`, `--redz-primary`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-text-faint`, `--redz-space-12`, `--redz-radius-8`, `--redz-primary-subtle`, `--redz-warning-subtle`, `--redz-danger-subtle`, `--redz-fs-14`, `--redz-border`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-fs-12`.
 
 # Empty states
 
@@ -7064,6 +7122,14 @@ An alert whose words come after an action - a refused sign-in, a wrong code - is
 <div class="alert alert-info alert-lg"><i class="bi bi-info-circle" aria-hidden="true"></i><div>Prices include the park fee.</div></div>
 ```
 
+### A title over its text
+
+The words may be a `vstack`: it stays beside the icon however long its text.
+
+```html
+<div class="alert alert-warning"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i><div class="vstack gap-4"><strong>The backup is two days old</strong><span>The nightly copy stopped on Tuesday, so today's changes are not in it yet. Run one by hand before the next update.</span></div></div>
+```
+
 ## Accessibility
 
 - An alert that is on the page from the start is plain content - no live region. One that appears after an action and must be heard goes in a live region, or is a toast.
@@ -7627,7 +7693,7 @@ A nav or a tab list wider than its box scrolls sideways, and the edge it goes on
 
 ### When the links do not fit
 
-`nav-overflow` around a nav keeps it on one line: the links that do not fit hide from the end and come back, in their order, as the items of a menu behind a “More” button after the nav. The link the person is on and a link with `nav-overflow-keep` stay in the row. A link that opens a [menu](menu.md) folds with it, as a group of its items under the link's words, and stays in the row while its menu holds the page the person is on; a [navbar](navbar.md) shows one. It measures the room its own box has, not the window, so a nav in a narrow column folds as early as it needs to. For a row of links the wrapper is the `<nav>`, so the menu stays inside the landmark.
+`nav-overflow` around a nav keeps it on one line: the links that do not fit hide from the end and come back, in their order, as the items of a menu behind a “More” button after the nav. The link the person is on and a link with `nav-overflow-keep` stay in the row. A link that opens a [menu](menu.md) folds with it, as a group of its items under the link's words, and stays in the row while its menu holds the page the person is on; a [navbar](navbar.md) shows one. A link the page hides with `hidden` leaves the row and the menu, and comes back when the page shows it. It measures the room its own box has, not the window, so a nav in a narrow column folds as early as it needs to. For a row of links the wrapper is the `<nav>`, so the menu stays inside the landmark.
 
 ```html
 <nav class="nav-overflow max-w-480" aria-label="Excursion sections">

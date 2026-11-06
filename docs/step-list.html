@@ -128,7 +128,7 @@
 
 				<section class="vstack gap-16" aria-labelledby="step-list-examples">
 					<h2 id="step-list-examples">A job's steps</h2>
-					<p><code>step-list</code> is an <code>ol</code> of steps, each with an icon, its name and a <code>step-list-detail</code> at the end; <code>data-state</code> says where it is: <code>done</code>, <code>current</code> - its icon turns while motion is allowed, <code>failed</code>, <code>kept</code> - failed with the earlier state kept - and <code>pending</code>. A job's panel is a <code>card</code> with <code>sticky-top</code>, under the app header while the page scrolls, its head a <a href="dot.html">dot</a>, a title and the time, and a <a href="progress.html">progress</a>.</p>
+					<p><code>step-list</code> is an <code>ol</code> of steps, each with an icon, its name and a <code>step-list-detail</code> at the end; <code>data-state</code> says where it is: <code>done</code>, <code>current</code> - its icon turns while motion is allowed, <code>ready</code> - next, it waits for a press and its icon stays still, <code>failed</code>, <code>kept</code> - failed with the earlier state kept - and <code>pending</code>. A job's panel is a <code>card</code> with <code>sticky-top</code>, under the app header while the page scrolls, its head a <a href="dot.html">dot</a>, a title and the time, and a <a href="progress.html">progress</a>.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="step-list-job">
 						<section class="card" aria-labelledby="step-list-job-title">
 							<div class="card-header hstack gap-8"><span class="dot dot-primary"></span><h2 id="step-list-job-title">Publishing the site</h2><span class="ms-auto tabular-nums text-muted">01:42</span></div>
@@ -157,6 +157,23 @@
 		&lt;/ol&gt;
 	&lt;/div&gt;
 &lt;/section&gt;</code></pre></div>
+
+					<h3 id="step-list-narrow-title">In a narrow box</h3>
+					<p>A <code>step-list-detail</code> stays at the end of the line while the name and it fit, and falls under the name, aligned with it, when they do not, at any width of the page. An empty one takes no room, so it can wait for its words, and it can hold a <a href="badge.html">badge</a>.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="step-list-narrow">
+						<ol class="step-list max-w-320" aria-label="Updating the site">
+							<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Download<span class="step-list-detail">4.6 MB</span></li>
+							<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Compare the files<span class="step-list-detail">matched 2,126 · fetched 14 · 4.6 MB · 2 migrations · 1 seed</span></li>
+							<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Check the schema<span class="step-list-detail"><span class="badge badge-subtle-success">Clean</span></span></li>
+							<li data-state="ready"><i class="bi bi-play-circle" aria-hidden="true"></i>Switch to the new version<span class="step-list-detail"></span></li>
+						</ol>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;ol class="step-list max-w-320" aria-label="Updating the site"&gt;
+	&lt;li data-state="done"&gt;&lt;i class="bi bi-check-circle-fill" aria-hidden="true"&gt;&lt;/i&gt;Download&lt;span class="step-list-detail"&gt;4.6 MB&lt;/span&gt;&lt;/li&gt;
+	&lt;li data-state="done"&gt;&lt;i class="bi bi-check-circle-fill" aria-hidden="true"&gt;&lt;/i&gt;Compare the files&lt;span class="step-list-detail"&gt;matched 2,126 · fetched 14 · 4.6 MB · 2 migrations · 1 seed&lt;/span&gt;&lt;/li&gt;
+	&lt;li data-state="done"&gt;&lt;i class="bi bi-check-circle-fill" aria-hidden="true"&gt;&lt;/i&gt;Check the schema&lt;span class="step-list-detail"&gt;&lt;span class="badge badge-subtle-success"&gt;Clean&lt;/span&gt;&lt;/span&gt;&lt;/li&gt;
+	&lt;li data-state="ready"&gt;&lt;i class="bi bi-play-circle" aria-hidden="true"&gt;&lt;/i&gt;Switch to the new version&lt;span class="step-list-detail"&gt;&lt;/span&gt;&lt;/li&gt;
+&lt;/ol&gt;</code></pre></div>
 
 					<h3 id="step-list-more">More states, and a step's body</h3>
 					<p>Six more states: <code>warning</code> - done with a warning, <code>info</code>, <code>ask</code> - the job waits for the person, <code>waiting</code> - for something else, <code>skipped</code> and <code>locked</code>. A <code>step-list-body</code> after a step's name is a block under it, for what the step found or asks; in a list with bodies every step is a block, and the current one, the one that asks and the one that failed are tinted.</p>
@@ -197,6 +214,19 @@
 	&lt;li data-state="ask"&gt;&lt;span class="hstack gap-8"&gt;&lt;i class="bi bi-question-circle-fill" aria-hidden="true"&gt;&lt;/i&gt;&lt;strong&gt;Approve&lt;/strong&gt;&lt;/span&gt;&lt;span class="fs-12"&gt;An owner signs off&lt;/span&gt;&lt;div class="stage-list-actions"&gt;&lt;button class="btn btn-sm btn-primary" type="button"&gt;Approve&lt;/button&gt;&lt;/div&gt;&lt;/li&gt;
 	&lt;li data-state="waiting"&gt;&lt;span class="hstack gap-8"&gt;&lt;i class="bi bi-hourglass-split" aria-hidden="true"&gt;&lt;/i&gt;&lt;strong&gt;Deploy&lt;/strong&gt;&lt;/span&gt;&lt;span class="fs-12"&gt;After the approval&lt;/span&gt;&lt;/li&gt;
 &lt;/ol&gt;</code></pre></div>
+					<p>A stage that is next and waits for a press is <code>ready</code>: it wears the frame of <code>current</code>, and its icon stays still.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="step-list-pipeline-ready">
+						<ol class="stage-list" aria-label="The update">
+							<li data-state="done"><span class="hstack gap-8"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><strong>Download</strong></span><span class="fs-12">4.6 MB</span></li>
+							<li data-state="ready" aria-current="step"><span class="hstack gap-8"><i class="bi bi-play-circle" aria-hidden="true"></i><strong>Install</strong></span><span class="fs-12">Waits for your press</span><div class="stage-list-actions"><button class="btn btn-sm btn-primary" type="button">Start</button></div></li>
+							<li data-state="pending"><span class="hstack gap-8"><i class="bi bi-circle" aria-hidden="true"></i><strong>Verify</strong></span><span class="fs-12">After the install</span></li>
+						</ol>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;ol class="stage-list" aria-label="The update"&gt;
+	&lt;li data-state="done"&gt;&lt;span class="hstack gap-8"&gt;&lt;i class="bi bi-check-circle-fill" aria-hidden="true"&gt;&lt;/i&gt;&lt;strong&gt;Download&lt;/strong&gt;&lt;/span&gt;&lt;span class="fs-12"&gt;4.6 MB&lt;/span&gt;&lt;/li&gt;
+	&lt;li data-state="ready" aria-current="step"&gt;&lt;span class="hstack gap-8"&gt;&lt;i class="bi bi-play-circle" aria-hidden="true"&gt;&lt;/i&gt;&lt;strong&gt;Install&lt;/strong&gt;&lt;/span&gt;&lt;span class="fs-12"&gt;Waits for your press&lt;/span&gt;&lt;div class="stage-list-actions"&gt;&lt;button class="btn btn-sm btn-primary" type="button"&gt;Start&lt;/button&gt;&lt;/div&gt;&lt;/li&gt;
+	&lt;li data-state="pending"&gt;&lt;span class="hstack gap-8"&gt;&lt;i class="bi bi-circle" aria-hidden="true"&gt;&lt;/i&gt;&lt;strong&gt;Verify&lt;/strong&gt;&lt;/span&gt;&lt;span class="fs-12"&gt;After the install&lt;/span&gt;&lt;/li&gt;
+&lt;/ol&gt;</code></pre></div>
 				</section>
 
 				<section class="vstack gap-16" aria-labelledby="step-list-timeline">
@@ -228,8 +258,8 @@
 
 						<section class="vstack gap-12" aria-labelledby="step-list-tokens">
 							<h2 id="step-list-tokens">Tokens</h2>
-							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/step-list.css"><code>css/components/step-list.css</code></a>, which declares no custom property of its own.</p>
-							<p>It reads the theme's <code>--redz-space-4</code>, <code>--redz-space-8</code>, <code>--redz-text-muted</code>, <code>--redz-text</code>, <code>--redz-success</code>, <code>--redz-primary</code>, <code>--redz-danger</code>, <code>--redz-warning</code>, <code>--redz-info</code>, <code>--redz-text-faint</code>, <code>--redz-space-12</code>, <code>--redz-radius-8</code>, <code>--redz-primary-subtle</code>, <code>--redz-warning-subtle</code>, <code>--redz-danger-subtle</code>, <code>--redz-fs-14</code>, <code>--redz-space-16</code>, <code>--redz-border</code>, <code>--redz-border-strong</code>, <code>--redz-radius-12</code>, <code>--redz-bg</code>, <code>--redz-fs-12</code>, <code>--redz-space-2</code>.</p>
+							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/step-list.css"><code>css/components/step-list.css</code></a>. It declares <code>--redz-step-edge</code>, <code>--redz-step-top</code> on its root, never on rows or items.</p>
+							<p>It reads the theme's <code>--redz-space-4</code>, <code>--redz-space-2</code>, <code>--redz-space-16</code>, <code>--redz-text-muted</code>, <code>--redz-space-8</code>, <code>--redz-text</code>, <code>--redz-success</code>, <code>--redz-primary</code>, <code>--redz-danger</code>, <code>--redz-warning</code>, <code>--redz-info</code>, <code>--redz-text-faint</code>, <code>--redz-space-12</code>, <code>--redz-radius-8</code>, <code>--redz-primary-subtle</code>, <code>--redz-warning-subtle</code>, <code>--redz-danger-subtle</code>, <code>--redz-fs-14</code>, <code>--redz-border</code>, <code>--redz-border-strong</code>, <code>--redz-radius-12</code>, <code>--redz-bg</code>, <code>--redz-fs-12</code>.</p>
 						</section>
 				<footer class="d-flex flex-wrap justify-content-between gap-8 pt-16 border-top text-muted fs-12">
 					<span>MIT license · © 2026 Red Z Group · includes Bootstrap Icons (MIT)</span>

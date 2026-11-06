@@ -74,3 +74,9 @@
 		--redz-alert-icon: var(--redz-info);
 	}
 }
+
+@layer utilities {
+	.alert > .vstack {
+		flex-basis: 16rem;
+	}
+}

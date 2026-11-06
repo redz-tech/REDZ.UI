@@ -9,6 +9,7 @@ Single-purpose classes with Bootstrap 5's names, where the number is the value: 
 - Space, in px: 0 2 4 8 12 16 20 24 32 40 48 64 - for `m`, `p` and `gap` with their sides: `mt` `mb` `ms` `me` `mx` `my`, the same for `p`. `ms` and `me` are the start and the end of the line, so they turn right to left.
 - Font size: 11 12 14 16 18 20 24 32 40 48 - 11 for the smallest caption, 40 and 48 for one hero number; line height: 16 20 24 28; radius: 0 4 6 8 12 16 and `rounded-full`.
 - Width prefixes come on placement and spacing - display, flex, grid, gaps, order, text alignment, margins and paddings: `md:d-none`, `lg:p-24`.
+- `d-none` beats every other display class and component on its element, and a width prefix beats it: `d-none md:d-flex` shows from `md`. Page styles outside the layers beat it too: use `hidden` there.
 
 ## Aspect ratio
 
@@ -96,7 +97,6 @@ row.classList.add('flash');
 
 | Class | Declarations | Width prefixes |
 | --- | --- | --- |
-| `d-none` | `display: none;` | yes |
 | `d-inline` | `display: inline;` | yes |
 | `d-inline-block` | `display: inline-block;` | yes |
 | `d-block` | `display: block;` | yes |
@@ -674,6 +674,7 @@ row.classList.add('flash');
 | `vr` | `display: inline-block; align-self: stretch; inline-size: 1px; min-block-size: 1em; background: var(--redz-border-strong);` | - |
 | `icon-link` | `display: inline-flex; align-items: center; gap: 0.375em; text-underline-offset: 0.2em;` | - |
 | `flip-rtl:dir(rtl)` | `scale: -1 1;` | - |
+| `d-none` | `display: none;` | yes |
 
 ## From Bootstrap 5.3
 

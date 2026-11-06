@@ -9,6 +9,7 @@
 		<li>Space, in px: 0 2 4 8 12 16 20 24 32 40 48 64 - for <code>m</code>, <code>p</code> and <code>gap</code> with their sides: <code>mt</code> <code>mb</code> <code>ms</code> <code>me</code> <code>mx</code> <code>my</code>, the same for <code>p</code>. <code>ms</code> and <code>me</code> are the start and the end of the line, so they turn right to left.</li>
 		<li>Font size: 11 12 14 16 18 20 24 32 40 48 - 11 for the smallest caption, 40 and 48 for one hero number; line height: 16 20 24 28; radius: 0 4 6 8 12 16 and <code>rounded-full</code>.</li>
 		<li>Width prefixes come on placement and spacing - display, flex, grid, gaps, order, text alignment, margins and paddings: <code>md:d-none</code>, <code>lg:p-24</code>.</li>
+		<li><code>d-none</code> beats every other display class and component on its element, and a width prefix beats it: <code>d-none md:d-flex</code> shows from <code>md</code>. Page styles outside the layers beat it too: use <code>hidden</code> there.</li>
 	</ul>
 </section>
 

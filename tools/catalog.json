@@ -6,7 +6,7 @@
 			{"key": "size", "kind": "size", "family": ["alert-sm", "", "alert-lg"]}
 		]},
 		{"id": "table", "match": "table.table", "icon": "table", "props": [
-			{"key": "hover", "family": ["", "table-hover"]},
+			{"key": "hover", "family": ["table-static", ""], "labels": ["no", "yes"]},
 			{"key": "stripes", "family": ["", "table-striped", "table-striped-columns"], "labels": ["none", "rows", "columns"]},
 			{"key": "lines", "family": ["", "table-bordered", "table-borderless"], "labels": ["rows", "all", "none"]},
 			{"key": "density", "kind": "size", "attr": "data-density", "family": ["compact", "", "comfortable", "spacious"]}

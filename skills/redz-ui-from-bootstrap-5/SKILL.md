@@ -59,6 +59,8 @@ row, state class, `data-bs-*` attribute and unknown class stays as it was and is
 
 - **Reused names.** `p-1`…`p-5`, `m-*`, `gap-*` and `rounded-1`…`rounded-5` exist in both with other sizes: Bootstrap's
   `p-4` is 24 px, REDZ.UI's `p-4` is 4 px. A file rewritten halfway cannot be read back - finish it in one pass.
+- **`d-none` has no `!important`.** It beats every display class and component on its element, and a width prefix beats
+  it, so `d-none md:d-flex` shows from `md`. Page styles outside the layers beat it too: use `hidden` there.
 - **Bootstrap 6 look-alikes are not REDZ.UI.** `md:col-6`, `data-bs-toggle="dialog"`, `fg-*`, `btn-solid` do not
   exist here; the scan reports them as `unknown`.
 - **Prefixes measure the region**, not the window: a column, a card, a dialog. A card in the 8-of-12 column at 1440 px

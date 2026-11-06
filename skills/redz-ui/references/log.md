@@ -24,7 +24,7 @@ What a job printed, line by line as it runs, and what changed between two versio
 
 ## A diff
 
-`div class="diff"` holds one element a line: an `ins` is a line added, marked "+" and tinted green, a `del` a line taken away, "-" and red, anything else a line kept. In a kept line, `del` and `ins` show the words changed inside it, side by side. Lines of code carry `translate="no"`, so a page's translator leaves them as they are, and a log or a diff of code is `dir="ltr"` on a right-to-left page; a diff of Arabic words keeps the page's direction.
+`div class="diff"` holds one element a line: an `ins` is a line added, marked "+" and tinted green, a `del` a line taken away, "-" and red, anything else a line kept. In a kept line, `del` and `ins` show the words changed inside it, side by side. It scrolls in its own box past 25rem, a `max-h-*` utility sets another height, and it prints in full; one that may scroll takes `tabindex="0"` and a name, so a keyboard reaches it. Lines of code carry `translate="no"`, so a page's translator leaves them as they are, and a log or a diff of code is `dir="ltr"` on a right-to-left page; a diff of Arabic words keeps the page's direction.
 
 ```html
 <div class="diff" role="group" aria-label="The changes of the page's title" dir="ltr">

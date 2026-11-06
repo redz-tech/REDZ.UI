@@ -122,7 +122,7 @@
 	}
 
 	.table tr:has(.stretched-link):is(:hover, :focus-within) > td {
-		background: color-mix(in oklch, var(--redz-bg-hover) 60%, var(--redz-bg));
+		background: var(--redz-row-hover, color-mix(in srgb, var(--redz-primary) 7%, var(--redz-bg)));
 	}
 
 	.table td:has(> .stretched-link) :is(a, button, input, select, label):not(.stretched-link) {
@@ -180,10 +180,6 @@
 
 	.table > :has(+ .table-group-divider) > tr:last-child > :is(th, td) {
 		border-block-end: 2px solid var(--redz-border-strong);
-	}
-
-	.table-hover tbody tr:hover td {
-		background: color-mix(in oklch, var(--redz-bg-hover) 60%, var(--redz-bg));
 	}
 
 	.table-title {
@@ -304,6 +300,16 @@
 
 	.table tr[aria-selected="true"] > td {
 		background: color-mix(in oklch, var(--redz-primary) 10%, var(--redz-bg));
+	}
+
+	@media (hover: hover) {
+		.table:not(.table-static) > tbody > tr:not([aria-selected="true"]):hover > :is(td, th) {
+			background: var(--redz-row-hover, color-mix(in srgb, var(--redz-primary) 7%, var(--redz-bg)));
+		}
+
+		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not([aria-selected="true"]):hover > :is(td, th) {
+			background: color-mix(in oklch, var(--redz-row-tint) 90%, var(--redz-bg));
+		}
 	}
 
 	/* The row's mark stands on its first cell, and on a phone on the first one the phone shows: a pseudo-element of a row would take a column in Chrome. */

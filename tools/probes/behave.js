@@ -414,12 +414,12 @@ window.REDZ_BEHAVE = (() => {
 		yield {click: pt(bar.querySelector('[data-editor-crumb="0"]'))};
 		yield {click: pt(ACT(bar, 'props'))};
 		say('the table\'s card has steppers', cardEl().querySelectorAll('[data-editor-more]').length === 2, cardEl().textContent);
-		const hover = cardEl().querySelector('[data-editor-prop] [data-value="table-hover"]');
+		const hover = cardEl().querySelector('[data-editor-prop] [data-value="table-static"]');
 		yield {hover: pt(hover)};
-		say('a table setting is tried on', blk('table1').classList.contains('table-hover'), blk('table1').className);
+		say('a table setting is tried on', blk('table1').classList.contains('table-static'), blk('table1').className);
 		yield {click: pt(hover)};
 		yield {hover: [5, 5]};
-		say('a table setting is kept', blk('table1').classList.contains('table-hover'), blk('table1').className);
+		say('a table setting is kept', blk('table1').classList.contains('table-static'), blk('table1').className);
 		const dense = cardEl().querySelector('[data-value="compact"]');
 		yield {click: pt(dense)};
 		yield {hover: [5, 5]};
@@ -1586,6 +1586,9 @@ window.REDZ_BEHAVE = (() => {
 			if ($('dialog[open]').hasAttribute('aria-describedby')) {
 				out.push('a confirmation without text is described');
 			}
+			if ($('dialog[open] .dialog-body') !== null) {
+				out.push('a confirmation of a title alone keeps an empty body');
+			}
 			$('dialog[open] button[value="cancel"]').click();
 			if (await plain !== false) {
 				out.push('Cancel does not answer false');
@@ -1645,10 +1648,25 @@ window.REDZ_BEHAVE = (() => {
 			if (lit.length !== $$('[data-highlight="' + key + '"]').length || lit.some((el) => el.dataset.highlight !== key)) {
 				out.push('pointing at a lane lights ' + say(lit.map((el) => el.dataset.highlight)) + ', not every ' + key);
 			}
+			const track = $('td', lane);
+			const shade = getComputedStyle(track).backgroundColor;
 			$('#chart-board caption').dispatchEvent(new PointerEvent('pointerover', {bubbles: true}));
 			if ($$('[data-highlighted]').length !== 0) {
 				out.push('pointing elsewhere leaves ' + $$('[data-highlighted]').length + ' lit');
 			}
+			if (getComputedStyle(track).backgroundColor === shade) {
+				out.push('a lit lane leaves its track as it was: ' + shade);
+			}
+			const row = $('#chart-board .table tr[data-highlight="' + key + '"]');
+			lane.dispatchEvent(new PointerEvent('pointerover', {bubbles: true}));
+			row.setAttribute('data-highlighted', 'hold');
+			$('#chart-board caption').dispatchEvent(new PointerEvent('pointerover', {bubbles: true}));
+			lane.dispatchEvent(new PointerEvent('pointerover', {bubbles: true}));
+			$('#chart-board caption').dispatchEvent(new PointerEvent('pointerover', {bubbles: true}));
+			if (row.getAttribute('data-highlighted') !== 'hold' || $$('[data-highlighted]').length !== 1) {
+				out.push('a mark the page holds goes with the pointer: ' + say(row.getAttribute('data-highlighted')) + ', ' + $$('[data-highlighted]').length + ' lit');
+			}
+			row.removeAttribute('data-highlighted');
 		}]},
 		view: {target: '#media-folder-grid', steps: [async (out) => {
 			const grid = $('#media-folder-grid');
@@ -2464,6 +2482,167 @@ window.REDZ_BEHAVE = (() => {
 				out.push('busy() and a cooldown on one button leave aria-disabled ' + say([busyEnded, countEnded, busyLeft, off()]) + ' - the wait ended, the count ended, the count ended under a wait, both ended');
 			}
 		}]},
+		foldedHidden: {target: '#nav-overflow .nav-overflow-toggle', steps: [async (out) => {
+			const wrapper = $('#nav-overflow .nav-overflow');
+			const links = $$(':scope > .nav > .nav-link', wrapper);
+			const folded = links.find((link) => 'overflow' in link.dataset);
+			const shown = links.find((link) => !('overflow' in link.dataset) && !link.hasAttribute('aria-current'));
+			const inMenu = (link) => $$('.nav-overflow-menu .menu-item', wrapper).some((item) => item.textContent.trim() === link.textContent.trim());
+			if (folded === undefined || shown === undefined || folded.hidden) {
+				out.push('the links do not fold as the check needs: ' + links.map((link) => link.hidden + ' ' + ('overflow' in link.dataset)).join(', '));
+				return;
+			}
+			if (!inMenu(folded) || folded.getClientRects().length > 0) {
+				out.push('a folded link is not in the menu alone');
+			}
+			folded.hidden = true;
+			await until(() => !inMenu(folded));
+			if (inMenu(folded) || !folded.hidden) {
+				out.push('a folded link the page hides stays in the menu');
+			}
+			folded.hidden = false;
+			await until(() => inMenu(folded) || folded.getClientRects().length > 0);
+			if (!inMenu(folded) && folded.getClientRects().length === 0) {
+				out.push('a link the page shows again comes back nowhere');
+			}
+			shown.hidden = true;
+			await until(() => shown.getClientRects().length === 0);
+			await settled();
+			if (inMenu(shown) || shown.getClientRects().length > 0 || !shown.hidden) {
+				out.push('a link in the row the page hides does not leave it');
+			}
+			shown.hidden = false;
+			await until(() => shown.getClientRects().length > 0 || inMenu(shown));
+			if (shown.getClientRects().length === 0 && !inMenu(shown)) {
+				out.push('a link the row gave up does not come back');
+			}
+		}]},
+		stepDetail: {target: '#step-list-narrow .step-list', steps: [async (out) => {
+			const [short, long, badge, empty] = $$('#step-list-narrow .step-list > li');
+			const room = (li) => {
+				const box = li.getBoundingClientRect();
+				return {box, start: box.left + parseFloat(getComputedStyle(li).paddingInlineStart), line: parseFloat(getComputedStyle(li).lineHeight)};
+			};
+			const beside = (li) => {
+				const {box, line} = room(li);
+				const detail = $('.step-list-detail', li).getBoundingClientRect();
+				return near(detail.right, box.right, 1) && near(box.height, line, 3);
+			};
+			if (!beside(short) || !beside(badge)) {
+				out.push('a detail that fits leaves the end of the line: ' + say([short, badge].map((li) => li.getBoundingClientRect().height)));
+			}
+			const {box, start, line} = room(long);
+			const under = $('.step-list-detail', long).getBoundingClientRect();
+			if (!near(under.left, start, 1) || under.top < box.top + line - 1) {
+				out.push('a detail that does not fit stays beside the name or leaves its start: ' + say([under.left, start, under.top - box.top, line]));
+			}
+			if (long.scrollWidth > long.clientWidth + 1) {
+				out.push('a long detail runs past its step');
+			}
+			if (!near(empty.getBoundingClientRect().height, room(empty).line, 1)) {
+				out.push('an empty detail takes room: ' + empty.getBoundingClientRect().height + ' for a line of ' + room(empty).line);
+			}
+			const icon = $('.bi', short).getBoundingClientRect();
+			if (!near(icon.top + icon.height / 2, box.top - long.getBoundingClientRect().top + short.getBoundingClientRect().top + line / 2, 2)) {
+				out.push('a step\'s icon leaves the middle of its first line');
+			}
+		}]},
+		readyStep: {target: '#step-list-pipeline-ready [data-state="ready"]', steps: [async (out) => {
+			const stage = $('#step-list-pipeline-ready [data-state="ready"]');
+			const icon = $('.bi', stage);
+			const step = $('#step-list-narrow [data-state="ready"] > .bi');
+			const turning = $('#step-list-job [data-state="current"] > .bi');
+			if (matchMedia('(prefers-reduced-motion: no-preference)').matches && getComputedStyle(turning).animationName === 'none') {
+				out.push('a current step no longer turns, so this check proves nothing');
+			}
+			if (getComputedStyle(icon).animationName !== 'none' || getComputedStyle(step).animationName !== 'none') {
+				out.push('a ready step turns its icon');
+			}
+			if (getComputedStyle(icon).color !== getComputedStyle(step).color || getComputedStyle(stage).borderInlineStartColor !== getComputedStyle($('#step-list-pipeline [data-state="current"]')).borderInlineStartColor) {
+				out.push('a ready step does not wear the look of the current one');
+			}
+		}]},
+		tileTone: {target: '#stat-tile-tone .stat', steps: [async (out) => {
+			const [own, plain] = $$('#stat-tile-tone .icon-tile');
+			const free = document.createElement('span');
+			free.className = own.className;
+			document.body.append(free);
+			const wanted = getComputedStyle(free).color;
+			free.remove();
+			if (getComputedStyle(own).color !== wanted) {
+				out.push('a stat takes the tone of its tile: ' + getComputedStyle(own).color + ', not ' + wanted);
+			}
+			if (getComputedStyle(plain).color !== getComputedStyle($('.stat-value', plain.parentElement)).color) {
+				out.push('a tile without a tone leaves the stat\'s');
+			}
+		}]},
+		diffBox: {target: '#log-diff-example .diff', steps: [async (out) => {
+			const diff = $('#log-diff-example .diff');
+			if (parseFloat(getComputedStyle(diff).maxBlockSize) !== parseFloat(getComputedStyle(document.documentElement).fontSize) * 25 || !/auto|scroll/.test(getComputedStyle(diff).overflowY)) {
+				out.push('a diff has no box of its own: ' + getComputedStyle(diff).maxBlockSize + ', ' + getComputedStyle(diff).overflowY);
+			}
+			diff.classList.add('max-h-160');
+			if (parseFloat(getComputedStyle(diff).maxBlockSize) !== parseFloat(getComputedStyle(document.documentElement).fontSize) * 10) {
+				out.push('a max-h utility does not set a diff\'s height');
+			}
+			diff.classList.remove('max-h-160');
+		}]},
+		displayNone: {target: '#alert-stacked', steps: [async (out) => {
+			const box = $('#alert-stacked');
+			const shown = (name) => {
+				const el = Object.assign(document.createElement('div'), {className: name});
+				box.append(el);
+				const display = getComputedStyle(el).display;
+				el.remove();
+				return display;
+			};
+			for (const name of ['d-flex', 'd-grid', 'd-block', 'vstack', 'hstack', 'grid', 'line-clamp-2', 'icon-link', 'vr', 'alert']) {
+				if (shown(name + ' d-none') !== 'none') {
+					out.push('d-none loses to ' + name);
+				}
+			}
+			if (shown('d-none md:d-flex') !== 'flex') {
+				out.push('d-none beats a width prefix');
+			}
+		}]},
+		alertStack: {target: '#alert-stacked .alert', steps: [async (out) => {
+			const alert = $('#alert-stacked .alert');
+			const body = $('.vstack', alert);
+			const before = alert.style.inlineSize;
+			alert.style.inlineSize = '340px';
+			const tops = [$('.bi', alert), body].map((el) => el.getBoundingClientRect().top);
+			if (body.getBoundingClientRect().left <= $('.bi', alert).getBoundingClientRect().right || tops[1] > tops[0] + 16) {
+				out.push('a stacked body falls under the icon at 340 px: ' + say(tops));
+			}
+			alert.style.inlineSize = before;
+		}]},
+		rowLight: {target: '#table-hover-rows', walk: async function* (out) {
+			const [lit, still] = $$('#table-hover-rows table');
+			const rest = getComputedStyle($('td', lit)).backgroundColor;
+			const point = async (el) => {
+				el.scrollIntoView({block: 'center', behavior: 'instant'});
+				await settled();
+				await settled();
+				return center(el);
+			};
+			yield {hover: await point($('td', lit))};
+			const hovered = getComputedStyle($('td', lit)).backgroundColor;
+			if (matchMedia('(hover: hover)').matches && hovered === rest) {
+				out.push('a table does not light the row under the pointer');
+			}
+			yield {hover: await point($('td', still))};
+			const quiet = getComputedStyle($('td', still)).backgroundColor;
+			if (quiet !== getComputedStyle($('tbody tr:last-child td', still)).backgroundColor) {
+				out.push('table-static lights its row: ' + quiet);
+			}
+			lit.style.setProperty('--redz-row-hover', 'rgb(1, 2, 3)');
+			yield {hover: await point($('td', lit))};
+			if (matchMedia('(hover: hover)').matches && getComputedStyle($('td', lit)).backgroundColor !== 'rgb(1, 2, 3)') {
+				out.push('--redz-row-hover does not set the light of a row');
+			}
+			lit.style.removeProperty('--redz-row-hover');
+			yield {hover: [5, 5]};
+		}},
 		rowLink: {target: '#table-links .stretched-link', steps: [async (out) => {
 			const row = $('#table-links tbody tr');
 			const link = $('.stretched-link', row);

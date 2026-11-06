@@ -112,7 +112,7 @@ function BUILD__ScalesCss(stdClass $vocab): string
 }
 
 /** The utilities: the plain rules - an entry's `rtl` is its rule right to left - then the prefixed ones by breakpoint
- *  inside the region's container query, then print. */
+ *  inside the region's container query, then print; d-none last of each, so no display class on its element beats it. */
 function BUILD__UtilitiesCss(stdClass $vocab): string
 {
 	$plain = [];
@@ -135,6 +135,10 @@ function BUILD__UtilitiesCss(stdClass $vocab): string
 			}
 		}
 	}
+	$last = static fn(array $rules): array => [...array_diff_key($rules, ['d-none' => true]), 'd-none' => $rules['d-none']];
+	$plain = $last($plain);
+	$prefixed = $last($prefixed);
+	$printed = $last($printed);
 	$out = BUILD_HEAD . "\n@layer utilities {\n";
 	foreach ($plain as [$selector, $css]) {
 		$out .= "\t" . $selector . ' { ' . $css . "; }\n";

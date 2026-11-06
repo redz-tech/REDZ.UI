@@ -14,7 +14,7 @@ let frame = 0;
 const pending = new Set();
 
 /** The nav's links: its children with the nav-link class that the page itself has not hidden. */
-const linksOf = (nav) => [...nav.children].filter((link) => link.classList.contains('nav-link') && (!link.hidden || 'overflow' in link.dataset));
+const linksOf = (nav) => [...nav.children].filter((link) => link.classList.contains('nav-link') && !link.hidden);
 
 /** The menu the link opens, when it opens one: the popover of role menu its commandfor names. */
 const menuOf = (link) => {
@@ -117,8 +117,7 @@ const update = (wrapper) => {
 		return;
 	}
 	const links = linksOf(nav);
-	for (const link of links) {
-		link.hidden = false;
+	for (const link of nav.children) {
 		delete link.dataset.overflow;
 	}
 	own.toggle.hidden = true;
@@ -129,7 +128,6 @@ const update = (wrapper) => {
 			if (fits(nav)) {
 				break;
 			}
-			link.hidden = true;
 			link.dataset.overflow = '';
 			moved.unshift(link);
 			if (menuOf(link)?.matches(':popover-open')) {
@@ -181,7 +179,7 @@ const setUp = (wrapper) => {
 	state.set(wrapper, {...partsOf(wrapper), moved: [], dirty: true});
 	update(wrapper);
 	sized.observe(wrapper);
-	new MutationObserver(() => schedule(wrapper, true)).observe(nav, {childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['aria-current', 'aria-selected', 'aria-disabled', 'disabled', 'href']});
+	new MutationObserver(() => schedule(wrapper, true)).observe(nav, {childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['aria-current', 'aria-selected', 'aria-disabled', 'disabled', 'hidden', 'href']});
 };
 
 document.querySelectorAll('.nav-overflow').forEach(setUp);

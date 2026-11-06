@@ -1,7 +1,7 @@
 @layer components {
 	.icon-tile {
-		--redz-tile-bg: var(--redz-primary-subtle);
-		--redz-tile-fg: var(--redz-primary);
+		--redz-tile-bg: var(--redz-tile-base-bg, var(--redz-primary-subtle));
+		--redz-tile-fg: var(--redz-tile-base-fg, var(--redz-primary));
 		display: grid;
 		place-items: center;
 		flex: none;

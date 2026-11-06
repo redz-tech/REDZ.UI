@@ -81,7 +81,7 @@ export const confirm = ({title = '', text: detail = '', note = null, rows = [], 
 		body.append(field);
 	}
 	footer.append(no, yes);
-	dialog.append(header, body, footer);
+	dialog.append(header, ...(body.childElementCount > 0 ? [body] : []), footer);
 	dialog.addEventListener('close', () => {
 		answer(dialog.returnValue === 'ok');
 		dialog.remove();

@@ -17,6 +17,15 @@ A number with its label and an icon in a tone - and, as a button, the filter for
 </div>
 ```
 
+A tile takes the stat's tone unless it has its own: `icon-tile-chart-3` or `icon-tile-success` on the tile stays, for a category in a neutral stat.
+
+```html
+<div class="grid cols-2 gap-12 max-w-480">
+	<div class="stat"><span class="icon-tile icon-tile-chart-3"><i class="bi bi-cloud-arrow-up" aria-hidden="true"></i></span><span><span class="stat-value">14</span><span class="stat-label">Uploaded</span></span></div>
+	<div class="stat stat-success"><span class="icon-tile"><i class="bi bi-check-lg" aria-hidden="true"></i></span><span><span class="stat-value">2,126</span><span class="stat-label">Matched</span></span></div>
+</div>
+```
+
 Without a button it only reads: a `div class="stat"`. One long word breaks instead of running past a narrow tile.
 
 ```html
@@ -63,6 +72,6 @@ As an `a` a tile leads to the list it counts, filtered on its server; the tile o
 
 ## Tokens
 
-From [`css/components/stat.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/stat.css). It declares `--redz-stat-tone`, `--redz-tile-bg`, `--redz-tile-fg` on its root, never on rows or items.
+From [`css/components/stat.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/stat.css). It declares `--redz-stat-tone`, `--redz-tile-base-bg`, `--redz-tile-base-fg` on its root, never on rows or items.
 
 It reads the theme's `--redz-text`, `--redz-space-12`, `--redz-space-16`, `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-bg-hover`, `--redz-space-8`, `--redz-text-muted`, `--redz-fs-12`, `--redz-space-2`, `--redz-success`, `--redz-danger`, `--redz-radius-6`, `--redz-fs-24`, `--redz-primary`, `--redz-warning`, `--redz-info`.

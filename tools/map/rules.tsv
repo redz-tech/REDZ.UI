@@ -186,6 +186,7 @@ navbar-collapse	drawer	review	navbar	a <nav class="drawer" popover id="ID"> afte
 navbar-nav-scroll		remove	navbar	the panel scrolls by itself
 navbar-dark		review	navbar	data-theme="dark" on the navbar, with a background such as bg-body
 table-(primary|success|info|light|dark)		review	table	row tones are danger, warning and secondary
+table-hover		remove	table	every table lights its row under the pointer; table-static keeps one still
 (table-striped|table-striped-columns|table-borderless|table-group-divider)	$1	same	table
 table-bordered	table-bordered	same	table	in a card the card's border is the table's frame
 caption-top		missing	table

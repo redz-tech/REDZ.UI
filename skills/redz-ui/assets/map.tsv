@@ -1906,7 +1906,7 @@ table-borderless	table-borderless	same	class	table
 table-danger	table-danger	same	class	table	
 table-dark		review	class	table	row tones are danger, warning and secondary
 table-group-divider	table-group-divider	same	class	table	
-table-hover	table-hover	same	class	table	
+table-hover		remove	class	table	every table lights its row under the pointer; table-static keeps one still
 table-info		review	class	table	row tones are danger, warning and secondary
 table-light		review	class	table	row tones are danger, warning and secondary
 table-primary		review	class	table	row tones are danger, warning and secondary

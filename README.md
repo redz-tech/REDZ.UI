@@ -59,7 +59,7 @@ a project keeps it in a folder of its own, and a new release of the library leav
 ```
 
 Such an icon follows the system colors in forced-colors mode and prints, from your own server or from a CDN that sends
-CORS headers.
+`Access-Control-Allow-Origin` on `.svg`: a browser fetches a mask in CORS mode, and without that header every icon is blank.
 
 ## Scripts
 One file beside the stylesheet carries them all - `js/redz-ui.min.js`, the modules of `js/index.js` as one; each

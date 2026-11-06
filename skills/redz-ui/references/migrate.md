@@ -467,6 +467,7 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `tab-content` | - | remove | panels are siblings with role="tabpanel", hidden when not selected |
 | `tab-pane` | - | remove | panels are siblings with role="tabpanel", hidden when not selected |
 | `table-dark` | - | review | row tones are danger, warning and secondary |
+| `table-hover` | - | remove | every table lights its row under the pointer; table-static keeps one still |
 | `table-info` | - | review | row tones are danger, warning and secondary |
 | `table-light` | - | review | row tones are danger, warning and secondary |
 | `table-primary` | - | review | row tones are danger, warning and secondary |

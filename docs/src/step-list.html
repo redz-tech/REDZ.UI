@@ -5,7 +5,7 @@
 
 <section class="vstack gap-16" aria-labelledby="step-list-examples">
 	<h2 id="step-list-examples">A job's steps</h2>
-	<p><code>step-list</code> is an <code>ol</code> of steps, each with an icon, its name and a <code>step-list-detail</code> at the end; <code>data-state</code> says where it is: <code>done</code>, <code>current</code> - its icon turns while motion is allowed, <code>failed</code>, <code>kept</code> - failed with the earlier state kept - and <code>pending</code>. A job's panel is a <code>card</code> with <code>sticky-top</code>, under the app header while the page scrolls, its head a <a href="dot.html">dot</a>, a title and the time, and a <a href="progress.html">progress</a>.</p>
+	<p><code>step-list</code> is an <code>ol</code> of steps, each with an icon, its name and a <code>step-list-detail</code> at the end; <code>data-state</code> says where it is: <code>done</code>, <code>current</code> - its icon turns while motion is allowed, <code>ready</code> - next, it waits for a press and its icon stays still, <code>failed</code>, <code>kept</code> - failed with the earlier state kept - and <code>pending</code>. A job's panel is a <code>card</code> with <code>sticky-top</code>, under the app header while the page scrolls, its head a <a href="dot.html">dot</a>, a title and the time, and a <a href="progress.html">progress</a>.</p>
 	<div class="docs-example docs-example-stack" id="step-list-job">
 		<section class="card" aria-labelledby="step-list-job-title">
 			<div class="card-header hstack gap-8"><span class="dot dot-primary"></span><h2 id="step-list-job-title">Publishing the site</h2><span class="ms-auto tabular-nums text-muted">01:42</span></div>
@@ -20,6 +20,17 @@
 				</ol>
 			</div>
 		</section>
+	</div>
+
+	<h3 id="step-list-narrow-title">In a narrow box</h3>
+	<p>A <code>step-list-detail</code> stays at the end of the line while the name and it fit, and falls under the name, aligned with it, when they do not, at any width of the page. An empty one takes no room, so it can wait for its words, and it can hold a <a href="badge.html">badge</a>.</p>
+	<div class="docs-example docs-example-stack" id="step-list-narrow">
+		<ol class="step-list max-w-320" aria-label="Updating the site">
+			<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Download<span class="step-list-detail">4.6 MB</span></li>
+			<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Compare the files<span class="step-list-detail">matched 2,126 · fetched 14 · 4.6 MB · 2 migrations · 1 seed</span></li>
+			<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Check the schema<span class="step-list-detail"><span class="badge badge-subtle-success">Clean</span></span></li>
+			<li data-state="ready"><i class="bi bi-play-circle" aria-hidden="true"></i>Switch to the new version<span class="step-list-detail"></span></li>
+		</ol>
 	</div>
 
 	<h3 id="step-list-more">More states, and a step's body</h3>
@@ -45,6 +56,14 @@
 			<li data-state="current" aria-current="step"><span class="hstack gap-8"><i class="bi bi-arrow-repeat" aria-hidden="true"></i><strong>Test</strong></span><span class="fs-12">412 of 580 checks</span><div class="stage-list-actions"><button class="btn btn-sm" type="button">Log</button><button class="btn btn-sm" type="button">Stop</button></div></li>
 			<li data-state="ask"><span class="hstack gap-8"><i class="bi bi-question-circle-fill" aria-hidden="true"></i><strong>Approve</strong></span><span class="fs-12">An owner signs off</span><div class="stage-list-actions"><button class="btn btn-sm btn-primary" type="button">Approve</button></div></li>
 			<li data-state="waiting"><span class="hstack gap-8"><i class="bi bi-hourglass-split" aria-hidden="true"></i><strong>Deploy</strong></span><span class="fs-12">After the approval</span></li>
+		</ol>
+	</div>
+	<p>A stage that is next and waits for a press is <code>ready</code>: it wears the frame of <code>current</code>, and its icon stays still.</p>
+	<div class="docs-example docs-example-stack" id="step-list-pipeline-ready">
+		<ol class="stage-list" aria-label="The update">
+			<li data-state="done"><span class="hstack gap-8"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><strong>Download</strong></span><span class="fs-12">4.6 MB</span></li>
+			<li data-state="ready" aria-current="step"><span class="hstack gap-8"><i class="bi bi-play-circle" aria-hidden="true"></i><strong>Install</strong></span><span class="fs-12">Waits for your press</span><div class="stage-list-actions"><button class="btn btn-sm btn-primary" type="button">Start</button></div></li>
+			<li data-state="pending"><span class="hstack gap-8"><i class="bi bi-circle" aria-hidden="true"></i><strong>Verify</strong></span><span class="fs-12">After the install</span></li>
 		</ol>
 	</div>
 </section>

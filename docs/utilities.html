@@ -132,6 +132,7 @@
 						<li>Space, in px: 0 2 4 8 12 16 20 24 32 40 48 64 - for <code>m</code>, <code>p</code> and <code>gap</code> with their sides: <code>mt</code> <code>mb</code> <code>ms</code> <code>me</code> <code>mx</code> <code>my</code>, the same for <code>p</code>. <code>ms</code> and <code>me</code> are the start and the end of the line, so they turn right to left.</li>
 						<li>Font size: 11 12 14 16 18 20 24 32 40 48 - 11 for the smallest caption, 40 and 48 for one hero number; line height: 16 20 24 28; radius: 0 4 6 8 12 16 and <code>rounded-full</code>.</li>
 						<li>Width prefixes come on placement and spacing - display, flex, grid, gaps, order, text alignment, margins and paddings: <code>md:d-none</code>, <code>lg:p-24</code>.</li>
+						<li><code>d-none</code> beats every other display class and component on its element, and a width prefix beats it: <code>d-none md:d-flex</code> shows from <code>md</code>. Page styles outside the layers beat it too: use <code>hidden</code> there.</li>
 					</ul>
 				</section>
 
@@ -241,7 +242,6 @@ row.classList.add('flash');</code></pre>
 					<table class="table docs-table">
 								<thead><tr><th scope="col">Class</th><th scope="col">Declarations</th><th scope="col">Width prefixes</th></tr></thead>
 								<tbody>
-									<tr><td><code>d-none</code></td><td><code>display: none;</code></td><td>yes</td></tr>
 									<tr><td><code>d-inline</code></td><td><code>display: inline;</code></td><td>yes</td></tr>
 									<tr><td><code>d-inline-block</code></td><td><code>display: inline-block;</code></td><td>yes</td></tr>
 									<tr><td><code>d-block</code></td><td><code>display: block;</code></td><td>yes</td></tr>
@@ -819,6 +819,7 @@ row.classList.add('flash');</code></pre>
 									<tr><td><code>vr</code></td><td><code>display: inline-block; align-self: stretch; inline-size: 1px; min-block-size: 1em; background: var(--redz-border-strong);</code></td><td>-</td></tr>
 									<tr><td><code>icon-link</code></td><td><code>display: inline-flex; align-items: center; gap: 0.375em; text-underline-offset: 0.2em;</code></td><td>-</td></tr>
 									<tr><td><code>flip-rtl:dir(rtl)</code></td><td><code>scale: -1 1;</code></td><td>-</td></tr>
+									<tr><td><code>d-none</code></td><td><code>display: none;</code></td><td>yes</td></tr>
 								</tbody>
 							</table>
 				</section>

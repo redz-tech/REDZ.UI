@@ -19,6 +19,10 @@ An icon takes the size of the text and its color: a utility or the parent sets b
 
 The names are Bootstrap Icons' own - look one up at [icons.getbootstrap.com](https://icons.getbootstrap.com/). A name the set does not have paints a filled square, and the checks flag it.
 
+## From another host
+
+A browser fetches a mask in CORS mode, as it does a font. Served from another origin, every icon stays blank unless that host sends `Access-Control-Allow-Origin` on `.svg`. jsDelivr and GitHub Pages do; on your own CDN, add `svg` to the types that get the header. A file already fetched without it stays broken in the browser's cache for its whole lifetime when it is `immutable`, so a change of header alone does not reach those visitors: give the files a new address too.
+
 ## Accessibility
 
 - An icon beside words is `aria-hidden="true"`. An icon alone takes its meaning from its parent: the button's `aria-label`, or hidden words.

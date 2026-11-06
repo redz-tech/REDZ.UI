@@ -23,7 +23,7 @@
 
 <section class="vstack gap-16" aria-labelledby="log-diff">
 	<h2 id="log-diff">A diff</h2>
-	<p><code>div class="diff"</code> holds one element a line: an <code>ins</code> is a line added, marked "+" and tinted green, a <code>del</code> a line taken away, "-" and red, anything else a line kept. In a kept line, <code>del</code> and <code>ins</code> show the words changed inside it, side by side. Lines of code carry <code>translate="no"</code>, so a page's translator leaves them as they are, and a log or a diff of code is <code>dir="ltr"</code> on a right-to-left page; a diff of Arabic words keeps the page's direction.</p>
+	<p><code>div class="diff"</code> holds one element a line: an <code>ins</code> is a line added, marked "+" and tinted green, a <code>del</code> a line taken away, "-" and red, anything else a line kept. In a kept line, <code>del</code> and <code>ins</code> show the words changed inside it, side by side. It scrolls in its own box past 25rem, a <code>max-h-*</code> utility sets another height, and it prints in full; one that may scroll takes <code>tabindex="0"</code> and a name, so a keyboard reaches it. Lines of code carry <code>translate="no"</code>, so a page's translator leaves them as they are, and a log or a diff of code is <code>dir="ltr"</code> on a right-to-left page; a diff of Arabic words keeps the page's direction.</p>
 	<div class="docs-example docs-example-stack" id="log-diff-example">
 		<div class="diff" role="group" aria-label="The changes of the page's title" dir="ltr">
 			<span translate="no">&lt;header class="vstack gap-8"&gt;</span>

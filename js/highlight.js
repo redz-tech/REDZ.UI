@@ -1,6 +1,7 @@
 // REDZ.UI, highlights: elements that share a data-highlight key light together - a chart's lane and the row of the same
 // thing in a table, say. Hovering or focusing one marks every element with its key data-highlighted, which the stylesheet
-// tints; the mark moves when the pointer or the focus goes to another key and goes when they leave every one.
+// tints; the mark moves when the pointer or the focus goes to another key and goes when they leave every one. A mark the
+// page sets itself, data-highlighted="hold", stays until the page takes it away.
 let lit = '';
 
 /** Marks the elements of the key, and only them. */
@@ -8,12 +9,12 @@ const light = (key) => {
 	if (key === lit) {
 		return;
 	}
-	for (const element of document.querySelectorAll('[data-highlighted]')) {
+	for (const element of document.querySelectorAll('[data-highlighted=""]')) {
 		element.removeAttribute('data-highlighted');
 	}
 	lit = key;
 	if (key !== '') {
-		for (const element of document.querySelectorAll('[data-highlight="' + CSS.escape(key) + '"]')) {
+		for (const element of document.querySelectorAll('[data-highlight="' + CSS.escape(key) + '"]:not([data-highlighted])')) {
 			element.setAttribute('data-highlighted', '');
 		}
 	}

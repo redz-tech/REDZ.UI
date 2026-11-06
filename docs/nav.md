@@ -166,7 +166,7 @@ A nav or a tab list wider than its box scrolls sideways, and the edge it goes on
 
 ### When the links do not fit
 
-`nav-overflow` around a nav keeps it on one line: the links that do not fit hide from the end and come back, in their order, as the items of a menu behind a “More” button after the nav. The link the person is on and a link with `nav-overflow-keep` stay in the row. A link that opens a [menu](menu.md) folds with it, as a group of its items under the link's words, and stays in the row while its menu holds the page the person is on; a [navbar](navbar.md) shows one. It measures the room its own box has, not the window, so a nav in a narrow column folds as early as it needs to. For a row of links the wrapper is the `<nav>`, so the menu stays inside the landmark.
+`nav-overflow` around a nav keeps it on one line: the links that do not fit hide from the end and come back, in their order, as the items of a menu behind a “More” button after the nav. The link the person is on and a link with `nav-overflow-keep` stay in the row. A link that opens a [menu](menu.md) folds with it, as a group of its items under the link's words, and stays in the row while its menu holds the page the person is on; a [navbar](navbar.md) shows one. A link the page hides with `hidden` leaves the row and the menu, and comes back when the page shows it. It measures the room its own box has, not the window, so a nav in a narrow column folds as early as it needs to. For a row of links the wrapper is the `<nav>`, so the menu stays inside the landmark.
 
 ```html
 <nav class="nav-overflow max-w-480" aria-label="Excursion sections">

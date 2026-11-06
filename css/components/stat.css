@@ -36,8 +36,8 @@
 	}
 
 	.stat > .icon-tile {
-		--redz-tile-bg: color-mix(in oklch, var(--redz-stat-tone) 14%, var(--redz-bg));
-		--redz-tile-fg: var(--redz-stat-tone);
+		--redz-tile-base-bg: color-mix(in oklch, var(--redz-stat-tone) 14%, var(--redz-bg));
+		--redz-tile-base-fg: var(--redz-stat-tone);
 		border-radius: 50%;
 	}
 

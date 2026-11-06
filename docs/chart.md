@@ -123,7 +123,7 @@ Series without a tone take the chart colors by their column.
 
 ## A board of lanes
 
-`table class="lanes"` lays a time window across: a header cell `lanes-scale` holds the captions, each at its `data-at`, and each row is a lane - its name in the `th`, which may hold a button, and its track in the `td`. In a track `lanes-tick` marks a run at `data-at`, `lanes-tick-once` a single one, and `lanes-span` from `data-from` to `data-to` a run that goes on, hatched, with its caption. The red line is now, at the table's `data-now` - 0, the start, by default; the grid has `--redz-lanes-steps` parts, 8. Elements that share a [`data-highlight`](table.md#table-highlight) key light together: a lane and its row in a table.
+`table class="lanes"` lays a time window across: a header cell `lanes-scale` holds the captions, each at its `data-at`, and each row is a lane - its name in the `th`, which may hold a button, and its track in the `td`. In a track `lanes-tick` marks a run at `data-at`, `lanes-tick-once` a single one, and `lanes-span` from `data-from` to `data-to` a run that goes on, hatched, with its caption. The red line is now, at the table's `data-now` - 0, the start, by default; the grid has `--redz-lanes-steps` parts, 8. Elements that share a [`data-highlight`](table.md#table-highlight) key light together: a lane, its track included, and its row in a table.
 
 ```html
 <table class="lanes">

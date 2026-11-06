@@ -132,6 +132,10 @@
 		min-inline-size: 0;
 	}
 
+	.nav-overflow > .nav > [data-overflow] {
+		display: none !important;
+	}
+
 	.nav-overflow:has(> .nav-underline) {
 		align-items: stretch;
 		border-block-end: 1px solid var(--redz-border);

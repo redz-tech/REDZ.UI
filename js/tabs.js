@@ -130,7 +130,7 @@ document.addEventListener('keydown', (event) => {
 	if (!list) {
 		return;
 	}
-	const tabs = tabsOf(list).filter((one) => !one.hidden);
+	const tabs = tabsOf(list).filter((one) => !one.hidden && !('overflow' in one.dataset));
 	const at = tabs.indexOf(tab);
 	const vertical = list.getAttribute('aria-orientation') === 'vertical';
 	const rtl = getComputedStyle(list).direction === 'rtl';

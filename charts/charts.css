@@ -406,8 +406,12 @@
 	.lanes > tbody > tr > td {
 		position: relative;
 		block-size: 1.125rem;
-		background: linear-gradient(to right, var(--redz-border) 1px, transparent 1px) 0 0 / calc(100% / var(--redz-lanes-steps, 8)) 100% repeat-x, var(--redz-bg-page);
+		background: linear-gradient(to right, var(--redz-border) 1px, transparent 1px) 0 0 / calc(100% / var(--redz-lanes-steps, 8)) 100% repeat-x, var(--redz-lanes-track, var(--redz-bg-page));
 		background-clip: content-box;
+	}
+
+	.lanes > tbody > tr[data-highlighted] > td {
+		--redz-lanes-track: color-mix(in oklch, var(--redz-primary) 10%, var(--redz-bg-page));
 	}
 
 	.lanes > tbody > tr > td::after {

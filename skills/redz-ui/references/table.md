@@ -6,13 +6,13 @@ A list of records: a title that links to the record, a line under it, a note whe
 
 ## Examples
 
-`table` on the `<table>`; `table-hover` lights the row under the pointer. The head stays at the top of the screen as the page scrolls. Columns that only help on a wide screen hide below `md` of their card.
+`table` on the `<table>`; the row under the pointer lights on a device with one, in the color of `--redz-row-hover`, set on the page or on one table, and `table-static` keeps a table's rows still. The head stays at the top of the screen as the page scrolls. Columns that only help on a wide screen hide below `md` of their card.
 
 ```html
 <section class="card" aria-labelledby="table-list-title">
 	<div class="card-header"><h2 id="table-list-title">Excursions</h2><span class="text-muted fs-12">3 of 28</span></div>
 	<div class="card-body p-0">
-		<table class="table table-hover">
+		<table class="table">
 			<thead>
 				<tr>
 					<th class="table-check"><input class="check" type="checkbox" aria-label="Select all"></th>
@@ -64,7 +64,7 @@ A list of records: a title that links to the record, a line under it, a note whe
 ```html
 <section class="card" aria-labelledby="table-variants-title">
 	<div class="card-header"><h2 class="fs-14" id="table-variants-title">Boats this week</h2></div>
-	<table class="table table-striped table-hover">
+	<table class="table table-striped">
 		<thead><tr><th scope="col">Boat</th><th class="text-end" scope="col">Trips</th><th class="text-end" scope="col">Seats sold</th></tr></thead>
 		<tbody>
 			<tr><td>Boat A</td><td class="text-end tabular-nums">12</td><td class="text-end tabular-nums">286</td></tr>
@@ -108,9 +108,28 @@ A list of records: a title that links to the record, a line under it, a note whe
 </table>
 ```
 
+### Rows that stay still
+
+Every table lights the row under the pointer. `table-static` keeps the rows of one still, for a table with nothing to do in a row.
+
+```html
+<table class="table" aria-label="Departures">
+	<tbody>
+		<tr><td>North Bay</td><td>08:00</td></tr>
+		<tr><td>Turtle Cove</td><td>10:30</td></tr>
+	</tbody>
+</table>
+<table class="table table-static" aria-label="Fares">
+	<tbody>
+		<tr><td>Adult</td><td>1,200</td></tr>
+		<tr><td>Child</td><td>600</td></tr>
+	</tbody>
+</table>
+```
+
 ### Rows that light together
 
-Elements that share a `data-highlight` key light together: hovering or focusing one marks every element with its key `data-highlighted`, tinted - a row here and its lane on a [board](chart.md#chart-lanes), or its marker on a map.
+Elements that share a `data-highlight` key light together: hovering or focusing one marks every element with its key `data-highlighted`, tinted - a row here and its lane on a [board](chart.md#chart-lanes), or its marker on a map. A mark the page sets itself, `data-highlighted="hold"`, stays until the page takes it away: a row flashed after a jump to it, say.
 
 ```html
 <div class="hstack flex-wrap gap-8">
@@ -254,7 +273,7 @@ A row's tone marks what needs attention: `table-danger` failed, `table-warning` 
 
 From [`css/components/table.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css). It declares `--redz-table-head-border`, `--redz-table-head-weight`, `--redz-row-tint`, `--redz-row-mark` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-8`, `--redz-row-pad`, `--redz-space-12`, `--redz-border`, `--redz-table-head-bg`, `--redz-bg`, `--redz-table-head-text`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-bg-page`, `--redz-border-strong`, `--redz-bg-hover`, `--redz-radius-12`, `--redz-space-16`, `--redz-font-mono`, `--redz-space-4`, `--redz-primary`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-primary-subtle`.
+It reads the theme's `--redz-space-8`, `--redz-row-pad`, `--redz-space-12`, `--redz-border`, `--redz-table-head-bg`, `--redz-bg`, `--redz-table-head-text`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-bg-page`, `--redz-border-strong`, `--redz-row-hover`, `--redz-primary`, `--redz-radius-12`, `--redz-space-16`, `--redz-font-mono`, `--redz-space-4`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-primary-subtle`.
 
 ## From Bootstrap 5.3
 
@@ -262,6 +281,7 @@ It reads the theme's `--redz-space-8`, `--redz-row-pad`, `--redz-space-12`, `--r
 | --- | --- | --- | --- |
 | `caption-top` | - | missing |  |
 | `table-dark` | - | review | row tones are danger, warning and secondary |
+| `table-hover` | - | remove | every table lights its row under the pointer; table-static keeps one still |
 | `table-info` | - | review | row tones are danger, warning and secondary |
 | `table-light` | - | review | row tones are danger, warning and secondary |
 | `table-primary` | - | review | row tones are danger, warning and secondary |

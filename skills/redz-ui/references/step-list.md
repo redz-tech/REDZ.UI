@@ -6,7 +6,7 @@ The steps of a long job as it runs - a release, a publish, an install - each wit
 
 ## A job's steps
 
-`step-list` is an `ol` of steps, each with an icon, its name and a `step-list-detail` at the end; `data-state` says where it is: `done`, `current` - its icon turns while motion is allowed, `failed`, `kept` - failed with the earlier state kept - and `pending`. A job's panel is a `card` with `sticky-top`, under the app header while the page scrolls, its head a [dot](dot.md), a title and the time, and a [progress](progress.md).
+`step-list` is an `ol` of steps, each with an icon, its name and a `step-list-detail` at the end; `data-state` says where it is: `done`, `current` - its icon turns while motion is allowed, `ready` - next, it waits for a press and its icon stays still, `failed`, `kept` - failed with the earlier state kept - and `pending`. A job's panel is a `card` with `sticky-top`, under the app header while the page scrolls, its head a [dot](dot.md), a title and the time, and a [progress](progress.md).
 
 ```html
 <section class="card" aria-labelledby="step-list-job-title">
@@ -22,6 +22,19 @@ The steps of a long job as it runs - a release, a publish, an install - each wit
 		</ol>
 	</div>
 </section>
+```
+
+### In a narrow box
+
+A `step-list-detail` stays at the end of the line while the name and it fit, and falls under the name, aligned with it, when they do not, at any width of the page. An empty one takes no room, so it can wait for its words, and it can hold a [badge](badge.md).
+
+```html
+<ol class="step-list max-w-320" aria-label="Updating the site">
+	<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Download<span class="step-list-detail">4.6 MB</span></li>
+	<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Compare the files<span class="step-list-detail">matched 2,126 · fetched 14 · 4.6 MB · 2 migrations · 1 seed</span></li>
+	<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Check the schema<span class="step-list-detail"><span class="badge badge-subtle-success">Clean</span></span></li>
+	<li data-state="ready"><i class="bi bi-play-circle" aria-hidden="true"></i>Switch to the new version<span class="step-list-detail"></span></li>
+</ol>
 ```
 
 ### More states, and a step's body
@@ -52,6 +65,16 @@ Six more states: `warning` - done with a warning, `info`, `ask` - the job waits 
 </ol>
 ```
 
+A stage that is next and waits for a press is `ready`: it wears the frame of `current`, and its icon stays still.
+
+```html
+<ol class="stage-list" aria-label="The update">
+	<li data-state="done"><span class="hstack gap-8"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><strong>Download</strong></span><span class="fs-12">4.6 MB</span></li>
+	<li data-state="ready" aria-current="step"><span class="hstack gap-8"><i class="bi bi-play-circle" aria-hidden="true"></i><strong>Install</strong></span><span class="fs-12">Waits for your press</span><div class="stage-list-actions"><button class="btn btn-sm btn-primary" type="button">Start</button></div></li>
+	<li data-state="pending"><span class="hstack gap-8"><i class="bi bi-circle" aria-hidden="true"></i><strong>Verify</strong></span><span class="fs-12">After the install</span></li>
+</ol>
+```
+
 ## A timeline
 
 `timeline` is an `ol` of events joined by a line: each starts with an [icon tile](icon-tile.md) in its tone, then a `timeline-time`, the words, and a `dl` of details when it has them.
@@ -73,6 +96,6 @@ Six more states: `warning` - done with a warning, `info`, `ask` - the job waits 
 
 ## Tokens
 
-From [`css/components/step-list.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/step-list.css), which declares no custom property of its own.
+From [`css/components/step-list.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/step-list.css). It declares `--redz-step-edge`, `--redz-step-top` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-4`, `--redz-space-8`, `--redz-text-muted`, `--redz-text`, `--redz-success`, `--redz-primary`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-text-faint`, `--redz-space-12`, `--redz-radius-8`, `--redz-primary-subtle`, `--redz-warning-subtle`, `--redz-danger-subtle`, `--redz-fs-14`, `--redz-space-16`, `--redz-border`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-fs-12`, `--redz-space-2`.
+It reads the theme's `--redz-space-4`, `--redz-space-2`, `--redz-space-16`, `--redz-text-muted`, `--redz-space-8`, `--redz-text`, `--redz-success`, `--redz-primary`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-text-faint`, `--redz-space-12`, `--redz-radius-8`, `--redz-primary-subtle`, `--redz-warning-subtle`, `--redz-danger-subtle`, `--redz-fs-14`, `--redz-border`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-fs-12`.

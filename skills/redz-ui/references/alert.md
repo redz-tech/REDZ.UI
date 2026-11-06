@@ -48,6 +48,14 @@ An alert whose words come after an action - a refused sign-in, a wrong code - is
 <div class="alert alert-info alert-lg"><i class="bi bi-info-circle" aria-hidden="true"></i><div>Prices include the park fee.</div></div>
 ```
 
+### A title over its text
+
+The words may be a `vstack`: it stays beside the icon however long its text.
+
+```html
+<div class="alert alert-warning"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i><div class="vstack gap-4"><strong>The backup is two days old</strong><span>The nightly copy stopped on Tuesday, so today's changes are not in it yet. Run one by hand before the next update.</span></div></div>
+```
+
 ## Accessibility
 
 - An alert that is on the page from the start is plain content - no live region. One that appears after an action and must be heard goes in a live region, or is a toast.

@@ -17,6 +17,11 @@
 	<p>The names are Bootstrap Icons' own - look one up at <a href="https://icons.getbootstrap.com/">icons.getbootstrap.com</a>. A name the set does not have paints a filled square, and the checks flag it.</p>
 </section>
 
+<section class="vstack gap-12" aria-labelledby="icons-host">
+	<h2 id="icons-host">From another host</h2>
+	<p>A browser fetches a mask in CORS mode, as it does a font. Served from another origin, every icon stays blank unless that host sends <code>Access-Control-Allow-Origin</code> on <code>.svg</code>. jsDelivr and GitHub Pages do; on your own CDN, add <code>svg</code> to the types that get the header. A file already fetched without it stays broken in the browser's cache for its whole lifetime when it is <code>immutable</code>, so a change of header alone does not reach those visitors: give the files a new address too.</p>
+</section>
+
 <section class="vstack gap-12" aria-labelledby="icons-access">
 	<h2 id="icons-access">Accessibility</h2>
 	<ul>

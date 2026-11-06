@@ -5,12 +5,12 @@
 
 <section class="vstack gap-16" aria-labelledby="table-examples">
 	<h2 id="table-examples">Examples</h2>
-	<p><code>table</code> on the <code>&lt;table&gt;</code>; <code>table-hover</code> lights the row under the pointer. The head stays at the top of the screen as the page scrolls. Columns that only help on a wide screen hide below <code>md</code> of their card.</p>
+	<p><code>table</code> on the <code>&lt;table&gt;</code>; the row under the pointer lights on a device with one, in the color of <code>--redz-row-hover</code>, set on the page or on one table, and <code>table-static</code> keeps a table's rows still. The head stays at the top of the screen as the page scrolls. Columns that only help on a wide screen hide below <code>md</code> of their card.</p>
 	<div class="docs-example docs-example-stack" id="table-list">
 		<section class="card" aria-labelledby="table-list-title">
 			<div class="card-header"><h2 id="table-list-title">Excursions</h2><span class="text-muted fs-12">3 of 28</span></div>
 			<div class="card-body p-0">
-				<table class="table table-hover">
+				<table class="table">
 					<thead>
 						<tr>
 							<th class="table-check"><input class="check" type="checkbox" aria-label="Select all"></th>
@@ -60,7 +60,7 @@
 	<div class="docs-example docs-example-stack" id="table-variants">
 		<section class="card" aria-labelledby="table-variants-title">
 			<div class="card-header"><h2 class="fs-14" id="table-variants-title">Boats this week</h2></div>
-			<table class="table table-striped table-hover">
+			<table class="table table-striped">
 				<thead><tr><th scope="col">Boat</th><th class="text-end" scope="col">Trips</th><th class="text-end" scope="col">Seats sold</th></tr></thead>
 				<tbody>
 					<tr><td>Boat A</td><td class="text-end tabular-nums">12</td><td class="text-end tabular-nums">286</td></tr>
@@ -102,8 +102,25 @@
 		</table>
 	</div>
 
+	<h3 id="table-hover-title">Rows that stay still</h3>
+	<p>Every table lights the row under the pointer. <code>table-static</code> keeps the rows of one still, for a table with nothing to do in a row.</p>
+	<div class="docs-example docs-example-stack" id="table-hover-rows">
+		<table class="table" aria-label="Departures">
+			<tbody>
+				<tr><td>North Bay</td><td>08:00</td></tr>
+				<tr><td>Turtle Cove</td><td>10:30</td></tr>
+			</tbody>
+		</table>
+		<table class="table table-static" aria-label="Fares">
+			<tbody>
+				<tr><td>Adult</td><td>1,200</td></tr>
+				<tr><td>Child</td><td>600</td></tr>
+			</tbody>
+		</table>
+	</div>
+
 	<h3 id="table-highlight">Rows that light together</h3>
-	<p>Elements that share a <code>data-highlight</code> key light together: hovering or focusing one marks every element with its key <code>data-highlighted</code>, tinted - a row here and its lane on a <a href="chart.html#chart-lanes">board</a>, or its marker on a map.</p>
+	<p>Elements that share a <code>data-highlight</code> key light together: hovering or focusing one marks every element with its key <code>data-highlighted</code>, tinted - a row here and its lane on a <a href="chart.html#chart-lanes">board</a>, or its marker on a map. A mark the page sets itself, <code>data-highlighted="hold"</code>, stays until the page takes it away: a row flashed after a jump to it, say.</p>
 	<div class="docs-example docs-example-stack" id="table-light">
 		<div class="hstack flex-wrap gap-8">
 			<button class="btn btn-sm" type="button" data-highlight="pier">The pier</button>
@@ -228,23 +245,23 @@
 			<tbody>
 				<tr>
 					<th scope="row">tr</th>
-					<td><table class="table table-hover"><tbody><tr><td><a class="table-title" href="#table-states">North Bay</a></td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: North Bay"><i class="bi bi-pencil" aria-hidden="true"></i></button></td></tr></tbody></table></td>
-					<td><table class="table table-hover"><tbody><tr data-docs-state="hover"><td><a class="table-title" href="#table-states">North Bay</a></td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: North Bay"><i class="bi bi-pencil" aria-hidden="true"></i></button></td></tr></tbody></table></td>
+					<td><table class="table"><tbody><tr><td><a class="table-title" href="#table-states">North Bay</a></td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: North Bay"><i class="bi bi-pencil" aria-hidden="true"></i></button></td></tr></tbody></table></td>
+					<td><table class="table"><tbody><tr data-docs-state="hover"><td><a class="table-title" href="#table-states">North Bay</a></td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: North Bay"><i class="bi bi-pencil" aria-hidden="true"></i></button></td></tr></tbody></table></td>
 				</tr>
 				<tr>
 					<th scope="row">tr.table-danger</th>
-					<td><table class="table table-hover"><tbody><tr class="table-danger"><td><a class="table-title" href="#table-states">Elephant sanctuary</a></td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Rebuild: Elephant sanctuary"><i class="bi bi-arrow-repeat" aria-hidden="true"></i></button></td></tr></tbody></table></td>
-					<td><table class="table table-hover"><tbody><tr class="table-danger" data-docs-state="hover"><td><a class="table-title" href="#table-states">Elephant sanctuary</a></td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Rebuild: Elephant sanctuary"><i class="bi bi-arrow-repeat" aria-hidden="true"></i></button></td></tr></tbody></table></td>
+					<td><table class="table"><tbody><tr class="table-danger"><td><a class="table-title" href="#table-states">Elephant sanctuary</a></td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Rebuild: Elephant sanctuary"><i class="bi bi-arrow-repeat" aria-hidden="true"></i></button></td></tr></tbody></table></td>
+					<td><table class="table"><tbody><tr class="table-danger" data-docs-state="hover"><td><a class="table-title" href="#table-states">Elephant sanctuary</a></td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Rebuild: Elephant sanctuary"><i class="bi bi-arrow-repeat" aria-hidden="true"></i></button></td></tr></tbody></table></td>
 				</tr>
 				<tr>
 					<th scope="row">tr.table-warning</th>
-					<td><table class="table table-hover"><tbody><tr class="table-warning"><td><a class="table-title" href="#table-states">Night market</a></td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Night market"><i class="bi bi-pencil" aria-hidden="true"></i></button></td></tr></tbody></table></td>
-					<td><table class="table table-hover"><tbody><tr class="table-warning" data-docs-state="hover"><td><a class="table-title" href="#table-states">Night market</a></td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Night market"><i class="bi bi-pencil" aria-hidden="true"></i></button></td></tr></tbody></table></td>
+					<td><table class="table"><tbody><tr class="table-warning"><td><a class="table-title" href="#table-states">Night market</a></td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Night market"><i class="bi bi-pencil" aria-hidden="true"></i></button></td></tr></tbody></table></td>
+					<td><table class="table"><tbody><tr class="table-warning" data-docs-state="hover"><td><a class="table-title" href="#table-states">Night market</a></td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Night market"><i class="bi bi-pencil" aria-hidden="true"></i></button></td></tr></tbody></table></td>
 				</tr>
 				<tr>
 					<th scope="row">tr.table-secondary</th>
-					<td><table class="table table-hover"><tbody><tr class="table-secondary"><td><a class="table-title" href="#table-states">Folk dance</a></td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Folk dance"><i class="bi bi-pencil" aria-hidden="true"></i></button></td></tr></tbody></table></td>
-					<td><table class="table table-hover"><tbody><tr class="table-secondary" data-docs-state="hover"><td><a class="table-title" href="#table-states">Folk dance</a></td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Folk dance"><i class="bi bi-pencil" aria-hidden="true"></i></button></td></tr></tbody></table></td>
+					<td><table class="table"><tbody><tr class="table-secondary"><td><a class="table-title" href="#table-states">Folk dance</a></td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Folk dance"><i class="bi bi-pencil" aria-hidden="true"></i></button></td></tr></tbody></table></td>
+					<td><table class="table"><tbody><tr class="table-secondary" data-docs-state="hover"><td><a class="table-title" href="#table-states">Folk dance</a></td><td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Folk dance"><i class="bi bi-pencil" aria-hidden="true"></i></button></td></tr></tbody></table></td>
 				</tr>
 			</tbody>
 		</table>
