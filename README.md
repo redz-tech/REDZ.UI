@@ -7,7 +7,7 @@ build step.
 a list, a resource page and a settings form - show it in light and dark themes, left-to-right and right-to-left.
 
 **Site:** [redz-tech.github.io/REDZ.UI](https://redz-tech.github.io/REDZ.UI/) - documentation and the demo screens of
-the latest release at the root, of the main branch under `next/`, and of every release under its version.
+the latest release at the root, of the main branch under `next/`, and of every release from 0.17.0 under its version.
 
 **Why:** [why our own library instead of Bootstrap 5.3 or 6](docs/why.md) · [по-русски](docs/why.ru.md).
 

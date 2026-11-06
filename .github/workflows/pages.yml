@@ -28,13 +28,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Assemble the site - the latest release at the root, main as next/, a folder per release
+      - name: Assemble the site - the latest release at the root, main as next/, a folder per release from 0.17.0; an older one stays in its tag and its release
         run: |
           set -eu
           mkdir -p _site/next
           git archive origin/main | tar -x -C _site/next
           latest=""
-          for tag in $(git tag --list 'v*' --sort=v:refname); do
+          for tag in $(git tag --list 'v*' --sort=v:refname | sed -n '/^v0\.17\.0$/,$p'); do
             mkdir -p "_site/${tag#v}"
             git archive "$tag" | tar -x -C "_site/${tag#v}"
             latest="$tag"
