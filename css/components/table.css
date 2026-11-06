@@ -7,7 +7,8 @@
 
 	.table th {
 		position: sticky;
-		inset-block-start: 3.25rem;
+		/* Right under the page's sticky bar: --redz-sticky-top less the gap it keeps for a panel; 0 with no bar. */
+		inset-block-start: calc(var(--redz-sticky-top, var(--redz-space-12)) - var(--redz-space-12));
 		z-index: 1;
 		padding: max(var(--redz-space-8), calc(var(--redz-row-pad) - 0.125rem)) var(--redz-space-12);
 		border-block-end: var(--redz-table-head-border, 1px solid var(--redz-border));
@@ -17,6 +18,12 @@
 		font-weight: var(--redz-table-head-weight, 550);
 		text-align: start;
 		white-space: nowrap;
+	}
+
+	:where(.table th) :is([popover], dialog) {
+		color: var(--redz-text);
+		font-size: var(--redz-fs-14);
+		font-weight: 400;
 	}
 
 	.table td {
@@ -55,7 +62,7 @@
 
 	@supports named-feature(single-axis-scroll-container) {
 		.table-scroll .table > thead th {
-			inset-block-start: 3.25rem;
+			inset-block-start: calc(var(--redz-sticky-top, var(--redz-space-12)) - var(--redz-space-12));
 		}
 	}
 

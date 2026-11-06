@@ -4,6 +4,13 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Fixed
+- A `table`'s head sticks at the top of a page without the shell, or under a page's own bar by `--redz-sticky-top`. It held the shell header's
+  height everywhere, so a table at the top of such a page had its head over its first row.
+- A `menu`, `popover` or `dialog` inside a `th` takes the size, weight and color of the page's text, not the head's.
+
 ## 0.18.2 - 2026-11-06
 
 Pack `it` found a row's menu turning see-through, and the cause reaches further. Browsers now stop `:hover`, `:active` and

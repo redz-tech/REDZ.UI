@@ -6,7 +6,7 @@ A list of records: a title that links to the record, a line under it, a note whe
 
 ## Examples
 
-`table` on the `<table>`; the row under the pointer lights on a device with one, in the color of `--redz-row-hover`, set on the page or on one table, and `table-static` keeps a table's rows still. The head stays at the top of the screen as the page scrolls. Columns that only help on a wide screen hide below `md` of their card.
+`table` on the `<table>`; the row under the pointer lights on a device with one, in the color of `--redz-row-hover`, set on the page or on one table, and `table-static` keeps a table's rows still. The head stays at the top of the screen as the page scrolls, under the shell's header. A page with a sticky bar of its own sets `--redz-sticky-top` to the bar's height plus 12 px. Columns that only help on a wide screen hide below `md` of their card.
 
 ```html
 <section class="card" aria-labelledby="table-list-title">
@@ -311,7 +311,7 @@ A row's tone marks what needs attention: `table-danger` failed, `table-warning` 
 
 From [`css/components/table.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css). It declares `--redz-table-head-border`, `--redz-table-head-weight`, `--redz-row-tint`, `--redz-row-mark` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-8`, `--redz-row-pad`, `--redz-space-12`, `--redz-border`, `--redz-table-head-bg`, `--redz-bg`, `--redz-table-head-text`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-bg-page`, `--redz-border-strong`, `--redz-row-hover`, `--redz-primary`, `--redz-radius-12`, `--redz-space-16`, `--redz-font-mono`, `--redz-space-4`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-primary-subtle`.
+It reads the theme's `--redz-sticky-top`, `--redz-space-12`, `--redz-space-8`, `--redz-row-pad`, `--redz-border`, `--redz-table-head-bg`, `--redz-bg`, `--redz-table-head-text`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-fs-14`, `--redz-bg-page`, `--redz-border-strong`, `--redz-row-hover`, `--redz-primary`, `--redz-radius-12`, `--redz-space-16`, `--redz-font-mono`, `--redz-space-4`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-primary-subtle`.
 
 ## From Bootstrap 5.3
 

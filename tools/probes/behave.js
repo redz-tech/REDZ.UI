@@ -2781,9 +2781,21 @@ window.REDZ_BEHAVE = (() => {
 			if (menu.scrollWidth > menu.clientWidth + 1 || getComputedStyle(menu).textAlign !== 'start') {
 				out.push('a long item of a menu in a cell: ' + say([menu.clientWidth, menu.scrollWidth, getComputedStyle(menu).textAlign]));
 			}
+			const beside = getComputedStyle($('.menu-item', menu));
+			const plain = [beside.fontSize, beside.fontWeight, beside.color];
 			menu.hidePopover();
 			menu.popover = 'auto';
 			label.data = word;
+
+			// A menu in the head takes nothing from the head's small text.
+			const headMenu = menuOf('table-row-menu-head');
+			$('thead .table-actions', host).append(headMenu);
+			headMenu.showPopover();
+			await settled();
+			const inHead = getComputedStyle($('.menu-item', headMenu));
+			holds('a menu in a table\'s head', [['its item', say([inHead.fontSize, inHead.fontWeight, inHead.color]), say(plain)]]);
+			headMenu.hidePopover();
+			headMenu.remove();
 
 			// A menu in a tree's row, where the rest is opacity 0.
 			const treeRow = $('.tree-row:has(> .tree-actions)');
@@ -2803,6 +2815,38 @@ window.REDZ_BEHAVE = (() => {
 			list.remove();
 			yield {hover: away};
 		}},
+		tableHead: {target: '#table-row-menu', steps: [async (out) => {
+			// Only a page without the shell shows it, so the table stands in a frame of its own.
+			const frame = document.createElement('iframe');
+			frame.style.cssText = 'position: fixed; inset-block-start: 0; inset-inline-start: 0; inline-size: 600px; block-size: 300px; visibility: hidden';
+			const page = (style, before = '', after = '') => '<!doctype html><html lang="en"><head><title>Head</title><link rel="stylesheet" href="' + $('link[href*="redz-ui.min.css"]').href + '"><style>' + style + '</style></head><body>' + before + '<table class="table"><thead><tr><th>Boat</th></tr></thead><tbody><tr><td>Boat A</td></tr></tbody></table>' + after + '</body></html>';
+			const read = async (...html) => {
+				const loaded = new Promise((done) => frame.addEventListener('load', done, {once: true}));
+				frame.srcdoc = page(...html);
+				await loaded;
+				const doc = frame.contentDocument;
+				await until(() => frame.contentWindow.getComputedStyle(doc.querySelector('th')).position === 'sticky');
+				return [doc.querySelector('th').getBoundingClientRect(), doc.querySelector('td').getBoundingClientRect(), frame.contentWindow.getComputedStyle(doc.querySelector('th')).insetBlockStart];
+			};
+			document.body.append(frame);
+			const [head, cell, top] = await read('body {margin: 0}');
+			if (head.bottom > cell.top + 1 || top !== '0px') {
+				out.push('a table on a page with no shell: its head ends at ' + head.bottom + ', its first row starts at ' + cell.top + ', the head stands at ' + top);
+			}
+			const [, , sideways] = await read('body {margin: 0}', '<div class="table-scroll">', '</div>');
+			if (sideways !== '0px') {
+				out.push('a table that scrolls sideways on a page with no shell: its head stands at ' + sideways);
+			}
+			const [, , under] = await read('body {margin: 0} :root {--redz-sticky-top: 5rem}');
+			if (!near(parseFloat(under), 68)) {
+				out.push('a page\'s own sticky bar: the head stands at ' + under + ', not under the bar');
+			}
+			frame.remove();
+			const inShell = getComputedStyle($('#table-row-menu thead th')).insetBlockStart;
+			if (inShell !== '52px') {
+				out.push('a table in the shell: its head stands at ' + inShell + ', not under the header');
+			}
+		}]},
 		rowLink: {target: '#table-links .stretched-link', steps: [async (out) => {
 			const row = $('#table-links tbody tr');
 			const link = $('.stretched-link', row);
