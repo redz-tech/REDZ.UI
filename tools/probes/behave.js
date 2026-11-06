@@ -2694,6 +2694,115 @@ window.REDZ_BEHAVE = (() => {
 			lit.style.removeProperty('--redz-row-hover');
 			yield {hover: [5, 5]};
 		}},
+		rowMenu: {target: '#table-row-menu', walk: async function* (out) {
+			if (!matchMedia('(hover: hover)').matches) {
+				return;
+			}
+			const opacity = (el) => getComputedStyle(el).opacity;
+			const lit = (row) => getComputedStyle(row.cells[0]).backgroundColor;
+			const away = [5, 5];
+			const menuOf = (id) => {
+				const list = Object.assign(document.createElement('div'), {id, className: 'menu', popover: 'auto', innerHTML: '<button class="menu-item" type="button" role="menuitem">One</button>'});
+				list.setAttribute('role', 'menu');
+				return list;
+			};
+			const holds = (name, kept) => {
+				for (const [what, value, want] of kept) {
+					if (value !== want) {
+						out.push(name + ': ' + what + ' ' + say(value) + ', not ' + say(want));
+					}
+				}
+			};
+			// A real pointer and click through the states of an open menu, each state asked of what must hold in it.
+			const walkMenu = async function* (name, button, menu, kept) {
+				yield {hover: center(button)};
+				yield {click: center(button)};
+				await until(() => menu.matches(':popover-open') && opacity(menu) === '1', 800);
+				holds(name + ', just open', kept());
+				yield {hover: center($('.menu-item', menu))};
+				holds(name + ', the pointer on an item', kept());
+				yield {hover: away};
+				holds(name + ', the pointer away', kept());
+			};
+
+			const host = $('#table-row-menu');
+			const [row, next] = $$('tbody tr', host);
+			const [edit, more] = $$('.table-actions > button', row);
+			const menu = $('.table-actions > .menu', row);
+			host.scrollIntoView({block: 'center', behavior: 'instant'});
+			await settled();
+			document.activeElement?.blur?.();
+			yield {hover: away};
+			const rest = lit(row);
+			holds('a row at rest', [['its button', opacity(more), '0.6']]);
+			yield {hover: center(row.cells[0])};
+			holds('a row under the pointer', [['its button', opacity(more), '1']]);
+			const light = lit(row);
+			if (light === rest) {
+				out.push('a row under the pointer has no light');
+			}
+			yield* walkMenu('a menu beside its button in a row', more, menu, () => [['the menu', opacity(menu), '1'], ['its button', opacity(more), '1'], ['the action beside it', opacity(edit), '1'], ['the row\'s light', lit(row), light]]);
+			menu.hidePopover();
+			document.activeElement?.blur?.();
+			await settled();
+			holds('a menu of a row closing', [['the menu', opacity(menu), '1']]);
+			await until(() => !menu.checkVisibility(), 800);
+			holds('a row after its menu', [['its button', opacity(more), '0.6'], ['the row\'s light', lit(row), rest]]);
+
+			// One menu kept outside the table for all its rows.
+			const shared = menuOf('table-row-menu-shared');
+			document.body.append(shared);
+			const hers = $$('.table-actions > button', next)[1];
+			const own = hers.getAttribute('commandfor');
+			hers.setAttribute('commandfor', shared.id);
+			yield* walkMenu('a menu shared from outside the table', hers, shared, () => [['its button', opacity(hers), '1'], ['the row\'s light', lit(next), light]]);
+			shared.hidePopover();
+			hers.setAttribute('commandfor', own);
+			hers.removeAttribute('aria-expanded');
+			shared.remove();
+			yield {hover: away};
+
+			// A dialog in the cell.
+			const dialog = Object.assign(document.createElement('dialog'), {className: 'dialog'});
+			$('.table-actions', row).append(dialog);
+			dialog.showModal();
+			await until(() => opacity(dialog) === '1', 800);
+			holds('a dialog in a row\'s cell', [['the dialog', opacity(dialog), '1']]);
+			dialog.close();
+			dialog.remove();
+
+			// A long item keeps to its menu, as the cell's text does not reach it.
+			const label = $('.menu-item', menu).lastChild;
+			const word = label.data;
+			label.data = 'A long name of a thing to do with this row, far longer than the widest menu, that has to wrap inside it and not run out of it';
+			menu.popover = 'manual';
+			menu.showPopover();
+			await settled();
+			if (menu.scrollWidth > menu.clientWidth + 1 || getComputedStyle(menu).textAlign !== 'start') {
+				out.push('a long item of a menu in a cell: ' + say([menu.clientWidth, menu.scrollWidth, getComputedStyle(menu).textAlign]));
+			}
+			menu.hidePopover();
+			menu.popover = 'auto';
+			label.data = word;
+
+			// A menu in a tree's row, where the rest is opacity 0.
+			const treeRow = $('.tree-row:has(> .tree-actions)');
+			const actions = $('.tree-actions', treeRow);
+			const button = $('button', actions);
+			const list = menuOf('tree-row-menu-probe');
+			actions.append(list);
+			button.setAttribute('commandfor', list.id);
+			button.setAttribute('command', 'toggle-popover');
+			treeRow.scrollIntoView({block: 'center', behavior: 'instant'});
+			await settled();
+			yield* walkMenu('a menu in a tree\'s row', button, list, () => [['the row\'s actions', opacity(actions), '1']]);
+			list.hidePopover();
+			button.removeAttribute('commandfor');
+			button.removeAttribute('command');
+			button.removeAttribute('aria-expanded');
+			list.remove();
+			yield {hover: away};
+		}},
 		rowLink: {target: '#table-links .stretched-link', steps: [async (out) => {
 			const row = $('#table-links tbody tr');
 			const link = $('.stretched-link', row);

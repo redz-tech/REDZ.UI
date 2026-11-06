@@ -3,7 +3,7 @@ name: redz-ui-from-bootstrap-5
 description: Move a project's markup, styles and scripts from Bootstrap 5.3 to REDZ.UI, file by file - find what Bootstrap left with scripts/scan.sh and the map assets/map.tsv, rewrite each file whole, scan again until nothing is left. Use when a project links Bootstrap 5 (bootstrap.css, bootstrap.bundle.js, data-bs-* attributes, row and col grids) and is to run on REDZ.UI instead.
 license: MIT
 metadata:
-  version: "0.18.1"
+  version: "0.18.2"
   from: "bootstrap 5.3.8"
 ---
 

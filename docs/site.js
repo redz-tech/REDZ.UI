@@ -2,7 +2,8 @@
 // else as last chosen here, set before the page paints; a twin written right to left stays so. The state mirror: every
 // :hover, :focus-visible, :focus and :active rule of the page's stylesheets is copied, in its place, under
 // [data-docs-state~="…"], so a state grid shows those states without a pointer or a key - the probes compare the copy
-// with the real state. The examples' buttons with data-docs-run call REDZ.ui.
+// with the real state. A rule that names a state only inside :not() is a rule of the rest: it takes the mark into its
+// :not() instead of a copy, as a copy would match everything unmarked. The examples' buttons with data-docs-run call REDZ.ui.
 (() => {
 	const root = document.documentElement;
 	const params = new URLSearchParams(location.search);
@@ -65,6 +66,7 @@
 	});
 
 	const pseudo = /:(hover|focus-visible|focus|active)(?![\w-])/g;
+	const not = /:not\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)/g;
 	const mirror = (list) => {
 		for (let i = 0; i < list.cssRules.length; i++) {
 			const rule = list.cssRules[i];
@@ -74,7 +76,9 @@
 				}
 			} else if (rule instanceof CSSStyleRule) {
 				const copy = rule.selectorText.replace(pseudo, '[data-docs-state~="$1"]');
-				if (copy !== rule.selectorText) {
+				if (copy !== rule.selectorText && rule.selectorText.replace(not, '').search(pseudo) === -1) {
+					rule.selectorText = rule.selectorText.replace(not, (part) => part.replace(pseudo, '$&, [data-docs-state~="$1"]'));
+				} else if (copy !== rule.selectorText) {
 					list.insertRule(copy + ' {' + rule.style.cssText + '}', ++i);
 				}
 			} else if (rule.cssRules !== undefined) {

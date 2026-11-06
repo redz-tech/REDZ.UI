@@ -337,6 +337,73 @@
 	&lt;/tbody&gt;
 &lt;/table&gt;</code></pre></div>
 
+					<h3 id="table-row-menu-title">A menu in a row</h3>
+					<p>A row's menu stands in <code>table-actions</code> right after its button. While it is open the row keeps its light and its actions, wherever the pointer goes, and the menu takes nothing from the cell. Rows may also share one menu kept outside the table: each button names it, and the row of the button that opened it stays lit.</p>
+					<div class="docs-sample"><div class="docs-example" id="table-row-menu">
+						<table class="table" aria-label="Departures">
+							<thead>
+								<tr><th scope="col">Excursion</th><th scope="col">Leaves</th><th class="table-actions"><span class="visually-hidden">Actions</span></th></tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>North Bay</td>
+									<td>08:00</td>
+									<td class="table-actions">
+										<button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: North Bay"><i class="bi bi-pencil" aria-hidden="true"></i></button>
+										<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="table-row-menu-bay" command="toggle-popover" aria-haspopup="menu" aria-label="More: North Bay"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
+										<div id="table-row-menu-bay" class="menu" popover role="menu" aria-label="More: North Bay">
+											<button class="menu-item" type="button" role="menuitem"><i class="bi bi-files" aria-hidden="true"></i>Duplicate</button>
+											<button class="menu-item" type="button" role="menuitem"><i class="bi bi-eye-slash" aria-hidden="true"></i>Withdraw</button>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>Turtle Cove</td>
+									<td>10:30</td>
+									<td class="table-actions">
+										<button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Turtle Cove"><i class="bi bi-pencil" aria-hidden="true"></i></button>
+										<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="table-row-menu-cove" command="toggle-popover" aria-haspopup="menu" aria-label="More: Turtle Cove"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
+										<div id="table-row-menu-cove" class="menu" popover role="menu" aria-label="More: Turtle Cove">
+											<button class="menu-item" type="button" role="menuitem"><i class="bi bi-files" aria-hidden="true"></i>Duplicate</button>
+											<button class="menu-item" type="button" role="menuitem"><i class="bi bi-eye-slash" aria-hidden="true"></i>Withdraw</button>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;table class="table" aria-label="Departures"&gt;
+	&lt;thead&gt;
+		&lt;tr&gt;&lt;th scope="col"&gt;Excursion&lt;/th&gt;&lt;th scope="col"&gt;Leaves&lt;/th&gt;&lt;th class="table-actions"&gt;&lt;span class="visually-hidden"&gt;Actions&lt;/span&gt;&lt;/th&gt;&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+		&lt;tr&gt;
+			&lt;td&gt;North Bay&lt;/td&gt;
+			&lt;td&gt;08:00&lt;/td&gt;
+			&lt;td class="table-actions"&gt;
+				&lt;button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: North Bay"&gt;&lt;i class="bi bi-pencil" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;
+				&lt;button class="btn btn-sm btn-icon btn-text" type="button" commandfor="table-row-menu-bay" command="toggle-popover" aria-haspopup="menu" aria-label="More: North Bay"&gt;&lt;i class="bi bi-three-dots" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;
+				&lt;div id="table-row-menu-bay" class="menu" popover role="menu" aria-label="More: North Bay"&gt;
+					&lt;button class="menu-item" type="button" role="menuitem"&gt;&lt;i class="bi bi-files" aria-hidden="true"&gt;&lt;/i&gt;Duplicate&lt;/button&gt;
+					&lt;button class="menu-item" type="button" role="menuitem"&gt;&lt;i class="bi bi-eye-slash" aria-hidden="true"&gt;&lt;/i&gt;Withdraw&lt;/button&gt;
+				&lt;/div&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;Turtle Cove&lt;/td&gt;
+			&lt;td&gt;10:30&lt;/td&gt;
+			&lt;td class="table-actions"&gt;
+				&lt;button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Turtle Cove"&gt;&lt;i class="bi bi-pencil" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;
+				&lt;button class="btn btn-sm btn-icon btn-text" type="button" commandfor="table-row-menu-cove" command="toggle-popover" aria-haspopup="menu" aria-label="More: Turtle Cove"&gt;&lt;i class="bi bi-three-dots" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;
+				&lt;div id="table-row-menu-cove" class="menu" popover role="menu" aria-label="More: Turtle Cove"&gt;
+					&lt;button class="menu-item" type="button" role="menuitem"&gt;&lt;i class="bi bi-files" aria-hidden="true"&gt;&lt;/i&gt;Duplicate&lt;/button&gt;
+					&lt;button class="menu-item" type="button" role="menuitem"&gt;&lt;i class="bi bi-eye-slash" aria-hidden="true"&gt;&lt;/i&gt;Withdraw&lt;/button&gt;
+				&lt;/div&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;</code></pre></div>
+
 					<h3 id="table-highlight">Rows that light together</h3>
 					<p>Elements that share a <code>data-highlight</code> key light together: hovering or focusing one marks every element with its key <code>data-highlighted</code>, tinted - a row here and its lane on a <a href="chart.html#chart-lanes">board</a>, or its marker on a map. A mark the page sets itself, <code>data-highlighted="hold"</code>, stays until the page takes it away: a row flashed after a jump to it, say.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="table-light">

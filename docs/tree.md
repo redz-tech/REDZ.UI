@@ -104,7 +104,7 @@ A tree with `data-reorder` moves its items as a list does - see [reordering](lis
 
 ### The current page, actions and checks
 
-A row whose link has `aria-current` - the page open now - is tinted and its link bold. `tree-actions` at the end of a row holds its buttons: quiet until the row is hovered or holds the focus on a pointer screen, always shown on a touch screen. A `check` in a row posts by its own name, for a batch over the chosen pages. A search with [`data-filter`](list-group.md#list-group-filter) keeps the parents of a match.
+A row whose link has `aria-current` - the page open now - is tinted and its link bold. `tree-actions` at the end of a row holds its buttons: quiet until the row is hovered, holds the focus or has a menu open on a pointer screen, always shown on a touch screen. A `check` in a row posts by its own name, for a batch over the chosen pages. A search with [`data-filter`](list-group.md#list-group-filter) keeps the parents of a match.
 
 ```html
 <input class="form-control" type="search" data-filter="tree-current-list" aria-label="Find a page" placeholder="Find a page" autocomplete="off">

@@ -127,6 +127,44 @@ Every table lights the row under the pointer. `table-static` keeps the rows of o
 </table>
 ```
 
+### A menu in a row
+
+A row's menu stands in `table-actions` right after its button. While it is open the row keeps its light and its actions, wherever the pointer goes, and the menu takes nothing from the cell. Rows may also share one menu kept outside the table: each button names it, and the row of the button that opened it stays lit.
+
+```html
+<table class="table" aria-label="Departures">
+	<thead>
+		<tr><th scope="col">Excursion</th><th scope="col">Leaves</th><th class="table-actions"><span class="visually-hidden">Actions</span></th></tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>North Bay</td>
+			<td>08:00</td>
+			<td class="table-actions">
+				<button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: North Bay"><i class="bi bi-pencil" aria-hidden="true"></i></button>
+				<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="table-row-menu-bay" command="toggle-popover" aria-haspopup="menu" aria-label="More: North Bay"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
+				<div id="table-row-menu-bay" class="menu" popover role="menu" aria-label="More: North Bay">
+					<button class="menu-item" type="button" role="menuitem"><i class="bi bi-files" aria-hidden="true"></i>Duplicate</button>
+					<button class="menu-item" type="button" role="menuitem"><i class="bi bi-eye-slash" aria-hidden="true"></i>Withdraw</button>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>Turtle Cove</td>
+			<td>10:30</td>
+			<td class="table-actions">
+				<button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Turtle Cove"><i class="bi bi-pencil" aria-hidden="true"></i></button>
+				<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="table-row-menu-cove" command="toggle-popover" aria-haspopup="menu" aria-label="More: Turtle Cove"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
+				<div id="table-row-menu-cove" class="menu" popover role="menu" aria-label="More: Turtle Cove">
+					<button class="menu-item" type="button" role="menuitem"><i class="bi bi-files" aria-hidden="true"></i>Duplicate</button>
+					<button class="menu-item" type="button" role="menuitem"><i class="bi bi-eye-slash" aria-hidden="true"></i>Withdraw</button>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+```
+
 ### Rows that light together
 
 Elements that share a `data-highlight` key light together: hovering or focusing one marks every element with its key `data-highlighted`, tinted - a row here and its lane on a [board](chart.md#chart-lanes), or its marker on a map. A mark the page sets itself, `data-highlighted="hold"`, stays until the page takes it away: a row flashed after a jump to it, say.

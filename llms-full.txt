@@ -6,11 +6,11 @@ REDZ.UI is a stylesheet, its icons and one small script on the browser platform.
 
 ## Get it
 
-Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. `redz-ui-0.18.1.zip` is the folder a project serves, as it is: `css/` and `js/` with minified files only, the license files and the passport, `redz-ui.json` - the version, the floor, the files to link, every class, token, command and text key, and the sha256 of every file. The icons are a release of their own, `redz-ui-icons-1.13.2.zip`, which changes only with Bootstrap Icons: the passport's `icons` names the version a release needs, and a project keeps it in a folder of its own, so a new release of the library leaves the icons and their cache alone. `checks.zip` beside the library is the sheet of the probes the release passed in every engine.
+Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. `redz-ui-0.18.2.zip` is the folder a project serves, as it is: `css/` and `js/` with minified files only, the license files and the passport, `redz-ui.json` - the version, the floor, the files to link, every class, token, command and text key, and the sha256 of every file. The icons are a release of their own, `redz-ui-icons-1.13.2.zip`, which changes only with Bootstrap Icons: the passport's `icons` names the version a release needs, and a project keeps it in a folder of its own, so a new release of the library leaves the icons and their cache alone. `checks.zip` beside the library is the sheet of the probes the release passed in every engine.
 
 ```js
-gh release download v0.18.1 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
-gh release verify-asset v0.18.1 redz-ui-0.18.1.zip --repo redz-tech/REDZ.UI
+gh release download v0.18.2 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
+gh release verify-asset v0.18.2 redz-ui-0.18.2.zip --repo redz-tech/REDZ.UI
 gh release download icons-1.13.2 --repo redz-tech/REDZ.UI --pattern 'redz-ui-icons-*.zip'
 gh release verify-asset icons-1.13.2 redz-ui-icons-1.13.2.zip --repo redz-tech/REDZ.UI
 ```
@@ -18,7 +18,7 @@ gh release verify-asset icons-1.13.2 redz-ui-icons-1.13.2.zip --repo redz-tech/R
 Or from jsDelivr, which serves a release by its tag:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.18.1/dist/css/redz-ui.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.18.2/dist/css/redz-ui.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@icons-1.13.2/css/icons.min.css">
 ```
 
@@ -5288,7 +5288,7 @@ A tree with `data-reorder` moves its items as a list does - see [reordering](lis
 
 ### The current page, actions and checks
 
-A row whose link has `aria-current` - the page open now - is tinted and its link bold. `tree-actions` at the end of a row holds its buttons: quiet until the row is hovered or holds the focus on a pointer screen, always shown on a touch screen. A `check` in a row posts by its own name, for a batch over the chosen pages. A search with [`data-filter`](list-group.md#list-group-filter) keeps the parents of a match.
+A row whose link has `aria-current` - the page open now - is tinted and its link bold. `tree-actions` at the end of a row holds its buttons: quiet until the row is hovered, holds the focus or has a menu open on a pointer screen, always shown on a touch screen. A `check` in a row posts by its own name, for a batch over the chosen pages. A search with [`data-filter`](list-group.md#list-group-filter) keeps the parents of a match.
 
 ```html
 <input class="form-control" type="search" data-filter="tree-current-list" aria-label="Find a page" placeholder="Find a page" autocomplete="off">
@@ -5825,6 +5825,44 @@ Every table lights the row under the pointer. `table-static` keeps the rows of o
 	<tbody>
 		<tr><td>Adult</td><td>1,200</td></tr>
 		<tr><td>Child</td><td>600</td></tr>
+	</tbody>
+</table>
+```
+
+### A menu in a row
+
+A row's menu stands in `table-actions` right after its button. While it is open the row keeps its light and its actions, wherever the pointer goes, and the menu takes nothing from the cell. Rows may also share one menu kept outside the table: each button names it, and the row of the button that opened it stays lit.
+
+```html
+<table class="table" aria-label="Departures">
+	<thead>
+		<tr><th scope="col">Excursion</th><th scope="col">Leaves</th><th class="table-actions"><span class="visually-hidden">Actions</span></th></tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>North Bay</td>
+			<td>08:00</td>
+			<td class="table-actions">
+				<button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: North Bay"><i class="bi bi-pencil" aria-hidden="true"></i></button>
+				<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="table-row-menu-bay" command="toggle-popover" aria-haspopup="menu" aria-label="More: North Bay"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
+				<div id="table-row-menu-bay" class="menu" popover role="menu" aria-label="More: North Bay">
+					<button class="menu-item" type="button" role="menuitem"><i class="bi bi-files" aria-hidden="true"></i>Duplicate</button>
+					<button class="menu-item" type="button" role="menuitem"><i class="bi bi-eye-slash" aria-hidden="true"></i>Withdraw</button>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>Turtle Cove</td>
+			<td>10:30</td>
+			<td class="table-actions">
+				<button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Turtle Cove"><i class="bi bi-pencil" aria-hidden="true"></i></button>
+				<button class="btn btn-sm btn-icon btn-text" type="button" commandfor="table-row-menu-cove" command="toggle-popover" aria-haspopup="menu" aria-label="More: Turtle Cove"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
+				<div id="table-row-menu-cove" class="menu" popover role="menu" aria-label="More: Turtle Cove">
+					<button class="menu-item" type="button" role="menuitem"><i class="bi bi-files" aria-hidden="true"></i>Duplicate</button>
+					<button class="menu-item" type="button" role="menuitem"><i class="bi bi-eye-slash" aria-hidden="true"></i>Withdraw</button>
+				</div>
+			</td>
+		</tr>
 	</tbody>
 </table>
 ```

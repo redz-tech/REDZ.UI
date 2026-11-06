@@ -121,7 +121,7 @@
 		cursor: pointer;
 	}
 
-	.table tr:has(.stretched-link):is(:hover, :focus-within) > td {
+	.table tr:has(.stretched-link):is(:hover, :focus-within, :has(:popover-open, [commandfor][aria-expanded="true"])) > td {
 		background: var(--redz-row-hover, color-mix(in srgb, var(--redz-primary) 7%, var(--redz-bg)));
 	}
 
@@ -303,11 +303,11 @@
 	}
 
 	@media (hover: hover) {
-		.table:not(.table-static) > tbody > tr:not([aria-selected="true"]):hover > :is(td, th) {
+		.table:not(.table-static) > tbody > tr:not([aria-selected="true"]):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th) {
 			background: var(--redz-row-hover, color-mix(in srgb, var(--redz-primary) 7%, var(--redz-bg)));
 		}
 
-		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not([aria-selected="true"]):hover > :is(td, th) {
+		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not([aria-selected="true"]):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th) {
 			background: color-mix(in oklch, var(--redz-row-tint) 90%, var(--redz-bg));
 		}
 	}
@@ -369,7 +369,7 @@
 	}
 
 	@media (hover: hover) {
-		.table tbody tr:not(:hover, :focus-within) .table-actions > * {
+		.table tbody tr:not(:hover, :focus-within, :has(:popover-open, [commandfor][aria-expanded="true"])) .table-actions > :not([popover], dialog) {
 			opacity: 0.6;
 		}
 	}

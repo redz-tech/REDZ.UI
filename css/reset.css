@@ -113,11 +113,15 @@
 		padding: 0;
 		border: 0;
 		color: inherit;
+		text-align: start;
+		white-space: normal;
 	}
 
 	[popover] {
 		padding: 0;
 		border: 0;
 		color: inherit;
+		text-align: start;
+		white-space: normal;
 	}
 }

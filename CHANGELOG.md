@@ -4,6 +4,28 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## 0.18.2 - 2026-11-06
+
+Pack `it` found a row's menu turning see-through, and the cause reaches further. Browsers now stop `:hover`, `:active` and
+`:focus-within` at the top layer, so an open menu or dialog no longer tells the row around it that the pointer or the focus is inside.
+A row now asks whether it holds an open layer. It no longer asks only where the pointer and the focus are.
+
+### Fixed
+- A `menu` or `dialog` inside `table-actions` is not dimmed with the row's actions.
+- A row keeps its actions lit while its menu is open, wherever the pointer goes, for a menu in the row and for one shared from outside
+  the table. `tree-actions` too: they used to vanish while a button among them had its menu open.
+- A `dialog` or `[popover]` takes no `text-align` or `white-space` from where it stands. A long item of a menu in a table cell wraps, where
+  it ran out of the menu.
+
+### Changed
+- A row holds its light while its menu is open.
+- The release files carry a banner of the name and the address, and the editor's its license too. `css/icons.min.css` stays as it is.
+
+### Docs
+- The table page shows a menu in a row.
+- On these pages a row's actions stayed dim under a real pointer and a tree's stayed hidden: the page's own state mirror did that, the
+  library did not, and it is fixed.
+
 ## 0.18.1 - 2026-11-06
 
 Two fixes the ERP found moving onto 0.18.0.

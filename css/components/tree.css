@@ -50,7 +50,7 @@
 	}
 
 	@media (hover: hover) {
-		.tree-row:not(:hover, :focus-within) > .tree-actions {
+		.tree-row:not(:hover, :focus-within, :has(:popover-open, [commandfor][aria-expanded="true"])) > .tree-actions {
 			opacity: 0;
 		}
 	}
