@@ -3,10 +3,12 @@
 // .chart, .chart-rows, .spark or .lanes becomes the custom property of its name through the CSSOM, which a strict CSP
 // allows where a style attribute it would refuse. A table of class chart or chart-rows, drawn otherwise, takes the
 // table's roles too: WebKit drops the meaning of a table whose parts are displayed otherwise, and a screen reader then
-// reads the chart as the table it is. Charts on the page, added later or given new numbers are drawn the same.
+// reads the chart as the table it is. A caption of a board's scale that would touch the one before it hides, by measure,
+// as its width depends on the language. Charts on the page, added later or given new numbers are drawn the same.
 const NUMBERS = ['v', 'at', 'from', 'to', 'median', 'now'];
 const DRAWN = '.chart, .chart-rows, .spark, .lanes';
 const ROLES = {CAPTION: 'caption', THEAD: 'rowgroup', TBODY: 'rowgroup', TR: 'row', TD: 'cell'};
+const CAPTION_GAP = 4;
 
 /** Copies the element's numbers into its custom properties. */
 const number = (element) => {
@@ -20,10 +22,27 @@ const number = (element) => {
 	}
 };
 
-/** Draws one chart: its numbers, and a chart table's roles. */
+/** Hides each caption of the scale that would touch the last one shown. */
+const fit = (scale) => {
+	let shown = null;
+	for (const caption of scale.children) {
+		const box = caption.getBoundingClientRect();
+		const crowded = shown !== null && box.left < shown.right + CAPTION_GAP && shown.left < box.right + CAPTION_GAP;
+		caption.toggleAttribute('data-crowded', crowded);
+		shown = crowded ? shown : box;
+	}
+};
+
+const sized = new ResizeObserver((entries) => entries.forEach((entry) => fit(entry.target)));
+
+/** Draws one chart: its numbers, a chart table's roles and a board's captions. */
 const draw = (chart) => {
 	for (const element of [chart, ...chart.querySelectorAll(NUMBERS.map((name) => '[data-' + name + ']').join(', '))]) {
 		number(element);
+	}
+	for (const scale of chart.querySelectorAll('.lanes-scale')) {
+		fit(scale);
+		sized.observe(scale);
 	}
 	if (chart.matches('table:is(.chart, .chart-rows)')) {
 		chart.setAttribute('role', 'table');
@@ -34,6 +53,8 @@ const draw = (chart) => {
 };
 
 document.querySelectorAll(DRAWN).forEach(draw);
+
+document.fonts?.ready.then(() => document.querySelectorAll('.lanes-scale').forEach(fit));
 
 new MutationObserver((records) => {
 	const charts = new Set();

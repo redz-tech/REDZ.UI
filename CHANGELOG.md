@@ -4,6 +4,15 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## 0.18.1 - 2026-11-06
+
+Two fixes the ERP found moving onto 0.18.0.
+
+### Fixed
+- A `step-list-body` that is also a `vstack` takes a line of its own under the step's name. 0.18.0 put it beside the name.
+- A caption of a board's scale that would touch the one before it hides, by measure, in any language and at any width. It replaces
+  the rule that hid every second caption in a narrow region, which let a long first word run into the next one.
+
 ## 0.18.0 - 2026-11-06
 
 What the ERP's walk and the move of its screens left: a step that waits for a press, step details that fit a phone without a

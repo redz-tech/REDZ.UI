@@ -261,3 +261,9 @@
 		color: var(--redz-text-muted);
 	}
 }
+
+@layer utilities {
+	.step-list-body.vstack {
+		flex: 1 0 100%;
+	}
+}

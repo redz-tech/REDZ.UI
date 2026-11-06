@@ -2549,6 +2549,42 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a step\'s icon leaves the middle of its first line');
 			}
 		}]},
+		stepBody: {target: '#step-list-blocks .step-list-body.vstack', steps: [async (out) => {
+			const body = $('#step-list-blocks .step-list-body.vstack');
+			const li = body.parentElement;
+			const style = getComputedStyle(li);
+			const room = li.getBoundingClientRect();
+			const box = body.getBoundingClientRect();
+			if (!near(box.left, room.left + parseFloat(style.paddingInlineStart), 1) || !near(box.right, room.right - parseFloat(style.paddingInlineEnd), 1)) {
+				out.push('a vstack body stands beside its step\'s name: ' + say([box.left, box.right, room.left, room.right]));
+			}
+		}]},
+		scaleCaptions: {target: '#chart-board .lanes-scale', steps: [async (out) => {
+			const board = $('#chart-board table.lanes');
+			const first = $('.lanes-scale > :first-child', board);
+			const words = first.textContent;
+			const seen = () => $$('.lanes-scale > span', board).filter((caption) => caption.getClientRects().length > 0 && getComputedStyle(caption).visibility === 'visible').map((caption) => caption.getBoundingClientRect());
+			const touching = () => seen().filter((box, i, all) => i > 0 && box.left < all[i - 1].right);
+			for (const [inline, name] of [['324px', 'narrow'], ['1000px', 'wide']]) {
+				board.style.inlineSize = inline;
+				first.textContent = 'a long first word';
+				await settled();
+				await settled();
+				if (touching().length > 0) {
+					out.push('captions of a ' + name + ' board touch: ' + say(seen().map((box) => [Math.round(box.left), Math.round(box.right)])));
+				}
+				if (seen().length < 3) {
+					out.push('a ' + name + ' board keeps ' + seen().length + ' captions');
+				}
+			}
+			first.textContent = words;
+			board.style.inlineSize = '';
+			await settled();
+			await settled();
+			if (seen().length !== $$('.lanes-scale > span', board).length) {
+				out.push('a wide board with room hides ' + ($$('.lanes-scale > span', board).length - seen().length) + ' captions');
+			}
+		}]},
 		foldedTab: {target: '#nav-tabs [role="tablist"]', steps: [async (out) => {
 			const tabs = $$('#nav-tabs [role="tab"]');
 			tabs[1].dataset.overflow = '';

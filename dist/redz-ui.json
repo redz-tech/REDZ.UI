@@ -1,6 +1,6 @@
 {
 	"name": "REDZ.UI",
-	"version": "0.18.0",
+	"version": "0.18.1",
 	"license": "MIT",
 	"site": "https://redz-tech.github.io/REDZ.UI/",
 	"floor": {"chrome":"130","chrome_android":"130","edge":"130","firefox":"132","firefox_android":"132","safari":"18.0","safari_ios":"18.0"},
@@ -4894,13 +4894,13 @@
 		"LICENSE-editor": "sha256-p1RwHDwUdLClSQ/A/HkfLiGXbyekZ+lEhRmT4TtNM6I=",
 		"NOTICE": "sha256-JqH/9wjpy8MakDrUK1tu6pSo2hYi9tisBPeJHoiDxIU=",
 		"css/redz-ui-calendar.min.css": "sha256-3JHv1comKcv36oaOXtQhHIQFNwd8ldkQ8aoqydc2Tzk=",
-		"css/redz-ui-charts.min.css": "sha256-oos583xb1fmSHNqfpj+6Z9fLf64snBLShTpUszjWs34=",
+		"css/redz-ui-charts.min.css": "sha256-jdKY37gBSmAsXLzPIgg3DCp2WEDJ4lOtrxn3o8IKdlE=",
 		"css/redz-ui-editor-surface.min.css": "sha256-t6qf1P6fNdBM0HqtdWt4XNNJAntoNdF2h4IcnGnyDyI=",
 		"css/redz-ui-editor.min.css": "sha256-hqTE8AHJsaIhppMKAvo0ahlL0Xr5HLzLLLcl0tA/JzU=",
 		"css/redz-ui-media.min.css": "sha256-DmfTJtc1q7Lo1OuOFGzzewTcE4IuttVAQTmEdfihN30=",
-		"css/redz-ui.min.css": "sha256-/9NKSeKLhBoWv4amBCOh2SCv1Ygh+cKSk0lxX4N7Rm8=",
+		"css/redz-ui.min.css": "sha256-24nMDK/0Jr3dXeZDJED2py+R4DflN06vpj6/tAlkwj0=",
 		"js/floor.min.js": "sha256-aZC0cy4S2whpQZieB1WW0mLdyQd6ByCvRGGSSW4/z5E=",
-		"js/redz-ui-charts.min.js": "sha256-wvCntsCfFz2C3mmNvxo4pB/WuzM9J1BZo8ZhJciOb80=",
+		"js/redz-ui-charts.min.js": "sha256-NwAN8+BhTFWndN+b0Er4zfSif1JF9WEOLCLkE2Ei19M=",
 		"js/redz-ui-editor.min.js": "sha256-BbzAFJ6Z3UsBSHzApn5NgummCWhKFweBcYB6XQNPlbE=",
 		"js/redz-ui.min.js": "sha256-a8JgefE3pOYqStCaxasxmBBHaRQnv00NBdnvmpOr9LU="
 	}

@@ -457,10 +457,8 @@
 		translate: 100% 0;
 	}
 
-	@container region (width < 576px) {
-		.lanes-scale > span:is(:nth-child(even), :last-child:not(:first-child)) {
-			display: none;
-		}
+	.lanes-scale > [data-crowded] {
+		visibility: hidden;
 	}
 
 	.lanes-tick {
