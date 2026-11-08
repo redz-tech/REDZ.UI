@@ -3221,16 +3221,24 @@ window.REDZ_BEHAVE = (() => {
 		}]},
 		shortcuts: {target: '#palette-demo', steps: [async (out) => {
 			const host = document.createElement('div');
-			host.innerHTML = '<div inert><button type="button" aria-keyshortcuts="Alt+J">Asleep</button></div><button type="button" aria-keyshortcuts="Alt+K">Awake</button>';
+			host.innerHTML = '<div inert><button type="button" aria-keyshortcuts="Alt+J">Asleep</button></div><button type="button" disabled aria-keyshortcuts="Alt+D Alt+K">Off</button><button type="button" aria-disabled="true" aria-keyshortcuts="Alt+B">Busy</button><button type="button" hidden aria-keyshortcuts="Alt+H">Hidden</button><a aria-disabled="true" aria-keyshortcuts="Alt+L">No address</a><button type="button" aria-keyshortcuts="Alt+K">Awake</button><dialog><p>Nothing keyed</p></dialog>';
 			$('#palette-demo').append(host);
-			const [asleep, awake] = $$('button', host);
-			const pressed = new Map([[asleep, 0], [awake, 0]]);
-			pressed.forEach((count, button) => button.addEventListener('click', () => pressed.set(button, pressed.get(button) + 1)));
-			const key = (letter, repeat = false) => !document.body.dispatchEvent(new KeyboardEvent('keydown', {key: letter, code: 'Key' + letter.toUpperCase(), altKey: true, repeat, bubbles: true, cancelable: true}));
-			const got = {inert: [key('j'), pressed.get(asleep)], press: [key('k'), pressed.get(awake)], held: [key('k', true), pressed.get(awake)]};
+			const all = $$('button, a', host);
+			const awake = all.at(-1);
+			const presses = () => all.reduce((sum, element) => sum + (element.pressed ?? 0), 0);
+			all.forEach((element) => element.addEventListener('click', () => {
+				element.pressed = (element.pressed ?? 0) + 1;
+			}));
+			const key = (letter, repeat = false) => [!document.body.dispatchEvent(new KeyboardEvent('keydown', {key: letter, code: 'Key' + letter.toUpperCase(), altKey: true, repeat, bubbles: true, cancelable: true})), presses()];
+			const got = {inert: key('j'), disabled: key('d'), busy: key('b'), hidden: key('h'), noAddress: key('l'), unnamed: key('q'), press: key('k'), held: key('k', true)};
+			got.pressedAwake = awake.pressed ?? 0;
+			$('dialog', host).showModal();
+			got.outsideModal = key('k');
+			$('dialog', host).close();
 			host.remove();
-			if (say(got) !== say({inert: [false, 0], press: [true, 1], held: [true, 1]})) {
-				out.push('shortcuts, as [prevented, presses]: a button in an inert region ' + say(got.inert) + ', a plain press ' + say(got.press) + ', its held repeat ' + say(got.held) + ' - an inert button is never pressed, and a repeat is kept from the browser without a press');
+			const want = {inert: [true, 0], disabled: [true, 0], busy: [true, 0], hidden: [true, 0], noAddress: [true, 0], unnamed: [false, 0], press: [true, 1], held: [true, 1], pressedAwake: 1, outsideModal: [true, 1]};
+			if (say(got) !== say(want)) {
+				out.push('shortcuts, as [prevented, presses so far]: ' + say(got) + ', not ' + say(want) + ' - a combination any button or link names is the page\'s and never reaches the browser, the first that can be pressed now is pressed, an inert one never, and a held one once');
 			}
 		}]},
 		tipNow: {target: '#tooltip-now', walk: async function* (out) {

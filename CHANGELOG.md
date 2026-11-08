@@ -39,6 +39,10 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   are read from the scripts' calls, and the build fails when two calls of one key pass different names or the
   library's own English text of a key uses other names than its calls pass.
 
+- A combination that a button's or a link's `aria-keyshortcuts` names is the page's even while none of them can be
+  pressed: disabled, busy, hidden, inert or outside the open modal, it never reaches the browser, so a page's save keeps
+  `Ctrl S` from the browser's own save while it saves or has nothing to save. The first that can be pressed is pressed.
+
 ### Changed
 - `floor.json` carries, for each name that falls short at the floor, its BCD key, and for each vendor form the browsers
   that take it; its exceptions carry their scope and, for a key, the names under it. The verdict `prefix -webkit-` gives
