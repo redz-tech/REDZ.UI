@@ -70,7 +70,14 @@ export const editor = (host, options = {}) => {
 	const whoOf = (top) => {
 		const by = top.getAttribute('data-by');
 		const checked = top.getAttribute('data-checked');
-		return say(by === 'ai' || by === 'mt' ? 'who.' + by + (checked === null ? '' : '.checked') : 'who.paste', {name: checked === '1' ? say('who.someone') : checked});
+		if (by !== 'ai' && by !== 'mt') {
+			return say('who.paste');
+		}
+		if (checked === null) {
+			return say(by === 'ai' ? 'who.ai' : 'who.mt');
+		}
+		const name = checked === '1' ? say('who.someone') : checked;
+		return by === 'ai' ? say('who.ai.checked', {name}) : say('who.mt.checked', {name});
 	};
 
 	/** Listens on a target, and forgets it on destroy. */

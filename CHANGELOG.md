@@ -34,6 +34,11 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   esbuild parses every script it writes for the browser floor; a watch on the size of the two main files against esbuild
   `--minify`. Both are native binaries from npm, pinned by version and sha512.
 
+- The passport names the arguments of every text: `args` beside `texts` and `plurals`, and `editor.args` beside
+  `editor.texts`, give each key the `{names}` the library fills in it, `[]` for none, `["count"]` for a count. They
+  are read from the scripts' calls, and the build fails when two calls of one key pass different names or the
+  library's own English text of a key uses other names than its calls pass.
+
 ### Changed
 - `floor.json` carries, for each name that falls short at the floor, its BCD key, and for each vendor form the browsers
   that take it; its exceptions carry their scope and, for a key, the names under it. The verdict `prefix -webkit-` gives

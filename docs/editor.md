@@ -174,4 +174,4 @@ Unlike the library, the editor is not under MIT. From 0.17.0 it is under [PolyFo
 
 - The toolbar is one tab stop, named; the marks say whether they are on in `aria-pressed`, the menus are REDZ.UI menus, the dialogs REDZ.UI dialogs.
 - The text is a text field of many lines, named by the placeholder; a block's tools are buttons named by what they do.
-- Every word comes from the page's texts, the keys of the passport's `editor.texts`.
+- Every word comes from the page's texts, the keys of the passport's `editor.texts`; `editor.args` names the `{names}` each one is given.

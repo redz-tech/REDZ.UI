@@ -70,7 +70,7 @@ const issues = (ed) => {
 	}
 	const pair = ed.pairCounts();
 	if (pair !== null && pair.stale + pair.missing > 0) {
-		out.push({key: 'check.pair', args: pair});
+		out.push({key: 'check.pair', args: {stale: pair.stale, missing: pair.missing}});
 	}
 	return out;
 };

@@ -125,7 +125,7 @@ export const pairOf = (ed) => {
 		known.set('counts', counts);
 		const all = doc.querySelector('.editor-strip-all');
 		all.hidden = counts.stale + counts.missing === 0;
-		all.querySelector('span').textContent = say('pair.counts', counts);
+		all.querySelector('span').textContent = say('pair.counts', {stale: counts.stale, missing: counts.missing});
 		all.querySelector('button').hidden = !ed.aiOpen();
 		align();
 	};

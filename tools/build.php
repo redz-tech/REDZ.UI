@@ -338,8 +338,9 @@ function BUILD__FloorJs(): string
 
 /** The passport: the version, the floor, the files to link - the main three, the icon pack this release needs, the
  *  editor and the packages -, the vocabulary - every class, every custom property the stylesheets define, the commands
- *  js/commands.js stands in for, the keys the page's texts must hold (a count by its .other form) and the counts whose
- *  other plural forms the page may add - and the sha256 of every file beside it in the SRI form. */
+ *  js/commands.js stands in for, the keys the page's texts must hold (a count by its .other form), the counts whose
+ *  other plural forms the page may add and the {names} each of those texts is given - and the sha256 of every file
+ *  beside it in the SRI form. */
 function BUILD__Passport(): string
 {
 	$sheets = array_merge(...array_map(fn(string $pattern): array => glob(BUILD_ROOT . '/' . $pattern) ?: [], BUILD_STYLES));
@@ -362,6 +363,14 @@ function BUILD__Passport(): string
 	}
 	$encode = fn(mixed $value): string => (string)json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 	$list = fn(array $items): string => "[\n\t\t" . implode(",\n\t\t", array_map($encode, $items)) . "\n\t]";
+	$args = [];
+	foreach (BUILD__MainArgs(BUILD__Vocabulary())[0] as $key => $names) {
+		$args[$texts[$key] === 'count' ? $key . '.other' : $key] = $names;
+		if ($texts[$key] === 'count') {
+			$args[$key] = $names;
+		}
+	}
+	ksort($args, SORT_STRING);
 	$fields = [
 		'name' => $encode('REDZ.UI'),
 		'version' => $encode(BUILD__Version()),
@@ -375,11 +384,107 @@ function BUILD__Passport(): string
 		'commands' => $list($sorted($commands[1])),
 		'texts' => $list($sorted(array_map(fn(string $key, string $kind): string => $kind === 'count' ? $key . '.other' : $key, array_keys($texts), $texts))),
 		'plurals' => $list($sorted(array_keys(array_filter($texts, fn(string $kind): bool => $kind === 'count')))),
-		'editor' => $encode([...BUILD_EDITOR, 'license' => 'PolyForm-Strict-1.0.0', 'rights' => BUILD_RIGHTS, 'catalog' => BUILD__Catalog()['elements'], 'write' => BUILD__WriteSchema(), 'texts' => $sorted(array_map(fn(string $key): string => 'editor.' . $key, array_keys((array)BUILD__Vocabulary()->editor->texts)))]),
+		'args' => "{\n\t\t" . implode(",\n\t\t", array_map(fn(string $key, array $names): string => $encode($key) . ': ' . $encode($names), array_keys($args), $args)) . "\n\t}",
+		'editor' => $encode([...BUILD_EDITOR, 'license' => 'PolyForm-Strict-1.0.0', 'rights' => BUILD_RIGHTS, 'catalog' => BUILD__Catalog()['elements'], 'write' => BUILD__WriteSchema(), 'texts' => $sorted(array_map(fn(string $key): string => 'editor.' . $key, array_keys((array)BUILD__Vocabulary()->editor->texts))), 'args' => (object)array_combine(array_map(fn(string $key): string => 'editor.' . $key, array_keys(BUILD__EditorArgs(BUILD__Vocabulary())[0])), BUILD__EditorArgs(BUILD__Vocabulary())[0])]),
 		'packages' => $encode(BUILD_PACKAGES),
 		'files' => "{\n\t\t" . implode(",\n\t\t", array_map(fn(string $file, string $hash): string => $encode($file) . ': ' . $encode($hash), array_keys($files), $files)) . "\n\t}",
 	];
 	return "{\n\t" . implode(",\n\t", array_map(fn(string $key, string $value): string => $encode($key) . ': ' . $value, array_keys($fields), $fields)) . "\n}\n";
+}
+
+/**
+ * The names of the object literal that opens at the byte: its keys, written out or short, outside strings and nested
+ * brackets. A spread names none it can tell.
+ * @return list<string>
+ */
+function BUILD__ObjectKeys(string $js, int $at): array
+{
+	$depth = 0;
+	$part = '';
+	$parts = [];
+	for ($i = $at, $length = strlen($js); $i < $length; $i++) {
+		$char = $js[$i];
+		if ($char === '\'' || $char === '"' || $char === '`') {
+			$end = $i + 1;
+			while ($end < $length && $js[$end] !== $char) {
+				$end += $js[$end] === '\\' ? 2 : 1;
+			}
+			$part .= substr($js, $i, $end - $i + 1);
+			$i = $end;
+			continue;
+		}
+		if (str_contains('([{', $char)) {
+			$depth++;
+		} elseif (str_contains(')]}', $char)) {
+			if ($depth === 0) {
+				$parts[] = $part;
+				break;
+			}
+			$depth--;
+		} elseif ($char === ',' && $depth === 0) {
+			$parts[] = $part;
+			$part = '';
+			continue;
+		}
+		$part .= $char;
+	}
+	$names = [];
+	foreach ($parts as $one) {
+		if (trim($one) === '') {
+			continue;
+		}
+		if (preg_match('~^\s*([A-Za-z_$][\w$]*)\s*(?::|$)~', $one, $name) !== 1) {
+			throw new RuntimeException('a text call passes "' . trim($one) . '", whose name the build cannot read');
+		}
+		$names[] = $name[1];
+	}
+	sort($names, SORT_STRING);
+	return array_values(array_unique($names));
+}
+
+/**
+ * The {names} each declared text is given, by its key, read from the scripts: a call CALL('key', {…}), or an object
+ * {key: 'key', args: {…}} the editor says later; a count's {count}; none for a key no call names whole (one built
+ * from a variable). Answers the names by key and the keys whose calls pass different ones.
+ * @param array<string, string> $declared
+ * @return array{array<string, list<string>>, list<string>}
+ */
+function BUILD__TextArgs(array $declared, string $pattern, string $call): array
+{
+	$js = implode("\n", array_map(fn(string $file): string => (string)file_get_contents($file), glob(BUILD_ROOT . '/' . $pattern) ?: []));
+	$args = [];
+	foreach ($declared as $key => $kind) {
+		$args[$key] = $kind === 'count' ? ['count'] : [];
+	}
+	$seen = [];
+	$differ = [];
+	preg_match_all('~(?:\b' . $call . '\(|\bkey:\s*)\'([\w.-]+)\'(\s*,\s*(?:args:\s*)?\{)?~', $js, $calls, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
+	foreach ($calls as $one) {
+		$key = $one[1][0];
+		if (!isset($args[$key]) || ($declared[$key] ?? '') === 'count') {
+			continue;
+		}
+		$names = isset($one[2]) && $one[2][1] >= 0 ? BUILD__ObjectKeys($js, $one[2][1] + strlen($one[2][0])) : [];
+		if (isset($seen[$key]) && $seen[$key] !== $names) {
+			$differ[] = $key;
+		}
+		$seen[$key] = $names;
+		$args[$key] = $names;
+	}
+	ksort($args, SORT_STRING);
+	return [$args, array_values(array_unique($differ))];
+}
+
+/** The {names} of the main texts, read from js/*.js. */
+function BUILD__MainArgs(stdClass $vocab): array
+{
+	return BUILD__TextArgs((array)$vocab->texts, 'js/*.js', 'text');
+}
+
+/** The {names} of the editor's texts, read from editor/*.js. */
+function BUILD__EditorArgs(stdClass $vocab): array
+{
+	return BUILD__TextArgs((array)($vocab->editor->texts ?? []), 'editor/*.js', 'say');
 }
 
 /**
@@ -407,6 +512,22 @@ function BUILD__TextsCheck(stdClass $vocab): array
 		}
 		if (!isset($docs[$kind === 'count' ? $key . '.other' : $key])) {
 			$wrong[] = 'tools/docs.json has no text for "' . ($kind === 'count' ? $key . '.other' : $key) . '"';
+		}
+	}
+	foreach (['' => [BUILD__MainArgs($vocab), $declared], 'editor.' => [BUILD__EditorArgs($vocab), (array)($vocab->editor->texts ?? [])]] as $prefix => [[$args, $differ], $kinds]) {
+		foreach ($differ as $key) {
+			$wrong[] = 'the scripts call the text "' . $prefix . $key . '" with different names';
+		}
+		foreach ($args as $key => $names) {
+			$words = $kinds[$key] === 'count' ? array_filter(array_keys($docs), fn(string $word): bool => str_starts_with($word, $prefix . $key . '.')) : [$prefix . $key];
+			foreach (array_filter($words, fn(string $word): bool => isset($docs[$word])) as $word) {
+				preg_match_all('~\{(\w+)\}~', (string)$docs[$word], $used);
+				$used = array_values(array_unique($used[1]));
+				sort($used, SORT_STRING);
+				if ($used !== $names) {
+					$wrong[] = 'tools/docs.json\'s "' . $word . '" uses {' . implode('}, {', $used) . '}, and its calls pass {' . implode('}, {', $names) . '}';
+				}
+			}
 		}
 	}
 	$editor = implode("\n", array_map(fn(string $file): string => (string)file_get_contents($file), glob(BUILD_ROOT . '/editor/*.js') ?: []));
