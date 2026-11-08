@@ -19,6 +19,28 @@ A white tile for a QR code: a scanner reads dark modules on white, so the tile s
 </figure>
 ```
 
+### Drawn by the package
+
+The package `redz-ui-qr` - the module `js/redz-ui-qr.min.js`, linked beside the main script on a screen that shows codes - draws a code into a tile as one SVG path in the tile's black: `data-qr` holds the text, drawn at load, when the tile is put in later and when the text changes. The text goes in as UTF-8, in the smallest of the 40 versions that holds it at the error correction level of `data-qr-level` - `L`, `M` by default, `Q` or `H` - then at the highest level that same version still holds, for free. `data-qr-quiet` is the quiet zone in modules, 4 by default, as scanners need. The path traces the outline of each dark region, so neither paper nor a zoom shows a seam; the same text always draws the same code. The library makes the tile `role="img"`; its name is the page's, an `aria-label` that says what the code holds. A module never falls under 3 px: past the version that would, the tile grows - `--redz-qr-module-min` sets that floor, `0` takes it away, and a size of the page's own on the `svg`, a poster's, wins over both.
+
+```html
+<figure class="vstack gap-8 align-items-center">
+	<div class="qr" data-qr="https://redz-tech.github.io/REDZ.UI/" aria-label="QR code: the address of this site"></div>
+	<figcaption class="fs-12 text-muted">Drawn from data-qr</figcaption>
+</figure>
+<figure class="vstack gap-8 align-items-center">
+	<div class="qr" id="qr-package-call" aria-label="QR code: a key for the app"></div>
+	<figcaption class="fs-12 text-muted">Drawn by REDZ.ui.qr</figcaption>
+</figure>
+```
+
+A text such as a two-factor secret should sit in no attribute: `REDZ.ui.qr(tile, text, {level, quiet})` draws it from a variable and answers `true`; the text goes into the code and nowhere else - no attribute, title, console line or storage, and no error quotes it. `REDZ.ui.qr(tile, null)` empties the tile. A text longer than version 40 holds at its level - 2,331 bytes at `M` - is refused: the tile empties, takes `data-qr-error` and hides, and the call answers `false`; the words beside the tile stand alone. The SVG carries no `style` attribute and is built without `innerHTML`, so a strict Content Security Policy with Trusted Types passes.
+
+```js
+const {uri} = await fetch('/profile/2fa', {method: 'POST'}).then((answer) => answer.json());
+REDZ.ui.qr(document.getElementById('totp-code'), uri);
+```
+
 ### Downloaded as a picture
 
 A button with `command="--download"` and `aria-controls` naming the tile downloads its code as a PNG on white, to print on a room's door or a table's card: `data-file` names the file, `code.png` by default, and `data-size` is its side in pixels, 512. An inline `svg` is drawn through a `blob:` image, so the page's Content Security Policy needs `img-src blob:`; an `img` from another site needs that site's CORS.
@@ -38,4 +60,4 @@ A button with `command="--download"` and `aria-controls` naming the tile downloa
 
 From [`css/components/qr.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/qr.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-8`, `--redz-border`, `--redz-radius-8`, `--redz-qr-size`.
+It reads the theme's `--redz-space-8`, `--redz-border`, `--redz-radius-8`, `--redz-qr-size`, `--redz-qr-modules`, `--redz-qr-module-min`.

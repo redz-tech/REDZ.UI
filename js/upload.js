@@ -13,8 +13,13 @@
 // file it holds carries data-file-stored, its id: its Remove asks the page in the cancelable redz:remove (detail.id,
 // detail.row) - busy while the page's promise runs, gone when it resolves, its words said when it rejects; untaken, the
 // row goes, with any field of its own. After each change the upload fires redz:change with detail.count, the files it
-// holds, stored and new. The zone may be a plain button.btn. A file dropped elsewhere on the page does not open in the
-// window.
+// holds, stored and new, detail.pending, those still sending, and detail.failed, those refused; while one sends, the
+// input is invalid with the page's text file.pending, so the form waits. data-paste="page" on the upload takes files
+// pasted anywhere on the page - or, naming an element's id, anywhere in it -; a paste into a text field that brings
+// words stays words; of several such uploads the one in the open modal dialog takes them, else the one that shows.
+// REDZ.ui.upload.clear(upload) - and the form's reset - takes away the new rows, their sending aborted, and keeps the
+// stored ones; REDZ.ui.upload.settled(upload) answers a promise of the redz:change detail once nothing is sending. The
+// zone may be a plain button.btn. A file dropped elsewhere on the page does not open in the window.
 import {ask} from './answer.js';
 import {announce} from './say.js';
 import {text} from './text.js';
@@ -50,10 +55,35 @@ const sizeOf = (bytes) => {
 	return new Intl.NumberFormat(document.documentElement.lang || 'en', {style: 'unit', unit: mega ? 'megabyte' : 'kilobyte', maximumFractionDigits: 1}).format(bytes / (mega ? 1048576 : 1024));
 };
 
-/** Tells the page how many files the upload holds now, stored and new, refused ones aside. */
+// The settled() promises each upload owes.
+const owed = new WeakMap();
+
+/** What the upload holds: its files, stored and new, refused ones aside; those still sending; those refused. */
+const stateOf = (upload) => ({count: upload.querySelectorAll('.upload-list > :not([data-state="failed"])').length, pending: upload.querySelectorAll('.upload-list > [data-state="sending"]').length, failed: upload.querySelectorAll('.upload-list > [data-state="failed"]').length});
+
+/** Tells the page what the upload holds now; holds the form while a file sends, and keeps what settled() owes. */
 const changed = (upload) => {
-	const count = upload.querySelectorAll('.upload-list > :not([data-state="failed"])').length;
-	upload.dispatchEvent(new CustomEvent('redz:change', {bubbles: true, detail: {count}}));
+	const detail = stateOf(upload);
+	inputOf(upload)?.setCustomValidity(detail.pending > 0 ? text('file.pending') : '');
+	if (detail.pending === 0) {
+		(owed.get(upload) ?? []).forEach((done) => done(detail));
+		owed.delete(upload);
+	}
+	upload.dispatchEvent(new CustomEvent('redz:change', {bubbles: true, detail}));
+};
+
+/** A promise of what the upload holds once nothing in it is sending. */
+export const settled = (upload) => {
+	const detail = stateOf(upload);
+	return detail.pending === 0 ? Promise.resolve(detail) : new Promise((done) => owed.set(upload, [...(owed.get(upload) ?? []), done]));
+};
+
+/** Takes away the upload's new rows, their sending aborted, and keeps the stored ones. */
+export const clear = (upload) => {
+	upload.querySelectorAll('.upload-list > :not([data-file-stored])').forEach(drop);
+	kept.set(upload, []);
+	sync(upload);
+	changed(upload);
 };
 
 /** The input holds the files kept for the form. */
@@ -147,13 +177,20 @@ const take = (upload, given) => {
 					kept.set(upload, [...(kept.get(upload) ?? []), own]);
 					sync(upload);
 					end(row, 'ready');
+					changed(upload);
 					return;
 				}
 				if ((typeof made === 'string' && made !== '') || (typeof made === 'number' && Number.isFinite(made))) {
 					row.dataset.fileStored = String(made);
 				}
 				end(row, 'done');
-			}, (words) => controller.signal.aborted || end(row, 'failed', String(words ?? '')));
+				changed(upload);
+			}, (words) => {
+				if (!controller.signal.aborted) {
+					end(row, 'failed', String(words ?? ''));
+					changed(upload);
+				}
+			});
 		}
 	}
 	sync(upload);
@@ -251,10 +288,26 @@ document.addEventListener('drop', (event) => {
 	}
 });
 
+/** The upload a paste on the target feeds: its own, or one with data-paste over it - in the open modal, else shown. */
+const pastedInto = (target, words) => {
+	const own = target?.closest('.upload') ?? null;
+	if (own !== null || (words && target?.closest('input, textarea, [contenteditable]:not([contenteditable="false"])'))) {
+		return own;
+	}
+	const modal = [...document.querySelectorAll('dialog:modal')].at(-1) ?? null;
+	const over = [...document.querySelectorAll('.upload[data-paste]')].filter((one) => one.dataset.paste === 'page' || document.getElementById(one.dataset.paste)?.contains(target));
+	return modal === null ? over.find((one) => one.checkVisibility()) ?? null : over.find((one) => modal.contains(one)) ?? null;
+};
+
 document.addEventListener('paste', (event) => {
-	const upload = event.target instanceof Element ? event.target.closest('.upload') : null;
-	if (upload !== null && (event.clipboardData?.files.length ?? 0) > 0) {
+	const upload = (event.clipboardData?.files.length ?? 0) === 0 ? null : pastedInto(event.target instanceof Element ? event.target : null, event.clipboardData.types.includes('text/plain'));
+	if (upload !== null) {
 		event.preventDefault();
 		take(upload, [...event.clipboardData.files]);
 	}
+});
+
+document.addEventListener('reset', (event) => {
+	const uploads = event.target instanceof HTMLFormElement ? [...event.target.querySelectorAll('.upload')] : [];
+	setTimeout(() => uploads.forEach(clear));
 });

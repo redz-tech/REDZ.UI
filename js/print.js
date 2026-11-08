@@ -1,7 +1,11 @@
 // REDZ.UI, print: a button with command="--print" prints the page. However printing starts, every closed details - an
 // accordion's item, one of a group too - and every region a --toggle button holds closed open for the paper, and close
-// again after.
+// again after; printing() says whether that is now, so nothing loads for the paper.
 const opened = [];
+let paper = false;
+
+/** Whether the page is being printed. */
+export const printing = () => paper;
 
 document.addEventListener('click', (event) => {
 	const button = event.target instanceof Element ? event.target.closest('button[command="--print"]') : null;
@@ -11,6 +15,7 @@ document.addEventListener('click', (event) => {
 });
 
 addEventListener('beforeprint', () => {
+	paper = true;
 	for (const details of document.querySelectorAll('details:not([open])')) {
 		opened.push([details, details.getAttribute('name')]);
 		details.removeAttribute('name');
@@ -36,4 +41,7 @@ addEventListener('afterprint', () => {
 			element.setAttribute('hidden', kept);
 		}
 	}
+	queueMicrotask(() => {
+		paper = false;
+	});
 });

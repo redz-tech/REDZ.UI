@@ -349,12 +349,12 @@
 	.text-muted { color: var(--redz-text-muted); }
 	.text-faint { color: var(--redz-text-faint); }
 	.text-reset { color: inherit; }
-	.text-primary { color: var(--redz-primary); }
-	.text-secondary { color: var(--redz-secondary); }
-	.text-success { color: var(--redz-success); }
-	.text-danger { color: var(--redz-danger); }
-	.text-warning { color: var(--redz-warning); }
-	.text-info { color: var(--redz-info); }
+	.text-primary { color: var(--redz-primary-text); }
+	.text-secondary { color: var(--redz-secondary-text); }
+	.text-success { color: var(--redz-success-text); }
+	.text-danger { color: var(--redz-danger-text); }
+	.text-warning { color: var(--redz-warning-text); }
+	.text-info { color: var(--redz-info-text); }
 	.text-primary-contrast { color: var(--redz-primary-contrast); }
 	.text-secondary-contrast { color: var(--redz-secondary-contrast); }
 	.text-success-contrast { color: var(--redz-success-contrast); }
@@ -465,6 +465,7 @@
 	.h-32 { block-size: 2rem; }
 	.h-40 { block-size: 2.5rem; }
 	.h-72 { block-size: 4.5rem; }
+	.h-88 { block-size: 5.5rem; }
 	.size-32 { inline-size: 2rem; block-size: 2rem; }
 	.size-48 { inline-size: 3rem; block-size: 3rem; }
 	.size-64 { inline-size: 4rem; block-size: 4rem; }

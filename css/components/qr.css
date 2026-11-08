@@ -13,9 +13,13 @@
 		print-color-adjust: exact;
 	}
 
+	.qr[data-qr-error] {
+		display: none;
+	}
+
 	.qr > :is(svg, img, canvas) {
 		display: block;
-		inline-size: var(--redz-qr-size, 11rem);
+		inline-size: max(var(--redz-qr-size, 11rem), calc(var(--redz-qr-modules, 0) * var(--redz-qr-module-min, 3px)));
 		block-size: auto;
 		aspect-ratio: 1;
 		shape-rendering: crispEdges;

@@ -47,10 +47,10 @@ Pages under pages, a menu's items, folders: a list whose items open their own li
 
 ### Children from the server
 
-A group with `data-lazy` and no items fires `redz:expand` on it when it first opens. A page that loads the items cancels it and answers with a promise: the toggle is busy until it settles, and a refusal closes the group again for another try. The Archive above answers after 400 ms.
+A group with `data-lazy` fires `redz:load` on it when it first opens, as any [region that loads](accordion.md#accordion-lazy) does. A page that loads the items cancels it and answers with a promise: the toggle is busy and the group shows placeholder lines until it settles; a refusal leaves the group open with its words and the next opening tries again. The Archive above answers after 400 ms.
 
 ```js
-document.addEventListener('redz:expand', (event) => {
+document.addEventListener('redz:load', (event) => {
 	event.preventDefault();
 	event.detail.respondWith(fetch('/pages?parent=' + event.target.dataset.parent)
 		.then((answer) => answer.text())

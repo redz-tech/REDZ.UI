@@ -56,6 +56,28 @@
 			</div>
 		</div>
 	</div>
+
+	<h3 id="accordion-lazy">Contents from the server</h3>
+	<p>An element with <code>data-lazy</code> - a <code>details</code> or its <code>accordion-body</code>, a region a <a href="collapse.html">--toggle button</a> opens, a <a href="nav.html">tab panel</a>, a <a href="tree.html">tree's group</a> - fires <code>redz:load</code> on itself with <code>{region}</code> the first time it shows: open at load, put in open later, or opened by a person, never for the paper. The library takes <code>data-lazy</code> away first. A page that loads the contents cancels the event and answers with a promise by <code>event.detail.respondWith</code>: meanwhile an empty region shows three placeholder lines and, to a screen reader, the page's text <code>busy</code>. A refusal puts <code>data-lazy</code> back and shows its words in the region, which stays open; the next opening tries again. Writing <code>data-lazy</code> again on a region that shows - its contents are stale - loads it again at once.</p>
+	<div class="docs-example docs-example-stack" id="accordion-lazy-history">
+		<div class="accordion">
+			<details class="accordion-item">
+				<summary class="accordion-header">History of changes<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+				<div class="accordion-body" data-lazy data-docs-history></div>
+			</details>
+		</div>
+	</div>
+	<pre class="docs-code" tabindex="0"><code>document.addEventListener('redz:load', (event) =&gt; {
+	if (event.target.id !== 'history') {
+		return;
+	}
+	event.preventDefault();
+	event.detail.respondWith(fetch('/excursions/12/history')
+		.then((answer) =&gt; answer.ok ? answer.text() : Promise.reject(new Error('The history could not be loaded.')))
+		.then((html) =&gt; {
+			event.detail.region.innerHTML = html;
+		}));
+});</code></pre>
 </section>
 
 <section class="vstack gap-16">

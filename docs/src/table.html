@@ -55,6 +55,29 @@
 		</section>
 	</div>
 
+	<h3 id="table-selection">Checked rows</h3>
+	<p>A checked row is tinted: its check is the only state. An element with <code>data-select</code> - the table, or the card holding it with its <a href="selection-bar.html">selection bar</a> - holds a selection; a check with <code>data-select-all</code> heads its checks, checked when all are, mixed when some are, and pressed it checks or clears them all. Only the checks a person can use count: enabled, and not in a row a filter hides - a checked row a search hides leaves the count while hidden and is checked again when it shows. The <code>selection-bar</code> inside hides at zero, a <code>data-select-count</code> says the page's text <code>selected</code>, and the scope fires <code>redz:selection</code> with <code>{count, total, values}</code>, the values of the checked checks; a head that changes them all says the count aloud. With <code>data-select="rows"</code> a click anywhere on a row but on its controls checks it, unless its text is being selected. A <code>data-select</code> inside another is a group with a head of its own; buttons with <code>command="--select-all"</code> or <code>"--select-none"</code> and <code>aria-controls</code> naming a scope do what its head does.</p>
+	<div class="docs-example docs-example-stack" id="table-select">
+		<input class="form-control" type="search" data-filter="table-select-rows" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off">
+		<section class="card" aria-labelledby="table-select-title" data-select="rows">
+			<div class="card-header"><h2 class="fs-14" id="table-select-title">Guests</h2></div>
+			<div class="selection-bar" role="region" aria-label="Selected guests" hidden>
+				<strong data-select-count></strong>
+				<button class="btn btn-sm" type="button"><i class="bi bi-envelope" aria-hidden="true"></i>Write to them</button>
+				<button class="btn btn-sm btn-icon btn-text ms-auto" type="button" command="--select-none" aria-controls="table-select-rows" aria-label="Clear the selection"><i class="bi bi-x" aria-hidden="true"></i></button>
+			</div>
+			<table class="table" id="table-select-rows">
+				<thead><tr><th class="table-check"><input class="check" type="checkbox" data-select-all aria-label="Select all"></th><th scope="col">Guest</th><th scope="col" class="text-end">Seats</th></tr></thead>
+				<tbody>
+					<tr><td class="table-check"><input class="check" type="checkbox" value="11" aria-label="Select: Alex Sample"></td><td>Alex Sample</td><td class="text-end tabular-nums">2</td></tr>
+					<tr><td class="table-check"><input class="check" type="checkbox" value="12" aria-label="Select: Ben Sample"></td><td>Ben Sample</td><td class="text-end tabular-nums">3</td></tr>
+					<tr><td class="table-check"><input class="check" type="checkbox" value="13" aria-label="Select: Chris Sample"></td><td>Chris Sample</td><td class="text-end tabular-nums">4</td></tr>
+					<tr><td class="table-check"><input class="check" type="checkbox" value="14" aria-label="Select: Dana Sample" disabled></td><td>Dana Sample<div class="table-sub">already written to</div></td><td class="text-end tabular-nums">1</td></tr>
+				</tbody>
+			</table>
+		</section>
+	</div>
+
 	<h3>Stripes, borders and groups</h3>
 	<p><code>table-striped</code> shades every other row, <code>table-striped-columns</code> every other column - under the hover's light and a row's tone alike; <code>table-group-divider</code> on a <code>tbody</code> draws a stronger line above it. <code>table-bordered</code> draws the lines between columns and, outside a card, the table's own frame; <code>table-borderless</code> takes the lines between rows away.</p>
 	<div class="docs-example docs-example-stack" id="table-variants">
@@ -171,17 +194,19 @@
 	</div>
 
 	<h3>Sortable columns</h3>
-	<p>A header that sorts holds a <code>button class="table-sort"</code>, and the header's <code>aria-sort</code> - <code>ascending</code>, <code>descending</code> or none - draws the arrow. The page sorts - on the server or in place - and moves <code>aria-sort</code> to the column it sorted by.</p>
+	<p>A header that sorts holds a <code>button class="table-sort"</code>, and the header's <code>aria-sort</code> - <code>ascending</code>, <code>descending</code> or none - draws the arrow. With a <code>value</code>, the button sorts the rows in place: by each row's <code>data-sort-VALUE</code>, else its cell's <code>data-sort-value</code>, else the cell's text - numbers as numbers, words in the page's language with their digits as numbers, an empty value last both ways, equal ones in the order the rows were drawn. A band's rows stay under it, its subtotal last. The first press sorts ascending, or as the button's <code>data-sort-first="descending"</code> says - newest, largest first; the next turns it, and on a table with <code>data-sort-reset</code> a third press brings back the order the rows were drawn in. The page's texts <code>sort.ascending</code>, <code>sort.descending</code> and <code>sort.none</code> say it aloud. Rows the page puts in are sorted the same, and <code>REDZ.ui.sort(table)</code> sorts again. Without a <code>value</code> the button only draws: the page sorts and moves <code>aria-sort</code>.</p>
 	<div class="docs-example docs-example-stack" id="table-sort">
 		<table class="table" aria-label="Owners">
-			<thead><tr><th scope="col" aria-sort="ascending"><button class="table-sort" type="button">Name</button></th><th scope="col"><button class="table-sort" type="button">Sites</button></th><th scope="col" class="text-end"><button class="table-sort" type="button">Paid</button></th></tr></thead>
+			<thead><tr><th scope="col" aria-sort="ascending"><button class="table-sort" type="button" value="name">Name</button></th><th scope="col"><button class="table-sort" type="button" value="sites">Sites</button></th><th scope="col" class="text-end"><button class="table-sort" type="button" value="paid" data-sort-first="descending">Paid</button></th></tr></thead>
 			<tbody>
-				<tr><td>Example Resort</td><td class="tabular-nums">3</td><td class="text-end tabular-nums">48,000</td></tr>
-				<tr><td>Example Cruises</td><td class="tabular-nums">1</td><td class="text-end tabular-nums">9,600</td></tr>
-				<tr><td>Example Divers</td><td class="tabular-nums">2</td><td class="text-end tabular-nums">21,300</td></tr>
+				<tr><td>Example Resort</td><td class="tabular-nums">3</td><td class="text-end tabular-nums" data-sort-value="48000">48,000</td></tr>
+				<tr><td>Example Cruises</td><td class="tabular-nums">1</td><td class="text-end tabular-nums" data-sort-value="9600">9,600</td></tr>
+				<tr><td>Example Divers</td><td class="tabular-nums">2</td><td class="text-end tabular-nums" data-sort-value="21300">21,300</td></tr>
+				<tr><td>Example Hostel</td><td class="tabular-nums"></td><td class="text-end tabular-nums" data-sort-value="">-</td></tr>
 			</tbody>
 		</table>
 	</div>
+	<p>The table fires the cancelable <code>redz:sort</code> with <code>{key, direction}</code> first. A page that sorts itself - a list in pages from the server - cancels it, and may answer with a promise by <code>event.detail.respondWith</code>: the button is busy meanwhile, and a refusal puts the header's order back. The header says the new order either way.</p>
 	<p>Where the server sorts, the header holds a link instead - <code>a class="table-sort"</code> to the same list in the other order - drawn the same way.</p>
 	<div class="docs-example docs-example-stack" id="table-sort-links">
 		<table class="table" aria-label="Owners, sorted by the server">

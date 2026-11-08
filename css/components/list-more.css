@@ -1,0 +1,20 @@
+@layer components {
+	.list-more {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--redz-space-8) var(--redz-space-16);
+		padding: var(--redz-space-12) var(--redz-space-16);
+		border-block-start: 1px solid var(--redz-border);
+		color: var(--redz-text-muted);
+		font-size: var(--redz-fs-14);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.list-more > [data-more-cap] {
+		flex: 1 1 14rem;
+		font-size: var(--redz-fs-12);
+		text-align: end;
+	}
+}

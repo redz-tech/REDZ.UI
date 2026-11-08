@@ -1,0 +1,45 @@
+@layer components {
+	.action-bar {
+		position: sticky;
+		inset-block-end: 0;
+		z-index: 5;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--redz-space-8) var(--redz-space-16);
+		padding-block: var(--redz-space-8) calc(var(--redz-space-8) + env(safe-area-inset-bottom, 0px));
+		padding-inline: max(var(--redz-space-16), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+		border-block-start: 1px solid var(--redz-border);
+		background: var(--redz-bg-page);
+	}
+
+	.action-bar-text {
+		flex: 1 1 10rem;
+		min-inline-size: 0;
+	}
+
+	.app-main > .action-bar:last-child {
+		margin-inline: calc(-1 * var(--redz-space-32));
+		margin-block-end: calc(-1 * var(--redz-space-32));
+		border-end-start-radius: inherit;
+		border-end-end-radius: inherit;
+	}
+
+	@media (width < 64rem) {
+		.app-main > .action-bar:last-child {
+			margin-inline: calc(-1 * var(--redz-space-12));
+		}
+	}
+
+	@media (pointer: coarse) {
+		:root:has(:is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="button"], [type="submit"], [type="reset"]), textarea, select, [contenteditable]:not([contenteditable="false"])):focus) .action-bar {
+			display: none;
+		}
+	}
+
+	@media print {
+		.action-bar {
+			display: none;
+		}
+	}
+}

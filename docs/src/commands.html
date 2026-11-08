@@ -18,6 +18,18 @@
 	</div>
 </section>
 
+<section class="vstack gap-16" aria-labelledby="commands-download">
+	<h2 id="commands-download">Download</h2>
+	<p><code>command="--download"</code> with <code>aria-controls</code> naming a field, a <code>textarea</code> or any element - a <code>pre</code> of a report - downloads its value or its text as a file: <code>data-file</code> names it, <code>download.txt</code> by default, and <code>data-type</code> is its type, <code>text/plain</code>. A <code>text/csv</code> file starts with a UTF-8 byte order mark, so a spreadsheet reads its letters right; <code>data-bom="false"</code> leaves it out. An element holding a picture - an <code>svg</code>, an <code>img</code>, a <code>canvas</code>, a <a href="qr.html#qr-download">QR tile</a> - downloads it as a PNG instead. Each download is said politely, in the page's text <code>downloaded</code>. From code, <code>REDZ.ui.download({text, file, type, bom})</code> does the same for words made at the moment - a report built from the rows on the screen - and <code>{blob, file}</code> for a <code>Blob</code> of any kind.</p>
+	<div class="docs-example" id="commands-download-report">
+		<pre class="docs-code w-100" id="commands-download-text" tabindex="0">Boat A	12 trips	286 seats
+Boat C	9 trips	201 seats</pre>
+		<button class="btn" type="button" command="--download" aria-controls="commands-download-text" data-file="boats.txt"><i class="bi bi-download" aria-hidden="true"></i>Download the report</button>
+	</div>
+	<pre class="docs-code" tabindex="0"><code>const rows = [...document.querySelectorAll('#agents tbody tr')].map((row) =&gt; [...row.cells].map((cell) =&gt; cell.textContent.trim()).join(';'));
+REDZ.ui.download({text: rows.join('\r\n'), file: 'agents-2026-11-08.csv', type: 'text/csv'});</code></pre>
+</section>
+
 <section class="vstack gap-16" aria-labelledby="commands-print">
 	<h2 id="commands-print">Print</h2>
 	<p><code>command="--print"</code> prints the page. However printing starts - the button, the browser's menu, a key - every closed <code>details</code>, an accordion's item among them, and every region a <code>--toggle</code> button holds closed open for the paper and close again after. A card is not cut across two pages, and a scrolling card's body prints whole; the shell, toasts, the save bar and anything with <code>print:d-none</code> stay off the paper.</p>
@@ -53,6 +65,23 @@
 			<a class="menu-item share-linkedin" role="menuitem"><i class="bi bi-linkedin" aria-hidden="true"></i>LinkedIn</a>
 			<a class="menu-item share-vk" role="menuitem">VK</a>
 			<button class="menu-item" type="button" role="menuitem" command="--copy"><i class="bi bi-link-45deg" aria-hidden="true"></i>Copy the address</button>
+		</div>
+	</div>
+	<p>Three more networks: <code>share-x</code> posts on X with the title as its words, <code>share-viber</code> opens Viber's app with them - its mark drawn as letters, as VK's, or the page's own <code>img</code> or <code>svg</code> in the link -, and <code>share-wechat</code>, which has no address to share by, is a plain button that opens the page's popover with a <a href="qr.html">QR code</a> of the address to scan in WeChat. <code>data-share-url</code> and <code>data-share-title</code> on any element write the links and the copy inside it, a row on the page without a menu: neutral buttons, each with the network's coloured icon and its name, as a filled brand colour leaves most names unreadable.</p>
+	<div class="docs-example" id="commands-share-row">
+		<div class="hstack flex-wrap gap-8" role="group" aria-label="Share your link" data-share-url="https://lagoon.example/join?ref=sample" data-share-title="Book North Bay trips with my link">
+			<a class="btn btn-sm share-whatsapp"><i class="bi bi-whatsapp" aria-hidden="true"></i>WhatsApp</a>
+			<a class="btn btn-sm share-telegram"><i class="bi bi-telegram" aria-hidden="true"></i>Telegram</a>
+			<a class="btn btn-sm share-x"><i class="bi bi-twitter-x" aria-hidden="true"></i>X</a>
+			<a class="btn btn-sm share-viber">Viber</a>
+			<button class="btn btn-sm share-wechat" type="button" commandfor="commands-share-wechat" command="toggle-popover"><i class="bi bi-wechat" aria-hidden="true"></i>WeChat</button>
+			<button class="btn btn-sm" type="button" command="--copy"><i class="bi bi-link-45deg" aria-hidden="true"></i>Copy the link</button>
+			<div class="popover" id="commands-share-wechat" popover aria-label="Scan in WeChat">
+				<div class="vstack gap-8 align-items-center">
+					<div class="qr"><img src="img/qr.svg" alt="QR code of your link"></div>
+					<p class="fs-12 text-muted">Scan in WeChat to share</p>
+				</div>
+			</div>
 		</div>
 	</div>
 </section>

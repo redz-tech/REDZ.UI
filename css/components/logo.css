@@ -1,0 +1,94 @@
+@layer components {
+	.logo {
+		position: relative;
+		display: inline-grid;
+		grid-template: 100% / 100%;
+		place-items: center;
+		flex: none;
+		block-size: var(--redz-logo-side, 2rem);
+		aspect-ratio: clamp(1, sqrt(var(--redz-ratio, 1)), 4);
+		max-inline-size: 100%;
+		margin: 0;
+		padding: 0;
+		overflow: hidden;
+		isolation: isolate;
+		border: 1px solid var(--redz-border);
+		border-radius: var(--redz-radius-6);
+		background: var(--redz-logo-ground, #fff);
+		color-scheme: light;
+		forced-color-adjust: none;
+		vertical-align: middle;
+		-webkit-print-color-adjust: exact;
+		print-color-adjust: exact;
+	}
+
+	.logo-sm {
+		--redz-logo-side: 1.75rem;
+	}
+
+	.logo-lg {
+		--redz-logo-side: 2.5rem;
+	}
+
+	.logo[data-color] {
+		--redz-logo-ground: var(--redz-color);
+	}
+
+	.logo > img {
+		grid-area: 1 / 1;
+		inline-size: 84%;
+		block-size: 76%;
+		max-inline-size: none;
+		max-block-size: none;
+		object-fit: contain;
+	}
+
+	.logo > img.logo-ground,
+	.choice-media[data-ratio] > img.logo-ground {
+		z-index: -1;
+		inline-size: 140%;
+		block-size: 140%;
+		object-fit: cover;
+		filter: blur(5px) saturate(1.2);
+	}
+
+	.logo-fade {
+		mask-image: linear-gradient(to right, transparent, #000 10px, #000 calc(100% - 10px), transparent);
+	}
+
+	.choice > .choice-media[data-ratio] {
+		position: relative;
+		overflow: hidden;
+		isolation: isolate;
+	}
+
+	.choice > .choice-media[data-ratio] > img:not(.logo-ground) {
+		grid-area: 1 / 1;
+		block-size: min(100%, calc(100% / sqrt(var(--redz-ratio, 1))));
+		inline-size: auto;
+		max-inline-size: 100%;
+		object-fit: contain;
+	}
+
+	.choice > .choice-media[data-ratio][data-color] {
+		padding-block: 0;
+	}
+
+	.choice > .choice-media[data-ratio][data-color] > img:not(.logo-ground) {
+		block-size: 100%;
+	}
+
+	.choice > .choice-media[data-ratio] > img.logo-ground {
+		position: absolute;
+		inset: -20px;
+		inline-size: calc(100% + 40px);
+		block-size: calc(100% + 40px);
+		filter: blur(18px) saturate(1.2);
+		opacity: 0.9;
+	}
+
+	.choice > .choice-media[data-ratio]:has(> .logo-ground) > img:not(.logo-ground) {
+		border-radius: var(--redz-radius-6);
+		box-shadow: var(--redz-shadow-2);
+	}
+}

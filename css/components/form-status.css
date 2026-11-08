@@ -23,15 +23,15 @@
 	}
 
 	.form-status[data-tone="success"] .bi {
-		color: var(--redz-success);
+		color: var(--redz-success-text);
 	}
 
 	.form-status[data-tone="info"] .bi {
-		color: var(--redz-info);
+		color: var(--redz-info-text);
 	}
 
 	.form-status[data-tone="warning"] .bi {
-		color: var(--redz-warning);
+		color: var(--redz-warning-text);
 	}
 
 	.form-status[data-tone="danger"] {
@@ -39,7 +39,7 @@
 	}
 
 	.form-status[data-tone="danger"] .bi {
-		color: var(--redz-danger);
+		color: var(--redz-danger-text);
 	}
 
 	.form-status[data-fading] {

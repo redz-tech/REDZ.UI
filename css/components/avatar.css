@@ -7,7 +7,7 @@
 		block-size: 2rem;
 		border-radius: 50%;
 		background: var(--redz-primary-subtle);
-		color: var(--redz-primary);
+		color: var(--redz-primary-text);
 		font-size: var(--redz-fs-12);
 		font-weight: 700;
 		-webkit-print-color-adjust: exact;

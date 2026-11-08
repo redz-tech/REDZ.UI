@@ -92,7 +92,7 @@
 });</code></pre>
 
 	<h3 id="upload-stored-files">Files the server holds</h3>
-	<p>The server writes a row for each file it holds, as the template's, with <code>data-file-stored</code> - its id - and the name of its remove button. Remove asks the page in <code>redz:remove</code> with <code>detail.id</code> and <code>detail.row</code>: a page that cancels it and answers with a promise keeps the row busy until it settles - gone when it resolves, its words said in its <code>data-file-error</code> when it rejects. Left alone, the row goes, and a hidden field of its own with it, so the form sends the ids still kept. After each change the upload fires <code>redz:change</code> with <code>detail.count</code>, the files it holds, stored and new; <code>data-max-files</code> counts the stored ones too. A file the page sends becomes such a row when its <code>redz:files</code> promise resolves with the id the server gave it. Below, the contract is in use by an invoice, and a paper added is sent and kept under the next id.</p>
+	<p>The server writes a row for each file it holds, as the template's, with <code>data-file-stored</code> - its id - and the name of its remove button. Remove asks the page in <code>redz:remove</code> with <code>detail.id</code> and <code>detail.row</code>: a page that cancels it and answers with a promise keeps the row busy until it settles - gone when it resolves, its words said in its <code>data-file-error</code> when it rejects. Left alone, the row goes, and a hidden field of its own with it, so the form sends the ids still kept. After each change the upload fires <code>redz:change</code> with <code>detail.count</code>, the files it holds, stored and new, <code>detail.pending</code>, those still sending, and <code>detail.failed</code>, those refused; <code>data-max-files</code> counts the stored ones too. While a file sends, the file field is invalid with the page's text <code>file.pending</code>, so its form waits. A file the page sends becomes such a row when its <code>redz:files</code> promise resolves with the id the server gave it. Below, the contract is in use by an invoice, and a paper added is sent and kept under the next id.</p>
 	<div class="docs-example docs-example-stack" id="upload-stored">
 		<div class="upload" data-max-files="4">
 			<input class="visually-hidden" id="upload-stored-input" type="file" name="papers[]" accept=".pdf,image/*" multiple tabindex="-1" aria-label="Papers">
@@ -112,6 +112,15 @@
 			</template>
 		</div>
 	</div>
+
+	<h3 id="upload-paste">Pasted anywhere, cleared, settled</h3>
+	<p>A file is pasted into an upload while the focus is in it. With <code>data-paste="page"</code> the upload takes files pasted anywhere on the page, or, with an element's id, anywhere in that element - a ticket's card. A paste into a text field that brings words stays words, though a word processor puts a picture of them beside: only a paste of files alone goes to the upload. Of several such uploads, the one in the open modal dialog takes the files, else the one that shows. <code>REDZ.ui.upload.clear(upload)</code> takes away the files not yet stored - their sending aborted - and keeps the stored ones, with one <code>redz:change</code> and the focus where it was; a reset of the form does the same. <code>REDZ.ui.upload.settled(upload)</code> answers a promise of <code>{count, pending, failed}</code> once nothing in it is sending: a Send waits on it.</p>
+	<pre class="docs-code" tabindex="0"><code>send.addEventListener('click', async () =&gt; {
+	const {failed} = await REDZ.ui.upload.settled(upload);
+	if (failed === 0) {
+		form.requestSubmit();
+	}
+});</code></pre>
 
 	<h3 id="upload-image-field">An image field</h3>
 	<p><code>upload-image</code> on an upload of one image shows its image whole on white, <code>--redz-upload-image-height</code> tall - 12rem by default - with its remove button in the corner; the zone, a plain button here, replaces it. The <code>capture</code> of the input goes to the browser as it is.</p>

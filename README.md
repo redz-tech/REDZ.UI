@@ -28,7 +28,7 @@ the latest release at the root, of the main branch under `next/`, and of every r
   fixture checked in real engines, with its Arabic twin (see [Documentation](#documentation)).
 - Two agent skills in `skills/`: building screens with REDZ.UI, and moving a project from Bootstrap 5.3 with a scan
   and a map of every Bootstrap class (see [Skills](#skills)).
-- Budgets held on every commit: the stylesheet at most 36 KB and the script 34 KB, gzipped - the two files a project
+- Budgets held on every commit: the stylesheet at most 38 KB and the script 42 KB, gzipped - the two files a project
   serves.
 
 ## How it reads
@@ -179,10 +179,10 @@ Content-Security-Policy runs no script, and every value is parsed inert and clea
 the clipboard runs. Its words are the island's `editor.*` texts, which the passport's `editor.texts` lists apart from the
 library's; its soft ceilings are 70 KB of script and 8 KB of styles, gzipped.
 
-## Charts, calendars and the media library
+## Charts, calendars, the media library and QR codes
 
-Three more packages, linked on the screens that show them, listed in the passport's `packages` - each built into
-`dist/` from its folder, `charts/`, `calendar/` and `media/`, which stay to read:
+Four more packages, linked on the screens that show them, listed in the passport's `packages` - each built into
+`dist/` from its folder, `charts/`, `calendar/`, `media/` and `qr/`, which stay to read:
 - `css/redz-ui-charts.min.css` and the module `js/redz-ui-charts.min.js` - a chart is the table of its numbers
   drawn by CSS: columns stacked by day (`chart`), a row's sparkline of runs (`spark`), a board of lanes over a time
   window (`lanes`). The numbers are `data-v`, `data-at`, `data-from`, `data-to`, `data-median` and `data-now`, shares
@@ -191,8 +191,11 @@ Three more packages, linked on the screens that show them, listed in the passpor
 - `css/redz-ui-calendar.min.css` - a month of days (`calendar`) and days across things (`schedule`); no script.
 - `css/redz-ui-media.min.css` - a folder of images as tiles or rows (`media-grid`, `media-tile`); its view switch is
   `--view` and its reordering `data-reorder`, both in the main script.
+- the module `js/redz-ui-qr.min.js` - draws the QR code of a text into a `qr` tile as one SVG path: `data-qr` in the
+  markup, or `REDZ.ui.qr(element, text)` for a text such as a secret that should sit in no attribute.
 
-Their budgets, gzipped: charts 3 KB of styles and 2 KB of script, the calendar and the media library 2 KB each.
+Their budgets, gzipped: charts 3 KB of styles and 2 KB of script, the calendar and the media library 2 KB each, QR
+codes 4 KB of script.
 
 ## Documentation
 `docs/` on the site: getting started, layout, utilities, tokens, icons, the move from Bootstrap 5.3, and a page per

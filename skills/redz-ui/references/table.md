@@ -57,6 +57,31 @@ A list of records: a title that links to the record, a line under it, a note whe
 </section>
 ```
 
+### Checked rows
+
+A checked row is tinted: its check is the only state. An element with `data-select` - the table, or the card holding it with its [selection bar](selection-bar.md) - holds a selection; a check with `data-select-all` heads its checks, checked when all are, mixed when some are, and pressed it checks or clears them all. Only the checks a person can use count: enabled, and not in a row a filter hides - a checked row a search hides leaves the count while hidden and is checked again when it shows. The `selection-bar` inside hides at zero, a `data-select-count` says the page's text `selected`, and the scope fires `redz:selection` with `{count, total, values}`, the values of the checked checks; a head that changes them all says the count aloud. With `data-select="rows"` a click anywhere on a row but on its controls checks it, unless its text is being selected. A `data-select` inside another is a group with a head of its own; buttons with `command="--select-all"` or `"--select-none"` and `aria-controls` naming a scope do what its head does.
+
+```html
+<input class="form-control" type="search" data-filter="table-select-rows" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off">
+<section class="card" aria-labelledby="table-select-title" data-select="rows">
+	<div class="card-header"><h2 class="fs-14" id="table-select-title">Guests</h2></div>
+	<div class="selection-bar" role="region" aria-label="Selected guests" hidden>
+		<strong data-select-count></strong>
+		<button class="btn btn-sm" type="button"><i class="bi bi-envelope" aria-hidden="true"></i>Write to them</button>
+		<button class="btn btn-sm btn-icon btn-text ms-auto" type="button" command="--select-none" aria-controls="table-select-rows" aria-label="Clear the selection"><i class="bi bi-x" aria-hidden="true"></i></button>
+	</div>
+	<table class="table" id="table-select-rows">
+		<thead><tr><th class="table-check"><input class="check" type="checkbox" data-select-all aria-label="Select all"></th><th scope="col">Guest</th><th scope="col" class="text-end">Seats</th></tr></thead>
+		<tbody>
+			<tr><td class="table-check"><input class="check" type="checkbox" value="11" aria-label="Select: Alex Sample"></td><td>Alex Sample</td><td class="text-end tabular-nums">2</td></tr>
+			<tr><td class="table-check"><input class="check" type="checkbox" value="12" aria-label="Select: Ben Sample"></td><td>Ben Sample</td><td class="text-end tabular-nums">3</td></tr>
+			<tr><td class="table-check"><input class="check" type="checkbox" value="13" aria-label="Select: Chris Sample"></td><td>Chris Sample</td><td class="text-end tabular-nums">4</td></tr>
+			<tr><td class="table-check"><input class="check" type="checkbox" value="14" aria-label="Select: Dana Sample" disabled></td><td>Dana Sample<div class="table-sub">already written to</div></td><td class="text-end tabular-nums">1</td></tr>
+		</tbody>
+	</table>
+</section>
+```
+
 ### Stripes, borders and groups
 
 `table-striped` shades every other row, `table-striped-columns` every other column - under the hover's light and a row's tone alike; `table-group-divider` on a `tbody` draws a stronger line above it. `table-bordered` draws the lines between columns and, outside a card, the table's own frame; `table-borderless` takes the lines between rows away.
@@ -184,18 +209,21 @@ Elements that share a `data-highlight` key light together: hovering or focusing 
 
 ### Sortable columns
 
-A header that sorts holds a `button class="table-sort"`, and the header's `aria-sort` - `ascending`, `descending` or none - draws the arrow. The page sorts - on the server or in place - and moves `aria-sort` to the column it sorted by.
+A header that sorts holds a `button class="table-sort"`, and the header's `aria-sort` - `ascending`, `descending` or none - draws the arrow. With a `value`, the button sorts the rows in place: by each row's `data-sort-VALUE`, else its cell's `data-sort-value`, else the cell's text - numbers as numbers, words in the page's language with their digits as numbers, an empty value last both ways, equal ones in the order the rows were drawn. A band's rows stay under it, its subtotal last. The first press sorts ascending, or as the button's `data-sort-first="descending"` says - newest, largest first; the next turns it, and on a table with `data-sort-reset` a third press brings back the order the rows were drawn in. The page's texts `sort.ascending`, `sort.descending` and `sort.none` say it aloud. Rows the page puts in are sorted the same, and `REDZ.ui.sort(table)` sorts again. Without a `value` the button only draws: the page sorts and moves `aria-sort`.
 
 ```html
 <table class="table" aria-label="Owners">
-	<thead><tr><th scope="col" aria-sort="ascending"><button class="table-sort" type="button">Name</button></th><th scope="col"><button class="table-sort" type="button">Sites</button></th><th scope="col" class="text-end"><button class="table-sort" type="button">Paid</button></th></tr></thead>
+	<thead><tr><th scope="col" aria-sort="ascending"><button class="table-sort" type="button" value="name">Name</button></th><th scope="col"><button class="table-sort" type="button" value="sites">Sites</button></th><th scope="col" class="text-end"><button class="table-sort" type="button" value="paid" data-sort-first="descending">Paid</button></th></tr></thead>
 	<tbody>
-		<tr><td>Example Resort</td><td class="tabular-nums">3</td><td class="text-end tabular-nums">48,000</td></tr>
-		<tr><td>Example Cruises</td><td class="tabular-nums">1</td><td class="text-end tabular-nums">9,600</td></tr>
-		<tr><td>Example Divers</td><td class="tabular-nums">2</td><td class="text-end tabular-nums">21,300</td></tr>
+		<tr><td>Example Resort</td><td class="tabular-nums">3</td><td class="text-end tabular-nums" data-sort-value="48000">48,000</td></tr>
+		<tr><td>Example Cruises</td><td class="tabular-nums">1</td><td class="text-end tabular-nums" data-sort-value="9600">9,600</td></tr>
+		<tr><td>Example Divers</td><td class="tabular-nums">2</td><td class="text-end tabular-nums" data-sort-value="21300">21,300</td></tr>
+		<tr><td>Example Hostel</td><td class="tabular-nums"></td><td class="text-end tabular-nums" data-sort-value="">-</td></tr>
 	</tbody>
 </table>
 ```
+
+The table fires the cancelable `redz:sort` with `{key, direction}` first. A page that sorts itself - a list in pages from the server - cancels it, and may answer with a promise by `event.detail.respondWith`: the button is busy meanwhile, and a refusal puts the header's order back. The header says the new order either way.
 
 Where the server sorts, the header holds a link instead - `a class="table-sort"` to the same list in the other order - drawn the same way.
 

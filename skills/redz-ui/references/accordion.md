@@ -63,6 +63,33 @@ Without `name` every item opens and closes by itself.
 </div>
 ```
 
+### Contents from the server
+
+An element with `data-lazy` - a `details` or its `accordion-body`, a region a [--toggle button](collapse.md) opens, a [tab panel](nav.md), a [tree's group](tree.md) - fires `redz:load` on itself with `{region}` the first time it shows: open at load, put in open later, or opened by a person, never for the paper. The library takes `data-lazy` away first. A page that loads the contents cancels the event and answers with a promise by `event.detail.respondWith`: meanwhile an empty region shows three placeholder lines and, to a screen reader, the page's text `busy`. A refusal puts `data-lazy` back and shows its words in the region, which stays open; the next opening tries again. Writing `data-lazy` again on a region that shows - its contents are stale - loads it again at once.
+
+```html
+<div class="accordion">
+	<details class="accordion-item">
+		<summary class="accordion-header">History of changes<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+		<div class="accordion-body" data-lazy data-docs-history></div>
+	</details>
+</div>
+```
+
+```js
+document.addEventListener('redz:load', (event) => {
+	if (event.target.id !== 'history') {
+		return;
+	}
+	event.preventDefault();
+	event.detail.respondWith(fetch('/excursions/12/history')
+		.then((answer) => answer.ok ? answer.text() : Promise.reject(new Error('The history could not be loaded.')))
+		.then((html) => {
+			event.detail.region.innerHTML = html;
+		}));
+});
+```
+
 ## States
 
 ## Keyboard and accessibility

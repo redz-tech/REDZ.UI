@@ -22,6 +22,18 @@ A region - a card, its body, a dialog's or a drawer's body, any `region` - keeps
 await REDZ.ui.busy(card, fetch(url).then((answer) => answer.text()).then((html) => { body.innerHTML = html; }));
 ```
 
+`data-busy` on the region gives the words that show under its spinner and are said instead of the page's text `busy`: "Reading the file list…".
+
+```html
+<section class="card" id="busy-region-words-card" aria-labelledby="busy-region-words-title" data-busy="Preparing the download…">
+	<div class="card-header"><h2 id="busy-region-words-title">Backup files</h2><button class="btn btn-sm ms-auto" type="button" data-docs-run="busy-region" aria-controls="busy-region-words-card"><i class="bi bi-download" aria-hidden="true"></i>Prepare for 2 seconds</button></div>
+	<div class="card-body vstack gap-8">
+		<p>base-2026-11-08.sql · 2.4 MB</p>
+		<p>files-2026-11-08.tar · 380 MB</p>
+	</div>
+</section>
+```
+
 ### A button
 
 The button keeps its focus, ignores clicks until the promise settles and shows a spinner: in place of its leading icon, or over its words when it has none - then it keeps its size too. `data-busy` on the button gives the words it shows while it waits, said politely once the wait passes 400 ms; set it again before each call when the wait has steps.
@@ -29,6 +41,25 @@ The button keeps its focus, ignores clicks until the promise settles and shows a
 ```html
 <button class="btn btn-primary" type="button" data-docs-run="busy-button">Save for 2 seconds</button>
 <button class="btn btn-primary" type="button" data-busy="Signing in…" data-docs-run="busy-button"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Sign in for 2 seconds</button>
+```
+
+An item of a menu - Delete in a row's menu - is busy with the button that opened the menu: the menu closes as the item is pressed, and the opener shows the spinner in its place and swallows its clicks until the promise settles. In a menu inside a menu, the outermost opener does.
+
+```html
+<button class="btn btn-icon" type="button" commandfor="busy-menu-list" command="toggle-popover" aria-haspopup="menu" aria-label="Actions: Boat A"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
+<div class="menu" id="busy-menu-list" popover role="menu" aria-label="Actions: Boat A">
+	<button class="menu-item" type="button" role="menuitem" data-docs-run="busy-menu-item" commandfor="busy-menu-list" command="hide-popover"><i class="bi bi-arrow-repeat" aria-hidden="true"></i>Check now</button>
+</div>
+```
+
+Any other element - a cell whose check runs, a line - shows a small ring after 400 ms and, to a screen reader, the words of its `data-busy` or the page's text `busy`, saying nothing aloud: many such checks at once would be noise.
+
+```html
+<table class="table" aria-label="Agents">
+	<thead><tr><th scope="col">Agent</th><th scope="col">State</th></tr></thead>
+	<tbody><tr><td>Boat A</td><td id="busy-cell-state" data-busy="Checking">Running</td></tr></tbody>
+</table>
+<div><button class="btn btn-sm" type="button" data-docs-run="busy-cell"><i class="bi bi-arrow-repeat" aria-hidden="true"></i>Check for 2 seconds</button></div>
 ```
 
 A button that starts a [cooldown](btn.md#btn-cooldown) while it waits - "Send the code again" with `data-cooldown` set as the code goes - stays disabled until the count ends: the cooldown holds `aria-disabled` while it counts, `busy()` leaves it alone, and the state from before both comes back when the last of them ends.
@@ -47,4 +78,4 @@ What `busy()` sets, written by hand - the overlay appears 400 ms after the page 
 
 From [`css/components/busy.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/busy.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-bg`, `--redz-primary`.
+It reads the theme's `--redz-bg`, `--redz-primary`, `--redz-space-16`, `--redz-text`, `--redz-fs-14`, `--redz-space-4`, `--redz-text-muted`.

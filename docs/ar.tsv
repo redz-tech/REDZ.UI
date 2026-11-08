@@ -1742,3 +1742,160 @@ The system is back. Every change is saved.	عاد النظام. كل التغي�
 The system is paused for maintenance. Your changes are kept; try again in a few minutes.	النظام متوقف مؤقتًا للصيانة. تغييراتك محفوظة؛ حاول مرة أخرى بعد دقائق.
 The connection is lost. Changes made now are not saved.	انقطع الاتصال. التغييرات التي تُجرى الآن لا تُحفظ.
 Clear	مسح
+Show bookings	عرض الحجوزات
+Not paid	غير مدفوع
+Alex Sample, boat A, paid	Alex Sample، القارب A، مدفوع
+Ben Sample, boat A, waiting	Ben Sample، القارب A، بانتظار الدفع
+Chris Sample, boat B, late	Chris Sample، القارب B، متأخر
+Dana Sample, boat B, paid	Dana Sample، القارب B، مدفوع
+Ella Sample, boat B, paid	Ella Sample، القارب B، مدفوع
+No booking matches.	لا يطابق أي حجز.
+Requests	الطلبات
+Search requests	البحث في الطلبات
+Subject or person	الموضوع أو الشخص
+Any status	أي حالة
+The pier gate does not open	بوابة الرصيف لا تفتح
+Refund for a cancelled trip	استرداد ثمن رحلة ملغاة
+A second invoice for one booking	فاتورة ثانية لحجز واحد
+Pickup points	نقاط الالتقاء
+Pickup point 1	نقطة الالتقاء 1
+Pickup point 2	نقطة الالتقاء 2
+Pickup point 3	نقطة الالتقاء 3
+Pickup point 4	نقطة الالتقاء 4
+Show more	عرض المزيد
+Search by name to find the other points.	ابحث بالاسم للعثور على النقاط الأخرى.
+Selected guests	الضيوف المحددون
+Write to them	راسلهم
+Select: Alex Sample	تحديد: Alex Sample
+Select: Ben Sample	تحديد: Ben Sample
+Select: Chris Sample	تحديد: Chris Sample
+Select: Dana Sample	تحديد: Dana Sample
+Dana Sample	Dana Sample
+already written to	تمت مراسلته
+Example Hostel	Example Hostel
+{count} of {total}	{count} من {total}
+{count}+	+{count}
+{count} more shown	عُرض {count} إضافي
+{count} selected	محدد: {count}
+Sorted by {label}, ascending	مرتب حسب {label}، تصاعديًا
+Sorted by {label}, descending	مرتب حسب {label}، تنازليًا
+Not sorted by {label}	غير مرتب حسب {label}
+Downloaded {name}	تم تنزيل {name}
+Wait until every file is sent	انتظر حتى تُرسل كل الملفات
+Download the report	تنزيل التقرير
+Ways to pay	طرق الدفع
+Bank card	بطاقة مصرفية
+Visa, Mastercard · 2.9 %	Visa، Mastercard · 2.9 %
+Configure	إعداد
+Bank card on	البطاقة المصرفية مفعّلة
+Bank transfer	تحويل مصرفي
+Three working days	ثلاثة أيام عمل
+Bank transfer on	التحويل المصرفي مفعّل
+Request 24-0187	الطلب 24-0187
+A Sample: The pier gate does not open at 07:00.	A Sample: بوابة الرصيف لا تفتح في 07:00.
+B Sample: The guard has the key from 06:45; I asked him to wait.	B Sample: المفتاح مع الحارس من 06:45؛ طلبت منه أن ينتظر.
+A Sample: Thank you. Is the boat still at 07:30?	A Sample: شكرًا. هل ما زال القارب في 07:30؟
+B Sample: Yes, it leaves at 07:30 from the second pier.	B Sample: نعم، يغادر في 07:30 من الرصيف الثاني.
+New messages	رسائل جديدة
+Add a message	أضف رسالة
+Compare every file	قارن كل ملف
+Clear the caches	امسح الذاكرة المؤقتة
+Next step	الخطوة التالية
+Pause the agent	أوقف الوكيل مؤقتًا
+Leave the price list	غادر قائمة الأسعار
+Take a boat out of service	أخرج قاربًا من الخدمة
+Boat B out of service	القارب B خارج الخدمة
+Why	السبب
+Take out	أخرج
+Code sent	أُرسل الرمز
+Make the dump	أنشئ النسخة
+Empty it	أفرغه
+Backup files	ملفات النسخ الاحتياطي
+Prepare for 2 seconds	جهّز لمدة ثانيتين
+base-2026-11-08.sql · 2.4 MB	base-2026-11-08.sql · 2.4 MB
+files-2026-11-08.tar · 380 MB	files-2026-11-08.tar · 380 MB
+Actions: Boat A	إجراءات: القارب A
+Check now	افحص الآن
+State	الحالة
+Check for 2 seconds	افحص لمدة ثانيتين
+The bill	الفاتورة
+North Bay by speedboat · 2 adults · 5,000 THB	الخليج الشمالي بالقارب السريع · 2 بالغان · 5,000 THB
+Lunch on the beach · 2 · 600 THB	غداء على الشاطئ · 2 · 600 THB
+Hotel pickup · 1 · 250 THB	النقل من الفندق · 1 · 250 THB
+Park fee · 2 · 800 THB	رسوم المنتزه · 2 · 800 THB
+Snorkelling gear · 2 · 0 THB	معدات الغطس · 2 · 0 THB
+6,650 THB	6,650 THB
+for 4 items	مقابل 4 عناصر
+Pay	ادفع
+Drawn by the package	ترسمه الحزمة
+QR code: a key for the app	رمز QR: مفتاح للتطبيق
+Drawn from data-qr	مرسوم من data-qr
+Drawn by REDZ.ui.qr	ترسمه REDZ.ui.qr
+Copy the settings: Bank card	نسخ الإعدادات: البطاقة المصرفية
+130 of 120	130 من 120
+2 failed	2 فشلت
+30 days ago	قبل 30 يومًا
+40.5 GB	40.5 GB
+41.0 GB	41.0 GB
+41.2 GB	41.2 GB
+42.0 GB	42.0 GB
+42.5 GB	42.5 GB
+43.8 GB	43.8 GB
+44.2 GB	44.2 GB
+44.5 GB	44.5 GB
+45.5 GB	45.5 GB
+47.0 GB	47.0 GB
+47.5 GB	47.5 GB
+48 GB	48 GB
+48.5 GB	48.5 GB
+49.5 GB	49.5 GB
+50.0 GB	50.0 GB
+60 days ago	قبل 60 يومًا
+90 days ago	قبل 90 يومًا
+90 days: 84 up, 2 slow, 2 down, 2 without data	90 يومًا: 84 يعمل، 2 بطيء، 2 متوقف، 2 بلا بيانات
+Add this line to the server's crontab:	أضف هذا السطر إلى crontab الخادم:
+Ask for the bookings of today:	اطلب حجوزات اليوم:
+Baybank	Baybank
+Card or wallet	بطاقة أو محفظة
+Commands to copy	أوامر للنسخ
+Copy all	انسخ الكل
+Copy the command	انسخ الأمر
+Copy the link	انسخ الرابط
+Download it:	نزّله:
+Free 50	مجاني 50
+Install the agent	ثبّت الوكيل
+Lagoonpay	Lagoonpay
+Logos	الشعارات
+North Bay Tours	North Bay Tours
+Nov 1 · 40.5 GB	1 نوفمبر · 40.5 GB
+Nov 10 · 47.5 GB	10 نوفمبر · 47.5 GB
+Nov 11 · 47.0 GB	11 نوفمبر · 47.0 GB
+Nov 12 · 48.5 GB	12 نوفمبر · 48.5 GB
+Nov 13 · 50.0 GB	13 نوفمبر · 50.0 GB
+Nov 14 · 49.5 GB	14 نوفمبر · 49.5 GB
+Nov 2 · 41.2 GB	2 نوفمبر · 41.2 GB
+Nov 3 · 41.0 GB	3 نوفمبر · 41.0 GB
+Nov 4 · 42.5 GB	4 نوفمبر · 42.5 GB
+Nov 5 · 42.0 GB	5 نوفمبر · 42.0 GB
+Nov 6 · 43.8 GB	6 نوفمبر · 43.8 GB
+Nov 7 · 44.5 GB	7 نوفمبر · 44.5 GB
+Nov 8 · 44.2 GB	8 نوفمبر · 44.2 GB
+Nov 9 · 45.5 GB	9 نوفمبر · 45.5 GB
+Over 10	زيادة 10
+Paid 70	مدفوع 70
+QR code of your link	رمز QR لرابطك
+Scan in WeChat	امسح في WeChat
+Scan in WeChat to share	امسح في WeChat للمشاركة
+Seats this month	المقاعد هذا الشهر
+Share your link	شارك رابطك
+Start it:	شغّله:
+Storage over 10 days: 41 to 48 GB	التخزين خلال 10 أيام: من 41 إلى 48 GB
+Storage used, last 14 days	التخزين المستخدم، آخر 14 يومًا
+The lagoon at noon	البحيرة عند الظهر
+Unpack it:	فك ضغطه:
+Uptime of the site	مدة تشغيل الموقع
+Used	المستخدم
+Viber	Viber
+WeChat	WeChat
+X	X
+files-01	files-01

@@ -22,6 +22,36 @@ What a job printed, line by line as it runs, and what changed between two versio
 		<div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="log-line" aria-controls="log-follow-lines">Add a line</button></div>
 ```
 
+### Any box that follows
+
+`data-follow` works on any element that scrolls - a thread of messages, a list of events: it keeps its end in view while its contents come in or grow, a picture that loads included. A button with `command="--follow"` and `aria-controls` naming the box shows while the reader is away from the end and something new came in; pressed, it brings the end back, follows again and hides. In a `follow-dock` - the box's last child - it floats at the middle of the box's bottom edge. With `data-follow="current"` the box keeps its child with `aria-current` in view instead - a running job's step - at the nearest edge, with the room of one step beside it, and its end while it has none; only the box scrolls, never the page, and once the reader scrolls the step out of view it waits until it is back.
+
+```html
+<div class="card card-scroll max-h-240" aria-labelledby="log-thread-title">
+	<div class="card-header"><h2 class="fs-14" id="log-thread-title">Request 24-0187</h2></div>
+	<div class="card-body vstack gap-8" id="log-thread-box" role="region" tabindex="0" aria-labelledby="log-thread-title" data-follow>
+		<p>A Sample: The pier gate does not open at 07:00.</p>
+		<p>B Sample: The guard has the key from 06:45; I asked him to wait.</p>
+		<p>A Sample: Thank you. Is the boat still at 07:30?</p>
+		<p>B Sample: Yes, it leaves at 07:30 from the second pier.</p>
+		<div class="follow-dock"><button class="btn btn-sm btn-primary rounded-full" type="button" command="--follow" aria-controls="log-thread-box" hidden><i class="bi bi-arrow-down" aria-hidden="true"></i>New messages</button></div>
+	</div>
+</div>
+<div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="log-message" aria-controls="log-thread-box">Add a message</button></div>
+```
+
+```html
+<ol class="step-list max-h-160 overflow-auto max-w-320" id="log-steps-list" tabindex="0" aria-label="Updating the site" data-follow="current">
+	<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Download</li>
+	<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Compare every file</li>
+	<li data-state="current" aria-current="step"><span class="spinner-border" aria-hidden="true"></span>Apply the changes</li>
+	<li data-state="ready"><i class="bi bi-circle" aria-hidden="true"></i>Check the schema</li>
+	<li data-state="ready"><i class="bi bi-circle" aria-hidden="true"></i>Clear the caches</li>
+	<li data-state="ready"><i class="bi bi-circle" aria-hidden="true"></i>Switch to the new version</li>
+</ol>
+<div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="log-step" aria-controls="log-steps-list">Next step</button></div>
+```
+
 ## A diff
 
 `div class="diff"` holds one element a line: an `ins` is a line added, marked "+" and tinted green, a `del` a line taken away, "-" and red, anything else a line kept. In a kept line, `del` and `ins` show the words changed inside it, side by side. It scrolls in its own box past 25rem, a `max-h-*` utility sets another height, and it prints in full; one that may scroll takes `tabindex="0"` and a name, so a keyboard reaches it. Lines of code carry `translate="no"`, so a page's translator leaves them as they are, and a log or a diff of code is `dir="ltr"` on a right-to-left page; a diff of Arabic words keeps the page's direction.
@@ -45,4 +75,4 @@ What a job printed, line by line as it runs, and what changed between two versio
 
 From [`css/components/log.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/log.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-border`, `--redz-radius-8`, `--redz-text`, `--redz-font-mono`, `--redz-fs-12`, `--redz-lh-20`, `--redz-space-8`, `--redz-space-12`, `--redz-bg-page`, `--redz-success`, `--redz-warning`, `--redz-danger`, `--redz-info`, `--redz-text-muted`, `--redz-bg`, `--redz-success-subtle`, `--redz-danger-subtle`.
+It reads the theme's `--redz-border`, `--redz-radius-8`, `--redz-text`, `--redz-font-mono`, `--redz-fs-12`, `--redz-lh-20`, `--redz-space-8`, `--redz-space-12`, `--redz-bg-page`, `--redz-success-text`, `--redz-warning-text`, `--redz-danger-text`, `--redz-info-text`, `--redz-text-muted`, `--redz-bg`, `--redz-success-subtle`, `--redz-danger-subtle`, `--redz-success`, `--redz-danger`.

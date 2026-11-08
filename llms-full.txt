@@ -39,9 +39,9 @@ The stylesheet, the icons and the scripts, with the page's own words for the few
 </head>
 ```
 
-- `css/redz-ui.min.css` is the layers, the tokens, the components and the utilities in one file, within its budget of 36 KB gzipped: the stylesheets `css/index.css` pulls in, squeezed.
+- `css/redz-ui.min.css` is the layers, the tokens, the components and the utilities in one file, within its budget of 38 KB gzipped: the stylesheets `css/index.css` pulls in, squeezed.
 - `css/icons.min.css` is apart: one mask per Bootstrap Icons file, used only by name. It reaches each file by a URL relative to itself, `../icons/NAME.svg`, so the pack's folders keep their shape where a project serves them. A project that marks its static files by their content (`?h=…`) cannot mark the icons this way, and needs not: the pack's folder is named by its version, which changes only with Bootstrap Icons.
-- `js/redz-ui.min.js` is one ES module of the behaviors, within its budget of 34 KB gzipped: the modules of `js/index.js` joined, squeezed and given short local names. It sets `REDZ.ui` for calls from code.
+- `js/redz-ui.min.js` is one ES module of the behaviors, within its budget of 42 KB gzipped: the modules of `js/index.js` joined, squeezed and given short local names. It sets `REDZ.ui` for calls from code.
 - The island `#redz-ui-text` gives the library its words, in the page's language: every key of the passport's `texts`, and for each key of its `plurals` the other forms its language's plural rules name (`found.one`, `found.few`). Its `args` names the `{names}` the library fills in each of them, `[]` for none: a text of the page that uses another name shows it as it is. The example shows four of them.
 - The two files are made from `css/` and `js/`, which stay to read. A project that bundles its own may join the stylesheets in the passport's order instead.
 
@@ -664,12 +664,12 @@ row.classList.add('flash');
 | `text-muted` | `color: var(--redz-text-muted);` | - |
 | `text-faint` | `color: var(--redz-text-faint);` | - |
 | `text-reset` | `color: inherit;` | - |
-| `text-primary` | `color: var(--redz-primary);` | - |
-| `text-secondary` | `color: var(--redz-secondary);` | - |
-| `text-success` | `color: var(--redz-success);` | - |
-| `text-danger` | `color: var(--redz-danger);` | - |
-| `text-warning` | `color: var(--redz-warning);` | - |
-| `text-info` | `color: var(--redz-info);` | - |
+| `text-primary` | `color: var(--redz-primary-text);` | - |
+| `text-secondary` | `color: var(--redz-secondary-text);` | - |
+| `text-success` | `color: var(--redz-success-text);` | - |
+| `text-danger` | `color: var(--redz-danger-text);` | - |
+| `text-warning` | `color: var(--redz-warning-text);` | - |
+| `text-info` | `color: var(--redz-info-text);` | - |
 | `text-primary-contrast` | `color: var(--redz-primary-contrast);` | - |
 | `text-secondary-contrast` | `color: var(--redz-secondary-contrast);` | - |
 | `text-success-contrast` | `color: var(--redz-success-contrast);` | - |
@@ -780,6 +780,7 @@ row.classList.add('flash');
 | `h-32` | `block-size: 2rem;` | - |
 | `h-40` | `block-size: 2.5rem;` | - |
 | `h-72` | `block-size: 4.5rem;` | - |
+| `h-88` | `block-size: 5.5rem;` | - |
 | `size-32` | `inline-size: 2rem; block-size: 2rem;` | - |
 | `size-48` | `inline-size: 3rem; block-size: 3rem;` | - |
 | `size-64` | `inline-size: 4rem; block-size: 4rem;` | - |
@@ -1203,7 +1204,7 @@ The custom properties on `:root` that the components read: colors by role in pai
 
 ## A white label from one colour
 
-`data-brand` on `html`, or on one region, makes the primary tone of one colour, `--redz-brand`: the library derives the tone, its `-subtle` fill, its `-contrast` text - black or white, whichever reads at 4.5:1 on it, as one of the two always does - the focus ring and the links, in both themes; in the dark one the tone is lightened until it reads on the dark ground. `data-brand="#0a7f5a"` gives the colour, which the library sets through the CSSOM after its script loads; a page that knows the colour on its server writes `--redz-brand` in its own stylesheet beside the attribute, and nothing waits for the script. The colour is used as given: one with 4.5:1 on white keeps the light theme's text readable - the library does not fix another. The relative colours it is derived with are on the floor: Chrome 119, Firefox 128, Safari 18.
+`data-brand` on `html`, or on one region, makes the primary tone of one colour, `--redz-brand`: the library derives the tone, its `-subtle` fill, its `-contrast` text - black or white, whichever reads at 4.5:1 on it, as one of the two always does - the focus ring and the links, in both themes; in the dark one the tone is lightened until it reads on the dark ground. `data-brand="#0a7f5a"` gives the colour, which the library sets through the CSSOM after its script loads; a page that knows the colour on its server writes `--redz-brand` in its own stylesheet beside the attribute, and nothing waits for the script. Where the tone is text - a link, a subtle badge, an outline button, `text-primary`, an alert's icon - it is `--redz-primary-text`: in the light theme the colour darkened, its hue kept, until its luminance is at most 0.13, which reads at 4.5:1 on white and on its subtle fill; in the dark theme the tone itself. A fill keeps the colour as given. The other tones follow their own keys the same way: `data-brand-secondary`, `data-brand-success`, `data-brand-info`, `data-brand-warning` and `data-brand-danger` - a company's own red for its errors - each derive that tone, its `-subtle`, `-contrast` and `-text`. Every tone has its `--redz-TONE-text`, the tone itself unless a brand key derives it. The relative colours it is derived with are on the floor: Chrome 119, Firefox 128, Safari 18.
 
 ```html
 <div class="hstack flex-wrap gap-8" data-brand="#0a7f5a">
@@ -1214,6 +1215,15 @@ The custom properties on `:root` that the components read: colors by role in pai
 </div>
 <div class="hstack flex-wrap gap-8" data-brand="#f4c542">
 	<button class="btn btn-primary" type="button">Book now</button>
+	<button class="btn btn-outline-primary" type="button">Details</button>
+	<span class="badge badge-subtle-primary">New</span>
+	<a href="#tokens-brand">A link</a>
+</div>
+<div class="hstack flex-wrap gap-8" data-brand-danger="#ff6b5b" data-brand-success="#3ddc84">
+	<button class="btn btn-danger" type="button">Delete</button>
+	<span class="badge badge-subtle-danger">Overdue</span>
+	<span class="badge badge-subtle-success">Paid</span>
+	<span class="text-danger">2 failed</span>
 </div>
 ```
 
@@ -1248,6 +1258,12 @@ The custom properties on `:root` that the components read: colors by role in pai
 | `--redz-info` | `light-dark(#0071bb, #5eaceb)` |
 | `--redz-info-subtle` | `light-dark(#e4f3ff, #193043)` |
 | `--redz-info-contrast` | `light-dark(#ffffff, #000000)` |
+| `--redz-primary-text` | `var(--redz-primary)` |
+| `--redz-secondary-text` | `var(--redz-secondary)` |
+| `--redz-success-text` | `var(--redz-success)` |
+| `--redz-danger-text` | `var(--redz-danger)` |
+| `--redz-warning-text` | `var(--redz-warning)` |
+| `--redz-info-text` | `var(--redz-info)` |
 | `--redz-chart-1` | `light-dark(#2a78d6, #3987e5)` |
 | `--redz-chart-2` | `light-dark(#eb6834, #d95926)` |
 | `--redz-chart-3` | `light-dark(#1baf7a, #199e70)` |
@@ -2911,7 +2927,7 @@ A state is the attribute accessibility needs anyway, on the button itself: no `a
 
 From [`css/components/btn.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/btn.css). It declares `--redz-btn-bg`, `--redz-btn-fg`, `--redz-btn-hover`, `--redz-btn-hover-fg`, `--redz-btn-on-bg`, `--redz-btn-on-fg` on its root, never on rows or items.
 
-It reads the theme's `--redz-bg-hover`, `--redz-text`, `--redz-control-height`, `--redz-space-12`, `--redz-radius-8`, `--redz-focus`, `--redz-bg-page`, `--redz-text-faint`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-primary-subtle`, `--redz-secondary-subtle`, `--redz-success-subtle`, `--redz-danger-subtle`, `--redz-warning-subtle`, `--redz-info-subtle`, `--redz-control-height-xs`, `--redz-radius-6`, `--redz-fs-12`, `--redz-control-height-sm`, `--redz-space-8`, `--redz-control-height-lg`, `--redz-space-16`, `--redz-fs-16`, `--redz-space-24`, `--redz-radius-12`, `--redz-fs-20`, `--redz-control-height-float`, `--redz-text-muted`, `--redz-motion`.
+It reads the theme's `--redz-bg-hover`, `--redz-text`, `--redz-control-height`, `--redz-space-12`, `--redz-radius-8`, `--redz-focus`, `--redz-bg-page`, `--redz-text-faint`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-primary-text`, `--redz-primary-subtle`, `--redz-secondary-text`, `--redz-secondary-subtle`, `--redz-success-text`, `--redz-success-subtle`, `--redz-danger-text`, `--redz-danger-subtle`, `--redz-warning-text`, `--redz-warning-subtle`, `--redz-info-text`, `--redz-info-subtle`, `--redz-control-height-xs`, `--redz-radius-6`, `--redz-fs-12`, `--redz-control-height-sm`, `--redz-space-8`, `--redz-control-height-lg`, `--redz-space-16`, `--redz-fs-16`, `--redz-space-24`, `--redz-radius-12`, `--redz-fs-20`, `--redz-control-height-float`, `--redz-text-muted`, `--redz-motion`.
 
 ## From Bootstrap 5.3
 
@@ -2941,6 +2957,21 @@ Buttons that act without a line of the page's script: copy a value, print the pa
 <div class="hstack gap-8">
 	<button class="btn" type="button" command="--copy" data-copy="https://lagoon.example/tours/north-bay"><i class="bi bi-link-45deg" aria-hidden="true"></i>Copy the address</button>
 </div>
+```
+
+## Download
+
+`command="--download"` with `aria-controls` naming a field, a `textarea` or any element - a `pre` of a report - downloads its value or its text as a file: `data-file` names it, `download.txt` by default, and `data-type` is its type, `text/plain`. A `text/csv` file starts with a UTF-8 byte order mark, so a spreadsheet reads its letters right; `data-bom="false"` leaves it out. An element holding a picture - an `svg`, an `img`, a `canvas`, a [QR tile](qr.md#qr-download) - downloads it as a PNG instead. Each download is said politely, in the page's text `downloaded`. From code, `REDZ.ui.download({text, file, type, bom})` does the same for words made at the moment - a report built from the rows on the screen - and `{blob, file}` for a `Blob` of any kind.
+
+```html
+		<pre class="docs-code w-100" id="commands-download-text" tabindex="0">Boat A	12 trips	286 seats
+Boat C	9 trips	201 seats</pre>
+		<button class="btn" type="button" command="--download" aria-controls="commands-download-text" data-file="boats.txt"><i class="bi bi-download" aria-hidden="true"></i>Download the report</button>
+```
+
+```js
+const rows = [...document.querySelectorAll('#agents tbody tr')].map((row) => [...row.cells].map((cell) => cell.textContent.trim()).join(';'));
+REDZ.ui.download({text: rows.join('\r\n'), file: 'agents-2026-11-08.csv', type: 'text/csv'});
 ```
 
 ## Print
@@ -2979,6 +3010,25 @@ Buttons with `command="--theme"` and the value `light`, `dark` or `system` set t
 	<a class="menu-item share-linkedin" role="menuitem"><i class="bi bi-linkedin" aria-hidden="true"></i>LinkedIn</a>
 	<a class="menu-item share-vk" role="menuitem">VK</a>
 	<button class="menu-item" type="button" role="menuitem" command="--copy"><i class="bi bi-link-45deg" aria-hidden="true"></i>Copy the address</button>
+</div>
+```
+
+Three more networks: `share-x` posts on X with the title as its words, `share-viber` opens Viber's app with them - its mark drawn as letters, as VK's, or the page's own `img` or `svg` in the link -, and `share-wechat`, which has no address to share by, is a plain button that opens the page's popover with a [QR code](qr.md) of the address to scan in WeChat. `data-share-url` and `data-share-title` on any element write the links and the copy inside it, a row on the page without a menu: neutral buttons, each with the network's coloured icon and its name, as a filled brand colour leaves most names unreadable.
+
+```html
+<div class="hstack flex-wrap gap-8" role="group" aria-label="Share your link" data-share-url="https://lagoon.example/join?ref=sample" data-share-title="Book North Bay trips with my link">
+	<a class="btn btn-sm share-whatsapp"><i class="bi bi-whatsapp" aria-hidden="true"></i>WhatsApp</a>
+	<a class="btn btn-sm share-telegram"><i class="bi bi-telegram" aria-hidden="true"></i>Telegram</a>
+	<a class="btn btn-sm share-x"><i class="bi bi-twitter-x" aria-hidden="true"></i>X</a>
+	<a class="btn btn-sm share-viber">Viber</a>
+	<button class="btn btn-sm share-wechat" type="button" commandfor="commands-share-wechat" command="toggle-popover"><i class="bi bi-wechat" aria-hidden="true"></i>WeChat</button>
+	<button class="btn btn-sm" type="button" command="--copy"><i class="bi bi-link-45deg" aria-hidden="true"></i>Copy the link</button>
+	<div class="popover" id="commands-share-wechat" popover aria-label="Scan in WeChat">
+		<div class="vstack gap-8 align-items-center">
+			<div class="qr"><img src="img/qr.svg" alt="QR code of your link"></div>
+			<p class="fs-12 text-muted">Scan in WeChat to share</p>
+		</div>
+	</div>
 </div>
 ```
 
@@ -3416,7 +3466,7 @@ Buttons with `command="--step-up"` or `"--step-down"` and `aria-controls` naming
 
 From [`css/components/form.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/form.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-4`, `--redz-text`, `--redz-fs-12`, `--redz-text-muted`, `--redz-link`, `--redz-motion`, `--redz-ease`, `--redz-danger`, `--redz-control-height`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg`, `--redz-focus`, `--redz-space-8`, `--redz-grow-rows`, `--redz-form-select-chevron`, `--redz-warning`, `--redz-radius-6`, `--redz-bg-page`, `--redz-primary-subtle`, `--redz-control-height-sm`, `--redz-control-height-lg`, `--redz-fs-16`, `--redz-control-height-float`, `--redz-fs-14`, `--redz-primary`.
+It reads the theme's `--redz-space-4`, `--redz-text`, `--redz-fs-12`, `--redz-text-muted`, `--redz-link`, `--redz-motion`, `--redz-ease`, `--redz-danger-text`, `--redz-control-height`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg`, `--redz-focus`, `--redz-space-8`, `--redz-grow-rows`, `--redz-form-select-chevron`, `--redz-danger`, `--redz-warning`, `--redz-warning-text`, `--redz-radius-6`, `--redz-bg-page`, `--redz-primary-subtle`, `--redz-control-height-sm`, `--redz-control-height-lg`, `--redz-fs-16`, `--redz-control-height-float`, `--redz-fs-14`, `--redz-primary`.
 
 ## From Bootstrap 5.3
 
@@ -3860,8 +3910,8 @@ A page that finds options itself listens for `redz:search` on the search and can
 
 ```js
 document.addEventListener('redz:search', (event) => {
-	const list = document.getElementById(event.target.getAttribute('aria-controls'));
-	if (list.id !== 'people' || event.detail.query.length < 2) {
+	const list = document.getElementById(event.target.getAttribute('aria-controls') ?? '');
+	if (list?.id !== 'people' || event.detail.query.length < 2) {
 		return; // the library filters the options it has
 	}
 	event.preventDefault();
@@ -4125,7 +4175,7 @@ document.addEventListener('redz:files', (event) => {
 
 ### Files the server holds
 
-The server writes a row for each file it holds, as the template's, with `data-file-stored` - its id - and the name of its remove button. Remove asks the page in `redz:remove` with `detail.id` and `detail.row`: a page that cancels it and answers with a promise keeps the row busy until it settles - gone when it resolves, its words said in its `data-file-error` when it rejects. Left alone, the row goes, and a hidden field of its own with it, so the form sends the ids still kept. After each change the upload fires `redz:change` with `detail.count`, the files it holds, stored and new; `data-max-files` counts the stored ones too. A file the page sends becomes such a row when its `redz:files` promise resolves with the id the server gave it. Below, the contract is in use by an invoice, and a paper added is sent and kept under the next id.
+The server writes a row for each file it holds, as the template's, with `data-file-stored` - its id - and the name of its remove button. Remove asks the page in `redz:remove` with `detail.id` and `detail.row`: a page that cancels it and answers with a promise keeps the row busy until it settles - gone when it resolves, its words said in its `data-file-error` when it rejects. Left alone, the row goes, and a hidden field of its own with it, so the form sends the ids still kept. After each change the upload fires `redz:change` with `detail.count`, the files it holds, stored and new, `detail.pending`, those still sending, and `detail.failed`, those refused; `data-max-files` counts the stored ones too. While a file sends, the file field is invalid with the page's text `file.pending`, so its form waits. A file the page sends becomes such a row when its `redz:files` promise resolves with the id the server gave it. Below, the contract is in use by an invoice, and a paper added is sent and kept under the next id.
 
 ```html
 <div class="upload" data-max-files="4">
@@ -4145,6 +4195,19 @@ The server writes a row for each file it holds, as the template's, with `data-fi
 		</li>
 	</template>
 </div>
+```
+
+### Pasted anywhere, cleared, settled
+
+A file is pasted into an upload while the focus is in it. With `data-paste="page"` the upload takes files pasted anywhere on the page, or, with an element's id, anywhere in that element - a ticket's card. A paste into a text field that brings words stays words, though a word processor puts a picture of them beside: only a paste of files alone goes to the upload. Of several such uploads, the one in the open modal dialog takes the files, else the one that shows. `REDZ.ui.upload.clear(upload)` takes away the files not yet stored - their sending aborted - and keeps the stored ones, with one `redz:change` and the focus where it was; a reset of the form does the same. `REDZ.ui.upload.settled(upload)` answers a promise of `{count, pending, failed}` once nothing in it is sending: a Send waits on it.
+
+```js
+send.addEventListener('click', async () => {
+	const {failed} = await REDZ.ui.upload.settled(upload);
+	if (failed === 0) {
+		form.requestSubmit();
+	}
+});
 ```
 
 ### An image field
@@ -4780,6 +4843,33 @@ Without `name` every item opens and closes by itself.
 </div>
 ```
 
+### Contents from the server
+
+An element with `data-lazy` - a `details` or its `accordion-body`, a region a [--toggle button](collapse.md) opens, a [tab panel](nav.md), a [tree's group](tree.md) - fires `redz:load` on itself with `{region}` the first time it shows: open at load, put in open later, or opened by a person, never for the paper. The library takes `data-lazy` away first. A page that loads the contents cancels the event and answers with a promise by `event.detail.respondWith`: meanwhile an empty region shows three placeholder lines and, to a screen reader, the page's text `busy`. A refusal puts `data-lazy` back and shows its words in the region, which stays open; the next opening tries again. Writing `data-lazy` again on a region that shows - its contents are stale - loads it again at once.
+
+```html
+<div class="accordion">
+	<details class="accordion-item">
+		<summary class="accordion-header">History of changes<i class="bi bi-chevron-down accordion-icon" aria-hidden="true"></i></summary>
+		<div class="accordion-body" data-lazy data-docs-history></div>
+	</details>
+</div>
+```
+
+```js
+document.addEventListener('redz:load', (event) => {
+	if (event.target.id !== 'history') {
+		return;
+	}
+	event.preventDefault();
+	event.detail.respondWith(fetch('/excursions/12/history')
+		.then((answer) => answer.ok ? answer.text() : Promise.reject(new Error('The history could not be loaded.')))
+		.then((html) => {
+			event.detail.region.innerHTML = html;
+		}));
+});
+```
+
 ## States
 
 ## Keyboard and accessibility
@@ -5016,7 +5106,7 @@ A column of items in one frame - plain rows, or links and buttons to choose from
 
 ### Links and buttons
 
-`list-group-item-action` makes an item a choice. The current one is `aria-current` - `"page"` for a link to the page shown, `"true"` otherwise; one that cannot be chosen is a `disabled` button, or a link without `href` and with `aria-disabled="true"`. A plain item whose title is a `stretched-link` is that link as a whole, and its other links and buttons stay their own.
+`list-group-item-action` makes an item a choice. The current one is `aria-current` - `"page"` for a link to the page shown, `"true"` otherwise; one that cannot be chosen is a `disabled` button, or a link without `href` and with `aria-disabled="true"`. A plain item whose title is a `stretched-link` is that link as a whole, as a [table's row](table.md) is: a click anywhere on it but on its own controls follows the title - with `Ctrl`, `Cmd` or the middle button into a new tab - unless the person was selecting its words, which stay selectable; the title is the one link a keyboard and a screen reader meet. Its other links, buttons, switches and handles stay their own. A `list-group-actions` at its end holds the item's buttons; its icon buttons are dimmed until the item is pointed at or holds the focus, on a device with a pointer, while a button with words keeps its contrast.
 
 ```html
 <nav class="list-group" aria-label="Sites">
@@ -5031,6 +5121,15 @@ A column of items in one frame - plain rows, or links and buttons to choose from
 	<button class="list-group-item list-group-item-action" type="button" disabled>The old catalog</button>
 </div>
 ```
+
+```html
+<ul class="list-group" aria-label="Ways to pay" data-density="compact">
+	<li class="list-group-item hstack gap-12"><span class="vstack flex-1"><a class="stretched-link fw-600" href="#list-group-rows">Bank card</a><span class="text-muted fs-12">Visa, Mastercard · 2.9 %</span></span><span class="list-group-actions"><a class="btn btn-sm" href="#list-group-rows">Configure</a><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Copy the settings: Bank card"><i class="bi bi-copy" aria-hidden="true"></i></button></span><label class="form-check"><input class="switch" type="checkbox" role="switch" checked aria-label="Bank card on"></label></li>
+	<li class="list-group-item hstack gap-12"><span class="vstack flex-1"><a class="stretched-link fw-600" href="#list-group-rows">Bank transfer</a><span class="text-muted fs-12">Three working days</span></span><span class="list-group-actions"><a class="btn btn-sm" href="#list-group-rows">Configure</a></span><label class="form-check"><input class="switch" type="checkbox" role="switch" aria-label="Bank transfer on"></label></li>
+</ul>
+```
+
+An item's padding follows `data-density`, as a table's row does: 12 px by default, 8 px `compact`, 16 px `comfortable`, 20 px `spacious`.
 
 ### Flush, numbered, with counts
 
@@ -5098,6 +5197,85 @@ A search field with `data-filter` naming a region hides, as the person types, th
 	<li class="list-group-item" data-search="elephant sanctuary chang">Elephant sanctuary</li>
 	<li class="list-group-item text-muted" data-filter-empty hidden>No excursion has these words.</li>
 </ul>
+```
+
+### Filtered by buttons
+
+A button with `command="--filter"` and `aria-controls` naming the region shows only the items whose `data-NAME` holds a word of its `value`: `NAME` is the button's `name`, `state` without one, and an item may hold several words - `data-state="late failed"`. The buttons of one name are one choice wherever they stand, their `aria-pressed` saying which; a button with `value=""` shows all and stays pressed while nothing narrows, and without one, pressing the pressed button again shows all. Names narrow together, and with the search. A `data-filter-count` inside a button shows how many items it would show; with the region's id as its value anywhere else it reads the page's text `filter.count`, "3 of 9". An element with `data-filter-group` - a card of items, a section - hides while none of its items shows, and a count inside it is its own. A press says the count; the region fires `redz:filter` with `{count, total}`; items the page puts in or changes are filtered again. `REDZ.ui.filter(region, {state: 'paid'})` chooses from code and answers the count; `null` clears every choice and the search.
+
+```html
+<div class="hstack flex-wrap gap-8" role="group" aria-label="Show bookings">
+	<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" value="" aria-pressed="true">All<span class="chip-count" data-filter-count></span></button>
+	<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" value="paid" aria-pressed="false">Paid<span class="chip-count" data-filter-count></span></button>
+	<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" value="waiting late" aria-pressed="false">Not paid<span class="chip-count" data-filter-count></span></button>
+</div>
+<div class="hstack flex-wrap gap-8" role="group" aria-label="Boat">
+	<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" name="boat" value="a" aria-pressed="false">Boat A</button>
+	<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" name="boat" value="b" aria-pressed="false">Boat B</button>
+</div>
+<input class="form-control" type="search" data-filter="list-group-states-list" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off">
+<p class="fs-12 text-muted" data-filter-count="list-group-states-list"></p>
+<ul class="list-group" id="list-group-states-list">
+	<li class="list-group-item" data-state="paid" data-boat="a">Alex Sample, boat A, paid</li>
+	<li class="list-group-item" data-state="waiting" data-boat="a">Ben Sample, boat A, waiting</li>
+	<li class="list-group-item" data-state="late" data-boat="b">Chris Sample, boat B, late</li>
+	<li class="list-group-item" data-state="paid" data-boat="b">Dana Sample, boat B, paid</li>
+	<li class="list-group-item" data-state="paid" data-boat="b">Ella Sample, boat B, paid</li>
+	<li class="list-group-item text-muted" data-filter-empty hidden>No booking matches.</li>
+</ul>
+```
+
+### Searched on the server
+
+A field with `data-filter-server` hides nothing itself: it asks the page by `redz:search` on the field, with `{query, form, signal}` - `form` the `FormData` of its `<search>` or form, a status select beside it included. It asks 600 ms after the typing pauses, at once on `Enter` and on `Esc`, which clears it, and at once when another control of its search changes. The page cancels the event and answers with a promise by `event.detail.respondWith`; meanwhile the region carries `aria-busy` and, in a `form-adorn`, the field shows a ring at its end. A newer question aborts the `signal` of the one before, and a late answer is dropped. The count is said in the page's text `found`: the answer's `count`, else the items there are. A [Show more](#list-group-more) over the region starts again from the answer.
+
+```html
+<search class="hstack flex-wrap gap-8" aria-label="Requests">
+	<div class="form-adorn flex-1"><i class="bi bi-search" aria-hidden="true"></i><input class="form-control" type="search" name="q" data-filter="list-group-server-list" data-filter-server aria-label="Search requests" placeholder="Subject or person" autocomplete="off"></div>
+	<select class="form-select w-auto" name="status" aria-label="Status"><option value="">Any status</option><option value="open">Open</option><option value="closed">Closed</option></select>
+</search>
+<ul class="list-group" id="list-group-server-list" data-docs-server>
+	<li class="list-group-item">The pier gate does not open</li>
+	<li class="list-group-item">Refund for a cancelled trip</li>
+	<li class="list-group-item">A second invoice for one booking</li>
+</ul>
+```
+
+```js
+document.addEventListener('redz:search', (event) => {
+	if (!event.target.matches('[data-filter="requests"]')) {
+		return; // a combobox's search fires redz:search too
+	}
+	event.preventDefault();
+	const {form, signal} = event.detail;
+	event.detail.respondWith(fetch('/requests?' + new URLSearchParams(form), {signal})
+		.then((answer) => answer.json())
+		.then(({rows, count}) => {
+			document.getElementById('requests').replaceChildren(...rows.map(row));
+			return {count};
+		}));
+});
+```
+
+### Show more
+
+A `list-more` under a list holds its count and a button with `command="--more"` and `aria-controls` naming the list - a list group, any element whose children are its items, a table or its body. The button fires `redz:more` on the list with `{shown, signal}`; the page answers with a promise by `event.detail.respondWith` and the button is busy until the page has put the next items in. Then the focus goes to the first new item - its first link or button, else the item - and the page's text `more.loaded` says how many came. The answer may say `{total}` or `{done: true}`; an answer that adds nothing is the end too, and `data-more-total` on the button is a total known from the start. At the end the button hides. With `data-more-max` it hides at that many items and a `data-more-cap` beside it shows the page's sentence instead - "Narrow the search to see older requests". A `data-more-count` reads the page's text `more.count`, "10 of 23", or `more.some`, "10+", while the total is unknown. A refusal keeps the button and the focus where they were.
+
+```html
+<section class="card" aria-labelledby="list-group-more-title">
+	<div class="card-header"><h2 class="fs-14" id="list-group-more-title">Pickup points</h2></div>
+	<ul class="list-group list-group-flush" id="list-group-more-list" data-docs-more>
+		<li class="list-group-item"><a href="#list-group-more">Pickup point 1</a></li>
+		<li class="list-group-item"><a href="#list-group-more">Pickup point 2</a></li>
+		<li class="list-group-item"><a href="#list-group-more">Pickup point 3</a></li>
+		<li class="list-group-item"><a href="#list-group-more">Pickup point 4</a></li>
+	</ul>
+	<div class="list-more">
+		<span data-more-count></span>
+		<button class="btn btn-sm" type="button" command="--more" aria-controls="list-group-more-list" data-more-total="11" data-more-max="8">Show more</button>
+		<span data-more-cap hidden>Search by name to find the other points.</span>
+	</div>
+</section>
 ```
 
 ### Reordering
@@ -5169,7 +5347,7 @@ document.addEventListener('redz:move', (event) => {
 
 From [`css/components/list-group.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/list-group.css). It declares `--redz-list-group-row`, `--redz-list-group-column` on its root, never on rows or items.
 
-It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-space-12`, `--redz-space-16`, `--redz-text`, `--redz-space-8`, `--redz-bg-page`, `--redz-text-muted`, `--redz-fs-12`, `--redz-bg-hover`, `--redz-primary-subtle`, `--redz-primary`, `--redz-text-faint`.
+It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-row-pad`, `--redz-space-16`, `--redz-text`, `--redz-row-hover`, `--redz-primary`, `--redz-space-4`, `--redz-space-8`, `--redz-bg-page`, `--redz-text-muted`, `--redz-fs-12`, `--redz-bg-hover`, `--redz-primary-subtle`, `--redz-text-faint`, `--redz-space-12`.
 
 ## From Bootstrap 5.3
 
@@ -5231,10 +5409,10 @@ Pages under pages, a menu's items, folders: a list whose items open their own li
 
 ### Children from the server
 
-A group with `data-lazy` and no items fires `redz:expand` on it when it first opens. A page that loads the items cancels it and answers with a promise: the toggle is busy until it settles, and a refusal closes the group again for another try. The Archive above answers after 400 ms.
+A group with `data-lazy` fires `redz:load` on it when it first opens, as any [region that loads](accordion.md#accordion-lazy) does. A page that loads the items cancels it and answers with a promise: the toggle is busy and the group shows placeholder lines until it settles; a refusal leaves the group open with its words and the next opening tries again. The Archive above answers after 400 ms.
 
 ```js
-document.addEventListener('redz:expand', (event) => {
+document.addEventListener('redz:load', (event) => {
 	event.preventDefault();
 	event.detail.respondWith(fetch('/pages?parent=' + event.target.dataset.parent)
 		.then((answer) => answer.text())
@@ -5463,6 +5641,18 @@ Series without a tone take the chart colors by their column.
 </table>
 ```
 
+### A line
+
+`chart chart-line` draws one series as a line with its area under it, through each row's first `data-v`: the script draws one SVG behind the rows, so the line is one stroke at any width, and each row keeps its tooltip and marks its point under the pointer. The scale is the page's: `data-v` is a share of the range it chose - from the lowest to the highest day, padded - and the captions say it. The header names the series for a screen reader and is hidden from sight.
+
+```html
+<table class="chart chart-line" data-tooltips>
+	<caption>Storage used, last 14 days</caption>
+	<thead><tr><th scope="col">Day</th><th scope="col">Used</th></tr></thead>
+	<tbody><tr title="Nov 1 · 40.5 GB"><th scope="row">Nov 1</th><td data-v="0.42">40.5 GB</td></tr><tr title="Nov 2 · 41.2 GB"><th scope="row"><span class="visually-hidden">Nov 2</span></th><td data-v="0.45">41.2 GB</td></tr><tr title="Nov 3 · 41.0 GB"><th scope="row"><span class="visually-hidden">Nov 3</span></th><td data-v="0.44">41.0 GB</td></tr><tr title="Nov 4 · 42.5 GB"><th scope="row"><span class="visually-hidden">Nov 4</span></th><td data-v="0.5">42.5 GB</td></tr><tr title="Nov 5 · 42.0 GB"><th scope="row"><span class="visually-hidden">Nov 5</span></th><td data-v="0.48">42.0 GB</td></tr><tr title="Nov 6 · 43.8 GB"><th scope="row"><span class="visually-hidden">Nov 6</span></th><td data-v="0.55">43.8 GB</td></tr><tr title="Nov 7 · 44.5 GB"><th scope="row"><span class="visually-hidden">Nov 7</span></th><td data-v="0.58">44.5 GB</td></tr><tr title="Nov 8 · 44.2 GB"><th scope="row"><span class="visually-hidden">Nov 8</span></th><td data-v="0.57">44.2 GB</td></tr><tr title="Nov 9 · 45.5 GB"><th scope="row"><span class="visually-hidden">Nov 9</span></th><td data-v="0.62">45.5 GB</td></tr><tr title="Nov 10 · 47.5 GB"><th scope="row"><span class="visually-hidden">Nov 10</span></th><td data-v="0.7">47.5 GB</td></tr><tr title="Nov 11 · 47.0 GB"><th scope="row"><span class="visually-hidden">Nov 11</span></th><td data-v="0.68">47.0 GB</td></tr><tr title="Nov 12 · 48.5 GB"><th scope="row"><span class="visually-hidden">Nov 12</span></th><td data-v="0.74">48.5 GB</td></tr><tr title="Nov 13 · 50.0 GB"><th scope="row"><span class="visually-hidden">Nov 13</span></th><td data-v="0.8">50.0 GB</td></tr><tr title="Nov 14 · 49.5 GB"><th scope="row">Nov 14</th><td data-v="0.78">49.5 GB</td></tr></tbody>
+</table>
+```
+
 ## Shares of a whole
 
 `chart-bar` with `chart` draws one row as a single bar across: each segment's `data-v` is its share of the whole, and the legend under it names the series - write the share in the legend's words too. The bar is 12 px thick; `--redz-chart-bar-height` sets another.
@@ -5507,6 +5697,23 @@ Series without a tone take the chart colors by their column.
 	<span class="spark spark-lg spark-median" role="img" aria-label="20 runs, median 1.2 s, longest 3.9 s" data-median="0.31"><i data-state="ok" data-v="0.31" title="Nov 3, 02:00 · 1.2 s"></i><i data-state="ok" data-v="0.28" title="Nov 3, 03:00 · 1.1 s"></i><i data-state="ok" data-v="0.36" title="Nov 3, 04:00 · 1.4 s"></i><i data-state="ok" data-v="0.33" title="Nov 3, 05:00 · 1.3 s"></i><i data-state="timeout" data-v="1" title="Nov 3, 06:00 · 3.9 s"></i><i data-state="ok" data-v="0.31" title="Nov 3, 07:00 · 1.2 s"></i><i data-state="ok" data-v="0.26" title="Nov 3, 08:00 · 1 s"></i><i data-state="ok" data-v="0.38" title="Nov 3, 09:00 · 1.5 s"></i><i data-state="ok" data-v="0.31" title="Nov 3, 10:00 · 1.2 s"></i><i data-state="failed" data-v="0.72" title="Nov 3, 11:00 · 2.8 s"></i><i data-state="ok" data-v="0.33" title="Nov 3, 12:00 · 1.3 s"></i><i data-state="ok" data-v="0.28" title="Nov 3, 13:00 · 1.1 s"></i><i data-state="ok" data-v="0.31" title="Nov 3, 14:00 · 1.2 s"></i><i data-state="ok" data-v="0.41" title="Nov 3, 15:00 · 1.6 s"></i><i data-state="ok" data-v="0.31" title="Nov 3, 16:00 · 1.2 s"></i><i data-state="ok" data-v="0.33" title="Nov 3, 17:00 · 1.3 s"></i><i data-state="ok" data-v="0.28" title="Nov 3, 18:00 · 1.1 s"></i><i data-state="ok" data-v="0.36" title="Nov 3, 19:00 · 1.4 s"></i><i data-state="ok" data-v="0.31" title="Nov 3, 20:00 · 1.2 s"></i><i data-state="running" data-v="0.15" title="Nov 3, 21:00 · 0.6 s"></i></span>
 	<figcaption class="fs-12 text-muted tabular-nums">Median 1.2 s · longest 3.9 s</figcaption>
 </figure>
+```
+
+`spark-line` draws the runs as one line instead of bars - a size over the days, which climbs and falls, not runs that pass or fail -, its `data-v` the share of the scale the page chose.
+
+```html
+<p class="hstack gap-8"><span class="font-monospace">files-01</span><span class="spark spark-line" role="img" aria-label="Storage over 10 days: 41 to 48 GB"><i data-v="0.1"></i><i data-v="0.2"></i><i data-v="0.15"></i><i data-v="0.4"></i><i data-v="0.45"></i><i data-v="0.42"></i><i data-v="0.6"></i><i data-v="0.7"></i><i data-v="0.65"></i><i data-v="0.9"></i></span><span class="tabular-nums">48 GB</span></p>
+```
+
+### A strip of days
+
+`spark spark-strip` fills its box with one cell a day, oldest first, each its state's colour by `data-tone` - `success`, `warning`, `danger`, `info` -, a day without one a grey track: not a short bar, which would read as a small value. In a `strip`, a box the strip measures, it shows 90 days, 60 below 560 px and 30 below 360 px, the oldest going first; the `strip-head`'s caption with the `data-days` of the days shown is the one that shows, so its words always match. A cell's `title` is its tooltip.
+
+```html
+<div class="strip" aria-label="Uptime of the site" role="group">
+	<div class="strip-head"><span data-days="90">90 days ago</span><span data-days="60">60 days ago</span><span data-days="30">30 days ago</span><span>Today</span></div>
+	<span class="spark spark-strip" role="img" aria-label="90 days: 84 up, 2 slow, 2 down, 2 without data" id="chart-strip-days"></span>
+</div>
 ```
 
 ## A board of lanes
@@ -5759,6 +5966,31 @@ A list of records: a title that links to the record, a line under it, a note whe
 </section>
 ```
 
+### Checked rows
+
+A checked row is tinted: its check is the only state. An element with `data-select` - the table, or the card holding it with its [selection bar](selection-bar.md) - holds a selection; a check with `data-select-all` heads its checks, checked when all are, mixed when some are, and pressed it checks or clears them all. Only the checks a person can use count: enabled, and not in a row a filter hides - a checked row a search hides leaves the count while hidden and is checked again when it shows. The `selection-bar` inside hides at zero, a `data-select-count` says the page's text `selected`, and the scope fires `redz:selection` with `{count, total, values}`, the values of the checked checks; a head that changes them all says the count aloud. With `data-select="rows"` a click anywhere on a row but on its controls checks it, unless its text is being selected. A `data-select` inside another is a group with a head of its own; buttons with `command="--select-all"` or `"--select-none"` and `aria-controls` naming a scope do what its head does.
+
+```html
+<input class="form-control" type="search" data-filter="table-select-rows" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off">
+<section class="card" aria-labelledby="table-select-title" data-select="rows">
+	<div class="card-header"><h2 class="fs-14" id="table-select-title">Guests</h2></div>
+	<div class="selection-bar" role="region" aria-label="Selected guests" hidden>
+		<strong data-select-count></strong>
+		<button class="btn btn-sm" type="button"><i class="bi bi-envelope" aria-hidden="true"></i>Write to them</button>
+		<button class="btn btn-sm btn-icon btn-text ms-auto" type="button" command="--select-none" aria-controls="table-select-rows" aria-label="Clear the selection"><i class="bi bi-x" aria-hidden="true"></i></button>
+	</div>
+	<table class="table" id="table-select-rows">
+		<thead><tr><th class="table-check"><input class="check" type="checkbox" data-select-all aria-label="Select all"></th><th scope="col">Guest</th><th scope="col" class="text-end">Seats</th></tr></thead>
+		<tbody>
+			<tr><td class="table-check"><input class="check" type="checkbox" value="11" aria-label="Select: Alex Sample"></td><td>Alex Sample</td><td class="text-end tabular-nums">2</td></tr>
+			<tr><td class="table-check"><input class="check" type="checkbox" value="12" aria-label="Select: Ben Sample"></td><td>Ben Sample</td><td class="text-end tabular-nums">3</td></tr>
+			<tr><td class="table-check"><input class="check" type="checkbox" value="13" aria-label="Select: Chris Sample"></td><td>Chris Sample</td><td class="text-end tabular-nums">4</td></tr>
+			<tr><td class="table-check"><input class="check" type="checkbox" value="14" aria-label="Select: Dana Sample" disabled></td><td>Dana Sample<div class="table-sub">already written to</div></td><td class="text-end tabular-nums">1</td></tr>
+		</tbody>
+	</table>
+</section>
+```
+
 ### Stripes, borders and groups
 
 `table-striped` shades every other row, `table-striped-columns` every other column - under the hover's light and a row's tone alike; `table-group-divider` on a `tbody` draws a stronger line above it. `table-bordered` draws the lines between columns and, outside a card, the table's own frame; `table-borderless` takes the lines between rows away.
@@ -5886,18 +6118,21 @@ Elements that share a `data-highlight` key light together: hovering or focusing 
 
 ### Sortable columns
 
-A header that sorts holds a `button class="table-sort"`, and the header's `aria-sort` - `ascending`, `descending` or none - draws the arrow. The page sorts - on the server or in place - and moves `aria-sort` to the column it sorted by.
+A header that sorts holds a `button class="table-sort"`, and the header's `aria-sort` - `ascending`, `descending` or none - draws the arrow. With a `value`, the button sorts the rows in place: by each row's `data-sort-VALUE`, else its cell's `data-sort-value`, else the cell's text - numbers as numbers, words in the page's language with their digits as numbers, an empty value last both ways, equal ones in the order the rows were drawn. A band's rows stay under it, its subtotal last. The first press sorts ascending, or as the button's `data-sort-first="descending"` says - newest, largest first; the next turns it, and on a table with `data-sort-reset` a third press brings back the order the rows were drawn in. The page's texts `sort.ascending`, `sort.descending` and `sort.none` say it aloud. Rows the page puts in are sorted the same, and `REDZ.ui.sort(table)` sorts again. Without a `value` the button only draws: the page sorts and moves `aria-sort`.
 
 ```html
 <table class="table" aria-label="Owners">
-	<thead><tr><th scope="col" aria-sort="ascending"><button class="table-sort" type="button">Name</button></th><th scope="col"><button class="table-sort" type="button">Sites</button></th><th scope="col" class="text-end"><button class="table-sort" type="button">Paid</button></th></tr></thead>
+	<thead><tr><th scope="col" aria-sort="ascending"><button class="table-sort" type="button" value="name">Name</button></th><th scope="col"><button class="table-sort" type="button" value="sites">Sites</button></th><th scope="col" class="text-end"><button class="table-sort" type="button" value="paid" data-sort-first="descending">Paid</button></th></tr></thead>
 	<tbody>
-		<tr><td>Example Resort</td><td class="tabular-nums">3</td><td class="text-end tabular-nums">48,000</td></tr>
-		<tr><td>Example Cruises</td><td class="tabular-nums">1</td><td class="text-end tabular-nums">9,600</td></tr>
-		<tr><td>Example Divers</td><td class="tabular-nums">2</td><td class="text-end tabular-nums">21,300</td></tr>
+		<tr><td>Example Resort</td><td class="tabular-nums">3</td><td class="text-end tabular-nums" data-sort-value="48000">48,000</td></tr>
+		<tr><td>Example Cruises</td><td class="tabular-nums">1</td><td class="text-end tabular-nums" data-sort-value="9600">9,600</td></tr>
+		<tr><td>Example Divers</td><td class="tabular-nums">2</td><td class="text-end tabular-nums" data-sort-value="21300">21,300</td></tr>
+		<tr><td>Example Hostel</td><td class="tabular-nums"></td><td class="text-end tabular-nums" data-sort-value="">-</td></tr>
 	</tbody>
 </table>
 ```
+
+The table fires the cancelable `redz:sort` with `{key, direction}` first. A page that sorts itself - a list in pages from the server - cancels it, and may answer with a promise by `event.detail.respondWith`: the button is busy meanwhile, and a refusal puts the header's order back. The header says the new order either way.
 
 Where the server sorts, the header holds a link instead - `a class="table-sort"` to the same list in the other order - drawn the same way.
 
@@ -6052,6 +6287,36 @@ What a job printed, line by line as it runs, and what changed between two versio
 		<div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="log-line" aria-controls="log-follow-lines">Add a line</button></div>
 ```
 
+### Any box that follows
+
+`data-follow` works on any element that scrolls - a thread of messages, a list of events: it keeps its end in view while its contents come in or grow, a picture that loads included. A button with `command="--follow"` and `aria-controls` naming the box shows while the reader is away from the end and something new came in; pressed, it brings the end back, follows again and hides. In a `follow-dock` - the box's last child - it floats at the middle of the box's bottom edge. With `data-follow="current"` the box keeps its child with `aria-current` in view instead - a running job's step - at the nearest edge, with the room of one step beside it, and its end while it has none; only the box scrolls, never the page, and once the reader scrolls the step out of view it waits until it is back.
+
+```html
+<div class="card card-scroll max-h-240" aria-labelledby="log-thread-title">
+	<div class="card-header"><h2 class="fs-14" id="log-thread-title">Request 24-0187</h2></div>
+	<div class="card-body vstack gap-8" id="log-thread-box" role="region" tabindex="0" aria-labelledby="log-thread-title" data-follow>
+		<p>A Sample: The pier gate does not open at 07:00.</p>
+		<p>B Sample: The guard has the key from 06:45; I asked him to wait.</p>
+		<p>A Sample: Thank you. Is the boat still at 07:30?</p>
+		<p>B Sample: Yes, it leaves at 07:30 from the second pier.</p>
+		<div class="follow-dock"><button class="btn btn-sm btn-primary rounded-full" type="button" command="--follow" aria-controls="log-thread-box" hidden><i class="bi bi-arrow-down" aria-hidden="true"></i>New messages</button></div>
+	</div>
+</div>
+<div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="log-message" aria-controls="log-thread-box">Add a message</button></div>
+```
+
+```html
+<ol class="step-list max-h-160 overflow-auto max-w-320" id="log-steps-list" tabindex="0" aria-label="Updating the site" data-follow="current">
+	<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Download</li>
+	<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Compare every file</li>
+	<li data-state="current" aria-current="step"><span class="spinner-border" aria-hidden="true"></span>Apply the changes</li>
+	<li data-state="ready"><i class="bi bi-circle" aria-hidden="true"></i>Check the schema</li>
+	<li data-state="ready"><i class="bi bi-circle" aria-hidden="true"></i>Clear the caches</li>
+	<li data-state="ready"><i class="bi bi-circle" aria-hidden="true"></i>Switch to the new version</li>
+</ol>
+<div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="log-step" aria-controls="log-steps-list">Next step</button></div>
+```
+
 ## A diff
 
 `div class="diff"` holds one element a line: an `ins` is a line added, marked "+" and tinted green, a `del` a line taken away, "-" and red, anything else a line kept. In a kept line, `del` and `ins` show the words changed inside it, side by side. It scrolls in its own box past 25rem, a `max-h-*` utility sets another height, and it prints in full; one that may scroll takes `tabindex="0"` and a name, so a keyboard reaches it. Lines of code carry `translate="no"`, so a page's translator leaves them as they are, and a log or a diff of code is `dir="ltr"` on a right-to-left page; a diff of Arabic words keeps the page's direction.
@@ -6075,7 +6340,58 @@ What a job printed, line by line as it runs, and what changed between two versio
 
 From [`css/components/log.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/log.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-border`, `--redz-radius-8`, `--redz-text`, `--redz-font-mono`, `--redz-fs-12`, `--redz-lh-20`, `--redz-space-8`, `--redz-space-12`, `--redz-bg-page`, `--redz-success`, `--redz-warning`, `--redz-danger`, `--redz-info`, `--redz-text-muted`, `--redz-bg`, `--redz-success-subtle`, `--redz-danger-subtle`.
+It reads the theme's `--redz-border`, `--redz-radius-8`, `--redz-text`, `--redz-font-mono`, `--redz-fs-12`, `--redz-lh-20`, `--redz-space-8`, `--redz-space-12`, `--redz-bg-page`, `--redz-success-text`, `--redz-warning-text`, `--redz-danger-text`, `--redz-info-text`, `--redz-text-muted`, `--redz-bg`, `--redz-success-subtle`, `--redz-danger-subtle`, `--redz-success`, `--redz-danger`.
+
+# Commands to copy
+
+A command a person runs on their own machine - an install line, a crontab entry, a request with a key - shown on one line, copied whole by one button.
+
+## Examples
+
+`command-line` is one frame: a `pre tabindex="0" translate="no"` holding a `code`, and a `--copy` button in its own column. The command stays on one line, left to right on any page, and scrolls sideways under a fade at the cut edge - never under the button; a click selects it whole. The button without `aria-controls` copies its command. The words above name it: the box is `role="group"` with `aria-labelledby`, as a `pre` may carry no name of its own.
+
+```html
+<p id="command-line-cron-title">Add this line to the server's crontab:</p>
+<div class="command-line" role="group" aria-labelledby="command-line-cron-title">
+	<pre tabindex="0" translate="no"><code>*/5 * * * * php /var/www/example/cron.php --task=maintenance --quiet &gt;&gt; /var/log/example-cron.log 2&gt;&amp;1</code></pre>
+	<button class="btn btn-icon" type="button" command="--copy" aria-label="Copy the command"><i class="bi bi-copy" aria-hidden="true"></i></button>
+</div>
+```
+
+A `var` in the command is a part the person puts in themselves - a key, a host - and shows as an amber chip. A page that fills it later, on a reveal, writes plain text in its place.
+
+```html
+<p id="command-line-key-title">Ask for the bookings of today:</p>
+<div class="command-line" role="group" aria-labelledby="command-line-key-title">
+	<pre tabindex="0" translate="no"><code>curl -H "Authorization: Bearer <var>YOUR_KEY</var>" https://api.example.com/v1/bookings?day=today</code></pre>
+	<button class="btn btn-icon" type="button" command="--copy" aria-label="Copy the command"><i class="bi bi-copy" aria-hidden="true"></i></button>
+</div>
+```
+
+### Steps
+
+`ol class="command-steps"` numbers commands run one after another, each step a line of words and its `command-line`, in circles joined by a line. A `--copy` button whose `aria-controls` names the list copies all its commands, a line each. Commands that are alternatives - one or the other - go in a plain `vstack` instead.
+
+```html
+<div class="hstack gap-8"><h4 class="fs-14 flex-1" id="command-line-install-title">Install the agent</h4><button class="btn btn-sm" type="button" command="--copy" aria-controls="command-line-install-list"><i class="bi bi-copy" aria-hidden="true"></i>Copy all</button></div>
+<ol class="command-steps" id="command-line-install-list" aria-labelledby="command-line-install-title">
+	<li><p id="command-line-install-1">Download it:</p><div class="command-line" role="group" aria-labelledby="command-line-install-1"><pre tabindex="0" translate="no"><code>curl -fsSLO https://get.example.com/agent/agent-2.4.tar.gz</code></pre><button class="btn btn-icon" type="button" command="--copy" aria-label="Copy the command"><i class="bi bi-copy" aria-hidden="true"></i></button></div></li>
+	<li><p id="command-line-install-2">Unpack it:</p><div class="command-line" role="group" aria-labelledby="command-line-install-2"><pre tabindex="0" translate="no"><code>tar -xzf agent-2.4.tar.gz -C /opt</code></pre><button class="btn btn-icon" type="button" command="--copy" aria-label="Copy the command"><i class="bi bi-copy" aria-hidden="true"></i></button></div></li>
+	<li><p id="command-line-install-3">Start it:</p><div class="command-line" role="group" aria-labelledby="command-line-install-3"><pre tabindex="0" translate="no"><code>/opt/agent/start --key <var>YOUR_KEY</var></code></pre><button class="btn btn-icon" type="button" command="--copy" aria-label="Copy the command"><i class="bi bi-copy" aria-hidden="true"></i></button></div></li>
+</ol>
+```
+
+## Accessibility
+
+- The command is a tab stop, so a keyboard scrolls it; its words above it name the group.
+- The copy button says what it copies in its name and says politely that it did, in the page's texts `copy.done` and `copy.failed`.
+- `translate="no"` keeps a page's translator from turning the command into words.
+
+## Tokens
+
+From [`css/components/command-line.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/command-line.css). It declares `--redz-btn-bg`, `--redz-btn-fg`, `--redz-btn-hover`, `--redz-btn-hover-fg`, `--redz-command-fade-start`, `--redz-command-fade-end` on its root, never on rows or items.
+
+It reads the theme's `--redz-border`, `--redz-radius-8`, `--redz-bg-page`, `--redz-focus`, `--redz-control-height`, `--redz-lh-20`, `--redz-space-12`, `--redz-text`, `--redz-font-mono`, `--redz-fs-12`, `--redz-radius-4`, `--redz-warning-subtle`, `--redz-warning-text`, `--redz-text-muted`, `--redz-bg-hover`, `--redz-space-16`, `--redz-space-4`, `--redz-space-8`, `--redz-border-strong`, `--redz-bg`.
 
 # Summaries and totals
 
@@ -6200,7 +6516,7 @@ A count in a navigation link, a status in a heading.
 
 From [`css/components/badge.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/badge.css). It declares `--redz-badge-bg`, `--redz-badge-fg` on its root, never on rows or items.
 
-It reads the theme's `--redz-bg-hover`, `--redz-text-muted`, `--redz-fs-12`, `--redz-fs-11`, `--redz-fs-14`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-text`, `--redz-bg`, `--redz-primary-subtle`, `--redz-secondary-subtle`, `--redz-success-subtle`, `--redz-danger-subtle`, `--redz-warning-subtle`, `--redz-info-subtle`.
+It reads the theme's `--redz-bg-hover`, `--redz-text-muted`, `--redz-fs-12`, `--redz-fs-11`, `--redz-fs-14`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-text`, `--redz-bg`, `--redz-primary-subtle`, `--redz-primary-text`, `--redz-secondary-subtle`, `--redz-secondary-text`, `--redz-success-subtle`, `--redz-success-text`, `--redz-danger-subtle`, `--redz-danger-text`, `--redz-warning-subtle`, `--redz-warning-text`, `--redz-info-subtle`, `--redz-info-text`.
 
 ## From Bootstrap 5.3
 
@@ -6289,7 +6605,49 @@ An avatar beside the person's name hides from assistive technology; an avatar al
 
 From [`css/components/avatar.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/avatar.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-primary-subtle`, `--redz-primary`, `--redz-fs-12`.
+It reads the theme's `--redz-primary-subtle`, `--redz-primary-text`, `--redz-fs-12`.
+
+# Logos
+
+A white mat for someone else's logo - a bank, a payment service, a partner - that keeps it readable in both themes and gives logos of any shape the same weight on a line.
+
+## Examples
+
+`logo` around an `img`: a white ground with a thin border and rounded corners in both themes and in forced colors, the picture contained in it. One height for a line - 32 px, `logo-sm` 28 px, `logo-lg` 40 px, an `h-*` utility for a banner, `h-88` - and a width by the logo's area: `data-ratio`, its width by its height as the server measured it, widens the mat by the square root of that ratio, from square to four times as wide, so a long wordmark and a round mark look the same size.
+
+```html
+<span class="logo logo-sm" data-ratio="4"><img src="img/logo-wide.svg" alt="Lagoonpay"></span>
+<span class="logo" data-ratio="4"><img src="img/logo-wide.svg" alt="Lagoonpay"></span>
+<span class="logo logo-lg" data-ratio="4"><img src="img/logo-wide.svg" alt="Lagoonpay"></span>
+<span class="logo logo-lg"><img src="img/logo-mark.svg" alt="North Bay Tours"></span>
+```
+
+A logo drawn on a solid color fills the mat in that color: `data-color` is the color of its edge, and `logo-fade` on the picture softens its sides into it. A photo gets a blurred copy of itself behind it, an `img class="logo-ground"` with an empty `alt`.
+
+```html
+<span class="logo logo-lg" data-ratio="3" data-color="#1f3a93"><img class="logo-fade" src="img/logo-solid.svg" alt="Baybank"></span>
+<span class="logo logo-lg" data-ratio="1.5"><img class="logo-ground" src="img/lagoon.svg" alt=""><img src="img/lagoon.svg" alt="The lagoon at noon"></span>
+```
+
+On a [choice tile](choice.md), a `choice-media` takes the same `data-ratio`, `data-color` and `logo-ground`: the banner of a payment method.
+
+```html
+<div class="grid cols-2 gap-12 max-w-480" role="radiogroup" aria-label="Pay with">
+	<label class="choice"><input type="radio" name="logo-choice-pay" checked><span class="choice-media" data-ratio="4"><img src="img/logo-wide.svg" alt=""></span><span class="fw-600">Lagoonpay</span><span class="fs-12 text-muted">Card or wallet</span></label>
+	<label class="choice"><input type="radio" name="logo-choice-pay"><span class="choice-media" data-ratio="3" data-color="#1f3a93"><img src="img/logo-solid.svg" alt=""></span><span class="fw-600">Baybank</span><span class="fs-12 text-muted">Bank transfer</span></label>
+</div>
+```
+
+## Accessibility
+
+- A logo that names something has an `alt` with that name; beside the same name in words, an empty one.
+- The mat stays white in the dark theme and in forced colors, so a logo made for white keeps its colors.
+
+## Tokens
+
+From [`css/components/logo.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/logo.css). It declares `--redz-logo-side`, `--redz-logo-ground` on its root, never on rows or items.
+
+It reads the theme's `--redz-ratio`, `--redz-border`, `--redz-radius-6`, `--redz-color`, `--redz-shadow-2`.
 
 # Icon tiles
 
@@ -6343,7 +6701,7 @@ The plain tile is in the accent; the tones and `icon-tile-sm` follow Bootstrap's
 
 From [`css/components/icon-tile.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/icon-tile.css). It declares `--redz-tile-bg`, `--redz-tile-fg`, `--redz-tile-chart` on its root, never on rows or items.
 
-It reads the theme's `--redz-tile-base-bg`, `--redz-primary-subtle`, `--redz-tile-base-fg`, `--redz-primary`, `--redz-radius-12`, `--redz-radius-8`, `--redz-radius-16`, `--redz-bg`, `--redz-text`, `--redz-chart-1`, `--redz-chart-2`, `--redz-chart-3`, `--redz-chart-4`, `--redz-chart-5`, `--redz-chart-6`, `--redz-chart-7`, `--redz-chart-8`, `--redz-secondary-subtle`, `--redz-secondary`, `--redz-success-subtle`, `--redz-success`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-info-subtle`, `--redz-info`, `--redz-color`.
+It reads the theme's `--redz-tile-base-bg`, `--redz-primary-subtle`, `--redz-tile-base-fg`, `--redz-primary`, `--redz-radius-12`, `--redz-radius-8`, `--redz-radius-16`, `--redz-bg`, `--redz-text`, `--redz-chart-1`, `--redz-chart-2`, `--redz-chart-3`, `--redz-chart-4`, `--redz-chart-5`, `--redz-chart-6`, `--redz-chart-7`, `--redz-chart-8`, `--redz-secondary-subtle`, `--redz-secondary-text`, `--redz-success-subtle`, `--redz-success-text`, `--redz-danger-subtle`, `--redz-danger-text`, `--redz-warning-subtle`, `--redz-warning-text`, `--redz-info-subtle`, `--redz-info-text`, `--redz-color`.
 
 # Stat tiles
 
@@ -6440,6 +6798,28 @@ A white tile for a QR code: a scanner reads dark modules on white, so the tile s
 </figure>
 ```
 
+### Drawn by the package
+
+The package `redz-ui-qr` - the module `js/redz-ui-qr.min.js`, linked beside the main script on a screen that shows codes - draws a code into a tile as one SVG path in the tile's black: `data-qr` holds the text, drawn at load, when the tile is put in later and when the text changes. The text goes in as UTF-8, in the smallest of the 40 versions that holds it at the error correction level of `data-qr-level` - `L`, `M` by default, `Q` or `H` - then at the highest level that same version still holds, for free. `data-qr-quiet` is the quiet zone in modules, 4 by default, as scanners need. The path traces the outline of each dark region, so neither paper nor a zoom shows a seam; the same text always draws the same code. The library makes the tile `role="img"`; its name is the page's, an `aria-label` that says what the code holds. A module never falls under 3 px: past the version that would, the tile grows - `--redz-qr-module-min` sets that floor, `0` takes it away, and a size of the page's own on the `svg`, a poster's, wins over both.
+
+```html
+<figure class="vstack gap-8 align-items-center">
+	<div class="qr" data-qr="https://redz-tech.github.io/REDZ.UI/" aria-label="QR code: the address of this site"></div>
+	<figcaption class="fs-12 text-muted">Drawn from data-qr</figcaption>
+</figure>
+<figure class="vstack gap-8 align-items-center">
+	<div class="qr" id="qr-package-call" aria-label="QR code: a key for the app"></div>
+	<figcaption class="fs-12 text-muted">Drawn by REDZ.ui.qr</figcaption>
+</figure>
+```
+
+A text such as a two-factor secret should sit in no attribute: `REDZ.ui.qr(tile, text, {level, quiet})` draws it from a variable and answers `true`; the text goes into the code and nowhere else - no attribute, title, console line or storage, and no error quotes it. `REDZ.ui.qr(tile, null)` empties the tile. A text longer than version 40 holds at its level - 2,331 bytes at `M` - is refused: the tile empties, takes `data-qr-error` and hides, and the call answers `false`; the words beside the tile stand alone. The SVG carries no `style` attribute and is built without `innerHTML`, so a strict Content Security Policy with Trusted Types passes.
+
+```js
+const {uri} = await fetch('/profile/2fa', {method: 'POST'}).then((answer) => answer.json());
+REDZ.ui.qr(document.getElementById('totp-code'), uri);
+```
+
 ### Downloaded as a picture
 
 A button with `command="--download"` and `aria-controls` naming the tile downloads its code as a PNG on white, to print on a room's door or a table's card: `data-file` names the file, `code.png` by default, and `data-size` is its side in pixels, 512. An inline `svg` is drawn through a `blob:` image, so the page's Content Security Policy needs `img-src blob:`; an `img` from another site needs that site's CORS.
@@ -6459,7 +6839,7 @@ A button with `command="--download"` and `aria-controls` naming the tile downloa
 
 From [`css/components/qr.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/qr.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-8`, `--redz-border`, `--redz-radius-8`, `--redz-qr-size`.
+It reads the theme's `--redz-space-8`, `--redz-border`, `--redz-radius-8`, `--redz-qr-size`, `--redz-qr-modules`, `--redz-qr-module-min`.
 
 # Ticking times
 
@@ -6780,6 +7160,50 @@ await REDZ.ui.confirm({
   ],
   ok: 'Delete', tone: 'danger', phrase: 'Riverside tower',
 });
+```
+
+### A question that waits for the server
+
+With `run`, the confirming button carries the answer out before the dialog closes: `run({choice, phrase, signal})` answers a promise. Meanwhile the button is busy, the other buttons are unavailable, the body is inert, and `Esc` and a click outside are held. Resolved, the dialog closes and answers; refused with words - an `Error`'s message or a string -, a danger alert with them stands right above the footer, said at once, and the buttons wake with the focus still on the confirming one, for another try. A dialog closed meanwhile by code aborts the `signal`, and a refusal that comes after it is a danger toast. To leave the page on success, go there inside `run` and leave its promise pending: the button stays busy. `choice: {label, items: [{value, text, hint}], value}` puts radios above the phrase, and the answer is then the chosen value - a string - or `false`.
+
+```html
+<button class="btn" type="button" data-docs-run="confirm-run"><i class="bi bi-pause-circle" aria-hidden="true"></i>Pause the agent</button>
+<span class="text-muted fs-12" role="status" data-docs-answer></span>
+```
+
+```js
+const how = await REDZ.ui.confirm({
+  title: 'Pause the agent on Boat A?',
+  choice: {label: 'For how long', items: [{value: 'hour', text: 'One hour'}, {value: 'day', text: 'Until tomorrow'}], value: 'hour'},
+  ok: 'Pause',
+  run: ({choice, signal}) => fetch('/agents/a/pause', {method: 'POST', body: choice, signal})
+    .then((answer) => answer.ok || answer.text().then((words) => Promise.reject(new Error(words)))),
+}); // 'hour', 'day', or false
+```
+
+A third answer, `alt: {text, tone, value}`, stands at the footer's start - Discard, outlined in its tone, beside Stay and Save at the end - and answers its `value`, a string: compare it, never take it as true. The focus starts on Cancel; `focus: 'ok'` or `'alt'` starts it there, where the confirming answer is the safe one - Save -, never for an answer that destroys. In a dialog narrower than 368 px a footer of three buttons stacks them full width, the confirming one on top.
+
+```html
+<button class="btn" type="button" data-docs-run="confirm-alt"><i class="bi bi-box-arrow-right" aria-hidden="true"></i>Leave the price list</button>
+<span class="text-muted fs-12" role="status" data-docs-answer></span>
+```
+
+A dialog of the page's own waits the same way: a `<form method="dialog">` inside it fires the cancelable `redz:save` on its submit, with `{form, data, submitter, signal}` - `data` the form's `FormData` with the pressed button's value. The page cancels it and answers with a promise by `event.detail.respondWith`; left alone, the form closes the dialog as the browser does. Marks on the fields stay the page's.
+
+```html
+<button class="btn" type="button" commandfor="dialog-wait-form-panel" command="show-modal"><i class="bi bi-tools" aria-hidden="true"></i>Take a boat out of service</button>
+<dialog class="dialog dialog-sm" id="dialog-wait-form-panel" aria-labelledby="dialog-wait-form-title">
+	<form method="dialog" data-docs-dialog-save>
+		<div class="dialog-header"><h2 class="dialog-title" id="dialog-wait-form-title">Boat B out of service</h2></div>
+		<div class="dialog-body vstack gap-12">
+			<div class="vstack gap-4"><label class="form-label" for="dialog-wait-form-reason">Why</label><input class="form-control" id="dialog-wait-form-reason" name="reason" autocomplete="off"></div>
+		</div>
+		<div class="dialog-footer">
+			<button class="btn" type="button" commandfor="dialog-wait-form-panel" command="close">Cancel</button>
+			<button class="btn btn-primary" value="save">Take out</button>
+		</div>
+	</form>
+</dialog>
 ```
 
 ### A question for one value
@@ -7155,6 +7579,25 @@ An alert whose words come after an action - a refused sign-in, a wrong code - is
 <div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="alert-fill">Fill the alert</button></div>
 ```
 
+`REDZ.ui.alert(box, {tone, text})` does it from code without a live role on the box: it gives the box the class of the tone, its icon and the words - text, never HTML - and says them through the page's hidden status, politely, at once for `danger`; the same words again are said again. `REDZ.ui.alert(box, null)` empties the box. Given a promise, it shows the page's text `busy` with a spinner once the promise waits past 400 ms, then the `{tone, text}` the promise answers - nothing empties the box - or the rejection's message as `danger`, and answers the promise. A later call wins.
+
+```html
+<div class="alert" id="alert-code-box"></div>
+<div class="hstack flex-wrap gap-8">
+	<button class="btn btn-secondary" type="button" data-docs-run="alert-code-info">Code sent</button>
+	<button class="btn btn-secondary" type="button" data-docs-run="alert-code-wait">Make the dump</button>
+	<button class="btn btn-secondary" type="button" data-docs-run="alert-code-clear">Empty it</button>
+</div>
+```
+
+```js
+const box = document.getElementById('sign-in-words');
+REDZ.ui.alert(box, {tone: 'info', text: 'A code went to your phone. A new one in 60 s.'});
+REDZ.ui.alert(box, fetch('/dump', {method: 'POST'}).then((answer) => answer.json())
+  .then(({file, size}) => ({tone: 'success', text: 'Done: ' + file + ' (' + size + ')'})));
+REDZ.ui.alert(box, null);
+```
+
 ### Sizes
 
 `alert-sm` for a note inside a card or a form, `alert-lg` for the one message a page is about.
@@ -7182,7 +7625,7 @@ The words may be a `vstack`: it stays beside the icon however long its text.
 
 From [`css/components/alert.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/alert.css). It declares `--redz-alert-bg`, `--redz-alert-icon` on its root, never on rows or items.
 
-It reads the theme's `--redz-secondary-subtle`, `--redz-secondary`, `--redz-space-8`, `--redz-space-12`, `--redz-space-16`, `--redz-radius-12`, `--redz-text`, `--redz-radius-8`, `--redz-fs-14`, `--redz-space-20`, `--redz-fs-16`, `--redz-primary-subtle`, `--redz-primary`, `--redz-success-subtle`, `--redz-success`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-info-subtle`, `--redz-info`.
+It reads the theme's `--redz-secondary-subtle`, `--redz-secondary-text`, `--redz-space-8`, `--redz-space-12`, `--redz-space-16`, `--redz-radius-12`, `--redz-text`, `--redz-radius-8`, `--redz-fs-14`, `--redz-space-20`, `--redz-fs-16`, `--redz-primary-subtle`, `--redz-primary-text`, `--redz-success-subtle`, `--redz-success-text`, `--redz-danger-subtle`, `--redz-danger-text`, `--redz-warning-subtle`, `--redz-warning-text`, `--redz-info-subtle`, `--redz-info-text`.
 
 ## From Bootstrap 5.3
 
@@ -7333,6 +7776,26 @@ The browser's own `<progress>` for work under way and `<meter>` for a measure wi
 <meter class="meter" value="9.6" min="0" max="10" low="7" high="9" optimum="0" aria-label="Backups, 9.6 of 10 GB">9.6 of 10 GB</meter>
 ```
 
+### A meter of several parts
+
+`meter meter-stacked` on a `div role="meter"` shows the parts of one amount - the free, the paid, what goes over the limit - each a child with its `data-v`, its share of the whole scale, and `data-tone`; 2 px apart, the ends rounded. A part with `data-over`, past the limit, is hatched red, so it reads without its colour too. The meter's numbers and its words are the page's: `aria-valuenow`, `aria-valuemax`, an `aria-valuetext` that says the parts, and a legend of [dots](dot.md) beside it.
+
+```html
+<div class="vstack gap-8 max-w-480">
+	<div class="hstack gap-8 fs-14"><span class="flex-1" id="progress-stacked-title">Seats this month</span><span class="text-muted tabular-nums">130 of 120</span></div>
+	<div class="meter meter-stacked" role="meter" aria-labelledby="progress-stacked-title" aria-valuenow="130" aria-valuemin="0" aria-valuemax="130" aria-valuetext="130 seats: 50 free, 70 paid, 10 over the limit">
+		<span data-tone="success" data-v="0.385"></span>
+		<span data-tone="primary" data-v="0.538"></span>
+		<span data-over data-v="0.077"></span>
+	</div>
+	<ul class="hstack flex-wrap gap-12 fs-12 text-muted" aria-hidden="true">
+		<li class="hstack gap-4"><span class="dot dot-success"></span>Free 50</li>
+		<li class="hstack gap-4"><span class="dot dot-primary"></span>Paid 70</li>
+		<li class="hstack gap-4"><span class="dot dot-danger"></span>Over 10</li>
+	</ul>
+</div>
+```
+
 ### Hairlines
 
 `progress-xs`, 3 px, and `meter-xs`, 2 px, sit under a row's words without fighting them: how far a job is between its runs, amber when it is late, and how often it succeeded, colored by the meter's own parts.
@@ -7373,9 +7836,9 @@ A product sets how much it shows in its tokens: `--redz-progress-top-size`, `--r
 
 ## Tokens
 
-From [`css/components/progress.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/progress.css). It declares `--redz-track` on its root, never on rows or items.
+From [`css/components/progress.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/progress.css). It declares `--redz-part`, `--redz-track` on its root, never on rows or items.
 
-It reads the theme's `--redz-bg-hover`, `--redz-primary`, `--redz-secondary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-progress-top-track`, `--redz-progress-top-size`, `--redz-progress-top-glow`, `--redz-motion`, `--redz-ease`.
+It reads the theme's `--redz-bg-hover`, `--redz-primary`, `--redz-secondary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-danger-contrast`, `--redz-progress-top-track`, `--redz-progress-top-size`, `--redz-progress-top-glow`, `--redz-motion`, `--redz-ease`.
 
 ## From Bootstrap 5.3
 
@@ -7409,6 +7872,18 @@ A region - a card, its body, a dialog's or a drawer's body, any `region` - keeps
 await REDZ.ui.busy(card, fetch(url).then((answer) => answer.text()).then((html) => { body.innerHTML = html; }));
 ```
 
+`data-busy` on the region gives the words that show under its spinner and are said instead of the page's text `busy`: "Reading the file list…".
+
+```html
+<section class="card" id="busy-region-words-card" aria-labelledby="busy-region-words-title" data-busy="Preparing the download…">
+	<div class="card-header"><h2 id="busy-region-words-title">Backup files</h2><button class="btn btn-sm ms-auto" type="button" data-docs-run="busy-region" aria-controls="busy-region-words-card"><i class="bi bi-download" aria-hidden="true"></i>Prepare for 2 seconds</button></div>
+	<div class="card-body vstack gap-8">
+		<p>base-2026-11-08.sql · 2.4 MB</p>
+		<p>files-2026-11-08.tar · 380 MB</p>
+	</div>
+</section>
+```
+
 ### A button
 
 The button keeps its focus, ignores clicks until the promise settles and shows a spinner: in place of its leading icon, or over its words when it has none - then it keeps its size too. `data-busy` on the button gives the words it shows while it waits, said politely once the wait passes 400 ms; set it again before each call when the wait has steps.
@@ -7416,6 +7891,25 @@ The button keeps its focus, ignores clicks until the promise settles and shows a
 ```html
 <button class="btn btn-primary" type="button" data-docs-run="busy-button">Save for 2 seconds</button>
 <button class="btn btn-primary" type="button" data-busy="Signing in…" data-docs-run="busy-button"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Sign in for 2 seconds</button>
+```
+
+An item of a menu - Delete in a row's menu - is busy with the button that opened the menu: the menu closes as the item is pressed, and the opener shows the spinner in its place and swallows its clicks until the promise settles. In a menu inside a menu, the outermost opener does.
+
+```html
+<button class="btn btn-icon" type="button" commandfor="busy-menu-list" command="toggle-popover" aria-haspopup="menu" aria-label="Actions: Boat A"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
+<div class="menu" id="busy-menu-list" popover role="menu" aria-label="Actions: Boat A">
+	<button class="menu-item" type="button" role="menuitem" data-docs-run="busy-menu-item" commandfor="busy-menu-list" command="hide-popover"><i class="bi bi-arrow-repeat" aria-hidden="true"></i>Check now</button>
+</div>
+```
+
+Any other element - a cell whose check runs, a line - shows a small ring after 400 ms and, to a screen reader, the words of its `data-busy` or the page's text `busy`, saying nothing aloud: many such checks at once would be noise.
+
+```html
+<table class="table" aria-label="Agents">
+	<thead><tr><th scope="col">Agent</th><th scope="col">State</th></tr></thead>
+	<tbody><tr><td>Boat A</td><td id="busy-cell-state" data-busy="Checking">Running</td></tr></tbody>
+</table>
+<div><button class="btn btn-sm" type="button" data-docs-run="busy-cell"><i class="bi bi-arrow-repeat" aria-hidden="true"></i>Check for 2 seconds</button></div>
 ```
 
 A button that starts a [cooldown](btn.md#btn-cooldown) while it waits - "Send the code again" with `data-cooldown` set as the code goes - stays disabled until the count ends: the cooldown holds `aria-disabled` while it counts, `busy()` leaves it alone, and the state from before both comes back when the last of them ends.
@@ -7434,7 +7928,7 @@ What `busy()` sets, written by hand - the overlay appears 400 ms after the page 
 
 From [`css/components/busy.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/busy.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-bg`, `--redz-primary`.
+It reads the theme's `--redz-bg`, `--redz-primary`, `--redz-space-16`, `--redz-text`, `--redz-fs-14`, `--redz-space-4`, `--redz-text-muted`.
 
 # Save bar
 
@@ -7545,7 +8039,7 @@ The bar over a list that shows when rows are checked: how many, and what can be 
 
 ## Examples
 
-Plain buttons in the bar take its tint; the one suggested action stays `btn-subtle-primary`, and clearing the selection is a quiet icon button at the end.
+Plain buttons in the bar take its tint; the one suggested action stays `btn-subtle-primary`, and clearing the selection is a quiet icon button at the end. Inside a `data-select` the library hides the bar at zero and writes its count into a `data-select-count` - see [checked rows](table.md#table-selection).
 
 ```html
 <div class="selection-bar" role="region" aria-label="Selected excursions">
@@ -8221,6 +8715,26 @@ The tones are `app-banner-info`, the default, `app-banner-success`, `app-banner-
 <div class="app-banner app-banner-success"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><span>The system is back. Every change is saved.</span></div>
 <div class="app-banner app-banner-warning"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i><span>The system is paused for maintenance. Your changes are kept; try again in a few minutes.</span></div>
 <div class="app-banner app-banner-danger"><i class="bi bi-x-octagon-fill" aria-hidden="true"></i><span>The connection is lost. Changes made now are not saved.</span></div>
+```
+
+## A bar at the bottom
+
+`action-bar` holds what a long screen is for - a total and Pay, a count and Save - at the bottom of the window while the page scrolls under it: sticky, across its region on the page's own tinted floor, a line above it. As the last child of `app-main` it reaches the region's edges. Its padding keeps clear of a phone's home bar and rounded corners - the page asks for that room with `viewport-fit=cover` in its viewport meta - and on a touch screen it steps aside while a field has the focus, as the keyboard takes its place. `action-bar-text` is its words, which take the room left. It stays off paper.
+
+```html
+<div class="card card-scroll max-h-240" aria-label="The bill">
+	<div class="card-body vstack gap-8">
+		<p>North Bay by speedboat · 2 adults · 5,000 THB</p>
+		<p>Lunch on the beach · 2 · 600 THB</p>
+		<p>Hotel pickup · 1 · 250 THB</p>
+		<p>Park fee · 2 · 800 THB</p>
+		<p>Snorkelling gear · 2 · 0 THB</p>
+	</div>
+	<div class="action-bar">
+		<span class="action-bar-text"><strong class="tabular-nums">6,650 THB</strong> <span class="text-muted">for 4 items</span></span>
+		<button class="btn btn-primary" type="button">Pay</button>
+	</div>
+</div>
 ```
 
 ## States

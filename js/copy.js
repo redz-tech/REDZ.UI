@@ -1,5 +1,6 @@
 // REDZ.UI, copy: a button with command="--copy" copies its data-copy, or the value of the field aria-controls names, or
-// that element's text; it says politely that it did - the page's texts copy.done and copy.failed -, shows a check in
+// that element's text - a command-line's command, or every command of a command-steps list, a line each; in a
+// command-line, a button with neither copies its command; it says politely that it did - the page's texts copy.done and copy.failed -, shows a check in
 // place of its icon for a moment, and tells the page in redz:copy (detail.text). Where the Clipboard API is missing - a
 // page over plain http - a hidden field and the browser's copy command stand in. Like --toggle, it has no commandfor.
 import {text} from './text.js';
@@ -7,13 +8,22 @@ import {announce} from './say.js';
 
 const shown = new WeakMap();
 
+/** The command of a command-line. */
+const commandOf = (box) => box.querySelector('pre')?.textContent.trim() ?? '';
+
 /** The words the button copies, or null. */
 const wordsOf = (button) => {
 	if (button.hasAttribute('data-copy')) {
 		return button.dataset.copy;
 	}
-	const target = document.getElementById((button.getAttribute('aria-controls') || '').trim());
-	return target === null ? null : (target.matches('input, textarea, select') ? target.value : target.textContent.trim());
+	const target = document.getElementById((button.getAttribute('aria-controls') || '').trim()) ?? button.closest('.command-line');
+	if (target === null) {
+		return null;
+	}
+	if (target.matches('.command-steps')) {
+		return [...target.querySelectorAll('.command-line')].map(commandOf).join('\n');
+	}
+	return target.matches('.command-line') ? commandOf(target) : (target.matches('input, textarea, select') ? target.value : target.textContent.trim());
 };
 
 /** Copies the words by a hidden field and the browser's copy command, the focus put back. */

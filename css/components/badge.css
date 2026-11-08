@@ -67,31 +67,31 @@
 
 	.badge-subtle-primary {
 		--redz-badge-bg: var(--redz-primary-subtle);
-		--redz-badge-fg: var(--redz-primary);
+		--redz-badge-fg: var(--redz-primary-text);
 	}
 
 	.badge-subtle-secondary {
 		--redz-badge-bg: var(--redz-secondary-subtle);
-		--redz-badge-fg: var(--redz-secondary);
+		--redz-badge-fg: var(--redz-secondary-text);
 	}
 
 	.badge-subtle-success {
 		--redz-badge-bg: var(--redz-success-subtle);
-		--redz-badge-fg: var(--redz-success);
+		--redz-badge-fg: var(--redz-success-text);
 	}
 
 	.badge-subtle-danger {
 		--redz-badge-bg: var(--redz-danger-subtle);
-		--redz-badge-fg: var(--redz-danger);
+		--redz-badge-fg: var(--redz-danger-text);
 	}
 
 	.badge-subtle-warning {
 		--redz-badge-bg: var(--redz-warning-subtle);
-		--redz-badge-fg: var(--redz-warning);
+		--redz-badge-fg: var(--redz-warning-text);
 	}
 
 	.badge-subtle-info {
 		--redz-badge-bg: var(--redz-info-subtle);
-		--redz-badge-fg: var(--redz-info);
+		--redz-badge-fg: var(--redz-info-text);
 	}
 }

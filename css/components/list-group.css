@@ -15,7 +15,7 @@
 
 	.list-group-item {
 		display: block;
-		padding: var(--redz-space-12) var(--redz-space-16);
+		padding: calc(var(--redz-row-pad) + 0.125rem) var(--redz-space-16);
 		border: 0 solid var(--redz-border);
 		border-block-start-width: var(--redz-list-group-row);
 		border-inline-start-width: var(--redz-list-group-column);
@@ -29,6 +29,27 @@
 
 	.list-group-item:has(.stretched-link) {
 		position: relative;
+		cursor: pointer;
+	}
+
+	.list-group-item:has(.stretched-link):is(:hover, :focus-within, :has(:popover-open, [commandfor][aria-expanded="true"])) {
+		background: var(--redz-row-hover, color-mix(in srgb, var(--redz-primary) 7%, var(--redz-bg)));
+	}
+
+	.list-group-item .stretched-link::after {
+		content: none !important;
+	}
+
+	.list-group-actions {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--redz-space-4);
+	}
+
+	@media (hover: hover) {
+		.list-group-item:not(:hover, :focus-within, :has(:popover-open, [commandfor][aria-expanded="true"])) .list-group-actions > .btn-icon {
+			opacity: 0.6;
+		}
 	}
 
 	.list-group-item:has(.stretched-link) :is(a, button, input, select, label):not(.stretched-link) {

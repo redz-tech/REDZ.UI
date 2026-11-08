@@ -86,6 +86,50 @@ await REDZ.ui.confirm({
 });
 ```
 
+### A question that waits for the server
+
+With `run`, the confirming button carries the answer out before the dialog closes: `run({choice, phrase, signal})` answers a promise. Meanwhile the button is busy, the other buttons are unavailable, the body is inert, and `Esc` and a click outside are held. Resolved, the dialog closes and answers; refused with words - an `Error`'s message or a string -, a danger alert with them stands right above the footer, said at once, and the buttons wake with the focus still on the confirming one, for another try. A dialog closed meanwhile by code aborts the `signal`, and a refusal that comes after it is a danger toast. To leave the page on success, go there inside `run` and leave its promise pending: the button stays busy. `choice: {label, items: [{value, text, hint}], value}` puts radios above the phrase, and the answer is then the chosen value - a string - or `false`.
+
+```html
+<button class="btn" type="button" data-docs-run="confirm-run"><i class="bi bi-pause-circle" aria-hidden="true"></i>Pause the agent</button>
+<span class="text-muted fs-12" role="status" data-docs-answer></span>
+```
+
+```js
+const how = await REDZ.ui.confirm({
+  title: 'Pause the agent on Boat A?',
+  choice: {label: 'For how long', items: [{value: 'hour', text: 'One hour'}, {value: 'day', text: 'Until tomorrow'}], value: 'hour'},
+  ok: 'Pause',
+  run: ({choice, signal}) => fetch('/agents/a/pause', {method: 'POST', body: choice, signal})
+    .then((answer) => answer.ok || answer.text().then((words) => Promise.reject(new Error(words)))),
+}); // 'hour', 'day', or false
+```
+
+A third answer, `alt: {text, tone, value}`, stands at the footer's start - Discard, outlined in its tone, beside Stay and Save at the end - and answers its `value`, a string: compare it, never take it as true. The focus starts on Cancel; `focus: 'ok'` or `'alt'` starts it there, where the confirming answer is the safe one - Save -, never for an answer that destroys. In a dialog narrower than 368 px a footer of three buttons stacks them full width, the confirming one on top.
+
+```html
+<button class="btn" type="button" data-docs-run="confirm-alt"><i class="bi bi-box-arrow-right" aria-hidden="true"></i>Leave the price list</button>
+<span class="text-muted fs-12" role="status" data-docs-answer></span>
+```
+
+A dialog of the page's own waits the same way: a `<form method="dialog">` inside it fires the cancelable `redz:save` on its submit, with `{form, data, submitter, signal}` - `data` the form's `FormData` with the pressed button's value. The page cancels it and answers with a promise by `event.detail.respondWith`; left alone, the form closes the dialog as the browser does. Marks on the fields stay the page's.
+
+```html
+<button class="btn" type="button" commandfor="dialog-wait-form-panel" command="show-modal"><i class="bi bi-tools" aria-hidden="true"></i>Take a boat out of service</button>
+<dialog class="dialog dialog-sm" id="dialog-wait-form-panel" aria-labelledby="dialog-wait-form-title">
+	<form method="dialog" data-docs-dialog-save>
+		<div class="dialog-header"><h2 class="dialog-title" id="dialog-wait-form-title">Boat B out of service</h2></div>
+		<div class="dialog-body vstack gap-12">
+			<div class="vstack gap-4"><label class="form-label" for="dialog-wait-form-reason">Why</label><input class="form-control" id="dialog-wait-form-reason" name="reason" autocomplete="off"></div>
+		</div>
+		<div class="dialog-footer">
+			<button class="btn" type="button" commandfor="dialog-wait-form-panel" command="close">Cancel</button>
+			<button class="btn btn-primary" value="save">Take out</button>
+		</div>
+	</form>
+</dialog>
+```
+
 ### A question for one value
 
 `await REDZ.ui.prompt({title, text, label, value, placeholder, type, inputmode, pattern, required, ok, cancel, tone})` asks for one value in a modal dialog and answers it, or `null` for Cancel and `Esc`. The field takes the focus with its text selected; `Enter` answers once the field is valid - `required`, `pattern` and `type` are held by the browser's own checks. The field is labelled by `label`, or the title; the buttons' words come from the caller or the page's texts.

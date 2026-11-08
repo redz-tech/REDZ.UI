@@ -310,16 +310,20 @@
 		background: color-mix(in oklch, var(--redz-row-tint) 55%, var(--redz-bg));
 	}
 
-	.table tr[aria-selected="true"] > td {
+	.table tr:is([aria-selected="true"], :has(> .table-check :checked)) > td {
 		background: color-mix(in oklch, var(--redz-primary) 10%, var(--redz-bg));
 	}
 
+	.table[data-select="rows"] > tbody > tr:has(> .table-check) {
+		cursor: pointer;
+	}
+
 	@media (hover: hover) {
-		.table:not(.table-static) > tbody > tr:not([aria-selected="true"]):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th) {
+		.table:not(.table-static) > tbody > tr:not([aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th) {
 			background: var(--redz-row-hover, color-mix(in srgb, var(--redz-primary) 7%, var(--redz-bg)));
 		}
 
-		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not([aria-selected="true"]):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th) {
+		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not([aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th) {
 			background: color-mix(in oklch, var(--redz-row-tint) 90%, var(--redz-bg));
 		}
 	}
@@ -392,7 +396,7 @@
 			background: CanvasText;
 		}
 
-		.table tr[aria-selected="true"] > td {
+		.table tr:is([aria-selected="true"], :has(> .table-check :checked)) > td {
 			forced-color-adjust: none;
 			background: Highlight;
 			color: HighlightText;

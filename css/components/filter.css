@@ -2,4 +2,30 @@
 	[data-filtered] {
 		display: none !important;
 	}
+
+	.form-adorn > [data-filter-server][aria-busy="true"] {
+		padding-inline-end: 2.25rem;
+	}
+
+	.form-adorn:has(> [data-filter-server][aria-busy="true"])::after {
+		content: "";
+		position: absolute;
+		inset-block-start: 50%;
+		inset-inline-end: var(--redz-space-12);
+		inline-size: 1rem;
+		block-size: 1rem;
+		margin-block-start: -0.5rem;
+		border: 2px solid var(--redz-primary);
+		border-inline-end-color: transparent;
+		border-radius: 50%;
+		animation: spinner-turn 0.7s linear infinite;
+		pointer-events: none;
+	}
+
+	@media (forced-colors: active) {
+		.form-adorn:has(> [data-filter-server][aria-busy="true"])::after {
+			border-color: CanvasText;
+			border-inline-end-color: transparent;
+		}
+	}
 }

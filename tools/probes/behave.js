@@ -2390,6 +2390,727 @@ window.REDZ_BEHAVE = (() => {
 			if (say(found) !== say(['-Boat A', '-Alex Sample', '-Ben Sample', '-Boat A', '+Boat C', '+Chris Sample', '+Boat C']) || !all) {
 				out.push('a grouped table searched for "chris" keeps ' + say(found) + ' - its band and subtotal with it, the other group away -' + (all ? '' : ' and cleared does not show every row'));
 			}
+			input(grouped, 'boat c');
+			const band = rows();
+			input(grouped, '');
+			if (say(band) !== say(['-Boat A', '-Alex Sample', '-Ben Sample', '-Boat A', '+Boat C', '+Chris Sample', '+Boat C'])) {
+				out.push('a grouped table searched for its band\'s label "boat c" keeps ' + say(band) + ', not the band\'s rows');
+			}
+		}]},
+		filterButtons: {target: '#list-group-states-list', steps: [async (out) => {
+			const list = $('#list-group-states-list');
+			const chip = (words) => $$('[aria-controls="list-group-states-list"]').find((button) => button.firstChild.textContent === words);
+			const shown = () => $$('.list-group-item:not([data-filter-empty])', list).filter((item) => getComputedStyle(item).display !== 'none').map((item) => item.textContent.split(',')[0]);
+			const counts = () => ['All', 'Paid', 'Not paid'].map((words) => $('[data-filter-count]', chip(words)).textContent).join(' ');
+			const total = $('[data-filter-count="list-group-states-list"]');
+			const field = $('[data-filter="list-group-states-list"]');
+			const heard = [];
+			const listen = (event) => heard.push(event.detail.count + '/' + event.detail.total);
+			list.addEventListener('redz:filter', listen);
+			const start = [counts(), total.textContent];
+			chip('Paid').click();
+			const paid = [shown().join(' '), chip('Paid').getAttribute('aria-pressed'), chip('All').getAttribute('aria-pressed'), total.textContent];
+			await wait(50);
+			const told = $$('[role="status"]').some((status) => /3/.test(status.textContent));
+			chip('Boat B').click();
+			const both = [shown().join(' '), counts()];
+			input(field, 'ella');
+			const typed = [shown().join(' '), counts()];
+			chip('Boat B').click();
+			const again = [shown().join(' '), chip('Boat B').getAttribute('aria-pressed')];
+			input(field, '');
+			chip('Paid').click();
+			const back = [shown().length, chip('All').getAttribute('aria-pressed')];
+			if (say(start) !== say(['5 3 2', '5 of 5']) || say(paid) !== say(['Alex Sample Dana Sample Ella Sample', 'true', 'false', '3 of 5']) || !told || say(both) !== say(['Dana Sample Ella Sample', '3 2 1']) || say(typed) !== say(['Ella Sample', '1 1 0']) || say(again) !== say(['Ella Sample', 'false']) || say(back) !== say([5, 'true'])) {
+				out.push('filter buttons: counts at load ' + say(start) + ', Paid shows ' + say(paid) + ' (said: ' + told + '), with Boat B ' + say(both) + ', with "ella" ' + say(typed) + ', Boat B pressed again ' + say(again) + ', Paid pressed again ' + say(back));
+			}
+			const call = REDZ.ui.filter(list, {state: 'late'});
+			const late = [call, shown().join(' ')];
+			chip('Paid').click();
+			const extra = Object.assign(document.createElement('li'), {className: 'list-group-item', textContent: 'Fay Sample, boat A, paid'});
+			extra.dataset.state = 'paid';
+			const later = extra.cloneNode(true);
+			later.dataset.state = 'late';
+			list.prepend(extra, later);
+			await settled();
+			const redrawn = [extra.hasAttribute('data-filtered'), later.hasAttribute('data-filtered'), total.textContent];
+			extra.remove();
+			later.remove();
+			REDZ.ui.filter(list, null);
+			await settled();
+			list.removeEventListener('redz:filter', listen);
+			if (say(late) !== say([1, 'Chris Sample']) || say(redrawn) !== say([false, true, '4 of 7']) || shown().length !== 5 || chip('All').getAttribute('aria-pressed') !== 'true' || !heard.includes('3/5')) {
+				out.push('REDZ.ui.filter({state: "late"}) answers ' + say(late) + '; items put in while Paid is chosen are hidden ' + say(redrawn) + '; null leaves ' + shown().length + ' items, All pressed ' + chip('All').getAttribute('aria-pressed') + '; redz:filter told ' + say(heard));
+			}
+			const box = document.createElement('div');
+			box.id = 'probe-filter-groups';
+			box.innerHTML = '<section data-filter-group><b data-filter-count></b><p data-kind="sea">Bay</p><p data-kind="land">Hill</p></section><section data-filter-group><b data-filter-count></b><p data-kind="land">Farm</p></section><button type="button" command="--filter" aria-controls="probe-filter-groups" name="kind" value="sea">Sea</button>';
+			document.body.append(box);
+			$('button', box).click();
+			const groups = $$('[data-filter-group]', box).map((group) => group.hasAttribute('data-filtered') + ':' + $('[data-filter-count]', group).textContent);
+			box.remove();
+			if (say(groups) !== say(['false:1', 'true:0'])) {
+				out.push('a data-filter-group with no item shown should hide and count its own: ' + say(groups));
+			}
+		}]},
+		serverSearch: {target: '#list-group-server-list', steps: [async (out) => {
+			const field = $('[data-filter="list-group-server-list"]');
+			const list = $('#list-group-server-list');
+			const status = $('select[name="status"]', field.closest('search'));
+			const asked = [];
+			const answers = [];
+			const take = (event) => {
+				if (event.target !== field) {
+					return;
+				}
+				event.preventDefault();
+				event.stopImmediatePropagation();
+				asked.push([event.detail.query, event.detail.form.get('status')]);
+				const slow = event.detail.query === 'pier';
+				answers.push(event.detail.signal);
+				event.detail.respondWith(new Promise((done) => setTimeout(() => done({count: slow ? 9 : 2}), slow ? 700 : 60)));
+			};
+			window.addEventListener('redz:search', take, true);
+			input(field, 'pi');
+			input(field, 'pier');
+			await wait(300);
+			const early = asked.length;
+			await wait(450);
+			const busy = [field.getAttribute('aria-busy'), list.getAttribute('aria-busy'), getComputedStyle(field.parentElement, '::after').content !== 'none'];
+			input(field, 'refund');
+			const enter = new KeyboardEvent('keydown', {key: 'Enter', bubbles: true, cancelable: true});
+			field.dispatchEvent(enter);
+			await wait(200);
+			const after = [field.getAttribute('aria-busy'), answers[0]?.aborted];
+			await wait(700);
+			const said = $$('body > .visually-hidden[role="status"]').map((one) => one.textContent).join(' ');
+			status.value = 'open';
+			status.dispatchEvent(new Event('change', {bubbles: true}));
+			field.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true}));
+			await wait(200);
+			status.value = '';
+			window.removeEventListener('redz:search', take, true);
+			if (early !== 0 || say(asked.slice(0, 2)) !== say([['pier', ''], ['refund', '']]) || say(busy) !== say(['true', 'true', true]) || !enter.defaultPrevented || say(after) !== say([null, true]) || /9/.test(said) || !/2/.test(said) || say(asked.slice(2)) !== say([['refund', 'open'], ['', 'open']]) || field.value !== '') {
+				out.push('a server search asked ' + early + ' times before the pause, then ' + say(asked) + '; waiting: field, region busy, ring ' + say(busy) + '; Enter ' + (enter.defaultPrevented ? 'taken' : 'left to the form') + '; after the newer answer busy ' + say(after) + ' (busy, the older signal aborted); said ' + say(said) + ' (the late answer\'s 9 must be dropped)');
+			}
+		}]},
+		showMore: {target: '#list-group-more-list', steps: [async (out) => {
+			const list = $('#list-group-more-list');
+			const button = $('[aria-controls="list-group-more-list"][command="--more"]');
+			const foot = button.parentElement;
+			const count = $('[data-more-count]', foot);
+			const cap = $('[data-more-cap]', foot);
+			const kept = [...list.children];
+			const start = [count.textContent, button.hidden, cap.hidden];
+			button.focus();
+			button.click();
+			const busy = button.getAttribute('aria-busy');
+			await until(() => list.children.length === 8, 2000);
+			const focused = document.activeElement?.textContent;
+			const grown = [list.children.length, count.textContent, button.hidden, cap.hidden, focused];
+			await wait(150);
+			const said = $$('[role="status"]').some((one) => /4/.test(one.textContent));
+			list.replaceChildren(...kept);
+			const refuse = (event) => {
+				event.preventDefault();
+				event.stopImmediatePropagation();
+				event.detail.respondWith(Promise.reject(new Error('no')));
+			};
+			button.hidden = false;
+			cap.hidden = true;
+			window.addEventListener('redz:more', refuse, true);
+			button.focus();
+			button.click();
+			await wait(100);
+			window.removeEventListener('redz:more', refuse, true);
+			const refused = [list.children.length, button.hidden, document.activeElement === button];
+			const total = button.dataset.moreTotal;
+			delete button.dataset.moreTotal;
+			let add = 1;
+			const some = (event) => {
+				event.preventDefault();
+				event.stopImmediatePropagation();
+				for (let n = 0; n < add; n++) {
+					list.append(Object.assign(document.createElement('li'), {className: 'list-group-item', textContent: 'Extra'}));
+				}
+				event.detail.respondWith(Promise.resolve({}));
+			};
+			window.addEventListener('redz:more', some, true);
+			button.click();
+			await wait(100);
+			const open = [count.textContent, button.hidden];
+			add = 0;
+			button.click();
+			await wait(100);
+			const ended = [count.textContent, button.hidden];
+			window.removeEventListener('redz:more', some, true);
+			list.replaceChildren(...kept);
+			button.dataset.moreTotal = total;
+			button.hidden = false;
+			cap.hidden = true;
+			count.textContent = '4 of 11';
+			if (say(start) !== say(['4 of 11', false, true]) || busy !== 'true' || say(grown) !== say([8, '8 of 11', true, false, 'Pickup point 5']) || !said || say(refused) !== say([4, false, true]) || say(open) !== say(['5+', false]) || say(ended) !== say(['5 of 5', true])) {
+				out.push('show more: at load ' + say(start) + ', pressed busy ' + say(busy) + ', then ' + say(grown) + ' (items, count, button hidden at the cap, cap shown, focus), said ' + said + '; refused ' + say(refused) + ' (items, hidden, focus kept); without a total ' + say(open) + ', then an empty answer ' + say(ended));
+			}
+		}]},
+		selection: {target: '#table-select-rows', steps: [async (out) => {
+			const table = $('#table-select-rows');
+			const scope = table.closest('[data-select]');
+			const bar = $('.selection-bar', scope);
+			const words = $('[data-select-count]', bar);
+			const head = $('[data-select-all]', table);
+			const check = (name) => $$('tbody input', table).find((one) => one.getAttribute('aria-label').includes(name));
+			const field = $('[data-filter="table-select-rows"]');
+			const heard = [];
+			const listen = (event) => heard.push(event.detail);
+			scope.addEventListener('redz:selection', listen);
+			const start = [bar.hidden, head.checked, head.indeterminate];
+			check('Alex').click();
+			const one = [bar.hidden, words.textContent, head.indeterminate, say(heard.at(-1))];
+			const tint = [getComputedStyle(check('Alex').closest('tr').cells[1]).backgroundColor, getComputedStyle(check('Ben').closest('tr').cells[1]).backgroundColor];
+			check('Ben').closest('tr').cells[1].click();
+			const row = check('Ben').checked;
+			check('Ben').click();
+			head.click();
+			const all = [head.checked, head.indeterminate, check('Dana').checked, words.textContent];
+			await wait(50);
+			const told = $$('[role="status"]').some((status) => /3/.test(status.textContent));
+			input(field, 'chris');
+			const hidden = [check('Alex').checked, words.textContent, head.checked, say(heard.at(-1).values)];
+			input(field, '');
+			const shown = [check('Alex').checked, check('Ben').checked, words.textContent];
+			$('[command="--select-none"]', bar).click();
+			const none = [bar.hidden, head.checked, head.indeterminate];
+			scope.removeEventListener('redz:selection', listen);
+			if (say(start) !== say([true, false, false]) || say(one) !== say([false, '1 selected', true, say({count: 1, total: 3, values: ['11']})]) || tint[0] === tint[1] || !row || say(all) !== say([true, false, false, '3 selected']) || !told || say(hidden) !== say([false, '1 selected', true, say(['13'])]) || say(shown) !== say([true, true, '3 selected']) || say(none) !== say([true, false, false])) {
+				out.push('selection: at load ' + say(start) + ' (bar hidden, head), one check ' + say(one) + ', tint ' + say(tint) + ', a row click checks ' + row + ', the head ' + say(all) + ' (said ' + told + '), a search hiding two ' + say(hidden) + ', cleared ' + say(shown) + ', select none ' + say(none));
+			}
+		}]},
+		sort: {target: '#table-sort', steps: [async (out) => {
+			const table = $('#table-sort table');
+			const order = () => [...table.tBodies[0].rows].map((row) => row.cells[0].textContent.replace('Example ', '')).join(' ');
+			const head = (words) => $$('th', table.tHead).find((cell) => cell.textContent === words);
+			const press = (words) => $('button', head(words)).click();
+			const at = order();
+			press('Paid');
+			const down = [order(), head('Paid').getAttribute('aria-sort'), head('Name').hasAttribute('aria-sort')];
+			await wait(50);
+			const said = $$('[role="status"]').some((status) => /Paid/.test(status.textContent));
+			press('Paid');
+			const up = order();
+			press('Paid');
+			const two = head('Paid').getAttribute('aria-sort');
+			table.setAttribute('data-sort-reset', '');
+			press('Paid');
+			press('Paid');
+			const reset = [order(), head('Paid').hasAttribute('aria-sort')];
+			table.removeAttribute('data-sort-reset');
+			press('Sites');
+			const sites = order();
+			const added = table.tBodies[0].rows[0].cloneNode(true);
+			added.cells[0].textContent = 'Example Camp';
+			added.cells[1].textContent = '2';
+			table.tBodies[0].append(added);
+			await settled();
+			const redrawn = order();
+			added.remove();
+			const take = (event) => {
+				event.preventDefault();
+				event.detail.respondWith(Promise.reject(new Error('no')));
+			};
+			table.addEventListener('redz:sort', take);
+			press('Name');
+			const taken = [order(), head('Name').getAttribute('aria-sort')];
+			await wait(50);
+			const restored = [head('Sites').getAttribute('aria-sort'), head('Name').hasAttribute('aria-sort')];
+			table.removeEventListener('redz:sort', take);
+			press('Name');
+			if (at !== 'Cruises Divers Hostel Resort' || say(down) !== say(['Resort Divers Cruises Hostel', 'descending', false]) || !said || up !== 'Cruises Divers Resort Hostel' || two !== 'descending' || say(reset) !== say(['Resort Cruises Divers Hostel', false]) || sites !== 'Cruises Divers Resort Hostel' || redrawn !== 'Cruises Divers Camp Resort Hostel' || say(taken) !== say([sites, 'ascending']) || say(restored) !== say(['ascending', false])) {
+				out.push('sorting: at load ' + say(at) + ', Paid first ' + say(down) + ' (said ' + said + '), again ' + say(up) + ', a third press without data-sort-reset ' + say(two) + ', with it back to the drawn order ' + say(reset) + ', by Sites ' + say(sites) + ', a row put in ' + say(redrawn) + ', a sort the page takes ' + say(taken) + ' and refuses ' + say(restored));
+			}
+			const box = document.createElement('table');
+			box.innerHTML = '<thead><tr><th><button class="table-sort" type="button" value="v">V</button></th></tr></thead><tbody><tr class="table-group"><th>G1</th></tr><tr><td>3</td></tr><tr><td>1</td></tr><tr class="table-subtotal"><th>S1</th></tr><tr class="table-group"><th>G2</th></tr><tr><td>2</td></tr><tr><td>0</td></tr></tbody>';
+			document.body.append(box);
+			$('button', box).click();
+			const banded = [...box.tBodies[0].rows].map((row) => row.cells[0].textContent).join(' ');
+			box.remove();
+			if (banded !== 'G1 1 3 S1 G2 0 2') {
+				out.push('a table with bands sorts each band\'s rows under it, its subtotal last: ' + say(banded));
+			}
+		}]},
+		confirmWait: {target: '#dialog-confirm-run', steps: [async (out) => {
+			const open = () => $$('dialog[role="alertdialog"]').filter((one) => one.open).at(-1);
+			let refuse = true;
+			let seen = null;
+			const asked = REDZ.ui.confirm({title: 'Pause?', choice: {label: 'How long', items: [{value: 'hour', text: 'An hour'}, {value: 'day', text: 'A day'}], value: 'hour'}, ok: 'Pause', run: (what) => {
+				seen = what.choice;
+				return new Promise((done, fail) => setTimeout(() => (refuse ? fail(new Error('The server is busy.')) : done()), 150));
+			}});
+			await settled();
+			const dialog = open();
+			const [no, yes] = $$('.dialog-footer > .btn', dialog);
+			$('input[value="day"]', dialog).click();
+			yes.focus();
+			yes.click();
+			await settled();
+			const cancel = new Event('cancel', {cancelable: true});
+			dialog.dispatchEvent(cancel);
+			const waiting = [yes.getAttribute('aria-busy'), no.getAttribute('aria-disabled'), $('.dialog-body', dialog).inert, cancel.defaultPrevented, seen];
+			await wait(400);
+			const refusal = $('[data-refusal]', dialog);
+			const after = [dialog.open, refusal?.textContent, refusal === $('.dialog-body', dialog).lastElementChild, no.hasAttribute('aria-disabled'), document.activeElement === yes, $$('[role="alert"]', dialog).some((one) => one.textContent.includes('busy'))];
+			refuse = false;
+			yes.click();
+			const answer = await asked;
+			if (say(waiting) !== say(['true', 'true', true, true, 'day']) || say(after) !== say([true, 'The server is busy.', true, false, true, true]) || answer !== 'day' || dialog.isConnected) {
+				out.push('confirm with run: waiting ' + say(waiting) + ' (OK busy, Cancel unavailable, body inert, Escape held, the choice), refused ' + say(after) + ' (open, words, above the footer, buttons awake, focus on OK, said at once), then answers ' + say(answer));
+			}
+			const forced = REDZ.ui.confirm({title: 'Delete?', ok: 'Delete', run: ({signal}) => new Promise((done, fail) => setTimeout(() => fail(new Error('Too late: ' + signal.aborted)), 150))});
+			await settled();
+			const second = open();
+			$('.dialog-footer > .btn:last-child', second).click();
+			second.close();
+			const early = await forced;
+			await wait(300);
+			const toast = $$('.toast-danger').some((one) => one.textContent.includes('Too late: true'));
+			if (early !== false || !toast) {
+				out.push('a confirm closed by code while it waits answers ' + say(early) + ' and its later refusal ' + (toast ? 'is' : 'is not') + ' a danger toast with the aborted signal');
+			}
+			$$('.toast-danger').forEach((one) => one.remove());
+			const third = REDZ.ui.confirm({title: 'Leave?', ok: 'Save', cancel: 'Stay', alt: {text: 'Discard', tone: 'danger', value: 'discard'}, focus: 'ok'});
+			await settled();
+			const leave = open();
+			const footer = $('.dialog-footer', leave);
+			const order = $$(':scope > .btn', footer).map((one) => one.textContent + (one.classList.contains('dialog-footer-start') ? '<' : '') + (one.classList.contains('btn-outline-danger') ? '!' : '')).join(' ');
+			const focused = document.activeElement?.textContent;
+			leave.style.inlineSize = '20rem';
+			const stacked = getComputedStyle(footer).flexDirection;
+			leave.style.inlineSize = '';
+			$('.dialog-footer-start', leave).click();
+			const chosen = await third;
+			if (order !== 'Discard<! Stay Save' || focused !== 'Save' || stacked !== 'column-reverse' || chosen !== 'discard') {
+				out.push('a third answer: footer ' + say(order) + ', focus on ' + say(focused) + ', narrow ' + say(stacked) + ', answers ' + say(chosen));
+			}
+		}]},
+		dialogWait: {target: '#dialog-wait-form-panel', steps: [async (out) => {
+			const dialog = $('#dialog-wait-form-panel');
+			dialog.showModal();
+			const save = $('button[value="save"]', dialog);
+			const cancel = $('[command="close"]', dialog);
+			save.click();
+			const waiting = [dialog.open, save.getAttribute('aria-busy'), cancel.getAttribute('aria-disabled')];
+			await wait(1000);
+			const refused = [dialog.open, $('[data-refusal]', dialog)?.textContent.startsWith('Say why'), cancel.hasAttribute('aria-disabled')];
+			$('input[name="reason"]', dialog).value = 'Engine check';
+			save.click();
+			await wait(1000);
+			const closed = [dialog.open, dialog.returnValue, $('[data-refusal]', dialog) === null];
+			$('input[name="reason"]', dialog).value = '';
+			if (say(waiting) !== say([true, 'true', 'true']) || say(refused) !== say([true, true, false]) || say(closed) !== say([false, 'save', true])) {
+				out.push('a form of a dialog the page saves: waiting ' + say(waiting) + ', refused ' + say(refused) + ', saved ' + say(closed));
+			}
+		}]},
+		alertCode: {target: '#alert-code-box', steps: [async (out) => {
+			const box = $('#alert-code-box');
+			const spoken = (role) => $$('body > .visually-hidden[role="' + role + '"]').map((one) => one.textContent).join(' ');
+			REDZ.ui.alert(box, {tone: 'danger', text: 'Wrong code.'});
+			await wait(150);
+			const danger = [box.className, $('.bi', box)?.className, box.textContent, spoken('alert').includes('Wrong code.'), box.hasAttribute('role')];
+			REDZ.ui.alert(box, {tone: 'info', text: 'Code sent.'});
+			await wait(50);
+			const info = [box.className, spoken('status').includes('Code sent.')];
+			$('body > .visually-hidden[role="status"]').textContent = '';
+			REDZ.ui.alert(box, {tone: 'info', text: 'Code sent.'});
+			await wait(50);
+			const again = spoken('status').includes('Code sent.');
+			let finish;
+			const call = REDZ.ui.alert(box, new Promise((done) => {
+				finish = done;
+			}));
+			await wait(500);
+			const pending = [$('.spinner-border', box) !== null, box.textContent];
+			finish({tone: 'success', text: 'Done.'});
+			await call;
+			await settled();
+			const done = [box.className, box.textContent];
+			REDZ.ui.alert(box, null);
+			if (say(danger) !== say(['alert alert-danger', 'bi bi-x-octagon', 'Wrong code.', true, false]) || say(info) !== say(['alert alert-info', true]) || !again || say(pending) !== say([true, 'Loading…']) || say(done) !== say(['alert alert-success', 'Done.']) || box.childElementCount !== 0) {
+				out.push('REDZ.ui.alert: danger ' + say(danger) + ', info ' + say(info) + ', the same again said ' + again + ', a promise waiting ' + say(pending) + ' then ' + say(done) + ', null leaves ' + box.childElementCount + ' children');
+			}
+		}]},
+		downloadText: {target: '#commands-download-text', steps: [async (out) => {
+			const made = [];
+			const make = URL.createObjectURL;
+			const click = HTMLAnchorElement.prototype.click;
+			URL.createObjectURL = (blob) => {
+				made.push(blob);
+				return make.call(URL, blob);
+			};
+			HTMLAnchorElement.prototype.click = function () {
+				made.push(this.download);
+			};
+			try {
+				$('[aria-controls="commands-download-text"][command="--download"]').click();
+				REDZ.ui.download({text: 'a;b', file: 'x.csv', type: 'text/csv'});
+				REDZ.ui.download({text: 'a;b', file: 'y.csv', type: 'text/csv', bom: false});
+			} finally {
+				URL.createObjectURL = make;
+				HTMLAnchorElement.prototype.click = click;
+			}
+			const [report, name, csv, csvName, bare] = made;
+			const bytes = async (blob) => [...new Uint8Array(await blob.arrayBuffer())].slice(0, 3).join(',');
+			const got = [await report.text() === $('#commands-download-text').textContent, report.type, name, await bytes(csv), csvName, await bytes(bare)];
+			await wait(50);
+			const said = $$('body > .visually-hidden[role="status"]').some((one) => one.textContent.includes('y.csv'));
+			if (say(got) !== say([true, 'text/plain;charset=utf-8', 'boats.txt', '239,187,191', 'x.csv', '97,59,98']) || !said) {
+				out.push('a text download gives ' + say(got) + ' (the words, the type, the name, a CSV with its byte order mark, its name, one without) and is said ' + said);
+			}
+		}]},
+		busyParts: {target: '#busy-menu-list', steps: [async (out) => {
+			const opener = $('[commandfor="busy-menu-list"][command="toggle-popover"]');
+			const menu = $('#busy-menu-list');
+			const item = $('.menu-item', menu);
+			opener.click();
+			await settled();
+			let finish;
+			const call = REDZ.ui.busy(item, new Promise((done) => {
+				finish = done;
+			}));
+			menu.hidePopover();
+			const held = [opener.getAttribute('aria-busy'), opener.getAttribute('aria-disabled'), item.getAttribute('aria-disabled')];
+			finish();
+			await call;
+			await settled();
+			const freed = [opener.hasAttribute('aria-busy'), opener.hasAttribute('aria-disabled'), item.hasAttribute('aria-disabled')];
+			const card = $('#busy-region-words-card');
+			let close;
+			const region = REDZ.ui.busy(card, new Promise((done) => {
+				close = done;
+			}));
+			await wait(500);
+			const words = [$('.busy-words', card)?.textContent, $$('body > .visually-hidden[role="status"]').some((one) => one.textContent === 'Preparing the download…')];
+			close();
+			await region;
+			const cell = $('#busy-cell-state');
+			let check;
+			const marked = REDZ.ui.busy(cell, new Promise((done) => {
+				check = done;
+			}));
+			const early = cell.querySelector('.busy-ring') === null;
+			await wait(500);
+			const ring = [cell.querySelector('.busy-ring') !== null, $('.visually-hidden', cell)?.textContent, $$('body > .visually-hidden[role="status"]').some((one) => one.textContent === 'Checking')];
+			check();
+			await marked;
+			const gone = [cell.childElementCount, cell.hasAttribute('aria-busy')];
+			if (say(held) !== say(['true', 'true', 'true']) || say(freed) !== say([false, false, false]) || say(words) !== say(['Preparing the download…', true]) || !early || say(ring) !== say([true, 'Checking', false]) || say(gone) !== say([0, false]) || $('.busy-words', card) !== null) {
+				out.push('busy: a menu item holds its opener ' + say(held) + ', then frees both ' + say(freed) + '; a region\'s words ' + say(words) + '; a cell\'s ring ' + (early ? 'after a moment' : 'at once') + ' ' + say(ring) + ' (ring, hidden words, said aloud), then ' + say(gone));
+			}
+		}]},
+		lazyLoad: {target: '#accordion-lazy-history', steps: [async (out) => {
+			const details = $('#accordion-lazy-history details');
+			const body = $('.accordion-body', details);
+			details.open = true;
+			await settled();
+			const loading = [body.hasAttribute('data-lazy'), $('[data-loading] .placeholder', body) !== null, $('[data-loading] .visually-hidden', body)?.textContent];
+			await wait(800);
+			const refused = [details.open, body.hasAttribute('data-lazy'), $('[data-load-error]', body)?.textContent.startsWith('The history'), $('[data-loading]', body) === null];
+			await wait(100);
+			const quiet = $('[data-loading]', body) === null;
+			details.open = false;
+			await settled();
+			details.open = true;
+			await wait(800);
+			const loaded = [body.querySelectorAll('p').length, $('[data-load-error]', body) === null, body.hasAttribute('data-lazy')];
+			details.open = false;
+			const fresh = document.createElement('details');
+			fresh.innerHTML = '<summary>Paper</summary><div data-lazy></div>';
+			let asked = 0;
+			const count = (event) => {
+				asked += event.target.closest('details') === fresh ? 1 : 0;
+			};
+			document.addEventListener('redz:load', count);
+			document.body.append(fresh);
+			dispatchEvent(new Event('beforeprint'));
+			await settled();
+			const printed = [fresh.open, asked];
+			dispatchEvent(new Event('afterprint'));
+			await settled();
+			const after = [fresh.open, asked, $('[data-lazy]', fresh) !== null];
+			fresh.remove();
+			document.removeEventListener('redz:load', count);
+			if (say(loading) !== say([false, true, 'Loading…']) || say(refused) !== say([true, true, true, true]) || !quiet || say(loaded) !== say([2, true, false]) || say(printed) !== say([true, 0]) || say(after) !== say([false, 0, true])) {
+				out.push('a lazy section: loading ' + say(loading) + ', refused ' + say(refused) + (quiet ? '' : ', loading again at once') + ', opened again ' + say(loaded) + '; printing opens a lazy one ' + say(printed) + ' without asking, after ' + say(after));
+			}
+		}]},
+		uploadPaste: {target: '#upload-stored', steps: [async (out) => {
+			const box = document.createElement('div');
+			box.innerHTML = '<form><div class="upload" id="probe-paste" data-paste="page"><input type="file" multiple hidden><button class="upload-zone" type="button">Add</button><template><div><span data-file-name></span><button type="button" data-file-remove>x</button><span data-file-error></span></div></template><div class="upload-list"><div data-file-stored="7" data-state="done"><span data-file-name>kept.pdf</span></div></div></div><input name="note"></form>';
+			document.body.append(box);
+			const upload = $('#probe-paste', box);
+			const heard = [];
+			upload.addEventListener('redz:change', (event) => heard.push(say(event.detail)));
+			let send;
+			const sending = (event) => {
+				if (event.target === upload) {
+					event.preventDefault();
+					event.detail.respondWith(new Promise((done) => {
+						send = done;
+					}));
+				}
+			};
+			document.addEventListener('redz:files', sending);
+			const paste = (target, types) => {
+				const data = new DataTransfer();
+				data.items.add(new File(['x'], 'shot.png', {type: 'image/png'}));
+				if (types) {
+					data.setData('text/plain', 'words');
+				}
+				target.dispatchEvent(new ClipboardEvent('paste', {clipboardData: data, bubbles: true, cancelable: true}));
+			};
+			const sample = new DataTransfer();
+			sample.items.add(new File(['x'], 'a.png', {type: 'image/png'}));
+			const pastes = new ClipboardEvent('paste', {clipboardData: sample}).clipboardData?.files.length === 1;
+			const add = (target, types) => pastes ? paste(target, types) : choose($('input[type="file"]', upload), files(['shot.png']));
+			paste($('input[name="note"]', box), true);
+			const words = pastes ? $$('.upload-list > *', upload).length : 1;
+			add(document.body, false);
+			const rows = $$('.upload-list > *', upload).length;
+			const invalid = $('input[type="file"]', upload).validationMessage !== '';
+			let ready = false;
+			const promise = REDZ.ui.upload.settled(upload).then((detail) => {
+				ready = detail;
+			});
+			await settled();
+			const early = ready;
+			send?.();
+			await promise;
+			add(document.body, false);
+			REDZ.ui.upload.clear(upload);
+			const cleared = $$('.upload-list > *', upload).map((row) => row.dataset.fileStored ?? 'new');
+			document.removeEventListener('redz:files', sending);
+			box.remove();
+			if (words !== 1 || rows !== 2 || !invalid || early !== false || say(ready) !== say({count: 2, pending: 0, failed: 0}) || say(cleared) !== say(['7']) || !heard.some((one) => one.includes('"pending":1'))) {
+				out.push('a page-wide paste: into a field with words ' + (words - 1) + ' rows, elsewhere ' + (rows - 1) + ', the field held while sending ' + invalid + ', settled early ' + say(early) + ' then ' + say(ready) + ', clear keeps ' + say(cleared) + '; heard ' + say(heard));
+			}
+		}]},
+		followBox: {target: '#log-thread-box', steps: [async (out) => {
+			const box = $('#log-thread-box');
+			const pill = $('[command="--follow"]', box);
+			for (let n = 0; n < 8; n++) {
+				$('.follow-dock', box).before(Object.assign(document.createElement('p'), {textContent: 'Earlier message ' + n}));
+			}
+			await wait(80);
+			const end = () => box.scrollHeight - box.scrollTop - box.clientHeight < 8;
+			const add = async (words) => {
+				$('.follow-dock', box).before(Object.assign(document.createElement('p'), {textContent: words}));
+				await wait(80);
+			};
+			await add('One');
+			const followed = [end(), pill.hidden];
+			box.scrollTop = 0;
+			box.dispatchEvent(new Event('scroll'));
+			await wait(50);
+			await add('Two');
+			const away = [box.scrollTop, pill.hidden];
+			pill.click();
+			await wait(50);
+			const back = [end(), pill.hidden];
+			const grow = $('p', box);
+			grow.style.blockSize = '6rem';
+			await wait(100);
+			const grown = end();
+			grow.style.blockSize = '';
+			const steps = $('#log-steps-list');
+			const last = steps.lastElementChild;
+			const current = $('[aria-current]', steps);
+			current.removeAttribute('aria-current');
+			last.setAttribute('aria-current', 'step');
+			await wait(100);
+			const [outer, inner] = [steps.getBoundingClientRect(), last.getBoundingClientRect()];
+			const shown = inner.top >= outer.top - 1 && inner.bottom <= outer.bottom + 1;
+			last.removeAttribute('aria-current');
+			current.setAttribute('aria-current', 'step');
+			if (say(followed) !== say([true, true]) || say(away) !== say([0, false]) || say(back) !== say([true, true]) || !grown || !shown) {
+				out.push('a followed box: ' + say(followed) + ' at the end, pill hidden; read above ' + say(away) + ' (kept, pill shown); the pill ' + say(back) + '; a child that grows ' + (grown ? 'keeps' : 'loses') + ' the end; the current step ' + (shown ? 'shows' : 'is out of view'));
+			}
+		}]},
+		listRowLink: {target: '#list-group-rows', steps: [async (out) => {
+			const item = $('#list-group-rows .list-group-item');
+			const link = $('.stretched-link', item);
+			let followed = 0;
+			const stop = (event) => {
+				event.preventDefault();
+				followed++;
+			};
+			link.addEventListener('click', stop);
+			$('.text-muted', item).click();
+			const byText = followed;
+			$('.list-group-actions .btn', item).addEventListener('click', (event) => event.preventDefault(), {once: true});
+			$('.list-group-actions .btn', item).click();
+			const byButton = followed;
+			link.removeEventListener('click', stop);
+			const cover = getComputedStyle(link, '::after').content;
+			const pad = getComputedStyle(item).paddingTop;
+			if (byText !== 1 || byButton !== 1 || cover !== 'none' || pad !== '8px') {
+				out.push('a list item as a link: a click on its words follows ' + byText + ' times, on its button ' + (byButton - byText) + ' more; its cover ' + say(cover) + ' (text stays selectable); compact padding ' + pad);
+			}
+		}]},
+		actionBar: {target: '#app-action-bar-example', steps: [async (out) => {
+			const bar = $('#app-action-bar-example .action-bar');
+			const style = getComputedStyle(bar);
+			const floor = document.body.appendChild(Object.assign(document.createElement('div'), {className: 'bg-page'}));
+			const page = getComputedStyle(floor).backgroundColor;
+			floor.remove();
+			if (style.position !== 'sticky' || style.bottom !== '0px' || style.backgroundColor !== page) {
+				out.push('an action bar is ' + style.position + ' at bottom ' + style.bottom + ' on ' + style.backgroundColor + ', not sticky on the page\'s floor');
+			}
+		}]},
+		toneText: {target: '#tokens-brand-region', steps: [async (out) => {
+			if (!await readable) {
+				return;
+			}
+			const lum = (color) => rgb(color).split(',').map(Number).map((c) => c / 255).map((c) => c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4).reduce((sum, c, i) => sum + c * [0.2126, 0.7152, 0.0722][i], 0);
+			const ratio = (a, b) => {
+				const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p);
+				return (x + 0.05) / (y + 0.05);
+			};
+			const ground = (element) => {
+				for (let at = element; at !== null; at = at.parentElement) {
+					const fill = getComputedStyle(at).backgroundColor;
+					if (fill !== 'rgba(0, 0, 0, 0)' && fill !== 'transparent') {
+						return fill;
+					}
+				}
+				return 'rgb(255, 255, 255)';
+			};
+			const low = [];
+			for (const one of $$('#tokens-brand-region :is(.badge, a, .text-danger, .btn-outline-primary)')) {
+				const found = ratio(getComputedStyle(one).color, ground(one));
+				if (found < 4.5) {
+					low.push(one.textContent.trim() + ' ' + found.toFixed(2) + ' in ' + one.parentElement.getAttribute('data-brand') + (one.parentElement.getAttribute('data-brand-danger') ?? ''));
+				}
+			}
+			if (low.length > 0 && document.documentElement.dataset.theme !== 'dark') {
+				out.push('text in a brand tone below 4.5:1 on its ground: ' + say(low));
+			}
+		}]},
+		logoSize: {target: '#logo-sizes', steps: [async (out) => {
+			const [small, plain, large, mark] = $$('#logo-sizes .logo').map((one) => one.getBoundingClientRect());
+			const ground = getComputedStyle($('#logo-sizes .logo')).backgroundColor;
+			const got = [Math.round(small.height), Math.round(plain.height), Math.round(large.height), Math.round(large.width), Math.round(mark.width), ground];
+			if (say(got) !== say([28, 32, 40, 80, 40, 'rgb(255, 255, 255)'])) {
+				out.push('logos: heights, the 4:1 large one\'s width and the round mark\'s width, the ground ' + say(got) + ' - a width by area is the height times the square root of the ratio');
+			}
+		}]},
+		shareRow: {target: '#commands-share-row', steps: [async (out) => {
+			const row = $('#commands-share-row [data-share-url]');
+			const href = (name) => $('a.share-' + name, row)?.getAttribute('href') ?? '';
+			const got = [href('x').startsWith('https://x.com/intent/tweet?url=https%3A%2F%2Flagoon.example%2Fjoin%3Fref%3Dsample&text=Book'), href('viber').startsWith('viber://forward?text=Book'), href('whatsapp').startsWith('https://wa.me/'), $('[command="--copy"]', row).dataset.copy, getComputedStyle($('.share-viber', row), '::before').content];
+			if (say(got) !== say([true, true, true, 'https://lagoon.example/join?ref=sample', '"Vb" / ""']) && say(got) !== say([true, true, true, 'https://lagoon.example/join?ref=sample', '"Vb"'])) {
+				out.push('a share row writes ' + say(got) + ' (X, Viber, WhatsApp links, the copy, Viber\'s letters)');
+			}
+		}]},
+		commandCopy: {target: '#command-line-install', steps: [async (out) => {
+			const copied = [];
+			const clipboard = navigator.clipboard;
+			if (clipboard === undefined) {
+				return;
+			}
+			const write = clipboard.writeText;
+			clipboard.writeText = (words) => {
+				copied.push(words);
+				return Promise.resolve();
+			};
+			try {
+				$('#command-line-install [aria-controls="command-line-install-list"]').click();
+				$('#command-line-install .command-line .btn').click();
+				$('#command-line-cron .command-line .btn').click();
+				await settled();
+			} finally {
+				clipboard.writeText = write;
+			}
+			const box = $('#command-line-cron .command-line');
+			const pre = $('pre', box);
+			const look = [getComputedStyle(pre).whiteSpace, getComputedStyle(pre).direction, pre.scrollWidth > pre.clientWidth || pre.scrollWidth <= pre.clientWidth, box.getAttribute('role'), getComputedStyle($('#command-line-key var')).backgroundColor !== 'rgba(0, 0, 0, 0)'];
+			if (say(copied) !== say(['curl -fsSLO https://get.example.com/agent/agent-2.4.tar.gz\ntar -xzf agent-2.4.tar.gz -C /opt\n/opt/agent/start --key YOUR_KEY', 'curl -fsSLO https://get.example.com/agent/agent-2.4.tar.gz', $('code', pre).textContent]) || say(look) !== say(['pre', 'ltr', true, 'group', true])) {
+				out.push('commands to copy: copied ' + say(copied) + ' (all steps a line each, one step, the crontab line); look ' + say(look));
+			}
+		}]},
+		meterStacked: {target: '#progress-stacked-quota', steps: [async (out) => {
+			const meter = $('#progress-stacked-quota .meter-stacked');
+			const parts = $$(':scope > *', meter);
+			const whole = meter.getBoundingClientRect().width - 4;
+			const shares = parts.map((part) => +(part.getBoundingClientRect().width / whole).toFixed(2));
+			const hatched = getComputedStyle(parts[2]).backgroundImage.includes('repeating-linear-gradient');
+			if (shares.some((value, i) => Math.abs(value - [0.385, 0.538, 0.077][i]) > 0.02) || !hatched) {
+				out.push('a stacked meter draws its parts at ' + say(shares) + ' of the scale, not their data-v, and its part over the limit is ' + (hatched ? '' : 'not ') + 'hatched');
+			}
+		}]},
+		chartLine: {target: '#chart-line-usage', steps: [async (out) => {
+			const table = $('#chart-line-usage table');
+			const body = table.tBodies[0];
+			const svg = $(':scope > svg[data-line]', body);
+			const points = () => $('polyline', svg)?.getAttribute('points').split(' ').length;
+			const shape = [svg !== null, $('polygon', body) !== null, points(), body.rows.length, getComputedStyle(body.rows[0].cells[0]).textAlign];
+			const cell = body.rows[3].cells[1];
+			const was = cell.getAttribute('data-v');
+			cell.setAttribute('data-v', '0.99');
+			await settled();
+			const moved = $(':scope > svg[data-line] polyline', body).getAttribute('points').split(' ')[3];
+			cell.setAttribute('data-v', was);
+			await settled();
+			const spark = $('#chart-spark-line .spark-line > svg polyline')?.getAttribute('points').split(' ').length;
+			if (say(shape) !== say([true, true, 14, 14, 'start']) || moved !== '3.5,10.0' || spark !== 10 || $$(':scope > svg', body).length !== 1) {
+				out.push('a line chart: ' + say(shape) + ' (its line, its area, its points, its rows, the first label at the start), a value changed moves its point to ' + say(moved) + ', a spark line has ' + spark + ' points, the body holds ' + $$(':scope > svg', body).length + ' lines');
+			}
+		}]},
+		strip: {target: '#chart-strip-uptime', steps: [async (out) => {
+			const box = $('#chart-strip-uptime .strip');
+			const shown = () => [$$('.spark-strip > i', box).filter((cell) => getComputedStyle(cell).display !== 'none').length, $$('.strip-head > [data-days]', box).filter((one) => getComputedStyle(one).display !== 'none').map((one) => one.dataset.days).join(' ')];
+			const counts = [];
+			for (const width of ['', '400px', '300px']) {
+				box.style.inlineSize = width;
+				await settled();
+				counts.push(shown());
+			}
+			box.style.inlineSize = '';
+			const cell = $('.spark-strip > i', box).getBoundingClientRect();
+			if (say(counts) !== say([[90, '90'], [60, '60'], [30, '30']]) || cell.height < 30) {
+				out.push('a strip of days shows ' + say(counts) + ' (cells, the caption) at its width, 400 px and 300 px, and a cell ' + Math.round(cell.height) + ' px high');
+			}
+		}]},
+		qrDraw: {target: '#qr-package', steps: [async (out) => {
+			const tile = $('#qr-package [data-qr]');
+			const svg = $('svg', tile);
+			const path = $$('path', svg);
+			const shape = [svg?.getAttribute('viewBox'), svg?.getAttribute('shape-rendering'), svg?.getAttribute('aria-hidden'), path.length, svg?.hasAttribute('style'), tile.getAttribute('role')];
+			const again = document.createElement('div');
+			REDZ.ui.qr(again, tile.dataset.qr);
+			const same = again.innerHTML === tile.innerHTML;
+			tile.dataset.qr = 'changed';
+			await settled();
+			const redrawn = tile.innerHTML !== again.innerHTML;
+			tile.dataset.qr = 'https://redz-tech.github.io/REDZ.UI/';
+			await settled();
+			const secret = document.createElement('div');
+			const long = REDZ.ui.qr(secret, 'x'.repeat(2332));
+			const refused = [long, secret.hasAttribute('data-qr-error'), secret.childElementCount];
+			let decoded = 'skip';
+			if ('BarcodeDetector' in window && await readable && (await BarcodeDetector.getSupportedFormats()).includes('qr_code')) {
+				const image = new Image();
+				image.src = URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(svg)], {type: 'image/svg+xml'}));
+				await image.decode();
+				const canvas = Object.assign(document.createElement('canvas'), {width: 300, height: 300});
+				const paint = canvas.getContext('2d');
+				paint.fillStyle = '#fff';
+				paint.fillRect(0, 0, 300, 300);
+				paint.drawImage(image, 0, 0, 300, 300);
+				decoded = (await new BarcodeDetector({formats: ['qr_code']}).detect(canvas).catch(() => []))[0]?.rawValue ?? 'nothing';
+			}
+			const wide = getComputedStyle($('svg', tile)).inlineSize;
+			if (shape[0] === null || say(shape.slice(1)) !== say(['crispEdges', 'true', 1, false, 'img']) || !same || !redrawn || say(refused) !== say([false, true, 0]) || !['skip', 'https://redz-tech.github.io/REDZ.UI/'].includes(decoded) || wide !== '176px') {
+				out.push('a QR tile: ' + say(shape) + ' (viewBox, crisp edges, hidden, one path, no style, role), the call draws the same ' + same + ', a new text redraws ' + redrawn + ', too long ' + say(refused) + ', decoded ' + say(decoded) + ', width ' + wide);
+			}
 		}]},
 		tap: {target: '#tooltip-title [aria-disabled="true"][title]', steps: [async (out) => {
 			const button = $('#tooltip-title [aria-disabled="true"][title]');
@@ -3217,16 +3938,23 @@ window.REDZ_BEHAVE = (() => {
 			const button = $('button', first);
 			const at = (x, y) => {
 				const hit = document.elementFromPoint(x, y);
-				return hit === link ? 'the link' : hit === button ? 'the button' : 'not the link';
+				return hit === link ? 'the link' : hit === button ? 'the button' : hit === first ? 'the item' : 'not the link';
 			};
 			const own = first.getBoundingClientRect();
 			const next = second.getBoundingClientRect();
 			const press = button.getBoundingClientRect();
 			const outside = list.getBoundingClientRect();
 			const got = [at(own.left + 4, own.top + own.height / 2), at(press.left + press.width / 2, press.top + press.height / 2), at(next.left + next.width / 2, next.top + next.height / 2), at(outside.left + outside.width / 2, outside.bottom + 6)];
+			let followed = 0;
+			link.addEventListener('click', (event) => {
+				event.preventDefault();
+				followed++;
+			});
+			first.click();
+			second.click();
 			list.remove();
-			if (got.join(' ') !== 'the link the button not the link not the link') {
-				out.push('a list item whose title is a stretched-link: its own edge, its button, the next item and the place under the list give ' + say(got) + ' - the link should take its item only, and its button stay its own');
+			if (got.join(' ') !== 'the item the button not the link not the link' || followed !== 1) {
+				out.push('a list item whose title is a stretched-link: its own edge, its button, the next item and the place under the list give ' + say(got) + ' - the item, not a cover, under the pointer, and its button its own - and clicks on it and on the next item follow ' + followed + ' times, not once');
 			}
 		}]},
 		shellPhone: {target: '#table-row-menu', steps: [async (out) => {

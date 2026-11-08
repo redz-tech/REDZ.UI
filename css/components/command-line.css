@@ -1,0 +1,172 @@
+@property --redz-command-fade-start {
+	syntax: "<length>";
+	inherits: false;
+	initial-value: 0px;
+}
+
+@property --redz-command-fade-end {
+	syntax: "<length>";
+	inherits: false;
+	initial-value: 0px;
+}
+
+@layer components {
+	.command-line {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: stretch;
+		min-inline-size: 0;
+		overflow: clip;
+		border: 1px solid var(--redz-border);
+		border-radius: var(--redz-radius-8);
+		background: var(--redz-bg-page);
+	}
+
+	.command-line:has(> pre:focus-visible) {
+		outline: 2px solid var(--redz-focus);
+		outline-offset: 2px;
+	}
+
+	.command-line > pre {
+		margin: 0;
+		padding: calc((var(--redz-control-height) - 2px - var(--redz-lh-20)) / 2) var(--redz-space-12);
+		overflow-x: auto;
+		overflow-y: hidden;
+		border: 0;
+		background: none;
+		color: var(--redz-text);
+		font-family: var(--redz-font-mono);
+		font-size: var(--redz-fs-12);
+		line-height: var(--redz-lh-20);
+		white-space: pre;
+		direction: ltr;
+		unicode-bidi: isolate;
+		text-align: start;
+		scrollbar-width: thin;
+	}
+
+	.command-line > pre:focus-visible {
+		outline: none;
+	}
+
+	.command-line code {
+		font-family: inherit;
+		font-size: inherit;
+		-webkit-user-select: all;
+		user-select: all;
+	}
+
+	.command-line var {
+		padding-inline: 0.3em;
+		border-radius: var(--redz-radius-4);
+		outline: 1px solid transparent;
+		outline-offset: -1px;
+		background: var(--redz-warning-subtle);
+		color: var(--redz-warning-text);
+		font-style: normal;
+	}
+
+	.command-line > .btn {
+		--redz-btn-bg: transparent;
+		--redz-btn-fg: var(--redz-text-muted);
+		--redz-btn-hover: var(--redz-bg-hover);
+		--redz-btn-hover-fg: var(--redz-text);
+		inline-size: auto;
+		min-block-size: 0;
+		min-inline-size: var(--redz-control-height);
+		border: 0;
+		border-inline-start: 1px solid var(--redz-border);
+		border-radius: 0;
+	}
+
+	.command-line > .btn:focus-visible {
+		outline-offset: -3px;
+	}
+
+	@keyframes command-fade {
+		0% {
+			--redz-command-fade-start: 0px;
+			--redz-command-fade-end: 1.5rem;
+		}
+
+		8% {
+			--redz-command-fade-start: 1.5rem;
+		}
+
+		92% {
+			--redz-command-fade-end: 1.5rem;
+		}
+
+		100% {
+			--redz-command-fade-start: 1.5rem;
+			--redz-command-fade-end: 0px;
+		}
+	}
+
+	@supports (animation-timeline: scroll()) {
+		.command-line > pre {
+			-webkit-mask-image: linear-gradient(to right, transparent, #000 var(--redz-command-fade-start), #000 calc(100% - var(--redz-command-fade-end)), transparent);
+			mask-image: linear-gradient(to right, transparent, #000 var(--redz-command-fade-start), #000 calc(100% - var(--redz-command-fade-end)), transparent);
+			animation: command-fade linear both;
+			animation-timeline: scroll(self inline);
+		}
+	}
+
+	.command-steps {
+		display: grid;
+		gap: var(--redz-space-16);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		counter-reset: command-step;
+	}
+
+	.command-steps > li {
+		position: relative;
+		display: grid;
+		grid-template-columns: 1.5rem minmax(0, 1fr);
+		gap: var(--redz-space-4) var(--redz-space-8);
+		min-inline-size: 0;
+		counter-increment: command-step;
+	}
+
+	.command-steps > li > * {
+		grid-column: 2;
+	}
+
+	.command-steps > li > p {
+		align-self: center;
+	}
+
+	.command-steps > li::before {
+		content: counter(command-step);
+		display: grid;
+		grid-row: 1;
+		grid-column: 1;
+		place-items: center;
+		inline-size: 1.5rem;
+		block-size: 1.5rem;
+		border: 1px solid var(--redz-border-strong);
+		border-radius: 50%;
+		background: var(--redz-bg);
+		color: var(--redz-text-muted);
+		font-size: var(--redz-fs-12);
+		font-weight: 600;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.command-steps > li:not(:last-child)::after {
+		content: "";
+		position: absolute;
+		inset-block: calc(1.5rem + var(--redz-space-4)) calc(-1 * var(--redz-space-16) + var(--redz-space-4));
+		inset-inline-start: calc(0.75rem - 1px);
+		inline-size: 2px;
+		background: var(--redz-border);
+	}
+
+	@media (forced-colors: active) {
+		.command-line var {
+			outline-color: CanvasText;
+		}
+	}
+}

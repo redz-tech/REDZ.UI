@@ -319,6 +319,8 @@ accordion-flush
 accordion-header
 accordion-icon
 accordion-item
+action-bar
+action-bar-text
 alert
 alert-danger
 alert-info
@@ -2538,6 +2540,8 @@ btn-toolbar
 btn-warning
 btn-xl
 btn-xs
+busy-ring
+busy-words
 calendar
 calendar-day
 calendar-event
@@ -2562,6 +2566,7 @@ carousel-item
 carousel-overlay
 chart
 chart-bar
+chart-line
 chart-rows
 chart-values
 check
@@ -2609,6 +2614,8 @@ combobox-search
 combobox-search-input
 combobox-toggle
 combobox-value
+command-line
+command-steps
 d-block
 d-contents
 d-flex
@@ -2624,6 +2631,7 @@ d-table-row
 dialog
 dialog-body
 dialog-footer
+dialog-footer-start
 dialog-fullscreen
 dialog-header
 dialog-lg
@@ -2763,6 +2771,7 @@ flip-rtl
 float-end
 float-none
 float-start
+follow-dock
 font-monospace
 form-adorn
 form-check
@@ -2818,6 +2827,7 @@ h-40
 h-50
 h-72
 h-75
+h-88
 h-auto
 hstack
 icon-link
@@ -3193,14 +3203,21 @@ lh-28
 line-clamp-2
 line-clamp-3
 list-group
+list-group-actions
 list-group-flush
 list-group-header
 list-group-horizontal
 list-group-item
 list-group-item-action
 list-group-numbered
+list-more
 list-unstyled
 log
+logo
+logo-fade
+logo-ground
+logo-lg
+logo-sm
 m-0
 m-12
 m-16
@@ -3593,6 +3610,7 @@ menu-item-danger
 menu-item-description
 menu-start
 meter
+meter-stacked
 meter-xs
 min-vh-100
 min-vw-100
@@ -3890,8 +3908,11 @@ share-line
 share-linkedin
 share-messenger
 share-telegram
+share-viber
 share-vk
+share-wechat
 share-whatsapp
+share-x
 size-32
 size-48
 size-64
@@ -4227,8 +4248,10 @@ span-9
 span-full
 spark
 spark-lg
+spark-line
 spark-md
 spark-median
+spark-strip
 spinner-border
 spinner-grow
 stage-list
@@ -4257,6 +4280,8 @@ stepper-horizontal
 stepper-item
 sticky-top
 stretched-link
+strip
+strip-head
 summary
 switch
 table

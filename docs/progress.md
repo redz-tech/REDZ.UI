@@ -46,6 +46,26 @@ The browser's own `<progress>` for work under way and `<meter>` for a measure wi
 <meter class="meter" value="9.6" min="0" max="10" low="7" high="9" optimum="0" aria-label="Backups, 9.6 of 10 GB">9.6 of 10 GB</meter>
 ```
 
+### A meter of several parts
+
+`meter meter-stacked` on a `div role="meter"` shows the parts of one amount - the free, the paid, what goes over the limit - each a child with its `data-v`, its share of the whole scale, and `data-tone`; 2 px apart, the ends rounded. A part with `data-over`, past the limit, is hatched red, so it reads without its colour too. The meter's numbers and its words are the page's: `aria-valuenow`, `aria-valuemax`, an `aria-valuetext` that says the parts, and a legend of [dots](dot.md) beside it.
+
+```html
+<div class="vstack gap-8 max-w-480">
+	<div class="hstack gap-8 fs-14"><span class="flex-1" id="progress-stacked-title">Seats this month</span><span class="text-muted tabular-nums">130 of 120</span></div>
+	<div class="meter meter-stacked" role="meter" aria-labelledby="progress-stacked-title" aria-valuenow="130" aria-valuemin="0" aria-valuemax="130" aria-valuetext="130 seats: 50 free, 70 paid, 10 over the limit">
+		<span data-tone="success" data-v="0.385"></span>
+		<span data-tone="primary" data-v="0.538"></span>
+		<span data-over data-v="0.077"></span>
+	</div>
+	<ul class="hstack flex-wrap gap-12 fs-12 text-muted" aria-hidden="true">
+		<li class="hstack gap-4"><span class="dot dot-success"></span>Free 50</li>
+		<li class="hstack gap-4"><span class="dot dot-primary"></span>Paid 70</li>
+		<li class="hstack gap-4"><span class="dot dot-danger"></span>Over 10</li>
+	</ul>
+</div>
+```
+
 ### Hairlines
 
 `progress-xs`, 3 px, and `meter-xs`, 2 px, sit under a row's words without fighting them: how far a job is between its runs, amber when it is late, and how often it succeeded, colored by the meter's own parts.
@@ -86,9 +106,9 @@ A product sets how much it shows in its tokens: `--redz-progress-top-size`, `--r
 
 ## Tokens
 
-From [`css/components/progress.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/progress.css). It declares `--redz-track` on its root, never on rows or items.
+From [`css/components/progress.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/progress.css). It declares `--redz-part`, `--redz-track` on its root, never on rows or items.
 
-It reads the theme's `--redz-bg-hover`, `--redz-primary`, `--redz-secondary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-progress-top-track`, `--redz-progress-top-size`, `--redz-progress-top-glow`, `--redz-motion`, `--redz-ease`.
+It reads the theme's `--redz-bg-hover`, `--redz-primary`, `--redz-secondary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-danger-contrast`, `--redz-progress-top-track`, `--redz-progress-top-size`, `--redz-progress-top-glow`, `--redz-motion`, `--redz-ease`.
 
 ## From Bootstrap 5.3
 

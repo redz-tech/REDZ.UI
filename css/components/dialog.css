@@ -112,6 +112,25 @@
 		background: var(--redz-bg-page);
 	}
 
+	.dialog-footer-start {
+		margin-inline-end: auto;
+	}
+
+	:where(.dialog-body:not(.vstack)) > [data-refusal] {
+		margin-block-start: var(--redz-space-12);
+	}
+
+	@container region (inline-size < 23rem) {
+		.dialog-footer:has(> .btn ~ .btn ~ .btn) {
+			flex-direction: column-reverse;
+			align-items: stretch;
+		}
+
+		.dialog-footer:has(> .btn ~ .btn ~ .btn) > .dialog-footer-start {
+			margin-inline-end: 0;
+		}
+	}
+
 	@media (prefers-reduced-motion: no-preference) {
 		.dialog,
 		.dialog::backdrop {

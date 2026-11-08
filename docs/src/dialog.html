@@ -73,6 +73,41 @@
   ok: 'Delete', tone: 'danger', phrase: 'Riverside tower',
 });</code></pre>
 
+	<h3 id="dialog-confirm-wait">A question that waits for the server</h3>
+	<p>With <code>run</code>, the confirming button carries the answer out before the dialog closes: <code>run({choice, phrase, signal})</code> answers a promise. Meanwhile the button is busy, the other buttons are unavailable, the body is inert, and <kbd>Esc</kbd> and a click outside are held. Resolved, the dialog closes and answers; refused with words - an <code>Error</code>'s message or a string -, a danger alert with them stands right above the footer, said at once, and the buttons wake with the focus still on the confirming one, for another try. A dialog closed meanwhile by code aborts the <code>signal</code>, and a refusal that comes after it is a danger toast. To leave the page on success, go there inside <code>run</code> and leave its promise pending: the button stays busy. <code>choice: {label, items: [{value, text, hint}], value}</code> puts radios above the phrase, and the answer is then the chosen value - a string - or <code>false</code>.</p>
+	<div class="docs-example" id="dialog-confirm-run">
+		<button class="btn" type="button" data-docs-run="confirm-run"><i class="bi bi-pause-circle" aria-hidden="true"></i>Pause the agent</button>
+		<span class="text-muted fs-12" role="status" data-docs-answer></span>
+	</div>
+	<pre class="docs-code" tabindex="0"><code>const how = await REDZ.ui.confirm({
+  title: 'Pause the agent on Boat A?',
+  choice: {label: 'For how long', items: [{value: 'hour', text: 'One hour'}, {value: 'day', text: 'Until tomorrow'}], value: 'hour'},
+  ok: 'Pause',
+  run: ({choice, signal}) =&gt; fetch('/agents/a/pause', {method: 'POST', body: choice, signal})
+    .then((answer) =&gt; answer.ok || answer.text().then((words) =&gt; Promise.reject(new Error(words)))),
+}); // 'hour', 'day', or false</code></pre>
+	<p>A third answer, <code>alt: {text, tone, value}</code>, stands at the footer's start - Discard, outlined in its tone, beside Stay and Save at the end - and answers its <code>value</code>, a string: compare it, never take it as true. The focus starts on Cancel; <code>focus: 'ok'</code> or <code>'alt'</code> starts it there, where the confirming answer is the safe one - Save -, never for an answer that destroys. In a dialog narrower than 368 px a footer of three buttons stacks them full width, the confirming one on top.</p>
+	<div class="docs-example" id="dialog-confirm-alt">
+		<button class="btn" type="button" data-docs-run="confirm-alt"><i class="bi bi-box-arrow-right" aria-hidden="true"></i>Leave the price list</button>
+		<span class="text-muted fs-12" role="status" data-docs-answer></span>
+	</div>
+	<p>A dialog of the page's own waits the same way: a <code>&lt;form method="dialog"&gt;</code> inside it fires the cancelable <code>redz:save</code> on its submit, with <code>{form, data, submitter, signal}</code> - <code>data</code> the form's <code>FormData</code> with the pressed button's value. The page cancels it and answers with a promise by <code>event.detail.respondWith</code>; left alone, the form closes the dialog as the browser does. Marks on the fields stay the page's.</p>
+	<div class="docs-example" id="dialog-wait-form">
+		<button class="btn" type="button" commandfor="dialog-wait-form-panel" command="show-modal"><i class="bi bi-tools" aria-hidden="true"></i>Take a boat out of service</button>
+		<dialog class="dialog dialog-sm" id="dialog-wait-form-panel" aria-labelledby="dialog-wait-form-title">
+			<form method="dialog" data-docs-dialog-save>
+				<div class="dialog-header"><h2 class="dialog-title" id="dialog-wait-form-title">Boat B out of service</h2></div>
+				<div class="dialog-body vstack gap-12">
+					<div class="vstack gap-4"><label class="form-label" for="dialog-wait-form-reason">Why</label><input class="form-control" id="dialog-wait-form-reason" name="reason" autocomplete="off"></div>
+				</div>
+				<div class="dialog-footer">
+					<button class="btn" type="button" commandfor="dialog-wait-form-panel" command="close">Cancel</button>
+					<button class="btn btn-primary" value="save">Take out</button>
+				</div>
+			</form>
+		</dialog>
+	</div>
+
 	<h3 id="dialog-prompt">A question for one value</h3>
 	<p><code>await REDZ.ui.prompt({title, text, label, value, placeholder, type, inputmode, pattern, required, ok, cancel, tone})</code> asks for one value in a modal dialog and answers it, or <code>null</code> for Cancel and <kbd>Esc</kbd>. The field takes the focus with its text selected; <kbd>Enter</kbd> answers once the field is valid - <code>required</code>, <code>pattern</code> and <code>type</code> are held by the browser's own checks. The field is labelled by <code>label</code>, or the title; the buttons' words come from the caller or the page's texts.</p>
 	<div class="docs-example" id="dialog-prompt-name">

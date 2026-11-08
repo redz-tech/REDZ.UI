@@ -69,7 +69,7 @@ A count in a navigation link, a status in a heading.
 
 From [`css/components/badge.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/badge.css). It declares `--redz-badge-bg`, `--redz-badge-fg` on its root, never on rows or items.
 
-It reads the theme's `--redz-bg-hover`, `--redz-text-muted`, `--redz-fs-12`, `--redz-fs-11`, `--redz-fs-14`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-text`, `--redz-bg`, `--redz-primary-subtle`, `--redz-secondary-subtle`, `--redz-success-subtle`, `--redz-danger-subtle`, `--redz-warning-subtle`, `--redz-info-subtle`.
+It reads the theme's `--redz-bg-hover`, `--redz-text-muted`, `--redz-fs-12`, `--redz-fs-11`, `--redz-fs-14`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-text`, `--redz-bg`, `--redz-primary-subtle`, `--redz-primary-text`, `--redz-secondary-subtle`, `--redz-secondary-text`, `--redz-success-subtle`, `--redz-success-text`, `--redz-danger-subtle`, `--redz-danger-text`, `--redz-warning-subtle`, `--redz-warning-text`, `--redz-info-subtle`, `--redz-info-text`.
 
 ## From Bootstrap 5.3
 

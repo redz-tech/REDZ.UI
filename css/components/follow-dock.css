@@ -1,0 +1,17 @@
+@layer components {
+	.follow-dock {
+		position: sticky;
+		inset-block-end: 0;
+		z-index: 3;
+		display: flex;
+		justify-content: center;
+		block-size: 0;
+		pointer-events: none;
+	}
+
+	.follow-dock > .btn {
+		pointer-events: auto;
+		translate: 0 calc(-100% - var(--redz-space-8));
+		box-shadow: var(--redz-shadow-2);
+	}
+}

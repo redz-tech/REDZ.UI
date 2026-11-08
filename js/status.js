@@ -2,8 +2,8 @@
 // page's text "status.saving" with a spinner once it waits past 400 ms, then "status.saved" with a check, which fades
 // after three seconds, or the rejection's own message with a danger icon, which stays - and answers the promise.
 // REDZ.ui.status(line, {tone, text}) says the words at once with the tone's icon: success and info fade, warning and
-// danger stay; REDZ.ui.status(line, null) empties the line. Each line holds a polite status, made at load, that says each
-// message once; a later call wins.
+// danger stay, and so does any with keep: true; REDZ.ui.status(line, null) empties the line. Each line holds a polite
+// status, made at load, that says each message once; a later call wins.
 import {text} from './text.js';
 
 const WAIT = 400;
@@ -27,7 +27,7 @@ const statusOf = (line) => {
 document.querySelectorAll('.form-status').forEach(statusOf);
 
 /** Shows and says the words of call $call in the tone - pending, info, success, warning or danger. */
-const put = (line, call, tone, words) => {
+const put = (line, call, tone, words, keep = false) => {
 	if (calls.get(line) !== call) {
 		return;
 	}
@@ -47,7 +47,7 @@ const put = (line, call, tone, words) => {
 	} else {
 		show();
 	}
-	if (tone === 'success' || tone === 'info') {
+	if ((tone === 'success' || tone === 'info') && !keep) {
 		setTimeout(() => {
 			if (calls.get(line) !== call) {
 				return;
@@ -75,7 +75,7 @@ export const status = (line, what) => {
 		return Promise.resolve();
 	}
 	if (typeof what?.then !== 'function') {
-		put(line, call, what?.tone ?? 'info', what?.text ?? '');
+		put(line, call, what?.tone ?? 'info', what?.text ?? '', what?.keep === true);
 		return Promise.resolve();
 	}
 	const promise = Promise.resolve(what);

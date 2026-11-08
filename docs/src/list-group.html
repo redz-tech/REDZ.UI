@@ -15,7 +15,7 @@
 	</div>
 
 	<h3>Links and buttons</h3>
-	<p><code>list-group-item-action</code> makes an item a choice. The current one is <code>aria-current</code> - <code>"page"</code> for a link to the page shown, <code>"true"</code> otherwise; one that cannot be chosen is a <code>disabled</code> button, or a link without <code>href</code> and with <code>aria-disabled="true"</code>. A plain item whose title is a <code>stretched-link</code> is that link as a whole, and its other links and buttons stay their own.</p>
+	<p><code>list-group-item-action</code> makes an item a choice. The current one is <code>aria-current</code> - <code>"page"</code> for a link to the page shown, <code>"true"</code> otherwise; one that cannot be chosen is a <code>disabled</code> button, or a link without <code>href</code> and with <code>aria-disabled="true"</code>. A plain item whose title is a <code>stretched-link</code> is that link as a whole, as a <a href="table.html">table's row</a> is: a click anywhere on it but on its own controls follows the title - with <kbd>Ctrl</kbd>, <kbd>Cmd</kbd> or the middle button into a new tab - unless the person was selecting its words, which stay selectable; the title is the one link a keyboard and a screen reader meet. Its other links, buttons, switches and handles stay their own. A <code>list-group-actions</code> at its end holds the item's buttons; its icon buttons are dimmed until the item is pointed at or holds the focus, on a device with a pointer, while a button with words keeps its contrast.</p>
 	<div class="docs-example docs-example-stack" id="list-group-action">
 		<nav class="list-group" aria-label="Sites">
 			<a class="list-group-item list-group-item-action" href="#list-group-action" aria-current="page">All sites</a>
@@ -29,6 +29,13 @@
 			<button class="list-group-item list-group-item-action" type="button" disabled>The old catalog</button>
 		</div>
 	</div>
+	<div class="docs-example docs-example-stack" id="list-group-rows">
+		<ul class="list-group" aria-label="Ways to pay" data-density="compact">
+			<li class="list-group-item hstack gap-12"><span class="vstack flex-1"><a class="stretched-link fw-600" href="#list-group-rows">Bank card</a><span class="text-muted fs-12">Visa, Mastercard · 2.9 %</span></span><span class="list-group-actions"><a class="btn btn-sm" href="#list-group-rows">Configure</a><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Copy the settings: Bank card"><i class="bi bi-copy" aria-hidden="true"></i></button></span><label class="form-check"><input class="switch" type="checkbox" role="switch" checked aria-label="Bank card on"></label></li>
+			<li class="list-group-item hstack gap-12"><span class="vstack flex-1"><a class="stretched-link fw-600" href="#list-group-rows">Bank transfer</a><span class="text-muted fs-12">Three working days</span></span><span class="list-group-actions"><a class="btn btn-sm" href="#list-group-rows">Configure</a></span><label class="form-check"><input class="switch" type="checkbox" role="switch" aria-label="Bank transfer on"></label></li>
+		</ul>
+	</div>
+	<p>An item's padding follows <code>data-density</code>, as a table's row does: 12 px by default, 8 px <code>compact</code>, 16 px <code>comfortable</code>, 20 px <code>spacious</code>.</p>
 
 	<h3>Flush, numbered, with counts</h3>
 	<p><code>list-group-flush</code> drops the frame, for a list inside a card: its rows' words line up with the card's. A flush list of <code>list-group-item-action</code> rows keeps the rows' room, so a hover's tint and the current row's bar stand off the words - as in <a href="card.html#card-scrolling">a card that scrolls</a>. <code>list-group-numbered</code> on an <code>&lt;ol&gt;</code> numbers the items.</p>
@@ -87,6 +94,76 @@
 			<li class="list-group-item" data-search="elephant sanctuary chang">Elephant sanctuary</li>
 			<li class="list-group-item text-muted" data-filter-empty hidden>No excursion has these words.</li>
 		</ul>
+	</div>
+
+	<h3 id="list-group-filter-buttons">Filtered by buttons</h3>
+	<p>A button with <code>command="--filter"</code> and <code>aria-controls</code> naming the region shows only the items whose <code>data-NAME</code> holds a word of its <code>value</code>: <code>NAME</code> is the button's <code>name</code>, <code>state</code> without one, and an item may hold several words - <code>data-state="late failed"</code>. The buttons of one name are one choice wherever they stand, their <code>aria-pressed</code> saying which; a button with <code>value=""</code> shows all and stays pressed while nothing narrows, and without one, pressing the pressed button again shows all. Names narrow together, and with the search. A <code>data-filter-count</code> inside a button shows how many items it would show; with the region's id as its value anywhere else it reads the page's text <code>filter.count</code>, "3 of 9". An element with <code>data-filter-group</code> - a card of items, a section - hides while none of its items shows, and a count inside it is its own. A press says the count; the region fires <code>redz:filter</code> with <code>{count, total}</code>; items the page puts in or changes are filtered again. <code>REDZ.ui.filter(region, {state: 'paid'})</code> chooses from code and answers the count; <code>null</code> clears every choice and the search.</p>
+	<div class="docs-example docs-example-stack" id="list-group-states">
+		<div class="hstack flex-wrap gap-8" role="group" aria-label="Show bookings">
+			<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" value="" aria-pressed="true">All<span class="chip-count" data-filter-count></span></button>
+			<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" value="paid" aria-pressed="false">Paid<span class="chip-count" data-filter-count></span></button>
+			<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" value="waiting late" aria-pressed="false">Not paid<span class="chip-count" data-filter-count></span></button>
+		</div>
+		<div class="hstack flex-wrap gap-8" role="group" aria-label="Boat">
+			<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" name="boat" value="a" aria-pressed="false">Boat A</button>
+			<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" name="boat" value="b" aria-pressed="false">Boat B</button>
+		</div>
+		<input class="form-control" type="search" data-filter="list-group-states-list" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off">
+		<p class="fs-12 text-muted" data-filter-count="list-group-states-list"></p>
+		<ul class="list-group" id="list-group-states-list">
+			<li class="list-group-item" data-state="paid" data-boat="a">Alex Sample, boat A, paid</li>
+			<li class="list-group-item" data-state="waiting" data-boat="a">Ben Sample, boat A, waiting</li>
+			<li class="list-group-item" data-state="late" data-boat="b">Chris Sample, boat B, late</li>
+			<li class="list-group-item" data-state="paid" data-boat="b">Dana Sample, boat B, paid</li>
+			<li class="list-group-item" data-state="paid" data-boat="b">Ella Sample, boat B, paid</li>
+			<li class="list-group-item text-muted" data-filter-empty hidden>No booking matches.</li>
+		</ul>
+	</div>
+
+	<h3 id="list-group-server">Searched on the server</h3>
+	<p>A field with <code>data-filter-server</code> hides nothing itself: it asks the page by <code>redz:search</code> on the field, with <code>{query, form, signal}</code> - <code>form</code> the <code>FormData</code> of its <code>&lt;search&gt;</code> or form, a status select beside it included. It asks 600 ms after the typing pauses, at once on <kbd>Enter</kbd> and on <kbd>Esc</kbd>, which clears it, and at once when another control of its search changes. The page cancels the event and answers with a promise by <code>event.detail.respondWith</code>; meanwhile the region carries <code>aria-busy</code> and, in a <code>form-adorn</code>, the field shows a ring at its end. A newer question aborts the <code>signal</code> of the one before, and a late answer is dropped. The count is said in the page's text <code>found</code>: the answer's <code>count</code>, else the items there are. A <a href="#list-group-more">Show more</a> over the region starts again from the answer.</p>
+	<div class="docs-example docs-example-stack" id="list-group-server">
+		<search class="hstack flex-wrap gap-8" aria-label="Requests">
+			<div class="form-adorn flex-1"><i class="bi bi-search" aria-hidden="true"></i><input class="form-control" type="search" name="q" data-filter="list-group-server-list" data-filter-server aria-label="Search requests" placeholder="Subject or person" autocomplete="off"></div>
+			<select class="form-select w-auto" name="status" aria-label="Status"><option value="">Any status</option><option value="open">Open</option><option value="closed">Closed</option></select>
+		</search>
+		<ul class="list-group" id="list-group-server-list" data-docs-server>
+			<li class="list-group-item">The pier gate does not open</li>
+			<li class="list-group-item">Refund for a cancelled trip</li>
+			<li class="list-group-item">A second invoice for one booking</li>
+		</ul>
+	</div>
+	<pre class="docs-code" tabindex="0"><code>document.addEventListener('redz:search', (event) =&gt; {
+	if (!event.target.matches('[data-filter="requests"]')) {
+		return; // a combobox's search fires redz:search too
+	}
+	event.preventDefault();
+	const {form, signal} = event.detail;
+	event.detail.respondWith(fetch('/requests?' + new URLSearchParams(form), {signal})
+		.then((answer) =&gt; answer.json())
+		.then(({rows, count}) =&gt; {
+			document.getElementById('requests').replaceChildren(...rows.map(row));
+			return {count};
+		}));
+});</code></pre>
+
+	<h3 id="list-group-more">Show more</h3>
+	<p>A <code>list-more</code> under a list holds its count and a button with <code>command="--more"</code> and <code>aria-controls</code> naming the list - a list group, any element whose children are its items, a table or its body. The button fires <code>redz:more</code> on the list with <code>{shown, signal}</code>; the page answers with a promise by <code>event.detail.respondWith</code> and the button is busy until the page has put the next items in. Then the focus goes to the first new item - its first link or button, else the item - and the page's text <code>more.loaded</code> says how many came. The answer may say <code>{total}</code> or <code>{done: true}</code>; an answer that adds nothing is the end too, and <code>data-more-total</code> on the button is a total known from the start. At the end the button hides. With <code>data-more-max</code> it hides at that many items and a <code>data-more-cap</code> beside it shows the page's sentence instead - "Narrow the search to see older requests". A <code>data-more-count</code> reads the page's text <code>more.count</code>, "10 of 23", or <code>more.some</code>, "10+", while the total is unknown. A refusal keeps the button and the focus where they were.</p>
+	<div class="docs-example docs-example-stack" id="list-group-more">
+		<section class="card" aria-labelledby="list-group-more-title">
+			<div class="card-header"><h2 class="fs-14" id="list-group-more-title">Pickup points</h2></div>
+			<ul class="list-group list-group-flush" id="list-group-more-list" data-docs-more>
+				<li class="list-group-item"><a href="#list-group-more">Pickup point 1</a></li>
+				<li class="list-group-item"><a href="#list-group-more">Pickup point 2</a></li>
+				<li class="list-group-item"><a href="#list-group-more">Pickup point 3</a></li>
+				<li class="list-group-item"><a href="#list-group-more">Pickup point 4</a></li>
+			</ul>
+			<div class="list-more">
+				<span data-more-count></span>
+				<button class="btn btn-sm" type="button" command="--more" aria-controls="list-group-more-list" data-more-total="11" data-more-max="8">Show more</button>
+				<span data-more-cap hidden>Search by name to find the other points.</span>
+			</div>
+		</section>
 	</div>
 
 	<h3 id="list-group-reorder">Reordering</h3>

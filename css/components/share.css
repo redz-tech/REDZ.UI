@@ -24,12 +24,31 @@
 		--redz-share: #25d366;
 	}
 
-	:is(.share-telegram, .share-facebook, .share-messenger, .share-linkedin, .share-vk, .share-line, .share-whatsapp) > .bi {
+	.share-x {
+		--redz-share: light-dark(#000000, #ffffff);
+	}
+
+	.share-viber {
+		--redz-share: #7360f2;
+	}
+
+	.share-wechat {
+		--redz-share: #07c160;
+	}
+
+	:is(.share-telegram, .share-facebook, .share-messenger, .share-linkedin, .share-vk, .share-line, .share-whatsapp, .share-x, .share-viber, .share-wechat) > .bi {
 		color: var(--redz-share);
+	}
+
+	.share-viber::before {
+		content: "Vb" / "";
 	}
 
 	.share-vk::before {
 		content: "VK" / "";
+	}
+
+	:is(.share-vk, .share-viber)::before {
 		display: inline-grid;
 		place-items: center;
 		flex: none;
@@ -41,5 +60,14 @@
 		font-size: 0.625rem;
 		font-weight: 700;
 		line-height: 1;
+	}
+
+	:is(.share-vk, .share-viber):has(> :is(img, svg))::before {
+		content: none;
+	}
+
+	:is(.share-vk, .share-viber) > img {
+		inline-size: 1.25rem;
+		block-size: 1.25rem;
 	}
 }

@@ -23,4 +23,4 @@ An avatar beside the person's name hides from assistive technology; an avatar al
 
 From [`css/components/avatar.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/avatar.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-primary-subtle`, `--redz-primary`, `--redz-fs-12`.
+It reads the theme's `--redz-primary-subtle`, `--redz-primary-text`, `--redz-fs-12`.

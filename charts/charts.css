@@ -88,12 +88,12 @@
 		pointer-events: none;
 	}
 
-	.chart > tbody > tr:first-child > th {
+	.chart > tbody > tr:first-of-type > th {
 		inset-inline-start: 0;
 		text-align: start;
 	}
 
-	.chart > tbody > tr:last-child:not(:first-child) > th {
+	.chart > tbody > tr:last-of-type:not(:first-of-type) > th {
 		inset-inline-end: 0;
 		text-align: end;
 	}
@@ -363,6 +363,161 @@
 		background: var(--redz-danger);
 	}
 
+	.chart-line > thead {
+		position: absolute;
+		inline-size: 1px;
+		block-size: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+	}
+
+	.chart-line > tbody {
+		position: relative;
+		isolation: isolate;
+		gap: 0;
+	}
+
+	.chart-line > tbody td {
+		block-size: 0;
+		background: none;
+	}
+
+	.chart-line > tbody > tr::after {
+		content: "";
+		position: absolute;
+		z-index: 2;
+		inset-block-start: calc((1 - var(--v, 0)) * 100% - 4.5px);
+		inset-inline-start: calc(50% - 4.5px);
+		inline-size: 9px;
+		block-size: 9px;
+		border-radius: 50%;
+		background: var(--redz-chart-1);
+		box-shadow: 0 0 0 2px var(--redz-bg);
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.chart-line > tbody > tr:hover::after {
+		opacity: 1;
+	}
+
+	:is(.chart-line > tbody, .spark-line) > svg {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		inline-size: 100%;
+		block-size: 100%;
+		overflow: visible;
+		pointer-events: none;
+	}
+
+	:is(.chart-line > tbody, .spark-line) > svg:dir(rtl) {
+		scale: -1 1;
+	}
+
+	:is(.chart-line, .spark-line) polyline {
+		fill: none;
+		stroke: var(--redz-chart-1);
+		stroke-width: 2;
+		stroke-linejoin: round;
+		stroke-linecap: round;
+		vector-effect: non-scaling-stroke;
+	}
+
+	.chart-line polygon {
+		fill: color-mix(in oklch, var(--redz-chart-1) 14%, transparent);
+		stroke: none;
+	}
+
+	.spark-line {
+		inline-size: 60px;
+	}
+
+	.spark-line > i {
+		display: none;
+	}
+
+	.spark-line polyline {
+		stroke: var(--redz-text-muted);
+		stroke-width: 1.5;
+	}
+
+	.strip {
+		container-type: inline-size;
+		min-inline-size: 8rem;
+	}
+
+	.strip-head {
+		display: flex;
+		justify-content: space-between;
+		margin-block-end: var(--redz-space-4);
+		color: var(--redz-text-muted);
+		font-size: var(--redz-fs-12);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.strip-head > [data-days] {
+		display: none;
+	}
+
+	.strip-head > [data-days="90"] {
+		display: inline;
+	}
+
+	.spark-strip {
+		display: flex;
+		align-items: stretch;
+		gap: 2px;
+		inline-size: 100%;
+		--redz-spark-height: 34px;
+	}
+
+	.spark-strip > i {
+		flex: 1 1 0;
+		min-inline-size: 0;
+		inline-size: auto;
+		block-size: auto;
+		background: var(--redz-border-strong);
+	}
+
+	.spark-strip > [data-tone="success"] {
+		background: var(--redz-success);
+	}
+
+	.spark-strip > [data-tone="warning"] {
+		background: var(--redz-warning);
+	}
+
+	.spark-strip > [data-tone="danger"] {
+		background: var(--redz-danger);
+	}
+
+	.spark-strip > [data-tone="info"] {
+		background: var(--redz-info);
+	}
+
+	@container (inline-size < 560px) {
+		.spark-strip > :nth-last-child(n+61),
+		.strip-head > [data-days="90"] {
+			display: none;
+		}
+
+		.strip-head > [data-days="60"] {
+			display: inline;
+		}
+	}
+
+	@container (inline-size < 360px) {
+		.spark-strip > :nth-last-child(n+31),
+		.strip-head > [data-days="60"] {
+			display: none;
+		}
+
+		.strip-head > [data-days="30"] {
+			display: inline;
+		}
+	}
+
 	.spark-median::after {
 		content: "";
 		position: absolute;
@@ -503,6 +658,20 @@
 		.lanes-tick {
 			forced-color-adjust: none;
 			background: CanvasText;
+		}
+
+		:is(.chart-line, .spark-line) polyline {
+			stroke: CanvasText;
+		}
+
+		.chart-line polygon {
+			fill: none;
+		}
+
+		.spark-strip > :not([data-tone]) {
+			background: Canvas;
+			outline: 1px solid CanvasText;
+			outline-offset: -1px;
 		}
 
 		.chart-rows > tbody > tr::after {

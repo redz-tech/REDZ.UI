@@ -17,6 +17,22 @@
 		</figure>
 	</div>
 
+	<h3 id="qr-drawn">Drawn by the package</h3>
+	<p>The package <code>redz-ui-qr</code> - the module <code>js/redz-ui-qr.min.js</code>, linked beside the main script on a screen that shows codes - draws a code into a tile as one SVG path in the tile's black: <code>data-qr</code> holds the text, drawn at load, when the tile is put in later and when the text changes. The text goes in as UTF-8, in the smallest of the 40 versions that holds it at the error correction level of <code>data-qr-level</code> - <code>L</code>, <code>M</code> by default, <code>Q</code> or <code>H</code> - then at the highest level that same version still holds, for free. <code>data-qr-quiet</code> is the quiet zone in modules, 4 by default, as scanners need. The path traces the outline of each dark region, so neither paper nor a zoom shows a seam; the same text always draws the same code. The library makes the tile <code>role="img"</code>; its name is the page's, an <code>aria-label</code> that says what the code holds. A module never falls under 3 px: past the version that would, the tile grows - <code>--redz-qr-module-min</code> sets that floor, <code>0</code> takes it away, and a size of the page's own on the <code>svg</code>, a poster's, wins over both.</p>
+	<div class="docs-example" id="qr-package">
+		<figure class="vstack gap-8 align-items-center">
+			<div class="qr" data-qr="https://redz-tech.github.io/REDZ.UI/" aria-label="QR code: the address of this site"></div>
+			<figcaption class="fs-12 text-muted">Drawn from data-qr</figcaption>
+		</figure>
+		<figure class="vstack gap-8 align-items-center">
+			<div class="qr" id="qr-package-call" aria-label="QR code: a key for the app"></div>
+			<figcaption class="fs-12 text-muted">Drawn by REDZ.ui.qr</figcaption>
+		</figure>
+	</div>
+	<p>A text such as a two-factor secret should sit in no attribute: <code>REDZ.ui.qr(tile, text, {level, quiet})</code> draws it from a variable and answers <code>true</code>; the text goes into the code and nowhere else - no attribute, title, console line or storage, and no error quotes it. <code>REDZ.ui.qr(tile, null)</code> empties the tile. A text longer than version 40 holds at its level - 2,331 bytes at <code>M</code> - is refused: the tile empties, takes <code>data-qr-error</code> and hides, and the call answers <code>false</code>; the words beside the tile stand alone. The SVG carries no <code>style</code> attribute and is built without <code>innerHTML</code>, so a strict Content Security Policy with Trusted Types passes.</p>
+	<pre class="docs-code" tabindex="0"><code>const {uri} = await fetch('/profile/2fa', {method: 'POST'}).then((answer) =&gt; answer.json());
+REDZ.ui.qr(document.getElementById('totp-code'), uri);</code></pre>
+
 	<h3 id="qr-download">Downloaded as a picture</h3>
 	<p>A button with <code>command="--download"</code> and <code>aria-controls</code> naming the tile downloads its code as a PNG on white, to print on a room's door or a table's card: <code>data-file</code> names the file, <code>code.png</code> by default, and <code>data-size</code> is its side in pixels, 512. An inline <code>svg</code> is drawn through a <code>blob:</code> image, so the page's Content Security Policy needs <code>img-src blob:</code>; an <code>img</code> from another site needs that site's CORS.</p>
 	<div class="docs-example" id="qr-download-room">

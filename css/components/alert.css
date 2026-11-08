@@ -1,7 +1,7 @@
 @layer components {
 	.alert {
 		--redz-alert-bg: var(--redz-secondary-subtle);
-		--redz-alert-icon: var(--redz-secondary);
+		--redz-alert-icon: var(--redz-secondary-text);
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
@@ -51,27 +51,27 @@
 
 	.alert-primary {
 		--redz-alert-bg: var(--redz-primary-subtle);
-		--redz-alert-icon: var(--redz-primary);
+		--redz-alert-icon: var(--redz-primary-text);
 	}
 
 	.alert-success {
 		--redz-alert-bg: var(--redz-success-subtle);
-		--redz-alert-icon: var(--redz-success);
+		--redz-alert-icon: var(--redz-success-text);
 	}
 
 	.alert-danger {
 		--redz-alert-bg: var(--redz-danger-subtle);
-		--redz-alert-icon: var(--redz-danger);
+		--redz-alert-icon: var(--redz-danger-text);
 	}
 
 	.alert-warning {
 		--redz-alert-bg: var(--redz-warning-subtle);
-		--redz-alert-icon: var(--redz-warning);
+		--redz-alert-icon: var(--redz-warning-text);
 	}
 
 	.alert-info {
 		--redz-alert-bg: var(--redz-info-subtle);
-		--redz-alert-icon: var(--redz-info);
+		--redz-alert-icon: var(--redz-info-text);
 	}
 }
 

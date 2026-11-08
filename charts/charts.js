@@ -4,11 +4,14 @@
 // allows where a style attribute it would refuse. A table of class chart or chart-rows, drawn otherwise, takes the
 // table's roles too: WebKit drops the meaning of a table whose parts are displayed otherwise, and a screen reader then
 // reads the chart as the table it is. A caption of a board's scale that would touch the one before it hides, by measure,
-// as its width depends on the language. Charts on the page, added later or given new numbers are drawn the same.
+// as its width depends on the language. A chart-line table and a spark-line get one SVG line through their values - a
+// chart its area under it too -, drawn behind the rows, which keep their tooltips. Charts on the page, added later or
+// given new numbers are drawn the same.
 const NUMBERS = ['v', 'at', 'from', 'to', 'median', 'now'];
 const DRAWN = '.chart, .chart-rows, .spark, .lanes';
 const ROLES = {CAPTION: 'caption', THEAD: 'rowgroup', TBODY: 'rowgroup', TR: 'row', TD: 'cell'};
 const CAPTION_GAP = 4;
+const SVG = 'http://www.w3.org/2000/svg';
 
 /** Copies the element's numbers into its custom properties. */
 const number = (element) => {
@@ -35,6 +38,32 @@ const fit = (scale) => {
 
 const sized = new ResizeObserver((entries) => entries.forEach((entry) => fit(entry.target)));
 
+/** Draws the line through the values, oldest first, behind the box's rows - and the area under it for a chart. */
+const line = (box, values, area) => {
+	box.querySelector(':scope > svg[data-line]')?.remove();
+	if (values.length === 0) {
+		return;
+	}
+	const svg = document.createElementNS(SVG, 'svg');
+	svg.setAttribute('data-line', '');
+	svg.setAttribute('aria-hidden', 'true');
+	svg.setAttribute('viewBox', '0 0 ' + values.length + ' 1000');
+	svg.setAttribute('preserveAspectRatio', 'none');
+	const points = values.map((value, i) => (i + 0.5) + ',' + ((1 - value) * 1000).toFixed(1)).join(' ');
+	if (area) {
+		const under = document.createElementNS(SVG, 'polygon');
+		under.setAttribute('points', '0.5,1000 ' + points + ' ' + (values.length - 0.5) + ',1000');
+		svg.append(under);
+	}
+	const stroke = document.createElementNS(SVG, 'polyline');
+	stroke.setAttribute('points', points);
+	svg.append(stroke);
+	box.prepend(svg);
+};
+
+/** A value between 0 and 1 from an element's data-v. */
+const share = (element) => Math.min(1, Math.max(0, Number(element?.getAttribute('data-v')) || 0));
+
 /** Draws one chart: its numbers, a chart table's roles and a board's captions. */
 const draw = (chart) => {
 	for (const element of [chart, ...chart.querySelectorAll(NUMBERS.map((name) => '[data-' + name + ']').join(', '))]) {
@@ -50,7 +79,20 @@ const draw = (chart) => {
 			part.setAttribute('role', part.tagName === 'TH' ? (part.closest('thead') === null ? 'rowheader' : 'columnheader') : ROLES[part.tagName]);
 		}
 	}
+	if (chart.matches('table.chart-line')) {
+		for (const body of chart.tBodies) {
+			const rows = [...body.rows];
+			rows.forEach((row) => row.style.setProperty('--v', String(share(row.querySelector('td[data-v]')))));
+			line(body, rows.map((row) => share(row.querySelector('td[data-v]'))), true);
+		}
+	}
+	if (chart.matches('.spark-line')) {
+		line(chart, [...chart.querySelectorAll(':scope > i')].map(share), false);
+	}
 };
+
+/** Whether the change is only a line this script drew. */
+const drawn = (record) => record.type === 'childList' && [...record.addedNodes, ...record.removedNodes].every((node) => node instanceof SVGElement && node.hasAttribute('data-line'));
 
 document.querySelectorAll(DRAWN).forEach(draw);
 
@@ -58,7 +100,7 @@ document.fonts?.ready.then(() => document.querySelectorAll('.lanes-scale').forEa
 
 new MutationObserver((records) => {
 	const charts = new Set();
-	for (const record of records) {
+	for (const record of records.filter((one) => !drawn(one))) {
 		const inside = record.target instanceof Element ? record.target.closest(DRAWN) : null;
 		if (inside !== null) {
 			charts.add(inside);

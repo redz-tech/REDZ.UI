@@ -20,19 +20,19 @@
 	}
 
 	.log [data-tone="success"] {
-		color: var(--redz-success);
+		color: var(--redz-success-text);
 	}
 
 	.log [data-tone="warning"] {
-		color: var(--redz-warning);
+		color: var(--redz-warning-text);
 	}
 
 	.log [data-tone="danger"] {
-		color: var(--redz-danger);
+		color: var(--redz-danger-text);
 	}
 
 	.log [data-tone="info"] {
-		color: var(--redz-info);
+		color: var(--redz-info-text);
 	}
 
 	.log [data-tone="muted"] {
@@ -79,12 +79,12 @@
 
 	.diff > ins::before {
 		content: "+";
-		color: var(--redz-success);
+		color: var(--redz-success-text);
 	}
 
 	.diff > del::before {
 		content: "-";
-		color: var(--redz-danger);
+		color: var(--redz-danger-text);
 	}
 
 	.diff > :not(ins, del) ins {

@@ -39,6 +39,25 @@ An alert whose words come after an action - a refused sign-in, a wrong code - is
 <div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="alert-fill">Fill the alert</button></div>
 ```
 
+`REDZ.ui.alert(box, {tone, text})` does it from code without a live role on the box: it gives the box the class of the tone, its icon and the words - text, never HTML - and says them through the page's hidden status, politely, at once for `danger`; the same words again are said again. `REDZ.ui.alert(box, null)` empties the box. Given a promise, it shows the page's text `busy` with a spinner once the promise waits past 400 ms, then the `{tone, text}` the promise answers - nothing empties the box - or the rejection's message as `danger`, and answers the promise. A later call wins.
+
+```html
+<div class="alert" id="alert-code-box"></div>
+<div class="hstack flex-wrap gap-8">
+	<button class="btn btn-secondary" type="button" data-docs-run="alert-code-info">Code sent</button>
+	<button class="btn btn-secondary" type="button" data-docs-run="alert-code-wait">Make the dump</button>
+	<button class="btn btn-secondary" type="button" data-docs-run="alert-code-clear">Empty it</button>
+</div>
+```
+
+```js
+const box = document.getElementById('sign-in-words');
+REDZ.ui.alert(box, {tone: 'info', text: 'A code went to your phone. A new one in 60 s.'});
+REDZ.ui.alert(box, fetch('/dump', {method: 'POST'}).then((answer) => answer.json())
+  .then(({file, size}) => ({tone: 'success', text: 'Done: ' + file + ' (' + size + ')'})));
+REDZ.ui.alert(box, null);
+```
+
 ### Sizes
 
 `alert-sm` for a note inside a card or a form, `alert-lg` for the one message a page is about.
@@ -66,7 +85,7 @@ The words may be a `vstack`: it stays beside the icon however long its text.
 
 From [`css/components/alert.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/alert.css). It declares `--redz-alert-bg`, `--redz-alert-icon` on its root, never on rows or items.
 
-It reads the theme's `--redz-secondary-subtle`, `--redz-secondary`, `--redz-space-8`, `--redz-space-12`, `--redz-space-16`, `--redz-radius-12`, `--redz-text`, `--redz-radius-8`, `--redz-fs-14`, `--redz-space-20`, `--redz-fs-16`, `--redz-primary-subtle`, `--redz-primary`, `--redz-success-subtle`, `--redz-success`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-info-subtle`, `--redz-info`.
+It reads the theme's `--redz-secondary-subtle`, `--redz-secondary-text`, `--redz-space-8`, `--redz-space-12`, `--redz-space-16`, `--redz-radius-12`, `--redz-text`, `--redz-radius-8`, `--redz-fs-14`, `--redz-space-20`, `--redz-fs-16`, `--redz-primary-subtle`, `--redz-primary-text`, `--redz-success-subtle`, `--redz-success-text`, `--redz-danger-subtle`, `--redz-danger-text`, `--redz-warning-subtle`, `--redz-warning-text`, `--redz-info-subtle`, `--redz-info-text`.
 
 ## From Bootstrap 5.3
 

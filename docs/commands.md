@@ -19,6 +19,21 @@ Buttons that act without a line of the page's script: copy a value, print the pa
 </div>
 ```
 
+## Download
+
+`command="--download"` with `aria-controls` naming a field, a `textarea` or any element - a `pre` of a report - downloads its value or its text as a file: `data-file` names it, `download.txt` by default, and `data-type` is its type, `text/plain`. A `text/csv` file starts with a UTF-8 byte order mark, so a spreadsheet reads its letters right; `data-bom="false"` leaves it out. An element holding a picture - an `svg`, an `img`, a `canvas`, a [QR tile](qr.md#qr-download) - downloads it as a PNG instead. Each download is said politely, in the page's text `downloaded`. From code, `REDZ.ui.download({text, file, type, bom})` does the same for words made at the moment - a report built from the rows on the screen - and `{blob, file}` for a `Blob` of any kind.
+
+```html
+		<pre class="docs-code w-100" id="commands-download-text" tabindex="0">Boat A	12 trips	286 seats
+Boat C	9 trips	201 seats</pre>
+		<button class="btn" type="button" command="--download" aria-controls="commands-download-text" data-file="boats.txt"><i class="bi bi-download" aria-hidden="true"></i>Download the report</button>
+```
+
+```js
+const rows = [...document.querySelectorAll('#agents tbody tr')].map((row) => [...row.cells].map((cell) => cell.textContent.trim()).join(';'));
+REDZ.ui.download({text: rows.join('\r\n'), file: 'agents-2026-11-08.csv', type: 'text/csv'});
+```
+
 ## Print
 
 `command="--print"` prints the page. However printing starts - the button, the browser's menu, a key - every closed `details`, an accordion's item among them, and every region a `--toggle` button holds closed open for the paper and close again after. A card is not cut across two pages, and a scrolling card's body prints whole; the shell, toasts, the save bar and anything with `print:d-none` stay off the paper.
@@ -55,6 +70,25 @@ Buttons with `command="--theme"` and the value `light`, `dark` or `system` set t
 	<a class="menu-item share-linkedin" role="menuitem"><i class="bi bi-linkedin" aria-hidden="true"></i>LinkedIn</a>
 	<a class="menu-item share-vk" role="menuitem">VK</a>
 	<button class="menu-item" type="button" role="menuitem" command="--copy"><i class="bi bi-link-45deg" aria-hidden="true"></i>Copy the address</button>
+</div>
+```
+
+Three more networks: `share-x` posts on X with the title as its words, `share-viber` opens Viber's app with them - its mark drawn as letters, as VK's, or the page's own `img` or `svg` in the link -, and `share-wechat`, which has no address to share by, is a plain button that opens the page's popover with a [QR code](qr.md) of the address to scan in WeChat. `data-share-url` and `data-share-title` on any element write the links and the copy inside it, a row on the page without a menu: neutral buttons, each with the network's coloured icon and its name, as a filled brand colour leaves most names unreadable.
+
+```html
+<div class="hstack flex-wrap gap-8" role="group" aria-label="Share your link" data-share-url="https://lagoon.example/join?ref=sample" data-share-title="Book North Bay trips with my link">
+	<a class="btn btn-sm share-whatsapp"><i class="bi bi-whatsapp" aria-hidden="true"></i>WhatsApp</a>
+	<a class="btn btn-sm share-telegram"><i class="bi bi-telegram" aria-hidden="true"></i>Telegram</a>
+	<a class="btn btn-sm share-x"><i class="bi bi-twitter-x" aria-hidden="true"></i>X</a>
+	<a class="btn btn-sm share-viber">Viber</a>
+	<button class="btn btn-sm share-wechat" type="button" commandfor="commands-share-wechat" command="toggle-popover"><i class="bi bi-wechat" aria-hidden="true"></i>WeChat</button>
+	<button class="btn btn-sm" type="button" command="--copy"><i class="bi bi-link-45deg" aria-hidden="true"></i>Copy the link</button>
+	<div class="popover" id="commands-share-wechat" popover aria-label="Scan in WeChat">
+		<div class="vstack gap-8 align-items-center">
+			<div class="qr"><img src="img/qr.svg" alt="QR code of your link"></div>
+			<p class="fs-12 text-muted">Scan in WeChat to share</p>
+		</div>
+	</div>
 </div>
 ```
 

@@ -33,6 +33,20 @@
 		<div class="alert alert-danger" id="alert-fill-words" role="alert"></div>
 		<div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="alert-fill">Fill the alert</button></div>
 	</div>
+	<p><code>REDZ.ui.alert(box, {tone, text})</code> does it from code without a live role on the box: it gives the box the class of the tone, its icon and the words - text, never HTML - and says them through the page's hidden status, politely, at once for <code>danger</code>; the same words again are said again. <code>REDZ.ui.alert(box, null)</code> empties the box. Given a promise, it shows the page's text <code>busy</code> with a spinner once the promise waits past 400 ms, then the <code>{tone, text}</code> the promise answers - nothing empties the box - or the rejection's message as <code>danger</code>, and answers the promise. A later call wins.</p>
+	<div class="docs-example docs-example-stack" id="alert-code">
+		<div class="alert" id="alert-code-box"></div>
+		<div class="hstack flex-wrap gap-8">
+			<button class="btn btn-secondary" type="button" data-docs-run="alert-code-info">Code sent</button>
+			<button class="btn btn-secondary" type="button" data-docs-run="alert-code-wait">Make the dump</button>
+			<button class="btn btn-secondary" type="button" data-docs-run="alert-code-clear">Empty it</button>
+		</div>
+	</div>
+	<pre class="docs-code" tabindex="0"><code>const box = document.getElementById('sign-in-words');
+REDZ.ui.alert(box, {tone: 'info', text: 'A code went to your phone. A new one in 60 s.'});
+REDZ.ui.alert(box, fetch('/dump', {method: 'POST'}).then((answer) =&gt; answer.json())
+  .then(({file, size}) =&gt; ({tone: 'success', text: 'Done: ' + file + ' (' + size + ')'})));
+REDZ.ui.alert(box, null);</code></pre>
 
 	<h3>Sizes</h3>
 	<p><code>alert-sm</code> for a note inside a card or a form, <code>alert-lg</code> for the one message a page is about.</p>

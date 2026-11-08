@@ -12,7 +12,7 @@ The custom properties on `:root` that the components read: colors by role in pai
 
 ## A white label from one colour
 
-`data-brand` on `html`, or on one region, makes the primary tone of one colour, `--redz-brand`: the library derives the tone, its `-subtle` fill, its `-contrast` text - black or white, whichever reads at 4.5:1 on it, as one of the two always does - the focus ring and the links, in both themes; in the dark one the tone is lightened until it reads on the dark ground. `data-brand="#0a7f5a"` gives the colour, which the library sets through the CSSOM after its script loads; a page that knows the colour on its server writes `--redz-brand` in its own stylesheet beside the attribute, and nothing waits for the script. The colour is used as given: one with 4.5:1 on white keeps the light theme's text readable - the library does not fix another. The relative colours it is derived with are on the floor: Chrome 119, Firefox 128, Safari 18.
+`data-brand` on `html`, or on one region, makes the primary tone of one colour, `--redz-brand`: the library derives the tone, its `-subtle` fill, its `-contrast` text - black or white, whichever reads at 4.5:1 on it, as one of the two always does - the focus ring and the links, in both themes; in the dark one the tone is lightened until it reads on the dark ground. `data-brand="#0a7f5a"` gives the colour, which the library sets through the CSSOM after its script loads; a page that knows the colour on its server writes `--redz-brand` in its own stylesheet beside the attribute, and nothing waits for the script. Where the tone is text - a link, a subtle badge, an outline button, `text-primary`, an alert's icon - it is `--redz-primary-text`: in the light theme the colour darkened, its hue kept, until its luminance is at most 0.13, which reads at 4.5:1 on white and on its subtle fill; in the dark theme the tone itself. A fill keeps the colour as given. The other tones follow their own keys the same way: `data-brand-secondary`, `data-brand-success`, `data-brand-info`, `data-brand-warning` and `data-brand-danger` - a company's own red for its errors - each derive that tone, its `-subtle`, `-contrast` and `-text`. Every tone has its `--redz-TONE-text`, the tone itself unless a brand key derives it. The relative colours it is derived with are on the floor: Chrome 119, Firefox 128, Safari 18.
 
 ```html
 <div class="hstack flex-wrap gap-8" data-brand="#0a7f5a">
@@ -23,6 +23,15 @@ The custom properties on `:root` that the components read: colors by role in pai
 </div>
 <div class="hstack flex-wrap gap-8" data-brand="#f4c542">
 	<button class="btn btn-primary" type="button">Book now</button>
+	<button class="btn btn-outline-primary" type="button">Details</button>
+	<span class="badge badge-subtle-primary">New</span>
+	<a href="#tokens-brand">A link</a>
+</div>
+<div class="hstack flex-wrap gap-8" data-brand-danger="#ff6b5b" data-brand-success="#3ddc84">
+	<button class="btn btn-danger" type="button">Delete</button>
+	<span class="badge badge-subtle-danger">Overdue</span>
+	<span class="badge badge-subtle-success">Paid</span>
+	<span class="text-danger">2 failed</span>
 </div>
 ```
 
@@ -57,6 +66,12 @@ The custom properties on `:root` that the components read: colors by role in pai
 | `--redz-info` | `light-dark(#0071bb, #5eaceb)` |
 | `--redz-info-subtle` | `light-dark(#e4f3ff, #193043)` |
 | `--redz-info-contrast` | `light-dark(#ffffff, #000000)` |
+| `--redz-primary-text` | `var(--redz-primary)` |
+| `--redz-secondary-text` | `var(--redz-secondary)` |
+| `--redz-success-text` | `var(--redz-success)` |
+| `--redz-danger-text` | `var(--redz-danger)` |
+| `--redz-warning-text` | `var(--redz-warning)` |
+| `--redz-info-text` | `var(--redz-info)` |
 | `--redz-chart-1` | `light-dark(#2a78d6, #3987e5)` |
 | `--redz-chart-2` | `light-dark(#eb6834, #d95926)` |
 | `--redz-chart-3` | `light-dark(#1baf7a, #199e70)` |

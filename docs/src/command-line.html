@@ -1,0 +1,44 @@
+<header class="vstack gap-8">
+	<h1>Commands to copy</h1>
+	<p class="docs-lead">A command a person runs on their own machine - an install line, a crontab entry, a request with a key - shown on one line, copied whole by one button.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="command-line-examples">
+	<h2 id="command-line-examples">Examples</h2>
+	<p><code>command-line</code> is one frame: a <code>pre tabindex="0" translate="no"</code> holding a <code>code</code>, and a <code>--copy</code> button in its own column. The command stays on one line, left to right on any page, and scrolls sideways under a fade at the cut edge - never under the button; a click selects it whole. The button without <code>aria-controls</code> copies its command. The words above name it: the box is <code>role="group"</code> with <code>aria-labelledby</code>, as a <code>pre</code> may carry no name of its own.</p>
+	<div class="docs-example docs-example-stack" id="command-line-cron">
+		<p id="command-line-cron-title">Add this line to the server's crontab:</p>
+		<div class="command-line" role="group" aria-labelledby="command-line-cron-title">
+			<pre tabindex="0" translate="no"><code>*/5 * * * * php /var/www/example/cron.php --task=maintenance --quiet &gt;&gt; /var/log/example-cron.log 2&gt;&amp;1</code></pre>
+			<button class="btn btn-icon" type="button" command="--copy" aria-label="Copy the command"><i class="bi bi-copy" aria-hidden="true"></i></button>
+		</div>
+	</div>
+	<p>A <code>var</code> in the command is a part the person puts in themselves - a key, a host - and shows as an amber chip. A page that fills it later, on a reveal, writes plain text in its place.</p>
+	<div class="docs-example docs-example-stack" id="command-line-key">
+		<p id="command-line-key-title">Ask for the bookings of today:</p>
+		<div class="command-line" role="group" aria-labelledby="command-line-key-title">
+			<pre tabindex="0" translate="no"><code>curl -H "Authorization: Bearer <var>YOUR_KEY</var>" https://api.example.com/v1/bookings?day=today</code></pre>
+			<button class="btn btn-icon" type="button" command="--copy" aria-label="Copy the command"><i class="bi bi-copy" aria-hidden="true"></i></button>
+		</div>
+	</div>
+
+	<h3 id="command-line-steps">Steps</h3>
+	<p><code>ol class="command-steps"</code> numbers commands run one after another, each step a line of words and its <code>command-line</code>, in circles joined by a line. A <code>--copy</code> button whose <code>aria-controls</code> names the list copies all its commands, a line each. Commands that are alternatives - one or the other - go in a plain <code>vstack</code> instead.</p>
+	<div class="docs-example docs-example-stack" id="command-line-install">
+		<div class="hstack gap-8"><h4 class="fs-14 flex-1" id="command-line-install-title">Install the agent</h4><button class="btn btn-sm" type="button" command="--copy" aria-controls="command-line-install-list"><i class="bi bi-copy" aria-hidden="true"></i>Copy all</button></div>
+		<ol class="command-steps" id="command-line-install-list" aria-labelledby="command-line-install-title">
+			<li><p id="command-line-install-1">Download it:</p><div class="command-line" role="group" aria-labelledby="command-line-install-1"><pre tabindex="0" translate="no"><code>curl -fsSLO https://get.example.com/agent/agent-2.4.tar.gz</code></pre><button class="btn btn-icon" type="button" command="--copy" aria-label="Copy the command"><i class="bi bi-copy" aria-hidden="true"></i></button></div></li>
+			<li><p id="command-line-install-2">Unpack it:</p><div class="command-line" role="group" aria-labelledby="command-line-install-2"><pre tabindex="0" translate="no"><code>tar -xzf agent-2.4.tar.gz -C /opt</code></pre><button class="btn btn-icon" type="button" command="--copy" aria-label="Copy the command"><i class="bi bi-copy" aria-hidden="true"></i></button></div></li>
+			<li><p id="command-line-install-3">Start it:</p><div class="command-line" role="group" aria-labelledby="command-line-install-3"><pre tabindex="0" translate="no"><code>/opt/agent/start --key <var>YOUR_KEY</var></code></pre><button class="btn btn-icon" type="button" command="--copy" aria-label="Copy the command"><i class="bi bi-copy" aria-hidden="true"></i></button></div></li>
+		</ol>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="command-line-access">
+	<h2 id="command-line-access">Accessibility</h2>
+	<ul>
+		<li>The command is a tab stop, so a keyboard scrolls it; its words above it name the group.</li>
+		<li>The copy button says what it copies in its name and says politely that it did, in the page's texts <code>copy.done</code> and <code>copy.failed</code>.</li>
+		<li><code>translate="no"</code> keeps a page's translator from turning the command into words.</li>
+	</ul>
+</section>

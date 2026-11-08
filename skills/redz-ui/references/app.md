@@ -62,6 +62,26 @@ The tones are `app-banner-info`, the default, `app-banner-success`, `app-banner-
 <div class="app-banner app-banner-danger"><i class="bi bi-x-octagon-fill" aria-hidden="true"></i><span>The connection is lost. Changes made now are not saved.</span></div>
 ```
 
+## A bar at the bottom
+
+`action-bar` holds what a long screen is for - a total and Pay, a count and Save - at the bottom of the window while the page scrolls under it: sticky, across its region on the page's own tinted floor, a line above it. As the last child of `app-main` it reaches the region's edges. Its padding keeps clear of a phone's home bar and rounded corners - the page asks for that room with `viewport-fit=cover` in its viewport meta - and on a touch screen it steps aside while a field has the focus, as the keyboard takes its place. `action-bar-text` is its words, which take the room left. It stays off paper.
+
+```html
+<div class="card card-scroll max-h-240" aria-label="The bill">
+	<div class="card-body vstack gap-8">
+		<p>North Bay by speedboat · 2 adults · 5,000 THB</p>
+		<p>Lunch on the beach · 2 · 600 THB</p>
+		<p>Hotel pickup · 1 · 250 THB</p>
+		<p>Park fee · 2 · 800 THB</p>
+		<p>Snorkelling gear · 2 · 0 THB</p>
+	</div>
+	<div class="action-bar">
+		<span class="action-bar-text"><strong class="tabular-nums">6,650 THB</strong> <span class="text-muted">for 4 items</span></span>
+		<button class="btn btn-primary" type="button">Pay</button>
+	</div>
+</div>
+```
+
 ## States
 
 ## Keyboard and accessibility

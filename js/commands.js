@@ -12,6 +12,16 @@ const OPENERS = ['toggle-popover', 'show-popover'];
 const openers = new WeakMap();
 let pressed = null;
 
+/** The button that opened the popover - the outermost one's for a menu inside a menu - else the one naming it, or null. */
+export const openerOf = (popover) => {
+	const outer = popover.parentElement?.closest('[popover]');
+	if (outer) {
+		return openerOf(outer);
+	}
+	const named = popover.id === '' ? [] : [...document.querySelectorAll('button[commandfor="' + CSS.escape(popover.id) + '"]')];
+	return openers.get(popover) ?? (named.length === 1 ? named[0] : null);
+};
+
 /** Whether the button opens the popover: a toggle or show command from outside it. */
 const opens = (button, popover) => OPENERS.includes((button.getAttribute('command') || '').toLowerCase()) && !popover.contains(button);
 

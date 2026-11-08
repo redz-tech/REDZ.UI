@@ -59,6 +59,52 @@
 		block-size: 3px;
 	}
 
+	.meter-stacked {
+		display: flex;
+		gap: 2px;
+		overflow: visible;
+	}
+
+	.meter-stacked > * {
+		flex: var(--v, 0) 0 0;
+		min-inline-size: 0;
+		background: var(--redz-part, var(--redz-secondary));
+	}
+
+	.meter-stacked > :first-child {
+		border-start-start-radius: 999px;
+		border-end-start-radius: 999px;
+	}
+
+	.meter-stacked > :last-child {
+		border-start-end-radius: 999px;
+		border-end-end-radius: 999px;
+	}
+
+	.meter-stacked > [data-tone="primary"] {
+		--redz-part: var(--redz-primary);
+	}
+
+	.meter-stacked > [data-tone="success"] {
+		--redz-part: var(--redz-success);
+	}
+
+	.meter-stacked > [data-tone="info"] {
+		--redz-part: var(--redz-info);
+	}
+
+	.meter-stacked > [data-tone="warning"] {
+		--redz-part: var(--redz-warning);
+	}
+
+	.meter-stacked > [data-tone="danger"] {
+		--redz-part: var(--redz-danger);
+	}
+
+	.meter-stacked > [data-over] {
+		background: repeating-linear-gradient(-45deg, color-mix(in oklch, var(--redz-danger-contrast) 55%, transparent) 0 1.5px, transparent 1.5px 4.5px), var(--redz-danger);
+	}
+
 	.meter-xs {
 		block-size: 2px;
 	}
@@ -189,6 +235,14 @@
 			border: 1px solid CanvasText;
 			background: Canvas;
 			color: Highlight;
+		}
+
+		.meter-stacked > * {
+			background: CanvasText;
+		}
+
+		.meter-stacked > [data-over] {
+			background: repeating-linear-gradient(-45deg, CanvasText 0 1.5px, Canvas 1.5px 4.5px);
 		}
 
 		.progress:indeterminate {

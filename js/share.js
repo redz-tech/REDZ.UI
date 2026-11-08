@@ -1,8 +1,9 @@
 // REDZ.UI, sharing: a button with command="--share" shares data-share-url - the page's own address when it has none - and
 // data-share-title through the device's share sheet where it has one; elsewhere it opens its menu, aria-controls, as
 // its popover. The library writes the addresses of the menu's links by their class - share-telegram, share-facebook,
-// share-messenger, share-linkedin, share-vk, share-line, share-whatsapp - and the URL into a --copy item without
-// data-copy. Like --toggle, the button has no commandfor.
+// share-messenger, share-linkedin, share-vk, share-line, share-whatsapp, share-x, share-viber - and the URL into a
+// --copy item without data-copy. Any other element with data-share-url gets the same for the links and copies inside
+// it: a row of share buttons on the page, without a menu. Like --toggle, the button has no commandfor.
 const NETWORKS = {
 	telegram: 'https://t.me/share/url?url={url}&text={title}',
 	facebook: 'https://www.facebook.com/sharer/sharer.php?u={url}',
@@ -11,6 +12,8 @@ const NETWORKS = {
 	vk: 'https://vk.com/share.php?url={url}&title={title}',
 	line: 'https://social-plugins.line.me/lineit/share?url={url}',
 	whatsapp: 'https://wa.me/?text={title}%20{url}',
+	x: 'https://x.com/intent/tweet?url={url}&text={title}',
+	viber: 'viber://forward?text={title}%20{url}',
 };
 const failed = new WeakSet();
 
@@ -20,6 +23,20 @@ const sharedBy = (button) => ({url: new URL(button.dataset.shareUrl || location.
 /** Whether the button shares by the device's own sheet: there is one, and it has not failed it. */
 const sheet = (button) => !failed.has(button) && typeof navigator.share === 'function' && navigator.canShare?.(sharedBy(button)) !== false;
 
+/** Writes the addresses of the box's share links and the URL of its copies. */
+const write = (box, {url, title}) => {
+	for (const [network, address] of Object.entries(NETWORKS)) {
+		for (const link of box.querySelectorAll('a.share-' + network)) {
+			link.href = address.replace('{url}', encodeURIComponent(url)).replace('{title}', encodeURIComponent(title));
+			link.target ||= '_blank';
+			link.rel ||= 'noopener';
+		}
+	}
+	for (const copy of box.querySelectorAll('[command="--copy"]:not([data-copy])')) {
+		copy.dataset.copy = url;
+	}
+};
+
 /** The button's menu with its links written, and the button made its popover's invoker unless the sheet shares; null
  *  when it has no menu. */
 const ready = (button) => {
@@ -27,17 +44,7 @@ const ready = (button) => {
 	if (menu === null) {
 		return null;
 	}
-	const {url, title} = sharedBy(button);
-	for (const [network, address] of Object.entries(NETWORKS)) {
-		for (const link of menu.querySelectorAll('a.share-' + network)) {
-			link.href = address.replace('{url}', encodeURIComponent(url)).replace('{title}', encodeURIComponent(title));
-			link.target ||= '_blank';
-			link.rel ||= 'noopener';
-		}
-	}
-	for (const copy of menu.querySelectorAll('[command="--copy"]:not([data-copy])')) {
-		copy.dataset.copy = url;
-	}
+	write(menu, sharedBy(button));
 	if (sheet(button)) {
 		button.removeAttribute('popovertarget');
 	} else {
@@ -73,4 +80,8 @@ document.addEventListener('beforetoggle', (event) => {
 
 for (const button of document.querySelectorAll('button[command="--share"]')) {
 	ready(button);
+}
+
+for (const box of document.querySelectorAll('[data-share-url]:not([command="--share"])')) {
+	write(box, sharedBy(box));
 }

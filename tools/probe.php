@@ -64,7 +64,7 @@ const PROBE_CODE = [
 ];
 // The folders of the packages: a file of one, or of what dist/redz-ui-NAME.min.* builds from it, reaches only the pages
 // that link those.
-const PROBE_PACKAGES = ['charts', 'calendar', 'media', 'editor'];
+const PROBE_PACKAGES = ['charts', 'calendar', 'media', 'qr', 'editor'];
 // The keys of the keyboard walk: the WebDriver code point (Firefox, Safari), the Windows key code and the text (Chrome).
 const PROBE_KEYS = ['Enter' => ["\u{E006}", 13, "\r"], 'Space' => ["\u{E00D}", 32, ' '], 'Escape' => ["\u{E00C}", 27, ''], 'Tab' => ["\u{E004}", 9, ''], 'ArrowDown' => ["\u{E015}", 40, ''], 'ArrowUp' => ["\u{E013}", 38, ''], 'ArrowLeft' => ["\u{E012}", 37, ''], 'ArrowRight' => ["\u{E014}", 39, ''], 'Home' => ["\u{E011}", 36, ''], 'End' => ["\u{E010}", 35, ''], 'Backspace' => ["\u{E003}", 8, '']];
 

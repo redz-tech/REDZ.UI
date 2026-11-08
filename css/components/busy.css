@@ -31,6 +31,24 @@
 		animation: busy-show 0s 400ms both, spinner-turn 0.7s linear infinite;
 	}
 
+	.busy-words {
+		position: absolute;
+		z-index: 2;
+		inset-block-start: calc(min(50%, 12rem) + 1.25rem);
+		inset-inline: 0;
+		padding-inline: var(--redz-space-16);
+		color: var(--redz-text);
+		font-size: var(--redz-fs-14);
+		text-align: center;
+		animation: busy-show 0s 400ms both;
+	}
+
+	.busy-ring {
+		margin-inline-start: var(--redz-space-4);
+		color: var(--redz-text-muted);
+		vertical-align: -0.125em;
+	}
+
 	@media (forced-colors: active) {
 		:is(.card, .card-body, .dialog-body, .drawer-body, .region)[aria-busy="true"]::after {
 			forced-color-adjust: none;

@@ -68,27 +68,27 @@
 
 	.icon-tile-secondary {
 		--redz-tile-bg: var(--redz-secondary-subtle);
-		--redz-tile-fg: var(--redz-secondary);
+		--redz-tile-fg: var(--redz-secondary-text);
 	}
 
 	.icon-tile-success {
 		--redz-tile-bg: var(--redz-success-subtle);
-		--redz-tile-fg: var(--redz-success);
+		--redz-tile-fg: var(--redz-success-text);
 	}
 
 	.icon-tile-danger {
 		--redz-tile-bg: var(--redz-danger-subtle);
-		--redz-tile-fg: var(--redz-danger);
+		--redz-tile-fg: var(--redz-danger-text);
 	}
 
 	.icon-tile-warning {
 		--redz-tile-bg: var(--redz-warning-subtle);
-		--redz-tile-fg: var(--redz-warning);
+		--redz-tile-fg: var(--redz-warning-text);
 	}
 
 	.icon-tile-info {
 		--redz-tile-bg: var(--redz-info-subtle);
-		--redz-tile-fg: var(--redz-info);
+		--redz-tile-fg: var(--redz-info-text);
 	}
 
 	.icon-tile[data-color] {

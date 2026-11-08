@@ -106,7 +106,7 @@ document.addEventListener('redz:files', (event) => {
 
 ### Files the server holds
 
-The server writes a row for each file it holds, as the template's, with `data-file-stored` - its id - and the name of its remove button. Remove asks the page in `redz:remove` with `detail.id` and `detail.row`: a page that cancels it and answers with a promise keeps the row busy until it settles - gone when it resolves, its words said in its `data-file-error` when it rejects. Left alone, the row goes, and a hidden field of its own with it, so the form sends the ids still kept. After each change the upload fires `redz:change` with `detail.count`, the files it holds, stored and new; `data-max-files` counts the stored ones too. A file the page sends becomes such a row when its `redz:files` promise resolves with the id the server gave it. Below, the contract is in use by an invoice, and a paper added is sent and kept under the next id.
+The server writes a row for each file it holds, as the template's, with `data-file-stored` - its id - and the name of its remove button. Remove asks the page in `redz:remove` with `detail.id` and `detail.row`: a page that cancels it and answers with a promise keeps the row busy until it settles - gone when it resolves, its words said in its `data-file-error` when it rejects. Left alone, the row goes, and a hidden field of its own with it, so the form sends the ids still kept. After each change the upload fires `redz:change` with `detail.count`, the files it holds, stored and new, `detail.pending`, those still sending, and `detail.failed`, those refused; `data-max-files` counts the stored ones too. While a file sends, the file field is invalid with the page's text `file.pending`, so its form waits. A file the page sends becomes such a row when its `redz:files` promise resolves with the id the server gave it. Below, the contract is in use by an invoice, and a paper added is sent and kept under the next id.
 
 ```html
 <div class="upload" data-max-files="4">
@@ -126,6 +126,19 @@ The server writes a row for each file it holds, as the template's, with `data-fi
 		</li>
 	</template>
 </div>
+```
+
+### Pasted anywhere, cleared, settled
+
+A file is pasted into an upload while the focus is in it. With `data-paste="page"` the upload takes files pasted anywhere on the page, or, with an element's id, anywhere in that element - a ticket's card. A paste into a text field that brings words stays words, though a word processor puts a picture of them beside: only a paste of files alone goes to the upload. Of several such uploads, the one in the open modal dialog takes the files, else the one that shows. `REDZ.ui.upload.clear(upload)` takes away the files not yet stored - their sending aborted - and keeps the stored ones, with one `redz:change` and the focus where it was; a reset of the form does the same. `REDZ.ui.upload.settled(upload)` answers a promise of `{count, pending, failed}` once nothing in it is sending: a Send waits on it.
+
+```js
+send.addEventListener('click', async () => {
+	const {failed} = await REDZ.ui.upload.settled(upload);
+	if (failed === 0) {
+		form.requestSubmit();
+	}
+});
 ```
 
 ### An image field

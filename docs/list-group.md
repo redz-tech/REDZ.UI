@@ -18,7 +18,7 @@ A column of items in one frame - plain rows, or links and buttons to choose from
 
 ### Links and buttons
 
-`list-group-item-action` makes an item a choice. The current one is `aria-current` - `"page"` for a link to the page shown, `"true"` otherwise; one that cannot be chosen is a `disabled` button, or a link without `href` and with `aria-disabled="true"`. A plain item whose title is a `stretched-link` is that link as a whole, and its other links and buttons stay their own.
+`list-group-item-action` makes an item a choice. The current one is `aria-current` - `"page"` for a link to the page shown, `"true"` otherwise; one that cannot be chosen is a `disabled` button, or a link without `href` and with `aria-disabled="true"`. A plain item whose title is a `stretched-link` is that link as a whole, as a [table's row](table.md) is: a click anywhere on it but on its own controls follows the title - with `Ctrl`, `Cmd` or the middle button into a new tab - unless the person was selecting its words, which stay selectable; the title is the one link a keyboard and a screen reader meet. Its other links, buttons, switches and handles stay their own. A `list-group-actions` at its end holds the item's buttons; its icon buttons are dimmed until the item is pointed at or holds the focus, on a device with a pointer, while a button with words keeps its contrast.
 
 ```html
 <nav class="list-group" aria-label="Sites">
@@ -33,6 +33,15 @@ A column of items in one frame - plain rows, or links and buttons to choose from
 	<button class="list-group-item list-group-item-action" type="button" disabled>The old catalog</button>
 </div>
 ```
+
+```html
+<ul class="list-group" aria-label="Ways to pay" data-density="compact">
+	<li class="list-group-item hstack gap-12"><span class="vstack flex-1"><a class="stretched-link fw-600" href="#list-group-rows">Bank card</a><span class="text-muted fs-12">Visa, Mastercard · 2.9 %</span></span><span class="list-group-actions"><a class="btn btn-sm" href="#list-group-rows">Configure</a><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Copy the settings: Bank card"><i class="bi bi-copy" aria-hidden="true"></i></button></span><label class="form-check"><input class="switch" type="checkbox" role="switch" checked aria-label="Bank card on"></label></li>
+	<li class="list-group-item hstack gap-12"><span class="vstack flex-1"><a class="stretched-link fw-600" href="#list-group-rows">Bank transfer</a><span class="text-muted fs-12">Three working days</span></span><span class="list-group-actions"><a class="btn btn-sm" href="#list-group-rows">Configure</a></span><label class="form-check"><input class="switch" type="checkbox" role="switch" aria-label="Bank transfer on"></label></li>
+</ul>
+```
+
+An item's padding follows `data-density`, as a table's row does: 12 px by default, 8 px `compact`, 16 px `comfortable`, 20 px `spacious`.
 
 ### Flush, numbered, with counts
 
@@ -100,6 +109,85 @@ A search field with `data-filter` naming a region hides, as the person types, th
 	<li class="list-group-item" data-search="elephant sanctuary chang">Elephant sanctuary</li>
 	<li class="list-group-item text-muted" data-filter-empty hidden>No excursion has these words.</li>
 </ul>
+```
+
+### Filtered by buttons
+
+A button with `command="--filter"` and `aria-controls` naming the region shows only the items whose `data-NAME` holds a word of its `value`: `NAME` is the button's `name`, `state` without one, and an item may hold several words - `data-state="late failed"`. The buttons of one name are one choice wherever they stand, their `aria-pressed` saying which; a button with `value=""` shows all and stays pressed while nothing narrows, and without one, pressing the pressed button again shows all. Names narrow together, and with the search. A `data-filter-count` inside a button shows how many items it would show; with the region's id as its value anywhere else it reads the page's text `filter.count`, "3 of 9". An element with `data-filter-group` - a card of items, a section - hides while none of its items shows, and a count inside it is its own. A press says the count; the region fires `redz:filter` with `{count, total}`; items the page puts in or changes are filtered again. `REDZ.ui.filter(region, {state: 'paid'})` chooses from code and answers the count; `null` clears every choice and the search.
+
+```html
+<div class="hstack flex-wrap gap-8" role="group" aria-label="Show bookings">
+	<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" value="" aria-pressed="true">All<span class="chip-count" data-filter-count></span></button>
+	<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" value="paid" aria-pressed="false">Paid<span class="chip-count" data-filter-count></span></button>
+	<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" value="waiting late" aria-pressed="false">Not paid<span class="chip-count" data-filter-count></span></button>
+</div>
+<div class="hstack flex-wrap gap-8" role="group" aria-label="Boat">
+	<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" name="boat" value="a" aria-pressed="false">Boat A</button>
+	<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" name="boat" value="b" aria-pressed="false">Boat B</button>
+</div>
+<input class="form-control" type="search" data-filter="list-group-states-list" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off">
+<p class="fs-12 text-muted" data-filter-count="list-group-states-list"></p>
+<ul class="list-group" id="list-group-states-list">
+	<li class="list-group-item" data-state="paid" data-boat="a">Alex Sample, boat A, paid</li>
+	<li class="list-group-item" data-state="waiting" data-boat="a">Ben Sample, boat A, waiting</li>
+	<li class="list-group-item" data-state="late" data-boat="b">Chris Sample, boat B, late</li>
+	<li class="list-group-item" data-state="paid" data-boat="b">Dana Sample, boat B, paid</li>
+	<li class="list-group-item" data-state="paid" data-boat="b">Ella Sample, boat B, paid</li>
+	<li class="list-group-item text-muted" data-filter-empty hidden>No booking matches.</li>
+</ul>
+```
+
+### Searched on the server
+
+A field with `data-filter-server` hides nothing itself: it asks the page by `redz:search` on the field, with `{query, form, signal}` - `form` the `FormData` of its `<search>` or form, a status select beside it included. It asks 600 ms after the typing pauses, at once on `Enter` and on `Esc`, which clears it, and at once when another control of its search changes. The page cancels the event and answers with a promise by `event.detail.respondWith`; meanwhile the region carries `aria-busy` and, in a `form-adorn`, the field shows a ring at its end. A newer question aborts the `signal` of the one before, and a late answer is dropped. The count is said in the page's text `found`: the answer's `count`, else the items there are. A [Show more](#list-group-more) over the region starts again from the answer.
+
+```html
+<search class="hstack flex-wrap gap-8" aria-label="Requests">
+	<div class="form-adorn flex-1"><i class="bi bi-search" aria-hidden="true"></i><input class="form-control" type="search" name="q" data-filter="list-group-server-list" data-filter-server aria-label="Search requests" placeholder="Subject or person" autocomplete="off"></div>
+	<select class="form-select w-auto" name="status" aria-label="Status"><option value="">Any status</option><option value="open">Open</option><option value="closed">Closed</option></select>
+</search>
+<ul class="list-group" id="list-group-server-list" data-docs-server>
+	<li class="list-group-item">The pier gate does not open</li>
+	<li class="list-group-item">Refund for a cancelled trip</li>
+	<li class="list-group-item">A second invoice for one booking</li>
+</ul>
+```
+
+```js
+document.addEventListener('redz:search', (event) => {
+	if (!event.target.matches('[data-filter="requests"]')) {
+		return; // a combobox's search fires redz:search too
+	}
+	event.preventDefault();
+	const {form, signal} = event.detail;
+	event.detail.respondWith(fetch('/requests?' + new URLSearchParams(form), {signal})
+		.then((answer) => answer.json())
+		.then(({rows, count}) => {
+			document.getElementById('requests').replaceChildren(...rows.map(row));
+			return {count};
+		}));
+});
+```
+
+### Show more
+
+A `list-more` under a list holds its count and a button with `command="--more"` and `aria-controls` naming the list - a list group, any element whose children are its items, a table or its body. The button fires `redz:more` on the list with `{shown, signal}`; the page answers with a promise by `event.detail.respondWith` and the button is busy until the page has put the next items in. Then the focus goes to the first new item - its first link or button, else the item - and the page's text `more.loaded` says how many came. The answer may say `{total}` or `{done: true}`; an answer that adds nothing is the end too, and `data-more-total` on the button is a total known from the start. At the end the button hides. With `data-more-max` it hides at that many items and a `data-more-cap` beside it shows the page's sentence instead - "Narrow the search to see older requests". A `data-more-count` reads the page's text `more.count`, "10 of 23", or `more.some`, "10+", while the total is unknown. A refusal keeps the button and the focus where they were.
+
+```html
+<section class="card" aria-labelledby="list-group-more-title">
+	<div class="card-header"><h2 class="fs-14" id="list-group-more-title">Pickup points</h2></div>
+	<ul class="list-group list-group-flush" id="list-group-more-list" data-docs-more>
+		<li class="list-group-item"><a href="#list-group-more">Pickup point 1</a></li>
+		<li class="list-group-item"><a href="#list-group-more">Pickup point 2</a></li>
+		<li class="list-group-item"><a href="#list-group-more">Pickup point 3</a></li>
+		<li class="list-group-item"><a href="#list-group-more">Pickup point 4</a></li>
+	</ul>
+	<div class="list-more">
+		<span data-more-count></span>
+		<button class="btn btn-sm" type="button" command="--more" aria-controls="list-group-more-list" data-more-total="11" data-more-max="8">Show more</button>
+		<span data-more-cap hidden>Search by name to find the other points.</span>
+	</div>
+</section>
 ```
 
 ### Reordering
@@ -171,7 +259,7 @@ document.addEventListener('redz:move', (event) => {
 
 From [`css/components/list-group.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/list-group.css). It declares `--redz-list-group-row`, `--redz-list-group-column` on its root, never on rows or items.
 
-It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-space-12`, `--redz-space-16`, `--redz-text`, `--redz-space-8`, `--redz-bg-page`, `--redz-text-muted`, `--redz-fs-12`, `--redz-bg-hover`, `--redz-primary-subtle`, `--redz-primary`, `--redz-text-faint`.
+It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-row-pad`, `--redz-space-16`, `--redz-text`, `--redz-row-hover`, `--redz-primary`, `--redz-space-4`, `--redz-space-8`, `--redz-bg-page`, `--redz-text-muted`, `--redz-fs-12`, `--redz-bg-hover`, `--redz-primary-subtle`, `--redz-text-faint`, `--redz-space-12`.
 
 ## From Bootstrap 5.3
 

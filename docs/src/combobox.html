@@ -208,8 +208,8 @@
 		</div>
 	</div>
 	<pre class="docs-code" tabindex="0"><code>document.addEventListener('redz:search', (event) =&gt; {
-	const list = document.getElementById(event.target.getAttribute('aria-controls'));
-	if (list.id !== 'people' || event.detail.query.length &lt; 2) {
+	const list = document.getElementById(event.target.getAttribute('aria-controls') ?? '');
+	if (list?.id !== 'people' || event.detail.query.length &lt; 2) {
 		return; // the library filters the options it has
 	}
 	event.preventDefault();

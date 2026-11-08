@@ -111,12 +111,26 @@
 		'toast-action': () => REDZ.ui.toast({title: 'Moved to the archive', tone: 'info', action: {label: 'Undo', run: () => REDZ.ui.toast({title: 'Restored', tone: 'success'})}}),
 		confirm: async (button) => answer(button, await REDZ.ui.confirm({title: 'Delete 2 excursions?', text: 'Their pages go away on all three sites.', ok: 'Delete', tone: 'danger'}) ? 'Confirmed.' : 'Cancelled.'),
 		'confirm-phrase': async (button) => answer(button, await REDZ.ui.confirm({title: 'Delete the site lagoon.example?', text: 'Its pages, its files and its settings go away for good.', ok: 'Delete the site', tone: 'danger', phrase: 'lagoon.example'}) ? 'Confirmed.' : 'Cancelled.'),
+		'confirm-run': async (button) => {
+			let tries = 0;
+			const run = () => new Promise((done, refuse) => setTimeout(() => (++tries === 1 ? refuse(new Error('The server is busy with a backup. Try again in a minute.')) : done()), 1200));
+			answer(button, await REDZ.ui.confirm({title: 'Pause the agent on Boat A?', choice: {label: 'For how long', items: [{value: 'hour', text: 'One hour'}, {value: 'day', text: 'Until tomorrow', hint: 'It starts again at 06:00.'}], value: 'hour'}, ok: 'Pause', run}) || 'Cancelled.');
+		},
+		'confirm-alt': async (button) => {
+			const chosen = await REDZ.ui.confirm({title: 'Leave without saving?', text: 'The price list has changes that are not saved.', ok: 'Save', cancel: 'Stay', alt: {text: 'Discard', tone: 'danger', value: 'discard'}, focus: 'ok', run: () => new Promise((done) => setTimeout(done, 800))});
+			answer(button, {true: 'Saved, then left.', discard: 'Discarded.', false: 'Stayed.'}[String(chosen)]);
+		},
+		'alert-code-info': () => REDZ.ui.alert(document.getElementById('alert-code-box'), {tone: 'info', text: 'A code went to your phone. A new one in 60 s.'}),
+		'alert-code-wait': () => REDZ.ui.alert(document.getElementById('alert-code-box'), new Promise((done) => setTimeout(() => done({tone: 'success', text: 'Done: base-2026-11-08.sql (2.4 MB)'}), 1500))),
+		'alert-code-clear': () => REDZ.ui.alert(document.getElementById('alert-code-box'), null),
 		prompt: async (button) => {
 			const name = await REDZ.ui.prompt({title: 'Rename the folder', label: 'Name', value: 'Tours 2026', required: true, ok: 'Rename'});
 			answer(button, name === null ? 'Cancelled.' : 'Renamed to ' + name + '.');
 		},
 		'confirm-lists': async (button) => answer(button, await REDZ.ui.confirm({title: 'Delete the project Riverside tower?', note: {tone: 'danger', text: 'This cannot be undone.'}, sections: [{title: 'Will be deleted:', items: ['128 tasks', '342 files', '1,204 log entries']}, {title: 'Kept:', items: ['The audit history']}], ok: 'Delete', tone: 'danger', phrase: 'Riverside tower'}) ? 'Confirmed.' : 'Cancelled.'),
 		'busy-button': (button) => REDZ.ui.busy(button, new Promise((done) => setTimeout(done, 2000))),
+		'busy-menu-item': (button) => REDZ.ui.busy(button, new Promise((done) => setTimeout(done, 2000))),
+		'busy-cell': () => REDZ.ui.busy(document.getElementById('busy-cell-state'), new Promise((done) => setTimeout(done, 2000))),
 		progress: () => REDZ.ui.progress(new Promise((done) => setTimeout(done, 2000))),
 		'cooldown': (button) => {
 			button.dataset.cooldown = '20';
@@ -138,6 +152,19 @@
 			time.dataset.tone = 'muted';
 			time.textContent = new Date().toTimeString().slice(0, 8);
 			log.append('\n', time, ' A new line, kept in view');
+		},
+		'log-message': (button) => {
+			const box = document.getElementById(button.getAttribute('aria-controls'));
+			box.querySelector(':scope > .follow-dock').before(Object.assign(document.createElement('p'), {textContent: 'A Sample: One more question about the lunch.'}));
+		},
+		'log-step': (button) => {
+			const steps = [...document.getElementById(button.getAttribute('aria-controls')).children];
+			const at = steps.findIndex((step) => step.hasAttribute('aria-current'));
+			const next = steps[(at + 1) % steps.length];
+			steps[at].removeAttribute('aria-current');
+			steps[at].dataset.state = 'done';
+			next.setAttribute('aria-current', 'step');
+			next.dataset.state = 'current';
 		},
 		'alert-fill': () => {
 			const words = document.getElementById('alert-fill-words');
@@ -170,6 +197,71 @@
 				return option;
 			}));
 		}, 400);
+	});
+
+	// The QR call's example: a key drawn from a variable, on the page that links the package.
+	document.addEventListener('DOMContentLoaded', () => {
+		const tile = document.getElementById('qr-package-call');
+		if (tile !== null && typeof REDZ.ui.qr === 'function') {
+			REDZ.ui.qr(tile, 'otpauth://totp/Example:guide%40example.com?secret=JBSWY3DPEHPK3PXP&issuer=Example');
+		}
+	});
+
+	// The strip's example: 90 days of uptime, the first six before the watch began, two without data.
+	document.addEventListener('DOMContentLoaded', () => {
+		const strip = document.getElementById('chart-strip-days');
+		if (strip === null) {
+			return;
+		}
+		const words = {success: 'up', warning: 'slow 14 min', danger: 'down 42 min', '': 'no data'};
+		for (let day = 0; day < 90; day++) {
+			const tone = day < 6 || day === 52 || day === 53 ? '' : [23, 67].includes(day) ? 'warning' : [41, 80].includes(day) ? 'danger' : 'success';
+			const cell = document.createElement('i');
+			if (tone !== '') {
+				cell.dataset.tone = tone;
+			}
+			cell.title = (89 - day) + ' days ago · ' + words[tone];
+			strip.append(cell);
+		}
+	});
+
+	// The server search's example: requests found in 500 ms, a status narrowing them.
+	const requests = [['The pier gate does not open', 'open'], ['Refund for a cancelled trip', 'closed'], ['A second invoice for one booking', 'open'], ['The boat left early', 'closed'], ['A seat for a child', 'open']];
+	document.addEventListener('redz:search', (event) => {
+		const list = document.getElementById(event.target.dataset.filter || '');
+		if (list === null || !list.hasAttribute('data-docs-server')) {
+			return;
+		}
+		event.preventDefault();
+		const {query, form, signal} = event.detail;
+		event.detail.respondWith(new Promise((done, fail) => {
+			const timer = setTimeout(() => {
+				const found = requests.filter(([words, state]) => words.toLowerCase().includes(query.toLowerCase()) && [state, ''].includes(form.get('status') ?? ''));
+				list.replaceChildren(...found.map(([words]) => Object.assign(document.createElement('li'), {className: 'list-group-item', textContent: words})));
+				done({count: found.length});
+			}, 500);
+			signal.addEventListener('abort', () => {
+				clearTimeout(timer);
+				fail(signal.reason);
+			});
+		}));
+	});
+
+	// Show more's example: four pickup points more in 500 ms.
+	document.addEventListener('redz:more', (event) => {
+		if (!event.target.hasAttribute('data-docs-more')) {
+			return;
+		}
+		event.preventDefault();
+		const list = event.target;
+		event.detail.respondWith(new Promise((done) => setTimeout(() => {
+			for (let n = event.detail.shown + 1; n <= Math.min(event.detail.shown + 4, 11); n++) {
+				const item = Object.assign(document.createElement('li'), {className: 'list-group-item'});
+				item.append(Object.assign(document.createElement('a'), {href: '#list-group-more', textContent: 'Pickup point ' + n}));
+				list.append(item);
+			}
+			done({total: 11});
+		}, 500)));
 	});
 
 	// The editor's example, on the pages that link the package: the same text under three people's rights.
@@ -296,7 +388,7 @@
 	});
 
 	// The tree's lazy Archive: two pages after 400 ms.
-	document.addEventListener('redz:expand', (event) => {
+	document.addEventListener('redz:load', (event) => {
 		if (!event.target.hasAttribute('data-docs-lazy')) {
 			return;
 		}
@@ -305,6 +397,24 @@
 			event.target.innerHTML = '<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Water Festival 2025</a></div></li><li class="tree-item"><div class="tree-row"><a href="#tree-pages">Lantern Festival 2025</a></div></li>';
 			done();
 		}, 400)));
+	});
+
+	// The lazy history: the first try is refused, the next one answers after 600 ms.
+	let historyTries = 0;
+	document.addEventListener('redz:load', (event) => {
+		if (!event.target.hasAttribute('data-docs-history')) {
+			return;
+		}
+		event.preventDefault();
+		const {region} = event.detail;
+		event.detail.respondWith(new Promise((done, refuse) => setTimeout(() => {
+			if (++historyTries === 1) {
+				refuse(new Error('The history could not be loaded. Close the section and open it again to try once more.'));
+				return;
+			}
+			region.replaceChildren(...['Price for adults from 2,400 to 2,500 · B Sample · 2 days ago', 'Pickup moved to 07:30 · C Sample · last week'].map((words) => Object.assign(document.createElement('p'), {textContent: words})));
+			done();
+		}, 600)));
 	});
 
 	// The upload's example: each file "sent" in a second and a half, its bar moving.
@@ -325,6 +435,16 @@
 			}, 150);
 			signal.addEventListener('abort', () => clearInterval(timer));
 		}));
+	});
+
+	// The markup dialog's form: the server refuses an empty reason, else keeps it in 800 ms.
+	document.addEventListener('redz:save', (event) => {
+		if (!event.target.hasAttribute('data-docs-dialog-save')) {
+			return;
+		}
+		event.preventDefault();
+		const reason = (event.detail.data.get('reason') ?? '').trim();
+		event.detail.respondWith(new Promise((saved, refused) => setTimeout(() => (reason === '' ? refused(new Error('Say why the boat is out, so the guides can tell the guests.')) : saved()), 800)));
 	});
 
 	// The inline edit's "saved by the page" example: a save after 600 ms, an empty title refused.

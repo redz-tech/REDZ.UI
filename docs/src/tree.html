@@ -44,8 +44,8 @@
 	</div>
 
 	<h3>Children from the server</h3>
-	<p>A group with <code>data-lazy</code> and no items fires <code>redz:expand</code> on it when it first opens. A page that loads the items cancels it and answers with a promise: the toggle is busy until it settles, and a refusal closes the group again for another try. The Archive above answers after 400 ms.</p>
-	<pre class="docs-code" tabindex="0"><code>document.addEventListener('redz:expand', (event) =&gt; {
+	<p>A group with <code>data-lazy</code> fires <code>redz:load</code> on it when it first opens, as any <a href="accordion.html#accordion-lazy">region that loads</a> does. A page that loads the items cancels it and answers with a promise: the toggle is busy and the group shows placeholder lines until it settles; a refusal leaves the group open with its words and the next opening tries again. The Archive above answers after 400 ms.</p>
+	<pre class="docs-code" tabindex="0"><code>document.addEventListener('redz:load', (event) =&gt; {
 	event.preventDefault();
 	event.detail.respondWith(fetch('/pages?parent=' + event.target.dataset.parent)
 		.then((answer) =&gt; answer.text())

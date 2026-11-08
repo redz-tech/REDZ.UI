@@ -46,8 +46,121 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   page's return from the history: `redz:reveal` bubbles from it, `detail.revealed` true or false.
 - `data-ago="short"` on a ticking `time` says how long ago it was in the short words of the page's language ("42 min.
   ago", "42 мин. назад") for a narrow place such as a stat tile; `data-ago` alone keeps the long words.
+- Filter buttons: a button with `command="--filter"` and `aria-controls` naming a region shows only the items whose
+  `data-NAME` holds a word of its `value` - `NAME` is the button's `name`, `state` without one. The buttons of one name
+  are one choice, `value=""` shows all, and pressing the pressed one again shows all; names narrow together and with the
+  search field. `data-filter-count` counts: in a button its items, in a `data-filter-group` the group's, with a region's
+  id the page's text `filter.count`. A `data-filter-group` hides while none of its items shows. A press says the count;
+  the region fires `redz:filter` with `{count, total}`; items the page puts in or changes are filtered again.
+  `REDZ.ui.filter(region, {name: value})` chooses from code and answers the count, `null` clears. Any element with a
+  `data-search` is an item, and a table row matches its band's label too.
+- A search on the server: a field with `data-filter-server` fires `redz:search` with `{query, form, signal}` on the
+  field 600 ms after the typing pauses, at once on Enter and Escape and when another control of its `<search>` or form
+  changes; answered with a promise, the region is `aria-busy` and a field in a `form-adorn` shows a ring, a newer
+  question aborts the one before and a late answer is dropped, and the count is said - the answer's `count`, else the
+  items there are.
+- Show more: a button with `command="--more"` and `aria-controls` naming a list fires `redz:more` with `{shown,
+  signal}` on the list; answered with a promise, the button is busy, then the focus goes to the first new item and the
+  page's text `more.loaded` says how many came. The answer may say `{total}` or `{done: true}`; `data-more-total` is a
+  total known from the start, `data-more-max` a cap whose `data-more-cap` sentence takes the button's place, and a
+  `data-more-count` reads `more.count` ("10 of 23") or `more.some` ("10+"). `list-more` is the row under a list that
+  holds them. A server search over the list starts it again.
+- Selection: an element with `data-select` holds a selection; a check with `data-select-all` heads its checks (or those
+  of the scopes its `aria-controls` names) - checked, mixed or clear, and pressed it checks or clears them all. Only
+  enabled checks in items a filter shows count: a checked row a filter hides leaves the count while hidden and is
+  checked again when shown. A `selection-bar` inside hides at zero, a `data-select-count` says the page's text
+  `selected`, and the scope fires `redz:selection` with `{count, total, values}`. `data-select="rows"` checks a row
+  clicked anywhere but on its controls; a `data-select` inside another is a group; `command="--select-all"` and
+  `"--select-none"` buttons do what a head does.
+- Sorting in place: a `table-sort` button with a `value` sorts its table's rows by each row's `data-sort-VALUE`, else
+  the cell's `data-sort-value`, else its text - numbers as numbers, words in the page's language, an empty value last
+  both ways, ties in the drawn order, a band's rows under it with its subtotal last. `data-sort-first="descending"`
+  starts the other way; `data-sort-reset` on the table makes a third press bring back the drawn order. The page's texts
+  `sort.ascending`, `sort.descending` and `sort.none` say it. The table fires the cancelable `redz:sort` with `{key,
+  direction}` first, for a page that sorts itself; rows the page puts in are sorted the same, and `REDZ.ui.sort(table)`
+  sorts again.
+- A question that waits for the server: `REDZ.ui.confirm({..., run})` carries the answer out before the dialog closes -
+  `run({choice, phrase, signal})` answers a promise; meanwhile OK is busy, the other buttons unavailable, the body inert,
+  Escape and a click outside held. Refused with words, a danger alert with them stands right above the footer, said at
+  once, the buttons wake and the focus stays on OK. A dialog closed by code meanwhile aborts the signal, and a later
+  refusal is a danger toast. `choice: {label, items: [{value, text, hint}], value}` puts radios above the phrase, and
+  the answer is then the chosen value. A dialog of the page's own waits the same way: a `form[method="dialog"]` fires
+  the cancelable `redz:save` with `{form, data, submitter, signal}` on its submit.
+- A third answer: `REDZ.ui.confirm({..., alt: {text, tone, value}})` puts a button at the footer's start - Discard
+  beside Stay and Save - that answers its value; `focus: 'ok'` or `'alt'` starts the focus there instead of on Cancel.
+  `dialog-footer-start` is that place in any footer, and a footer of three buttons in a dialog narrower than 368 px
+  stacks them full width, the confirming one on top.
+- `REDZ.ui.alert(box, {tone, text})` fills a box with an alert of the tone, its icon and the words, and says them -
+  politely, at once for `danger`, the same words again said again; `null` empties it; a promise shows the page's text
+  `busy` past 400 ms, then what it answers or its rejection. No live role on the box.
+- `REDZ.ui.status(line, {tone, text, keep: true})` keeps a success or an info in the line.
+- A text download: `command="--download"` naming a field, a textarea or any element downloads its value or its text,
+  `data-file`, `data-type`; a `text/csv` file starts with a UTF-8 byte order mark unless `data-bom="false"`.
+  `REDZ.ui.download({text, file, type, bom})` or `({blob, file})` does it from code. Each download is said, in the
+  page's text `downloaded`.
+- `busy()` on an item of a menu holds the button that opened the menu busy too, the outermost one for a menu inside a
+  menu. A region's `data-busy` shows its words under the spinner and says them instead of `busy`. Any other element - a
+  cell that checks - shows a small ring after 400 ms and, for a screen reader, the words of its `data-busy` or `busy`,
+  saying nothing aloud.
+- Contents loaded the first time they show: `data-lazy` on a `details` or its `accordion-body`, a region a `--toggle`
+  button opens, a tab panel or a tree's group fires `redz:load` with `{region}` when it first shows - open at load, put
+  in open later, or opened by a person, never for the paper. Answered with a promise, an empty region shows three
+  placeholder lines; a refusal shows its words in the region, which stays open, and the next opening tries again.
+  `data-lazy` written again on a region that shows loads it again.
+- Uploads: `data-paste="page"`, or an element's id, takes files pasted anywhere on the page or in that element - a paste
+  of words into a text field stays words, the one in the open modal or the one that shows takes them.
+  `REDZ.ui.upload.clear(upload)`, and the form's reset, takes away the files not yet stored, their sending aborted;
+  `REDZ.ui.upload.settled(upload)` answers once nothing sends. `redz:change` adds `pending` and `failed`, and while a
+  file sends the file field is invalid with the page's text `file.pending`.
+- `data-follow` on any element that scrolls keeps its end in view while its contents come in or grow, a ResizeObserver
+  on it and its children; `data-follow="current"` keeps its child with `aria-current` in view at the nearest edge with a
+  step's room beside it. A `command="--follow"` button naming it shows while the reader is away and something new came
+  in, and brings the end back; `follow-dock` floats it at the middle of the box's bottom.
+- `action-bar`, a sticky bar at the bottom of the window on the page's tinted floor, with `action-bar-text`: across its
+  region, clear of a phone's home bar, aside on a touch screen while a field has the focus, off paper.
+- A list group's item whose title is a `stretched-link` is a link as a whole by script, as a table's row: its words stay
+  selectable, and Ctrl, Cmd or the middle button open a new tab. `list-group-actions` holds its buttons, dimmed until the
+  item is pointed at or focused.
+- The package `redz-ui-qr`, `js/redz-ui-qr.min.js` in `packages.qr`: draws the QR code of a text into a `qr` tile as one
+  SVG path that traces each dark region, so no seam shows on paper or at any zoom - `data-qr`, `data-qr-level` (`L`,
+  `M` by default, `Q`, `H`) and `data-qr-quiet` (4) in the markup, or `REDZ.ui.qr(tile, text, {level, quiet})` for a
+  text such as a secret that should sit in no attribute, `null` to empty it. Byte mode UTF-8, versions 1 to 40, the
+  level raised for free when the same version holds more; the tile is `role="img"`, named by the page; a text too long
+  empties the tile, marks it `data-qr-error` and hides it. Built without `innerHTML` or a `style` attribute, so a
+  strict CSP with Trusted Types passes. A module never falls under 3 px (`--redz-qr-module-min`): the tile grows.
+- `logo`, a white mat for someone else's logo in both themes, with a border: 32 px high, `logo-sm` 28 and `logo-lg` 40,
+  an `h-*` utility for a banner (`h-88` added), and as wide as its area asks - `data-ratio`, its width by its height,
+  widens it by the square root, from square to four times as wide. `data-color` grounds a logo drawn on a solid color,
+  `logo-fade` softens its sides into it, and an `img.logo-ground` is a blurred copy behind a photo; `choice-media`
+  takes the same.
+- Share links for X (`share-x`), Viber (`share-viber`, its letters drawn as VK's are) and WeChat (`share-wechat`, a plain
+  button for the page's popover with a QR code); `data-share-url` and `data-share-title` on any element write the
+  share links and copies inside it - a row of buttons without a menu.
+- A text token per tone, `--redz-TONE-text`: where a tone is text - a subtle badge, an outline or subtle button,
+  `text-TONE`, an alert's icon, a form's and a log's tone - it reads it. It is the tone itself, and under `data-brand`
+  the brand darkened in the light theme, its hue kept, to a luminance of 0.13 at most, so it reads at 4.5:1 on white
+  and on its subtle fill. `data-brand-secondary`, `-success`, `-info`, `-warning` and `-danger` derive their tones the
+  same way, each with its `-subtle`, `-contrast` and `-text`.
+- `meter meter-stacked`, a meter of several parts on a `div role="meter"`: each child's `data-v` its share of the scale,
+  `data-tone` its color, 2 px apart; a part with `data-over` is hatched red, readable without its color.
+- Charts: `chart chart-line` draws one series as an SVG line with its area under it, behind the rows that keep their
+  tooltips and mark their point under the pointer; `spark-line` draws a sparkline as a line; `spark-strip` in a `strip`
+  fills its box with a cell a day in its state's tone - 90 days, 60 below 560 px, 30 below 360 px, the oldest going
+  first - and the `strip-head` caption with the `data-days` shown is the one that shows.
+- `command-line`, a command to copy in one frame: one line that scrolls under a fade at its cut edge, never under the
+  copy button in its own column, left to right on any page, selected whole by a click; a `var` is an amber chip of a
+  part the person puts in. `command-steps` numbers commands run one after another in circles; a `--copy` naming the
+  list copies them all, a line each, and one inside a `command-line` without a target copies its command.
 
 ### Changed
+- A table row whose `table-check` box is checked is tinted, as a row with `aria-selected="true"` is.
+- A tree's group with `data-lazy` asks the page by `redz:load`, as every region that loads, instead of `redz:expand`
+  (no page listened for it); a refusal now leaves the group open with the page's words instead of closing it.
+- A list group's item follows `data-density`: 12 px by default, 8 compact, 16 comfortable, 20 spacious.
+- `data-follow` is read by `js/follow.js`, which replaces `js/log.js`.
+- The link follows the primary tone's text token: under a light `data-brand` it stays readable.
+- A chart's first and last day labels are found by type, so a line drawn among the rows does not move them.
+- The budgets: the main stylesheet at most 38 KB and the main script 42 KB, gzipped.
 - `floor.json` carries, for each name that falls short at the floor, its BCD key, and for each vendor form the browsers
   that take it; its exceptions carry their scope and, for a key, the names under it. The verdict `prefix -webkit-` gives
   way to the browsers of `"-webkit-"`.

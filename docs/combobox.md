@@ -229,8 +229,8 @@ A page that finds options itself listens for `redz:search` on the search and can
 
 ```js
 document.addEventListener('redz:search', (event) => {
-	const list = document.getElementById(event.target.getAttribute('aria-controls'));
-	if (list.id !== 'people' || event.detail.query.length < 2) {
+	const list = document.getElementById(event.target.getAttribute('aria-controls') ?? '');
+	if (list?.id !== 'people' || event.detail.query.length < 2) {
 		return; // the library filters the options it has
 	}
 	event.preventDefault();
