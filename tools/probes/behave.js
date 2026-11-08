@@ -1956,6 +1956,28 @@ window.REDZ_BEHAVE = (() => {
 			if (say(look) !== say(['10,127,90', '#0a7f5a', '0,0,0'])) {
 				out.push('a white label of #0a7f5a draws its button ' + say(look[0]) + ' with --redz-brand ' + say(look[1]) + ', one of #f4c542 its words ' + say(look[2]));
 			}
+			if (await readable) {
+				const luminance = (color) => color.split(',').map((one) => Number(one) / 255).map((one) => (one <= 0.04045 ? one / 12.92 : ((one + 0.055) / 1.055) ** 2.4)).reduce((sum, one, i) => sum + one * [0.2126, 0.7152, 0.0722][i], 0);
+				const contrast = (one, other) => (Math.max(luminance(one), luminance(other)) + 0.05) / (Math.min(luminance(one), luminance(other)) + 0.05);
+				const region = Object.assign(document.createElement('div'), {innerHTML: '<button type="button" class="btn btn-primary">Save</button>'});
+				region.setAttribute('data-brand', '');
+				region.style.colorScheme = 'light';
+				region.firstElementChild.style.transition = 'none';
+				document.body.append(region);
+				const low = [];
+				for (const brand of ['#0a7f5a', '#b85c57', '#bf625c', '#a86d15', '#af731f', '#498e4d', '#4f9453', '#4e878a', '#548d90', '#5879c3', '#5e7fc9', '#9b63a8', '#a168ae', '#7a7a7a', '#767676', '#f4c542']) {
+					region.style.setProperty('--redz-brand', brand);
+					const button = getComputedStyle($('.btn', region));
+					const ratio = contrast(rgb(button.backgroundColor), rgb(button.color));
+					if (ratio < 4.5) {
+						low.push(brand + ' ' + ratio.toFixed(2));
+					}
+				}
+				region.remove();
+				if (low.length > 0) {
+					out.push('a white label\'s button words fall under 4.5:1 on ' + say(low));
+				}
+			}
 		}]},
 		segmented: {target: '#btn-segmented', steps: [async (out) => {
 			const look = (id) => getComputedStyle($('label[for="' + id + '"]')).backgroundColor;

@@ -63,6 +63,9 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   a search hid the band of every row it found.
 - A search field's `data-filter-empty` note shows only while words are typed: in a region with no items, a search typed
   and cleared left the note that nothing matches.
+- A white label's `--redz-primary-contrast` is black or white by the luminance of `--redz-brand`, so its words read at
+  4.5:1 or more on any colour. It went by the colour's lightness and turned white below 0.62, which gave 3.7 to 4.5:1 on
+  many mid tones, such as `#4f9453` and `#7a7a7a`.
 
 ## 0.18.2 - 2026-11-06
 

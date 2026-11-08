@@ -67,7 +67,7 @@
 	[data-brand] {
 		--redz-primary: light-dark(var(--redz-brand), oklch(from var(--redz-brand) max(l, 0.72) c h));
 		--redz-primary-subtle: light-dark(oklch(from var(--redz-brand) 0.96 calc(c * 0.25) h), oklch(from var(--redz-brand) 0.3 calc(c * 0.35) h));
-		--redz-primary-contrast: light-dark(oklch(from var(--redz-brand) clamp(0, (0.62 - l) * 1000, 1) 0 0), #000000);
+		--redz-primary-contrast: light-dark(color(from var(--redz-brand) xyz-d65 calc(clamp(0, (0.1791 - y) * 100000, 1) * 0.9505) clamp(0, (0.1791 - y) * 100000, 1) calc(clamp(0, (0.1791 - y) * 100000, 1) * 1.0891)), #000000);
 		--redz-focus: var(--redz-primary);
 		--redz-link: var(--redz-primary);
 	}
