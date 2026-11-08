@@ -1,7 +1,7 @@
-// REDZ.UI, texts: the library has no words of its own — every word it shows comes from the page's island
+// REDZ.UI, texts: the library has no words of its own - every word it shows comes from the page's island
 // <script type="application/json" id="redz-ui-text">; a missing one is named in the console and shown as its key. A text
-// fills its {names} from the arguments; a count picks the form its language's plural rules name — KEY.one, KEY.few,
-// KEY.other — and falls back to KEY.other.
+// fills its {names} from the arguments; a count picks the form its language's plural rules name - KEY.one, KEY.few,
+// KEY.other - and falls back to KEY.other.
 let texts = null;
 
 /** The island's texts, read once. */

@@ -1,4 +1,4 @@
-// The minifier's fixture: names that hide, share and capture — every answer must stay the same once the names are short.
+// The minifier's fixture: names that hide, share and capture - every answer must stay the same once the names are short.
 const a = 'outer a';
 const b = 'outer b';
 globalThis.q = 'free q';

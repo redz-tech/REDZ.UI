@@ -1,9 +1,9 @@
 // REDZ.UI, inline edit: a button with commandfor naming a form of class inline-edit-form and command="--edit" opens the
-// form — in place of the value the form names in data-for, or, a popover form, beside its button — its field focused
+// form - in place of the value the form names in data-for, or, a popover form, beside its button - its field focused
 // and its text selected; Escape, or a button with command="--cancel" for the form, puts the field back and closes the
 // form, the focus on the Edit button again; a click outside leaves it open. Its submit fires the cancelable redz:save
 // (js/answer.js) with the form and the field's value: answered with a promise, the Save button is busy until it
-// settles — resolved, the value shows the saved text and the form closes; rejected with words, the form stays open, the
+// settles - resolved, the value shows the saved text and the form closes; rejected with words, the form stays open, the
 // field invalid and the words in its invalid-feedback. Left alone, the value shows the text at once, the field keeps it.
 import {ask} from './answer.js';
 import {busy} from './busy.js';

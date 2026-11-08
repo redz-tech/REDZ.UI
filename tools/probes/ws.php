@@ -1,5 +1,5 @@
 <?php
-// probes, WebSocket: the client of our drivers — Firefox's WebDriver BiDi everywhere, Chrome's DevTools protocol where
+// probes, WebSocket: the client of our drivers - Firefox's WebDriver BiDi everywhere, Chrome's DevTools protocol where
 // its pipe cannot run (Windows); text messages, fragments joined, pings answered.
 
 /** A WebSocket to ws://127.0.0.1:$port$path, its handshake checked; reads wait at most two minutes. */

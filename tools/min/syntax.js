@@ -1,4 +1,4 @@
-// The minifier's fixture: where a squeezed line could read differently — a `/` that divides or begins a pattern, signs
+// The minifier's fixture: where a squeezed line could read differently - a `/` that divides or begins a pattern, signs
 // that would fuse, numbers before a dot, optional chains, templates in templates, strings that look like code.
 const ratio = (a, b) => (a + b) / 2 / (b || 1);
 const half = [8][0] / 2;

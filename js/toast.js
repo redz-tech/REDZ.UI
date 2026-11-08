@@ -1,5 +1,5 @@
 // REDZ.UI, notices: REDZ.ui.toast() shows a toast in the stack .toast-container, in one of its two live regions that
-// are on the page from the start — role="status", role="alert" for danger — or, while a modal dialog is open, in the
+// are on the page from the start - role="status", role="alert" for danger - or, while a modal dialog is open, in the
 // dialog's own stack, since everything outside a modal is inert. Success and info leave after 8 seconds unless the
 // pointer or the focus rests on them; danger and a toast with an action stay until closed. The words come from the
 // caller; the close button's name from the page's texts.

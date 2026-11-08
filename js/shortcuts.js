@@ -1,5 +1,5 @@
 // REDZ.UI, shortcuts: a button or link whose aria-keyshortcuts names a combination with Control, Meta or Alt is pressed
-// by it — the page states the keys once, for people and for the machine. Where both Meta+K and Control+K are named,
+// by it - the page states the keys once, for people and for the machine. Where both Meta+K and Control+K are named,
 // Apple's systems answer Meta and the others Control. A disabled or hidden one, or one outside an open modal dialog, is
 // left alone; a single key is never a shortcut here (WCAG 2.1.4).
 const APPLE = /Mac|iPhone|iPad/.test(navigator.platform);

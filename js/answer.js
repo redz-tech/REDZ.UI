@@ -1,4 +1,4 @@
-// REDZ.UI, the page's answers: a moment only the page can carry out — creating a value, saving one — is a cancelable
+// REDZ.UI, the page's answers: a moment only the page can carry out - creating a value, saving one - is a cancelable
 // redz:* event on the widget. The page that takes the moment cancels it: with event.detail.respondWith(promise) it
 // lets the widget wait and finish when the promise settles; without, the moment is all the page's. Left alone, the
 // widget's own default acts.

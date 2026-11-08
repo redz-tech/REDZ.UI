@@ -1,5 +1,5 @@
 // REDZ.UI, scrollspy: in a nav or list with data-scrollspy, the link to the section in view says so in
-// aria-current="location" — the last section whose top has passed a quarter of the scrolling area's height, or the
+// aria-current="location" - the last section whose top has passed a quarter of the scrolling area's height, or the
 // last section once the area is scrolled to its end. The links name their sections by href="#id".
 let frame = 0;
 
@@ -14,7 +14,7 @@ const scrollerOf = (section) => {
 	return document.scrollingElement ?? document.documentElement;
 };
 
-/** The section a link names: by its fragment as written, else percent-decoded — as the browser finds it. */
+/** The section a link names: by its fragment as written, else percent-decoded - as the browser finds it. */
 const sectionOf = (link) => {
 	const id = link.getAttribute('href').slice(1);
 	try {

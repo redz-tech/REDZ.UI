@@ -1,6 +1,6 @@
-// probes, read: what the page itself holds for a screen reader's quick navigation, in document order — each heading's
+// probes, read: what the page itself holds for a screen reader's quick navigation, in document order - each heading's
 // words, each landmark's role and name, each form control's name (NVDA's form fields: buttons, check boxes, radio buttons,
-// switches, combo boxes, list boxes, trees, tabs, text fields one can edit) — without what a reader is never shown:
+// switches, combo boxes, list boxes, trees, tabs, text fields one can edit) - without what a reader is never shown:
 // hidden, inert or aria-hidden. Only what is surely such an item is listed; a reader stopping at more is no fault of the
 // page.
 (() => {

@@ -1,4 +1,4 @@
-/* The minifier's fixture: what a squeezed stylesheet could read differently — a descendant before a pseudo-class,
+/* The minifier's fixture: what a squeezed stylesheet could read differently - a descendant before a pseudo-class,
    escaped names, strings with spaces and braces, arithmetic, !important, values kept as written, an empty value. */
 @layer fixture {
 	.a :is(.b, .c) > .d ~ .e + .f {

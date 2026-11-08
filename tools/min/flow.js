@@ -1,5 +1,5 @@
-// The minifier's fixture: the blocks of every statement — switch cases with their own blocks, loops, try without a
-// binding, async arrows — and their scopes.
+// The minifier's fixture: the blocks of every statement - switch cases with their own blocks, loops, try without a
+// binding, async arrows - and their scopes.
 const kind = (n) => {
 	let out = '';
 	switch (n) {
