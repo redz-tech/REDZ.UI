@@ -46,6 +46,10 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - A `table`'s head sticks at the top of a page without the shell, or under a page's own bar by `--redz-sticky-top`. It held the shell header's
   height everywhere, so a table at the top of such a page had its head over its first row.
 - A `menu`, `popover` or `dialog` inside a `th` takes the size, weight and color of the page's text, not the head's.
+- A group's end slot `table-group-end` in a table wider than its `table-scroll`, as on a phone, stays at the scroller's
+  visible end, over a label that runs under it. It stood at the far end of the band, out of sight until scrolled there.
+- A `table-group` band in a `table-scroll-first` or `table-scroll-last` keeps its own background and no line: it took
+  the held column's background, line and stickiness.
 
 ## 0.18.2 - 2026-11-06
 

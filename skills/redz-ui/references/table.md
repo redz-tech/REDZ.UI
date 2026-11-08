@@ -211,7 +211,7 @@ Where the server sorts, the header holds a link instead - `a class="table-sort"`
 
 ### Groups and subtotals
 
-A row `table-group` heads the rows under it: one `th scope="rowgroup"` across the table, a band that does not stick, with an end slot `table-group-end` for its count or sum. A row `table-subtotal` closes a group in bold under a line.
+A row `table-group` heads the rows under it: one `th scope="rowgroup"` across the table, a band that does not stick, with an end slot `table-group-end` for its count or sum. In a table wider than its scroller the end slot stays at the scroller's visible end, over the band's label. A row `table-subtotal` closes a group in bold under a line.
 
 ```html
 <table class="table" aria-label="Bookings by boat">
@@ -241,6 +241,7 @@ A table with more columns than its card has room for goes in a `table-scroll`: i
 		<table class="table">
 			<thead><tr><th scope="col">Boat</th><th scope="col" class="text-end">Mon</th><th scope="col" class="text-end">Tue</th><th scope="col" class="text-end">Wed</th><th scope="col" class="text-end">Thu</th><th scope="col" class="text-end">Fri</th><th scope="col" class="text-end">Sat</th><th scope="col" class="text-end">Sun</th><th scope="col" class="text-end">Week</th><th scope="col" class="text-end">Last week</th><th scope="col" class="text-end">Change</th></tr></thead>
 			<tbody>
+				<tr class="table-group"><th scope="rowgroup" colspan="11">Island tours<span class="table-group-end">3 boats, 651 seats</span></th></tr>
 				<tr><th scope="row">Boat A</th><td class="text-end tabular-nums">42</td><td class="text-end tabular-nums">38</td><td class="text-end tabular-nums">40</td><td class="text-end tabular-nums">44</td><td class="text-end tabular-nums">46</td><td class="text-end tabular-nums">48</td><td class="text-end tabular-nums">28</td><td class="text-end tabular-nums">286</td><td class="text-end tabular-nums">270</td><td class="text-end tabular-nums"><bdi>+16</bdi></td></tr>
 				<tr><th scope="row">Boat C</th><td class="text-end tabular-nums">30</td><td class="text-end tabular-nums">28</td><td class="text-end tabular-nums">27</td><td class="text-end tabular-nums">31</td><td class="text-end tabular-nums">33</td><td class="text-end tabular-nums">35</td><td class="text-end tabular-nums">17</td><td class="text-end tabular-nums">201</td><td class="text-end tabular-nums">214</td><td class="text-end tabular-nums"><bdi>-13</bdi></td></tr>
 				<tr><th scope="row">Boat B</th><td class="text-end tabular-nums">22</td><td class="text-end tabular-nums">20</td><td class="text-end tabular-nums">24</td><td class="text-end tabular-nums">23</td><td class="text-end tabular-nums">25</td><td class="text-end tabular-nums">30</td><td class="text-end tabular-nums">20</td><td class="text-end tabular-nums">164</td><td class="text-end tabular-nums">150</td><td class="text-end tabular-nums"><bdi>+14</bdi></td></tr>
@@ -311,7 +312,7 @@ A row's tone marks what needs attention: `table-danger` failed, `table-warning` 
 
 From [`css/components/table.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css). It declares `--redz-table-head-border`, `--redz-table-head-weight`, `--redz-row-tint`, `--redz-row-mark` on its root, never on rows or items.
 
-It reads the theme's `--redz-sticky-top`, `--redz-space-12`, `--redz-space-8`, `--redz-row-pad`, `--redz-border`, `--redz-table-head-bg`, `--redz-bg`, `--redz-table-head-text`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-fs-14`, `--redz-bg-page`, `--redz-border-strong`, `--redz-row-hover`, `--redz-primary`, `--redz-radius-12`, `--redz-space-16`, `--redz-font-mono`, `--redz-space-4`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-primary-subtle`.
+It reads the theme's `--redz-sticky-top`, `--redz-space-12`, `--redz-space-8`, `--redz-row-pad`, `--redz-border`, `--redz-table-head-bg`, `--redz-bg`, `--redz-table-head-text`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-fs-14`, `--redz-bg-page`, `--redz-space-16`, `--redz-border-strong`, `--redz-row-hover`, `--redz-primary`, `--redz-radius-12`, `--redz-font-mono`, `--redz-space-4`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-primary-subtle`.
 
 ## From Bootstrap 5.3
 

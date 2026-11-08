@@ -66,15 +66,15 @@
 		}
 	}
 
-	.table-scroll-first > .table > * > tr > :first-child {
+	.table-scroll-first > .table > * > tr:not(.table-group) > :first-child {
 		position: sticky;
 		inset-inline-start: 0;
 		z-index: 1;
 		border-inline-end: 1px solid var(--redz-border);
 	}
 
-	:where(.table-scroll-first > .table > * > tr) > :first-child,
-	.table-scroll-first > .table > tbody > tr > th:first-child {
+	:where(.table-scroll-first > .table > * > tr:not(.table-group)) > :first-child,
+	.table-scroll-first > .table > tbody > tr:not(.table-group) > th:first-child {
 		background-color: var(--redz-bg);
 	}
 
@@ -82,15 +82,15 @@
 		z-index: 2;
 	}
 
-	.table-scroll-last > .table > * > tr > :last-child {
+	.table-scroll-last > .table > * > tr:not(.table-group) > :last-child {
 		position: sticky;
 		inset-inline-end: 0;
 		z-index: 1;
 		border-inline-start: 1px solid var(--redz-border);
 	}
 
-	:where(.table-scroll-last > .table > * > tr) > :last-child,
-	.table-scroll-last > .table > tbody > tr > th:last-child {
+	:where(.table-scroll-last > .table > * > tr:not(.table-group)) > :last-child,
+	.table-scroll-last > .table > tbody > tr:not(.table-group) > th:last-child {
 		background-color: var(--redz-bg);
 	}
 
@@ -109,7 +109,12 @@
 	}
 
 	.table-group-end {
+		position: sticky;
+		inset-inline-end: 0;
 		float: inline-end;
+		margin-inline-end: calc(-1 * var(--redz-space-16));
+		padding-inline: var(--redz-space-8) var(--redz-space-16);
+		background: inherit;
 		color: var(--redz-text-muted);
 		font-weight: 400;
 	}

@@ -2900,15 +2900,43 @@ window.REDZ_BEHAVE = (() => {
 		}]},
 		scroller: {target: '#table-wide .table-scroll', steps: [async (out) => {
 			const box = $('#table-wide .table-scroll');
-			const first = $('tbody th', box);
+			const first = $('tbody tr:not(.table-group) > th', box);
 			const head = $('thead th:nth-child(2)', box);
 			box.style.inlineSize = '20rem';
 			box.scrollLeft = box.scrollWidth;
 			await wait(50);
 			const left = Math.round(first.getBoundingClientRect().left - box.getBoundingClientRect().left);
+			const band = $('.table-group > th', box);
+			const slot = $('.table-group-end', band);
+			const ends = [];
+			for (const dir of ['ltr', 'rtl']) {
+				document.documentElement.dir = dir;
+				for (const to of [0, dir === 'ltr' ? box.scrollWidth : -box.scrollWidth]) {
+					box.scrollLeft = to;
+					await wait(50);
+					const port = box.getBoundingClientRect().left + box.clientLeft;
+					const end = slot.getBoundingClientRect();
+					ends.push(Math.round(dir === 'ltr' ? port + box.clientWidth - end.right : end.left - port));
+				}
+			}
+			document.documentElement.dir = 'ltr';
 			box.scrollLeft = 0;
 			const wide = box.scrollWidth > box.clientWidth;
 			box.style.removeProperty('inline-size');
+			if (ends.some((gap) => Math.abs(gap) > 1)) {
+				out.push('a group\'s end slot stands ' + say(ends) + ' px from a narrow scroller\'s end, at rest and scrolled, left to right and right to left');
+			}
+			const look = (th) => {
+				const style = getComputedStyle(th);
+				return [style.position, style.backgroundColor, style.borderInlineStartWidth, style.borderInlineEndWidth].join(' ');
+			};
+			const plain = look($('#table-grouped .table-group > th'));
+			if (look(band) !== plain) {
+				out.push('a group band in a table-scroll-first reads ' + say(look(band)) + ', not ' + say(plain) + ' as outside it');
+			}
+			if (getComputedStyle(slot).backgroundColor !== getComputedStyle(band).backgroundColor) {
+				out.push('a group\'s end slot stands on ' + say(getComputedStyle(slot).backgroundColor) + ', not its band\'s ' + say(getComputedStyle(band).backgroundColor) + ', so a long label shows through it');
+			}
 			const single = CSS.supports('named-feature(single-axis-scroll-container)');
 			const top = getComputedStyle(head).insetBlockStart;
 			if (!wide || left !== 0 || top !== (single ? '52px' : '0px') || getComputedStyle($('tbody td', box)).position !== 'relative') {
