@@ -70,7 +70,7 @@ const filter = (field) => {
 	}
 	const count = words.length === 0 ? items.length : items.filter((item) => !item.hasAttribute('data-filtered') && (!item.matches('.tree-item') || hits.has(item))).length;
 	region.querySelectorAll('[data-filter-empty]').forEach((empty) => {
-		empty.hidden = count > 0;
+		empty.hidden = words.length === 0 || count > 0;
 	});
 	return count;
 };

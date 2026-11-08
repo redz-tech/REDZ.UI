@@ -2323,6 +2323,15 @@ window.REDZ_BEHAVE = (() => {
 			if (say(one) !== say(['Turtle Cove and Pearl Cove']) || say(search) !== say(['Elephant sanctuary']) || none[0] !== 0 || none[1] !== false || !told || field.value !== '' || shown().length !== 4 || !empty.hidden) {
 				out.push('a search shows ' + say(one) + ' for "TÚRTLE cove", ' + say(search) + ' for a data-search word, ' + say(none) + ' for none (shown, the empty state hidden), the count ' + (told ? '' : 'not ') + 'said, then Escape leaves ' + say(field.value) + ' and ' + shown().length + ' items');
 			}
+			const items = $$('.list-group-item:not([data-filter-empty])', list);
+			items.forEach((item) => item.remove());
+			input(field, 'cove');
+			input(field, '');
+			const bare = empty.hidden;
+			list.prepend(...items);
+			if (!bare) {
+				out.push('a list with no items, searched and cleared, shows its empty state: nothing is searched');
+			}
 			const tree = $('[data-filter="tree-current-list"]');
 			input(tree, 'night');
 			const pages = $$('#tree-current-list .tree-item').map((item) => (item.hasAttribute('data-filtered') ? '-' : '+') + $(':scope > .tree-row > a', item).textContent);

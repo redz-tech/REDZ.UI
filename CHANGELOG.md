@@ -61,6 +61,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - A search field over a table with groups keeps a group's `table-group` band and `table-subtotal` while a row of the
   group matches, and hides them with the group's last row. It matched each band and subtotal against its own words, so
   a search hid the band of every row it found.
+- A search field's `data-filter-empty` note shows only while words are typed: in a region with no items, a search typed
+  and cleared left the note that nothing matches.
 
 ## 0.18.2 - 2026-11-06
 
