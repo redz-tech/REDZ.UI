@@ -110,7 +110,7 @@
 			{"label": "the checks", "do": "focus", "target": "#editor-demo-host [data-editor-foot=\"check\"]", "expect": ["Check"]},
 			{"label": "the AI's menu", "do": "focus", "target": "#editor-demo-host [data-editor-foot=\"ai\"]", "expect": ["AI"]},
 			{"label": "the menu of blocks", "do": "focus", "target": "#editor-demo-host [data-editor=\"insert\"]", "expect": ["Insert"]},
-			{"label": "Enter on it: its first item", "do": "key", "key": "Enter", "expect": ["Write with AI"]}
+			{"label": "Enter on it: its first item", "do": "key", "key": "Enter", "expect": ["Write with AI"], "unsteady": {"voiceover": "VoiceOver 15 said the opened button and went to Safari's own Page Menu instead of the first item on one run of three, in both hearings; the other two said the item (measured 2026-11-08)."}}
 		],
 		"docs/carousel.html": [
 			{"label": "the Next button of a carousel", "do": "focus", "target": "[command=\"--next\"][aria-controls=\"carousel-basic-tours\"]", "expect": ["Next"]},
