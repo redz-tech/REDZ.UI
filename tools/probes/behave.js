@@ -2545,12 +2545,81 @@ window.REDZ_BEHAVE = (() => {
 			const ended = [count.textContent, button.hidden];
 			window.removeEventListener('redz:more', some, true);
 			list.replaceChildren(...kept);
-			button.dataset.moreTotal = total;
-			button.hidden = false;
-			cap.hidden = true;
-			count.textContent = '4 of 11';
+			REDZ.ui.more(list, {total: Number(total)});
 			if (say(start) !== say(['4 of 11', false, true]) || busy !== 'true' || say(grown) !== say([8, '8 of 11', true, false, 'Pickup point 5']) || !said || say(refused) !== say([4, false, true]) || say(open) !== say(['5+', false]) || say(ended) !== say(['5 of 5', true])) {
 				out.push('show more: at load ' + say(start) + ', pressed busy ' + say(busy) + ', then ' + say(grown) + ' (items, count, button hidden at the cap, cap shown, focus), said ' + said + '; refused ' + say(refused) + ' (items, hidden, focus kept); without a total ' + say(open) + ', then an empty answer ' + say(ended));
+			}
+		}]},
+		moreLater: {target: '#list-group-more-list', steps: [async (out) => {
+			const row = (words) => Object.assign(document.createElement('button'), {type: 'button', className: 'list-group-item list-group-item-action', textContent: words});
+			const box = document.createElement('div');
+			box.innerHTML = '<div class="list-group" id="probe-more-list"></div><div class="list-more"><span data-more-count></span></div><div class="list-more"><span data-more-count></span><button class="btn btn-sm" type="button" command="--more" aria-controls="probe-more-later">More</button></div>';
+			document.body.append(box);
+			const list = $('#probe-more-list', box);
+			list.append(row('Row 1'), row('Row 2'));
+			const [foot, other] = $$('.list-more', box);
+			const button = Object.assign(document.createElement('button'), {type: 'button', className: 'btn btn-sm', textContent: 'More'});
+			button.setAttribute('command', '--more');
+			button.dataset.moreTotal = '5';
+			foot.append(button);
+			await settled();
+			const count = $('[data-more-count]', foot);
+			const unnamed = count.textContent;
+			button.setAttribute('aria-controls', 'probe-more-list');
+			await settled();
+			const named = count.textContent;
+			list.append(row('Row 3'));
+			await settled();
+			const redrawn = count.textContent;
+			const late = Object.assign(document.createElement('ul'), {id: 'probe-more-later', className: 'list-group', innerHTML: '<li class="list-group-item">A</li><li class="list-group-item">B</li>'});
+			box.append(late);
+			await settled();
+			const put = $('[data-more-count]', other).textContent;
+			const take = (event) => {
+				if (event.target === list) {
+					event.preventDefault();
+					event.stopImmediatePropagation();
+					list.append(row('Row 4'), row('Row 5'));
+					event.detail.respondWith(Promise.resolve({}));
+				}
+			};
+			window.addEventListener('redz:more', take, true);
+			button.click();
+			await until(() => document.activeElement?.textContent === 'Row 4', 1000);
+			window.removeEventListener('redz:more', take, true);
+			const fourth = list.children[3];
+			const focused = [document.activeElement === fourth, fourth.hasAttribute('tabindex'), fourth.tabIndex, count.textContent, button.hidden];
+			list.replaceChildren(row('Row 1'));
+			REDZ.ui.more(list, {total: 9});
+			await settled();
+			const total = [count.textContent, button.hidden];
+			REDZ.ui.more(list, {});
+			await settled();
+			const unknown = [count.textContent, button.hidden];
+			REDZ.ui.more(list, {done: true});
+			await settled();
+			const done = [count.textContent, button.hidden];
+			list.append(row('Row 2'));
+			await settled();
+			const after = [count.textContent, button.hidden];
+			REDZ.ui.more(list, {});
+			let signal = null;
+			const hold = (event) => {
+				if (event.target === list) {
+					event.preventDefault();
+					event.stopImmediatePropagation();
+					signal = event.detail.signal;
+					event.detail.respondWith(new Promise(() => {}));
+				}
+			};
+			window.addEventListener('redz:more', hold, true);
+			button.click();
+			window.removeEventListener('redz:more', hold, true);
+			REDZ.ui.more(list, {total: 4});
+			const aborted = signal?.aborted;
+			box.remove();
+			if (unnamed !== '' || named !== '2 of 5' || redrawn !== '3 of 5' || put !== '2+' || say(focused) !== say([true, false, 0, '5 of 5', true]) || say(total) !== say(['1 of 9', false]) || say(unknown) !== say(['1+', false]) || say(done) !== say(['1 of 1', true]) || say(after) !== say(['2 of 2', true]) || aborted !== true) {
+				out.push('show more told by the page: a button without aria-controls ' + say(unnamed) + ', given it ' + say(named) + ', the list grown by code ' + say(redrawn) + ', a list put in later ' + say(put) + '; a new item that is a button: focused, tabindex, tab stop, count, hidden ' + say(focused) + '; REDZ.ui.more {total: 9} ' + say(total) + ', {} ' + say(unknown) + ', {done: true} ' + say(done) + ', grown after the end ' + say(after) + '; a question out aborted by it ' + say(aborted));
 			}
 		}]},
 		selection: {target: '#table-select-rows', steps: [async (out) => {
@@ -2584,6 +2653,46 @@ window.REDZ_BEHAVE = (() => {
 			scope.removeEventListener('redz:selection', listen);
 			if (say(start) !== say([true, false, false]) || say(one) !== say([false, '1 selected', true, say({count: 1, total: 3, values: ['11']})]) || tint[0] === tint[1] || !row || say(all) !== say([true, false, false, '3 selected']) || !told || say(hidden) !== say([false, '1 selected', true, say(['13'])]) || say(shown) !== say([true, true, '3 selected']) || say(none) !== say([true, false, false])) {
 				out.push('selection: at load ' + say(start) + ' (bar hidden, head), one check ' + say(one) + ', tint ' + say(tint) + ', a row click checks ' + row + ', the head ' + say(all) + ' (said ' + told + '), a search hiding two ' + say(hidden) + ', cleared ' + say(shown) + ', select none ' + say(none));
+			}
+		}]},
+		selectionLater: {target: '#table-select-rows', steps: [async (out) => {
+			const box = document.createElement('div');
+			box.innerHTML = '<div data-select id="probe-select"><div class="selection-bar"><span data-select-count></span></div><input type="checkbox" data-select-all aria-label="All"><ul><li><input type="checkbox" value="a" aria-label="A"></li><li><input type="checkbox" value="b" aria-label="B"></li><li><input type="checkbox" value="c" aria-label="C"></li></ul></div><div id="probe-select-late"><input type="checkbox" value="d" aria-label="D" checked></div>';
+			const scope = $('#probe-select', box);
+			const late = $('#probe-select-late', box);
+			const [a, b, c] = $$('ul input', scope);
+			const head = $('[data-select-all]', scope);
+			const bar = $('.selection-bar', scope);
+			const heard = [];
+			const listen = (event) => heard.push(event.target.id + ' ' + event.detail.count + '/' + event.detail.total);
+			box.addEventListener('redz:selection', listen);
+			document.body.append(box);
+			await settled();
+			const put = [heard.join(), bar.hidden];
+			a.checked = true;
+			REDZ.ui.selection(scope);
+			const called = [heard.at(-1), head.indeterminate, bar.hidden];
+			REDZ.ui.selection(scope);
+			const quiet = heard.length;
+			b.disabled = true;
+			await settled();
+			const disabled = heard.at(-1);
+			a.closest('li').hidden = true;
+			await settled();
+			const hidden = [heard.at(-1), a.checked, bar.hidden];
+			a.closest('li').hidden = false;
+			await settled();
+			const back = [heard.at(-1), a.checked];
+			c.setAttribute('checked', '');
+			await settled();
+			const attribute = [heard.at(-1), head.checked];
+			late.dataset.select = '';
+			await settled();
+			const marked = heard.at(-1);
+			box.removeEventListener('redz:selection', listen);
+			box.remove();
+			if (say(put) !== say(['probe-select 0/3', true]) || say(called) !== say(['probe-select 1/3', true, false]) || quiet !== 2 || disabled !== 'probe-select 1/2' || say(hidden) !== say(['probe-select 0/1', false, true]) || say(back) !== say(['probe-select 1/2', true]) || say(attribute) !== say(['probe-select 2/2', true]) || marked !== 'probe-select-late 1/1') {
+				out.push('a selection put in later: told ' + say(put) + ' (event, bar hidden); REDZ.ui.selection after .checked ' + say(called) + ' (event, head mixed, bar), again ' + (quiet === 2 ? 'silent' : 'told') + ', a check disabled ' + say(disabled) + ', its item hidden ' + say(hidden) + ' (event, checked, bar hidden), shown ' + say(back) + ', a checked attribute ' + say(attribute) + ' (event, head), data-select given later ' + say(marked));
 			}
 		}]},
 		sort: {target: '#table-sort', steps: [async (out) => {
@@ -2840,6 +2949,47 @@ window.REDZ_BEHAVE = (() => {
 			document.removeEventListener('redz:load', count);
 			if (say(loading) !== say([false, true, 'Loading…']) || say(refused) !== say([true, true, true, true]) || !quiet || say(loaded) !== say([2, true, false]) || say(printed) !== say([true, 0]) || say(after) !== say([false, 0, true])) {
 				out.push('a lazy section: loading ' + say(loading) + ', refused ' + say(refused) + (quiet ? '' : ', loading again at once') + ', opened again ' + say(loaded) + '; printing opens a lazy one ' + say(printed) + ' without asking, after ' + say(after));
+			}
+		}]},
+		lazyLayer: {target: '#accordion-lazy-history', steps: [async (out) => {
+			const box = document.createElement('div');
+			box.innerHTML = '<div popover id="probe-lazy-popover"><ul data-lazy></ul></div><dialog id="probe-lazy-dialog"><div data-lazy></div></dialog>';
+			const [popover, dialog] = [$('[popover]', box), $('dialog', box)];
+			const asked = [];
+			let refuse = true;
+			const take = (event) => {
+				if (box.contains(event.target)) {
+					asked.push(event.target.closest('[popover], dialog').id);
+					event.preventDefault();
+					event.stopImmediatePropagation();
+					event.detail.respondWith(refuse ? Promise.reject(new Error('no')) : Promise.resolve());
+				}
+			};
+			window.addEventListener('redz:load', take, true);
+			document.body.append(box);
+			await settled();
+			const closed = asked.length;
+			popover.showPopover();
+			await settled();
+			await wait(50);
+			const opened = asked.length;
+			popover.hidePopover();
+			await settled();
+			refuse = false;
+			popover.showPopover();
+			await settled();
+			await wait(50);
+			const again = asked.length;
+			popover.hidePopover();
+			dialog.show();
+			await settled();
+			await wait(50);
+			const shown = [...asked];
+			dialog.close();
+			window.removeEventListener('redz:load', take, true);
+			box.remove();
+			if (closed !== 0 || opened !== 1 || again !== 2 || say(shown) !== say(['probe-lazy-popover', 'probe-lazy-popover', 'probe-lazy-dialog'])) {
+				out.push('a lazy region in a closed popover or dialog asked ' + closed + ' times before it opened, ' + opened + ' when the popover opened, ' + again + ' after a refusal and another opening; asked for ' + say(shown));
 			}
 		}]},
 		uploadPaste: {target: '#upload-stored', steps: [async (out) => {

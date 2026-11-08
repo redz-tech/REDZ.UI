@@ -1,20 +1,29 @@
-// REDZ.UI, selection: an element with data-select holds a selection - its checks, the boxes of its rows or items. A check
-// with data-select-all heads them: checked when all are, mixed when some are, and pressed it checks or clears them all;
-// it heads the scope it stands in, or the scopes its aria-controls names. A data-select inside another is a group: its
-// own head heads its checks and the outer head all of them. Only the checks a person can use count - enabled, and not
-// in an item a filter hides (js/filter.js): a checked one a filter hides leaves the count until it is shown again,
-// checked again. A selection-bar in the scope hides at zero; a data-select-count says "selected" in the page's words;
-// the scope fires redz:selection {count, total, values}, the values of its checked checks, and a head that changes them
-// all says the count too. data-select="rows" on a table also checks a row clicked anywhere but on its controls or its
-// text being selected. A button with command="--select-all" or "--select-none" and aria-controls naming a scope does
-// the same as its head.
+// REDZ.UI, selection: an element with data-select holds a selection - its checks, the boxes of its rows or items. A
+// check with data-select-all heads them: checked when all are, mixed when some are, and pressed it checks or clears
+// them all; it heads the scope it stands in, or the scopes its aria-controls names. A data-select inside another is a
+// group: its own head heads its checks and the outer head all of them. Only the checks a person can use count -
+// enabled, and not in an item a filter hides (js/filter.js) or code hides in the selection: a checked one hidden leaves
+// the count until it is shown again, checked again. A selection-bar in the scope hides at zero; a data-select-count
+// says "selected" in the page's words; the scope fires redz:selection {count, total, values}, the values of its checked
+// checks, and a head that changes them all says the count too. data-select="rows" on a table also checks a row clicked
+// anywhere but on its controls or its text being selected. A button with command="--select-all" or "--select-none" and
+// aria-controls naming a scope does the same as its head. Scopes put in later or given data-select later are watched
+// the same; a check's disabled, checked or hidden and an item's hidden set by code are seen. A check's checked property
+// set by code is not: the page fires change on it, or calls REDZ.ui.selection(scope), which reads the scope again.
 import {textCount} from './text.js';
 import {announce} from './say.js';
 
 const CONTROLS = 'a[href], button, input, select, textarea, label, summary, [contenteditable], [tabindex]';
 
-/** The checks of the scope a person can choose: not heads, enabled, not hidden by a filter. */
-const checksOf = (scope) => [...scope.querySelectorAll('input[type="checkbox"]:not([data-select-all])')].filter((check) => !check.disabled && check.closest('[data-filtered]') === null);
+/** Whether a filter hid the check's item, or code hid the check or an element around it inside its selection. */
+const unseen = (check) => {
+	const hidden = check.closest('[hidden]');
+	const scope = hidden === null ? null : outermost(check);
+	return check.closest('[data-filtered]') !== null || (scope !== null && hidden !== scope && scope.contains(hidden));
+};
+
+/** The checks of the scope a person can choose: not heads, enabled, not hidden. */
+const checksOf = (scope) => [...scope.querySelectorAll('input[type="checkbox"]:not([data-select-all])')].filter((check) => !check.disabled && !unseen(check));
 
 /** The scopes the head heads. */
 const headed = (head) => {
@@ -31,10 +40,10 @@ const outermost = (element) => {
 	return scope;
 };
 
-/** Writes the scope's state - checks a filter hid or showed, heads, bars, counts - and fires redz:selection when it changed. */
+/** Writes the scope's state - checks hidden or shown again, heads, bars, counts - and fires redz:selection when it changed. */
 const sync = (scope) => {
 	for (const check of scope.querySelectorAll('input[type="checkbox"]:not([data-select-all])')) {
-		const hidden = check.closest('[data-filtered]') !== null;
+		const hidden = unseen(check);
 		if (hidden && check.checked) {
 			check.checked = false;
 			check.dataset.selectKept = '';
@@ -55,7 +64,7 @@ const sync = (scope) => {
 	for (const one of scopes) {
 		const count = checksOf(one).filter((check) => check.checked).length;
 		one.querySelectorAll(':scope .selection-bar').forEach((bar) => {
-			if (bar.parentElement.closest('[data-select]') === one) {
+			if (bar.parentElement.closest('[data-select]') === one && bar.hidden !== (count === 0)) {
 				bar.hidden = count === 0;
 			}
 		});
@@ -120,19 +129,29 @@ document.addEventListener('redz:filter', (event) => {
 	new Set(scopes.map(outermost)).forEach(sync);
 });
 
-const redrawn = new MutationObserver((records) => {
+/** Reads the selections in or around the element again - its checks changed by code - and fires redz:selection where one changed. */
+export const selection = (element) => {
+	const scopes = [element.closest('[data-select]'), ...element.querySelectorAll('[data-select]')].filter((scope) => scope !== null);
+	new Set(scopes.map(outermost)).forEach(sync);
+};
+
+new MutationObserver((records) => {
 	const scopes = new Set();
 	for (const record of records) {
-		if ([...record.addedNodes, ...record.removedNodes].some((node) => node.nodeType === Node.ELEMENT_NODE)) {
+		if (record.type === 'attributes' || [...record.addedNodes, ...record.removedNodes].some((node) => node.nodeType === Node.ELEMENT_NODE)) {
 			scopes.add(outermost(record.target));
+		}
+		for (const node of record.addedNodes) {
+			if (node instanceof Element) {
+				[...(node.matches('[data-select]') ? [node] : []), ...node.querySelectorAll('[data-select]')].forEach((scope) => scopes.add(outermost(scope)));
+			}
 		}
 	}
 	scopes.forEach((scope) => scope?.isConnected && sync(scope));
-});
+}).observe(document.documentElement, {childList: true, subtree: true, attributes: true, attributeFilter: ['data-select', 'disabled', 'checked', 'hidden']});
 
 for (const scope of document.querySelectorAll('[data-select]')) {
 	if (outermost(scope) === scope) {
-		redrawn.observe(scope, {childList: true, subtree: true});
 		sync(scope);
 	}
 }

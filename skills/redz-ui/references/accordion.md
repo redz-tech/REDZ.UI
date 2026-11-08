@@ -65,7 +65,7 @@ Without `name` every item opens and closes by itself.
 
 ### Contents from the server
 
-An element with `data-lazy` - a `details` or its `accordion-body`, a region a [--toggle button](collapse.md) opens, a [tab panel](nav.md), a [tree's group](tree.md) - fires `redz:load` on itself with `{region}` the first time it shows: open at load, put in open later, or opened by a person, never for the paper. The library takes `data-lazy` away first. A page that loads the contents cancels the event and answers with a promise by `event.detail.respondWith`: meanwhile an empty region shows three placeholder lines and, to a screen reader, the page's text `busy`. A refusal puts `data-lazy` back and shows its words in the region, which stays open; the next opening tries again. Writing `data-lazy` again on a region that shows - its contents are stale - loads it again at once.
+An element with `data-lazy` - a `details` or its `accordion-body`, a region a [--toggle button](collapse.md) opens, a [tab panel](nav.md), a [tree's group](tree.md), a popover or a dialog or a region in one - fires `redz:load` on itself with `{region}` the first time it shows: open at load, put in open later, or opened by a person, never for the paper. The library takes `data-lazy` away first. A page that loads the contents cancels the event and answers with a promise by `event.detail.respondWith`: meanwhile an empty region shows three placeholder lines and, to a screen reader, the page's text `busy`. A refusal puts `data-lazy` back and shows its words in the region, which stays open; the next opening tries again. Writing `data-lazy` again on a region that shows - its contents are stale - loads it again at once.
 
 ```html
 <div class="accordion">

@@ -129,7 +129,7 @@ attaches by delegation on `document`, so nothing is set up per element and marku
   saying which; elements with `data-strength` naming the field show its level as it is typed - by its length and its
   kinds of characters - a meter at once, the words after a pause (`js/password.js`).
 - **Trees:** a list of class `tree` opens its groups by `--toggle` buttons; a group with `data-lazy` asks the page for
-  its items by `redz:expand` on its first opening, and `--expand-all` / `--collapse-all` open and close a whole tree
+  its items by `redz:load` on its first opening, and `--expand-all` / `--collapse-all` open and close a whole tree
   (`js/tree.js`).
 - **Reordering:** a list, a table's `tbody`, a grid or a tree with `data-reorder` moves its items by a `drag-handle` -
   a button opening the list's menu of moves (up, down, first, last; in and out in a tree) - or by the pointer dragging

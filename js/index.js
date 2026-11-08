@@ -57,8 +57,10 @@ import {status} from './status.js';
 import {banner} from './banner.js';
 import {filterRegion} from './filter.js';
 import {sort} from './sort.js';
+import {restart} from './more.js';
+import {selection} from './select.js';
 import {alert} from './alert.js';
 import {download} from './download.js';
 import {clear, settled} from './upload.js';
 
-globalThis.REDZ = Object.assign(globalThis.REDZ ?? {}, {ui: {...globalThis.REDZ?.ui, toast, confirm, busy, prompt, progress, select: selectTab, status, banner, filter: filterRegion, sort, alert, download, upload: {clear, settled}, combobox: {set: setList}}});
+globalThis.REDZ = Object.assign(globalThis.REDZ ?? {}, {ui: {...globalThis.REDZ?.ui, toast, confirm, busy, prompt, progress, select: selectTab, status, banner, filter: filterRegion, sort, more: restart, selection, alert, download, upload: {clear, settled}, combobox: {set: setList}}});

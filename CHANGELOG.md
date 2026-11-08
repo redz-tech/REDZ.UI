@@ -4,6 +4,29 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Added
+- `REDZ.ui.more(list, answer)` starts a list's Show more again after the page replaced its items - a refresh, a filter
+  its server answered - with what the page knows: `{total}`, `{done: true}`, or `{}` while the total is unknown; a
+  question still out is aborted. A server search over the list did it alone until now.
+- `REDZ.ui.selection(scope)` reads a selection again after code changed its checks' `checked` property, which fires
+  nothing a script can see, and fires `redz:selection` if the selection changed.
+
+### Changed
+- A Show more button or a list the page puts in later, or a button given `aria-controls` later, is written at once:
+  its count, cap and state. A list the page redraws is counted again by itself.
+- A selection the page puts in later or marks with `data-select` later is watched as one at load; a check's
+  `disabled`, `checked` or `hidden` and an item's `hidden` set by code are read again. A check hidden by code inside
+  the selection leaves the count as one a filter hides does, and is checked again when it shows.
+
+### Fixed
+- Show more moved the focus to the first new item's first link or button, and took an item that is itself a button
+  out of the Tab order for good; it now focuses such an item and leaves its Tab stop.
+- A region with `data-lazy` in a closed popover or dialog counted as shown: it loaded with the page and never asked
+  again after a refusal. It now loads when the popover or the dialog opens.
+- The README still named `redz:expand` for a tree's lazy group, which 0.19.0 replaced with `redz:load`.
+
 ## 0.19.0 - 2026-11-08
 
 ### Added

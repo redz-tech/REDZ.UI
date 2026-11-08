@@ -1,10 +1,11 @@
 // REDZ.UI, contents loaded the first time they show: an element with data-lazy - a tree's group, a details or its
-// accordion-body, a region a --toggle button opens, a tab panel - asks the page for its contents by the cancelable
-// redz:load {region} (js/answer.js) the first time it shows: open at load, put in open later, or opened by a person, but
-// never for the paper. The library takes data-lazy away first. Answered with a promise, the region shows three
-// placeholder lines while it is empty and the words of the page's text "busy" to a screen reader, until the page has put
-// the contents in. A refusal puts data-lazy back and shows its words in the region, which stays open, for another try
-// when it opens again. data-lazy written again on a region that shows loads it again at once.
+// accordion-body, a region a --toggle button opens, a tab panel, a popover or a dialog or a region in one - asks the
+// page for its contents by the cancelable redz:load {region} (js/answer.js) the first time it shows: open at load, put
+// in open later, or opened by a person, but never for the paper. The library takes data-lazy away first. Answered with
+// a promise, the region shows three placeholder lines while it is empty and the words of the page's text "busy" to a
+// screen reader, until the page has put the contents in. A refusal puts data-lazy back and shows its words in the
+// region, which stays open, for another try when it opens again. data-lazy written again on a region that shows loads
+// it again at once.
 import {ask} from './answer.js';
 import {text} from './text.js';
 import {printing} from './print.js';
@@ -12,10 +13,10 @@ import {printing} from './print.js';
 // The elements a refusal left open, which wait to be opened again.
 const failed = new WeakSet();
 
-/** Whether the element shows: neither it nor an element around it hidden, and every details from it out open. */
+/** Whether the element shows: nothing from it out hidden, and every details, dialog and popover from it out open. */
 const shows = (element) => {
 	for (let at = element; at !== null; at = at.parentElement) {
-		if (at.hidden || (at.localName === 'details' && !at.open)) {
+		if (at.hidden || ((at.localName === 'details' || at.localName === 'dialog') && !at.open) || (at.hasAttribute('popover') && !at.matches(':popover-open'))) {
 			return false;
 		}
 	}
