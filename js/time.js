@@ -1,7 +1,8 @@
 // REDZ.UI, ticking times: a time element with a datetime - ISO, with its zone - and data-elapsed shows the time since
 // then as a clock, m:ss under an hour and h:mm:ss after; one with data-ago says how long ago it was, or how soon it
-// comes, in the page's language ("5 minutes ago"), its full moment in its title. One ticker serves them all: each second
-// while an elapsed time is on the page, else every 30 seconds, still while the page is hidden. They are never read out.
+// comes, in the page's language ("5 minutes ago", or "5 min. ago" with data-ago="short"), its full moment in its title.
+// One ticker serves them all: each second while an elapsed time is on the page, else every 30 seconds, still while the
+// page is hidden. They are never read out.
 const UNITS = [['year', 31536000], ['month', 2592000], ['day', 86400], ['hour', 3600], ['minute', 60], ['second', 1]];
 let timer = 0;
 
@@ -16,10 +17,10 @@ const clock = (seconds) => {
 	return (hours > 0 ? hours + ':' + pad(Math.floor(whole / 60) % 60) : Math.floor(whole / 60)) + ':' + pad(whole % 60);
 };
 
-/** Words for so many seconds ago, or ahead when negative, in the page's language. */
-const ago = (seconds, lang) => {
+/** Words for so many seconds ago, or ahead when negative, in the page's language, long or short. */
+const ago = (seconds, lang, style) => {
 	const [unit, size] = UNITS.find(([, length]) => Math.abs(seconds) >= length) ?? UNITS.at(-1);
-	return new Intl.RelativeTimeFormat(lang, {numeric: 'auto'}).format(-Math.round(seconds / size), unit);
+	return new Intl.RelativeTimeFormat(lang, {numeric: 'auto', style}).format(-Math.round(seconds / size), unit);
 };
 
 /** Writes every ticking time and plans the next tick. */
@@ -36,7 +37,7 @@ const tick = () => {
 			time.textContent = clock(seconds);
 			next = Math.min(next, 1010 - (Math.max(0, seconds) * 1000) % 1000);
 		} else {
-			time.textContent = ago(seconds, lang);
+			time.textContent = ago(seconds, lang, time.dataset.ago === 'short' ? 'short' : 'long');
 			time.title ||= new Intl.DateTimeFormat(lang, {dateStyle: 'medium', timeStyle: 'short'}).format(new Date(time.dateTime));
 		}
 	}

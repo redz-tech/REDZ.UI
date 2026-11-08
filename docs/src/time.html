@@ -5,10 +5,11 @@
 
 <section class="vstack gap-16" aria-labelledby="time-examples">
 	<h2 id="time-examples">Examples</h2>
-	<p>A <code>time</code> whose <code>datetime</code> is the moment - ISO, with its zone. With <code>data-elapsed</code> it shows the time since then as a clock, <code>m:ss</code> under an hour and <code>h:mm:ss</code> after; with <code>data-ago</code> it says how long ago it was, or how soon it comes, in the page's language, and its <code>title</code> holds the full moment. One ticker serves every one on the page: each second while an elapsed time is there, else every 30 seconds, and none while the page is hidden. The page's own words stand inside until the library starts.</p>
+	<p>A <code>time</code> whose <code>datetime</code> is the moment - ISO, with its zone. With <code>data-elapsed</code> it shows the time since then as a clock, <code>m:ss</code> under an hour and <code>h:mm:ss</code> after; with <code>data-ago</code> it says how long ago it was, or how soon it comes, in the page's language, and its <code>title</code> holds the full moment; <code>data-ago="short"</code> says it short, for a narrow place such as a stat tile. One ticker serves every one on the page: each second while an elapsed time is there, else every 30 seconds, and none while the page is hidden. The page's own words stand inside until the library starts.</p>
 	<div class="docs-example docs-example-stack" id="time-ticking">
 		<p>The backup has been running for <time datetime="2026-11-04T08:00:00Z" data-elapsed data-docs-since="95">1:35</time>.</p>
 		<p>The last message came <time datetime="2026-11-04T08:00:00Z" data-ago data-docs-since="300">5 minutes ago</time>; the next tour leaves <time datetime="2026-11-04T08:00:00Z" data-ago data-docs-since="-7200">in 2 hours</time>.</p>
+		<p>Last backup <time datetime="2026-11-04T08:00:00Z" data-ago="short" data-docs-since="2520">42 min. ago</time>.</p>
 	</div>
 </section>
 

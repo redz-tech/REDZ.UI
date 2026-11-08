@@ -6,11 +6,12 @@ A time that keeps itself current: how long a job has been running, how long ago 
 
 ## Examples
 
-A `time` whose `datetime` is the moment - ISO, with its zone. With `data-elapsed` it shows the time since then as a clock, `m:ss` under an hour and `h:mm:ss` after; with `data-ago` it says how long ago it was, or how soon it comes, in the page's language, and its `title` holds the full moment. One ticker serves every one on the page: each second while an elapsed time is there, else every 30 seconds, and none while the page is hidden. The page's own words stand inside until the library starts.
+A `time` whose `datetime` is the moment - ISO, with its zone. With `data-elapsed` it shows the time since then as a clock, `m:ss` under an hour and `h:mm:ss` after; with `data-ago` it says how long ago it was, or how soon it comes, in the page's language, and its `title` holds the full moment; `data-ago="short"` says it short, for a narrow place such as a stat tile. One ticker serves every one on the page: each second while an elapsed time is there, else every 30 seconds, and none while the page is hidden. The page's own words stand inside until the library starts.
 
 ```html
 <p>The backup has been running for <time datetime="2026-11-04T08:00:00Z" data-elapsed data-docs-since="95">1:35</time>.</p>
 <p>The last message came <time datetime="2026-11-04T08:00:00Z" data-ago data-docs-since="300">5 minutes ago</time>; the next tour leaves <time datetime="2026-11-04T08:00:00Z" data-ago data-docs-since="-7200">in 2 hours</time>.</p>
+<p>Last backup <time datetime="2026-11-04T08:00:00Z" data-ago="short" data-docs-since="2520">42 min. ago</time>.</p>
 ```
 
 ## Accessibility

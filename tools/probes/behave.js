@@ -2135,6 +2135,16 @@ window.REDZ_BEHAVE = (() => {
 			if (!/^\d+:\d\d$/.test(at[0]) || minutes * 60 + seconds < 95 || minutes * 60 + seconds > 240 || at[1] !== '5 minutes ago' || at[2] !== 'in 2 hours' || !at[3] || !/^1:02:0[5-7]$/.test(hour) || elapsed.textContent === hour) {
 				out.push('the times read ' + say(at) + ', an elapsed time of an hour and more ' + say(hour) + ' then ' + say(elapsed.textContent));
 			}
+			const words = (style) => new Intl.RelativeTimeFormat(document.documentElement.lang, {numeric: 'auto', style}).format(-42, 'minute');
+			ago.dateTime = new Date(Date.now() - 2520000).toISOString();
+			ago.dataset.ago = 'short';
+			await wait(50);
+			const short = ago.textContent;
+			ago.dataset.ago = '';
+			await wait(50);
+			if (short !== words('short') || ago.textContent !== words('long')) {
+				out.push('a time 42 minutes ago reads ' + say(short) + ' with data-ago="short" and ' + say(ago.textContent) + ' with data-ago, not ' + say([words('short'), words('long')]));
+			}
 		}]},
 		viewer: {target: '#viewer-set', steps: [async (out) => {
 			const links = $$('#viewer-set a[data-zoom]');
