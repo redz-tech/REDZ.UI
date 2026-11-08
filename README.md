@@ -3,7 +3,7 @@
 The interface library of the REDZ products: plain CSS and small JavaScript on the browser platform - no framework, no
 build step.
 
-**Status:** 0.18.2 (2026-11-06) - see [Releases](#releases). Three demo screens in `reference/demo/` -
+**Status:** 0.19.0 (2026-11-08) - see [Releases](#releases). Three demo screens in `reference/demo/` -
 a list, a resource page and a settings form - show it in light and dark themes, left-to-right and right-to-left.
 
 **Site:** [redz-tech.github.io/REDZ.UI](https://redz-tech.github.io/REDZ.UI/) - documentation and the demo screens of
@@ -333,13 +333,13 @@ holds `css/icons.min.css`, `icons/` and the pack's passport `redz-ui-icons.json`
 the version it needs. `php tools/build.php --check` refuses icons that changed under a published version.
 
 ```sh
-gh release download v0.18.2 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
-gh release verify-asset v0.18.2 redz-ui-0.18.2.zip --repo redz-tech/REDZ.UI
+gh release download v0.19.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
+gh release verify-asset v0.19.0 redz-ui-0.19.0.zip --repo redz-tech/REDZ.UI
 gh release download icons-1.13.2 --repo redz-tech/REDZ.UI --pattern 'redz-ui-icons-*.zip'
 gh release verify-asset icons-1.13.2 redz-ui-icons-1.13.2.zip --repo redz-tech/REDZ.UI
 ```
 
-jsDelivr serves a release by its tag: `https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.18.2/dist/css/redz-ui.min.css`
+jsDelivr serves a release by its tag: `https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.19.0/dist/css/redz-ui.min.css`
 and `https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@icons-1.13.2/css/icons.min.css`. Versions
 follow Semantic Versioning: a class, token, attribute or JavaScript call removed or renamed is a major release, one
 added is a minor release, a fix is a patch; while the version is 0.x, a removal or a rename is a minor release.
