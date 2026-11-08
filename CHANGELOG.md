@@ -58,6 +58,9 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   visible end, over a label that runs under it. It stood at the far end of the band, out of sight until scrolled there.
 - A `table-group` band in a `table-scroll-first` or `table-scroll-last` keeps its own background and no line: it took
   the held column's background, line and stickiness.
+- A search field over a table with groups keeps a group's `table-group` band and `table-subtotal` while a row of the
+  group matches, and hides them with the group's last row. It matched each band and subtotal against its own words, so
+  a search hid the band of every row it found.
 
 ## 0.18.2 - 2026-11-06
 

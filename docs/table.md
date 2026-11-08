@@ -211,9 +211,10 @@ Where the server sorts, the header holds a link instead - `a class="table-sort"`
 
 ### Groups and subtotals
 
-A row `table-group` heads the rows under it: one `th scope="rowgroup"` across the table, a band that does not stick, with an end slot `table-group-end` for its count or sum. In a table wider than its scroller the end slot stays at the scroller's visible end, over the band's label. A row `table-subtotal` closes a group in bold under a line.
+A row `table-group` heads the rows under it: one `th scope="rowgroup"` across the table, a band that does not stick, with an end slot `table-group-end` for its count or sum. In a table wider than its scroller the end slot stays at the scroller's visible end, over the band's label. A row `table-subtotal` closes a group in bold under a line. A [search field](list-group.md#list-group-search) over the table keeps a group's band and subtotal while a row of the group matches.
 
 ```html
+<input class="form-control" type="search" data-filter="table-grouped" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off">
 <table class="table" aria-label="Bookings by boat">
 	<thead><tr><th scope="col">Guest</th><th scope="col" class="text-end">Seats</th><th scope="col" class="text-end">Paid</th></tr></thead>
 	<tbody>

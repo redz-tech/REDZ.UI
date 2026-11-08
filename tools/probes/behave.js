@@ -2330,6 +2330,15 @@ window.REDZ_BEHAVE = (() => {
 			if (say(pages) !== say(['+Excursions', '-North Bay by speedboat', '+Night market and street food'])) {
 				out.push('a tree searched for "night" keeps ' + say(pages) + ', not the parent of the match');
 			}
+			const grouped = $('[data-filter="table-grouped"]');
+			const rows = () => $$('#table-grouped tbody > tr').map((row) => (row.hasAttribute('data-filtered') ? '-' : '+') + row.cells[0].firstChild.textContent.trim());
+			input(grouped, 'chris');
+			const found = rows();
+			input(grouped, '');
+			const all = rows().every((row) => row.startsWith('+'));
+			if (say(found) !== say(['-Boat A', '-Alex Sample', '-Ben Sample', '-Boat A', '+Boat C', '+Chris Sample', '+Boat C']) || !all) {
+				out.push('a grouped table searched for "chris" keeps ' + say(found) + ' - its band and subtotal with it, the other group away -' + (all ? '' : ' and cleared does not show every row'));
+			}
 		}]},
 		tap: {target: '#tooltip-title [aria-disabled="true"][title]', steps: [async (out) => {
 			const button = $('#tooltip-title [aria-disabled="true"][title]');

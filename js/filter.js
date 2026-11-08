@@ -1,13 +1,13 @@
 // REDZ.UI, filters: a search field with data-filter naming a region hides, as the person types, the region's items
 // whose words - their text, or their data-search - lack one of the typed words, case and accents aside: list items,
 // items with a data-value, media tiles, tree items, table rows. A tree keeps the ancestors of a match and opens their
-// groups. An element with data-filter-empty in the region shows when nothing matches; the count is said once the
+// groups; a table's group band and subtotal stay while a row of their group does. An element with data-filter-empty in the region shows when nothing matches; the count is said once the
 // typing pauses, in the page's text "found"; Escape in the field clears it. A hidden item carries data-filtered.
 import {textCount} from './text.js';
 import {announce} from './say.js';
 import {mark} from './toggle.js';
 
-const ITEMS = '.list-group-item, [data-value], .media-tile, .tree-item, tbody > tr';
+const ITEMS = '.list-group-item, [data-value], .media-tile, .tree-item, tbody > tr:not(.table-group, .table-subtotal)';
 const PAUSE = 600;
 const said = new WeakMap();
 
@@ -18,6 +18,28 @@ const fold = (words) => words.normalize('NFD').replace(/\p{M}/gu, '').toLowerCas
 const itemsOf = (region) => {
 	const all = [...region.querySelectorAll(ITEMS)].filter((item) => !item.hasAttribute('data-filter-empty'));
 	return all.filter((item) => item.matches('.tree-item') || !all.some((other) => other !== item && other.contains(item)));
+};
+
+/** Hides each group band and subtotal of the table body whose rows are all hidden, while a search runs. */
+const bands = (body, searching) => {
+	let heads = [];
+	let shown = false;
+	const close = () => {
+		heads.forEach((head) => head.toggleAttribute('data-filtered', searching && !shown));
+		heads = [];
+		shown = false;
+	};
+	for (const row of body.rows) {
+		if (row.matches('.table-group')) {
+			close();
+			heads.push(row);
+		} else if (row.matches('.table-subtotal')) {
+			heads.push(row);
+		} else if (!row.hasAttribute('data-filtered')) {
+			shown = true;
+		}
+	}
+	close();
 };
 
 /** Hides the region's items that lack a word of the field's value; answers how many match. */
@@ -42,6 +64,9 @@ const filter = (field) => {
 			group.hidden = false;
 			mark(group, true);
 		}
+	}
+	for (const body of region.matches('tbody') ? [region] : region.querySelectorAll('tbody')) {
+		bands(body, words.length > 0);
 	}
 	const count = words.length === 0 ? items.length : items.filter((item) => !item.hasAttribute('data-filtered') && (!item.matches('.tree-item') || hits.has(item))).length;
 	region.querySelectorAll('[data-filter-empty]').forEach((empty) => {

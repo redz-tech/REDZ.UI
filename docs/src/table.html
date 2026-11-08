@@ -194,8 +194,9 @@
 	</div>
 
 	<h3 id="table-groups">Groups and subtotals</h3>
-	<p>A row <code>table-group</code> heads the rows under it: one <code>th scope="rowgroup"</code> across the table, a band that does not stick, with an end slot <code>table-group-end</code> for its count or sum. In a table wider than its scroller the end slot stays at the scroller's visible end, over the band's label. A row <code>table-subtotal</code> closes a group in bold under a line.</p>
+	<p>A row <code>table-group</code> heads the rows under it: one <code>th scope="rowgroup"</code> across the table, a band that does not stick, with an end slot <code>table-group-end</code> for its count or sum. In a table wider than its scroller the end slot stays at the scroller's visible end, over the band's label. A row <code>table-subtotal</code> closes a group in bold under a line. A <a href="list-group.html#list-group-search">search field</a> over the table keeps a group's band and subtotal while a row of the group matches.</p>
 	<div class="docs-example docs-example-stack" id="table-grouped">
+		<input class="form-control" type="search" data-filter="table-grouped" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off">
 		<table class="table" aria-label="Bookings by boat">
 			<thead><tr><th scope="col">Guest</th><th scope="col" class="text-end">Seats</th><th scope="col" class="text-end">Paid</th></tr></thead>
 			<tbody>

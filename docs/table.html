@@ -468,8 +468,9 @@
 &lt;/table&gt;</code></pre></div>
 
 					<h3 id="table-groups">Groups and subtotals</h3>
-					<p>A row <code>table-group</code> heads the rows under it: one <code>th scope="rowgroup"</code> across the table, a band that does not stick, with an end slot <code>table-group-end</code> for its count or sum. In a table wider than its scroller the end slot stays at the scroller's visible end, over the band's label. A row <code>table-subtotal</code> closes a group in bold under a line.</p>
+					<p>A row <code>table-group</code> heads the rows under it: one <code>th scope="rowgroup"</code> across the table, a band that does not stick, with an end slot <code>table-group-end</code> for its count or sum. In a table wider than its scroller the end slot stays at the scroller's visible end, over the band's label. A row <code>table-subtotal</code> closes a group in bold under a line. A <a href="list-group.html#list-group-search">search field</a> over the table keeps a group's band and subtotal while a row of the group matches.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="table-grouped">
+						<input class="form-control" type="search" data-filter="table-grouped" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off">
 						<table class="table" aria-label="Bookings by boat">
 							<thead><tr><th scope="col">Guest</th><th scope="col" class="text-end">Seats</th><th scope="col" class="text-end">Paid</th></tr></thead>
 							<tbody>
@@ -483,7 +484,8 @@
 							</tbody>
 						</table>
 					</div>
-					<pre class="docs-code" tabindex="0"><code>&lt;table class="table" aria-label="Bookings by boat"&gt;
+					<pre class="docs-code" tabindex="0"><code>&lt;input class="form-control" type="search" data-filter="table-grouped" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off"&gt;
+&lt;table class="table" aria-label="Bookings by boat"&gt;
 	&lt;thead&gt;&lt;tr&gt;&lt;th scope="col"&gt;Guest&lt;/th&gt;&lt;th scope="col" class="text-end"&gt;Seats&lt;/th&gt;&lt;th scope="col" class="text-end"&gt;Paid&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
 	&lt;tbody&gt;
 		&lt;tr class="table-group"&gt;&lt;th scope="rowgroup" colspan="3"&gt;Boat A&lt;span class="table-group-end"&gt;2 bookings&lt;/span&gt;&lt;/th&gt;&lt;/tr&gt;
