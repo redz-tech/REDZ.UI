@@ -35,5 +35,35 @@ jobs:
       - name: Every CSS and HTML feature works at the browser floor
         run: php tools/floor.php check
 
+      - name: The minifier's outside judges - Lightning CSS reprints what it squeezes, esbuild parses what it writes
+        run: php tools/judge.php
+
       - name: No em dash or en dash in the files this commit touches
         run: php tools/dashes.php --commit
+
+  tools:
+    # The release's tools on the oldest PHP their passport names, with no extension loaded: the floor checker on its
+    # command line and the minifier on its fuses.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: '8.4'
+          coverage: none
+          tools: none
+
+      - name: The floor checker and the minifier run on PHP 8.4 with no extension loaded
+        run: |
+          set -eu
+          test "$(php -r 'echo json_decode(file_get_contents("tools/dist/redz-ui-tools.json"))->php;')" = "$(php -r 'echo PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION;')"
+          php -n -m
+          for file in tools/dist/*.php; do php -n -l "$file"; done
+          printf '.a { color: red; }\n' > "${RUNNER_TEMP}/clean.css"
+          printf '.a { field-sizing: content; }\n' > "${RUNNER_TEMP}/gap.css"
+          php -n tools/dist/floor.php check "${RUNNER_TEMP}/clean.css"
+          status=0
+          php -n tools/dist/floor.php check "${RUNNER_TEMP}/gap.css" || status=$?
+          test "$status" -eq 1
+          php -n -r 'require "tools/dist/min.php"; $failures = MIN__SelfTest(); if ($failures !== []) { fwrite(STDERR, implode("\n", $failures) . "\n"); exit(1); } echo "the minifier holds its fuses\n";'

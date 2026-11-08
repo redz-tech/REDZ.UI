@@ -6,7 +6,43 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 
 ## Unreleased
 
+### Added
+- `redz-ui-tools-<version>.zip` in every release: the tools a project runs on its own server and never serves, each
+  the very file the release was built and checked with - `floor.php`, the browser floor checker, with its list
+  `floor.json`, and `min.php`, the minifier -, PHP 8.4 or newer with no extension, no network, and their passport
+  `redz-ui-tools.json`: the PHP they need, the file of each tool and the sha256 of every file. `tools/dist/` of the tag,
+  written by `php tools/build.php`; the Check workflow runs both on PHP 8.4 with no extension loaded.
+- The floor checker for a project: `php floor.php check [--allow=FILE] [--json] FILE…`, a finding a line on standard
+  output and the summary on standard error, exit 0 clean, 1 findings, 2 for anything else; `--json` prints the findings
+  as objects. An exception of a project's own carries its reason: `/* floor-allow NAME[, NAME…] -- reason */` covers its
+  lines and the next one, `--allow=FILE` a set of files; one that allows nothing is a finding. It applies the release's
+  exceptions of scope `any` only.
+- The minifier for a project: `MIN__JsBlocks([$label => $js, …])` joins classic scripts, each in a block of its own, for
+  one ES module, and refuses what reads otherwise there - a static `import` or `export`, a `var` or a function declared
+  outside any function, `this` outside any function but an arrow, `with`, an HTML-like comment, a legacy octal number or
+  escape; `MIN__SelfTest()` gives the samples it proves itself on that misfire. A class's private names `#name` are read.
+- Outside judges of the minifier on every commit, `php tools/judge.php`: Lightning CSS reprints every stylesheet it
+  squeezes, the library's and the css-tokenizer-tests corpus, as written and as squeezed, which must read the same;
+  esbuild parses every script it writes for the browser floor; a watch on the size of the two main files against esbuild
+  `--minify`. Both are native binaries from npm, pinned by version and sha512.
+
+### Changed
+- `floor.json` carries, for each name that falls short at the floor, its BCD key, and for each vendor form the browsers
+  that take it; its exceptions carry their scope and, for a key, the names under it. The verdict `prefix -webkit-` gives
+  way to the browsers of `"-webkit-"`.
+- Every exception of `tools/floor/rules.json` has a scope: `any` for an engine's own fact, `library` where the library's
+  own code stands in - `js/menu-place.js` places only the library's menus and tooltips.
+- The library's floor gate, `tools/floor.php`, judges through the checker each release ships and by `floor.json`, and
+  runs that checker on its command line on every commit.
+- A refusal of the minifier names the byte and the line of the text it was given, with the code around it, and has the
+  byte as its code; a fault of its own proof is a `LogicException`.
+- The floor gate and the minifier read bytes without the ctype and mbstring extensions: on macOS ctype read bytes by the
+  locale, so a byte such as 0xA0 counted as a space there and not on Linux.
+
 ### Fixed
+- The minifier no longer hangs on a stylesheet that ends in a `\`; it refuses it (since 0.4.0).
+- The minifier refuses a script with a string, a pattern, a template or a comment that runs to its end, and a string or
+  a pattern that runs past its line, instead of failing in its own proof.
 - A `table`'s head sticks at the top of a page without the shell, or under a page's own bar by `--redz-sticky-top`. It held the shell header's
   height everywhere, so a table at the top of such a page had its head over its first row.
 - A `menu`, `popover` or `dialog` inside a `th` takes the size, weight and color of the page's text, not the head's.

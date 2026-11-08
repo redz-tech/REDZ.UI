@@ -19,13 +19,37 @@ const MIN_JS_PUNCTUATORS = ['>>>=', '...', '===', '!==', '**=', '<<=', '>>=', '>
 const MIN_JS_KEYWORDS = ['await', 'break', 'case', 'catch', 'class', 'const', 'continue', 'debugger', 'default', 'delete', 'do', 'else', 'enum', 'export', 'extends', 'false', 'finally', 'for', 'function', 'if', 'implements', 'import', 'in', 'instanceof', 'interface', 'let', 'new', 'null', 'package', 'private', 'protected', 'public', 'return', 'static', 'super', 'switch', 'this', 'throw', 'true', 'try', 'typeof', 'var', 'void', 'while', 'with', 'yield'];
 // Names the pass neither lets a script declare nor gives: their meaning is fixed, or its parse reads them as words.
 const MIN_JS_FIXED = ['arguments', 'async', 'eval', 'Infinity', 'NaN', 'of', 'undefined'];
+// The words whose `(…)` before a `{` is a statement's head, not a function's parameters.
+const MIN_JS_HEADS = ['if', 'for', 'while', 'switch', 'catch', 'with'];
 // Names a script may declare but the pass never gives: the words of forms it does not read.
 const MIN_JS_CONTEXTUAL = ['as', 'from', 'get', 'set'];
+
+// The byte classes of the C locale, read without the ctype extension.
+const MIN_SPACE = " \t\n\r\x0B\x0C";
+const MIN_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+const MIN_DIGITS = '0123456789';
+const MIN_ALNUM = MIN_LETTERS . MIN_DIGITS;
+
+/** Whether $s has bytes and every one is of $set, as the ctype functions read them in the C locale. */
+function MIN__Bytes(string $s, string $set): bool
+{
+	return $s !== '' && strspn($s, $set) === strlen($s);
+}
+
+/**
+ * A refusal of the text a pass was given: a RuntimeException "REASON at byte N, line L: …the code around it…" whose code
+ * is the byte. A fault of the pass's own proof is a LogicException instead.
+ */
+function MIN__Refuse(string $reason, string $text, int $at): never
+{
+	$near = strtr(substr($text, max(0, $at - 24), 48), "\r\n\t", '   ');
+	throw new RuntimeException($reason . ' at byte ' . $at . ', line ' . (substr_count($text, "\n", 0, min($at, strlen($text))) + 1) . ': …' . $near . '…', $at);
+}
 
 /** Whether $c is a byte of a CSS name. */
 function MIN__CssNameByte(string $c): bool
 {
-	return $c !== '' && (ctype_alnum($c) || $c === '-' || $c === '_' || $c === '\\' || ord($c) >= 0x80);
+	return $c !== '' && (MIN__Bytes($c, MIN_ALNUM) || $c === '-' || $c === '_' || $c === '\\' || ord($c) >= 0x80);
 }
 
 /**
@@ -81,6 +105,7 @@ function MIN__Css(string $css): string
 	$out = '';
 	$n = strlen($css);
 	$blocks = ['rules'];
+	$opened = [];
 	$prelude = 0;
 	$declaration = 0;
 	$value = -1;
@@ -92,15 +117,15 @@ function MIN__Css(string $css): string
 		if ($c === '/' && ($css[$i + 1] ?? '') === '*') {
 			$end = strpos($css, '*/', $i + 2);
 			if ($end === false) {
-				throw new RuntimeException('an unclosed comment at byte ' . $i);
+				MIN__Refuse('an unclosed comment', $css, $i);
 			}
 			$i = $end + 2;
 			if (!$space && MIN__CssNameByte(substr($out, -1)) && MIN__CssNameByte($css[$i] ?? '')) {
-				throw new RuntimeException('a comment between two names at byte ' . $i);
+				MIN__Refuse('a comment between two names', $css, $i);
 			}
 			continue;
 		}
-		if (ctype_space($c)) {
+		if (MIN__Bytes($c, MIN_SPACE)) {
 			$space = true;
 			$i++;
 			continue;
@@ -115,7 +140,7 @@ function MIN__Css(string $css): string
 			$end = $i + 1;
 			while ($end < $n && $css[$end] !== $c) {
 				if ($css[$end] === "\n") {
-					throw new RuntimeException('a string runs past its line at byte ' . $i);
+					MIN__Refuse('a string runs past its line', $css, $i);
 				}
 				$end += $css[$end] === '\\' ? 2 : 1;
 			}
@@ -124,25 +149,28 @@ function MIN__Css(string $css): string
 			continue;
 		}
 		if ($c === '\\') {
-			preg_match('~\G\\\\(?:[0-9a-fA-F]{1,6}[ \t\n]?|.)~s', $css, $m, 0, $i);
+			if (preg_match('~\G\\\\(?:[0-9a-fA-F]{1,6}[ \t\n]?|.)~s', $css, $m, 0, $i) !== 1) {
+				MIN__Refuse('a \\ with nothing after it', $css, $i);
+			}
 			$out .= $m[0];
 			$i += strlen($m[0]);
 			continue;
 		}
 		if ($c === '(' && preg_match('~url$~i', $out) === 1 && preg_match('~\G\(\s*["\']~', $css, $m, 0, $i) !== 1) {
-			throw new RuntimeException('an unquoted url( at byte ' . $i);
+			MIN__Refuse('an unquoted url(', $css, $i);
 		}
 		if ($c === '{') {
 			if ($block === 'declarations') {
-				throw new RuntimeException('a rule nested in declarations at byte ' . $i);
+				MIN__Refuse('a rule nested in declarations', $css, $i);
 			}
 			$name = preg_match('~^@([\w-]+)~', substr($out, $prelude), $m) === 1 ? strtolower($m[1]) : '';
 			$blocks[] = match (true) {
 				$name === '', in_array($name, MIN_CSS_DECLARATIONS, true) => 'declarations',
 				in_array($name, MIN_CSS_RULES, true) => 'rules',
-				default => throw new RuntimeException('the at-rule @' . $name . ' at byte ' . $i . ' is not one this pass knows'),
+				default => MIN__Refuse('the at-rule @' . $name . ' is not one this pass knows', $css, $i),
 			};
 			$out .= '{';
+			$opened[] = $i;
 			$prelude = $declaration = strlen($out);
 			$value = -1;
 			$verbatim = false;
@@ -151,8 +179,9 @@ function MIN__Css(string $css): string
 		}
 		if ($c === '}') {
 			if (count($blocks) === 1) {
-				throw new RuntimeException('a } without its { at byte ' . $i);
+				MIN__Refuse('a } without its {', $css, $i);
 			}
+			array_pop($opened);
 			if (array_pop($blocks) === 'declarations' && str_ends_with($out, ';')) {
 				$out = substr($out, 0, -1);
 			}
@@ -175,7 +204,7 @@ function MIN__Css(string $css): string
 		$i++;
 	}
 	if (count($blocks) !== 1) {
-		throw new RuntimeException('a { without its }');
+		MIN__Refuse('a { without its }', $css, (int)end($opened));
 	}
 	return $out;
 }
@@ -192,10 +221,10 @@ function MIN__CssSafe(string $css): string
 {
 	$min = MIN__Css($css);
 	if (MIN__Css($min) !== $min) {
-		throw new RuntimeException('the squeezed stylesheet changes when squeezed again');
+		throw new LogicException('the squeezed stylesheet changes when squeezed again');
 	}
 	if (MIN__CssBare($min) !== MIN__CssBare($css)) {
-		throw new RuntimeException('the squeezed stylesheet differs from its files beyond comments and white space');
+		throw new LogicException('the squeezed stylesheet differs from its files beyond comments and white space');
 	}
 	return $min;
 }
@@ -203,7 +232,7 @@ function MIN__CssSafe(string $css): string
 /** Whether $c is a byte of a JavaScript name. */
 function MIN__JsWord(string $c): bool
 {
-	return $c !== '' && (ctype_alnum($c) || $c === '_' || $c === '$');
+	return $c !== '' && (MIN__Bytes($c, MIN_ALNUM) || $c === '_' || $c === '$');
 }
 
 /**
@@ -224,7 +253,7 @@ function MIN__JsGlue(string $prev, string $next, string $lastWord): bool
 	if ($prev === '<' && $next === '!') {
 		return true;
 	}
-	return $next === '.' && $lastWord !== '' && ctype_digit($lastWord);
+	return $next === '.' && $lastWord !== '' && MIN__Bytes($lastWord, MIN_DIGITS);
 }
 
 /** Whether a `/` after $prev, the last byte written, and the word $lastWord begins a regular expression, not a division. */
@@ -245,6 +274,7 @@ function MIN__JsRegexpOk(string $prev, string $lastWord): bool
 function MIN__JsTemplate(string $js, int $i, array &$tokens, array &$hazards): array
 {
 	$n = strlen($js);
+	$opened = $i;
 	$out = $js[$i];
 	$chunk = $js[$i];
 	$i++;
@@ -275,8 +305,7 @@ function MIN__JsTemplate(string $js, int $i, array &$tokens, array &$hazards): a
 		$chunk .= $c;
 		$i++;
 	}
-	$tokens[] = 'T' . $chunk;
-	return [$out, $i];
+	MIN__Refuse('a template runs to the end of the script', $js, $opened);
 }
 
 /**
@@ -317,9 +346,13 @@ function MIN__JsScan(string $js, int $from = 0, bool $inner = false): array
 		}
 		if ($c === '/' && $c2 === '*') {
 			$flush();
+			$opened = $i;
 			$i += 2;
 			while ($i < $n && !($js[$i] === '*' && ($js[$i + 1] ?? '') === '/')) {
 				$i++;
+			}
+			if ($i >= $n) {
+				MIN__Refuse('an unclosed comment', $js, $opened);
 			}
 			$i += 2;
 			// A comment can be the only separator: `a/*c*/b` and `a+/*c*/+b` fuse once it is gone.
@@ -332,6 +365,8 @@ function MIN__JsScan(string $js, int $from = 0, bool $inner = false): array
 		if ($c === '"' || $c === "'") {
 			$flush();
 			$literal = $c;
+			$opened = $i;
+			$closed = false;
 			$i++;
 			while ($i < $n) {
 				$ch = $js[$i];
@@ -340,11 +375,18 @@ function MIN__JsScan(string $js, int $from = 0, bool $inner = false): array
 					$i += 2;
 					continue;
 				}
+				if ($ch === "\n") {
+					MIN__Refuse('a string runs past its line', $js, $opened);
+				}
 				$literal .= $ch;
 				$i++;
 				if ($ch === $c) {
+					$closed = true;
 					break;
 				}
+			}
+			if (!$closed) {
+				MIN__Refuse('a string runs to the end of the script', $js, $opened);
 			}
 			$out .= $literal;
 			$tokens[] = 'S' . $literal;
@@ -366,6 +408,8 @@ function MIN__JsScan(string $js, int $from = 0, bool $inner = false): array
 		if ($c === '/' && MIN__JsRegexpOk($prev, $lastWord) && !in_array(substr($out, -2), ['++', '--'], true)) {
 			$flush();
 			$literal = $c;
+			$opened = $i;
+			$closed = false;
 			$i++;
 			$class = false;
 			while ($i < $n) {
@@ -375,6 +419,9 @@ function MIN__JsScan(string $js, int $from = 0, bool $inner = false): array
 					$i += 2;
 					continue;
 				}
+				if ($ch === "\n") {
+					MIN__Refuse('a pattern runs past its line', $js, $opened);
+				}
 				$literal .= $ch;
 				$i++;
 				if ($ch === '[') {
@@ -382,10 +429,14 @@ function MIN__JsScan(string $js, int $from = 0, bool $inner = false): array
 				} elseif ($ch === ']') {
 					$class = false;
 				} elseif ($ch === '/' && !$class) {
+					$closed = true;
 					break;
 				}
 			}
-			while ($i < $n && ctype_alpha($js[$i])) {
+			if (!$closed) {
+				MIN__Refuse('a pattern runs to the end of the script', $js, $opened);
+			}
+			while ($i < $n && MIN__Bytes($js[$i], MIN_LETTERS)) {
 				$literal .= $js[$i++];
 			}
 			$out .= $literal;
@@ -410,7 +461,7 @@ function MIN__JsScan(string $js, int $from = 0, bool $inner = false): array
 			}
 			// Two expressions a newline alone keeps apart - a literal after a literal or a name - become one once joined.
 			if ($newline && ($next === "'" || $next === '"' || $next === '`') && (str_contains(')]}\'"`', $prev) && $prev !== '' || MIN__JsWord($prev))) {
-				$hazards[] = substr($out, -60);
+				$hazards[] = [$j, substr($out, -60)];
 			}
 			$gap = true;
 			$i = $j;
@@ -454,24 +505,24 @@ function MIN__JsSafe(string $js): string
 {
 	[$min, $tokens, $hazards] = MIN__JsScan($js);
 	if ($hazards !== []) {
-		throw new RuntimeException('a newline is the only separator at ' . count($hazards) . ' place(s) - add the operator or `;` it lacks: …' . trim($hazards[0]));
+		MIN__Refuse('a newline is the only separator at ' . count($hazards) . ' place(s) - add the operator or `;` it lacks', $js, $hazards[0][0]);
 	}
 	if (trim($js) !== '' && $min === '') {
-		throw new RuntimeException('the squeezed script is empty');
+		MIN__Refuse('the squeezed script is empty', $js, 0);
 	}
 	if (strlen($min) > strlen($js)) {
-		throw new RuntimeException('the squeezed script grew');
+		throw new LogicException('the squeezed script grew');
 	}
 	[$again, $againTokens] = MIN__JsScan($min);
 	if ($again !== $min) {
-		throw new RuntimeException('the squeezed script changes when scanned again');
+		throw new LogicException('the squeezed script changes when scanned again');
 	}
 	if ($againTokens !== $tokens) {
 		$at = 0;
 		while (($tokens[$at] ?? null) === ($againTokens[$at] ?? null)) {
 			$at++;
 		}
-		throw new RuntimeException('the squeezed script\'s tokens differ at #' . $at . ' (' . substr($tokens[$at] ?? '<end>', 0, 40) . ' → ' . substr($againTokens[$at] ?? '<end>', 0, 40) . ')');
+		throw new LogicException('the squeezed script\'s tokens differ at #' . $at . ' (' . substr($tokens[$at] ?? '<end>', 0, 40) . ' → ' . substr($againTokens[$at] ?? '<end>', 0, 40) . ')');
 	}
 	return $min;
 }
@@ -547,19 +598,39 @@ function MIN__JsLex(string $js): array
 	$i = 0;
 	while ($i < $n) {
 		$c = $js[$i];
-		if (ctype_space($c)) {
+		if (MIN__Bytes($c, MIN_SPACE)) {
 			$i++;
+			continue;
+		}
+		// Comments, for a script as written: a squeezed one has none, as the squeezer keeps `/ /` apart.
+		if ($c === '/' && ($js[$i + 1] ?? '') === '/') {
+			$end = strpos($js, "\n", $i);
+			$i = $end === false ? $n : $end;
+			continue;
+		}
+		if ($c === '/' && ($js[$i + 1] ?? '') === '*') {
+			$end = strpos($js, '*/', $i + 2);
+			if ($end === false) {
+				MIN__Refuse('an unclosed comment', $js, $i);
+			}
+			$i = $end + 2;
 			continue;
 		}
 		[$lastKind, $lastText] = $tokens === [] ? ['', ''] : $tokens[count($tokens) - 1];
 		if (preg_match('~\G[A-Za-z_$][\w$]*~', $js, $m, 0, $i) === 1) {
-			$tokens[] = ['name', $m[0]];
+			$tokens[] = ['name', $m[0], $i];
 			$i += strlen($m[0]);
 			continue;
 		}
-		if (ctype_digit($c) || ($c === '.' && ctype_digit($js[$i + 1] ?? ''))) {
+		// A class's private name: classes stop the names pass, so only the block check reads one.
+		if ($c === '#' && preg_match('~\G#[A-Za-z_$][\w$]*~', $js, $m, 0, $i) === 1) {
+			$tokens[] = ['private', $m[0], $i];
+			$i += strlen($m[0]);
+			continue;
+		}
+		if (MIN__Bytes($c, MIN_DIGITS) || ($c === '.' && MIN__Bytes($js[$i + 1] ?? '', MIN_DIGITS))) {
 			preg_match('~\G(?:0[xXoObB][\da-fA-F_]+|(?:\d[\d_]*\.?[\d_]*|\.\d[\d_]*)(?:[eE][+-]?\d[\d_]*)?)n?~', $js, $m, 0, $i);
-			$tokens[] = ['number', $m[0]];
+			$tokens[] = ['number', $m[0], $i];
 			$i += strlen($m[0]);
 			continue;
 		}
@@ -568,7 +639,7 @@ function MIN__JsLex(string $js): array
 			while ($end < $n && $js[$end] !== $c) {
 				$end += $js[$end] === '\\' ? 2 : 1;
 			}
-			$tokens[] = ['string', substr($js, $i, $end + 1 - $i)];
+			$tokens[] = ['string', substr($js, $i, $end + 1 - $i), $i];
 			$i = $end + 1;
 			continue;
 		}
@@ -581,7 +652,7 @@ function MIN__JsLex(string $js): array
 				$end += $js[$end] === '\\' ? 2 : 1;
 			}
 			if ($end >= $n) {
-				throw new RuntimeException('a template runs to the end of the script');
+				MIN__Refuse('a template runs to the end of the script', $js, $i);
 			}
 			if ($js[$end] === '$') {
 				$depths[] = 0;
@@ -589,12 +660,12 @@ function MIN__JsLex(string $js): array
 			} else {
 				$end++;
 			}
-			$tokens[] = ['template', substr($js, $i, $end - $i)];
+			$tokens[] = ['template', substr($js, $i, $end - $i), $i];
 			$i = $end;
 			continue;
 		}
 		if ($c === '/' && $lastKind === 'punctuator' && $lastText === '}') {
-			throw new RuntimeException('a / after } at byte ' . $i . ': the end of a block and of an object read it differently');
+			MIN__Refuse('a / after }: the end of a block and of an object read it differently', $js, $i);
 		}
 		$regexp = $lastKind === '' || ($lastKind === 'punctuator' && !in_array($lastText, [')', ']', '++', '--'], true)) || ($lastKind === 'name' && in_array($lastText, MIN_JS_BEFORE_REGEXP, true)) || ($lastKind === 'template' && str_ends_with($lastText, '${'));
 		if ($c === '/' && $regexp) {
@@ -611,27 +682,27 @@ function MIN__JsLex(string $js): array
 				$end++;
 			}
 			$end++;
-			while ($end < $n && ctype_alpha($js[$end])) {
+			while ($end < $n && MIN__Bytes($js[$end], MIN_LETTERS)) {
 				$end++;
 			}
-			$tokens[] = ['regexp', substr($js, $i, $end - $i)];
+			$tokens[] = ['regexp', substr($js, $i, $end - $i), $i];
 			$i = $end;
 			continue;
 		}
 		foreach (MIN_JS_PUNCTUATORS as $punctuator) {
-			if (substr($js, $i, strlen($punctuator)) === $punctuator && !($punctuator === '?.' && ctype_digit($js[$i + 2] ?? ''))) {
-				$tokens[] = ['punctuator', $punctuator];
+			if (substr($js, $i, strlen($punctuator)) === $punctuator && !($punctuator === '?.' && MIN__Bytes($js[$i + 2] ?? '', MIN_DIGITS))) {
+				$tokens[] = ['punctuator', $punctuator, $i];
 				$i += strlen($punctuator);
 				continue 2;
 			}
 		}
 		if (!str_contains('{}()[];,<>+-*/%&|^!~?:=.', $c)) {
-			throw new RuntimeException('the byte 0x' . bin2hex($c) . ' at ' . $i . ' is not one the names pass reads');
+			MIN__Refuse('the byte 0x' . bin2hex($c) . ' is not one this reader takes outside strings and comments', $js, $i);
 		}
 		if ($depths !== [] && ($c === '{' || $c === '}')) {
 			$depths[count($depths) - 1] += $c === '{' ? 1 : -1;
 		}
-		$tokens[] = ['punctuator', $c];
+		$tokens[] = ['punctuator', $c, $i];
 		$i++;
 	}
 	return $tokens;
@@ -657,7 +728,7 @@ function MIN__JsScopes(array $tokens): array
 		$opens = ($kind === 'punctuator' && in_array($text, ['(', '[', '{'], true)) || ($kind === 'template' && str_ends_with($text, '${'));
 		if ($closes) {
 			if ($open === []) {
-				throw new RuntimeException('a ' . $text[0] . ' without its opening at token ' . $t);
+				throw new RuntimeException('a ' . $text[0] . ' without its opening', $t);
 			}
 			$match[array_pop($open)] = $t;
 		}
@@ -666,7 +737,7 @@ function MIN__JsScopes(array $tokens): array
 		}
 	}
 	if ($open !== []) {
-		throw new RuntimeException('a bracket without its closing');
+		throw new RuntimeException('a bracket without its closing', (int)end($open));
 	}
 	$scopes = [null];
 	$names = [[]];
@@ -686,10 +757,10 @@ function MIN__JsScopes(array $tokens): array
 	$declare = function (int $in, int $t) use (&$names, &$counts, &$uses, $tokens): void {
 		$name = $tokens[$t][1];
 		if (in_array($name, MIN_JS_KEYWORDS, true) || in_array($name, MIN_JS_FIXED, true)) {
-			throw new RuntimeException('the word ' . $name . ' is declared at token ' . $t);
+			throw new RuntimeException('the word ' . $name . ' is declared', $t);
 		}
 		if (isset($names[$in][$name])) {
-			throw new RuntimeException('the name ' . $name . ' is declared twice in one scope at token ' . $t);
+			throw new RuntimeException('the name ' . $name . ' is declared twice in one scope', $t);
 		}
 		$counts[] = 0;
 		$names[$in][$name] = count($counts) - 1;
@@ -716,7 +787,7 @@ function MIN__JsScopes(array $tokens): array
 		$caseColon = $colon;
 		$colon = false;
 		if ($fn !== null && $text !== '=>' && $text !== '{') {
-			throw new RuntimeException('parameters without their => or body at token ' . $t);
+			throw new RuntimeException('parameters without their => or body', $t);
 		}
 		if ($kind === 'name') {
 			if ($prev === '.' || $prev === '?.') {
@@ -736,7 +807,7 @@ function MIN__JsScopes(array $tokens): array
 					}
 					$stack[$k]['pos'] = 'after';
 				} else {
-					throw new RuntimeException('the key ' . $text . ' before ' . $next . ' at token ' . $t . ': accessors and modified methods are not read here');
+					throw new RuntimeException('the key ' . $text . ' before ' . $next . ': accessors and modified methods are not read here', $t);
 				}
 				continue;
 			}
@@ -746,14 +817,14 @@ function MIN__JsScopes(array $tokens): array
 					continue;
 				}
 				if (in_array($text, ['var', 'function', 'class', 'with', 'import', 'export', 'yield', 'enum'], true)) {
-					throw new RuntimeException($text . ' at token ' . $t . ' is not read by the names pass');
+					throw new RuntimeException($text . ' is not read by the names pass', $t);
 				}
 				if (($text === 'break' || $text === 'continue') && $nextKind === 'name') {
-					throw new RuntimeException('a label at token ' . $t);
+					throw new RuntimeException('a label', $t);
 				}
 				if ($text === 'const' || $text === 'let') {
 					if (!in_array($type, ['program', 'block', 'forhead'], true)) {
-						throw new RuntimeException($text . ' outside a block at token ' . $t);
+						throw new RuntimeException($text . ' outside a block', $t);
 					}
 					$stack[$k]['decl'] = ['scope' => $top['scope'], 'pos' => 'binding'];
 				} elseif ($text === 'case' || ($text === 'default' && $next === ':')) {
@@ -771,7 +842,7 @@ function MIN__JsScopes(array $tokens): array
 				continue;
 			}
 			if ($text === 'arguments' || $text === 'eval') {
-				throw new RuntimeException($text . ' at token ' . $t . ' is not read by the names pass');
+				throw new RuntimeException($text . ' is not read by the names pass', $t);
 			}
 			if ($next === '=>') {
 				$fn = $scope($top['scope']);
@@ -801,7 +872,7 @@ function MIN__JsScopes(array $tokens): array
 			if ($text[0] === '}') {
 				$arrows();
 				if (array_pop($stack)['type'] !== 'tpl') {
-					throw new RuntimeException('a template\'s } out of place at token ' . $t);
+					throw new RuntimeException('a template\'s } out of place', $t);
 				}
 			}
 			if (str_ends_with($text, '${')) {
@@ -851,7 +922,7 @@ function MIN__JsScopes(array $tokens): array
 				break;
 			case '(':
 				if ($type === 'object' && $pos === 'colon') {
-					throw new RuntimeException('a method with a computed key at token ' . $t . ' is not read here');
+					throw new RuntimeException('a method with a computed key is not read here', $t);
 				}
 				if (($prev === 'for' || $prev === 'catch') && !in_array($tokens[$t - 2][1] ?? '', ['.', '?.'], true)) {
 					$inner = $scope($top['scope']);
@@ -872,13 +943,13 @@ function MIN__JsScopes(array $tokens): array
 				$arrows();
 				$closed = array_pop($stack);
 				if ($stack === [] || $closed['type'] === 'tpl') {
-					throw new RuntimeException('a ' . $text . ' out of place at token ' . $t);
+					throw new RuntimeException('a ' . $text . ' out of place', $t);
 				}
 				if ($closed['type'] === 'params') {
 					$fn = $closed['scope'];
 				} elseif ($closed['type'] === 'forhead' || $closed['type'] === 'catch') {
 					if ($next !== '{') {
-						throw new RuntimeException('a for or catch body without braces at token ' . $t);
+						throw new RuntimeException('a for or catch body without braces', $t);
 					}
 					$head = $closed['scope'];
 				}
@@ -913,7 +984,7 @@ function MIN__JsScopes(array $tokens): array
 				break;
 			case '=>':
 				if ($fn === null) {
-					throw new RuntimeException('=> without parameters at token ' . $t);
+					throw new RuntimeException('=> without parameters', $t);
 				}
 				if ($next !== '{') {
 					$push(['type' => 'arrow', 'scope' => $fn, 'bind' => $fn]);
@@ -938,7 +1009,7 @@ function MIN__JsScopes(array $tokens): array
 					$stack[$k]['case'] = false;
 					$colon = true;
 				} else {
-					throw new RuntimeException('a label or a stray : at token ' . $t);
+					throw new RuntimeException('a label or a stray :', $t);
 				}
 				break;
 			case '...':
@@ -951,7 +1022,7 @@ function MIN__JsScopes(array $tokens): array
 		}
 	}
 	if (count($stack) !== 1 || $fn !== null) {
-		throw new RuntimeException('the script ends inside a bracket or a function');
+		throw new RuntimeException('the script ends inside a bracket or a function', max(0, $count - 1));
 	}
 	$free = [];
 	foreach ($refs as [$t, $from]) {
@@ -998,7 +1069,11 @@ function MIN__JsName(int $i, array $first, array $rest): string
 function MIN__JsNames(string $min): string
 {
 	$tokens = MIN__JsLex($min);
-	$a = MIN__JsScopes($tokens);
+	try {
+		$a = MIN__JsScopes($tokens);
+	} catch (RuntimeException $e) {
+		MIN__Refuse($e->getMessage(), $min, $tokens[$e->getCode()][2] ?? strlen($min));
+	}
 	$base = [];
 	$slot = [];
 	foreach ($a['scopes'] as $s => $parent) {
@@ -1066,9 +1141,13 @@ function MIN__JsNamesSafe(string $min): string
 {
 	$named = MIN__JsNames($min);
 	$before = MIN__JsLex($min);
-	$after = MIN__JsLex($named);
 	$a = MIN__JsScopes($before);
-	$b = MIN__JsScopes($after);
+	try {
+		$after = MIN__JsLex($named);
+		$b = MIN__JsScopes($after);
+	} catch (RuntimeException $e) {
+		throw new LogicException('the named script cannot be read again: ' . $e->getMessage(), 0, $e);
+	}
 	$map = [];
 	$o = 0;
 	foreach ($before as $t => [$kind, $text]) {
@@ -1080,26 +1159,174 @@ function MIN__JsNamesSafe(string $min): string
 		$useAfter = $b['uses'][$o] ?? null;
 		$same = $kindAfter === $kind && ($use === null) === ($useAfter === null) && ($use === -1) === ($useAfter === -1);
 		if (!$same || (($use ?? -1) < 0 && $textAfter !== $text)) {
-			throw new RuntimeException('the names pass changed token #' . $t . ': ' . $text . ' → ' . $textAfter);
+			throw new LogicException('the names pass changed token #' . $t . ': ' . $text . ' → ' . $textAfter);
 		}
 		if ($use !== null && $use >= 0) {
 			if (isset($map[$use]) && $map[$use] !== $useAfter) {
-				throw new RuntimeException('the name ' . $text . ' at token #' . $t . ' now uses another declaration');
+				throw new LogicException('the name ' . $text . ' at token #' . $t . ' now uses another declaration');
 			}
 			$map[$use] = $useAfter;
 		}
 		$o++;
 	}
 	if ($o !== count($after)) {
-		throw new RuntimeException('the named script has ' . (count($after) - $o) . ' more tokens');
+		throw new LogicException('the named script has ' . (count($after) - $o) . ' more tokens');
 	}
 	if (count(array_unique($map)) !== count($map)) {
-		throw new RuntimeException('two declarations share a name in the named script');
+		throw new LogicException('two declarations share a name in the named script');
 	}
 	if (MIN__JsScan($named)[0] !== $named) {
-		throw new RuntimeException('the named script changes when scanned again');
+		throw new LogicException('the named script changes when scanned again');
 	}
 	return $named;
+}
+
+/**
+ * Refuses, in a classic script that is to run in a block of an ES module, what reads otherwise there: a static import or
+ * export; a `var` or a function declaration outside any function - global in a script, the block's own in a module;
+ * `this` outside any function but an arrow - the window in a script, undefined in a module; `with`, an HTML-like comment,
+ * a legacy octal number or escape - errors in a module's strict code; and a bracket left open or closed twice, which
+ * breaks the block.
+ */
+function MIN__JsBlockCheck(string $js): void
+{
+	$tokens = MIN__JsLex($js);
+	$stack = [];
+	$class = -1;
+	$before = -1;
+	$depth = function (int $flag) use (&$stack): int {
+		return count(array_filter($stack, fn(array $open): bool => $open[$flag]));
+	};
+	foreach ($tokens as $t => [$kind, $text, $at]) {
+		$prev = $tokens[$t - 1] ?? ['', '', -1];
+		$next = $tokens[$t + 1] ?? ['', '', -1];
+		$word = $kind === 'name' && $prev[1] !== '.' && $prev[1] !== '?.' && $next[1] !== ':';
+		$start = in_array($prev[1], ['', ';', '{', '}', ')', 'else'], true) || ($prev[1] === 'async' && in_array(($tokens[$t - 2] ?? ['', ''])[1], ['', ';', '{', '}', ')'], true));
+		match (true) {
+			$word && $text === 'var' && $depth(1) === 0 => MIN__Refuse('a var outside any function is the block\'s own in a module, not global - write const or let, or window.NAME = … where other code reads it', $js, $at),
+			$word && $text === 'function' && $start && $depth(1) === 0 => MIN__Refuse('a function declared outside any function is the block\'s own in a module, not global - write window.NAME = function … where other code calls it', $js, $at),
+			$word && $text === 'this' && $depth(2) === 0 => MIN__Refuse('this outside any function is undefined in a module, not the window', $js, $at),
+			$word && $text === 'with' => MIN__Refuse('with is an error in a module\'s strict code', $js, $at),
+			$word && $text === 'import' && $next[1] !== '(' && $next[1] !== '.', $word && $text === 'export' => MIN__Refuse('a static ' . $text . ' does not run in a block', $js, $at),
+			$kind === 'punctuator' && $text === '<' && $next[1] === '!' && $next[2] === $at + 1 && ($tokens[$t + 2] ?? ['', '', -1])[1] === '--' && ($tokens[$t + 2] ?? ['', '', -1])[2] === $at + 2 => MIN__Refuse('<!-- begins a comment in a script, not in a module', $js, $at),
+			$kind === 'punctuator' && $text === '--' && $next[1] === '>' && $next[2] === $at + 2 && trim(substr($js, ($line = strrpos(substr($js, 0, $at), "\n")) === false ? 0 : $line + 1, $at - ($line === false ? 0 : $line + 1))) === '' => MIN__Refuse('--> at a line\'s start begins a comment in a script, not in a module', $js, $at),
+			$kind === 'number' && preg_match('~^0[0-9]~', $text) === 1 => MIN__Refuse('a number with a leading 0 is an error in a module\'s strict code', $js, $at),
+			$kind === 'string' && preg_match_all('~\\\\(.)(.?)~s', $text, $escapes, PREG_SET_ORDER) > 0 && array_filter($escapes, fn(array $e): bool => str_contains('123456789', $e[1]) || ($e[1] === '0' && MIN__Bytes($e[2], MIN_DIGITS))) !== [] => MIN__Refuse('an octal escape is an error in a module\'s strict code', $js, $at),
+			default => null,
+		};
+		if ($kind === 'name' && $text === 'class' && $prev[1] !== '.') {
+			$class = count($stack);
+		}
+		$closes = $kind === 'punctuator' && in_array($text, [')', ']', '}'], true) || ($kind === 'template' && $text[0] === '}');
+		if ($closes) {
+			$open = array_pop($stack);
+			if ($open === null || $open[0] !== ($text[0] === ')' ? '(' : ($text[0] === ']' ? '[' : '{'))) {
+				MIN__Refuse('a ' . $text[0] . ' without its opening', $js, $at);
+			}
+			$before = $text === ')' ? $open[3] : -1;
+		}
+		if ($kind === 'punctuator' && ($text === '(' || $text === '[')) {
+			$stack[] = [$text, false, false, $t - 1, $at];
+		} elseif ($kind === 'template' && str_ends_with($text, '${')) {
+			$stack[] = ['{', false, false, -1, $at];
+		} elseif ($kind === 'punctuator' && $text === '{') {
+			$head = $prev[1] === ')' && $before >= 0 ? $tokens[$before] : ['', '', -1];
+			$stack[] = match (true) {
+				$class === count($stack) => ['{', false, true, -1, $at, 'class'],
+				$prev[1] === '=>' => ['{', true, false, -1, $at],
+				$prev[1] === 'static' && (end($stack)[5] ?? '') === 'class' => ['{', true, true, -1, $at],
+				$prev[1] === ')' => in_array($head[1], MIN_JS_HEADS, true) && $head[0] === 'name' ? ['{', false, false, -1, $at] : ['{', true, true, -1, $at],
+				default => ['{', false, false, -1, $at],
+			};
+			if ($class === count($stack) - 1) {
+				$class = -1;
+			}
+		}
+	}
+	if ($stack !== []) {
+		MIN__Refuse('a ' . $stack[count($stack) - 1][0] . ' without its closing', $js, $stack[count($stack) - 1][4]);
+	}
+}
+
+/**
+ * Classic scripts joined, each in a block of its own and in their order, for one ES module - the file a page links with
+ * type="module". A script that reads otherwise in a block of a module is refused: "LABEL: REASON at byte N, line L", the
+ * byte of that script as the code. The joined text goes through MIN__JsSafe and then, where it can, MIN__JsNamesSafe.
+ * @param array<string, string> $scripts the text of each script by the label a refusal names it with
+ */
+function MIN__JsBlocks(array $scripts): string
+{
+	$blocks = [];
+	foreach ($scripts as $label => $js) {
+		try {
+			MIN__JsBlockCheck($js);
+		} catch (RuntimeException $e) {
+			throw new RuntimeException($label . ': ' . $e->getMessage(), $e->getCode(), $e);
+		}
+		$blocks[] = "{\n" . $js . "\n}";
+	}
+	return implode("\n", $blocks) . "\n";
+}
+
+// The samples the passes prove themselves on: [pass, text, 'gives' and the output, or 'refuses' and a part of the refusal].
+const MIN_FUSES = [
+	['css', ".a { color: red; }\n/* c */ .b  .c { margin: 0 auto; }", 'gives', '.a{color:red}.b .c{margin:0 auto}'],
+	['css', '.a{color:url(x)}', 'refuses', 'an unquoted url( at byte 12, line 1'],
+	['css', ".a{}\n.b{", 'refuses', 'a { without its } at byte 7, line 2'],
+	['css', '.a{b:c}}', 'refuses', 'a } without its { at byte 7, line 1'],
+	['css', '@foo{}', 'refuses', 'the at-rule @foo is not one this pass knows at byte 4'],
+	['css', '.a{b:c}\\', 'refuses', 'a \\ with nothing after it at byte 7, line 1'],
+	['js', "const a = 1;\n// x\nconst b = a + 1;", 'gives', 'const a=1;const b=a+1;'],
+	['js', "a\n'b'", 'refuses', 'a newline is the only separator at 1 place(s) - add the operator or `;` it lacks at byte 2, line 2'],
+	['js', "const a = 'open", 'refuses', 'a string runs to the end of the script at byte 10'],
+	['js', "const a = 'one\ntwo';", 'refuses', 'a string runs past its line at byte 10'],
+	['js', 'const a = 1; /* open', 'refuses', 'an unclosed comment at byte 13'],
+	['js', 'const a = `open ${b}', 'refuses', 'a template runs to the end of the script at byte 10'],
+	['js', 'const a = /open', 'refuses', 'a pattern runs to the end of the script at byte 10'],
+	['names', 'const longName=1;console.log(longName);', 'gives', 'const o=1;console.log(o);'],
+	['names', 'var a=1;', 'refuses', 'var is not read by the names pass at byte 0'],
+	['names', 'const f=()=>{let x=1;let x=2;};', 'refuses', 'the name x is declared twice in one scope at byte 25, line 1'],
+	['blocks', '(function () { var x = 1; })();', 'gives', "{\n(function () { var x = 1; })();\n}\n"],
+	['blocks', 'const w = function () { for (var i = 0; i < 2; i++) {} };', 'gives', "{\nconst w = function () { for (var i = 0; i < 2; i++) {} };\n}\n"],
+	['blocks', 'class A { #n = 1; x = this; static { var y = 1; } m() { return this.#n; } }', 'gives', "{\nclass A { #n = 1; x = this; static { var y = 1; } m() { return this.#n; } }\n}\n"],
+	['blocks', "const o = { m() { return this; } }; obj.var = 1; import('./x.js'); const u = import.meta.url; x-->y; const s = '\\0' + '\\\\1';", 'gives', "{\nconst o = { m() { return this; } }; obj.var = 1; import('./x.js'); const u = import.meta.url; x-->y; const s = '\\0' + '\\\\1';\n}\n"],
+	['blocks', 'var x = 1;', 'refuses', 'a.js: a var outside any function'],
+	['blocks', 'if (a) { var x = 1; }', 'refuses', 'a.js: a var outside any function is the block\'s own in a module, not global - write const or let, or window.NAME = … where other code reads it at byte 9'],
+	['blocks', 'function f() {}', 'refuses', 'a.js: a function declared outside any function'],
+	['blocks', 'const f = () => this;', 'refuses', 'a.js: this outside any function is undefined in a module, not the window at byte 16'],
+	['blocks', 'const f = () => { return this; };', 'refuses', 'a.js: this outside any function is undefined in a module, not the window at byte 25'],
+	['blocks', 'with (o) {}', 'refuses', 'a.js: with is an error'],
+	['blocks', "import x from './x.js';", 'refuses', 'a.js: a static import does not run in a block'],
+	['blocks', 'export const a = 1;', 'refuses', 'a.js: a static export does not run in a block'],
+	['blocks', 'a<!--b', 'refuses', 'a.js: <!-- begins a comment in a script, not in a module at byte 1'],
+	['blocks', "x = 1;\n  --> note", 'refuses', 'a.js: --> at a line\'s start begins a comment in a script, not in a module at byte 9, line 2'],
+	['blocks', 'const a = 010;', 'refuses', 'a.js: a number with a leading 0 is an error'],
+	['blocks', "const s = '\\1';", 'refuses', 'a.js: an octal escape is an error'],
+	['blocks', 'if (a) {', 'refuses', 'a.js: a { without its closing at byte 7'],
+	['blocks', '}', 'refuses', 'a.js: a } without its opening at byte 0'],
+];
+
+/** The fuses of MIN_FUSES that misfire: a sample that gives another output, or a refusal that is not the one expected. */
+function MIN__SelfTest(): array
+{
+	$failures = [];
+	foreach (MIN_FUSES as [$pass, $text, $expect, $what]) {
+		try {
+			$got = match ($pass) {
+				'css' => MIN__CssSafe($text),
+				'js' => MIN__JsSafe($text),
+				'names' => MIN__JsNamesSafe($text),
+				'blocks' => MIN__JsBlocks(['a.js' => $text]),
+			};
+			$wrong = $expect !== 'gives' || $got !== $what ? 'gives ' . json_encode($got, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) : '';
+		} catch (RuntimeException $e) {
+			$wrong = $expect !== 'refuses' || !str_contains($e->getMessage(), $what) || !str_contains($e->getMessage(), ' at byte ' . $e->getCode() . ',') ? 'refuses ' . $e->getMessage() : '';
+		}
+		if ($wrong !== '') {
+			$failures[] = 'the ' . $pass . ' fuse ' . json_encode($text, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ' ' . $wrong;
+		}
+	}
+	return $failures;
 }
 
 /**

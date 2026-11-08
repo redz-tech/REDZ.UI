@@ -969,7 +969,7 @@ function PROBE__MinCell(array &$h, string $name, array $run, array &$report): vo
 		try {
 			$written = $answer($source);
 			$minified = $answer(MIN__JsNamesSafe(MIN__JsSafe($source)));
-		} catch (RuntimeException $e) {
+		} catch (RuntimeException | LogicException $e) {
 			$report['findings'][] = $name . ' tools/min/' . basename($file) . ' - ' . $e->getMessage();
 			continue;
 		}

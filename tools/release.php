@@ -2,8 +2,9 @@
 // release - what a tag publishes, for the release jobs of the workflows. A tag v* is the library: it checks that the tag
 // names the passport's version and that the changelog has that version's section, then writes into DIR the archive
 // redz-ui-<version>.zip - `git archive` of the tag's dist/, the folder a project receives as it is, under
-// redz-ui-<version>/ - and notes.md, the release notes: that section of the changelog, what the files are and how to
-// check them. A tag icons-* is the icon pack: redz-ui-icons-<version>.zip, the pack's passport, its stylesheet and icons/,
+// redz-ui-<version>/ -, redz-ui-tools-<version>.zip - `git archive` of the tag's tools/dist/, the floor checker and the
+// minifier, under redz-ui-tools-<version>/, for tags that have it - and notes.md, the release notes: that section of
+// the changelog, what the files are and how to check them. A tag icons-* is the icon pack: redz-ui-icons-<version>.zip, the pack's passport, its stylesheet and icons/,
 // with its own notes. Each archive holds exactly what its passport lists, and is the same byte for byte wherever it is
 // made, so anyone can rebuild a release's from its tag. Usage: php tools/release.php TAG DIR
 
@@ -21,12 +22,35 @@ function RELEASE__Section(string $version): string
 	return trim($m[1]);
 }
 
-/** The release notes of $version under $tag: the changelog's section, the two files and how to check the archive. */
-function RELEASE__Notes(string $tag, string $version, string $section, string $icons): string
+/** The release notes of $version under $tag: the changelog's section, the files and how to check the archives. */
+function RELEASE__Notes(string $tag, string $version, string $section, string $icons, bool $tools): string
 {
 	return $section . "\n\n---\n\n"
-		. '**Files.** `redz-ui-' . $version . '.zip` - the folder a project serves, as it is: `css/`, `js/`, `LICENSE`, `LICENSE-editor`, `NOTICE` and `redz-ui.json`, the passport (the version, the floor, the files to link, the vocabulary and the sha256 of every file). This release needs the icon pack `' . $icons . '`, a release of its own. `checks.zip` - the sheet of the probes this release passed in every engine, also at ' . RELEASE_SITE . $version . "/checks/.\n\n"
-		. '**Check the archive:** `gh release verify-asset ' . $tag . ' redz-ui-' . $version . '.zip --repo ' . RELEASE_REPO . "`.\n";
+		. '**Files.** `redz-ui-' . $version . '.zip` - the folder a project serves, as it is: `css/`, `js/`, `LICENSE`, `LICENSE-editor`, `NOTICE` and `redz-ui.json`, the passport (the version, the floor, the files to link, the vocabulary and the sha256 of every file). This release needs the icon pack `' . $icons . '`, a release of its own. '
+		. ($tools ? '`redz-ui-tools-' . $version . '.zip` - the tools a project runs on its own server, never serves: `floor.php`, the browser floor checker, with its list `floor.json`, and `min.php`, the minifier, each the file this release was built and checked with; PHP 8.4 or newer with no extension, no network; `redz-ui-tools.json` is their passport. ' : '')
+		. '`checks.zip` - the sheet of the probes this release passed in every engine, also at ' . RELEASE_SITE . $version . "/checks/.\n\n"
+		. '**Check the archive' . ($tools ? 's' : '') . ':** `gh release verify-asset ' . $tag . ' redz-ui-' . $version . '.zip --repo ' . RELEASE_REPO . '`' . ($tools ? ', and the same for `redz-ui-tools-' . $version . '.zip`' : '') . ".\n";
+}
+
+/** Writes the tools' archive of the tag $tag into $dir - tools/dist/ as it is, under redz-ui-tools-<version>/ -; what it
+ *  says, or '' for a tag from before the tools. */
+function RELEASE__Tools(string $tag, string $dir, string $version, string $mtime): string
+{
+	if (!in_array('dist/redz-ui-tools.json', RELEASE__Tree($tag, 'tools'), true)) {
+		return '';
+	}
+	$passport = json_decode(RELEASE__Git(['show', $tag . ':tools/dist/redz-ui-tools.json']), true, 512, JSON_THROW_ON_ERROR);
+	if ($passport['version'] !== $version) {
+		throw new RuntimeException('the tools\' passport of ' . $tag . ' names the version ' . $passport['version']);
+	}
+	$listed = [...array_keys($passport['files']), 'redz-ui-tools.json'];
+	sort($listed, SORT_STRING);
+	if (RELEASE__Tree($tag, 'tools/dist') !== $listed) {
+		throw new RuntimeException('tools/dist/ of ' . $tag . ' is not what the tools\' passport lists');
+	}
+	$zip = realpath($dir) . '/redz-ui-tools-' . $version . '.zip';
+	RELEASE__Git(['archive', '--format=zip', '--prefix=redz-ui-tools-' . $version . '/', '--mtime=' . $mtime, '-o', $zip, $tag . ':tools/dist']);
+	return sprintf('%s · %d files · %.0f KB', basename($zip), count($listed), filesize($zip) / 1024);
 }
 
 /** The release notes of the icon pack $version under $tag. */
@@ -82,9 +106,11 @@ function RELEASE__Library(string $tag, string $dir): string
 		throw new RuntimeException('dist/ of ' . $tag . ' is not what its passport lists: ' . implode(', ', array_diff(RELEASE__Tree($tag, 'dist'), $listed)));
 	}
 	$zip = realpath($dir) . '/redz-ui-' . $version . '.zip';
-	RELEASE__Git(['archive', '--format=zip', '--prefix=redz-ui-' . $version . '/', '--mtime=' . trim(RELEASE__Git(['log', '-1', '--format=%cI', $tag])), '-o', $zip, $tag . ':dist']);
-	file_put_contents($dir . '/notes.md', RELEASE__Notes($tag, $version, $section, $passport['icons']['name'] . ' ' . $passport['icons']['version']));
-	return sprintf('%s · %d files · %.0f KB', basename($zip), count($listed), filesize($zip) / 1024);
+	$mtime = trim(RELEASE__Git(['log', '-1', '--format=%cI', $tag]));
+	RELEASE__Git(['archive', '--format=zip', '--prefix=redz-ui-' . $version . '/', '--mtime=' . $mtime, '-o', $zip, $tag . ':dist']);
+	$tools = RELEASE__Tools($tag, $dir, $version, $mtime);
+	file_put_contents($dir . '/notes.md', RELEASE__Notes($tag, $version, $section, $passport['icons']['name'] . ' ' . $passport['icons']['version'], $tools !== ''));
+	return sprintf('%s · %d files · %.0f KB', basename($zip), count($listed), filesize($zip) / 1024) . ($tools === '' ? '' : "\n" . $tools);
 }
 
 /** Writes the pack's archive and notes of the tag $tag into $dir; what it says, or throws. */

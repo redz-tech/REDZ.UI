@@ -1,0 +1,15 @@
+{
+	"name": "REDZ.UI tools",
+	"version": "0.18.2",
+	"license": "MIT",
+	"site": "https://redz-tech.github.io/REDZ.UI/",
+	"php": "8.4",
+	"tools": {"floor":"floor.php","min":"min.php"},
+	"files": {
+		"LICENSE": "sha256-VxG7R7vB50XrAOWiRo7YLosKb2txCpEGMaBjxNs596k=",
+		"NOTICE": "sha256-JqH/9wjpy8MakDrUK1tu6pSo2hYi9tisBPeJHoiDxIU=",
+		"floor.json": "sha256-T5/oI2db/IJ02BcHTHbqQC/oTGlYeNofhmLQAJoX9XY=",
+		"floor.php": "sha256-k4LgMB+mY+/DYXcEqZuwcW1hejj/TPxH0+rpmNF7dIE=",
+		"min.php": "sha256-HooL+yBvzixppnVO5N60LvSR3sgBhXzHRRd/UZzPSfM="
+	}
+}

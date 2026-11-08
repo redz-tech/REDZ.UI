@@ -229,12 +229,14 @@ workflow here. A block is checked only for the browsers that can apply it: `@med
 `@supports (…)` narrow them. A vendor form beside a property covers the browsers that need it, as
 `-webkit-print-color-adjust` does for Chrome 130-135. Every exception is in `tools/floor/rules.json` with its reason,
 and so is every repair of an engine bug with the first versions that fixed it: when the floor passes those versions, the
-gate asks for the exception or the repair to be removed. `php tools/floor.php check your.css page.html` checks your own
-files the same way.
+gate asks for the exception or the repair to be removed. Your own files go through the release's checker, `floor.php`
+of [the tools](#tools-for-a-project), the same code the gate runs.
 
 `floor.json` lists every name the gate knows - `property:print-color-adjust`, `value:display:grid`, `unit:dvh`,
-`selector:has`, `media:forced-colors`, `attribute:button:commandfor` - with `"ok"` or, per browser, what the floor
-lacks. Its data is a pinned version of browser-compat-data in `tools/floor/bcd.tsv`, fetched and checked against its
+`selector:has`, `media:forced-colors`, `attribute:button:commandfor` - with `"ok"` or its BCD key and, per browser,
+what the floor lacks, and for each vendor form the browsers that take it; then the exceptions, each with its scope:
+`any` for an engine's own fact, such as Safari having no forced colors, `library` where the library's own code stands
+in. Its data is a pinned version of browser-compat-data in `tools/floor/bcd.tsv`, fetched and checked against its
 sha512 by `php tools/floor.php refresh`.
 
 **Checks in real engines.** `php tools/probe.php` opens the all-components page, the demo screens and the landing in
@@ -262,15 +264,65 @@ run. CI checks only what changed since the nearest commit that passed (`php tool
 why: nothing for texts and tools, the changed pages alone, or everything), a commit that passed runs nothing again, and a run whose job GitHub
 never placed on a runner runs its failed jobs once more by itself.
 
+## Tools for a project
+`redz-ui-tools-<version>.zip` holds two tools a project runs on its own server, never serves, each the very file the
+release was built and checked with: PHP 8.4 or newer with no extension, no network. Its passport `redz-ui-tools.json`
+names the PHP they need, the file of each tool and the sha256 of every file.
+
+**The floor checker**, `floor.php` with its list `floor.json`, judges your stylesheets, and pages, by the floor of the
+release you took:
+
+```sh
+php floor.php check [--allow=FILE] [--json] FILE…
+```
+
+A finding a line on standard output - `site.css:12  property:field-sizing (css.properties.field-sizing) - firefox 132
+none, from 152, …` -, the summary on standard error; exit 0 clean, 1 findings, 2 a wrong call or anything it cannot
+read or prove. `--json` prints the findings as objects: `file`, `line`, `name`, `key`, `browsers`, `text`. It proves
+itself on its samples before it judges, and it applies the release's exceptions of scope `any` only: one the library's
+own scripts stand in for does not hold for your code. An exception of your own needs its reason, and one that allows
+nothing is a finding. A comment covers its names on its own lines and the next one:
+
+```css
+/* floor-allow property:field-sizing, value:field-sizing:content -- rows stay fixed below the floor */
+.note { field-sizing: content; }
+```
+
+and `--allow=FILE` reads exceptions for a whole set of files:
+`{"allow": [{"name": "selector:open", "browsers": ["firefox", "firefox_android"], "reason": "…"}]}`.
+
+**The minifier**, `min.php`, is a library of functions; nothing runs when it is included:
+- `MIN__CssSafe($css)` - a stylesheet squeezed, and proved: squeezing it again changes nothing, and only comments and
+  white space are gone;
+- `MIN__JsSafe($js)` - a script squeezed onto one line, proved by its tokens; a newline that is the only separator is
+  refused;
+- `MIN__JsNamesSafe($min)` - a squeezed script with short local names, proved token by token. It reads `const`, `let`
+  and arrows and refuses `var`, `function` and `class`: keep the squeezed text where it refuses;
+- `MIN__JsBlocks([$label => $js, …])` - classic scripts joined, each in a block of its own, for one ES module a page
+  links with `type="module"`. It refuses what reads otherwise there: a static `import` or `export`, a `var` or a
+  function declared outside any function, `this` outside any function but an arrow, `with`, an HTML-like comment, a
+  legacy octal number or escape;
+- `MIN__SelfTest()` - the samples it proves itself on that misfire, none when it holds.
+
+A refusal of the input is a `RuntimeException`: `REASON at byte N, line L: …the code around it…`, the byte as its code;
+`MIN__JsBlocks` puts the script's label first. A `LogicException` is a fault of the minifier's own proof: report it.
+
+Outside judges hold the minifier on every commit: `php tools/judge.php` has Lightning CSS reprint each stylesheet as
+written and as squeezed - the library's and the [css-tokenizer-tests](https://github.com/romainmenke/css-tokenizer-tests)
+corpus - which must read the same, and esbuild parse every script it writes for the browser floor; both are native
+binaries from npm, pinned by version and sha512.
+
 ## Releases
 Every release is an [immutable GitHub release](https://github.com/redz-tech/REDZ.UI/releases): once it is out, neither
 its tag nor its files can change, and GitHub signs an attestation of both. A tag `v*` becomes a release only when the
-probes are clean in every engine; the release carries two files:
+probes are clean in every engine; the release carries three files:
 - `redz-ui-<version>.zip` - `dist/` of the tag, the folder a project serves as it is: `css/` and `js/` with minified
   files only, the license files and the passport `redz-ui.json`: the version, the floor, the files to link, every
   class, custom property, command and text key of the library, and the sha256 of every file in the SRI form.
-  `php tools/build.php` writes the folder, and `--check` holds it current on every commit. The sources, the docs and
-  `floor.json` stay in the repository and in the tag's source archive;
+  `php tools/build.php` writes the folder, and `--check` holds it current on every commit. The sources and the docs
+  stay in the repository and in the tag's source archive;
+- `redz-ui-tools-<version>.zip` - `tools/dist/` of the tag, [the tools](#tools-for-a-project) a project runs on its own
+  server and never serves, with their passport `redz-ui-tools.json`; from 0.19.0 on;
 - `checks.zip` - the sheet of the probes the release passed; the site shows the latest release's under `checks/`.
 
 The icons are a release of their own, under a tag `icons-<version>` that follows Bootstrap Icons: `redz-ui-icons-<version>.zip`

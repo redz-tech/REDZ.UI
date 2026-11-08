@@ -7,7 +7,10 @@
 // with its passport dist/redz-ui.json: the version of the changelog's newest section, the floor, the files to link, the
 // vocabulary and the sha256 of every file beside it; then the icon pack, css/icons.min.css (one mask per file of icons/)
 // and its passport redz-ui-icons.json, and that the pack a tag already published has not changed under its version;
-// then that every skill carries the version, and the budgets of the two files and of the packages', gzip -9. Usage: php
+// then tools/dist/, the release's tools - tools/floor/floor.php, floor.json and tools/min.php as they are, LICENSE,
+// NOTICE and their passport redz-ui-tools.json -, that the tools call only what every PHP has built in and that the
+// minifier proves itself on its fuses; then that every skill carries the version, and the budgets of the two files and
+// of the packages', gzip -9. Usage: php
 // tools/build.php [--check] - --check writes nothing and exits 1 when a file is out of date, a skill's version is not
 // the passport's, a published pack changed or a budget is exceeded.
 require __DIR__ . '/lib.php';
@@ -37,6 +40,14 @@ const BUILD_ARCHIVED = ['css/*.min.css', 'js/*.min.js', 'LICENSE', 'LICENSE-edit
 // The icon pack: Bootstrap Icons as published, by the version it follows; a change of icons/ is a new version.
 const BUILD_ICONS = ['name' => 'redz-ui-icons', 'version' => '1.13.2', 'css' => 'css/icons.min.css'];
 const BUILD_ICONS_PASSPORT = 'redz-ui-icons.json';
+// The tools of a release, redz-ui-tools-<version>.zip: tools/dist/ as it is - the floor checker with its list and the
+// minifier, each the very file the library runs -, with the license, the notice and the tools' passport.
+const BUILD_TOOLS = ['floor' => 'floor.php', 'min' => 'min.php'];
+const BUILD_TOOLS_SOURCES = ['LICENSE' => 'LICENSE', 'NOTICE' => 'NOTICE', 'floor.json' => 'floor.json', 'floor.php' => 'tools/floor/floor.php', 'min.php' => 'tools/min.php'];
+const BUILD_TOOLS_PASSPORT = 'tools/dist/redz-ui-tools.json';
+// The PHP the tools need, proved by the Check workflow, and the extensions every PHP has built in - all they may call.
+const BUILD_TOOLS_PHP = '8.4';
+const BUILD_TOOLS_EXTENSIONS = ['Core', 'standard', 'pcre', 'json', 'SPL', 'date', 'hash', 'random', 'Reflection'];
 
 /** The vocabulary of tools/vocabulary.json, its keys checked; lists stay arrays, maps stay objects. */
 function BUILD__Vocabulary(): stdClass
@@ -187,6 +198,47 @@ function BUILD__IconsPassport(): string
 	$lines = array_map(fn(string $file): string => json_encode($file, JSON_UNESCAPED_SLASHES) . ': ' . json_encode(BUILD__Hash($file), JSON_UNESCAPED_SLASHES), $names);
 	$encode = fn(mixed $value): string => (string)json_encode($value, JSON_UNESCAPED_SLASHES);
 	return "{\n\t\"name\": " . $encode(BUILD_ICONS['name']) . ",\n\t\"version\": " . $encode(BUILD_ICONS['version']) . ",\n\t\"license\": \"MIT\",\n\t\"source\": \"https://github.com/twbs/icons\",\n\t\"css\": " . $encode(BUILD_ICONS['css']) . ",\n\t\"files\": {\n\t\t" . implode(",\n\t\t", $lines) . "\n\t}\n}\n";
+}
+
+/** The tools' passport: the version, the PHP they need, the file of each tool and every file's sha256 in the SRI form. */
+function BUILD__ToolsPassport(): string
+{
+	$encode = fn(mixed $value): string => (string)json_encode($value, JSON_UNESCAPED_SLASHES);
+	$names = array_keys(BUILD_TOOLS_SOURCES);
+	sort($names, SORT_STRING);
+	$lines = array_map(fn(string $file): string => $encode($file) . ': ' . $encode(BUILD__Hash('tools/dist/' . $file)), $names);
+	return "{\n\t\"name\": \"REDZ.UI tools\",\n\t\"version\": " . $encode(BUILD__Version()) . ",\n\t\"license\": \"MIT\",\n\t\"site\": \"https://redz-tech.github.io/REDZ.UI/\",\n\t\"php\": " . $encode(BUILD_TOOLS_PHP) . ",\n\t\"tools\": " . $encode(BUILD_TOOLS) . ",\n\t\"files\": {\n\t\t" . implode(",\n\t\t", $lines) . "\n\t}\n}\n";
+}
+
+/**
+ * The calls of the tools to functions they neither define nor find in every PHP - those of an extension a server may
+ * lack -, by the tokens of their sources.
+ * @return list<string>
+ */
+function BUILD__ToolsCalls(): array
+{
+	$builtIn = array_fill_keys(array_map('strtolower', array_merge(...array_map(fn(string $extension): array => get_extension_funcs($extension) ?: [], BUILD_TOOLS_EXTENSIONS))), true);
+	$wrong = [];
+	foreach (array_filter(BUILD_TOOLS_SOURCES, fn(string $source): bool => str_ends_with($source, '.php')) as $source) {
+		$tokens = array_values(array_filter(token_get_all((string)file_get_contents(BUILD_ROOT . '/' . $source)), fn(mixed $t): bool => !is_array($t) || !in_array($t[0], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT], true)));
+		$defined = [];
+		foreach ($tokens as $k => $t) {
+			if (is_array($t) && $t[0] === T_FUNCTION && is_array($tokens[$k + 1] ?? null) && $tokens[$k + 1][0] === T_STRING) {
+				$defined[strtolower($tokens[$k + 1][1])] = true;
+			}
+		}
+		foreach ($tokens as $k => $t) {
+			$prev = $tokens[$k - 1] ?? '';
+			if (!is_array($t) || !in_array($t[0], [T_STRING, T_NAME_FULLY_QUALIFIED], true) || ($tokens[$k + 1] ?? '') !== '(' || (is_array($prev) && in_array($prev[0], [T_FUNCTION, T_OBJECT_OPERATOR, T_NULLSAFE_OBJECT_OPERATOR, T_DOUBLE_COLON, T_NEW], true))) {
+				continue;
+			}
+			$name = strtolower(ltrim($t[1], '\\'));
+			if (!isset($defined[$name]) && !isset($builtIn[$name])) {
+				$wrong[] = $source . ':' . $t[2] . '  ' . $t[1] . '() is not built into every PHP';
+			}
+		}
+	}
+	return array_values(array_unique($wrong));
 }
 
 /** Why the pack differs from what its version's tag published; '' when it does not, or when no such tag is here. */
@@ -487,7 +539,7 @@ function BUILD__Main(array $argv): int
 {
 	$check = in_array('--check', $argv, true);
 	$vocab = BUILD__Vocabulary();
-	$wrong = [...BUILD__TextsCheck($vocab), ...BUILD__CatalogCheck()];
+	$wrong = [...BUILD__TextsCheck($vocab), ...BUILD__CatalogCheck(), ...BUILD__ToolsCalls(), ...array_map(fn(string $failure): string => 'tools/min.php  ' . $failure, MIN__SelfTest())];
 	if ($wrong !== []) {
 		fwrite(STDERR, implode("\n", $wrong) . "\n");
 		return 1;
@@ -496,7 +548,12 @@ function BUILD__Main(array $argv): int
 	foreach (array_keys(BUILD_PACKAGE_SOURCES) as $dist) {
 		$packages['dist/' . $dist] = fn(): string => BUILD__Package($dist);
 	}
-	$files = ['css/scales.css' => fn(): string => BUILD__ScalesCss($vocab), 'css/utilities.css' => fn(): string => BUILD__UtilitiesCss($vocab), 'editor/catalog.js' => fn(): string => BUILD__CatalogJs(), BUILD_ICONS['css'] => fn(): string => BUILD__IconsCss(), 'dist/' . BUILD_MAIN['css'] => fn(): string => BUILD__Dist('css'), 'dist/' . BUILD_MAIN['js'] => fn(): string => BUILD__Dist('js'), ...$packages, 'dist/' . BUILD_MAIN['floor'] => fn(): string => BUILD__FloorJs(), 'dist/LICENSE' => fn(): string => (string)file_get_contents(BUILD_ROOT . '/LICENSE'), 'dist/LICENSE-editor' => fn(): string => (string)file_get_contents(BUILD_ROOT . '/editor/LICENSE'), 'dist/NOTICE' => fn(): string => (string)file_get_contents(BUILD_ROOT . '/NOTICE'), BUILD_PASSPORT => fn(): string => BUILD__Passport(), BUILD_ICONS_PASSPORT => fn(): string => BUILD__IconsPassport()];
+	$tools = [];
+	foreach (BUILD_TOOLS_SOURCES as $file => $source) {
+		$tools['tools/dist/' . $file] = fn(): string => (string)file_get_contents(BUILD_ROOT . '/' . $source);
+	}
+	$tools[BUILD_TOOLS_PASSPORT] = fn(): string => BUILD__ToolsPassport();
+	$files = ['css/scales.css' => fn(): string => BUILD__ScalesCss($vocab), 'css/utilities.css' => fn(): string => BUILD__UtilitiesCss($vocab), 'editor/catalog.js' => fn(): string => BUILD__CatalogJs(), BUILD_ICONS['css'] => fn(): string => BUILD__IconsCss(), 'dist/' . BUILD_MAIN['css'] => fn(): string => BUILD__Dist('css'), 'dist/' . BUILD_MAIN['js'] => fn(): string => BUILD__Dist('js'), ...$packages, 'dist/' . BUILD_MAIN['floor'] => fn(): string => BUILD__FloorJs(), 'dist/LICENSE' => fn(): string => (string)file_get_contents(BUILD_ROOT . '/LICENSE'), 'dist/LICENSE-editor' => fn(): string => (string)file_get_contents(BUILD_ROOT . '/editor/LICENSE'), 'dist/NOTICE' => fn(): string => (string)file_get_contents(BUILD_ROOT . '/NOTICE'), BUILD_PASSPORT => fn(): string => BUILD__Passport(), BUILD_ICONS_PASSPORT => fn(): string => BUILD__IconsPassport(), ...$tools];
 	$stale = [];
 	foreach ($files as $file => $made) {
 		$text = $made();

@@ -225,7 +225,7 @@ jobs:
           php tools/build.php --check
           php tools/release.php "${GITHUB_REF_NAME}" release
 
-      - name: The release - a draft with the archive and the sheet of the probes, then published
+      - name: The release - a draft with the archive, the tools and the sheet of the probes, then published
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
@@ -234,5 +234,7 @@ jobs:
           version="${GITHUB_REF_NAME#v}"
           gh run download "${GITHUB_RUN_ID}" --name checks --dir checks
           (cd checks && zip -qr ../release/checks.zip .)
-          gh release create "${GITHUB_REF_NAME}" --draft --verify-tag --title "REDZ.UI ${version}" --notes-file release/notes.md "release/redz-ui-${version}.zip" release/checks.zip
+          files=("release/redz-ui-${version}.zip")
+          if [ -f "release/redz-ui-tools-${version}.zip" ]; then files+=("release/redz-ui-tools-${version}.zip"); fi
+          gh release create "${GITHUB_REF_NAME}" --draft --verify-tag --title "REDZ.UI ${version}" --notes-file release/notes.md "${files[@]}" release/checks.zip
           gh release edit "${GITHUB_REF_NAME}" --draft=false
