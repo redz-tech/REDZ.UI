@@ -26,7 +26,7 @@ A product tints the head of every card with `--redz-card-header-bg`.
 
 ### Images
 
-`card-img-top` and `card-img-bottom` round the image with the card's corners; `card-img-overlay` lays the card's words over a `card-img`. A `stretched-link` makes the whole card its link.
+`card-img-top` and `card-img-bottom` round the image with the card's corners; `card-img-overlay` lays the card's words over a `card-img`, in white on a shade that rises from the bottom, so they read on any picture; the picture fills its card when a grid stretches the card. A `stretched-link` makes the whole card its link.
 
 ```html
 <div class="grid md:cols-2 gap-16">
@@ -127,7 +127,7 @@ For a category instead of a state - a site, a team, a kind of job - `edge-top-ch
 
 ## Tokens
 
-From [`css/components/card.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/card.css), which declares no custom property of its own.
+From [`css/components/card.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/card.css). It declares `--redz-link` on its root, never on rows or items.
 
 It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-space-16`, `--redz-space-8`, `--redz-space-12`, `--redz-card-header-bg`, `--redz-text-muted`.
 

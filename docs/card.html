@@ -159,7 +159,7 @@
 					<p>A product tints the head of every card with <code>--redz-card-header-bg</code>.</p>
 
 					<h3>Images</h3>
-					<p><code>card-img-top</code> and <code>card-img-bottom</code> round the image with the card's corners; <code>card-img-overlay</code> lays the card's words over a <code>card-img</code>. A <code>stretched-link</code> makes the whole card its link.</p>
+					<p><code>card-img-top</code> and <code>card-img-bottom</code> round the image with the card's corners; <code>card-img-overlay</code> lays the card's words over a <code>card-img</code>, in white on a shade that rises from the bottom, so they read on any picture; the picture fills its card when a grid stretches the card. A <code>stretched-link</code> makes the whole card its link.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="card-images">
 						<div class="grid md:cols-2 gap-16">
 							<section class="card" aria-labelledby="card-images-title">
@@ -309,7 +309,7 @@
 
 						<section class="vstack gap-12" aria-labelledby="card-tokens">
 							<h2 id="card-tokens">Tokens</h2>
-							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/card.css"><code>css/components/card.css</code></a>, which declares no custom property of its own.</p>
+							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/card.css"><code>css/components/card.css</code></a>. It declares <code>--redz-link</code> on its root, never on rows or items.</p>
 							<p>It reads the theme's <code>--redz-border</code>, <code>--redz-radius-12</code>, <code>--redz-bg</code>, <code>--redz-space-16</code>, <code>--redz-space-8</code>, <code>--redz-space-12</code>, <code>--redz-card-header-bg</code>, <code>--redz-text-muted</code>.</p>
 						</section>
 

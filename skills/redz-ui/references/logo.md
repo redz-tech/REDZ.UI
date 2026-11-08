@@ -6,7 +6,7 @@ A white mat for someone else's logo - a bank, a payment service, a partner - tha
 
 ## Examples
 
-`logo` around an `img`: a white ground with a thin border and rounded corners in both themes and in forced colors, the picture contained in it. One height for a line - 32 px, `logo-sm` 28 px, `logo-lg` 40 px, an `h-*` utility for a banner, `h-88` - and a width by the logo's area: `data-ratio`, its width by its height as the server measured it, widens the mat by the square root of that ratio, from square to four times as wide, so a long wordmark and a round mark look the same size.
+`logo` around an `img`: a white ground with a thin border and rounded corners in both themes and in forced colors, the picture contained in it. One height for a line - 32 px, `logo-sm` 28 px, `logo-lg` 40 px, an `h-*` utility for a banner, `h-88` - and a width by the logo's area: `data-ratio`, its width by its height as the server measured it, widens the mat by that ratio to the power 0.75, from square to four times as wide, and the picture fills 90 by 80 % of it: a long wordmark stays readable, and a round mark beside it does not look smaller.
 
 ```html
 <span class="logo logo-sm" data-ratio="4"><img src="img/logo-wide.svg" alt="Lagoonpay"></span>
@@ -22,7 +22,7 @@ A logo drawn on a solid color fills the mat in that color: `data-color` is the c
 <span class="logo logo-lg" data-ratio="1.5"><img class="logo-ground" src="img/lagoon.svg" alt=""><img src="img/lagoon.svg" alt="The lagoon at noon"></span>
 ```
 
-On a [choice tile](choice.md), a `choice-media` takes the same `data-ratio`, `data-color` and `logo-ground`: the banner of a payment method.
+On a [choice tile](choice.md), a `choice-media` takes the same `data-ratio`, `data-color` and `logo-ground`: the banner of a payment method. There a logo is as high as the banner over the fourth root of its ratio - a 4:1 wordmark gets 70 % of the height, a round mark all of it - and one on its own color fills the banner.
 
 ```html
 <div class="grid cols-2 gap-12 max-w-480" role="radiogroup" aria-label="Pay with">

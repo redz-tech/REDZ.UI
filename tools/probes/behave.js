@@ -3058,8 +3058,41 @@ window.REDZ_BEHAVE = (() => {
 			const [small, plain, large, mark] = $$('#logo-sizes .logo').map((one) => one.getBoundingClientRect());
 			const ground = getComputedStyle($('#logo-sizes .logo')).backgroundColor;
 			const got = [Math.round(small.height), Math.round(plain.height), Math.round(large.height), Math.round(large.width), Math.round(mark.width), ground];
-			if (say(got) !== say([28, 32, 40, 80, 40, 'rgb(255, 255, 255)'])) {
-				out.push('logos: heights, the 4:1 large one\'s width and the round mark\'s width, the ground ' + say(got) + ' - a width by area is the height times the square root of the ratio');
+			if (say(got) !== say([28, 32, 40, 113, 40, 'rgb(255, 255, 255)'])) {
+				out.push('logos: heights, the 4:1 large one\'s width and the round mark\'s width, the ground ' + say(got) + ' - a width is the height times the ratio to the power 0.75');
+			}
+		}]},
+		logoChoice: {target: '#logo-choice', steps: [async (out) => {
+			const [wide, solid] = $$('#logo-choice .choice-media').map((media) => {
+				const style = getComputedStyle(media);
+				const room = media.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+				return Math.round($('img', media).getBoundingClientRect().height / room * 100);
+			});
+			if (Math.abs(wide - 71) > 3 || solid < 97) {
+				out.push('a choice tile draws a 4:1 wordmark ' + wide + ' % as high as its banner, not about 71 % (the fourth root), and a logo on its own color ' + solid + ' %, not all of it');
+			}
+		}]},
+		overlayShade: {target: '#card-images', steps: [async (out) => {
+			const overlay = $('#card-images .card-img-overlay');
+			const style = getComputedStyle(overlay);
+			const picture = $(':scope > .card-img', overlay.parentElement).getBoundingClientRect();
+			const card = overlay.parentElement.getBoundingClientRect();
+			if (!style.backgroundImage.includes('gradient') || style.color !== 'rgb(255, 255, 255)' || picture.height < card.height - 3) {
+				out.push('words over a picture: ' + (style.backgroundImage.includes('gradient') ? '' : 'no shade, ') + 'their color ' + style.color + ', the picture ' + Math.round(picture.height) + ' px in a card of ' + Math.round(card.height));
+			}
+		}]},
+		rowHeaderLine: {target: '#table-wide', steps: [async (out) => {
+			const host = document.body.appendChild(Object.assign(document.createElement('div'), {className: 'region', dir: 'ltr'}));
+			host.style.inlineSize = '360px';
+			host.append($('#table-wide .table-scroll').cloneNode(true));
+			await settled();
+			const head = $('tbody th[scope="row"]', host);
+			const range = document.createRange();
+			range.selectNodeContents(head);
+			const lines = new Set([...range.getClientRects()].map((rect) => Math.round(rect.top))).size;
+			host.remove();
+			if (lines !== 1) {
+				out.push('a row header in a table that scrolls, 360 px wide, takes ' + lines + ' lines for "' + head.textContent + '"');
 			}
 		}]},
 		shareRow: {target: '#commands-share-row', steps: [async (out) => {

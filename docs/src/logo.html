@@ -5,7 +5,7 @@
 
 <section class="vstack gap-16" aria-labelledby="logo-examples">
 	<h2 id="logo-examples">Examples</h2>
-	<p><code>logo</code> around an <code>img</code>: a white ground with a thin border and rounded corners in both themes and in forced colors, the picture contained in it. One height for a line - 32 px, <code>logo-sm</code> 28 px, <code>logo-lg</code> 40 px, an <code>h-*</code> utility for a banner, <code>h-88</code> - and a width by the logo's area: <code>data-ratio</code>, its width by its height as the server measured it, widens the mat by the square root of that ratio, from square to four times as wide, so a long wordmark and a round mark look the same size.</p>
+	<p><code>logo</code> around an <code>img</code>: a white ground with a thin border and rounded corners in both themes and in forced colors, the picture contained in it. One height for a line - 32 px, <code>logo-sm</code> 28 px, <code>logo-lg</code> 40 px, an <code>h-*</code> utility for a banner, <code>h-88</code> - and a width by the logo's area: <code>data-ratio</code>, its width by its height as the server measured it, widens the mat by that ratio to the power 0.75, from square to four times as wide, and the picture fills 90 by 80 % of it: a long wordmark stays readable, and a round mark beside it does not look smaller.</p>
 	<div class="docs-example" id="logo-sizes">
 		<span class="logo logo-sm" data-ratio="4"><img src="img/logo-wide.svg" alt="Lagoonpay"></span>
 		<span class="logo" data-ratio="4"><img src="img/logo-wide.svg" alt="Lagoonpay"></span>
@@ -17,7 +17,7 @@
 		<span class="logo logo-lg" data-ratio="3" data-color="#1f3a93"><img class="logo-fade" src="img/logo-solid.svg" alt="Baybank"></span>
 		<span class="logo logo-lg" data-ratio="1.5"><img class="logo-ground" src="img/lagoon.svg" alt=""><img src="img/lagoon.svg" alt="The lagoon at noon"></span>
 	</div>
-	<p>On a <a href="choice.html">choice tile</a>, a <code>choice-media</code> takes the same <code>data-ratio</code>, <code>data-color</code> and <code>logo-ground</code>: the banner of a payment method.</p>
+	<p>On a <a href="choice.html">choice tile</a>, a <code>choice-media</code> takes the same <code>data-ratio</code>, <code>data-color</code> and <code>logo-ground</code>: the banner of a payment method. There a logo is as high as the banner over the fourth root of its ratio - a 4:1 wordmark gets 70 % of the height, a round mark all of it - and one on its own color fills the banner.</p>
 	<div class="docs-example docs-example-stack" id="logo-choice">
 		<div class="grid cols-2 gap-12 max-w-480" role="radiogroup" aria-label="Pay with">
 			<label class="choice"><input type="radio" name="logo-choice-pay" checked><span class="choice-media" data-ratio="4"><img src="img/logo-wide.svg" alt=""></span><span class="fw-600">Lagoonpay</span><span class="fs-12 text-muted">Card or wallet</span></label>

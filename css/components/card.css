@@ -31,9 +31,16 @@
 	}
 
 	.card-img-overlay {
+		--redz-link: #fff;
 		position: absolute;
 		inset: 0;
 		padding: var(--redz-space-16);
+		background: linear-gradient(to top, rgb(0 0 0 / 0.62), rgb(0 0 0 / 0) 65%);
+		color: #fff;
+	}
+
+	.card:has(> .card-img-overlay) > .card-img {
+		block-size: 100%;
 	}
 
 	.card-header {

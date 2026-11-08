@@ -60,6 +60,10 @@
 		inset-block-start: 0;
 	}
 
+	.table-scroll > .table > tbody > tr > th[scope="row"] {
+		white-space: nowrap;
+	}
+
 	@supports named-feature(single-axis-scroll-container) {
 		.table-scroll .table > thead th {
 			inset-block-start: calc(var(--redz-sticky-top, var(--redz-space-12)) - var(--redz-space-12));

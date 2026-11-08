@@ -129,10 +129,11 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   empties the tile, marks it `data-qr-error` and hides it. Built without `innerHTML` or a `style` attribute, so a
   strict CSP with Trusted Types passes. A module never falls under 3 px (`--redz-qr-module-min`): the tile grows.
 - `logo`, a white mat for someone else's logo in both themes, with a border: 32 px high, `logo-sm` 28 and `logo-lg` 40,
-  an `h-*` utility for a banner (`h-88` added), and as wide as its area asks - `data-ratio`, its width by its height,
-  widens it by the square root, from square to four times as wide. `data-color` grounds a logo drawn on a solid color,
-  `logo-fade` softens its sides into it, and an `img.logo-ground` is a blurred copy behind a photo; `choice-media`
-  takes the same.
+  an `h-*` utility for a banner (`h-88` added), and as wide as its logo asks - `data-ratio`, its width by its height,
+  widens it by the ratio to the power 0.75, from square to four times as wide, and the picture fills 90 by 80 % of it.
+  `data-color` grounds a logo drawn on a solid color, `logo-fade` softens its sides into it, and an `img.logo-ground` is
+  a blurred copy behind a photo; `choice-media` takes the same, a logo there as high as the banner over the fourth root
+  of its ratio, so a 4:1 wordmark gets 70 % of the height and stays readable.
 - Share links for X (`share-x`), Viber (`share-viber`, its letters drawn as VK's are) and WeChat (`share-wechat`, a plain
   button for the page's popover with a QR code); `data-share-url` and `data-share-title` on any element write the
   share links and copies inside it - a row of buttons without a menu.
@@ -153,6 +154,9 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   list copies them all, a line each, and one inside a `command-line` without a target copies its command.
 
 ### Changed
+- `card-img-overlay` lays its words in white on a shade that rises from the bottom of the picture, and its links turn
+  white with them: the words kept the text's color, so on a phone dark words stood on dark water. A `card-img` under an
+  overlay fills its card, so a card a grid stretches stays a picture instead of a picture over a white end.
 - A table row whose `table-check` box is checked is tinted, as a row with `aria-selected="true"` is.
 - A tree's group with `data-lazy` asks the page by `redz:load`, as every region that loads, instead of `redz:expand`
   (no page listened for it); a refusal now leaves the group open with the page's words instead of closing it.
@@ -215,6 +219,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   end, and its buttons wrap below them: the clear button, last, wrapped onto a line of its own at the start.
 - A busy region's words stand on a ground of the region's color, as wide as they are: they spanned the region over the
   dimmed words under them, which on a narrow region read through them.
+- A row header, `th scope="row"`, in a `table-scroll` keeps its words on one line, as the scroller is there to give the
+  table its width: on a phone "Boat A" broke onto two lines. `text-wrap` lets a long one wrap again.
 - A tooltip hides on a scroll only when the scroll moves its element: any box scrolling anywhere hid it, so a log with
   `data-follow` taking a line, or a page nudged by a pixel, closed the tooltip a reader was on.
 

@@ -6,7 +6,7 @@
 		place-items: center;
 		flex: none;
 		block-size: var(--redz-logo-side, 2rem);
-		aspect-ratio: clamp(1, sqrt(var(--redz-ratio, 1)), 4);
+		aspect-ratio: clamp(1, pow(var(--redz-ratio, 1), 0.75), 4);
 		max-inline-size: 100%;
 		margin: 0;
 		padding: 0;
@@ -36,8 +36,8 @@
 
 	.logo > img {
 		grid-area: 1 / 1;
-		inline-size: 84%;
-		block-size: 76%;
+		inline-size: 90%;
+		block-size: 80%;
 		max-inline-size: none;
 		max-block-size: none;
 		object-fit: contain;
@@ -64,7 +64,7 @@
 
 	.choice > .choice-media[data-ratio] > img:not(.logo-ground) {
 		grid-area: 1 / 1;
-		block-size: min(100%, calc(100% / sqrt(var(--redz-ratio, 1))));
+		block-size: min(100%, 100% / pow(var(--redz-ratio, 1), 0.25));
 		inline-size: auto;
 		max-inline-size: 100%;
 		object-fit: contain;
