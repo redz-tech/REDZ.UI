@@ -42,6 +42,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - A combination that a button's or a link's `aria-keyshortcuts` names is the page's even while none of them can be
   pressed: disabled, busy, hidden, inert or outside the open modal, it never reaches the browser, so a page's save keeps
   `Ctrl S` from the browser's own save while it saves or has nothing to save. The first that can be pressed is pressed.
+- A password field tells the page each time its text is shown or hidden, by the person or on its form's submit or the
+  page's return from the history: `redz:reveal` bubbles from it, `detail.revealed` true or false.
 - `data-ago="short"` on a ticking `time` says how long ago it was in the short words of the page's language ("42 min.
   ago", "42 мин. назад") for a narrow place such as a stat tile; `data-ago` alone keeps the long words.
 

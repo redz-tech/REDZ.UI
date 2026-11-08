@@ -111,7 +111,7 @@ A `details` with `form-more` folds what a short hint cannot say. Its chevron tur
 
 ### A new password
 
-A button with `command="--reveal"` for a password field shows its text and hides it again - `aria-pressed` says which - and the field hides it on its form's submit and when the page comes back from the history. Each element with `data-strength` naming the field shows its level as it is typed: shorter than its `minlength`, long enough, then longer or of three kinds of characters, then both - a `meter` at once, and the words, the page's texts `strength.short`, `.fair`, `.good` and `.strong`, once the typing pauses, said politely by a live region of the field's own - VoiceOver says nothing of a password field's own description changing, so the words' element needs no `aria-live`. The level is a hint: the server keeps its own rules.
+A button with `command="--reveal"` for a password field shows its text and hides it again - `aria-pressed` says which - and the field hides it on its form's submit and when the page comes back from the history. Each change bubbles from the field as `redz:reveal`, `detail.revealed` true or false, so a page that copies the shown text elsewhere hides it there too. Each element with `data-strength` naming the field shows its level as it is typed: shorter than its `minlength`, long enough, then longer or of three kinds of characters, then both - a `meter` at once, and the words, the page's texts `strength.short`, `.fair`, `.good` and `.strong`, once the typing pauses, said politely by a live region of the field's own - VoiceOver says nothing of a password field's own description changing, so the words' element needs no `aria-live`. The level is a hint: the server keeps its own rules.
 
 ```html
 <div class="form-field">

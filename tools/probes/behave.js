@@ -3229,6 +3229,27 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a list item whose title is a stretched-link: its own edge, its button, the next item and the place under the list give ' + say(got) + ' - the link should take its item only, and its button stay its own');
 			}
 		}]},
+		reveal: {target: '#form-adorn-password', steps: [async (out) => {
+			const field = $('#form-adorn-password');
+			const button = $('[commandfor="form-adorn-password"][command="--reveal"]');
+			const form = document.createElement('form');
+			form.addEventListener('submit', (event) => event.preventDefault());
+			field.before(form);
+			form.append(field);
+			const said = [];
+			const hear = (event) => said.push(event.target === field ? event.detail.revealed : 'elsewhere');
+			document.addEventListener('redz:reveal', hear);
+			button.click();
+			button.click();
+			button.click();
+			form.requestSubmit();
+			document.removeEventListener('redz:reveal', hear);
+			form.before(field);
+			form.remove();
+			if (say(said) !== say([true, false, true, false]) || field.type !== 'password') {
+				out.push('a password field shown, hidden, shown and its form sent tells the page ' + say(said) + ' in redz:reveal and ends as ' + field.type + ' - each change, the hiding on submit too, says whether its text shows');
+			}
+		}]},
 		shortcuts: {target: '#palette-demo', steps: [async (out) => {
 			const host = document.createElement('div');
 			host.innerHTML = '<div inert><button type="button" aria-keyshortcuts="Alt+J">Asleep</button></div><button type="button" disabled aria-keyshortcuts="Alt+D Alt+K">Off</button><button type="button" aria-disabled="true" aria-keyshortcuts="Alt+B">Busy</button><button type="button" hidden aria-keyshortcuts="Alt+H">Hidden</button><a aria-disabled="true" aria-keyshortcuts="Alt+L">No address</a><button type="button" aria-keyshortcuts="Alt+K">Awake</button><dialog><p>Nothing keyed</p></dialog>';

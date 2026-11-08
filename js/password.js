@@ -1,6 +1,6 @@
 // REDZ.UI, passwords: a button with commandfor naming a password field and command="--reveal" shows its text and
 // hides it again, saying which in aria-pressed, and the field is hidden again on its form's submit and when the page
-// comes back from the history. Each element with data-strength naming the field shows its level as it is typed - 0
+// comes back from the history; each change bubbles from the field as redz:reveal (detail.revealed). Each element with data-strength naming the field shows its level as it is typed - 0
 // nothing, 1 shorter than its minlength (8 without one), 2 long enough, 3 long enough with four characters more or three
 // kinds of characters (small or uncased letters, capitals, digits, the rest), 4 both, or twice the minimum: a meter at
 // once as its value, and the level's words once the typing pauses - a meter's aria-valuetext, any other element's
@@ -37,12 +37,22 @@ const press = (field, shown) => {
 	}
 };
 
+/** Shows or hides the field's text, and tells the page in redz:reveal. */
+const reveal = (field, shown) => {
+	field.type = shown ? 'text' : 'password';
+	if (shown) {
+		field.dataset.revealed = '';
+	} else {
+		delete field.dataset.revealed;
+	}
+	press(field, shown);
+	field.dispatchEvent(new CustomEvent('redz:reveal', {bubbles: true, detail: {revealed: shown}}));
+};
+
 /** Hides the text of every revealed field within the root. */
 const conceal = (root) => {
 	for (const field of root.querySelectorAll('input[data-revealed]')) {
-		field.type = 'password';
-		delete field.dataset.revealed;
-		press(field, false);
+		reveal(field, false);
 	}
 };
 
@@ -90,14 +100,7 @@ document.addEventListener('command', (event) => {
 	if (event.command !== COMMAND || !(field instanceof HTMLInputElement)) {
 		return;
 	}
-	const shown = field.type === 'password';
-	field.type = shown ? 'text' : 'password';
-	if (shown) {
-		field.dataset.revealed = '';
-	} else {
-		delete field.dataset.revealed;
-	}
-	press(field, shown);
+	reveal(field, field.type === 'password');
 }, true);
 
 document.addEventListener('input', (event) => {
