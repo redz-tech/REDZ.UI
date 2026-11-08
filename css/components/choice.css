@@ -59,6 +59,7 @@
 
 	.choice-media {
 		display: grid;
+		grid-template: minmax(0, 1fr) / minmax(0, 1fr);
 		place-items: center;
 		block-size: 3.5rem;
 		margin: calc(-1 * var(--redz-space-12)) calc(-1 * var(--redz-space-16)) var(--redz-space-8);

@@ -158,7 +158,7 @@
 		grid-template-areas: "header" "main";
 	}
 
-	.app:not(:has(> .app-sidebar)) > .app-main {
+	:where(.app:not(:has(> .app-sidebar))) > .app-main {
 		margin-inline-start: var(--redz-space-8);
 	}
 

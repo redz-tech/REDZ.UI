@@ -84,6 +84,13 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   past the page's question. The panel the address names comes into view, as at load.
 - A `stretched-link` in a `list-group-item` makes that item its link, and the item's other links and buttons stay their
   own. The item was not the link's box, so the link covered the first screen of the page, wherever the list stood.
+- A button `REDZ.ui.busy()` marks keeps its own fill and edge while it waits, as the states table shows it. The
+  `aria-disabled` it is given turned it to the disabled look, which on the page floor of a dialog's footer left only the
+  spinner to see. A busy outline button without an icon keeps its edge too.
+- A logo in a `choice-media` without `width` and `height` fits the banner: its height went unbounded, so a wide logo
+  drew at its own size, 236 by 68 where the banner holds 40.
+- On a phone, a shell without an `app-sidebar` lays its main region edge to edge, as one with a sidebar does; it kept
+  an 8 px margin at the start. The same holds in print.
 - A shortcut leaves alone a button inside an `inert` region, which it pressed, and keeps a held combination's repeats
   from the browser: holding the keys of a page's save let the browser's own "Save page" through after the first press.
 

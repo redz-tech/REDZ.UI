@@ -3229,6 +3229,56 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a list item whose title is a stretched-link: its own edge, its button, the next item and the place under the list give ' + say(got) + ' - the link should take its item only, and its button stay its own');
 			}
 		}]},
+		shellPhone: {target: '#table-row-menu', steps: [async (out) => {
+			const frame = document.createElement('iframe');
+			frame.style.cssText = 'position: fixed; inset-block-start: 0; inset-inline-start: 0; inline-size: 600px; block-size: 400px; visibility: hidden';
+			const loaded = new Promise((done) => frame.addEventListener('load', done, {once: true}));
+			frame.srcdoc = '<!doctype html><html lang="en"><head><title>Shell</title><link rel="stylesheet" href="' + $('link[href*="redz-ui.min.css"]').href + '"></head><body><div class="app"><header class="app-header">Bookings</header><main class="app-main">A page without a sidebar</main></div></body></html>';
+			document.body.append(frame);
+			await loaded;
+			const main = frame.contentDocument.querySelector('.app-main');
+			await until(() => frame.contentWindow.getComputedStyle(main).borderTopWidth !== '');
+			const margins = ['marginInlineStart', 'marginInlineEnd'].map((side) => frame.contentWindow.getComputedStyle(main)[side]);
+			frame.remove();
+			if (say(margins) !== say(['0px', '0px'])) {
+				out.push('a shell without a sidebar on a phone keeps its main region ' + say(margins) + ' in from its sides, where a shell with one has none');
+			}
+		}]},
+		choiceMedia: {target: '#busy-region', steps: [async (out) => {
+			const picture = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="236" height="68"><rect width="236" height="68" fill="#456"/></svg>');
+			const host = document.createElement('div');
+			host.innerHTML = '<label class="choice"><input type="radio" name="probe-media"><span class="choice-media"><img src="' + picture + '" alt=""></span>Example Pay</label>';
+			$('#busy-region').append(host);
+			const image = $('img', host);
+			await until(() => image.complete);
+			const room = $('.choice-media', host).getBoundingClientRect();
+			const drawn = image.getBoundingClientRect();
+			host.remove();
+			if (drawn.height > room.height - 15 || drawn.width > room.width) {
+				out.push('a logo of 236 by 68 without width and height draws ' + Math.round(drawn.width) + ' by ' + Math.round(drawn.height) + ' in a choice-media of ' + Math.round(room.width) + ' by ' + Math.round(room.height) + ' - it should fit inside its padding');
+			}
+		}]},
+		busyTone: {target: '#busy-region', steps: [async (out) => {
+			const host = document.createElement('div');
+			host.style.background = 'var(--redz-bg-page)';
+			host.innerHTML = ['btn-primary', 'btn-danger', 'btn-outline-primary'].map((tone) => '<button class="btn ' + tone + '" type="button">Pay</button><button class="btn ' + tone + '" type="button" aria-busy="true" aria-disabled="true">Pay</button><button class="btn ' + tone + '" type="button"><i class="bi bi-trash" aria-hidden="true"></i>Pay</button><button class="btn ' + tone + '" type="button" aria-busy="true" aria-disabled="true"><i class="bi bi-trash" aria-hidden="true"></i>Pay</button>').join('');
+			$('#busy-region').append(host);
+			const buttons = $$('button', host);
+			buttons.forEach((button) => {
+				button.style.transition = 'none';
+			});
+			const look = (button) => getComputedStyle(button).backgroundColor + ' / ' + getComputedStyle(button).borderTopColor;
+			const lost = [];
+			for (let i = 0; i < buttons.length; i += 2) {
+				if (look(buttons[i]) !== look(buttons[i + 1])) {
+					lost.push(buttons[i].className + (buttons[i].firstElementChild === null ? '' : ' with an icon') + ': ' + look(buttons[i]) + ' busy ' + look(buttons[i + 1]));
+				}
+			}
+			host.remove();
+			if (lost.length > 0) {
+				out.push('a busy button, as busy() marks it (aria-busy and aria-disabled), loses its own fill and edge, so on the page floor of a dialog footer it shows only its spinner: ' + lost.join('; '));
+			}
+		}]},
 		reveal: {target: '#form-adorn-password', steps: [async (out) => {
 			const field = $('#form-adorn-password');
 			const button = $('[commandfor="form-adorn-password"][command="--reveal"]');
