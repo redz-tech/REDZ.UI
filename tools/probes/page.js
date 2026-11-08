@@ -120,7 +120,7 @@ window.REDZ_PROBE = (() => {
 			}
 			const cut = [];
 			for (const el of document.querySelectorAll('.btn, .badge, .chip, .nav-link, .menu-item, .app-link, .form-label, label')) {
-				if (shown(el) && !unseen(el) && el.scrollWidth > el.clientWidth + 1 && getComputedStyle(el).overflowX !== 'visible') {
+				if (shown(el) && !unseen(el) && el.scrollWidth > el.clientWidth + 1 && getComputedStyle(el).overflowX !== 'visible' && !(getComputedStyle(el).textOverflow === 'ellipsis' && el.title.trim() !== '')) {
 					cut.push(name(el) + ' "' + el.textContent.trim().slice(0, 30) + '"');
 				}
 			}

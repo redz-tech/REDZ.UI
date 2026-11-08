@@ -2695,6 +2695,23 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a selection put in later: told ' + say(put) + ' (event, bar hidden); REDZ.ui.selection after .checked ' + say(called) + ' (event, head mixed, bar), again ' + (quiet === 2 ? 'silent' : 'told') + ', a check disabled ' + say(disabled) + ', its item hidden ' + say(hidden) + ' (event, checked, bar hidden), shown ' + say(back) + ', a checked attribute ' + say(attribute) + ' (event, head), data-select given later ' + say(marked));
 			}
 		}]},
+		barTones: {target: '#table-select-rows', steps: [async (out) => {
+			const box = document.createElement('div');
+			box.innerHTML = '<div class="selection-bar"><button class="btn btn-sm" type="button">Plain</button><button class="btn btn-sm btn-primary" type="button">Apply</button><button class="btn btn-sm btn-subtle-danger" type="button">Delete</button><button class="btn btn-sm btn-outline-secondary" type="button">Export</button><button class="btn btn-sm" type="button" disabled>Merge</button></div><button class="btn btn-sm btn-primary" type="button">Apply</button><button class="btn btn-sm btn-subtle-danger" type="button">Delete</button><button class="btn btn-sm btn-outline-secondary" type="button">Export</button><button class="btn btn-sm" type="button" disabled>Merge</button>';
+			document.body.append(box);
+			const ground = getComputedStyle(document.body).getPropertyValue('--redz-bg').trim();
+			const paint = (button) => getComputedStyle(button).backgroundColor;
+			const probe = Object.assign(document.createElement('i'), {style: 'color: ' + ground});
+			box.append(probe);
+			const white = getComputedStyle(probe).color;
+			const [plain, ...inBar] = $$('.selection-bar > .btn', box);
+			const outside = $$(':scope > .btn', box);
+			const got = [paint(plain) === white, ...inBar.map((button, i) => paint(button) === paint(outside[i]))];
+			box.remove();
+			if (say(got) !== say([true, true, true, true, true])) {
+				out.push('a selection bar: a plain button on the page\'s ground ' + got[0] + '; primary, subtle danger, outline secondary and a disabled one as outside the bar ' + say(got.slice(1)));
+			}
+		}]},
 		sort: {target: '#table-sort', steps: [async (out) => {
 			const table = $('#table-sort table');
 			const order = () => [...table.tBodies[0].rows].map((row) => row.cells[0].textContent.replace('Example ', '')).join(' ');
@@ -3605,6 +3622,19 @@ window.REDZ_BEHAVE = (() => {
 			const box = body.getBoundingClientRect();
 			if (!near(box.left, room.left + parseFloat(style.paddingInlineStart), 1) || !near(box.right, room.right - parseFloat(style.paddingInlineEnd), 1)) {
 				out.push('a vstack body stands beside its step\'s name: ' + say([box.left, box.right, room.left, room.right]));
+			}
+		}]},
+		laneButton: {target: '#chart-board table.lanes', steps: [async (out) => {
+			const button = $('#chart-board table.lanes > tbody > tr > th > button');
+			const th = button.parentElement;
+			const [cell, own] = [th.getBoundingClientRect(), button.getBoundingClientRect()];
+			const room = cell.right - parseFloat(getComputedStyle(th).paddingRight);
+			button.focus();
+			const ring = button.matches(':focus-visible') ? getComputedStyle(button).outlineOffset : '-2px';
+			button.blur();
+			const got = [own.left >= cell.left - 0.5 && own.right <= room + 0.5, button.scrollWidth > button.clientWidth, getComputedStyle(button).textOverflow, own.height >= 23.5, ring];
+			if (say(got) !== say([true, true, 'ellipsis', true, '-2px'])) {
+				out.push('a button in a lanes row header: inside the header\'s room ' + got[0] + ' (' + Math.round(own.left) + '-' + Math.round(own.right) + ' in ' + Math.round(cell.left) + '-' + Math.round(room) + '), cut ' + got[1] + ', ends in ' + got[2] + ', its height kept ' + got[3] + ', its focus ring drawn inside it by ' + got[4] + ', not cut by the header');
 			}
 		}]},
 		scaleCaptions: {target: '#chart-board .lanes-scale', steps: [async (out) => {

@@ -558,6 +558,20 @@
 		white-space: nowrap;
 	}
 
+	.lanes > tbody > tr > th > :is(a, button) {
+		display: inline-block;
+		align-content: center;
+		max-inline-size: 100%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		vertical-align: middle;
+	}
+
+	.lanes > tbody > tr > th > :is(a, button):focus-visible {
+		outline-offset: -2px;
+	}
+
 	.lanes > tbody > tr > td {
 		position: relative;
 		block-size: 1.125rem;

@@ -9,7 +9,7 @@
 		background: var(--redz-primary-subtle);
 	}
 
-	.selection-bar > .btn:not(.btn-subtle-primary, .btn-text) {
+	.selection-bar > .btn:not(.btn-primary, .btn-secondary, .btn-success, .btn-danger, .btn-warning, .btn-info, .btn-outline-primary, .btn-outline-secondary, .btn-outline-success, .btn-outline-danger, .btn-outline-warning, .btn-outline-info, .btn-subtle-primary, .btn-subtle-secondary, .btn-subtle-success, .btn-subtle-danger, .btn-subtle-warning, .btn-subtle-info, .btn-text, .btn-link, :disabled, [aria-disabled="true"]:not([aria-busy="true"])) {
 		--redz-btn-bg: var(--redz-bg);
 	}
 

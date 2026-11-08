@@ -5718,7 +5718,7 @@ Series without a tone take the chart colors by their column.
 
 ## A board of lanes
 
-`table class="lanes"` lays a time window across: a header cell `lanes-scale` holds the captions, each at its `data-at`, and each row is a lane - its name in the `th`, which may hold a button, and its track in the `td`. In a track `lanes-tick` marks a run at `data-at`, `lanes-tick-once` a single one, and `lanes-span` from `data-from` to `data-to` a run that goes on, hatched, with its caption. The red line is now, at the table's `data-now` - 0, the start, by default; the grid has `--redz-lanes-steps` parts, 8. A caption that would touch the one before it hides, in any language and at any width. Elements that share a [`data-highlight`](table.md#table-highlight) key light together: a lane, its track included, and its row in a table.
+`table class="lanes"` lays a time window across: a header cell `lanes-scale` holds the captions, each at its `data-at`, and each row is a lane - its name in the `th`, which may hold a link or a button that shrinks to it and ends in an ellipsis - give it the whole name as its `title` -, and its track in the `td`. In a track `lanes-tick` marks a run at `data-at`, `lanes-tick-once` a single one, and `lanes-span` from `data-from` to `data-to` a run that goes on, hatched, with its caption. The red line is now, at the table's `data-now` - 0, the start, by default; the grid has `--redz-lanes-steps` parts, 8. A caption that would touch the one before it hides, in any language and at any width. Elements that share a [`data-highlight`](table.md#table-highlight) key light together: a lane, its track included, and its row in a table.
 
 ```html
 <table class="lanes">
@@ -5728,6 +5728,7 @@ Series without a tone take the chart colors by their column.
 		<tr data-highlight="mail.queue"><th scope="row">mail.queue</th><td><span class="lanes-span" data-from="0" data-to="1" title="mail.queue - every minute">continuous</span></td></tr>
 		<tr data-highlight="backup.nightly"><th scope="row">backup.nightly</th><td><i class="lanes-tick-once lanes-tick" data-at="0.458" title="backup.nightly - 02:00"></i></td></tr>
 		<tr data-highlight="fx.rates"><th scope="row">fx.rates</th><td><i class="lanes-tick" data-at="0.04" title="fx.rates - 16:00"></i><i class="lanes-tick" data-at="0.207" title="fx.rates - 20:00"></i><i class="lanes-tick" data-at="0.373" title="fx.rates - 00:00"></i><i class="lanes-tick" data-at="0.54" title="fx.rates - 04:00"></i><i class="lanes-tick" data-at="0.707" title="fx.rates - 08:00"></i><i class="lanes-tick" data-at="0.873" title="fx.rates - 12:00"></i></td></tr>
+		<tr data-highlight="invoices.send-reminders"><th scope="row"><button class="btn btn-text btn-xs" type="button" title="invoices.send-reminders">invoices.send-reminders</button></th><td><i class="lanes-tick" data-at="0.667" title="invoices.send-reminders - 07:00"></i></td></tr>
 	</tbody>
 </table>
 <table class="table" aria-label="Agents">
@@ -5736,6 +5737,7 @@ Series without a tone take the chart colors by their column.
 		<tr data-highlight="mail.queue"><td class="font-monospace">mail.queue</td><td>Every minute</td></tr>
 		<tr data-highlight="backup.nightly"><td class="font-monospace">backup.nightly</td><td>02:00</td></tr>
 		<tr data-highlight="fx.rates"><td class="font-monospace">fx.rates</td><td>16:00</td></tr>
+		<tr data-highlight="invoices.send-reminders"><td class="font-monospace">invoices.send-reminders</td><td>07:00</td></tr>
 	</tbody>
 </table>
 ```
@@ -8039,7 +8041,7 @@ The bar over a list that shows when rows are checked: how many, and what can be 
 
 ## Examples
 
-Plain buttons in the bar take its tint; the one suggested action stays `btn-subtle-primary`, and clearing the selection is a quiet icon button at the end. Inside a `data-select` the library hides the bar at zero and writes its count into a `data-select-count` - see [checked rows](table.md#table-selection).
+Plain buttons in the bar stand on the page's ground over its tint; a toned button keeps its own colors, and the one suggested action stays `btn-subtle-primary`; clearing the selection is a quiet icon button at the end. Inside a `data-select` the library hides the bar at zero and writes its count into a `data-select-count` - see [checked rows](table.md#table-selection).
 
 ```html
 <div class="selection-bar" role="region" aria-label="Selected excursions">

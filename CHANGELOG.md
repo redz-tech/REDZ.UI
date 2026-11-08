@@ -26,6 +26,11 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - A region with `data-lazy` in a closed popover or dialog counted as shown: it loaded with the page and never asked
   again after a refusal. It now loads when the popover or the dialog opens.
 - The README still named `redz:expand` for a tree's lazy group, which 0.19.0 replaced with `redz:load`.
+- A toned button in a `selection-bar` - `btn-primary`, any subtle or outline tone - took the bar's white ground under
+  its own words, and a disabled one lost its look; only a plain button takes that ground now.
+- A link or a button in a row header of a board of `lanes` was cut by the header instead of ending in an ellipsis, ran
+  into the room at the header's end and lost its focus ring; it now shrinks to the header, ends in an ellipsis - its
+  `title` gives the whole name - and draws its ring inside itself.
 
 ## 0.19.0 - 2026-11-08
 

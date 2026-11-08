@@ -6,7 +6,7 @@ The bar over a list that shows when rows are checked: how many, and what can be 
 
 ## Examples
 
-Plain buttons in the bar take its tint; the one suggested action stays `btn-subtle-primary`, and clearing the selection is a quiet icon button at the end. Inside a `data-select` the library hides the bar at zero and writes its count into a `data-select-count` - see [checked rows](table.md#table-selection).
+Plain buttons in the bar stand on the page's ground over its tint; a toned button keeps its own colors, and the one suggested action stays `btn-subtle-primary`; clearing the selection is a quiet icon button at the end. Inside a `data-select` the library hides the bar at zero and writes its count into a `data-select-count` - see [checked rows](table.md#table-selection).
 
 ```html
 <div class="selection-bar" role="region" aria-label="Selected excursions">

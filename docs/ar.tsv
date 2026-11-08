@@ -1132,6 +1132,8 @@ fx.rates - 00:00	fx.rates - 00:00
 fx.rates - 04:00	fx.rates - 04:00
 fx.rates - 08:00	fx.rates - 08:00
 fx.rates - 12:00	fx.rates - 12:00
+invoices.send-reminders	invoices.send-reminders
+invoices.send-reminders - 07:00	invoices.send-reminders - 07:00
 Next run	التشغيل التالي
 Every minute	كل دقيقة
 Days	الأيام
