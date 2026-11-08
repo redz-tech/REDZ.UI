@@ -1,7 +1,7 @@
 // REDZ.UI, shortcuts: a button or link whose aria-keyshortcuts names a combination with Control, Meta or Alt is pressed
 // by it - the page states the keys once, for people and for the machine. Where both Meta+K and Control+K are named,
-// Apple's systems answer Meta and the others Control. A disabled or hidden one, or one outside an open modal dialog, is
-// left alone; a single key is never a shortcut here (WCAG 2.1.4).
+// Apple's systems answer Meta and the others Control. A disabled, hidden or inert one, or one outside an open modal
+// dialog, is left alone; a held combination presses once; a single key is never a shortcut here (WCAG 2.1.4).
 const APPLE = /Mac|iPhone|iPad/.test(navigator.platform);
 const MODIFIERS = ['Control', 'Meta', 'Alt', 'Shift'];
 
@@ -23,18 +23,20 @@ const combinationsOf = (element) => {
 	return all.filter((combination) => !combination.split('+').includes(other) || !all.includes(combination.split('+').map((part) => part === other ? own : part).join('+')));
 };
 
+/** Whether a person could press the element now, in the open modal dialog if there is one. */
+const pressable = (element, modal) => !element.disabled && element.getAttribute('aria-disabled') !== 'true' && element.checkVisibility() && element.closest('[inert]') === null && (modal === null || modal.contains(element));
+
 document.addEventListener('keydown', (event) => {
-	if (event.repeat || !(event.ctrlKey || event.metaKey || event.altKey)) {
+	if (!(event.ctrlKey || event.metaKey || event.altKey)) {
 		return;
 	}
 	const modal = document.querySelector('dialog:modal');
 	for (const element of document.querySelectorAll('button[aria-keyshortcuts], a[href][aria-keyshortcuts]')) {
-		if (element.disabled || element.getAttribute('aria-disabled') === 'true' || !element.checkVisibility() || (modal !== null && !modal.contains(element))) {
-			continue;
-		}
-		if (combinationsOf(element).some((combination) => matches(event, combination))) {
+		if (pressable(element, modal) && combinationsOf(element).some((combination) => matches(event, combination))) {
 			event.preventDefault();
-			element.click();
+			if (!event.repeat) {
+				element.click();
+			}
 			return;
 		}
 	}

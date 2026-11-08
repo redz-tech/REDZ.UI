@@ -36,7 +36,8 @@
 	<p>A button or a link whose <code>aria-keyshortcuts</code> names a combination with <kbd>Control</kbd>, <kbd>Meta</kbd> or <kbd>Alt</kbd> is pressed by it: the page states the keys once, for screen readers and for the library. Where both <code>Meta+K</code> and <code>Control+K</code> are named, Apple's systems answer <kbd>⌘K</kbd> and the others <kbd>Ctrl K</kbd>, so <kbd>Control K</kbd> keeps its meaning in a Mac's text fields; Firefox's own <kbd>Ctrl K</kbd> gives way to the page's.</p>
 	<ul>
 		<li>A single key is never a shortcut here: WCAG 2.1.4 asks for a way to turn such keys off, and a combination needs none.</li>
-		<li>A disabled or hidden button is left alone, and so is one outside an open modal dialog.</li>
+		<li>A disabled, hidden or inert button is left alone, and so is one outside an open modal dialog.</li>
+		<li>A combination held down presses once; its repeats are kept from the browser.</li>
 		<li>The hint the button shows - <kbd>⌘K</kbd> or <kbd>Ctrl K</kbd> - is the page's to write.</li>
 	</ul>
 </section>

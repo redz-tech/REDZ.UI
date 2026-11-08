@@ -76,6 +76,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   past the page's question. The panel the address names comes into view, as at load.
 - A `stretched-link` in a `list-group-item` makes that item its link, and the item's other links and buttons stay their
   own. The item was not the link's box, so the link covered the first screen of the page, wherever the list stood.
+- A shortcut leaves alone a button inside an `inert` region, which it pressed, and keeps a held combination's repeats
+  from the browser: holding the keys of a page's save let the browser's own "Save page" through after the first press.
 
 ## 0.18.2 - 2026-11-06
 

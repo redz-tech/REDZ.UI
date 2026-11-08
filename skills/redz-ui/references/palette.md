@@ -37,7 +37,8 @@ The button opens the dialog by the browser's command and names its keys in `aria
 A button or a link whose `aria-keyshortcuts` names a combination with `Control`, `Meta` or `Alt` is pressed by it: the page states the keys once, for screen readers and for the library. Where both `Meta+K` and `Control+K` are named, Apple's systems answer `⌘K` and the others `Ctrl K`, so `Control K` keeps its meaning in a Mac's text fields; Firefox's own `Ctrl K` gives way to the page's.
 
 - A single key is never a shortcut here: WCAG 2.1.4 asks for a way to turn such keys off, and a combination needs none.
-- A disabled or hidden button is left alone, and so is one outside an open modal dialog.
+- A disabled, hidden or inert button is left alone, and so is one outside an open modal dialog.
+- A combination held down presses once; its repeats are kept from the browser.
 - The hint the button shows - `⌘K` or `Ctrl K` - is the page's to write.
 
 ## Keyboard and accessibility

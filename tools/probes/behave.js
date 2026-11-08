@@ -3219,6 +3219,20 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a list item whose title is a stretched-link: its own edge, its button, the next item and the place under the list give ' + say(got) + ' - the link should take its item only, and its button stay its own');
 			}
 		}]},
+		shortcuts: {target: '#palette-demo', steps: [async (out) => {
+			const host = document.createElement('div');
+			host.innerHTML = '<div inert><button type="button" aria-keyshortcuts="Alt+J">Asleep</button></div><button type="button" aria-keyshortcuts="Alt+K">Awake</button>';
+			$('#palette-demo').append(host);
+			const [asleep, awake] = $$('button', host);
+			const pressed = new Map([[asleep, 0], [awake, 0]]);
+			pressed.forEach((count, button) => button.addEventListener('click', () => pressed.set(button, pressed.get(button) + 1)));
+			const key = (letter, repeat = false) => !document.body.dispatchEvent(new KeyboardEvent('keydown', {key: letter, code: 'Key' + letter.toUpperCase(), altKey: true, repeat, bubbles: true, cancelable: true}));
+			const got = {inert: [key('j'), pressed.get(asleep)], press: [key('k'), pressed.get(awake)], held: [key('k', true), pressed.get(awake)]};
+			host.remove();
+			if (say(got) !== say({inert: [false, 0], press: [true, 1], held: [true, 1]})) {
+				out.push('shortcuts, as [prevented, presses]: a button in an inert region ' + say(got.inert) + ', a plain press ' + say(got.press) + ', its held repeat ' + say(got.held) + ' - an inert button is never pressed, and a repeat is kept from the browser without a press');
+			}
+		}]},
 		tipNow: {target: '#tooltip-now', walk: async function* (out) {
 			const tip = () => $('#redz-tooltip')?.matches(':popover-open') ?? false;
 			const spot = async (el) => {
