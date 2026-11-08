@@ -41,12 +41,17 @@ const FLOOR_FUSES = [
 	['css', "/* floor-allow selector:open -- two lines away */\n\ndetails:open { color: red; }", 'fuse:3  selector:open (css.selectors.open)'],
 	['css', "/* floor-allow property:color -- nothing to allow */\n.a { color: red; }", 'allows nothing'],
 	['css', ".a { content: \"/* floor-allow selector:open -- in a string */\"; }\ndetails:open { color: red; }", 'selector:open'],
-	['html', '<' . 'button interestfor="tip">Info</button>', 'attribute:button:interestfor'],
 	['html', '<div popover="hint"></div>', 'popover:hint'],
 	['html', '<div style="color: red"></div>', 'style='],
 	['html', '<button commandfor="d" command="show-modal">Open</button>', ''],
 	['html', '<blink>Old</blink>', 'element:blink'],
 ];
+/** The fuses: FLOOR_FUSES and one built by sprintf, so that no literal holds markup an editor checks as HTML. */
+function FLOOR__Fuses(): array
+{
+	return [...FLOOR_FUSES, ['html', sprintf('<%1$s %2$s="tip">Info</%1$s>', 'button', 'interestfor'), 'attribute:button:interestfor']];
+}
+
 const FLOOR_VENDOR = '~^(-[a-z]+-)(.+)$~';
 const FLOOR_ALLOW_COMMENT = '~^floor-allow\b~';
 const FLOOR_USAGE = "usage: php floor.php check [--allow=FILE] [--json] FILE…\n";
@@ -892,12 +897,12 @@ function FLOOR__Judge(array $data, array $allow, array $files, array &$used): ar
 	return $findings;
 }
 
-/** The fuses of FLOOR_FUSES that misfire under every exception of the release: a broken sample let through, or a sound one reported. */
+/** The fuses of FLOOR__Fuses() that misfire under every exception of the release: a broken sample let through, or a sound one reported. */
 function FLOOR__SelfTest(array $data): array
 {
 	$failures = [];
 	$allow = FLOOR__ReleaseAllow($data, FLOOR_SCOPES);
-	foreach (FLOOR_FUSES as [$kind, $sample, $expect]) {
+	foreach (FLOOR__Fuses() as [$kind, $sample, $expect]) {
 		$used = [];
 		$lines = array_map('FLOOR__FindingLine', FLOOR__FileFindings($sample, $kind, 'fuse', $data, $allow, $used));
 		$findings = implode("\n", $lines);

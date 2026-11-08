@@ -3,7 +3,7 @@
 // versions of tools/floor/rules.json. Usage: php tools/floor.php check [FILE…] | build | refresh [VERSION]
 // check - reports each feature the floor lacks as file:line, exits 1 on any, when floor.json is out of date, and when an
 // exception or a repair of rules.json is outgrown; with files (.css, .html), checks just them; either way first proves
-// itself on the fuses of FLOOR_FUSES, and the release's checker tools/dist/floor.php on its command line;
+// itself on the fuses of FLOOR__Fuses(), and the release's checker tools/dist/floor.php on its command line;
 // build - writes floor.json, every name the gate knows with its verdict at the floor, for the release;
 // refresh - downloads @mdn/browser-compat-data (the version of tools/floor/bcd.tsv, or VERSION), verifies its sha512 and
 // writes tools/floor/bcd.tsv.
@@ -488,7 +488,7 @@ function FLOOR__Check(array $paths): int
 	$root = (string)realpath(FLOOR_ROOT);
 	$used = [];
 	$findings = array_map(fn(string $failure): string => 'tools/floor/floor.php  ' . $failure, FLOOR__SelfTest($data));
-	$fuses = count(FLOOR_FUSES) - count($findings);
+	$fuses = count(FLOOR__Fuses()) - count($findings);
 	$files = [];
 	foreach ([...$rules['css'], ...$rules['html']] as $pattern) {
 		foreach ($paths === [] ? glob($root . '/' . $pattern) ?: [] : [] as $path) {
@@ -514,7 +514,7 @@ function FLOOR__Check(array $paths): int
 		echo $finding, "\n";
 	}
 	$floor = implode(' ', array_map(fn(string $browser): string => $browser . ' ' . $rules['floor'][$browser], FLOOR_BROWSERS));
-	printf("floor %s · BCD %s · %d files · %d exceptions · %d repairs · selftest %d/%d · %s\n", $floor, $data['bcd']['version'], count($files), count($rules['allow']), count($rules['repairs'] ?? []), $fuses, count(FLOOR_FUSES), $findings === [] ? 'CLEAN' : count($findings) . ' findings');
+	printf("floor %s · BCD %s · %d files · %d exceptions · %d repairs · selftest %d/%d · %s\n", $floor, $data['bcd']['version'], count($files), count($rules['allow']), count($rules['repairs'] ?? []), $fuses, count(FLOOR__Fuses()), $findings === [] ? 'CLEAN' : count($findings) . ' findings');
 	return $findings === [] ? 0 : 1;
 }
 
