@@ -8,7 +8,8 @@
 // with the focus. After every selection, the first one too, the tablist fires redz:selected (detail: tab).
 // REDZ.ui.select(tab) chooses a tab from code as a person would, and answers a promise of whether it was selected. A
 // tablist with data-hash follows the address: location.hash naming a panel, or anything inside one, selects its tab -
-// at load and when the hash changes, nested tablists too -, and a choice writes the panel's id into the address.
+// at load, and when the hash changes as a person's choice that redz:select may refuse, which puts the address back;
+// nested tablists too -, and a choice writes the panel's id into the address.
 import {ask} from './answer.js';
 
 const asking = new WeakSet();
@@ -45,8 +46,9 @@ const select = (tab, chosen = false) => {
 	told(tab);
 };
 
-/** Selects the tab a person chose, unless the page refuses it in redz:select; a promise of whether it is selected. */
-const choose = (tab) => {
+/** Selects the tab a person chose, unless the page refuses it in redz:select; a promise of whether it is selected. With
+ *  write false the address stays as it is. */
+const choose = (tab, write = true) => {
 	const list = tab.closest('[role="tablist"]');
 	const from = tabsOf(list).find((one) => one.getAttribute('aria-selected') === 'true') ?? null;
 	if (from === tab || asking.has(list)) {
@@ -54,7 +56,7 @@ const choose = (tab) => {
 	}
 	const [taken, answer] = ask(list, 'redz:select', {tab, from});
 	if (!taken) {
-		select(tab, true);
+		select(tab, write);
 		return Promise.resolve(true);
 	}
 	if (answer === null) {
@@ -64,7 +66,7 @@ const choose = (tab) => {
 	return answer.then((yes) => yes === true).catch(() => false).then((yes) => {
 		asking.delete(list);
 		if (yes) {
-			select(tab, true);
+			select(tab, write);
 		} else if (from !== null && list.contains(document.activeElement)) {
 			from.focus();
 		}
@@ -84,23 +86,41 @@ const named = () => {
 	}
 };
 
-/** Selects the tab of every panel of a tablist with data-hash that holds the element the address names, outermost
- *  first; answers whether one was. */
-const follow = () => {
-	const target = named();
+/** The tab of every panel of a tablist with data-hash that holds the element the address names, outermost first. */
+const tabsNamed = () => {
 	const tabs = [];
-	for (let at = target; at !== null; at = at.parentElement) {
+	for (let at = named(); at !== null; at = at.parentElement) {
 		const tab = at.id === '' ? null : document.querySelector('[role="tab"][aria-controls="' + CSS.escape(at.id) + '"]');
 		if (tab?.closest('[role="tablist"][data-hash]')) {
 			tabs.unshift(tab);
 		}
 	}
-	for (const tab of tabs) {
-		if (tab.getAttribute('aria-selected') !== 'true') {
-			select(tab);
-		}
-	}
+	return tabs;
+};
+
+/** Selects the tabs the address names at load; answers whether it named one. */
+const follow = () => {
+	const tabs = tabsNamed();
+	tabs.filter((tab) => tab.getAttribute('aria-selected') !== 'true').forEach((tab) => select(tab));
 	return tabs.length > 0;
+};
+
+/** A new address chooses its tabs as a person would: one the page refuses puts the address back. */
+const moved = async (event) => {
+	let changed = false;
+	for (const tab of tabsNamed()) {
+		if (tab.getAttribute('aria-selected') === 'true') {
+			continue;
+		}
+		if (!(await choose(tab, false))) {
+			history.replaceState(history.state, '', event.oldURL);
+			return;
+		}
+		changed = true;
+	}
+	if (changed) {
+		named()?.scrollIntoView();
+	}
 };
 
 for (const list of document.querySelectorAll('[role="tablist"]')) {
@@ -115,7 +135,7 @@ if (follow()) {
 	named()?.scrollIntoView();
 }
 
-addEventListener('hashchange', follow);
+addEventListener('hashchange', moved);
 
 document.addEventListener('click', (event) => {
 	const tab = event.target instanceof Element ? event.target.closest('[role="tab"]') : null;

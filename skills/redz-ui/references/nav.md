@@ -91,7 +91,7 @@ tablist.addEventListener('redz:select', (event) => {
 
 ### Tabs in the address
 
-A tablist with `data-hash` follows the address: `location.hash` naming a panel, or anything inside one, selects its tab - when the page loads and when the hash changes, a tablist inside a panel too -, and a person's choice writes the panel's id into the address, so a link or a reload opens the same tab. After every selection, the first one too, the tablist fires `redz:selected` with `detail.tab`. `REDZ.ui.select(tab)` chooses a tab from code as a person would - through `redz:select`, so the page can still refuse - and answers a promise of whether it was selected.
+A tablist with `data-hash` follows the address: `location.hash` naming a panel, or anything inside one, selects its tab - when the page loads, and when the hash changes as a person's choice through `redz:select`, whose refusal puts the address back; a tablist inside a panel too -, and a person's choice writes the panel's id into the address, so a link or a reload opens the same tab. After every selection, the first one too, the tablist fires `redz:selected` with `detail.tab`. `REDZ.ui.select(tab)` chooses a tab from code as a person would - through `redz:select`, so the page can still refuse - and answers a promise of whether it was selected.
 
 ```html
 <div class="nav nav-underline" role="tablist" aria-label="Booking" data-hash>

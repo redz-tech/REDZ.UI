@@ -66,6 +66,9 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - A white label's `--redz-primary-contrast` is black or white by the luminance of `--redz-brand`, so its words read at
   4.5:1 or more on any colour. It went by the colour's lightness and turned white below 0.62, which gave 3.7 to 4.5:1 on
   many mid tones, such as `#4f9453` and `#7a7a7a`.
+- A tablist with `data-hash` takes a new address as a person's choice, through `redz:select`: a page that refuses it,
+  with unsaved edits, keeps its tab and gets the address back. A link to a panel or the back button selected the tab
+  past the page's question. The panel the address names comes into view, as at load.
 
 ## 0.18.2 - 2026-11-06
 

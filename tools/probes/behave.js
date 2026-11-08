@@ -2221,9 +2221,19 @@ window.REDZ_BEHAVE = (() => {
 			const refused = await REDZ.ui.select(tabs[0]);
 			const kept = selected();
 			const taken = await REDZ.ui.select(tabs[0]);
+			const after = selected();
 			list.removeEventListener('redz:selected', hear);
+			const first = '#' + tabs[0].getAttribute('aria-controls');
+			list.addEventListener('redz:select', refuse, {once: true});
+			location.hash = '#nav-hash-payment';
+			await wait(100);
+			const guarded = [selected(), location.hash];
+			list.removeEventListener('redz:select', refuse);
+			if (say(guarded) !== say([0, first])) {
+				out.push('an address the page refuses in redz:select leaves tab ' + guarded[0] + ' and the address ' + say(guarded[1]) + ', not tab 0 and ' + say(first));
+			}
 			history.replaceState(history.state, '', location.pathname + location.search);
-			if (written !== '#nav-hash-payment' || followed !== 2 || refused !== false || kept !== 2 || taken !== true || selected() !== 0 || say(told) !== say([1, 2, 0])) {
+			if (written !== '#nav-hash-payment' || followed !== 2 || refused !== false || kept !== 2 || taken !== true || after !== 0 || say(told) !== say([1, 2, 0])) {
 				out.push('a choice writes ' + say(written) + ', the address selects tab ' + followed + ', a refused select answers ' + refused + ' leaving tab ' + kept + ', a taken one ' + taken + ', and redz:selected told ' + say(told));
 			}
 		}]},
