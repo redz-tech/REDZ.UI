@@ -18,7 +18,7 @@ A column of items in one frame - plain rows, or links and buttons to choose from
 
 ### Links and buttons
 
-`list-group-item-action` makes an item a choice. The current one is `aria-current` - `"page"` for a link to the page shown, `"true"` otherwise; one that cannot be chosen is a `disabled` button, or a link without `href` and with `aria-disabled="true"`.
+`list-group-item-action` makes an item a choice. The current one is `aria-current` - `"page"` for a link to the page shown, `"true"` otherwise; one that cannot be chosen is a `disabled` button, or a link without `href` and with `aria-disabled="true"`. A plain item whose title is a `stretched-link` is that link as a whole, and its other links and buttons stay their own.
 
 ```html
 <nav class="list-group" aria-label="Sites">

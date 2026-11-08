@@ -3196,6 +3196,29 @@ window.REDZ_BEHAVE = (() => {
 				out.push('the second of ' + handles.length + ' handles sharing one menu of moves ' + (open ? 'opens it' : 'does not open it') + ': aria-expanded ' + say(expanded) + ' while it is open, ' + say(closed) + ' after - only the handle that opened it is expanded');
 			}
 		}]},
+		listLink: {target: '#list-group-basic', steps: [async (out) => {
+			const list = document.createElement('ul');
+			list.className = 'list-group';
+			list.innerHTML = '<li class="list-group-item hstack gap-8"><a class="stretched-link flex-fill" href="#list-group-basic">Boat A</a><button class="btn btn-sm" type="button">Call</button></li><li class="list-group-item">Boat B</li>';
+			$('#list-group-basic').append(list);
+			list.scrollIntoView({block: 'center'});
+			const [first, second] = list.children;
+			const link = $('a', first);
+			const button = $('button', first);
+			const at = (x, y) => {
+				const hit = document.elementFromPoint(x, y);
+				return hit === link ? 'the link' : hit === button ? 'the button' : 'not the link';
+			};
+			const own = first.getBoundingClientRect();
+			const next = second.getBoundingClientRect();
+			const press = button.getBoundingClientRect();
+			const outside = list.getBoundingClientRect();
+			const got = [at(own.left + 4, own.top + own.height / 2), at(press.left + press.width / 2, press.top + press.height / 2), at(next.left + next.width / 2, next.top + next.height / 2), at(outside.left + outside.width / 2, outside.bottom + 6)];
+			list.remove();
+			if (got.join(' ') !== 'the link the button not the link not the link') {
+				out.push('a list item whose title is a stretched-link: its own edge, its button, the next item and the place under the list give ' + say(got) + ' - the link should take its item only, and its button stay its own');
+			}
+		}]},
 		tipNow: {target: '#tooltip-now', walk: async function* (out) {
 			const tip = () => $('#redz-tooltip')?.matches(':popover-open') ?? false;
 			const spot = async (el) => {

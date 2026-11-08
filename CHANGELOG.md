@@ -74,6 +74,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - A tablist with `data-hash` takes a new address as a person's choice, through `redz:select`: a page that refuses it,
   with unsaved edits, keeps its tab and gets the address back. A link to a panel or the back button selected the tab
   past the page's question. The panel the address names comes into view, as at load.
+- A `stretched-link` in a `list-group-item` makes that item its link, and the item's other links and buttons stay their
+  own. The item was not the link's box, so the link covered the first screen of the page, wherever the list stood.
 
 ## 0.18.2 - 2026-11-06
 

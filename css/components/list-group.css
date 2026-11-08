@@ -27,6 +27,15 @@
 		border-width: 0;
 	}
 
+	.list-group-item:has(.stretched-link) {
+		position: relative;
+	}
+
+	.list-group-item:has(.stretched-link) :is(a, button, input, select, label):not(.stretched-link) {
+		position: relative;
+		z-index: 2;
+	}
+
 	.list-group-header {
 		padding-block: var(--redz-space-8);
 		background: var(--redz-bg-page);
