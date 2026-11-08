@@ -42,8 +42,12 @@ function MIN__Bytes(string $s, string $set): bool
  */
 function MIN__Refuse(string $reason, string $text, int $at): never
 {
-	$near = strtr(substr($text, max(0, $at - 24), 48), "\r\n\t", '   ');
-	throw new RuntimeException($reason . ' at byte ' . $at . ', line ' . (substr_count($text, "\n", 0, min($at, strlen($text))) + 1) . ': …' . $near . '…', $at);
+	$from = max(0, $at - 24);
+	$near = substr($text, $from, 48);
+	$near = strtr($near, "\r\n\t", '   ');
+	$end = min($at, strlen($text));
+	$line = substr_count($text, "\n", 0, $end) + 1;
+	throw new RuntimeException($reason . ' at byte ' . $at . ', line ' . $line . ': …' . $near . '…', $at);
 }
 
 /** Whether $c is a byte of a CSS name. */
@@ -553,7 +557,7 @@ function MIN__JsJoin(string $root, array $files): string
 		$names = [];
 		$body = [];
 		foreach (explode("\n", (string)file_get_contents($root . '/' . $file)) as $line) {
-			if (preg_match('~^import \{([\w, ]+)\} from \'(?:\./|\.\./[\w-]+/)([\w-]+)\.js\';$~', $line, $m) === 1) {
+			if (preg_match('~^import \{([\w, ]+)} from \'(?:\./|\.\./[\w-]+/)([\w-]+)\.js\';$~', $line, $m) === 1) {
 				$wanted = array_map('trim', explode(',', $m[1]));
 				$missing = array_diff($wanted, $exports[$holder($m[2])] ?? []);
 				if ($missing !== []) {
@@ -769,10 +773,12 @@ function MIN__JsScopes(array $tokens): array
 	$push = function (array $context) use (&$stack): void {
 		$stack[] = $context + ['pos' => '', 'ternary' => 0, 'decl' => null, 'case' => false];
 	};
-	$arrows = function () use (&$stack): void {
+	// Ends the arrows a `,` or a `;` closes; the index of the bracket on top then.
+	$arrows = function () use (&$stack): int {
 		while ($stack[count($stack) - 1]['type'] === 'arrow') {
 			array_pop($stack);
 		}
+		return count($stack) - 1;
 	};
 	for ($t = 0; $t < $count; $t++) {
 		[$kind, $text] = $tokens[$t];
@@ -955,8 +961,7 @@ function MIN__JsScopes(array $tokens): array
 				}
 				break;
 			case ',':
-				$arrows();
-				$k = count($stack) - 1;
+				$k = $arrows();
 				if (in_array($stack[$k]['type'], ['params', 'arrpat'], true)) {
 					$stack[$k]['pos'] = 'binding';
 				} elseif (in_array($stack[$k]['type'], ['object', 'objpat'], true)) {
@@ -967,8 +972,7 @@ function MIN__JsScopes(array $tokens): array
 				}
 				break;
 			case ';':
-				$arrows();
-				$k = count($stack) - 1;
+				$k = $arrows();
 				$stack[$k]['decl'] = null;
 				$stack[$k]['ternary'] = 0;
 				break;

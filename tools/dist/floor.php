@@ -41,7 +41,7 @@ const FLOOR_FUSES = [
 	['css', "/* floor-allow selector:open -- two lines away */\n\ndetails:open { color: red; }", 'fuse:3  selector:open (css.selectors.open)'],
 	['css', "/* floor-allow property:color -- nothing to allow */\n.a { color: red; }", 'allows nothing'],
 	['css', ".a { content: \"/* floor-allow selector:open -- in a string */\"; }\ndetails:open { color: red; }", 'selector:open'],
-	['html', '<button interestfor="tip">Info</button>', 'attribute:button:interestfor'],
+	['html', '<' . 'button interestfor="tip">Info</button>', 'attribute:button:interestfor'],
 	['html', '<div popover="hint"></div>', 'popover:hint'],
 	['html', '<div style="color: red"></div>', 'style='],
 	['html', '<button commandfor="d" command="show-modal">Open</button>', ''],
@@ -77,6 +77,8 @@ function FLOOR__Utf8(int $cp): string
  * The table of floor.json's text: the floor, the BCD version, each name's key and verdicts - by browser, where it falls
  * short, and the browsers that take each vendor form - and the release's exceptions.
  * @return array{floor: array<string, string>, bcd: array<string, string>, names: array<string, array{key: string, verdicts: array<string, string>, prefixes: array<string, array<string, true>>}>, allow: list<array<string, mixed>>}
+ * @throws JsonException when the text is not JSON
+ * @throws RuntimeException when it is not floor.json's shape
  */
 function FLOOR__Table(string $json): array
 {
@@ -128,14 +130,7 @@ function FLOOR__NameVerdict(array $data, string $name, string $browser, string $
 /** The browsers of $live in which every one of $names has full support (with $prefix for the first one). */
 function FLOOR__SupportedIn(array $data, array $live, array $names, string $prefix = ''): array
 {
-	return array_values(array_filter($live, function (string $browser) use ($data, $names, $prefix): bool {
-		foreach ($names as $k => $name) {
-			if (FLOOR__NameVerdict($data, $name, $browser, $k === 0 ? $prefix : '') !== 'full') {
-				return false;
-			}
-		}
-		return true;
-	}));
+	return array_values(array_filter($live, fn(string $browser): bool => array_all($names, fn(string $name, int $k): bool => FLOOR__NameVerdict($data, $name, $browser, $k === 0 ? $prefix : '') === 'full')));
 }
 
 /** The release's exceptions of $scopes, by their id `release#K`, K their place in floor.json. */
@@ -150,7 +145,11 @@ function FLOOR__ReleaseAllow(array $data, array $scopes): array
 	return $allow;
 }
 
-/** The exceptions of an allow file, by their id `file#K`: {"allow": [{"name", "browsers"?, "reason"}]}. */
+/**
+ * The exceptions of an allow file, by their id `file#K`: {"allow": [{"name", "browsers"?, "reason"}]}.
+ * @throws JsonException when the file is not JSON
+ * @throws RuntimeException when it cannot be read or an exception lacks its name or reason
+ */
 function FLOOR__AllowFile(string $path): array
 {
 	$list = json_decode(FLOOR__Read($path), true, 512, JSON_THROW_ON_ERROR);
@@ -194,7 +193,8 @@ function FLOOR__CssAllowComments(string $css, string $file, array &$findings): a
 		if ($c === '/' && ($css[$i + 1] ?? '') === '*') {
 			$end = strpos($css, '*/', $i + 2);
 			$end = $end === false ? $n : $end + 2;
-			$body = trim(substr($css, $i + 2, max(0, $end - $i - 4)));
+			$body = substr($css, $i + 2, max(0, $end - $i - 4));
+			$body = trim($body);
 			$last = $line + substr_count($css, "\n", $i, $end - $i);
 			if (preg_match(FLOOR_ALLOW_COMMENT, $body) === 1) {
 				if (preg_match('~^floor-allow\s+(\S.*?)\s+--\s+(\S.*)$~s', $body, $m) !== 1) {
@@ -477,7 +477,8 @@ function FLOOR__SelectorFacts(array &$facts, array $head, int $line, array $live
 	}
 	$vendor = 0;
 	foreach ($parts as $part) {
-		$vendor += count(array_filter(FLOOR__SelectorNames($part), fn(string $name): bool => str_starts_with($name, 'selector:-'))) > 0 ? 1 : 0;
+		$names = FLOOR__SelectorNames($part);
+		$vendor += count(array_filter($names, fn(string $name): bool => str_starts_with($name, 'selector:-'))) > 0 ? 1 : 0;
 	}
 	if ($vendor > 0 && $vendor < count($parts)) {
 		FLOOR__Fact($facts, 'mixed:vendor-list', $line, $live);
@@ -550,8 +551,11 @@ function FLOOR__SelectorNames(array $tokens): array
 			if ($pseudo === 'not' && in_array(',', array_column($argument, 0), true)) {
 				$names[] = 'selector:not.selector_list';
 			}
-		} elseif (str_starts_with($pseudo, 'nth-') && in_array('of', array_map(fn($v): string => strtolower((string)$v), array_column($argument, 1)), true)) {
-			$names[] = 'selector:' . $pseudo . '.of_syntax';
+		} elseif (str_starts_with($pseudo, 'nth-')) {
+			$words = array_map(fn($v): string => strtolower((string)$v), array_column($argument, 1));
+			if (in_array('of', $words, true)) {
+				$names[] = 'selector:' . $pseudo . '.of_syntax';
+			}
 		}
 	}
 	return array_values(array_unique($names));
@@ -576,11 +580,15 @@ function FLOOR__CssAtRule(string $name, array $prelude, int $line, array $live, 
 		if (in_array('or', $words, true)) {
 			FLOOR__Fact($facts, 'media:or_syntax', $line, $live);
 		}
-	} elseif ($name === 'container' && in_array('style', array_column(array_filter($prelude, fn(array $t): bool => $t[0] === 'function'), 1), true)) {
-		FLOOR__Fact($facts, 'container:style_queries_for_custom_properties', $line, $live);
+	} elseif ($name === 'container') {
+		$functions = array_filter($prelude, fn(array $t): bool => $t[0] === 'function');
+		if (in_array('style', array_column($functions, 1), true)) {
+			FLOOR__Fact($facts, 'container:style_queries_for_custom_properties', $line, $live);
+		}
 	} elseif ($name === 'supports') {
 		$at = 0;
-		$supported = array_values(array_intersect($supported, FLOOR__SupportsTrue($prelude, $at, $data)));
+		$holds = FLOOR__SupportsTrue($prelude, $at, $data);
+		$supported = array_values(array_intersect($supported, $holds));
 	} elseif ($name === 'import') {
 		if (in_array('layer', $words, true)) {
 			FLOOR__Fact($facts, 'import:layer', $line, $live);
@@ -683,7 +691,9 @@ function FLOOR__CssDeclarations(array &$facts, array $declarations, array $live,
 		if ($colon === false) {
 			continue;
 		}
-		$property = strtolower(trim(implode('', array_column(array_slice($tokens, 0, $colon), 1))));
+		$head = array_column(array_slice($tokens, 0, $colon), 1);
+		$property = trim(implode('', $head));
+		$property = strtolower($property);
 		$parsed[] = [$property, array_slice($tokens, $colon + 1), $line];
 		if (preg_match(FLOOR_VENDOR, $property, $m) === 1) {
 			$prefixed[$m[2]][] = $m[1];
@@ -844,7 +854,8 @@ function FLOOR__Findings(array $facts, string $file, array $data, array $allow, 
 		}
 		if ($lacking !== []) {
 			$key = $data['names'][$name]['key'];
-			$findings[] = FLOOR__Finding($file, $line, $name, $name . ' (' . $key . ') - ' . implode(', ', array_map(fn(string $browser, string $verdict): string => $browser . ' ' . $data['floor'][$browser] . ' ' . $verdict, array_keys($lacking), $lacking)), $key, $lacking);
+			$verdicts = array_map(fn(string $browser, string $verdict): string => $browser . ' ' . $data['floor'][$browser] . ' ' . $verdict, array_keys($lacking), $lacking);
+			$findings[] = FLOOR__Finding($file, $line, $name, $name . ' (' . $key . ') - ' . implode(', ', $verdicts), $key, $lacking);
 		}
 	}
 	return $findings;
@@ -885,9 +896,11 @@ function FLOOR__Judge(array $data, array $allow, array $files, array &$used): ar
 function FLOOR__SelfTest(array $data): array
 {
 	$failures = [];
+	$allow = FLOOR__ReleaseAllow($data, FLOOR_SCOPES);
 	foreach (FLOOR_FUSES as [$kind, $sample, $expect]) {
 		$used = [];
-		$findings = implode("\n", array_map('FLOOR__FindingLine', FLOOR__FileFindings($sample, $kind, 'fuse', $data, FLOOR__ReleaseAllow($data, FLOOR_SCOPES), $used)));
+		$lines = array_map('FLOOR__FindingLine', FLOOR__FileFindings($sample, $kind, 'fuse', $data, $allow, $used));
+		$findings = implode("\n", $lines);
 		if ($expect === '' ? $findings !== '' : !str_contains($findings, $expect)) {
 			$failures[] = 'the fuse ' . json_encode($sample, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ($expect === '' ? ' reports ' . $findings : ' does not report ' . $expect);
 		}
