@@ -5000,8 +5000,8 @@
 		"css/redz-ui.min.css": "sha256-IC52A1ybZaKXJ3OqZJAXMi0QgD8/JcEzZ6ezIcItlGM=",
 		"js/floor.min.js": "sha256-SlXScca0xV+TpFCu1YIXMzlHJEnXeX8Az9gukSn5Ph0=",
 		"js/redz-ui-charts.min.js": "sha256-HqbPocHzNMQFYPTyOYpFKxUApCQxtyi2PcI7jqHP0NY=",
-		"js/redz-ui-editor.min.js": "sha256-2SVVM66xgDpIM6QRVEQ3yFa27pvXWZGD28OV6EvMB2s=",
-		"js/redz-ui-qr.min.js": "sha256-7FCALCm0tX48eCQWP4AC+TazM/bkZimGZWDwY/2wV5E=",
-		"js/redz-ui.min.js": "sha256-Y6IcsQXYiS7v5DVOrdJ8HwpwfKk5Vvt11zRFhdGhOLE="
+		"js/redz-ui-editor.min.js": "sha256-CGwo6xTOPzRuM8pvs1M0R35xmG1IgmNIWIiOqBbx9iw=",
+		"js/redz-ui-qr.min.js": "sha256-8AgWz06SWLYwuOCi7FQA6bXBgjJfxeRYx5tFCWlrEts=",
+		"js/redz-ui.min.js": "sha256-LMTyf7Gmsy1P0TojLYJGim0f6Ud+YQ37YpaYbCuInmk="
 	}
 }

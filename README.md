@@ -299,12 +299,18 @@ and `--allow=FILE` reads exceptions for a whole set of files:
   white space are gone;
 - `MIN__JsSafe($js)` - a script squeezed onto one line, proved by its tokens; a newline that is the only separator is
   refused;
-- `MIN__JsNamesSafe($min)` - a squeezed script with short local names, proved token by token. It reads `const`, `let`
-  and arrows and refuses `var`, `function` and `class`: keep the squeezed text where it refuses;
+- `MIN__JsNamesSafe($min)` - a squeezed script with short local names, proved token by token. It reads `const`, `let`,
+  `var`, arrows, functions and their parameters, `arguments`, classes, generators and labels, and refuses `eval`,
+  `with`, a function declared right under a statement or a label, a function declared in a block and read outside it,
+  and a `var` within the reach of a `let`, `const`, `class` or `catch` of its name: keep the squeezed text where it
+  refuses. A `var` or a function declared at the script's top level keeps its name, as a script shares it; a renamed
+  function's or class's `name` property answers its short name;
 - `MIN__JsBlocks([$label => $js, …])` - classic scripts joined, each in a block of its own, for one ES module a page
   links with `type="module"`. It refuses what reads otherwise there: a static `import` or `export`, a `var` or a
   function declared outside any function, `this` outside any function but an arrow, `with`, an HTML-like comment, a
-  legacy octal number or escape;
+  legacy octal number or escape, a function declared in a block and read outside it, and a name another script of the
+  call declares at its top level, whatever their order - "b.js: total is declared at the top of a.js, and a block does
+  not share it - share it through a name both read, such as window.NAME.total at byte N, line L";
 - `MIN__SelfTest()` - the samples it proves itself on that misfire, none when it holds.
 
 A refusal of the input is a `RuntimeException`: `REASON at byte N, line L: …the code around it…`, the byte as its code;

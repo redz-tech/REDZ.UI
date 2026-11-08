@@ -7,6 +7,20 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 ## Unreleased
 
 ### Added
+- The minifier's names pass, `MIN__JsNamesSafe`, reads what classic scripts are made of: `var`, function declarations
+  and expressions with their own names, the parameters of functions that are not arrows - defaults, rests and
+  patterns -, `arguments`, classes with fields, private names, static blocks, accessors and computed keys, getters,
+  setters and computed methods of objects, generators, `for await`, labels, and functions declared in a block. It
+  refuses `eval`, `with`, a function declared right under a statement or a label, a function declared in a block and
+  read outside it, and a `var` within the reach of a `let`, `const`, `class` or `catch` of its name. A `var` or a
+  function declared at the script's top level keeps its name, as a script shares it; a renamed function's or class's
+  `name` property answers its short name. Of the family's 75 classic scripts it names 74, where it named 3; at gzip -9
+  they are 1.5 % over esbuild's `--minify`, where they were 8.9 % over.
+- `MIN__JsBlocks` refuses a script that reads a name another script of the call declares at its top level - by
+  `const`, `let` or `class`, destructured ones too - whatever their order, as each is its block's own in the module:
+  "b.js: total is declared at the top of a.js, and a block does not share it - share it through a name both read, such
+  as window.NAME.total at byte N, line L", the byte in the reading script. The same name at the top of two scripts is
+  not refused. It is exact where the names pass reads the script, and a lexical stand-in elsewhere.
 - `REDZ.ui.more(list, answer)` starts a list's Show more again after the page replaced its items - a refresh, a filter
   its server answered - with what the page knows: `{total}`, `{done: true}`, or `{}` while the total is unknown; a
   question still out is aborted. A server search over the list did it alone until now.
@@ -26,6 +40,14 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - A region with `data-lazy` in a closed popover or dialog counted as shown: it loaded with the page and never asked
   again after a refusal. It now loads when the popover or the dialog opens.
 - The README still named `redz:expand` for a tree's lazy group, which 0.19.0 replaced with `redz:load`.
+- `MIN__JsBlocks` let through a function declared in a block and called outside it, which a classic script binds in
+  the function around the block too and a module does not: the joined module threw a `ReferenceError` there. It is
+  refused now: "LABEL: the function NAME declared in a block is read outside it, where a script reads it and a module
+  does not at byte N, line L".
+- The names pass gave a default parameter the name of a declaration in its function's body, which a default never
+  sees: `(given = outer) => { const outer = 1; … }` read the body's `outer` once named. The body is a scope of its own
+  when the parameters hold expressions. The library's own scripts never read a name that way; only their short names
+  move.
 - A toned button in a `selection-bar` - `btn-primary`, any subtle or outline tone - took the bar's white ground under
   its own words, and a disabled one lost its look; only a plain button takes that ground now.
 - A link or a button in a row header of a board of `lanes` was cut by the header instead of ending in an ellipsis, ran

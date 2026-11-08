@@ -714,11 +714,16 @@ function MIN__JsLex(string $js): array
 
 /**
  * The names of a squeezed script's tokens: which declaration each name token uses - by the scopes of `const`, `let`,
- * arrow parameters, `catch`, `for` heads and blocks - and which names are free, the page's globals. A property, an
- * object key or a word of the language is no use; a shorthand `{a}` is one, which the names pass writes out as
- * `{a:x}`. `var`, `function`, `class`, labels, accessors and methods with computed or modified keys, generators,
- * `import`, `export`, `eval`, `arguments`, and a `for` or `catch` body without braces stop it: the library's scripts
- * have none.
+ * `var`, functions and their parameters, classes, `catch`, `for` heads and blocks - and which names are free, the page's
+ * globals. A `var` and a function declared at a function's top level bind in its body, a `var` of a parameter's name is
+ * the parameter, and the body is a scope of its own when the parameters hold expressions, which never see it. A `var`
+ * or a function declared at the script's top level keeps its name, as a script shares it: it reads as a free name. A
+ * function or class expression's own name is in a scope between the outside and its parameters or body. A property, an
+ * object key, a class member's name, a label or a word of the language is no use; a shorthand `{a}` is one, which the
+ * names pass writes out as `{a:x}`; `arguments` in a function that is not an arrow and `yield` in a generator are words.
+ * `eval`, `with`, `import`, `export`, a function declared in a block or right in a statement, a `var` within the reach
+ * of a `let`, `const`, `class` or `catch` of its name, `arguments` outside any function and `yield` outside a
+ * generator, and a `for` or `catch` body without braces stop it.
  * @param list<array{string, string}> $tokens
  * @return array{uses: array<int, int>, shorthand: array<int, true>, counts: list<int>, scopes: list<?int>, names: list<array<string, int>>, free: array<string, true>}
  */
@@ -743,35 +748,95 @@ function MIN__JsScopes(array $tokens): array
 	if ($open !== []) {
 		throw new RuntimeException('a bracket without its closing', (int)end($open));
 	}
+	// Each scope's parent, names, kind - program, function, arrow, body, static (a class's static block), name, block -
+	// and whether it is a generator's.
 	$scopes = [null];
 	$names = [[]];
+	$kinds = ['program'];
+	$gens = [false];
 	$counts = [];
+	$binds = [];
 	$uses = [];
 	$shorthand = [];
 	$refs = [];
-	$stack = [['type' => 'program', 'scope' => 0, 'bind' => 0, 'pos' => '', 'ternary' => 0, 'decl' => null, 'case' => false]];
+	// The var statements: [name, the scope of the statement, token, the scope it binds in]; the names kept at the top.
+	$sites = [];
+	$tops = [];
+	$stack = [['type' => 'program', 'scope' => 0, 'bind' => 0, 'pos' => '', 'ternary' => 0, 'decl' => null, 'case' => false, 'body' => true, 'bk' => 'lexical', 'site' => 0, 'exprs' => false, 'gen' => false]];
 	$fn = null;
+	$fnExprs = false;
 	$head = null;
 	$colon = false;
-	$scope = function (int $parent) use (&$scopes, &$names): int {
+	$colonAt = -1;
+	$labelAt = -1;
+	$label = false;
+	// The functions declared in a block: [name, the block's scope, token].
+	$blocked = [];
+	$pending = null;
+	$klass = null;
+	$static = false;
+	$scope = function (int $parent, string $kind = 'block', bool $gen = false) use (&$scopes, &$names, &$kinds, &$gens): int {
 		$scopes[] = $parent;
 		$names[] = [];
+		$kinds[] = $kind;
+		$gens[] = $gen;
 		return count($scopes) - 1;
 	};
-	$declare = function (int $in, int $t) use (&$names, &$counts, &$uses, $tokens): void {
+	$declare = function (int $in, int $t, string $as = 'lexical') use (&$names, &$counts, &$uses, &$binds, $tokens): void {
 		$name = $tokens[$t][1];
 		if (in_array($name, MIN_JS_KEYWORDS, true) || in_array($name, MIN_JS_FIXED, true)) {
 			throw new RuntimeException('the word ' . $name . ' is declared', $t);
 		}
-		if (isset($names[$in][$name])) {
-			throw new RuntimeException('the name ' . $name . ' is declared twice in one scope', $t);
+		$id = $names[$in][$name] ?? null;
+		if ($id !== null) {
+			if (in_array($as, ['var', 'function'], true) && in_array($binds[$id], ['var', 'function', 'param'], true)) {
+				$uses[$t] = $id;
+				return;
+			}
+			throw new RuntimeException(in_array($as, ['var', 'function'], true) || in_array($binds[$id], ['var', 'function'], true) ? 'a var or a function and a let, const, class or parameter of the name ' . $name . ' in one scope' : 'the name ' . $name . ' is declared twice in one scope', $t);
 		}
 		$counts[] = 0;
+		$binds[] = $as;
 		$names[$in][$name] = count($counts) - 1;
 		$uses[$t] = count($counts) - 1;
 	};
+	// A var or a function declared at a function's top level: in the body, as the parameter of its name, or kept at the top.
+	$hoist = function (int $t, int $site, string $as) use (&$names, &$uses, &$binds, &$refs, &$tops, &$sites, &$kinds, &$scopes, $tokens, $declare): void {
+		$name = $tokens[$t][1];
+		$target = $site;
+		while ($kinds[$target] === 'block') {
+			$target = $scopes[$target];
+		}
+		if ($as === 'var') {
+			$sites[] = [$name, $site, $t, $target];
+		}
+		if ($target === 0) {
+			$tops[$name] ??= $t;
+			$refs[] = [$t, 0];
+			return;
+		}
+		$params = $kinds[$target] === 'body' ? $scopes[$target] : $target;
+		$id = $names[$params][$name] ?? null;
+		if ($params !== $target && $id !== null && $binds[$id] === 'param') {
+			$uses[$t] = $id;
+			return;
+		}
+		$declare($target, $t, $as);
+	};
+	// Whether a scope is in a function that is not an arrow, or a generator, before a class's static block or the top.
+	$within = function (int $from, bool $generator) use (&$kinds, &$scopes, &$gens): bool {
+		for ($s = $from; $s !== null; $s = $scopes[$s]) {
+			if ($kinds[$s] === 'function') {
+				return !$generator || $gens[$s];
+			}
+			if ($kinds[$s] === 'static' || $kinds[$s] === 'program' || ($generator && $kinds[$s] === 'arrow')) {
+				return false;
+			}
+		}
+		return false;
+	};
 	$push = function (array $context) use (&$stack): void {
-		$stack[] = $context + ['pos' => '', 'ternary' => 0, 'decl' => null, 'case' => false];
+		$stack[] = $context + ['pos' => '', 'ternary' => 0, 'decl' => null, 'case' => false, 'body' => false, 'bk' => 'lexical', 'site' => $context['scope'], 'exprs' => false, 'gen' => false];
 	};
 	// Ends the arrows a `,` or a `;` closes; the index of the bracket on top then.
 	$arrows = function () use (&$stack): int {
@@ -779,6 +844,15 @@ function MIN__JsScopes(array $tokens): array
 			array_pop($stack);
 		}
 		return count($stack) - 1;
+	};
+	// Marks the parameters a default or a computed key stands in: their function's body is a scope of its own.
+	$exprs = function (int $k) use (&$stack): void {
+		while ($k > 0 && in_array($stack[$k]['type'], ['arrpat', 'objpat'], true)) {
+			$k--;
+		}
+		if ($stack[$k]['type'] === 'params') {
+			$stack[$k]['exprs'] = true;
+		}
 	};
 	for ($t = 0; $t < $count; $t++) {
 		[$kind, $text] = $tokens[$t];
@@ -795,11 +869,29 @@ function MIN__JsScopes(array $tokens): array
 		if ($fn !== null && $text !== '=>' && $text !== '{') {
 			throw new RuntimeException('parameters without their => or body', $t);
 		}
-		if ($kind === 'name') {
+		if ($pending !== null && $text !== '(') {
+			throw new RuntimeException('a function without its parameters', $t);
+		}
+		if ($kind === 'name' || $kind === 'private') {
 			if ($prev === '.' || $prev === '?.') {
 				continue;
 			}
+			if ($type === 'class' && $pos === 'key') {
+				$member = in_array($nextKind, ['name', 'string', 'number', 'private'], true) || $next === '[' || $next === '*';
+				if ($kind === 'name' && (($text === 'static' && ($member || $next === '{')) || (in_array($text, ['get', 'set', 'async'], true) && $member))) {
+					$static = $text === 'static' && $next === '{';
+					continue;
+				}
+				$stack[$k]['pos'] = $next === '(' ? 'method' : 'field';
+				continue;
+			}
+			if ($kind === 'private') {
+				continue;
+			}
 			if (($type === 'object' || $type === 'objpat') && $pos === 'key') {
+				if ($type === 'object' && in_array($text, ['get', 'set', 'async'], true) && (in_array($nextKind, ['name', 'string', 'number'], true) || $next === '[' || $next === '*')) {
+					continue;
+				}
 				if ($next === ':') {
 					$stack[$k]['pos'] = 'colon';
 				} elseif ($next === '(' && $type === 'object') {
@@ -807,13 +899,13 @@ function MIN__JsScopes(array $tokens): array
 				} elseif ($next === ',' || $next === '}' || $next === '=') {
 					$shorthand[$t] = true;
 					if ($type === 'objpat') {
-						$declare($top['bind'], $t);
+						$top['bk'] === 'var' ? $hoist($t, $top['site'], 'var') : $declare($top['bind'], $t, $top['bk']);
 					} else {
 						$refs[] = [$t, $top['scope']];
 					}
 					$stack[$k]['pos'] = 'after';
 				} else {
-					throw new RuntimeException('the key ' . $text . ' before ' . $next . ': accessors and modified methods are not read here', $t);
+					throw new RuntimeException('the key ' . $text . ' before ' . $next . ' is not read here', $t);
 				}
 				continue;
 			}
@@ -822,17 +914,57 @@ function MIN__JsScopes(array $tokens): array
 				if ($text === 'import' && $next === '.' && ($tokens[$t + 2][1] ?? '') === 'meta') {
 					continue;
 				}
-				if (in_array($text, ['var', 'function', 'class', 'with', 'import', 'export', 'yield', 'enum'], true)) {
+				if (in_array($text, ['with', 'import', 'export', 'enum'], true)) {
 					throw new RuntimeException($text . ' is not read by the names pass', $t);
 				}
-				if (($text === 'break' || $text === 'continue') && $nextKind === 'name') {
-					throw new RuntimeException('a label', $t);
+				if ($text === 'yield') {
+					if (!$within($top['scope'], true)) {
+						throw new RuntimeException('yield outside a generator', $t);
+					}
+					continue;
 				}
-				if ($text === 'const' || $text === 'let') {
+				if (($text === 'break' || $text === 'continue') && $nextKind === 'name') {
+					$t++;
+					continue;
+				}
+				if ($text === 'function' || $text === 'class') {
+					$at = $prev === 'async' && $text === 'function' ? $t - 2 : $t - 1;
+					$before = $tokens[$at][1] ?? '';
+					$statement = in_array($type, ['program', 'block'], true) && ($at < 0 || in_array($before, ['', ';', '{', '}', ')', 'else', 'do'], true) || $at === $colonAt || $at === $labelAt);
+					$gen = $text === 'function' && $next === '*';
+					$last = $gen ? $t + 1 : $t;
+					$named = ($tokens[$last + 1][0] ?? '') === 'name' && ($tokens[$last + 1][1] ?? '') !== 'extends';
+					if ($statement && $text === 'function' && (in_array($before, [')', 'else', 'do'], true) || ($at >= 0 && $at === $labelAt))) {
+						throw new RuntimeException('a function declared right in a statement or under a label', $t);
+					}
+					if ($statement && !$named) {
+						throw new RuntimeException('a ' . $text . ' declared without its name', $t);
+					}
+					$inner = $top['scope'];
+					if ($statement && $text === 'function' && $top['body']) {
+						$hoist($last + 1, $top['scope'], 'function');
+					} elseif ($statement && $text === 'function') {
+						$declare($top['scope'], $last + 1, 'block');
+						$blocked[] = [$tokens[$last + 1][1], $top['scope'], $last + 1];
+					} elseif ($statement) {
+						$declare($top['scope'], $last + 1);
+					} elseif ($named) {
+						$inner = $scope($top['scope'], 'name');
+						$declare($inner, $last + 1, 'name');
+					}
+					if ($text === 'function') {
+						$pending = ['parent' => $inner, 'gen' => $gen];
+					} else {
+						$klass = ['scope' => $inner, 'depth' => count($stack)];
+					}
+					$t = $named ? $last + 1 : $last;
+					continue;
+				}
+				if ($text === 'const' || $text === 'let' || $text === 'var') {
 					if (!in_array($type, ['program', 'block', 'forhead'], true)) {
 						throw new RuntimeException($text . ' outside a block', $t);
 					}
-					$stack[$k]['decl'] = ['scope' => $top['scope'], 'pos' => 'binding'];
+					$stack[$k]['decl'] = ['scope' => $top['scope'], 'pos' => 'binding', 'var' => $text === 'var'];
 				} elseif ($text === 'case' || ($text === 'default' && $next === ':')) {
 					$stack[$k]['case'] = true;
 				} elseif ($text === 'in' && $type === 'forhead' && $declPos === 'after') {
@@ -844,24 +976,35 @@ function MIN__JsScopes(array $tokens): array
 				$stack[$k]['decl'] = null;
 				continue;
 			}
-			if ($text === 'async' && ($next === '(' || ($nextKind === 'name' && ($tokens[$t + 2][1] ?? '') === '=>'))) {
+			if ($text === 'async' && ($next === '(' || $next === 'function' || ($nextKind === 'name' && ($tokens[$t + 2][1] ?? '') === '=>'))) {
 				continue;
 			}
-			if ($text === 'arguments' || $text === 'eval') {
-				throw new RuntimeException($text . ' is not read by the names pass', $t);
+			if ($text === 'eval') {
+				throw new RuntimeException('eval is not read by the names pass', $t);
+			}
+			if ($text === 'arguments') {
+				if (!$within($top['scope'], false)) {
+					throw new RuntimeException('arguments outside a function that is not an arrow', $t);
+				}
+				continue;
+			}
+			if ($next === ':' && in_array($type, ['program', 'block'], true) && $top['ternary'] === 0 && !$top['case'] && $declPos === '') {
+				$label = true;
+				continue;
 			}
 			if ($next === '=>') {
-				$fn = $scope($top['scope']);
-				$declare($fn, $t);
+				$fn = $scope($top['scope'], 'arrow');
+				$fnExprs = false;
+				$declare($fn, $t, 'param');
 				continue;
 			}
 			if (in_array($type, ['params', 'arrpat', 'objpat', 'catch'], true) && $pos === 'binding') {
-				$declare($top['bind'], $t);
+				$top['bk'] === 'var' ? $hoist($t, $top['site'], 'var') : $declare($top['bind'], $t, $top['bk']);
 				$stack[$k]['pos'] = 'after';
 				continue;
 			}
 			if ($declPos === 'binding') {
-				$declare($top['decl']['scope'], $t);
+				$top['decl']['var'] ? $hoist($t, $top['decl']['scope'], 'var') : $declare($top['decl']['scope'], $t);
 				$stack[$k]['decl']['pos'] = 'after';
 				continue;
 			}
@@ -869,7 +1012,9 @@ function MIN__JsScopes(array $tokens): array
 			continue;
 		}
 		if ($kind === 'string' || $kind === 'number') {
-			if (($type === 'object' || $type === 'objpat') && $pos === 'key') {
+			if ($type === 'class' && $pos === 'key') {
+				$stack[$k]['pos'] = $next === '(' ? 'method' : 'field';
+			} elseif (($type === 'object' || $type === 'objpat') && $pos === 'key') {
 				$stack[$k]['pos'] = $next === '(' ? 'method' : 'colon';
 			}
 			continue;
@@ -891,13 +1036,23 @@ function MIN__JsScopes(array $tokens): array
 			continue;
 		}
 		$binding = (in_array($type, ['params', 'arrpat', 'objpat', 'catch'], true) && $pos === 'binding') || $declPos === 'binding';
+		// A pattern opened here binds as its declaration or the pattern around it does.
+		$pattern = $declPos === 'binding' ? ['bind' => $top['decl']['scope'], 'bk' => $top['decl']['var'] ? 'var' : 'lexical', 'site' => $top['decl']['scope']] : ['bind' => $top['bind'], 'bk' => $top['bk'], 'site' => $top['site']];
 		switch ($text) {
 			case '{':
 				if ($fn !== null) {
-					$push(['type' => 'block', 'scope' => $fn, 'bind' => $fn]);
+					$body = $fnExprs ? $scope($fn, 'body') : $fn;
+					$push(['type' => 'block', 'scope' => $body, 'bind' => $body, 'body' => true]);
 					$fn = null;
+				} elseif ($static && $type === 'class') {
+					$static = false;
+					$inner = $scope($top['scope'], 'static');
+					$push(['type' => 'block', 'scope' => $inner, 'bind' => $inner, 'body' => true]);
+				} elseif ($klass !== null && count($stack) === $klass['depth']) {
+					$push(['type' => 'class', 'scope' => $klass['scope'], 'bind' => $klass['scope'], 'pos' => 'key']);
+					$klass = null;
 				} elseif ($binding) {
-					$push(['type' => 'objpat', 'scope' => $top['scope'], 'bind' => $declPos === 'binding' ? $top['decl']['scope'] : $top['bind'], 'pos' => 'key']);
+					$push(['type' => 'objpat', 'scope' => $top['scope'], 'pos' => 'key'] + $pattern);
 					if ($declPos === 'binding') {
 						$stack[$k]['decl']['pos'] = 'after';
 					} else {
@@ -913,32 +1068,42 @@ function MIN__JsScopes(array $tokens): array
 				break;
 			case '[':
 				if ($binding) {
-					$push(['type' => 'arrpat', 'scope' => $top['scope'], 'bind' => $declPos === 'binding' ? $top['decl']['scope'] : $top['bind'], 'pos' => 'binding']);
+					$push(['type' => 'arrpat', 'scope' => $top['scope'], 'pos' => 'binding'] + $pattern);
 					if ($declPos === 'binding') {
 						$stack[$k]['decl']['pos'] = 'after';
 					} else {
 						$stack[$k]['pos'] = 'after';
 					}
 				} else {
-					if (($type === 'object' || $type === 'objpat') && $pos === 'key') {
-						$stack[$k]['pos'] = 'colon';
+					if (in_array($type, ['object', 'objpat', 'class'], true) && $pos === 'key') {
+						$stack[$k]['pos'] = $type === 'class' ? 'computed' : 'colon';
+						if ($type === 'objpat') {
+							$exprs($k);
+						}
 					}
 					$push(['type' => 'array', 'scope' => $top['scope'], 'bind' => $top['bind']]);
 				}
 				break;
 			case '(':
-				if ($type === 'object' && $pos === 'colon') {
-					throw new RuntimeException('a method with a computed key is not read here', $t);
-				}
-				if (($prev === 'for' || $prev === 'catch') && !in_array($tokens[$t - 2][1] ?? '', ['.', '?.'], true)) {
+				if ($pending !== null) {
+					$inner = $scope($pending['parent'], 'function', $pending['gen']);
+					$push(['type' => 'params', 'scope' => $inner, 'bind' => $inner, 'pos' => 'binding', 'bk' => 'param']);
+					$pending = null;
+				} elseif (($prev === 'for' || $prev === 'catch' || ($prev === 'await' && ($tokens[$t - 2][1] ?? '') === 'for')) && !in_array($tokens[$t - ($prev === 'await' ? 3 : 2)][1] ?? '', ['.', '?.'], true)) {
 					$inner = $scope($top['scope']);
-					$push(['type' => $prev === 'for' ? 'forhead' : 'catch', 'scope' => $inner, 'bind' => $inner, 'pos' => $prev === 'for' ? '' : 'binding']);
-				} elseif (($tokens[$match[$t] + 1][1] ?? '') === '=>' || ($type === 'object' && $pos === 'method')) {
-					if ($type === 'object') {
+					$push(['type' => $prev === 'catch' ? 'catch' : 'forhead', 'scope' => $inner, 'bind' => $inner, 'pos' => $prev === 'catch' ? 'binding' : '']);
+				} elseif (($tokens[$match[$t] + 1][1] ?? '') === '=>' || ($type === 'object' && ($pos === 'method' || ($pos === 'colon' && $prev === ']'))) || ($type === 'class' && in_array($pos, ['method', 'computed'], true))) {
+					$arrow = ($tokens[$match[$t] + 1][1] ?? '') === '=>';
+					if ($type === 'object' && !$arrow) {
 						$stack[$k]['pos'] = 'after';
+					} elseif ($type === 'class' && !$arrow) {
+						$stack[$k]['pos'] = 'key';
 					}
-					$inner = $scope($top['scope']);
-					$push(['type' => 'params', 'scope' => $inner, 'bind' => $inner, 'pos' => 'binding']);
+					$inner = $scope($top['scope'], $arrow ? 'arrow' : 'function', !$arrow && $top['gen']);
+					$stack[$k]['gen'] = false;
+					$push(['type' => 'params', 'scope' => $inner, 'bind' => $inner, 'pos' => 'binding', 'bk' => 'param']);
+				} elseif ($type === 'object' && $pos === 'colon') {
+					throw new RuntimeException('a ( after a key and before its :', $t);
 				} else {
 					$push(['type' => 'paren', 'scope' => $top['scope'], 'bind' => $top['bind']]);
 				}
@@ -953,6 +1118,7 @@ function MIN__JsScopes(array $tokens): array
 				}
 				if ($closed['type'] === 'params') {
 					$fn = $closed['scope'];
+					$fnExprs = $closed['exprs'];
 				} elseif ($closed['type'] === 'forhead' || $closed['type'] === 'catch') {
 					if ($next !== '{') {
 						throw new RuntimeException('a for or catch body without braces', $t);
@@ -975,11 +1141,17 @@ function MIN__JsScopes(array $tokens): array
 				$k = $arrows();
 				$stack[$k]['decl'] = null;
 				$stack[$k]['ternary'] = 0;
+				if ($stack[$k]['type'] === 'class') {
+					$stack[$k]['pos'] = 'key';
+				}
 				break;
 			case '=':
 				if (in_array($type, ['params', 'arrpat', 'objpat', 'catch'], true) && $pos === 'after') {
 					$stack[$k]['pos'] = 'expr';
+					$exprs($k);
 				} elseif ($type === 'object' && $pos === 'after') {
+					$stack[$k]['pos'] = 'value';
+				} elseif ($type === 'class' && in_array($pos, ['field', 'computed'], true)) {
 					$stack[$k]['pos'] = 'value';
 				}
 				if ($declPos === 'after') {
@@ -995,6 +1167,11 @@ function MIN__JsScopes(array $tokens): array
 					$fn = null;
 				}
 				break;
+			case '*':
+				if (in_array($type, ['object', 'class'], true) && $pos === 'key') {
+					$stack[$k]['gen'] = true;
+				}
+				break;
 			case '?':
 				$stack[$k]['ternary']++;
 				break;
@@ -1003,7 +1180,11 @@ function MIN__JsScopes(array $tokens): array
 					array_pop($stack);
 				}
 				$k = count($stack) - 1;
-				if ($stack[$k]['ternary'] > 0) {
+				if ($label) {
+					$label = false;
+					$colon = true;
+					$labelAt = $t;
+				} elseif ($stack[$k]['ternary'] > 0) {
 					$stack[$k]['ternary']--;
 				} elseif ($stack[$k]['type'] === 'object' && $stack[$k]['pos'] === 'colon') {
 					$stack[$k]['pos'] = 'value';
@@ -1012,8 +1193,9 @@ function MIN__JsScopes(array $tokens): array
 				} elseif ($stack[$k]['case']) {
 					$stack[$k]['case'] = false;
 					$colon = true;
+					$colonAt = $t;
 				} else {
-					throw new RuntimeException('a label or a stray :', $t);
+					throw new RuntimeException('a stray :', $t);
 				}
 				break;
 			case '...':
@@ -1025,14 +1207,30 @@ function MIN__JsScopes(array $tokens): array
 				break;
 		}
 	}
-	if (count($stack) !== 1 || $fn !== null) {
-		throw new RuntimeException('the script ends inside a bracket or a function', max(0, $count - 1));
+	if (count($stack) !== 1 || $fn !== null || $pending !== null || $klass !== null) {
+		throw new RuntimeException('the script ends inside a bracket, a function or a class', max(0, $count - 1));
+	}
+	foreach ($tops as $name => $t) {
+		if (isset($names[0][$name])) {
+			throw new RuntimeException('a var or a function and a let, const or class of the name ' . $name . ' at the top', $t);
+		}
+	}
+	foreach ($sites as [$name, $site, $t, $target]) {
+		for ($s = $site; $s !== $target; $s = $scopes[$s]) {
+			if (isset($names[$s][$name])) {
+				throw new RuntimeException('a var in the reach of a let, const, class or catch of the name ' . $name, $t);
+			}
+		}
 	}
 	$free = [];
+	// The scopes each reference passed before it found its declaration, the one it found included.
+	$passed = [];
 	foreach ($refs as [$t, $from]) {
 		$name = $tokens[$t][1];
 		$uses[$t] = -1;
+		$passed[$t] = [];
 		for ($s = $from; $s !== null; $s = $scopes[$s]) {
+			$passed[$t][$s] = true;
 			if (isset($names[$s][$name])) {
 				$uses[$t] = $names[$s][$name];
 				break;
@@ -1040,6 +1238,19 @@ function MIN__JsScopes(array $tokens): array
 		}
 		if ($uses[$t] === -1) {
 			$free[$name] = true;
+		}
+	}
+	// A script also binds a function declared in a block in the function around it, where a module does not: a name read
+	// there, outside the block, would read another thing in each.
+	foreach ($blocked as [$name, $block, $at]) {
+		$target = $block;
+		while ($kinds[$target] === 'block') {
+			$target = $scopes[$target];
+		}
+		foreach ($refs as [$t]) {
+			if ($tokens[$t][1] === $name && isset($passed[$t][$target])) {
+				throw new RuntimeException('the function ' . $name . ' declared in a block is read outside it, where a script reads it and a module does not', $t);
+			}
 		}
 	}
 	foreach ($uses as $use) {
@@ -1253,26 +1464,182 @@ function MIN__JsBlockCheck(string $js): void
 }
 
 /**
+ * What a script for MIN__JsBlocks declares at its top level - by const, let and class, outside every function, block and
+ * bracket, destructured ones too - and the names it reads that it does not declare, each at the byte of its first read.
+ * Exact where MIN__JsScopes reads the script, which also refuses a function declared in a block and read outside it. Where
+ * it does not, a lexical stand-in: a read is a name used as a reference - not after . or ?., not an object key - that
+ * the script declares nowhere, so a script that declares a name anywhere never reads it from another.
+ * @return array{top: array<string, true>, reads: array<string, int>}
+ */
+function MIN__JsBlockNames(string $js): array
+{
+	$tokens = MIN__JsLex($js);
+	try {
+		$a = MIN__JsScopes($tokens);
+	} catch (RuntimeException $e) {
+		if (str_contains($e->getMessage(), 'declared in a block is read outside it')) {
+			MIN__Refuse($e->getMessage(), $js, $tokens[$e->getCode()][2] ?? strlen($js));
+		}
+		$a = null;
+	}
+	$reads = [];
+	if ($a !== null) {
+		foreach ($a['uses'] as $t => $use) {
+			if ($use === -1) {
+				$reads[$tokens[$t][1]] ??= $tokens[$t][2];
+			}
+		}
+		return ['top' => array_fill_keys(array_keys($a['names'][0]), true), 'reads' => $reads];
+	}
+	$count = count($tokens);
+	$match = [];
+	$open = [];
+	foreach ($tokens as $t => [$kind, $text]) {
+		if (($kind === 'punctuator' && in_array($text, [')', ']', '}'], true)) || ($kind === 'template' && $text[0] === '}')) {
+			if ($open !== []) {
+				$match[array_pop($open)] = $t;
+			}
+		}
+		if (($kind === 'punctuator' && in_array($text, ['(', '[', '{'], true)) || ($kind === 'template' && str_ends_with($text, '${'))) {
+			$open[] = $t;
+		}
+	}
+	// The token after an expression that starts at $j: the next `,` or `;` outside its brackets, or $end.
+	$skip = function (int $j, int $end) use ($tokens, $match): int {
+		while ($j < $end && !in_array($tokens[$j][1], [',', ';'], true)) {
+			$j = isset($match[$j]) ? $match[$j] + 1 : $j + 1;
+		}
+		return $j;
+	};
+	// The names a binding at $i declares - a name, an object or array pattern, a list of parameters - and the token after it.
+	$bind = function (int $i) use (&$bind, $tokens, $match, $skip): array {
+		[$kind, $text] = $tokens[$i] ?? ['', ''];
+		if ($kind === 'name') {
+			return [[$text], $i + 1];
+		}
+		if (!in_array($text, ['{', '[', '('], true) || !isset($match[$i])) {
+			return [[], $i + 1];
+		}
+		$names = [];
+		$end = $match[$i];
+		for ($j = $i + 1; $j < $end;) {
+			if ($tokens[$j][1] === ',') {
+				$j++;
+				continue;
+			}
+			if ($tokens[$j][1] === '...') {
+				$j++;
+			}
+			if ($text === '{' && ($tokens[$j + 1][1] ?? '') === ':') {
+				$j += 2;
+			} elseif ($text === '{' && $tokens[$j][1] === '[' && isset($match[$j]) && ($tokens[$match[$j] + 1][1] ?? '') === ':') {
+				$j = $match[$j] + 2;
+			}
+			[$more, $after] = $bind($j);
+			array_push($names, ...$more);
+			$j = ($tokens[$after][1] ?? '') === '=' ? $skip($after + 1, $end) : max($after, $j + 1);
+		}
+		return [$names, $end + 1];
+	};
+	// The names a const, let or var declares, from the token after the word.
+	$declares = function (int $i) use ($bind, $skip, $tokens, $count): array {
+		$names = [];
+		while ($i < $count) {
+			[$more, $i] = $bind($i);
+			array_push($names, ...$more);
+			if (($tokens[$i][1] ?? '') === '=') {
+				$i = $skip($i + 1, $count);
+			}
+			if (($tokens[$i][1] ?? '') !== ',') {
+				break;
+			}
+			$i++;
+		}
+		return $names;
+	};
+	$top = [];
+	$declared = [];
+	$depth = 0;
+	foreach ($tokens as $t => [$kind, $text, $at]) {
+		$prev = $tokens[$t - 1] ?? ['', '', 0];
+		$property = $prev[1] === '.' || $prev[1] === '?.';
+		$fresh = $t === 0 || in_array($prev[1], [';', '}'], true) || str_contains(substr($js, $prev[2], $at - $prev[2]), "\n");
+		$names = [];
+		if ($kind === 'name' && !$property && in_array($text, ['const', 'let', 'var'], true)) {
+			$names = $declares($t + 1);
+		} elseif ($kind === 'name' && !$property && ($text === 'function' || $text === 'class')) {
+			$n = ($tokens[$t + 1][1] ?? '') === '*' ? $t + 2 : $t + 1;
+			$names = ($tokens[$n][0] ?? '') === 'name' && $tokens[$n][1] !== 'extends' ? [$tokens[$n][1]] : [];
+		} elseif ($kind === 'name' && ($tokens[$t + 1][1] ?? '') === '=>') {
+			$names = [$text];
+		} elseif ($text === '(' && isset($match[$t]) && (($tokens[$match[$t] + 1][1] ?? '') === '=>' || (($tokens[$match[$t] + 1][1] ?? '') === '{' && (($prev[0] === 'name' && (!in_array($prev[1], MIN_JS_HEADS, true) || $prev[1] === 'catch')) || $prev[1] === ']')))) {
+			$names = $bind($t)[0];
+		}
+		array_push($declared, ...$names);
+		if ($depth === 0 && $fresh && in_array($text, ['const', 'let', 'class'], true) && $kind === 'name' && !$property) {
+			array_push($top, ...$names);
+		}
+		if (($kind === 'punctuator' && in_array($text, ['(', '[', '{'], true)) || ($kind === 'template' && str_ends_with($text, '${'))) {
+			$depth++;
+		}
+		if (($kind === 'punctuator' && in_array($text, [')', ']', '}'], true)) || ($kind === 'template' && $text[0] === '}')) {
+			$depth--;
+		}
+	}
+	$declared = array_flip($declared);
+	foreach ($tokens as $t => [$kind, $text, $at]) {
+		$prev = $tokens[$t - 1][1] ?? '';
+		$key = ($tokens[$t + 1][1] ?? '') === ':' && in_array($prev, ['{', ','], true);
+		if ($kind === 'name' && !isset($declared[$text]) && !$key && !in_array($prev, ['.', '?.', 'break', 'continue'], true) && !in_array($text, MIN_JS_KEYWORDS, true) && !in_array($text, MIN_JS_FIXED, true)) {
+			$reads[$text] ??= $at;
+		}
+	}
+	return ['top' => array_fill_keys($top, true), 'reads' => $reads];
+}
+
+/**
  * Classic scripts joined, each in a block of its own and in their order, for one ES module - the file a page links with
  * type="module". A script that reads otherwise in a block of a module is refused: "LABEL: REASON at byte N, line L", the
- * byte of that script as the code. The joined text goes through MIN__JsSafe and then, where it can, MIN__JsNamesSafe.
+ * byte of that script as the code. So is a script that reads a name another script declares at its top level - in
+ * classic scripts the page's, in a module its block's own - whatever their order, and a function declared in a block and
+ * read outside it, which a script also binds in the function around the block and a module does not. The same name at
+ * the top of two scripts is each block's own. The joined text goes through MIN__JsSafe and then, where it can,
+ * MIN__JsNamesSafe.
  * @param array<string, string> $scripts the text of each script by the label a refusal names it with
  */
 function MIN__JsBlocks(array $scripts): string
 {
 	$blocks = [];
+	$facts = [];
 	foreach ($scripts as $label => $js) {
 		try {
 			MIN__JsBlockCheck($js);
+			$facts[$label] = MIN__JsBlockNames($js);
 		} catch (RuntimeException $e) {
 			throw new RuntimeException($label . ': ' . $e->getMessage(), $e->getCode(), $e);
 		}
 		$blocks[] = "{\n" . $js . "\n}";
 	}
+	foreach ($facts as $reader => $fact) {
+		asort($fact['reads']);
+		foreach ($fact['reads'] as $name => $at) {
+			foreach ($facts as $owner => $other) {
+				if ((string)$owner === (string)$reader || !isset($other['top'][$name])) {
+					continue;
+				}
+				try {
+					MIN__Refuse($name . ' is declared at the top of ' . $owner . ', and a block does not share it - share it through a name both read, such as window.NAME.' . $name, $scripts[$reader], $at);
+				} catch (RuntimeException $e) {
+					throw new RuntimeException($reader . ': ' . $e->getMessage(), $e->getCode(), $e);
+				}
+			}
+		}
+	}
 	return implode("\n", $blocks) . "\n";
 }
 
-// The samples the passes prove themselves on: [pass, text, 'gives' and the output, or 'refuses' and a part of the refusal].
+// The samples the passes prove themselves on: [pass, text - for blocks, a text or the scripts by label -, 'gives' and the
+// output, or 'refuses' and a part of the refusal].
 const MIN_FUSES = [
 	['css', ".a { color: red; }\n/* c */ .b  .c { margin: 0 auto; }", 'gives', '.a{color:red}.b .c{margin:0 auto}'],
 	['css', '.a{color:url(x)}', 'refuses', 'an unquoted url( at byte 12, line 1'],
@@ -1288,7 +1655,26 @@ const MIN_FUSES = [
 	['js', 'const a = `open ${b}', 'refuses', 'a template runs to the end of the script at byte 10'],
 	['js', 'const a = /open', 'refuses', 'a pattern runs to the end of the script at byte 10'],
 	['names', 'const longName=1;console.log(longName);', 'gives', 'const o=1;console.log(o);'],
-	['names', 'var a=1;', 'refuses', 'var is not read by the names pass at byte 0'],
+	['names', 'var longName=1;function helper(){return longName;}', 'gives', 'var longName=1;function helper(){return longName;}'],
+	['names', 'const f=()=>{return twice(1);function twice(value){return value*2;}};', 'gives', 'const t=()=>{return n(1);function n(r){return r*2;}};'],
+	['names', 'const f=function self(count){return count?self(count-1):0;};', 'gives', 'const c=function t(n){return n?t(n-1):0;};'],
+	['names', 'const f=function(first,{second,third=1}={},...rest){var first;var other=first;return other+second+third+rest.length;};', 'gives', 'const e=function(n,{second:r,third:t=1}={},...a){var n;var c=n;return c+r+t+a.length;};'],
+	['names', 'const f=function(){return arguments.length;};', 'gives', 'const n=function(){return arguments.length;};'],
+	['names', 'const f=(given=outer)=>{const outer=1;return given+outer;};', 'gives', 'const o=(t=outer)=>{const n=1;return t+n;};'],
+	['names', 'class Box{#size=1;static count=0;static{Box.count=1;}constructor(value){this.value=value;}get size(){return this.#size;}set size(next){this.#size=next;}[Symbol.iterator](){return [].values();}*items(){yield this.value;}}', 'gives', 'class s{#size=1;static count=0;static{s.count=1;}constructor(t){this.value=t;}get size(){return this.#size;}set size(t){this.#size=t;}[Symbol.iterator](){return[].values();}*items(){yield this.value;}}'],
+	['names', 'const A=class Named extends Base{static make(){return new Named();}};', 'gives', 'const s=class e extends Base{static make(){return new e();}};'],
+	['names', 'const o={get size(){return 1;},set size(next){},[key](value){return value;},*items(){yield 1;},async load(url){return url;}};', 'gives', 'const t={get size(){return 1;},set size(e){},[key](e){return e;},*items(){yield 1;},async load(e){return e;}};'],
+	['names', 'const g=function*(){yield 1;};const h=async function*(){yield 2;};', 'gives', 'const n=function*(){yield 1;};const c=async function*(){yield 2;};'],
+	['names', 'const f=()=>{outer:for(const row of rows){for(const cell of row){if(cell){break outer;}}}};', 'gives', 'const f=()=>{outer:for(const o of rows){for(const r of o){if(r){break outer;}}}};'],
+	['names', 'const f=(flag)=>{if(flag){function inner(){return 1;}return inner();}};', 'gives', 'const t=(n)=>{if(n){function r(){return 1;}return r();}};'],
+	['names', 'const f=(flag)=>{if(flag){function inner(){}}return inner;};', 'refuses', 'the function inner declared in a block is read outside it, where a script reads it and a module does not at byte 52, line 1'],
+	['names', 'const f=()=>{if(a)function g(){}};', 'refuses', 'a function declared right in a statement or under a label at byte 18'],
+	['names', 'const f=()=>{let shared;{var shared;}};', 'refuses', 'a var or a function and a let, const, class or parameter of the name shared in one scope at byte 29'],
+	['names', 'const f=()=>{try{}catch(error){var error;}};', 'refuses', 'a var in the reach of a let, const, class or catch of the name error at byte 35'],
+	['names', 'const f=()=>arguments;', 'refuses', 'arguments outside a function that is not an arrow at byte 12'],
+	['names', 'const f=()=>{yield;};', 'refuses', 'yield outside a generator at byte 13'],
+	['names', 'const f=()=>eval(code);', 'refuses', 'eval is not read by the names pass at byte 12'],
+	['names', 'const f=async()=>{for await(const value of stream){use(value);}};', 'gives', 'const a=async()=>{for await(const s of stream){use(s);}};'],
 	['names', 'const f=()=>{let x=1;let x=2;};', 'refuses', 'the name x is declared twice in one scope at byte 25, line 1'],
 	['blocks', '(function () { var x = 1; })();', 'gives', "{\n(function () { var x = 1; })();\n}\n"],
 	['blocks', 'const w = function () { for (var i = 0; i < 2; i++) {} };', 'gives', "{\nconst w = function () { for (var i = 0; i < 2; i++) {} };\n}\n"],
@@ -1308,6 +1694,15 @@ const MIN_FUSES = [
 	['blocks', "const s = '\\1';", 'refuses', 'a.js: an octal escape is an error'],
 	['blocks', 'if (a) {', 'refuses', 'a.js: a { without its closing at byte 7'],
 	['blocks', '}', 'refuses', 'a.js: a } without its opening at byte 0'],
+	['blocks', ['a.js' => 'const total = 1;', 'b.js' => 'console.log(total);'], 'refuses', 'b.js: total is declared at the top of a.js, and a block does not share it - share it through a name both read, such as window.NAME.total at byte 12, line 1'],
+	['blocks', ['a.js' => 'const f = () => total;', 'b.js' => 'const total = 1;'], 'refuses', 'a.js: total is declared at the top of b.js, and a block does not share it - share it through a name both read, such as window.NAME.total at byte 16'],
+	['blocks', ['a.js' => 'const {total, more: [x]} = o; class Box {}', 'b.js' => 'f(x);'], 'refuses', 'b.js: x is declared at the top of a.js'],
+	['blocks', ['a.js' => 'const total = 1;', 'b.js' => 'const total = 2; console.log(total);'], 'gives', "{\nconst total = 1;\n}\n{\nconst total = 2; console.log(total);\n}\n"],
+	['blocks', ['a.js' => 'eval(""); const {total} = o; class Box {}', 'b.js' => 'new Box();'], 'refuses', 'b.js: Box is declared at the top of a.js, and a block does not share it - share it through a name both read, such as window.NAME.Box at byte 4'],
+	['blocks', ['a.js' => 'const total = 1;', 'b.js' => 'eval("x"); f(total);'], 'refuses', 'b.js: total is declared at the top of a.js, and a block does not share it - share it through a name both read, such as window.NAME.total at byte 13'],
+	['blocks', ['a.js' => 'const total = 1;', 'b.js' => 'eval("x"); (function () { var total = 2; f(total); })();'], 'gives', "{\nconst total = 1;\n}\n{\neval(\"x\"); (function () { var total = 2; f(total); })();\n}\n"],
+	['blocks', '(function () { if (a) { function g() {} } g(); })();', 'refuses', 'a.js: the function g declared in a block is read outside it, where a script reads it and a module does not at byte 42'],
+	['blocks', '(function () { if (a) { function g() {} g(); } })();', 'gives', "{\n(function () { if (a) { function g() {} g(); } })();\n}\n"],
 ];
 
 /** The fuses of MIN_FUSES that misfire: a sample that gives another output, or a refusal that is not the one expected. */
@@ -1320,7 +1715,7 @@ function MIN__SelfTest(): array
 				'css' => MIN__CssSafe($text),
 				'js' => MIN__JsSafe($text),
 				'names' => MIN__JsNamesSafe($text),
-				'blocks' => MIN__JsBlocks(['a.js' => $text]),
+				'blocks' => MIN__JsBlocks(is_array($text) ? $text : ['a.js' => $text]),
 			};
 			$wrong = $expect !== 'gives' || $got !== $what ? 'gives ' . json_encode($got, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) : '';
 		} catch (RuntimeException $e) {
