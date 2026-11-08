@@ -3232,13 +3232,16 @@ window.REDZ_BEHAVE = (() => {
 			await settled();
 			box.scrollTop = 120;
 			await settled();
+			// WebKit fires a page scroll that moves nothing when it rounds a page left at a fraction of a pixel, as a trackpad leaves it.
+			document.dispatchEvent(new Event('scroll'));
+			await settled();
 			const kept = $('#redz-tooltip')?.matches(':popover-open') ?? false;
 			scrollBy({top: 80, behavior: 'instant'});
 			await settled();
 			const hidden = !($('#redz-tooltip')?.matches(':popover-open') ?? false);
 			box.remove();
 			if (!kept || !hidden) {
-				out.push('a tooltip ' + (kept ? 'stays' : 'hides') + ' while a box elsewhere scrolls, and ' + (hidden ? 'hides' : 'stays') + ' when the page scrolls its element away');
+				out.push('a tooltip ' + (kept ? 'stays' : 'hides') + ' while a box elsewhere scrolls or the page sends a scroll that moves nothing, and ' + (hidden ? 'hides' : 'stays') + ' when the page scrolls its element away');
 			}
 		}]},
 		titleBack: {target: '#tooltip-title', steps: [async (out) => {
