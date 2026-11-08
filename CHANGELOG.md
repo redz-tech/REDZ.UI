@@ -33,6 +33,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - A selection the page puts in later or marks with `data-select` later is watched as one at load; a check's
   `disabled`, `checked` or `hidden` and an item's `hidden` set by code are read again. A check hidden by code inside
   the selection leaves the count as one a filter hides does, and is checked again when it shows.
+- The one action a `selection-bar` suggests is a `btn-primary`, as the docs and the list demo show it now: a
+  `btn-subtle-primary` stands on the bar's own tint and reads as words, not a button.
 
 ### Fixed
 - Show more moved the focus to the first new item's first link or button, and took an item that is itself a button
@@ -53,6 +55,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - A link or a button in a row header of a board of `lanes` was cut by the header instead of ending in an ellipsis, ran
   into the room at the header's end and lost its focus ring; it now shrinks to the header, ends in an ellipsis - its
   `title` gives the whole name - and draws its ring inside itself.
+- The list demo screen ran wider than its card, and the page scrolled sideways, in a window between about 1080 and
+  1280 px wide: its section, price and sites columns now show from `lg:`, its changed and status columns from `md:`.
 
 ## 0.19.0 - 2026-11-08
 
