@@ -206,6 +206,17 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   an 8 px margin at the start. The same holds in print.
 - A shortcut leaves alone a button inside an `inert` region, which it pressed, and keeps a held combination's repeats
   from the browser: holding the keys of a page's save let the browser's own "Save page" through after the first press.
+- A `list-group-flush` right in a `card`, under its header, gives its rows the card's 16 px at the sides, as Bootstrap
+  does: its rows' words stood against the card's edge (since 0.2.0). Inside a `card-body`, which has its own room, the
+  rows stay flush.
+- An `alert` keeps its icon beside its words in a narrow box, such as a dialog on a phone: below about 320 px its words
+  wrapped under the icon, which stood alone on a line above them.
+- A `selection-bar` in a narrow box with more than one action keeps its clear button on the line of its count, at the
+  end, and its buttons wrap below them: the clear button, last, wrapped onto a line of its own at the start.
+- A busy region's words stand on a ground of the region's color, as wide as they are: they spanned the region over the
+  dimmed words under them, which on a narrow region read through them.
+- A tooltip hides on a scroll only when the scroll moves its element: any box scrolling anywhere hid it, so a log with
+  `data-follow` taking a line, or a page nudged by a pixel, closed the tooltip a reader was on.
 
 ## 0.18.2 - 2026-11-06
 

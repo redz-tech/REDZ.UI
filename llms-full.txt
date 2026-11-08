@@ -2965,7 +2965,7 @@ Buttons that act without a line of the page's script: copy a value, print the pa
 
 ```html
 		<pre class="docs-code w-100" id="commands-download-text" tabindex="0">Boat A	12 trips	286 seats
-Boat C	9 trips	201 seats</pre>
+Boat C	 9 trips	201 seats</pre>
 		<button class="btn" type="button" command="--download" aria-controls="commands-download-text" data-file="boats.txt"><i class="bi bi-download" aria-hidden="true"></i>Download the report</button>
 ```
 
@@ -6309,10 +6309,10 @@ What a job printed, line by line as it runs, and what changed between two versio
 <ol class="step-list max-h-160 overflow-auto max-w-320" id="log-steps-list" tabindex="0" aria-label="Updating the site" data-follow="current">
 	<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Download</li>
 	<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Compare every file</li>
-	<li data-state="current" aria-current="step"><span class="spinner-border" aria-hidden="true"></span>Apply the changes</li>
-	<li data-state="ready"><i class="bi bi-circle" aria-hidden="true"></i>Check the schema</li>
-	<li data-state="ready"><i class="bi bi-circle" aria-hidden="true"></i>Clear the caches</li>
-	<li data-state="ready"><i class="bi bi-circle" aria-hidden="true"></i>Switch to the new version</li>
+	<li data-state="current" aria-current="step"><i class="bi bi-arrow-repeat" aria-hidden="true"></i>Apply the changes</li>
+	<li data-state="pending"><i class="bi bi-circle" aria-hidden="true"></i>Check the schema</li>
+	<li data-state="pending"><i class="bi bi-circle" aria-hidden="true"></i>Clear the caches</li>
+	<li data-state="pending"><i class="bi bi-circle" aria-hidden="true"></i>Switch to the new version</li>
 </ol>
 <div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="log-step" aria-controls="log-steps-list">Next step</button></div>
 ```
@@ -7928,7 +7928,7 @@ What `busy()` sets, written by hand - the overlay appears 400 ms after the page 
 
 From [`css/components/busy.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/busy.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-bg`, `--redz-primary`, `--redz-space-16`, `--redz-text`, `--redz-fs-14`, `--redz-space-4`, `--redz-text-muted`.
+It reads the theme's `--redz-bg`, `--redz-primary`, `--redz-space-16`, `--redz-space-2`, `--redz-space-8`, `--redz-radius-6`, `--redz-text`, `--redz-fs-14`, `--redz-space-4`, `--redz-text-muted`.
 
 # Save bar
 
@@ -8061,7 +8061,7 @@ Plain buttons in the bar take its tint; the one suggested action stays `btn-subt
 
 From [`css/components/selection-bar.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/selection-bar.css). It declares `--redz-btn-bg` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-8`, `--redz-space-16`, `--redz-border`, `--redz-primary-subtle`, `--redz-bg`.
+It reads the theme's `--redz-space-8`, `--redz-space-16`, `--redz-border`, `--redz-primary-subtle`, `--redz-bg`, `--redz-control-height-sm`.
 
 # Navs and tabs
 

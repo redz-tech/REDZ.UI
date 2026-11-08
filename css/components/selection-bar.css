@@ -12,4 +12,23 @@
 	.selection-bar > .btn:not(.btn-subtle-primary, .btn-text) {
 		--redz-btn-bg: var(--redz-bg);
 	}
+
+	.selection-bar:has(> .btn-icon:last-child) {
+		position: relative;
+		container-type: inline-size;
+	}
+
+	@container (inline-size < 30rem) {
+		.selection-bar:has(> :nth-child(4)) > :first-child {
+			flex-basis: calc(100% - var(--redz-control-height-sm) - var(--redz-space-8));
+			min-block-size: var(--redz-control-height-sm);
+			align-content: center;
+		}
+
+		.selection-bar:has(> :nth-child(4)) > .btn-icon:last-child {
+			position: absolute;
+			inset-block-start: var(--redz-space-8);
+			inset-inline-end: var(--redz-space-16);
+		}
+	}
 }

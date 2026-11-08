@@ -34,7 +34,7 @@
 	}
 
 	.alert > div {
-		flex: 1 1 16rem;
+		flex: 1 1 min(16rem, 100% - 1.125rem - var(--redz-space-12));
 		min-inline-size: 0;
 	}
 
@@ -77,6 +77,6 @@
 
 @layer utilities {
 	.alert > .vstack {
-		flex-basis: 16rem;
+		flex-basis: min(16rem, 100% - 1.125rem - var(--redz-space-12));
 	}
 }

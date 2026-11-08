@@ -36,7 +36,12 @@
 		z-index: 2;
 		inset-block-start: calc(min(50%, 12rem) + 1.25rem);
 		inset-inline: 0;
-		padding-inline: var(--redz-space-16);
+		inline-size: fit-content;
+		max-inline-size: calc(100% - 2 * var(--redz-space-16));
+		margin-inline: auto;
+		padding: var(--redz-space-2) var(--redz-space-8);
+		border-radius: var(--redz-radius-6);
+		background: var(--redz-bg);
 		color: var(--redz-text);
 		font-size: var(--redz-fs-14);
 		text-align: center;

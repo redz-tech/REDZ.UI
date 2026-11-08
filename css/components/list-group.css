@@ -131,6 +131,10 @@
 		padding-inline: var(--redz-space-12);
 	}
 
+	.card > .list-group-flush > .list-group-item {
+		padding-inline: var(--redz-space-16);
+	}
+
 	.list-group-numbered {
 		counter-reset: list-group;
 	}

@@ -494,7 +494,7 @@
 					</div>
 					<div class="docs-example" id="commands-download-report">
 						<pre class="docs-code w-100" id="commands-download-text" tabindex="0">Boat A	12 trips	286 seats
-Boat C	9 trips	201 seats</pre>
+Boat C	 9 trips	201 seats</pre>
 						<button class="btn" type="button" command="--download" aria-controls="commands-download-text" data-file="boats.txt"><i class="bi bi-download" aria-hidden="true"></i>تنزيل التقرير</button>
 					</div>
 					<div class="docs-example" id="commands-print-page">
@@ -1835,7 +1835,7 @@ Boat C	9 trips	201 seats</pre>
 							<li class="list-group-item text-muted" data-filter-empty="" hidden="">لا توجد رحلة بهذه الكلمات.</li>
 						</ul>
 					</div>
-					<div class="docs-example docs-example-stack" id="list-group-states">
+					<div class="docs-example docs-example-stack" id="list-group-filter-buttons-example">
 						<div class="hstack flex-wrap gap-8" role="group" aria-label="عرض الحجوزات">
 							<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" value="" aria-pressed="true">الكل<span class="chip-count" data-filter-count=""></span></button>
 							<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" value="paid" aria-pressed="false">مدفوع<span class="chip-count" data-filter-count=""></span></button>
@@ -1856,7 +1856,7 @@ Boat C	9 trips	201 seats</pre>
 							<li class="list-group-item text-muted" data-filter-empty="" hidden="">لا يطابق أي حجز.</li>
 						</ul>
 					</div>
-					<div class="docs-example docs-example-stack" id="list-group-server">
+					<div class="docs-example docs-example-stack" id="list-group-server-example">
 						<search class="hstack flex-wrap gap-8" aria-label="الطلبات">
 							<div class="form-adorn flex-1"><i class="bi bi-search" aria-hidden="true"></i><input class="form-control" type="search" name="q" data-filter="list-group-server-list" data-filter-server="" aria-label="البحث في الطلبات" placeholder="الموضوع أو الشخص" autocomplete="off"></div>
 							<select class="form-select w-auto" name="status" aria-label="الحالة"><option value="">أي حالة</option><option value="open">فتح</option><option value="closed">مغلقة</option></select>
@@ -1867,7 +1867,7 @@ Boat C	9 trips	201 seats</pre>
 							<li class="list-group-item">فاتورة ثانية لحجز واحد</li>
 						</ul>
 					</div>
-					<div class="docs-example docs-example-stack" id="list-group-more">
+					<div class="docs-example docs-example-stack" id="list-group-more-example">
 						<section class="card" aria-labelledby="list-group-more-title">
 							<div class="card-header"><h2 class="fs-14" id="list-group-more-title">نقاط الالتقاء</h2></div>
 							<ul class="list-group list-group-flush" id="list-group-more-list" data-docs-more="">
@@ -2625,10 +2625,10 @@ Boat C	9 trips	201 seats</pre>
 						<ol class="step-list max-h-160 overflow-auto max-w-320" id="log-steps-list" tabindex="0" aria-label="تحديث الموقع" data-follow="current">
 							<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>التنزيل</li>
 							<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>قارن كل ملف</li>
-							<li data-state="current" aria-current="step"><span class="spinner-border" aria-hidden="true"></span>تطبيق التغييرات</li>
-							<li data-state="ready"><i class="bi bi-circle" aria-hidden="true"></i>فحص المخطط</li>
-							<li data-state="ready"><i class="bi bi-circle" aria-hidden="true"></i>امسح الذاكرة المؤقتة</li>
-							<li data-state="ready"><i class="bi bi-circle" aria-hidden="true"></i>الانتقال إلى الإصدار الجديد</li>
+							<li data-state="current" aria-current="step"><i class="bi bi-arrow-repeat" aria-hidden="true"></i>تطبيق التغييرات</li>
+							<li data-state="pending"><i class="bi bi-circle" aria-hidden="true"></i>فحص المخطط</li>
+							<li data-state="pending"><i class="bi bi-circle" aria-hidden="true"></i>امسح الذاكرة المؤقتة</li>
+							<li data-state="pending"><i class="bi bi-circle" aria-hidden="true"></i>الانتقال إلى الإصدار الجديد</li>
 						</ol>
 						<div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="log-step" aria-controls="log-steps-list">الخطوة التالية</button></div>
 					</div>

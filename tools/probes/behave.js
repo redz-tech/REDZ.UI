@@ -2955,6 +2955,66 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a list item as a link: a click on its words follows ' + byText + ' times, on its button ' + (byButton - byText) + ' more; its cover ' + say(cover) + ' (text stays selectable); compact padding ' + pad);
 			}
 		}]},
+		flushInCard: {target: '#list-group-more-example', steps: [async (out) => {
+			for (const list of $$('.card > .list-group-flush')) {
+				const header = $(':scope > .card-header', list.parentElement);
+				const edge = (element) => {
+					const box = element.getBoundingClientRect();
+					const style = getComputedStyle(element);
+					return style.direction === 'rtl' ? box.right - parseFloat(style.paddingRight) : box.left + parseFloat(style.paddingLeft);
+				};
+				const item = $(':scope > .list-group-item', list);
+				if (header !== null && item !== null && Math.abs(edge(item) - edge(header)) > 1) {
+					out.push('a flush list right in a card (' + (list.id || list.parentElement.id || list.parentElement.getAttribute('aria-labelledby')) + '): its rows\' words start ' + Math.round(edge(item) - edge(header)) + ' px from its header\'s');
+				}
+			}
+		}]},
+		alertNarrow: {target: '#alert-tones', steps: [async (out) => {
+			const host = document.body.appendChild(Object.assign(document.createElement('div'), {dir: 'ltr'}));
+			host.style.inlineSize = '280px';
+			host.innerHTML = '<div class="alert alert-danger"><i class="bi bi-x-octagon" aria-hidden="true"></i><div>This cannot be undone.</div></div><div class="alert alert-primary"><i class="bi bi-stars" aria-hidden="true"></i><div class="vstack gap-8"><strong>A shorter title</strong><p>It fits the search results.</p></div></div>';
+			await settled();
+			for (const alert of $$('.alert', host)) {
+				const [icon, words] = [$(':scope > .bi', alert).getBoundingClientRect(), $(':scope > div', alert).getBoundingClientRect()];
+				if (words.left < icon.right || words.top > icon.bottom) {
+					out.push('an alert 280 px wide puts its words ' + (words.top > icon.bottom ? 'under' : 'over') + ' its icon, not beside it');
+				}
+			}
+			host.remove();
+		}]},
+		selectionBarNarrow: {target: '#selection-bar-list', steps: [async (out) => {
+			const host = document.body.appendChild(Object.assign(document.createElement('div'), {dir: 'ltr'}));
+			host.style.inlineSize = '360px';
+			host.append($('#selection-bar-list .selection-bar').cloneNode(true));
+			const short = document.body.appendChild(Object.assign(document.createElement('div'), {dir: 'ltr'}));
+			short.style.inlineSize = '360px';
+			short.innerHTML = '<div class="selection-bar"><strong>2 selected</strong><button class="btn btn-sm" type="button">Write</button><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Clear"><i class="bi bi-x" aria-hidden="true"></i></button></div>';
+			await settled();
+			const bar = $('.selection-bar', host);
+			const [label, close] = [bar.firstElementChild.getBoundingClientRect(), bar.lastElementChild.getBoundingClientRect()];
+			const edge = bar.getBoundingClientRect().right - close.right;
+			const one = $('.selection-bar', short);
+			const lines = Math.round((one.getBoundingClientRect().height - 16) / one.lastElementChild.getBoundingClientRect().height);
+			if (Math.abs((label.top + label.bottom) / 2 - (close.top + close.bottom) / 2) > 2 || Math.abs(edge - 16) > 1 || lines !== 1) {
+				out.push('a selection bar 360 px wide: its clear button ' + Math.round((close.top + close.bottom - label.top - label.bottom) / 2) + ' px off its count\'s line, ' + Math.round(edge) + ' px from the end; a bar of one action takes ' + lines + ' lines');
+			}
+			host.remove();
+			short.remove();
+		}]},
+		busyWordsGround: {target: '#busy-region-words', steps: [async (out) => {
+			const host = document.body.appendChild(Object.assign(document.createElement('div'), {className: 'region', dir: 'ltr'}));
+			host.style.inlineSize = '360px';
+			host.setAttribute('aria-busy', 'true');
+			host.innerHTML = '<p>base-2026-11-08.sql · 2.4 MB</p><p>files-2026-11-08.tar · 380 MB</p><span class="busy-words">Preparing the download…</span>';
+			await settled();
+			const words = $('.busy-words', host);
+			const ground = getComputedStyle(words).backgroundColor;
+			const wide = words.getBoundingClientRect().width;
+			if (ground === 'rgba(0, 0, 0, 0)' || ground === 'transparent' || wide > 300) {
+				out.push('a busy region\'s words stand ' + (wide > 300 ? 'across the region' : 'on no ground of their own') + ', over the dimmed words under them');
+			}
+			host.remove();
+		}]},
 		actionBar: {target: '#app-action-bar-example', steps: [async (out) => {
 			const bar = $('#app-action-bar-example .action-bar');
 			const style = getComputedStyle(bar);
@@ -3125,6 +3185,27 @@ window.REDZ_BEHAVE = (() => {
 			await wait(3000);
 			if (!open || !said || tip.matches(':popover-open')) {
 				out.push('a tap on a disabled control ' + (open ? 'shows' : 'does not show') + ' its title, ' + (said ? 'says' : 'does not say') + ' it, and ' + (tip?.matches(':popover-open') ? 'keeps it past' : 'hides it after') + ' three seconds');
+			}
+		}]},
+		tipScroll: {target: '#tooltip-title [aria-disabled="true"][title]', steps: [async (out) => {
+			const button = $('#tooltip-title [aria-disabled="true"][title]');
+			button.scrollIntoView({block: 'center', behavior: 'instant'});
+			const box = document.body.appendChild(Object.assign(document.createElement('div'), {className: 'overflow-auto'}));
+			box.style.blockSize = '40px';
+			box.append(Object.assign(document.createElement('div'), {textContent: 'A box that scrolls by itself'}));
+			box.firstElementChild.style.blockSize = '400px';
+			await settled();
+			button.dispatchEvent(new PointerEvent('pointerup', {bubbles: true, pointerType: 'touch'}));
+			await settled();
+			box.scrollTop = 120;
+			await settled();
+			const kept = $('#redz-tooltip')?.matches(':popover-open') ?? false;
+			scrollBy({top: 80, behavior: 'instant'});
+			await settled();
+			const hidden = !($('#redz-tooltip')?.matches(':popover-open') ?? false);
+			box.remove();
+			if (!kept || !hidden) {
+				out.push('a tooltip ' + (kept ? 'stays' : 'hides') + ' while a box elsewhere scrolls, and ' + (hidden ? 'hides' : 'stays') + ' when the page scrolls its element away');
 			}
 		}]},
 		titleBack: {target: '#tooltip-title', steps: [async (out) => {

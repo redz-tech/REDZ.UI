@@ -150,6 +150,7 @@ window.REDZ_PROBE = (() => {
 				edits: [...document.querySelectorAll('.inline-edit-form')].filter((form) => document.getElementById(form.dataset.for || '') === null).slice(0, 8).map(name),
 				grips: [...document.querySelectorAll('.drag-handle')].filter((grip) => grip.closest('[data-reorder]') === null || grip.closest('[data-value]') === null).slice(0, 8).map(name),
 				uploads: [...document.querySelectorAll('.upload')].filter((upload) => ['input[type="file"]', '.upload-zone', 'template', '.upload-list'].some((part) => upload.querySelector(part) === null)).slice(0, 8).map(name),
+				twins: [...new Set([...document.querySelectorAll('[id]')].map((el) => el.id).filter((id, i, all) => id !== '' && all.indexOf(id) !== i))].slice(0, 8).map((id) => '#' + id),
 				comboboxes: [...document.querySelectorAll('input[role="combobox"][aria-controls]')].flatMap((input) => {
 					const list = document.getElementById(input.getAttribute('aria-controls') || '');
 					if (list === null) {

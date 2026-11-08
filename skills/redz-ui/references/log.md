@@ -44,10 +44,10 @@ What a job printed, line by line as it runs, and what changed between two versio
 <ol class="step-list max-h-160 overflow-auto max-w-320" id="log-steps-list" tabindex="0" aria-label="Updating the site" data-follow="current">
 	<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Download</li>
 	<li data-state="done"><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Compare every file</li>
-	<li data-state="current" aria-current="step"><span class="spinner-border" aria-hidden="true"></span>Apply the changes</li>
-	<li data-state="ready"><i class="bi bi-circle" aria-hidden="true"></i>Check the schema</li>
-	<li data-state="ready"><i class="bi bi-circle" aria-hidden="true"></i>Clear the caches</li>
-	<li data-state="ready"><i class="bi bi-circle" aria-hidden="true"></i>Switch to the new version</li>
+	<li data-state="current" aria-current="step"><i class="bi bi-arrow-repeat" aria-hidden="true"></i>Apply the changes</li>
+	<li data-state="pending"><i class="bi bi-circle" aria-hidden="true"></i>Check the schema</li>
+	<li data-state="pending"><i class="bi bi-circle" aria-hidden="true"></i>Clear the caches</li>
+	<li data-state="pending"><i class="bi bi-circle" aria-hidden="true"></i>Switch to the new version</li>
 </ol>
 <div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="log-step" aria-controls="log-steps-list">Next step</button></div>
 ```

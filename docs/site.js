@@ -160,11 +160,17 @@
 		'log-step': (button) => {
 			const steps = [...document.getElementById(button.getAttribute('aria-controls')).children];
 			const at = steps.findIndex((step) => step.hasAttribute('aria-current'));
-			const next = steps[(at + 1) % steps.length];
-			steps[at].removeAttribute('aria-current');
-			steps[at].dataset.state = 'done';
-			next.setAttribute('aria-current', 'step');
-			next.dataset.state = 'current';
+			const icons = {done: 'bi-check-circle-fill', current: 'bi-arrow-repeat', pending: 'bi-circle'};
+			const now = (at + 1) % steps.length;
+			steps.forEach((step, n) => {
+				const state = n < now ? 'done' : (n === now ? 'current' : 'pending');
+				step.dataset.state = state;
+				step.toggleAttribute('aria-current', state === 'current');
+				if (state === 'current') {
+					step.setAttribute('aria-current', 'step');
+				}
+				step.querySelector(':scope > .bi').className = 'bi ' + icons[state];
+			});
 		},
 		'alert-fill': () => {
 			const words = document.getElementById('alert-fill-words');

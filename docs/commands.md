@@ -25,7 +25,7 @@ Buttons that act without a line of the page's script: copy a value, print the pa
 
 ```html
 		<pre class="docs-code w-100" id="commands-download-text" tabindex="0">Boat A	12 trips	286 seats
-Boat C	9 trips	201 seats</pre>
+Boat C	 9 trips	201 seats</pre>
 		<button class="btn" type="button" command="--download" aria-controls="commands-download-text" data-file="boats.txt"><i class="bi bi-download" aria-hidden="true"></i>Download the report</button>
 ```
 

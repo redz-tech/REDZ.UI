@@ -28,4 +28,4 @@ Plain buttons in the bar take its tint; the one suggested action stays `btn-subt
 
 From [`css/components/selection-bar.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/selection-bar.css). It declares `--redz-btn-bg` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-8`, `--redz-space-16`, `--redz-border`, `--redz-primary-subtle`, `--redz-bg`.
+It reads the theme's `--redz-space-8`, `--redz-space-16`, `--redz-border`, `--redz-primary-subtle`, `--redz-bg`, `--redz-control-height-sm`.

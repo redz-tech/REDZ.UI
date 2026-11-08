@@ -78,4 +78,4 @@ What `busy()` sets, written by hand - the overlay appears 400 ms after the page 
 
 From [`css/components/busy.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/busy.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-bg`, `--redz-primary`, `--redz-space-16`, `--redz-text`, `--redz-fs-14`, `--redz-space-4`, `--redz-text-muted`.
+It reads the theme's `--redz-bg`, `--redz-primary`, `--redz-space-16`, `--redz-space-2`, `--redz-space-8`, `--redz-radius-6`, `--redz-text`, `--redz-fs-14`, `--redz-space-4`, `--redz-text-muted`.
