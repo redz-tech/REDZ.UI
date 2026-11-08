@@ -50,5 +50,6 @@ import {prompt} from './prompt.js';
 import {progress} from './progress.js';
 import {selectTab} from './tabs.js';
 import {status} from './status.js';
+import {banner} from './banner.js';
 
-globalThis.REDZ = Object.assign(globalThis.REDZ ?? {}, {ui: {...globalThis.REDZ?.ui, toast, confirm, busy, prompt, progress, select: selectTab, status, combobox: {set: setList}}});
+globalThis.REDZ = Object.assign(globalThis.REDZ ?? {}, {ui: {...globalThis.REDZ?.ui, toast, confirm, busy, prompt, progress, select: selectTab, status, banner, combobox: {set: setList}}});

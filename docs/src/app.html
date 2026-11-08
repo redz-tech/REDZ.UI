@@ -27,6 +27,23 @@
 
 document.addEventListener('redz:fold', (event) =&gt; localStorage.setItem('folded', event.detail.folded ? '1' : ''));</code></pre>
 	<p>A shell without <code>app-sidebar</code> - a page whose role has no sections - is one column by itself: no class to add.</p>
+
+	<h3 id="app-banner">A banner for the whole system</h3>
+	<p>A state of the whole system - a pause for maintenance, a lost connection - shows in <code>app-banner</code>: the first row of the shell, above its header, across the window, sticky with the header under it. <code>REDZ.ui.banner()</code> shows it and answers a function that removes it; <code>REDZ.ui.banner(null)</code> removes it too. There is one at a time: a later call replaces it, and the same tone and words again change nothing, so a page may call it on every answer of its server. Its words are said once. On a page without the shell it goes first in the body.</p>
+	<div class="docs-example" id="app-banner-calls">
+		<button class="btn" type="button" data-docs-run="banner-warning">Paused</button>
+		<button class="btn" type="button" data-docs-run="banner-danger">Connection lost</button>
+		<button class="btn" type="button" data-docs-run="banner-clear">Clear</button>
+	</div>
+	<pre class="docs-code" tabindex="0"><code>REDZ.ui.banner({tone: 'warning', text: 'The system is paused for maintenance.'});
+REDZ.ui.banner(null);</code></pre>
+	<p>The tones are <code>app-banner-info</code>, the default, <code>app-banner-success</code>, <code>app-banner-warning</code> and <code>app-banner-danger</code>. The banner's height, which grows as its words wrap, goes to <code>--redz-app-banner-height</code> on the root: the header, the side navigation, a table's head and the scroll padding stand under it. A banner written in the page's markup in its place is measured the same.</p>
+	<div class="docs-example docs-example-stack" id="app-banner-tones">
+		<div class="app-banner"><i class="bi bi-info-circle-fill" aria-hidden="true"></i><span>A new version is ready. It loads with the next page.</span></div>
+		<div class="app-banner app-banner-success"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><span>The system is back. Every change is saved.</span></div>
+		<div class="app-banner app-banner-warning"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i><span>The system is paused for maintenance. Your changes are kept; try again in a few minutes.</span></div>
+		<div class="app-banner app-banner-danger"><i class="bi bi-x-octagon-fill" aria-hidden="true"></i><span>The connection is lost. Changes made now are not saved.</span></div>
+	</div>
 </section>
 
 <section class="vstack gap-16">
@@ -56,6 +73,7 @@ document.addEventListener('redz:fold', (event) =&gt; localStorage.setItem('folde
 		<li>On a narrow screen the burger opens the navigation as a popover: <kbd>Esc</kbd> or a click outside closes it, and the focus goes back to the burger.</li>
 		<li>The current section is <code>aria-current="page"</code>, drawn as a bar that stays in forced colors.</li>
 		<li>The fold button is a toggle button, pressed while the rail is folded; it has no <code>commandfor</code>, which WebKit would announce as collapsed. On a narrow screen it hides, as the burger opens the whole navigation there.</li>
-		<li>The header and the navigation stay off paper: only the main column prints.</li>
+		<li>The banner's words are said once as it shows - politely, at once for <code>danger</code> - and not again for the same call; a banner in the markup is read in its place, first on the page.</li>
+		<li>The banner, the header and the navigation stay off paper: only the main column prints.</li>
 	</ul>
 </section>

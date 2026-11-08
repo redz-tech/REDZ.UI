@@ -3581,6 +3581,17 @@
 
 				<section class="vstack gap-16" aria-labelledby="all-app">
 					<h2 id="all-app"><a href="app.html">App shell</a></h2>
+					<div class="docs-example" id="app-banner-calls">
+						<button class="btn" type="button" data-docs-run="banner-warning">Paused</button>
+						<button class="btn" type="button" data-docs-run="banner-danger">Connection lost</button>
+						<button class="btn" type="button" data-docs-run="banner-clear">Clear</button>
+					</div>
+					<div class="docs-example docs-example-stack" id="app-banner-tones">
+						<div class="app-banner"><i class="bi bi-info-circle-fill" aria-hidden="true"></i><span>A new version is ready. It loads with the next page.</span></div>
+						<div class="app-banner app-banner-success"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><span>The system is back. Every change is saved.</span></div>
+						<div class="app-banner app-banner-warning"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i><span>The system is paused for maintenance. Your changes are kept; try again in a few minutes.</span></div>
+						<div class="app-banner app-banner-danger"><i class="bi bi-x-octagon-fill" aria-hidden="true"></i><span>The connection is lost. Changes made now are not saved.</span></div>
+					</div>
 					<div class="docs-states" id="app-states" tabindex="0" role="region" aria-labelledby="app-states-title">
 						<table class="docs-matrix">
 							<thead>

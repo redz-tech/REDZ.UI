@@ -1,10 +1,14 @@
 @layer components {
 	html:has(> body > .app) {
-		scroll-padding-block-start: 3.25rem;
+		scroll-padding-block-start: calc(3.25rem + var(--redz-app-banner-height, 0px));
+	}
+
+	html:has(> body > .app-banner) {
+		scroll-padding-block-start: var(--redz-app-banner-height, 0px);
 	}
 
 	.app {
-		--redz-sticky-top: calc(3.25rem + var(--redz-space-12));
+		--redz-sticky-top: calc(3.25rem + var(--redz-space-12) + var(--redz-app-banner-height, 0px));
 		display: grid;
 		grid-template-columns: 15rem minmax(0, 1fr);
 		grid-template-rows: auto 1fr;
@@ -16,7 +20,7 @@
 		container: region / inline-size;
 		grid-area: header;
 		position: sticky;
-		inset-block-start: 0;
+		inset-block-start: var(--redz-app-banner-height, 0px);
 		z-index: 10;
 		display: flex;
 		align-items: center;
@@ -79,9 +83,9 @@
 		grid-area: sidebar;
 		position: sticky;
 		inset: auto;
-		inset-block-start: 3.25rem;
+		inset-block-start: calc(3.25rem + var(--redz-app-banner-height, 0px));
 		inline-size: auto;
-		block-size: calc(100dvh - 3.25rem);
+		block-size: calc(100dvh - 3.25rem - var(--redz-app-banner-height, 0px));
 		overflow-y: auto;
 		margin: 0;
 		padding: var(--redz-space-4) 0 var(--redz-space-16);
@@ -158,6 +162,53 @@
 		margin-inline-start: var(--redz-space-8);
 	}
 
+	.app-banner {
+		--redz-app-banner-bg: var(--redz-info);
+		--redz-app-banner-text: var(--redz-info-contrast);
+		grid-area: banner;
+		position: sticky;
+		inset-block-start: 0;
+		z-index: 10;
+		padding: var(--redz-space-8) var(--redz-space-16);
+		outline: 1px solid transparent;
+		outline-offset: -1px;
+		background: var(--redz-app-banner-bg);
+		color: var(--redz-app-banner-text);
+		font-size: var(--redz-fs-14);
+		font-weight: 550;
+		text-align: center;
+	}
+
+	.app-banner > .bi {
+		margin-inline-end: var(--redz-space-8);
+		font-size: 1rem;
+		vertical-align: -0.1875em;
+	}
+
+	.app-banner-success {
+		--redz-app-banner-bg: var(--redz-success);
+		--redz-app-banner-text: var(--redz-success-contrast);
+	}
+
+	.app-banner-warning {
+		--redz-app-banner-bg: var(--redz-warning);
+		--redz-app-banner-text: var(--redz-warning-contrast);
+	}
+
+	.app-banner-danger {
+		--redz-app-banner-bg: var(--redz-danger);
+		--redz-app-banner-text: var(--redz-danger-contrast);
+	}
+
+	.app:has(> .app-banner) {
+		grid-template-rows: auto auto 1fr;
+		grid-template-areas: "banner banner" "header header" "sidebar main";
+	}
+
+	.app:has(> .app-banner):not(:has(> .app-sidebar)) {
+		grid-template-areas: "banner" "header" "main";
+	}
+
 	@media (width >= 64rem) {
 		.app:has(> .app-sidebar[data-folded]) {
 			grid-template-columns: 3.5rem minmax(0, 1fr);
@@ -189,6 +240,10 @@
 		.app {
 			grid-template-columns: minmax(0, 1fr);
 			grid-template-areas: "header" "main";
+		}
+
+		.app:has(> .app-banner) {
+			grid-template-areas: "banner" "header" "main";
 		}
 
 		.app-burger {
@@ -228,6 +283,7 @@
 			display: block;
 		}
 
+		.app-banner,
 		.app-header,
 		.app-sidebar {
 			display: none;

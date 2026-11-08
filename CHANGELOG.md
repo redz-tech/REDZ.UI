@@ -7,6 +7,14 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 ## Unreleased
 
 ### Added
+- A banner for a state of the whole system, `app-banner` with the tones `app-banner-info` (the default),
+  `app-banner-success`, `app-banner-warning` and `app-banner-danger`: the first row of `app`, above its header, across
+  the window and sticky with the header under it; first in the body of a page without the shell; off paper.
+  `REDZ.ui.banner({tone, text})` shows the one banner or replaces it, and answers a function that removes it;
+  `REDZ.ui.banner(null)` removes it. The same tone and words again change nothing and say nothing, so a page may call it
+  on every answer of its server. The words are said once, politely, at once for `danger`. Its height goes to
+  `--redz-app-banner-height` on the root, which the header, the side navigation, `--redz-sticky-top` and the scroll
+  padding add.
 - `redz-ui-tools-<version>.zip` in every release: the tools a project runs on its own server and never serves, each
   the very file the release was built and checked with - `floor.php`, the browser floor checker, with its list
   `floor.json`, and `min.php`, the minifier -, PHP 8.4 or newer with no extension, no network, and their passport

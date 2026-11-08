@@ -8196,6 +8196,30 @@ document.addEventListener('redz:fold', (event) => localStorage.setItem('folded',
 
 A shell without `app-sidebar` - a page whose role has no sections - is one column by itself: no class to add.
 
+### A banner for the whole system
+
+A state of the whole system - a pause for maintenance, a lost connection - shows in `app-banner`: the first row of the shell, above its header, across the window, sticky with the header under it. `REDZ.ui.banner()` shows it and answers a function that removes it; `REDZ.ui.banner(null)` removes it too. There is one at a time: a later call replaces it, and the same tone and words again change nothing, so a page may call it on every answer of its server. Its words are said once. On a page without the shell it goes first in the body.
+
+```html
+<button class="btn" type="button" data-docs-run="banner-warning">Paused</button>
+<button class="btn" type="button" data-docs-run="banner-danger">Connection lost</button>
+<button class="btn" type="button" data-docs-run="banner-clear">Clear</button>
+```
+
+```js
+REDZ.ui.banner({tone: 'warning', text: 'The system is paused for maintenance.'});
+REDZ.ui.banner(null);
+```
+
+The tones are `app-banner-info`, the default, `app-banner-success`, `app-banner-warning` and `app-banner-danger`. The banner's height, which grows as its words wrap, goes to `--redz-app-banner-height` on the root: the header, the side navigation, a table's head and the scroll padding stand under it. A banner written in the page's markup in its place is measured the same.
+
+```html
+<div class="app-banner"><i class="bi bi-info-circle-fill" aria-hidden="true"></i><span>A new version is ready. It loads with the next page.</span></div>
+<div class="app-banner app-banner-success"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><span>The system is back. Every change is saved.</span></div>
+<div class="app-banner app-banner-warning"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i><span>The system is paused for maintenance. Your changes are kept; try again in a few minutes.</span></div>
+<div class="app-banner app-banner-danger"><i class="bi bi-x-octagon-fill" aria-hidden="true"></i><span>The connection is lost. Changes made now are not saved.</span></div>
+```
+
 ## States
 
 ## Keyboard and accessibility
@@ -8204,13 +8228,14 @@ A shell without `app-sidebar` - a page whose role has no sections - is one colum
 - On a narrow screen the burger opens the navigation as a popover: `Esc` or a click outside closes it, and the focus goes back to the burger.
 - The current section is `aria-current="page"`, drawn as a bar that stays in forced colors.
 - The fold button is a toggle button, pressed while the rail is folded; it has no `commandfor`, which WebKit would announce as collapsed. On a narrow screen it hides, as the burger opens the whole navigation there.
-- The header and the navigation stay off paper: only the main column prints.
+- The banner's words are said once as it shows - politely, at once for `danger` - and not again for the same call; a banner in the markup is read in its place, first on the page.
+- The banner, the header and the navigation stay off paper: only the main column prints.
 
 ## Tokens
 
-From [`css/components/app.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/app.css). It declares `--redz-sticky-top`, `--redz-btn-bg`, `--redz-btn-fg`, `--redz-btn-hover` on its root, never on rows or items.
+From [`css/components/app.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/app.css). It declares `--redz-sticky-top`, `--redz-btn-bg`, `--redz-btn-fg`, `--redz-btn-hover`, `--redz-app-banner-bg`, `--redz-app-banner-text` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-12`, `--redz-space-8`, `--redz-bg-page`, `--redz-text`, `--redz-radius-8`, `--redz-primary`, `--redz-primary-contrast`, `--redz-fs-12`, `--redz-bg`, `--redz-text-muted`, `--redz-border`, `--redz-border-strong`, `--redz-space-4`, `--redz-space-16`, `--redz-bg-hover`, `--redz-shadow-1`, `--redz-space-24`, `--redz-space-32`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-3`.
+It reads the theme's `--redz-app-banner-height`, `--redz-space-12`, `--redz-space-8`, `--redz-bg-page`, `--redz-text`, `--redz-radius-8`, `--redz-primary`, `--redz-primary-contrast`, `--redz-fs-12`, `--redz-bg`, `--redz-text-muted`, `--redz-border`, `--redz-border-strong`, `--redz-space-4`, `--redz-space-16`, `--redz-bg-hover`, `--redz-shadow-1`, `--redz-space-24`, `--redz-space-32`, `--redz-radius-12`, `--redz-info`, `--redz-info-contrast`, `--redz-fs-14`, `--redz-success`, `--redz-success-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-bg-raised`, `--redz-shadow-3`.
 
 # Centered page
 

@@ -352,6 +352,10 @@ align-text-top
 align-top
 app
 app-aside
+app-banner
+app-banner-danger
+app-banner-success
+app-banner-warning
 app-brand
 app-burger
 app-header

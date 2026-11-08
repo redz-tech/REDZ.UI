@@ -3417,6 +3417,48 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a folded hint: its chevron rotates ' + say(rest) + ' at rest, ' + say(seen) + ' open');
 			}
 		}]},
+		banner: {target: '#app-banner-calls', steps: [async (out) => {
+			const app = $('body > .app');
+			const region = (role) => $(':scope > .visually-hidden[role="' + role + '"]', document.body)?.textContent ?? '';
+			const slot = () => $$(':scope > .app-banner', app);
+			const top = (selector) => Math.round($(selector).getBoundingClientRect().top);
+			const close = REDZ.ui.banner({tone: 'warning', text: 'Paused for a probe'});
+			await wait(150);
+			const [shown] = slot();
+			const high = Math.round(shown?.getBoundingClientRect().height ?? 0);
+			const stored = Math.round(parseFloat(document.documentElement.style.getPropertyValue('--redz-app-banner-height')));
+			scrollTo(0, 600);
+			await wait(100);
+			const ruler = Object.assign(document.createElement('div'), {style: 'position: absolute; inline-size: var(--redz-sticky-top)'});
+			app.append(ruler);
+			const stack = [top('body > .app > .app-banner'), top('body > .app > .app-header') - high, top('body > .app > .app-sidebar') - high, Math.round(ruler.getBoundingClientRect().width) - high];
+			ruler.remove();
+			if (slot().length !== 1 || app.firstElementChild !== shown || !shown.matches('.app-banner-warning') || high < 20 || stored !== high || say(stack) !== say([0, 0, 52, 64])) {
+				out.push('a banner shows ' + slot().length + ' in the shell, ' + high + ' px high, stored as ' + stored + ' px; scrolled, the banner, the header, the sidebar and the sticky top stand at ' + say(stack) + ' less its height, not [0, 0, 52, 64]');
+			}
+			if (region('status') !== 'Paused for a probe') {
+				out.push('a banner\'s words are said as ' + say(region('status')));
+			}
+			$(':scope > .visually-hidden[role="status"]', document.body).textContent = 'kept';
+			const again = REDZ.ui.banner({tone: 'warning', text: 'Paused for a probe'});
+			await wait(150);
+			if (slot()[0] !== shown || region('status') !== 'kept' || again !== close) {
+				out.push('the same banner again ' + (slot()[0] === shown ? '' : 'is made anew, ') + (region('status') === 'kept' ? '' : 'is said again, ') + (again === close ? '' : 'answers another remover'));
+			}
+			REDZ.ui.banner({tone: 'danger', text: 'Lost for a probe'});
+			await wait(150);
+			close();
+			if (slot().length !== 1 || !slot()[0].matches('.app-banner-danger') || region('alert') !== 'Lost for a probe') {
+				out.push('a danger banner shows ' + slot().length + ' in the shell, ' + say(slot()[0]?.className ?? '') + ', said at once as ' + say(region('alert')) + ', and the replaced banner\'s remover took it away');
+			}
+			REDZ.ui.banner(null);
+			await wait(100);
+			const left = [slot().length, document.documentElement.style.getPropertyValue('--redz-app-banner-height'), top('body > .app > .app-header'), $$('#app-banner-tones > .app-banner').length];
+			scrollTo(0, 0);
+			if (say(left) !== say([0, '', 0, 4])) {
+				out.push('once removed, the shell keeps ' + say(left) + ' - banners, the stored height, the header\'s top, the examples - not [0, "", 0, 4]');
+			}
+		}]},
 		editor: {target: '#editor-demo-host', walk: editorWalk},
 	};
 
