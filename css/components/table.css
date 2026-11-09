@@ -123,6 +123,32 @@
 		font-weight: 400;
 	}
 
+	.table > tbody > .table-group > th:has(> .table-group-line) {
+		padding-inline: 0;
+	}
+
+	.table-group-line {
+		position: sticky;
+		inset-inline-start: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--redz-space-4) var(--redz-space-16);
+		inline-size: min(100%, var(--redz-table-scroll-size, 100%));
+		padding-inline: var(--redz-space-16);
+	}
+
+	.table-group-line > :not(.table-group-end) {
+		flex: 1 1 auto;
+	}
+
+	.table-group-line > .table-group-end {
+		position: static;
+		float: none;
+		margin: 0;
+		padding: 0;
+		background: none;
+	}
+
 	.table > * > .table-subtotal > :is(td, th) {
 		border-block-start: 1px solid var(--redz-border-strong);
 		color: var(--redz-text);
@@ -385,6 +411,10 @@
 		.table th:last-child,
 		.table td:last-child {
 			padding-inline-end: var(--redz-space-12);
+		}
+
+		.table-group-line {
+			padding-inline: var(--redz-space-12);
 		}
 	}
 

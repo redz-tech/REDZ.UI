@@ -4294,6 +4294,7 @@ table-danger
 table-group
 table-group-divider
 table-group-end
+table-group-line
 table-note
 table-scroll
 table-scroll-first

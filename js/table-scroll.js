@@ -1,5 +1,5 @@
 // REDZ.UI, a table that scrolls: a table-scroll is a tab stop only while its table is wider than it, so the keyboard can
-// scroll it; a table that fits leaves no stop that does nothing.
+// scroll it; a table that fits leaves no stop that does nothing. A band's table-group-line reads the width it shows.
 const SCROLLERS = '.table-scroll';
 const watched = new WeakSet();
 
@@ -12,9 +12,17 @@ const mark = (scroller) => {
 	}
 };
 
+/** Writes the width the scroller shows. */
+const measure = (scroller) => scroller.style.setProperty('--redz-table-scroll-size', scroller.clientWidth + 'px');
+
+// The width changes the height of the bands, so it is written outside the observer's own turn.
 const sizes = new ResizeObserver((entries) => {
 	for (const entry of entries) {
-		mark(entry.target.closest(SCROLLERS));
+		const scroller = entry.target.closest(SCROLLERS);
+		mark(scroller);
+		if (entry.target === scroller) {
+			requestAnimationFrame(() => measure(scroller));
+		}
 	}
 });
 
@@ -28,6 +36,7 @@ const watch = (scroller) => {
 		sizes.observe(table);
 	}
 	mark(scroller);
+	measure(scroller);
 };
 
 document.querySelectorAll(SCROLLERS).forEach(watch);

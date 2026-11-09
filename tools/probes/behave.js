@@ -4014,6 +4014,81 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a toggle\'s chevron and words read ' + say(closed) + ' closed and ' + say(open) + ' open');
 			}
 		}]},
+		bandLine: {target: '#table-band-line', steps: [async (out) => {
+			const card = $('#table-band-line .card');
+			const box = $('.table-scroll', card);
+			const table = $('table', box);
+			const lines = $$('.table-group-line', box);
+			const parts = (line) => [line.firstElementChild, $('.table-group-end', line)];
+			const measure = (dir) => {
+				const edge = box.getBoundingClientRect().left + box.clientLeft;
+				const [from, to] = dir === 'ltr' ? [edge, edge + box.clientWidth] : [-(edge + box.clientWidth), -edge];
+				const start = (rect) => dir === 'ltr' ? rect.left : -rect.right;
+				const end = (rect) => dir === 'ltr' ? rect.right : -rect.left;
+				return lines.map((line) => {
+					const [label, slot] = parts(line).map((part) => part.getBoundingClientRect());
+					const pad = parseFloat(getComputedStyle(line).paddingInlineStart);
+					return {
+						inside: [label, slot].every((rect) => start(rect) >= from + pad - 1 && end(rect) <= to - pad + 1),
+						clipped: parts(line).some((part) => part.scrollWidth > part.clientWidth + 1),
+						under: slot.top >= label.bottom - 1,
+						startGap: Math.round(start(slot) - start(label)),
+						endGap: Math.round(to - pad - end(slot)),
+						lines: Math.round(slot.height / parseFloat(getComputedStyle(parts(line)[1]).lineHeight)),
+						labelAt: Math.round(start(label) - from),
+					};
+				});
+			};
+			const wrong = [];
+			const loops = [];
+			const heard = (event) => /ResizeObserver/.test(event.message) && loops.push(event.message);
+			window.addEventListener('error', heard);
+			const followed = () => until(() => parseFloat(box.style.getPropertyValue('--redz-table-scroll-size')) === box.clientWidth);
+			card.style.inlineSize = '340px';
+			await followed();
+			for (const dir of ['ltr', 'rtl']) {
+				document.documentElement.dir = dir;
+				await settled();
+				for (const to of [0, dir === 'ltr' ? box.scrollWidth : -box.scrollWidth]) {
+					box.scrollLeft = to;
+					await wait(50);
+					const [long, short, name] = measure(dir);
+					const pad = parseFloat(getComputedStyle(lines[0]).paddingInlineStart);
+					const row = to === 0 ? $('tbody tr:not(.table-group) > td', box).getBoundingClientRect() : null;
+					const cellText = row === null ? pad : parseFloat(getComputedStyle($('tbody tr:not(.table-group) > td', box)).paddingInlineStart);
+					const seen = {dir, to: to === 0 ? 'at rest' : 'scrolled', long, short, name};
+					const fine = [long, short, name].every((one) => one.inside && !one.clipped)
+						&& long.under && long.startGap === 0 && long.lines >= 2
+						&& !short.under && Math.abs(short.endGap) <= 1
+						&& name.under && name.startGap === 0
+						&& short.labelAt === Math.round(pad) && Math.round(pad) === Math.round(cellText);
+					if (!fine) {
+						wrong.push(say(seen));
+					}
+				}
+				box.scrollLeft = 0;
+			}
+			document.documentElement.dir = 'ltr';
+			card.style.removeProperty('inline-size');
+			await followed();
+			const [wideLong, wideShort] = measure('ltr');
+			const roomy = !wideLong.under && Math.abs(wideLong.endGap) <= 1 && !wideShort.under && Math.abs(wideShort.endGap) <= 1;
+			table.style.width = 'auto';
+			await settled();
+			const fits = table.getBoundingClientRect().width < box.clientWidth - 1;
+			table.style.removeProperty('width');
+			await settled();
+			window.removeEventListener('error', heard);
+			if (loops.length > 0) {
+				out.push('a band line\'s width sets off the observer\'s loop error: ' + say(loops));
+			}
+			if (wrong.length > 0) {
+				out.push('a band line in a narrow scroller: ' + wrong.join(' ; '));
+			}
+			if (!roomy || !fits) {
+				out.push('a band line with room: ' + say([wideLong, wideShort]) + ', a table of its own width stays narrower than its scroller ' + fits);
+			}
+		}]},
 		scroller: {target: '#table-wide .table-scroll', steps: [async (out) => {
 			const box = $('#table-wide .table-scroll');
 			const first = $('tbody tr:not(.table-group) > th', box);

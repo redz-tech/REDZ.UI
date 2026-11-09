@@ -6,6 +6,12 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 
 ## Unreleased
 
+### Added
+- `table-group-line` holds a band's label and its `table-group-end` slot in a box as wide as the visible part of the
+  table: both stay in view while the table scrolls sideways, the slot goes under the label at the start when the two
+  do not fit, and a slot wider than the line wraps inside itself. The label is one element, before the slot. A band
+  without the line looks as before.
+
 ### Fixed
 - A spark-line in a sorted table no longer hangs the tab on the first press of a sort button. A sort takes only rows
   and bodies the page puts in as a redraw, not any element added under the table, and a line whose values did not

@@ -578,6 +578,42 @@
 	&lt;/div&gt;
 &lt;/section&gt;</code></pre></div>
 
+					<p>Put a band's label and its end slot in a <code>table-group-line</code> to keep them both in view while the table scrolls sideways: the line is as wide as the part of the table that shows. The label is one element, before the slot. When the two do not fit, the slot goes under the label at the start, and a slot wider than the line wraps inside itself. A band without a line keeps its label in the table and its slot at the visible end.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="table-band-line">
+						<section class="card" aria-labelledby="table-band-line-title">
+							<div class="card-header"><h2 class="fs-14" id="table-band-line-title">Trips by route</h2></div>
+							<div class="table-scroll" role="region" aria-labelledby="table-band-line-title">
+								<table class="table">
+									<thead><tr><th scope="col">Boat</th><th scope="col">Skipper</th><th scope="col">Pier</th><th scope="col" class="text-end">Seats</th><th scope="col" class="text-end">Booked</th><th scope="col">Leaves</th></tr></thead>
+									<tbody>
+										<tr class="table-group"><th scope="rowgroup" colspan="6"><div class="table-group-line"><span><i class="bi bi-geo-alt me-4" aria-hidden="true"></i><a href="#table-band-line">Island tours</a></span><span class="table-group-end tabular-nums">Boats: 6 · booked: 412 of 651 seats · 1,204 km <span class="badge badge-subtle-danger">1 held</span> <span class="badge badge-subtle-warning">2 late</span></span></div></th></tr>
+										<tr><td>Boat A</td><td>Example Skipper</td><td>North pier</td><td class="text-end tabular-nums">42</td><td class="text-end tabular-nums">38</td><td>08:00</td></tr>
+										<tr class="table-group"><th scope="rowgroup" colspan="6"><div class="table-group-line"><span>Harbor cruises</span><span class="table-group-end">2 boats</span></div></th></tr>
+										<tr><td>Boat C</td><td>Example Skipper</td><td>South pier</td><td class="text-end tabular-nums">30</td><td class="text-end tabular-nums">28</td><td>10:30</td></tr>
+										<tr class="table-group"><th scope="rowgroup" colspan="6"><div class="table-group-line"><span>Evening and full moon cruises around the northern islands</span><span class="table-group-end">1 boat</span></div></th></tr>
+										<tr><td>Boat D</td><td>Example Skipper</td><td>East pier</td><td class="text-end tabular-nums">24</td><td class="text-end tabular-nums">20</td><td>19:15</td></tr>
+									</tbody>
+								</table>
+							</div>
+						</section>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;section class="card" aria-labelledby="table-band-line-title"&gt;
+	&lt;div class="card-header"&gt;&lt;h2 class="fs-14" id="table-band-line-title"&gt;Trips by route&lt;/h2&gt;&lt;/div&gt;
+	&lt;div class="table-scroll" role="region" aria-labelledby="table-band-line-title"&gt;
+		&lt;table class="table"&gt;
+			&lt;thead&gt;&lt;tr&gt;&lt;th scope="col"&gt;Boat&lt;/th&gt;&lt;th scope="col"&gt;Skipper&lt;/th&gt;&lt;th scope="col"&gt;Pier&lt;/th&gt;&lt;th scope="col" class="text-end"&gt;Seats&lt;/th&gt;&lt;th scope="col" class="text-end"&gt;Booked&lt;/th&gt;&lt;th scope="col"&gt;Leaves&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+			&lt;tbody&gt;
+				&lt;tr class="table-group"&gt;&lt;th scope="rowgroup" colspan="6"&gt;&lt;div class="table-group-line"&gt;&lt;span&gt;&lt;i class="bi bi-geo-alt me-4" aria-hidden="true"&gt;&lt;/i&gt;&lt;a href="#table-band-line"&gt;Island tours&lt;/a&gt;&lt;/span&gt;&lt;span class="table-group-end tabular-nums"&gt;Boats: 6 · booked: 412 of 651 seats · 1,204 km &lt;span class="badge badge-subtle-danger"&gt;1 held&lt;/span&gt; &lt;span class="badge badge-subtle-warning"&gt;2 late&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/th&gt;&lt;/tr&gt;
+				&lt;tr&gt;&lt;td&gt;Boat A&lt;/td&gt;&lt;td&gt;Example Skipper&lt;/td&gt;&lt;td&gt;North pier&lt;/td&gt;&lt;td class="text-end tabular-nums"&gt;42&lt;/td&gt;&lt;td class="text-end tabular-nums"&gt;38&lt;/td&gt;&lt;td&gt;08:00&lt;/td&gt;&lt;/tr&gt;
+				&lt;tr class="table-group"&gt;&lt;th scope="rowgroup" colspan="6"&gt;&lt;div class="table-group-line"&gt;&lt;span&gt;Harbor cruises&lt;/span&gt;&lt;span class="table-group-end"&gt;2 boats&lt;/span&gt;&lt;/div&gt;&lt;/th&gt;&lt;/tr&gt;
+				&lt;tr&gt;&lt;td&gt;Boat C&lt;/td&gt;&lt;td&gt;Example Skipper&lt;/td&gt;&lt;td&gt;South pier&lt;/td&gt;&lt;td class="text-end tabular-nums"&gt;30&lt;/td&gt;&lt;td class="text-end tabular-nums"&gt;28&lt;/td&gt;&lt;td&gt;10:30&lt;/td&gt;&lt;/tr&gt;
+				&lt;tr class="table-group"&gt;&lt;th scope="rowgroup" colspan="6"&gt;&lt;div class="table-group-line"&gt;&lt;span&gt;Evening and full moon cruises around the northern islands&lt;/span&gt;&lt;span class="table-group-end"&gt;1 boat&lt;/span&gt;&lt;/div&gt;&lt;/th&gt;&lt;/tr&gt;
+				&lt;tr&gt;&lt;td&gt;Boat D&lt;/td&gt;&lt;td&gt;Example Skipper&lt;/td&gt;&lt;td&gt;East pier&lt;/td&gt;&lt;td class="text-end tabular-nums"&gt;24&lt;/td&gt;&lt;td class="text-end tabular-nums"&gt;20&lt;/td&gt;&lt;td&gt;19:15&lt;/td&gt;&lt;/tr&gt;
+			&lt;/tbody&gt;
+		&lt;/table&gt;
+	&lt;/div&gt;
+&lt;/section&gt;</code></pre></div>
+
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="table-wide-last">
 						<section class="card" aria-labelledby="table-wide-last-title">
 							<div class="card-header"><h2 class="fs-14" id="table-wide-last-title">Rates</h2></div>
@@ -693,7 +729,7 @@
 						<section class="vstack gap-12" aria-labelledby="table-tokens">
 							<h2 id="table-tokens">Tokens</h2>
 							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css"><code>css/components/table.css</code></a>. It declares <code>--redz-table-head-border</code>, <code>--redz-table-head-weight</code>, <code>--redz-row-tint</code>, <code>--redz-row-mark</code> on its root, never on rows or items.</p>
-							<p>It reads the theme's <code>--redz-sticky-top</code>, <code>--redz-space-12</code>, <code>--redz-space-8</code>, <code>--redz-row-pad</code>, <code>--redz-border</code>, <code>--redz-table-head-bg</code>, <code>--redz-bg</code>, <code>--redz-table-head-text</code>, <code>--redz-text-muted</code>, <code>--redz-fs-12</code>, <code>--redz-text</code>, <code>--redz-fs-14</code>, <code>--redz-bg-page</code>, <code>--redz-space-16</code>, <code>--redz-border-strong</code>, <code>--redz-row-hover</code>, <code>--redz-primary</code>, <code>--redz-radius-12</code>, <code>--redz-font-mono</code>, <code>--redz-space-4</code>, <code>--redz-danger-subtle</code>, <code>--redz-danger</code>, <code>--redz-warning-subtle</code>, <code>--redz-warning</code>, <code>--redz-primary-subtle</code>.</p>
+							<p>It reads the theme's <code>--redz-sticky-top</code>, <code>--redz-space-12</code>, <code>--redz-space-8</code>, <code>--redz-row-pad</code>, <code>--redz-border</code>, <code>--redz-table-head-bg</code>, <code>--redz-bg</code>, <code>--redz-table-head-text</code>, <code>--redz-text-muted</code>, <code>--redz-fs-12</code>, <code>--redz-text</code>, <code>--redz-fs-14</code>, <code>--redz-bg-page</code>, <code>--redz-space-16</code>, <code>--redz-space-4</code>, <code>--redz-table-scroll-size</code>, <code>--redz-border-strong</code>, <code>--redz-row-hover</code>, <code>--redz-primary</code>, <code>--redz-radius-12</code>, <code>--redz-font-mono</code>, <code>--redz-danger-subtle</code>, <code>--redz-danger</code>, <code>--redz-warning-subtle</code>, <code>--redz-warning</code>, <code>--redz-primary-subtle</code>.</p>
 						</section>
 
 						<section class="vstack gap-12" aria-labelledby="table-from-bootstrap">
