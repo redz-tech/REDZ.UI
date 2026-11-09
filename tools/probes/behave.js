@@ -3324,6 +3324,44 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a line chart: ' + say(shape) + ' (its line, its area, its points, its rows, the first label at the start), a value changed moves its point to ' + say(moved) + ', a spark line has ' + spark + ' points, the body holds ' + $$(':scope > svg', body).length + ' lines');
 			}
 		}]},
+		sortedLine: {target: '#chart-spark-line', steps: [async (out) => {
+			const row = (size) => '<tr data-sort-size="' + size + '"><td><span class="spark spark-line" role="img" aria-label="Size ' + size + '"><i data-v="0.' + size + '"></i><i data-v="0.' + (size + 1) + '"></i></span></td></tr>';
+			const box = document.createElement('table');
+			box.innerHTML = '<thead><tr><th><button class="table-sort" type="button" value="size">Size</button></th></tr></thead><tbody>' + [3, 1, 2].map(row).join('') + '</tbody>';
+			document.body.append(box);
+			await settled();
+			const order = () => [...box.tBodies[0].rows].map((one) => one.dataset.sortSize).join(' ');
+			const lines = () => $$('svg[data-line]', box);
+			const drawn = lines();
+			let seen = 0;
+			// A sort and a chart that redraw each other never yield the thread, so the check stops them itself by taking the sparks away.
+			const guard = new MutationObserver((records) => {
+				seen += records.length;
+				if (seen > 200) {
+					$$('.spark', box).forEach((spark) => spark.remove());
+				}
+			});
+			guard.observe(box, {childList: true, subtree: true});
+			$('button', box).click();
+			await settled();
+			const up = order();
+			const kept = lines().length === 3 && lines().every((one) => drawn.includes(one));
+			$('button', box).click();
+			await settled();
+			const down = order();
+			const first = box.tBodies[0].rows[0];
+			first.dataset.sortSize = '0';
+			first.cells[0].append(document.createElement('b'));
+			await settled();
+			const stayed = order();
+			guard.disconnect();
+			box.remove();
+			if (seen > 200) {
+				out.push('a sort and a spark-line in its table redraw each other without end: ' + seen + ' changes after two presses');
+			} else if (say([drawn.length, up, kept, down, stayed]) !== say([3, '1 2 3', true, '3 2 1', '0 2 1'])) {
+				out.push('a spark-line in a sorted table: ' + say([drawn.length, up, kept, down, stayed]) + ' (lines drawn, the order after one press, the lines stayed the same elements, after two presses, after an element put in a cell)');
+			}
+		}]},
 		strip: {target: '#chart-strip-uptime', steps: [async (out) => {
 			const box = $('#chart-strip-uptime .strip');
 			const shown = () => [$$('.spark-strip > i', box).filter((cell) => getComputedStyle(cell).display !== 'none').length, $$('.strip-head > [data-days]', box).filter((one) => getComputedStyle(one).display !== 'none').map((one) => one.dataset.days).join(' ')];

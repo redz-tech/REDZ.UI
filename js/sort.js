@@ -73,7 +73,7 @@ export const sort = (table) => {
 const own = new WeakSet();
 
 const redrawn = new MutationObserver((records) => {
-	const tables = new Set(records.filter((record) => [...record.addedNodes].some((node) => node.nodeType === Node.ELEMENT_NODE)).map((record) => record.target.closest('table')));
+	const tables = new Set(records.filter((record) => [...record.addedNodes].some((node) => ['TR', 'TBODY'].includes(node.nodeName))).map((record) => record.target.closest('table')));
 	tables.forEach((table) => table !== null && !own.has(table) && sortedOf(table) !== null && sort(table));
 });
 

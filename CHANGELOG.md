@@ -4,6 +4,13 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Fixed
+- A spark-line in a sorted table no longer hangs the tab on the first press of a sort button. A sort takes only rows
+  and bodies the page puts in as a redraw, not any element added under the table, and a line whose values did not
+  change stays as it was drawn; the two used to redraw each other without end.
+
 ## 0.20.0 - 2026-11-08
 
 ### Added

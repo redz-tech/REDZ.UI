@@ -40,7 +40,12 @@ const sized = new ResizeObserver((entries) => entries.forEach((entry) => fit(ent
 
 /** Draws the line through the values, oldest first, behind the box's rows - and the area under it for a chart. */
 const line = (box, values, area) => {
-	box.querySelector(':scope > svg[data-line]')?.remove();
+	const points = values.map((value, i) => (i + 0.5) + ',' + ((1 - value) * 1000).toFixed(1)).join(' ');
+	const was = box.querySelector(':scope > svg[data-line]');
+	if (was?.querySelector('polyline')?.getAttribute('points') === points) {
+		return;
+	}
+	was?.remove();
 	if (values.length === 0) {
 		return;
 	}
@@ -49,7 +54,6 @@ const line = (box, values, area) => {
 	svg.setAttribute('aria-hidden', 'true');
 	svg.setAttribute('viewBox', '0 0 ' + values.length + ' 1000');
 	svg.setAttribute('preserveAspectRatio', 'none');
-	const points = values.map((value, i) => (i + 0.5) + ',' + ((1 - value) * 1000).toFixed(1)).join(' ');
 	if (area) {
 		const under = document.createElementNS(SVG, 'polygon');
 		under.setAttribute('points', '0.5,1000 ' + points + ' ' + (values.length - 0.5) + ',1000');
