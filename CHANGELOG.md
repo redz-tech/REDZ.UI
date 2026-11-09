@@ -4,7 +4,7 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
-## Unreleased
+## 0.21.0 - 2026-11-09
 
 ### Added
 - `table-group-line` holds a band's label and its `table-group-end` slot in a box as wide as the visible part of the
