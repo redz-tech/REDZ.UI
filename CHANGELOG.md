@@ -17,8 +17,13 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - A `role="tablist"` put in the page later is taken up as it comes, as at load: one tab in the tab order, the first
   `redz:selected`, and with `data-hash` the tab the address names, with no write to the address and no scroll. An
   empty tablist is taken when its tabs come, and a tab added to a tablist leaves the tab order unless it is selected.
+- The passport's `commands` names every `--` command the library handles beside the built-ins it stands in for, so a
+  consumer's check can tell `--copy` from a typo. The build refuses a command the scripts handle and the docs do not
+  show, or the other way round.
 
 ### Fixed
+- Enter in the editor makes a paragraph in every engine. Firefox could lose the setting made when the editor starts and
+  make a `div`, and a line that was a `div` took no Markdown shortcut such as `- ` or `> `.
 - A badge that changes while the More menu of a `nav-overflow` is open no longer takes the focus out of the menu.
 - An address that names a tab selects it at once at load: `redz:selected` comes once, not first for the default tab,
   and a tab that is disabled is not selected by the address.

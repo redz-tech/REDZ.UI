@@ -523,6 +523,7 @@ window.REDZ_BEHAVE = (() => {
 		say('## makes a heading', doc.getSelection().anchorNode !== null && (doc.getSelection().anchorNode.nodeType === 1 ? doc.getSelection().anchorNode : doc.getSelection().anchorNode.parentElement).closest('h2') !== null, doc.body.lastElementChild.outerHTML);
 		yield {type: 'Hello'};
 		say('the words go on in the heading', doc.body.lastElementChild.matches('h2') && doc.body.lastElementChild.textContent === 'Hello', doc.body.lastElementChild.outerHTML);
+		doc.execCommand('defaultParagraphSeparator', false, 'div');
 		yield {key: 'Enter'};
 		yield {type: '- '};
 		say('- makes a list', doc.body.lastElementChild.matches('ul'), doc.body.lastElementChild.outerHTML);

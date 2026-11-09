@@ -338,7 +338,7 @@ function BUILD__FloorJs(): string
 
 /** The passport: the version, the floor, the files to link - the main three, the icon pack this release needs, the
  *  editor and the packages -, the vocabulary - every class, every custom property the stylesheets define, the commands
- *  js/commands.js stands in for, the keys the page's texts must hold (a count by its .other form), the counts whose
+ *  js/commands.js stands in for and every -- command the scripts handle, the keys the page's texts must hold (a count by its .other form), the counts whose
  *  other plural forms the page may add and the {names} each of those texts is given - and the sha256 of every file
  *  beside it in the SRI form. */
 function BUILD__Passport(): string
@@ -381,7 +381,7 @@ function BUILD__Passport(): string
 		'icons' => $encode(BUILD_ICONS),
 		'classes' => $list(array_map('strval', array_keys(TOOL__Classes()))),
 		'tokens' => $list($sorted($tokens[1])),
-		'commands' => $list($sorted($commands[1])),
+		'commands' => $list($sorted([...$commands[1], ...BUILD__CustomCommands()])),
 		'texts' => $list($sorted(array_map(fn(string $key, string $kind): string => $kind === 'count' ? $key . '.other' : $key, array_keys($texts), $texts))),
 		'plurals' => $list($sorted(array_keys(array_filter($texts, fn(string $kind): bool => $kind === 'count')))),
 		'args' => "{\n\t\t" . implode(",\n\t\t", array_map(fn(string $key, array $names): string => $encode($key) . ': ' . $encode($names), array_keys($args), $args)) . "\n\t}",
@@ -485,6 +485,43 @@ function BUILD__MainArgs(stdClass $vocab): array
 function BUILD__EditorArgs(stdClass $vocab): array
 {
 	return BUILD__TextArgs((array)($vocab->editor->texts ?? []), 'editor/*.js', 'say');
+}
+
+/**
+ * The -- commands the library's scripts handle: their strings of two dashes and a name, less the names the stylesheets
+ * use as custom properties.
+ * @return list<string>
+ */
+function BUILD__CustomCommands(): array
+{
+	$sheets = array_merge(...array_map(fn(string $pattern): array => glob(BUILD_ROOT . '/' . $pattern) ?: [], BUILD_STYLES));
+	$css = implode("\n", array_map(fn(string $file): string => (string)file_get_contents($file), $sheets));
+	preg_match_all('~(?|var\(\s*(--[a-z][a-z0-9-]*)|(?<![\w-])(--[a-z][a-z0-9-]*)\s*:)~', $css, $properties);
+	$names = [];
+	foreach (['js', 'editor', 'charts', 'calendar', 'media', 'qr'] as $folder) {
+		foreach (glob(BUILD_ROOT . '/' . $folder . '/*.js') ?: [] as $file) {
+			preg_match_all('~[\'"`](--(?!redz-)[a-z][a-z-]*)[\'"`]~', (string)file_get_contents($file), $found);
+			array_push($names, ...$found[1]);
+		}
+	}
+	return array_values(array_diff(array_unique($names), $properties[1]));
+}
+
+/**
+ * The -- commands held against the docs: each one a script handles is shown in docs/src, and each one shown there is
+ * handled. Answers what is wrong.
+ * @return list<string>
+ */
+function BUILD__CommandsCheck(): array
+{
+	$handled = BUILD__CustomCommands();
+	$docs = implode("\n", array_map(fn(string $file): string => (string)file_get_contents($file), glob(BUILD_ROOT . '/docs/src/*.html') ?: []));
+	preg_match_all('~\bcommand="(--[a-z-]+)"~', $docs, $found);
+	$shown = array_values(array_unique($found[1]));
+	return [
+		...array_map(fn(string $name): string => 'a script handles the command ' . $name . ', which docs/src never shows', array_values(array_diff($handled, $shown))),
+		...array_map(fn(string $name): string => 'docs/src shows the command ' . $name . ', which no script handles', array_values(array_diff($shown, $handled))),
+	];
 }
 
 /**
@@ -660,7 +697,7 @@ function BUILD__Main(array $argv): int
 {
 	$check = in_array('--check', $argv, true);
 	$vocab = BUILD__Vocabulary();
-	$wrong = [...BUILD__TextsCheck($vocab), ...BUILD__CatalogCheck(), ...BUILD__ToolsCalls(), ...array_map(fn(string $failure): string => 'tools/min.php  ' . $failure, MIN__SelfTest())];
+	$wrong = [...BUILD__TextsCheck($vocab), ...BUILD__CommandsCheck(), ...BUILD__CatalogCheck(), ...BUILD__ToolsCalls(), ...array_map(fn(string $failure): string => 'tools/min.php  ' . $failure, MIN__SelfTest())];
 	if ($wrong !== []) {
 		fwrite(STDERR, implode("\n", $wrong) . "\n");
 		return 1;

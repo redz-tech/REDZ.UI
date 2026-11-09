@@ -920,6 +920,9 @@ export const editor = (host, options = {}) => {
 			}
 		});
 		ed.on(doc, 'beforeinput', (event) => {
+			if (event.inputType === 'insertParagraph') {
+				doc.execCommand('defaultParagraphSeparator', false, 'p');
+			}
 			if (event.inputType === 'historyUndo' || event.inputType === 'historyRedo') {
 				event.preventDefault();
 				(event.inputType === 'historyUndo' ? ed.undo : ed.redo)();
