@@ -178,7 +178,7 @@
 						<span class="size-48 rounded-8 bg-page"></span>
 						<span class="size-64 rounded-8 bg-page"></span>
 						<span class="size-80 rounded-8 bg-page"></span>
-						<input class="form-control w-120" type="text" aria-label="شيفرة" value="SPRING-26">
+						<input class="form-control w-120" type="text" name="code" aria-label="شيفرة" value="SPRING-26">
 					</div>
 					<div class="docs-example docs-example-stack" id="utilities-text-kinds">
 						<p class="text-pre-wrap">فيلا 12، طريق الميناء الجزيرة الرئيسية 00000</p>
@@ -529,7 +529,7 @@ Boat C	 9 trips	201 seats</pre>
 							<a class="btn btn-sm share-viber">Viber</a>
 							<button class="btn btn-sm share-wechat" type="button" commandfor="commands-share-wechat" command="toggle-popover"><i class="bi bi-wechat" aria-hidden="true"></i>WeChat</button>
 							<button class="btn btn-sm" type="button" command="--copy"><i class="bi bi-link-45deg" aria-hidden="true"></i>انسخ الرابط</button>
-							<div class="popover" id="commands-share-wechat" popover="" aria-label="امسح في WeChat">
+							<div class="popover" id="commands-share-wechat" popover="" role="dialog" aria-label="امسح في WeChat">
 								<div class="vstack gap-8 align-items-center">
 									<div class="qr"><img src="img/qr.svg" alt="رمز QR لرابطك"></div>
 									<p class="fs-12 text-muted">امسح في WeChat للمشاركة</p>
@@ -703,7 +703,7 @@ Boat C	 9 trips	201 seats</pre>
 					<div class="docs-example docs-example-stack" id="form-adorn">
 						<div class="form-adorn">
 							<i class="bi bi-search" aria-hidden="true"></i>
-							<input class="form-control" type="search" placeholder="الاسم أو المعرّف أو الرمز" aria-label="البحث في الرحلات">
+							<input class="form-control" type="search" name="q" placeholder="الاسم أو المعرّف أو الرمز" aria-label="البحث في الرحلات">
 						</div>
 						<div class="form-floating form-adorn">
 							<i class="bi bi-envelope" aria-hidden="true"></i>
@@ -725,10 +725,10 @@ Boat C	 9 trips	201 seats</pre>
 						</div>
 					</div>
 					<div class="docs-example docs-example-stack" id="form-sizes">
-						<input class="form-control form-control-sm" placeholder="صغير" aria-label="حقل صغير">
-						<input class="form-control" placeholder="افتراضي" aria-label="حقل افتراضي">
-						<input class="form-control form-control-lg" placeholder="كبير" aria-label="حقل كبير">
-						<select class="form-select form-select-sm" aria-label="قائمة اختيار صغيرة"><option>قائمة اختيار صغيرة</option></select>
+						<input class="form-control form-control-sm" name="small-field" placeholder="صغير" aria-label="حقل صغير">
+						<input class="form-control" name="default-field" placeholder="افتراضي" aria-label="حقل افتراضي">
+						<input class="form-control form-control-lg" name="large-field" placeholder="كبير" aria-label="حقل كبير">
+						<select class="form-select form-select-sm" name="small-select" aria-label="قائمة اختيار صغيرة"><option>قائمة اختيار صغيرة</option></select>
 					</div>
 					<div class="docs-example docs-example-stack" id="form-otp">
 						<div class="form-field">
@@ -835,19 +835,19 @@ Boat C	 9 trips	201 seats</pre>
 							<tbody>
 								<tr>
 									<th scope="row">form-control</th>
-									<td><input class="form-control" value="North Bay" aria-label="في وضع السكون"></td>
-									<td><input class="form-control" value="North Bay" aria-label="مركّز عليه" data-docs-state="focus"></td>
-									<td><input class="form-control" value="North Bay" aria-label="غير صالح" aria-invalid="true"></td>
-									<td><input class="form-control" value="North Bay" aria-label="للقراءة فقط" readonly=""></td>
-									<td><input class="form-control" value="North Bay" aria-label="معطّل" disabled=""></td>
+									<td><input class="form-control" name="at-rest" value="North Bay" aria-label="في وضع السكون"></td>
+									<td><input class="form-control" name="focused" value="North Bay" aria-label="مركّز عليه" data-docs-state="focus"></td>
+									<td><input class="form-control" name="invalid" value="North Bay" aria-label="غير صالح" aria-invalid="true"></td>
+									<td><input class="form-control" name="read-only" value="North Bay" aria-label="للقراءة فقط" readonly=""></td>
+									<td><input class="form-control" name="disabled" value="North Bay" aria-label="معطّل" disabled=""></td>
 								</tr>
 								<tr>
 									<th scope="row">form-select</th>
-									<td><select class="form-select" aria-label="في وضع السكون"><option>بحري</option></select></td>
-									<td><select class="form-select" aria-label="مركّز عليه" data-docs-state="focus"><option>بحري</option></select></td>
-									<td><select class="form-select" aria-label="غير صالح" aria-invalid="true"><option>بحري</option></select></td>
+									<td><select class="form-select" name="at-rest" aria-label="في وضع السكون"><option>بحري</option></select></td>
+									<td><select class="form-select" name="focused" aria-label="مركّز عليه" data-docs-state="focus"><option>بحري</option></select></td>
+									<td><select class="form-select" name="invalid" aria-label="غير صالح" aria-invalid="true"><option>بحري</option></select></td>
 									<td>-</td>
-									<td><select class="form-select" aria-label="معطّل" disabled=""><option>بحري</option></select></td>
+									<td><select class="form-select" name="disabled" aria-label="معطّل" disabled=""><option>بحري</option></select></td>
 								</tr>
 								<tr>
 									<th scope="row">form-floating</th>
@@ -866,30 +866,30 @@ Boat C	 9 trips	201 seats</pre>
 					<h2 id="all-input-group"><a href="input-group.html">مجموعات الإدخال</a></h2>
 					<div class="docs-example docs-example-stack" id="input-group-basic">
 						<div class="input-group">
-							<input class="form-control" type="text" inputmode="decimal" value="2,500" aria-label="سعر البالغ" aria-describedby="input-group-basic-unit">
+							<input class="form-control" type="text" name="adult-price" inputmode="decimal" value="2,500" aria-label="سعر البالغ" aria-describedby="input-group-basic-unit">
 							<span class="input-group-text" id="input-group-basic-unit">THB</span>
 						</div>
 						<div class="input-group">
 							<span class="input-group-text">https://</span>
-							<input class="form-control" type="text" value="northbay.example" aria-label="عنوان الموقع">
+							<input class="form-control" type="text" name="site-address" value="northbay.example" aria-label="عنوان الموقع">
 						</div>
 						<div class="input-group">
-							<input class="form-control" type="text" value="R7K2-9QXM" readonly="" aria-label="رمز الدخول">
+							<input class="form-control" type="text" name="access-code" value="R7K2-9QXM" readonly="" aria-label="رمز الدخول">
 							<button class="btn" type="button"><i class="bi bi-clipboard" aria-hidden="true"></i>نسخ</button>
 						</div>
 					</div>
 					<div class="docs-example docs-example-stack" id="input-group-choice">
 						<div class="input-group">
-							<select class="form-select" aria-label="العملة">
+							<select class="form-select" name="currency" aria-label="العملة">
 								<option>THB</option>
 								<option>USD</option>
 								<option>EUR</option>
 							</select>
-							<input class="form-control" type="text" inputmode="decimal" value="1,900" aria-label="سعر الطفل">
+							<input class="form-control" type="text" name="child-price" inputmode="decimal" value="1,900" aria-label="سعر الطفل">
 						</div>
 						<div class="input-group">
-							<label class="input-group-text"><input class="check" type="checkbox" checked="">خصم</label>
-							<input class="form-control" type="text" inputmode="decimal" value="10" aria-label="الخصم، بالنسبة المئوية">
+							<label class="input-group-text"><input class="check" type="checkbox" name="discount" checked="">خصم</label>
+							<input class="form-control" type="text" name="discount-percent" inputmode="decimal" value="10" aria-label="الخصم، بالنسبة المئوية">
 							<span class="input-group-text">%</span>
 						</div>
 					</div>
@@ -929,7 +929,7 @@ Boat C	 9 trips	201 seats</pre>
 					</div>
 					<div class="docs-example docs-example-stack" id="input-group-menu">
 						<div class="input-group">
-							<input class="form-control" type="search" placeholder="البحث في الرحلات" aria-label="البحث في الرحلات">
+							<input class="form-control" type="search" name="q" placeholder="البحث في الرحلات" aria-label="البحث في الرحلات">
 							<button class="btn" type="button" commandfor="input-group-menu-in" command="toggle-popover" aria-haspopup="menu">في كل مكان<i class="bi bi-chevron-down" aria-hidden="true"></i></button>
 							<div id="input-group-menu-in" class="menu" popover="" role="menu" aria-label="البحث في">
 								<button class="menu-item" type="button" role="menuitemradio" aria-checked="true">في كل مكان</button>
@@ -957,11 +957,11 @@ Boat C	 9 trips	201 seats</pre>
 							<tbody>
 								<tr>
 									<th scope="row">input-group</th>
-									<td><div class="input-group"><input class="form-control" type="text" value="2,500" aria-label="في وضع السكون"><span class="input-group-text">THB</span></div></td>
-									<td><div class="input-group"><input class="form-control" type="text" value="2,500" aria-label="تحت المؤشر" data-docs-state="hover"><span class="input-group-text">THB</span></div></td>
-									<td><div class="input-group"><input class="form-control" type="text" value="2,500" aria-label="مركّز عليه" data-docs-state="focus"><span class="input-group-text">THB</span></div></td>
-									<td><div class="input-group"><input class="form-control" type="text" value="25OO" aria-label="غير صالح" aria-invalid="true"><span class="input-group-text">THB</span></div></td>
-									<td><div class="input-group"><input class="form-control" type="text" value="2,500" aria-label="معطّل" disabled=""><span class="input-group-text">THB</span></div></td>
+									<td><div class="input-group"><input class="form-control" type="text" name="at-rest" value="2,500" aria-label="في وضع السكون"><span class="input-group-text">THB</span></div></td>
+									<td><div class="input-group"><input class="form-control" type="text" name="hovered" value="2,500" aria-label="تحت المؤشر" data-docs-state="hover"><span class="input-group-text">THB</span></div></td>
+									<td><div class="input-group"><input class="form-control" type="text" name="focused" value="2,500" aria-label="مركّز عليه" data-docs-state="focus"><span class="input-group-text">THB</span></div></td>
+									<td><div class="input-group"><input class="form-control" type="text" name="invalid" value="25OO" aria-label="غير صالح" aria-invalid="true"><span class="input-group-text">THB</span></div></td>
+									<td><div class="input-group"><input class="form-control" type="text" name="disabled" value="2,500" aria-label="معطّل" disabled=""><span class="input-group-text">THB</span></div></td>
 								</tr>
 							</tbody>
 						</table>
@@ -973,9 +973,9 @@ Boat C	 9 trips	201 seats</pre>
 					<div class="docs-example docs-example-stack" id="check-boxes">
 						<fieldset class="vstack gap-8">
 							<legend class="form-label">مشمول</legend>
-							<label class="form-check"><input class="check" type="checkbox" checked="">النقل</label>
-							<label class="form-check"><input class="check" type="checkbox" checked="">الغداء</label>
-							<label class="form-check"><input class="check" type="checkbox">قوارب الكاياك</label>
+							<label class="form-check"><input class="check" type="checkbox" name="transfer" checked="">النقل</label>
+							<label class="form-check"><input class="check" type="checkbox" name="lunch" checked="">الغداء</label>
+							<label class="form-check"><input class="check" type="checkbox" name="kayaks">قوارب الكاياك</label>
 						</fieldset>
 					</div>
 					<div class="docs-example docs-example-stack" id="check-radios">
@@ -987,9 +987,9 @@ Boat C	 9 trips	201 seats</pre>
 						</fieldset>
 					</div>
 					<div class="docs-example docs-example-stack" id="check-switches">
-						<label class="form-check"><input class="switch" type="checkbox" role="switch" checked="">العرض على الموقع</label>
+						<label class="form-check"><input class="switch" type="checkbox" name="show-on-the-site" role="switch" checked="">العرض على الموقع</label>
 						<div class="vstack gap-4">
-							<label class="form-check"><input class="switch" type="checkbox" role="switch" aria-disabled="true" aria-describedby="check-switches-why">إخفاء «يعمل بواسطة REDZ CMS»</label>
+							<label class="form-check"><input class="switch" type="checkbox" name="hide-powered-by-redz-cms" role="switch" aria-disabled="true" aria-describedby="check-switches-why">إخفاء «يعمل بواسطة REDZ CMS»</label>
 							<div class="form-text" id="check-switches-why"><i class="bi bi-lock" aria-hidden="true"></i> متاح مع ترخيص الشريك</div>
 						</div>
 					</div>
@@ -1001,12 +1001,12 @@ Boat C	 9 trips	201 seats</pre>
 							<tbody>
 								<tr>
 									<th scope="row">check</th>
-									<td><input class="check" type="checkbox" aria-label="إيقاف"></td>
-									<td><input class="check" type="checkbox" aria-label="محدد" checked=""></td>
-									<td><input class="check" type="checkbox" aria-label="بعضها" data-docs-indeterminate=""></td>
-									<td><input class="check" type="checkbox" aria-label="مركّز عليه" data-docs-state="focus-visible"></td>
-									<td><input class="check" type="checkbox" aria-label="معطّل" checked="" disabled=""></td>
-									<td><input class="check" type="checkbox" aria-label="غير متاح" checked="" aria-disabled="true"></td>
+									<td><input class="check" type="checkbox" name="off" aria-label="إيقاف"></td>
+									<td><input class="check" type="checkbox" name="checked" aria-label="محدد" checked=""></td>
+									<td><input class="check" type="checkbox" name="some" aria-label="بعضها" data-docs-indeterminate=""></td>
+									<td><input class="check" type="checkbox" name="focused" aria-label="مركّز عليه" data-docs-state="focus-visible"></td>
+									<td><input class="check" type="checkbox" name="disabled" aria-label="معطّل" checked="" disabled=""></td>
+									<td><input class="check" type="checkbox" name="unavailable" aria-label="غير متاح" checked="" aria-disabled="true"></td>
 								</tr>
 								<tr>
 									<th scope="row">radio</th>
@@ -1019,12 +1019,12 @@ Boat C	 9 trips	201 seats</pre>
 								</tr>
 								<tr>
 									<th scope="row">switch</th>
-									<td><input class="switch" type="checkbox" role="switch" aria-label="إيقاف"></td>
-									<td><input class="switch" type="checkbox" role="switch" aria-label="تشغيل" checked=""></td>
+									<td><input class="switch" type="checkbox" name="off" role="switch" aria-label="إيقاف"></td>
+									<td><input class="switch" type="checkbox" name="on" role="switch" aria-label="تشغيل" checked=""></td>
 									<td>-</td>
-									<td><input class="switch" type="checkbox" role="switch" aria-label="مركّز عليه" data-docs-state="focus-visible"></td>
-									<td><input class="switch" type="checkbox" role="switch" aria-label="معطّل" checked="" disabled=""></td>
-									<td><input class="switch" type="checkbox" role="switch" aria-label="غير متاح" checked="" aria-disabled="true"></td>
+									<td><input class="switch" type="checkbox" name="focused" role="switch" aria-label="مركّز عليه" data-docs-state="focus-visible"></td>
+									<td><input class="switch" type="checkbox" name="disabled" role="switch" aria-label="معطّل" checked="" disabled=""></td>
+									<td><input class="switch" type="checkbox" name="unavailable" role="switch" aria-label="غير متاح" checked="" aria-disabled="true"></td>
 								</tr>
 							</tbody>
 						</table>
@@ -1041,7 +1041,7 @@ Boat C	 9 trips	201 seats</pre>
 						<div class="menu combobox-menu" id="combobox-one-panel" popover="" role="dialog" aria-label="اللغة الافتراضية">
 							<div class="combobox-search">
 								<i class="bi bi-search" aria-hidden="true"></i>
-								<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-one-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن لغة" placeholder="ابحث عن لغة" autocomplete="off" autofocus="">
+								<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-one-search" role="combobox" aria-controls="combobox-one-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن لغة" placeholder="ابحث عن لغة" autocomplete="off" autofocus="">
 							</div>
 							<div class="combobox-list" id="combobox-one-list" role="listbox" aria-label="اللغات" data-name="language">
 								<div class="menu-item" role="option" id="combobox-one-en" data-value="en" aria-selected="false">الإنجليزية</div>
@@ -1069,7 +1069,7 @@ Boat C	 9 trips	201 seats</pre>
 						<div class="menu combobox-menu" id="combobox-many-panel" popover="" role="dialog" aria-label="لغات الموقع">
 							<div class="combobox-search">
 								<i class="bi bi-search" aria-hidden="true"></i>
-								<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-many-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن لغة" placeholder="ابحث عن لغة" autocomplete="off" autofocus="">
+								<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-many-search" role="combobox" aria-controls="combobox-many-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن لغة" placeholder="ابحث عن لغة" autocomplete="off" autofocus="">
 							</div>
 							<div class="combobox-list" id="combobox-many-list" role="listbox" aria-label="اللغات" aria-multiselectable="true" data-name="languages[]">
 								<div class="menu-item" role="option" id="combobox-many-en" data-value="en" aria-selected="true">الإنجليزية</div>
@@ -1098,7 +1098,7 @@ Boat C	 9 trips	201 seats</pre>
 						<div class="menu combobox-menu" id="combobox-chips-panel" popover="" role="dialog" aria-label="الفئات">
 							<div class="combobox-search">
 								<i class="bi bi-search" aria-hidden="true"></i>
-								<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-chips-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن فئة" placeholder="ابحث عن فئة" autocomplete="off" autofocus="">
+								<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-chips-search" role="combobox" aria-controls="combobox-chips-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن فئة" placeholder="ابحث عن فئة" autocomplete="off" autofocus="">
 							</div>
 							<div class="combobox-list" id="combobox-chips-list" role="listbox" aria-label="الفئات" aria-multiselectable="true" data-name="categories[]" data-chips="combobox-chips-list-chips">
 								<div class="menu-item" role="option" id="combobox-chips-beaches" data-value="beaches" aria-selected="true">الشواطئ</div>
@@ -1126,7 +1126,7 @@ Boat C	 9 trips	201 seats</pre>
 						<div class="menu combobox-menu" id="combobox-tags-panel" popover="" role="dialog" aria-label="الوسوم">
 							<div class="combobox-search">
 								<i class="bi bi-search" aria-hidden="true"></i>
-								<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-tags-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن وسم أو أنشئه" placeholder="ابحث عن وسم أو أنشئه" autocomplete="off" autofocus="">
+								<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-tags-search" role="combobox" aria-controls="combobox-tags-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن وسم أو أنشئه" placeholder="ابحث عن وسم أو أنشئه" autocomplete="off" autofocus="">
 							</div>
 							<div class="combobox-list" id="combobox-tags-list" role="listbox" aria-label="الوسوم" aria-multiselectable="true" data-name="tags[]" data-create="tags_new[]" data-chips="combobox-tags-chips">
 								<div class="menu-item" role="option" id="combobox-tags-family" data-value="family" aria-selected="true">العائلة</div>
@@ -1149,7 +1149,7 @@ Boat C	 9 trips	201 seats</pre>
 					<div class="docs-example docs-example-stack" id="combobox-levels">
 						<div class="card">
 							<div class="card-body vstack gap-8">
-								<input class="form-control" type="search" role="combobox" aria-controls="combobox-levels-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن وجهة" placeholder="ابحث عن وجهة" autocomplete="off">
+								<input class="form-control" type="search" id="combobox-levels-search" role="combobox" aria-controls="combobox-levels-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن وجهة" placeholder="ابحث عن وجهة" autocomplete="off">
 								<div class="combobox-list" id="combobox-levels-list" role="listbox" aria-label="الوجهات" data-name="destination">
 									<div class="menu-item" role="option" id="combobox-levels-th" data-value="th" data-level="1" aria-selected="false">الأرض الشمالية</div>
 									<div class="menu-item" role="option" id="combobox-levels-south" data-value="th-south" data-level="2" aria-selected="false">الجنوب</div>
@@ -1173,7 +1173,7 @@ Boat C	 9 trips	201 seats</pre>
 						<div class="menu combobox-menu" id="combobox-groups-panel" popover="" role="dialog" aria-label="الدور">
 							<div class="combobox-search">
 								<i class="bi bi-search" aria-hidden="true"></i>
-								<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-groups-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن دور" placeholder="ابحث عن دور" autocomplete="off" autofocus="">
+								<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-groups-search" role="combobox" aria-controls="combobox-groups-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن دور" placeholder="ابحث عن دور" autocomplete="off" autofocus="">
 							</div>
 							<div class="combobox-list" id="combobox-groups-list" role="listbox" aria-label="الأدوار" data-name="role">
 								<div role="group" aria-labelledby="combobox-groups-content">
@@ -1199,7 +1199,7 @@ Boat C	 9 trips	201 seats</pre>
 						<div class="menu combobox-menu" id="combobox-remote-panel" popover="" role="dialog" aria-label="مُسنَد إلى">
 							<div class="combobox-search">
 								<i class="bi bi-search" aria-hidden="true"></i>
-								<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-remote-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن شخص" placeholder="ابحث عن شخص" autocomplete="off" autofocus="">
+								<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-remote-search" role="combobox" aria-controls="combobox-remote-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن شخص" placeholder="ابحث عن شخص" autocomplete="off" autofocus="">
 							</div>
 							<div class="combobox-list" id="combobox-remote-list" role="listbox" aria-label="الأشخاص" data-name="assignee" data-docs-remote=""></div>
 							<p class="combobox-no-results" hidden="">لم يُعثر على أحد</p>
@@ -1208,7 +1208,7 @@ Boat C	 9 trips	201 seats</pre>
 					<div class="docs-example docs-example-stack" id="combobox-inline">
 						<div class="card">
 							<div class="card-body vstack gap-8">
-								<input class="form-control" type="search" role="combobox" aria-controls="combobox-inline-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن منطقة زمنية" placeholder="ابحث عن منطقة زمنية" autocomplete="off">
+								<input class="form-control" type="search" id="combobox-inline-search" role="combobox" aria-controls="combobox-inline-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن منطقة زمنية" placeholder="ابحث عن منطقة زمنية" autocomplete="off">
 								<div class="combobox-list" id="combobox-inline-list" role="listbox" aria-label="المناطق الزمنية" data-name="zone">
 									<div class="menu-item" role="option" id="combobox-inline-bkk" data-value="Asia/Bangkok" aria-selected="true">بانكوك · UTC+7</div>
 									<div class="menu-item" role="option" id="combobox-inline-sgp" data-value="Asia/Singapore" aria-selected="false">سنغافورة · UTC+8</div>
@@ -1672,7 +1672,7 @@ Boat C	 9 trips	201 seats</pre>
 					<h2 id="all-carousel"><a href="carousel.html">الدوّارات</a></h2>
 					<div class="docs-example docs-example-stack" id="carousel-basic">
 						<div class="carousel" id="carousel-basic-tours" role="region" aria-label="الجولات">
-							<div class="carousel-inner" tabindex="0" aria-label="الجولات">
+							<div class="carousel-inner" role="group" tabindex="0" aria-label="الجولات">
 								<div class="carousel-item"><div class="p-24 bg-primary-subtle vstack gap-8"><strong>متنزه الخليج الشمالي البحري</strong><span>قوارب الكاياك وبحيرة ومطل، يوم بالقارب السريع.</span></div></div>
 								<div class="carousel-item"><div class="p-24 bg-success-subtle vstack gap-8"><strong>الغطس في خليج السلحفاة</strong><span>خليجان وحديقة مرجانية، والغداء على متن القارب.</span></div></div>
 								<div class="carousel-item"><div class="p-24 bg-warning-subtle vstack gap-8"><strong>رحلة الغروب</strong><span>قارب كاتاماران حول الساحل الجنوبي عند الغسق.</span></div></div>
@@ -1686,7 +1686,7 @@ Boat C	 9 trips	201 seats</pre>
 					</div>
 					<div class="docs-example docs-example-stack" id="carousel-several">
 						<div class="carousel" id="carousel-several-reviews" role="region" aria-label="المراجعات">
-							<div class="carousel-inner" tabindex="0" aria-label="المراجعات">
+							<div class="carousel-inner" role="group" tabindex="0" aria-label="المراجعات">
 								<div class="carousel-item"><div class="card card-body h-100">«أفضل يوم في رحلتنا.» - آنا</div></div>
 								<div class="carousel-item"><div class="card card-body h-100">«مرشدون لطفاء وقارب نظيف.» - مارك</div></div>
 								<div class="carousel-item"><div class="card card-body h-100">«البحيرة تستحق الصعود.» - سومتشاي</div></div>
@@ -1700,7 +1700,7 @@ Boat C	 9 trips	201 seats</pre>
 					</div>
 					<div class="docs-example docs-example-stack" id="carousel-fade">
 						<div class="carousel carousel-fade" id="carousel-fade-island" role="region" aria-label="الجزيرة">
-							<div class="carousel-inner" tabindex="0" aria-label="الجزيرة">
+							<div class="carousel-inner" role="group" tabindex="0" aria-label="الجزيرة">
 								<div class="carousel-item"><div class="p-32 bg-info-subtle text-center"><strong>الشواطئ</strong></div></div>
 								<div class="carousel-item"><div class="p-32 bg-success-subtle text-center"><strong>الشلالات</strong></div></div>
 								<div class="carousel-item"><div class="p-32 bg-warning-subtle text-center"><strong>المعابد</strong></div></div>
@@ -1786,8 +1786,8 @@ Boat C	 9 trips	201 seats</pre>
 					</div>
 					<div class="docs-example docs-example-stack" id="list-group-rows">
 						<ul class="list-group" aria-label="طرق الدفع" data-density="compact">
-							<li class="list-group-item hstack gap-12"><span class="vstack flex-1"><a class="stretched-link fw-600" href="#list-group-rows">بطاقة مصرفية</a><span class="text-muted fs-12">Visa، Mastercard · 2.9 %</span></span><span class="list-group-actions"><a class="btn btn-sm" href="#list-group-rows">إعداد</a><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="نسخ الإعدادات: البطاقة المصرفية"><i class="bi bi-copy" aria-hidden="true"></i></button></span><label class="form-check"><input class="switch" type="checkbox" role="switch" checked="" aria-label="البطاقة المصرفية مفعّلة"></label></li>
-							<li class="list-group-item hstack gap-12"><span class="vstack flex-1"><a class="stretched-link fw-600" href="#list-group-rows">تحويل مصرفي</a><span class="text-muted fs-12">ثلاثة أيام عمل</span></span><span class="list-group-actions"><a class="btn btn-sm" href="#list-group-rows">إعداد</a></span><label class="form-check"><input class="switch" type="checkbox" role="switch" aria-label="التحويل المصرفي مفعّل"></label></li>
+							<li class="list-group-item hstack gap-12"><span class="vstack flex-grow-1"><a class="stretched-link fw-600" href="#list-group-rows">بطاقة مصرفية</a><span class="text-muted fs-12">Visa، Mastercard · 2.9 %</span></span><span class="list-group-actions"><a class="btn btn-sm" href="#list-group-rows">إعداد</a><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="نسخ الإعدادات: البطاقة المصرفية"><i class="bi bi-copy" aria-hidden="true"></i></button></span><label class="form-check"><input class="switch" type="checkbox" name="bank-card-on" role="switch" checked="" aria-label="البطاقة المصرفية مفعّلة"></label></li>
+							<li class="list-group-item hstack gap-12"><span class="vstack flex-grow-1"><a class="stretched-link fw-600" href="#list-group-rows">تحويل مصرفي</a><span class="text-muted fs-12">ثلاثة أيام عمل</span></span><span class="list-group-actions"><a class="btn btn-sm" href="#list-group-rows">إعداد</a></span><label class="form-check"><input class="switch" type="checkbox" name="bank-transfer-on" role="switch" aria-label="التحويل المصرفي مفعّل"></label></li>
 						</ul>
 					</div>
 					<div class="docs-example docs-example-stack" id="list-group-flush">
@@ -1820,13 +1820,13 @@ Boat C	 9 trips	201 seats</pre>
 					</div>
 					<div class="docs-example docs-example-stack" id="list-group-checks">
 						<div class="list-group" role="group" aria-label="العرض على">
-							<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" checked="">lagoon.example</label>
-							<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" checked="">northbay.example</label>
-							<label class="list-group-item hstack gap-8"><input class="check" type="checkbox">turtlecove.example</label>
+							<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" name="lagoon-example" checked="">lagoon.example</label>
+							<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" name="northbay-example" checked="">northbay.example</label>
+							<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" name="turtlecove-example">turtlecove.example</label>
 						</div>
 					</div>
 					<div class="docs-example docs-example-stack" id="list-group-search">
-						<input class="form-control" type="search" data-filter="list-group-search-list" aria-label="ابحث عن رحلة" placeholder="ابحث عن رحلة" autocomplete="off">
+						<input class="form-control" type="search" name="q" data-filter="list-group-search-list" aria-label="ابحث عن رحلة" placeholder="ابحث عن رحلة" autocomplete="off">
 						<ul class="list-group" id="list-group-search-list">
 							<li class="list-group-item">حديقة الخليج الشمالي البحرية</li>
 							<li class="list-group-item">خليج السلحفاة وخليج اللؤلؤ</li>
@@ -1845,7 +1845,7 @@ Boat C	 9 trips	201 seats</pre>
 							<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" name="boat" value="a" aria-pressed="false">القارب أ</button>
 							<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" name="boat" value="b" aria-pressed="false">القارب ب</button>
 						</div>
-						<input class="form-control" type="search" data-filter="list-group-states-list" aria-label="ابحث عن ضيف" placeholder="ابحث عن ضيف" autocomplete="off">
+						<input class="form-control" type="search" name="q" data-filter="list-group-states-list" aria-label="ابحث عن ضيف" placeholder="ابحث عن ضيف" autocomplete="off">
 						<p class="fs-12 text-muted" data-filter-count="list-group-states-list"></p>
 						<ul class="list-group" id="list-group-states-list">
 							<li class="list-group-item" data-state="paid" data-boat="a">Alex Sample، القارب A، مدفوع</li>
@@ -1858,7 +1858,7 @@ Boat C	 9 trips	201 seats</pre>
 					</div>
 					<div class="docs-example docs-example-stack" id="list-group-server-example">
 						<search class="hstack flex-wrap gap-8" aria-label="الطلبات">
-							<div class="form-adorn flex-1"><i class="bi bi-search" aria-hidden="true"></i><input class="form-control" type="search" name="q" data-filter="list-group-server-list" data-filter-server="" aria-label="البحث في الطلبات" placeholder="الموضوع أو الشخص" autocomplete="off"></div>
+							<div class="form-adorn flex-grow-1"><i class="bi bi-search" aria-hidden="true"></i><input class="form-control" type="search" name="q" data-filter="list-group-server-list" data-filter-server="" aria-label="البحث في الطلبات" placeholder="الموضوع أو الشخص" autocomplete="off"></div>
 							<select class="form-select w-auto" name="status" aria-label="الحالة"><option value="">أي حالة</option><option value="open">فتح</option><option value="closed">مغلقة</option></select>
 						</search>
 						<ul class="list-group" id="list-group-server-list" data-docs-server="">
@@ -2017,7 +2017,7 @@ Boat C	 9 trips	201 seats</pre>
 						</div>
 					</div>
 					<div class="docs-example docs-example-stack" id="tree-current">
-						<input class="form-control" type="search" data-filter="tree-current-list" aria-label="ابحث عن صفحة" placeholder="ابحث عن صفحة" autocomplete="off">
+						<input class="form-control" type="search" name="q" data-filter="tree-current-list" aria-label="ابحث عن صفحة" placeholder="ابحث عن صفحة" autocomplete="off">
 						<ul class="tree" id="tree-current-list" aria-label="صفحات للنشر">
 							<li class="tree-item">
 								<div class="tree-row">
@@ -2078,7 +2078,7 @@ Boat C	 9 trips	201 seats</pre>
 								</ol>
 							</div>
 							<div class="card-footer">
-								<textarea class="form-control" rows="2" aria-label="الرد" placeholder="اكتب ردًا"></textarea>
+								<textarea class="form-control" name="reply" rows="2" aria-label="الرد" placeholder="اكتب ردًا"></textarea>
 								<button class="btn btn-primary" type="button"><i class="bi bi-send" aria-hidden="true"></i>إرسال</button>
 								<button class="btn ms-auto" type="button">أغلق التذكرة</button>
 							</div>
@@ -2279,10 +2279,10 @@ Boat C	 9 trips	201 seats</pre>
 							</div>
 						</div>
 						<div class="media-grid" id="media-folder-grid" data-view="grid" data-reorder="media[]" role="list" aria-label="صور المجلد">
-							<div class="media-tile" role="listitem" data-value="lagoon"><input class="check media-tile-check" type="checkbox" aria-label="حدّد lagoon.svg" checked=""><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="media-folder-moves" command="toggle-popover" aria-haspopup="menu" aria-label="انقل: lagoon.svg"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button><img class="media-tile-thumb" src="img/lagoon.svg" alt="بحيرة شاطئية تحت تلال خضراء" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span>lagoon.svg</span></span><span class="media-tile-meta">1600×900 · 24 KB · 4 مقاسات</span></div><div class="media-tile-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="انسخ الوسم: lagoon.svg"><i class="bi bi-clipboard" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon" type="button" aria-label="أين تُستخدم: lagoon.svg"><i class="bi bi-search" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon btn-subtle-danger" type="button" aria-label="احذف: lagoon.svg"><i class="bi bi-trash3" aria-hidden="true"></i></button></div></div>
-							<div class="media-tile" role="listitem" data-value="qr"><input class="check media-tile-check" type="checkbox" aria-label="حدّد qr.svg"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="media-folder-moves" command="toggle-popover" aria-haspopup="menu" aria-label="انقل: qr.svg"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button><img class="media-tile-thumb" src="img/qr.svg" alt="رمز QR للوثائق" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span>qr.svg</span></span><span class="media-tile-meta">45×45 · 3 KB · مقاس واحد</span></div><div class="media-tile-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="انسخ الوسم: qr.svg"><i class="bi bi-clipboard" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon" type="button" aria-label="أين تُستخدم: qr.svg"><i class="bi bi-search" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon btn-subtle-danger" type="button" aria-label="احذف: qr.svg"><i class="bi bi-trash3" aria-hidden="true"></i></button></div></div>
-							<div class="media-tile" role="listitem" data-value="pier"><input class="check media-tile-check" type="checkbox" aria-label="حدّد pier-at-dawn.svg"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="media-folder-moves" command="toggle-popover" aria-haspopup="menu" aria-label="انقل: pier-at-dawn.svg"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button><img class="media-tile-thumb" src="img/lagoon.svg" alt="الرصيف عند الفجر" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span>pier-at-dawn.svg</span></span><span class="media-tile-meta">2400×1600 · 31 KB · 5 مقاسات</span></div><div class="media-tile-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="انسخ الوسم: pier-at-dawn.svg"><i class="bi bi-clipboard" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon" type="button" aria-label="أين تُستخدم: pier-at-dawn.svg"><i class="bi bi-search" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon btn-subtle-danger" type="button" aria-label="احذف: pier-at-dawn.svg"><i class="bi bi-trash3" aria-hidden="true"></i></button></div></div>
-							<div class="media-tile" role="listitem" data-value="hidden" hidden=""><input class="check media-tile-check" type="checkbox" aria-label="حدّد boat.svg"><img class="media-tile-thumb" src="img/lagoon.svg" alt="" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><span>boat.svg</span></span></div></div>
+							<div class="media-tile" role="listitem" data-value="lagoon"><input class="check media-tile-check" type="checkbox" name="selected" value="lagoon.svg" aria-label="حدّد lagoon.svg" checked=""><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="media-folder-moves" command="toggle-popover" aria-haspopup="menu" aria-label="انقل: lagoon.svg"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button><img class="media-tile-thumb" src="img/lagoon.svg" alt="بحيرة شاطئية تحت تلال خضراء" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span>lagoon.svg</span></span><span class="media-tile-meta">1600×900 · 24 KB · 4 مقاسات</span></div><div class="media-tile-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="انسخ الوسم: lagoon.svg"><i class="bi bi-clipboard" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon" type="button" aria-label="أين تُستخدم: lagoon.svg"><i class="bi bi-search" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon btn-subtle-danger" type="button" aria-label="احذف: lagoon.svg"><i class="bi bi-trash3" aria-hidden="true"></i></button></div></div>
+							<div class="media-tile" role="listitem" data-value="qr"><input class="check media-tile-check" type="checkbox" name="selected" value="qr.svg" aria-label="حدّد qr.svg"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="media-folder-moves" command="toggle-popover" aria-haspopup="menu" aria-label="انقل: qr.svg"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button><img class="media-tile-thumb" src="img/qr.svg" alt="رمز QR للوثائق" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span>qr.svg</span></span><span class="media-tile-meta">45×45 · 3 KB · مقاس واحد</span></div><div class="media-tile-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="انسخ الوسم: qr.svg"><i class="bi bi-clipboard" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon" type="button" aria-label="أين تُستخدم: qr.svg"><i class="bi bi-search" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon btn-subtle-danger" type="button" aria-label="احذف: qr.svg"><i class="bi bi-trash3" aria-hidden="true"></i></button></div></div>
+							<div class="media-tile" role="listitem" data-value="pier"><input class="check media-tile-check" type="checkbox" name="selected" value="pier-at-dawn.svg" aria-label="حدّد pier-at-dawn.svg"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="media-folder-moves" command="toggle-popover" aria-haspopup="menu" aria-label="انقل: pier-at-dawn.svg"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button><img class="media-tile-thumb" src="img/lagoon.svg" alt="الرصيف عند الفجر" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span>pier-at-dawn.svg</span></span><span class="media-tile-meta">2400×1600 · 31 KB · 5 مقاسات</span></div><div class="media-tile-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="انسخ الوسم: pier-at-dawn.svg"><i class="bi bi-clipboard" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon" type="button" aria-label="أين تُستخدم: pier-at-dawn.svg"><i class="bi bi-search" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon btn-subtle-danger" type="button" aria-label="احذف: pier-at-dawn.svg"><i class="bi bi-trash3" aria-hidden="true"></i></button></div></div>
+							<div class="media-tile" role="listitem" data-value="hidden" hidden=""><input class="check media-tile-check" type="checkbox" name="selected" value="boat.svg" aria-label="حدّد boat.svg"><img class="media-tile-thumb" src="img/lagoon.svg" alt="" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><span>boat.svg</span></span></div></div>
 						</div>
 						<div class="menu" id="media-folder-moves" popover="" role="menu" aria-label="نقل">
 							<button class="menu-item" type="button" role="menuitem" data-move="up"><i class="bi bi-arrow-left flip-rtl" aria-hidden="true"></i>انقل إلى الأمام</button>
@@ -2320,7 +2320,7 @@ Boat C	 9 trips	201 seats</pre>
 								<table class="table">
 									<thead>
 										<tr>
-											<th class="table-check"><input class="check" type="checkbox" aria-label="تحديد الكل"></th>
+											<th class="table-check"><input class="check" type="checkbox" id="table-list-all" aria-label="تحديد الكل"></th>
 											<th>الرحلة</th>
 											<th class="text-end d-none md:d-table-cell">السعر ابتداءً من</th>
 											<th class="d-none md:d-table-cell">الحالة</th>
@@ -2329,28 +2329,28 @@ Boat C	 9 trips	201 seats</pre>
 									</thead>
 									<tbody>
 										<tr>
-											<td><input class="check" type="checkbox" aria-label="تحديد: الخليج الشمالي"></td>
+											<td><input class="check" type="checkbox" name="selected" value="north-bay" aria-label="تحديد: الخليج الشمالي"></td>
 											<td><a class="table-title" href="#table-list">الخليج الشمالي: الحديقة البحرية بالقارب السريع</a><div class="table-sub d-none md:d-block">/excursions/north-bay/</div></td>
 											<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">2,500 بات</td>
 											<td class="d-none md:d-table-cell"><span class="badge"><i class="bi bi-check2" aria-hidden="true"></i>منشور</span></td>
 											<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="تعديل: الخليج الشمالي"><i class="bi bi-pencil" aria-hidden="true"></i></button></td>
 										</tr>
 										<tr class="table-danger">
-											<td><input class="check" type="checkbox" aria-label="تحديد: محمية الفيلة"></td>
+											<td><input class="check" type="checkbox" name="selected" value="elephant-sanctuary" aria-label="تحديد: محمية الفيلة"></td>
 											<td><a class="table-title" href="#table-list">محمية الفيلة: إطعام ونزهة</a><div class="table-note"><i class="bi bi-x-octagon-fill" aria-hidden="true"></i><span class="text-muted">لم يُعَد البناء: تحذير PHP في قالب السمة</span></div></td>
 											<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">2,600 بات</td>
 											<td class="d-none md:d-table-cell"><span class="badge badge-subtle-danger"><i class="bi bi-x-octagon" aria-hidden="true"></i>فشل</span></td>
 											<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="إعادة البناء: محمية الفيلة"><i class="bi bi-arrow-repeat" aria-hidden="true"></i></button></td>
 										</tr>
 										<tr class="table-warning">
-											<td><input class="check" type="checkbox" aria-label="تحديد: السوق الليلي"></td>
+											<td><input class="check" type="checkbox" name="selected" value="night-market" aria-label="تحديد: السوق الليلي"></td>
 											<td><a class="table-title" href="#table-list">السوق الليلي وطعام الشارع</a><div class="table-note"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i><span class="text-muted">الترجمة الالأرض الشماليةية أقدم من الإنجليزية</span></div></td>
 											<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">900 بات</td>
 											<td class="d-none md:d-table-cell"><span class="badge badge-subtle-warning"><i class="bi bi-clock-history" aria-hidden="true"></i>قديم</span></td>
 											<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="تعديل: السوق الليلي"><i class="bi bi-pencil" aria-hidden="true"></i></button></td>
 										</tr>
 										<tr class="table-secondary">
-											<td><input class="check" type="checkbox" aria-label="تحديد: الرقص الشعبي"></td>
+											<td><input class="check" type="checkbox" name="selected" value="folk-dance" aria-label="تحديد: الرقص الشعبي"></td>
 											<td><a class="table-title" href="#table-list">الرقص الشعبي: أمسية في الملعب</a><div class="table-sub d-none md:d-block">مسحوب من المواقع</div></td>
 											<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">1,500 بات</td>
 											<td class="d-none md:d-table-cell"><span class="badge"><i class="bi bi-eye-slash" aria-hidden="true"></i>مسحوب</span></td>
@@ -2362,7 +2362,7 @@ Boat C	 9 trips	201 seats</pre>
 						</section>
 					</div>
 					<div class="docs-example docs-example-stack" id="table-select">
-						<input class="form-control" type="search" data-filter="table-select-rows" aria-label="ابحث عن ضيف" placeholder="ابحث عن ضيف" autocomplete="off">
+						<input class="form-control" type="search" name="q" data-filter="table-select-rows" aria-label="ابحث عن ضيف" placeholder="ابحث عن ضيف" autocomplete="off">
 						<section class="card" aria-labelledby="table-select-title" data-select="rows">
 							<div class="card-header"><h2 class="fs-14" id="table-select-title">الضيوف</h2></div>
 							<div class="selection-bar" role="region" aria-label="الضيوف المحددون" hidden="">
@@ -2371,12 +2371,12 @@ Boat C	 9 trips	201 seats</pre>
 								<button class="btn btn-sm btn-icon btn-text ms-auto" type="button" command="--select-none" aria-controls="table-select-rows" aria-label="مسح التحديد"><i class="bi bi-x" aria-hidden="true"></i></button>
 							</div>
 							<table class="table" id="table-select-rows">
-								<thead><tr><th class="table-check"><input class="check" type="checkbox" data-select-all="" aria-label="تحديد الكل"></th><th scope="col">الضيف</th><th scope="col" class="text-end">المقاعد</th></tr></thead>
+								<thead><tr><th class="table-check"><input class="check" type="checkbox" id="table-select-all" data-select-all="" aria-label="تحديد الكل"></th><th scope="col">الضيف</th><th scope="col" class="text-end">المقاعد</th></tr></thead>
 								<tbody>
-									<tr><td class="table-check"><input class="check" type="checkbox" value="11" aria-label="تحديد: Alex Sample"></td><td>Alex Sample</td><td class="text-end tabular-nums">2</td></tr>
-									<tr><td class="table-check"><input class="check" type="checkbox" value="12" aria-label="تحديد: Ben Sample"></td><td>Ben Sample</td><td class="text-end tabular-nums">3</td></tr>
-									<tr><td class="table-check"><input class="check" type="checkbox" value="13" aria-label="تحديد: Chris Sample"></td><td>Chris Sample</td><td class="text-end tabular-nums">4</td></tr>
-									<tr><td class="table-check"><input class="check" type="checkbox" value="14" aria-label="تحديد: Dana Sample" disabled=""></td><td>Dana Sample<div class="table-sub">تمت مراسلته</div></td><td class="text-end tabular-nums">1</td></tr>
+									<tr><td class="table-check"><input class="check" type="checkbox" name="selected" value="11" aria-label="تحديد: Alex Sample"></td><td>Alex Sample</td><td class="text-end tabular-nums">2</td></tr>
+									<tr><td class="table-check"><input class="check" type="checkbox" name="selected" value="12" aria-label="تحديد: Ben Sample"></td><td>Ben Sample</td><td class="text-end tabular-nums">3</td></tr>
+									<tr><td class="table-check"><input class="check" type="checkbox" name="selected" value="13" aria-label="تحديد: Chris Sample"></td><td>Chris Sample</td><td class="text-end tabular-nums">4</td></tr>
+									<tr><td class="table-check"><input class="check" type="checkbox" name="selected" value="14" aria-label="تحديد: Dana Sample" disabled=""></td><td>Dana Sample<div class="table-sub">تمت مراسلته</div></td><td class="text-end tabular-nums">1</td></tr>
 								</tbody>
 							</table>
 						</section>
@@ -2502,7 +2502,7 @@ Boat C	 9 trips	201 seats</pre>
 						</table>
 					</div>
 					<div class="docs-example docs-example-stack" id="table-grouped">
-						<input class="form-control" type="search" data-filter="table-grouped" aria-label="ابحث عن ضيف" placeholder="ابحث عن ضيف" autocomplete="off">
+						<input class="form-control" type="search" name="q" data-filter="table-grouped" aria-label="ابحث عن ضيف" placeholder="ابحث عن ضيف" autocomplete="off">
 						<table class="table" aria-label="الحجوزات حسب القارب">
 							<thead><tr><th scope="col">الضيف</th><th scope="col" class="text-end">المقاعد</th><th scope="col" class="text-end">مدفوع</th></tr></thead>
 							<tbody>
@@ -2616,7 +2616,7 @@ Boat C	 9 trips	201 seats</pre>
 				<section class="vstack gap-16" aria-labelledby="all-log">
 					<h2 id="all-log"><a href="log.html">السجلات والفروق</a></h2>
 					<div class="docs-example docs-example-stack" id="log-follow">
-						<pre class="log max-h-160" id="log-follow-lines" tabindex="0" data-follow="" aria-label="The import's output" dir="ltr"><span data-tone="muted">09:14:02</span> Import started: excursions.csv, 128 rows
+						<pre class="log max-h-160" id="log-follow-lines" role="region" tabindex="0" data-follow="" aria-label="The import's output" dir="ltr"><span data-tone="muted">09:14:02</span> Import started: excursions.csv, 128 rows
 <span data-tone="muted">09:14:02</span> Columns: title, price, date, seats, language
 <span data-tone="muted">09:14:02</span> Row 1-20 read
 <span data-tone="muted">09:14:02</span> Row 21-40 read
@@ -2629,7 +2629,7 @@ Boat C	 9 trips	201 seats</pre>
 						<div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="log-line" aria-controls="log-follow-lines">أضف سطرًا</button></div>
 					</div>
 					<div class="docs-example docs-example-stack" id="log-thread">
-						<div class="card card-scroll max-h-240" aria-labelledby="log-thread-title">
+						<div class="card card-scroll max-h-240">
 							<div class="card-header"><h2 class="fs-14" id="log-thread-title">الطلب 24-0187</h2></div>
 							<div class="card-body vstack gap-8" id="log-thread-box" role="region" tabindex="0" aria-labelledby="log-thread-title" data-follow="">
 								<p>A Sample: بوابة الرصيف لا تفتح في 07:00.</p>
@@ -2680,7 +2680,7 @@ Boat C	 9 trips	201 seats</pre>
 						</div>
 					</div>
 					<div class="docs-example docs-example-stack" id="command-line-install">
-						<div class="hstack gap-8"><h4 class="fs-14 flex-1" id="command-line-install-title">ثبّت الوكيل</h4><button class="btn btn-sm" type="button" command="--copy" aria-controls="command-line-install-list"><i class="bi bi-copy" aria-hidden="true"></i>انسخ الكل</button></div>
+						<div class="hstack gap-8"><h4 class="fs-14 flex-grow-1" id="command-line-install-title">ثبّت الوكيل</h4><button class="btn btn-sm" type="button" command="--copy" aria-controls="command-line-install-list"><i class="bi bi-copy" aria-hidden="true"></i>انسخ الكل</button></div>
 						<ol class="command-steps" id="command-line-install-list" aria-labelledby="command-line-install-title">
 							<li><p id="command-line-install-1">نزّله:</p><div class="command-line" role="group" aria-labelledby="command-line-install-1"><pre tabindex="0" translate="no"><code>curl -fsSLO https://get.example.com/agent/agent-2.4.tar.gz</code></pre><button class="btn btn-icon" type="button" command="--copy" aria-label="انسخ الأمر"><i class="bi bi-copy" aria-hidden="true"></i></button></div></li>
 							<li><p id="command-line-install-2">فك ضغطه:</p><div class="command-line" role="group" aria-labelledby="command-line-install-2"><pre tabindex="0" translate="no"><code>tar -xzf agent-2.4.tar.gz -C /opt</code></pre><button class="btn btn-icon" type="button" command="--copy" aria-label="انسخ الأمر"><i class="bi bi-copy" aria-hidden="true"></i></button></div></li>
@@ -2898,11 +2898,11 @@ Boat C	 9 trips	201 seats</pre>
 					</div>
 					<div class="docs-example" id="qr-package">
 						<figure class="vstack gap-8 align-items-center">
-							<div class="qr" data-qr="https://redz-tech.github.io/REDZ.UI/" aria-label="رمز QR: عنوان هذا الموقع"></div>
+							<div class="qr" data-qr="https://redz-tech.github.io/REDZ.UI/" role="img" aria-label="رمز QR: عنوان هذا الموقع"></div>
 							<figcaption class="fs-12 text-muted">مرسوم من data-qr</figcaption>
 						</figure>
 						<figure class="vstack gap-8 align-items-center">
-							<div class="qr" id="qr-package-call" aria-label="رمز QR: مفتاح للتطبيق"></div>
+							<div class="qr" id="qr-package-call" role="img" aria-label="رمز QR: مفتاح للتطبيق"></div>
 							<figcaption class="fs-12 text-muted">ترسمه REDZ.ui.qr</figcaption>
 						</figure>
 					</div>
@@ -2995,7 +2995,7 @@ Boat C	 9 trips	201 seats</pre>
 						<label class="empty-state empty-state-drop">
 							<span class="icon-tile icon-tile-sm"><i class="bi bi-upload" aria-hidden="true"></i></span>
 							<span class="vstack gap-2"><strong class="text-body">الشعار · السمة الفاتحة</strong><span class="form-text">SVG أو PNG، أفلت ملفًا أو اختر</span></span>
-							<input class="visually-hidden" type="file" accept="image/svg+xml,image/png">
+							<input class="visually-hidden" type="file" name="logo-light" accept="image/svg+xml,image/png">
 						</label>
 					</div>
 					<div class="docs-states" id="empty-state-states" tabindex="0" role="region" aria-labelledby="empty-state-states-title">
@@ -3006,8 +3006,8 @@ Boat C	 9 trips	201 seats</pre>
 							<tbody>
 								<tr>
 									<th scope="row">empty-state-drop</th>
-									<td><label class="empty-state empty-state-drop"><span class="icon-tile icon-tile-sm"><i class="bi bi-upload" aria-hidden="true"></i></span><strong class="text-body">الشعار</strong><input class="visually-hidden" type="file"></label></td>
-									<td><label class="empty-state empty-state-drop" data-docs-state="hover"><span class="icon-tile icon-tile-sm"><i class="bi bi-upload" aria-hidden="true"></i></span><strong class="text-body">الشعار</strong><input class="visually-hidden" type="file"></label></td>
+									<td><label class="empty-state empty-state-drop"><span class="icon-tile icon-tile-sm"><i class="bi bi-upload" aria-hidden="true"></i></span><strong class="text-body">الشعار</strong><input class="visually-hidden" type="file" name="logo"></label></td>
+									<td><label class="empty-state empty-state-drop" data-docs-state="hover"><span class="icon-tile icon-tile-sm"><i class="bi bi-upload" aria-hidden="true"></i></span><strong class="text-body">الشعار</strong><input class="visually-hidden" type="file" name="logo"></label></td>
 								</tr>
 							</tbody>
 						</table>
@@ -3058,7 +3058,7 @@ Boat C	 9 trips	201 seats</pre>
 								<button class="btn-close" type="button" commandfor="dialog-edit-note" command="close" aria-label="إغلاق"></button>
 							</div>
 							<div class="dialog-body vstack gap-8">
-								<label class="form-field"><span class="form-label">ملاحظة</span><textarea class="form-control" autofocus="">الاستقبال عند الرصيف في الساعة 8:30.</textarea></label>
+								<label class="form-field"><span class="form-label">ملاحظة</span><textarea class="form-control" name="note" autofocus="">الاستقبال عند الرصيف في الساعة 8:30.</textarea></label>
 							</div>
 							<div class="dialog-footer">
 								<button class="btn" type="button" commandfor="dialog-edit-note" command="close">إلغاء</button>
@@ -3150,8 +3150,8 @@ Boat C	 9 trips	201 seats</pre>
 							<div class="drawer-body vstack gap-16">
 								<fieldset class="vstack gap-8">
 									<legend class="form-label">الحالة</legend>
-									<label class="form-check"><input class="check" type="checkbox" checked="">منشور</label>
-									<label class="form-check"><input class="check" type="checkbox">مسودة</label>
+									<label class="form-check"><input class="check" type="checkbox" name="published" checked="">منشور</label>
+									<label class="form-check"><input class="check" type="checkbox" name="draft">مسودة</label>
 								</fieldset>
 								<div class="form-floating">
 									<select class="form-select" id="drawer-filters-section"><option>أي قسم</option><option>بحري</option><option>بري</option></select>
@@ -3344,7 +3344,7 @@ Boat C	 9 trips	201 seats</pre>
 					</div>
 					<div class="docs-example docs-example-stack" id="progress-stacked-quota">
 						<div class="vstack gap-8 max-w-480">
-							<div class="hstack gap-8 fs-14"><span class="flex-1" id="progress-stacked-title">المقاعد هذا الشهر</span><span class="text-muted tabular-nums">130 من 120</span></div>
+							<div class="hstack gap-8 fs-14"><span class="flex-grow-1" id="progress-stacked-title">المقاعد هذا الشهر</span><span class="text-muted tabular-nums">130 من 120</span></div>
 							<div class="meter meter-stacked" role="meter" aria-labelledby="progress-stacked-title" aria-valuenow="130" aria-valuemin="0" aria-valuemax="130" aria-valuetext="130 seats: 50 free, 70 paid, 10 over the limit">
 								<span data-tone="success" data-v="0.385"></span>
 								<span data-tone="primary" data-v="0.538"></span>
@@ -3462,7 +3462,7 @@ Boat C	 9 trips	201 seats</pre>
 							<input class="form-control" id="save-bar-changed-name" value="North Bay by speedboat" placeholder="الاسم" data-changed="">
 							<label for="save-bar-changed-name">الاسم</label>
 						</div>
-						<label class="form-check" data-changed=""><input class="check" type="checkbox" checked=""> معروض على الموقع</label>
+						<label class="form-check" data-changed=""><input class="check" type="checkbox" name="shown-on-the-site" checked=""> معروض على الموقع</label>
 					</div>
 				</section>
 
@@ -3857,7 +3857,7 @@ Boat C	 9 trips	201 seats</pre>
 					<div class="docs-example" id="palette-demo">
 						<button class="btn btn-subtle-secondary" type="button" commandfor="palette-demo-dialog" command="show-modal" aria-keyshortcuts="Meta+K Control+K"><i class="bi bi-search" aria-hidden="true"></i>البحث أو الانتقال إلى…<kbd>⌘K</kbd></button>
 						<dialog class="palette" id="palette-demo-dialog" closedby="any" aria-label="ابحث أو انتقل">
-							<input class="palette-search" type="search" role="combobox" aria-controls="palette-demo-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث أو انتقل" placeholder="البحث أو الانتقال إلى…" autocomplete="off" autofocus="">
+							<input class="palette-search" type="search" id="palette-demo-search" role="combobox" aria-controls="palette-demo-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث أو انتقل" placeholder="البحث أو الانتقال إلى…" autocomplete="off" autofocus="">
 							<div class="palette-list" id="palette-demo-list" role="listbox" aria-label="الأماكن والإجراءات">
 								<div role="group" aria-labelledby="palette-demo-go">
 									<div class="menu-header" id="palette-demo-go" role="presentation">انتقل إلى</div>
@@ -3893,7 +3893,7 @@ Boat C	 9 trips	201 seats</pre>
 						<div class="app-banner app-banner-danger"><i class="bi bi-x-octagon-fill" aria-hidden="true"></i><span>انقطع الاتصال. التغييرات التي تُجرى الآن لا تُحفظ.</span></div>
 					</div>
 					<div class="docs-example docs-example-stack" id="app-action-bar-example">
-						<div class="card card-scroll max-h-240" aria-label="الفاتورة">
+						<div class="card card-scroll max-h-240" role="group" aria-label="الفاتورة">
 							<div class="card-body vstack gap-8">
 								<p>الخليج الشمالي بالقارب السريع · 2 بالغان · 5,000 THB</p>
 								<p>غداء على الشاطئ · 2 · 600 THB</p>

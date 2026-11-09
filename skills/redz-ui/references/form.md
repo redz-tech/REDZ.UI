@@ -64,7 +64,7 @@ A `details` with `form-more` folds what a short hint cannot say. Its chevron tur
 ```html
 <div class="form-adorn">
 	<i class="bi bi-search" aria-hidden="true"></i>
-	<input class="form-control" type="search" placeholder="Name, slug or code" aria-label="Search excursions">
+	<input class="form-control" type="search" name="q" placeholder="Name, slug or code" aria-label="Search excursions">
 </div>
 <div class="form-floating form-adorn">
 	<i class="bi bi-envelope" aria-hidden="true"></i>
@@ -91,10 +91,10 @@ A `details` with `form-more` folds what a short hint cannot say. Its chevron tur
 `form-control-sm` and `form-select-sm` are 28 px high, the default 32 px, `-lg` 40 px - the same heights as the buttons beside them.
 
 ```html
-<input class="form-control form-control-sm" placeholder="Small" aria-label="Small field">
-<input class="form-control" placeholder="Default" aria-label="Default field">
-<input class="form-control form-control-lg" placeholder="Large" aria-label="Large field">
-<select class="form-select form-select-sm" aria-label="Small select"><option>Small select</option></select>
+<input class="form-control form-control-sm" name="small-field" placeholder="Small" aria-label="Small field">
+<input class="form-control" name="default-field" placeholder="Default" aria-label="Default field">
+<input class="form-control form-control-lg" name="large-field" placeholder="Large" aria-label="Large field">
+<select class="form-select form-select-sm" name="small-select" aria-label="Small select"><option>Small select</option></select>
 ```
 
 ### A one-time code

@@ -19,8 +19,8 @@ A drawer opens and closes like a dialog: `command="show-modal"` and `command="cl
 	<div class="drawer-body vstack gap-16">
 		<fieldset class="vstack gap-8">
 			<legend class="form-label">Status</legend>
-			<label class="form-check"><input class="check" type="checkbox" checked>Published</label>
-			<label class="form-check"><input class="check" type="checkbox">Draft</label>
+			<label class="form-check"><input class="check" type="checkbox" name="published" checked>Published</label>
+			<label class="form-check"><input class="check" type="checkbox" name="draft">Draft</label>
 		</fieldset>
 		<div class="form-floating">
 			<select class="form-select" id="drawer-filters-section"><option>Any section</option><option>Marine</option><option>Land</option></select>

@@ -547,8 +547,9 @@ window.REDZ_PROBE = (() => {
 				el.style.setProperty('position', 'static', 'important');
 			}
 			try {
-				const result = await window.axe.run(document, {runOnly: {type: 'tag', values: tags}, resultTypes: ['violations']});
-				return result.violations.map((v) => ({id: v.id, impact: v.impact, help: v.help, targets: v.nodes.slice(0, 5).map((node) => node.target.join(' '))}));
+				const result = await window.axe.run(document, {runOnly: {type: 'tag', values: tags}, resultTypes: ['violations', 'incomplete']});
+				// A name on an element with no role, axe leaves as incomplete when the element holds text.
+				return [...result.violations, ...result.incomplete.filter((v) => v.id === 'aria-prohibited-attr')].map((v) => ({id: v.id, impact: v.impact, help: v.help, targets: v.nodes.slice(0, 5).map((node) => node.target.join(' '))}));
 			} finally {
 				for (const el of stuck) {
 					el.style.removeProperty('position');

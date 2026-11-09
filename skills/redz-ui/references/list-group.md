@@ -36,8 +36,8 @@ A column of items in one frame - plain rows, or links and buttons to choose from
 
 ```html
 <ul class="list-group" aria-label="Ways to pay" data-density="compact">
-	<li class="list-group-item hstack gap-12"><span class="vstack flex-1"><a class="stretched-link fw-600" href="#list-group-rows">Bank card</a><span class="text-muted fs-12">Visa, Mastercard · 2.9 %</span></span><span class="list-group-actions"><a class="btn btn-sm" href="#list-group-rows">Configure</a><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Copy the settings: Bank card"><i class="bi bi-copy" aria-hidden="true"></i></button></span><label class="form-check"><input class="switch" type="checkbox" role="switch" checked aria-label="Bank card on"></label></li>
-	<li class="list-group-item hstack gap-12"><span class="vstack flex-1"><a class="stretched-link fw-600" href="#list-group-rows">Bank transfer</a><span class="text-muted fs-12">Three working days</span></span><span class="list-group-actions"><a class="btn btn-sm" href="#list-group-rows">Configure</a></span><label class="form-check"><input class="switch" type="checkbox" role="switch" aria-label="Bank transfer on"></label></li>
+	<li class="list-group-item hstack gap-12"><span class="vstack flex-grow-1"><a class="stretched-link fw-600" href="#list-group-rows">Bank card</a><span class="text-muted fs-12">Visa, Mastercard · 2.9 %</span></span><span class="list-group-actions"><a class="btn btn-sm" href="#list-group-rows">Configure</a><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Copy the settings: Bank card"><i class="bi bi-copy" aria-hidden="true"></i></button></span><label class="form-check"><input class="switch" type="checkbox" name="bank-card-on" role="switch" checked aria-label="Bank card on"></label></li>
+	<li class="list-group-item hstack gap-12"><span class="vstack flex-grow-1"><a class="stretched-link fw-600" href="#list-group-rows">Bank transfer</a><span class="text-muted fs-12">Three working days</span></span><span class="list-group-actions"><a class="btn btn-sm" href="#list-group-rows">Configure</a></span><label class="form-check"><input class="switch" type="checkbox" name="bank-transfer-on" role="switch" aria-label="Bank transfer on"></label></li>
 </ul>
 ```
 
@@ -90,9 +90,9 @@ An item's padding follows `data-density`, as a table's row does: 12 px by defaul
 
 ```html
 <div class="list-group" role="group" aria-label="Show on">
-	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" checked>lagoon.example</label>
-	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" checked>northbay.example</label>
-	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox">turtlecove.example</label>
+	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" name="lagoon-example" checked>lagoon.example</label>
+	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" name="northbay-example" checked>northbay.example</label>
+	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" name="turtlecove-example">turtlecove.example</label>
 </div>
 ```
 
@@ -101,7 +101,7 @@ An item's padding follows `data-density`, as a table's row does: 12 px by defaul
 A search field with `data-filter` naming a region hides, as the person types, the region's items whose words lack one of the typed words - case and accents aside: list items, items with a `data-value`, [media tiles](media.md), [tree items](tree.md) and table rows; an item's `data-search` stands in for its text. A tree keeps the ancestors of a match and opens their groups. An element with `data-filter-empty` in the region shows when nothing matches. The count is said once the typing pauses, in the page's count text `found`; `Esc` in the field clears it. A hidden item carries `data-filtered`.
 
 ```html
-<input class="form-control" type="search" data-filter="list-group-search-list" aria-label="Find an excursion" placeholder="Find an excursion" autocomplete="off">
+<input class="form-control" type="search" name="q" data-filter="list-group-search-list" aria-label="Find an excursion" placeholder="Find an excursion" autocomplete="off">
 <ul class="list-group" id="list-group-search-list">
 	<li class="list-group-item">North Bay Marine Park</li>
 	<li class="list-group-item">Turtle Cove and Pearl Cove</li>
@@ -125,7 +125,7 @@ A button with `command="--filter"` and `aria-controls` naming the region shows o
 	<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" name="boat" value="a" aria-pressed="false">Boat A</button>
 	<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" name="boat" value="b" aria-pressed="false">Boat B</button>
 </div>
-<input class="form-control" type="search" data-filter="list-group-states-list" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off">
+<input class="form-control" type="search" name="q" data-filter="list-group-states-list" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off">
 <p class="fs-12 text-muted" data-filter-count="list-group-states-list"></p>
 <ul class="list-group" id="list-group-states-list">
 	<li class="list-group-item" data-state="paid" data-boat="a">Alex Sample, boat A, paid</li>
@@ -143,7 +143,7 @@ A field with `data-filter-server` hides nothing itself: it asks the page by `red
 
 ```html
 <search class="hstack flex-wrap gap-8" aria-label="Requests">
-	<div class="form-adorn flex-1"><i class="bi bi-search" aria-hidden="true"></i><input class="form-control" type="search" name="q" data-filter="list-group-server-list" data-filter-server aria-label="Search requests" placeholder="Subject or person" autocomplete="off"></div>
+	<div class="form-adorn flex-grow-1"><i class="bi bi-search" aria-hidden="true"></i><input class="form-control" type="search" name="q" data-filter="list-group-server-list" data-filter-server aria-label="Search requests" placeholder="Subject or person" autocomplete="off"></div>
 	<select class="form-select w-auto" name="status" aria-label="Status"><option value="">Any status</option><option value="open">Open</option><option value="closed">Closed</option></select>
 </search>
 <ul class="list-group" id="list-group-server-list" data-docs-server>

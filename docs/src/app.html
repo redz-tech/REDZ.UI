@@ -50,7 +50,7 @@ REDZ.ui.banner(null);</code></pre>
 	<h2 id="app-action-bar">A bar at the bottom</h2>
 	<p><code>action-bar</code> holds what a long screen is for - a total and Pay, a count and Save - at the bottom of the window while the page scrolls under it: sticky, across its region on the page's own tinted floor, a line above it. As the last child of <code>app-main</code> it reaches the region's edges. Its padding keeps clear of a phone's home bar and rounded corners - the page asks for that room with <code>viewport-fit=cover</code> in its viewport meta - and on a touch screen it steps aside while a field has the focus, as the keyboard takes its place. <code>action-bar-text</code> is its words, which take the room left. It stays off paper.</p>
 	<div class="docs-example docs-example-stack" id="app-action-bar-example">
-		<div class="card card-scroll max-h-240" aria-label="The bill">
+		<div class="card card-scroll max-h-240" role="group" aria-label="The bill">
 			<div class="card-body vstack gap-8">
 				<p>North Bay by speedboat · 2 adults · 5,000 THB</p>
 				<p>Lunch on the beach · 2 · 600 THB</p>

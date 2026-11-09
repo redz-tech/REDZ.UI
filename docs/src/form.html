@@ -56,7 +56,7 @@
 	<div class="docs-example docs-example-stack" id="form-adorn">
 		<div class="form-adorn">
 			<i class="bi bi-search" aria-hidden="true"></i>
-			<input class="form-control" type="search" placeholder="Name, slug or code" aria-label="Search excursions">
+			<input class="form-control" type="search" name="q" placeholder="Name, slug or code" aria-label="Search excursions">
 		</div>
 		<div class="form-floating form-adorn">
 			<i class="bi bi-envelope" aria-hidden="true"></i>
@@ -81,10 +81,10 @@
 	<h3>Sizes</h3>
 	<p><code>form-control-sm</code> and <code>form-select-sm</code> are 28 px high, the default 32 px, <code>-lg</code> 40 px - the same heights as the buttons beside them.</p>
 	<div class="docs-example docs-example-stack" id="form-sizes">
-		<input class="form-control form-control-sm" placeholder="Small" aria-label="Small field">
-		<input class="form-control" placeholder="Default" aria-label="Default field">
-		<input class="form-control form-control-lg" placeholder="Large" aria-label="Large field">
-		<select class="form-select form-select-sm" aria-label="Small select"><option>Small select</option></select>
+		<input class="form-control form-control-sm" name="small-field" placeholder="Small" aria-label="Small field">
+		<input class="form-control" name="default-field" placeholder="Default" aria-label="Default field">
+		<input class="form-control form-control-lg" name="large-field" placeholder="Large" aria-label="Large field">
+		<select class="form-select form-select-sm" name="small-select" aria-label="Small select"><option>Small select</option></select>
 	</div>
 
 	<h3>A one-time code</h3>
@@ -225,19 +225,19 @@
 			<tbody>
 				<tr>
 					<th scope="row">form-control</th>
-					<td><input class="form-control" value="North Bay" aria-label="At rest"></td>
-					<td><input class="form-control" value="North Bay" aria-label="Focused" data-docs-state="focus"></td>
-					<td><input class="form-control" value="North Bay" aria-label="Invalid" aria-invalid="true"></td>
-					<td><input class="form-control" value="North Bay" aria-label="Read only" readonly></td>
-					<td><input class="form-control" value="North Bay" aria-label="Disabled" disabled></td>
+					<td><input class="form-control" name="at-rest" value="North Bay" aria-label="At rest"></td>
+					<td><input class="form-control" name="focused" value="North Bay" aria-label="Focused" data-docs-state="focus"></td>
+					<td><input class="form-control" name="invalid" value="North Bay" aria-label="Invalid" aria-invalid="true"></td>
+					<td><input class="form-control" name="read-only" value="North Bay" aria-label="Read only" readonly></td>
+					<td><input class="form-control" name="disabled" value="North Bay" aria-label="Disabled" disabled></td>
 				</tr>
 				<tr>
 					<th scope="row">form-select</th>
-					<td><select class="form-select" aria-label="At rest"><option>Marine</option></select></td>
-					<td><select class="form-select" aria-label="Focused" data-docs-state="focus"><option>Marine</option></select></td>
-					<td><select class="form-select" aria-label="Invalid" aria-invalid="true"><option>Marine</option></select></td>
+					<td><select class="form-select" name="at-rest" aria-label="At rest"><option>Marine</option></select></td>
+					<td><select class="form-select" name="focused" aria-label="Focused" data-docs-state="focus"><option>Marine</option></select></td>
+					<td><select class="form-select" name="invalid" aria-label="Invalid" aria-invalid="true"><option>Marine</option></select></td>
 					<td>-</td>
-					<td><select class="form-select" aria-label="Disabled" disabled><option>Marine</option></select></td>
+					<td><select class="form-select" name="disabled" aria-label="Disabled" disabled><option>Marine</option></select></td>
 				</tr>
 				<tr>
 					<th scope="row">form-floating</th>

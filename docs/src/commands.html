@@ -76,7 +76,7 @@ REDZ.ui.download({text: rows.join('\r\n'), file: 'agents-2026-11-08.csv', type: 
 			<a class="btn btn-sm share-viber">Viber</a>
 			<button class="btn btn-sm share-wechat" type="button" commandfor="commands-share-wechat" command="toggle-popover"><i class="bi bi-wechat" aria-hidden="true"></i>WeChat</button>
 			<button class="btn btn-sm" type="button" command="--copy"><i class="bi bi-link-45deg" aria-hidden="true"></i>Copy the link</button>
-			<div class="popover" id="commands-share-wechat" popover aria-label="Scan in WeChat">
+			<div class="popover" id="commands-share-wechat" popover role="dialog" aria-label="Scan in WeChat">
 				<div class="vstack gap-8 align-items-center">
 					<div class="qr"><img src="img/qr.svg" alt="QR code of your link"></div>
 					<p class="fs-12 text-muted">Scan in WeChat to share</p>

@@ -38,7 +38,7 @@ A conversation in a card: each message with its author, time and files, the pers
 		</ol>
 	</div>
 	<div class="card-footer">
-		<textarea class="form-control" rows="2" aria-label="Reply" placeholder="Write a reply"></textarea>
+		<textarea class="form-control" name="reply" rows="2" aria-label="Reply" placeholder="Write a reply"></textarea>
 		<button class="btn btn-primary" type="button"><i class="bi bi-send" aria-hidden="true"></i>Send</button>
 		<button class="btn ms-auto" type="button">Close the ticket</button>
 	</div>

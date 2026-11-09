@@ -11,9 +11,9 @@ The class goes on the `<input>`; the label wraps it, so a click anywhere on the 
 ```html
 <fieldset class="vstack gap-8">
 	<legend class="form-label">Included</legend>
-	<label class="form-check"><input class="check" type="checkbox" checked>Transfer</label>
-	<label class="form-check"><input class="check" type="checkbox" checked>Lunch</label>
-	<label class="form-check"><input class="check" type="checkbox">Kayaks</label>
+	<label class="form-check"><input class="check" type="checkbox" name="transfer" checked>Transfer</label>
+	<label class="form-check"><input class="check" type="checkbox" name="lunch" checked>Lunch</label>
+	<label class="form-check"><input class="check" type="checkbox" name="kayaks">Kayaks</label>
 </fieldset>
 ```
 
@@ -35,9 +35,9 @@ Radios with one `name` are one choice; the arrow keys move it.
 A switch is a checkbox with `role="switch"`: on or off, applied at once. One that cannot change keeps its focus with `aria-disabled="true"` and says why in a hint.
 
 ```html
-<label class="form-check"><input class="switch" type="checkbox" role="switch" checked>Show on the site</label>
+<label class="form-check"><input class="switch" type="checkbox" name="show-on-the-site" role="switch" checked>Show on the site</label>
 <div class="vstack gap-4">
-	<label class="form-check"><input class="switch" type="checkbox" role="switch" aria-disabled="true" aria-describedby="check-switches-why">Hide “Powered by REDZ CMS”</label>
+	<label class="form-check"><input class="switch" type="checkbox" name="hide-powered-by-redz-cms" role="switch" aria-disabled="true" aria-describedby="check-switches-why">Hide “Powered by REDZ CMS”</label>
 	<div class="form-text" id="check-switches-why"><i class="bi bi-lock" aria-hidden="true"></i> Available with a partner license</div>
 </div>
 ```

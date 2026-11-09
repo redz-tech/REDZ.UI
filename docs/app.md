@@ -67,7 +67,7 @@ The tones are `app-banner-info`, the default, `app-banner-success`, `app-banner-
 `action-bar` holds what a long screen is for - a total and Pay, a count and Save - at the bottom of the window while the page scrolls under it: sticky, across its region on the page's own tinted floor, a line above it. As the last child of `app-main` it reaches the region's edges. Its padding keeps clear of a phone's home bar and rounded corners - the page asks for that room with `viewport-fit=cover` in its viewport meta - and on a touch screen it steps aside while a field has the focus, as the keyboard takes its place. `action-bar-text` is its words, which take the room left. It stays off paper.
 
 ```html
-<div class="card card-scroll max-h-240" aria-label="The bill">
+<div class="card card-scroll max-h-240" role="group" aria-label="The bill">
 	<div class="card-body vstack gap-8">
 		<p>North Bay by speedboat · 2 adults · 5,000 THB</p>
 		<p>Lunch on the beach · 2 · 600 THB</p>

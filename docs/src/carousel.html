@@ -5,10 +5,10 @@
 
 <section class="vstack gap-16" aria-labelledby="carousel-examples">
 	<h2 id="carousel-examples">Examples</h2>
-	<p><code>carousel</code> on the frame, a named region; <code>carousel-inner</code> on the row, which takes the focus; <code>carousel-item</code> on each slide. Buttons with <code>command="--prev"</code> or <code>"--next"</code> and <code>aria-controls</code> naming the carousel move a slide, round the ends. An empty <code>carousel-indicators</code> fills with a button per slide. The slide in place is <code>aria-current="true"</code>.</p>
+	<p><code>carousel</code> on the frame, a named region; <code>carousel-inner</code> on the row, a named group that takes the focus; <code>carousel-item</code> on each slide. Buttons with <code>command="--prev"</code> or <code>"--next"</code> and <code>aria-controls</code> naming the carousel move a slide, round the ends. An empty <code>carousel-indicators</code> fills with a button per slide. The slide in place is <code>aria-current="true"</code>.</p>
 	<div class="docs-example docs-example-stack" id="carousel-basic">
 		<div class="carousel" id="carousel-basic-tours" role="region" aria-label="Tours">
-			<div class="carousel-inner" tabindex="0" aria-label="Tours">
+			<div class="carousel-inner" role="group" tabindex="0" aria-label="Tours">
 				<div class="carousel-item"><div class="p-24 bg-primary-subtle vstack gap-8"><strong>North Bay marine park</strong><span>Kayaks, a lagoon and a viewpoint, a day by speedboat.</span></div></div>
 				<div class="carousel-item"><div class="p-24 bg-success-subtle vstack gap-8"><strong>Turtle Cove snorkeling</strong><span>Two bays and a coral garden, lunch on board.</span></div></div>
 				<div class="carousel-item"><div class="p-24 bg-warning-subtle vstack gap-8"><strong>Sunset cruise</strong><span>A catamaran round the south coast at dusk.</span></div></div>
@@ -26,7 +26,7 @@
 	<pre class="docs-code" tabindex="0"><code>.tour-reviews { --redz-carousel-items: 2; --redz-carousel-gap: 12px; --redz-carousel-peek: 24px; }</code></pre>
 	<div class="docs-example docs-example-stack" id="carousel-several">
 		<div class="carousel" id="carousel-several-reviews" role="region" aria-label="Reviews">
-			<div class="carousel-inner" tabindex="0" aria-label="Reviews">
+			<div class="carousel-inner" role="group" tabindex="0" aria-label="Reviews">
 				<div class="carousel-item"><div class="card card-body h-100">“The best day of our trip.” - Anna</div></div>
 				<div class="carousel-item"><div class="card card-body h-100">“Kind guides and a clean boat.” - Mark</div></div>
 				<div class="carousel-item"><div class="card card-body h-100">“The lagoon is worth the climb.” - Somchai</div></div>
@@ -43,7 +43,7 @@
 	<p><code>carousel-fade</code> stacks the slides and shows the current one. <code>carousel-overlay</code> lays its buttons over the slides. A button with <code>command="--play"</code> plays the slides on every 5 seconds while it is <code>aria-pressed="true"</code> - written so, it plays from the start - and pauses while the pointer rests on the carousel or the focus is in it; it never plays for a person who asks for less motion.</p>
 	<div class="docs-example docs-example-stack" id="carousel-fade">
 		<div class="carousel carousel-fade" id="carousel-fade-island" role="region" aria-label="The island">
-			<div class="carousel-inner" tabindex="0" aria-label="The island">
+			<div class="carousel-inner" role="group" tabindex="0" aria-label="The island">
 				<div class="carousel-item"><div class="p-32 bg-info-subtle text-center"><strong>Beaches</strong></div></div>
 				<div class="carousel-item"><div class="p-32 bg-success-subtle text-center"><strong>Waterfalls</strong></div></div>
 				<div class="carousel-item"><div class="p-32 bg-warning-subtle text-center"><strong>Temples</strong></div></div>

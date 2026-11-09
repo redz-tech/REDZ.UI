@@ -293,7 +293,7 @@
 					<h3 id="tree-rows">The current page, actions and checks</h3>
 					<p>A row whose link has <code>aria-current</code> - the page open now - is tinted and its link bold. <code>tree-actions</code> at the end of a row holds its buttons: quiet until the row is hovered, holds the focus or has a menu open on a pointer screen, always shown on a touch screen. A <code>check</code> in a row posts by its own name, for a batch over the chosen pages. A search with <a href="list-group.html#list-group-filter"><code>data-filter</code></a> keeps the parents of a match.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="tree-current">
-						<input class="form-control" type="search" data-filter="tree-current-list" aria-label="Find a page" placeholder="Find a page" autocomplete="off">
+						<input class="form-control" type="search" name="q" data-filter="tree-current-list" aria-label="Find a page" placeholder="Find a page" autocomplete="off">
 						<ul class="tree" id="tree-current-list" aria-label="Pages to publish">
 							<li class="tree-item">
 								<div class="tree-row">
@@ -320,7 +320,7 @@
 							</li>
 						</ul>
 					</div>
-					<pre class="docs-code" tabindex="0"><code>&lt;input class="form-control" type="search" data-filter="tree-current-list" aria-label="Find a page" placeholder="Find a page" autocomplete="off"&gt;
+					<pre class="docs-code" tabindex="0"><code>&lt;input class="form-control" type="search" name="q" data-filter="tree-current-list" aria-label="Find a page" placeholder="Find a page" autocomplete="off"&gt;
 &lt;ul class="tree" id="tree-current-list" aria-label="Pages to publish"&gt;
 	&lt;li class="tree-item"&gt;
 		&lt;div class="tree-row"&gt;

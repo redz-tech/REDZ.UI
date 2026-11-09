@@ -177,7 +177,7 @@ export const typingOf = (ed) => {
 	const palette = Object.assign(document.createElement('dialog'), {className: 'dialog editor-palette'});
 	palette.setAttribute('closedby', 'any');
 	palette.setAttribute('aria-label', say('commands'));
-	palette.innerHTML = '<input class="form-control" type="search" autocomplete="off" aria-label="' + say('commands') + '" placeholder="' + say('commands.find') + '"><div class="editor-palette-list" role="listbox" aria-label="' + say('commands') + '"></div>';
+	palette.innerHTML = '<input class="form-control" id="' + ed.id + '-commands" type="search" autocomplete="off" aria-label="' + say('commands') + '" placeholder="' + say('commands.find') + '"><div class="editor-palette-list" role="listbox" aria-label="' + say('commands') + '"></div>';
 	ed.box.append(palette);
 	const find = palette.querySelector('input');
 	const list = palette.querySelector('[role="listbox"]');

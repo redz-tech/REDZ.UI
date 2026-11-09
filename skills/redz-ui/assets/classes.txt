@@ -3678,6 +3678,7 @@ nav-fill
 nav-justified
 nav-link
 nav-overflow
+nav-overflow-keep
 nav-overflow-toggle
 nav-pills
 nav-underline

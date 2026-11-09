@@ -10,15 +10,15 @@ A field joined to what belongs to it - a unit, a prefix, a button, a choice - in
 
 ```html
 <div class="input-group">
-	<input class="form-control" type="text" inputmode="decimal" value="2,500" aria-label="Adult price" aria-describedby="input-group-basic-unit">
+	<input class="form-control" type="text" name="adult-price" inputmode="decimal" value="2,500" aria-label="Adult price" aria-describedby="input-group-basic-unit">
 	<span class="input-group-text" id="input-group-basic-unit">THB</span>
 </div>
 <div class="input-group">
 	<span class="input-group-text">https://</span>
-	<input class="form-control" type="text" value="northbay.example" aria-label="Site address">
+	<input class="form-control" type="text" name="site-address" value="northbay.example" aria-label="Site address">
 </div>
 <div class="input-group">
-	<input class="form-control" type="text" value="R7K2-9QXM" readonly aria-label="Access code">
+	<input class="form-control" type="text" name="access-code" value="R7K2-9QXM" readonly aria-label="Access code">
 	<button class="btn" type="button"><i class="bi bi-clipboard" aria-hidden="true"></i>Copy</button>
 </div>
 ```
@@ -31,16 +31,16 @@ A `form-select` or a check joins the same way; a check goes inside an `input-gro
 
 ```html
 <div class="input-group">
-	<select class="form-select" aria-label="Currency">
+	<select class="form-select" name="currency" aria-label="Currency">
 		<option>THB</option>
 		<option>USD</option>
 		<option>EUR</option>
 	</select>
-	<input class="form-control" type="text" inputmode="decimal" value="1,900" aria-label="Child price">
+	<input class="form-control" type="text" name="child-price" inputmode="decimal" value="1,900" aria-label="Child price">
 </div>
 <div class="input-group">
-	<label class="input-group-text"><input class="check" type="checkbox" checked>Discount</label>
-	<input class="form-control" type="text" inputmode="decimal" value="10" aria-label="Discount, percent">
+	<label class="input-group-text"><input class="check" type="checkbox" name="discount" checked>Discount</label>
+	<input class="form-control" type="text" name="discount-percent" inputmode="decimal" value="10" aria-label="Discount, percent">
 	<span class="input-group-text">%</span>
 </div>
 ```
@@ -90,7 +90,7 @@ The menu sits in the group beside its button; the group joins only what it shows
 
 ```html
 <div class="input-group">
-	<input class="form-control" type="search" placeholder="Search excursions" aria-label="Search excursions">
+	<input class="form-control" type="search" name="q" placeholder="Search excursions" aria-label="Search excursions">
 	<button class="btn" type="button" commandfor="input-group-menu-in" command="toggle-popover" aria-haspopup="menu">Everywhere<i class="bi bi-chevron-down" aria-hidden="true"></i></button>
 	<div id="input-group-menu-in" class="menu" popover role="menu" aria-label="Search in">
 		<button class="menu-item" type="button" role="menuitemradio" aria-checked="true">Everywhere</button>

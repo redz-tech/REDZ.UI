@@ -23,7 +23,7 @@ What a list, a panel or a search shows when it has nothing yet: what would be he
 <label class="empty-state empty-state-drop">
 	<span class="icon-tile icon-tile-sm"><i class="bi bi-upload" aria-hidden="true"></i></span>
 	<span class="vstack gap-2"><strong class="text-body">Logo · light theme</strong><span class="form-text">SVG or PNG, drop a file or choose</span></span>
-	<input class="visually-hidden" type="file" accept="image/svg+xml,image/png">
+	<input class="visually-hidden" type="file" name="logo-light" accept="image/svg+xml,image/png">
 </label>
 ```
 

@@ -101,7 +101,7 @@
 					<div class="card-header">
 						<div class="form-adorn">
 							<i class="bi bi-search" aria-hidden="true"></i>
-							<input class="form-control" type="search" placeholder="الاسم أو المعرّف أو الرمز" aria-label="البحث في الرحلات">
+							<input class="form-control" type="search" name="q" placeholder="الاسم أو المعرّف أو الرمز" aria-label="البحث في الرحلات">
 						</div>
 						<span class="chip" role="group" aria-label="عامل التصفية: القسم البحري"><i class="bi bi-diagram-3" aria-hidden="true"></i>القسم: بحري<span class="chip-count">9</span><button class="chip-dismiss" type="button" aria-label="إزالة عامل التصفية: القسم البحري"><i class="bi bi-x" aria-hidden="true"></i></button></span>
 						<button class="chip" type="button" aria-pressed="false"><i class="bi bi-translate" aria-hidden="true"></i>اللغة: أي لغة</button>
@@ -120,10 +120,10 @@
 						<button class="btn btn-sm btn-icon btn-text" type="button" aria-label="مسح التحديد"><i class="bi bi-x" aria-hidden="true"></i></button>
 					</div>
 					<div class="card-body p-0">
-						<table class="table table-hover">
+						<table class="table">
 							<thead>
 								<tr>
-									<th class="table-check"><input class="check" type="checkbox" aria-label="تحديد الكل"></th>
+									<th class="table-check"><input class="check" type="checkbox" id="list-all" aria-label="تحديد الكل"></th>
 									<th>الرحلة</th>
 									<th class="d-none lg:d-table-cell">القسم</th>
 									<th class="text-end d-none lg:d-table-cell">السعر ابتداءً من</th>
@@ -136,7 +136,7 @@
 							</thead>
 							<tbody>
 								<tr class="table-danger">
-									<td><input class="check" type="checkbox" aria-label="تحديد: محمية الفيلة"></td>
+									<td><input class="check" type="checkbox" name="selected" value="elephant-sanctuary" aria-label="تحديد: محمية الفيلة"></td>
 									<td>
 										<div class="hstack gap-8">
 											<span class="demo-thumb demo-thumb-land d-none md:d-block"></span>
@@ -162,7 +162,7 @@
 									</td>
 								</tr>
 								<tr class="table-warning">
-									<td><input class="check" type="checkbox" checked="" aria-label="تحديد: خليج السلحفاة"></td>
+									<td><input class="check" type="checkbox" name="selected" value="turtle-cove" checked="" aria-label="تحديد: خليج السلحفاة"></td>
 									<td>
 										<div class="hstack gap-8">
 											<span class="demo-thumb d-none md:d-block"></span>
@@ -187,7 +187,7 @@
 									</td>
 								</tr>
 								<tr>
-									<td><input class="check" type="checkbox" checked="" aria-label="تحديد: الخليج الشمالي"></td>
+									<td><input class="check" type="checkbox" name="selected" value="north-bay" checked="" aria-label="تحديد: الخليج الشمالي"></td>
 									<td>
 										<div class="hstack gap-8">
 											<span class="demo-thumb d-none md:d-block"></span>
@@ -212,7 +212,7 @@
 									</td>
 								</tr>
 								<tr>
-									<td><input class="check" type="checkbox" aria-label="تحديد: رحلة الغروب بالمركب الشراعي"></td>
+									<td><input class="check" type="checkbox" name="selected" value="sunset-junk-cruise" aria-label="تحديد: رحلة الغروب بالمركب الشراعي"></td>
 									<td>
 										<div class="hstack gap-8">
 											<span class="demo-thumb demo-thumb-sunset d-none md:d-block"></span>
@@ -237,7 +237,7 @@
 									</td>
 								</tr>
 								<tr>
-									<td><input class="check" type="checkbox" aria-label="تحديد: صيد أعالي البحار"></td>
+									<td><input class="check" type="checkbox" name="selected" value="deep-sea-fishing" aria-label="تحديد: صيد أعالي البحار"></td>
 									<td>
 										<div class="hstack gap-8">
 											<span class="demo-thumb d-none md:d-block"></span>
@@ -262,7 +262,7 @@
 									</td>
 								</tr>
 								<tr class="table-secondary">
-									<td><input class="check" type="checkbox" aria-label="تحديد: ليلة الرقص الشعبي"></td>
+									<td><input class="check" type="checkbox" name="selected" value="folk-dance-night" aria-label="تحديد: ليلة الرقص الشعبي"></td>
 									<td>
 										<div class="hstack gap-8">
 											<span class="demo-thumb demo-thumb-sunset d-none md:d-block"></span>

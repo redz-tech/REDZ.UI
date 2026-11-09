@@ -99,7 +99,7 @@ export const editor = (host, options = {}) => {
 	box.setAttribute('data-tooltips', '');
 	const stage = Object.assign(document.createElement('div'), {className: 'editor-stage'});
 	const frame = Object.assign(document.createElement('iframe'), {className: 'editor-frame', id: id + '-frame', title: config.placeholder || say('body')});
-	const area = Object.assign(document.createElement('textarea'), {className: 'editor-source', hidden: true, spellcheck: false});
+	const area = Object.assign(document.createElement('textarea'), {className: 'editor-source', id: id + '-source', hidden: true, spellcheck: false});
 	area.setAttribute('aria-label', say('source'));
 	const note = Object.assign(document.createElement('div'), {className: 'visually-hidden'});
 	note.setAttribute('role', 'status');

@@ -16,7 +16,7 @@ The face is a button with `role="combobox"` that opens its panel by the browser'
 <div class="menu combobox-menu" id="combobox-one-panel" popover role="dialog" aria-label="Default language">
 	<div class="combobox-search">
 		<i class="bi bi-search" aria-hidden="true"></i>
-		<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-one-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a language" placeholder="Find a language" autocomplete="off" autofocus>
+		<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-one-search" role="combobox" aria-controls="combobox-one-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a language" placeholder="Find a language" autocomplete="off" autofocus>
 	</div>
 	<div class="combobox-list" id="combobox-one-list" role="listbox" aria-label="Languages" data-name="language">
 		<div class="menu-item" role="option" id="combobox-one-en" data-value="en" aria-selected="false">English</div>
@@ -49,7 +49,7 @@ A list with `aria-multiselectable="true"` keeps its panel open while options are
 <div class="menu combobox-menu" id="combobox-many-panel" popover role="dialog" aria-label="Site languages">
 	<div class="combobox-search">
 		<i class="bi bi-search" aria-hidden="true"></i>
-		<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-many-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a language" placeholder="Find a language" autocomplete="off" autofocus>
+		<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-many-search" role="combobox" aria-controls="combobox-many-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a language" placeholder="Find a language" autocomplete="off" autofocus>
 	</div>
 	<div class="combobox-list" id="combobox-many-list" role="listbox" aria-label="Languages" aria-multiselectable="true" data-name="languages[]">
 		<div class="menu-item" role="option" id="combobox-many-en" data-value="en" aria-selected="true">English</div>
@@ -83,7 +83,7 @@ Where the chosen values are the field's content - categories, tags - the list na
 <div class="menu combobox-menu" id="combobox-chips-panel" popover role="dialog" aria-label="Categories">
 	<div class="combobox-search">
 		<i class="bi bi-search" aria-hidden="true"></i>
-		<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-chips-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a category" placeholder="Find a category" autocomplete="off" autofocus>
+		<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-chips-search" role="combobox" aria-controls="combobox-chips-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a category" placeholder="Find a category" autocomplete="off" autofocus>
 	</div>
 	<div class="combobox-list" id="combobox-chips-list" role="listbox" aria-label="Categories" aria-multiselectable="true" data-name="categories[]" data-chips="combobox-chips-list-chips">
 		<div class="menu-item" role="option" id="combobox-chips-beaches" data-value="beaches" aria-selected="true">Beaches</div>
@@ -116,7 +116,7 @@ A list with `data-create` ends with “Create …” while the search's words ar
 <div class="menu combobox-menu" id="combobox-tags-panel" popover role="dialog" aria-label="Tags">
 	<div class="combobox-search">
 		<i class="bi bi-search" aria-hidden="true"></i>
-		<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-tags-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find or create a tag" placeholder="Find or create a tag" autocomplete="off" autofocus>
+		<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-tags-search" role="combobox" aria-controls="combobox-tags-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find or create a tag" placeholder="Find or create a tag" autocomplete="off" autofocus>
 	</div>
 	<div class="combobox-list" id="combobox-tags-list" role="listbox" aria-label="Tags" aria-multiselectable="true" data-name="tags[]" data-create="tags_new[]" data-chips="combobox-tags-chips">
 		<div class="menu-item" role="option" id="combobox-tags-family" data-value="family" aria-selected="true">Family</div>
@@ -160,7 +160,7 @@ Options with `data-level` 2 or 3 are indented under the one before them, and a p
 ```html
 <div class="card">
 	<div class="card-body vstack gap-8">
-		<input class="form-control" type="search" role="combobox" aria-controls="combobox-levels-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a destination" placeholder="Find a destination" autocomplete="off">
+		<input class="form-control" type="search" id="combobox-levels-search" role="combobox" aria-controls="combobox-levels-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a destination" placeholder="Find a destination" autocomplete="off">
 		<div class="combobox-list" id="combobox-levels-list" role="listbox" aria-label="Destinations" data-name="destination">
 			<div class="menu-item" role="option" id="combobox-levels-th" data-value="th" data-level="1" aria-selected="false">Northland</div>
 			<div class="menu-item" role="option" id="combobox-levels-south" data-value="th-south" data-level="2" aria-selected="false">The south</div>
@@ -189,7 +189,7 @@ Options sit in groups - `role="group"` named by its `menu-header` - and carry an
 <div class="menu combobox-menu" id="combobox-groups-panel" popover role="dialog" aria-label="Role">
 	<div class="combobox-search">
 		<i class="bi bi-search" aria-hidden="true"></i>
-		<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-groups-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a role" placeholder="Find a role" autocomplete="off" autofocus>
+		<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-groups-search" role="combobox" aria-controls="combobox-groups-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a role" placeholder="Find a role" autocomplete="off" autofocus>
 	</div>
 	<div class="combobox-list" id="combobox-groups-list" role="listbox" aria-label="Roles" data-name="role">
 		<div role="group" aria-labelledby="combobox-groups-content">
@@ -220,7 +220,7 @@ A page that finds options itself listens for `redz:search` on the search and can
 <div class="menu combobox-menu" id="combobox-remote-panel" popover role="dialog" aria-label="Assigned to">
 	<div class="combobox-search">
 		<i class="bi bi-search" aria-hidden="true"></i>
-		<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-remote-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a person" placeholder="Find a person" autocomplete="off" autofocus>
+		<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-remote-search" role="combobox" aria-controls="combobox-remote-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a person" placeholder="Find a person" autocomplete="off" autofocus>
 	</div>
 	<div class="combobox-list" id="combobox-remote-list" role="listbox" aria-label="People" data-name="assignee" data-docs-remote></div>
 	<p class="combobox-no-results" hidden>Nobody found</p>
@@ -253,7 +253,7 @@ The same search and list without a button and a panel - a filter in a side colum
 ```html
 <div class="card">
 	<div class="card-body vstack gap-8">
-		<input class="form-control" type="search" role="combobox" aria-controls="combobox-inline-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a time zone" placeholder="Find a time zone" autocomplete="off">
+		<input class="form-control" type="search" id="combobox-inline-search" role="combobox" aria-controls="combobox-inline-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a time zone" placeholder="Find a time zone" autocomplete="off">
 		<div class="combobox-list" id="combobox-inline-list" role="listbox" aria-label="Time zones" data-name="zone">
 			<div class="menu-item" role="option" id="combobox-inline-bkk" data-value="Asia/Bangkok" aria-selected="true">Bangkok · UTC+7</div>
 			<div class="menu-item" role="option" id="combobox-inline-sgp" data-value="Asia/Singapore" aria-selected="false">Singapore · UTC+8</div>

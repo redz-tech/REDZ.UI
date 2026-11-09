@@ -259,7 +259,7 @@ export const cardOf = (ed) => {
 	/** The tab of HTML, for an expert. */
 	const html = (body, top) => {
 		const copy = unmark(top.cloneNode(true), false);
-		body.innerHTML = hint('card.html') + '<textarea class="form-control font-monospace fs-12" rows="10" spellcheck="false" aria-label="' + say('tab.html') + '">' + escape(copy.outerHTML) + '</textarea><div class="hstack gap-8"><button class="btn btn-primary btn-sm" type="button" data-editor-apply>' + say('apply') + '</button><span class="editor-card-note" role="status"></span></div>';
+		body.innerHTML = hint('card.html') + '<textarea class="form-control font-monospace fs-12" id="' + ed.id + '-html" rows="10" spellcheck="false" aria-label="' + say('tab.html') + '">' + escape(copy.outerHTML) + '</textarea><div class="hstack gap-8"><button class="btn btn-primary btn-sm" type="button" data-editor-apply>' + say('apply') + '</button><span class="editor-card-note" role="status"></span></div>';
 		body.querySelector('[data-editor-apply]').onclick = async () => {
 			const value = body.querySelector('textarea').value;
 			const notes = await ed.checkHTML(value);

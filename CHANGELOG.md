@@ -4,6 +4,25 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Added
+- The build holds the markup of the docs and the demo screens: every class is in a stylesheet or the page's own, every
+  field has an id or a name, and a `div`, a `span` or a `pre` with a name has a role. The probes count a name on an element with
+  no role when axe leaves it as incomplete.
+- The passport's `classes` lists `nav-overflow-keep`, a class a page writes and only a script reads.
+
+### Fixed
+- The docs show `carousel-inner` as `role="group"`, since a name on a plain `div` is prohibited. A page with a carousel
+  adds the role to that element.
+- The editor's source view, its HTML tab and its command search have an id: Chrome reports a field with neither an id
+  nor a name.
+- Every field in the docs' examples and the demo screens has an id or a name: a name for what a form would send, an id
+  for what only the page uses.
+- `flex-1`, which no stylesheet has, is `flex-grow-1` in the examples of the command line, the list group and the
+  progress bar, so the row's end stays at its end.
+- The list demo no longer carries `table-hover`, which has done nothing since every table lights its row.
+
 ## 0.22.0 - 2026-11-09
 
 ### Added

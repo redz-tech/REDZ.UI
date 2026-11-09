@@ -525,6 +525,37 @@ function BUILD__CommandsCheck(): array
 }
 
 /**
+ * The markup a consumer copies, docs/src and the demo screens: each class is the library's or a page's own docs- or demo-
+ * name, each control has an id or a name, and a div, a span or a pre with a name has a role. Answers what is wrong.
+ * @return list<string>
+ */
+function BUILD__SamplesCheck(): array
+{
+	$classes = TOOL__Classes();
+	$wrong = [];
+	foreach ([...glob(BUILD_ROOT . '/docs/src/*.html') ?: [], ...glob(BUILD_ROOT . '/reference/demo/*.html') ?: []] as $file) {
+		$where = substr($file, strlen(BUILD_ROOT) + 1);
+		preg_match_all('~<([a-z][a-z0-9]*)\b((?:[^>"\']|"[^"]*"|\'[^\']*\')*)>~', (string)file_get_contents($file), $tags, PREG_SET_ORDER);
+		foreach ($tags as [, $tag, $attributes]) {
+			preg_match_all('~\s([a-z][a-z-]*)(?:="([^"]*)")?~', $attributes, $pairs, PREG_SET_ORDER);
+			$has = array_column($pairs, 2, 1);
+			foreach (preg_split('~\s+~', trim($has['class'] ?? ''), -1, PREG_SPLIT_NO_EMPTY) ?: [] as $class) {
+				if (!isset($classes[$class]) && !preg_match('~^(docs|demo)-~', $class)) {
+					$wrong[] = $where . '  the class ' . $class . ' is in no stylesheet';
+				}
+			}
+			if (in_array($tag, ['input', 'select', 'textarea'], true) && ($has['type'] ?? '') !== 'hidden' && !isset($has['id']) && !isset($has['name'])) {
+				$wrong[] = $where . '  a ' . $tag . ' has neither an id nor a name: ' . ($has['aria-label'] ?? $has['placeholder'] ?? $has['type'] ?? '');
+			}
+			if (in_array($tag, ['div', 'span', 'pre'], true) && (isset($has['aria-label']) || isset($has['aria-labelledby'])) && !isset($has['role'])) {
+				$wrong[] = $where . '  a ' . $tag . ' with a name has no role: ' . ($has['class'] ?? '');
+			}
+		}
+	}
+	return $wrong;
+}
+
+/**
  * The island's keys of tools/vocabulary.json held against the scripts and the docs: every key a script asks for by
  * text('key', …) or textCount('key', …) is declared, a count as "count"; every declared key is a string in a script;
  * the docs' texts hold each one, a count by its .other form. Answers what is wrong.
@@ -697,7 +728,7 @@ function BUILD__Main(array $argv): int
 {
 	$check = in_array('--check', $argv, true);
 	$vocab = BUILD__Vocabulary();
-	$wrong = [...BUILD__TextsCheck($vocab), ...BUILD__CommandsCheck(), ...BUILD__CatalogCheck(), ...BUILD__ToolsCalls(), ...array_map(fn(string $failure): string => 'tools/min.php  ' . $failure, MIN__SelfTest())];
+	$wrong = [...BUILD__TextsCheck($vocab), ...BUILD__CommandsCheck(), ...BUILD__SamplesCheck(), ...BUILD__CatalogCheck(), ...BUILD__ToolsCalls(), ...array_map(fn(string $failure): string => 'tools/min.php  ' . $failure, MIN__SelfTest())];
 	if ($wrong !== []) {
 		fwrite(STDERR, implode("\n", $wrong) . "\n");
 		return 1;

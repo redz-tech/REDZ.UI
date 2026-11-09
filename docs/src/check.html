@@ -9,9 +9,9 @@
 	<div class="docs-example docs-example-stack" id="check-boxes">
 		<fieldset class="vstack gap-8">
 			<legend class="form-label">Included</legend>
-			<label class="form-check"><input class="check" type="checkbox" checked>Transfer</label>
-			<label class="form-check"><input class="check" type="checkbox" checked>Lunch</label>
-			<label class="form-check"><input class="check" type="checkbox">Kayaks</label>
+			<label class="form-check"><input class="check" type="checkbox" name="transfer" checked>Transfer</label>
+			<label class="form-check"><input class="check" type="checkbox" name="lunch" checked>Lunch</label>
+			<label class="form-check"><input class="check" type="checkbox" name="kayaks">Kayaks</label>
 		</fieldset>
 	</div>
 
@@ -29,9 +29,9 @@
 	<h3>Switches</h3>
 	<p>A switch is a checkbox with <code>role="switch"</code>: on or off, applied at once. One that cannot change keeps its focus with <code>aria-disabled="true"</code> and says why in a hint.</p>
 	<div class="docs-example docs-example-stack" id="check-switches">
-		<label class="form-check"><input class="switch" type="checkbox" role="switch" checked>Show on the site</label>
+		<label class="form-check"><input class="switch" type="checkbox" name="show-on-the-site" role="switch" checked>Show on the site</label>
 		<div class="vstack gap-4">
-			<label class="form-check"><input class="switch" type="checkbox" role="switch" aria-disabled="true" aria-describedby="check-switches-why">Hide “Powered by REDZ CMS”</label>
+			<label class="form-check"><input class="switch" type="checkbox" name="hide-powered-by-redz-cms" role="switch" aria-disabled="true" aria-describedby="check-switches-why">Hide “Powered by REDZ CMS”</label>
 			<div class="form-text" id="check-switches-why"><i class="bi bi-lock" aria-hidden="true"></i> Available with a partner license</div>
 		</div>
 	</div>
@@ -48,12 +48,12 @@
 			<tbody>
 				<tr>
 					<th scope="row">check</th>
-					<td><input class="check" type="checkbox" aria-label="Off"></td>
-					<td><input class="check" type="checkbox" aria-label="Checked" checked></td>
-					<td><input class="check" type="checkbox" aria-label="Some" data-docs-indeterminate></td>
-					<td><input class="check" type="checkbox" aria-label="Focused" data-docs-state="focus-visible"></td>
-					<td><input class="check" type="checkbox" aria-label="Disabled" checked disabled></td>
-					<td><input class="check" type="checkbox" aria-label="Unavailable" checked aria-disabled="true"></td>
+					<td><input class="check" type="checkbox" name="off" aria-label="Off"></td>
+					<td><input class="check" type="checkbox" name="checked" aria-label="Checked" checked></td>
+					<td><input class="check" type="checkbox" name="some" aria-label="Some" data-docs-indeterminate></td>
+					<td><input class="check" type="checkbox" name="focused" aria-label="Focused" data-docs-state="focus-visible"></td>
+					<td><input class="check" type="checkbox" name="disabled" aria-label="Disabled" checked disabled></td>
+					<td><input class="check" type="checkbox" name="unavailable" aria-label="Unavailable" checked aria-disabled="true"></td>
 				</tr>
 				<tr>
 					<th scope="row">radio</th>
@@ -66,12 +66,12 @@
 				</tr>
 				<tr>
 					<th scope="row">switch</th>
-					<td><input class="switch" type="checkbox" role="switch" aria-label="Off"></td>
-					<td><input class="switch" type="checkbox" role="switch" aria-label="On" checked></td>
+					<td><input class="switch" type="checkbox" name="off" role="switch" aria-label="Off"></td>
+					<td><input class="switch" type="checkbox" name="on" role="switch" aria-label="On" checked></td>
 					<td>-</td>
-					<td><input class="switch" type="checkbox" role="switch" aria-label="Focused" data-docs-state="focus-visible"></td>
-					<td><input class="switch" type="checkbox" role="switch" aria-label="Disabled" checked disabled></td>
-					<td><input class="switch" type="checkbox" role="switch" aria-label="Unavailable" checked aria-disabled="true"></td>
+					<td><input class="switch" type="checkbox" name="focused" role="switch" aria-label="Focused" data-docs-state="focus-visible"></td>
+					<td><input class="switch" type="checkbox" name="disabled" role="switch" aria-label="Disabled" checked disabled></td>
+					<td><input class="switch" type="checkbox" name="unavailable" role="switch" aria-label="Unavailable" checked aria-disabled="true"></td>
 				</tr>
 			</tbody>
 		</table>

@@ -6,11 +6,11 @@ A row of slides seen one or a few at a time: tours, photos, reviews. The browser
 
 ## Examples
 
-`carousel` on the frame, a named region; `carousel-inner` on the row, which takes the focus; `carousel-item` on each slide. Buttons with `command="--prev"` or `"--next"` and `aria-controls` naming the carousel move a slide, round the ends. An empty `carousel-indicators` fills with a button per slide. The slide in place is `aria-current="true"`.
+`carousel` on the frame, a named region; `carousel-inner` on the row, a named group that takes the focus; `carousel-item` on each slide. Buttons with `command="--prev"` or `"--next"` and `aria-controls` naming the carousel move a slide, round the ends. An empty `carousel-indicators` fills with a button per slide. The slide in place is `aria-current="true"`.
 
 ```html
 <div class="carousel" id="carousel-basic-tours" role="region" aria-label="Tours">
-	<div class="carousel-inner" tabindex="0" aria-label="Tours">
+	<div class="carousel-inner" role="group" tabindex="0" aria-label="Tours">
 		<div class="carousel-item"><div class="p-24 bg-primary-subtle vstack gap-8"><strong>North Bay marine park</strong><span>Kayaks, a lagoon and a viewpoint, a day by speedboat.</span></div></div>
 		<div class="carousel-item"><div class="p-24 bg-success-subtle vstack gap-8"><strong>Turtle Cove snorkeling</strong><span>Two bays and a coral garden, lunch on board.</span></div></div>
 		<div class="carousel-item"><div class="p-24 bg-warning-subtle vstack gap-8"><strong>Sunset cruise</strong><span>A catamaran round the south coast at dusk.</span></div></div>
@@ -33,7 +33,7 @@ Three custom properties on the carousel set the row, in the module's own stylesh
 
 ```html
 <div class="carousel" id="carousel-several-reviews" role="region" aria-label="Reviews">
-	<div class="carousel-inner" tabindex="0" aria-label="Reviews">
+	<div class="carousel-inner" role="group" tabindex="0" aria-label="Reviews">
 		<div class="carousel-item"><div class="card card-body h-100">“The best day of our trip.” - Anna</div></div>
 		<div class="carousel-item"><div class="card card-body h-100">“Kind guides and a clean boat.” - Mark</div></div>
 		<div class="carousel-item"><div class="card card-body h-100">“The lagoon is worth the climb.” - Somchai</div></div>
@@ -52,7 +52,7 @@ Three custom properties on the carousel set the row, in the module's own stylesh
 
 ```html
 <div class="carousel carousel-fade" id="carousel-fade-island" role="region" aria-label="The island">
-	<div class="carousel-inner" tabindex="0" aria-label="The island">
+	<div class="carousel-inner" role="group" tabindex="0" aria-label="The island">
 		<div class="carousel-item"><div class="p-32 bg-info-subtle text-center"><strong>Beaches</strong></div></div>
 		<div class="carousel-item"><div class="p-32 bg-success-subtle text-center"><strong>Waterfalls</strong></div></div>
 		<div class="carousel-item"><div class="p-32 bg-warning-subtle text-center"><strong>Temples</strong></div></div>

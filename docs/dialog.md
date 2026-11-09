@@ -16,7 +16,7 @@ A button opens the dialog with `commandfor` + `command="show-modal"`; buttons in
 		<button class="btn-close" type="button" commandfor="dialog-edit-note" command="close" aria-label="Close"></button>
 	</div>
 	<div class="dialog-body vstack gap-8">
-		<label class="form-field"><span class="form-label">Note</span><textarea class="form-control" autofocus>Pick up at the pier at 8:30.</textarea></label>
+		<label class="form-field"><span class="form-label">Note</span><textarea class="form-control" name="note" autofocus>Pick up at the pier at 8:30.</textarea></label>
 	</div>
 	<div class="dialog-footer">
 		<button class="btn" type="button" commandfor="dialog-edit-note" command="close">Cancel</button>

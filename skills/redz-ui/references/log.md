@@ -9,7 +9,7 @@ What a job printed, line by line as it runs, and what changed between two versio
 `pre class="log"` sets a job's output in the monospace font, wraps its long lines and scrolls in its own box once a `max-h-*` utility caps its height - give it `tabindex="0"` then, so the keyboard scrolls it too. A line in a `span` with `data-tone` - `success`, `warning`, `danger`, `info` or `muted` - takes that tone; the words still say what happened. With `data-follow` the end stays in view while lines come in, as in a terminal, unless the reader scrolled up to read an earlier one; back at the end, it follows again.
 
 ```html
-		<pre class="log max-h-160" id="log-follow-lines" tabindex="0" data-follow aria-label="The import's output" dir="ltr"><span data-tone="muted">09:14:02</span> Import started: excursions.csv, 128 rows
+		<pre class="log max-h-160" id="log-follow-lines" role="region" tabindex="0" data-follow aria-label="The import's output" dir="ltr"><span data-tone="muted">09:14:02</span> Import started: excursions.csv, 128 rows
 <span data-tone="muted">09:14:02</span> Columns: title, price, date, seats, language
 <span data-tone="muted">09:14:02</span> Row 1-20 read
 <span data-tone="muted">09:14:02</span> Row 21-40 read
@@ -27,7 +27,7 @@ What a job printed, line by line as it runs, and what changed between two versio
 `data-follow` works on any element that scrolls - a thread of messages, a list of events: it keeps its end in view while its contents come in or grow, a picture that loads included. A button with `command="--follow"` and `aria-controls` naming the box shows while the reader is away from the end and something new came in; pressed, it brings the end back, follows again and hides. In a `follow-dock` - the box's last child - it floats at the middle of the box's bottom edge. With `data-follow="current"` the box keeps its child with `aria-current` in view instead - a running job's step - at the nearest edge, with the room of one step beside it, and its end while it has none; only the box scrolls, never the page, and once the reader scrolls the step out of view it waits until it is back.
 
 ```html
-<div class="card card-scroll max-h-240" aria-labelledby="log-thread-title">
+<div class="card card-scroll max-h-240">
 	<div class="card-header"><h2 class="fs-14" id="log-thread-title">Request 24-0187</h2></div>
 	<div class="card-body vstack gap-8" id="log-thread-box" role="region" tabindex="0" aria-labelledby="log-thread-title" data-follow>
 		<p>A Sample: The pier gate does not open at 07:00.</p>

@@ -34,7 +34,7 @@ Where a control or a mark needs a fixed size - a narrow field in a toolbar, a co
 <span class="size-48 rounded-8 bg-page"></span>
 <span class="size-64 rounded-8 bg-page"></span>
 <span class="size-80 rounded-8 bg-page"></span>
-<input class="form-control w-120" type="text" aria-label="Code" value="SPRING-26">
+<input class="form-control w-120" type="text" name="code" aria-label="Code" value="SPRING-26">
 ```
 
 ## Text: kept lines, captions, clamps

@@ -25,11 +25,11 @@ The package `redz-ui-qr` - the module `js/redz-ui-qr.min.js`, linked beside the 
 
 ```html
 <figure class="vstack gap-8 align-items-center">
-	<div class="qr" data-qr="https://redz-tech.github.io/REDZ.UI/" aria-label="QR code: the address of this site"></div>
+	<div class="qr" data-qr="https://redz-tech.github.io/REDZ.UI/" role="img" aria-label="QR code: the address of this site"></div>
 	<figcaption class="fs-12 text-muted">Drawn from data-qr</figcaption>
 </figure>
 <figure class="vstack gap-8 align-items-center">
-	<div class="qr" id="qr-package-call" aria-label="QR code: a key for the app"></div>
+	<div class="qr" id="qr-package-call" role="img" aria-label="QR code: a key for the app"></div>
 	<figcaption class="fs-12 text-muted">Drawn by REDZ.ui.qr</figcaption>
 </figure>
 ```

@@ -15,7 +15,7 @@ A list of records: a title that links to the record, a line under it, a note whe
 		<table class="table">
 			<thead>
 				<tr>
-					<th class="table-check"><input class="check" type="checkbox" aria-label="Select all"></th>
+					<th class="table-check"><input class="check" type="checkbox" id="table-list-all" aria-label="Select all"></th>
 					<th>Excursion</th>
 					<th class="text-end d-none md:d-table-cell">Price from</th>
 					<th class="d-none md:d-table-cell">Status</th>
@@ -24,28 +24,28 @@ A list of records: a title that links to the record, a line under it, a note whe
 			</thead>
 			<tbody>
 				<tr>
-					<td><input class="check" type="checkbox" aria-label="Select: North Bay"></td>
+					<td><input class="check" type="checkbox" name="selected" value="north-bay" aria-label="Select: North Bay"></td>
 					<td><a class="table-title" href="#table-list">North Bay: marine park by speedboat</a><div class="table-sub d-none md:d-block">/excursions/north-bay/</div></td>
 					<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">2,500 THB</td>
 					<td class="d-none md:d-table-cell"><span class="badge"><i class="bi bi-check2" aria-hidden="true"></i>Published</span></td>
 					<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: North Bay"><i class="bi bi-pencil" aria-hidden="true"></i></button></td>
 				</tr>
 				<tr class="table-danger">
-					<td><input class="check" type="checkbox" aria-label="Select: Elephant sanctuary"></td>
+					<td><input class="check" type="checkbox" name="selected" value="elephant-sanctuary" aria-label="Select: Elephant sanctuary"></td>
 					<td><a class="table-title" href="#table-list">Elephant sanctuary: feeding and a walk</a><div class="table-note"><i class="bi bi-x-octagon-fill" aria-hidden="true"></i><span class="text-muted">Did not rebuild: a PHP warning in the theme template</span></div></td>
 					<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">2,600 THB</td>
 					<td class="d-none md:d-table-cell"><span class="badge badge-subtle-danger"><i class="bi bi-x-octagon" aria-hidden="true"></i>Failed</span></td>
 					<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Rebuild: Elephant sanctuary"><i class="bi bi-arrow-repeat" aria-hidden="true"></i></button></td>
 				</tr>
 				<tr class="table-warning">
-					<td><input class="check" type="checkbox" aria-label="Select: Night market"></td>
+					<td><input class="check" type="checkbox" name="selected" value="night-market" aria-label="Select: Night market"></td>
 					<td><a class="table-title" href="#table-list">Night market and street food</a><div class="table-note"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i><span class="text-muted">The Thai translation is older than the English</span></div></td>
 					<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">900 THB</td>
 					<td class="d-none md:d-table-cell"><span class="badge badge-subtle-warning"><i class="bi bi-clock-history" aria-hidden="true"></i>Stale</span></td>
 					<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Night market"><i class="bi bi-pencil" aria-hidden="true"></i></button></td>
 				</tr>
 				<tr class="table-secondary">
-					<td><input class="check" type="checkbox" aria-label="Select: Folk dance"></td>
+					<td><input class="check" type="checkbox" name="selected" value="folk-dance" aria-label="Select: Folk dance"></td>
 					<td><a class="table-title" href="#table-list">Folk dance: an evening at the stadium</a><div class="table-sub d-none md:d-block">withdrawn from the sites</div></td>
 					<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">1,500 THB</td>
 					<td class="d-none md:d-table-cell"><span class="badge"><i class="bi bi-eye-slash" aria-hidden="true"></i>Withdrawn</span></td>
@@ -62,7 +62,7 @@ A list of records: a title that links to the record, a line under it, a note whe
 A checked row is tinted: its check is the only state. An element with `data-select` - the table, or the card holding it with its [selection bar](selection-bar.md) - holds a selection; a check with `data-select-all` heads its checks, checked when all are, mixed when some are, and pressed it checks or clears them all. Only the checks a person can use count: enabled, and not in a row a filter or the page hides - a checked row hidden leaves the count while hidden and is checked again when it shows. The `selection-bar` inside hides at zero, a `data-select-count` says the page's text `selected`, and the scope fires `redz:selection` with `{count, total, values}`, the values of the checked checks; a head that changes them all says the count aloud. With `data-select="rows"` a click anywhere on a row but on its controls checks it, unless its text is being selected. A `data-select` inside another is a group with a head of its own; buttons with `command="--select-all"` or `"--select-none"` and `aria-controls` naming a scope do what its head does. Scopes the page puts in or marks later are read the same, and so are a check's `disabled`, `checked` or `hidden` and a row's `hidden` set by code. A check's `checked` property set by code fires nothing a script can see: the page fires `change` on the check, or calls `REDZ.ui.selection(scope)`, which reads the scope again and fires `redz:selection` if the selection changed.
 
 ```html
-<input class="form-control" type="search" data-filter="table-select-rows" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off">
+<input class="form-control" type="search" name="q" data-filter="table-select-rows" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off">
 <section class="card" aria-labelledby="table-select-title" data-select="rows">
 	<div class="card-header"><h2 class="fs-14" id="table-select-title">Guests</h2></div>
 	<div class="selection-bar" role="region" aria-label="Selected guests" hidden>
@@ -71,12 +71,12 @@ A checked row is tinted: its check is the only state. An element with `data-sele
 		<button class="btn btn-sm btn-icon btn-text ms-auto" type="button" command="--select-none" aria-controls="table-select-rows" aria-label="Clear the selection"><i class="bi bi-x" aria-hidden="true"></i></button>
 	</div>
 	<table class="table" id="table-select-rows">
-		<thead><tr><th class="table-check"><input class="check" type="checkbox" data-select-all aria-label="Select all"></th><th scope="col">Guest</th><th scope="col" class="text-end">Seats</th></tr></thead>
+		<thead><tr><th class="table-check"><input class="check" type="checkbox" id="table-select-all" data-select-all aria-label="Select all"></th><th scope="col">Guest</th><th scope="col" class="text-end">Seats</th></tr></thead>
 		<tbody>
-			<tr><td class="table-check"><input class="check" type="checkbox" value="11" aria-label="Select: Alex Sample"></td><td>Alex Sample</td><td class="text-end tabular-nums">2</td></tr>
-			<tr><td class="table-check"><input class="check" type="checkbox" value="12" aria-label="Select: Ben Sample"></td><td>Ben Sample</td><td class="text-end tabular-nums">3</td></tr>
-			<tr><td class="table-check"><input class="check" type="checkbox" value="13" aria-label="Select: Chris Sample"></td><td>Chris Sample</td><td class="text-end tabular-nums">4</td></tr>
-			<tr><td class="table-check"><input class="check" type="checkbox" value="14" aria-label="Select: Dana Sample" disabled></td><td>Dana Sample<div class="table-sub">already written to</div></td><td class="text-end tabular-nums">1</td></tr>
+			<tr><td class="table-check"><input class="check" type="checkbox" name="selected" value="11" aria-label="Select: Alex Sample"></td><td>Alex Sample</td><td class="text-end tabular-nums">2</td></tr>
+			<tr><td class="table-check"><input class="check" type="checkbox" name="selected" value="12" aria-label="Select: Ben Sample"></td><td>Ben Sample</td><td class="text-end tabular-nums">3</td></tr>
+			<tr><td class="table-check"><input class="check" type="checkbox" name="selected" value="13" aria-label="Select: Chris Sample"></td><td>Chris Sample</td><td class="text-end tabular-nums">4</td></tr>
+			<tr><td class="table-check"><input class="check" type="checkbox" name="selected" value="14" aria-label="Select: Dana Sample" disabled></td><td>Dana Sample<div class="table-sub">already written to</div></td><td class="text-end tabular-nums">1</td></tr>
 		</tbody>
 	</table>
 </section>
@@ -242,7 +242,7 @@ Where the server sorts, the header holds a link instead - `a class="table-sort"`
 A row `table-group` heads the rows under it: one `th scope="rowgroup"` across the table, a band that does not stick, with an end slot `table-group-end` for its count or sum. In a table wider than its scroller the end slot stays at the scroller's visible end, over the band's label. A row `table-subtotal` closes a group in bold under a line. A [search field](list-group.md#list-group-search) over the table keeps a group's band and subtotal while a row of the group matches.
 
 ```html
-<input class="form-control" type="search" data-filter="table-grouped" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off">
+<input class="form-control" type="search" name="q" data-filter="table-grouped" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off">
 <table class="table" aria-label="Bookings by boat">
 	<thead><tr><th scope="col">Guest</th><th scope="col" class="text-end">Seats</th><th scope="col" class="text-end">Paid</th></tr></thead>
 	<tbody>

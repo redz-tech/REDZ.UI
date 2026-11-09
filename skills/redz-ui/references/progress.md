@@ -52,7 +52,7 @@ The browser's own `<progress>` for work under way and `<meter>` for a measure wi
 
 ```html
 <div class="vstack gap-8 max-w-480">
-	<div class="hstack gap-8 fs-14"><span class="flex-1" id="progress-stacked-title">Seats this month</span><span class="text-muted tabular-nums">130 of 120</span></div>
+	<div class="hstack gap-8 fs-14"><span class="flex-grow-1" id="progress-stacked-title">Seats this month</span><span class="text-muted tabular-nums">130 of 120</span></div>
 	<div class="meter meter-stacked" role="meter" aria-labelledby="progress-stacked-title" aria-valuenow="130" aria-valuemin="0" aria-valuemax="130" aria-valuetext="130 seats: 50 free, 70 paid, 10 over the limit">
 		<span data-tone="success" data-v="0.385"></span>
 		<span data-tone="primary" data-v="0.538"></span>

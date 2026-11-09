@@ -252,7 +252,7 @@ Where a control or a mark needs a fixed size - a narrow field in a toolbar, a co
 <span class="size-48 rounded-8 bg-page"></span>
 <span class="size-64 rounded-8 bg-page"></span>
 <span class="size-80 rounded-8 bg-page"></span>
-<input class="form-control w-120" type="text" aria-label="Code" value="SPRING-26">
+<input class="form-control w-120" type="text" name="code" aria-label="Code" value="SPRING-26">
 ```
 
 ## Text: kept lines, captions, clamps
@@ -3023,7 +3023,7 @@ Three more networks: `share-x` posts on X with the title as its words, `share-vi
 	<a class="btn btn-sm share-viber">Viber</a>
 	<button class="btn btn-sm share-wechat" type="button" commandfor="commands-share-wechat" command="toggle-popover"><i class="bi bi-wechat" aria-hidden="true"></i>WeChat</button>
 	<button class="btn btn-sm" type="button" command="--copy"><i class="bi bi-link-45deg" aria-hidden="true"></i>Copy the link</button>
-	<div class="popover" id="commands-share-wechat" popover aria-label="Scan in WeChat">
+	<div class="popover" id="commands-share-wechat" popover role="dialog" aria-label="Scan in WeChat">
 		<div class="vstack gap-8 align-items-center">
 			<div class="qr"><img src="img/qr.svg" alt="QR code of your link"></div>
 			<p class="fs-12 text-muted">Scan in WeChat to share</p>
@@ -3269,7 +3269,7 @@ A `details` with `form-more` folds what a short hint cannot say. Its chevron tur
 ```html
 <div class="form-adorn">
 	<i class="bi bi-search" aria-hidden="true"></i>
-	<input class="form-control" type="search" placeholder="Name, slug or code" aria-label="Search excursions">
+	<input class="form-control" type="search" name="q" placeholder="Name, slug or code" aria-label="Search excursions">
 </div>
 <div class="form-floating form-adorn">
 	<i class="bi bi-envelope" aria-hidden="true"></i>
@@ -3296,10 +3296,10 @@ A `details` with `form-more` folds what a short hint cannot say. Its chevron tur
 `form-control-sm` and `form-select-sm` are 28 px high, the default 32 px, `-lg` 40 px - the same heights as the buttons beside them.
 
 ```html
-<input class="form-control form-control-sm" placeholder="Small" aria-label="Small field">
-<input class="form-control" placeholder="Default" aria-label="Default field">
-<input class="form-control form-control-lg" placeholder="Large" aria-label="Large field">
-<select class="form-select form-select-sm" aria-label="Small select"><option>Small select</option></select>
+<input class="form-control form-control-sm" name="small-field" placeholder="Small" aria-label="Small field">
+<input class="form-control" name="default-field" placeholder="Default" aria-label="Default field">
+<input class="form-control form-control-lg" name="large-field" placeholder="Large" aria-label="Large field">
+<select class="form-select form-select-sm" name="small-select" aria-label="Small select"><option>Small select</option></select>
 ```
 
 ### A one-time code
@@ -3492,15 +3492,15 @@ A field joined to what belongs to it - a unit, a prefix, a button, a choice - in
 
 ```html
 <div class="input-group">
-	<input class="form-control" type="text" inputmode="decimal" value="2,500" aria-label="Adult price" aria-describedby="input-group-basic-unit">
+	<input class="form-control" type="text" name="adult-price" inputmode="decimal" value="2,500" aria-label="Adult price" aria-describedby="input-group-basic-unit">
 	<span class="input-group-text" id="input-group-basic-unit">THB</span>
 </div>
 <div class="input-group">
 	<span class="input-group-text">https://</span>
-	<input class="form-control" type="text" value="northbay.example" aria-label="Site address">
+	<input class="form-control" type="text" name="site-address" value="northbay.example" aria-label="Site address">
 </div>
 <div class="input-group">
-	<input class="form-control" type="text" value="R7K2-9QXM" readonly aria-label="Access code">
+	<input class="form-control" type="text" name="access-code" value="R7K2-9QXM" readonly aria-label="Access code">
 	<button class="btn" type="button"><i class="bi bi-clipboard" aria-hidden="true"></i>Copy</button>
 </div>
 ```
@@ -3513,16 +3513,16 @@ A `form-select` or a check joins the same way; a check goes inside an `input-gro
 
 ```html
 <div class="input-group">
-	<select class="form-select" aria-label="Currency">
+	<select class="form-select" name="currency" aria-label="Currency">
 		<option>THB</option>
 		<option>USD</option>
 		<option>EUR</option>
 	</select>
-	<input class="form-control" type="text" inputmode="decimal" value="1,900" aria-label="Child price">
+	<input class="form-control" type="text" name="child-price" inputmode="decimal" value="1,900" aria-label="Child price">
 </div>
 <div class="input-group">
-	<label class="input-group-text"><input class="check" type="checkbox" checked>Discount</label>
-	<input class="form-control" type="text" inputmode="decimal" value="10" aria-label="Discount, percent">
+	<label class="input-group-text"><input class="check" type="checkbox" name="discount" checked>Discount</label>
+	<input class="form-control" type="text" name="discount-percent" inputmode="decimal" value="10" aria-label="Discount, percent">
 	<span class="input-group-text">%</span>
 </div>
 ```
@@ -3572,7 +3572,7 @@ The menu sits in the group beside its button; the group joins only what it shows
 
 ```html
 <div class="input-group">
-	<input class="form-control" type="search" placeholder="Search excursions" aria-label="Search excursions">
+	<input class="form-control" type="search" name="q" placeholder="Search excursions" aria-label="Search excursions">
 	<button class="btn" type="button" commandfor="input-group-menu-in" command="toggle-popover" aria-haspopup="menu">Everywhere<i class="bi bi-chevron-down" aria-hidden="true"></i></button>
 	<div id="input-group-menu-in" class="menu" popover role="menu" aria-label="Search in">
 		<button class="menu-item" type="button" role="menuitemradio" aria-checked="true">Everywhere</button>
@@ -3623,9 +3623,9 @@ The class goes on the `<input>`; the label wraps it, so a click anywhere on the 
 ```html
 <fieldset class="vstack gap-8">
 	<legend class="form-label">Included</legend>
-	<label class="form-check"><input class="check" type="checkbox" checked>Transfer</label>
-	<label class="form-check"><input class="check" type="checkbox" checked>Lunch</label>
-	<label class="form-check"><input class="check" type="checkbox">Kayaks</label>
+	<label class="form-check"><input class="check" type="checkbox" name="transfer" checked>Transfer</label>
+	<label class="form-check"><input class="check" type="checkbox" name="lunch" checked>Lunch</label>
+	<label class="form-check"><input class="check" type="checkbox" name="kayaks">Kayaks</label>
 </fieldset>
 ```
 
@@ -3647,9 +3647,9 @@ Radios with one `name` are one choice; the arrow keys move it.
 A switch is a checkbox with `role="switch"`: on or off, applied at once. One that cannot change keeps its focus with `aria-disabled="true"` and says why in a hint.
 
 ```html
-<label class="form-check"><input class="switch" type="checkbox" role="switch" checked>Show on the site</label>
+<label class="form-check"><input class="switch" type="checkbox" name="show-on-the-site" role="switch" checked>Show on the site</label>
 <div class="vstack gap-4">
-	<label class="form-check"><input class="switch" type="checkbox" role="switch" aria-disabled="true" aria-describedby="check-switches-why">Hide “Powered by REDZ CMS”</label>
+	<label class="form-check"><input class="switch" type="checkbox" name="hide-powered-by-redz-cms" role="switch" aria-disabled="true" aria-describedby="check-switches-why">Hide “Powered by REDZ CMS”</label>
 	<div class="form-text" id="check-switches-why"><i class="bi bi-lock" aria-hidden="true"></i> Available with a partner license</div>
 </div>
 ```
@@ -3697,7 +3697,7 @@ The face is a button with `role="combobox"` that opens its panel by the browser'
 <div class="menu combobox-menu" id="combobox-one-panel" popover role="dialog" aria-label="Default language">
 	<div class="combobox-search">
 		<i class="bi bi-search" aria-hidden="true"></i>
-		<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-one-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a language" placeholder="Find a language" autocomplete="off" autofocus>
+		<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-one-search" role="combobox" aria-controls="combobox-one-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a language" placeholder="Find a language" autocomplete="off" autofocus>
 	</div>
 	<div class="combobox-list" id="combobox-one-list" role="listbox" aria-label="Languages" data-name="language">
 		<div class="menu-item" role="option" id="combobox-one-en" data-value="en" aria-selected="false">English</div>
@@ -3730,7 +3730,7 @@ A list with `aria-multiselectable="true"` keeps its panel open while options are
 <div class="menu combobox-menu" id="combobox-many-panel" popover role="dialog" aria-label="Site languages">
 	<div class="combobox-search">
 		<i class="bi bi-search" aria-hidden="true"></i>
-		<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-many-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a language" placeholder="Find a language" autocomplete="off" autofocus>
+		<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-many-search" role="combobox" aria-controls="combobox-many-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a language" placeholder="Find a language" autocomplete="off" autofocus>
 	</div>
 	<div class="combobox-list" id="combobox-many-list" role="listbox" aria-label="Languages" aria-multiselectable="true" data-name="languages[]">
 		<div class="menu-item" role="option" id="combobox-many-en" data-value="en" aria-selected="true">English</div>
@@ -3764,7 +3764,7 @@ Where the chosen values are the field's content - categories, tags - the list na
 <div class="menu combobox-menu" id="combobox-chips-panel" popover role="dialog" aria-label="Categories">
 	<div class="combobox-search">
 		<i class="bi bi-search" aria-hidden="true"></i>
-		<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-chips-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a category" placeholder="Find a category" autocomplete="off" autofocus>
+		<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-chips-search" role="combobox" aria-controls="combobox-chips-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a category" placeholder="Find a category" autocomplete="off" autofocus>
 	</div>
 	<div class="combobox-list" id="combobox-chips-list" role="listbox" aria-label="Categories" aria-multiselectable="true" data-name="categories[]" data-chips="combobox-chips-list-chips">
 		<div class="menu-item" role="option" id="combobox-chips-beaches" data-value="beaches" aria-selected="true">Beaches</div>
@@ -3797,7 +3797,7 @@ A list with `data-create` ends with “Create …” while the search's words ar
 <div class="menu combobox-menu" id="combobox-tags-panel" popover role="dialog" aria-label="Tags">
 	<div class="combobox-search">
 		<i class="bi bi-search" aria-hidden="true"></i>
-		<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-tags-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find or create a tag" placeholder="Find or create a tag" autocomplete="off" autofocus>
+		<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-tags-search" role="combobox" aria-controls="combobox-tags-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find or create a tag" placeholder="Find or create a tag" autocomplete="off" autofocus>
 	</div>
 	<div class="combobox-list" id="combobox-tags-list" role="listbox" aria-label="Tags" aria-multiselectable="true" data-name="tags[]" data-create="tags_new[]" data-chips="combobox-tags-chips">
 		<div class="menu-item" role="option" id="combobox-tags-family" data-value="family" aria-selected="true">Family</div>
@@ -3841,7 +3841,7 @@ Options with `data-level` 2 or 3 are indented under the one before them, and a p
 ```html
 <div class="card">
 	<div class="card-body vstack gap-8">
-		<input class="form-control" type="search" role="combobox" aria-controls="combobox-levels-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a destination" placeholder="Find a destination" autocomplete="off">
+		<input class="form-control" type="search" id="combobox-levels-search" role="combobox" aria-controls="combobox-levels-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a destination" placeholder="Find a destination" autocomplete="off">
 		<div class="combobox-list" id="combobox-levels-list" role="listbox" aria-label="Destinations" data-name="destination">
 			<div class="menu-item" role="option" id="combobox-levels-th" data-value="th" data-level="1" aria-selected="false">Northland</div>
 			<div class="menu-item" role="option" id="combobox-levels-south" data-value="th-south" data-level="2" aria-selected="false">The south</div>
@@ -3870,7 +3870,7 @@ Options sit in groups - `role="group"` named by its `menu-header` - and carry an
 <div class="menu combobox-menu" id="combobox-groups-panel" popover role="dialog" aria-label="Role">
 	<div class="combobox-search">
 		<i class="bi bi-search" aria-hidden="true"></i>
-		<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-groups-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a role" placeholder="Find a role" autocomplete="off" autofocus>
+		<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-groups-search" role="combobox" aria-controls="combobox-groups-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a role" placeholder="Find a role" autocomplete="off" autofocus>
 	</div>
 	<div class="combobox-list" id="combobox-groups-list" role="listbox" aria-label="Roles" data-name="role">
 		<div role="group" aria-labelledby="combobox-groups-content">
@@ -3901,7 +3901,7 @@ A page that finds options itself listens for `redz:search` on the search and can
 <div class="menu combobox-menu" id="combobox-remote-panel" popover role="dialog" aria-label="Assigned to">
 	<div class="combobox-search">
 		<i class="bi bi-search" aria-hidden="true"></i>
-		<input class="form-control form-control-sm combobox-search-input" type="search" role="combobox" aria-controls="combobox-remote-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a person" placeholder="Find a person" autocomplete="off" autofocus>
+		<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-remote-search" role="combobox" aria-controls="combobox-remote-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a person" placeholder="Find a person" autocomplete="off" autofocus>
 	</div>
 	<div class="combobox-list" id="combobox-remote-list" role="listbox" aria-label="People" data-name="assignee" data-docs-remote></div>
 	<p class="combobox-no-results" hidden>Nobody found</p>
@@ -3934,7 +3934,7 @@ The same search and list without a button and a panel - a filter in a side colum
 ```html
 <div class="card">
 	<div class="card-body vstack gap-8">
-		<input class="form-control" type="search" role="combobox" aria-controls="combobox-inline-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a time zone" placeholder="Find a time zone" autocomplete="off">
+		<input class="form-control" type="search" id="combobox-inline-search" role="combobox" aria-controls="combobox-inline-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a time zone" placeholder="Find a time zone" autocomplete="off">
 		<div class="combobox-list" id="combobox-inline-list" role="listbox" aria-label="Time zones" data-name="zone">
 			<div class="menu-item" role="option" id="combobox-inline-bkk" data-value="Asia/Bangkok" aria-selected="true">Bangkok · UTC+7</div>
 			<div class="menu-item" role="option" id="combobox-inline-sgp" data-value="Asia/Singapore" aria-selected="false">Singapore · UTC+8</div>
@@ -4906,11 +4906,11 @@ A row of slides seen one or a few at a time: tours, photos, reviews. The browser
 
 ## Examples
 
-`carousel` on the frame, a named region; `carousel-inner` on the row, which takes the focus; `carousel-item` on each slide. Buttons with `command="--prev"` or `"--next"` and `aria-controls` naming the carousel move a slide, round the ends. An empty `carousel-indicators` fills with a button per slide. The slide in place is `aria-current="true"`.
+`carousel` on the frame, a named region; `carousel-inner` on the row, a named group that takes the focus; `carousel-item` on each slide. Buttons with `command="--prev"` or `"--next"` and `aria-controls` naming the carousel move a slide, round the ends. An empty `carousel-indicators` fills with a button per slide. The slide in place is `aria-current="true"`.
 
 ```html
 <div class="carousel" id="carousel-basic-tours" role="region" aria-label="Tours">
-	<div class="carousel-inner" tabindex="0" aria-label="Tours">
+	<div class="carousel-inner" role="group" tabindex="0" aria-label="Tours">
 		<div class="carousel-item"><div class="p-24 bg-primary-subtle vstack gap-8"><strong>North Bay marine park</strong><span>Kayaks, a lagoon and a viewpoint, a day by speedboat.</span></div></div>
 		<div class="carousel-item"><div class="p-24 bg-success-subtle vstack gap-8"><strong>Turtle Cove snorkeling</strong><span>Two bays and a coral garden, lunch on board.</span></div></div>
 		<div class="carousel-item"><div class="p-24 bg-warning-subtle vstack gap-8"><strong>Sunset cruise</strong><span>A catamaran round the south coast at dusk.</span></div></div>
@@ -4933,7 +4933,7 @@ Three custom properties on the carousel set the row, in the module's own stylesh
 
 ```html
 <div class="carousel" id="carousel-several-reviews" role="region" aria-label="Reviews">
-	<div class="carousel-inner" tabindex="0" aria-label="Reviews">
+	<div class="carousel-inner" role="group" tabindex="0" aria-label="Reviews">
 		<div class="carousel-item"><div class="card card-body h-100">“The best day of our trip.” - Anna</div></div>
 		<div class="carousel-item"><div class="card card-body h-100">“Kind guides and a clean boat.” - Mark</div></div>
 		<div class="carousel-item"><div class="card card-body h-100">“The lagoon is worth the climb.” - Somchai</div></div>
@@ -4952,7 +4952,7 @@ Three custom properties on the carousel set the row, in the module's own stylesh
 
 ```html
 <div class="carousel carousel-fade" id="carousel-fade-island" role="region" aria-label="The island">
-	<div class="carousel-inner" tabindex="0" aria-label="The island">
+	<div class="carousel-inner" role="group" tabindex="0" aria-label="The island">
 		<div class="carousel-item"><div class="p-32 bg-info-subtle text-center"><strong>Beaches</strong></div></div>
 		<div class="carousel-item"><div class="p-32 bg-success-subtle text-center"><strong>Waterfalls</strong></div></div>
 		<div class="carousel-item"><div class="p-32 bg-warning-subtle text-center"><strong>Temples</strong></div></div>
@@ -5124,8 +5124,8 @@ A column of items in one frame - plain rows, or links and buttons to choose from
 
 ```html
 <ul class="list-group" aria-label="Ways to pay" data-density="compact">
-	<li class="list-group-item hstack gap-12"><span class="vstack flex-1"><a class="stretched-link fw-600" href="#list-group-rows">Bank card</a><span class="text-muted fs-12">Visa, Mastercard · 2.9 %</span></span><span class="list-group-actions"><a class="btn btn-sm" href="#list-group-rows">Configure</a><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Copy the settings: Bank card"><i class="bi bi-copy" aria-hidden="true"></i></button></span><label class="form-check"><input class="switch" type="checkbox" role="switch" checked aria-label="Bank card on"></label></li>
-	<li class="list-group-item hstack gap-12"><span class="vstack flex-1"><a class="stretched-link fw-600" href="#list-group-rows">Bank transfer</a><span class="text-muted fs-12">Three working days</span></span><span class="list-group-actions"><a class="btn btn-sm" href="#list-group-rows">Configure</a></span><label class="form-check"><input class="switch" type="checkbox" role="switch" aria-label="Bank transfer on"></label></li>
+	<li class="list-group-item hstack gap-12"><span class="vstack flex-grow-1"><a class="stretched-link fw-600" href="#list-group-rows">Bank card</a><span class="text-muted fs-12">Visa, Mastercard · 2.9 %</span></span><span class="list-group-actions"><a class="btn btn-sm" href="#list-group-rows">Configure</a><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Copy the settings: Bank card"><i class="bi bi-copy" aria-hidden="true"></i></button></span><label class="form-check"><input class="switch" type="checkbox" name="bank-card-on" role="switch" checked aria-label="Bank card on"></label></li>
+	<li class="list-group-item hstack gap-12"><span class="vstack flex-grow-1"><a class="stretched-link fw-600" href="#list-group-rows">Bank transfer</a><span class="text-muted fs-12">Three working days</span></span><span class="list-group-actions"><a class="btn btn-sm" href="#list-group-rows">Configure</a></span><label class="form-check"><input class="switch" type="checkbox" name="bank-transfer-on" role="switch" aria-label="Bank transfer on"></label></li>
 </ul>
 ```
 
@@ -5178,9 +5178,9 @@ An item's padding follows `data-density`, as a table's row does: 12 px by defaul
 
 ```html
 <div class="list-group" role="group" aria-label="Show on">
-	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" checked>lagoon.example</label>
-	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" checked>northbay.example</label>
-	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox">turtlecove.example</label>
+	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" name="lagoon-example" checked>lagoon.example</label>
+	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" name="northbay-example" checked>northbay.example</label>
+	<label class="list-group-item hstack gap-8"><input class="check" type="checkbox" name="turtlecove-example">turtlecove.example</label>
 </div>
 ```
 
@@ -5189,7 +5189,7 @@ An item's padding follows `data-density`, as a table's row does: 12 px by defaul
 A search field with `data-filter` naming a region hides, as the person types, the region's items whose words lack one of the typed words - case and accents aside: list items, items with a `data-value`, [media tiles](media.md), [tree items](tree.md) and table rows; an item's `data-search` stands in for its text. A tree keeps the ancestors of a match and opens their groups. An element with `data-filter-empty` in the region shows when nothing matches. The count is said once the typing pauses, in the page's count text `found`; `Esc` in the field clears it. A hidden item carries `data-filtered`.
 
 ```html
-<input class="form-control" type="search" data-filter="list-group-search-list" aria-label="Find an excursion" placeholder="Find an excursion" autocomplete="off">
+<input class="form-control" type="search" name="q" data-filter="list-group-search-list" aria-label="Find an excursion" placeholder="Find an excursion" autocomplete="off">
 <ul class="list-group" id="list-group-search-list">
 	<li class="list-group-item">North Bay Marine Park</li>
 	<li class="list-group-item">Turtle Cove and Pearl Cove</li>
@@ -5213,7 +5213,7 @@ A button with `command="--filter"` and `aria-controls` naming the region shows o
 	<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" name="boat" value="a" aria-pressed="false">Boat A</button>
 	<button class="chip" type="button" command="--filter" aria-controls="list-group-states-list" name="boat" value="b" aria-pressed="false">Boat B</button>
 </div>
-<input class="form-control" type="search" data-filter="list-group-states-list" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off">
+<input class="form-control" type="search" name="q" data-filter="list-group-states-list" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off">
 <p class="fs-12 text-muted" data-filter-count="list-group-states-list"></p>
 <ul class="list-group" id="list-group-states-list">
 	<li class="list-group-item" data-state="paid" data-boat="a">Alex Sample, boat A, paid</li>
@@ -5231,7 +5231,7 @@ A field with `data-filter-server` hides nothing itself: it asks the page by `red
 
 ```html
 <search class="hstack flex-wrap gap-8" aria-label="Requests">
-	<div class="form-adorn flex-1"><i class="bi bi-search" aria-hidden="true"></i><input class="form-control" type="search" name="q" data-filter="list-group-server-list" data-filter-server aria-label="Search requests" placeholder="Subject or person" autocomplete="off"></div>
+	<div class="form-adorn flex-grow-1"><i class="bi bi-search" aria-hidden="true"></i><input class="form-control" type="search" name="q" data-filter="list-group-server-list" data-filter-server aria-label="Search requests" placeholder="Subject or person" autocomplete="off"></div>
 	<select class="form-select w-auto" name="status" aria-label="Status"><option value="">Any status</option><option value="open">Open</option><option value="closed">Closed</option></select>
 </search>
 <ul class="list-group" id="list-group-server-list" data-docs-server>
@@ -5469,7 +5469,7 @@ A tree with `data-reorder` moves its items as a list does - see [reordering](lis
 A row whose link has `aria-current` - the page open now - is tinted and its link bold. `tree-actions` at the end of a row holds its buttons: quiet until the row is hovered, holds the focus or has a menu open on a pointer screen, always shown on a touch screen. A `check` in a row posts by its own name, for a batch over the chosen pages. A search with [`data-filter`](list-group.md#list-group-filter) keeps the parents of a match.
 
 ```html
-<input class="form-control" type="search" data-filter="tree-current-list" aria-label="Find a page" placeholder="Find a page" autocomplete="off">
+<input class="form-control" type="search" name="q" data-filter="tree-current-list" aria-label="Find a page" placeholder="Find a page" autocomplete="off">
 <ul class="tree" id="tree-current-list" aria-label="Pages to publish">
 	<li class="tree-item">
 		<div class="tree-row">
@@ -5547,7 +5547,7 @@ A conversation in a card: each message with its author, time and files, the pers
 		</ol>
 	</div>
 	<div class="card-footer">
-		<textarea class="form-control" rows="2" aria-label="Reply" placeholder="Write a reply"></textarea>
+		<textarea class="form-control" name="reply" rows="2" aria-label="Reply" placeholder="Write a reply"></textarea>
 		<button class="btn btn-primary" type="button"><i class="bi bi-send" aria-hidden="true"></i>Send</button>
 		<button class="btn ms-auto" type="button">Close the ticket</button>
 	</div>
@@ -5864,10 +5864,10 @@ The switch is two buttons with `command="--view"`, `aria-controls` naming the gr
 	</div>
 </div>
 <div class="media-grid" id="media-folder-grid" data-view="grid" data-reorder="media[]" role="list" aria-label="Images of the folder">
-	<div class="media-tile" role="listitem" data-value="lagoon"><input class="check media-tile-check" type="checkbox" aria-label="Select lagoon.svg" checked><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="media-folder-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: lagoon.svg"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button><img class="media-tile-thumb" src="img/lagoon.svg" alt="A lagoon under green hills" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span>lagoon.svg</span></span><span class="media-tile-meta">1600×900 · 24 KB · 4 sizes</span></div><div class="media-tile-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="Copy the tag: lagoon.svg"><i class="bi bi-clipboard" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon" type="button" aria-label="Where it is used: lagoon.svg"><i class="bi bi-search" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon btn-subtle-danger" type="button" aria-label="Delete: lagoon.svg"><i class="bi bi-trash3" aria-hidden="true"></i></button></div></div>
-	<div class="media-tile" role="listitem" data-value="qr"><input class="check media-tile-check" type="checkbox" aria-label="Select qr.svg"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="media-folder-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: qr.svg"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button><img class="media-tile-thumb" src="img/qr.svg" alt="The QR code of the docs" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span>qr.svg</span></span><span class="media-tile-meta">45×45 · 3 KB · 1 size</span></div><div class="media-tile-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="Copy the tag: qr.svg"><i class="bi bi-clipboard" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon" type="button" aria-label="Where it is used: qr.svg"><i class="bi bi-search" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon btn-subtle-danger" type="button" aria-label="Delete: qr.svg"><i class="bi bi-trash3" aria-hidden="true"></i></button></div></div>
-	<div class="media-tile" role="listitem" data-value="pier"><input class="check media-tile-check" type="checkbox" aria-label="Select pier-at-dawn.svg"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="media-folder-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: pier-at-dawn.svg"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button><img class="media-tile-thumb" src="img/lagoon.svg" alt="The pier at dawn" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span>pier-at-dawn.svg</span></span><span class="media-tile-meta">2400×1600 · 31 KB · 5 sizes</span></div><div class="media-tile-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="Copy the tag: pier-at-dawn.svg"><i class="bi bi-clipboard" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon" type="button" aria-label="Where it is used: pier-at-dawn.svg"><i class="bi bi-search" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon btn-subtle-danger" type="button" aria-label="Delete: pier-at-dawn.svg"><i class="bi bi-trash3" aria-hidden="true"></i></button></div></div>
-	<div class="media-tile" role="listitem" data-value="hidden" hidden><input class="check media-tile-check" type="checkbox" aria-label="Select boat.svg"><img class="media-tile-thumb" src="img/lagoon.svg" alt="" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><span>boat.svg</span></span></div></div>
+	<div class="media-tile" role="listitem" data-value="lagoon"><input class="check media-tile-check" type="checkbox" name="selected" value="lagoon.svg" aria-label="Select lagoon.svg" checked><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="media-folder-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: lagoon.svg"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button><img class="media-tile-thumb" src="img/lagoon.svg" alt="A lagoon under green hills" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span>lagoon.svg</span></span><span class="media-tile-meta">1600×900 · 24 KB · 4 sizes</span></div><div class="media-tile-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="Copy the tag: lagoon.svg"><i class="bi bi-clipboard" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon" type="button" aria-label="Where it is used: lagoon.svg"><i class="bi bi-search" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon btn-subtle-danger" type="button" aria-label="Delete: lagoon.svg"><i class="bi bi-trash3" aria-hidden="true"></i></button></div></div>
+	<div class="media-tile" role="listitem" data-value="qr"><input class="check media-tile-check" type="checkbox" name="selected" value="qr.svg" aria-label="Select qr.svg"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="media-folder-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: qr.svg"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button><img class="media-tile-thumb" src="img/qr.svg" alt="The QR code of the docs" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span>qr.svg</span></span><span class="media-tile-meta">45×45 · 3 KB · 1 size</span></div><div class="media-tile-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="Copy the tag: qr.svg"><i class="bi bi-clipboard" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon" type="button" aria-label="Where it is used: qr.svg"><i class="bi bi-search" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon btn-subtle-danger" type="button" aria-label="Delete: qr.svg"><i class="bi bi-trash3" aria-hidden="true"></i></button></div></div>
+	<div class="media-tile" role="listitem" data-value="pier"><input class="check media-tile-check" type="checkbox" name="selected" value="pier-at-dawn.svg" aria-label="Select pier-at-dawn.svg"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="media-folder-moves" command="toggle-popover" aria-haspopup="menu" aria-label="Move: pier-at-dawn.svg"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button><img class="media-tile-thumb" src="img/lagoon.svg" alt="The pier at dawn" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><i class="bi bi-file-earmark-image" aria-hidden="true"></i><span>pier-at-dawn.svg</span></span><span class="media-tile-meta">2400×1600 · 31 KB · 5 sizes</span></div><div class="media-tile-actions"><button class="btn btn-sm btn-icon" type="button" aria-label="Copy the tag: pier-at-dawn.svg"><i class="bi bi-clipboard" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon" type="button" aria-label="Where it is used: pier-at-dawn.svg"><i class="bi bi-search" aria-hidden="true"></i></button><button class="btn btn-sm btn-icon btn-subtle-danger" type="button" aria-label="Delete: pier-at-dawn.svg"><i class="bi bi-trash3" aria-hidden="true"></i></button></div></div>
+	<div class="media-tile" role="listitem" data-value="hidden" hidden><input class="check media-tile-check" type="checkbox" name="selected" value="boat.svg" aria-label="Select boat.svg"><img class="media-tile-thumb" src="img/lagoon.svg" alt="" loading="lazy"><div class="media-tile-body"><span class="media-tile-name"><span>boat.svg</span></span></div></div>
 </div>
 <div class="menu" id="media-folder-moves" popover role="menu" aria-label="Move">
 	<button class="menu-item" type="button" role="menuitem" data-move="up"><i class="bi bi-arrow-left flip-rtl" aria-hidden="true"></i>Move earlier</button>
@@ -5926,7 +5926,7 @@ A list of records: a title that links to the record, a line under it, a note whe
 		<table class="table">
 			<thead>
 				<tr>
-					<th class="table-check"><input class="check" type="checkbox" aria-label="Select all"></th>
+					<th class="table-check"><input class="check" type="checkbox" id="table-list-all" aria-label="Select all"></th>
 					<th>Excursion</th>
 					<th class="text-end d-none md:d-table-cell">Price from</th>
 					<th class="d-none md:d-table-cell">Status</th>
@@ -5935,28 +5935,28 @@ A list of records: a title that links to the record, a line under it, a note whe
 			</thead>
 			<tbody>
 				<tr>
-					<td><input class="check" type="checkbox" aria-label="Select: North Bay"></td>
+					<td><input class="check" type="checkbox" name="selected" value="north-bay" aria-label="Select: North Bay"></td>
 					<td><a class="table-title" href="#table-list">North Bay: marine park by speedboat</a><div class="table-sub d-none md:d-block">/excursions/north-bay/</div></td>
 					<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">2,500 THB</td>
 					<td class="d-none md:d-table-cell"><span class="badge"><i class="bi bi-check2" aria-hidden="true"></i>Published</span></td>
 					<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: North Bay"><i class="bi bi-pencil" aria-hidden="true"></i></button></td>
 				</tr>
 				<tr class="table-danger">
-					<td><input class="check" type="checkbox" aria-label="Select: Elephant sanctuary"></td>
+					<td><input class="check" type="checkbox" name="selected" value="elephant-sanctuary" aria-label="Select: Elephant sanctuary"></td>
 					<td><a class="table-title" href="#table-list">Elephant sanctuary: feeding and a walk</a><div class="table-note"><i class="bi bi-x-octagon-fill" aria-hidden="true"></i><span class="text-muted">Did not rebuild: a PHP warning in the theme template</span></div></td>
 					<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">2,600 THB</td>
 					<td class="d-none md:d-table-cell"><span class="badge badge-subtle-danger"><i class="bi bi-x-octagon" aria-hidden="true"></i>Failed</span></td>
 					<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Rebuild: Elephant sanctuary"><i class="bi bi-arrow-repeat" aria-hidden="true"></i></button></td>
 				</tr>
 				<tr class="table-warning">
-					<td><input class="check" type="checkbox" aria-label="Select: Night market"></td>
+					<td><input class="check" type="checkbox" name="selected" value="night-market" aria-label="Select: Night market"></td>
 					<td><a class="table-title" href="#table-list">Night market and street food</a><div class="table-note"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i><span class="text-muted">The Thai translation is older than the English</span></div></td>
 					<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">900 THB</td>
 					<td class="d-none md:d-table-cell"><span class="badge badge-subtle-warning"><i class="bi bi-clock-history" aria-hidden="true"></i>Stale</span></td>
 					<td class="table-actions"><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Edit: Night market"><i class="bi bi-pencil" aria-hidden="true"></i></button></td>
 				</tr>
 				<tr class="table-secondary">
-					<td><input class="check" type="checkbox" aria-label="Select: Folk dance"></td>
+					<td><input class="check" type="checkbox" name="selected" value="folk-dance" aria-label="Select: Folk dance"></td>
 					<td><a class="table-title" href="#table-list">Folk dance: an evening at the stadium</a><div class="table-sub d-none md:d-block">withdrawn from the sites</div></td>
 					<td class="text-end tabular-nums text-nowrap d-none md:d-table-cell">1,500 THB</td>
 					<td class="d-none md:d-table-cell"><span class="badge"><i class="bi bi-eye-slash" aria-hidden="true"></i>Withdrawn</span></td>
@@ -5973,7 +5973,7 @@ A list of records: a title that links to the record, a line under it, a note whe
 A checked row is tinted: its check is the only state. An element with `data-select` - the table, or the card holding it with its [selection bar](selection-bar.md) - holds a selection; a check with `data-select-all` heads its checks, checked when all are, mixed when some are, and pressed it checks or clears them all. Only the checks a person can use count: enabled, and not in a row a filter or the page hides - a checked row hidden leaves the count while hidden and is checked again when it shows. The `selection-bar` inside hides at zero, a `data-select-count` says the page's text `selected`, and the scope fires `redz:selection` with `{count, total, values}`, the values of the checked checks; a head that changes them all says the count aloud. With `data-select="rows"` a click anywhere on a row but on its controls checks it, unless its text is being selected. A `data-select` inside another is a group with a head of its own; buttons with `command="--select-all"` or `"--select-none"` and `aria-controls` naming a scope do what its head does. Scopes the page puts in or marks later are read the same, and so are a check's `disabled`, `checked` or `hidden` and a row's `hidden` set by code. A check's `checked` property set by code fires nothing a script can see: the page fires `change` on the check, or calls `REDZ.ui.selection(scope)`, which reads the scope again and fires `redz:selection` if the selection changed.
 
 ```html
-<input class="form-control" type="search" data-filter="table-select-rows" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off">
+<input class="form-control" type="search" name="q" data-filter="table-select-rows" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off">
 <section class="card" aria-labelledby="table-select-title" data-select="rows">
 	<div class="card-header"><h2 class="fs-14" id="table-select-title">Guests</h2></div>
 	<div class="selection-bar" role="region" aria-label="Selected guests" hidden>
@@ -5982,12 +5982,12 @@ A checked row is tinted: its check is the only state. An element with `data-sele
 		<button class="btn btn-sm btn-icon btn-text ms-auto" type="button" command="--select-none" aria-controls="table-select-rows" aria-label="Clear the selection"><i class="bi bi-x" aria-hidden="true"></i></button>
 	</div>
 	<table class="table" id="table-select-rows">
-		<thead><tr><th class="table-check"><input class="check" type="checkbox" data-select-all aria-label="Select all"></th><th scope="col">Guest</th><th scope="col" class="text-end">Seats</th></tr></thead>
+		<thead><tr><th class="table-check"><input class="check" type="checkbox" id="table-select-all" data-select-all aria-label="Select all"></th><th scope="col">Guest</th><th scope="col" class="text-end">Seats</th></tr></thead>
 		<tbody>
-			<tr><td class="table-check"><input class="check" type="checkbox" value="11" aria-label="Select: Alex Sample"></td><td>Alex Sample</td><td class="text-end tabular-nums">2</td></tr>
-			<tr><td class="table-check"><input class="check" type="checkbox" value="12" aria-label="Select: Ben Sample"></td><td>Ben Sample</td><td class="text-end tabular-nums">3</td></tr>
-			<tr><td class="table-check"><input class="check" type="checkbox" value="13" aria-label="Select: Chris Sample"></td><td>Chris Sample</td><td class="text-end tabular-nums">4</td></tr>
-			<tr><td class="table-check"><input class="check" type="checkbox" value="14" aria-label="Select: Dana Sample" disabled></td><td>Dana Sample<div class="table-sub">already written to</div></td><td class="text-end tabular-nums">1</td></tr>
+			<tr><td class="table-check"><input class="check" type="checkbox" name="selected" value="11" aria-label="Select: Alex Sample"></td><td>Alex Sample</td><td class="text-end tabular-nums">2</td></tr>
+			<tr><td class="table-check"><input class="check" type="checkbox" name="selected" value="12" aria-label="Select: Ben Sample"></td><td>Ben Sample</td><td class="text-end tabular-nums">3</td></tr>
+			<tr><td class="table-check"><input class="check" type="checkbox" name="selected" value="13" aria-label="Select: Chris Sample"></td><td>Chris Sample</td><td class="text-end tabular-nums">4</td></tr>
+			<tr><td class="table-check"><input class="check" type="checkbox" name="selected" value="14" aria-label="Select: Dana Sample" disabled></td><td>Dana Sample<div class="table-sub">already written to</div></td><td class="text-end tabular-nums">1</td></tr>
 		</tbody>
 	</table>
 </section>
@@ -6153,7 +6153,7 @@ Where the server sorts, the header holds a link instead - `a class="table-sort"`
 A row `table-group` heads the rows under it: one `th scope="rowgroup"` across the table, a band that does not stick, with an end slot `table-group-end` for its count or sum. In a table wider than its scroller the end slot stays at the scroller's visible end, over the band's label. A row `table-subtotal` closes a group in bold under a line. A [search field](list-group.md#list-group-search) over the table keeps a group's band and subtotal while a row of the group matches.
 
 ```html
-<input class="form-control" type="search" data-filter="table-grouped" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off">
+<input class="form-control" type="search" name="q" data-filter="table-grouped" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off">
 <table class="table" aria-label="Bookings by boat">
 	<thead><tr><th scope="col">Guest</th><th scope="col" class="text-end">Seats</th><th scope="col" class="text-end">Paid</th></tr></thead>
 	<tbody>
@@ -6297,7 +6297,7 @@ What a job printed, line by line as it runs, and what changed between two versio
 `pre class="log"` sets a job's output in the monospace font, wraps its long lines and scrolls in its own box once a `max-h-*` utility caps its height - give it `tabindex="0"` then, so the keyboard scrolls it too. A line in a `span` with `data-tone` - `success`, `warning`, `danger`, `info` or `muted` - takes that tone; the words still say what happened. With `data-follow` the end stays in view while lines come in, as in a terminal, unless the reader scrolled up to read an earlier one; back at the end, it follows again.
 
 ```html
-		<pre class="log max-h-160" id="log-follow-lines" tabindex="0" data-follow aria-label="The import's output" dir="ltr"><span data-tone="muted">09:14:02</span> Import started: excursions.csv, 128 rows
+		<pre class="log max-h-160" id="log-follow-lines" role="region" tabindex="0" data-follow aria-label="The import's output" dir="ltr"><span data-tone="muted">09:14:02</span> Import started: excursions.csv, 128 rows
 <span data-tone="muted">09:14:02</span> Columns: title, price, date, seats, language
 <span data-tone="muted">09:14:02</span> Row 1-20 read
 <span data-tone="muted">09:14:02</span> Row 21-40 read
@@ -6315,7 +6315,7 @@ What a job printed, line by line as it runs, and what changed between two versio
 `data-follow` works on any element that scrolls - a thread of messages, a list of events: it keeps its end in view while its contents come in or grow, a picture that loads included. A button with `command="--follow"` and `aria-controls` naming the box shows while the reader is away from the end and something new came in; pressed, it brings the end back, follows again and hides. In a `follow-dock` - the box's last child - it floats at the middle of the box's bottom edge. With `data-follow="current"` the box keeps its child with `aria-current` in view instead - a running job's step - at the nearest edge, with the room of one step beside it, and its end while it has none; only the box scrolls, never the page, and once the reader scrolls the step out of view it waits until it is back.
 
 ```html
-<div class="card card-scroll max-h-240" aria-labelledby="log-thread-title">
+<div class="card card-scroll max-h-240">
 	<div class="card-header"><h2 class="fs-14" id="log-thread-title">Request 24-0187</h2></div>
 	<div class="card-body vstack gap-8" id="log-thread-box" role="region" tabindex="0" aria-labelledby="log-thread-title" data-follow>
 		<p>A Sample: The pier gate does not open at 07:00.</p>
@@ -6396,7 +6396,7 @@ A `var` in the command is a part the person puts in themselves - a key, a host -
 `ol class="command-steps"` numbers commands run one after another, each step a line of words and its `command-line`, in circles joined by a line. A `--copy` button whose `aria-controls` names the list copies all its commands, a line each. Commands that are alternatives - one or the other - go in a plain `vstack` instead.
 
 ```html
-<div class="hstack gap-8"><h4 class="fs-14 flex-1" id="command-line-install-title">Install the agent</h4><button class="btn btn-sm" type="button" command="--copy" aria-controls="command-line-install-list"><i class="bi bi-copy" aria-hidden="true"></i>Copy all</button></div>
+<div class="hstack gap-8"><h4 class="fs-14 flex-grow-1" id="command-line-install-title">Install the agent</h4><button class="btn btn-sm" type="button" command="--copy" aria-controls="command-line-install-list"><i class="bi bi-copy" aria-hidden="true"></i>Copy all</button></div>
 <ol class="command-steps" id="command-line-install-list" aria-labelledby="command-line-install-title">
 	<li><p id="command-line-install-1">Download it:</p><div class="command-line" role="group" aria-labelledby="command-line-install-1"><pre tabindex="0" translate="no"><code>curl -fsSLO https://get.example.com/agent/agent-2.4.tar.gz</code></pre><button class="btn btn-icon" type="button" command="--copy" aria-label="Copy the command"><i class="bi bi-copy" aria-hidden="true"></i></button></div></li>
 	<li><p id="command-line-install-2">Unpack it:</p><div class="command-line" role="group" aria-labelledby="command-line-install-2"><pre tabindex="0" translate="no"><code>tar -xzf agent-2.4.tar.gz -C /opt</code></pre><button class="btn btn-icon" type="button" command="--copy" aria-label="Copy the command"><i class="bi bi-copy" aria-hidden="true"></i></button></div></li>
@@ -6827,11 +6827,11 @@ The package `redz-ui-qr` - the module `js/redz-ui-qr.min.js`, linked beside the 
 
 ```html
 <figure class="vstack gap-8 align-items-center">
-	<div class="qr" data-qr="https://redz-tech.github.io/REDZ.UI/" aria-label="QR code: the address of this site"></div>
+	<div class="qr" data-qr="https://redz-tech.github.io/REDZ.UI/" role="img" aria-label="QR code: the address of this site"></div>
 	<figcaption class="fs-12 text-muted">Drawn from data-qr</figcaption>
 </figure>
 <figure class="vstack gap-8 align-items-center">
-	<div class="qr" id="qr-package-call" aria-label="QR code: a key for the app"></div>
+	<div class="qr" id="qr-package-call" role="img" aria-label="QR code: a key for the app"></div>
 	<figcaption class="fs-12 text-muted">Drawn by REDZ.ui.qr</figcaption>
 </figure>
 ```
@@ -7007,7 +7007,7 @@ What a list, a panel or a search shows when it has nothing yet: what would be he
 <label class="empty-state empty-state-drop">
 	<span class="icon-tile icon-tile-sm"><i class="bi bi-upload" aria-hidden="true"></i></span>
 	<span class="vstack gap-2"><strong class="text-body">Logo · light theme</strong><span class="form-text">SVG or PNG, drop a file or choose</span></span>
-	<input class="visually-hidden" type="file" accept="image/svg+xml,image/png">
+	<input class="visually-hidden" type="file" name="logo-light" accept="image/svg+xml,image/png">
 </label>
 ```
 
@@ -7115,7 +7115,7 @@ A button opens the dialog with `commandfor` + `command="show-modal"`; buttons in
 		<button class="btn-close" type="button" commandfor="dialog-edit-note" command="close" aria-label="Close"></button>
 	</div>
 	<div class="dialog-body vstack gap-8">
-		<label class="form-field"><span class="form-label">Note</span><textarea class="form-control" autofocus>Pick up at the pier at 8:30.</textarea></label>
+		<label class="form-field"><span class="form-label">Note</span><textarea class="form-control" name="note" autofocus>Pick up at the pier at 8:30.</textarea></label>
 	</div>
 	<div class="dialog-footer">
 		<button class="btn" type="button" commandfor="dialog-edit-note" command="close">Cancel</button>
@@ -7320,8 +7320,8 @@ A drawer opens and closes like a dialog: `command="show-modal"` and `command="cl
 	<div class="drawer-body vstack gap-16">
 		<fieldset class="vstack gap-8">
 			<legend class="form-label">Status</legend>
-			<label class="form-check"><input class="check" type="checkbox" checked>Published</label>
-			<label class="form-check"><input class="check" type="checkbox">Draft</label>
+			<label class="form-check"><input class="check" type="checkbox" name="published" checked>Published</label>
+			<label class="form-check"><input class="check" type="checkbox" name="draft">Draft</label>
 		</fieldset>
 		<div class="form-floating">
 			<select class="form-select" id="drawer-filters-section"><option>Any section</option><option>Marine</option><option>Land</option></select>
@@ -7805,7 +7805,7 @@ The browser's own `<progress>` for work under way and `<meter>` for a measure wi
 
 ```html
 <div class="vstack gap-8 max-w-480">
-	<div class="hstack gap-8 fs-14"><span class="flex-1" id="progress-stacked-title">Seats this month</span><span class="text-muted tabular-nums">130 of 120</span></div>
+	<div class="hstack gap-8 fs-14"><span class="flex-grow-1" id="progress-stacked-title">Seats this month</span><span class="text-muted tabular-nums">130 of 120</span></div>
 	<div class="meter meter-stacked" role="meter" aria-labelledby="progress-stacked-title" aria-valuenow="130" aria-valuemin="0" aria-valuemax="130" aria-valuetext="130 seats: 50 free, 70 paid, 10 over the limit">
 		<span data-tone="success" data-v="0.385"></span>
 		<span data-tone="primary" data-v="0.538"></span>
@@ -7999,7 +7999,7 @@ The page sets the bar's `data-state` after a save: `error` in the danger tone, i
 	<input class="form-control" id="save-bar-changed-name" value="North Bay by speedboat" placeholder="Name" data-changed>
 	<label for="save-bar-changed-name">Name</label>
 </div>
-<label class="form-check" data-changed><input class="check" type="checkbox" checked> Shown on the site</label>
+<label class="form-check" data-changed><input class="check" type="checkbox" name="shown-on-the-site" checked> Shown on the site</label>
 ```
 
 ## Accessibility
@@ -8630,7 +8630,7 @@ The button opens the dialog by the browser's command and names its keys in `aria
 ```html
 <button class="btn btn-subtle-secondary" type="button" commandfor="palette-demo-dialog" command="show-modal" aria-keyshortcuts="Meta+K Control+K"><i class="bi bi-search" aria-hidden="true"></i>Find or go to…<kbd>⌘K</kbd></button>
 <dialog class="palette" id="palette-demo-dialog" closedby="any" aria-label="Find or go to">
-	<input class="palette-search" type="search" role="combobox" aria-controls="palette-demo-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find or go to" placeholder="Find or go to…" autocomplete="off" autofocus>
+	<input class="palette-search" type="search" id="palette-demo-search" role="combobox" aria-controls="palette-demo-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find or go to" placeholder="Find or go to…" autocomplete="off" autofocus>
 	<div class="palette-list" id="palette-demo-list" role="listbox" aria-label="Places and actions">
 		<div role="group" aria-labelledby="palette-demo-go">
 			<div class="menu-header" id="palette-demo-go" role="presentation">Go to</div>
@@ -8747,7 +8747,7 @@ The tones are `app-banner-info`, the default, `app-banner-success`, `app-banner-
 `action-bar` holds what a long screen is for - a total and Pay, a count and Save - at the bottom of the window while the page scrolls under it: sticky, across its region on the page's own tinted floor, a line above it. As the last child of `app-main` it reaches the region's edges. Its padding keeps clear of a phone's home bar and rounded corners - the page asks for that room with `viewport-fit=cover` in its viewport meta - and on a touch screen it steps aside while a field has the focus, as the keyboard takes its place. `action-bar-text` is its words, which take the room left. It stays off paper.
 
 ```html
-<div class="card card-scroll max-h-240" aria-label="The bill">
+<div class="card card-scroll max-h-240" role="group" aria-label="The bill">
 	<div class="card-body vstack gap-8">
 		<p>North Bay by speedboat · 2 adults · 5,000 THB</p>
 		<p>Lunch on the beach · 2 · 600 THB</p>

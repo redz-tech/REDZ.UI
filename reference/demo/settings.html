@@ -60,12 +60,12 @@
 								<label class="empty-state empty-state-drop">
 									<span class="icon-tile icon-tile-sm"><i class="bi bi-upload" aria-hidden="true"></i></span>
 									<span class="vstack gap-2"><strong class="text-body">Logo · light theme</strong><span class="form-text">SVG or PNG, drop a file or choose</span></span>
-									<input class="visually-hidden" type="file" accept="image/svg+xml,image/png">
+									<input class="visually-hidden" type="file" name="logo-light" accept="image/svg+xml,image/png">
 								</label>
 								<label class="empty-state empty-state-drop">
 									<span class="icon-tile icon-tile-sm"><i class="bi bi-upload" aria-hidden="true"></i></span>
 									<span class="vstack gap-2"><strong class="text-body">Logo · dark theme</strong><span class="form-text">SVG or PNG, drop a file or choose</span></span>
-									<input class="visually-hidden" type="file" accept="image/svg+xml,image/png">
+									<input class="visually-hidden" type="file" name="logo-dark" accept="image/svg+xml,image/png">
 								</label>
 							</div>
 							<p class="form-text">Every interface string names the product through {product} - translators never touch the brand.</p>
@@ -107,7 +107,7 @@
 								<label for="w-mail">Support e-mail</label>
 							</div>
 							<div class="form-field">
-								<label class="form-check"><input class="switch" type="checkbox" role="switch" aria-disabled="true" aria-describedby="w-power-why">Hide «Powered by REDZ CMS»</label>
+								<label class="form-check"><input class="switch" type="checkbox" name="hide-powered-by-redz-cms" role="switch" aria-disabled="true" aria-describedby="w-power-why">Hide «Powered by REDZ CMS»</label>
 								<div class="form-text" id="w-power-why"><i class="bi bi-lock" aria-hidden="true"></i> Available with a partner license</div>
 							</div>
 						</div>

@@ -132,7 +132,7 @@
 					<h2 id="log-lines">A log</h2>
 					<p><code>pre class="log"</code> sets a job's output in the monospace font, wraps its long lines and scrolls in its own box once a <code>max-h-*</code> utility caps its height - give it <code>tabindex="0"</code> then, so the keyboard scrolls it too. A line in a <code>span</code> with <code>data-tone</code> - <code>success</code>, <code>warning</code>, <code>danger</code>, <code>info</code> or <code>muted</code> - takes that tone; the words still say what happened. With <code>data-follow</code> the end stays in view while lines come in, as in a terminal, unless the reader scrolled up to read an earlier one; back at the end, it follows again.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="log-follow">
-						<pre class="log max-h-160" id="log-follow-lines" tabindex="0" data-follow aria-label="The import's output" dir="ltr"><span data-tone="muted">09:14:02</span> Import started: excursions.csv, 128 rows
+						<pre class="log max-h-160" id="log-follow-lines" role="region" tabindex="0" data-follow aria-label="The import's output" dir="ltr"><span data-tone="muted">09:14:02</span> Import started: excursions.csv, 128 rows
 <span data-tone="muted">09:14:02</span> Columns: title, price, date, seats, language
 <span data-tone="muted">09:14:02</span> Row 1-20 read
 <span data-tone="muted">09:14:02</span> Row 21-40 read
@@ -144,7 +144,7 @@
 <span data-tone="success"><span data-tone="muted">09:14:05</span> 127 excursions imported, 1 skipped</span></pre>
 						<div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="log-line" aria-controls="log-follow-lines">Add a line</button></div>
 					</div>
-					<pre class="docs-code" tabindex="0"><code>		&lt;pre class="log max-h-160" id="log-follow-lines" tabindex="0" data-follow aria-label="The import's output" dir="ltr"&gt;&lt;span data-tone="muted"&gt;09:14:02&lt;/span&gt; Import started: excursions.csv, 128 rows
+					<pre class="docs-code" tabindex="0"><code>		&lt;pre class="log max-h-160" id="log-follow-lines" role="region" tabindex="0" data-follow aria-label="The import's output" dir="ltr"&gt;&lt;span data-tone="muted"&gt;09:14:02&lt;/span&gt; Import started: excursions.csv, 128 rows
 &lt;span data-tone="muted"&gt;09:14:02&lt;/span&gt; Columns: title, price, date, seats, language
 &lt;span data-tone="muted"&gt;09:14:02&lt;/span&gt; Row 1-20 read
 &lt;span data-tone="muted"&gt;09:14:02&lt;/span&gt; Row 21-40 read
@@ -159,7 +159,7 @@
 					<h3 id="log-follow-any">Any box that follows</h3>
 					<p><code>data-follow</code> works on any element that scrolls - a thread of messages, a list of events: it keeps its end in view while its contents come in or grow, a picture that loads included. A button with <code>command="--follow"</code> and <code>aria-controls</code> naming the box shows while the reader is away from the end and something new came in; pressed, it brings the end back, follows again and hides. In a <code>follow-dock</code> - the box's last child - it floats at the middle of the box's bottom edge. With <code>data-follow="current"</code> the box keeps its child with <code>aria-current</code> in view instead - a running job's step - at the nearest edge, with the room of one step beside it, and its end while it has none; only the box scrolls, never the page, and once the reader scrolls the step out of view it waits until it is back.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="log-thread">
-						<div class="card card-scroll max-h-240" aria-labelledby="log-thread-title">
+						<div class="card card-scroll max-h-240">
 							<div class="card-header"><h2 class="fs-14" id="log-thread-title">Request 24-0187</h2></div>
 							<div class="card-body vstack gap-8" id="log-thread-box" role="region" tabindex="0" aria-labelledby="log-thread-title" data-follow>
 								<p>A Sample: The pier gate does not open at 07:00.</p>
@@ -171,7 +171,7 @@
 						</div>
 						<div class="hstack gap-8"><button class="btn btn-secondary" type="button" data-docs-run="log-message" aria-controls="log-thread-box">Add a message</button></div>
 					</div>
-					<pre class="docs-code" tabindex="0"><code>&lt;div class="card card-scroll max-h-240" aria-labelledby="log-thread-title"&gt;
+					<pre class="docs-code" tabindex="0"><code>&lt;div class="card card-scroll max-h-240"&gt;
 	&lt;div class="card-header"&gt;&lt;h2 class="fs-14" id="log-thread-title"&gt;Request 24-0187&lt;/h2&gt;&lt;/div&gt;
 	&lt;div class="card-body vstack gap-8" id="log-thread-box" role="region" tabindex="0" aria-labelledby="log-thread-title" data-follow&gt;
 		&lt;p&gt;A Sample: The pier gate does not open at 07:00.&lt;/p&gt;

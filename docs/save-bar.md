@@ -46,7 +46,7 @@ The page sets the bar's `data-state` after a save: `error` in the danger tone, i
 	<input class="form-control" id="save-bar-changed-name" value="North Bay by speedboat" placeholder="Name" data-changed>
 	<label for="save-bar-changed-name">Name</label>
 </div>
-<label class="form-check" data-changed><input class="check" type="checkbox" checked> Shown on the site</label>
+<label class="form-check" data-changed><input class="check" type="checkbox" name="shown-on-the-site" checked> Shown on the site</label>
 ```
 
 ## Accessibility

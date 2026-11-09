@@ -79,8 +79,8 @@ function TOOL__NpmFile(string $package, string $version, string $name, string $i
 
 /**
  * Every class of the library's stylesheets, unescaped - components, utilities with their prefixes, icons, and the
- * packages' as the docs link them (tools/docs.json's "packages") - with the docs page of its stylesheet ('' for the
- * base layers).
+ * packages' as the docs link them (tools/docs.json's "packages"), and the classes a consumer writes that only a script
+ * reads - with the docs page of its stylesheet ('' for the base layers).
  * @return array<string, string>
  */
 function TOOL__Classes(): array
@@ -95,7 +95,7 @@ function TOOL__Classes(): array
 			$sheets[dirname(__DIR__) . '/' . $file] = $page;
 		}
 	}
-	$classes = [];
+	$classes = ['nav-overflow-keep' => ['nav']];
 	foreach ($sheets as $file => $page) {
 		$css = (string)preg_replace(['~/\*.*?\*/~s', '~url\([^)]*\)~'], '', (string)file_get_contents($file));
 		preg_match_all('~([^{}]+)\{~', $css, $selectors);
