@@ -556,6 +556,48 @@ function BUILD__SamplesCheck(): array
 }
 
 /**
+ * The bodies of the @media blocks of $query in $css, and $css without them.
+ * @return array{list<string>, string}
+ */
+function BUILD__MediaBlocks(string $css, string $query): array
+{
+	$bodies = [];
+	while (($at = strpos($css, $query)) !== false) {
+		$open = (int)strpos($css, '{', $at);
+		$depth = 1;
+		$end = $open + 1;
+		while ($depth > 0 && $end < strlen($css)) {
+			$depth += ['{' => 1, '}' => -1][$css[$end++]] ?? 0;
+		}
+		$bodies[] = substr($css, $open + 1, $end - $open - 2);
+		$css = substr($css, 0, $at) . substr($css, $end);
+	}
+	return [$bodies, $css];
+}
+
+/**
+ * An endless animation outside a no-preference block runs for a person who asks for less motion, so that it says work
+ * goes on: each one is slowed in a reduce block of its own stylesheet. Answers what is wrong.
+ * @return list<string>
+ */
+function BUILD__MotionCheck(): array
+{
+	$split = fn(string $selectors): array => array_map(fn(string $selector): string => trim((string)preg_replace('~\s+~', ' ', $selector)), explode(',', $selectors));
+	$wrong = [];
+	foreach (array_merge(...array_map(fn(string $pattern): array => glob(BUILD_ROOT . '/' . $pattern) ?: [], BUILD_STYLES)) as $file) {
+		[, $css] = BUILD__MediaBlocks((string)preg_replace('~/\*.*?\*/~s', '', (string)file_get_contents($file)), '@media (prefers-reduced-motion: no-preference)');
+		[$reduce, $css] = BUILD__MediaBlocks($css, '@media (prefers-reduced-motion: reduce)');
+		preg_match_all('~([^{}]+)\{[^{}]*\banimation-duration:[^{}]*\}~', implode("\n", $reduce), $slowed);
+		preg_match_all('~([^{}]+)\{[^{}]*\banimation:[^;{}]*\binfinite\b[^{}]*\}~', $css, $endless);
+		$missing = array_diff(array_merge([], ...array_map($split, $endless[1])), array_merge([], ...array_map($split, $slowed[1])));
+		foreach ($missing as $selector) {
+			$wrong[] = substr($file, strlen(BUILD_ROOT) + 1) . '  ' . $selector . ' runs without end and is not slowed for less motion';
+		}
+	}
+	return $wrong;
+}
+
+/**
  * The island's keys of tools/vocabulary.json held against the scripts and the docs: every key a script asks for by
  * text('key', …) or textCount('key', …) is declared, a count as "count"; every declared key is a string in a script;
  * the docs' texts hold each one, a count by its .other form. Answers what is wrong.
@@ -728,7 +770,7 @@ function BUILD__Main(array $argv): int
 {
 	$check = in_array('--check', $argv, true);
 	$vocab = BUILD__Vocabulary();
-	$wrong = [...BUILD__TextsCheck($vocab), ...BUILD__CommandsCheck(), ...BUILD__SamplesCheck(), ...BUILD__CatalogCheck(), ...BUILD__ToolsCalls(), ...array_map(fn(string $failure): string => 'tools/min.php  ' . $failure, MIN__SelfTest())];
+	$wrong = [...BUILD__TextsCheck($vocab), ...BUILD__CommandsCheck(), ...BUILD__SamplesCheck(), ...BUILD__MotionCheck(), ...BUILD__CatalogCheck(), ...BUILD__ToolsCalls(), ...array_map(fn(string $failure): string => 'tools/min.php  ' . $failure, MIN__SelfTest())];
 	if ($wrong !== []) {
 		fwrite(STDERR, implode("\n", $wrong) . "\n");
 		return 1;

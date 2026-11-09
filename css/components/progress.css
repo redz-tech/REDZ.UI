@@ -161,9 +161,8 @@
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.progress-top:indeterminate {
-			background: currentColor;
-			animation: none;
+		.progress:indeterminate {
+			animation-duration: 6s;
 		}
 	}
 

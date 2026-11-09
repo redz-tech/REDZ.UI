@@ -22,6 +22,12 @@
 		pointer-events: none;
 	}
 
+	@media (prefers-reduced-motion: reduce) {
+		.form-adorn:has(> [data-filter-server][aria-busy="true"])::after {
+			animation-duration: 1.4s;
+		}
+	}
+
 	@media (forced-colors: active) {
 		.form-adorn:has(> [data-filter-server][aria-busy="true"])::after {
 			border-color: CanvasText;

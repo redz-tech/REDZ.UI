@@ -19,6 +19,16 @@
 		animation: spinner-grow 0.75s linear infinite;
 	}
 
+	@media (prefers-reduced-motion: reduce) {
+		.spinner-border {
+			animation-duration: 1.4s;
+		}
+
+		.spinner-grow {
+			animation-duration: 1.5s;
+		}
+	}
+
 	@media (forced-colors: active) {
 		.spinner-border {
 			forced-color-adjust: none;

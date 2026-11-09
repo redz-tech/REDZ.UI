@@ -11,6 +11,12 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   field has an id or a name, and a `div`, a `span` or a `pre` with a name has a role. The probes count a name on an element with
   no role when axe leaves it as incomplete.
 - The passport's `classes` lists `nav-overflow-keep`, a class a page writes and only a script reads.
+- The build refuses an endless animation that is not slowed for people who ask for less motion.
+
+### Changed
+- Busy indicators run slower for people who ask for less motion, and none of them stops. A bar without a value and
+  `progress-top` take 6 seconds, and spinners, a busy button, a busy region, a server filter and a kiosk's ring turn at
+  half the speed. `progress-top` used to stand still, and the others did not look at the setting.
 
 ### Fixed
 - The docs show `carousel-inner` as `role="group"`, since a name on a plain `div` is prohibited. A page with a carousel

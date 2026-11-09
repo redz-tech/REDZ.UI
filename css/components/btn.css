@@ -311,6 +311,13 @@
 		animation: spinner-turn 0.7s linear infinite;
 	}
 
+	@media (prefers-reduced-motion: reduce) {
+		.btn[aria-busy="true"] > .bi:first-child,
+		.btn[aria-busy="true"]:not(:has(> .bi:first-child))::after {
+			animation-duration: 1.4s;
+		}
+	}
+
 	.btn-close {
 		display: inline-grid;
 		place-items: center;

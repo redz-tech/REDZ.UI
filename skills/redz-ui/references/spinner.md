@@ -24,7 +24,7 @@ The words beside the spinner say what is happening; the ring alone is hidden fro
 
 ## Accessibility
 
-- A spinner moves even for people who ask for less motion - it is the sign that something is happening - and stays a ring or a dot in forced colors.
+- A spinner turns at half the speed for people who ask for less motion and never stops - it is the sign that something is happening - and stays a ring or a dot in forced colors.
 - Say the same in words, in a live region when it starts after an action.
 
 ## Tokens

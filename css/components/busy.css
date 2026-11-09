@@ -31,6 +31,12 @@
 		animation: busy-show 0s 400ms both, spinner-turn 0.7s linear infinite;
 	}
 
+	@media (prefers-reduced-motion: reduce) {
+		:is(.card, .card-body, .dialog-body, .drawer-body, .region)[aria-busy="true"]::after {
+			animation-duration: 0s, 1.4s;
+		}
+	}
+
 	.busy-words {
 		position: absolute;
 		z-index: 2;

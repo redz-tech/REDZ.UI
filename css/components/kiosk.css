@@ -88,6 +88,12 @@
 		animation: spinner-turn 0.9s linear infinite;
 	}
 
+	@media (prefers-reduced-motion: reduce) {
+		.kiosk-state[aria-busy="true"]::after {
+			animation-duration: 1.8s;
+		}
+	}
+
 	@media (prefers-reduced-motion: no-preference) {
 		.kiosk-state-idle {
 			animation: kiosk-pulse 2.2s ease-in-out infinite;
