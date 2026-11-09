@@ -5,7 +5,10 @@
 // items, named by the link's words. It measures the nav against the room the wrapper leaves it, as hiding links changes
 // the nav's own width, and looks again when the wrapper changes size, the fonts load, or the nav's links or their
 // states change. The button and the menu may be the page's own (a .nav-overflow-toggle and a .nav-overflow-menu in the
-// wrapper); else the button says the page's text "more". A wrapper added to the page later is taken up as it comes.
+// wrapper); else the button says the page's text "more". A danger or warning badge on a hidden link shows on the button:
+// a badge of the worst tone with the sum of their numbers, or a dot of that tone when one of them is not a plain number,
+// and the button's name says which links they are, in the links' own words. A wrapper added to the page later is taken
+// up as it comes.
 import {text} from './text.js';
 
 const state = new WeakMap();
@@ -84,6 +87,44 @@ const entriesOf = (moved, wrapper) => {
 	return entries.flatMap((entry, i) => i > 0 && [entry, entries[i - 1]].some((one) => one.getAttribute('role') === 'group') ? [Object.assign(document.createElement('hr'), {className: 'menu-divider'}), entry] : [entry]);
 };
 
+/** The page's language, for numbers and lists. */
+const lang = () => document.documentElement.lang || 'en';
+
+/** The element's text without the parts the selector picks. */
+const wordsOf = (element, less) => {
+	const copy = element.cloneNode(true);
+	copy.querySelectorAll(less).forEach((part) => part.remove());
+	return copy.textContent.replace(/\s+/g, ' ').trim();
+};
+
+/** The whole number the words show, in Latin digits or the language's own, or NaN. */
+const wholeIn = (words) => {
+	const digits = [...new Intl.NumberFormat(lang(), {useGrouping: false}).format(9876543210)].reverse();
+	const plain = [...words].map((one) => digits.includes(one) ? digits.indexOf(one) : one).join('');
+	return /^\d+$/.test(plain) ? Number(plain) : NaN;
+};
+
+/** The tone of a badge that asks for attention: danger or warning, or undefined. */
+const toneOf = (badge) => ['danger', 'warning'].find((tone) => badge.classList.contains('badge-' + tone) || badge.classList.contains('badge-subtle-' + tone));
+
+/** Writes on the button what the badges of the hidden links ask for: the worst tone, the sum, and who they are. */
+const markFor = (own, moved) => {
+	const raised = moved.flatMap((link) => [...link.querySelectorAll('.badge')].filter(toneOf).map((badge) => ({link, badge})));
+	own.mark.hidden = raised.length === 0;
+	if (raised.length === 0) {
+		own.said.textContent = '';
+		return;
+	}
+	const worst = raised.find(({badge}) => toneOf(badge) === 'danger') ?? raised[0];
+	const tone = toneOf(worst.badge);
+	const sum = raised.reduce((all, {badge}) => all + wholeIn(wordsOf(badge, '.visually-hidden')), 0);
+	const shown = Number.isNaN(sum) ? '' : new Intl.NumberFormat(lang()).format(sum);
+	own.mark.className = shown === '' ? 'dot dot-' + tone : 'badge badge-' + (worst.badge.classList.contains('badge-subtle-' + tone) ? 'subtle-' : '') + tone + ' tabular-nums';
+	own.mark.textContent = shown;
+	const who = [...new Set(raised.map(({link, badge}) => link.getAttribute('aria-label') ?? wordsOf(link, '.badge') + ' ' + badge.textContent.trim()))];
+	own.said.textContent = (shown === '' ? '' : ' ' + shown) + ': ' + new Intl.ListFormat(lang(), {type: 'conjunction'}).format(who);
+};
+
 /** The wrapper's button and menu: the page's own, else made once after the nav. */
 const partsOf = (wrapper) => {
 	let toggle = wrapper.querySelector(':scope > .nav-overflow-toggle');
@@ -106,7 +147,13 @@ const partsOf = (wrapper) => {
 	if (!menu.hasAttribute('aria-label') && !menu.hasAttribute('aria-labelledby') && toggle.id !== '') {
 		menu.setAttribute('aria-labelledby', toggle.id);
 	}
-	return {toggle, menu};
+	const mark = Object.assign(document.createElement('span'), {hidden: true});
+	mark.setAttribute('aria-hidden', 'true');
+	const said = Object.assign(document.createElement('span'), {className: 'visually-hidden'});
+	const icon = toggle.querySelector(':scope > .bi:last-child');
+	toggle.insertBefore(mark, icon);
+	toggle.insertBefore(said, icon);
+	return {toggle, menu, mark, said};
 };
 
 /** Shows every link, then hides from the end the ones that may go until the rest fit; the menu holds the hidden. */
@@ -121,6 +168,7 @@ const update = (wrapper) => {
 		delete link.dataset.overflow;
 	}
 	own.toggle.hidden = true;
+	markFor(own, []);
 	const moved = [];
 	if (!fits(nav)) {
 		own.toggle.hidden = false;
@@ -130,6 +178,7 @@ const update = (wrapper) => {
 			}
 			link.dataset.overflow = '';
 			moved.unshift(link);
+			markFor(own, moved);
 			if (menuOf(link)?.matches(':popover-open')) {
 				menuOf(link).hidePopover();
 			}
@@ -140,7 +189,12 @@ const update = (wrapper) => {
 		if (moved.length === 0 && own.menu.matches(':popover-open')) {
 			own.menu.hidePopover();
 		}
+		const focused = [...own.menu.querySelectorAll('[role="menuitem"]')].indexOf(document.activeElement);
 		own.menu.replaceChildren(...entriesOf(moved, wrapper));
+		if (focused !== -1) {
+			const items = own.menu.querySelectorAll('[role="menuitem"]');
+			(items[focused] ?? items[items.length - 1])?.focus();
+		}
 	}
 	own.moved = moved;
 	own.dirty = false;
@@ -179,7 +233,7 @@ const setUp = (wrapper) => {
 	state.set(wrapper, {...partsOf(wrapper), moved: [], dirty: true});
 	update(wrapper);
 	sized.observe(wrapper);
-	new MutationObserver(() => schedule(wrapper, true)).observe(nav, {childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['aria-current', 'aria-selected', 'aria-disabled', 'disabled', 'hidden', 'href']});
+	new MutationObserver(() => schedule(wrapper, true)).observe(nav, {childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['aria-current', 'aria-selected', 'aria-disabled', 'disabled', 'hidden', 'href', 'class']});
 };
 
 document.querySelectorAll('.nav-overflow').forEach(setUp);

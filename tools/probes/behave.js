@@ -2247,6 +2247,132 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a choice writes ' + say(written) + ', the address selects tab ' + followed + ', a refused select answers ' + refused + ' leaving tab ' + kept + ', a taken one ' + taken + ', and redz:selected told ' + say(told));
 			}
 		}]},
+		tabsLater: {target: '#nav-hash', steps: [async (out) => {
+			const names = ['a', 'b', 'c'];
+			const buttons = (id) => names.map((one, i) => '<button class="nav-link" type="button" role="tab" id="' + id + '-' + one + '-tab" aria-selected="' + (i === 0) + '" aria-controls="' + id + '-' + one + '">' + one + '</button>').join('');
+			const strip = (id, extra = '') => '<div class="nav" role="tablist" aria-label="Later" id="' + id + '" ' + extra + '>' + buttons(id) + '</div>' + names.map((one, i) => '<div role="tabpanel" id="' + id + '-' + one + '"' + (i === 0 ? '' : ' hidden') + '></div>').join('');
+			const stops = (id) => names.map((one) => $('#' + id + '-' + one + '-tab').tabIndex);
+			const stage = document.body.appendChild(document.createElement('div'));
+			const heard = [];
+			const hear = (event) => heard.push(event.detail.tab.id);
+			const home = location.pathname + location.search;
+			const expect = (what, got, want) => {
+				if (say(got) !== say(want)) {
+					out.push(what + ': ' + say(got) + ', not ' + say(want));
+				}
+			};
+			document.addEventListener('redz:selected', hear);
+			stage.innerHTML = strip('later1');
+			await wait(50);
+			expect('a tablist put in later has one tab stop', stops('later1'), [0, -1, -1]);
+			expect('it tells its first selection', heard.splice(0), ['later1-a-tab']);
+			history.replaceState(history.state, '', '#later2-b');
+			stage.innerHTML = strip('later2', 'data-hash');
+			await wait(50);
+			expect('a later tablist with data-hash takes the tab the address names', stops('later2'), [-1, 0, -1]);
+			expect('it selects once', heard.splice(0), ['later2-b-tab']);
+			expect('it shows only that panel', names.map((one) => $('#later2-' + one).hidden), [true, false, true]);
+			expect('it leaves the address', location.hash, '#later2-b');
+			const added = $('#later2-c-tab').cloneNode(true);
+			added.id = 'later2-d-tab';
+			added.removeAttribute('tabindex');
+			$('#later2').append(added);
+			await wait(50);
+			expect('a tab added to a taken tablist leaves the tab order', added.tabIndex, -1);
+			expect('that tab tells nothing', heard.splice(0), []);
+			history.replaceState(history.state, '', home);
+			stage.innerHTML = '<div class="nav" role="tablist" aria-label="Later" id="later3"></div>';
+			await wait(50);
+			$('#later3').innerHTML = buttons('later3');
+			await wait(50);
+			expect('a tablist that was empty is taken when its tabs come', stops('later3'), [0, -1, -1]);
+			expect('that tablist selects once', heard.splice(0), ['later3-a-tab']);
+			stage.innerHTML = strip('outer', 'data-hash');
+			await wait(50);
+			heard.length = 0;
+			$('#outer-b-tab').dataset.hashWithin = 'deep-';
+			location.hash = '#deep-b';
+			await wait(100);
+			expect('an address that begins with data-hash-within selects its tab', $('#outer-b-tab').getAttribute('aria-selected'), 'true');
+			expect('that address stays', location.hash, '#deep-b');
+			$('#outer-b').innerHTML = strip('deep', 'data-hash');
+			await wait(50);
+			expect('the tablist its panel brings selects the tab the address names', stops('deep'), [-1, 0, -1]);
+			expect('the address stays then too', location.hash, '#deep-b');
+			document.removeEventListener('redz:selected', hear);
+			stage.remove();
+			history.replaceState(history.state, '', home);
+		}]},
+		overflowFocus: {target: '#nav-overflow', steps: [async (out) => {
+			const stage = Object.assign(document.createElement('div'), {className: 'nav-overflow', innerHTML: '<nav class="nav" aria-label="Focus">' + ['One', 'Two', 'Three', 'Four', 'Five', 'Six'].map((word) => '<a class="nav-link" href="#nav-overflow">' + word + '<span class="badge">1</span></a>').join('') + '</nav>'});
+			stage.style.inlineSize = '180px';
+			document.body.append(stage);
+			await wait(100);
+			const menu = $('.nav-overflow-menu', stage);
+			menu.showPopover();
+			await wait(100);
+			$$('[role="menuitem"]', menu)[1].focus();
+			$('[data-overflow] .badge', stage).textContent = '7';
+			await wait(150);
+			if (document.activeElement !== $$('[role="menuitem"]', menu)[1] || !menu.matches(':popover-open')) {
+				out.push('a badge that changes while the More menu is open leaves the focus on ' + document.activeElement.tagName + ' and the menu open: ' + menu.matches(':popover-open') + ', not the same item focused');
+			}
+			menu.hidePopover();
+			stage.remove();
+		}]},
+		overflowMark: {target: '#nav-overflow', steps: [async (out) => {
+			const link = (word, tone, count) => '<a class="nav-link" href="#nav-overflow">' + word + (tone === null ? '' : '<span class="' + tone + '" id="mark-' + word + '">' + count + '</span>') + '</a>';
+			const stage = Object.assign(document.createElement('div'), {className: 'nav-overflow', innerHTML: '<nav class="nav" aria-label="Mark">' + link('One', null) + link('Two', null) + link('Three', null) + link('Four', null) + link('Six', 'badge badge-subtle-warning', 1) + link('Seven', 'badge badge-subtle-danger', 2) + link('Eight', 'badge', 9) + '</nav>'});
+			stage.style.inlineSize = '170px';
+			document.body.append(stage);
+			await wait(150);
+			const nav = $('.nav', stage);
+			const mark = () => $('.nav-overflow-toggle > [aria-hidden="true"]:not(.bi)', stage);
+			const said = () => $('.nav-overflow-toggle > .visually-hidden', stage).textContent;
+			const look = () => mark().hidden ? ['none', ''] : [mark().className.split(' ').slice(0, 2).join(' '), mark().textContent];
+			const expect = (what, want) => {
+				if (say(look()) !== say(want)) {
+					out.push(what + ': ' + say(look()) + ', not ' + say(want));
+				}
+			};
+			expect('two toned badges in the menu give the worst tone and their sum', ['badge badge-subtle-danger', '3']);
+			if (!said().includes('3') || !said().includes('Six 1') || !said().includes('Seven 2') || said().includes('Eight')) {
+				out.push('the button says ' + say(said()) + ', not the sum and the two links with toned badges');
+			}
+			for (let width = 140; width <= 320; width += 6) {
+				stage.style.inlineSize = width + 'px';
+				await wait(50);
+				if (nav.scrollWidth - nav.clientWidth > 1) {
+					out.push('the mark widens the button past the fold: at ' + width + ' px the nav overflows by ' + (nav.scrollWidth - nav.clientWidth));
+					break;
+				}
+			}
+			stage.style.inlineSize = '170px';
+			await wait(150);
+			$('#mark-Seven').textContent = '5';
+			await wait(150);
+			expect('a new number in a badge changes the sum', ['badge badge-subtle-danger', '6']);
+			$('#mark-Seven').className = 'badge';
+			await wait(150);
+			expect('a badge that loses its tone leaves the worst and the sum of the rest', ['badge badge-subtle-warning', '1']);
+			$('#mark-Six').textContent = 'late';
+			await wait(150);
+			expect('a word instead of a number gives a dot of the tone', ['dot dot-warning', '']);
+			if (!said().includes('Six late')) {
+				out.push('the button says ' + say(said()) + ', without the word the badge shows');
+			}
+			$('#mark-Six').className = 'badge badge-danger';
+			$('#mark-Six').textContent = '2';
+			await wait(150);
+			expect('a solid badge gives a solid mark', ['badge badge-danger', '2']);
+			$('#mark-Six').className = 'badge';
+			await wait(150);
+			expect('neutral badges give no mark', ['none', '']);
+			if (said() !== '') {
+				out.push('the button still says ' + say(said()) + ' with no toned badge in its menu');
+			}
+			stage.remove();
+		}]},
 		checks: {target: '#menu-checks', steps: [async (out) => {
 			const menu = $('#menu-checks-list');
 			const item = (words) => $$('.menu-item', menu).find((one) => one.textContent === words);

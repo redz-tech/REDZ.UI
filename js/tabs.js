@@ -9,10 +9,15 @@
 // REDZ.ui.select(tab) chooses a tab from code as a person would, and answers a promise of whether it was selected. A
 // tablist with data-hash follows the address: location.hash naming a panel, or anything inside one, selects its tab -
 // at load, and when the hash changes as a person's choice that redz:select may refuse, which puts the address back;
-// nested tablists too -, and a choice writes the panel's id into the address.
+// nested tablists too -, and a choice writes the panel's id into the address. A tab with data-hash-within="PREFIX" stands
+// for a panel whose contents come later: an address that begins with PREFIX and names nothing on the page yet selects
+// that tab, the address staying, and the tablist the panel brings takes its own tab from the same address. A tablist put
+// in later is taken up as it comes, as at load: one selection, the address left as it is, no scroll; a tab added to one
+// leaves the tab order unless it is the selected one.
 import {ask} from './answer.js';
 
 const asking = new WeakSet();
+const known = new WeakSet();
 
 const tabsOf = (list) => [...list.querySelectorAll('[role="tab"]')].filter((tab) => tab.closest('[role="tablist"]') === list && !tab.disabled && tab.getAttribute('aria-disabled') !== 'true');
 
@@ -77,32 +82,50 @@ const choose = (tab, write = true) => {
 /** Chooses a tab from code, as a person would: a promise of whether it is selected. */
 export const selectTab = (tab) => tab?.closest('[role="tablist"]') ? choose(tab) : Promise.resolve(false);
 
-/** The element the address names, or null. */
-const named = () => {
+/** The id the address names, or an empty string. */
+const addressId = () => {
 	try {
-		return location.hash.length > 1 ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
+		return decodeURIComponent(location.hash.slice(1));
 	} catch {
-		return null;
+		return '';
 	}
 };
 
-/** The tab of every panel of a tablist with data-hash that holds the element the address names, outermost first. */
+/** The element the address names, or null. */
+const named = () => addressId() === '' ? null : document.getElementById(addressId());
+
+/** The tabs the address asks for, outermost first: of every panel of a tablist with data-hash that holds the element it
+ *  names, or, while the page has no such element, the ones whose data-hash-within begins its id. */
 const tabsNamed = () => {
 	const tabs = [];
-	for (let at = named(); at !== null; at = at.parentElement) {
+	const found = named();
+	for (let at = found; at !== null; at = at.parentElement) {
 		const tab = at.id === '' ? null : document.querySelector('[role="tab"][aria-controls="' + CSS.escape(at.id) + '"]');
 		if (tab?.closest('[role="tablist"][data-hash]')) {
 			tabs.unshift(tab);
 		}
 	}
-	return tabs;
+	return found !== null ? tabs : [...document.querySelectorAll('[role="tab"][data-hash-within]')].filter((tab) => tab.closest('[role="tablist"][data-hash]') && tab.dataset.hashWithin !== '' && addressId().startsWith(tab.dataset.hashWithin));
 };
 
-/** Selects the tabs the address names at load; answers whether it named one. */
-const follow = () => {
-	const tabs = tabsNamed();
-	tabs.filter((tab) => tab.getAttribute('aria-selected') !== 'true').forEach((tab) => select(tab));
-	return tabs.length > 0;
+/** Takes up a tablist that has tabs: selects the one the address asks for, else its selected one, else its first. A
+ *  tablist already taken only puts a tab added to it out of the tab order, unless none of its tabs is selected any more. */
+const takeUp = (list) => {
+	const tabs = tabsOf(list);
+	if (tabs.length === 0) {
+		return;
+	}
+	const on = tabs.find((tab) => tab.getAttribute('aria-selected') === 'true');
+	if (known.has(list) && on !== undefined) {
+		for (const tab of tabs) {
+			if (tab !== on && tab.tabIndex !== -1) {
+				tab.tabIndex = -1;
+			}
+		}
+		return;
+	}
+	known.add(list);
+	select(tabsNamed().find((tab) => tabs.includes(tab)) ?? on ?? tabs[0]);
 };
 
 /** A new address chooses its tabs as a person would: one the page refuses puts the address back. */
@@ -123,17 +146,25 @@ const moved = async (event) => {
 	}
 };
 
-for (const list of document.querySelectorAll('[role="tablist"]')) {
-	const tabs = tabsOf(list);
-	const selected = tabs.find((tab) => tab.getAttribute('aria-selected') === 'true') ?? tabs[0];
-	if (selected !== undefined) {
-		select(selected);
-	}
-}
+document.querySelectorAll('[role="tablist"]').forEach(takeUp);
 
-if (follow()) {
+if (tabsNamed().length > 0) {
 	named()?.scrollIntoView();
 }
+
+new MutationObserver((records) => {
+	for (const record of records) {
+		for (const node of record.addedNodes) {
+			if (node instanceof Element) {
+				const list = node.closest('[role="tablist"]');
+				if (list !== null) {
+					takeUp(list);
+				}
+				node.querySelectorAll('[role="tablist"]').forEach(takeUp);
+			}
+		}
+	}
+}).observe(document.documentElement, {childList: true, subtree: true});
 
 addEventListener('hashchange', moved);
 

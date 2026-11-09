@@ -4,6 +4,25 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Added
+- `nav-overflow`: a danger or warning badge on a link folded into the menu shows on the More button, so a problem in
+  the menu is seen with the menu closed: a badge of the worst tone with the sum of their numbers, or a dot of that tone
+  when one of them is not a plain number. The button's name says which links they are, in the links' own words, and
+  no new text is needed in `#redz-ui-text`. Other badges stay in the menu.
+- A tab with `data-hash-within="PREFIX"` stands for a panel whose contents come later: an address that begins with
+  PREFIX and names nothing on the page yet selects that tab, the address staying, and the tablist the panel brings
+  takes its own tab from the same address.
+- A `role="tablist"` put in the page later is taken up as it comes, as at load: one tab in the tab order, the first
+  `redz:selected`, and with `data-hash` the tab the address names, with no write to the address and no scroll. An
+  empty tablist is taken when its tabs come, and a tab added to a tablist leaves the tab order unless it is selected.
+
+### Fixed
+- A badge that changes while the More menu of a `nav-overflow` is open no longer takes the focus out of the menu.
+- An address that names a tab selects it at once at load: `redz:selected` comes once, not first for the default tab,
+  and a tab that is disabled is not selected by the address.
+
 ## 0.21.0 - 2026-11-09
 
 ### Added

@@ -8179,6 +8179,8 @@ tablist.addEventListener('redz:select', (event) => {
 
 A tablist with `data-hash` follows the address: `location.hash` naming a panel, or anything inside one, selects its tab - when the page loads, and when the hash changes as a person's choice through `redz:select`, whose refusal puts the address back; a tablist inside a panel too -, and a person's choice writes the panel's id into the address, so a link or a reload opens the same tab. After every selection, the first one too, the tablist fires `redz:selected` with `detail.tab`. `REDZ.ui.select(tab)` chooses a tab from code as a person would - through `redz:select`, so the page can still refuse - and answers a promise of whether it was selected.
 
+A tab with `data-hash-within="PREFIX"` stands for a panel whose contents come later, such as a `data-lazy` one: an address that begins with PREFIX and names nothing on the page yet selects that tab, the address staying, and the tablist the panel brings takes its own tab from the same address. A tablist put in later is taken up as it comes, as at load: one selection and one `redz:selected`, the address left as it is, no scroll. A tab added to a tablist leaves the tab order unless it is the selected one.
+
 ```html
 <div class="nav nav-underline" role="tablist" aria-label="Booking" data-hash>
 	<button class="nav-link" type="button" role="tab" id="nav-hash-1" aria-selected="true" aria-controls="nav-hash-guests">Guests</button>
@@ -8252,7 +8254,7 @@ A nav or a tab list wider than its box scrolls sideways, and the edge it goes on
 
 ### When the links do not fit
 
-`nav-overflow` around a nav keeps it on one line: the links that do not fit hide from the end and come back, in their order, as the items of a menu behind a “More” button after the nav. The link the person is on and a link with `nav-overflow-keep` stay in the row. A link that opens a [menu](menu.md) folds with it, as a group of its items under the link's words, and stays in the row while its menu holds the page the person is on; a [navbar](navbar.md) shows one. A link the page hides with `hidden` leaves the row and the menu, and comes back when the page shows it. It measures the room its own box has, not the window, so a nav in a narrow column folds as early as it needs to. For a row of links the wrapper is the `<nav>`, so the menu stays inside the landmark.
+`nav-overflow` around a nav keeps it on one line: the links that do not fit hide from the end and come back, in their order, as the items of a menu behind a “More” button after the nav. The link the person is on and a link with `nav-overflow-keep` stay in the row. A link that opens a [menu](menu.md) folds with it, as a group of its items under the link's words, and stays in the row while its menu holds the page the person is on; a [navbar](navbar.md) shows one. A link the page hides with `hidden` leaves the row and the menu, and comes back when the page shows it. A danger or warning badge on a hidden link shows on the button, so a problem in the menu is seen with the menu closed: a badge of the worst tone with the sum of their numbers, or a dot of that tone when one of them is not a plain number. The button's name says which links they are, in the links' own words; other badges stay in the menu. It measures the room its own box has, not the window, so a nav in a narrow column folds as early as it needs to. For a row of links the wrapper is the `<nav>`, so the menu stays inside the landmark.
 
 ```html
 <nav class="nav-overflow max-w-480" aria-label="Excursion sections">
@@ -8263,8 +8265,8 @@ A nav or a tab list wider than its box scrolls sideways, and the edge it goes on
 		<a class="nav-link" href="#nav-overflow">Dates</a>
 		<a class="nav-link" href="#nav-overflow">Pickup</a>
 		<a class="nav-link" href="#nav-overflow">Reviews<span class="badge">42</span></a>
-		<a class="nav-link" href="#nav-overflow">Photos</a>
-		<a class="nav-link" href="#nav-overflow">Questions</a>
+		<a class="nav-link" href="#nav-overflow">Photos<span class="badge badge-subtle-warning">3</span></a>
+		<a class="nav-link" href="#nav-overflow">Questions<span class="badge badge-subtle-danger">1</span></a>
 	</div>
 </nav>
 ```
