@@ -10,6 +10,9 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - A spark-line in a sorted table no longer hangs the tab on the first press of a sort button. A sort takes only rows
   and bodies the page puts in as a redraw, not any element added under the table, and a line whose values did not
   change stays as it was drawn; the two used to redraw each other without end.
+- `MIN__JsSafe` keeps the space between a keyword and a name in letters beyond ASCII or one that begins with a Unicode
+  escape: `var Ω` came out as `varΩ` and `var A` as `varA`, and its proof passed them, as it read such a
+  name's bytes as punctuation. A newline that is the only separator after such a name is refused, as after any name.
 
 ## 0.20.0 - 2026-11-08
 

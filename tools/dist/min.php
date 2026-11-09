@@ -236,7 +236,7 @@ function MIN__CssSafe(string $css): string
 /** Whether $c is a byte of a JavaScript name. */
 function MIN__JsWord(string $c): bool
 {
-	return $c !== '' && (MIN__Bytes($c, MIN_ALNUM) || $c === '_' || $c === '$');
+	return $c !== '' && (MIN__Bytes($c, MIN_ALNUM) || $c === '_' || $c === '$' || $c === '\\' || ord($c) >= 0x80);
 }
 
 /**
@@ -1654,6 +1654,10 @@ const MIN_FUSES = [
 	['js', 'const a = 1; /* open', 'refuses', 'an unclosed comment at byte 13'],
 	['js', 'const a = `open ${b}', 'refuses', 'a template runs to the end of the script at byte 10'],
 	['js', 'const a = /open', 'refuses', 'a pattern runs to the end of the script at byte 10'],
+	['js', "var Ω = 1;\nwindow.a = Ω;\n", 'gives', 'var Ω=1;window.a=Ω;'],
+	['js', 'function ж() { return typeof é in Ω; }', 'gives', 'function ж(){return typeof é in Ω;}'],
+	['js', 'var \\u0041 = 1; a in \\u{41};', 'gives', 'var \\u0041=1;a in \\u{41};'],
+	['js', "Ω\n'b'", 'refuses', 'a newline is the only separator at 1 place(s) - add the operator or `;` it lacks at byte 3, line 2'],
 	['names', 'const longName=1;console.log(longName);', 'gives', 'const o=1;console.log(o);'],
 	['names', 'var longName=1;function helper(){return longName;}', 'gives', 'var longName=1;function helper(){return longName;}'],
 	['names', 'const f=()=>{return twice(1);function twice(value){return value*2;}};', 'gives', 'const t=()=>{return n(1);function n(r){return r*2;}};'],
