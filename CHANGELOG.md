@@ -4,7 +4,7 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
-## Unreleased
+## 0.23.0 - 2026-11-10
 
 ### Added
 - The build holds the markup of the docs and the demo screens: every class is in a stylesheet or the page's own, every
