@@ -4684,6 +4684,15 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a folded rail: every group open ' + spread + ', a heading ' + heading + ', the line ' + line.borderTopWidth + ' ' + line.borderTopStyle + ', closed again unfolded ' + back + ', told ' + say(told));
 			}
 		}]},
+		sidebarWide: {target: '.app-sidebar[popover]', steps: [async (out) => {
+			const sidebar = $('.app-sidebar[popover]');
+			sidebar.showPopover();
+			await settled();
+			if (sidebar.matches(':popover-open')) {
+				sidebar.hidePopover();
+				out.push('a side navigation opens as a panel on a wide window, where it is a column');
+			}
+		}]},
 		busyArt: {target: '#busy-art-card', steps: [async (out) => {
 			const card = $('#busy-art-card');
 			const art = $(':scope > .busy-art', card);

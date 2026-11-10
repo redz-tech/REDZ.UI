@@ -43,6 +43,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   half the speed. `progress-top` used to stand still, and the others did not look at the setting.
 
 ### Fixed
+- A side navigation opened from the burger on a narrow window stayed a narrow panel over the page once the window grew
+  past 1024 px, as a tablet turned on its side does; the panel closes there now, and a wide window does not open it.
 - The docs show `carousel-inner` as `role="group"`, since a name on a plain `div` is prohibited. A page with a carousel
   adds the role to that element.
 - The editor's source view, its HTML tab and its command search have an id: Chrome reports a field with neither an id

@@ -5,7 +5,8 @@
 // 1024 px, every group of the sidebar opens, as their icons are the way in, and the ones the rail opened close as it
 // unfolds. data-scroll on the app-sidebar places it as the page loads and as its panel opens: keep - where this tab
 // left it, in sessionStorage, the top when the storage is empty or refuses; current - the current link brought into
-// view; without it, the top.
+// view; without it, the top. Above 1024 px the sidebar is a column, not a panel: it does not open as one, and a panel
+// open as the window grows past that closes.
 const WIDE = matchMedia('(width >= 64rem)');
 const KEY = 'redz-ui.sidebar.';
 const asked = new WeakMap();
@@ -105,7 +106,20 @@ addEventListener('pagehide', () => {
 	}
 });
 
-WIDE.addEventListener('change', () => document.querySelectorAll('.app-sidebar').forEach(fit));
+document.addEventListener('beforetoggle', (event) => {
+	if (WIDE.matches && event.newState === 'open' && event.target instanceof HTMLElement && event.target.matches('.app-sidebar')) {
+		event.preventDefault();
+	}
+}, true);
+
+WIDE.addEventListener('change', () => {
+	for (const sidebar of document.querySelectorAll('.app-sidebar')) {
+		if (WIDE.matches && sidebar.matches(':popover-open')) {
+			sidebar.hidePopover();
+		}
+		fit(sidebar);
+	}
+});
 
 new MutationObserver((records) => {
 	for (const record of records) {
