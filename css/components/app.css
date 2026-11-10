@@ -103,6 +103,45 @@
 		font-weight: 600;
 	}
 
+	.app-group > .app-section {
+		display: flex;
+		align-items: center;
+		gap: var(--redz-space-8);
+		margin-inline: var(--redz-space-8);
+		padding-inline: var(--redz-space-8);
+		border-radius: var(--redz-radius-8);
+		list-style: none;
+		cursor: pointer;
+	}
+
+	.app-group > .app-section::-webkit-details-marker {
+		display: none;
+	}
+
+	.app-group > .app-section::after {
+		content: "";
+		flex: none;
+		inline-size: 0.75rem;
+		block-size: 0.75rem;
+		margin-inline-start: auto;
+		background: currentColor;
+		mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708'/%3E%3C/svg%3E") center / contain no-repeat;
+	}
+
+	.app-group[open] > .app-section::after {
+		rotate: 180deg;
+	}
+
+	.app-group > .app-section:hover {
+		color: var(--redz-text);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.app-group > .app-section::after {
+			transition: rotate var(--redz-motion) var(--redz-ease);
+		}
+	}
+
 	.app-link {
 		display: flex;
 		align-items: center;
@@ -234,6 +273,31 @@
 		.app-sidebar[data-folded] .app-link .bi {
 			font-size: 1rem;
 		}
+
+		.app-sidebar[data-folded] .app-group > .app-section {
+			display: none;
+		}
+
+		.app-sidebar[data-folded] .app-group:not(:first-child)::before {
+			content: "";
+			display: block;
+			margin: var(--redz-space-8) var(--redz-space-16);
+			border-block-start: 1px solid var(--redz-border);
+		}
+
+		.app-sidebar[data-folded] div.app-section:not(:first-child) {
+			position: static;
+			inline-size: auto;
+			margin: var(--redz-space-8) var(--redz-space-16);
+			padding: 0;
+			border-block-start: 1px solid var(--redz-border);
+			clip-path: none;
+			text-indent: 100%;
+		}
+
+		.app-sidebar {
+			view-transition-name: redz-app-sidebar;
+		}
 	}
 
 	@media (width < 64rem) {
@@ -303,5 +367,37 @@
 			border-start-start-radius: 0;
 			border-end-start-radius: 0;
 		}
+
+		@supports (forced-color-adjust: preserve-parent-color) {
+			.app-group > .app-section::after {
+				forced-color-adjust: preserve-parent-color;
+			}
+		}
+	}
+
+	/* The change of pages: the header and the side navigation stand still while the rest cross-fades, as
+	   <html data-transition> says - fade, the default, instant, busy (js/transition.js) or none. */
+	@media (prefers-reduced-motion: no-preference) {
+		@view-transition {
+			navigation: auto;
+		}
+	}
+
+	.app-header {
+		view-transition-name: redz-app-header;
+	}
+
+	::view-transition-group(redz-app-header),
+	::view-transition-group(redz-app-sidebar),
+	::view-transition-old(redz-app-header),
+	::view-transition-new(redz-app-header),
+	::view-transition-old(redz-app-sidebar),
+	::view-transition-new(redz-app-sidebar),
+	:root:is([data-transition="instant"], [data-transition="busy"])::view-transition-old(root),
+	:root:is([data-transition="instant"], [data-transition="busy"])::view-transition-new(root),
+	:root[data-transition="none"]::view-transition-group(*),
+	:root[data-transition="none"]::view-transition-old(*),
+	:root[data-transition="none"]::view-transition-new(*) {
+		animation: none;
 	}
 }

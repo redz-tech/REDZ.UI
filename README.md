@@ -98,6 +98,15 @@ attaches by delegation on `document`, so nothing is set up per element and marku
 - **The folded rail:** a header button with `command="--fold"` and `aria-controls` naming `app-sidebar` folds it into
   a rail of icons on a wide window and back (`aria-pressed`, `data-folded`); `redz:fold` tells the page, which keeps the
   choice (`js/fold.js`).
+- **Groups of the side navigation:** `<details class="app-group">` with its `<summary class="app-section">` opens and
+  closes, printed by the server as the person left it; the group of the current page opens as the page loads, a
+  person's open or close is told in `redz:group` (`detail.open`), and the rail opens every group while folded.
+  `data-scroll="keep"` or `"current"` on `app-sidebar` places it as a page loads: where this tab left it, or at the
+  current link (`js/app-sidebar.js`).
+- **Changing pages:** the header and the side navigation stand still while the rest cross-fades, where the browser has
+  cross-document view transitions. `data-transition` on `<html>` is `fade`, the default, `instant`, `busy` - the main
+  column under the busy overlay while the next page comes, where the browser has the Navigation API - or `none`
+  (`js/transition.js`).
 - **Notices:** `REDZ.ui.toast({title, text, tone, action, persistent})` shows a toast in the live regions of
   `.toast-container` - `role="status"`, `role="alert"` for `danger` - or in an open modal dialog's own. Success and info
   leave after 8 seconds unless the pointer or the focus rests on them; an error and a notice with an action stay until

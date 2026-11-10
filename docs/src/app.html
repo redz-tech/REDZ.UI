@@ -13,8 +13,13 @@
     &lt;button class="btn app-search" type="button" aria-keyshortcuts="Meta+K"&gt;…&lt;/button&gt;
   &lt;/header&gt;
   &lt;nav id="side" class="app-sidebar" popover aria-label="Sections"&gt;
+    &lt;a class="app-link" href="/"&gt;…Overview&lt;/a&gt;
     &lt;div class="app-section"&gt;Content&lt;/div&gt;
     &lt;a class="app-link" href="/excursions/" aria-current="page"&gt;…Excursions&lt;/a&gt;
+    &lt;details class="app-group" id="side-sales"&gt;
+      &lt;summary class="app-section"&gt;Sales&lt;/summary&gt;
+      &lt;a class="app-link" href="/bookings/"&gt;…Bookings&lt;/a&gt;
+    &lt;/details&gt;
   &lt;/nav&gt;
   &lt;main class="app-main" id="main"&gt;…&lt;/main&gt;
   &lt;aside class="app-aside"&gt;…&lt;/aside&gt;
@@ -27,6 +32,37 @@
 
 document.addEventListener('redz:fold', (event) =&gt; localStorage.setItem('folded', event.detail.folded ? '1' : ''));</code></pre>
 	<p>A shell without <code>app-sidebar</code> - a page whose role has no sections - is one column by itself: no class to add.</p>
+
+	<h3 id="app-groups">Groups that open and close</h3>
+	<p>A section of the side navigation may open and close: <code>&lt;details class="app-group"&gt;</code> with its <code>&lt;summary class="app-section"&gt;</code>, the chevron drawn by the library. The server prints each group open or closed as the person left it, so the navigation stands right before any script and without one. The group that holds the current page - its <code>aria-current="page"</code> link - opens as the page loads, even after the person closed it. A person's open or close is told in <code>redz:group</code> (<code>detail.open</code>) on the group, which the page keeps by the group's id; the library stores nothing, and its own opening is not told. A plain <code>div.app-section</code> still heads a section that does not close. These docs' sections are groups, kept in this browser.</p>
+	<pre class="docs-code" tabindex="0"><code>&lt;details class="app-group" id="side-sales" open&gt;
+  &lt;summary class="app-section"&gt;Sales&lt;/summary&gt;
+  &lt;a class="app-link" href="/bookings/"&gt;…Bookings&lt;/a&gt;
+&lt;/details&gt;
+
+document.addEventListener('redz:group', (event) =&gt; save(event.target.id, event.detail.open));</code></pre>
+	<p>Folded to a rail, every group opens, as its icons are the way in, and a line stands between two groups or sections; as the rail unfolds, the groups it opened close again.</p>
+
+	<h3 id="app-pages">Changing pages</h3>
+	<p>From one page of a site to the next the header and the side navigation stand still and the rest cross-fades, with no white flash between them - in Chrome, Edge and Safari 18.2 and later; Firefox changes pages as before. <code>data-transition</code> on <code>&lt;html&gt;</code>, which the server prints from the setting, chooses:</p>
+	<ul>
+		<li><code>"fade"</code> - the default, the same as no attribute: the new page fades in.</li>
+		<li><code>"instant"</code> - the new page stands at once, still with no flash.</li>
+		<li><code>"busy"</code> - while the server prepares the next page, the main column lies under the busy overlay with its spinner, from 400 ms on, and the new page stands at once.</li>
+		<li><code>"none"</code> - no transition: a page changes as it always did.</li>
+	</ul>
+	<p>For people who ask for less motion nothing fades and nothing moves; <code>"busy"</code> keeps its overlay, the spinner turning slower.</p>
+	<pre class="docs-code" tabindex="0"><code>&lt;html lang="en" data-transition="busy"&gt;</code></pre>
+	<p>The overlay of <code>"busy"</code> comes where the browser has the Navigation API - Chrome, Edge, Firefox 147, Safari 26.2 - for a navigation to another page of the site. Not for a click with a key or the middle button, a link to another tab, window or frame, a <code>download</code> link, a link to a fragment of this page, or a navigation a handler prevents or takes over. A link whose answer is a file carries <code>download</code>: nothing tells a page that a navigation became a download, so the overlay would lift only by itself, after ten seconds. Escape lifts it at once, and so does coming back to the page from the browser's cache. <code>data-busy</code> on <code>app-main</code> gives the words under the spinner, and a <code>busy-art</code> first in it shows the page's own picture in its place - see <a href="busy.html#busy-art">Busy</a>.</p>
+
+	<h3 id="app-scroll">Where the side navigation stands</h3>
+	<p>A long side navigation is placed as the page loads, and as its panel opens on a narrow screen, by <code>data-scroll</code> on <code>app-sidebar</code>:</p>
+	<ul>
+		<li><code>"keep"</code> - where the person left it in this tab, kept in the tab's sessionStorage; the top when the storage is empty or refuses. It is the one thing the library stores, and only where the page asks.</li>
+		<li><code>"current"</code> - the current page's link brought into view.</li>
+		<li>No attribute - the top.</li>
+	</ul>
+	<pre class="docs-code" tabindex="0"><code>&lt;nav id="side" class="app-sidebar" popover aria-label="Sections" data-scroll="keep"&gt;</code></pre>
 
 	<h3 id="app-banner">A banner for the whole system</h3>
 	<p>A state of the whole system - a pause for maintenance, a lost connection - shows in <code>app-banner</code>: the first row of the shell, above its header, across the window, sticky with the header under it. <code>REDZ.ui.banner()</code> shows it and answers a function that removes it; <code>REDZ.ui.banner(null)</code> removes it too. There is one at a time: a later call replaces it, and the same tone and words again change nothing, so a page may call it on every answer of its server. Its words are said once. On a page without the shell it goes first in the body.</p>
@@ -71,7 +107,7 @@ REDZ.ui.banner(null);</code></pre>
 	<div class="docs-states" id="app-states" tabindex="0" role="region" aria-labelledby="app-states-title">
 		<table class="docs-matrix">
 			<thead>
-				<tr><th scope="col">class</th><th scope="col">rest</th><th scope="col">:hover</th><th scope="col">:focus-visible</th><th scope="col">aria-current</th></tr>
+				<tr><th scope="col">class</th><th scope="col">rest</th><th scope="col">:hover</th><th scope="col">:focus-visible</th><th scope="col">aria-current, open</th></tr>
 			</thead>
 			<tbody>
 				<tr>
@@ -80,6 +116,13 @@ REDZ.ui.banner(null);</code></pre>
 					<td><nav aria-label="Hovered"><a class="app-link" href="#app-states" data-docs-state="hover"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
 					<td><nav aria-label="Focused"><a class="app-link" href="#app-states" data-docs-state="focus-visible"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
 					<td><nav aria-label="Current"><a class="app-link" href="#app-states" aria-current="page"><i class="bi bi-compass" aria-hidden="true"></i>Excursions</a></nav></td>
+				</tr>
+				<tr>
+					<th scope="row">app-group</th>
+					<td><nav aria-label="A group at rest"><details class="app-group"><summary class="app-section">Sales</summary><a class="app-link" href="#app-states"><i class="bi bi-receipt" aria-hidden="true"></i>Bookings</a></details></nav></td>
+					<td><nav aria-label="A group hovered"><details class="app-group"><summary class="app-section" data-docs-state="hover">Sales</summary><a class="app-link" href="#app-states"><i class="bi bi-receipt" aria-hidden="true"></i>Bookings</a></details></nav></td>
+					<td><nav aria-label="A group focused"><details class="app-group"><summary class="app-section" data-docs-state="focus-visible">Sales</summary><a class="app-link" href="#app-states"><i class="bi bi-receipt" aria-hidden="true"></i>Bookings</a></details></nav></td>
+					<td><nav aria-label="A group open"><details class="app-group" open><summary class="app-section">Sales</summary><a class="app-link" href="#app-states"><i class="bi bi-receipt" aria-hidden="true"></i>Bookings</a></details></nav></td>
 				</tr>
 			</tbody>
 		</table>
@@ -93,6 +136,8 @@ REDZ.ui.banner(null);</code></pre>
 		<li>On a narrow screen the burger opens the navigation as a popover: <kbd>Esc</kbd> or a click outside closes it, and the focus goes back to the burger.</li>
 		<li>The current section is <code>aria-current="page"</code>, drawn as a bar that stays in forced colors.</li>
 		<li>The fold button is a toggle button, pressed while the rail is folded; it has no <code>commandfor</code>, which WebKit would announce as collapsed. On a narrow screen it hides, as the burger opens the whole navigation there.</li>
+		<li>A group's heading is the browser's own disclosure: <kbd>Enter</kbd> or <kbd>Space</kbd> opens and closes it, and a screen reader says whether it is expanded. In the rail the headings leave the page and its tab order, as every link stands there with its name.</li>
+		<li>The page that changes is announced by the browser as always; under <code>"busy"</code> the main column turns inert, and one polite message says it is loading once the overlay shows.</li>
 		<li>The banner's words are said once as it shows - politely, at once for <code>danger</code> - and not again for the same call; a banner in the markup is read in its place, first on the page.</li>
 		<li>The banner, the header and the navigation stay off paper: only the main column prints.</li>
 	</ul>

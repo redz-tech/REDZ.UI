@@ -4632,6 +4632,94 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a folded rail: the tooltip of a link stands ' + say(seen) + ' beside ' + say(box) + ', the link named ' + say(named));
 			}
 		}},
+		groupTold: {target: '.app-sidebar details.app-group', walk: async function* (out) {
+			const group = $$('.app-sidebar details.app-group').find((one) => one.open && one.querySelector('[aria-current="page"]') === null);
+			const summary = group.querySelector(':scope > summary');
+			const told = [];
+			const hear = (event) => told.push(event.target.id + ' ' + event.detail.open);
+			document.addEventListener('redz:group', hear);
+			summary.scrollIntoView({block: 'nearest'});
+			await settled();
+			yield {click: center(summary)};
+			await until(() => !group.open);
+			const shut = !group.open;
+			summary.focus();
+			// Firefox's WebDriver keys do not open a summary, even on a page without the library: a key is held to
+			// what it told only where it opened the group.
+			yield {key: 'Enter'};
+			await until(() => group.open, 600);
+			const keyed = group.open;
+			group.open = false;
+			await settled();
+			group.open = true;
+			await settled();
+			document.removeEventListener('redz:group', hear);
+			const want = [group.id + ' false', ...(keyed ? [group.id + ' true'] : [])];
+			if (!shut || !group.open || say(told) !== say(want)) {
+				out.push('a group of the side navigation: a click and Enter on its heading tell ' + say(told) + ' for ' + say(want) + ', closed by the click ' + shut + ', open at the end ' + group.open);
+			}
+		}},
+		groupRail: {target: '.app-sidebar details.app-group', steps: [async (out) => {
+			const rail = $('.app-sidebar');
+			const groups = $$('details.app-group', rail);
+			const group = groups.find((one) => one.querySelector('[aria-current="page"]') === null && groups.indexOf(one) > 0);
+			const told = [];
+			const hear = (event) => told.push(event.target.id);
+			document.addEventListener('redz:group', hear);
+			group.open = false;
+			await settled();
+			rail.toggleAttribute('data-folded', true);
+			await until(() => group.open);
+			const heading = getComputedStyle(group.querySelector(':scope > summary')).display;
+			const drawn = getComputedStyle(group, '::before');
+			const line = {borderTopWidth: drawn.borderTopWidth, borderTopStyle: drawn.borderTopStyle};
+			const spread = groups.every((one) => one.open);
+			rail.toggleAttribute('data-folded', false);
+			await until(() => !group.open);
+			const back = !group.open;
+			group.open = true;
+			await settled();
+			document.removeEventListener('redz:group', hear);
+			if (!spread || heading !== 'none' || line.borderTopWidth !== '1px' || line.borderTopStyle !== 'solid' || !back || told.length > 0) {
+				out.push('a folded rail: every group open ' + spread + ', a heading ' + heading + ', the line ' + line.borderTopWidth + ' ' + line.borderTopStyle + ', closed again unfolded ' + back + ', told ' + say(told));
+			}
+		}]},
+		busyArt: {target: '#busy-art-card', steps: [async (out) => {
+			const card = $('#busy-art-card');
+			const art = $(':scope > .busy-art', card);
+			let done = () => {};
+			const held = REDZ.ui.busy(card, new Promise((resolve) => {
+				done = resolve;
+			}));
+			await wait(550);
+			const box = art.getBoundingClientRect();
+			const frame = card.getBoundingClientRect();
+			const seen = [getComputedStyle(art).display, getComputedStyle(art).visibility, getComputedStyle(card, '::after').content];
+			const middle = near(box.left + box.width / 2, frame.left + frame.width / 2, 2) && box.height > 8;
+			done();
+			await held;
+			const after = getComputedStyle(art).display;
+			if (say(seen) !== say(['flex', 'visible', 'none']) || !middle || after !== 'none') {
+				out.push('busy-art: busy it shows ' + say(seen) + ' at ' + say([box.left, box.width, box.height]) + ' in ' + say([frame.left, frame.width]) + ', after ' + after);
+			}
+			const main = Object.assign(document.createElement('div'), {className: 'app-main'});
+			main.append(Object.assign(document.createElement('p'), {textContent: 'A main column'}));
+			document.body.append(main);
+			let free = () => {};
+			const kept = REDZ.ui.busy(main, new Promise((resolve) => {
+				free = resolve;
+			}));
+			await wait(550);
+			const made = main.firstElementChild;
+			const ring = made?.matches('.busy-art') ? [getComputedStyle(made).position, getComputedStyle(made).visibility, made.querySelector('.spinner-border')?.offsetHeight] : null;
+			free();
+			await kept;
+			const left = main.querySelector('.busy-art');
+			main.remove();
+			if (say(ring) !== say(['sticky', 'visible', 24]) || left !== null) {
+				out.push('a busy main column: the ring it is given ' + say(ring) + ', left after ' + (left !== null));
+			}
+		}]},
 		groupButton: {target: '#input-group-basic .btn', steps: [async (out) => {
 			const button = getComputedStyle($('#input-group-basic .btn'));
 			const field = getComputedStyle($('#input-group-basic .form-control'));

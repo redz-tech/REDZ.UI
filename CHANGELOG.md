@@ -20,8 +20,24 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   package needs a policy.
 - The probes' pages require Trusted Types, as a strict consumer does, so a string of markup in any script is a finding
   in every engine that has them. `PROBE_CSP` in the environment replaces that Content-Security-Policy.
+- Groups of the side navigation that open and close: `<details class="app-group">` with its
+  `<summary class="app-section">`, the chevron drawn by the library. The server prints each open or closed. The group of
+  the current page opens as the page loads, and `redz:group` (`detail.open`) tells the page of a person's open or close.
+  Folded to a rail, every group opens and a line stands between them; as the rail unfolds, the groups it opened close
+  again.
+- `data-scroll` on `app-sidebar` places it as a page loads and as its panel opens. `keep` puts it where this tab left
+  it, kept in sessionStorage; `current` brings the current link into view.
+- Pages change with the header and the side navigation standing still while the rest cross-fades, in browsers with
+  cross-document view transitions, and never for people who ask for less motion. `data-transition` on `<html>` is
+  `fade`, the default, `instant`, `busy` or `none`. `busy` holds the main column under the busy overlay from 400 ms
+  into a navigation to another page of the site, where the browser has the Navigation API, and the new page stands at
+  once.
+- `busy-art`, a child of a busy region, shows the page's own picture in place of the spinner, the region's words under
+  it. The main column is a busy region too: there a picture first in it stays in the middle of the window, and a main
+  column without one is given the library's ring the same way.
 
 ### Changed
+- Folded to a rail, a plain `app-section` that is not the first of the side navigation is a line, as a group is.
 - Busy indicators run slower for people who ask for less motion, and none of them stops. A bar without a value and
   `progress-top` take 6 seconds, and spinners, a busy button, a busy region, a server filter and a kiosk's ring turn at
   half the speed. `progress-top` used to stand still, and the others did not look at the setting.

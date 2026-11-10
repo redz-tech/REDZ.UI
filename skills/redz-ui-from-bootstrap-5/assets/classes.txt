@@ -360,6 +360,7 @@ app-banner-success
 app-banner-warning
 app-brand
 app-burger
+app-group
 app-header
 app-link
 app-main
@@ -2540,6 +2541,7 @@ btn-toolbar
 btn-warning
 btn-xl
 btn-xs
+busy-art
 busy-ring
 busy-words
 calendar

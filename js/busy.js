@@ -2,10 +2,12 @@
 // marked aria-disabled too, which keeps its focus and, as for every button, check, radio or switch so marked, swallows
 // its clicks; its leading icon turns into a spinner, or a spinner covers its words when it has none, and a data-busy
 // on it says other words while it waits - shown at once, said politely after 400 ms. A region -
-// a card, its body, a dialog's or a drawer's body, any .region - turns inert under an overlay that shows after 400 ms
-// (css/components/busy.css) and then stays at least 400 ms; once it shows, one polite message says so (the page's text
-// "busy"), and a focus the region dropped comes back to the same element, its namesake by id, or the region. aria-busy
-// is only a styling hook: screen readers mostly ignore it, and on a live region it breaks the region. A button that
+// a card, its body, a dialog's or a drawer's body, any .region, the app shell's main column - turns inert under an
+// overlay that shows after 400 ms (css/components/busy.css) and then stays at least 400 ms; once it shows, one polite
+// message says so (the page's text "busy"), and a focus the region dropped comes back to the same element, its namesake
+// by id, or the region. The page's own picture, a .busy-art child, shows in place of the ring; the main column, which
+// may be taller than the window, is given one with the ring while it has none. aria-busy is only a styling hook: screen
+// readers mostly ignore it, and on a live region it breaks the region. A button that
 // counts a cooldown meanwhile stays disabled until its count ends too (js/hold.js). A region's data-busy says its own
 // words under the spinner and aloud instead of "busy". An item of a menu holds the button that opened the menu busy
 // with it, as the menu closes. Any other element - a cell that checks, a line - shows a small ring after 400 ms and,
@@ -17,7 +19,7 @@ import {openerOf} from './commands.js';
 
 const SHOW = 400;
 const HOLD = 400;
-const REGIONS = '.card, .card-body, .dialog-body, .drawer-body, .region';
+const REGIONS = '.card, .card-body, .dialog-body, .drawer-body, .region, .app-main';
 const LIVE = '[aria-live], [role="status"], [role="alert"], [role="log"]';
 
 document.addEventListener('click', (event) => {
@@ -29,14 +31,21 @@ document.addEventListener('click', (event) => {
 }, true);
 
 /** Holds the region inert under its overlay until the promise settles; answers the promise. */
-const hold = (element, promise) => {
+export const hold = (element, promise) => {
 	const focused = element.contains(document.activeElement) ? document.activeElement : null;
 	const started = performance.now();
 	const words = element.dataset.busy ?? '';
+	let made = null;
+	if (element.matches('.app-main') && element.querySelector(':scope > .busy-art') === null) {
+		made = Object.assign(document.createElement('div'), {className: 'busy-art'});
+		made.setAttribute('aria-hidden', 'true');
+		made.append(Object.assign(document.createElement('span'), {className: 'spinner-border'}));
+		element.prepend(made);
+	}
 	const said = words === '' ? null : Object.assign(document.createElement('span'), {className: 'busy-words', textContent: words});
 	said?.setAttribute('aria-hidden', 'true');
 	if (said !== null) {
-		element.append(said);
+		(element.querySelector(':scope > .busy-art') ?? element).append(said);
 	}
 	element.setAttribute('aria-busy', 'true');
 	element.inert = true;
@@ -48,6 +57,7 @@ const hold = (element, promise) => {
 		if (held >= SHOW && held < SHOW + HOLD) {
 			await new Promise((done) => setTimeout(done, SHOW + HOLD - held));
 		}
+		made?.remove();
 		element.removeAttribute('aria-busy');
 		element.inert = false;
 		if (focused === null || (document.activeElement !== null && document.activeElement !== document.body)) {

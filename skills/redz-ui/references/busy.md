@@ -34,6 +34,36 @@ await REDZ.ui.busy(card, fetch(url).then((answer) => answer.text()).then((html) 
 </section>
 ```
 
+### The page's own picture
+
+A `busy-art` child of the region shows in place of the spinner: any picture, such as an inline SVG of any size with its own motion. It is hidden until the region is busy, then stands over the overlay after the same 400 ms, the region's words under it. Its colors and its motion are the page's: written inline, it takes the theme's colors and the page's CSS in every engine, while an SVG file shown as an image stands still in Safari. Its motion slows down for people who ask for less motion and never stops, as every busy mark of the library does. In the main column, which may be far taller than the window, it goes first, and there it stays in the middle of what shows; a main column without one is given the library's ring the same way.
+
+```html
+<section class="card" id="busy-art-card" aria-labelledby="busy-art-title">
+	<div class="busy-art" aria-hidden="true"><span class="docs-dots"><span></span><span></span><span></span></span></div>
+	<div class="card-header"><h2 id="busy-art-title">Trips today</h2><button class="btn btn-sm ms-auto" type="button" data-docs-run="busy-region" aria-controls="busy-art-card"><i class="bi bi-arrow-repeat" aria-hidden="true"></i>Reload for 2 seconds</button></div>
+	<div class="card-body vstack gap-8">
+		<p class="fs-24 fw-600 tabular-nums">14</p>
+		<p class="text-muted">boats out, 3 coming back</p>
+	</div>
+</section>
+```
+
+The example's picture is three dots drawn by the page's CSS; an inline SVG stands there the same way, its parts in the theme's colors:
+
+```html
+<div class="busy-art" aria-hidden="true">
+  <svg class="dots" viewBox="0 0 60 20" width="96" height="32"><circle cx="10" cy="10" r="7"/><circle cx="30" cy="10" r="7"/><circle cx="50" cy="10" r="7"/></svg>
+</div>
+
+.dots circle { transform-box: fill-box; transform-origin: center; fill: var(--redz-primary); animation: hop 0.9s ease-in-out infinite; }
+.dots circle:nth-child(2) { animation-delay: 0.15s; }
+.dots circle:nth-child(3) { animation-delay: 0.3s; }
+@keyframes hop { 0%, 100% { scale: 0.55; opacity: 0.45; } 50% { scale: 1; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .dots circle { animation-duration: 2.4s; } }
+@media (forced-colors: active) { .dots circle { fill: CanvasText; } }
+```
+
 ### A button
 
 The button keeps its focus, ignores clicks until the promise settles and shows a spinner: in place of its leading icon, or over its words when it has none - then it keeps its size too. `data-busy` on the button gives the words it shows while it waits, said politely once the wait passes 400 ms; set it again before each call when the wait has steps.
@@ -78,4 +108,4 @@ What `busy()` sets, written by hand - the overlay appears 400 ms after the page 
 
 From [`css/components/busy.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/busy.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-bg`, `--redz-primary`, `--redz-space-16`, `--redz-space-2`, `--redz-space-8`, `--redz-radius-6`, `--redz-text`, `--redz-fs-14`, `--redz-space-4`, `--redz-text-muted`.
+It reads the theme's `--redz-bg`, `--redz-primary`, `--redz-space-8`, `--redz-space-16`, `--redz-app-banner-height`, `--redz-space-2`, `--redz-radius-6`, `--redz-text`, `--redz-fs-14`, `--redz-space-4`, `--redz-text-muted`.

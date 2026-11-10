@@ -14,6 +14,8 @@ import './table-scroll.js';
 import './navbar.js';
 import './tooltips.js';
 import './fold.js';
+import './app-sidebar.js';
+import './transition.js';
 import './carousel.js';
 import './inline-edit.js';
 import './password.js';

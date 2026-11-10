@@ -16,8 +16,13 @@ The shell is the one part of the library that looks at the window; everything in
     <button class="btn app-search" type="button" aria-keyshortcuts="Meta+K">…</button>
   </header>
   <nav id="side" class="app-sidebar" popover aria-label="Sections">
+    <a class="app-link" href="/">…Overview</a>
     <div class="app-section">Content</div>
     <a class="app-link" href="/excursions/" aria-current="page">…Excursions</a>
+    <details class="app-group" id="side-sales">
+      <summary class="app-section">Sales</summary>
+      <a class="app-link" href="/bookings/">…Bookings</a>
+    </details>
   </nav>
   <main class="app-main" id="main">…</main>
   <aside class="app-aside">…</aside>
@@ -37,6 +42,50 @@ document.addEventListener('redz:fold', (event) => localStorage.setItem('folded',
 ```
 
 A shell without `app-sidebar` - a page whose role has no sections - is one column by itself: no class to add.
+
+### Groups that open and close
+
+A section of the side navigation may open and close: `<details class="app-group">` with its `<summary class="app-section">`, the chevron drawn by the library. The server prints each group open or closed as the person left it, so the navigation stands right before any script and without one. The group that holds the current page - its `aria-current="page"` link - opens as the page loads, even after the person closed it. A person's open or close is told in `redz:group` (`detail.open`) on the group, which the page keeps by the group's id; the library stores nothing, and its own opening is not told. A plain `div.app-section` still heads a section that does not close. These docs' sections are groups, kept in this browser.
+
+```html
+<details class="app-group" id="side-sales" open>
+  <summary class="app-section">Sales</summary>
+  <a class="app-link" href="/bookings/">…Bookings</a>
+</details>
+
+document.addEventListener('redz:group', (event) => save(event.target.id, event.detail.open));
+```
+
+Folded to a rail, every group opens, as its icons are the way in, and a line stands between two groups or sections; as the rail unfolds, the groups it opened close again.
+
+### Changing pages
+
+From one page of a site to the next the header and the side navigation stand still and the rest cross-fades, with no white flash between them - in Chrome, Edge and Safari 18.2 and later; Firefox changes pages as before. `data-transition` on `<html>`, which the server prints from the setting, chooses:
+
+- `"fade"` - the default, the same as no attribute: the new page fades in.
+- `"instant"` - the new page stands at once, still with no flash.
+- `"busy"` - while the server prepares the next page, the main column lies under the busy overlay with its spinner, from 400 ms on, and the new page stands at once.
+- `"none"` - no transition: a page changes as it always did.
+
+For people who ask for less motion nothing fades and nothing moves; `"busy"` keeps its overlay, the spinner turning slower.
+
+```html
+<html lang="en" data-transition="busy">
+```
+
+The overlay of `"busy"` comes where the browser has the Navigation API - Chrome, Edge, Firefox 147, Safari 26.2 - for a navigation to another page of the site. Not for a click with a key or the middle button, a link to another tab, window or frame, a `download` link, a link to a fragment of this page, or a navigation a handler prevents or takes over. A link whose answer is a file carries `download`: nothing tells a page that a navigation became a download, so the overlay would lift only by itself, after ten seconds. Escape lifts it at once, and so does coming back to the page from the browser's cache. `data-busy` on `app-main` gives the words under the spinner, and a `busy-art` first in it shows the page's own picture in its place - see [Busy](busy.md#busy-art).
+
+### Where the side navigation stands
+
+A long side navigation is placed as the page loads, and as its panel opens on a narrow screen, by `data-scroll` on `app-sidebar`:
+
+- `"keep"` - where the person left it in this tab, kept in the tab's sessionStorage; the top when the storage is empty or refuses. It is the one thing the library stores, and only where the page asks.
+- `"current"` - the current page's link brought into view.
+- No attribute - the top.
+
+```html
+<nav id="side" class="app-sidebar" popover aria-label="Sections" data-scroll="keep">
+```
 
 ### A banner for the whole system
 
@@ -90,6 +139,8 @@ The tones are `app-banner-info`, the default, `app-banner-success`, `app-banner-
 - On a narrow screen the burger opens the navigation as a popover: `Esc` or a click outside closes it, and the focus goes back to the burger.
 - The current section is `aria-current="page"`, drawn as a bar that stays in forced colors.
 - The fold button is a toggle button, pressed while the rail is folded; it has no `commandfor`, which WebKit would announce as collapsed. On a narrow screen it hides, as the burger opens the whole navigation there.
+- A group's heading is the browser's own disclosure: `Enter` or `Space` opens and closes it, and a screen reader says whether it is expanded. In the rail the headings leave the page and its tab order, as every link stands there with its name.
+- The page that changes is announced by the browser as always; under `"busy"` the main column turns inert, and one polite message says it is loading once the overlay shows.
 - The banner's words are said once as it shows - politely, at once for `danger` - and not again for the same call; a banner in the markup is read in its place, first on the page.
 - The banner, the header and the navigation stay off paper: only the main column prints.
 
@@ -97,4 +148,4 @@ The tones are `app-banner-info`, the default, `app-banner-success`, `app-banner-
 
 From [`css/components/app.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/app.css). It declares `--redz-sticky-top`, `--redz-btn-bg`, `--redz-btn-fg`, `--redz-btn-hover`, `--redz-app-banner-bg`, `--redz-app-banner-text` on its root, never on rows or items.
 
-It reads the theme's `--redz-app-banner-height`, `--redz-space-12`, `--redz-space-8`, `--redz-bg-page`, `--redz-text`, `--redz-radius-8`, `--redz-primary`, `--redz-primary-contrast`, `--redz-fs-12`, `--redz-bg`, `--redz-text-muted`, `--redz-border`, `--redz-border-strong`, `--redz-space-4`, `--redz-space-16`, `--redz-bg-hover`, `--redz-shadow-1`, `--redz-space-24`, `--redz-space-32`, `--redz-radius-12`, `--redz-info`, `--redz-info-contrast`, `--redz-fs-14`, `--redz-success`, `--redz-success-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-bg-raised`, `--redz-shadow-3`.
+It reads the theme's `--redz-app-banner-height`, `--redz-space-12`, `--redz-space-8`, `--redz-bg-page`, `--redz-text`, `--redz-radius-8`, `--redz-primary`, `--redz-primary-contrast`, `--redz-fs-12`, `--redz-bg`, `--redz-text-muted`, `--redz-border`, `--redz-border-strong`, `--redz-space-4`, `--redz-space-16`, `--redz-motion`, `--redz-ease`, `--redz-bg-hover`, `--redz-shadow-1`, `--redz-space-24`, `--redz-space-32`, `--redz-radius-12`, `--redz-info`, `--redz-info-contrast`, `--redz-fs-14`, `--redz-success`, `--redz-success-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-bg-raised`, `--redz-shadow-3`.

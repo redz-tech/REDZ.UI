@@ -38,9 +38,20 @@
 		}
 	};
 	apply();
-	// The folded pages, kept here as the library keeps nothing.
+	// The folded pages and the closed groups, kept here as the library keeps nothing; the group of the current page
+	// stays open, and the groups close before the rail folds, which opens them all.
+	const closed = new Set((stored('closed') || '').split(' ').filter(Boolean));
 	document.addEventListener('redz:fold', (event) => store('folded', event.detail.folded ? '1' : ''));
+	document.addEventListener('redz:group', (event) => {
+		closed[event.detail.open ? 'delete' : 'add'](event.target.id);
+		store('closed', [...closed].join(' '));
+	});
 	document.addEventListener('DOMContentLoaded', () => {
+		for (const group of document.querySelectorAll('#docs-nav details.app-group')) {
+			if (closed.has(group.id) && group.querySelector('[aria-current="page"]') === null) {
+				group.open = false;
+			}
+		}
 		if (stored('folded') === '1') {
 			document.getElementById('docs-nav')?.setAttribute('data-folded', '');
 		}

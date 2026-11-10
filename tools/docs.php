@@ -124,19 +124,20 @@ function DOCS__WithCode(string $html): string
 	return $out . substr($html, $last);
 }
 
-/** The side navigation: the groups and their pages, the current one marked. */
+/** The side navigation: the groups and their pages, the current one marked; every group open, as site.js closes the
+ *  ones a person closed. */
 function DOCS__Nav(array $config, string $current): string
 {
 	$out = '';
 	$group = '';
 	foreach ([...$config['pages'], 'all' => ['All components', 'Reference']] as $key => [$title, $in]) {
 		if ($in !== $group) {
-			$out .= DOCS_INDENT . '<div class="app-section">' . $in . "</div>\n";
+			$out .= ($group === '' ? '' : DOCS_INDENT . "</details>\n") . DOCS_INDENT . '<details class="app-group" id="docs-nav-' . strtolower(str_replace(' ', '-', $in)) . '" open><summary class="app-section">' . $in . "</summary>\n";
 			$group = $in;
 		}
-		$out .= DOCS_INDENT . '<a class="app-link" href="' . $key . '.html"' . ($key === $current ? ' aria-current="page"' : '') . '>' . DOCS__NavIcon($config, $key) . htmlspecialchars($title) . "</a>\n";
+		$out .= DOCS_INDENT . "\t" . '<a class="app-link" href="' . $key . '.html"' . ($key === $current ? ' aria-current="page"' : '') . '>' . DOCS__NavIcon($config, $key) . htmlspecialchars($title) . "</a>\n";
 	}
-	return $out . DOCS_INDENT . '<a class="app-link" href="../reference/demo/list.html">' . DOCS__NavIcon($config, 'demo') . 'Demo screens</a>' . "\n" . DOCS_INDENT . '<a class="app-link" href="../checks/">' . DOCS__NavIcon($config, 'checks') . 'Checks in real engines</a>' . "\n";
+	return $out . DOCS_INDENT . "\t" . '<a class="app-link" href="../reference/demo/list.html">' . DOCS__NavIcon($config, 'demo') . 'Demo screens</a>' . "\n" . DOCS_INDENT . "\t" . '<a class="app-link" href="../checks/">' . DOCS__NavIcon($config, 'checks') . 'Checks in real engines</a>' . "\n" . DOCS_INDENT . "</details>\n";
 }
 
 /** The icon of the menu item $key. */

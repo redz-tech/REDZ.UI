@@ -220,4 +220,54 @@
 	.docs-matrix :is(.form-control, .form-select, .form-floating) {
 		min-inline-size: 9rem;
 	}
+
+	/* The busy picture of the example: three dots of the theme's colors, slower for less motion. */
+	.docs-dots {
+		display: flex;
+		gap: var(--redz-space-8);
+	}
+
+	.docs-dots > span {
+		inline-size: 0.875rem;
+		block-size: 0.875rem;
+		border-radius: 50%;
+		background: var(--redz-primary);
+		animation: docs-hop 0.9s ease-in-out infinite;
+	}
+
+	.docs-dots > span:nth-child(2) {
+		background: var(--redz-info);
+		animation-delay: 0.15s;
+	}
+
+	.docs-dots > span:nth-child(3) {
+		background: var(--redz-danger);
+		animation-delay: 0.3s;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.docs-dots > span {
+			animation-duration: 2.4s;
+		}
+	}
+
+	@media (forced-colors: active) {
+		.docs-dots > span {
+			forced-color-adjust: none;
+			background: CanvasText;
+		}
+	}
+
+	@keyframes docs-hop {
+		0%,
+		100% {
+			opacity: 0.45;
+			scale: 0.55;
+		}
+
+		50% {
+			opacity: 1;
+			scale: none;
+		}
+	}
 }

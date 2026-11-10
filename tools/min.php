@@ -7,7 +7,7 @@
 
 // The at-rules whose block holds rules, and those whose block holds declarations.
 const MIN_CSS_RULES = ['media', 'supports', 'container', 'layer', 'starting-style', 'keyframes', 'scope'];
-const MIN_CSS_DECLARATIONS = ['font-face', 'property', 'page', 'counter-style'];
+const MIN_CSS_DECLARATIONS = ['font-face', 'property', 'page', 'counter-style', 'view-transition'];
 
 // The words after which a `/` begins a regular expression: none of them can end an expression.
 const MIN_JS_BEFORE_REGEXP = ['return', 'typeof', 'instanceof', 'in', 'of', 'new', 'delete', 'void', 'do', 'else', 'case', 'yield', 'await', 'throw'];
