@@ -9,6 +9,9 @@ window.REDZ_BEHAVE = (() => {
 	const $ = (selector, root = document) => root.querySelector(selector);
 	const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 	const say = JSON.stringify;
+	// The checks' own markup goes through a policy of theirs: the probes' pages require Trusted Types.
+	const policy = globalThis.trustedTypes?.createPolicy('redz-probe', {createHTML: (markup) => markup});
+	const trusted = (markup) => (policy === undefined ? markup : policy.createHTML(markup));
 	const near = (a, b, by = 2) => Math.abs(a - b) <= by;
 	// Two frames, or a moment where a page gets none: what real input does is done by then.
 	const settled = () => Promise.race([new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))), wait(120)]);
@@ -137,7 +140,7 @@ window.REDZ_BEHAVE = (() => {
 		say('undo and redo closed at first', tool('undo').disabled && tool('redo').disabled);
 		say('value keeps ids', /data-block="alert1"/.test(value()) && /data-lock="form"/.test(value()), value().slice(0, 300));
 		say('value has no marks', !marks(value()), value());
-		const noIds = new DOMParser().parseFromString(value(), 'text/html').body.children.length;
+		const noIds = new DOMParser().parseFromString(trusted(value()), 'text/html').body.children.length;
 		say('value has the blocks', noIds === 10, noIds);
 		say('an accordion item drawn open keeps its shut state in the value', !/<details[^>]* open/.test(value()), value());
 		say('a details name is back in the value', /name="d"/.test(value()));
@@ -538,10 +541,10 @@ window.REDZ_BEHAVE = (() => {
 		yield {type: '> Said'};
 		say('> makes a quote', doc.body.lastElementChild.matches('blockquote'), doc.body.lastElementChild.outerHTML);
 		yield {key: 'Enter'};
-		await until(() => [...new DOMParser().parseFromString(value(), 'text/html').body.children].every((one) => one.hasAttribute('data-block')));
-		say('new prose has ids in the value', [...new DOMParser().parseFromString(value(), 'text/html').body.children].every((one) => one.hasAttribute('data-block')), value().slice(-300));
+		await until(() => [...new DOMParser().parseFromString(trusted(value()), 'text/html').body.children].every((one) => one.hasAttribute('data-block')));
+		say('new prose has ids in the value', [...new DOMParser().parseFromString(trusted(value()), 'text/html').body.children].every((one) => one.hasAttribute('data-block')), value().slice(-300));
 		say('the ids are unique', (() => {
-			const ids = [...new DOMParser().parseFromString(value(), 'text/html').body.children].map((one) => one.getAttribute('data-block'));
+			const ids = [...new DOMParser().parseFromString(trusted(value()), 'text/html').body.children].map((one) => one.getAttribute('data-block'));
 			return new Set(ids).size === ids.length;
 		})());
 
@@ -1619,7 +1622,7 @@ window.REDZ_BEHAVE = (() => {
 			box.className = 'overflow-x-auto';
 			const late = document.createElement('table');
 			late.className = 'chart';
-			late.innerHTML = '<thead><tr><th>Day</th><th>A</th></tr></thead><tbody>' + Array.from({length: 90}, (_, i) => '<tr><th><span class="visually-hidden">' + i + '</span></th><td data-v="' + (i % 10) / 10 + '">' + i + '</td></tr>').join('') + '</tbody>';
+			late.innerHTML = trusted('<thead><tr><th>Day</th><th>A</th></tr></thead><tbody>' + Array.from({length: 90}, (_, i) => '<tr><th><span class="visually-hidden">' + i + '</span></th><td data-v="' + (i % 10) / 10 + '">' + i + '</td></tr>').join('') + '</tbody>');
 			box.append(late);
 			$('#chart-messages').append(box);
 			await wait(50);
@@ -1960,7 +1963,7 @@ window.REDZ_BEHAVE = (() => {
 			if (await readable) {
 				const luminance = (color) => color.split(',').map((one) => Number(one) / 255).map((one) => (one <= 0.04045 ? one / 12.92 : ((one + 0.055) / 1.055) ** 2.4)).reduce((sum, one, i) => sum + one * [0.2126, 0.7152, 0.0722][i], 0);
 				const contrast = (one, other) => (Math.max(luminance(one), luminance(other)) + 0.05) / (Math.min(luminance(one), luminance(other)) + 0.05);
-				const region = Object.assign(document.createElement('div'), {innerHTML: '<button type="button" class="btn btn-primary">Save</button>'});
+				const region = Object.assign(document.createElement('div'), {innerHTML: trusted('<button type="button" class="btn btn-primary">Save</button>')});
 				region.setAttribute('data-brand', '');
 				region.style.colorScheme = 'light';
 				region.firstElementChild.style.transition = 'none';
@@ -2263,12 +2266,12 @@ window.REDZ_BEHAVE = (() => {
 				}
 			};
 			document.addEventListener('redz:selected', hear);
-			stage.innerHTML = strip('later1');
+			stage.innerHTML = trusted(strip('later1'));
 			await wait(50);
 			expect('a tablist put in later has one tab stop', stops('later1'), [0, -1, -1]);
 			expect('it tells its first selection', heard.splice(0), ['later1-a-tab']);
 			history.replaceState(history.state, '', '#later2-b');
-			stage.innerHTML = strip('later2', 'data-hash');
+			stage.innerHTML = trusted(strip('later2', 'data-hash'));
 			await wait(50);
 			expect('a later tablist with data-hash takes the tab the address names', stops('later2'), [-1, 0, -1]);
 			expect('it selects once', heard.splice(0), ['later2-b-tab']);
@@ -2282,13 +2285,13 @@ window.REDZ_BEHAVE = (() => {
 			expect('a tab added to a taken tablist leaves the tab order', added.tabIndex, -1);
 			expect('that tab tells nothing', heard.splice(0), []);
 			history.replaceState(history.state, '', home);
-			stage.innerHTML = '<div class="nav" role="tablist" aria-label="Later" id="later3"></div>';
+			stage.innerHTML = trusted('<div class="nav" role="tablist" aria-label="Later" id="later3"></div>');
 			await wait(50);
-			$('#later3').innerHTML = buttons('later3');
+			$('#later3').innerHTML = trusted(buttons('later3'));
 			await wait(50);
 			expect('a tablist that was empty is taken when its tabs come', stops('later3'), [0, -1, -1]);
 			expect('that tablist selects once', heard.splice(0), ['later3-a-tab']);
-			stage.innerHTML = strip('outer', 'data-hash');
+			stage.innerHTML = trusted(strip('outer', 'data-hash'));
 			await wait(50);
 			heard.length = 0;
 			$('#outer-b-tab').dataset.hashWithin = 'deep-';
@@ -2296,7 +2299,7 @@ window.REDZ_BEHAVE = (() => {
 			await wait(100);
 			expect('an address that begins with data-hash-within selects its tab', $('#outer-b-tab').getAttribute('aria-selected'), 'true');
 			expect('that address stays', location.hash, '#deep-b');
-			$('#outer-b').innerHTML = strip('deep', 'data-hash');
+			$('#outer-b').innerHTML = trusted(strip('deep', 'data-hash'));
 			await wait(50);
 			expect('the tablist its panel brings selects the tab the address names', stops('deep'), [-1, 0, -1]);
 			expect('the address stays then too', location.hash, '#deep-b');
@@ -2305,7 +2308,7 @@ window.REDZ_BEHAVE = (() => {
 			history.replaceState(history.state, '', home);
 		}]},
 		overflowFocus: {target: '#nav-overflow', steps: [async (out) => {
-			const stage = Object.assign(document.createElement('div'), {className: 'nav-overflow', innerHTML: '<nav class="nav" aria-label="Focus">' + ['One', 'Two', 'Three', 'Four', 'Five', 'Six'].map((word) => '<a class="nav-link" href="#nav-overflow">' + word + '<span class="badge">1</span></a>').join('') + '</nav>'});
+			const stage = Object.assign(document.createElement('div'), {className: 'nav-overflow', innerHTML: trusted('<nav class="nav" aria-label="Focus">' + ['One', 'Two', 'Three', 'Four', 'Five', 'Six'].map((word) => '<a class="nav-link" href="#nav-overflow">' + word + '<span class="badge">1</span></a>').join('') + '</nav>')});
 			stage.style.inlineSize = '180px';
 			document.body.append(stage);
 			await wait(100);
@@ -2323,7 +2326,7 @@ window.REDZ_BEHAVE = (() => {
 		}]},
 		overflowMark: {target: '#nav-overflow', steps: [async (out) => {
 			const link = (word, tone, count) => '<a class="nav-link" href="#nav-overflow">' + word + (tone === null ? '' : '<span class="' + tone + '" id="mark-' + word + '">' + count + '</span>') + '</a>';
-			const stage = Object.assign(document.createElement('div'), {className: 'nav-overflow', innerHTML: '<nav class="nav" aria-label="Mark">' + link('One', null) + link('Two', null) + link('Three', null) + link('Four', null) + link('Six', 'badge badge-subtle-warning', 1) + link('Seven', 'badge badge-subtle-danger', 2) + link('Eight', 'badge', 9) + '</nav>'});
+			const stage = Object.assign(document.createElement('div'), {className: 'nav-overflow', innerHTML: trusted('<nav class="nav" aria-label="Mark">' + link('One', null) + link('Two', null) + link('Three', null) + link('Four', null) + link('Six', 'badge badge-subtle-warning', 1) + link('Seven', 'badge badge-subtle-danger', 2) + link('Eight', 'badge', 9) + '</nav>')});
 			stage.style.inlineSize = '170px';
 			document.body.append(stage);
 			await wait(150);
@@ -2571,7 +2574,7 @@ window.REDZ_BEHAVE = (() => {
 			}
 			const box = document.createElement('div');
 			box.id = 'probe-filter-groups';
-			box.innerHTML = '<section data-filter-group><b data-filter-count></b><p data-kind="sea">Bay</p><p data-kind="land">Hill</p></section><section data-filter-group><b data-filter-count></b><p data-kind="land">Farm</p></section><button type="button" command="--filter" aria-controls="probe-filter-groups" name="kind" value="sea">Sea</button>';
+			box.innerHTML = trusted('<section data-filter-group><b data-filter-count></b><p data-kind="sea">Bay</p><p data-kind="land">Hill</p></section><section data-filter-group><b data-filter-count></b><p data-kind="land">Farm</p></section><button type="button" command="--filter" aria-controls="probe-filter-groups" name="kind" value="sea">Sea</button>');
 			document.body.append(box);
 			$('button', box).click();
 			const groups = $$('[data-filter-group]', box).map((group) => group.hasAttribute('data-filtered') + ':' + $('[data-filter-count]', group).textContent);
@@ -2680,7 +2683,7 @@ window.REDZ_BEHAVE = (() => {
 		moreLater: {target: '#list-group-more-list', steps: [async (out) => {
 			const row = (words) => Object.assign(document.createElement('button'), {type: 'button', className: 'list-group-item list-group-item-action', textContent: words});
 			const box = document.createElement('div');
-			box.innerHTML = '<div class="list-group" id="probe-more-list"></div><div class="list-more"><span data-more-count></span></div><div class="list-more"><span data-more-count></span><button class="btn btn-sm" type="button" command="--more" aria-controls="probe-more-later">More</button></div>';
+			box.innerHTML = trusted('<div class="list-group" id="probe-more-list"></div><div class="list-more"><span data-more-count></span></div><div class="list-more"><span data-more-count></span><button class="btn btn-sm" type="button" command="--more" aria-controls="probe-more-later">More</button></div>');
 			document.body.append(box);
 			const list = $('#probe-more-list', box);
 			list.append(row('Row 1'), row('Row 2'));
@@ -2698,7 +2701,7 @@ window.REDZ_BEHAVE = (() => {
 			list.append(row('Row 3'));
 			await settled();
 			const redrawn = count.textContent;
-			const late = Object.assign(document.createElement('ul'), {id: 'probe-more-later', className: 'list-group', innerHTML: '<li class="list-group-item">A</li><li class="list-group-item">B</li>'});
+			const late = Object.assign(document.createElement('ul'), {id: 'probe-more-later', className: 'list-group', innerHTML: trusted('<li class="list-group-item">A</li><li class="list-group-item">B</li>')});
 			box.append(late);
 			await settled();
 			const put = $('[data-more-count]', other).textContent;
@@ -2784,7 +2787,7 @@ window.REDZ_BEHAVE = (() => {
 		}]},
 		selectionLater: {target: '#table-select-rows', steps: [async (out) => {
 			const box = document.createElement('div');
-			box.innerHTML = '<div data-select id="probe-select"><div class="selection-bar"><span data-select-count></span></div><input type="checkbox" data-select-all aria-label="All"><ul><li><input type="checkbox" value="a" aria-label="A"></li><li><input type="checkbox" value="b" aria-label="B"></li><li><input type="checkbox" value="c" aria-label="C"></li></ul></div><div id="probe-select-late"><input type="checkbox" value="d" aria-label="D" checked></div>';
+			box.innerHTML = trusted('<div data-select id="probe-select"><div class="selection-bar"><span data-select-count></span></div><input type="checkbox" data-select-all aria-label="All"><ul><li><input type="checkbox" value="a" aria-label="A"></li><li><input type="checkbox" value="b" aria-label="B"></li><li><input type="checkbox" value="c" aria-label="C"></li></ul></div><div id="probe-select-late"><input type="checkbox" value="d" aria-label="D" checked></div>');
 			const scope = $('#probe-select', box);
 			const late = $('#probe-select-late', box);
 			const [a, b, c] = $$('ul input', scope);
@@ -2824,7 +2827,7 @@ window.REDZ_BEHAVE = (() => {
 		}]},
 		barTones: {target: '#table-select-rows', steps: [async (out) => {
 			const box = document.createElement('div');
-			box.innerHTML = '<div class="selection-bar"><button class="btn btn-sm" type="button">Plain</button><button class="btn btn-sm btn-primary" type="button">Apply</button><button class="btn btn-sm btn-subtle-danger" type="button">Delete</button><button class="btn btn-sm btn-outline-secondary" type="button">Export</button><button class="btn btn-sm" type="button" disabled>Merge</button></div><button class="btn btn-sm btn-primary" type="button">Apply</button><button class="btn btn-sm btn-subtle-danger" type="button">Delete</button><button class="btn btn-sm btn-outline-secondary" type="button">Export</button><button class="btn btn-sm" type="button" disabled>Merge</button>';
+			box.innerHTML = trusted('<div class="selection-bar"><button class="btn btn-sm" type="button">Plain</button><button class="btn btn-sm btn-primary" type="button">Apply</button><button class="btn btn-sm btn-subtle-danger" type="button">Delete</button><button class="btn btn-sm btn-outline-secondary" type="button">Export</button><button class="btn btn-sm" type="button" disabled>Merge</button></div><button class="btn btn-sm btn-primary" type="button">Apply</button><button class="btn btn-sm btn-subtle-danger" type="button">Delete</button><button class="btn btn-sm btn-outline-secondary" type="button">Export</button><button class="btn btn-sm" type="button" disabled>Merge</button>');
 			document.body.append(box);
 			const ground = getComputedStyle(document.body).getPropertyValue('--redz-bg').trim();
 			const paint = (button) => getComputedStyle(button).backgroundColor;
@@ -2882,7 +2885,7 @@ window.REDZ_BEHAVE = (() => {
 				out.push('sorting: at load ' + say(at) + ', Paid first ' + say(down) + ' (said ' + said + '), again ' + say(up) + ', a third press without data-sort-reset ' + say(two) + ', with it back to the drawn order ' + say(reset) + ', by Sites ' + say(sites) + ', a row put in ' + say(redrawn) + ', a sort the page takes ' + say(taken) + ' and refuses ' + say(restored));
 			}
 			const box = document.createElement('table');
-			box.innerHTML = '<thead><tr><th><button class="table-sort" type="button" value="v">V</button></th></tr></thead><tbody><tr class="table-group"><th>G1</th></tr><tr><td>3</td></tr><tr><td>1</td></tr><tr class="table-subtotal"><th>S1</th></tr><tr class="table-group"><th>G2</th></tr><tr><td>2</td></tr><tr><td>0</td></tr></tbody>';
+			box.innerHTML = trusted('<thead><tr><th><button class="table-sort" type="button" value="v">V</button></th></tr></thead><tbody><tr class="table-group"><th>G1</th></tr><tr><td>3</td></tr><tr><td>1</td></tr><tr class="table-subtotal"><th>S1</th></tr><tr class="table-group"><th>G2</th></tr><tr><td>2</td></tr><tr><td>0</td></tr></tbody>');
 			document.body.append(box);
 			$('button', box).click();
 			const banded = [...box.tBodies[0].rows].map((row) => row.cells[0].textContent).join(' ');
@@ -3076,7 +3079,7 @@ window.REDZ_BEHAVE = (() => {
 			const loaded = [body.querySelectorAll('p').length, $('[data-load-error]', body) === null, body.hasAttribute('data-lazy')];
 			details.open = false;
 			const fresh = document.createElement('details');
-			fresh.innerHTML = '<summary>Paper</summary><div data-lazy></div>';
+			fresh.innerHTML = trusted('<summary>Paper</summary><div data-lazy></div>');
 			let asked = 0;
 			const count = (event) => {
 				asked += event.target.closest('details') === fresh ? 1 : 0;
@@ -3097,7 +3100,7 @@ window.REDZ_BEHAVE = (() => {
 		}]},
 		lazyLayer: {target: '#accordion-lazy-history', steps: [async (out) => {
 			const box = document.createElement('div');
-			box.innerHTML = '<div popover id="probe-lazy-popover"><ul data-lazy></ul></div><dialog id="probe-lazy-dialog"><div data-lazy></div></dialog>';
+			box.innerHTML = trusted('<div popover id="probe-lazy-popover"><ul data-lazy></ul></div><dialog id="probe-lazy-dialog"><div data-lazy></div></dialog>');
 			const [popover, dialog] = [$('[popover]', box), $('dialog', box)];
 			const asked = [];
 			let refuse = true;
@@ -3138,7 +3141,7 @@ window.REDZ_BEHAVE = (() => {
 		}]},
 		uploadPaste: {target: '#upload-stored', steps: [async (out) => {
 			const box = document.createElement('div');
-			box.innerHTML = '<form><div class="upload" id="probe-paste" data-paste="page"><input type="file" multiple hidden><button class="upload-zone" type="button">Add</button><template><div><span data-file-name></span><button type="button" data-file-remove>x</button><span data-file-error></span></div></template><div class="upload-list"><div data-file-stored="7" data-state="done"><span data-file-name>kept.pdf</span></div></div></div><input name="note"></form>';
+			box.innerHTML = trusted('<form><div class="upload" id="probe-paste" data-paste="page"><input type="file" multiple hidden><button class="upload-zone" type="button">Add</button><template><div><span data-file-name></span><button type="button" data-file-remove>x</button><span data-file-error></span></div></template><div class="upload-list"><div data-file-stored="7" data-state="done"><span data-file-name>kept.pdf</span></div></div></div><input name="note"></form>');
 			document.body.append(box);
 			const upload = $('#probe-paste', box);
 			const heard = [];
@@ -3266,7 +3269,7 @@ window.REDZ_BEHAVE = (() => {
 		alertNarrow: {target: '#alert-tones', steps: [async (out) => {
 			const host = document.body.appendChild(Object.assign(document.createElement('div'), {dir: 'ltr'}));
 			host.style.inlineSize = '280px';
-			host.innerHTML = '<div class="alert alert-danger"><i class="bi bi-x-octagon" aria-hidden="true"></i><div>This cannot be undone.</div></div><div class="alert alert-primary"><i class="bi bi-stars" aria-hidden="true"></i><div class="vstack gap-8"><strong>A shorter title</strong><p>It fits the search results.</p></div></div>';
+			host.innerHTML = trusted('<div class="alert alert-danger"><i class="bi bi-x-octagon" aria-hidden="true"></i><div>This cannot be undone.</div></div><div class="alert alert-primary"><i class="bi bi-stars" aria-hidden="true"></i><div class="vstack gap-8"><strong>A shorter title</strong><p>It fits the search results.</p></div></div>');
 			await settled();
 			for (const alert of $$('.alert', host)) {
 				const [icon, words] = [$(':scope > .bi', alert).getBoundingClientRect(), $(':scope > div', alert).getBoundingClientRect()];
@@ -3282,7 +3285,7 @@ window.REDZ_BEHAVE = (() => {
 			host.append($('#selection-bar-list .selection-bar').cloneNode(true));
 			const short = document.body.appendChild(Object.assign(document.createElement('div'), {dir: 'ltr'}));
 			short.style.inlineSize = '360px';
-			short.innerHTML = '<div class="selection-bar"><strong>2 selected</strong><button class="btn btn-sm" type="button">Write</button><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Clear"><i class="bi bi-x" aria-hidden="true"></i></button></div>';
+			short.innerHTML = trusted('<div class="selection-bar"><strong>2 selected</strong><button class="btn btn-sm" type="button">Write</button><button class="btn btn-sm btn-icon btn-text" type="button" aria-label="Clear"><i class="bi bi-x" aria-hidden="true"></i></button></div>');
 			await settled();
 			const bar = $('.selection-bar', host);
 			const [label, close] = [bar.firstElementChild.getBoundingClientRect(), bar.lastElementChild.getBoundingClientRect()];
@@ -3299,7 +3302,7 @@ window.REDZ_BEHAVE = (() => {
 			const host = document.body.appendChild(Object.assign(document.createElement('div'), {className: 'region', dir: 'ltr'}));
 			host.style.inlineSize = '360px';
 			host.setAttribute('aria-busy', 'true');
-			host.innerHTML = '<p>base-2026-11-08.sql · 2.4 MB</p><p>files-2026-11-08.tar · 380 MB</p><span class="busy-words">Preparing the download…</span>';
+			host.innerHTML = trusted('<p>base-2026-11-08.sql · 2.4 MB</p><p>files-2026-11-08.tar · 380 MB</p><span class="busy-words">Preparing the download…</span>');
 			await settled();
 			const words = $('.busy-words', host);
 			const ground = getComputedStyle(words).backgroundColor;
@@ -3454,7 +3457,7 @@ window.REDZ_BEHAVE = (() => {
 		sortedLine: {target: '#chart-spark-line', steps: [async (out) => {
 			const row = (size) => '<tr data-sort-size="' + size + '"><td><span class="spark spark-line" role="img" aria-label="Size ' + size + '"><i data-v="0.' + size + '"></i><i data-v="0.' + (size + 1) + '"></i></span></td></tr>';
 			const box = document.createElement('table');
-			box.innerHTML = '<thead><tr><th><button class="table-sort" type="button" value="size">Size</button></th></tr></thead><tbody>' + [3, 1, 2].map(row).join('') + '</tbody>';
+			box.innerHTML = trusted('<thead><tr><th><button class="table-sort" type="button" value="size">Size</button></th></tr></thead><tbody>' + [3, 1, 2].map(row).join('') + '</tbody>');
 			document.body.append(box);
 			await settled();
 			const order = () => [...box.tBodies[0].rows].map((one) => one.dataset.sortSize).join(' ');
@@ -3580,8 +3583,8 @@ window.REDZ_BEHAVE = (() => {
 			const host = $('#tooltip-title');
 			const button = Object.assign(document.createElement('button'), {className: 'btn', type: 'button', title: 'Moves', textContent: 'Moves'});
 			const other = Object.assign(document.createElement('button'), {className: 'btn', type: 'button', textContent: 'Elsewhere'});
-			const menu = Object.assign(document.createElement('div'), {className: 'menu', popover: 'auto', innerHTML: '<button class="menu-item" type="button">Up</button>'});
-			const dialog = Object.assign(document.createElement('dialog'), {className: 'dialog', innerHTML: '<button class="btn" type="button">Inside</button>'});
+			const menu = Object.assign(document.createElement('div'), {className: 'menu', popover: 'auto', innerHTML: trusted('<button class="menu-item" type="button">Up</button>')});
+			const dialog = Object.assign(document.createElement('dialog'), {className: 'dialog', innerHTML: trusted('<button class="btn" type="button">Inside</button>')});
 			host.append(button, other, menu, dialog);
 			const tip = () => $('#redz-tooltip')?.matches(':popover-open') ?? false;
 			button.focus();
@@ -3613,7 +3616,7 @@ window.REDZ_BEHAVE = (() => {
 		}]},
 		showNested: {target: '#form-show-tax-region', steps: [async (out) => {
 			const form = document.createElement('form');
-			form.innerHTML = '<select name="walkKind"><option value="simple">Simple</option><option value="bundle">Bundle</option></select><div data-show-when="walkKind" data-show-in="bundle"><select name="walkMode"><option value="auto">Auto</option><option value="manual">Manual</option></select><div data-show-when="walkMode" data-show-in="manual"><input name="walkPrice" value="9"></div></div>';
+			form.innerHTML = trusted('<select name="walkKind"><option value="simple">Simple</option><option value="bundle">Bundle</option></select><div data-show-when="walkKind" data-show-in="bundle"><select name="walkMode"><option value="auto">Auto</option><option value="manual">Manual</option></select><div data-show-when="walkMode" data-show-in="manual"><input name="walkPrice" value="9"></div></div>');
 			$('#form-show-tax-region').after(form);
 			const kind = form.elements.walkKind;
 			const mode = form.elements.walkMode;
@@ -3660,7 +3663,7 @@ window.REDZ_BEHAVE = (() => {
 			}
 		}]},
 		footRow: {target: '#table-wide .table-scroll', steps: [async (out) => {
-			const table = Object.assign(document.createElement('table'), {className: 'table', innerHTML: '<thead><tr><th scope="col">Boat</th><th scope="col">Seats</th></tr></thead><tbody><tr><th scope="row">Boat A</th><td>5</td></tr></tbody><tfoot><tr><th scope="row">Total</th><td>5</td></tr></tfoot>'});
+			const table = Object.assign(document.createElement('table'), {className: 'table', innerHTML: trusted('<thead><tr><th scope="col">Boat</th><th scope="col">Seats</th></tr></thead><tbody><tr><th scope="row">Boat A</th><td>5</td></tr></tbody><tfoot><tr><th scope="row">Total</th><td>5</td></tr></tfoot>')});
 			$('#table-wide .table-scroll').parentElement.append(table);
 			const read = (cell) => {
 				const style = getComputedStyle(cell);
@@ -3675,7 +3678,7 @@ window.REDZ_BEHAVE = (() => {
 		}]},
 		tableStop: {target: '#table-wide .table-scroll', steps: [async (out) => {
 			const host = $('#table-wide .table-scroll').parentElement;
-			const fits = Object.assign(document.createElement('div'), {className: 'table-scroll', innerHTML: '<table class="table"><tbody><tr><td>Fits</td></tr></tbody></table>'});
+			const fits = Object.assign(document.createElement('div'), {className: 'table-scroll', innerHTML: trusted('<table class="table"><tbody><tr><td>Fits</td></tr></tbody></table>')});
 			fits.setAttribute('tabindex', '0');
 			host.append(fits);
 			await wait(50);
@@ -3945,7 +3948,7 @@ window.REDZ_BEHAVE = (() => {
 			const lit = (row) => getComputedStyle(row.cells[0]).backgroundColor;
 			const away = [5, 5];
 			const menuOf = (id) => {
-				const list = Object.assign(document.createElement('div'), {id, className: 'menu', popover: 'auto', innerHTML: '<button class="menu-item" type="button" role="menuitem">One</button>'});
+				const list = Object.assign(document.createElement('div'), {id, className: 'menu', popover: 'auto', innerHTML: trusted('<button class="menu-item" type="button" role="menuitem">One</button>')});
 				list.setAttribute('role', 'menu');
 				return list;
 			};
@@ -4065,7 +4068,7 @@ window.REDZ_BEHAVE = (() => {
 			const page = (style, before = '', after = '') => '<!doctype html><html lang="en"><head><title>Head</title><link rel="stylesheet" href="' + $('link[href*="redz-ui.min.css"]').href + '"><style>' + style + '</style></head><body>' + before + '<table class="table"><thead><tr><th>Boat</th></tr></thead><tbody><tr><td>Boat A</td></tr></tbody></table>' + after + '</body></html>';
 			const read = async (...html) => {
 				const loaded = new Promise((done) => frame.addEventListener('load', done, {once: true}));
-				frame.srcdoc = page(...html);
+				frame.srcdoc = trusted(page(...html));
 				await loaded;
 				const doc = frame.contentDocument;
 				await until(() => frame.contentWindow.getComputedStyle(doc.querySelector('th')).position === 'sticky');
@@ -4467,7 +4470,7 @@ window.REDZ_BEHAVE = (() => {
 		listLink: {target: '#list-group-basic', steps: [async (out) => {
 			const list = document.createElement('ul');
 			list.className = 'list-group';
-			list.innerHTML = '<li class="list-group-item hstack gap-8"><a class="stretched-link flex-fill" href="#list-group-basic">Boat A</a><button class="btn btn-sm" type="button">Call</button></li><li class="list-group-item">Boat B</li>';
+			list.innerHTML = trusted('<li class="list-group-item hstack gap-8"><a class="stretched-link flex-fill" href="#list-group-basic">Boat A</a><button class="btn btn-sm" type="button">Call</button></li><li class="list-group-item">Boat B</li>');
 			$('#list-group-basic').append(list);
 			list.scrollIntoView({block: 'center'});
 			const [first, second] = list.children;
@@ -4498,7 +4501,7 @@ window.REDZ_BEHAVE = (() => {
 			const frame = document.createElement('iframe');
 			frame.style.cssText = 'position: fixed; inset-block-start: 0; inset-inline-start: 0; inline-size: 600px; block-size: 400px; visibility: hidden';
 			const loaded = new Promise((done) => frame.addEventListener('load', done, {once: true}));
-			frame.srcdoc = '<!doctype html><html lang="en"><head><title>Shell</title><link rel="stylesheet" href="' + $('link[href*="redz-ui.min.css"]').href + '"></head><body><div class="app"><header class="app-header">Bookings</header><main class="app-main">A page without a sidebar</main></div></body></html>';
+			frame.srcdoc = trusted('<!doctype html><html lang="en"><head><title>Shell</title><link rel="stylesheet" href="' + $('link[href*="redz-ui.min.css"]').href + '"></head><body><div class="app"><header class="app-header">Bookings</header><main class="app-main">A page without a sidebar</main></div></body></html>');
 			document.body.append(frame);
 			await loaded;
 			const main = frame.contentDocument.querySelector('.app-main');
@@ -4512,7 +4515,7 @@ window.REDZ_BEHAVE = (() => {
 		choiceMedia: {target: '#busy-region', steps: [async (out) => {
 			const picture = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="236" height="68"><rect width="236" height="68" fill="#456"/></svg>');
 			const host = document.createElement('div');
-			host.innerHTML = '<label class="choice"><input type="radio" name="probe-media"><span class="choice-media"><img src="' + picture + '" alt=""></span>Example Pay</label>';
+			host.innerHTML = trusted('<label class="choice"><input type="radio" name="probe-media"><span class="choice-media"><img src="' + picture + '" alt=""></span>Example Pay</label>');
 			$('#busy-region').append(host);
 			const image = $('img', host);
 			await until(() => image.complete);
@@ -4526,7 +4529,7 @@ window.REDZ_BEHAVE = (() => {
 		busyTone: {target: '#busy-region', steps: [async (out) => {
 			const host = document.createElement('div');
 			host.style.background = 'var(--redz-bg-page)';
-			host.innerHTML = ['btn-primary', 'btn-danger', 'btn-outline-primary'].map((tone) => '<button class="btn ' + tone + '" type="button">Pay</button><button class="btn ' + tone + '" type="button" aria-busy="true" aria-disabled="true">Pay</button><button class="btn ' + tone + '" type="button"><i class="bi bi-trash" aria-hidden="true"></i>Pay</button><button class="btn ' + tone + '" type="button" aria-busy="true" aria-disabled="true"><i class="bi bi-trash" aria-hidden="true"></i>Pay</button>').join('');
+			host.innerHTML = trusted(['btn-primary', 'btn-danger', 'btn-outline-primary'].map((tone) => '<button class="btn ' + tone + '" type="button">Pay</button><button class="btn ' + tone + '" type="button" aria-busy="true" aria-disabled="true">Pay</button><button class="btn ' + tone + '" type="button"><i class="bi bi-trash" aria-hidden="true"></i>Pay</button><button class="btn ' + tone + '" type="button" aria-busy="true" aria-disabled="true"><i class="bi bi-trash" aria-hidden="true"></i>Pay</button>').join(''));
 			$('#busy-region').append(host);
 			const buttons = $$('button', host);
 			buttons.forEach((button) => {
@@ -4567,7 +4570,7 @@ window.REDZ_BEHAVE = (() => {
 		}]},
 		shortcuts: {target: '#palette-demo', steps: [async (out) => {
 			const host = document.createElement('div');
-			host.innerHTML = '<div inert><button type="button" aria-keyshortcuts="Alt+J">Asleep</button></div><button type="button" disabled aria-keyshortcuts="Alt+D Alt+K">Off</button><button type="button" aria-disabled="true" aria-keyshortcuts="Alt+B">Busy</button><button type="button" hidden aria-keyshortcuts="Alt+H">Hidden</button><a aria-disabled="true" aria-keyshortcuts="Alt+L">No address</a><button type="button" aria-keyshortcuts="Alt+K">Awake</button><dialog><p>Nothing keyed</p></dialog>';
+			host.innerHTML = trusted('<div inert><button type="button" aria-keyshortcuts="Alt+J">Asleep</button></div><button type="button" disabled aria-keyshortcuts="Alt+D Alt+K">Off</button><button type="button" aria-disabled="true" aria-keyshortcuts="Alt+B">Busy</button><button type="button" hidden aria-keyshortcuts="Alt+H">Hidden</button><a aria-disabled="true" aria-keyshortcuts="Alt+L">No address</a><button type="button" aria-keyshortcuts="Alt+K">Awake</button><dialog><p>Nothing keyed</p></dialog>');
 			$('#palette-demo').append(host);
 			const all = $$('button, a', host);
 			const awake = all.at(-1);
@@ -4697,7 +4700,7 @@ window.REDZ_BEHAVE = (() => {
 			frame.style.cssText = 'position: fixed; inset: 0; inline-size: 400px; block-size: 200px; visibility: hidden';
 			const sheet = document.querySelector('link[rel="stylesheet"][href*="redz-ui"]').href;
 			document.body.append(frame);
-			frame.srcdoc = '<!doctype html><link rel="stylesheet" href="' + sheet + '"><body class="region"><table class="table"><tbody><tr class="table-danger"><td class="d-none md:d-table-cell">Hidden</td><td>Shown</td></tr></tbody></table>';
+			frame.srcdoc = trusted('<!doctype html><link rel="stylesheet" href="' + sheet + '"><body class="region"><table class="table"><tbody><tr class="table-danger"><td class="d-none md:d-table-cell">Hidden</td><td>Shown</td></tr></tbody></table>');
 			await new Promise((done) => {
 				frame.onload = done;
 			});

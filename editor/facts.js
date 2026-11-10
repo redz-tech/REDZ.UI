@@ -1,7 +1,7 @@
 // REDZ.UI editor, live facts: a price, a date, a phone number written once and shown in every place, <data value="KEY">. The words keep the key, so
 // a price that changes neither touches a translation nor leaves it stale; an AI and a translator see a token they cannot change.
 import {say} from './words.js';
-import {escape} from './clean.js';
+import {escape, trusted} from './clean.js';
 import {fieldAt, topAt} from './caret.js';
 
 const ZERO = String.fromCodePoint(0x200b);
@@ -89,7 +89,7 @@ export const factsOf = (ed) => {
 		const open = ed.may('facts');
 		const edits = open && typeof ed.config.onFact === 'function';
 		const rows = [...ed.facts.values()].map((one, index) => '<div class="editor-fact"><label for="' + ed.id + '-fact-' + index + '">' + escape(one.label) + ' <span class="text-muted">· ' + escape(say('fact.uses', {count: uses(one.key)})) + '</span></label><span class="hstack gap-4"><input class="form-control form-control-sm" id="' + ed.id + '-fact-' + index + '" data-fact="' + escape(one.key) + '" value="' + escape(one.text) + '"' + (edits && one.editable !== false ? '' : ' readonly') + '>' + (open ? '<button class="btn btn-xs" type="button" data-fact-put="' + escape(one.key) + '">' + escape(say('fact.put')) + '</button>' : '') + '</span></div>').join('');
-		panel.body.innerHTML = '<p class="editor-card-hint">' + escape(say(ed.facts.size === 0 ? 'fact.none' : 'fact.hint')) + '</p>' + rows;
+		panel.body.innerHTML = trusted('<p class="editor-card-hint">' + escape(say(ed.facts.size === 0 ? 'fact.none' : 'fact.hint')) + '</p>' + rows);
 		for (const one of panel.body.querySelectorAll('[data-fact-put]')) {
 			one.onclick = () => {
 				panel.close();

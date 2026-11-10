@@ -2,7 +2,7 @@
 // and the count of words, by the language's own word breaks, so Thai and Burmese count too. Text an AI wrote that nobody checked, a price typed by hand
 // where a fact stands, and translations left behind are stumbles too.
 import {say, sayCount} from './words.js';
-import {escape} from './clean.js';
+import {escape, trusted} from './clean.js';
 import {charsOf, rangeOf, slotsOf} from './plain.js';
 
 const LONG = 320;
@@ -89,7 +89,7 @@ export const checksOf = (ed) => {
 	const button = (key, icon, act) => {
 		const one = Object.assign(document.createElement('button'), {type: 'button', className: 'btn btn-text btn-xs'});
 		one.dataset.editorFoot = key;
-		one.innerHTML = '<i class="bi bi-' + icon + '" aria-hidden="true"></i>' + escape(say(key));
+		one.innerHTML = trusted('<i class="bi bi-' + icon + '" aria-hidden="true"></i>' + escape(say(key)));
 		if (act !== null) {
 			one.addEventListener('click', act);
 		}
@@ -105,7 +105,7 @@ export const checksOf = (ed) => {
 		panel.popover = 'auto';
 		panel.setAttribute('role', 'dialog');
 		panel.setAttribute('aria-label', say(key));
-		panel.innerHTML = '<div class="editor-card-head"><strong>' + escape(say(key)) + '</strong><button class="btn-close" type="button" aria-label="' + escape(say('close')) + '"></button></div><div class="editor-card-body"></div>';
+		panel.innerHTML = trusted('<div class="editor-card-head"><strong>' + escape(say(key)) + '</strong><button class="btn-close" type="button" aria-label="' + escape(say('close')) + '"></button></div><div class="editor-card-body"></div>');
 		ed.box.append(panel);
 		const close = () => panel.hidePopover();
 		panel.querySelector('.btn-close').onclick = close;
@@ -139,7 +139,7 @@ export const checksOf = (ed) => {
 
 	const render = () => {
 		const list = issues(ed);
-		panel.body.innerHTML = list.length === 0 ? '<p class="editor-card-hint">' + escape(say('check.fine')) + '</p>' : list.map((one, index) => '<div class="editor-issue"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i><span>' + escape(say(one.key, one.args)) + '</span><span class="hstack gap-4">' + (one.top ? '<button class="btn btn-xs" type="button" data-show="' + index + '">' + escape(say('check.show')) + '</button>' : '') + (one.fix ? '<button class="btn btn-xs" type="button" data-fix="' + index + '">' + escape(say('check.fix')) + '</button>' : '') + '</span></div>').join('');
+		panel.body.innerHTML = trusted(list.length === 0 ? '<p class="editor-card-hint">' + escape(say('check.fine')) + '</p>' : list.map((one, index) => '<div class="editor-issue"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i><span>' + escape(say(one.key, one.args)) + '</span><span class="hstack gap-4">' + (one.top ? '<button class="btn btn-xs" type="button" data-show="' + index + '">' + escape(say('check.show')) + '</button>' : '') + (one.fix ? '<button class="btn btn-xs" type="button" data-fix="' + index + '">' + escape(say('check.fix')) + '</button>' : '') + '</span></div>').join(''));
 		for (const one of panel.body.querySelectorAll('[data-show]')) {
 			one.onclick = () => {
 				panel.close();

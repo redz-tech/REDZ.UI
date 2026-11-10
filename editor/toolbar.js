@@ -1,7 +1,7 @@
 // REDZ.UI editor, the panel as the owner fixed it: undo, redo | the block's style as a word | bold, italic, underline, link, color | bullets,
 // numbers, align | Insert | clear, source. One tab stop, the arrow keys, and the states say what is under the caret.
 import {say} from './words.js';
-import {escape} from './clean.js';
+import {escape, trusted} from './clean.js';
 import {caretGet, caretPut, fieldAt, topAt} from './caret.js';
 
 const MAC = /Mac|iPhone|iPad/.test(navigator.platform);
@@ -21,7 +21,7 @@ export const toolbarOf = (ed) => {
 
 	/** A panel's button: an icon or words, its name, its action; toggles report aria-pressed. */
 	const button = (key, html, act, extra = {}) => {
-		const one = Object.assign(document.createElement('button'), {type: 'button', className: 'btn btn-text editor-tool', tabIndex: -1, innerHTML: html});
+		const one = Object.assign(document.createElement('button'), {type: 'button', className: 'btn btn-text editor-tool', tabIndex: -1, innerHTML: trusted(html)});
 		one.setAttribute('aria-label', say(key));
 		one.title = extra.keys ? say(key) + ' ' + keysOf(extra.keys) : say(key);
 		one.dataset.editor = key;
@@ -54,7 +54,7 @@ export const toolbarOf = (ed) => {
 		return {one, list};
 	};
 	const item = (list, label, act, html = '') => {
-		const one = Object.assign(document.createElement('button'), {type: 'button', className: 'menu-item', innerHTML: html + escape(label)});
+		const one = Object.assign(document.createElement('button'), {type: 'button', className: 'menu-item', innerHTML: trusted(html + escape(label))});
 		one.setAttribute('role', 'menuitem');
 		one.addEventListener('click', () => {
 			list.hidePopover();
@@ -110,7 +110,9 @@ export const toolbarOf = (ed) => {
 			}
 		}
 		if (name === '') {
-			range.insertNode(doc.createRange().createContextualFragment(span.innerHTML));
+			const piece = doc.createDocumentFragment();
+			piece.append(...span.childNodes);
+			range.insertNode(piece);
 		} else {
 			span.className = name;
 			range.insertNode(span);
@@ -148,7 +150,7 @@ export const toolbarOf = (ed) => {
 		const swatches = Object.assign(document.createElement('div'), {className: 'editor-swatches'});
 		color.list.append(swatches);
 		for (const [key, name, token] of COLORS) {
-			const one = Object.assign(document.createElement('button'), {type: 'button', className: 'menu-item', innerHTML: '<i style="--editor-swatch:var(' + token + ')"></i>'});
+			const one = Object.assign(document.createElement('button'), {type: 'button', className: 'menu-item', innerHTML: trusted('<i style="--editor-swatch:var(' + token + ')"></i>')});
 			one.setAttribute('role', 'menuitem');
 			one.setAttribute('aria-label', say(key));
 			one.title = say(key);
@@ -166,7 +168,7 @@ export const toolbarOf = (ed) => {
 		const row = Object.assign(document.createElement('div'), {className: 'editor-swatches editor-swatches-row'});
 		place.list.append(row);
 		for (const [key, name, glyph] of ALIGN) {
-			const one = Object.assign(document.createElement('button'), {type: 'button', className: 'menu-item', innerHTML: icon(glyph)});
+			const one = Object.assign(document.createElement('button'), {type: 'button', className: 'menu-item', innerHTML: trusted(icon(glyph))});
 			one.setAttribute('role', 'menuitem');
 			one.setAttribute('aria-label', say(key));
 			one.title = say(key);

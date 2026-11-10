@@ -14,6 +14,12 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - The build refuses an endless animation that is not slowed for people who ask for less motion.
 - The build refuses markup built from a string in the main bundle's and the packages' scripts, which a page that
   requires Trusted Types refuses.
+- The editor runs on a page that sends `require-trusted-types-for 'script'`. It makes one policy, `redz-editor`, once, as
+  its package loads, and the page names it in `trusted-types redz-editor`. Markup reaches it only as the editor's own
+  panels, a value through the cleaner, or raw markup parsed inert. The build refuses an editor sink outside it. No other
+  package needs a policy.
+- The probes' pages require Trusted Types, as a strict consumer does, so a string of markup in any script is a finding
+  in every engine that has them. `PROBE_CSP` in the environment replaces that Content-Security-Policy.
 
 ### Changed
 - Busy indicators run slower for people who ask for less motion, and none of them stops. A bar without a value and
@@ -32,6 +38,7 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - The list demo no longer carries `table-hover`, which has done nothing since every table lights its row.
 - The image viewer opens on a page that sends `require-trusted-types-for 'script'`: it built its buttons' icons from a
   string, which threw, and its link did nothing.
+- The editor cleans an earlier version of a block before it tries it on, as it cleans every other value.
 
 ## 0.22.0 - 2026-11-09
 

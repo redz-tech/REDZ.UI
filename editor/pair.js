@@ -2,7 +2,7 @@
 // hash of the source's words it was made from, data-from, so only the block that changed goes stale, and a price that changed stales nothing: the
 // words carry a token. Rows line up by a stylesheet of margins made from what is measured, so no mark lands in the text.
 import {say} from './words.js';
-import {clean, escape} from './clean.js';
+import {clean, escape, trusted} from './clean.js';
 import {changes} from './diff.js';
 import {drawTop} from './marks.js';
 import {plainOf, slotsOf, wordsHash} from './plain.js';
@@ -42,7 +42,7 @@ export const pairOf = (ed) => {
 		const from = here(id)?.getAttribute('data-from');
 		const box = document.createElement('template');
 		for (const one of [...(language(sourceCode())?.versions?.[id] ?? [])].reverse()) {
-			box.innerHTML = clean(one.html);
+			box.innerHTML = trusted(clean(one.html));
 			const old = box.content.firstElementChild === null ? null : drawTop(doc.importNode(box.content.firstElementChild, true), false);
 			if (old !== null && from !== undefined && wordsHash(old) === from) {
 				return slotsOf(old).map(plainOf).join('\n');
@@ -119,7 +119,7 @@ export const pairOf = (ed) => {
 			top.setAttribute('data-editor-state', state);
 			if (state !== 'ok') {
 				counts[state]++;
-				top.insertAdjacentHTML('afterend', strip(top, state));
+				top.insertAdjacentHTML('afterend', trusted(strip(top, state)));
 			}
 		}
 		known.set('counts', counts);
@@ -154,14 +154,14 @@ export const pairOf = (ed) => {
 		stage.dataset.editorPair = '';
 		await new Promise((done) => {
 			frame.addEventListener('load', done, {once: true});
-			frame.srcdoc = ed.frameDocument(code, one.dir ?? 'ltr');
+			frame.srcdoc = trusted(ed.frameDocument(code, one.dir ?? 'ltr'));
 		});
 		doc = frame.contentDocument;
 		ed.applyTheme();
 		doc.body.className = 'prose';
-		const holder = new DOMParser().parseFromString('<!doctype html><body>' + clean(html), 'text/html').body;
+		const holder = new DOMParser().parseFromString(trusted('<!doctype html><body>' + clean(html)), 'text/html').body;
 		doc.body.replaceChildren(...[...holder.children].map((node) => drawTop(doc.importNode(node, true), false)));
-		doc.body.insertAdjacentHTML('afterbegin', '<div class="editor-strip editor-strip-all" hidden><span></span><button class="btn btn-xs btn-primary" type="button" data-pair="all"><i class="bi bi-stars" aria-hidden="true"></i>' + escape(say('pair.all')) + '</button></div>');
+		doc.body.insertAdjacentHTML('afterbegin', trusted('<div class="editor-strip editor-strip-all" hidden><span></span><button class="btn btn-xs btn-primary" type="button" data-pair="all"><i class="bi bi-stars" aria-hidden="true"></i>' + escape(say('pair.all')) + '</button></div>'));
 		for (const one of [doc, ed.doc]) {
 			one.head.append(Object.assign(one.createElement('style'), {textContent: ''}));
 			one.head.lastElementChild.setAttribute('data-editor-pair', '');

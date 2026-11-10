@@ -2,7 +2,7 @@
 // wait. Rows go from shorter to longer, columns from stricter to warmer, the middle is the text as it stands. A point is tried on the block itself,
 // which comes back unless it is kept; the facts of a version are checked first, and a version that lost one cannot be chosen.
 import {say} from './words.js';
-import {escape} from './clean.js';
+import {escape, trusted} from './clean.js';
 import {slotsOf, tokensIn} from './plain.js';
 import {rewriteSlot} from './review.js';
 
@@ -18,7 +18,7 @@ export const padOf = (ed) => {
 	const columns = [say('pad.stricter'), '', say('pad.warmer')];
 	const named = (x, y) => (x === MIDDLE && y === MIDDLE ? say('pad.same') : [rows[y], columns[x]].filter(Boolean).join(', '));
 	const points = [0, 1, 2].flatMap((y) => [0, 1, 2].map((x) => '<button type="button" role="radio" aria-checked="' + (x === MIDDLE && y === MIDDLE) + '" tabindex="' + (x === MIDDLE && y === MIDDLE ? 0 : -1) + '" data-x="' + x + '" data-y="' + y + '" aria-label="' + escape(named(x, y)) + '" title="' + escape(named(x, y)) + '"' + (x === MIDDLE && y === MIDDLE ? '' : ' disabled') + '></button>')).join('');
-	panel.innerHTML = '<div class="editor-card-head"><strong>' + say('pad') + '</strong><button class="btn-close" type="button" aria-label="' + escape(say('close')) + '"></button></div><div class="editor-card-body"><div class="editor-pad-axes"><span>' + escape(rows[0]) + '</span><div class="editor-pad-grid" role="radiogroup" aria-label="' + say('pad') + '">' + points + '</div><span>' + escape(rows[2]) + '</span><div class="editor-pad-ends"><span>' + escape(columns[0]) + '</span><span>' + escape(columns[2]) + '</span></div></div><p class="editor-card-hint" role="status"></p><div class="hstack gap-8"><button class="btn btn-sm btn-primary" type="button" data-pad="keep">' + say('pad.keep') + '</button><button class="btn btn-sm" type="button" data-pad="back">' + say('pad.back') + '</button></div></div>';
+	panel.innerHTML = trusted('<div class="editor-card-head"><strong>' + say('pad') + '</strong><button class="btn-close" type="button" aria-label="' + escape(say('close')) + '"></button></div><div class="editor-card-body"><div class="editor-pad-axes"><span>' + escape(rows[0]) + '</span><div class="editor-pad-grid" role="radiogroup" aria-label="' + say('pad') + '">' + points + '</div><span>' + escape(rows[2]) + '</span><div class="editor-pad-ends"><span>' + escape(columns[0]) + '</span><span>' + escape(columns[2]) + '</span></div></div><p class="editor-card-hint" role="status"></p><div class="hstack gap-8"><button class="btn btn-sm btn-primary" type="button" data-pad="keep">' + say('pad.keep') + '</button><button class="btn btn-sm" type="button" data-pad="back">' + say('pad.back') + '</button></div></div>');
 	ed.box.append(panel);
 	const told = panel.querySelector('[role="status"]');
 	const keep = panel.querySelector('[data-pad="keep"]');

@@ -6,6 +6,7 @@ import {FIELDS, nodeAt, pathOf, repeats} from './marks.js';
 import {elementOf} from './props.js';
 import {partDo, columnAdd, columnDrop, rowAdd, rowDrop, rowsOf} from './parts.js';
 import {fieldAt, topAt} from './caret.js';
+import {trusted} from './clean.js';
 
 const icon = (name) => '<i class="bi bi-' + name + '" aria-hidden="true"></i>';
 const GRACE = 300;
@@ -15,11 +16,11 @@ const tool = (act, name, key) => '<button class="btn btn-text btn-xs btn-icon" t
 export const barsOf = (ed) => {
 	const layer = Object.assign(document.createElement('div'), {className: 'editor-layer'});
 	const make = (className, html = '') => {
-		const one = Object.assign(document.createElement('div'), {className, hidden: true, innerHTML: html});
+		const one = Object.assign(document.createElement('div'), {className, hidden: true, innerHTML: trusted(html)});
 		layer.append(one);
 		return one;
 	};
-	const handle = Object.assign(document.createElement('button'), {type: 'button', className: 'editor-handle', hidden: true, innerHTML: icon('grip-vertical')});
+	const handle = Object.assign(document.createElement('button'), {type: 'button', className: 'editor-handle', hidden: true, innerHTML: trusted(icon('grip-vertical'))});
 	handle.setAttribute('aria-label', say('handle'));
 	handle.title = say('handle');
 	layer.append(handle);
@@ -243,7 +244,7 @@ export const barsOf = (ed) => {
 			}
 			acts.push(tool('drop', 'trash3', 'part.drop'));
 		}
-		bar.innerHTML = '<span class="editor-crumbs">' + crumbs + '</span>' + acts.join('');
+		bar.innerHTML = trusted('<span class="editor-crumbs">' + crumbs + '</span>' + acts.join(''));
 		bar.hidden = false;
 		const rect = box(node);
 		const height = bar.offsetHeight;

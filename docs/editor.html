@@ -301,6 +301,7 @@ const page = REDZ.ui.editor('#body', {
 						<li>The text is edited in a frame whose own Content-Security-Policy runs no script: an <code>onerror</code>, a <code>&lt;script&gt;</code> or a <code>javascript:</code> link in a stored body or on the clipboard never runs, on load, on paste or later.</li>
 						<li>Every value is parsed inert and cleaned before it is shown or given back: no script, style, link, meta, base, object or embed element, no <code>on*</code> attribute, no address that is not a path, a fragment, http(s), mailto or tel, no frame that is not https.</li>
 						<li>The cleaner guards the editing page; the server cleans what it stores as well.</li>
+						<li>On a page that sends <code>require-trusted-types-for 'script'</code>, the editor makes one Trusted Types policy, <code>redz-editor</code>, once, as its package loads: that page names it in <code>trusted-types redz-editor</code>. The name is part of the editor's contract. Markup reaches the policy only as the editor's own panels, a value through the cleaner, or raw markup parsed inert to be cleaned or read. No other package needs a policy: the main bundle, the charts and the QR codes build by the DOM, and the build refuses a string of markup in them.</li>
 					</ul>
 				</section>
 

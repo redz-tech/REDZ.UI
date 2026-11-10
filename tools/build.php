@@ -576,18 +576,21 @@ function BUILD__MediaBlocks(string $css, string $query): array
 }
 
 /**
- * The main bundle's and the packages' scripts build their elements by the DOM, never from a string of markup: a page
- * that sends require-trusted-types-for 'script' refuses a string at every such sink. Answers what is wrong.
+ * A page that sends require-trusted-types-for 'script' refuses a string at every markup sink: the main bundle's and the
+ * packages' scripts build their elements by the DOM, and the editor hands a sink markup only through trusted(), its one
+ * policy. Answers what is wrong.
  * @return list<string>
  */
 function BUILD__SinksCheck(): array
 {
-	$sink = '~\b(?:inner|outer)HTML\s*(?:\+?=(?!=)|:)|\b(?:insertAdjacentHTML|parseFromString|createContextualFragment|setHTMLUnsafe|parseHTMLUnsafe|eval)\s*\(|\bdocument\.write(?:ln)?\s*\(|\bsrcdoc\s*(?:=(?!=)|:)|\bnew\s+Function\s*\(~';
+	$sink = '~\b(?:inner|outer)HTML\s*(?:\+?=(?!=)|:)|\b(?:insertAdjacentHTML|parseFromString|createContextualFragment|setHTMLUnsafe|parseHTMLUnsafe|eval)\s*\(|\bdocument\.write(?:ln)?\s*\(|\bsrcdoc\s*(?:=(?!=)|:)|\bnew\s+Function\s*\(|\bexec(?:Command)?\(\s*\'insertHTML\'~';
 	$wrong = [];
-	foreach (array_merge(...array_map(fn(string $pattern): array => glob(BUILD_ROOT . '/' . $pattern) ?: [], ['js/*.js', 'charts/*.js', 'qr/*.js'])) as $file) {
+	foreach (array_merge(...array_map(fn(string $pattern): array => glob(BUILD_ROOT . '/' . $pattern) ?: [], ['js/*.js', 'charts/*.js', 'qr/*.js', 'editor/*.js'])) as $file) {
+		$editor = str_contains($file, '/editor/');
 		foreach (explode("\n", (string)file_get_contents($file)) as $index => $line) {
-			if (preg_match($sink, (string)preg_replace('~^\s*//.*|/\*.*?\*/~', '', $line)) === 1) {
-				$wrong[] = substr($file, strlen(BUILD_ROOT) + 1) . ':' . ($index + 1) . '  builds from a string of markup, which Trusted Types refuses';
+			$code = (string)preg_replace('~^\s*//.*|/\*.*?\*/~', '', $line);
+			if (preg_match($sink, $code) === 1 && !($editor && str_contains($code, 'trusted('))) {
+				$wrong[] = substr($file, strlen(BUILD_ROOT) + 1) . ':' . ($index + 1) . ($editor ? '  hands a sink markup outside trusted(), which Trusted Types refuses' : '  builds from a string of markup, which Trusted Types refuses');
 			}
 		}
 	}

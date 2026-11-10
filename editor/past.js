@@ -1,6 +1,7 @@
 // REDZ.UI editor, its history: a step for each pause in typing and each command, with the caret where the change STARTED, and each
 // block's own earlier versions, so one block can go back while the others stay.
 import {caretGet, caretPut} from './caret.js';
+import {trusted} from './clean.js';
 
 const LIMIT = 200;
 const PAUSE = 300;
@@ -8,7 +9,7 @@ const PAUSE = 300;
 /** Each block's markup in a value, by its id. */
 const blocksIn = (html) => {
 	const box = document.createElement('template');
-	box.innerHTML = html;
+	box.innerHTML = trusted(html);
 	return new Map([...box.content.children].filter((one) => one.hasAttribute('data-block')).map((one) => [one.getAttribute('data-block'), one.outerHTML]));
 };
 

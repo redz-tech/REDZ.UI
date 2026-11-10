@@ -1,7 +1,7 @@
 // REDZ.UI editor, the card of a block or a part: its properties, tried on before they are kept, its form, its history, its protection and,
 // for an expert, its HTML. The card never covers what it changes: it stands beside the editor, or as a sheet at the foot of a phone.
 import {say} from './words.js';
-import {escape, clean, safe} from './clean.js';
+import {escape, clean, safe, trusted} from './clean.js';
 import {nodeAt, unmark, drawTop} from './marks.js';
 import {choices, elementOf, readProp, writeProp} from './props.js';
 import {columnAdd, columnDrop, columnsOf, headToggle, rowAdd, rowDrop, rowsOf} from './parts.js';
@@ -89,7 +89,7 @@ export const cardOf = (ed) => {
 			const has = [...node.classList].find((name) => name.startsWith('bi-'));
 			extra += '<div class="editor-icons" role="group" aria-label="' + say('el.icon') + '">' + ICONS.map((name) => '<button type="button" data-editor-icon="' + name + '" aria-label="' + name + '" aria-pressed="' + (has === 'bi-' + name) + '"><i class="bi bi-' + name + '" aria-hidden="true"></i></button>').join('') + '</div>';
 		}
-		body.innerHTML = (list.length + steps.length === 0 && extra === '' ? hint('card.none') : hint('card.try') + steps.join('') + extra + list.map((prop, index) => propRow(prop, index, (one) => readProp(node, one))).join(''));
+		body.innerHTML = trusted((list.length + steps.length === 0 && extra === '' ? hint('card.none') : hint('card.try') + steps.join('') + extra + list.map((prop, index) => propRow(prop, index, (one) => readProp(node, one))).join('')));
 		const again = () => {
 			const now = blockNow();
 			if (now !== null) {
@@ -188,7 +188,7 @@ export const cardOf = (ed) => {
 	const forms = (body, top) => {
 		const now = formNow(top);
 		const list = now === null ? [] : Object.keys(FORMS);
-		body.innerHTML = list.length === 0 ? hint('card.form.none') : hint('card.form') + '<div role="group" aria-label="' + say('tab.form') + '">' + list.map((name) => '<button class="menu-item" type="button" data-form="' + name + '" aria-pressed="' + (now === name) + '"><i class="bi bi-' + FORMS[name].icon + '" aria-hidden="true"></i>' + say('form.' + name) + '</button>').join('') + '</div>';
+		body.innerHTML = trusted(list.length === 0 ? hint('card.form.none') : hint('card.form') + '<div role="group" aria-label="' + say('tab.form') + '">' + list.map((name) => '<button class="menu-item" type="button" data-form="' + name + '" aria-pressed="' + (now === name) + '"><i class="bi bi-' + FORMS[name].icon + '" aria-hidden="true"></i>' + say('form.' + name) + '</button>').join('') + '</div>');
 		for (const one of body.querySelectorAll('[data-form]')) {
 			choose(one, () => tryOn(blockNow(), (fresh) => toForm(fresh, one.dataset.form, ed.doc)), () => {
 				const live = blockNow();
@@ -208,17 +208,17 @@ export const cardOf = (ed) => {
 		const when = (at) => at instanceof Date ? at.toLocaleTimeString(ed.config.lang, {hour: '2-digit', minute: '2-digit'}) : String(at);
 		const words = (html) => {
 			const box = document.createElement('template');
-			box.innerHTML = html;
+			box.innerHTML = trusted(html);
 			return box.content.textContent.trim().slice(0, 100);
 		};
-		body.innerHTML = list.length === 0 ? hint('card.past.none') : hint('card.past') + '<div role="group" aria-label="' + say('tab.past') + '">' + list.map((one, index) => '<button class="menu-item editor-past" type="button" data-version="' + index + '"><span class="text-muted fs-12">' + escape(when(one.at)) + (one.by ? ' · ' + escape(one.by) : '') + '</span><span>' + escape(words(one.html)) + '</span></button>').join('') + '</div>';
+		body.innerHTML = trusted(list.length === 0 ? hint('card.past.none') : hint('card.past') + '<div role="group" aria-label="' + say('tab.past') + '">' + list.map((one, index) => '<button class="menu-item editor-past" type="button" data-version="' + index + '"><span class="text-muted fs-12">' + escape(when(one.at)) + (one.by ? ' · ' + escape(one.by) : '') + '</span><span>' + escape(words(one.html)) + '</span></button>').join('') + '</div>');
 		if (!ed.wordsOpen(top)) {
 			return;
 		}
 		for (const one of body.querySelectorAll('[data-version]')) {
 			choose(one, () => tryOn(blockNow(), (fresh) => {
 				const box = document.createElement('template');
-				box.innerHTML = list[+one.dataset.version].html;
+				box.innerHTML = trusted(clean(list[+one.dataset.version].html));
 				const made = ed.doc.importNode(box.content.firstElementChild, true);
 				fresh.replaceWith(made);
 				return made;
@@ -237,7 +237,7 @@ export const cardOf = (ed) => {
 	const access = (body, top) => {
 		const levels = [['', 'lock.open'], ['form', 'lock.form'], ['all', 'lock.all']];
 		const now = top.getAttribute('data-lock') ?? '';
-		body.innerHTML = hint('card.lock') + levels.map(([value, key]) => '<button class="menu-item editor-past" type="button" data-lock-level="' + value + '" aria-pressed="' + (now === value) + '"><span>' + say(key) + '</span><span class="text-muted fs-12">' + say(key + '.say') + '</span></button>').join('');
+		body.innerHTML = trusted(hint('card.lock') + levels.map(([value, key]) => '<button class="menu-item editor-past" type="button" data-lock-level="' + value + '" aria-pressed="' + (now === value) + '"><span>' + say(key) + '</span><span class="text-muted fs-12">' + say(key + '.say') + '</span></button>').join(''));
 		for (const one of body.querySelectorAll('[data-lock-level]')) {
 			one.onclick = () => {
 				const level = one.dataset.lockLevel;
@@ -259,11 +259,11 @@ export const cardOf = (ed) => {
 	/** The tab of HTML, for an expert. */
 	const html = (body, top) => {
 		const copy = unmark(top.cloneNode(true), false);
-		body.innerHTML = hint('card.html') + '<textarea class="form-control font-monospace fs-12" id="' + ed.id + '-html" rows="10" spellcheck="false" aria-label="' + say('tab.html') + '">' + escape(copy.outerHTML) + '</textarea><div class="hstack gap-8"><button class="btn btn-primary btn-sm" type="button" data-editor-apply>' + say('apply') + '</button><span class="editor-card-note" role="status"></span></div>';
+		body.innerHTML = trusted(hint('card.html') + '<textarea class="form-control font-monospace fs-12" id="' + ed.id + '-html" rows="10" spellcheck="false" aria-label="' + say('tab.html') + '">' + escape(copy.outerHTML) + '</textarea><div class="hstack gap-8"><button class="btn btn-primary btn-sm" type="button" data-editor-apply>' + say('apply') + '</button><span class="editor-card-note" role="status"></span></div>');
 		body.querySelector('[data-editor-apply]').onclick = async () => {
 			const value = body.querySelector('textarea').value;
 			const notes = await ed.checkHTML(value);
-			const parsed = new DOMParser().parseFromString('<!doctype html><body>' + clean(value), 'text/html').body.firstElementChild;
+			const parsed = new DOMParser().parseFromString(trusted('<!doctype html><body>' + clean(value)), 'text/html').body.firstElementChild;
 			if (parsed === null) {
 				return;
 			}
@@ -283,7 +283,7 @@ export const cardOf = (ed) => {
 
 	/** The tab of what else a block can do. */
 	const more = (body, top) => {
-		body.innerHTML = [['copy', 'files', 'more.copy'], ['preview', 'eye', 'block.preview'], ['up', 'arrow-up', 'part.up'], ['down', 'arrow-down', 'part.down'], ['drop', 'trash3', 'part.drop']].map(([act, icon, key]) => '<button class="menu-item" type="button" data-more="' + act + '"><i class="bi bi-' + icon + '" aria-hidden="true"></i>' + say(key) + '</button>').join('') + '<p class="editor-card-hint">' + say('more.keys') + '</p>';
+		body.innerHTML = trusted([['copy', 'files', 'more.copy'], ['preview', 'eye', 'block.preview'], ['up', 'arrow-up', 'part.up'], ['down', 'arrow-down', 'part.down'], ['drop', 'trash3', 'part.drop']].map(([act, icon, key]) => '<button class="menu-item" type="button" data-more="' + act + '"><i class="bi bi-' + icon + '" aria-hidden="true"></i>' + say(key) + '</button>').join('') + '<p class="editor-card-hint">' + say('more.keys') + '</p>');
 		for (const one of body.querySelectorAll('[data-more]')) {
 			one.onclick = () => {
 				const act = one.dataset.more;
@@ -317,7 +317,7 @@ export const cardOf = (ed) => {
 		if (!tabs.includes(open.tab)) {
 			open.tab = tabs[0];
 		}
-		card.innerHTML = '<div class="editor-card-head"><strong>' + say('el.' + (entry?.id ?? 'block')) + '</strong>' + (top.hasAttribute('data-lock') ? '<span class="badge badge-subtle-warning badge-sm">' + say('lock.' + top.getAttribute('data-lock')) + '</span>' : '') + '<button class="btn-close" type="button" aria-label="' + escape(say('close')) + '"></button></div>' + (tabs.length > 1 ? '<div class="editor-card-tabs" role="group" aria-label="' + say('card') + '">' + tabs.map((key) => '<button type="button" data-tab="' + key + '" aria-pressed="' + (key === open.tab) + '">' + say('tab.' + key) + '</button>').join('') + '</div>' : '') + '<div class="editor-card-body"></div>';
+		card.innerHTML = trusted('<div class="editor-card-head"><strong>' + say('el.' + (entry?.id ?? 'block')) + '</strong>' + (top.hasAttribute('data-lock') ? '<span class="badge badge-subtle-warning badge-sm">' + say('lock.' + top.getAttribute('data-lock')) + '</span>' : '') + '<button class="btn-close" type="button" aria-label="' + escape(say('close')) + '"></button></div>' + (tabs.length > 1 ? '<div class="editor-card-tabs" role="group" aria-label="' + say('card') + '">' + tabs.map((key) => '<button type="button" data-tab="' + key + '" aria-pressed="' + (key === open.tab) + '">' + say('tab.' + key) + '</button>').join('') + '</div>' : '') + '<div class="editor-card-body"></div>');
 		card.querySelector('.btn-close').onclick = () => {
 			ed.closeCard();
 			ed.focus();

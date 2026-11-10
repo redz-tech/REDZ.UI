@@ -176,7 +176,8 @@ right. A price or a date is a live fact, `<data value>`, written once. The AI is
 page: a suggestion is drawn word by word and taken or left, what it writes passes through the catalog, and a translation
 stands beside its source, row by row, so only the block that changed goes stale. Rights only hide controls: the server decides on every save. The text lives in a frame whose own
 Content-Security-Policy runs no script, and every value is parsed inert and cleaned, so nothing in a stored body or on
-the clipboard runs. Its words are the island's `editor.*` texts, which the passport's `editor.texts` lists apart from the
+the clipboard runs. On a page that requires Trusted Types it makes one policy, `redz-editor`, which the page names in its
+`trusted-types` directive; no other package needs one. Its words are the island's `editor.*` texts, which the passport's `editor.texts` lists apart from the
 library's; its soft ceilings are 70 KB of script and 8 KB of styles, gzipped.
 
 ## Charts, calendars, the media library and QR codes

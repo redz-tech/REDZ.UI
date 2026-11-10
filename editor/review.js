@@ -5,6 +5,7 @@ import {say, sayCount} from './words.js';
 import {changes} from './diff.js';
 import {FIELDS} from './marks.js';
 import {charsOf, putWords, rangeOf, slotsOf, tidy} from './plain.js';
+import {trusted} from './clean.js';
 
 /** Writes new words over a slot, changing only the stretches that differ, so the marks around them stay. */
 export const rewriteSlot = (slot, after, lang, factNode) => {
@@ -25,7 +26,7 @@ export const reviewOf = (ed) => {
 	bar.setAttribute('role', 'group');
 	bar.setAttribute('aria-label', say('review'));
 	const tool = (act, icon, key) => '<button class="btn btn-text btn-xs btn-icon" type="button" data-review="' + act + '" aria-label="' + say(key) + '" title="' + say(key) + '"><i class="bi bi-' + icon + '" aria-hidden="true"></i></button>';
-	bar.innerHTML = '<i class="bi bi-stars" aria-hidden="true"></i><span class="editor-review-say" role="status"></span><span class="hstack gap-4">' + tool('back', 'chevron-up', 'review.back') + tool('on', 'chevron-down', 'review.on') + '<button class="btn btn-xs btn-primary" type="button" data-review="yes"><i class="bi bi-check-lg" aria-hidden="true"></i>' + say('review.yes') + '</button><button class="btn btn-xs" type="button" data-review="no"><i class="bi bi-x-lg" aria-hidden="true"></i>' + say('review.no') + '</button></span><span class="hstack gap-4"><button class="btn btn-text btn-xs" type="button" data-review="all">' + say('review.all') + '</button><button class="btn btn-text btn-xs" type="button" data-review="none">' + say('review.none') + '</button><button class="btn btn-text btn-xs" type="button" data-review="raw">' + say('review.raw') + '</button></span>';
+	bar.innerHTML = trusted('<i class="bi bi-stars" aria-hidden="true"></i><span class="editor-review-say" role="status"></span><span class="hstack gap-4">' + tool('back', 'chevron-up', 'review.back') + tool('on', 'chevron-down', 'review.on') + '<button class="btn btn-xs btn-primary" type="button" data-review="yes"><i class="bi bi-check-lg" aria-hidden="true"></i>' + say('review.yes') + '</button><button class="btn btn-xs" type="button" data-review="no"><i class="bi bi-x-lg" aria-hidden="true"></i>' + say('review.no') + '</button></span><span class="hstack gap-4"><button class="btn btn-text btn-xs" type="button" data-review="all">' + say('review.all') + '</button><button class="btn btn-text btn-xs" type="button" data-review="none">' + say('review.none') + '</button><button class="btn btn-text btn-xs" type="button" data-review="raw">' + say('review.raw') + '</button></span>');
 	ed.box.insertBefore(bar, ed.footBox);
 	const told = bar.querySelector('.editor-review-say');
 	const raw = ed.panel('editor-raw', 'review.raw');
@@ -257,7 +258,7 @@ export const reviewOf = (ed) => {
 		} else if (act === 'all' || act === 'none') {
 			decide(open(), act === 'all');
 		} else if (act === 'raw') {
-			raw.body.innerHTML = '<pre class="editor-raw-words" tabindex="0"></pre>';
+			raw.body.innerHTML = trusted('<pre class="editor-raw-words" tabindex="0"></pre>');
 			raw.body.firstElementChild.textContent = JSON.stringify(now.answer, null, 2);
 			raw.open();
 		}

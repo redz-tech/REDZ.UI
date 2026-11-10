@@ -1,6 +1,7 @@
 // REDZ.UI editor, the lens: the width, the theme, the site and the language of the page under the text, changed while it stays editable. The frame
 // is a real page, so its media queries answer to its width and the site's own stylesheets draw it.
 import {say} from './words.js';
+import {trusted} from './clean.js';
 
 const WIDTHS = [['full', '', 'laptop'], ['tablet', '48rem', 'tablet'], ['phone', '24.375rem', 'phone']];
 const THEMES = [['auto', 'circle-half'], ['light', 'sun'], ['dark', 'moon-stars']];
@@ -16,7 +17,7 @@ export const lensOf = (ed) => {
 		const one = Object.assign(document.createElement('div'), {className: 'editor-choice'});
 		one.setAttribute('role', 'group');
 		one.setAttribute('aria-label', say(key));
-		one.innerHTML = items.map(([value, words, glyph], index) => '<button type="button" data-value="' + value + '" aria-pressed="' + (index === 0) + '"' + (glyph === undefined ? '>' + words : ' aria-label="' + words + '" title="' + words + '"><i class="bi bi-' + glyph + '" aria-hidden="true"></i>') + '</button>').join('');
+		one.innerHTML = trusted(items.map(([value, words, glyph], index) => '<button type="button" data-value="' + value + '" aria-pressed="' + (index === 0) + '"' + (glyph === undefined ? '>' + words : ' aria-label="' + words + '" title="' + words + '"><i class="bi bi-' + glyph + '" aria-hidden="true"></i>') + '</button>').join(''));
 		const press = (button) => {
 			for (const each of one.querySelectorAll('button')) {
 				each.setAttribute('aria-pressed', String(each === button));
@@ -39,7 +40,7 @@ export const lensOf = (ed) => {
 
 	const toggle = (key, glyph, act) => {
 		const one = Object.assign(document.createElement('div'), {className: 'editor-choice'});
-		one.innerHTML = '<button type="button" aria-pressed="false" data-editor-lens="' + key + '" aria-label="' + say(key) + '" title="' + say(key) + '"><i class="bi bi-' + glyph + '" aria-hidden="true"></i></button>';
+		one.innerHTML = trusted('<button type="button" aria-pressed="false" data-editor-lens="' + key + '" aria-label="' + say(key) + '" title="' + say(key) + '"><i class="bi bi-' + glyph + '" aria-hidden="true"></i></button>');
 		one.firstElementChild.addEventListener('click', act);
 		strip.append(one);
 		return one.firstElementChild;

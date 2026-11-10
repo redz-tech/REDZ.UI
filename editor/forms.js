@@ -1,5 +1,7 @@
 // REDZ.UI editor, the forms of a list: the same words as bullets, numbers, a list group, cards, an accordion, steps or a table. Each form
 // reads its items and writes them, so turning a block into another form never touches a word.
+import {trusted} from './clean.js';
+
 const HEADING = /^h[1-6]$/i;
 
 export const FORMS = {bullets: {icon: 'list-ul'}, numbers: {icon: 'list-ol'}, group: {icon: 'list-task'}, cards: {icon: 'card-text'}, accordion: {icon: 'chevron-bar-expand'}, steps: {icon: 'signpost-split'}, table: {icon: 'table'}};
@@ -70,7 +72,7 @@ export const toForm = (top, name, doc) => {
 		return top;
 	}
 	const box = doc.createElement('template');
-	box.innerHTML = writers[name](readers[now](top));
+	box.innerHTML = trusted(writers[name](readers[now](top)));
 	const made = box.content.firstElementChild;
 	made.setAttribute('data-block', top.getAttribute('data-block'));
 	if (top.hasAttribute('data-lock')) {

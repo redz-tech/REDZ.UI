@@ -2,7 +2,7 @@
 // answers plain words or flat blocks; nothing lands without the review, a refusal is said as what it is, and an answer that comes back after a person
 // changed the block is left out, because the AI never overwrites what someone just wrote. It acts with the person's rights: a closed block is not sent.
 import {say} from './words.js';
-import {escape} from './clean.js';
+import {escape, trusted} from './clean.js';
 import {blockId} from './marks.js';
 import {elementOf} from './props.js';
 import {plainOf, slotsOf, tokensIn, wordsHash} from './plain.js';
@@ -15,7 +15,7 @@ export const aiOf = (ed) => {
 	const running = new Set();
 	const block = (id) => ed.doc.querySelector('[data-block="' + CSS.escape(id) + '"]');
 	const state = Object.assign(document.createElement('span'), {className: 'editor-working', hidden: true});
-	state.innerHTML = '<span class="spinner-border" aria-hidden="true"></span><span role="status"></span><button class="btn btn-text btn-xs" type="button">' + say('ai.stop') + '</button>';
+	state.innerHTML = trusted('<span class="spinner-border" aria-hidden="true"></span><span role="status"></span><button class="btn btn-text btn-xs" type="button">' + say('ai.stop') + '</button>');
 	ed.foot.prepend(state);
 	state.querySelector('button').onclick = () => {
 		for (const stop of running) {
@@ -183,7 +183,7 @@ export const aiOf = (ed) => {
 	ed.aiBuild = () => {
 		ed.aiPaint();
 		list.replaceChildren(...ed.aiCommands().map((one) => {
-			const item = Object.assign(document.createElement('button'), {type: 'button', className: 'menu-item', innerHTML: '<i class="bi bi-' + one.icon + '" aria-hidden="true"></i>' + escape(one.label)});
+			const item = Object.assign(document.createElement('button'), {type: 'button', className: 'menu-item', innerHTML: trusted('<i class="bi bi-' + one.icon + '" aria-hidden="true"></i>' + escape(one.label))});
 			item.setAttribute('role', 'menuitem');
 			item.addEventListener('click', () => {
 				list.hidePopover();

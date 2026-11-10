@@ -1,6 +1,13 @@
-// REDZ.UI editor, what comes in: escaping, the addresses that may stay, and the cleaner every value passes through.
+// REDZ.UI editor, what comes in: escaping, the addresses that may stay, the cleaner every value passes through, and the
+// editor's one Trusted Types policy, redz-editor, made once as the package loads: a page that requires Trusted Types names
+// it in its trusted-types directive. Markup reaches it only as the editor's own panels, a value through the cleaner, or
+// raw markup parsed inert, by DOMParser or a template, to be cleaned or read.
+const POLICY = globalThis.trustedTypes?.createPolicy('redz-editor', {createHTML: (markup) => markup});
 const DROP = new Set(['SCRIPT', 'STYLE', 'LINK', 'META', 'BASE', 'OBJECT', 'EMBED', 'NOSCRIPT', 'TEMPLATE', 'FRAME', 'FRAMESET', 'APPLET']);
 const URLS = new Set(['href', 'src', 'action', 'poster', 'cite', 'data', 'xlink:href', 'background']);
+
+/** Markup as a sink takes it: TrustedHTML where the browser has Trusted Types, the string itself elsewhere. */
+export const trusted = (markup) => (POLICY === undefined ? markup : POLICY.createHTML(markup));
 
 /** Escapes text for an attribute or an element's words. */
 export const escape = (value) => String(value).replace(/[&<>"']/g, (c) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'})[c]);
@@ -10,7 +17,7 @@ export const safe = (value) => !/^\s*[a-z][a-z0-9+.-]*:/i.test(value) || /^\s*(h
 
 /** The HTML with nothing that runs or reaches away. */
 export const clean = (html) => {
-	const doc = new DOMParser().parseFromString('<!doctype html><body>' + html, 'text/html');
+	const doc = new DOMParser().parseFromString(trusted('<!doctype html><body>' + html), 'text/html');
 	const walk = (node) => {
 		for (const child of [...node.childNodes]) {
 			if (child.nodeType === Node.COMMENT_NODE) {

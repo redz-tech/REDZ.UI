@@ -5,7 +5,7 @@
 // tools/catalog.json, so a person without the right never sees HTML. A block keeps a stable id, data-block, in the value with options.ids.
 // options.rights says what the person may do, and only the server's check on save makes that true. Every word comes from the page's texts.
 import {say} from './words.js';
-import {clean, escape, safe} from './clean.js';
+import {clean, escape, safe, trusted} from './clean.js';
 import {drawTop, FIELDS, isInline, isProse, blockId, repeats, unmark} from './marks.js';
 import {before, caretPut, caretTo, fieldAt, guard, topAt} from './caret.js';
 import {pastOf} from './past.js';
@@ -163,7 +163,7 @@ export const editor = (host, options = {}) => {
 	ed.fill = (html) => {
 		const doc = ed.doc;
 		ed.calm();
-		const holder = new DOMParser().parseFromString('<!doctype html><body>' + clean(html), 'text/html').body;
+		const holder = new DOMParser().parseFromString(trusted('<!doctype html><body>' + clean(html)), 'text/html').body;
 		doc.body.replaceChildren();
 		let run = null;
 		for (const node of [...holder.childNodes]) {
@@ -451,7 +451,7 @@ export const editor = (host, options = {}) => {
 	/** Puts cleaned markup in after a top element, or in the place of an empty paragraph, nothing recorded yet. */
 	ed.placeBlocks = (html, near) => {
 		const doc = ed.doc;
-		const holder = new DOMParser().parseFromString('<!doctype html><body>' + clean(html), 'text/html').body;
+		const holder = new DOMParser().parseFromString(trusted('<!doctype html><body>' + clean(html)), 'text/html').body;
 		const tops = [...holder.children].map((node) => {
 			const top = doc.importNode(node, true);
 			return drawTop(top, true);
@@ -547,7 +547,7 @@ export const editor = (host, options = {}) => {
 		const dialog = Object.assign(document.createElement('dialog'), {className: 'dialog'});
 		const titled = id + '-dialog-' + ++made;
 		dialog.setAttribute('aria-labelledby', titled);
-		dialog.innerHTML = '<form method="dialog" class="vstack"><div class="dialog-header"><h2 class="dialog-title" id="' + titled + '">' + escape(title) + '</h2></div><div class="dialog-body vstack gap-12">' + fields + '</div><div class="dialog-footer"><button class="btn" type="submit" value="cancel" formnovalidate>' + escape(say('cancel')) + '</button><button class="btn btn-primary" type="submit" value="ok">' + escape(say('ok')) + '</button></div></form>';
+		dialog.innerHTML = trusted('<form method="dialog" class="vstack"><div class="dialog-header"><h2 class="dialog-title" id="' + titled + '">' + escape(title) + '</h2></div><div class="dialog-body vstack gap-12">' + fields + '</div><div class="dialog-footer"><button class="btn" type="submit" value="cancel" formnovalidate>' + escape(say('cancel')) + '</button><button class="btn btn-primary" type="submit" value="ok">' + escape(say('ok')) + '</button></div></form>');
 		dialog.addEventListener('close', () => {
 			const form = dialog.querySelector('form');
 			answer(dialog.returnValue === 'ok' ? Object.fromEntries(new FormData(form)) : null);
@@ -611,7 +611,7 @@ export const editor = (host, options = {}) => {
 			insert: (spec) => {
 				const img = '<img src="' + escape(spec.src) + '" alt="' + escape(spec.alt ?? '') + '"' + (spec.width ? ' width="' + escape(spec.width) + '"' : '') + (spec.height ? ' height="' + escape(spec.height) + '"' : '') + (spec.srcset ? ' srcset="' + escape(spec.srcset) + '"' : '') + (spec.sizes ? ' sizes="' + escape(spec.sizes) + '"' : '') + ' loading="lazy" decoding="async">';
 				const html = Array.isArray(spec.sources) && spec.sources.length > 0 ? '<picture>' + spec.sources.map((one) => '<source' + (one.media ? ' media="' + escape(one.media) + '"' : '') + (one.type ? ' type="' + escape(one.type) + '"' : '') + ' srcset="' + escape(one.srcset) + '">').join('') + img + '</picture>' : img;
-				ed.exec('insertHTML', clean(html));
+				ed.exec('insertHTML', trusted(clean(html)));
 			},
 		});
 	};
@@ -619,7 +619,7 @@ export const editor = (host, options = {}) => {
 	/** Names what an expert wrote that REDZ.UI does not know, from the passport. */
 	ed.checkHTML = async (value) => {
 		const notes = [];
-		const parsed = new DOMParser().parseFromString('<!doctype html><body>' + value, 'text/html').body;
+		const parsed = new DOMParser().parseFromString(trusted('<!doctype html><body>' + value), 'text/html').body;
 		const removed = new Set();
 		for (const one of parsed.querySelectorAll('script, style, object, embed, link, meta, base')) {
 			removed.add(one.tagName.toLowerCase());
@@ -654,10 +654,10 @@ export const editor = (host, options = {}) => {
 		const texts = document.getElementById('redz-ui-text')?.textContent || '{}';
 		const hosts = [...new Set([LIBRARY.js, ...config.scripts].map((src) => new URL(src, document.baseURI).origin))].join(' ');
 		const head = '<meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="script-src ' + escape(hosts) + '; object-src \'none\'; base-uri \'none\'; form-action \'none\'">' + [...frameSheets(), ...sheets].map((href) => '<link rel="stylesheet" href="' + escape(href) + '">').join('') + '<script type="application/json" id="redz-ui-text">' + texts.replace(/</g, '\\u003c') + '</script><script type="module" src="' + escape(LIBRARY.js) + '"></script>' + config.scripts.map((src) => '<script type="module" src="' + escape(src) + '"></script>').join('');
-		dialog.innerHTML = '<div class="dialog-header"><h2 class="dialog-title" id="' + titled + '">' + escape(say('block.preview')) + '</h2><button class="btn-close" type="button" commandfor="' + titled + '-dialog" command="close" aria-label="' + escape(say('close')) + '"></button></div><div class="dialog-body"><iframe class="editor-preview" title="' + escape(say('block.preview')) + '"></iframe></div>';
+		dialog.innerHTML = trusted('<div class="dialog-header"><h2 class="dialog-title" id="' + titled + '">' + escape(say('block.preview')) + '</h2><button class="btn-close" type="button" commandfor="' + titled + '-dialog" command="close" aria-label="' + escape(say('close')) + '"></button></div><div class="dialog-body"><iframe class="editor-preview" title="' + escape(say('block.preview')) + '"></iframe></div>');
 		dialog.id = titled + '-dialog';
 		const theme = document.documentElement.dataset.theme;
-		dialog.querySelector('iframe').srcdoc = '<!doctype html><html lang="' + escape(config.lang) + '" dir="' + escape(config.dir) + '"' + (theme === undefined ? '' : ' data-theme="' + escape(theme) + '"') + '><head>' + head + '</head><body class="region p-16">' + clean(unmark(top.cloneNode(true), false).outerHTML) + '</body></html>';
+		dialog.querySelector('iframe').srcdoc = trusted('<!doctype html><html lang="' + escape(config.lang) + '" dir="' + escape(config.dir) + '"' + (theme === undefined ? '' : ' data-theme="' + escape(theme) + '"') + '><head>' + head + '</head><body class="region p-16">' + clean(unmark(top.cloneNode(true), false).outerHTML) + '</body></html>');
 		dialog.addEventListener('close', () => dialog.remove());
 		document.body.append(dialog);
 		dialog.showModal();
@@ -810,7 +810,7 @@ export const editor = (host, options = {}) => {
 
 	const buildBubble = () => {
 		const panel = ed.layer.bubble;
-		panel.innerHTML = [['bold', 'type-bold'], ['italic', 'type-italic'], ['underline', 'type-underline'], ['link', 'link-45deg'], ['clear', 'eraser']].map(([key, icon]) => '<button class="btn btn-text btn-sm btn-icon" type="button" data-editor-bubble="' + key + '" aria-label="' + say(key) + '" title="' + say(key) + '"><i class="bi bi-' + icon + '" aria-hidden="true"></i></button>').join('') + (typeof config.ai === 'function' ? '<button class="btn btn-text btn-sm btn-icon" type="button" data-editor-bubble="ai" commandfor="' + ed.aiMenuId + '" command="toggle-popover" aria-haspopup="menu" aria-label="' + say('ai') + '" title="' + say('ai') + '"><i class="bi bi-stars" aria-hidden="true"></i></button>' : '');
+		panel.innerHTML = trusted([['bold', 'type-bold'], ['italic', 'type-italic'], ['underline', 'type-underline'], ['link', 'link-45deg'], ['clear', 'eraser']].map(([key, icon]) => '<button class="btn btn-text btn-sm btn-icon" type="button" data-editor-bubble="' + key + '" aria-label="' + say(key) + '" title="' + say(key) + '"><i class="bi bi-' + icon + '" aria-hidden="true"></i></button>').join('') + (typeof config.ai === 'function' ? '<button class="btn btn-text btn-sm btn-icon" type="button" data-editor-bubble="ai" commandfor="' + ed.aiMenuId + '" command="toggle-popover" aria-haspopup="menu" aria-label="' + say('ai') + '" title="' + say('ai') + '"><i class="bi bi-stars" aria-hidden="true"></i></button>' : ''));
 		panel.addEventListener('pointerdown', (event) => event.preventDefault());
 		panel.addEventListener('click', (event) => {
 			const act = event.target.closest('[data-editor-bubble]')?.dataset.editorBubble;
@@ -1046,7 +1046,7 @@ export const editor = (host, options = {}) => {
 		}
 	};
 	ed.on(frame, 'load', ready, {once: true});
-	frame.srcdoc = ed.frameDocument(config.lang, config.dir);
+	frame.srcdoc = trusted(ed.frameDocument(config.lang, config.dir));
 
 	return {
 		getHTML: () => (ed.doc === null ? clean(config.value ?? '') : ed.value()),

@@ -1,7 +1,7 @@
 // REDZ.UI editor, what is pasted: Word, Google Docs, a spreadsheet, Markdown from a chat, plain words. Each comes in as REDZ.UI's own markup and
 // nothing else: a table stays a table, a heading a heading, every style and font is left behind.
 import {say} from './words.js';
-import {escape, safe} from './clean.js';
+import {escape, safe, trusted} from './clean.js';
 import {fieldAt, topAt} from './caret.js';
 
 const KEEP = {B: 'strong', STRONG: 'strong', I: 'em', EM: 'em', U: 'u', CODE: 'code'};
@@ -43,7 +43,7 @@ const tableOf = (rows) => {
 
 /** REDZ.UI's markup of pasted HTML. */
 const fromHTML = (html) => {
-	const body = new DOMParser().parseFromString(html, 'text/html').body;
+	const body = new DOMParser().parseFromString(trusted(html), 'text/html').body;
 	const out = [];
 	let list = null;
 	const end = () => {
@@ -159,7 +159,7 @@ export const pasteOf = (ed) => {
 			return;
 		}
 		if (fieldAt(doc) !== null) {
-			doc.execCommand('insertText', false, text || new DOMParser().parseFromString(html, 'text/html').body.textContent);
+			doc.execCommand('insertText', false, text || new DOMParser().parseFromString(trusted(html), 'text/html').body.textContent);
 			ed.commit();
 			return;
 		}

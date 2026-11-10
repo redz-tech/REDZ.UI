@@ -1,7 +1,7 @@
 // REDZ.UI editor, the keyboard: marks typed into the text, the / menu of an empty line, one list of commands for the panel, the keys and the
 // palette. Nothing here touches the text while a character is composed: Thai and Burmese keyboards read the words around the caret.
 import {say} from './words.js';
-import {escape} from './clean.js';
+import {escape, trusted} from './clean.js';
 import {before, caretTo, fieldAt, topAt} from './caret.js';
 
 const LINES = {'## ': 'h2', '### ': 'h3', '#### ': 'h4', '> ': 'blockquote', '- ': 'ul', '* ': 'ul', '1. ': 'ol'};
@@ -28,7 +28,7 @@ export const typingOf = (ed) => {
 			closePick();
 			return;
 		}
-		menu.innerHTML = items.map((one, index) => '<button class="menu-item" type="button" role="option" aria-selected="' + (index === 0) + '" data-index="' + index + '"><i class="bi bi-' + one.icon + '" aria-hidden="true"></i>' + escape(one.label) + '</button>').join('');
+		menu.innerHTML = trusted(items.map((one, index) => '<button class="menu-item" type="button" role="option" aria-selected="' + (index === 0) + '" data-index="' + index + '"><i class="bi bi-' + one.icon + '" aria-hidden="true"></i>' + escape(one.label) + '</button>').join(''));
 		picking = {items, take, at: 0};
 		for (const one of menu.querySelectorAll('[data-index]')) {
 			one.onpointerdown = (event) => {
@@ -131,7 +131,7 @@ export const typingOf = (ed) => {
 					range.setEnd(node, selection.anchorOffset);
 					selection.removeAllRanges();
 					selection.addRange(range);
-					doc.execCommand('insertHTML', false, '<' + tag + '>' + escape(inner) + '</' + tag + '>​');
+					doc.execCommand('insertHTML', false, trusted('<' + tag + '>' + escape(inner) + '</' + tag + '>​'));
 					return;
 				}
 			}
@@ -177,7 +177,7 @@ export const typingOf = (ed) => {
 	const palette = Object.assign(document.createElement('dialog'), {className: 'dialog editor-palette'});
 	palette.setAttribute('closedby', 'any');
 	palette.setAttribute('aria-label', say('commands'));
-	palette.innerHTML = '<input class="form-control" id="' + ed.id + '-commands" type="search" autocomplete="off" aria-label="' + say('commands') + '" placeholder="' + say('commands.find') + '"><div class="editor-palette-list" role="listbox" aria-label="' + say('commands') + '"></div>';
+	palette.innerHTML = trusted('<input class="form-control" id="' + ed.id + '-commands" type="search" autocomplete="off" aria-label="' + say('commands') + '" placeholder="' + say('commands.find') + '"><div class="editor-palette-list" role="listbox" aria-label="' + say('commands') + '"></div>');
 	ed.box.append(palette);
 	const find = palette.querySelector('input');
 	const list = palette.querySelector('[role="listbox"]');
@@ -187,7 +187,7 @@ export const typingOf = (ed) => {
 		const query = find.value.trim().toLowerCase();
 		shown = ed.commands().filter((one) => one.label.toLowerCase().includes(query));
 		at = Math.min(at, Math.max(0, shown.length - 1));
-		list.innerHTML = shown.map((one, index) => '<button class="menu-item" type="button" role="option" aria-selected="' + (index === at) + '" data-index="' + index + '"><i class="bi bi-' + one.icon + '" aria-hidden="true"></i><span class="flex-fill">' + escape(one.label) + '</span>' + (one.keys ? '<kbd>' + escape(one.keys) + '</kbd>' : '') + '</button>').join('');
+		list.innerHTML = trusted(shown.map((one, index) => '<button class="menu-item" type="button" role="option" aria-selected="' + (index === at) + '" data-index="' + index + '"><i class="bi bi-' + one.icon + '" aria-hidden="true"></i><span class="flex-fill">' + escape(one.label) + '</span>' + (one.keys ? '<kbd>' + escape(one.keys) + '</kbd>' : '') + '</button>').join(''));
 		list.querySelector('[aria-selected="true"]')?.scrollIntoView({block: 'nearest'});
 	};
 	const run = (one) => {

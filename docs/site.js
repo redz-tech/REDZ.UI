@@ -400,7 +400,13 @@
 		}
 		event.preventDefault();
 		event.detail.respondWith(new Promise((done) => setTimeout(() => {
-			event.target.innerHTML = '<li class="tree-item"><div class="tree-row"><a href="#tree-pages">Water Festival 2025</a></div></li><li class="tree-item"><div class="tree-row"><a href="#tree-pages">Lantern Festival 2025</a></div></li>';
+			event.target.replaceChildren(...['Water Festival 2025', 'Lantern Festival 2025'].map((words) => {
+				const item = Object.assign(document.createElement('li'), {className: 'tree-item'});
+				const row = Object.assign(document.createElement('div'), {className: 'tree-row'});
+				row.append(Object.assign(document.createElement('a'), {href: '#tree-pages', textContent: words}));
+				item.append(row);
+				return item;
+			}));
 			done();
 		}, 400)));
 	});
