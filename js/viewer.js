@@ -14,7 +14,9 @@ let at = 0;
 const button = (name, icon, words) => {
 	const made = Object.assign(document.createElement('button'), {className: 'btn btn-icon viewer-' + name, type: 'button'});
 	made.setAttribute('aria-label', words);
-	made.innerHTML = '<i class="bi bi-' + icon + '" aria-hidden="true"></i>';
+	const glyph = Object.assign(document.createElement('i'), {className: 'bi bi-' + icon});
+	glyph.setAttribute('aria-hidden', 'true');
+	made.append(glyph);
 	return made;
 };
 

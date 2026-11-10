@@ -12,6 +12,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   no role when axe leaves it as incomplete.
 - The passport's `classes` lists `nav-overflow-keep`, a class a page writes and only a script reads.
 - The build refuses an endless animation that is not slowed for people who ask for less motion.
+- The build refuses markup built from a string in the main bundle's and the packages' scripts, which a page that
+  requires Trusted Types refuses.
 
 ### Changed
 - Busy indicators run slower for people who ask for less motion, and none of them stops. A bar without a value and
@@ -28,6 +30,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - `flex-1`, which no stylesheet has, is `flex-grow-1` in the examples of the command line, the list group and the
   progress bar, so the row's end stays at its end.
 - The list demo no longer carries `table-hover`, which has done nothing since every table lights its row.
+- The image viewer opens on a page that sends `require-trusted-types-for 'script'`: it built its buttons' icons from a
+  string, which threw, and its link did nothing.
 
 ## 0.22.0 - 2026-11-09
 

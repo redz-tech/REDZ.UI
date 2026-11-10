@@ -576,6 +576,25 @@ function BUILD__MediaBlocks(string $css, string $query): array
 }
 
 /**
+ * The main bundle's and the packages' scripts build their elements by the DOM, never from a string of markup: a page
+ * that sends require-trusted-types-for 'script' refuses a string at every such sink. Answers what is wrong.
+ * @return list<string>
+ */
+function BUILD__SinksCheck(): array
+{
+	$sink = '~\b(?:inner|outer)HTML\s*(?:\+?=(?!=)|:)|\b(?:insertAdjacentHTML|parseFromString|createContextualFragment|setHTMLUnsafe|parseHTMLUnsafe|eval)\s*\(|\bdocument\.write(?:ln)?\s*\(|\bsrcdoc\s*(?:=(?!=)|:)|\bnew\s+Function\s*\(~';
+	$wrong = [];
+	foreach (array_merge(...array_map(fn(string $pattern): array => glob(BUILD_ROOT . '/' . $pattern) ?: [], ['js/*.js', 'charts/*.js', 'qr/*.js'])) as $file) {
+		foreach (explode("\n", (string)file_get_contents($file)) as $index => $line) {
+			if (preg_match($sink, (string)preg_replace('~^\s*//.*|/\*.*?\*/~', '', $line)) === 1) {
+				$wrong[] = substr($file, strlen(BUILD_ROOT) + 1) . ':' . ($index + 1) . '  builds from a string of markup, which Trusted Types refuses';
+			}
+		}
+	}
+	return $wrong;
+}
+
+/**
  * An endless animation outside a no-preference block runs for a person who asks for less motion, so that it says work
  * goes on: each one is slowed in a reduce block of its own stylesheet. Answers what is wrong.
  * @return list<string>
@@ -770,7 +789,7 @@ function BUILD__Main(array $argv): int
 {
 	$check = in_array('--check', $argv, true);
 	$vocab = BUILD__Vocabulary();
-	$wrong = [...BUILD__TextsCheck($vocab), ...BUILD__CommandsCheck(), ...BUILD__SamplesCheck(), ...BUILD__MotionCheck(), ...BUILD__CatalogCheck(), ...BUILD__ToolsCalls(), ...array_map(fn(string $failure): string => 'tools/min.php  ' . $failure, MIN__SelfTest())];
+	$wrong = [...BUILD__TextsCheck($vocab), ...BUILD__CommandsCheck(), ...BUILD__SamplesCheck(), ...BUILD__MotionCheck(), ...BUILD__SinksCheck(), ...BUILD__CatalogCheck(), ...BUILD__ToolsCalls(), ...array_map(fn(string $failure): string => 'tools/min.php  ' . $failure, MIN__SelfTest())];
 	if ($wrong !== []) {
 		fwrite(STDERR, implode("\n", $wrong) . "\n");
 		return 1;
