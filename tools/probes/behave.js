@@ -4684,6 +4684,80 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a folded rail: every group open ' + spread + ', a heading ' + heading + ', the line ' + line.borderTopWidth + ' ' + line.borderTopStyle + ', closed again unfolded ' + back + ', told ' + say(told));
 			}
 		}]},
+		pageChange: {target: '#docs-nav', steps: [async (out) => {
+			// Pages that change, in a frame of a wide window's size: the probes' router makes an answer late and writes
+			// data-transition, data-scroll and a trace of pagereveal as the query asks.
+			const frame = Object.assign(document.createElement('iframe'), {title: 'Pages that change'});
+			frame.style.cssText = 'position: fixed; inset: 0 auto auto 0; z-index: 2147483647; inline-size: 1100px; block-size: 700px; border: 0; background: Canvas';
+			// A page has come once the frame shows it whole: a frame left while it loads cuts its requests short.
+			const loaded = async (url) => {
+				await until(() => frame.contentWindow?.location.href.endsWith(url) === true && frame.contentDocument?.readyState === 'complete', 8000);
+				await wait(200);
+				return frame.contentDocument;
+			};
+			const open = (url) => {
+				frame.src = url;
+				return loaded(url);
+			};
+			const follow = (doc, to) => {
+				const link = doc.querySelector('#docs-nav a.app-link[href="busy.html"]');
+				link.href = to;
+				link.click();
+				return loaded(to);
+			};
+			document.body.append(frame);
+			const crossing = 'CSSViewTransitionRule' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+			const named = CSS.supports('view-transition-name', 'a');
+			for (const mode of ['fade', 'instant', 'none']) {
+				await follow(await open('app.html?probe-transition=' + mode), 'busy.html?probe-trace=1&probe-transition=' + mode);
+				await wait(400);
+				const seen = frame.contentWindow.REDZ_PROBE_REVEAL ?? null;
+				const header = frame.contentWindow.getComputedStyle(frame.contentDocument.querySelector('.app-header')).viewTransitionName;
+				const shown = mode !== 'none' && crossing;
+				// An engine without cross-document transitions brings no pagereveal, so no trace.
+				const fine = (shown ? seen?.ready === 'ran' && (mode === 'fade' ? seen.root > 0 : seen.root === 0) : seen === null || !seen.transition) && (!named || header === 'redz-app-header');
+				if (!fine) {
+					out.push('data-transition="' + mode + '": the next page brought ' + say(seen) + ', its header named ' + say(header) + ', for a transition ' + shown + (shown ? (mode === 'fade' ? ' that fades the page' : ' that leaves the page still') : ''));
+				}
+			}
+			const doc = await open('app.html?probe-transition=busy');
+			const view = frame.contentWindow;
+			view.scrollTo(0, 2500);
+			const main = doc.querySelector('.app-main');
+			const came = follow(doc, 'busy.html?probe-wait=1600&probe-transition=busy');
+			await wait(700);
+			const art = main.firstElementChild;
+			const box = art?.getBoundingClientRect();
+			const made = art?.matches('.busy-art') === true;
+			const held = [main.getAttribute('aria-busy'), main.inert, made && art.querySelector('.spinner-border') !== null, made ? view.getComputedStyle(art).visibility : ''];
+			const middle = box === undefined ? -1 : Math.round(box.top + box.height / 2);
+			await came;
+			await wait(200);
+			const after = frame.contentDocument.querySelector('.app-main').getAttribute('aria-busy');
+			const veiled = 'navigation' in window;
+			if (say(held) !== say(veiled ? ['true', true, true, 'visible'] : [null, false, false, '']) || (veiled && !near(middle, (view.innerHeight + 52) / 2, 40)) || after !== null) {
+				out.push('data-transition="busy": a late page holds the main column ' + say(held) + ', its ring at ' + middle + ' of ' + view.innerHeight + ' scrolled down, the next page ' + say(after) + ', where the Navigation API is ' + veiled);
+			}
+			const kept = await open('app.html?probe-scroll=keep');
+			kept.getElementById('docs-nav').scrollTop = 180;
+			await wait(150);
+			await follow(kept, 'busy.html?probe-scroll=keep');
+			await wait(200);
+			const left = frame.contentDocument.getElementById('docs-nav').scrollTop;
+			const side = (await open('pagination.html?probe-scroll=current')).getElementById('docs-nav');
+			const shelf = side.getBoundingClientRect();
+			const row = side.querySelector('[aria-current="page"]').getBoundingClientRect();
+			const current = [side.scrollTop > 0, row.top >= shelf.top - 1 && row.bottom <= shelf.bottom + 1];
+			const top = (await open('pagination.html')).getElementById('docs-nav').scrollTop;
+			frame.remove();
+			try {
+				sessionStorage.removeItem('redz-ui.sidebar.docs-nav');
+			} catch {
+			}
+			if (!near(left, 180, 1) || say(current) !== say([true, true]) || top !== 0) {
+				out.push('data-scroll: keep comes back at ' + left + ' for 180, current scrolled and in view ' + say(current) + ', none at ' + top);
+			}
+		}]},
 		sidebarWide: {target: '.app-sidebar[popover]', steps: [async (out) => {
 			const sidebar = $('.app-sidebar[popover]');
 			sidebar.showPopover();

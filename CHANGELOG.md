@@ -32,6 +32,9 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   `fade`, the default, `instant`, `busy` or `none`. `busy` holds the main column under the busy overlay from 400 ms
   into a navigation to another page of the site, where the browser has the Navigation API, and the new page stands at
   once.
+- The probes change pages in a frame. Their server answers late and writes `data-transition`, `data-scroll` and a trace
+  of `pagereveal` as a query asks, so the transitions, the busy overlay of a page change and the side navigation's
+  scroll are held in every engine.
 - `busy-art`, a child of a busy region, shows the page's own picture in place of the spinner, the region's words under
   it. The main column is a busy region too: there a picture first in it stays in the middle of the window, and a main
   column without one is given the library's ring the same way.

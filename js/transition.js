@@ -33,8 +33,9 @@ const veil = () => {
 };
 
 const skip = (event) => {
-	if (mode() === 'none') {
-		event.viewTransition?.skipTransition();
+	if (mode() === 'none' && event.viewTransition) {
+		event.viewTransition.ready.catch(() => {});
+		event.viewTransition.skipTransition();
 	}
 };
 addEventListener('pageswap', skip);
