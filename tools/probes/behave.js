@@ -3120,7 +3120,15 @@ window.REDZ_BEHAVE = (() => {
 			await settled();
 			await wait(50);
 			const opened = asked.length;
+			// The closing's toggle must come before the opening: a hide and a show close together are one toggle in
+			// Safari on a slow machine, and the refusal is forgotten only as the layer closes.
+			const gone = new Promise((done) => popover.addEventListener('toggle', (event) => {
+				if (event.newState === 'closed') {
+					done();
+				}
+			}));
 			popover.hidePopover();
+			await Promise.race([gone, wait(1000)]);
 			await settled();
 			refuse = false;
 			popover.showPopover();
