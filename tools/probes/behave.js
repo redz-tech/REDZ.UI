@@ -5457,6 +5457,15 @@ window.REDZ_BEHAVE = (() => {
 			}
 			frame.remove();
 		}},
+		bannerStack: {target: '#app-banner-tones', steps: [async (out) => {
+			// Banners in a grid of the page's own, not the shell's, stand one under another: the shell's banner area is the
+			// shell's alone, and in any other grid it put them all in one cell.
+			const boxes = $$('#app-banner-tones > .app-banner').map((banner) => banner.getBoundingClientRect());
+			const stacked = boxes.length === 4 && boxes.every((box, at) => at === 0 || box.top >= boxes[at - 1].bottom - 0.5);
+			if (!stacked) {
+				out.push('the banners of a grid of the page\'s own stand at ' + say(boxes.map((box) => Math.round(box.top) + '-' + Math.round(box.bottom))) + ', not one under another');
+			}
+		}]},
 		toastModal: {target: '#dialog-edit-note', steps: [async (out) => {
 			// Toasts shown while a modal is open stand in its own stack; as it closes they go on in the page's, out of the
 			// live regions that said them once: closed, the dialog hid them, and showed a danger toast again as it opened.

@@ -187,8 +187,9 @@
 		min-inline-size: 44rem;
 	}
 
-	/* Two bars shown side by side stay in place: sticking to the window's edge, they would cover each other. */
-	#save-bar-results .save-bar {
+	/* Bars and banners shown side by side stay in place: sticking to the window's edge, they would cover each other. */
+	#save-bar-results .save-bar,
+	#app-banner-tones > .app-banner {
 		position: static;
 	}
 

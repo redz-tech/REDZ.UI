@@ -13,6 +13,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   part of `contracts.track`: a page that draws its own bar sets and removes it the same way.
 - A toast shown while a modal dialog is open no longer goes away with the dialog, nor comes back when it opens again:
   as the dialog closes, its toasts go on in the stack below it, out of the live regions that said them once.
+- `app-banner` takes the shell's banner area only right in `app`: in a grid of the page's own, every banner fell into
+  one cell, each over the last, as the docs' example of the four tones showed only the last.
 - The app shell's docs put the side column `app-aside` in the main column's grid, as the resource demo does: right in
   `app`, whose grid has no place for it, it stood under the side navigation. The build refuses it there in a sample.
 
