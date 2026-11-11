@@ -5386,6 +5386,100 @@ window.REDZ_BEHAVE = (() => {
 				out.push('the tracked examples stay changed after the check: ' + REDZ.ui.track.dirty().length);
 			}
 		}]},
+		saveRoom: {target: '#save-bar-live', walk: async function* (out) {
+			// A long tracked form at the foot of a page in a frame, a wide window's size and a phone's, where the bar wraps:
+			// every field the keys reach stands above the bar, and the page stays where it is as the bar's own buttons take
+			// the focus - by the keys, and Save after Undo with the bar stuck to the window's foot.
+			const frame = Object.assign(document.createElement('iframe'), {title: 'A long tracked form', src: 'app.html'});
+			const at = (element) => {
+				const box = element.getBoundingClientRect();
+				return [Math.round(box.left + box.width / 2), Math.round(box.top + box.height / 2)];
+			};
+			document.body.append(frame);
+			for (const [width, height] of [[1100, 700], [390, 700]]) {
+				frame.style.cssText = 'position: fixed; inset: 0 auto auto 0; z-index: 2147483647; inline-size: ' + width + 'px; block-size: ' + height + 'px; border: 0; background: Canvas';
+				frame.contentWindow.location.replace('app.html?width=' + width);
+				await until(() => frame.contentWindow?.location.search === '?width=' + width && frame.contentDocument?.readyState === 'complete', 8000);
+				await wait(200);
+				const doc = frame.contentDocument;
+				const view = frame.contentWindow;
+				const room = () => doc.documentElement.style.getPropertyValue('--redz-save-bar-height');
+				const form = Object.assign(doc.createElement('form'), {className: 'vstack gap-8'});
+				form.dataset.track = 'Long';
+				for (let n = 1; n <= 24; n++) {
+					form.append(Object.assign(doc.createElement('label'), {className: 'form-label mb-0', htmlFor: 'long-' + n, textContent: 'Field ' + n}), Object.assign(doc.createElement('input'), {className: 'form-control', id: 'long-' + n, name: 'field' + n}));
+				}
+				doc.querySelector('.app-main').append(form);
+				await wait(100);
+				view.focus();
+				doc.getElementById('long-1').focus();
+				yield {type: 'x'};
+				await until(() => doc.querySelector('.save-bar:not([hidden])') !== null && room() !== '');
+				const bar = doc.querySelector('.save-bar');
+				const action = (name) => bar.querySelector('[data-track-action="' + name + '"]');
+				// More of the page under the form: the bar stays stuck to the window's foot above the form's end.
+				bar.after(Object.assign(doc.createElement('div'), {style: 'block-size: 40rem'}));
+				const covered = [];
+				for (let n = 2; n <= 24; n++) {
+					yield {key: 'Tab'};
+					await settled();
+					const field = doc.activeElement.getBoundingClientRect();
+					if (doc.activeElement.id !== 'long-' + n || field.bottom > bar.getBoundingClientRect().top + 0.5) {
+						covered.push(doc.activeElement.id + ' ' + Math.round(field.bottom) + '/' + Math.round(bar.getBoundingClientRect().top));
+					}
+				}
+				const tall = [room(), bar.getBoundingClientRect().height + 'px'];
+				// A window without the focus - headless Firefox's - matches no :focus, which the bar's own buttons ask.
+				const focused = doc.hasFocus();
+				const moves = [];
+				for (let step = 0; step < 2; step++) {
+					const before = view.scrollY;
+					yield {key: 'Tab'};
+					await settled();
+					moves.push(bar.contains(doc.activeElement) ? Math.round(view.scrollY - before) : 'left the bar');
+				}
+				doc.getElementById('long-12').focus();
+				await settled();
+				yield {click: at(action('discard'))};
+				await until(() => !action('undo').hidden);
+				const foot = Math.round(view.innerHeight - bar.getBoundingClientRect().bottom);
+				const before = view.scrollY;
+				yield {click: at(action('undo'))};
+				await settled();
+				const undone = [doc.activeElement === action('save'), Math.round(view.scrollY - before), foot];
+				view.REDZ.ui.track.reset(form);
+				form.remove();
+				await until(() => bar.hidden && room() === '');
+				const gone = [bar.hidden, room()];
+				if (covered.length > 0 || tall[0] !== tall[1] || (focused && say(moves) !== say([0, 0])) || say(undone) !== say([true, 0, 12]) || say(gone) !== say([true, ''])) {
+					out.push(width + ' px wide: fields the keys reach under the bar ' + say(covered) + ', the bar measured ' + say(tall) + ', its buttons by the keys move the page ' + say(moves) + ', Undo with the bar ' + undone[2] + ' px above the foot puts the focus on Save ' + undone[0] + ' and moves the page ' + undone[1] + ', the hidden bar ' + say(gone));
+				}
+			}
+			frame.remove();
+		}},
+		toastModal: {target: '#dialog-edit-note', steps: [async (out) => {
+			// Toasts shown while a modal is open stand in its own stack; as it closes they go on in the page's, out of the
+			// live regions that said them once: closed, the dialog hid them, and showed a danger toast again as it opened.
+			const dialog = $('#dialog-edit-note');
+			const mine = () => $$('.toast').filter((one) => one.textContent.includes('Kept on'));
+			dialog.showModal();
+			await wait(300);
+			const ends = [REDZ.ui.toast({title: 'Kept on, saved', tone: 'success'}), REDZ.ui.toast({title: 'Kept on, refused', tone: 'danger'})];
+			await wait(200);
+			const inside = mine().map((one) => dialog.contains(one) && one.checkVisibility());
+			dialog.close();
+			await wait(400);
+			const after = mine().map((one) => [one.closest('dialog') === null, one.checkVisibility(), one.parentElement.matches('.toast-container'), one.closest('[role]') === null]);
+			dialog.showModal();
+			await wait(300);
+			const again = $$('.toast', dialog).length;
+			dialog.close();
+			ends.forEach((end) => end());
+			await wait(50);
+			if (say(inside) !== say([true, true]) || say(after) !== say([[true, true, true, true], [true, true, true, true]]) || again !== 0 || mine().length !== 0) {
+				out.push('toasts shown in a modal ' + say(inside) + ' (in it, seen), after it closes ' + say(after) + ' (out of every dialog, seen, in the page\'s stack, out of its live regions), ' + again + ' in it as it opens again, ' + mine().length + ' left after they close');
+			}
+		}]},
 		chips: {target: '#form-chips-days', steps: [async (out) => {
 			const entry = $('#form-chips-days');
 			const box = entry.closest('.chip-input');

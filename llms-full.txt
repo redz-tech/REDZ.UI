@@ -7901,7 +7901,7 @@ The page carries the stack from the start, so that screen readers know its live 
 ## Keyboard and accessibility
 
 - A toast never takes the focus; its close button and its action are in the tab order at the end of the page.
-- While a modal dialog is open, toasts show inside it, since everything outside it is inert.
+- While a modal dialog is open, toasts show inside it, since everything outside it is inert; as it closes, they go on in the stack below it.
 - The close button's name comes from the page's texts: `close` in the island `#redz-ui-text`.
 - Nothing a person must act on lives only in a toast that leaves by itself.
 
@@ -8225,7 +8225,7 @@ It reads the theme's `--redz-bg`, `--redz-primary`, `--redz-space-8`, `--redz-sp
 
 # Save bar
 
-A tracked form remembers what it held and marks what changed since; the bar at the foot of the page says what is not saved yet, saves it or discards it, and asks before the changes are left. It sticks to the bottom of the screen while the form is longer than the screen.
+A tracked form remembers what it held and marks what changed since; the bar at the foot of the page says what is not saved yet, saves it or discards it, and asks before the changes are left. It sticks to the bottom of the screen while the form is longer than the screen, and a field the keys reach stands above it: while it shows, its height goes to `--redz-save-bar-height` on the root, which the page's scroll padding at the foot adds.
 
 ## Examples
 
@@ -8412,7 +8412,7 @@ What a page's own checks may rely on, also in the passport as `contracts.track`.
 
 From [`css/components/save-bar.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/save-bar.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-12`, `--redz-space-8`, `--redz-space-16`, `--redz-border`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-2`, `--redz-text-muted`, `--redz-fs-12`, `--redz-warning`, `--redz-warning-subtle`, `--redz-danger`, `--redz-danger-subtle`, `--redz-success`, `--redz-success-subtle`.
+It reads the theme's `--redz-save-bar-height`, `--redz-space-12`, `--redz-space-8`, `--redz-space-16`, `--redz-border`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-2`, `--redz-text-muted`, `--redz-fs-12`, `--redz-warning`, `--redz-warning-subtle`, `--redz-danger`, `--redz-danger-subtle`, `--redz-success`, `--redz-success-subtle`.
 
 # Status lines
 
@@ -9104,10 +9104,16 @@ The shell is the one part of the library that looks at the window; everything in
       <a class="app-link" href="/bookings/">…Bookings</a>
     </details>
   </nav>
-  <main class="app-main" id="main">…</main>
-  <aside class="app-aside">…</aside>
+  <main class="app-main" id="main">
+    <div class="grid lg:cols-12 gap-24 align-items-start">
+      <div class="lg:span-8 vstack gap-16">…</div>
+      <aside class="app-aside lg:span-4" aria-label="About this excursion">…</aside>
+    </div>
+  </main>
 </div>
 ```
+
+The side column `app-aside` stands in the main column's grid, beside its content, and goes under it where the column is narrow; the shell's own grid has no place for it.
 
 The [demo screens](https://redz-tech.github.io/REDZ.UI/reference/demo/list.html) show the whole shell: a list, a resource page with its side column, a settings form.
 

@@ -1,4 +1,10 @@
 @layer components {
+	/* While the tracked forms' bar shows, js/track.js puts its height on the root: a field the keys reach stands above it.
+	   The bar's own buttons need no room above the bar, and the page stays where it is as they take the focus. */
+	html:not(:has(.save-bar:focus-within)) {
+		scroll-padding-block-end: calc(var(--redz-save-bar-height) + 2 * var(--redz-space-12));
+	}
+
 	.save-bar {
 		position: sticky;
 		inset-block-end: var(--redz-space-12);

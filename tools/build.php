@@ -570,8 +570,9 @@ function BUILD__CommandsCheck(): array
 
 /**
  * The markup a consumer copies, docs/src and the demo screens: each class is the library's or a page's own docs- or demo-
- * name, each control has an id or a name, a div, a span or a pre with a name has a role, and role="combobox" is on an
- * input only of type="text" without a list. Answers what is wrong.
+ * name, each control has an id or a name, a div, a span or a pre with a name has a role, role="combobox" is on an
+ * input only of type="text" without a list, and app-aside, in the markup or in a sample shown as code, stands in the
+ * main column's grid, never right in app, whose grid has no place for it. Answers what is wrong.
  * @return list<string>
  */
 function BUILD__SamplesCheck(): array
@@ -597,6 +598,13 @@ function BUILD__SamplesCheck(): array
 			}
 			if ($tag === 'input' && ($has['role'] ?? '') === 'combobox' && (($has['type'] ?? 'text') !== 'text' || isset($has['list']))) {
 				$wrong[] = $where . '  role="combobox" belongs on an input of type="text" without a list (ARIA in HTML): ' . ($has['id'] ?? $has['name'] ?? '');
+			}
+		}
+		$page = Dom\HTMLDocument::createFromString((string)file_get_contents($file), LIBXML_NOERROR);
+		$samples = array_map(fn(Dom\Element $code): Dom\HTMLDocument => Dom\HTMLDocument::createFromString('<!doctype html><body>' . $code->textContent, LIBXML_NOERROR), iterator_to_array($page->querySelectorAll('pre > code')));
+		foreach ([$page, ...$samples] as $markup) {
+			if ($markup->querySelector('.app > .app-aside') !== null) {
+				$wrong[] = $where . '  app-aside stands right in app, whose grid has no place for it: put it in the main column\'s grid, as reference/demo/resource.html does';
 			}
 		}
 	}

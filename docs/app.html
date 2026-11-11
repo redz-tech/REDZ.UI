@@ -156,9 +156,14 @@
       &lt;a class="app-link" href="/bookings/"&gt;…Bookings&lt;/a&gt;
     &lt;/details&gt;
   &lt;/nav&gt;
-  &lt;main class="app-main" id="main"&gt;…&lt;/main&gt;
-  &lt;aside class="app-aside"&gt;…&lt;/aside&gt;
+  &lt;main class="app-main" id="main"&gt;
+    &lt;div class="grid lg:cols-12 gap-24 align-items-start"&gt;
+      &lt;div class="lg:span-8 vstack gap-16"&gt;…&lt;/div&gt;
+      &lt;aside class="app-aside lg:span-4" aria-label="About this excursion"&gt;…&lt;/aside&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
 &lt;/div&gt;</code></pre>
+					<p>The side column <code>app-aside</code> stands in the main column's grid, beside its content, and goes under it where the column is narrow; the shell's own grid has no place for it.</p>
 					<p>The <a href="../reference/demo/list.html">demo screens</a> show the whole shell: a list, a resource page with its side column, a settings form.</p>
 
 					<h3>Folded to a rail</h3>

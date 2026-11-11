@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Save bar - REDZ.UI</title>
-	<meta name="description" content="A tracked form remembers what it held and marks what changed since; the bar at the foot of the page says what is not saved yet, saves it or discards it, and asks before the changes are left. It sticks to the bottom of the screen while the form is longer than the screen.">
+	<meta name="description" content="A tracked form remembers what it held and marks what changed since; the bar at the foot of the page says what is not saved yet, saves it or discards it, and asks before the changes are left. It sticks to the bottom of the screen while the form is longer than the screen, and a field the keys reach stands above it: while it shows, its height goes to --redz-save-bar-height on the root, which the page&#039;s scroll padding at the foot adds.">
 	<script src="../dist/js/floor.min.js"></script>
 	<link rel="stylesheet" href="../dist/css/redz-ui.min.css">
 	<link rel="stylesheet" href="../css/icons.min.css">
@@ -135,7 +135,7 @@
 			<article class="docs vstack gap-32">
 				<header class="vstack gap-8">
 					<h1>Save bar</h1>
-					<p class="docs-lead">A tracked form remembers what it held and marks what changed since; the bar at the foot of the page says what is not saved yet, saves it or discards it, and asks before the changes are left. It sticks to the bottom of the screen while the form is longer than the screen.</p>
+					<p class="docs-lead">A tracked form remembers what it held and marks what changed since; the bar at the foot of the page says what is not saved yet, saves it or discards it, and asks before the changes are left. It sticks to the bottom of the screen while the form is longer than the screen, and a field the keys reach stands above it: while it shows, its height goes to <code>--redz-save-bar-height</code> on the root, which the page's scroll padding at the foot adds.</p>
 				</header>
 
 				<section class="vstack gap-16" aria-labelledby="save-bar-examples">
@@ -427,7 +427,7 @@
 						<section class="vstack gap-12" aria-labelledby="save-bar-tokens">
 							<h2 id="save-bar-tokens">Tokens</h2>
 							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/save-bar.css"><code>css/components/save-bar.css</code></a>, which declares no custom property of its own.</p>
-							<p>It reads the theme's <code>--redz-space-12</code>, <code>--redz-space-8</code>, <code>--redz-space-16</code>, <code>--redz-border</code>, <code>--redz-radius-12</code>, <code>--redz-bg-raised</code>, <code>--redz-shadow-2</code>, <code>--redz-text-muted</code>, <code>--redz-fs-12</code>, <code>--redz-warning</code>, <code>--redz-warning-subtle</code>, <code>--redz-danger</code>, <code>--redz-danger-subtle</code>, <code>--redz-success</code>, <code>--redz-success-subtle</code>.</p>
+							<p>It reads the theme's <code>--redz-save-bar-height</code>, <code>--redz-space-12</code>, <code>--redz-space-8</code>, <code>--redz-space-16</code>, <code>--redz-border</code>, <code>--redz-radius-12</code>, <code>--redz-bg-raised</code>, <code>--redz-shadow-2</code>, <code>--redz-text-muted</code>, <code>--redz-fs-12</code>, <code>--redz-warning</code>, <code>--redz-warning-subtle</code>, <code>--redz-danger</code>, <code>--redz-danger-subtle</code>, <code>--redz-success</code>, <code>--redz-success-subtle</code>.</p>
 						</section>
 				<footer class="d-flex flex-wrap justify-content-between gap-8 pt-16 border-top text-muted fs-12">
 					<span>MIT license · © 2026 Red Z Group · includes Bootstrap Icons (MIT)</span>

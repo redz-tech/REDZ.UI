@@ -4,6 +4,17 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Fixed
+- The save bar no longer covers a field the keys reach at the foot of a long tracked form (WCAG 2.4.11): while the bar
+  shows, its height goes to `--redz-save-bar-height` on the root, and the page's scroll padding at the foot is that
+  height and the room around the bar. The bar's own buttons take the focus without moving the page.
+- A toast shown while a modal dialog is open no longer goes away with the dialog, nor comes back when it opens again:
+  as the dialog closes, its toasts go on in the stack below it, out of the live regions that said them once.
+- The app shell's docs put the side column `app-aside` in the main column's grid, as the resource demo does: right in
+  `app`, whose grid has no place for it, it stood under the side navigation. The build refuses it there in a sample.
+
 ## 0.24.0 - 2026-11-11
 
 ### Added

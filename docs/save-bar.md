@@ -2,7 +2,7 @@
 
 # Save bar
 
-A tracked form remembers what it held and marks what changed since; the bar at the foot of the page says what is not saved yet, saves it or discards it, and asks before the changes are left. It sticks to the bottom of the screen while the form is longer than the screen.
+A tracked form remembers what it held and marks what changed since; the bar at the foot of the page says what is not saved yet, saves it or discards it, and asks before the changes are left. It sticks to the bottom of the screen while the form is longer than the screen, and a field the keys reach stands above it: while it shows, its height goes to `--redz-save-bar-height` on the root, which the page's scroll padding at the foot adds.
 
 ## Examples
 
@@ -189,4 +189,4 @@ What a page's own checks may rely on, also in the passport as `contracts.track`.
 
 From [`css/components/save-bar.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/save-bar.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-12`, `--redz-space-8`, `--redz-space-16`, `--redz-border`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-2`, `--redz-text-muted`, `--redz-fs-12`, `--redz-warning`, `--redz-warning-subtle`, `--redz-danger`, `--redz-danger-subtle`, `--redz-success`, `--redz-success-subtle`.
+It reads the theme's `--redz-save-bar-height`, `--redz-space-12`, `--redz-space-8`, `--redz-space-16`, `--redz-border`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-2`, `--redz-text-muted`, `--redz-fs-12`, `--redz-warning`, `--redz-warning-subtle`, `--redz-danger`, `--redz-danger-subtle`, `--redz-success`, `--redz-success-subtle`.

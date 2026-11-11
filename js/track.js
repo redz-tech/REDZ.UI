@@ -4,7 +4,8 @@
 // value typed back is no change. A changed field wears data-changed - the control, a check's .form-check row, a
 // combobox's face, a chips field's box - and so do its form and the tab of every pane that holds it. The page's tracked
 // forms outside a dialog share one save bar, the page's .save-bar[data-track] or one made at the end of .app-main,
-// which names the changes in the page's words and stays at rest while such a form is in view; Save and Discard are
+// which names the changes in the page's words, stays at rest while such a form is in view and, shown, puts its height
+// on the root as --redz-save-bar-height, so a field the keys reach stands above it; Save and Discard are
 // never disabled and say when there is nothing to do, Save takes Control+S and Meta+S. Save takes the words left in a
 // chips field's entry first, then fires the cancelable redz:save on each changed form in turn - {form, changed: [{name,
 // label, was, now}], data, submitter, signal} - and, answered with a promise, what was sent becomes the saved state once
@@ -32,6 +33,11 @@ const CLEARED = '\u0000';
 const PLAIN = /^(button|submit|reset|image|file)$/;
 const SHOWN = 10000;
 const NOTE = 3000;
+const ROOM = '--redz-save-bar-height';
+const sized = new ResizeObserver(([entry]) => {
+	const size = entry.target.isConnected ? entry.borderBoxSize[0].blockSize : 0;
+	size > 0 ? document.documentElement.style.setProperty(ROOM, size + 'px') : document.documentElement.style.removeProperty(ROOM);
+});
 
 const saved = new WeakMap();
 const undos = new WeakMap();
@@ -470,6 +476,8 @@ const barOf = () => {
 	discard.addEventListener('click', discardPage);
 	save.addEventListener('click', () => savePage(pageForms()));
 	host.replaceChildren(icon, words, undo, discard, save);
+	sized.disconnect();
+	sized.observe(host);
 	bar = {host, icon, words, undo, discard, save};
 	return bar;
 };

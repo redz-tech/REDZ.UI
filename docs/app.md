@@ -24,10 +24,16 @@ The shell is the one part of the library that looks at the window; everything in
       <a class="app-link" href="/bookings/">…Bookings</a>
     </details>
   </nav>
-  <main class="app-main" id="main">…</main>
-  <aside class="app-aside">…</aside>
+  <main class="app-main" id="main">
+    <div class="grid lg:cols-12 gap-24 align-items-start">
+      <div class="lg:span-8 vstack gap-16">…</div>
+      <aside class="app-aside lg:span-4" aria-label="About this excursion">…</aside>
+    </div>
+  </main>
 </div>
 ```
+
+The side column `app-aside` stands in the main column's grid, beside its content, and goes under it where the column is narrow; the shell's own grid has no place for it.
 
 The [demo screens](https://redz-tech.github.io/REDZ.UI/reference/demo/list.html) show the whole shell: a list, a resource page with its side column, a settings form.
 

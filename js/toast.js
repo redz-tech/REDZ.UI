@@ -1,6 +1,7 @@
 // REDZ.UI, notices: REDZ.ui.toast() shows a toast in the stack .toast-container, in one of its two live regions that
 // are on the page from the start - role="status", role="alert" for danger - or, while a modal dialog is open, in the
-// dialog's own stack, since everything outside a modal is inert. Success and info leave after 8 seconds unless the
+// dialog's own stack, since everything outside a modal is inert; as the dialog closes, its toasts go on in the stack
+// below it, out of the live regions, which said them once. Success and info leave after 8 seconds unless the
 // pointer or the focus rests on them; danger and a toast with an action stay until closed. The words come from the
 // caller; the close button's name from the page's texts.
 import {text} from './text.js';
@@ -29,6 +30,12 @@ const regionIn = (scope, role) => {
 };
 
 regionIn(document.body, 'status');
+document.addEventListener('close', (event) => {
+	const kept = event.target instanceof HTMLDialogElement ? event.target.querySelectorAll('.toast-container .toast') : [];
+	if (kept.length > 0) {
+		regionIn(document.querySelector('dialog:modal') ?? document.body, 'status').region.parentElement.prepend(...kept);
+	}
+}, true);
 
 /** Removes the toast; when it holds the focus, the focus goes back where it came from. */
 const close = (toast) => {

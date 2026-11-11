@@ -42,7 +42,7 @@ The page carries the stack from the start, so that screen readers know its live 
 ## Keyboard and accessibility
 
 - A toast never takes the focus; its close button and its action are in the tab order at the end of the page.
-- While a modal dialog is open, toasts show inside it, since everything outside it is inert.
+- While a modal dialog is open, toasts show inside it, since everything outside it is inert; as it closes, they go on in the stack below it.
 - The close button's name comes from the page's texts: `close` in the island `#redz-ui-text`.
 - Nothing a person must act on lives only in a toast that leaves by itself.
 
