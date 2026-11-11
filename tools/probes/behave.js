@@ -4711,6 +4711,17 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a folded rail: every group open ' + spread + ', a heading ' + heading + ', the line ' + line.borderTopWidth + ' ' + line.borderTopStyle + ', closed again unfolded ' + back + ', told ' + say(told));
 			}
 		}]},
+		pageStill: {target: '.app-header', steps: [async (out) => {
+			// What stands still as the page changes shows its new picture alone: the old one under it showed through.
+			const shown = (part) => getComputedStyle(document.documentElement, part).display;
+			if (shown('::view-transition-old(root)') === '') {
+				return;
+			}
+			const parts = ['old(redz-app-header)', 'old(redz-app-sidebar)', 'new(redz-app-header)', 'new(redz-app-sidebar)'].map((name) => shown('::view-transition-' + name));
+			if (say(parts) !== say(['none', 'none', 'block', 'block'])) {
+				out.push('the header and the side navigation, standing still as the page changes, show old and new pictures ' + say(parts) + ' - not the new alone');
+			}
+		}]},
 		pageChange: {target: '#docs-nav', steps: [async (out) => {
 			// Pages that change, in a frame of a wide window's size: the probes' router makes an answer late and writes
 			// data-transition, data-scroll and a trace of pagereveal as the query asks.

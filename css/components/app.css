@@ -387,11 +387,16 @@
 		view-transition-name: redz-app-header;
 	}
 
+	/* Standing still is the new picture alone: the old one, left under it unanimated, showed through it - two current
+	   items at once and their words doubled - while the page cross-faded. */
+	::view-transition-old(redz-app-header),
+	::view-transition-old(redz-app-sidebar) {
+		display: none;
+	}
+
 	::view-transition-group(redz-app-header),
 	::view-transition-group(redz-app-sidebar),
-	::view-transition-old(redz-app-header),
 	::view-transition-new(redz-app-header),
-	::view-transition-old(redz-app-sidebar),
 	::view-transition-new(redz-app-sidebar),
 	:root:is([data-transition="instant"], [data-transition="busy"])::view-transition-old(root),
 	:root:is([data-transition="instant"], [data-transition="busy"])::view-transition-new(root),

@@ -91,6 +91,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   are.
 - A page change whose view transition the browser aborted - the window resized or hidden as the page went - left an
   uncaught error in the console of the page that left.
+- As the page changed, the header and the side navigation, which stand still, showed their old picture through the new
+  one while the rest cross-faded: two current items at once in the navigation and their words doubled.
 
 ## 0.23.0 - 2026-11-10
 
