@@ -505,4 +505,37 @@
 			}
 		}, 700)));
 	});
+
+	// The redrawn region: the server's copy is the region as the page came; each redraw changes one server's load, the
+	// others as the server last sent them.
+	const loads = new Map();
+	let drawn = 0;
+	let server = null;
+	document.addEventListener('DOMContentLoaded', () => {
+		server = document.getElementById('swap-servers')?.cloneNode(true) ?? null;
+	});
+	const redraw = () => {
+		const region = document.getElementById('swap-servers');
+		const next = server?.cloneNode(true);
+		if (!region || !next) {
+			return;
+		}
+		const rows = [...next.querySelectorAll('tbody tr')];
+		const row = rows[drawn++ % rows.length];
+		loads.set(row.id, (Number(row.dataset.sortLoad) + 17 * drawn) % 96);
+		for (const one of rows.filter((tr) => loads.has(tr.id))) {
+			one.dataset.sortLoad = loads.get(one.id);
+			one.cells[2].textContent = loads.get(one.id) + '%';
+		}
+		next.querySelector('#swap-drawn').textContent = 'Drawn ' + drawn + (drawn === 1 ? ' time' : ' times');
+		REDZ.ui.swap(region, next);
+	};
+	calls['swap-now'] = redraw;
+	let every = null;
+	document.addEventListener('change', (event) => {
+		if (event.target.id === 'swap-auto') {
+			clearInterval(every);
+			every = event.target.checked ? setInterval(redraw, 3000) : null;
+		}
+	});
 })();

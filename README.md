@@ -139,6 +139,10 @@ attaches by delegation on `document`, so nothing is set up per element and marku
   saw, a refusal marks the fields it names - a conflict offers Keep mine and Take saved -, Discard offers Undo, and
   leaving with changes asks first. `REDZ.ui.track` saves, discards and reads them from code; the passport's
   `contracts.track` names what a page's probes may rely on (`js/track.js`).
+- **Redrawn regions:** `REDZ.ui.swap(region, source)` puts new content - nodes or a `TrustedHTML`, never a string -
+  into a region once no open menu, dialog, changed tracked form or composition in what it replaces holds it, and
+  carries the person's filter, search, sort, selection, tab, open parts, scroll and focus over by id; parts the server
+  sent unchanged stay alive (`js/swap.js`).
 - **Passwords:** a button with `command="--reveal"` shows a password field's text and hides it again, `aria-pressed`
   saying which; elements with `data-strength` naming the field show its level as it is typed - by its length and its
   kinds of characters - a meter at once, the words after a pause (`js/password.js`).

@@ -179,6 +179,14 @@
 		border-collapse: collapse;
 	}
 
+	#swap-find {
+		max-inline-size: 14rem;
+	}
+
+	#swap-table {
+		min-inline-size: 44rem;
+	}
+
 	.docs-matrix .menu {
 		position: static;
 		min-inline-size: 0;

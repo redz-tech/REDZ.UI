@@ -47,6 +47,7 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 - [Calendars](docs/calendar.md): A month of days with what happens on each, and a strip of days across the things that can be busy on them - equipment, rooms, boats.
 - [Media library](docs/media.md): A folder of images as square tiles or as compact rows: checked for actions on many at once, moved by a handle, each with its own actions.
 - [Tables](docs/table.md): A list of records: a title that links to the record, a line under it, a note when something is wrong, a column of checks for batch actions and the row's own actions at the end.
+- [Redrawn regions](docs/swap.md): A region the page draws again - a list it asks the server for every few seconds, a card after a change - keeps what the person was doing in it. REDZ.ui.swap() waits while a menu is open in the region, puts the new content in, and carries the filter, the sort, the search, the ticked rows, the open parts, the scroll and the focus over by id. A part that did not change stays as it is, its menu open.
 - [Logs and diffs](docs/log.md): What a job printed, line by line as it runs, and what changed between two versions of a text - a template, a setting, a translation.
 - [Commands to copy](docs/command-line.md): A command a person runs on their own machine - an install line, a crontab entry, a request with a key - shown on one line, copied whole by one button.
 - [Summaries and totals](docs/summary.md): The facts of one record in pairs - a label and its value - and the sums at the foot of an invoice or a booking.

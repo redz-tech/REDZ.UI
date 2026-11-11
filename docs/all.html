@@ -84,6 +84,7 @@
 				<a class="app-link" href="calendar.html"><i class="bi bi-calendar3" aria-hidden="true"></i>Calendars</a>
 				<a class="app-link" href="media.html"><i class="bi bi-collection" aria-hidden="true"></i>Media library</a>
 				<a class="app-link" href="table.html"><i class="bi bi-table" aria-hidden="true"></i>Tables</a>
+				<a class="app-link" href="swap.html"><i class="bi bi-arrow-clockwise" aria-hidden="true"></i>Redrawn regions</a>
 				<a class="app-link" href="log.html"><i class="bi bi-terminal" aria-hidden="true"></i>Logs and diffs</a>
 				<a class="app-link" href="command-line.html"><i class="bi bi-terminal" aria-hidden="true"></i>Commands to copy</a>
 				<a class="app-link" href="summary.html"><i class="bi bi-receipt" aria-hidden="true"></i>Summaries and totals</a>
@@ -2621,6 +2622,42 @@ Boat C	 9 trips	201 seats</pre>
 								</tr>
 							</tbody>
 						</table>
+					</div>
+				</section>
+
+				<section class="vstack gap-16" aria-labelledby="all-swap">
+					<h2 id="all-swap"><a href="swap.html">Redrawn regions</a></h2>
+					<div class="docs-example docs-example-stack" id="swap-example">
+						<div class="hstack gap-12 flex-wrap align-items-center">
+							<button class="btn btn-sm" type="button" data-docs-run="swap-now"><i class="bi bi-arrow-clockwise" aria-hidden="true"></i>Redraw</button>
+							<label class="form-check"><input class="switch" type="checkbox" role="switch" id="swap-auto"> Redraw every 3 seconds</label>
+						</div>
+						<section class="card" id="swap-servers" aria-labelledby="swap-servers-title">
+							<div class="card-header"><h3 id="swap-servers-title">Servers</h3><span class="text-muted fs-12" id="swap-drawn">Drawn by the server</span></div>
+							<div class="card-body vstack gap-12">
+								<div class="hstack gap-8 flex-wrap">
+									<input class="form-control form-control-sm" type="search" id="swap-find" data-filter="swap-table" placeholder="Find a server" aria-label="Find a server" autocomplete="off">
+									<div class="btn-group" role="group" aria-label="State">
+										<button class="btn btn-sm" type="button" command="--filter" aria-controls="swap-table" value="" aria-pressed="true">All</button>
+										<button class="btn btn-sm" type="button" command="--filter" aria-controls="swap-table" value="online" aria-pressed="false">Online</button>
+										<button class="btn btn-sm" type="button" command="--filter" aria-controls="swap-table" value="offline" aria-pressed="false">Offline</button>
+									</div>
+								</div>
+								<details id="swap-window"><summary>Maintenance window</summary><p class="text-muted m-0">Sundays from 02:00 to 04:00, one server at a time.</p></details>
+								<div class="table-scroll" role="region" aria-labelledby="swap-servers-title">
+									<table class="table" id="swap-table" data-select>
+										<thead><tr><th scope="col"><input class="check" type="checkbox" id="swap-all" data-select-all aria-label="All servers"></th><th scope="col" aria-sort="ascending"><button class="table-sort" type="button" value="name">Name</button></th><th scope="col" class="text-end"><button class="table-sort" type="button" value="load" data-sort-first="descending">Load</button></th><th scope="col">State</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr></thead>
+										<tbody>
+											<tr id="swap-web-01" data-state="online" data-sort-load="12"><td><input class="check" type="checkbox" name="servers[]" value="web-01" aria-label="web-01"></td><td>web-01</td><td class="text-end">12%</td><td>Online</td><td class="text-end"><button class="btn btn-icon btn-sm" type="button" commandfor="swap-menu-web-01" command="toggle-popover" aria-haspopup="menu" aria-label="Actions for web-01"><i class="bi bi-three-dots" aria-hidden="true"></i></button><div class="menu" id="swap-menu-web-01" popover role="menu" aria-label="web-01"><button class="menu-item" type="button" role="menuitem">Restart</button><button class="menu-item" type="button" role="menuitem">Open logs</button></div></td></tr>
+											<tr id="swap-web-02" data-state="online" data-sort-load="47"><td><input class="check" type="checkbox" name="servers[]" value="web-02" aria-label="web-02"></td><td>web-02</td><td class="text-end">47%</td><td>Online</td><td class="text-end"><button class="btn btn-icon btn-sm" type="button" commandfor="swap-menu-web-02" command="toggle-popover" aria-haspopup="menu" aria-label="Actions for web-02"><i class="bi bi-three-dots" aria-hidden="true"></i></button><div class="menu" id="swap-menu-web-02" popover role="menu" aria-label="web-02"><button class="menu-item" type="button" role="menuitem">Restart</button><button class="menu-item" type="button" role="menuitem">Open logs</button></div></td></tr>
+											<tr id="swap-db-01" data-state="online" data-sort-load="63"><td><input class="check" type="checkbox" name="servers[]" value="db-01" aria-label="db-01"></td><td>db-01</td><td class="text-end">63%</td><td>Online</td><td class="text-end"><button class="btn btn-icon btn-sm" type="button" commandfor="swap-menu-db-01" command="toggle-popover" aria-haspopup="menu" aria-label="Actions for db-01"><i class="bi bi-three-dots" aria-hidden="true"></i></button><div class="menu" id="swap-menu-db-01" popover role="menu" aria-label="db-01"><button class="menu-item" type="button" role="menuitem">Restart</button><button class="menu-item" type="button" role="menuitem">Open logs</button></div></td></tr>
+											<tr id="swap-mail-01" data-state="offline" data-sort-load="0"><td><input class="check" type="checkbox" name="servers[]" value="mail-01" aria-label="mail-01"></td><td>mail-01</td><td class="text-end">0%</td><td>Offline</td><td class="text-end"><button class="btn btn-icon btn-sm" type="button" commandfor="swap-menu-mail-01" command="toggle-popover" aria-haspopup="menu" aria-label="Actions for mail-01"><i class="bi bi-three-dots" aria-hidden="true"></i></button><div class="menu" id="swap-menu-mail-01" popover role="menu" aria-label="mail-01"><button class="menu-item" type="button" role="menuitem">Restart</button><button class="menu-item" type="button" role="menuitem">Open logs</button></div></td></tr>
+											<tr id="swap-files-01" data-state="online" data-sort-load="28"><td><input class="check" type="checkbox" name="servers[]" value="files-01" aria-label="files-01"></td><td>files-01</td><td class="text-end">28%</td><td>Online</td><td class="text-end"><button class="btn btn-icon btn-sm" type="button" commandfor="swap-menu-files-01" command="toggle-popover" aria-haspopup="menu" aria-label="Actions for files-01"><i class="bi bi-three-dots" aria-hidden="true"></i></button><div class="menu" id="swap-menu-files-01" popover role="menu" aria-label="files-01"><button class="menu-item" type="button" role="menuitem">Restart</button><button class="menu-item" type="button" role="menuitem">Open logs</button></div></td></tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</section>
 					</div>
 				</section>
 

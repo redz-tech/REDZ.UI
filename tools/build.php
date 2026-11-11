@@ -32,6 +32,15 @@ const BUILD_TRACK = [
 	'events' => ['redz:save', 'redz:saved', 'redz:discard'],
 	'api' => ['refresh', 'baseline', 'reset', 'dirty', 'changed', 'save'],
 ];
+// What a swap takes, what holds it and what it carries to the new content, as a page's probes may rely on: each is in
+// the docs' table of what is carried and in js/swap.js.
+const BUILD_SWAP = [
+	'sources' => ['DocumentFragment', 'Document', 'Element', 'TrustedHTML'],
+	'holds' => [':popover-open', 'dialog[open]', 'form[data-track]', 'compositionstart'],
+	'carried' => ['--filter', 'data-filter', 'aria-sort', 'data-select', 'aria-selected', 'details', '--toggle', '.table-scroll', 'commandfor', 'aria-controls'],
+	'events' => ['redz:swap'],
+	'api' => ['swap'],
+];
 // What a project links first, as the passport names it, from the version's folder.
 const BUILD_MAIN = ['css' => 'css/redz-ui.min.css', 'js' => 'js/redz-ui.min.js', 'floor' => 'js/floor.min.js'];
 // The editor, a package of its own: its stylesheet, its module, and the marks of the frame it edits in.
@@ -400,7 +409,7 @@ function BUILD__Passport(): string
 		'args' => "{\n\t\t" . implode(",\n\t\t", array_map(fn(string $key, array $names): string => $encode($key) . ': ' . $encode($names), array_keys($args), $args)) . "\n\t}",
 		'editor' => $encode([...BUILD_EDITOR, 'license' => 'PolyForm-Strict-1.0.0', 'rights' => BUILD_RIGHTS, 'catalog' => BUILD__Catalog()['elements'], 'write' => BUILD__WriteSchema(), 'texts' => $sorted(array_map(fn(string $key): string => 'editor.' . $key, array_keys((array)BUILD__Vocabulary()->editor->texts))), 'args' => (object)array_combine(array_map(fn(string $key): string => 'editor.' . $key, array_keys(BUILD__EditorArgs(BUILD__Vocabulary())[0])), BUILD__EditorArgs(BUILD__Vocabulary())[0])]),
 		'packages' => $encode(BUILD_PACKAGES),
-		'contracts' => $encode(['track' => BUILD_TRACK]),
+		'contracts' => $encode(['track' => BUILD_TRACK, 'swap' => BUILD_SWAP]),
 		'files' => "{\n\t\t" . implode(",\n\t\t", array_map(fn(string $file, string $hash): string => $encode($file) . ': ' . $encode($hash), array_keys($files), $files)) . "\n\t}",
 	];
 	return "{\n\t" . implode(",\n\t", array_map(fn(string $key, string $value): string => $encode($key) . ': ' . $value, array_keys($fields), $fields)) . "\n}\n";
@@ -606,8 +615,8 @@ function BUILD__MediaBlocks(string $css, string $query): array
 
 /**
  * A page that sends require-trusted-types-for 'script' refuses a string at every markup sink: the main bundle's and the
- * packages' scripts build their elements by the DOM, and the editor hands a sink markup only through trusted(), its one
- * policy. Answers what is wrong.
+ * packages' scripts build their elements by the DOM, the editor hands a sink markup only through trusted(), its one
+ * policy, and swap() parses only a TrustedHTML the page made, proven by instanceof on the same line. Answers what is wrong.
  * @return list<string>
  */
 function BUILD__SinksCheck(): array
@@ -618,7 +627,7 @@ function BUILD__SinksCheck(): array
 		$editor = str_contains($file, '/editor/');
 		foreach (explode("\n", (string)file_get_contents($file)) as $index => $line) {
 			$code = (string)preg_replace('~^\s*//.*|/\*.*?\*/~', '', $line);
-			if (preg_match($sink, $code) === 1 && !($editor && str_contains($code, 'trusted('))) {
+			if (preg_match($sink, $code) === 1 && !($editor && str_contains($code, 'trusted(')) && !preg_match('~\bsource instanceof TrustedHTML \? new DOMParser\(\)\.parseFromString\(source,~', $code)) {
 				$wrong[] = substr($file, strlen(BUILD_ROOT) + 1) . ':' . ($index + 1) . ($editor ? '  hands a sink markup outside trusted(), which Trusted Types refuses' : '  builds from a string of markup, which Trusted Types refuses');
 			}
 		}
@@ -662,6 +671,35 @@ function BUILD__TrackCheck(): array
 	foreach (BUILD_TRACK['api'] as $name) {
 		if (preg_match('~^\t' . $name . ': ~m', $js) !== 1) {
 			$wrong[] = 'REDZ.ui.track has no ' . $name . ', which BUILD_TRACK holds';
+		}
+	}
+	return $wrong;
+}
+
+/**
+ * The swap's contract held against the docs and the script: every carried name of BUILD_SWAP in the docs' table of
+ * what is carried, and every name of it in js/swap.js. Answers what is wrong.
+ * @return list<string>
+ */
+function BUILD__SwapCheck(): array
+{
+	$docs = (string)file_get_contents(BUILD_ROOT . '/docs/src/swap.html');
+	$js = (string)preg_replace(['~/\*.*?\*/~s', '~^\s*//.*$~m'], '', (string)file_get_contents(BUILD_ROOT . '/js/swap.js'));
+	$table = preg_match('~aria-labelledby="swap-carried">(.*?)</section>~s', $docs, $part) === 1 ? $part[1] : '';
+	$wrong = [];
+	foreach (BUILD_SWAP['carried'] as $name) {
+		if (!str_contains($table, $name)) {
+			$wrong[] = 'docs/src/swap.html\'s table of what is carried does not show ' . $name . ', which BUILD_SWAP names';
+		}
+	}
+	foreach ([...BUILD_SWAP['sources'], ...BUILD_SWAP['holds'], ...BUILD_SWAP['carried'], ...BUILD_SWAP['events']] as $name) {
+		if (!str_contains($js, $name)) {
+			$wrong[] = 'js/swap.js never names ' . $name . ', which BUILD_SWAP holds';
+		}
+	}
+	foreach (BUILD_SWAP['api'] as $name) {
+		if (preg_match('~^export const ' . $name . ' = ~m', $js) !== 1) {
+			$wrong[] = 'js/swap.js exports no ' . $name . ', which BUILD_SWAP holds';
 		}
 	}
 	return $wrong;
@@ -862,7 +900,7 @@ function BUILD__Main(array $argv): int
 {
 	$check = in_array('--check', $argv, true);
 	$vocab = BUILD__Vocabulary();
-	$wrong = [...BUILD__TextsCheck($vocab), ...BUILD__CommandsCheck(), ...BUILD__SamplesCheck(), ...BUILD__MotionCheck(), ...BUILD__SinksCheck(), ...BUILD__TrackCheck(), ...BUILD__CatalogCheck(), ...BUILD__ToolsCalls(), ...array_map(fn(string $failure): string => 'tools/min.php  ' . $failure, MIN__SelfTest())];
+	$wrong = [...BUILD__TextsCheck($vocab), ...BUILD__CommandsCheck(), ...BUILD__SamplesCheck(), ...BUILD__MotionCheck(), ...BUILD__SinksCheck(), ...BUILD__TrackCheck(), ...BUILD__SwapCheck(), ...BUILD__CatalogCheck(), ...BUILD__ToolsCalls(), ...array_map(fn(string $failure): string => 'tools/min.php  ' . $failure, MIN__SelfTest())];
 	if ($wrong !== []) {
 		fwrite(STDERR, implode("\n", $wrong) . "\n");
 		return 1;

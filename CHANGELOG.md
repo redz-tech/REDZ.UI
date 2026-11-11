@@ -26,8 +26,19 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   of `window`, `navigator` or `document`, a member only APIs short of the floor have - unless the file tests for it by
   `in`, `typeof`, `?.` or a truthiness test; `/* floor-allow NAME -- reason */` works as in a stylesheet. The library's
   gate judges its own scripts too.
+- Redrawn regions: `REDZ.ui.swap(region, source, {signal})` puts the content of a `DocumentFragment`, a `Document`,
+  an `Element` or a `TrustedHTML` into a region - never a string of markup - once nothing it would take out is in use: an
+  open menu, popover or dialog in it or opened from it, a tracked form with changes, words being composed. It tries
+  again as those end, a newer swap of the region overtakes a waiting one, and the promise answers whether it went in.
+  What the person set is carried to the new content by id: a filter's choice, a search's words, a table's sort, a
+  selection's checks, the selected tab, an open `details`, a `--toggle` region or tree group, the scroll of the region,
+  its boxes and the window, and the focus with its caret - or, its row gone, the region. Elements with an id are parts:
+  one the server sent unchanged stays as it is, its menu open, moved alive where the browser has `moveBefore`.
+  `REDZ.ui.swap(source)` puts each top part of the source into its namesake on the page; the region fires `redz:swap`.
 
 ### Changed
+- A table sorted again moves its rows alive where the browser has `moveBefore`: a menu open in a row stays open and the
+  focus stays on its control.
 - The script's budget is 52 KB gzipped, up from 42 KB: tracked forms take about 5 KB of it.
 - A form with `data-track` in a dialog saves as a tracked form, with `changed` in its `redz:save`; other dialog forms
   save as before.

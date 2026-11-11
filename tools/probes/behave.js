@@ -5101,6 +5101,78 @@ window.REDZ_BEHAVE = (() => {
 				out.push('once removed, the shell keeps ' + say(left) + ' - banners, the stored height, the header\'s top, the examples - not [0, "", 0, 4]');
 			}
 		}]},
+		swap: {target: '#swap-servers', steps: [async (out) => {
+			const region = $('#swap-servers');
+			const server = region.cloneNode(true);
+			const next = (load, drop = '') => {
+				const copy = server.cloneNode(true);
+				const row = $('#swap-db-01', copy);
+				row.dataset.sortLoad = String(load);
+				row.cells[2].textContent = load + '%';
+				$('#' + (drop || 'none'), copy)?.remove();
+				return copy;
+			};
+			const opener = (name) => $('#swap-' + name + ' button[commandfor]');
+			const open = (name) => document.querySelector('#swap-menu-' + name + ':popover-open') !== null;
+			const shut = () => document.querySelectorAll('#swap-servers :popover-open').forEach((menu) => menu.hidePopover());
+			const style = Object.assign(document.createElement('style'), {textContent: '#swap-servers .table-scroll { max-inline-size: 16rem; }'});
+			document.head.append(style);
+			input($('#swap-find'), 'web');
+			$('#swap-servers [command="--filter"][value="online"]').click();
+			$('#swap-servers button.table-sort[value="load"]').click();
+			$('#swap-window').open = true;
+			$('#swap-web-02 .check').click();
+			$('#swap-servers .table-scroll').scrollLeft = 60;
+			opener('web-01').focus();
+			await wait(50);
+			const left = $('#swap-servers .table-scroll').scrollLeft;
+			const done = await REDZ.ui.swap(region, next(99));
+			const head = $('#swap-table th[aria-sort]');
+			const carried = [done, $('#swap-find').value, $('#swap-servers [command="--filter"][value="online"]').getAttribute('aria-pressed'), head?.textContent + ' ' + head?.getAttribute('aria-sort'), $$('#swap-table tbody tr:not([data-filtered])').map((row) => row.id), $('#swap-window').open, $$('#swap-table tbody .check:checked').map((check) => check.value), $('#swap-servers .table-scroll').scrollLeft === left && left > 0, document.activeElement.getAttribute('commandfor'), $('#swap-db-01').cells[2].textContent];
+			if (say(carried) !== say([true, 'web', 'true', 'Load descending', ['swap-web-02', 'swap-web-01'], true, ['web-02'], true, 'swap-menu-web-01', '99%'])) {
+				out.push('a swap carries over (done, search, filter, sort, rows shown, details, ticks, scroll, focus, new load) ' + say(carried));
+			}
+			await REDZ.ui.swap(region, next(99));
+			const row = $('#swap-web-01');
+			opener('web-01').click();
+			await wait(100);
+			const alive = typeof Element.prototype.moveBefore === 'function';
+			const kept = REDZ.ui.swap(region, next(40));
+			const early = await Promise.race([kept, wait(300).then(() => 'waiting')]);
+			const parts = [early, $('#swap-web-01') === row, open('web-01')];
+			shut();
+			if (say(parts) !== say(alive ? [true, true, true] : ['waiting', true, false]) || await kept !== true) {
+				out.push('a menu open in a row the swap leaves as it is ' + (alive ? 'should neither hold the swap nor close' : 'holds the swap where nodes cannot move alive') + ': ' + say(parts) + ' (answer, the same row, the menu open)');
+			}
+			opener('db-01').click();
+			await wait(100);
+			const held = REDZ.ui.swap(region, next(41));
+			const first = await Promise.race([held, wait(300).then(() => 'waiting')]);
+			const newer = REDZ.ui.swap(region, next(42));
+			const overtaken = await held;
+			shut();
+			const last = await Promise.race([newer, wait(500).then(() => 'waiting')]);
+			if (say([first, overtaken, last, $('#swap-db-01').cells[2].textContent]) !== say(['waiting', false, true, '42%'])) {
+				out.push('a menu open in a changed row: the swap answers ' + say(first) + ' while it is open, ' + say(overtaken) + ' when a newer swap overtakes it, the newer one ' + say(last) + ' after it closes, the load reads ' + say($('#swap-db-01').cells[2].textContent));
+			}
+			opener('web-02').focus();
+			await REDZ.ui.swap(region, next(42, 'swap-web-02'));
+			if (document.activeElement !== region) {
+				out.push('a focus whose row is gone lands on ' + say(document.activeElement.id || document.activeElement.className) + ', not the region');
+			}
+			const quiet = console.error;
+			console.error = () => {};
+			const refused = await REDZ.ui.swap(region, '<p>Markup</p>');
+			console.error = quiet;
+			if (refused !== false || $('#swap-table') === null) {
+				out.push('a string of markup is not refused: the swap answers ' + say(refused));
+			}
+			await REDZ.ui.swap(region, server.cloneNode(true));
+			REDZ.ui.filter($('#swap-table'), null);
+			$$('#swap-table .check:checked').forEach((check) => check.click());
+			$('#swap-window').open = false;
+			style.remove();
+		}]},
 		comboboxLater: {target: '#combobox-one', steps: [async (out) => {
 			const late = $('#combobox-one').cloneNode(true);
 			for (const element of [late, ...$$('*', late)]) {

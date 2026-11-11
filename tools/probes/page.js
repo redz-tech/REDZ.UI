@@ -546,11 +546,16 @@ window.REDZ_PROBE = (() => {
 			for (const el of stuck) {
 				el.style.setProperty('position', 'static', 'important');
 			}
+			// A color still fading - a button whose cooldown just ended - is judged at its end, not halfway.
+			const still = document.createElement('style');
+			still.textContent = '*, *::before, *::after { transition: none !important; }';
+			document.head.append(still);
 			try {
 				const result = await window.axe.run(document, {runOnly: {type: 'tag', values: tags}, resultTypes: ['violations', 'incomplete']});
 				// A name on an element with no role, axe leaves as incomplete when the element holds text.
 				return [...result.violations, ...result.incomplete.filter((v) => v.id === 'aria-prohibited-attr')].map((v) => ({id: v.id, impact: v.impact, help: v.help, targets: v.nodes.slice(0, 5).map((node) => node.target.join(' '))}));
 			} finally {
+				still.remove();
 				for (const el of stuck) {
 					el.style.removeProperty('position');
 				}

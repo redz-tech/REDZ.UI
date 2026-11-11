@@ -48,7 +48,7 @@ const order = (table, head, direction) => {
 		}
 		let run = [];
 		const place = (before) => {
-			run.sort(compare).forEach((row) => body.insertBefore(row, before));
+			run.sort(compare).forEach((row) => typeof body.moveBefore === 'function' ? body.moveBefore(row, before) : body.insertBefore(row, before));
 			run = [];
 		};
 		for (const row of [...body.rows]) {

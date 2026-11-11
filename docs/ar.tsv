@@ -1945,3 +1945,25 @@ The page answers	جواب الصفحة
 {count} unsaved changes in {forms}: {fields}	{count} تغييرات غير محفوظة في {forms}: {fields}
 {forms}: {count} change is not saved - {fields}.	{forms}: {count} تغيير لم يُحفظ - {fields}.
 {forms}: {count} changes are not saved - {fields}.	{forms}: {count} تغييرات لم تُحفظ - {fields}.
+Actions for db-01	إجراءات db-01
+Actions for files-01	إجراءات files-01
+Actions for mail-01	إجراءات mail-01
+Actions for web-01	إجراءات web-01
+Actions for web-02	إجراءات web-02
+All servers	كل الخوادم
+Drawn by the server	رسمها الخادم
+Find a server	ابحث عن خادم
+Load	الحمل
+Maintenance window	نافذة الصيانة
+Online	متصل
+Open logs	فتح السجلات
+Redraw every 3 seconds	إعادة الرسم كل 3 ثوانٍ
+Redraw	إعادة الرسم
+Redrawn regions	مناطق يعاد رسمها
+Restart	إعادة التشغيل
+Servers	الخوادم
+Sundays from 02:00 to 04:00, one server at a time.	أيام الأحد من 02:00 إلى 04:00، خادم واحد في كل مرة.
+db-01	db-01
+mail-01	mail-01
+web-01	web-01
+web-02	web-02

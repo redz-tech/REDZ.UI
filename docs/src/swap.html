@@ -1,0 +1,93 @@
+<header class="vstack gap-8">
+	<h1>Redrawn regions</h1>
+	<p class="docs-lead">A region the page draws again - a list it asks the server for every few seconds, a card after a change - keeps what the person was doing in it. <code>REDZ.ui.swap()</code> waits while a menu is open in the region, puts the new content in, and carries the filter, the sort, the search, the ticked rows, the open parts, the scroll and the focus over by id. A part that did not change stays as it is, its menu open.</p>
+</header>
+
+<section class="vstack gap-16" aria-labelledby="swap-examples">
+	<h2 id="swap-examples">Examples</h2>
+	<p>Type in the search, press Online, sort by Load, tick a row, open the maintenance window, scroll the table sideways, open a row's menu - then redraw. Each redraw changes one server's load: the other rows stay as they are, and a menu open in one of them stays open. A menu open in the changed row holds the redraw until it closes.</p>
+	<div class="docs-example docs-example-stack" id="swap-example">
+		<div class="hstack gap-12 flex-wrap align-items-center">
+			<button class="btn btn-sm" type="button" data-docs-run="swap-now"><i class="bi bi-arrow-clockwise" aria-hidden="true"></i>Redraw</button>
+			<label class="form-check"><input class="switch" type="checkbox" role="switch" id="swap-auto"> Redraw every 3 seconds</label>
+		</div>
+		<section class="card" id="swap-servers" aria-labelledby="swap-servers-title">
+			<div class="card-header"><h3 id="swap-servers-title">Servers</h3><span class="text-muted fs-12" id="swap-drawn">Drawn by the server</span></div>
+			<div class="card-body vstack gap-12">
+				<div class="hstack gap-8 flex-wrap">
+					<input class="form-control form-control-sm" type="search" id="swap-find" data-filter="swap-table" placeholder="Find a server" aria-label="Find a server" autocomplete="off">
+					<div class="btn-group" role="group" aria-label="State">
+						<button class="btn btn-sm" type="button" command="--filter" aria-controls="swap-table" value="" aria-pressed="true">All</button>
+						<button class="btn btn-sm" type="button" command="--filter" aria-controls="swap-table" value="online" aria-pressed="false">Online</button>
+						<button class="btn btn-sm" type="button" command="--filter" aria-controls="swap-table" value="offline" aria-pressed="false">Offline</button>
+					</div>
+				</div>
+				<details id="swap-window"><summary>Maintenance window</summary><p class="text-muted m-0">Sundays from 02:00 to 04:00, one server at a time.</p></details>
+				<div class="table-scroll" role="region" aria-labelledby="swap-servers-title">
+					<table class="table" id="swap-table" data-select>
+						<thead><tr><th scope="col"><input class="check" type="checkbox" id="swap-all" data-select-all aria-label="All servers"></th><th scope="col" aria-sort="ascending"><button class="table-sort" type="button" value="name">Name</button></th><th scope="col" class="text-end"><button class="table-sort" type="button" value="load" data-sort-first="descending">Load</button></th><th scope="col">State</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr></thead>
+						<tbody>
+							<tr id="swap-web-01" data-state="online" data-sort-load="12"><td><input class="check" type="checkbox" name="servers[]" value="web-01" aria-label="web-01"></td><td>web-01</td><td class="text-end">12%</td><td>Online</td><td class="text-end"><button class="btn btn-icon btn-sm" type="button" commandfor="swap-menu-web-01" command="toggle-popover" aria-haspopup="menu" aria-label="Actions for web-01"><i class="bi bi-three-dots" aria-hidden="true"></i></button><div class="menu" id="swap-menu-web-01" popover role="menu" aria-label="web-01"><button class="menu-item" type="button" role="menuitem">Restart</button><button class="menu-item" type="button" role="menuitem">Open logs</button></div></td></tr>
+							<tr id="swap-web-02" data-state="online" data-sort-load="47"><td><input class="check" type="checkbox" name="servers[]" value="web-02" aria-label="web-02"></td><td>web-02</td><td class="text-end">47%</td><td>Online</td><td class="text-end"><button class="btn btn-icon btn-sm" type="button" commandfor="swap-menu-web-02" command="toggle-popover" aria-haspopup="menu" aria-label="Actions for web-02"><i class="bi bi-three-dots" aria-hidden="true"></i></button><div class="menu" id="swap-menu-web-02" popover role="menu" aria-label="web-02"><button class="menu-item" type="button" role="menuitem">Restart</button><button class="menu-item" type="button" role="menuitem">Open logs</button></div></td></tr>
+							<tr id="swap-db-01" data-state="online" data-sort-load="63"><td><input class="check" type="checkbox" name="servers[]" value="db-01" aria-label="db-01"></td><td>db-01</td><td class="text-end">63%</td><td>Online</td><td class="text-end"><button class="btn btn-icon btn-sm" type="button" commandfor="swap-menu-db-01" command="toggle-popover" aria-haspopup="menu" aria-label="Actions for db-01"><i class="bi bi-three-dots" aria-hidden="true"></i></button><div class="menu" id="swap-menu-db-01" popover role="menu" aria-label="db-01"><button class="menu-item" type="button" role="menuitem">Restart</button><button class="menu-item" type="button" role="menuitem">Open logs</button></div></td></tr>
+							<tr id="swap-mail-01" data-state="offline" data-sort-load="0"><td><input class="check" type="checkbox" name="servers[]" value="mail-01" aria-label="mail-01"></td><td>mail-01</td><td class="text-end">0%</td><td>Offline</td><td class="text-end"><button class="btn btn-icon btn-sm" type="button" commandfor="swap-menu-mail-01" command="toggle-popover" aria-haspopup="menu" aria-label="Actions for mail-01"><i class="bi bi-three-dots" aria-hidden="true"></i></button><div class="menu" id="swap-menu-mail-01" popover role="menu" aria-label="mail-01"><button class="menu-item" type="button" role="menuitem">Restart</button><button class="menu-item" type="button" role="menuitem">Open logs</button></div></td></tr>
+							<tr id="swap-files-01" data-state="online" data-sort-load="28"><td><input class="check" type="checkbox" name="servers[]" value="files-01" aria-label="files-01"></td><td>files-01</td><td class="text-end">28%</td><td>Online</td><td class="text-end"><button class="btn btn-icon btn-sm" type="button" commandfor="swap-menu-files-01" command="toggle-popover" aria-haspopup="menu" aria-label="Actions for files-01"><i class="bi bi-three-dots" aria-hidden="true"></i></button><div class="menu" id="swap-menu-files-01" popover role="menu" aria-label="files-01"><button class="menu-item" type="button" role="menuitem">Restart</button><button class="menu-item" type="button" role="menuitem">Open logs</button></div></td></tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+	</div>
+	<p>The page asks its server, makes nodes of the answer and hands them over; the library makes no request and parses no string. A <code>&lt;template&gt;</code>, a <code>DOMParser</code> document or a request with <code>responseType = 'document'</code> make the nodes - under Trusted Types that parse is the page's own, through its policy, or the page hands over the policy's <code>TrustedHTML</code> as it is.</p>
+	<pre class="docs-code" tabindex="0"><code>const answer = await (await fetch('/servers/list')).text();
+const template = document.createElement('template');
+template.innerHTML = answer; // or policy.createHTML(answer) under Trusted Types
+await REDZ.ui.swap(document.getElementById('swap-servers'), template.content);</code></pre>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="swap-carried">
+	<h2 id="swap-carried">What is carried over</h2>
+	<p>The new content is the server's; what the person set in the old content is set again in the new one, matched by id. Give the parts ids: rows, tables, scroll boxes, toggled regions, the buttons that open menus by <code>commandfor</code>.</p>
+	<table class="table docs-table">
+		<thead><tr><th scope="col">What</th><th scope="col">Matched by</th></tr></thead>
+		<tbody>
+			<tr><td>A filter's pressed buttons (<code>command="--filter"</code>)</td><td>The region the buttons name</td></tr>
+			<tr><td>A search's words (<code>data-filter</code>) and the words of the focused field</td><td>The field's id; a field of a <a href="save-bar.html">tracked form</a> is never written</td></tr>
+			<tr><td>A table's sort (<code>aria-sort</code>)</td><td>The table's id, the column's sort value or place</td></tr>
+			<tr><td>The ticked checks of a selection (<code>data-select</code>)</td><td>The selection's id, each check's value</td></tr>
+			<tr><td>The selected tab (<code>aria-selected</code>)</td><td>The tab list's id and the tab's</td></tr>
+			<tr><td>An open <code>details</code>, a <code>--toggle</code> region, a tree group</td><td>Its id</td></tr>
+			<tr><td>The scroll of the region and of its scroll boxes</td><td>The box's id, else its place among the region's <code>.table-scroll</code></td></tr>
+			<tr><td>The window's scroll, when the region starts above the window</td><td>The first element with an id in view, held where it was</td></tr>
+			<tr><td>The focus and a field's caret</td><td>The id; else the button with the same <code>commandfor</code>, or the same <code>aria-controls</code> and <code>command</code>; else a field with the same name and value; else the first control of the nearest part with an id; else the region itself</td></tr>
+		</tbody>
+	</table>
+	<p>Not carried: pages a "show more" list loaded, which are data - ask the server for as many - and anything the page set by its own script, which <code>redz:swap</code> lets it set again.</p>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="swap-wait">
+	<h2 id="swap-wait">When it waits</h2>
+	<p>A swap goes in at once when nothing in the region is in use. It waits while what it would take out holds a menu, a popover or a dialog that is open - or one opened from a button in it - a <a href="save-bar.html">tracked form</a> with changes, or words being composed with an input method, and tries again as each of those ends: no timer. A newer swap of the same region overtakes a waiting one, which answers <code>false</code>; so does an aborted <code>signal</code>. Typing in a field does not hold a swap: its words, caret and focus are carried.</p>
+	<p>Elements with an id are parts. A part whose new copy is equal to the copy the last swap brought - the first time, to the part as it stands - stays as it is: its menu open, its spinner turning, its focus. Where the browser moves a node alive (<code>moveBefore</code>: Chrome 133, Firefox 144) such a part never holds a swap; elsewhere, Safari among them, it is moved as any node is and holds the swap like the rest.</p>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="swap-code">
+	<h2 id="swap-code">From code</h2>
+	<table class="table docs-table">
+		<thead><tr><th scope="col">Call or event</th><th scope="col">What it does</th></tr></thead>
+		<tbody>
+			<tr><td><code>REDZ.ui.swap(region, source, {signal})</code></td><td>Puts the source's content into the region; a promise of <code>true</code> once it is in, <code>false</code> when a newer swap overtook it or the signal aborted. <code>source</code> is a <code>DocumentFragment</code>, a <code>Document</code>, an <code>Element</code> or a <code>TrustedHTML</code>; when it holds an element with the region's id, that element's children are taken, else all of it. Its scripts are dropped, its nodes taken.</td></tr>
+			<tr><td><code>REDZ.ui.swap(source, {signal})</code></td><td>Puts each top element of the source that has an id into its namesake on the page - a card's head and its regions from one answer. A promise of <code>true</code> when every one went in.</td></tr>
+			<tr><td><code>redz:swap</code></td><td>Fired on the region, bubbling, once the new content is in and carried over: the moment for the page's own setup of it.</td></tr>
+		</tbody>
+	</table>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="swap-access">
+	<h2 id="swap-access">Keyboard and accessibility</h2>
+	<ul>
+		<li>The focus stays where the person was: on the same control, or on its nearest namesake. When the row it was on is gone, the region takes it - made focusable with <code>tabindex="-1"</code> - so the next Tab goes on from there, not from the top of the page.</li>
+		<li>A swap says nothing aloud. A list that changes under a person's eyes - new rows, a state that turned - is for the page to say, in its own words, with a <a href="status.html">status line</a> or a toast.</li>
+		<li>Redraw no faster than people read: every few seconds at most, and not while nothing changed.</li>
+	</ul>
+</section>
