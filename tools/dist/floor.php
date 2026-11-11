@@ -5,7 +5,8 @@
 // browser-compat-data, and the release's exceptions. The core of the library's own gate, tools/floor.php, and shipped as
 // it is in each release's redz-ui-tools-<version>.zip. PHP 8.4+, no network.
 // Usage: php floor.php check [--allow=FILE] [--json] FILE… - a finding a line on stdout, FILE:LINE  NAME (KEY) - BROWSER
-// VERSION VERDICT, …, the summary on stderr; exit 0 clean, 1 findings, 2 anything else. A block counts only for the
+// VERSION VERDICT, …, the notes to check by hand and the summary on stderr; exit 0 clean, 1 findings, 2 anything else.
+// A member of one plain word short of the floor - bytes, sync - is as often the page's own data: a note, failing nothing. A block counts only for the
 // browsers that apply it (@media, @supports), and a vendor form beside a property covers it; a script that tests a name
 // ('X' in o, typeof, ?., o.X && …) is spared it. An exception needs a reason: /* floor-allow NAME[, NAME…] -- reason */
 // (or // in a script) covers those names on its own lines and the next one, and --allow=FILE reads
@@ -31,6 +32,8 @@ const FLOOR_JS_RECEIVERS = ['navigator', 'document'];
 // The operators after which a name is tested, not used: `o.X && …`, and `o.X === undefined` with the word after them.
 const FLOOR_JS_TESTS = ['&&', '||', '??', '?'];
 const FLOOR_JS_COMPARE = ['===', '!==', '==', '!='];
+// A member's name of one plain word: the page's own data as often as the browser's, so its gap is a note to check by hand.
+const FLOOR_JS_PLAIN = '~^member:[a-z]+$~';
 // The samples the checker proves itself on before it judges: [kind, sample, a text its findings hold, or '' for none].
 const FLOOR_FUSES = [
 	['css', '.a { field-sizing: content; }', 'property:field-sizing'],
@@ -60,6 +63,7 @@ const FLOOR_FUSES = [
 	['js', "cookieStore.get('a');", 'fuse:1  global:cookieStore (api.Window.cookieStore)'],
 	['js', 'Promise.try(() => 1);', 'static:Promise.try (javascript.builtins.Promise.try)'],
 	['js', 'list.moveBefore(a, b);', 'member:moveBefore (api.'],
+	['js', 'const data = await blob.bytes();', 'a plain word, maybe the page\'s own: check by hand'],
 	['js', "const route = new URLPattern({pathname: '/a'});", 'global:URLPattern (api.URLPattern)'],
 	['js', 'const registry = new CustomElementRegistry();', 'new:CustomElementRegistry (api.CustomElementRegistry.CustomElementRegistry)'],
 	['js', 'const brands = navigator.userAgentData.brands;', 'navigator:userAgentData (api.Navigator.userAgentData)'],
@@ -315,10 +319,11 @@ function FLOOR__Allowed(array $allow, string $name, string $browser, int $line, 
 	return false;
 }
 
-/** One finding: where, the name it is about, its BCD key and verdicts by browser when it falls short, and its text. */
-function FLOOR__Finding(string $file, int $line, string $name, string $text, string $key = '', array $browsers = []): array
+/** One finding: where, the name it is about, its BCD key and verdicts by browser when it falls short, its text, and
+ *  whether it is only a note to check by hand. */
+function FLOOR__Finding(string $file, int $line, string $name, string $text, string $key = '', array $browsers = [], bool $hand = false): array
 {
-	return ['file' => $file, 'line' => $line, 'name' => $name, 'key' => $key, 'browsers' => $browsers, 'text' => $text];
+	return ['file' => $file, 'line' => $line, 'name' => $name, 'key' => $key, 'browsers' => $browsers, 'text' => $text, 'hand' => $hand];
 }
 
 /** A finding as its line: FILE:LINE  TEXT. */
@@ -1243,7 +1248,8 @@ function FLOOR__Findings(array $facts, string $file, array $data, array $allow, 
 		if ($lacking !== []) {
 			$key = $data['names'][$name]['key'];
 			$verdicts = array_map(fn(string $browser, string $verdict): string => $browser . ' ' . $data['floor'][$browser] . ' ' . $verdict, array_keys($lacking), $lacking);
-			$findings[] = FLOOR__Finding($file, $line, $name, $name . ' (' . $key . ') - ' . implode(', ', $verdicts), $key, $lacking);
+			$hand = preg_match(FLOOR_JS_PLAIN, $name) === 1;
+			$findings[] = FLOOR__Finding($file, $line, $name, $name . ' (' . $key . ') - ' . implode(', ', $verdicts) . ($hand ? ' - a plain word, maybe the page\'s own: check by hand' : ''), $key, $lacking, $hand);
 		}
 	}
 	return $findings;
@@ -1313,7 +1319,8 @@ function FLOOR__SelfTest(array $data): array
 }
 
 /** check [--allow=FILE] [--json] FILE…: the findings of the files under the release's exceptions for any stylesheet and
- *  the allow file's; 0 clean, 1 findings, 2 a wrong call or anything the checker cannot read or prove. */
+ *  the allow file's, the notes to check by hand apart; 0 clean, 1 findings, 2 a wrong call or anything the checker
+ *  cannot read or prove. */
 function FLOOR__Cli(array $argv): int
 {
 	$json = false;
@@ -1353,10 +1360,13 @@ function FLOOR__Cli(array $argv): int
 		fwrite(STDERR, 'floor.php: ' . $e->getMessage() . "\n");
 		return 2;
 	}
+	$hand = array_values(array_filter($findings, fn(array $finding): bool => $finding['hand']));
+	$findings = array_values(array_filter($findings, fn(array $finding): bool => !$finding['hand']));
 	echo $json
-		? json_encode(['floor' => $data['floor'], 'bcd' => $data['bcd']['version'], 'findings' => $findings], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . "\n"
+		? json_encode(['floor' => $data['floor'], 'bcd' => $data['bcd']['version'], 'findings' => $findings, 'hand' => $hand], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . "\n"
 		: implode('', array_map(fn(array $finding): string => FLOOR__FindingLine($finding) . "\n", $findings));
-	fwrite(STDERR, sprintf("floor %s · BCD %s · %d files · %s\n", implode(' ', array_map(fn(string $browser): string => $browser . ' ' . $data['floor'][$browser], FLOOR_BROWSERS)), $data['bcd']['version'], count($paths), $findings === [] ? 'CLEAN' : count($findings) . ' findings'));
+	fwrite(STDERR, implode('', array_map(fn(array $finding): string => FLOOR__FindingLine($finding) . "\n", $json ? [] : $hand)));
+	fwrite(STDERR, sprintf("floor %s · BCD %s · %d files · %s%s\n", implode(' ', array_map(fn(string $browser): string => $browser . ' ' . $data['floor'][$browser], FLOOR_BROWSERS)), $data['bcd']['version'], count($paths), $findings === [] ? 'CLEAN' : count($findings) . ' findings', $hand === [] ? '' : ' · ' . count($hand) . ' to check by hand'));
 	return $findings === [] ? 0 : 1;
 }
 

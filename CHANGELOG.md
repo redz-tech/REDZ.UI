@@ -26,16 +26,21 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   lands later, on its own `input` or `change` and when a script sets it. Enter, the separator or the button takes the
   entry by its own rules - `min`, `max`, `step`, `pattern`, `type` - and a value held already (`chip.held`) or past
   `data-chips-max` (`chip.full`) is refused too: the entry turns `aria-invalid`, keeps its text, and the words stand
-  under the box and are said at once. `data-chips-order` sorts the values, numbers as numbers; a chip reads as the
-  entry's `datalist` option of its value. Each chip's remove button is in the Tab order and takes Delete and Backspace;
-  Backspace in the entry never removes a chip; added and removed are said politely (`chip.added`, `chip.removed`). In
-  a tracked form the hidden field is one field marked on the box and named by the entry's label.
+  under the box and are said at once. Words left in the entry are taken when the person leaves it for a place outside
+  the box - a refusal then said politely - and when the form is sent or saved, which a refusal holds with the focus in
+  the entry; a refused entry stays invalid until it changes, so nothing typed is lost unseen. `data-chips-order` sorts
+  the values, numbers as numbers; a chip reads as the entry's `datalist` option of its value. Each chip's remove
+  button is in the Tab order and takes Delete and Backspace; Backspace in the entry never removes a chip; added and
+  removed are said politely (`chip.added`, `chip.removed`). In a tracked form the hidden field is one field marked on
+  the box and named by the entry's label.
 - `textCount(key, count, args)`: a count's text takes other `{names}` too, and the passport's `args` lists them.
 - The floor checker judges scripts: `floor.php check` reads a `.js` or `.mjs` file and reports the browser APIs
   (`api.*`, `javascript.builtins.*`) and the few forms of syntax the floor lacks - a global, a `new`, a static, a member
   of `window`, `navigator` or `document`, a member only APIs short of the floor have - unless the file tests for it by
-  `in`, `typeof`, `?.` or a truthiness test; `/* floor-allow NAME -- reason */` works as in a stylesheet. The library's
-  gate judges its own scripts too.
+  `in`, `typeof`, `?.` or a truthiness test; `/* floor-allow NAME -- reason */` works as in a stylesheet. A member of
+  one plain word - `bytes`, `sync` - is as often the page's own data, so its gap is a note to check by hand on standard
+  error (`hand` in `--json`) that fails nothing; a name like `moveBefore` stays a finding. The library's gate judges its
+  own scripts too.
 - Redrawn regions: `REDZ.ui.swap(region, source, {signal})` puts the content of a `DocumentFragment`, a `Document`,
   an `Element` or a `TrustedHTML` into a region - never a string of markup - once nothing it would take out is in use: an
   open menu, popover or dialog in it or opened from it, a tracked form with changes, words being composed. It tries
@@ -70,6 +75,10 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   save as before.
 - The busy overlay of `data-transition="busy"` does not start while a tracked form's changes have the browser ask
   before the page goes.
+- A combobox's search is `type="text"` in every sample, the only input type ARIA in HTML allows `role="combobox"` on,
+  with `enterkeyhint="search"` for the phone's search key; `type="search"` and `type="email"` there were invalid. A
+  search with `inputmode="email"` refuses words that are no address, checked as `type="email"` would - and old
+  markup with `type="email"` still works. The build refuses `role="combobox"` on another input type in the samples.
 
 ### Fixed
 - A combobox put in after the page loaded was not drawn - its options' choice and its face's words - until the page set

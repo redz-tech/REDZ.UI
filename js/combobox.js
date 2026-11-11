@@ -5,8 +5,9 @@
 // in a dialog, its options links and buttons. A page that finds options itself cancels redz:search and puts them in. A
 // list with data-create offers "Create …" for a search no option's label equals: the page may make the value through
 // redz:create (js/answer.js), else the new label goes into a hidden field data-create names. In such a list a comma
-// takes the words as Enter does, and a search with a pattern or type="email" refuses words it does not hold. Options in
-// levels (data-level: an option has no aria-level) keep the page's order, a match shown with its parents.
+// takes the words as Enter does, and a search with a pattern or inputmode="email" - type="email" too, though
+// role="combobox" belongs on type="text" - refuses words it does not hold. Options in levels (data-level: an option has
+// no aria-level) keep the page's order, a match shown with its parents.
 import {ask} from './answer.js';
 import {text, textCount} from './text.js';
 
@@ -452,7 +453,7 @@ const create = (option) => {
 	const input = searchOf(list);
 	const label = option.dataset.label;
 	const many = list.getAttribute('aria-multiselectable') === 'true';
-	if (input?.validity.patternMismatch || input?.validity.typeMismatch) {
+	if (input?.validity.patternMismatch || input?.validity.typeMismatch || (input?.inputMode === 'email' && !Object.assign(document.createElement('input'), {type: 'email', value: label}).validity.valid)) {
 		input.setAttribute('aria-invalid', 'true');
 		sayLater(list, text('chip.invalid', {label}));
 		return;

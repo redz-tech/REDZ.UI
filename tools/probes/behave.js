@@ -5141,8 +5141,8 @@ window.REDZ_BEHAVE = (() => {
 			const early = await Promise.race([kept, wait(300).then(() => 'waiting')]);
 			const parts = [early, $('#swap-web-01') === row, open('web-01')];
 			shut();
-			if (say(parts) !== say(alive ? [true, true, true] : ['waiting', true, false]) || await kept !== true) {
-				out.push('a menu open in a row the swap leaves as it is ' + (alive ? 'should neither hold the swap nor close' : 'holds the swap where nodes cannot move alive') + ': ' + say(parts) + ' (answer, the same row, the menu open)');
+			if (say(parts) !== say(alive ? [true, true, true] : ['waiting', true, true]) || await kept !== true) {
+				out.push('a menu open in a row the swap leaves as it is ' + (alive ? 'should neither hold the swap nor close' : 'holds the swap open where nodes cannot move alive') + ': ' + say(parts) + ' (answer, the same row, the menu open)');
 			}
 			opener('db-01').click();
 			await wait(100);
@@ -5439,6 +5439,39 @@ window.REDZ_BEHAVE = (() => {
 			if (say(last) !== say(['30,7,5,4,3,2', true]) || hidden.value !== '7,5,4,3,2' || document.activeElement !== dismiss()[0]) {
 				out.push('Backspace on the last chip gives ' + say(last) + ' and a click on the first leaves ' + say([hidden.value, document.activeElement?.getAttribute('aria-label')]) + ' - not the focus on the entry, then on the next chip');
 			}
+			// An engine whose window is in the background sends no focus events: they are sent as a focused window would.
+			const leave = (to) => {
+				let sent = false;
+				const mark = () => {
+					sent = true;
+				};
+				entry.addEventListener('focusout', mark, {once: true});
+				to.focus();
+				entry.removeEventListener('focusout', mark);
+				if (!sent) {
+					entry.dispatchEvent(new FocusEvent('focusout', {bubbles: true, relatedTarget: to}));
+				}
+			};
+			entry.focus();
+			input(entry, '9');
+			entry.dispatchEvent(new FocusEvent('focusout', {bubbles: true}));
+			const away = [hidden.value, entry.value];
+			leave(dismiss()[0]);
+			const within = [hidden.value, entry.value];
+			entry.focus();
+			leave($('#form-chips-rooms'));
+			await wait(50);
+			const blurred = [hidden.value, entry.value, told()];
+			entry.focus();
+			input(entry, '7');
+			leave($('#form-chips-rooms'));
+			await wait(150);
+			const stays = [hidden.value, entry.value, entry.getAttribute('aria-invalid'), told(), entry.validationMessage, entry.checkValidity()];
+			input(entry, '');
+			const freed = entry.checkValidity();
+			if (say(away) !== say(['7,5,4,3,2', '9']) || say(within) !== say(['7,5,4,3,2', '9']) || say(blurred) !== say(['9,7,5,4,3,2', '', '9 added']) || say(stays) !== say(['9,7,5,4,3,2', '7', 'true', 'A week before is already in the list', 'A week before is already in the list', false]) || !freed) {
+				out.push('words left in the entry: another window ' + say(away) + ', a chip\'s button ' + say(within) + ' - not left alone; a field outside the box takes 9: ' + say(blurred) + ', refuses a held 7: ' + say(stays) + ' - not said politely and holding the form until the entry changes (' + freed + ')');
+			}
 			hidden.value = '60,2';
 			hidden.dispatchEvent(new Event('change', {bubbles: true}));
 			const outside = labels();
@@ -5494,9 +5527,34 @@ window.REDZ_BEHAVE = (() => {
 			form.reset();
 			await wait(20);
 			const reset = [typed, $(':scope > input[type="hidden"]', lateBox).value, labels(lateBox)];
+			let asked = null;
+			form.addEventListener('redz:save', (event) => {
+				event.preventDefault();
+				asked = event.detail.changed.map((change) => change.now);
+				event.detail.respondWith(Promise.resolve());
+			}, {once: true});
+			late.value = '21';
+			const saved = [await REDZ.ui.track.save(form), late.value];
+			form.removeAttribute('data-track');
+			const sent = [];
+			form.addEventListener('submit', (event) => {
+				event.preventDefault();
+				sent.push(new FormData(form).get('remind_days'));
+			});
+			late.focus();
+			late.value = '60';
+			form.requestSubmit();
+			late.value = '7';
+			form.requestSubmit();
+			await wait(150);
+			const stopped = [document.activeElement === late, late.getAttribute('aria-invalid'), alerted()];
+			form.requestSubmit();
 			form.remove();
 			late.blur();
 			await wait(50);
+			if (say([asked, ...saved]) !== say([['30,21,7,1'], true, '']) || say(sent) !== say(['60,30,21,7,1']) || say(stopped) !== say([true, 'true', 'A week before is already in the list'])) {
+				out.push('words left in a chips entry as its form is saved give ' + say([asked, ...saved]) + ', as a plain form is sent ' + say(sent) + ' - not taken first; a held 7 sends nothing, the focus in the entry, said at once: ' + say(stopped));
+			}
 			if (say(discarded) !== say(['30,7,1', ['30', 'A week before', 'The day before'], false, false, true])) {
 				out.push('Discard of the tracked chips gives ' + say(discarded) + ' - not the saved value, its chips drawn again, no mark, no refusal');
 			}

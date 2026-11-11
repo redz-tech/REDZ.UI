@@ -1,9 +1,10 @@
 <?php
 // floor - the browser floor gate: every CSS, HTML and JS feature of the library against MDN's browser-compat-data at the
 // versions of tools/floor/rules.json. Usage: php tools/floor.php check [FILE…] | build | refresh [VERSION]
-// check - reports each feature the floor lacks as file:line, exits 1 on any, when floor.json is out of date, and when an
-// exception or a repair of rules.json is outgrown; with files (.css, .html, .js), checks just them; either way first
-// proves itself on the fuses of FLOOR__Fuses(), and the release's checker tools/dist/floor.php on its command line;
+// check - reports each feature the floor lacks as file:line, a member of one plain word as a note to check by hand that
+// fails nothing; exits 1 on any other, when floor.json is out of date, and when an exception or a repair of rules.json
+// is outgrown; with files (.css, .html, .js), checks just them; either way first proves itself on the fuses of
+// FLOOR__Fuses(), and the release's checker tools/dist/floor.php on its command line;
 // build - writes floor.json, every name the gate knows with its verdict at the floor, for the release;
 // refresh - downloads @mdn/browser-compat-data (the version of tools/floor/bcd.tsv, or VERSION), verifies its sha512 and
 // writes tools/floor/bcd.tsv.
@@ -525,6 +526,8 @@ function FLOOR__CliFindings(): array
 		'bad.json' => '{"allow": [{"name": "property:field-sizing"}]}',
 		'gap.js' => "const prefs = await cookieStore.get('theme');\n",
 		'module.mjs' => "if ('cookieStore' in window) {\n\tawait cookieStore.get('theme');\n}\nexport const run = () => Promise.try(load);\n",
+		'plain.js' => "const data = await blob.bytes();\nlist.moveBefore(a, b);\n",
+		'hand.js' => "const size = file.bytes;\n",
 	];
 	if (!is_dir($dir)) {
 		mkdir($dir);
@@ -539,6 +542,9 @@ function FLOOR__CliFindings(): array
 		[['check', '--json', 'gap.css'], 1, '~"name": "property:field-sizing",\s+"key": "css\.properties\.field-sizing",\s+"browsers": \{~', '~findings~'],
 		[['check', 'gap.js', 'module.mjs'], 1, '~\Agap\.js:1  global:cookieStore \(api\.Window\.cookieStore\) - [^\n]*\nmodule\.mjs:4  static:Promise\.try \(javascript\.builtins\.Promise\.try\) - [^\n]*\n\z~', '~2 files · 2 findings~'],
 		[['check', '--json', 'gap.js'], 1, '~"name": "global:cookieStore",\s+"key": "api\.Window\.cookieStore",\s+"browsers": \{~', '~findings~'],
+		[['check', 'plain.js'], 1, '~\Aplain\.js:2  member:moveBefore \(api\.[^\n]*\n\z~', '~^plain\.js:1  member:bytes \(api\.[^\n]* - a plain word, maybe the page\'s own: check by hand\n(?s:.*)1 findings · 1 to check by hand~m'],
+		[['check', 'hand.js'], 0, '~\A\z~', '~CLEAN · 1 to check by hand~'],
+		[['check', '--json', 'hand.js'], 0, '~"findings": \[\],\s+"hand": \[\s+\{\s+"file": "hand\.js",\s+"line": 1,\s+"name": "member:bytes"~', '~\A[^\n]*CLEAN · 1 to check by hand\n\z~'],
 		[['check', '--allow=bad.json', 'clean.css'], 2, '~\A\z~', '~needs a name, a reason~'],
 		[['check'], 2, '~\A\z~', '~usage~'],
 		[['check', 'missing.css'], 2, '~\A\z~', '~cannot read missing\.css~'],
@@ -580,7 +586,9 @@ function FLOOR__Check(array $paths): int
 	foreach ($paths as $path) {
 		$files[$path] = str_starts_with($path, $root . '/') ? substr($path, strlen($root) + 1) : $path;
 	}
-	$findings = [...$findings, ...array_map('FLOOR__FindingLine', FLOOR__Judge($data, FLOOR__ReleaseAllow($data, FLOOR_SCOPES), $files, $used))];
+	$judged = FLOOR__Judge($data, FLOOR__ReleaseAllow($data, FLOOR_SCOPES), $files, $used);
+	$hand = array_map('FLOOR__FindingLine', array_filter($judged, fn(array $finding): bool => $finding['hand']));
+	$findings = [...$findings, ...array_map('FLOOR__FindingLine', array_filter($judged, fn(array $finding): bool => !$finding['hand']))];
 	foreach ($paths === [] ? $rules['allow'] : [] as $k => $entry) {
 		if (!isset($used['release#' . $k])) {
 			$findings[] = 'tools/floor/rules.json  the exception ' . ($entry['key'] ?? $entry['name']) . ' allows nothing any more - remove it';
@@ -592,11 +600,11 @@ function FLOOR__Check(array $paths): int
 	if ($paths === [] && (!is_file(FLOOR_LIST) || file_get_contents(FLOOR_LIST) !== $text)) {
 		$findings[] = 'floor.json  out of date - run php tools/floor.php build';
 	}
-	foreach ($findings as $finding) {
+	foreach ([...$findings, ...$hand] as $finding) {
 		echo $finding, "\n";
 	}
 	$floor = implode(' ', array_map(fn(string $browser): string => $browser . ' ' . $rules['floor'][$browser], FLOOR_BROWSERS));
-	printf("floor %s · BCD %s · %d files · %d exceptions · %d repairs · selftest %d/%d · %s\n", $floor, $data['bcd']['version'], count($files), count($rules['allow']), count($rules['repairs'] ?? []), $fuses, count(FLOOR__Fuses()), $findings === [] ? 'CLEAN' : count($findings) . ' findings');
+	printf("floor %s · BCD %s · %d files · %d exceptions · %d repairs · selftest %d/%d · %s\n", $floor, $data['bcd']['version'], count($files), count($rules['allow']), count($rules['repairs'] ?? []), $fuses, count(FLOOR__Fuses()), ($findings === [] ? 'CLEAN' : count($findings) . ' findings') . ($hand === [] ? '' : ' · ' . count($hand) . ' to check by hand'));
 	return $findings === [] ? 0 : 1;
 }
 

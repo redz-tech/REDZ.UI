@@ -10,8 +10,10 @@
 // goes to the next chip, else to the entry; added and removed are said politely. Each change writes the hidden value
 // and fires input and change on it, and the chips are drawn again from it at load, for a box that lands later, on its
 // own input or change from outside - a tracked form's Discard - and when a script sets it; the form's reset puts back
-// the values the box came with. Enter in the entry never sends the form; the remove buttons and the --add button follow
-// the entry's disabled.
+// the values the box came with. Words left in the entry are taken as the person leaves it for a place outside the box -
+// a refusal then said politely - and as the form is sent or saved, which a refusal holds, the focus in the entry; a
+// refused entry stays invalid until it changes. Enter in the entry never sends the form; the remove buttons and the
+// --add button follow the entry's disabled.
 import {chipOf} from './combobox.js';
 import {announce} from './say.js';
 import {text, textCount} from './text.js';
@@ -96,8 +98,9 @@ const describe = (entry, id, on) => {
 	}
 };
 
-/** Refuses the entry: aria-invalid, the words in the error line after the box, said at once. */
-const refuse = (box, words) => {
+/** Refuses the entry: aria-invalid, the words in the error line after the box, said at once or, as the person has left
+ *  the entry, politely; a value the entry's own checks pass holds the form by the words. */
+const refuse = (box, words, loud) => {
 	const entry = entryOf(box);
 	let line = lines.get(box);
 	if (line === undefined || !line.isConnected) {
@@ -110,7 +113,9 @@ const refuse = (box, words) => {
 	icon.setAttribute('aria-hidden', 'true');
 	line.replaceChildren(icon, words);
 	entry.setAttribute('aria-invalid', 'true');
-	announce(words, true);
+	entry.setCustomValidity('');
+	entry.setCustomValidity(entry.validity.valid ? words : '');
+	announce(words, loud);
 };
 
 /** Takes the entry's refusal away: its mark and its error line. */
@@ -118,6 +123,7 @@ const unrefuse = (box) => {
 	const entry = entryOf(box);
 	const line = lines.get(box);
 	entry.removeAttribute('aria-invalid');
+	entry.setCustomValidity('');
 	if (line !== undefined) {
 		describe(entry, line.id, false);
 		line.remove();
@@ -138,7 +144,7 @@ const write = (box, values) => {
 
 /** Takes what the entry holds - each part between separators in turn - until one is refused, which stays in the entry
  *  with the parts after it. */
-const take = (entry) => {
+const take = (entry, loud = true) => {
 	const box = entry.closest(BOX);
 	const join = joinOf(box);
 	const parts = entry.validity.badInput ? [''] : entry.value.split(join).map((part) => part.trim()).filter((part) => part !== '');
@@ -170,8 +176,17 @@ const take = (entry) => {
 		entry.value = parts.slice(at).join(join);
 	}
 	if (words !== '') {
-		refuse(box, words);
+		refuse(box, words, loud);
 	}
+};
+
+/** Whether the entry holds words not taken yet. */
+const left = (entry) => entry.value.trim() !== '' || entry.validity.badInput;
+
+/** Takes what the entries of the form still hold, as it is saved; the first entry refused, else null. */
+export const settle = (form) => {
+	form.querySelectorAll(ENTRY).forEach((entry) => left(entry) && take(entry));
+	return form.querySelector(ENTRY + '[aria-invalid="true"]');
 };
 
 /** Takes the remove button's chip away and says so; the focus goes to the next chip's button, else to the entry. */
@@ -234,3 +249,21 @@ document.addEventListener('change', follow);
 document.addEventListener('reset', (event) => {
 	setTimeout(() => event.target.querySelectorAll(BOX).forEach((box) => firsts.has(box) && write(box, firsts.get(box))));
 });
+
+// Leaving the entry for a place outside its box takes what it holds; another window taking the focus does not.
+document.addEventListener('focusout', (event) => {
+	const entry = event.target;
+	if (entry instanceof HTMLInputElement && entry.matches(ENTRY) && left(entry) && document.activeElement !== entry && !entry.parentElement.contains(event.relatedTarget)) {
+		take(entry, false);
+	}
+});
+
+// A form sent with words left in an entry takes them first; one refused holds the form, the focus in it.
+document.addEventListener('submit', (event) => {
+	const entry = event.target instanceof HTMLFormElement ? settle(event.target) : null;
+	if (entry !== null) {
+		event.preventDefault();
+		event.stopImmediatePropagation();
+		entry.focus();
+	}
+}, true);

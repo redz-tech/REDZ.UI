@@ -402,7 +402,7 @@
 &lt;/div&gt;</code></pre></div>
 
 					<h3>Chips for typed values</h3>
-					<p><code>chip-input</code> is one field of several typed values, drawn as one box: the values as chips, then the entry, a <code>form-ghost</code> of any type. What the form sends is the box's hidden field - the values joined by <code>data-chips-join</code>, a comma by default - and the chips are drawn from it, at load and whenever it changes. <kbd>Enter</kbd>, the separator or the <code>command="--add"</code> button takes what is typed, by the entry's own rules - <code>min</code>, <code>max</code>, <code>step</code>, <code>pattern</code>, <code>type</code>; a value held already and one past <code>data-chips-max</code> are refused too. A refusal keeps the typed text, marks the entry <code>aria-invalid</code> and stands in words under the box. <code>data-chips-order</code> sorts the values - numbers as numbers in a number entry, words in the page's language - and without it they stay as typed. A chip reads as the entry's <code>datalist</code> option of its value, else as the value.</p>
+					<p><code>chip-input</code> is one field of several typed values, drawn as one box: the values as chips, then the entry, a <code>form-ghost</code> of any type. What the form sends is the box's hidden field - the values joined by <code>data-chips-join</code>, a comma by default - and the chips are drawn from it, at load and whenever it changes. <kbd>Enter</kbd>, the separator or the <code>command="--add"</code> button takes what is typed, by the entry's own rules - <code>min</code>, <code>max</code>, <code>step</code>, <code>pattern</code>, <code>type</code>; a value held already and one past <code>data-chips-max</code> are refused too. A refusal keeps the typed text, marks the entry <code>aria-invalid</code> and stands in words under the box. Words left in the entry are taken as the person leaves it for a place outside the box and as the form is sent or saved; a refusal there holds the form, the focus in the entry. <code>data-chips-order</code> sorts the values - numbers as numbers in a number entry, words in the page's language - and without it they stay as typed. A chip reads as the entry's <code>datalist</code> option of its value, else as the value.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="form-chips">
 						<div class="form-field max-w-360">
 							<label class="form-label" for="form-chips-days">Remind before the event, days</label>
@@ -656,7 +656,7 @@ REDZ.ui.follow(form);</code></pre>
 									<th scope="row">chip-input</th>
 									<td><div class="chip-input"><input type="hidden" value="7"><input class="form-ghost" name="chips-rest" aria-label="Days at rest"></div></td>
 									<td><div class="chip-input"><input type="hidden" value="7"><input class="form-ghost" name="chips-focused" aria-label="Days focused" data-docs-state="focus"></div></td>
-									<td><div class="chip-input"><input type="hidden" value="7"><input class="form-ghost" name="chips-invalid" value="400" aria-label="Days with an error" aria-invalid="true"></div></td>
+									<td><div class="chip-input"><input type="hidden" value="7"><input class="form-ghost" name="chips-invalid" type="number" max="365" value="400" aria-label="Days with an error" aria-invalid="true"></div></td>
 									<td>-</td>
 									<td><div class="chip-input"><input type="hidden" value="7"><input class="form-ghost" name="chips-disabled" aria-label="Days disabled" disabled></div></td>
 								</tr>

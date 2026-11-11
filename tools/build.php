@@ -564,7 +564,8 @@ function BUILD__CommandsCheck(): array
 
 /**
  * The markup a consumer copies, docs/src and the demo screens: each class is the library's or a page's own docs- or demo-
- * name, each control has an id or a name, and a div, a span or a pre with a name has a role. Answers what is wrong.
+ * name, each control has an id or a name, a div, a span or a pre with a name has a role, and role="combobox" is on an
+ * input only of type="text" without a list. Answers what is wrong.
  * @return list<string>
  */
 function BUILD__SamplesCheck(): array
@@ -587,6 +588,9 @@ function BUILD__SamplesCheck(): array
 			}
 			if (in_array($tag, ['div', 'span', 'pre'], true) && (isset($has['aria-label']) || isset($has['aria-labelledby'])) && !isset($has['role'])) {
 				$wrong[] = $where . '  a ' . $tag . ' with a name has no role: ' . ($has['class'] ?? '');
+			}
+			if ($tag === 'input' && ($has['role'] ?? '') === 'combobox' && (($has['type'] ?? 'text') !== 'text' || isset($has['list']))) {
+				$wrong[] = $where . '  role="combobox" belongs on an input of type="text" without a list (ARIA in HTML): ' . ($has['id'] ?? $has['name'] ?? '');
 			}
 		}
 	}

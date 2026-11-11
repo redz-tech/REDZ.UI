@@ -11,7 +11,7 @@ The button opens the dialog by the browser's command and names its keys in `aria
 ```html
 <button class="btn btn-subtle-secondary" type="button" commandfor="palette-demo-dialog" command="show-modal" aria-keyshortcuts="Meta+K Control+K"><i class="bi bi-search" aria-hidden="true"></i>Find or go to…<kbd>⌘K</kbd></button>
 <dialog class="palette" id="palette-demo-dialog" closedby="any" aria-label="Find or go to">
-	<input class="palette-search" type="search" id="palette-demo-search" role="combobox" aria-controls="palette-demo-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find or go to" placeholder="Find or go to…" autocomplete="off" autofocus>
+	<input class="palette-search" type="text" enterkeyhint="search" id="palette-demo-search" role="combobox" aria-controls="palette-demo-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find or go to" placeholder="Find or go to…" autocomplete="off" autofocus>
 	<div class="palette-list" id="palette-demo-list" role="listbox" aria-label="Places and actions">
 		<div role="group" aria-labelledby="palette-demo-go">
 			<div class="menu-header" id="palette-demo-go" role="presentation">Go to</div>

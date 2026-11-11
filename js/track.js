@@ -5,11 +5,11 @@
 // combobox's face, a chips field's box - and so do its form and the tab of every pane that holds it. The page's tracked
 // forms outside a dialog share one save bar, the page's .save-bar[data-track] or one made at the end of .app-main,
 // which names the changes in the page's words and stays at rest while such a form is in view; Save and Discard are
-// never disabled and say when there is nothing to do, Save takes Control+S and Meta+S. Save fires the cancelable
-// redz:save on each changed form in turn - {form, changed: [{name, label, was, now}], data, submitter, signal} - and,
-// answered with a promise, what was sent becomes the saved state once it resolves, then redz:saved {form, value}; a
-// refusal {message, fields} marks each named field under its control - {text, stored} offers Keep mine and Take saved -
-// and reveals the first. Left alone, a lone changed form is submitted as usual. A form in a dialog saves by its own
+// never disabled and say when there is nothing to do, Save takes Control+S and Meta+S. Save takes the words left in a
+// chips field's entry first, then fires the cancelable redz:save on each changed form in turn - {form, changed: [{name,
+// label, was, now}], data, submitter, signal} - and, answered with a promise, what was sent becomes the saved state once
+// it resolves, then redz:saved {form, value}; a refusal {message, fields} marks each named field under its control -
+// {text, stored} offers Keep mine and Take saved - and reveals the first. Left alone, a lone changed form is submitted as usual. A form in a dialog saves by its own
 // button (js/wait.js). Discard puts the saved values back, each with input and change, fires redz:discard and offers
 // Undo until the next edit or ten seconds. While anything is changed, a link that leaves the page, a tab whose pane
 // holds a changed form and a dialog's cancel or close ask first - Save and go, Discard, Stay - and the browser's own
@@ -17,6 +17,7 @@
 // with command="--clear" for it and data-clear empties and disables it, and the form then sends that name as 1.
 import {ask} from './answer.js';
 import {busy} from './busy.js';
+import {settle} from './chip-input.js';
 import {setList} from './combobox.js';
 import {confirm} from './confirm.js';
 import {announce} from './say.js';
@@ -686,6 +687,7 @@ const savePage = (forms, submitter = null) => {
 	if (saving !== null) {
 		return saving;
 	}
+	forms.forEach(settle);
 	const dirty = dirtyForms(forms);
 	if (dirty.length === 0) {
 		tell(text('changes.nothing'));
@@ -1019,5 +1021,8 @@ export const track = {
 	},
 	dirty: (form) => form === undefined ? dirtyForms() : changesOf(form).length > 0,
 	changed: (form) => changesOf(form),
-	save: (form) => saveForms(form === undefined ? dirtyForms() : dirtyForms([form])),
+	save: (form) => {
+		(form === undefined ? tracked() : [form]).forEach(settle);
+		return saveForms(form === undefined ? dirtyForms() : dirtyForms([form]));
+	},
 };

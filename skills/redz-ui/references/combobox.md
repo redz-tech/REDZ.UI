@@ -16,7 +16,7 @@ The face is a button with `role="combobox"` that opens its panel by the browser'
 <div class="menu combobox-menu" id="combobox-one-panel" popover role="dialog" aria-label="Default language">
 	<div class="combobox-search">
 		<i class="bi bi-search" aria-hidden="true"></i>
-		<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-one-search" role="combobox" aria-controls="combobox-one-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a language" placeholder="Find a language" autocomplete="off" autofocus>
+		<input class="form-control form-control-sm combobox-search-input" type="text" enterkeyhint="search" id="combobox-one-search" role="combobox" aria-controls="combobox-one-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a language" placeholder="Find a language" autocomplete="off" autofocus>
 	</div>
 	<div class="combobox-list" id="combobox-one-list" role="listbox" aria-label="Languages" data-name="language">
 		<div class="menu-item" role="option" id="combobox-one-en" data-value="en" aria-selected="false">English</div>
@@ -49,7 +49,7 @@ A list with `aria-multiselectable="true"` keeps its panel open while options are
 <div class="menu combobox-menu" id="combobox-many-panel" popover role="dialog" aria-label="Site languages">
 	<div class="combobox-search">
 		<i class="bi bi-search" aria-hidden="true"></i>
-		<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-many-search" role="combobox" aria-controls="combobox-many-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a language" placeholder="Find a language" autocomplete="off" autofocus>
+		<input class="form-control form-control-sm combobox-search-input" type="text" enterkeyhint="search" id="combobox-many-search" role="combobox" aria-controls="combobox-many-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a language" placeholder="Find a language" autocomplete="off" autofocus>
 	</div>
 	<div class="combobox-list" id="combobox-many-list" role="listbox" aria-label="Languages" aria-multiselectable="true" data-name="languages[]">
 		<div class="menu-item" role="option" id="combobox-many-en" data-value="en" aria-selected="true">English</div>
@@ -83,7 +83,7 @@ Where the chosen values are the field's content - categories, tags - the list na
 <div class="menu combobox-menu" id="combobox-chips-panel" popover role="dialog" aria-label="Categories">
 	<div class="combobox-search">
 		<i class="bi bi-search" aria-hidden="true"></i>
-		<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-chips-search" role="combobox" aria-controls="combobox-chips-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a category" placeholder="Find a category" autocomplete="off" autofocus>
+		<input class="form-control form-control-sm combobox-search-input" type="text" enterkeyhint="search" id="combobox-chips-search" role="combobox" aria-controls="combobox-chips-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a category" placeholder="Find a category" autocomplete="off" autofocus>
 	</div>
 	<div class="combobox-list" id="combobox-chips-list" role="listbox" aria-label="Categories" aria-multiselectable="true" data-name="categories[]" data-chips="combobox-chips-list-chips">
 		<div class="menu-item" role="option" id="combobox-chips-beaches" data-value="beaches" aria-selected="true">Beaches</div>
@@ -116,7 +116,7 @@ A list with `data-create` ends with “Create …” while the search's words ar
 <div class="menu combobox-menu" id="combobox-tags-panel" popover role="dialog" aria-label="Tags">
 	<div class="combobox-search">
 		<i class="bi bi-search" aria-hidden="true"></i>
-		<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-tags-search" role="combobox" aria-controls="combobox-tags-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find or create a tag" placeholder="Find or create a tag" autocomplete="off" autofocus>
+		<input class="form-control form-control-sm combobox-search-input" type="text" enterkeyhint="search" id="combobox-tags-search" role="combobox" aria-controls="combobox-tags-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find or create a tag" placeholder="Find or create a tag" autocomplete="off" autofocus>
 	</div>
 	<div class="combobox-list" id="combobox-tags-list" role="listbox" aria-label="Tags" aria-multiselectable="true" data-name="tags[]" data-create="tags_new[]" data-chips="combobox-tags-chips">
 		<div class="menu-item" role="option" id="combobox-tags-family" data-value="family" aria-selected="true">Family</div>
@@ -140,13 +140,13 @@ document.addEventListener('redz:create', (event) => {
 
 ### Free values
 
-A list with `data-create` and no options of its own takes free values - e-mail addresses, phone numbers, words - as chips: `Enter` or a comma takes the words, a value held already is not taken twice. A search with a `pattern` or `type="email"` refuses words it does not hold: the search is marked `aria-invalid` and the page's text `chip.invalid` says why.
+A list with `data-create` and no options of its own takes free values - e-mail addresses, phone numbers, words - as chips: `Enter` or a comma takes the words, a value held already is not taken twice. A search with a `pattern` or `inputmode="email"` refuses words it does not hold: the search is marked `aria-invalid` and the page's text `chip.invalid` says why. The search stays `type="text"`, the only input type `role="combobox"` is allowed on; `inputmode="email"` brings the phone's keyboard for addresses and the library checks the address as `type="email"` would.
 
 ```html
 <div class="card">
 	<div class="card-body vstack gap-8">
 		<label class="form-label" for="combobox-free-search">Send the report to</label>
-		<input class="form-control" id="combobox-free-search" type="email" role="combobox" aria-controls="combobox-free-list" aria-expanded="true" aria-autocomplete="list" placeholder="name@example.com" autocomplete="off">
+		<input class="form-control" id="combobox-free-search" type="text" inputmode="email" autocapitalize="off" spellcheck="false" role="combobox" aria-controls="combobox-free-list" aria-expanded="true" aria-autocomplete="list" placeholder="name@example.com" autocomplete="off">
 		<div class="combobox-list" id="combobox-free-list" role="listbox" aria-label="Addresses" aria-multiselectable="true" data-name="to[]" data-create="to[]" data-chips="combobox-free-chips"></div>
 		<div class="combobox-chips" id="combobox-free-chips"></div>
 	</div>
@@ -160,7 +160,7 @@ Options with `data-level` 2 or 3 are indented under the one before them, and a p
 ```html
 <div class="card">
 	<div class="card-body vstack gap-8">
-		<input class="form-control" type="search" id="combobox-levels-search" role="combobox" aria-controls="combobox-levels-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a destination" placeholder="Find a destination" autocomplete="off">
+		<input class="form-control" type="text" enterkeyhint="search" id="combobox-levels-search" role="combobox" aria-controls="combobox-levels-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a destination" placeholder="Find a destination" autocomplete="off">
 		<div class="combobox-list" id="combobox-levels-list" role="listbox" aria-label="Destinations" data-name="destination">
 			<div class="menu-item" role="option" id="combobox-levels-th" data-value="th" data-level="1" aria-selected="false">Northland</div>
 			<div class="menu-item" role="option" id="combobox-levels-south" data-value="th-south" data-level="2" aria-selected="false">The south</div>
@@ -189,7 +189,7 @@ Options sit in groups - `role="group"` named by its `menu-header` - and carry an
 <div class="menu combobox-menu" id="combobox-groups-panel" popover role="dialog" aria-label="Role">
 	<div class="combobox-search">
 		<i class="bi bi-search" aria-hidden="true"></i>
-		<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-groups-search" role="combobox" aria-controls="combobox-groups-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a role" placeholder="Find a role" autocomplete="off" autofocus>
+		<input class="form-control form-control-sm combobox-search-input" type="text" enterkeyhint="search" id="combobox-groups-search" role="combobox" aria-controls="combobox-groups-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a role" placeholder="Find a role" autocomplete="off" autofocus>
 	</div>
 	<div class="combobox-list" id="combobox-groups-list" role="listbox" aria-label="Roles" data-name="role">
 		<div role="group" aria-labelledby="combobox-groups-content">
@@ -220,7 +220,7 @@ A page that finds options itself listens for `redz:search` on the search and can
 <div class="menu combobox-menu" id="combobox-remote-panel" popover role="dialog" aria-label="Assigned to">
 	<div class="combobox-search">
 		<i class="bi bi-search" aria-hidden="true"></i>
-		<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-remote-search" role="combobox" aria-controls="combobox-remote-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a person" placeholder="Find a person" autocomplete="off" autofocus>
+		<input class="form-control form-control-sm combobox-search-input" type="text" enterkeyhint="search" id="combobox-remote-search" role="combobox" aria-controls="combobox-remote-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a person" placeholder="Find a person" autocomplete="off" autofocus>
 	</div>
 	<div class="combobox-list" id="combobox-remote-list" role="listbox" aria-label="People" data-name="assignee" data-docs-remote></div>
 	<p class="combobox-no-results" hidden>Nobody found</p>
@@ -253,7 +253,7 @@ The same search and list without a button and a panel - a filter in a side colum
 ```html
 <div class="card">
 	<div class="card-body vstack gap-8">
-		<input class="form-control" type="search" id="combobox-inline-search" role="combobox" aria-controls="combobox-inline-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a time zone" placeholder="Find a time zone" autocomplete="off">
+		<input class="form-control" type="text" enterkeyhint="search" id="combobox-inline-search" role="combobox" aria-controls="combobox-inline-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a time zone" placeholder="Find a time zone" autocomplete="off">
 		<div class="combobox-list" id="combobox-inline-list" role="listbox" aria-label="Time zones" data-name="zone">
 			<div class="menu-item" role="option" id="combobox-inline-bkk" data-value="Asia/Bangkok" aria-selected="true">Bangkok · UTC+7</div>
 			<div class="menu-item" role="option" id="combobox-inline-sgp" data-value="Asia/Singapore" aria-selected="false">Singapore · UTC+8</div>
@@ -284,7 +284,7 @@ The button carries a field's states; an option is active where the arrow keys ar
 | `Tab` | - | Closes the panel and moves on |
 
 - The button is the WAI-ARIA select-only combobox: named by its `<label for>`, its value its text, its popup a panel with `role="dialog"`; the library keeps its `aria-expanded`, and its `aria-controls` only while the panel is open - VoiceOver otherwise reads the value from the closed list, not from the button.
-- The search is the editable combobox with list autocomplete: the focus stays in it, `aria-activedescendant` names the active option, `aria-selected` marks the chosen ones. The list follows the search in the page, so a screen reader on a phone reaches it by swiping.
+- The search is the editable combobox with list autocomplete, an `input type="text"` - the only input type `role="combobox"` is allowed on (ARIA in HTML); `enterkeyhint="search"` keeps the phone's search key: the focus stays in it, `aria-activedescendant` names the active option, `aria-selected` marks the chosen ones. The list follows the search in the page, so a screen reader on a phone reaches it by swiping.
 - Once the typing pauses, the option `Enter` would take is said politely by its label - a screen reader busy with the typed keys says nothing of it - and with nothing found, the count, from the page's texts. The probes' engine `voiceover` holds these words against what VoiceOver says in Safari.
 - A choice fires `input` and `change` on the list; a form's reset puts the values back as the page sent them.
 
@@ -296,7 +296,7 @@ The library has no words of its own; it reads these from the page's island `#red
 | --- | --- | --- |
 | `remove` | A chip's remove button; `{label}` is the value's label | Remove {label} |
 | `create` | The option of a list with `data-create`; `{label}` is the search's words | Create “{label}” |
-| `chip.invalid` | Words a search with a `pattern` or `type="email"` refuses; `{label}` is the words | {label} is not valid |
+| `chip.invalid` | Words a search with a `pattern` or `inputmode="email"` refuses; `{label}` is the words | {label} is not valid |
 | `found.one`, `found.other` | The count of options found; `{count}` in the page's digits | {count} result, {count} results |
 
 ## Tokens

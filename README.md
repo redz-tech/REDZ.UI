@@ -132,8 +132,9 @@ attaches by delegation on `document`, so nothing is set up per element and marku
   command palette is the same search in a `<dialog>`, its options links and buttons (`js/combobox.js`).
 - **Chips for typed values:** a `chip-input` box draws the values of its hidden field as chips before its entry, a
   `form-ghost` of any type; Enter, the separator or a `command="--add"` button takes the entry by its own rules, a
-  value held already or past `data-chips-max` is refused under the box, `data-chips-order` sorts them, and each chip's
-  remove button takes Delete and Backspace - Backspace in the entry never removes a chip (`js/chip-input.js`).
+  value held already or past `data-chips-max` is refused under the box, words left in the entry are taken as the
+  person leaves it or saves, `data-chips-order` sorts them, and each chip's remove button takes Delete and Backspace -
+  Backspace in the entry never removes a chip (`js/chip-input.js`).
 - **Inline edit:** a button with `command="--edit"` opens a form of class `inline-edit-form` in place of the value it
   names, or as a popover beside the button; Enter saves, Escape puts the field back. Its submit fires `redz:save`,
   which a page that saves answers with a promise: the Save button is busy, a refusal's words show as the field's error
@@ -305,7 +306,9 @@ php floor.php check [--allow=FILE] [--json] FILE…
 
 A finding a line on standard output - `site.css:12  property:field-sizing (css.properties.field-sizing) - firefox 132
 none, from 152, …` -, the summary on standard error; exit 0 clean, 1 findings, 2 a wrong call or anything it cannot
-read or prove. `--json` prints the findings as objects: `file`, `line`, `name`, `key`, `browsers`, `text`. It proves
+read or prove. A script's member of one plain word - `data.bytes`, `job.sync` - is as often your own data as a browser
+API, so its gap is a note to check by hand on standard error that fails nothing. `--json` prints the findings as
+objects - `file`, `line`, `name`, `key`, `browsers`, `text`, `hand` - and the notes the same way under `hand`. It proves
 itself on its samples before it judges, and it applies the release's exceptions of scope `any` only: one the library's
 own scripts stand in for does not hold for your code. An exception of your own needs its reason, and one that allows
 nothing is a finding. A comment covers its names on its own lines and the next one:

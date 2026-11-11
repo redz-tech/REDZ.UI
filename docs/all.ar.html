@@ -925,7 +925,7 @@ Boat C	 9 trips	201 seats</pre>
 									<th scope="row">chip-input</th>
 									<td><div class="chip-input"><input type="hidden" value="7"><input class="form-ghost" name="chips-rest" aria-label="أيام في حالة السكون"></div></td>
 									<td><div class="chip-input"><input type="hidden" value="7"><input class="form-ghost" name="chips-focused" aria-label="أيام مركّز عليها" data-docs-state="focus"></div></td>
-									<td><div class="chip-input"><input type="hidden" value="7"><input class="form-ghost" name="chips-invalid" value="400" aria-label="أيام فيها خطأ" aria-invalid="true"></div></td>
+									<td><div class="chip-input"><input type="hidden" value="7"><input class="form-ghost" name="chips-invalid" type="number" max="365" value="400" aria-label="أيام فيها خطأ" aria-invalid="true"></div></td>
 									<td>-</td>
 									<td><div class="chip-input"><input type="hidden" value="7"><input class="form-ghost" name="chips-disabled" aria-label="أيام معطّلة" disabled=""></div></td>
 								</tr>
@@ -1113,7 +1113,7 @@ Boat C	 9 trips	201 seats</pre>
 						<div class="menu combobox-menu" id="combobox-one-panel" popover="" role="dialog" aria-label="اللغة الافتراضية">
 							<div class="combobox-search">
 								<i class="bi bi-search" aria-hidden="true"></i>
-								<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-one-search" role="combobox" aria-controls="combobox-one-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن لغة" placeholder="ابحث عن لغة" autocomplete="off" autofocus="">
+								<input class="form-control form-control-sm combobox-search-input" type="text" enterkeyhint="search" id="combobox-one-search" role="combobox" aria-controls="combobox-one-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن لغة" placeholder="ابحث عن لغة" autocomplete="off" autofocus="">
 							</div>
 							<div class="combobox-list" id="combobox-one-list" role="listbox" aria-label="اللغات" data-name="language">
 								<div class="menu-item" role="option" id="combobox-one-en" data-value="en" aria-selected="false">الإنجليزية</div>
@@ -1141,7 +1141,7 @@ Boat C	 9 trips	201 seats</pre>
 						<div class="menu combobox-menu" id="combobox-many-panel" popover="" role="dialog" aria-label="لغات الموقع">
 							<div class="combobox-search">
 								<i class="bi bi-search" aria-hidden="true"></i>
-								<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-many-search" role="combobox" aria-controls="combobox-many-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن لغة" placeholder="ابحث عن لغة" autocomplete="off" autofocus="">
+								<input class="form-control form-control-sm combobox-search-input" type="text" enterkeyhint="search" id="combobox-many-search" role="combobox" aria-controls="combobox-many-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن لغة" placeholder="ابحث عن لغة" autocomplete="off" autofocus="">
 							</div>
 							<div class="combobox-list" id="combobox-many-list" role="listbox" aria-label="اللغات" aria-multiselectable="true" data-name="languages[]">
 								<div class="menu-item" role="option" id="combobox-many-en" data-value="en" aria-selected="true">الإنجليزية</div>
@@ -1170,7 +1170,7 @@ Boat C	 9 trips	201 seats</pre>
 						<div class="menu combobox-menu" id="combobox-chips-panel" popover="" role="dialog" aria-label="الفئات">
 							<div class="combobox-search">
 								<i class="bi bi-search" aria-hidden="true"></i>
-								<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-chips-search" role="combobox" aria-controls="combobox-chips-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن فئة" placeholder="ابحث عن فئة" autocomplete="off" autofocus="">
+								<input class="form-control form-control-sm combobox-search-input" type="text" enterkeyhint="search" id="combobox-chips-search" role="combobox" aria-controls="combobox-chips-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن فئة" placeholder="ابحث عن فئة" autocomplete="off" autofocus="">
 							</div>
 							<div class="combobox-list" id="combobox-chips-list" role="listbox" aria-label="الفئات" aria-multiselectable="true" data-name="categories[]" data-chips="combobox-chips-list-chips">
 								<div class="menu-item" role="option" id="combobox-chips-beaches" data-value="beaches" aria-selected="true">الشواطئ</div>
@@ -1198,7 +1198,7 @@ Boat C	 9 trips	201 seats</pre>
 						<div class="menu combobox-menu" id="combobox-tags-panel" popover="" role="dialog" aria-label="الوسوم">
 							<div class="combobox-search">
 								<i class="bi bi-search" aria-hidden="true"></i>
-								<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-tags-search" role="combobox" aria-controls="combobox-tags-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن وسم أو أنشئه" placeholder="ابحث عن وسم أو أنشئه" autocomplete="off" autofocus="">
+								<input class="form-control form-control-sm combobox-search-input" type="text" enterkeyhint="search" id="combobox-tags-search" role="combobox" aria-controls="combobox-tags-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن وسم أو أنشئه" placeholder="ابحث عن وسم أو أنشئه" autocomplete="off" autofocus="">
 							</div>
 							<div class="combobox-list" id="combobox-tags-list" role="listbox" aria-label="الوسوم" aria-multiselectable="true" data-name="tags[]" data-create="tags_new[]" data-chips="combobox-tags-chips">
 								<div class="menu-item" role="option" id="combobox-tags-family" data-value="family" aria-selected="true">العائلة</div>
@@ -1212,7 +1212,7 @@ Boat C	 9 trips	201 seats</pre>
 						<div class="card">
 							<div class="card-body vstack gap-8">
 								<label class="form-label" for="combobox-free-search">أرسل التقرير إلى</label>
-								<input class="form-control" id="combobox-free-search" type="email" role="combobox" aria-controls="combobox-free-list" aria-expanded="true" aria-autocomplete="list" placeholder="name@example.com" autocomplete="off">
+								<input class="form-control" id="combobox-free-search" type="text" inputmode="email" autocapitalize="off" spellcheck="false" role="combobox" aria-controls="combobox-free-list" aria-expanded="true" aria-autocomplete="list" placeholder="name@example.com" autocomplete="off">
 								<div class="combobox-list" id="combobox-free-list" role="listbox" aria-label="العناوين" aria-multiselectable="true" data-name="to[]" data-create="to[]" data-chips="combobox-free-chips"></div>
 								<div class="combobox-chips" id="combobox-free-chips"></div>
 							</div>
@@ -1221,7 +1221,7 @@ Boat C	 9 trips	201 seats</pre>
 					<div class="docs-example docs-example-stack" id="combobox-levels">
 						<div class="card">
 							<div class="card-body vstack gap-8">
-								<input class="form-control" type="search" id="combobox-levels-search" role="combobox" aria-controls="combobox-levels-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن وجهة" placeholder="ابحث عن وجهة" autocomplete="off">
+								<input class="form-control" type="text" enterkeyhint="search" id="combobox-levels-search" role="combobox" aria-controls="combobox-levels-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن وجهة" placeholder="ابحث عن وجهة" autocomplete="off">
 								<div class="combobox-list" id="combobox-levels-list" role="listbox" aria-label="الوجهات" data-name="destination">
 									<div class="menu-item" role="option" id="combobox-levels-th" data-value="th" data-level="1" aria-selected="false">الأرض الشمالية</div>
 									<div class="menu-item" role="option" id="combobox-levels-south" data-value="th-south" data-level="2" aria-selected="false">الجنوب</div>
@@ -1245,7 +1245,7 @@ Boat C	 9 trips	201 seats</pre>
 						<div class="menu combobox-menu" id="combobox-groups-panel" popover="" role="dialog" aria-label="الدور">
 							<div class="combobox-search">
 								<i class="bi bi-search" aria-hidden="true"></i>
-								<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-groups-search" role="combobox" aria-controls="combobox-groups-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن دور" placeholder="ابحث عن دور" autocomplete="off" autofocus="">
+								<input class="form-control form-control-sm combobox-search-input" type="text" enterkeyhint="search" id="combobox-groups-search" role="combobox" aria-controls="combobox-groups-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن دور" placeholder="ابحث عن دور" autocomplete="off" autofocus="">
 							</div>
 							<div class="combobox-list" id="combobox-groups-list" role="listbox" aria-label="الأدوار" data-name="role">
 								<div role="group" aria-labelledby="combobox-groups-content">
@@ -1271,7 +1271,7 @@ Boat C	 9 trips	201 seats</pre>
 						<div class="menu combobox-menu" id="combobox-remote-panel" popover="" role="dialog" aria-label="مُسنَد إلى">
 							<div class="combobox-search">
 								<i class="bi bi-search" aria-hidden="true"></i>
-								<input class="form-control form-control-sm combobox-search-input" type="search" id="combobox-remote-search" role="combobox" aria-controls="combobox-remote-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن شخص" placeholder="ابحث عن شخص" autocomplete="off" autofocus="">
+								<input class="form-control form-control-sm combobox-search-input" type="text" enterkeyhint="search" id="combobox-remote-search" role="combobox" aria-controls="combobox-remote-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن شخص" placeholder="ابحث عن شخص" autocomplete="off" autofocus="">
 							</div>
 							<div class="combobox-list" id="combobox-remote-list" role="listbox" aria-label="الأشخاص" data-name="assignee" data-docs-remote=""></div>
 							<p class="combobox-no-results" hidden="">لم يُعثر على أحد</p>
@@ -1280,7 +1280,7 @@ Boat C	 9 trips	201 seats</pre>
 					<div class="docs-example docs-example-stack" id="combobox-inline">
 						<div class="card">
 							<div class="card-body vstack gap-8">
-								<input class="form-control" type="search" id="combobox-inline-search" role="combobox" aria-controls="combobox-inline-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن منطقة زمنية" placeholder="ابحث عن منطقة زمنية" autocomplete="off">
+								<input class="form-control" type="text" enterkeyhint="search" id="combobox-inline-search" role="combobox" aria-controls="combobox-inline-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن منطقة زمنية" placeholder="ابحث عن منطقة زمنية" autocomplete="off">
 								<div class="combobox-list" id="combobox-inline-list" role="listbox" aria-label="المناطق الزمنية" data-name="zone">
 									<div class="menu-item" role="option" id="combobox-inline-bkk" data-value="Asia/Bangkok" aria-selected="true">بانكوك · UTC+7</div>
 									<div class="menu-item" role="option" id="combobox-inline-sgp" data-value="Asia/Singapore" aria-selected="false">سنغافورة · UTC+8</div>
@@ -3608,7 +3608,7 @@ Boat C	 9 trips	201 seats</pre>
 									<div class="menu combobox-menu" id="save-bar-guide-panel" popover="" role="dialog" aria-label="لغة المرشد">
 										<div class="combobox-search">
 											<i class="bi bi-search" aria-hidden="true"></i>
-											<input class="form-control form-control-sm combobox-search-input" type="search" id="save-bar-guide-search" role="combobox" aria-controls="save-bar-guide-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن لغة" placeholder="ابحث عن لغة" autocomplete="off" autofocus="">
+											<input class="form-control form-control-sm combobox-search-input" type="text" enterkeyhint="search" id="save-bar-guide-search" role="combobox" aria-controls="save-bar-guide-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث عن لغة" placeholder="ابحث عن لغة" autocomplete="off" autofocus="">
 										</div>
 										<div class="combobox-list" id="save-bar-guide-list" role="listbox" aria-label="اللغات" data-name="guide">
 											<div class="menu-item" role="option" id="save-bar-guide-en" data-value="en" aria-selected="false">الإنجليزية</div>
@@ -4080,7 +4080,7 @@ Boat C	 9 trips	201 seats</pre>
 					<div class="docs-example" id="palette-demo">
 						<button class="btn btn-subtle-secondary" type="button" commandfor="palette-demo-dialog" command="show-modal" aria-keyshortcuts="Meta+K Control+K"><i class="bi bi-search" aria-hidden="true"></i>البحث أو الانتقال إلى…<kbd>⌘K</kbd></button>
 						<dialog class="palette" id="palette-demo-dialog" closedby="any" aria-label="ابحث أو انتقل">
-							<input class="palette-search" type="search" id="palette-demo-search" role="combobox" aria-controls="palette-demo-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث أو انتقل" placeholder="البحث أو الانتقال إلى…" autocomplete="off" autofocus="">
+							<input class="palette-search" type="text" enterkeyhint="search" id="palette-demo-search" role="combobox" aria-controls="palette-demo-list" aria-expanded="true" aria-autocomplete="list" aria-label="ابحث أو انتقل" placeholder="البحث أو الانتقال إلى…" autocomplete="off" autofocus="">
 							<div class="palette-list" id="palette-demo-list" role="listbox" aria-label="الأماكن والإجراءات">
 								<div role="group" aria-labelledby="palette-demo-go">
 									<div class="menu-header" id="palette-demo-go" role="presentation">انتقل إلى</div>

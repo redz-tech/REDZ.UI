@@ -36,7 +36,7 @@ A tracked form remembers what it held and marks what changed since; the bar at t
 			<div class="menu combobox-menu" id="save-bar-guide-panel" popover role="dialog" aria-label="Guide speaks">
 				<div class="combobox-search">
 					<i class="bi bi-search" aria-hidden="true"></i>
-					<input class="form-control form-control-sm combobox-search-input" type="search" id="save-bar-guide-search" role="combobox" aria-controls="save-bar-guide-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a language" placeholder="Find a language" autocomplete="off" autofocus>
+					<input class="form-control form-control-sm combobox-search-input" type="text" enterkeyhint="search" id="save-bar-guide-search" role="combobox" aria-controls="save-bar-guide-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a language" placeholder="Find a language" autocomplete="off" autofocus>
 				</div>
 				<div class="combobox-list" id="save-bar-guide-list" role="listbox" aria-label="Languages" data-name="guide">
 					<div class="menu-item" role="option" id="save-bar-guide-en" data-value="en" aria-selected="false">English</div>
