@@ -22,17 +22,19 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   what a page's probes may rely on.
 - Chips for typed values: `chip-input` is one field of several values drawn as one box - the chips, then the entry, a
   `form-ghost` of any type, and an optional `command="--add"` button. Its hidden field is what the form sends, the
-  values joined by `data-chips-join` (a comma by default), and the chips are drawn from it at load, for a box that
-  lands later, on its own `input` or `change` and when a script sets it. Enter, the separator or the button takes the
-  entry by its own rules - `min`, `max`, `step`, `pattern`, `type` - and a value held already (`chip.held`) or past
+  values joined by `data-chips-join` (a comma by default), and the chips are drawn from it at load, for a box that lands
+  later, on its own `input` or `change` and when a script sets it. Enter, the separator or the button takes the entry by
+  its own rules - `min`, `max`, `step`, `pattern`, `type` - and a value held already (`chip.held`) or past
   `data-chips-max` (`chip.full`) is refused too: the entry turns `aria-invalid`, keeps its text, and the words stand
   under the box and are said at once. Words left in the entry are taken when the person leaves it for a place outside
   the box - a refusal then said politely - and when the form is sent or saved, which a refusal holds with the focus in
-  the entry; a refused entry stays invalid until it changes, so nothing typed is lost unseen. `data-chips-order` sorts
-  the values, numbers as numbers; a chip reads as the entry's `datalist` option of its value. Each chip's remove
-  button is in the Tab order and takes Delete and Backspace; Backspace in the entry never removes a chip; added and
-  removed are said politely (`chip.added`, `chip.removed`). In a tracked form the hidden field is one field marked on
-  the box and named by the entry's label.
+  the entry; a refused entry stays invalid until it changes, so nothing typed is lost unseen. A page that saves a form
+  by its own script calls `REDZ.ui.settle(form)` first: it takes the entries' words as sending does and answers `false`,
+  the focus on the first entry refused, or `true`; the passport's `contracts.chips` names it. `data-chips-order` sorts
+  the values, numbers as numbers; a chip reads as the entry's `datalist` option of its value. Each chip's remove button
+  is in the Tab order and takes Delete and Backspace; Backspace in the entry never removes a chip; added and removed are
+  said politely (`chip.added`, `chip.removed`). In a tracked form the hidden field is one field marked on the box and
+  named by the entry's label.
 - `textCount(key, count, args)`: a count's text takes other `{names}` too, and the passport's `args` lists them.
 - The floor checker judges scripts: `floor.php check` reads a `.js` or `.mjs` file and reports the browser APIs
   (`api.*`, `javascript.builtins.*`) and the few forms of syntax the floor lacks - a global, a `new`, a static, a member

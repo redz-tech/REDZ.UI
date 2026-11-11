@@ -5560,11 +5560,24 @@ window.REDZ_BEHAVE = (() => {
 			await wait(150);
 			const stopped = [document.activeElement === late, late.getAttribute('aria-invalid'), alerted()];
 			form.requestSubmit();
+			const lateHidden = $(':scope > input[type="hidden"]', lateBox);
+			input(late, '');
+			late.setAttribute('aria-invalid', 'true');
+			const idle = [REDZ.ui.settle(form), lateHidden.value];
+			late.removeAttribute('aria-invalid');
+			late.value = '90';
+			const fine = [REDZ.ui.settle(form), lateHidden.value, late.value];
+			late.value = '7';
+			$('#form-chips-rooms').focus();
+			const holds = [REDZ.ui.settle(form), document.activeElement === late, late.getAttribute('aria-invalid')];
 			form.remove();
 			late.blur();
 			await wait(50);
 			if (say([asked, ...saved]) !== say([['30,21,7,1'], true, '']) || say(sent) !== say(['60,30,21,7,1']) || say(stopped) !== say([true, 'true', 'A week before is already in the list'])) {
 				out.push('words left in a chips entry as its form is saved give ' + say([asked, ...saved]) + ', as a plain form is sent ' + say(sent) + ' - not taken first; a held 7 sends nothing, the focus in the entry, said at once: ' + say(stopped));
+			}
+			if (say([idle, fine, holds]) !== say([[true, '60,30,21,7,1'], [true, '90,60,30,21,7,1', ''], [false, true, 'true']])) {
+				out.push('REDZ.ui.settle(form) with nothing left gives ' + say(idle) + ', with 90 left ' + say(fine) + ', with a held 7 left ' + say(holds) + ' - not true and nothing changed, true and 90 taken, false with the focus in the entry and its refusal');
 			}
 			if (say(discarded) !== say(['30,7,1', ['30', 'A week before', 'The day before'], false, false, true])) {
 				out.push('Discard of the tracked chips gives ' + say(discarded) + ' - not the saved value, its chips drawn again, no mark, no refusal');

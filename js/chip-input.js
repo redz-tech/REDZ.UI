@@ -12,8 +12,9 @@
 // own input or change from outside - a tracked form's Discard - and when a script sets it; the form's reset puts back
 // the values the box came with. Words left in the entry are taken as the person leaves it for a place outside the box -
 // a refusal then said politely - and as the form is sent or saved, which a refusal holds, the focus in the entry; a
-// refused entry stays invalid until it changes. Enter in the entry never sends the form; the remove buttons and the
-// --add button follow the entry's disabled.
+// refused entry stays invalid until it changes. A page that saves a form by its own script calls REDZ.ui.settle(form)
+// first: false holds its save. Enter in the entry never sends the form; the remove buttons and the --add button follow
+// the entry's disabled.
 import {chipOf} from './combobox.js';
 import {announce} from './say.js';
 import {text, textCount} from './text.js';
@@ -183,10 +184,12 @@ const take = (entry, loud = true) => {
 /** Whether the entry holds words not taken yet. */
 const left = (entry) => entry.value.trim() !== '' || entry.validity.badInput;
 
-/** Takes what the entries of the form still hold, as it is saved; the first entry refused, else null. */
+/** REDZ.ui.settle: takes what the entries of the form still hold, as it is sent or saved; false, the focus on the first
+ *  entry refused, when one is refused; true otherwise. */
 export const settle = (form) => {
-	form.querySelectorAll(ENTRY).forEach((entry) => left(entry) && take(entry));
-	return form.querySelector(ENTRY + '[aria-invalid="true"]');
+	const refused = [...form.querySelectorAll(ENTRY)].filter((entry) => left(entry) && (take(entry), entry.hasAttribute('aria-invalid')));
+	refused[0]?.focus();
+	return refused.length === 0;
 };
 
 /** Takes the remove button's chip away and says so; the focus goes to the next chip's button, else to the entry. */
@@ -260,10 +263,8 @@ document.addEventListener('focusout', (event) => {
 
 // A form sent with words left in an entry takes them first; one refused holds the form, the focus in it.
 document.addEventListener('submit', (event) => {
-	const entry = event.target instanceof HTMLFormElement ? settle(event.target) : null;
-	if (entry !== null) {
+	if (event.target instanceof HTMLFormElement && !settle(event.target)) {
 		event.preventDefault();
 		event.stopImmediatePropagation();
-		entry.focus();
 	}
 }, true);

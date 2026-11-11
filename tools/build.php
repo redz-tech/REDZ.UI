@@ -41,6 +41,12 @@ const BUILD_SWAP = [
 	'events' => ['redz:swap'],
 	'api' => ['swap'],
 ];
+// The chips field's parts and calls, as a page's probes and a page's own save may rely on: each in js/chip-input.js, in
+// REDZ.ui and in the docs' table of parts.
+const BUILD_CHIPS = [
+	'selectors' => ['box' => '.chip-input', 'entry' => '.chip-input > .form-ghost', 'list' => '.chip-list', 'error' => '.invalid-feedback'],
+	'api' => ['settle'],
+];
 // What a project links first, as the passport names it, from the version's folder.
 const BUILD_MAIN = ['css' => 'css/redz-ui.min.css', 'js' => 'js/redz-ui.min.js', 'floor' => 'js/floor.min.js'];
 // The editor, a package of its own: its stylesheet, its module, and the marks of the frame it edits in.
@@ -409,7 +415,7 @@ function BUILD__Passport(): string
 		'args' => "{\n\t\t" . implode(",\n\t\t", array_map(fn(string $key, array $names): string => $encode($key) . ': ' . $encode($names), array_keys($args), $args)) . "\n\t}",
 		'editor' => $encode([...BUILD_EDITOR, 'license' => 'PolyForm-Strict-1.0.0', 'rights' => BUILD_RIGHTS, 'catalog' => BUILD__Catalog()['elements'], 'write' => BUILD__WriteSchema(), 'texts' => $sorted(array_map(fn(string $key): string => 'editor.' . $key, array_keys((array)BUILD__Vocabulary()->editor->texts))), 'args' => (object)array_combine(array_map(fn(string $key): string => 'editor.' . $key, array_keys(BUILD__EditorArgs(BUILD__Vocabulary())[0])), BUILD__EditorArgs(BUILD__Vocabulary())[0])]),
 		'packages' => $encode(BUILD_PACKAGES),
-		'contracts' => $encode(['track' => BUILD_TRACK, 'swap' => BUILD_SWAP]),
+		'contracts' => $encode(['track' => BUILD_TRACK, 'swap' => BUILD_SWAP, 'chips' => BUILD_CHIPS]),
 		'files' => "{\n\t\t" . implode(",\n\t\t", array_map(fn(string $file, string $hash): string => $encode($file) . ': ' . $encode($hash), array_keys($files), $files)) . "\n\t}",
 	];
 	return "{\n\t" . implode(",\n\t", array_map(fn(string $key, string $value): string => $encode($key) . ': ' . $value, array_keys($fields), $fields)) . "\n}\n";
@@ -710,6 +716,37 @@ function BUILD__SwapCheck(): array
 }
 
 /**
+ * The chips field's contract held against the script and the docs: each call of BUILD_CHIPS exported by
+ * js/chip-input.js, set in REDZ.ui by js/index.js and shown in docs/src/form.html as REDZ.ui.NAME(form). Answers what is
+ * wrong.
+ * @return list<string>
+ */
+function BUILD__ChipsCheck(): array
+{
+	$js = (string)file_get_contents(BUILD_ROOT . '/js/chip-input.js');
+	$index = (string)file_get_contents(BUILD_ROOT . '/js/index.js');
+	$docs = (string)file_get_contents(BUILD_ROOT . '/docs/src/form.html');
+	$wrong = [];
+	foreach (BUILD_CHIPS['api'] as $name) {
+		if (preg_match('~^export const ' . $name . ' = ~m', $js) !== 1) {
+			$wrong[] = 'js/chip-input.js exports no ' . $name . ', which BUILD_CHIPS holds';
+		}
+		if (preg_match('~import \{[^}]*\b' . $name . '\b[^}]*\} from \'\./chip-input\.js\'~', $index) !== 1 || preg_match('~\bui: \{[^\n]*\b' . $name . '\b~', $index) !== 1) {
+			$wrong[] = 'js/index.js does not set REDZ.ui.' . $name . ' from js/chip-input.js, which BUILD_CHIPS holds';
+		}
+		if (!str_contains($docs, '<code>REDZ.ui.' . $name . '(form)</code>')) {
+			$wrong[] = 'docs/src/form.html does not show REDZ.ui.' . $name . '(form), which BUILD_CHIPS holds';
+		}
+	}
+	foreach (BUILD_CHIPS['selectors'] as $selector) {
+		if (!str_contains($js, $selector) && !str_contains($js, ltrim(preg_replace('~^.* ~', '', $selector), '.'))) {
+			$wrong[] = 'js/chip-input.js never names ' . $selector . ', which BUILD_CHIPS holds';
+		}
+	}
+	return $wrong;
+}
+
+/**
  * An endless animation outside a no-preference block runs for a person who asks for less motion, so that it says work
  * goes on: each one is slowed in a reduce block of its own stylesheet. Answers what is wrong.
  * @return list<string>
@@ -904,7 +941,7 @@ function BUILD__Main(array $argv): int
 {
 	$check = in_array('--check', $argv, true);
 	$vocab = BUILD__Vocabulary();
-	$wrong = [...BUILD__TextsCheck($vocab), ...BUILD__CommandsCheck(), ...BUILD__SamplesCheck(), ...BUILD__MotionCheck(), ...BUILD__SinksCheck(), ...BUILD__TrackCheck(), ...BUILD__SwapCheck(), ...BUILD__CatalogCheck(), ...BUILD__ToolsCalls(), ...array_map(fn(string $failure): string => 'tools/min.php  ' . $failure, MIN__SelfTest())];
+	$wrong = [...BUILD__TextsCheck($vocab), ...BUILD__CommandsCheck(), ...BUILD__SamplesCheck(), ...BUILD__MotionCheck(), ...BUILD__SinksCheck(), ...BUILD__TrackCheck(), ...BUILD__SwapCheck(), ...BUILD__ChipsCheck(), ...BUILD__CatalogCheck(), ...BUILD__ToolsCalls(), ...array_map(fn(string $failure): string => 'tools/min.php  ' . $failure, MIN__SelfTest())];
 	if ($wrong !== []) {
 		fwrite(STDERR, implode("\n", $wrong) . "\n");
 		return 1;

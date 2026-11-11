@@ -6,7 +6,7 @@ import './tabs.js';
 import './toggle.js';
 import './dialog.js';
 import './combobox.js';
-import './chip-input.js';
+import {settle} from './chip-input.js';
 import './shortcuts.js';
 import './scrollspy.js';
 import './nav-overflow.js';
@@ -69,4 +69,4 @@ import {download} from './download.js';
 import {clear, settled} from './upload.js';
 import {follow} from './show-when.js';
 
-globalThis.REDZ = Object.assign(globalThis.REDZ ?? {}, {ui: {...globalThis.REDZ?.ui, toast, confirm, busy, prompt, progress, select: selectTab, status, banner, filter: filterRegion, sort, more: restart, selection, alert, download, upload: {clear, settled}, combobox: {set: setList}, track, swap, follow}});
+globalThis.REDZ = Object.assign(globalThis.REDZ ?? {}, {ui: {...globalThis.REDZ?.ui, toast, confirm, busy, prompt, progress, select: selectTab, status, banner, filter: filterRegion, sort, more: restart, selection, alert, download, upload: {clear, settled}, combobox: {set: setList}, track, swap, follow, settle}});
