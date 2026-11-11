@@ -146,7 +146,8 @@ function PROBE__FirefoxPrint(array &$h): string
 	return base64_decode(PROBE__FirefoxSend($h, 'browsingContext.print', ['context' => $h['context'], 'page' => ['width' => 21.0, 'height' => 29.7], 'background' => false])['data']);
 }
 
-/** The page's errors since its load: console and script errors and warnings, failed requests, answers from 400. */
+/** The page's errors since its load: console and script errors and warnings, failed requests - not one cancelled, as
+ *  Chrome's - and answers from 400. */
 function PROBE__FirefoxErrors(array &$h): array
 {
 	$errors = [];
@@ -159,7 +160,7 @@ function PROBE__FirefoxErrors(array &$h): array
 		$errors[] = match ($m['method'] ?? '') {
 			'log.entryAdded' => in_array($params['level'] ?? '', ['error', 'warn'], true) ? 'log ' . ($params['text'] ?? '') : '',
 			'network.responseCompleted' => ($params['response']['status'] ?? 0) >= 400 ? $params['response']['status'] . ' ' . $url : '',
-			'network.fetchError' => 'failed ' . ($params['errorText'] ?? '') . ' ' . $url,
+			'network.fetchError' => ($params['errorText'] ?? '') === 'NS_BINDING_ABORTED' ? '' : 'failed ' . ($params['errorText'] ?? '') . ' ' . $url,
 			default => '',
 		};
 	}

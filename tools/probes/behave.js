@@ -4778,6 +4778,21 @@ window.REDZ_BEHAVE = (() => {
 			if (say(held) !== say(veiled ? ['true', true, true, 'visible'] : [null, false, false, '']) || (veiled && !near(middle, (view.innerHeight + 52) / 2, 40)) || after !== null) {
 				out.push('data-transition="busy": a late page holds the main column ' + say(held) + ', its ring at ' + middle + ' of ' + view.innerHeight + ' scrolled down, the next page ' + say(after) + ', where the Navigation API is ' + veiled);
 			}
+			// A navigation ended as it starts - the page's own question before leaving answered Stay, or stop() - leaves the
+			// main column free.
+			const stays = await open('app.html?probe-transition=busy');
+			let told = false;
+			stays.defaultView.navigation?.addEventListener('navigateerror', () => {
+				told = true;
+			});
+			stays.defaultView.location.href = 'busy.html?probe-wait=1600&probe-transition=busy';
+			stays.defaultView.stop();
+			await wait(700);
+			const free = [stays.querySelector('.app-main').getAttribute('aria-busy'), stays.querySelector('.app-main').inert, frame.contentWindow.location.pathname.endsWith('/app.html')];
+			// An engine that tells the page nothing of the end - Firefox of a stop() - leaves the overlay to Escape or ten seconds.
+			if (told && say(free) !== say([null, false, true])) {
+				out.push('data-transition="busy": a navigation stopped as it starts leaves the main column ' + say(free.slice(0, 2)) + ', not free, on the page that stays ' + free[2]);
+			}
 			const kept = await open('app.html?probe-scroll=keep');
 			kept.getElementById('docs-nav').scrollTop = 180;
 			await wait(150);

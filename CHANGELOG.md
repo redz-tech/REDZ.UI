@@ -95,6 +95,9 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   uncaught error in the console of the page that left.
 - As the page changed, the header and the side navigation, which stand still, showed their old picture through the new
   one while the rest cross-faded: two current items at once in the navigation and their words doubled.
+- With `data-transition="busy"`, a navigation that ended before its overlay started - the page's own question before
+  leaving answered Stay, or a `stop()` - still held the main column under the overlay for ten seconds, where the
+  browser says the navigation ended (Chrome, Edge); an engine that says nothing still leaves it to Escape.
 
 ## 0.23.0 - 2026-11-10
 
