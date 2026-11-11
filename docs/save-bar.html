@@ -401,6 +401,7 @@
 				<section class="vstack gap-12" aria-labelledby="save-bar-contract">
 					<h2 id="save-bar-contract">For a page's probes</h2>
 					<p>What a page's own checks may rely on, also in the passport as <code>contracts.track</code>.</p>
+					<p>The bar's height in pixels stands in <code>--redz-save-bar-height</code> on the root while the bar shows and is gone while it hides; the scroll padding at the foot is that height and the room around the bar, except while the focus is in a save bar. A page that draws its own bar, not a tracked form's, sets and removes it the same way.</p>
 					<table class="table docs-table">
 						<thead><tr><th scope="col">Part</th><th scope="col">Names</th></tr></thead>
 						<tbody>
@@ -410,6 +411,7 @@
 							<tr><td>Attributes</td><td><code>data-track</code>, <code>data-track-label</code>, <code>data-changed</code>, <code>data-secret</code>, <code>data-clear</code>, <code>data-state</code>, <code>data-track-action</code>, <code>data-track-error</code>, <code>data-track-conflict</code>, <code>aria-invalid</code>, <code>aria-describedby</code></td></tr>
 							<tr><td>Events</td><td><code>redz:save</code>, <code>redz:saved</code>, <code>redz:discard</code></td></tr>
 							<tr><td><code>REDZ.ui.track</code></td><td><code>refresh</code>, <code>baseline</code>, <code>reset</code>, <code>dirty</code>, <code>changed</code>, <code>save</code></td></tr>
+							<tr><td>Custom property</td><td><code>--redz-save-bar-height</code></td></tr>
 						</tbody>
 					</table>
 				</section>

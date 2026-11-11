@@ -31,6 +31,7 @@ const BUILD_TRACK = [
 	'attributes' => ['data-track', 'data-track-label', 'data-changed', 'data-secret', 'data-clear', 'data-state', 'data-track-action', 'data-track-error', 'data-track-conflict', 'aria-invalid', 'aria-describedby'],
 	'events' => ['redz:save', 'redz:saved', 'redz:discard'],
 	'api' => ['refresh', 'baseline', 'reset', 'dirty', 'changed', 'save'],
+	'properties' => ['--redz-save-bar-height'],
 ];
 // What a swap takes, what holds it and what it carries to the new content, as a page's probes may rely on: each is in
 // the docs' table of what is carried and in js/swap.js.
@@ -655,8 +656,9 @@ function BUILD__SinksCheck(): array
 
 /**
  * The tracked forms' contract held against the docs and the script: every name of BUILD_TRACK in the table of
- * docs/src/save-bar.html's contract section, and every attribute, state, action, event and call in js/track.js; a name
- * the table shows that the contract lacks is wrong too. Answers what is wrong.
+ * docs/src/save-bar.html's contract section, every attribute, state, action, event and call in js/track.js, and every
+ * custom property set by js/track.js and used by css/components/save-bar.css; a name the table shows that the contract
+ * lacks is wrong too. Answers what is wrong.
  * @return list<string>
  */
 function BUILD__TrackCheck(): array
@@ -665,7 +667,7 @@ function BUILD__TrackCheck(): array
 	$js = (string)preg_replace(['~/\*.*?\*/~s', '~^\s*//.*$~m'], '', (string)file_get_contents(BUILD_ROOT . '/js/track.js'));
 	$table = preg_match('~aria-labelledby="save-bar-contract">(.*?)</section>~s', $docs, $part) === 1 ? $part[1] : '';
 	preg_match_all('~<code>([^<]+)</code>~', $table, $shown);
-	$names = [...array_values(BUILD_TRACK['selectors']), ...BUILD_TRACK['states'], ...BUILD_TRACK['actions'], ...BUILD_TRACK['attributes'], ...BUILD_TRACK['events'], ...BUILD_TRACK['api']];
+	$names = [...array_values(BUILD_TRACK['selectors']), ...BUILD_TRACK['states'], ...BUILD_TRACK['actions'], ...BUILD_TRACK['attributes'], ...BUILD_TRACK['events'], ...BUILD_TRACK['api'], ...BUILD_TRACK['properties']];
 	$wrong = [];
 	foreach ($names as $name) {
 		if (!in_array($name, $shown[1], true)) {
@@ -689,6 +691,12 @@ function BUILD__TrackCheck(): array
 	foreach (BUILD_TRACK['api'] as $name) {
 		if (preg_match('~^\t' . $name . ': ~m', $js) !== 1) {
 			$wrong[] = 'REDZ.ui.track has no ' . $name . ', which BUILD_TRACK holds';
+		}
+	}
+	$css = (string)file_get_contents(BUILD_ROOT . '/css/components/save-bar.css');
+	foreach (BUILD_TRACK['properties'] as $name) {
+		if (!str_contains($js, "'" . $name . "'") || !str_contains($css, 'var(' . $name . ')')) {
+			$wrong[] = 'js/track.js does not set ' . $name . ' or css/components/save-bar.css does not use it, which BUILD_TRACK holds';
 		}
 	}
 	return $wrong;

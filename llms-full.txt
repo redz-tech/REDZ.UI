@@ -8392,6 +8392,8 @@ Save, `Control` `S`, `Enter` in a field or `REDZ.ui.track.save()` fires the canc
 
 What a page's own checks may rely on, also in the passport as `contracts.track`.
 
+The bar's height in pixels stands in `--redz-save-bar-height` on the root while the bar shows and is gone while it hides; the scroll padding at the foot is that height and the room around the bar, except while the focus is in a save bar. A page that draws its own bar, not a tracked form's, sets and removes it the same way.
+
 | Part | Names |
 | --- | --- |
 | Selectors | `form[data-track]`, `[data-changed]`, `.save-bar[data-state]`, `.invalid-feedback[data-track-error]`, `.alert-warning[data-track-conflict]`, `[data-track-action]` |
@@ -8400,6 +8402,7 @@ What a page's own checks may rely on, also in the passport as `contracts.track`.
 | Attributes | `data-track`, `data-track-label`, `data-changed`, `data-secret`, `data-clear`, `data-state`, `data-track-action`, `data-track-error`, `data-track-conflict`, `aria-invalid`, `aria-describedby` |
 | Events | `redz:save`, `redz:saved`, `redz:discard` |
 | `REDZ.ui.track` | `refresh`, `baseline`, `reset`, `dirty`, `changed`, `save` |
+| Custom property | `--redz-save-bar-height` |
 
 ## Accessibility
 

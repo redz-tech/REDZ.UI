@@ -9,7 +9,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 ### Fixed
 - The save bar no longer covers a field the keys reach at the foot of a long tracked form (WCAG 2.4.11): while the bar
   shows, its height goes to `--redz-save-bar-height` on the root, and the page's scroll padding at the foot is that
-  height and the room around the bar. The bar's own buttons take the focus without moving the page.
+  height and the room around the bar. The bar's own buttons take the focus without moving the page. The property is
+  part of `contracts.track`: a page that draws its own bar sets and removes it the same way.
 - A toast shown while a modal dialog is open no longer goes away with the dialog, nor comes back when it opens again:
   as the dialog closes, its toasts go on in the stack below it, out of the live regions that said them once.
 - The app shell's docs put the side column `app-aside` in the main column's grid, as the resource demo does: right in
