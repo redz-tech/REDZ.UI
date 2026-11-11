@@ -187,6 +187,11 @@
 		min-inline-size: 44rem;
 	}
 
+	/* Two bars shown side by side stay in place: sticking to the window's edge, they would cover each other. */
+	#save-bar-results .save-bar {
+		position: static;
+	}
+
 	.docs-matrix .menu {
 		position: static;
 		min-inline-size: 0;
