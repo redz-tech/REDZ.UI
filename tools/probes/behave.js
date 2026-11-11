@@ -5358,6 +5358,152 @@ window.REDZ_BEHAVE = (() => {
 				out.push('the tracked examples stay changed after the check: ' + REDZ.ui.track.dirty().length);
 			}
 		}]},
+		chips: {target: '#form-chips-days', steps: [async (out) => {
+			const entry = $('#form-chips-days');
+			const box = entry.closest('.chip-input');
+			const hidden = $(':scope > input[type="hidden"]', box);
+			const plus = $('[command="--add"]', box);
+			const labels = (root = box) => $$('.chip', root).map((chip) => chip.firstChild.textContent);
+			const dismiss = (root = box) => $$('.chip-dismiss', root);
+			const line = (field = entry) => document.getElementById((field.getAttribute('aria-describedby') ?? '').split(' ')[0]);
+			const press = (target, key) => {
+				const event = new KeyboardEvent('keydown', {key, bubbles: true, cancelable: true});
+				target.dispatchEvent(event);
+				return event.defaultPrevented;
+			};
+			const alerted = () => $('body > .visually-hidden[role="alert"]')?.textContent ?? '';
+			const told = () => $('body > .visually-hidden[role="status"]')?.textContent ?? '';
+			const heard = [];
+			const listen = (event) => heard.push(event.type);
+			hidden.addEventListener('input', listen);
+			hidden.addEventListener('change', listen);
+			const list = $(':scope > .chip-list', box);
+			const drawn = [labels(), list?.getAttribute('role'), list?.getAttribute('aria-label'), dismiss().map((button) => button.getAttribute('aria-label')), list?.nextElementSibling === entry];
+			if (say(drawn) !== say([['30', 'A week before', 'The day before'], 'list', 'Remind before the event, days', ['Remove 30', 'Remove A week before', 'Remove The day before'], true])) {
+				out.push('a chips field at load draws ' + say(drawn) + ' - not 30, A week before and The day before from its hidden value and datalist, in a role="list" named by the label before the entry, each remove button named');
+			}
+			entry.focus();
+			input(entry, '14');
+			const kept = press(entry, 'Enter');
+			await wait(50);
+			const added = [hidden.value, labels(), entry.value, say(heard), kept, told()];
+			if (say(added) !== say(['30,14,7,1', ['30', '14', 'A week before', 'The day before'], '', say(['input', 'change']), true, '14 added'])) {
+				out.push('Enter on 14 gives ' + say(added) + ' - not the hidden value 30,14,7,1 in descending order, its chips, an empty entry, input and change once, the form not sent, "14 added" said politely');
+			}
+			heard.length = 0;
+			input(entry, '7');
+			press(entry, 'Enter');
+			await wait(150);
+			const held = [hidden.value, entry.value, entry.getAttribute('aria-invalid'), line()?.matches('.invalid-feedback'), line()?.textContent, line()?.previousElementSibling === box, alerted(), heard.length];
+			if (say(held) !== say(['30,14,7,1', '7', 'true', true, 'A week before is already in the list', true, 'A week before is already in the list', 0])) {
+				out.push('a 7 held already gives ' + say(held) + ' - not the value kept, the text kept, aria-invalid, the error line after the box and first in the entry\'s description, said at once, no event');
+			}
+			input(entry, '40');
+			const edited = [entry.hasAttribute('aria-invalid'), line()?.matches('.invalid-feedback') ?? false, box.nextElementSibling?.matches('.invalid-feedback')];
+			input(entry, '400');
+			plus.click();
+			await wait(150);
+			const range = [hidden.value, entry.value, entry.getAttribute('aria-invalid'), line()?.textContent, alerted(), document.activeElement === entry];
+			if (say(edited) !== say([false, false, false]) || say(range) !== say(['30,14,7,1', '400', 'true', '400 is not valid', '400 is not valid', true])) {
+				out.push('typing after a refusal leaves ' + say(edited) + ' (aria-invalid, an error line), and 400 by the + button ' + say(range) + ' - not refused by the entry\'s max with its text kept, said at once, the focus in the entry');
+			}
+			input(entry, '');
+			const back = press(entry, 'Backspace');
+			if (back || labels().length !== 4) {
+				out.push('Backspace in an empty entry is ' + (back ? 'taken' : 'left') + ' and leaves ' + labels().length + ' chips, not the four');
+			}
+			for (const day of ['2', '3', '4', '5']) {
+				input(entry, day);
+				press(entry, 'Enter');
+			}
+			input(entry, '6');
+			press(entry, 'Enter');
+			await wait(150);
+			const full = [hidden.value, entry.value, entry.getAttribute('aria-invalid'), line()?.textContent, alerted()];
+			if (say(full) !== say(['30,14,7,5,4,3,2,1', '6', 'true', 'Up to 8 values', 'Up to 8 values'])) {
+				out.push('a ninth day gives ' + say(full) + ' - not refused at data-chips-max="8" with its text kept and the most said at once');
+			}
+			input(entry, '');
+			heard.length = 0;
+			dismiss()[1].focus();
+			const deleted = press(dismiss()[1], 'Delete');
+			await wait(50);
+			const removed = [hidden.value, labels().length, document.activeElement === dismiss()[1], document.activeElement?.getAttribute('aria-label'), say(heard), told(), deleted];
+			if (say(removed) !== say(['30,7,5,4,3,2,1', 7, true, 'Remove A week before', say(['input', 'change']), '14 removed', true])) {
+				out.push('Delete on the second chip gives ' + say(removed) + ' - not 14 gone, the focus on the next chip\'s button, input and change, "14 removed" said politely');
+			}
+			dismiss().at(-1).focus();
+			press(dismiss().at(-1), 'Backspace');
+			const last = [hidden.value, document.activeElement === entry];
+			dismiss()[0].click();
+			if (say(last) !== say(['30,7,5,4,3,2', true]) || hidden.value !== '7,5,4,3,2' || document.activeElement !== dismiss()[0]) {
+				out.push('Backspace on the last chip gives ' + say(last) + ' and a click on the first leaves ' + say([hidden.value, document.activeElement?.getAttribute('aria-label')]) + ' - not the focus on the entry, then on the next chip');
+			}
+			hidden.value = '60,2';
+			hidden.dispatchEvent(new Event('change', {bubbles: true}));
+			const outside = labels();
+			await wait(0);
+			hidden.value = '9';
+			await Promise.resolve();
+			const quiet = labels();
+			hidden.value = '30,7,1';
+			hidden.dispatchEvent(new Event('input', {bubbles: true}));
+			hidden.removeEventListener('input', listen);
+			hidden.removeEventListener('change', listen);
+			if (say(outside) !== say(['60', '2']) || say(quiet) !== say(['9']) || say(labels()) !== say(['30', 'A week before', 'The day before'])) {
+				out.push('a value set from outside draws ' + say(outside) + ' after its change, ' + say(quiet) + ' with no event, ' + say(labels()) + ' after its input');
+			}
+			const field = box.closest('.form-field').cloneNode(true);
+			for (const element of [field, ...$$('*', field)]) {
+				for (const name of ['id', 'for', 'list', 'aria-controls', 'aria-describedby']) {
+					if (element.hasAttribute(name)) {
+						element.setAttribute(name, element.getAttribute(name).replace(/form-chips-days/g, 'form-chips-tracked'));
+					}
+				}
+			}
+			const form = Object.assign(document.createElement('form'), {action: '#form-chips'});
+			form.dataset.track = 'Reminders';
+			form.append(field);
+			$('#form-chips').after(form);
+			await wait(50);
+			const late = $('#form-chips-tracked');
+			const lateBox = late.closest('.chip-input');
+			const lateDrawn = labels(lateBox);
+			input(late, '14');
+			press(late, 'Enter');
+			const marks = [lateBox.hasAttribute('data-changed'), $$('[data-changed]', form).length, REDZ.ui.track.changed(form).map((change) => [change.name, change.label, change.was, change.now])];
+			if (say(lateDrawn) !== say(['30', 'A week before', 'The day before']) || say(marks) !== say([true, 1, [['remind_days', 'Remind before the event, days', '30,7,1', '30,14,7,1']]])) {
+				out.push('a chips field put in a tracked form later draws ' + say(lateDrawn) + ' and, given 14, marks ' + say(marks) + ' - not the box alone changed, one field named by the entry\'s label');
+			}
+			form.addEventListener('redz:save', (event) => {
+				event.preventDefault();
+				event.detail.respondWith(Promise.reject({message: 'Not saved.', fields: {remind_days: 'Fewer reminders, please'}}));
+			}, {once: true});
+			await REDZ.ui.track.save(form);
+			await wait(50);
+			const error = line(late);
+			const refused = [lateBox.getAttribute('aria-invalid'), error?.matches('.invalid-feedback[data-track-error="remind_days"]'), error?.textContent, error?.previousElementSibling === lateBox, document.activeElement === late];
+			if (say(refused) !== say(['true', true, 'Fewer reminders, please', true, true])) {
+				out.push('a refused chips field gives ' + say(refused) + ' - not aria-invalid on the box, the refusal\'s line after the box and first in the entry\'s description, the focus in the entry');
+			}
+			REDZ.ui.track.reset(form);
+			const discarded = [$(':scope > input[type="hidden"]', lateBox).value, labels(lateBox), lateBox.hasAttribute('data-changed'), lateBox.hasAttribute('aria-invalid'), $('[data-track-error]', form) === null];
+			late.value = '14';
+			press(late, 'Enter');
+			const typed = $(':scope > input[type="hidden"]', lateBox).value;
+			form.reset();
+			await wait(20);
+			const reset = [typed, $(':scope > input[type="hidden"]', lateBox).value, labels(lateBox)];
+			form.remove();
+			late.blur();
+			await wait(50);
+			if (say(discarded) !== say(['30,7,1', ['30', 'A week before', 'The day before'], false, false, true])) {
+				out.push('Discard of the tracked chips gives ' + say(discarded) + ' - not the saved value, its chips drawn again, no mark, no refusal');
+			}
+			if (say(reset) !== say(['30,14,7,1', '30,7,1', ['30', 'A week before', 'The day before']])) {
+				out.push('a form\'s reset after 14 is added gives ' + say(reset.slice(1)) + ' - not the value and chips the box came with');
+			}
+		}]},
 		editor: {target: '#editor-demo-host', walk: editorWalk},
 		enable: {target: '#form-enable-wait', steps: [async (out) => {
 			const on = $('#form-enable-wait-on');

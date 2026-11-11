@@ -22,7 +22,7 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 
 ## Forms
 
-- [Form fields](docs/form.md): Text fields, selects and text areas with Bootstrap 5's names: a label floating in the field or above it, a hint, an error said in words, an icon inside the field.
+- [Form fields](docs/form.md): Text fields, selects and text areas with Bootstrap 5's names: a label floating in the field or above it, a hint, an error said in words, an icon inside the field, chips for typed values.
 - [Input groups](docs/input-group.md): A field joined to what belongs to it - a unit, a prefix, a button, a choice - into one control. The borders meet by themselves; a menu or a hidden element inside the group is left out of the joining.
 - [Checks, radios and switches](docs/check.md): The browser's own checkbox and radio, drawn by the library: check, radio and switch on the input itself, form-check on the label around it.
 - [Combobox](docs/combobox.md): A choice from a list long enough to search: a button in the look of a select shows the value and opens a panel with a search field and the list. One core - the WAI-ARIA combobox with a listbox - also drives the command palette and a list in the page.

@@ -2,19 +2,19 @@
 // own scripts, a mask's formatting too - or one task after it lands later, and compares every field with it: a radio
 // group, checkboxes of one name, a select multiple and a combobox's list count as one field, disabled ones too, and a
 // value typed back is no change. A changed field wears data-changed - the control, a check's .form-check row, a
-// combobox's face - and so do its form and the tab of every pane that holds it. The page's tracked forms outside a
-// dialog share one save bar, the page's .save-bar[data-track] or one made at the end of .app-main, which names the
-// changes in the page's words and stays at rest while such a form is in view; Save and Discard are never disabled and
-// say when there is nothing to do, Save takes Control+S and Meta+S. Save fires the cancelable redz:save on each changed
-// form in turn - {form, changed: [{name, label, was, now}], data, submitter, signal} - and, answered with a promise,
-// what was sent becomes the saved state once it resolves, then redz:saved {form, value}; a refusal {message, fields}
-// marks each named field under its control - {text, stored} offers Keep mine and Take saved - and reveals the first.
-// Left alone, a lone changed form is submitted as usual. A form in a dialog saves by its own button (js/wait.js).
-// Discard puts the saved values back, each with input and change, fires redz:discard and offers Undo until the next
-// edit or ten seconds. While anything is changed, a link that leaves the page, a tab whose pane holds a changed form
-// and a dialog's cancel or close ask first - Save and go, Discard, Stay - and the browser's own question guards the
-// rest. An input[type=password][data-secret] keeps the stored value while it is empty; a button with command="--clear"
-// for it and data-clear empties and disables it, and the form then sends that name as 1.
+// combobox's face, a chips field's box - and so do its form and the tab of every pane that holds it. The page's tracked
+// forms outside a dialog share one save bar, the page's .save-bar[data-track] or one made at the end of .app-main,
+// which names the changes in the page's words and stays at rest while such a form is in view; Save and Discard are
+// never disabled and say when there is nothing to do, Save takes Control+S and Meta+S. Save fires the cancelable
+// redz:save on each changed form in turn - {form, changed: [{name, label, was, now}], data, submitter, signal} - and,
+// answered with a promise, what was sent becomes the saved state once it resolves, then redz:saved {form, value}; a
+// refusal {message, fields} marks each named field under its control - {text, stored} offers Keep mine and Take saved -
+// and reveals the first. Left alone, a lone changed form is submitted as usual. A form in a dialog saves by its own
+// button (js/wait.js). Discard puts the saved values back, each with input and change, fires redz:discard and offers
+// Undo until the next edit or ten seconds. While anything is changed, a link that leaves the page, a tab whose pane
+// holds a changed form and a dialog's cancel or close ask first - Save and go, Discard, Stay - and the browser's own
+// question guards the rest. An input[type=password][data-secret] keeps the stored value while it is empty; a button
+// with command="--clear" for it and data-clear empties and disables it, and the form then sends that name as 1.
 import {ask} from './answer.js';
 import {busy} from './busy.js';
 import {setList} from './combobox.js';
@@ -64,17 +64,27 @@ const glyph = (name) => {
 /** The button that clears a secret field, or null. */
 const clearOf = (field) => field.id === '' ? null : document.querySelector('[command="' + CLEAR + '"][commandfor="' + CSS.escape(field.id) + '"]');
 
-/** What shows a control's change and its refusal: a combobox's face for its list, a check's row for a check. */
+/** What shows a control's change and its refusal: a combobox's face for its list, a chips field's box for its hidden
+ *  value, a check's row for a check. */
 const faceOf = (control) => {
 	if (control.getAttribute('role') === 'listbox') {
 		const panel = control.closest('[popover]');
 		return panel === null ? control : document.querySelector('.combobox-toggle[commandfor="' + CSS.escape(panel.id) + '"]') ?? control;
 	}
+	if (control.type === 'hidden') {
+		return control.closest('.chip-input') ?? control;
+	}
 	return control.type === 'checkbox' || control.type === 'radio' ? control.closest('.form-check') ?? control : control;
 };
 
-/** What a refusal marks and focuses: a combobox's face for its list, else the control itself. */
-const targetOf = (control) => control.getAttribute('role') === 'listbox' ? faceOf(control) : control;
+/** What a refusal marks: a combobox's face for its list, a chips field's box for its value, else the control itself. */
+const targetOf = (control) => control.getAttribute('role') === 'listbox' || control.type === 'hidden' ? faceOf(control) : control;
+
+/** What a target's words are read with and what takes its focus: a chips field's entry for its box, else the target. */
+const entryOf = (target) => target.matches('.chip-input') ? target.querySelector(':scope > .form-ghost') ?? target : target;
+
+/** Whether a control has nothing on the page to show it: a hidden field that no chips field draws. */
+const unseen = (control) => targetOf(control).type === 'hidden';
 
 /** The fields of a form by name: their kind and controls, a combobox's list standing for the hidden fields it writes. */
 const fieldsOf = (form) => {
@@ -137,11 +147,11 @@ const nameOf = (element) => {
 const labelOf = (field) => {
 	const [first] = field.controls;
 	const group = field.kind === 'radio' || field.controls.length > 1 ? first.closest('fieldset, [role="radiogroup"], [role="group"]') : null;
-	const named = [first, group, field.kind === 'list' ? faceOf(first) : null].find((one) => one?.dataset.trackLabel !== undefined);
+	const named = [first, group, targetOf(first)].find((one) => one?.dataset.trackLabel !== undefined);
 	if (named !== undefined) {
 		return named.dataset.trackLabel;
 	}
-	const words = group !== null ? nameOf(group) : nameOf(field.kind === 'list' ? faceOf(first) : first);
+	const words = group !== null ? nameOf(group) : nameOf(entryOf(targetOf(first)));
 	return words || first.getAttribute('aria-label') || field.name;
 };
 
@@ -300,7 +310,7 @@ const unmarkAll = (form) => {
 	}
 };
 
-const marked = (forms) => forms.reduce((count, form) => count + new Set([...form.querySelectorAll('[aria-invalid="true"]')].map((element) => element.name || element.getAttribute('commandfor') || element.id)).size, 0);
+const marked = (forms) => forms.reduce((count, form) => count + new Set([...form.querySelectorAll('[aria-invalid="true"]')].map((element) => element.name || element.getAttribute('commandfor') || element.id || element)).size, 0);
 
 /** Places a field's words under its control, above its hints: in its .form-field, after its group or wrapper. */
 const place = (field, box) => {
@@ -335,7 +345,7 @@ const conflictOf = (form, field, {text: words, stored}) => {
 				restore(form, new Map([[field.name, stored]]));
 			}
 			paint();
-			targetOf(field.controls[0]).focus();
+			entryOf(targetOf(field.controls[0])).focus();
 		});
 		return button;
 	};
@@ -349,7 +359,7 @@ const conflictOf = (form, field, {text: words, stored}) => {
 const mark = (form, name, why) => {
 	const fields = fieldsOf(form);
 	const field = fields.get(name) ?? fields.get(name + '[]');
-	const targets = field === undefined ? [] : field.controls.filter((control) => control.type !== 'hidden').map(targetOf);
+	const targets = field === undefined ? [] : field.controls.filter((control) => !unseen(control)).map(targetOf);
 	if (targets.length === 0) {
 		return null;
 	}
@@ -367,7 +377,7 @@ const mark = (form, name, why) => {
 	if (box !== null) {
 		box.id = 'redz-track-' + ++made;
 		place(field, box);
-		targets.forEach((element) => describe(element, box.id, true));
+		targets.forEach((element) => describe(entryOf(element), box.id, true));
 	}
 	return targets[0];
 };
@@ -393,7 +403,7 @@ const reveal = async (target) => {
 		fold.open = true;
 	}
 	target.scrollIntoView({block: 'center'});
-	target.focus({preventScroll: true});
+	entryOf(target).focus({preventScroll: true});
 };
 
 /** Reads a refusal: marks the fields it names and reveals the first; its message and how many fields it named. */
@@ -548,7 +558,7 @@ const paint = () => {
 		const names = new Set(list.map((change) => change.name));
 		form.toggleAttribute('data-changed', list.length > 0);
 		for (const field of fieldsOf(form).values()) {
-			for (const control of field.controls.filter((one) => one.type !== 'hidden')) {
+			for (const control of field.controls.filter((one) => !unseen(one))) {
 				const on = names.has(field.name) && (control.type !== 'radio' || control.checked);
 				faceOf(control).toggleAttribute('data-changed', on);
 				if (on) {
@@ -556,7 +566,7 @@ const paint = () => {
 				}
 			}
 		}
-		if (list.some((change) => !fieldsOf(form).has(change.name) || fieldsOf(form).get(change.name).controls.every((control) => control.type === 'hidden'))) {
+		if (list.some((change) => !fieldsOf(form).has(change.name) || fieldsOf(form).get(change.name).controls.every(unseen))) {
 			changed.push(form);
 		}
 	}

@@ -6,6 +6,7 @@ import './tabs.js';
 import './toggle.js';
 import './dialog.js';
 import './combobox.js';
+import './chip-input.js';
 import './shortcuts.js';
 import './scrollspy.js';
 import './nav-overflow.js';

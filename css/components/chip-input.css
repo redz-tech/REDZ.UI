@@ -1,0 +1,97 @@
+@layer components {
+	/* One box drawn as a field: the chips and the entry wrap inside it, the + button at its end. */
+	.chip-input {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 2px var(--redz-space-4);
+		inline-size: 100%;
+		min-block-size: var(--redz-control-height);
+		padding-block: 1px;
+		padding-inline: var(--redz-space-4) 1px;
+		border: 1px solid var(--redz-border-strong);
+		border-radius: var(--redz-radius-8);
+		background-color: var(--redz-bg);
+		color: var(--redz-text);
+		cursor: text;
+	}
+
+	.chip-input:hover {
+		border-color: var(--redz-text-muted);
+	}
+
+	/* Focus within, written so the docs' state mirror can copy it. */
+	.chip-input:has(:focus) {
+		border-color: var(--redz-focus);
+		outline: 2px solid var(--redz-focus);
+		outline-offset: -1px;
+	}
+
+	.chip-input:is([aria-invalid="true"], :has(> .form-ghost:is([aria-invalid="true"], :user-invalid))) {
+		border-color: var(--redz-danger);
+	}
+
+	.chip-input[data-changed] {
+		box-shadow: inset 3px 0 0 var(--redz-warning);
+	}
+
+	.chip-input[data-changed]:dir(rtl) {
+		box-shadow: inset -3px 0 0 var(--redz-warning);
+	}
+
+	.chip-list {
+		display: contents;
+	}
+
+	.chip-input .chip {
+		min-block-size: var(--redz-control-height-xs);
+		cursor: default;
+	}
+
+	.chip-input > .form-ghost {
+		flex: 1 1 4rem;
+		min-inline-size: 4rem;
+		min-block-size: var(--redz-control-height-sm);
+		padding: 0 var(--redz-space-4);
+		border: 0;
+		outline: 0;
+		background: transparent;
+		color: inherit;
+		font: inherit;
+	}
+
+	.chip-input > .form-ghost::placeholder {
+		color: var(--redz-text-muted);
+		opacity: 1;
+	}
+
+	.chip-input:has(> .form-ghost:disabled) {
+		background-color: var(--redz-bg-page);
+		color: var(--redz-text-muted);
+		cursor: not-allowed;
+	}
+
+	.chip-input:has(> .form-ghost:disabled) .chip {
+		background: transparent;
+		color: inherit;
+		pointer-events: none;
+	}
+
+	@media (pointer: coarse) {
+		.chip-input > .form-ghost {
+			font-size: max(16px, 1em);
+		}
+	}
+
+	@media (forced-colors: active) {
+		.chip-input[data-changed] {
+			border-inline-start-width: 3px;
+		}
+
+		.chip-input:has(> .form-ghost:disabled),
+		.chip-input:has(> .form-ghost:disabled) .chip {
+			border-color: GrayText;
+			color: GrayText;
+		}
+	}
+}

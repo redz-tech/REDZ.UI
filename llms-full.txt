@@ -3207,7 +3207,7 @@ It reads the theme's `--redz-space-4`, `--redz-border`, `--redz-radius-12`, `--r
 
 # Form fields
 
-Text fields, selects and text areas with Bootstrap 5's names: a label floating in the field or above it, a hint, an error said in words, an icon inside the field.
+Text fields, selects and text areas with Bootstrap 5's names: a label floating in the field or above it, a hint, an error said in words, an icon inside the field, chips for typed values.
 
 ## Examples
 
@@ -3394,6 +3394,42 @@ Buttons with `command="--step-up"` or `"--step-down"` and `aria-controls` naming
 </div>
 ```
 
+### Chips for typed values
+
+`chip-input` is one field of several typed values, drawn as one box: the values as chips, then the entry, a `form-ghost` of any type. What the form sends is the box's hidden field - the values joined by `data-chips-join`, a comma by default - and the chips are drawn from it, at load and whenever it changes. `Enter`, the separator or the `command="--add"` button takes what is typed, by the entry's own rules - `min`, `max`, `step`, `pattern`, `type`; a value held already and one past `data-chips-max` are refused too. A refusal keeps the typed text, marks the entry `aria-invalid` and stands in words under the box. `data-chips-order` sorts the values - numbers as numbers in a number entry, words in the page's language - and without it they stay as typed. A chip reads as the entry's `datalist` option of its value, else as the value.
+
+```html
+<div class="form-field max-w-360">
+	<label class="form-label" for="form-chips-days">Remind before the event, days</label>
+	<div class="chip-input" data-chips-max="8" data-chips-order="descending">
+		<input type="hidden" name="remind_days" value="30,7,1">
+		<input class="form-ghost tabular-nums" id="form-chips-days" type="number" min="1" max="365" step="1" list="form-chips-days-words" aria-describedby="form-chips-days-hint">
+		<button class="btn btn-icon btn-sm" type="button" command="--add" aria-controls="form-chips-days" aria-label="Add a day"><i class="bi bi-plus-lg" aria-hidden="true"></i></button>
+	</div>
+	<datalist id="form-chips-days-words"><option value="1">The day before</option><option value="7">A week before</option></datalist>
+	<div class="form-text" id="form-chips-days-hint">From 1 to 365 days, up to 8.</div>
+</div>
+<div class="form-field max-w-360">
+	<label class="form-label" for="form-chips-rooms">Rooms to clean first</label>
+	<div class="chip-input">
+		<input type="hidden" name="rooms" value="B204,A101">
+		<input class="form-ghost font-monospace" id="form-chips-rooms" pattern="[A-Z][0-9]{3}" autocomplete="off" spellcheck="false" aria-describedby="form-chips-rooms-hint">
+	</div>
+	<div class="form-text" id="form-chips-rooms-hint">A capital letter and three digits; a comma or Enter after each.</div>
+</div>
+```
+
+| Part | What it does |
+| --- | --- |
+| `chip-input` | The box, drawn as a field. `data-chips-max` caps the count; `data-chips-order` is `ascending` or `descending`; `data-chips-join` joins the values, a comma by default. |
+| `input type="hidden"` | The value the form sends, its `name` the field's. Every change fires `input` and `change` on it; a script that sets it, with or without those events, has the chips drawn again. |
+| `form-ghost` | The entry, with an `id` for its label and no `name` of its own: its type and constraints are the rules of a value, its `list` the labels of values. |
+| `command="--add"` | An optional button in the box, `aria-controls` naming the entry, for a keypad without `Enter`. Like `--step-up`, it has no `commandfor`. |
+| `chip-list` | The chips, a `role="list"` the library draws before the entry and names by the entry's label; each chip's `chip-dismiss` button is named by the page's text `remove`. |
+| `invalid-feedback` | The refusal's words, which the library puts after the box and joins to the entry by `aria-describedby`; the next edit of the entry takes them away. |
+
+In a tracked form the hidden field is one field: `data-changed` and a refusal's `aria-invalid` go on the box, the field is named by the entry's label, the refusal's words stand under the box, and Discard draws the chips again.
+
 ### A colour
 
 `form-control-color` is the browser's own colour picker in a field's box. A text field with `data-color-for` naming the picker is its hex twin: each follows the other, and a twin that holds no colour - `#rgb` or `#rrggbb`, the `#` optional - is `aria-invalid`. A stored colour is drawn by `data-color`, which the library sets as `--redz-color` through the CSSOM, so a page under a strict CSP writes no style: on a `dot`, an `icon-tile` - its icon black or white by the colour's lightness -, a `choice-media`, and the edges `edge-top-color` and `edge-start-color`.
@@ -3517,6 +3553,21 @@ REDZ.ui.follow(form);
 - Number step buttons are named by `aria-label` and keep their place in the Tab order; from the keyboard the field's own arrow keys step it.
 - A region shown by another field is `hidden` while it does not apply, so a screen reader skips it and the form sends nothing of it.
 - A field disabled by another field is skipped by `Tab`: its reason, joined to the driving field, is heard there.
+- In a chips field, `Enter`, the separator or the `--add` button takes the entry, and `Enter` never sends the form. Each chip's remove button keeps its place in the Tab order; a click, `Delete` or `Backspace` on it removes the chip, and the focus goes to the next chip, else to the entry. `Backspace` in the entry only edits its text: a person who clears the text by it never loses a chip.
+- A refused value is said at once, in the words that stand under the box; an added or a removed value is said politely. The remove buttons and the `--add` button follow the entry's `disabled`, its fieldset's too.
+
+## Texts
+
+The library has no words of its own; it reads these from the page's island `#redz-ui-text`. A count takes the form the page language's plural rules name - `chip.full.one`, `chip.full.few` - and `chip.full.other` when the page gives no such form.
+
+| Key | For | In English |
+| --- | --- | --- |
+| `remove` | A chip's remove button; `{label}` is the value's label | Remove {label} |
+| `chip.added` | Said politely as values are taken; `{label}` is their labels | {label} added |
+| `chip.removed` | Said politely as a chip is removed; `{label}` is its label | {label} removed |
+| `chip.invalid` | What the entry's rules refuse; `{label}` is the typed words, or the entry's label when a number cannot be read | {label} is not valid |
+| `chip.held` | A value held already; `{label}` is its label | {label} is already in the list |
+| `chip.full.one`, `chip.full.other` | A value past `data-chips-max`; `{count}` is the most, in the page's digits | Up to {count} value, Up to {count} values |
 
 ## Tokens
 
@@ -8277,7 +8328,7 @@ At rest the bar says everything is saved; with unsaved changes it names them. Th
 
 ### The fields that changed
 
-`data-changed` marks a field whose value differs from the saved one: a bar at the start of a `form-control` or a `form-select` - a combobox's face is one - and a dot after a check or a switch. On a tab it is a dot too. A tracked form sets it; a page may set it by hand.
+`data-changed` marks a field whose value differs from the saved one: a bar at the start of a `form-control` or a `form-select` - a combobox's face is one - or of a chips field's `chip-input` box, and a dot after a check or a switch. On a tab it is a dot too. A tracked form sets it; a page may set it by hand.
 
 ```html
 <div class="form-floating">

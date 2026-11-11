@@ -130,6 +130,10 @@ attaches by delegation on `document`, so nothing is set up per element and marku
   cancels `redz:search` and puts the options in. A list with `data-create` offers “Create …” for words no option has:
   the new label goes into the hidden field `data-create` names, or the page makes it through `redz:create`. The
   command palette is the same search in a `<dialog>`, its options links and buttons (`js/combobox.js`).
+- **Chips for typed values:** a `chip-input` box draws the values of its hidden field as chips before its entry, a
+  `form-ghost` of any type; Enter, the separator or a `command="--add"` button takes the entry by its own rules, a
+  value held already or past `data-chips-max` is refused under the box, `data-chips-order` sorts them, and each chip's
+  remove button takes Delete and Backspace - Backspace in the entry never removes a chip (`js/chip-input.js`).
 - **Inline edit:** a button with `command="--edit"` opens a form of class `inline-edit-form` in place of the value it
   names, or as a popover beside the button; Enter saves, Escape puts the field back. Its submit fires `redz:save`,
   which a page that saves answers with a promise: the Save button is busy, a refusal's words show as the field's error

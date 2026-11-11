@@ -106,7 +106,7 @@ At rest the bar says everything is saved; with unsaved changes it names them. Th
 
 ### The fields that changed
 
-`data-changed` marks a field whose value differs from the saved one: a bar at the start of a `form-control` or a `form-select` - a combobox's face is one - and a dot after a check or a switch. On a tab it is a dot too. A tracked form sets it; a page may set it by hand.
+`data-changed` marks a field whose value differs from the saved one: a bar at the start of a `form-control` or a `form-select` - a combobox's face is one - or of a chips field's `chip-input` box, and a dot after a check or a switch. On a tab it is a dot too. A tracked form sets it; a page may set it by hand.
 
 ```html
 <div class="form-floating">

@@ -339,20 +339,22 @@ const fit = (face, list) => {
 	}
 };
 
+/** A chip of the label with its remove button, which holds the value: a span, or a list's item. */
+export const chipOf = (label, value, tag = 'span') => {
+	const dismiss = Object.assign(document.createElement('button'), {className: 'chip-dismiss', type: 'button'});
+	dismiss.dataset.value = value;
+	dismiss.setAttribute('aria-label', text('remove', {label}));
+	const icon = Object.assign(document.createElement('i'), {className: 'bi bi-x'});
+	icon.setAttribute('aria-hidden', 'true');
+	dismiss.append(icon);
+	const node = Object.assign(document.createElement(tag), {className: 'chip'});
+	node.append(label, dismiss);
+	return node;
+};
+
 /** Draws the chips of the chosen values, each with its remove button. */
 const chip = (container, list) => {
-	container.replaceChildren(...holdersOf(list).map((holder) => {
-		const label = holder.dataset.label || holder.value;
-		const dismiss = Object.assign(document.createElement('button'), {className: 'chip-dismiss', type: 'button'});
-		dismiss.dataset.value = holder.value;
-		dismiss.setAttribute('aria-label', text('remove', {label}));
-		const icon = Object.assign(document.createElement('i'), {className: 'bi bi-x'});
-		icon.setAttribute('aria-hidden', 'true');
-		dismiss.append(icon);
-		const node = Object.assign(document.createElement('span'), {className: 'chip'});
-		node.append(label, dismiss);
-		return node;
-	}));
+	container.replaceChildren(...holdersOf(list).map((holder) => chipOf(holder.dataset.label || holder.value, holder.value)));
 	container.hidden = container.childElementCount === 0;
 };
 

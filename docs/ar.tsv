@@ -1988,3 +1988,19 @@ Alerts for Boat C	تنبيهات القارب ج
 At the pier	عند الرصيف
 At the hotel	عند الفندق
 No pickup	بلا توصيل
+Remind before the event, days	التذكير قبل الفعالية، بالأيام
+Add a day	إضافة يوم
+The day before	قبلها بيوم
+A week before	قبلها بأسبوع
+From 1 to 365 days, up to 8.	من 1 إلى 365 يومًا، حتى 8 قيم.
+Rooms to clean first	الغرف التي تُنظَّف أولًا
+A capital letter and three digits; a comma or Enter after each.	حرف لاتيني كبير وثلاثة أرقام؛ وبعد كل واحدة فاصلة أو Enter.
+Days at rest	أيام في حالة السكون
+Days focused	أيام مركّز عليها
+Days with an error	أيام فيها خطأ
+Days disabled	أيام معطّلة
+{label} is already in the list	{label} موجود في القائمة بالفعل
+Up to {count} value	حتى {count} قيمة
+Up to {count} values	حتى {count} قيم
+{label} added	أُضيف {label}
+{label} removed	أُزيل {label}

@@ -2575,6 +2575,8 @@ check
 chip
 chip-count
 chip-dismiss
+chip-input
+chip-list
 choice
 choice-danger
 choice-media
@@ -2785,6 +2787,7 @@ form-control-sm
 form-counter
 form-field
 form-floating
+form-ghost
 form-label
 form-more
 form-range
