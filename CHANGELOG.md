@@ -4,7 +4,7 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
-## Unreleased
+## 0.24.1 - 2026-11-11
 
 ### Fixed
 - The save bar no longer covers a field the keys reach at the foot of a long tracked form (WCAG 2.4.11): while the bar
