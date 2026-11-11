@@ -110,7 +110,26 @@ jobs:
 
       - name: Noto on Linux, the fonts Android and ChromeOS draw Arabic and the rest in
         if: runner.os == 'Linux'
-        run: sudo apt-get install -y -q --no-install-recommends fonts-noto-core
+        # By the runner's own mirror, else the same packages from the Ubuntu archive or a mirror of it under another name,
+        # each held to its sum in noble's index: once, for hours, the runners resolved no name under ubuntu.com.
+        run: |
+          if sudo apt-get install -y -q --no-install-recommends fonts-noto-core; then
+            exit 0
+          fi
+          echo "The runner's mirror failed: the same packages from the archive or a mirror of it"
+          cd "$RUNNER_TEMP"
+          for deb in fonts-noto-mono_20201225-2_all.deb:ce277a6e2fbbe7562206171e20e0493ac42c9c405758505cb42aaa01c982036c fonts-noto-core_20201225-2_all.deb:4fee136cb12fc197703a340e010478f780a41044339fcefbd78ed9aa96c8b617; do
+            name="${deb%%:*}"
+            for mirror in http://archive.ubuntu.com/ubuntu https://mirrors.edge.kernel.org/ubuntu https://mirror.math.princeton.edu/pub/ubuntu https://mirrors.mit.edu/ubuntu; do
+              if curl -fsSL --retry 2 --max-time 300 -o "$name" "$mirror/pool/main/f/fonts-noto/$name" && echo "${deb##*:}  $name" | sha256sum -c --quiet -; then
+                echo "$name from $mirror"
+                continue 2
+              fi
+            done
+            echo "No mirror gave $name with its sum"
+            exit 1
+          done
+          sudo dpkg -i fonts-noto-mono_20201225-2_all.deb fonts-noto-core_20201225-2_all.deb
 
       - name: Let safaridriver drive Safari and the simulators
         if: matrix.part.name == 'safari' || startsWith(matrix.part.name, 'ios') || startsWith(matrix.part.name, 'voiceover')
