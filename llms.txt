@@ -78,7 +78,7 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 - [Spinners](docs/spinner.md): A turning ring, 1 em across in the color of the text around it, for something small that is on its way. A button shows its own while busy; a region shows an overlay.
 - [Progress and meters](docs/progress.md): The browser's own <progress> for work under way and <meter> for a measure within known limits - a quota, a score. The value is an attribute, the browser announces it, and a progress without a value says the work has no known end.
 - [Busy](docs/busy.md): REDZ.ui.busy(element, promise) marks a button or a region busy until the promise settles: a button shows a spinner and ignores clicks, a region turns inert under an overlay.
-- [Save bar](docs/save-bar.md): The bar at the foot of a form that says what is not saved yet and offers to save or discard it. It sticks to the bottom of the screen while the form is longer than the screen.
+- [Save bar](docs/save-bar.md): A tracked form remembers what it held and marks what changed since; the bar at the foot of the page says what is not saved yet, saves it or discards it, and asks before the changes are left. It sticks to the bottom of the screen while the form is longer than the screen.
 - [Status lines](docs/status.md): A line beside a form's button that says what its save is doing: saving, saved, or why it was refused. It stays where the person looks; a message that comes and goes over the page is a toast.
 - [Selection bar](docs/selection-bar.md): The bar over a list that shows when rows are checked: how many, and what can be done with all of them at once.
 

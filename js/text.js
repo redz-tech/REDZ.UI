@@ -26,9 +26,10 @@ export const text = (key, args = {}) => {
 	return key;
 };
 
-/** The page's text for a count: the form of the key its language's plural rules pick, {count} in its digits. */
-export const textCount = (key, count) => {
+/** The page's text for a count: the form of the key its language's plural rules pick, {count} in its digits, its other
+ *  {names} from the arguments. */
+export const textCount = (key, count, args = {}) => {
 	const lang = document.documentElement.lang || 'en';
 	const form = key + '.' + new Intl.PluralRules(lang).select(count);
-	return text(typeof island()[form] === 'string' ? form : key + '.other', {count: new Intl.NumberFormat(lang).format(count)});
+	return text(typeof island()[form] === 'string' ? form : key + '.other', {...args, count: new Intl.NumberFormat(lang).format(count)});
 };

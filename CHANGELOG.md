@@ -4,6 +4,41 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Added
+- Tracked forms: `data-track` on a form keeps what it held once the page's scripts ran and marks what changed since -
+  the control, a check's row, a combobox's face, the form and every tab that holds a change, each with `data-changed`.
+  The page's tracked forms share one save bar built from the page's texts (`changes.*`): its words name the changed
+  fields and the forms, `data-state` says `clean`, `dirty`, `saving`, `saved` or `error`, Save and Discard are never
+  disabled and say when there is nothing to do, Save takes Control+S and Meta+S and runs the browser's checks first,
+  and Discard offers Undo until the next edit or ten seconds. Save fires the cancelable `redz:save` with `changed:
+  [{name, label, was, now}]`; a resolved answer makes what was sent the saved state and fires `redz:saved`, a refusal
+  `{message, fields}` marks each field under its control and reveals the first, and a field refused as `{text, stored}`
+  offers Keep mine and Take saved. While anything is changed, a link that leaves, a tab and a dialog's cancel or close
+  ask Save and go, Discard or Stay (`leave.*`), and the browser's own question guards the rest. A password field with
+  `data-secret` keeps its stored value while it is empty, and a `command="--clear"` button with `data-clear` clears it.
+  `REDZ.ui.track` - `refresh`, `baseline`, `reset`, `dirty`, `changed`, `save`; the passport's `contracts.track` names
+  what a page's probes may rely on.
+- `textCount(key, count, args)`: a count's text takes other `{names}` too, and the passport's `args` lists them.
+- The floor checker judges scripts: `floor.php check` reads a `.js` or `.mjs` file and reports the browser APIs
+  (`api.*`, `javascript.builtins.*`) and the few forms of syntax the floor lacks - a global, a `new`, a static, a member
+  of `window`, `navigator` or `document`, a member only APIs short of the floor have - unless the file tests for it by
+  `in`, `typeof`, `?.` or a truthiness test; `/* floor-allow NAME -- reason */` works as in a stylesheet. The library's
+  gate judges its own scripts too.
+
+### Changed
+- The script's budget is 52 KB gzipped, up from 42 KB: tracked forms take about 5 KB of it.
+- A form with `data-track` in a dialog saves as a tracked form, with `changed` in its `redz:save`; other dialog forms
+  save as before.
+- The busy overlay of `data-transition="busy"` does not start while a tracked form's changes have the browser ask
+  before the page goes.
+
+### Fixed
+- A combobox put in after the page loaded was not drawn - its options' choice and its face's words - until the page set
+  its value, and its face did not refit as it resized.
+- In forced colors a check, a radio or a switch with `aria-disabled="true"` was not greyed as a disabled one is.
+
 ## 0.23.0 - 2026-11-10
 
 ### Added

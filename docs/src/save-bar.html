@@ -1,11 +1,76 @@
 <header class="vstack gap-8">
 	<h1>Save bar</h1>
-	<p class="docs-lead">The bar at the foot of a form that says what is not saved yet and offers to save or discard it. It sticks to the bottom of the screen while the form is longer than the screen.</p>
+	<p class="docs-lead">A tracked form remembers what it held and marks what changed since; the bar at the foot of the page says what is not saved yet, saves it or discards it, and asks before the changes are left. It sticks to the bottom of the screen while the form is longer than the screen.</p>
 </header>
 
 <section class="vstack gap-16" aria-labelledby="save-bar-examples">
 	<h2 id="save-bar-examples">Examples</h2>
-	<p>At rest the bar says everything is saved; with unsaved changes it turns <code>save-bar-dirty</code> and names them.</p>
+	<p><code>data-track</code> on a form tracks it; its value names the form in the bar's words. Change a field - its mark appears, so does a dot on the tab that holds it - then save with the bar or <kbd>Control</kbd> <kbd>S</kbd>, or discard and undo. Here the page answers in 700 ms and refuses an adult price below the child price; with "A conflict" chosen, it says another person changed the name meanwhile.</p>
+	<div class="docs-example docs-example-stack" id="save-bar-live">
+		<div class="hstack gap-8"><label class="form-label mb-0" for="save-bar-answer">The page answers</label><select class="form-select w-auto" id="save-bar-answer"><option value="saved">Saved</option><option value="conflict">A conflict</option></select></div>
+		<form class="card" id="save-bar-form" data-track="Excursion" data-docs-track>
+			<div class="nav nav-underline" role="tablist" aria-label="Excursion">
+				<button class="nav-link" type="button" role="tab" id="save-bar-tab-1" aria-selected="true" aria-controls="save-bar-pane-1">Details</button>
+				<button class="nav-link" type="button" role="tab" id="save-bar-tab-2" aria-selected="false" aria-controls="save-bar-pane-2">Prices</button>
+			</div>
+			<div class="card-body vstack gap-16" id="save-bar-pane-1" role="tabpanel" aria-labelledby="save-bar-tab-1" tabindex="0">
+				<div class="form-field">
+					<div class="form-floating">
+						<input class="form-control" id="save-bar-name" name="name" value="Sunset cruise" placeholder="Name">
+						<label for="save-bar-name">Name</label>
+					</div>
+				</div>
+				<fieldset class="vstack gap-8">
+					<legend class="form-label">Departure</legend>
+					<label class="form-check"><input class="radio" type="radio" name="departure" value="morning">Morning, 8:30</label>
+					<label class="form-check"><input class="radio" type="radio" name="departure" value="sunset" checked>Sunset, 16:30</label>
+				</fieldset>
+				<label class="form-check"><input class="switch" type="checkbox" role="switch" name="shown" value="1" checked>Shown on the site</label>
+				<div class="form-field">
+					<div class="form-floating">
+						<button class="form-select combobox-toggle" type="button" id="save-bar-guide-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="save-bar-guide-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Choose a language…">Thai</span></button>
+						<label for="save-bar-guide-face">Guide speaks</label>
+					</div>
+					<div class="menu combobox-menu" id="save-bar-guide-panel" popover role="dialog" aria-label="Guide speaks">
+						<div class="combobox-search">
+							<i class="bi bi-search" aria-hidden="true"></i>
+							<input class="form-control form-control-sm combobox-search-input" type="search" id="save-bar-guide-search" role="combobox" aria-controls="save-bar-guide-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a language" placeholder="Find a language" autocomplete="off" autofocus>
+						</div>
+						<div class="combobox-list" id="save-bar-guide-list" role="listbox" aria-label="Languages" data-name="guide">
+							<div class="menu-item" role="option" id="save-bar-guide-en" data-value="en" aria-selected="false">English</div>
+							<div class="menu-item" role="option" id="save-bar-guide-th" data-value="th" aria-selected="true">Thai</div>
+							<div class="menu-item" role="option" id="save-bar-guide-de" data-value="de" aria-selected="false">German</div>
+						</div>
+						<p class="combobox-no-results" hidden>Nothing found</p>
+						<input type="hidden" name="guide" value="th" data-label="Thai">
+					</div>
+				</div>
+			</div>
+			<div class="card-body vstack gap-16" id="save-bar-pane-2" role="tabpanel" aria-labelledby="save-bar-tab-2" tabindex="0" hidden>
+				<div class="form-field">
+					<label class="form-label" for="save-bar-adult">Adult price</label>
+					<div class="input-group"><input class="form-control tabular-nums" id="save-bar-adult" name="adult" type="number" value="2500" min="0" step="100" aria-describedby="save-bar-adult-hint"><span class="input-group-text">THB</span></div>
+					<div class="form-text" id="save-bar-adult-hint">Adults pay at least the child price.</div>
+				</div>
+				<div class="form-field">
+					<label class="form-label" for="save-bar-child">Child price</label>
+					<div class="input-group"><input class="form-control tabular-nums" id="save-bar-child" name="child" type="number" value="1900" min="0" step="100"><span class="input-group-text">THB</span></div>
+				</div>
+				<div class="form-field">
+					<label class="form-label" for="save-bar-key">Payment key</label>
+					<div class="input-group">
+						<input class="form-control" id="save-bar-key" name="key" type="password" autocomplete="off" placeholder="Stored - type to replace" data-secret aria-describedby="save-bar-key-hint">
+						<button class="btn" type="button" command="--clear" commandfor="save-bar-key" aria-pressed="false" data-clear="key_clear">Clear</button>
+					</div>
+					<div class="form-text" id="save-bar-key-hint">Left empty, the stored key stays.</div>
+				</div>
+			</div>
+		</form>
+		<div class="save-bar" data-track hidden></div>
+	</div>
+
+	<h3>The bar's states</h3>
+	<p>At rest the bar says everything is saved; with unsaved changes it names them. The script sets <code>data-state</code> - <code>clean</code>, <code>dirty</code>, <code>saving</code>, <code>saved</code>, <code>error</code> - and a bar written by hand takes <code>save-bar-dirty</code> for the second.</p>
 	<div class="docs-example docs-example-stack" id="save-bar-states">
 		<div class="save-bar" role="region" aria-label="Changes">
 			<i class="bi bi-check2-circle" aria-hidden="true"></i>
@@ -20,7 +85,7 @@
 	</div>
 
 	<h3>Refused and saved</h3>
-	<p>The page sets the bar's <code>data-state</code> after a save: <code>error</code> in the danger tone, its words saying which fields the server refused; <code>saved</code> in the success tone, which fades back to the bar at rest after two seconds; under reduced motion it stays until the page changes it.</p>
+	<p><code>error</code> is in the danger tone, its words saying how many fields the page refused; <code>saved</code> in the success tone fades back to the bar at rest after two seconds, and under reduced motion it stays until the next change.</p>
 	<div class="docs-example docs-example-stack" id="save-bar-results">
 		<div class="save-bar" data-state="error" role="region" aria-label="Changes not saved">
 			<i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
@@ -34,7 +99,7 @@
 	</div>
 
 	<h3>The fields that changed</h3>
-	<p><code>data-changed</code>, set by the page, marks a field whose value differs from the saved one: a bar at the start of a <code>form-control</code> or a <code>form-select</code> - a combobox's button is one - and a dot after a check or a switch. On a tab it is a dot too.</p>
+	<p><code>data-changed</code> marks a field whose value differs from the saved one: a bar at the start of a <code>form-control</code> or a <code>form-select</code> - a combobox's face is one - and a dot after a check or a switch. On a tab it is a dot too. A tracked form sets it; a page may set it by hand.</p>
 	<div class="docs-example docs-example-stack" id="save-bar-changed">
 		<div class="form-floating">
 			<input class="form-control" id="save-bar-changed-name" value="North Bay by speedboat" placeholder="Name" data-changed>
@@ -42,13 +107,87 @@
 		</div>
 		<label class="form-check" data-changed><input class="check" type="checkbox" name="shown-on-the-site" checked> Shown on the site</label>
 	</div>
+
+	<h3>A form in a dialog</h3>
+	<p>A tracked form in a dialog keeps its own button, which takes <kbd>Control</kbd> <kbd>S</kbd> when it is the form's only one; the dialog waits while the page saves, and closing it with changes asks first.</p>
+	<div class="docs-example" id="save-bar-dialog">
+		<button class="btn" type="button" commandfor="save-bar-dialog-panel" command="show-modal"><i class="bi bi-pencil" aria-hidden="true"></i>Rename the boat</button>
+		<dialog class="dialog dialog-sm" id="save-bar-dialog-panel" aria-labelledby="save-bar-dialog-title">
+			<form method="dialog" data-track="Boat" data-docs-track>
+				<div class="dialog-header"><h2 class="dialog-title" id="save-bar-dialog-title">Boat B</h2></div>
+				<div class="dialog-body vstack gap-12">
+					<div class="form-field"><label class="form-label" for="save-bar-dialog-name">Name</label><input class="form-control" id="save-bar-dialog-name" name="boat" value="Blue Heron" autocomplete="off"></div>
+				</div>
+				<div class="dialog-footer">
+					<button class="btn" type="button" commandfor="save-bar-dialog-panel" command="close">Cancel</button>
+					<button class="btn btn-primary" value="save">Save</button>
+				</div>
+			</form>
+		</dialog>
+	</div>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="save-bar-fields">
+	<h2 id="save-bar-fields">What a field is</h2>
+	<ul>
+		<li>One field per name: a radio group, checkboxes of one name, a <code>select multiple</code> and a combobox's list each count once. A disabled field is compared too, by its value.</li>
+		<li>The saved state is read one task after <code>DOMContentLoaded</code> - after the page's own scripts, so a field a script formats at load is already in it - and one task after a tracked form lands later. A value typed back to the saved one is no change; a field added or removed since is one.</li>
+		<li><code>data-track="off"</code> on a control or a fieldset leaves it out. Hidden fields are compared but never marked. A field's words in the bar are its <code>data-track-label</code>, else its label, its group's legend or its combobox's label.</li>
+		<li>A value set by code: <code>REDZ.ui.track.refresh(form)</code> draws the change, <code>REDZ.ui.track.baseline(form)</code> takes what the form holds as saved - a dialog refilled for another record.</li>
+	</ul>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="save-bar-saving">
+	<h2 id="save-bar-saving">Saving</h2>
+	<p>Save, <kbd>Control</kbd> <kbd>S</kbd>, <kbd>Enter</kbd> in a field or <code>REDZ.ui.track.save()</code> fires the cancelable <code>redz:save</code> on each changed form in turn, and stops at the first refusal. The page answers with <code>event.detail.respondWith(promise)</code>; what the form held when it was sent becomes the saved state once the promise resolves, so what the person typed meanwhile stays changed. Nothing changed: the bar says so, and nothing is sent.</p>
+	<table class="table docs-table">
+		<thead><tr><th scope="col">In <code>redz:save</code></th><th scope="col">What it is</th></tr></thead>
+		<tbody>
+			<tr><td><code>changed</code></td><td>The changed fields, <code>{name, label, was, now}</code>: a value is a string, a list for a kind that sends several, <code>null</code> for one that sends nothing. A secret's has <code>secret: true</code>, <code>was: null</code>, and <code>cleared: true</code> once cleared.</td></tr>
+			<tr><td><code>data</code></td><td>The whole form's <code>FormData</code></td></tr>
+			<tr><td><code>submitter</code></td><td>The button that saved: the bar's Save or the form's own</td></tr>
+			<tr><td><code>signal</code></td><td>Aborted when a dialog that waits is closed by code</td></tr>
+		</tbody>
+	</table>
+	<ul>
+		<li>Resolved: every password field is emptied, then <code>redz:saved</code> <code>{form, value}</code> bubbles from the form with what the promise resolved to - the place to reload or go on.</li>
+		<li>Refused with <code>{message, fields}</code>: each field <code>fields</code> names gets <code>aria-invalid="true"</code> and its sentence in an <code>invalid-feedback</code> under its control, above its hints, first in its <code>aria-describedby</code>; the bar says how many are left to fix, with the message; the first is brought into view - its tab selected, its fold opened - and focused. A field refused with <code>''</code> is marked without words; a sentence goes once the field is edited. An <code>AbortError</code> is silent.</li>
+		<li>A field refused as <code>{text, stored}</code> - another person saved it meanwhile - shows the words in a warning under it with Keep mine, which takes <code>stored</code> as the saved state and keeps the person's value, and Take saved, which puts <code>stored</code> in the field.</li>
+		<li>Left alone, a lone changed form is submitted as usual.</li>
+	</ul>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="save-bar-leaving">
+	<h2 id="save-bar-leaving">Discarding and leaving</h2>
+	<ul>
+		<li>Discard puts the saved values back, each with <code>input</code> and <code>change</code> so whatever a field drives follows, fires <code>redz:discard</code> on the form, and offers Undo until the next edit or ten seconds.</li>
+		<li>While anything is changed, a link that leaves the page, a tab whose pane holds a changed form and a dialog's cancel or close ask first: Save and go - the focus starts there -, Discard, Stay. The browser's own question guards the rest, and only while something is changed.</li>
+		<li>An <code>input type="password"</code> with <code>data-secret</code> keeps the stored value while it is empty. A button with <code>command="--clear"</code> for it and <code>data-clear</code> clears it: the field is disabled and emptied, <code>aria-pressed="true"</code>, and the form sends the name <code>data-clear</code> gives as <code>1</code>.</li>
+	</ul>
+</section>
+
+<section class="vstack gap-12" aria-labelledby="save-bar-contract">
+	<h2 id="save-bar-contract">For a page's probes</h2>
+	<p>What a page's own checks may rely on, also in the passport as <code>contracts.track</code>.</p>
+	<table class="table docs-table">
+		<thead><tr><th scope="col">Part</th><th scope="col">Names</th></tr></thead>
+		<tbody>
+			<tr><td>Selectors</td><td><code>form[data-track]</code>, <code>[data-changed]</code>, <code>.save-bar[data-state]</code>, <code>.invalid-feedback[data-track-error]</code>, <code>.alert-warning[data-track-conflict]</code>, <code>[data-track-action]</code></td></tr>
+			<tr><td>The bar's states</td><td><code>clean</code>, <code>dirty</code>, <code>saving</code>, <code>saved</code>, <code>error</code></td></tr>
+			<tr><td>Actions</td><td><code>save</code>, <code>discard</code>, <code>undo</code>, <code>keep</code>, <code>take</code></td></tr>
+			<tr><td>Attributes</td><td><code>data-track</code>, <code>data-track-label</code>, <code>data-changed</code>, <code>data-secret</code>, <code>data-clear</code>, <code>data-state</code>, <code>data-track-action</code>, <code>data-track-error</code>, <code>data-track-conflict</code>, <code>aria-invalid</code>, <code>aria-describedby</code></td></tr>
+			<tr><td>Events</td><td><code>redz:save</code>, <code>redz:saved</code>, <code>redz:discard</code></td></tr>
+			<tr><td><code>REDZ.ui.track</code></td><td><code>refresh</code>, <code>baseline</code>, <code>reset</code>, <code>dirty</code>, <code>changed</code>, <code>save</code></td></tr>
+		</tbody>
+	</table>
 </section>
 
 <section class="vstack gap-12" aria-labelledby="save-bar-access">
 	<h2 id="save-bar-access">Accessibility</h2>
 	<ul>
-		<li>The bar is a region named after what it holds; its words name the changes, not only their count.</li>
+		<li>The bar is a region named by the page's text; its words name the changes, not only their count. They are not a live region: a screen reader hears only that the changes were saved, refused, discarded, or that there is nothing to do.</li>
+		<li>Save and Discard are never disabled; pressed with nothing to do, they say so.</li>
 		<li>It does not print, and it never hides the last field of the form: the form keeps room under it.</li>
-		<li>A changed field's mark is drawn, not read out: the bar's words name the changes. In forced colors the mark is a thicker start border.</li>
+		<li>A changed field's mark is drawn, not read out: the bar's words name the changes; a changed tab is described as not saved. In forced colors the mark is a thicker start border.</li>
 	</ul>
 </section>

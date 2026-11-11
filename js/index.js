@@ -48,6 +48,7 @@ import './select.js';
 import './sort.js';
 import './row-link.js';
 import './follow.js';
+import {track} from './track.js';
 import {setList} from './combobox.js';
 import {toast} from './toast.js';
 import {confirm} from './confirm.js';
@@ -65,4 +66,4 @@ import {alert} from './alert.js';
 import {download} from './download.js';
 import {clear, settled} from './upload.js';
 
-globalThis.REDZ = Object.assign(globalThis.REDZ ?? {}, {ui: {...globalThis.REDZ?.ui, toast, confirm, busy, prompt, progress, select: selectTab, status, banner, filter: filterRegion, sort, more: restart, selection, alert, download, upload: {clear, settled}, combobox: {set: setList}}});
+globalThis.REDZ = Object.assign(globalThis.REDZ ?? {}, {ui: {...globalThis.REDZ?.ui, toast, confirm, busy, prompt, progress, select: selectTab, status, banner, filter: filterRegion, sort, more: restart, selection, alert, download, upload: {clear, settled}, combobox: {set: setList}, track}});

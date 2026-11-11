@@ -28,7 +28,7 @@ the latest release at the root, of the main branch under `next/`, and of every r
   fixture checked in real engines, with its Arabic twin (see [Documentation](#documentation)).
 - Two agent skills in `skills/`: building screens with REDZ.UI, and moving a project from Bootstrap 5.3 with a scan
   and a map of every Bootstrap class (see [Skills](#skills)).
-- Budgets held on every commit: the stylesheet at most 38 KB and the script 42 KB, gzipped - the two files a project
+- Budgets held on every commit: the stylesheet at most 38 KB and the script 52 KB, gzipped - the two files a project
   serves.
 
 ## How it reads
@@ -134,6 +134,11 @@ attaches by delegation on `document`, so nothing is set up per element and marku
   names, or as a popover beside the button; Enter saves, Escape puts the field back. Its submit fires `redz:save`,
   which a page that saves answers with a promise: the Save button is busy, a refusal's words show as the field's error
   (`js/inline-edit.js`).
+- **Tracked forms:** `data-track` on a form marks what changed since it loaded, on the field, its tab and a save bar
+  the library builds from the page's texts; Save fires `redz:save` with the changed fields and the values the person
+  saw, a refusal marks the fields it names - a conflict offers Keep mine and Take saved -, Discard offers Undo, and
+  leaving with changes asks first. `REDZ.ui.track` saves, discards and reads them from code; the passport's
+  `contracts.track` names what a page's probes may rely on (`js/track.js`).
 - **Passwords:** a button with `command="--reveal"` shows a password field's text and hides it again, `aria-pressed`
   saying which; elements with `data-strength` naming the field show its level as it is typed - by its length and its
   kinds of characters - a meter at once, the words after a pause (`js/password.js`).
@@ -235,8 +240,8 @@ library writes them, and its scripts stand in below them and where an engine get
 command to the browser's own `popovertarget` or calls the dialog, `js/menu-place.js` places a menu the engine did not
 put beside its button, `js/dialog.js` closes a dialog by a click outside it. Nothing is written for older browsers.
 
-**The floor gate.** `php tools/floor.php check` reads every stylesheet and page of the library and checks each
-property, value, function, unit, selector, at-rule, media feature, element and attribute against MDN's
+**The floor gate.** `php tools/floor.php check` reads every stylesheet, page and script of the library and checks each
+property, value, function, unit, selector, at-rule, media feature, element, attribute and script API against MDN's
 [browser-compat-data](https://github.com/mdn/browser-compat-data) at those versions - on every commit and in the Check
 workflow here. A block is checked only for the browsers that can apply it: `@media (forced-colors: active)` and
 `@supports (…)` narrow them. A vendor form beside a property covers the browsers that need it, as
@@ -282,8 +287,9 @@ never placed on a runner runs its failed jobs once more by itself.
 release was built and checked with: PHP 8.4 or newer with no extension, no network. Its passport `redz-ui-tools.json`
 names the PHP they need, the file of each tool and the sha256 of every file.
 
-**The floor checker**, `floor.php` with its list `floor.json`, judges your stylesheets, and pages, by the floor of the
-release you took:
+**The floor checker**, `floor.php` with its list `floor.json`, judges your stylesheets, pages and scripts by the floor
+of the release you took - a script's browser APIs and the few forms of syntax the floor lacks, unless the script tests
+for them by `in`, `typeof`, `?.` or a truthiness test; it reads scripts with `min.php`, which stays beside it:
 
 ```sh
 php floor.php check [--allow=FILE] [--json] FILE…

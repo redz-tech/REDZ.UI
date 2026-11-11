@@ -1923,3 +1923,25 @@ A group at rest	مجموعة في وضع السكون
 A group hovered	مجموعة تحت المؤشر
 A group focused	مجموعة مركّز عليها
 A group open	مجموعة مفتوحة
+A conflict	تعارض
+Adults pay at least the child price.	يدفع البالغون على الأقل سعر الطفل.
+Changes discarded	تم تجاهل التغييرات
+Guide speaks	لغة المرشد
+Keep mine	الإبقاء على قيمتي
+Left empty, the stored key stays.	إذا تُرك فارغًا يبقى المفتاح المحفوظ.
+No changes - nothing to do	لا تغييرات - لا شيء لفعله
+Nothing was saved: {count} field to fix. {message}	لم يُحفظ شيء: {count} حقل يحتاج إلى تصحيح. {message}
+Nothing was saved: {count} fields to fix. {message}	لم يُحفظ شيء: {count} حقول تحتاج إلى تصحيح. {message}
+Payment key	مفتاح الدفع
+Rename the boat	إعادة تسمية القارب
+Save and go	حفظ ومتابعة
+Saved at {time}	حُفظ في {time}
+Stay	البقاء
+Stored - type to replace	محفوظ - اكتب للاستبدال
+Take saved	اعتماد المحفوظ
+The page answers	جواب الصفحة
+{count} more	{count} أخرى
+{count} unsaved change in {forms}: {fields}	{count} تغيير غير محفوظ في {forms}: {fields}
+{count} unsaved changes in {forms}: {fields}	{count} تغييرات غير محفوظة في {forms}: {fields}
+{forms}: {count} change is not saved - {fields}.	{forms}: {count} تغيير لم يُحفظ - {fields}.
+{forms}: {count} changes are not saved - {fields}.	{forms}: {count} تغييرات لم تُحفظ - {fields}.

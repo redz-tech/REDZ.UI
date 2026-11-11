@@ -533,20 +533,34 @@ const observer = new ResizeObserver((entries) => {
 	}
 });
 
-for (const face of document.querySelectorAll('.combobox-toggle')) {
-	const list = document.getElementById(face.getAttribute('commandfor') || '')?.querySelector('[role="listbox"]');
-	if (list) {
-		paint(list);
-		observer.observe(face);
-	}
-}
+const started = new WeakSet();
 
-for (const input of document.querySelectorAll('input[role="combobox"]')) {
-	const list = listOf(input);
-	if (list !== null) {
-		untab(list);
+/** Draws every face and fits it to its width, and takes the options out of the Tab order, once each: at load, and for a
+ *  combobox that lands later. */
+const start = () => {
+	for (const face of document.querySelectorAll('.combobox-toggle')) {
+		const list = document.getElementById(face.getAttribute('commandfor') || '')?.querySelector('[role="listbox"]');
+		if (list && !started.has(face)) {
+			started.add(face);
+			paint(list);
+			observer.observe(face);
+		}
 	}
-}
+	for (const input of document.querySelectorAll('input[role="combobox"]')) {
+		const list = listOf(input);
+		if (list !== null && !started.has(input)) {
+			started.add(input);
+			untab(list);
+		}
+	}
+};
+start();
+new MutationObserver((records) => {
+	const landed = records.some((record) => [...record.addedNodes].some((node) => node instanceof Element && (node.matches('.combobox-toggle, input[role="combobox"], [role="listbox"]') || node.querySelector('.combobox-toggle, input[role="combobox"]') !== null)));
+	if (landed) {
+		start();
+	}
+}).observe(document.documentElement, {childList: true, subtree: true});
 
 document.addEventListener('input', (event) => {
 	const input = event.target;

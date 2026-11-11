@@ -4,8 +4,10 @@
 // that leaves this page for another of this site, where the browser has the Navigation API. A navigation to another tab,
 // window or target, a download, a fragment of this page and one a handler prevents or takes over are not such. The
 // overlay lifts as the page comes back from the back-forward cache, the navigation fails, Escape stops it or after ten
-// seconds, as a navigation that turns into a download or that the browser's stop ends tells the page nothing.
+// seconds, as a navigation that turns into a download or that the browser's stop ends tells the page nothing; while a
+// tracked form's changes have the browser ask before the page goes (js/track.js), no overlay starts.
 import {hold} from './busy.js';
+import {guarding} from './track.js';
 
 const LONGEST = 10000;
 let lift = null;
@@ -47,7 +49,7 @@ globalThis.navigation?.addEventListener('navigate', (event) => {
 		return;
 	}
 	setTimeout(() => {
-		if (!event.defaultPrevented && navigation.transition === null) {
+		if (!event.defaultPrevented && navigation.transition === null && !guarding()) {
 			veil();
 		}
 	});

@@ -22,12 +22,12 @@
 		font-size: var(--redz-fs-12);
 	}
 
-	.save-bar-dirty {
+	:is(.save-bar-dirty, .save-bar[data-state="dirty"], .save-bar[data-state="saving"]) {
 		border-color: color-mix(in oklch, var(--redz-warning) 45%, transparent);
 		background: var(--redz-warning-subtle);
 	}
 
-	.save-bar-dirty .save-bar-text {
+	:is(.save-bar-dirty, .save-bar[data-state="dirty"], .save-bar[data-state="saving"]) .save-bar-text {
 		color: var(--redz-warning);
 		font-weight: 600;
 	}

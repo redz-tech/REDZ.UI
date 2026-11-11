@@ -1,9 +1,9 @@
 <?php
-// floor - the browser floor gate: every CSS and HTML feature of the library against MDN's browser-compat-data at the
+// floor - the browser floor gate: every CSS, HTML and JS feature of the library against MDN's browser-compat-data at the
 // versions of tools/floor/rules.json. Usage: php tools/floor.php check [FILE…] | build | refresh [VERSION]
 // check - reports each feature the floor lacks as file:line, exits 1 on any, when floor.json is out of date, and when an
-// exception or a repair of rules.json is outgrown; with files (.css, .html), checks just them; either way first proves
-// itself on the fuses of FLOOR__Fuses(), and the release's checker tools/dist/floor.php on its command line;
+// exception or a repair of rules.json is outgrown; with files (.css, .html, .js), checks just them; either way first
+// proves itself on the fuses of FLOOR__Fuses(), and the release's checker tools/dist/floor.php on its command line;
 // build - writes floor.json, every name the gate knows with its verdict at the floor, for the release;
 // refresh - downloads @mdn/browser-compat-data (the version of tools/floor/bcd.tsv, or VERSION), verifies its sha512 and
 // writes tools/floor/bcd.tsv.
@@ -20,6 +20,10 @@ const FLOOR_SHIPPED = __DIR__ . '/dist/floor.php';
 const FLOOR_UNIT_TYPES = ['length', 'angle', 'time', 'frequency', 'resolution', 'flex'];
 const FLOOR_TYPE_UNITS = ['length' => ['px', 'cm', 'mm', 'in', 'pc', 'pt'], 'time' => ['s', 'ms'], 'frequency' => ['hz', 'khz'], 'flex' => ['fr']];
 const FLOOR_WORD = '~^-?[a-z][a-z0-9-]*$~';
+// A member's name in an api or javascript key - a subfeature's is snake case -, and the interfaces whose members a
+// script also reaches by a name of their own: window.X or X, navigator.X, document.X.
+const FLOOR_JS_MEMBER = '~^(?:[A-Za-z$][A-Za-z0-9$]*|[A-Z][A-Z0-9_]*)$~';
+const FLOOR_JS_OWN_KEYS = ['Window' => 'global', 'Navigator' => 'navigator', 'Document' => 'document'];
 
 /** The rules of tools/floor/rules.json: the floor versions, the files to check and the exceptions with their reasons. */
 function FLOOR__Rules(): array
@@ -128,25 +132,50 @@ function FLOOR__Since(array $ranges): string
 	return $since;
 }
 
-/** By bcd.tsv, the best verdict of the keys of $name in $browser at the floor: 'full', 'partial', 'none' or 'unknown'. */
+/** By bcd.tsv, the best verdict of the keys of $name in $browser at the floor: 'full', 'partial', 'none' or 'unknown'; a
+ *  member's keys count only where their interface is, and a member of none there is 'full', as no script reaches it. */
 function FLOOR__BcdVerdict(array $data, array $rules, string $name, string $browser, string $prefix = ''): string
 {
-	$verdict = isset($data['names'][$name]) ? 'none' : 'unknown';
+	$verdict = 'unknown';
 	foreach ($data['names'][$name] ?? [] as $key) {
+		if (str_starts_with($name, 'member:') && FLOOR__OwnerIsAbsent($data, $rules, $key, $browser)) {
+			continue;
+		}
 		$one = FLOOR__Verdict($data['rows'][$key]['support'][$browser], $rules['floor'][$browser], $prefix);
 		if ($one === 'full') {
 			return 'full';
 		}
-		if ($one === 'partial') {
-			$verdict = 'partial';
-		}
+		$verdict = $one === 'partial' || $verdict === 'partial' ? 'partial' : 'none';
 	}
-	return $verdict;
+	return $verdict === 'unknown' && isset($data['names'][$name]) ? 'full' : $verdict;
 }
 
-/** The names a BCD path answers to by the grammar of floor.json; none for a behavior that no markup shows. */
+/** Whether the interface or builtin that holds the member $key has no support in $browser at the floor. */
+function FLOOR__OwnerIsAbsent(array $data, array $rules, string $key, string $browser): bool
+{
+	$owner = substr($key, 0, (int)strrpos($key, '.'));
+	return isset($data['rows'][$owner]) && FLOOR__Verdict($data['rows'][$owner]['support'][$browser], $rules['floor'][$browser]) === 'none';
+}
+
+/** The key floor.json names for $name: the first, or for a member the first that falls short in one of $lacking where
+ *  its interface is. */
+function FLOOR__NameKey(array $data, array $rules, string $name, array $lacking): string
+{
+	$keys = $data['names'][$name];
+	foreach (str_starts_with($name, 'member:') ? $keys : [] as $key) {
+		if (array_any($lacking, fn(string $browser): bool => !FLOOR__OwnerIsAbsent($data, $rules, $key, $browser) && FLOOR__Verdict($data['rows'][$key]['support'][$browser], $rules['floor'][$browser]) !== 'full')) {
+			return $key;
+		}
+	}
+	return $keys[0];
+}
+
+/** The names a BCD path answers to by the grammar of floor.json; none for a behavior that no markup or token shows. */
 function FLOOR__Names(array $path, array $compat): array
 {
+	if ($path[0] === 'api' || $path[0] === 'javascript') {
+		return FLOOR__JsNames($path);
+	}
 	$depth = count($path);
 	$last = $path[$depth - 1];
 	$desc = html_entity_decode((string)($compat['description'] ?? ''), ENT_QUOTES | ENT_HTML5);
@@ -256,6 +285,42 @@ function FLOOR__HtmlNames(array $path, string $desc): array
 	return [];
 }
 
+/** The names of an api or javascript path: a global, a constructor, a static, a member of any owner - of the window,
+ *  navigator and document also by their own -, a statement or a part of a regular expression; none for a subfeature. */
+function FLOOR__JsNames(array $path): array
+{
+	if ($path[0] === 'javascript' && in_array($path[1], ['statements', 'regular_expressions'], true)) {
+		return [($path[1] === 'statements' ? 'statement:' : 'regexp:') . implode('.', array_slice($path, 2))];
+	}
+	if ($path[0] === 'javascript' && $path[1] !== 'builtins') {
+		return [];
+	}
+	$builtin = $path[0] === 'javascript';
+	$parts = array_slice($path, $builtin ? 2 : 1);
+	$member = preg_match(FLOOR_JS_MEMBER, $parts[count($parts) - 1]) === 1;
+	if (count($parts) === 1) {
+		return preg_match('~^[A-Za-z_$][\w$]*$~', $parts[0]) === 1 ? ['global:' . $parts[0], ...($member && preg_match('~^[a-z]~', $parts[0]) === 1 ? ['member:' . $parts[0]] : [])] : [];
+	}
+	if (count($parts) === 2) {
+		[$owner, $name] = $parts;
+		if ($name === $owner) {
+			return ['new:' . $owner];
+		}
+		if (!$builtin && str_ends_with($name, '_static') && preg_match(FLOOR_JS_MEMBER, substr($name, 0, -7)) === 1) {
+			return ['static:' . $owner . '.' . substr($name, 0, -7)];
+		}
+		if (!$member) {
+			return [];
+		}
+		return match (true) {
+			$builtin => ['static:' . $owner . '.' . $name, 'member:' . $name],
+			isset(FLOOR_JS_OWN_KEYS[$owner]) => [FLOOR_JS_OWN_KEYS[$owner] . ':' . $name, 'member:' . $name],
+			default => ['member:' . $name],
+		};
+	}
+	return $builtin && count($parts) === 3 && $member && preg_match('~^[A-Z]~', $parts[1]) === 1 && !in_array($parts[1], [$parts[0], $parts[2]], true) ? ['member:' . $parts[2]] : [];
+}
+
 /** One cell of bcd.tsv from a browser's support statements: released and unflagged, of the name itself or of the
  *  alternative name $alt. */
 function FLOOR__Cell(?array $statements, string $alt = ''): string
@@ -285,8 +350,8 @@ function FLOOR__Cell(?array $statements, string $alt = ''): string
 	return $items === [] ? '-' : implode(';', $items);
 }
 
-/** The rows of bcd.tsv for the css and html trees of BCD, one per key with names; a property's alternative name (such
- *  as word-wrap) gets a row of its own, keyed `<key>~<name>`. */
+/** The rows of bcd.tsv for the css, html, api and javascript trees of BCD, one per key with names; a property's
+ *  alternative name (such as word-wrap) gets a row of its own, keyed `<key>~<name>`. */
 function FLOOR__Derive(array $bcd): array
 {
 	$rows = [];
@@ -322,7 +387,7 @@ function FLOOR__Derive(array $bcd): array
 			$walk($child, $here);
 		}
 	};
-	$walk(['css' => $bcd['css'], 'html' => $bcd['html']], []);
+	$walk(['css' => $bcd['css'], 'html' => $bcd['html'], 'api' => $bcd['api'], 'javascript' => $bcd['javascript']], []);
 	return $rows;
 }
 
@@ -346,7 +411,8 @@ function FLOOR__Refresh(string $version): int
 }
 
 /** The text of floor.json: the floor, the BCD version, every name with its key and its verdicts where it falls short at
- *  the floor and the browsers that take each of its vendor forms, and the exceptions with the names their keys cover. */
+ *  the floor and the browsers that take each of its vendor forms - a script's only when it falls short, with the
+ *  web-features of its keys -, and the exceptions with the names their keys cover. */
 function FLOOR__ListText(array $data, array $rules): string
 {
 	$names = array_keys($data['names']);
@@ -363,20 +429,31 @@ function FLOOR__ListText(array $data, array $rules): string
 	$prefixes = array_keys($prefixes);
 	sort($prefixes);
 	$lines = [];
+	$kept = [];
 	foreach ($names as $name) {
-		$info = [];
+		$js = FLOOR__NameIsJs($name);
+		$verdicts = [];
 		foreach (FLOOR_BROWSERS as $browser) {
 			$verdict = FLOOR__BcdVerdict($data, $rules, $name, $browser);
-			if ($verdict === 'full') {
-				continue;
+			if ($verdict !== 'full') {
+				$verdicts[$browser] = $verdict;
 			}
-			$since = FLOOR__Since($data['rows'][$data['names'][$name][0]]['support'][$browser]);
+		}
+		$key = FLOOR__NameKey($data, $rules, $name, array_keys($verdicts));
+		$info = [];
+		foreach ($verdicts as $browser => $verdict) {
+			$since = FLOOR__Since($data['rows'][$key]['support'][$browser]);
 			$info[$browser] = $verdict . ($verdict === 'none' && $since !== '' ? ', from ' . $since : '');
 		}
-		if ($info !== []) {
-			$info = ['key' => $data['names'][$name][0]] + $info;
+		if ($js && ($info === [] || (str_starts_with($name, 'new:') && $info === ($kept['global:' . substr($name, 4)] ?? [])))) {
+			continue;
 		}
-		foreach ($prefixes as $prefix) {
+		$kept[$name] = $info;
+		if ($info !== []) {
+			$features = $js ? array_values(array_unique(array_diff(array_map(fn(string $one): string => $data['rows'][$one]['feature'], $data['names'][$name]), ['-']))) : [];
+			$info = ['key' => $key] + ($features === [] ? [] : ['features' => $features]) + $info;
+		}
+		foreach ($js ? [] : $prefixes as $prefix) {
 			$takes = array_values(array_filter(FLOOR_BROWSERS, fn(string $browser): bool => FLOOR__BcdVerdict($data, $rules, $name, $browser, $prefix) === 'full'));
 			if ($takes !== []) {
 				$info[$prefix] = $takes;
@@ -431,7 +508,8 @@ function FLOOR__TestFindings(array $data): array
 
 /**
  * The release's checker, tools/dist/floor.php, run as a consumer runs it on planted files: its exit codes, its two
- * streams, --allow, --json, and that the library's own exceptions do not reach a consumer's stylesheet.
+ * streams, --allow, --json, a script and a module with a guarded name, and that the library's own exceptions do not reach
+ * a consumer's stylesheet.
  * @return list<string>
  */
 function FLOOR__CliFindings(): array
@@ -445,6 +523,8 @@ function FLOOR__CliFindings(): array
 		'gap.css' => ".a { field-sizing: content; }\n.b { position-area: block-end span-inline-end; }\n",
 		'allow.json' => '{"allow": [{"name": "property:field-sizing", "reason": "rows stay fixed below the floor"}, {"name": "value:field-sizing:content", "browsers": ["firefox", "firefox_android", "safari", "safari_ios"], "reason": "the same"}, {"name": "property:color", "reason": "nothing to allow"}]}',
 		'bad.json' => '{"allow": [{"name": "property:field-sizing"}]}',
+		'gap.js' => "const prefs = await cookieStore.get('theme');\n",
+		'module.mjs' => "if ('cookieStore' in window) {\n\tawait cookieStore.get('theme');\n}\nexport const run = () => Promise.try(load);\n",
 	];
 	if (!is_dir($dir)) {
 		mkdir($dir);
@@ -457,6 +537,8 @@ function FLOOR__CliFindings(): array
 		[['check', 'gap.css'], 1, '~^gap\.css:1  property:field-sizing \(css\.properties\.field-sizing\) - .*\n(?s:.*)^gap\.css:2  property:position-area \(~m', '~findings~'],
 		[['check', '--allow=allow.json', 'gap.css'], 1, '~\A(?!.*gap\.css:1 )(?s:.*)^allow\.json  the exception property:color allows nothing~m', '~findings~'],
 		[['check', '--json', 'gap.css'], 1, '~"name": "property:field-sizing",\s+"key": "css\.properties\.field-sizing",\s+"browsers": \{~', '~findings~'],
+		[['check', 'gap.js', 'module.mjs'], 1, '~\Agap\.js:1  global:cookieStore \(api\.Window\.cookieStore\) - [^\n]*\nmodule\.mjs:4  static:Promise\.try \(javascript\.builtins\.Promise\.try\) - [^\n]*\n\z~', '~2 files · 2 findings~'],
+		[['check', '--json', 'gap.js'], 1, '~"name": "global:cookieStore",\s+"key": "api\.Window\.cookieStore",\s+"browsers": \{~', '~findings~'],
 		[['check', '--allow=bad.json', 'clean.css'], 2, '~\A\z~', '~needs a name, a reason~'],
 		[['check'], 2, '~\A\z~', '~usage~'],
 		[['check', 'missing.css'], 2, '~\A\z~', '~cannot read missing\.css~'],
@@ -477,9 +559,9 @@ function FLOOR__CliFindings(): array
 	return $findings;
 }
 
-/** check: the findings of every stylesheet and page of rules.json, or of the files in $paths (.css or .html) alone;
- *  1 on any, or - for the library itself - when an exception allows nothing, floor.json is out of date or the
- *  release's checker misbehaves on its command line. */
+/** check: the findings of every stylesheet, page and script of rules.json, or of the files in $paths (.css, .html or
+ *  .js) alone; 1 on any, or - for the library itself - when an exception allows nothing, floor.json is out of date or
+ *  the release's checker misbehaves on its command line. */
 function FLOOR__Check(array $paths): int
 {
 	$rules = FLOOR__Rules();
@@ -490,7 +572,7 @@ function FLOOR__Check(array $paths): int
 	$findings = array_map(fn(string $failure): string => 'tools/floor/floor.php  ' . $failure, FLOOR__SelfTest($data));
 	$fuses = count(FLOOR__Fuses()) - count($findings);
 	$files = [];
-	foreach ([...$rules['css'], ...$rules['html']] as $pattern) {
+	foreach ([...$rules['css'], ...$rules['html'], ...$rules['js']] as $pattern) {
 		foreach ($paths === [] ? glob($root . '/' . $pattern) ?: [] : [] as $path) {
 			$files[$path] = substr($path, strlen($root) + 1);
 		}

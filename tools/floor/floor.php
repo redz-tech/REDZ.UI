@@ -1,13 +1,17 @@
 <?php
 // floor - the browser floor checker of REDZ.UI: every property, value, function, unit, selector, at-rule, media feature,
-// element and attribute of a stylesheet or a page, judged by floor.json beside it - each name's verdict at the floor from
-// MDN's browser-compat-data, and the release's exceptions. The core of the library's own gate, tools/floor.php, and
-// shipped as it is in each release's redz-ui-tools-<version>.zip. PHP 8.4+, no network.
+// element and attribute of a stylesheet or a page, and the globals, statics, members and statements of a script (.js,
+// .mjs, read by min.php beside it), judged by floor.json beside it - each name's verdict at the floor from MDN's
+// browser-compat-data, and the release's exceptions. The core of the library's own gate, tools/floor.php, and shipped as
+// it is in each release's redz-ui-tools-<version>.zip. PHP 8.4+, no network.
 // Usage: php floor.php check [--allow=FILE] [--json] FILE… - a finding a line on stdout, FILE:LINE  NAME (KEY) - BROWSER
 // VERSION VERDICT, …, the summary on stderr; exit 0 clean, 1 findings, 2 anything else. A block counts only for the
-// browsers that apply it (@media, @supports), and a vendor form beside a property covers it. An exception needs a reason:
-// /* floor-allow NAME[, NAME…] -- reason */ covers those names on its own lines and the next one, and --allow=FILE reads
+// browsers that apply it (@media, @supports), and a vendor form beside a property covers it; a script that tests a name
+// ('X' in o, typeof, ?., o.X && …) is spared it. An exception needs a reason: /* floor-allow NAME[, NAME…] -- reason */
+// (or // in a script) covers those names on its own lines and the next one, and --allow=FILE reads
 // {"allow": [{"name": NAME, "browsers": [BROWSER…], "reason": TEXT}]}; one that allows nothing is a finding.
+
+require_once is_file(__DIR__ . '/min.php') ? __DIR__ . '/min.php' : dirname(__DIR__) . '/min.php';
 
 const FLOOR_BROWSERS = ['chrome', 'chrome_android', 'edge', 'firefox', 'firefox_android', 'safari', 'safari_ios'];
 // Where an exception of the release holds: for any stylesheet, or for the library's own files, whose code stands in.
@@ -19,6 +23,14 @@ const FLOOR_COMBINATORS = ['>' => 'child', '+' => 'next-sibling', '~' => 'subseq
 const FLOOR_SELECTOR_ARGUMENTS = ['is', 'where', 'not', 'has', 'host', 'host-context', 'slotted'];
 const FLOOR_RANGE = ['<', '>', '='];
 const FLOOR_FUNCTION_ALIASES = ['rgba' => 'rgb'];
+// The kinds of the names a script's tokens give; floor.json holds only those short of the floor somewhere.
+const FLOOR_JS_KINDS = ['global', 'new', 'static', 'member', 'navigator', 'document', 'statement', 'regexp'];
+// The names through which a script reads the global object, and the objects whose members have keys of their own.
+const FLOOR_JS_GLOBAL_OBJECTS = ['window', 'globalThis', 'self'];
+const FLOOR_JS_RECEIVERS = ['navigator', 'document'];
+// The operators after which a name is tested, not used: `o.X && …`, and `o.X === undefined` with the word after them.
+const FLOOR_JS_TESTS = ['&&', '||', '??', '?'];
+const FLOOR_JS_COMPARE = ['===', '!==', '==', '!='];
 // The samples the checker proves itself on before it judges: [kind, sample, a text its findings hold, or '' for none].
 const FLOOR_FUSES = [
 	['css', '.a { field-sizing: content; }', 'property:field-sizing'],
@@ -45,6 +57,44 @@ const FLOOR_FUSES = [
 	['html', '<div style="color: red"></div>', 'style='],
 	['html', '<button commandfor="d" command="show-modal">Open</button>', ''],
 	['html', '<blink>Old</blink>', 'element:blink'],
+	['js', "cookieStore.get('a');", 'fuse:1  global:cookieStore (api.Window.cookieStore)'],
+	['js', 'Promise.try(() => 1);', 'static:Promise.try (javascript.builtins.Promise.try)'],
+	['js', 'list.moveBefore(a, b);', 'member:moveBefore (api.'],
+	['js', "const route = new URLPattern({pathname: '/a'});", 'global:URLPattern (api.URLPattern)'],
+	['js', 'const registry = new CustomElementRegistry();', 'new:CustomElementRegistry (api.CustomElementRegistry.CustomElementRegistry)'],
+	['js', 'const brands = navigator.userAgentData.brands;', 'navigator:userAgentData (api.Navigator.userAgentData)'],
+	['js', 'window.scheduler.yield();', 'global:scheduler (api.scheduler)'],
+	['js', 'document.startViewTransition(paint);', 'document:startViewTransition (api.Document.startViewTransition)'],
+	['js', "import data from './a.json' with {type: 'json'};", 'statement:import.import_attributes.type_json'],
+	['js', 'using lock = take();', 'statement:using (javascript.statements.using)'],
+	['js', 'const word = /(?i:a)b/;', 'regexp:modifier'],
+	['js', "/* floor-allow member:moveBefore */\nlist.moveBefore(a, b);", 'needs NAME'],
+	['js', "// floor-allow global:cookieStore -- nothing to allow\nconst a = 1;", 'allows nothing'],
+	['js', "/* floor-allow member:moveBefore -- two lines away */\n\nlist.moveBefore(a, b);", 'fuse:3  member:moveBefore'],
+	['js', "const s = '// floor-allow member:moveBefore -- in a string';\nlist.moveBefore(a, b);", 'fuse:2  member:moveBefore ('],
+	['js', "// floor-allow member:moveBefore -- the page's own list\nlist.moveBefore(a, b);", ''],
+	['js', "if ('cookieStore' in window) {\n\tcookieStore.get('a');\n}", ''],
+	['js', "if (typeof cookieStore !== 'undefined') {\n\tcookieStore.get('a');\n}", ''],
+	['js', "if (typeof list.moveBefore === 'function') {\n\tlist.moveBefore(a, b);\n}", ''],
+	['js', "globalThis.cookieStore?.get('a');", ''],
+	['js', 'dialog.requestClose?.();', ''],
+	['js', "if (list.moveBefore) {\n\tlist.moveBefore(a, b);\n}", ''],
+	['js', 'const moved = list.moveBefore ? list.moveBefore(a, b) : null;', ''],
+	['js', 'const moved = list.moveBefore && list.moveBefore(a, b);', ''],
+	['js', "if ('highlights' in CSS) {\n\tCSS.highlights.set('a', new Highlight(range));\n}", ''],
+	['js', "const cookieStore = {get: () => 1};\ncookieStore.get('a');", ''],
+	['js', "const {cookieStore} = settings;\ncookieStore.get('a');", ''],
+	['js', 'const flags = {cookieStore: 1, moveBefore: 2};', ''],
+	['js', "const pick = {items, take};\npick.take(items[0]);", ''],
+	['js', "const rows = {moveBefore(a, b) {}};\nrows.moveBefore(a, b);", ''],
+	['js', "class Rows {\n\tsize = 0;\n\tmoveBefore = null;\n}\nnew Rows().moveBefore(a, b);", ''],
+	['js', 'const last = rows.at(-1) ?? map.has(key) ?? rows.find(match);', ''],
+	['js', 'const where = row.dataset.move;', ''],
+	['js', "list.addEventListener('scrollend', paint);", ''],
+	['js', 'const share = /(?:a)b/g.test(text) ? total / count / 2 : 0;', ''],
+	['js', "import {using} from './a.js';\nusing(1);", ''],
+	['js', 'const names = agent.brands.map((one) => one.brand);', ''],
+	['js', "if (a) {}\n/b/.test(c);", 'fuse:2  the script cannot be read'],
 ];
 /** The fuses: FLOOR_FUSES and one built by sprintf, so that no literal holds markup an editor checks as HTML. */
 function FLOOR__Fuses(): array
@@ -79,9 +129,10 @@ function FLOOR__Utf8(int $cp): string
 }
 
 /**
- * The table of floor.json's text: the floor, the BCD version, each name's key and verdicts - by browser, where it falls
- * short, and the browsers that take each vendor form - and the release's exceptions.
- * @return array{floor: array<string, string>, bcd: array<string, string>, names: array<string, array{key: string, verdicts: array<string, string>, prefixes: array<string, array<string, true>>}>, allow: list<array<string, mixed>>}
+ * The table of floor.json's text: the floor, the BCD version, each name's key, web-features and verdicts - by browser,
+ * where it falls short, and the browsers that take each vendor form -, the web-features of each word a script's name
+ * ends with, and the release's exceptions.
+ * @return array{floor: array<string, string>, bcd: array<string, string>, names: array<string, array{key: string, features: list<string>, verdicts: array<string, string>, prefixes: array<string, array<string, true>>}>, words: array<string, array<string, true>>, allow: list<array<string, mixed>>}
  * @throws JsonException when the text is not JSON
  * @throws RuntimeException when it is not floor.json's shape
  */
@@ -98,10 +149,11 @@ function FLOOR__Table(string $json): array
 	}
 	$names = [];
 	foreach ($list['names'] as $name => $info) {
-		$entry = ['key' => '', 'verdicts' => [], 'prefixes' => []];
+		$entry = ['key' => '', 'features' => [], 'verdicts' => [], 'prefixes' => []];
 		foreach ($info === 'ok' ? [] : (is_array($info) ? $info : throw new RuntimeException('floor.json: a name it cannot read: ' . $name)) as $field => $value) {
 			match (true) {
 				$field === 'key' && is_string($value) => $entry['key'] = $value,
+				$field === 'features' && is_array($value) && array_is_list($value) && array_all($value, fn(mixed $one): bool => is_string($one)) => $entry['features'] = $value,
 				in_array($field, FLOOR_BROWSERS, true) && is_string($value) => $entry['verdicts'][$field] = $value,
 				preg_match('~^-?[a-z]+(?:-[a-z]+)*-?$~', (string)$field) === 1 && is_array($value) => $entry['prefixes'][$field] = array_fill_keys($value, true),
 				default => throw new RuntimeException('floor.json: a field it cannot read in ' . $name . ': ' . $field),
@@ -114,7 +166,13 @@ function FLOOR__Table(string $json): array
 			throw new RuntimeException('floor.json: an exception it cannot read: ' . json_encode($entry));
 		}
 	}
-	return ['floor' => $list['floor'], 'bcd' => $list['bcd'], 'names' => $names, 'allow' => $list['allow']];
+	$words = [];
+	foreach ($names as $name => $entry) {
+		foreach ($entry['features'] as $feature) {
+			$words[(string)preg_replace('~^.*[:.]~', '', $name)][$feature] = true;
+		}
+	}
+	return ['floor' => $list['floor'], 'bcd' => $list['bcd'], 'names' => $names, 'words' => $words, 'allow' => $list['allow']];
 }
 
 /** The verdict of $name in $browser at the floor: 'full', 'partial', 'none' or 'unknown'; with $prefix, whether that
@@ -199,17 +257,8 @@ function FLOOR__CssAllowComments(string $css, string $file, array &$findings): a
 			$end = strpos($css, '*/', $i + 2);
 			$end = $end === false ? $n : $end + 2;
 			$body = substr($css, $i + 2, max(0, $end - $i - 4));
-			$body = trim($body);
 			$last = $line + substr_count($css, "\n", $i, $end - $i);
-			if (preg_match(FLOOR_ALLOW_COMMENT, $body) === 1) {
-				if (preg_match('~^floor-allow\s+(\S.*?)\s+--\s+(\S.*)$~s', $body, $m) !== 1) {
-					$findings[] = FLOOR__Finding($file, $line, '', 'a floor-allow needs NAME[, NAME…] -- reason');
-				} else {
-					foreach (array_map('trim', explode(',', $m[1])) as $k => $name) {
-						$allow['inline:' . $file . ':' . $line . ':' . $k] = ['name' => $name, 'reason' => $m[2], 'file' => $file, 'line' => $line, 'lines' => [$line, $last + 1]];
-					}
-				}
-			}
+			FLOOR__AllowCommentParse(trim($body), $file, $line, $last, $allow, $findings);
 			$line = $last;
 			$i = $end;
 			continue;
@@ -231,6 +280,22 @@ function FLOOR__CssAllowComments(string $css, string $file, array &$findings): a
 		$i++;
 	}
 	return $allow;
+}
+
+/** One comment's text on lines $line to $last: a floor-allow adds its names to $allow, covering them to the line after
+ *  $last, and one in another form is a finding. */
+function FLOOR__AllowCommentParse(string $body, string $file, int $line, int $last, array &$allow, array &$findings): void
+{
+	if (preg_match(FLOOR_ALLOW_COMMENT, $body) !== 1) {
+		return;
+	}
+	if (preg_match('~^floor-allow\s+(\S.*?)\s+--\s+(\S.*)$~s', $body, $m) !== 1) {
+		$findings[] = FLOOR__Finding($file, $line, '', 'a floor-allow needs NAME[, NAME…] -- reason');
+		return;
+	}
+	foreach (array_map('trim', explode(',', $m[1])) as $k => $name) {
+		$allow['inline:' . $file . ':' . $line . ':' . $k] = ['name' => $name, 'reason' => $m[2], 'file' => $file, 'line' => $line, 'lines' => [$line, $last + 1]];
+	}
 }
 
 /** Whether an exception of $allow allows $name in $browser at $line ('' for a check of no browser) - a name exception
@@ -817,6 +882,324 @@ function FLOOR__HtmlFacts(string $html, array $data): array
 	return $facts;
 }
 
+/** Whether $name is a script's, of a kind of FLOOR_JS_KINDS. */
+function FLOOR__NameIsJs(string $name): bool
+{
+	return in_array(strstr($name, ':', true), FLOOR_JS_KINDS, true);
+}
+
+/**
+ * The tokens of a script as min.php's reader gives them, each [kind, text, byte, line], and its comments - what lies
+ * between two tokens beside white space -, each [text, line, last line].
+ * @return array{list<array{string, string, int, int}>, list<array{string, int, int}>}
+ * @throws RuntimeException where the reader stops, its code the byte
+ */
+function FLOOR__JsTokens(string $js): array
+{
+	$js = str_starts_with($js, "\xEF\xBB\xBF") ? '   ' . substr($js, 3) : $js;
+	$tokens = [];
+	$comments = [];
+	$line = 1;
+	$at = 0;
+	foreach ([...MIN__JsLex($js), ['end', '', strlen($js)]] as [$kind, $text, $byte]) {
+		$gap = substr($js, $at, $byte - $at);
+		$from = 0;
+		while (preg_match('~\G\s*(//[^\n]*|/\*.*?\*/)~s', $gap, $m, PREG_OFFSET_CAPTURE, $from) === 1) {
+			$first = $line + substr_count(substr($gap, 0, $m[1][1]), "\n");
+			$comments[] = [$m[1][0], $first, $first + substr_count($m[1][0], "\n")];
+			$from = $m[0][1] + strlen($m[0][0]);
+		}
+		$line += substr_count($gap, "\n");
+		if ($kind !== 'end') {
+			$tokens[] = [$kind, $text, $byte, $line];
+			$line += substr_count($text, "\n");
+		}
+		$at = $byte + strlen($text);
+	}
+	return [$tokens, $comments];
+}
+
+/** The floor-allow comments of a script, block and line comments, as FLOOR__CssAllowComments reads a stylesheet's. */
+function FLOOR__JsAllowComments(array $comments, string $file, array &$findings): array
+{
+	$allow = [];
+	foreach ($comments as [$text, $line, $last]) {
+		FLOOR__AllowCommentParse(trim(str_starts_with($text, '//') ? substr($text, 2) : substr($text, 2, -2)), $file, $line, $last, $allow, $findings);
+	}
+	return $allow;
+}
+
+/** For each bracket of a script's tokens - `(`, `[`, `{` and a template's `${` - its partner, both ways, and for each
+ *  token the index of the open bracket it stands in, -1 at the top. */
+function FLOOR__JsBrackets(array $tokens): array
+{
+	$match = [];
+	$within = [];
+	$open = [];
+	foreach ($tokens as $t => [$kind, $text]) {
+		if ((($kind === 'punctuator' && in_array($text, [')', ']', '}'], true)) || ($kind === 'template' && $text[0] === '}')) && $open !== []) {
+			$from = array_pop($open);
+			$match[$from] = $t;
+			$match[$t] = $from;
+		}
+		$within[$t] = $open === [] ? -1 : $open[count($open) - 1];
+		if (($kind === 'punctuator' && in_array($text, ['(', '[', '{'], true)) || ($kind === 'template' && str_ends_with($text, '${'))) {
+			$open[] = $t;
+		}
+	}
+	return [$match, $within];
+}
+
+/** Whether the token at $t follows `.` or `?.`: a member's name. */
+function FLOOR__JsIsMember(array $tokens, int $t): bool
+{
+	return in_array($tokens[$t - 1][1] ?? '', ['.', '?.'], true) && ($tokens[$t - 1][0] ?? '') === 'punctuator';
+}
+
+/** The first name of the chain `a.b?.c` that ends at $t. */
+function FLOOR__JsChainStart(array $tokens, int $t): int
+{
+	while (FLOOR__JsIsMember($tokens, $t) && ($tokens[$t - 2][0] ?? '') === 'name') {
+		$t -= 2;
+	}
+	return $t;
+}
+
+/** The names a bracket of parameters or a pattern binds, between $from and $to: neither a member nor a key. */
+function FLOOR__JsGroupNames(array $tokens, int $from, int $to): array
+{
+	$names = [];
+	for ($t = $from + 1; $t < $to; $t++) {
+		if ($tokens[$t][0] === 'name' && !FLOOR__JsIsMember($tokens, $t) && ($tokens[$t + 1][1] ?? '') !== ':' && !in_array($tokens[$t][1], MIN_JS_KEYWORDS, true)) {
+			$names[] = $tokens[$t][1];
+		}
+	}
+	return $names;
+}
+
+/** The names a declaration binds from its first binding at $t - names and the names of patterns, each after a `,` - to
+ *  its `;`, its `in` or `of`, or the end of the bracket it stands in. */
+function FLOOR__JsBindings(array $tokens, array $match, int $t): array
+{
+	$names = [];
+	$binding = true;
+	for ($count = count($tokens); $t < $count; $t++) {
+		[$kind, $text] = $tokens[$t];
+		if ($binding && $kind === 'name') {
+			$names[] = $text;
+		} elseif ($kind === 'punctuator' && in_array($text, ['(', '[', '{'], true) && isset($match[$t])) {
+			$names = $binding ? [...$names, ...FLOOR__JsGroupNames($tokens, $t, $match[$t])] : $names;
+			$t = $match[$t];
+		} elseif (($kind === 'punctuator' && in_array($text, [';', ')', ']', '}'], true)) || ($kind === 'name' && in_array($text, ['in', 'of'], true))) {
+			break;
+		}
+		$binding = $kind === 'punctuator' && $text === ',';
+	}
+	return $names;
+}
+
+/** The declaration a `using` at $t begins - 'using' or 'await_using' - or '' where the word is a name. */
+function FLOOR__JsUsing(array $tokens, int $t): string
+{
+	$binding = $tokens[$t + 1] ?? ['', '', 0, 0];
+	if ($tokens[$t][1] !== 'using' || FLOOR__JsIsMember($tokens, $t) || $binding[0] !== 'name' || in_array($binding[1], MIN_JS_KEYWORDS, true) || $binding[3] !== $tokens[$t][3] || !in_array($tokens[$t + 2][1] ?? '', ['=', 'of'], true)) {
+		return '';
+	}
+	return ($tokens[$t - 1][1] ?? '') === 'await' ? 'await_using' : 'using';
+}
+
+/** Whether the name at $t is a key, a label, a method or a class member, not a value the script reads. */
+function FLOOR__JsIsKey(array $tokens, array $match, array $within, array $classes, int $t): bool
+{
+	$prev = $tokens[$t - 1] ?? ['', ''];
+	$next = $tokens[$t + 1][1] ?? '';
+	if ($next === ':' && in_array($prev[1], ['', '{', ',', ';', '}'], true)) {
+		return true;
+	}
+	if ($next === '(' && isset($match[$t + 1]) && ($tokens[$match[$t + 1] + 1][1] ?? '') === '{' && !in_array($tokens[$t][1], [...MIN_JS_HEADS, 'function'], true)) {
+		return true;
+	}
+	return isset($classes[$within[$t]]) && ($prev[0] !== 'punctuator' || in_array($prev[1], ['{', '}', ';', ')', ']', '*'], true));
+}
+
+/** Whether a regular expression literal holds a modifier group, (?i:…) or (?-i:…). */
+function FLOOR__JsRegexpHasModifier(string $regexp): bool
+{
+	$body = substr($regexp, 1, (int)strrpos($regexp, '/') - 1);
+	$class = false;
+	for ($i = 0, $n = strlen($body); $i < $n; $i++) {
+		$c = $body[$i];
+		if ($c === '\\') {
+			$i++;
+		} elseif ($class) {
+			$class = $c !== ']';
+		} elseif ($c === '[') {
+			$class = true;
+		} elseif ($c === '(' && preg_match('~\G\(\?(?:[ims]+(?:-[ims]*)?|-[ims]+):~', $body, $m, 0, $i) === 1) {
+			return true;
+		}
+	}
+	return false;
+}
+
+/**
+ * What a script's tokens tell of the whole file: the names it declares (a declaration, a parameter, an import, a global
+ * it assigns), the member names it defines (a key, `{X}`, a method, a class member, `o.X = …`), the names it tests
+ * (`'X' in o`, `typeof o.X`, `X?.`, `o.X &&`, `!o.X`, `if (o.X)`, `o.X === undefined`) and its class bodies' braces.
+ * @return array{declared: array<string, true>, defined: array<string, true>, tested: array<string, true>, classes: array<int, true>}
+ */
+function FLOOR__JsScan(array $tokens, array $match, array $within): array
+{
+	$scan = ['declared' => [], 'defined' => [], 'tested' => [], 'classes' => []];
+	$count = count($tokens);
+	for ($t = 0; $t < $count; $t++) {
+		[$kind, $text] = $tokens[$t];
+		$next = $tokens[$t + 1][1] ?? '';
+		if ($kind === 'string' && $next === 'in' && preg_match('~^[\'"]([\w$]+)[\'"]$~', $text, $m) === 1) {
+			$scan['tested'][$m[1]] = true;
+		} elseif ($kind === 'string' && $next === ':' && in_array($tokens[$t - 1][1] ?? '', ['{', ','], true)) {
+			$scan['defined'][substr($text, 1, -1)] = true;
+		} elseif ($kind === 'punctuator' && $text === ')' && $next === '=>' && isset($match[$t])) {
+			$scan['declared'] += array_fill_keys(FLOOR__JsGroupNames($tokens, $match[$t], $t), true);
+		}
+		if ($kind !== 'name') {
+			continue;
+		}
+		$start = FLOOR__JsChainStart($tokens, $t);
+		$before = $tokens[$start - 1][1] ?? '';
+		$end = !in_array($next, ['.', '?.', '(', '['], true) && ($tokens[$t + 1][0] ?? '') !== 'template';
+		$condition = $next === ')' && isset($match[$t + 1]) && in_array($tokens[$match[$t + 1] - 1][1] ?? '', ['if', 'while'], true);
+		if ($next === '?.' || ($end && (in_array($next, FLOOR_JS_TESTS, true) || $before === '!' || ($condition && in_array($before, ['(', '&&', '||'], true)) || (in_array($next, FLOOR_JS_COMPARE, true) && in_array($tokens[$t + 2][1] ?? '', ['undefined', 'null'], true)) || (in_array($before, FLOOR_JS_COMPARE, true) && in_array($tokens[$start - 2][1] ?? '', ['undefined', 'null'], true))))) {
+			$scan['tested'][$text] = true;
+		}
+		if (!FLOOR__JsIsMember($tokens, $t) && in_array($tokens[$t - 1][1] ?? '', ['{', ','], true) && in_array($next, [',', '}', '='], true)) {
+			$scan['defined'][$text] = true;
+		}
+		if (FLOOR__JsIsMember($tokens, $t)) {
+			if (in_array($next, ['=', '||=', '&&=', '??='], true)) {
+				$scan['defined'][$text] = true;
+				if (in_array($tokens[$t - 2][1] ?? '', FLOOR_JS_GLOBAL_OBJECTS, true) && !FLOOR__JsIsMember($tokens, $t - 2)) {
+					$scan['declared'][$text] = true;
+				}
+			}
+			continue;
+		}
+		if ($text === 'typeof') {
+			$k = $t + 1;
+			while (($tokens[$k][1] ?? '') === '(') {
+				$k++;
+			}
+			while (($tokens[$k][0] ?? '') === 'name') {
+				$scan['tested'][$tokens[$k][1]] = true;
+				if (!in_array($tokens[$k + 1][1] ?? '', ['.', '?.'], true)) {
+					break;
+				}
+				$k += 2;
+			}
+		} elseif (in_array($text, ['let', 'const', 'var'], true) && (($tokens[$t + 1][0] ?? '') === 'name' || $next === '{' || $next === '[')) {
+			$scan['declared'] += array_fill_keys(FLOOR__JsBindings($tokens, $match, $t + 1), true);
+		} elseif (FLOOR__JsUsing($tokens, $t) !== '') {
+			$scan['declared'][$next] = true;
+		} elseif ($text === 'function' || ($text === 'catch' && $next === '(')) {
+			$k = $t + 1 + ($next === '*' ? 1 : 0);
+			if (($tokens[$k][0] ?? '') === 'name') {
+				$scan['declared'][$tokens[$k++][1]] = true;
+			}
+			if (($tokens[$k][1] ?? '') === '(' && isset($match[$k])) {
+				$scan['declared'] += array_fill_keys(FLOOR__JsGroupNames($tokens, $k, $match[$k]), true);
+			}
+		} elseif ($text === 'class' && $next !== ':') {
+			if (($tokens[$t + 1][0] ?? '') === 'name' && $next !== 'extends') {
+				$scan['declared'][$next] = true;
+			}
+			$k = $t + 1;
+			while ($k < $count && !($tokens[$k][1] === '{' && $within[$k] === $within[$t])) {
+				$k++;
+			}
+			$scan['classes'][$k] = true;
+		} elseif ($text === 'import' && $next !== '(' && $next !== '.') {
+			for ($k = $t + 1; $k < $count && $tokens[$k][0] !== 'string' && $tokens[$k][1] !== ';'; $k++) {
+				if ($tokens[$k][0] === 'name' && !in_array($tokens[$k][1], ['as', 'from'], true)) {
+					$scan['declared'][$tokens[$k][1]] = true;
+				}
+			}
+		} elseif (FLOOR__JsIsKey($tokens, $match, $within, $scan['classes'], $t)) {
+			$scan['defined'][$text] = true;
+			if ($next === '(' && isset($match[$t + 1])) {
+				$scan['declared'] += array_fill_keys(FLOOR__JsGroupNames($tokens, $t + 1, $match[$t + 1]), true);
+			}
+		} elseif ($next === '=>' || ($next === '=' && !in_array($text, MIN_JS_KEYWORDS, true))) {
+			$scan['declared'][$text] = true;
+		}
+	}
+	return $scan;
+}
+
+/** The facts of a script: each global, constructor, static, member and statement it uses whose name floor.json holds,
+ *  but for the names the file declares, defines or tests - a test spares every name of the tested one's web-features -
+ *  and the members of a dataset. */
+function FLOOR__JsFacts(array $tokens, array $data): array
+{
+	[$match, $within] = FLOOR__JsBrackets($tokens);
+	$scan = FLOOR__JsScan($tokens, $match, $within);
+	$tested = [];
+	foreach (array_keys($scan['tested']) as $word) {
+		$tested += $data['words'][$word] ?? [];
+	}
+	$facts = [];
+	foreach ($tokens as $t => [$kind, $text, , $line]) {
+		$next = $tokens[$t + 1][1] ?? '';
+		$words = [$text];
+		$name = '';
+		if ($kind === 'regexp') {
+			$name = FLOOR__JsRegexpHasModifier($text) ? 'regexp:modifier' : '';
+			$words = [];
+		} elseif ($kind === 'string' && in_array($tokens[$t - 1][1] ?? '', ['from', 'import'], true) && in_array($next, ['with', 'assert'], true) && ($tokens[$t + 2][1] ?? '') === '{') {
+			$name = 'statement:import.' . ($next === 'with' ? 'import_attributes' : 'import_assertions');
+			for ($k = $t + 3; $k < ($match[$t + 2] ?? 0); $k++) {
+				if (trim($tokens[$k][1], '\'"') === 'type' && ($tokens[$k + 1][1] ?? '') === ':' && isset($data['names'][$name . '.type_' . trim($tokens[$k + 2][1] ?? '', '\'"')])) {
+					$name .= '.type_' . trim($tokens[$k + 2][1], '\'"');
+					break;
+				}
+			}
+			$words = [];
+		} elseif ($kind !== 'name') {
+			continue;
+		} elseif (FLOOR__JsUsing($tokens, $t) !== '') {
+			$name = 'statement:' . FLOOR__JsUsing($tokens, $t);
+			$words = [];
+		} elseif (FLOOR__JsIsMember($tokens, $t)) {
+			if (in_array($next, ['=', '||=', '&&=', '??='], true) || (($tokens[$t - 2][1] ?? '') === 'dataset' && FLOOR__JsIsMember($tokens, $t - 2))) {
+				continue;
+			}
+			$receiver = ($tokens[$t - 2][0] ?? '') === 'name' ? $tokens[$t - 2][1] : '';
+			$free = $receiver !== '' && !FLOOR__JsIsMember($tokens, $t - 2);
+			$throughGlobal = $receiver !== '' && !$free && in_array($tokens[$t - 4][1] ?? '', FLOOR_JS_GLOBAL_OBJECTS, true) && !FLOOR__JsIsMember($tokens, $t - 4);
+			$name = match (true) {
+				$free && (in_array($receiver, ['window', 'globalThis'], true) || ($receiver === 'self' && !isset($scan['declared']['self']))) => 'global:' . $text,
+				($free || $throughGlobal) && in_array($receiver, FLOOR_JS_RECEIVERS, true) => $receiver . ':' . $text,
+				($free && !isset($scan['declared'][$receiver])) || $throughGlobal => 'static:' . $receiver . '.' . $text,
+				default => '',
+			};
+			$words = str_starts_with($name, 'static:') ? [$receiver, $text] : [$text];
+			if (!isset($data['names'][$name])) {
+				$name = isset($scan['defined'][$text]) ? '' : 'member:' . $text;
+				$words = [$text];
+			}
+		} elseif (!in_array($text, MIN_JS_KEYWORDS, true) && !isset($scan['declared'][$text]) && !in_array($tokens[$t - 1][1] ?? '', ['break', 'continue'], true) && !FLOOR__JsIsKey($tokens, $match, $within, $scan['classes'], $t)) {
+			$name = ($tokens[$t - 1][1] ?? '') === 'new' && $next !== '.' && $next !== '?.' && isset($data['names']['new:' . $text]) ? 'new:' . $text : 'global:' . $text;
+		}
+		if (!isset($data['names'][$name])) {
+			continue;
+		}
+		$spared = $words !== [] && (array_any($words, fn(string $word): bool => isset($scan['tested'][$word])) || array_any($data['names'][$name]['features'], fn(string $feature): bool => isset($tested[$feature])));
+		if (!$spared) {
+			FLOOR__Fact($facts, $name, $line, FLOOR_BROWSERS);
+		}
+	}
+	return $facts;
+}
+
 /** The findings of $facts in $file: a missing or partial feature, an unknown name, a prefix no engine takes, unchecked code. */
 function FLOOR__Findings(array $facts, string $file, array $data, array $allow, array &$used): array
 {
@@ -866,13 +1249,24 @@ function FLOOR__Findings(array $facts, string $file, array $data, array $allow, 
 	return $findings;
 }
 
-/** The findings of one stylesheet ('css') or page ('html') shown as $file, with the exceptions of $allow and, in a
- *  stylesheet, its floor-allow comments; a comment that allows nothing is a finding. */
+/** The findings of one stylesheet ('css'), page ('html') or script ('js') shown as $file, with the exceptions of $allow
+ *  and, in a stylesheet or a script, its floor-allow comments; a comment that allows nothing is a finding, and so is a
+ *  script min.php's reader cannot read. */
 function FLOOR__FileFindings(string $text, string $kind, string $file, array $data, array $allow, array &$used): array
 {
 	$findings = [];
-	$inline = $kind === 'css' ? FLOOR__CssAllowComments($text, $file, $findings) : [];
-	$facts = $kind === 'css' ? FLOOR__CssFacts($text, $data) : FLOOR__HtmlFacts($text, $data);
+	if ($kind === 'js') {
+		try {
+			[$tokens, $comments] = FLOOR__JsTokens($text);
+		} catch (RuntimeException $e) {
+			return [FLOOR__Finding($file, substr_count(substr($text, 0, $e->getCode()), "\n") + 1, '', 'the script cannot be read, so nothing in it is checked: ' . $e->getMessage())];
+		}
+		$inline = FLOOR__JsAllowComments($comments, $file, $findings);
+		$facts = FLOOR__JsFacts($tokens, $data);
+	} else {
+		$inline = $kind === 'css' ? FLOOR__CssAllowComments($text, $file, $findings) : [];
+		$facts = $kind === 'css' ? FLOOR__CssFacts($text, $data) : FLOOR__HtmlFacts($text, $data);
+	}
 	$findings = [...$findings, ...FLOOR__Findings($facts, $file, $data, [...$allow, ...$inline], $used)];
 	foreach ($inline as $id => $entry) {
 		if (!isset($used[$id])) {
@@ -886,12 +1280,17 @@ function FLOOR__FileFindings(string $text, string $kind, string $file, array $da
 	return array_values($unique);
 }
 
-/** The findings of $files, by path the name to show: .html and .htm as pages, the rest as stylesheets. */
+/** The findings of $files, by path the name to show: .html and .htm as pages, .js and .mjs as scripts, the rest as
+ *  stylesheets. */
 function FLOOR__Judge(array $data, array $allow, array $files, array &$used): array
 {
 	$findings = [];
 	foreach ($files as $path => $shown) {
-		$kind = preg_match('~\.html?$~i', (string)$path) === 1 ? 'html' : 'css';
+		$kind = match (true) {
+			preg_match('~\.html?$~i', (string)$path) === 1 => 'html',
+			preg_match('~\.m?js$~i', (string)$path) === 1 => 'js',
+			default => 'css',
+		};
 		$findings = [...$findings, ...FLOOR__FileFindings(FLOOR__Read((string)$path), $kind, (string)$shown, $data, $allow, $used)];
 	}
 	return $findings;

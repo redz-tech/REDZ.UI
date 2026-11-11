@@ -4,7 +4,7 @@
 // said at once, and the buttons wake with the focus still on the pressed one. A dialog closed meanwhile by code aborts
 // the signal, and a refusal that comes after it is a danger toast. A form with method="dialog" in a dialog fires the
 // cancelable redz:save {form, data, submitter, signal} on its submit (js/answer.js): answered with a promise, the
-// dialog waits the same way.
+// dialog waits the same way; a tracked form's submit is js/track.js's, which waits by wait() too.
 import {ask} from './answer.js';
 import {busy} from './busy.js';
 import {announce} from './say.js';
@@ -72,7 +72,7 @@ export const wait = (dialog, button, promise, controller) => {
 document.addEventListener('submit', (event) => {
 	const form = event.target;
 	const dialog = form instanceof HTMLFormElement && form.method === 'dialog' ? form.closest('dialog') : null;
-	if (dialog === null || !dialog.open) {
+	if (dialog === null || !dialog.open || form.matches('form[data-track]')) {
 		return;
 	}
 	const submitter = event.submitter ?? form.querySelector('button[type="submit"], button:not([type])');

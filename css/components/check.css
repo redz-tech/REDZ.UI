@@ -158,7 +158,10 @@
 
 		.check:disabled,
 		.radio:disabled,
-		.switch:disabled {
+		.switch:disabled,
+		.check[aria-disabled="true"],
+		.radio[aria-disabled="true"],
+		.switch[aria-disabled="true"] {
 			border-color: GrayText;
 		}
 	}

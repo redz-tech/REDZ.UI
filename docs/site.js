@@ -479,4 +479,30 @@
 		const value = event.detail.value.trim();
 		event.detail.respondWith(new Promise((saved, refused) => setTimeout(() => (value === '' ? refused('A title cannot be empty') : saved(value)), 600)));
 	});
+
+	// The tracked forms: an answer in 700 ms; an adult price below the child price and an empty boat name refused; with
+	// "A conflict" chosen, a name changed from one the person never saw stored.
+	document.addEventListener('redz:save', (event) => {
+		if (!event.target.hasAttribute('data-docs-track')) {
+			return;
+		}
+		event.preventDefault();
+		const {changed, data} = event.detail;
+		const stored = 'Sunset cruise to Coral Bay';
+		const name = changed.find((change) => change.name === 'name');
+		const conflict = document.getElementById('save-bar-answer')?.value === 'conflict' && name !== undefined && name.was !== stored;
+		const low = data.has('adult') && Number(data.get('adult')) < Number(data.get('child'));
+		const nameless = data.has('boat') && String(data.get('boat')).trim() === '';
+		event.detail.respondWith(new Promise((saved, refused) => setTimeout(() => {
+			if (low) {
+				refused({message: '', fields: {adult: 'Lower than the child price'}});
+			} else if (nameless) {
+				refused({message: '', fields: {boat: 'A boat needs a name'}});
+			} else if (conflict) {
+				refused({message: 'Another person saved this excursion meanwhile.', fields: {name: {text: 'Another person changed the name today at 14:05. Saved now: “' + stored + '”.', stored}}});
+			} else {
+				saved({id: 7});
+			}
+		}, 700)));
+	});
 })();

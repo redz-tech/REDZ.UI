@@ -5082,6 +5082,191 @@ window.REDZ_BEHAVE = (() => {
 				out.push('once removed, the shell keeps ' + say(left) + ' - banners, the stored height, the header\'s top, the examples - not [0, "", 0, 4]');
 			}
 		}]},
+		comboboxLater: {target: '#combobox-one', steps: [async (out) => {
+			const late = $('#combobox-one').cloneNode(true);
+			for (const element of [late, ...$$('*', late)]) {
+				for (const name of ['id', 'for', 'commandfor', 'aria-controls', 'aria-labelledby', 'aria-activedescendant']) {
+					if (element.hasAttribute(name)) {
+						element.setAttribute(name, element.getAttribute(name).replace(/combobox-one/g, 'combobox-late'));
+					}
+				}
+			}
+			const holder = $('input[type="hidden"]', late);
+			holder.value = 'de';
+			holder.dataset.label = 'German';
+			$('#combobox-one').after(late);
+			await wait(50);
+			const drawn = [$('#combobox-late-de', late)?.getAttribute('aria-selected'), $('#combobox-late-th', late)?.getAttribute('aria-selected'), $('.combobox-value', late)?.textContent];
+			late.remove();
+			if (say(drawn) !== say(['true', 'false', 'German'])) {
+				out.push('a combobox put in after load draws its options and face as ' + say(drawn) + ', not German chosen on its face');
+			}
+		}]},
+		track: {target: '#save-bar-live', steps: [async (out) => {
+			const form = $('#save-bar-form');
+			const bar = $('#save-bar-live .save-bar[data-track]');
+			const words = () => $('.save-bar-text', bar)?.textContent ?? '';
+			const act = (name, root = bar) => $('[data-track-action="' + name + '"]', root);
+			const put = (name, value) => {
+				form.elements[name].value = value;
+				form.elements[name].dispatchEvent(new Event('input', {bubbles: true}));
+			};
+			const marks = () => $$('[data-changed]', form).filter((element) => element.getAttribute('role') !== 'tab');
+			const leaves = () => {
+				const event = new Event('beforeunload', {cancelable: true});
+				dispatchEvent(event);
+				return event.defaultPrevented;
+			};
+			const asked = () => $$('dialog[open]').find((dialog) => !dialog.id.startsWith('save-bar-'));
+			const answer = async (label) => {
+				$$('button', asked()).find((button) => button.textContent === label)?.click();
+				await wait(300);
+			};
+			const passport = await (await fetch(new URL('../dist/redz-ui.json', location.href))).json();
+			const contract = passport.contracts?.track;
+			if (contract === undefined || $$(contract.selectors.form).length !== 2 || say(contract.states) !== say(['clean', 'dirty', 'saving', 'saved', 'error'])) {
+				out.push('the passport\'s contracts.track is ' + say(contract) + ', not the selectors that find both tracked examples and the five states');
+			}
+			const rest = getComputedStyle(bar).backgroundColor;
+			if (bar.hidden || bar.dataset.state !== 'clean' || words() !== 'All changes saved' || getComputedStyle(bar).position !== 'sticky' || bar.getAttribute('role') !== 'region' || leaves()) {
+				out.push('at rest the bar is ' + say([bar.hidden ? 'hidden' : 'shown', bar.dataset.state, words(), getComputedStyle(bar).position, bar.getAttribute('role')]) + (leaves() ? ' and the page guards its leaving' : '') + ', not a shown sticky region, clean, "All changes saved", the leaving free');
+			}
+			put('name', 'Sunset cruise and dinner');
+			const tab = $('#save-bar-tab-1');
+			const dirty = [bar.dataset.state, words(), marks().length, form.hasAttribute('data-changed'), tab.hasAttribute('data-changed'), (tab.getAttribute('aria-describedby') ?? '').split(' ').includes('redz-track-tab'), getComputedStyle(bar).backgroundColor !== rest, leaves()];
+			if (say(dirty) !== say(['dirty', '1 unsaved change in Excursion: Name', 1, true, true, true, true, true])) {
+				out.push('a changed name gives ' + say(dirty) + ' - state, words, marks, the form\'s and the tab\'s marks, the tab\'s description, a new ground, the guard - not dirty, its words, one mark and all the rest');
+			}
+			put('name', 'Sunset cruise');
+			if (bar.dataset.state !== 'clean' || marks().length !== 0 || tab.hasAttribute('data-changed') || leaves()) {
+				out.push('a name typed back leaves ' + say([bar.dataset.state, marks().length, tab.hasAttribute('data-changed'), leaves()]) + ', not a clean bar, no mark, no tab dot, no guard');
+			}
+			act('save').click();
+			await wait(100);
+			if (words() !== 'No changes - nothing to do' || bar.dataset.state !== 'clean') {
+				out.push('Save with nothing changed says ' + say(words()) + ' in ' + bar.dataset.state);
+			}
+			put('adult', '1500');
+			act('save').click();
+			await wait(100);
+			const busyBar = bar.dataset.state;
+			await wait(900);
+			const adult = form.elements.adult;
+			const error = document.getElementById((adult.getAttribute('aria-describedby') ?? '').split(' ')[0]);
+			const refused = [busyBar, bar.dataset.state, words(), $('#save-bar-pane-2').hidden, document.activeElement === adult, $$('[aria-invalid="true"]', form).length, error?.matches('.invalid-feedback[data-track-error]'), error?.checkVisibility(), error?.nextElementSibling?.matches('.form-text')];
+			if (say(refused) !== say(['saving', 'error', 'Nothing was saved: 1 field to fix.', false, true, 1, true, true, true])) {
+				out.push('a refused price gives ' + say(refused) + ' - saving, then error with its count, the pane shown, the field focused and alone invalid, its sentence first in its description, shown, above its hint');
+			}
+			put('adult', '2600');
+			let told = null;
+			form.addEventListener('redz:saved', (event) => {
+				told = [event.detail.value?.id, bar.dataset.state];
+			}, {once: true});
+			if ($('[data-track-error]', form) !== null || adult.hasAttribute('aria-invalid')) {
+				out.push('a refused field keeps its refusal after it is edited');
+			}
+			act('save').click();
+			await wait(900);
+			if (say(told) === 'null' || told[0] !== 7 || bar.dataset.state !== 'saved' || REDZ.ui.track.dirty(form) || !words().startsWith('Saved at ')) {
+				out.push('a resolved save tells ' + say(told) + ', the bar ' + say([bar.dataset.state, words()]) + ', dirty ' + REDZ.ui.track.dirty(form));
+			}
+			put('adult', '2500');
+			const heard = [];
+			const listen = (event) => heard.push(event.type + ':' + (event.target instanceof HTMLFormElement ? '' : event.target.name));
+			form.addEventListener('input', listen);
+			form.addEventListener('change', listen);
+			form.addEventListener('redz:discard', listen);
+			act('discard').click();
+			form.removeEventListener('input', listen);
+			form.removeEventListener('change', listen);
+			form.removeEventListener('redz:discard', listen);
+			const discarded = [adult.value, say(heard), act('undo').hidden, words()];
+			act('undo').click();
+			if (say(discarded) !== say(['2600', say(['input:adult', 'change:adult', 'redz:discard:']), false, 'Changes discarded']) || adult.value !== '2500' || document.activeElement !== act('save')) {
+				out.push('Discard gives ' + say(discarded) + ', then Undo the price ' + adult.value + ' with the focus on ' + say(document.activeElement?.textContent ?? '') + ' - not the saved price, input and change and redz:discard, Undo shown, then the price back and the focus on Save');
+			}
+			act('save').click();
+			await wait(900);
+			$('#save-bar-answer').value = 'conflict';
+			put('name', 'Sunset cruise at dusk');
+			act('save').click();
+			await wait(900);
+			const conflict = $('[data-track-conflict]', form);
+			if (conflict === null || !conflict.matches('.alert-warning') || document.activeElement !== form.elements.name || bar.dataset.state !== 'error') {
+				out.push('a conflict shows ' + say([conflict?.className ?? null, document.activeElement?.id, bar.dataset.state]) + ', not a warning under the field, the field focused, the bar refused');
+			}
+			act('keep', conflict ?? document).click();
+			const kept = REDZ.ui.track.changed(form);
+			if (kept.length !== 1 || kept[0].was !== 'Sunset cruise to Coral Bay' || kept[0].now !== 'Sunset cruise at dusk' || $('[data-track-conflict]', form) !== null) {
+				out.push('Keep mine leaves the changes ' + say(kept) + ', not the person\'s name against the stored one');
+			}
+			$('#save-bar-answer').value = 'saved';
+			act('save').click();
+			await wait(900);
+			const link = Object.assign(document.createElement('a'), {href: '../index.html', textContent: 'Elsewhere'});
+			$('#save-bar-live').append(link);
+			put('child', '1800');
+			link.click();
+			await wait(300);
+			const question = asked();
+			const leaving = [location.pathname.endsWith('.html'), question !== undefined, question?.contains(document.activeElement) ? document.activeElement.textContent : null];
+			await answer('Stay');
+			link.remove();
+			if (say(leaving) !== say([true, true, 'Save and go']) || !REDZ.ui.track.dirty(form)) {
+				out.push('a link out of a changed page gives ' + say(leaving) + ' and leaves it dirty ' + REDZ.ui.track.dirty(form) + ' - not the question with the focus on Save and go, then the page as it was');
+			}
+			const apple = /Mac|iPhone|iPad/.test(navigator.platform);
+			const keys = new KeyboardEvent('keydown', {key: 's', code: 'KeyS', metaKey: apple, ctrlKey: !apple, bubbles: true, cancelable: true});
+			document.body.dispatchEvent(keys);
+			const pressed = [keys.defaultPrevented, bar.dataset.state];
+			await wait(900);
+			if (say(pressed) !== say([true, 'saving']) || REDZ.ui.track.dirty(form)) {
+				out.push('the save keys give ' + say(pressed) + ' and leave the form dirty ' + REDZ.ui.track.dirty(form));
+			}
+			const clear = $('[command="--clear"]', form);
+			clear.click();
+			await wait(50);
+			const secret = REDZ.ui.track.changed(form);
+			const cleared = [form.elements.key.disabled, clear.getAttribute('aria-pressed'), new FormData(form).get('key_clear'), secret.length === 1 && secret[0].cleared === true && secret[0].was === null];
+			act('discard').click();
+			if (say(cleared) !== say([true, 'true', '1', true]) || form.elements.key.disabled || clear.getAttribute('aria-pressed') !== 'false' || new FormData(form).has('key_clear')) {
+				out.push('Clear gives ' + say(cleared) + ' and Discard leaves ' + say([form.elements.key.disabled, clear.getAttribute('aria-pressed'), new FormData(form).has('key_clear')]));
+			}
+			const dialog = $('#save-bar-dialog-panel');
+			const boat = $('form', dialog);
+			const own = $('.btn-primary', boat);
+			dialog.showModal();
+			boat.elements.boat.value = '';
+			boat.elements.boat.dispatchEvent(new Event('input', {bubbles: true}));
+			own.click();
+			await wait(100);
+			const waiting = [own.getAttribute('aria-busy') === 'true' || own.matches('[aria-disabled="true"], .busy, :has(.spinner-border)'), act('save').querySelector('.spinner-border') === null, bar.dataset.state];
+			await wait(900);
+			const inside = [dialog.open, boat.elements.boat.getAttribute('aria-invalid'), $('[data-track-error]', boat)?.textContent, document.activeElement === boat.elements.boat];
+			if (say(waiting) !== say([true, true, 'clean']) || say(inside) !== say([true, 'true', 'A boat needs a name', true])) {
+				out.push('a dialog\'s refused form gives ' + say(waiting) + ' while it waits and ' + say(inside) + ' after - not its own button busy, the bar clean, then the dialog open with the field marked and focused');
+			}
+			boat.elements.boat.value = 'Grey Heron';
+			boat.elements.boat.dispatchEvent(new Event('input', {bubbles: true}));
+			$('[command="close"]', dialog).click();
+			await wait(300);
+			const closing = [dialog.open, asked() !== undefined];
+			await answer('Stay');
+			const stayed = [dialog.open, dialog.contains(document.activeElement)];
+			boat.elements.boat.value = 'Blue Heron';
+			REDZ.ui.track.baseline(boat);
+			$('[command="close"]', dialog).click();
+			await wait(300);
+			if (say(closing) !== say([true, true]) || say(stayed) !== say([true, true]) || dialog.open || asked() !== undefined) {
+				out.push('closing a changed dialog gives ' + say(closing) + ', Stay ' + say(stayed) + ', and a refilled one taken as saved closes ' + (dialog.open ? 'not at all' : asked() !== undefined ? 'only after a question' : 'at once'));
+			}
+			dialog.close();
+			REDZ.ui.track.dirty().forEach((one) => REDZ.ui.track.reset(one));
+			await wait(50);
+			if (REDZ.ui.track.dirty().length !== 0 || leaves()) {
+				out.push('the tracked examples stay changed after the check: ' + REDZ.ui.track.dirty().length);
+			}
+		}]},
 		editor: {target: '#editor-demo-host', walk: editorWalk},
 	};
 
