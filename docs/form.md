@@ -244,6 +244,61 @@ Buttons with `command="--step-up"` or `"--step-down"` and `aria-controls` naming
 </form>
 ```
 
+### Enabled or required by another field
+
+`data-enable-when` enables its element while a field of its form holds a value `data-enable-in` lists, and `data-require-when` with `data-require-in` makes it required, read as `data-show-when` reads: the values a space apart, any value without the list. A rule on a field owns its `disabled` or `required`, as the server drew it too; a `fieldset` takes its own `disabled`; any other element sets each field inside it, and a field the page disabled or required itself stays so. A disabled field counts as empty for every rule, as the form sends nothing of it: the fields of a hidden region drive nothing. A field hidden by a class or by `hidden` counts by its value, a hidden input too, and a field inside the rule's element never counts.
+
+A disabled field is out of the keyboard's reach, so the field that drives it says why: while a rule disables a field, a text with its own `data-show-when` that the field names in `aria-describedby` joins, as long as it shows, the `aria-describedby` of every control of the driving name. A checked radio a rule disables hands its check to the radio of its group with `data-enable-else`, which fires `input` and `change`; without one the group is left with none checked. A number's step buttons follow the field.
+
+```html
+<form class="vstack gap-16">
+	<div class="vstack gap-8">
+		<input type="hidden" name="wait_on" value="0">
+		<label class="form-check"><input class="switch" type="checkbox" role="switch" name="wait_on" value="1" id="form-enable-wait-on"> Wait for late guests</label>
+		<div class="form-field">
+			<label class="form-label" for="form-enable-wait">Minutes</label>
+			<div class="input-group max-w-160">
+				<button class="btn btn-icon" type="button" command="--step-down" aria-controls="form-enable-wait" aria-label="One minute fewer"><i class="bi bi-dash-lg" aria-hidden="true"></i></button>
+				<input class="form-control tabular-nums text-center" id="form-enable-wait" name="wait" type="number" min="1" max="60" value="10" aria-describedby="form-enable-wait-why" data-enable-when="wait_on" data-enable-in="1">
+				<button class="btn btn-icon" type="button" command="--step-up" aria-controls="form-enable-wait" aria-label="One minute more"><i class="bi bi-plus-lg" aria-hidden="true"></i></button>
+			</div>
+			<div class="form-text" id="form-enable-wait-why" data-show-when="wait_on" data-show-in="0">Turn on Wait for late guests to set the minutes.</div>
+		</div>
+	</div>
+	<fieldset class="vstack gap-8" id="form-enable-kind">
+		<legend class="form-label">Key kind</legend>
+		<label class="form-check"><input class="radio" type="radio" name="kind" value="secret" checked> Secret</label>
+		<label class="form-check"><input class="radio" type="radio" name="kind" value="public"> Public</label>
+		<label class="form-check"><input class="radio" type="radio" name="kind" value="test"> Test</label>
+	</fieldset>
+	<div class="form-field">
+		<label class="form-label" for="form-enable-domains">Domains</label>
+		<textarea class="form-control" id="form-enable-domains" name="domains" rows="2" aria-describedby="form-enable-domains-hint" data-require-when="kind" data-require-in="public"></textarea>
+		<div class="form-text" id="form-enable-domains-hint">A public key needs its domains, one a line.</div>
+	</div>
+	<fieldset class="vstack gap-8">
+		<legend class="form-label">Check by</legend>
+		<label class="form-check"><input class="radio" type="radio" name="call" value="format" id="form-enable-format" data-enable-else checked> Format check</label>
+		<label class="form-check"><input class="radio" type="radio" name="call" value="network" id="form-enable-network" aria-describedby="form-enable-call-why" data-enable-when="kind" data-enable-in="test"> Network call</label>
+		<div class="form-text" id="form-enable-call-why" data-show-when="kind" data-show-in="secret public">Only a test key can make a network call.</div>
+	</fieldset>
+</form>
+```
+
+| Attribute | On | What it does |
+| --- | --- | --- |
+| `data-show-when`, `data-show-in` | Any element | Shows it while the field holds a listed value, else hides it and disables its fields |
+| `data-enable-when`, `data-enable-in` | A field, a fieldset or any element of fields | Enables it while the field holds a listed value, else disables it |
+| `data-require-when`, `data-require-in` | A field or any element of fields | Makes it required while the field holds a listed value |
+| `data-enable-else` | A radio | Takes its group's check from a checked radio a rule disables |
+
+Rules follow `input`, `change` and `reset`, so a tracked form's Discard needs nothing. A value set by code fires no event: `REDZ.ui.follow(form)` reads the rules of the form again, or of the whole page without one.
+
+```js
+form.elements.kind.value = 'test';
+REDZ.ui.follow(form);
+```
+
 ## States
 
 ## Keyboard and accessibility
@@ -256,6 +311,7 @@ Buttons with `command="--step-up"` or `"--step-down"` and `aria-controls` naming
 - A count of characters is said only near or over its most, once the typing pauses; at every key it would drown the typing.
 - Number step buttons are named by `aria-label` and keep their place in the Tab order; from the keyboard the field's own arrow keys step it.
 - A region shown by another field is `hidden` while it does not apply, so a screen reader skips it and the form sends nothing of it.
+- A field disabled by another field is skipped by `Tab`: its reason, joined to the driving field, is heard there.
 
 ## Tokens
 

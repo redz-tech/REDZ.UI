@@ -35,10 +35,26 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   its boxes and the window, and the focus with its caret - or, its row gone, the region. Elements with an id are parts:
   one the server sent unchanged stays as it is, its menu open, moved alive where the browser has `moveBefore`.
   `REDZ.ui.swap(source)` puts each top part of the source into its namesake on the page; the region fires `redz:swap`.
+- Fields enabled or required by another field: `data-enable-when` with `data-enable-in` and `data-require-when` with
+  `data-require-in`, read as `data-show-when` reads, on a field - the rule owns its `disabled` or `required`, the
+  server's first render included -, on a `fieldset`, which takes its own `disabled`, or on any element, which sets each
+  field inside it and leaves a field the page disabled or required itself so. While a rule disables a field, the shown
+  texts with `data-show-when` it names in `aria-describedby` join the `aria-describedby` of every control that drives
+  it, and leave as it is enabled; a checked radio a rule disables hands its check to the radio of its group with
+  `data-enable-else`, which fires `input` and `change`, or is left unchecked. `REDZ.ui.follow(form)` reads the rules of
+  the form, or of the page, again after a value set by code.
+- `busy()` on a check, a radio or a switch the person has just flipped: `aria-busy` and `aria-disabled`, the focus and
+  the look kept, the cursor `progress`, clicks and keys swallowed - a radio's whole group -, after 400 ms a ring in place
+  of its mark or in its knob and the words of its `data-busy` or `busy` said politely. A refusal puts the flip back
+  without a `change` - a radio to the choice its group held before - and shows its words in a danger toast; an empty one
+  or an `AbortError` is silent. `data-apply` on one fires the cancelable `redz:apply` `{checked, value, signal}` on its
+  `change`, answered by `respondWith(promise)`, and a tracked form leaves such a control out.
 
 ### Changed
 - A table sorted again moves its rows alive where the browser has `moveBefore`: a menu open in a row stays open and the
   focus stays on its control.
+- `data-show-when` counts a disabled field as empty, as the form sends nothing of it: a region no longer follows a field
+  that a hidden region or the page disabled.
 - The script's budget is 52 KB gzipped, up from 42 KB: tracked forms take about 5 KB of it.
 - A form with `data-track` in a dialog saves as a tracked form, with `changed` in its `redz:save`; other dialog forms
   save as before.
@@ -52,6 +68,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - A number field's step buttons followed its `disabled` only at load and on its own input: a field the page, its
   fieldset or a hidden region disabled later kept its buttons looking live.
 - `busy()` on a field put its ring and its words inside the field, where nothing shows; they now follow the field.
+- A field with `data-show-when` of its own was hidden but still sent; it is disabled while hidden, as a region's fields
+  are.
 - A page change whose view transition the browser aborted - the window resized or hidden as the page went - left an
   uncaught error in the console of the page that left.
 

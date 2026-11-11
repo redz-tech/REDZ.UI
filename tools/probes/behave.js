@@ -5359,6 +5359,288 @@ window.REDZ_BEHAVE = (() => {
 			}
 		}]},
 		editor: {target: '#editor-demo-host', walk: editorWalk},
+		enable: {target: '#form-enable-wait', steps: [async (out) => {
+			const on = $('#form-enable-wait-on');
+			const minutes = $('#form-enable-wait');
+			const why = $('#form-enable-wait-why');
+			const [down, up] = ['--step-down', '--step-up'].map((command) => $('[command="' + command + '"][aria-controls="form-enable-wait"]'));
+			const state = () => [minutes.disabled, why.hidden, on.getAttribute('aria-describedby'), down.getAttribute('aria-disabled'), up.getAttribute('aria-disabled')];
+			const flip = async () => {
+				on.click();
+				await settled();
+				return state();
+			};
+			const rest = state();
+			const shown = await flip();
+			on.setAttribute('aria-describedby', 'form-enable-kind');
+			const own = (await flip())[2];
+			const back = (await flip())[2];
+			on.removeAttribute('aria-describedby');
+			const again = await flip();
+			const off = [true, false, 'form-enable-wait-why', 'true', 'true'];
+			if (say([rest, shown, own, back, again]) !== say([off, [false, true, null, null, null], 'form-enable-kind form-enable-wait-why', 'form-enable-kind', off])) {
+				out.push('a number enabled by a switch, [disabled, reason hidden, the switch\'s aria-describedby, step down and up aria-disabled]: ' + say({rest, shown, again}) + '; the switch\'s own description kept: ' + say([own, back]));
+			}
+		}]},
+		enableKind: {target: '#form-enable-network', steps: [async (out) => {
+			const kind = (value) => $('#form-enable-kind input[value="' + value + '"]');
+			const network = $('#form-enable-network');
+			const format = $('#form-enable-format');
+			const domains = $('#form-enable-domains');
+			let told = 0;
+			const tell = () => told++;
+			format.addEventListener('change', tell);
+			const state = () => [network.disabled, domains.required, $('#form-enable-call-why').hidden, ['secret', 'public', 'test'].map((value) => (kind(value).getAttribute('aria-describedby') ?? '').split(' ').includes('form-enable-call-why'))];
+			const choose = async (radio) => {
+				radio.click();
+				await settled();
+				return state();
+			};
+			const rest = state();
+			const test = await choose(kind('test'));
+			network.click();
+			const chosen = [network.checked, format.checked];
+			const open = [...await choose(kind('public')), network.checked, format.checked, told];
+			const secret = await choose(kind('secret'));
+			format.removeEventListener('change', tell);
+			const shut = [true, false, false, [true, true, true]];
+			if (say([rest, test, chosen, open, secret]) !== say([shut, [false, false, true, [false, false, false]], [true, false], [true, true, false, [true, true, true], false, true, 1], shut])) {
+				out.push('a key kind, [network disabled, domains required, reason hidden, the reason in each kind\'s aria-describedby]: ' + say({rest, test, public: open, secret}) + ' - network chosen ' + say(chosen) + ', then public moves the check to format with one change (network, format, changes at the end)');
+			}
+		}]},
+		enableParts: {target: '#form-enable', steps: [async (out) => {
+			const form = document.createElement('form');
+			form.innerHTML = trusted('<select name="pOn"><option value="no">No</option><option value="yes">Yes</option></select><div data-enable-when="pOn" data-enable-in="yes"><input name="pA"><input name="pB" disabled></div><fieldset data-enable-when="pOn" data-enable-in="yes"><input name="pC"></fieldset><div data-require-when="pOn" data-require-in="yes"><input name="pD"><input name="pE" required></div><input name="pF" required data-require-when="pOn" data-require-in="yes"><input name="pG" disabled data-enable-when="pOn" data-enable-in="yes">');
+			$('#form-enable').append(form);
+			const read = () => ['pA', 'pB', 'pC', 'pG'].map((name) => form.elements[name].matches(':disabled')).concat(['pD', 'pE', 'pF'].map((name) => form.elements[name].required), form.elements.pC.disabled);
+			const set = async (value) => {
+				form.elements.pOn.value = value;
+				form.elements.pOn.dispatchEvent(new Event('change', {bubbles: true}));
+				await settled();
+				return read();
+			};
+			const drawn = read();
+			REDZ.ui.follow(form);
+			const followed = read();
+			const yes = await set('yes');
+			const no = await set('no');
+			form.remove();
+			const shut = [true, true, true, true, false, true, false, false];
+			if (say([drawn, followed, yes, no]) !== say([[false, true, false, true, false, true, true, false], shut, [false, true, false, false, true, true, true, false], shut])) {
+				out.push('rules on a box, a fieldset and fields, [A B C G :disabled, D E F required, C disabled itself]: as drawn ' + say(drawn) + ', followed ' + say(followed) + ', on ' + say(yes) + ', off ' + say(no) + ' - B disabled and E required by the page stay so, F and G as their rules say');
+			}
+		}]},
+		enableChain: {target: '#form-enable', steps: [async (out) => {
+			const form = document.createElement('form');
+			form.innerHTML = trusted('<select name="cKind"><option value="simple">Simple</option><option value="bundle">Bundle</option></select><div data-show-when="cKind" data-show-in="bundle"><select name="cMode"><option value="auto">Auto</option><option value="manual" selected>Manual</option></select></div><input name="cPrice" data-enable-when="cMode" data-enable-in="manual"><input type="hidden" name="cKey" value="x"><input name="cByKey" data-enable-when="cKey" data-enable-in="y"><div class="d-none"><input name="cAway" value="on"></div><input name="cByAway" data-enable-when="cAway"><input type="radio" name="cWho" value="a"><input type="radio" name="cWho" value="b" checked><input type="radio" name="cPick" value="1" checked data-enable-when="cWho" data-enable-in="b"><input type="radio" name="cPick" value="2" data-enable-when="cWho" data-enable-in="b">');
+			$('#form-enable').append(form);
+			const els = form.elements;
+			REDZ.ui.follow(form);
+			const chained = [els.cMode.disabled, els.cMode.value, els.cPrice.disabled];
+			els.cKind.value = 'bundle';
+			els.cKind.dispatchEvent(new Event('change', {bubbles: true}));
+			const shown = [els.cMode.disabled, els.cPrice.disabled];
+			els.cKey.value = 'y';
+			const unseen = els.cByKey.disabled;
+			REDZ.ui.follow(form);
+			const seen = els.cByKey.disabled;
+			const away = els.cByAway.disabled;
+			els.cWho[0].click();
+			const empty = [...els.cPick].map((radio) => [radio.disabled, radio.checked]);
+			let bounced = 0;
+			const loop = document.createElement('form');
+			loop.innerHTML = trusted('<input type="radio" name="lOn" value="1" checked><input type="radio" name="lOn" value="0"><input type="radio" name="lPick" value="a" checked data-enable-when="lOn" data-enable-in="1"><input type="radio" name="lPick" value="b" data-enable-else>');
+			$('#form-enable').append(loop);
+			const [pickA, pickB] = loop.elements.lPick;
+			pickB.addEventListener('change', () => {
+				bounced++;
+				pickA.checked = true;
+				pickA.dispatchEvent(new Event('change', {bubbles: true}));
+			});
+			loop.elements.lOn[1].click();
+			const ended = [bounced, pickA.checked, pickB.checked];
+			form.remove();
+			loop.remove();
+			if (say([chained, shown, unseen, seen, away, empty]) !== say([[true, 'manual', true], [false, false], true, false, false, [[true, false], [true, false]]]) || say(ended) !== say([1, false, true])) {
+				out.push('a disabled controller counts as empty: a mode in a hidden region ' + say(chained) + ' (disabled, value, its price disabled), shown ' + say(shown) + '; a hidden input set by code leaves its field disabled ' + say(unseen) + ' until follow() ' + say(seen) + '; a field in d-none drives by its value ' + say(!away) + '; a checked radio disabled with no data-enable-else ' + say(empty) + ' (disabled, checked); a page that hands the check back ' + say(ended) + ' (bounces, the disabled radio checked, data-enable-else checked)');
+			}
+		}]},
+		busyCheck: {target: '#busy-check-apply', steps: [async (out) => {
+			const box = document.createElement('div');
+			box.innerHTML = trusted('<label class="form-check"><input class="switch" type="checkbox" role="switch" id="busy-lab-switch"> Lab switch</label><label class="form-check"><input class="check" type="checkbox" id="busy-lab-check"> Lab check</label>');
+			$('#busy-check-apply').append(box);
+			const sw = $('#busy-lab-switch');
+			const check = $('#busy-lab-check');
+			let changes = 0;
+			box.addEventListener('change', () => changes++);
+			const look = (el, part = null) => {
+				const style = getComputedStyle(el, part);
+				return [style.backgroundColor, style.boxShadow, style.borderTopStyle === 'none' || style.borderTopColor === 'rgba(0, 0, 0, 0)' ? 'none' : style.borderTopColor];
+			};
+			const toasts = () => $$('.toast-danger').length;
+			const grey = Object.assign(document.createElement('input'), {className: 'switch', type: 'checkbox', checked: true});
+			grey.setAttribute('aria-disabled', 'true');
+			box.append(grey);
+			sw.focus();
+			sw.click();
+			const flipped = [look(sw), look(sw, '::before')];
+			let fail;
+			const held = REDZ.ui.busy(sw, new Promise((done, refuse) => {
+				fail = refuse;
+			}));
+			await wait(50);
+			const early = [sw.getAttribute('aria-busy'), sw.getAttribute('aria-disabled'), document.activeElement === sw, say([look(sw), look(sw, '::before')]) === say(flipped), getComputedStyle(sw).cursor];
+			sw.click();
+			const swallowed = [sw.checked, changes];
+			await wait(450);
+			const knob = look(sw, '::before');
+			const late = [say(look(sw)) === say(flipped[0]), say(look(sw)) !== say(look(grey)), knob[0] === 'rgba(0, 0, 0, 0)' && knob[2] !== 'none', $$('body > .visually-hidden[role="status"]').some((status) => status.textContent === 'Loading…')];
+			fail(new Error('The lab refused it.'));
+			await held.catch(() => {});
+			await wait(50);
+			const refusal = $$('.toast-danger').find((toast) => toast.textContent.includes('The lab refused it.'));
+			const back = [sw.checked, changes, sw.hasAttribute('aria-busy'), sw.hasAttribute('aria-disabled'), document.activeElement === sw, refusal?.parentElement.getAttribute('role') ?? null];
+			refusal?.remove();
+			check.click();
+			let finish;
+			const ticked = REDZ.ui.busy(check, new Promise((done) => {
+				finish = done;
+			}));
+			await wait(50);
+			const before = [getComputedStyle(check, '::after').visibility, getComputedStyle(check, '::before').opacity];
+			await wait(450);
+			const after = [getComputedStyle(check, '::after').visibility, getComputedStyle(check, '::before').opacity];
+			finish(7);
+			const answered = await ticked;
+			const kept = [check.checked, check.hasAttribute('aria-busy'), answered];
+			const silent = toasts();
+			const quiet = [];
+			for (const reason of [new DOMException('Stopped', 'AbortError'), '', {message: 'An object said no.'}]) {
+				sw.click();
+				await REDZ.ui.busy(sw, Promise.reject(reason)).catch(() => {});
+				await wait(20);
+				quiet.push([sw.checked, toasts() - silent]);
+			}
+			$$('.toast-danger').filter((toast) => toast.textContent.includes('An object said no.')).forEach((toast) => toast.remove());
+			box.remove();
+			if (say(early) !== say(['true', 'true', true, true, 'progress']) || say(swallowed) !== say([true, 1]) || say(late) !== say([true, true, true, true]) || say(back) !== say([false, 1, false, false, true, 'alert'])) {
+				out.push('a switch flipped on and busy: at 50 ms ' + say(early) + ' (aria-busy, aria-disabled, focused, its look and knob as flipped, cursor); a second click leaves ' + say(swallowed) + ' (checked, changes); at 450 ms ' + say(late) + ' (its look kept, not grey, the knob a ring, said politely); refused ' + say(back) + ' (checked, changes, aria-busy, aria-disabled, focused, the toast\'s region)');
+			}
+			if (say(before) !== say(['hidden', '1']) || say(after) !== say(['visible', '0']) || say(kept) !== say([true, false, 7])) {
+				out.push('a busy check shows [its ring, its mark] ' + say(before) + ' at 50 ms and ' + say(after) + ' at 450 ms; resolved, [checked, aria-busy, the answer] ' + say(kept));
+			}
+			if (say(quiet) !== say([[false, 0], [false, 0], [false, 1]])) {
+				out.push('refused by an AbortError, an empty string and an object\'s message, [checked, new toasts]: ' + say(quiet));
+			}
+		}]},
+		busyRadio: {target: '#busy-check-pickup', walk: async function* (out) {
+			const [pier, hotel, none] = $$('#busy-check-pickup input');
+			let changes = 0;
+			const count = () => changes++;
+			$('#busy-check-pickup').addEventListener('change', count);
+			$('#busy-check-pickup').scrollIntoView({block: 'center', behavior: 'instant'});
+			await settled();
+			yield {click: center(hotel.closest('label'))};
+			await settled();
+			const held = [hotel.checked, hotel.getAttribute('aria-busy'), changes];
+			yield {click: center(none.closest('label'))};
+			await settled();
+			const swallowed = [hotel.checked, none.checked, changes];
+			await until(() => !hotel.hasAttribute('aria-busy'), 3000);
+			await wait(50);
+			const refusal = $$('.toast-danger').find((toast) => toast.textContent.includes('The hotel is outside the pickup area.'));
+			const back = [pier.checked, hotel.checked, changes, refusal !== undefined];
+			refusal?.remove();
+			$('#busy-check-pickup').removeEventListener('change', count);
+			if (say(held) !== say([true, 'true', 1]) || say(swallowed) !== say([true, false, 1]) || say(back) !== say([true, false, 1, true])) {
+				out.push('a radio chosen by a click and busy ' + say(held) + ' (hotel checked, aria-busy, changes); a click on another of its group ' + say(swallowed) + ' (hotel, none, changes); refused ' + say(back) + ' (pier back, hotel, changes, the words in a toast)');
+			}
+		}},
+		busyKeys: {target: '#busy-check-pickup', walk: async function* (out) {
+			const [pier, hotel] = $$('#busy-check-pickup input');
+			const sw = Object.assign(document.createElement('input'), {className: 'switch', type: 'checkbox', id: 'busy-keys-switch'});
+			sw.setAttribute('role', 'switch');
+			sw.setAttribute('aria-label', 'Lab');
+			$('#busy-check-pickup').after(sw);
+			sw.focus();
+			yield {key: 'Space'};
+			await settled();
+			if (!sw.checked || document.activeElement !== sw) {
+				sw.remove();
+				return;
+			}
+			let finish;
+			const held = REDZ.ui.busy(sw, new Promise((done) => {
+				finish = done;
+			}));
+			yield {key: 'Space'};
+			await settled();
+			const space = [sw.checked, document.activeElement === sw];
+			finish();
+			await held;
+			sw.remove();
+			pier.focus();
+			yield {key: 'ArrowDown'};
+			await settled();
+			const moved = [hotel.checked, hotel.getAttribute('aria-busy'), document.activeElement === hotel];
+			yield {key: 'ArrowDown'};
+			await settled();
+			const stayed = [hotel.checked, document.activeElement === hotel];
+			await until(() => !hotel.hasAttribute('aria-busy'), 3000);
+			await wait(50);
+			const back = [pier.checked, hotel.checked];
+			$$('.toast-danger').filter((toast) => toast.textContent.includes('The hotel is outside the pickup area.')).forEach((toast) => toast.remove());
+			if (say(space) !== say([true, true]) || say(moved) !== say([true, 'true', true]) || say(stayed) !== say([true, true]) || say(back) !== say([true, false])) {
+				out.push('Space on a busy switch leaves ' + say(space) + ' (checked, focused); ArrowDown from the pier ' + say(moved) + ' (hotel checked, busy, focused), again while busy ' + say(stayed) + '; refused ' + say(back) + ' (pier back, hotel)');
+			}
+		}},
+		apply: {target: '#busy-check-apply', steps: [async (out) => {
+			const [b, c] = ['b', 'c'].map((id) => $('#busy-check-' + id));
+			const asked = [];
+			const hear = (event) => asked.push(event.detail);
+			document.addEventListener('redz:apply', hear);
+			let changes = 0;
+			const count = () => changes++;
+			c.addEventListener('change', count);
+			b.click();
+			c.click();
+			const held = [b.getAttribute('aria-busy'), b.checked, c.getAttribute('aria-busy'), c.checked];
+			await until(() => !b.hasAttribute('aria-busy') && !c.hasAttribute('aria-busy'), 3000);
+			await wait(50);
+			const refusal = $$('.toast-danger').find((toast) => toast.textContent.includes('Boat C has no phone on board'));
+			const after = [b.checked, c.checked, changes, refusal !== undefined];
+			refusal?.remove();
+			const detail = asked.map((one) => [one.checked, one.value, one.signal instanceof AbortSignal, typeof one.respondWith]);
+			b.click();
+			await until(() => !b.hasAttribute('aria-busy'), 3000);
+			c.removeEventListener('change', count);
+			document.removeEventListener('redz:apply', hear);
+			const form = document.createElement('form');
+			form.dataset.track = 'Lab';
+			form.innerHTML = trusted('<label class="form-check"><input class="switch" type="checkbox" role="switch" name="lApply" value="1" data-apply> Applied</label><input name="lText" value="x" aria-label="Lab text">');
+			$('#busy-check-apply').after(form);
+			await wait(100);
+			const own = form.elements.lApply;
+			const signals = [];
+			own.addEventListener('redz:apply', (event) => {
+				event.preventDefault();
+				signals.push(event.detail.signal);
+			});
+			own.click();
+			own.click();
+			const alone = [own.hasAttribute('aria-busy'), own.checked, signals.map((signal) => signal.aborted)];
+			own.click();
+			await wait(50);
+			const tracked = [REDZ.ui.track.changed(form).map((change) => change.name), own.closest('.form-check').hasAttribute('data-changed')];
+			REDZ.ui.track.baseline(form);
+			form.remove();
+			if (say(held) !== say(['true', true, 'true', true]) || say(after) !== say([true, false, 1, true]) || say(detail) !== say([[true, 'on', true, 'function'], [true, 'on', true, 'function']])) {
+				out.push('redz:apply answered by the page: flipped and busy ' + say(held) + ' (B busy, on, C busy, on), settled ' + say(after) + ' (B on, C back off, C\'s changes, the refusal\'s toast); its details ' + say(detail));
+			}
+			if (say(alone) !== say([false, false, [true, false]]) || say(tracked) !== say([[], false])) {
+				out.push('a data-apply switch cancelled without an answer: ' + say(alone) + ' (busy, checked after two flips, the signals aborted); in a tracked form the changes are ' + say(tracked));
+			}
+		}]},
 	};
 
 	const runs = {};

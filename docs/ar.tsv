@@ -1967,3 +1967,24 @@ db-01	db-01
 mail-01	mail-01
 web-01	web-01
 web-02	web-02
+Wait for late guests	انتظار الضيوف المتأخرين
+Minutes	الدقائق
+One minute fewer	دقيقة أقل
+One minute more	دقيقة أكثر
+Turn on Wait for late guests to set the minutes.	فعّل انتظار الضيوف المتأخرين لتحديد الدقائق.
+Key kind	نوع المفتاح
+Secret	سري
+Public	عام
+Domains	النطاقات
+A public key needs its domains, one a line.	يحتاج المفتاح العام إلى نطاقاته، نطاق في كل سطر.
+Check by	التحقق عبر
+Format check	فحص الصيغة
+Network call	اتصال بالشبكة
+Only a test key can make a network call.	مفتاح الاختبار وحده يستطيع إجراء اتصال بالشبكة.
+Alerts by boat	التنبيهات حسب القارب
+Alerts for Boat A	تنبيهات القارب أ
+Alerts for Boat B	تنبيهات القارب ب
+Alerts for Boat C	تنبيهات القارب ج
+At the pier	عند الرصيف
+At the hotel	عند الفندق
+No pickup	بلا توصيل

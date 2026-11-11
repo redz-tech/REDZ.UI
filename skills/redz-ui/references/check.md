@@ -57,7 +57,7 @@ A check with some of its items chosen is `indeterminate` - a property set from s
 
 From [`css/components/check.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/check.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-border-strong`, `--redz-bg`, `--redz-primary-contrast`, `--redz-primary`, `--redz-focus`, `--redz-border`, `--redz-bg-page`, `--redz-bg-hover`, `--redz-motion`, `--redz-ease`.
+It reads the theme's `--redz-border-strong`, `--redz-bg`, `--redz-primary-contrast`, `--redz-primary`, `--redz-focus`, `--redz-border`, `--redz-bg-page`, `--redz-text-muted`, `--redz-bg-hover`, `--redz-motion`, `--redz-ease`.
 
 ## From Bootstrap 5.3
 

@@ -10,25 +10,76 @@
 // readers mostly ignore it, and on a live region it breaks the region. A button that
 // counts a cooldown meanwhile stays disabled until its count ends too (js/hold.js). A region's data-busy says its own
 // words under the spinner and aloud instead of "busy". An item of a menu holds the button that opened the menu busy
-// with it, as the menu closes. Any other element - a cell that checks, a line, a field - shows a small ring after 400 ms,
-// inside it or after a field, and, for a screen reader, the words of its data-busy or "busy", saying nothing aloud.
+// with it, as the menu closes. A check, a radio or a switch the person has just flipped is marked aria-disabled too and
+// keeps its look, its cursor progress: after 400 ms its mark - a switch's knob - turns into a spinning ring and the words
+// of its data-busy or "busy" are said politely; a radio's whole group swallows clicks and arrow keys meanwhile. Resolved,
+// the flip stays; refused, it goes back without a change event - a radio to the choice its group held at the person's
+// press, key or focus before it - and the refusal's words, an Error's or an object's message or a string, are a danger
+// toast, while an empty one or an AbortError says nothing. One with data-apply fires the cancelable redz:apply
+// {checked, value, signal} on its change (js/answer.js) - a newer one of the control or of its radio group aborts the
+// last one's signal -: answered with a promise, it is busy until the promise settles. Any other element - a cell that
+// checks, a line, a field - shows a small ring after 400 ms, inside it or after a field, and, for a screen reader, the
+// words of its data-busy or "busy", saying nothing aloud.
+import {ask} from './answer.js';
 import {text} from './text.js';
 import {announce} from './say.js';
 import {take, leave} from './hold.js';
 import {openerOf} from './commands.js';
+import {toast} from './toast.js';
 
 const SHOW = 400;
 const HOLD = 400;
 const REGIONS = '.card, .card-body, .dialog-body, .drawer-body, .region, .app-main';
 const LIVE = '[aria-live], [role="status"], [role="alert"], [role="log"]';
+const CHECKS = 'input:is(.check, .radio, .switch)';
+const applying = new WeakMap();
+let noted = null;
+
+/** The radios of the radio's group: those of its name in its form, or in the page outside a form. */
+export const groupOf = (radio) => radio.name === '' ? [radio] : [...(radio.form?.elements ?? document.querySelectorAll('input'))].filter((one) => one.type === 'radio' && one.name === radio.name && one.form === radio.form);
+
+/** Whether a radio of the radio's group is busy. */
+const held = (radio) => groupOf(radio).some((one) => one.matches('[aria-busy="true"]'));
 
 document.addEventListener('click', (event) => {
-	const button = event.target instanceof Element ? event.target.closest('button[aria-disabled="true"], .btn[aria-disabled="true"], input:is([type="checkbox"], [type="radio"])[aria-disabled="true"]') : null;
-	if (button !== null) {
+	const target = event.target;
+	if (target.closest?.('button[aria-disabled="true"], .btn[aria-disabled="true"], input:is([type="checkbox"], [type="radio"])[aria-disabled="true"]') || (target.type === 'radio' && held(target))) {
 		event.preventDefault();
 		event.stopImmediatePropagation();
 	}
 }, true);
+
+for (const type of ['pointerdown', 'keydown', 'focusin']) {
+	document.addEventListener(type, (event) => {
+		const radio = event.target.closest?.('label')?.control ?? event.target;
+		if (radio.type !== 'radio') {
+			return;
+		}
+		if (held(radio)) {
+			if (event.key?.startsWith('Arrow')) {
+				event.preventDefault();
+			}
+			return;
+		}
+		const group = groupOf(radio);
+		noted = [group, group.find((one) => one.checked) ?? null];
+	}, true);
+}
+
+document.addEventListener('change', (event) => {
+	const control = event.target;
+	if (!control.matches?.(CHECKS + '[data-apply]')) {
+		return;
+	}
+	const key = control.type === 'radio' ? groupOf(control)[0] : control;
+	const controller = new AbortController();
+	applying.get(key)?.abort();
+	applying.set(key, controller);
+	const [, answer] = ask(control, 'redz:apply', {checked: control.checked, value: control.value, signal: controller.signal});
+	if (answer !== null) {
+		busy(control, answer).catch(() => {});
+	}
+});
 
 /** Holds the region inert under its overlay until the promise settles; answers the promise. */
 export const hold = (element, promise) => {
@@ -90,10 +141,37 @@ const mark = (element, promise) => {
 	});
 };
 
+/** Holds a check, a radio or a switch the person flipped until the promise settles; refused, the flip goes back. */
+const flipped = (element, promise) => {
+	const before = element.type === 'radio' ? (noted?.[0].includes(element) ? noted[1] : null) : !element.checked;
+	element.setAttribute('aria-busy', 'true');
+	take(element, 'busy');
+	const said = setTimeout(() => announce(element.dataset.busy || text('busy')), SHOW);
+	return Promise.resolve(promise).finally(() => {
+		clearTimeout(said);
+		element.removeAttribute('aria-busy');
+		leave(element, 'busy');
+	}).catch((reason) => {
+		if (element.type === 'radio') {
+			(before ?? element).checked = before !== null;
+		} else {
+			element.checked = before;
+		}
+		const words = typeof reason === 'string' ? reason : typeof reason?.message === 'string' ? reason.message : '';
+		if (words !== '' && reason?.name !== 'AbortError') {
+			toast({tone: 'danger', text: words});
+		}
+		throw reason;
+	});
+};
+
 /** Marks the element busy until the promise settles; answers the promise. */
 export const busy = (element, promise) => {
 	if (element.matches(LIVE) || element.querySelector(LIVE) !== null) {
 		console.error('REDZ.UI: busy() on or around a live region breaks it in screen readers - mark an element without one');
+	}
+	if (element.matches(CHECKS)) {
+		return flipped(element, promise);
 	}
 	const button = element.matches('button, .btn');
 	if (!button && element.matches(REGIONS)) {

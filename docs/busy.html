@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Busy - REDZ.UI</title>
-	<meta name="description" content="REDZ.ui.busy(element, promise) marks a button or a region busy until the promise settles: a button shows a spinner and ignores clicks, a region turns inert under an overlay.">
+	<meta name="description" content="REDZ.ui.busy(element, promise) marks a button or a region busy until the promise settles: a button shows a spinner and ignores clicks, a region turns inert under an overlay, a switch the person flipped goes back on a refusal.">
 	<script src="../dist/js/floor.min.js"></script>
 	<link rel="stylesheet" href="../dist/css/redz-ui.min.css">
 	<link rel="stylesheet" href="../css/icons.min.css">
@@ -135,7 +135,7 @@
 			<article class="docs vstack gap-32">
 				<header class="vstack gap-8">
 					<h1>Busy</h1>
-					<p class="docs-lead"><code>REDZ.ui.busy(element, promise)</code> marks a button or a region busy until the promise settles: a button shows a spinner and ignores clicks, a region turns inert under an overlay.</p>
+					<p class="docs-lead"><code>REDZ.ui.busy(element, promise)</code> marks a button or a region busy until the promise settles: a button shows a spinner and ignores clicks, a region turns inert under an overlay, a switch the person flipped goes back on a refusal.</p>
 				</header>
 
 				<section class="vstack gap-16" aria-labelledby="busy-examples">
@@ -227,6 +227,50 @@
 &lt;div class="menu" id="busy-menu-list" popover role="menu" aria-label="Actions: Boat A"&gt;
 	&lt;button class="menu-item" type="button" role="menuitem" data-docs-run="busy-menu-item" commandfor="busy-menu-list" command="hide-popover"&gt;&lt;i class="bi bi-arrow-repeat" aria-hidden="true"&gt;&lt;/i&gt;Check now&lt;/button&gt;
 &lt;/div&gt;</code></pre></div>
+					<h3 id="busy-check">A check, a radio or a switch</h3>
+					<p>A check, a radio or a switch that applies at once is held while the page saves the person's flip: <code>busy(control, promise)</code> from its <code>change</code> marks it <code>aria-busy</code> and <code>aria-disabled</code>, so it keeps its focus and its look and swallows clicks and keys - a radio's whole group does. After 400 ms its mark, or a switch's knob, turns into a spinning ring, and the words of its <code>data-busy</code> or the page's text <code>busy</code> are said politely. Resolved, the flip stays. Refused, it goes back without a <code>change</code> - a radio to the choice its group held before -, and the refusal's words, the <code>message</code> of an <code>Error</code> or of an object, or a string, show in a danger toast, said at once; an empty refusal or an <code>AbortError</code> says nothing.</p>
+					<p><code>data-apply</code> on the control does it without a listener of its own: its <code>change</code> fires the cancelable <code>redz:apply</code> with <code>{checked, value, signal}</code>, and the page answers with <code>event.detail.respondWith(promise)</code>. Left alone, or cancelled without an answer, the flip just stands. A newer <code>redz:apply</code> of the same control or radio group aborts the last one's <code>signal</code>. A tracked form leaves a <code>data-apply</code> control out, as it is saved at once; a control in a tracked form that <code>busy()</code> holds without it needs <code>data-track="off"</code>. Here the page answers in 1.5 seconds and refuses alerts for Boat C, which has no phone on board.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="busy-check-apply">
+						<table class="table" aria-label="Alerts by boat">
+							<thead><tr><th scope="col">Boat</th><th scope="col">Alerts</th></tr></thead>
+							<tbody>
+								<tr><td>Boat A</td><td><input class="switch" type="checkbox" role="switch" id="busy-check-a" aria-label="Alerts for Boat A" data-apply checked></td></tr>
+								<tr><td>Boat B</td><td><input class="switch" type="checkbox" role="switch" id="busy-check-b" aria-label="Alerts for Boat B" data-apply></td></tr>
+								<tr><td>Boat C</td><td><input class="switch" type="checkbox" role="switch" id="busy-check-c" aria-label="Alerts for Boat C" data-apply data-busy="Turning the alerts on"></td></tr>
+							</tbody>
+						</table>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;table class="table" aria-label="Alerts by boat"&gt;
+	&lt;thead&gt;&lt;tr&gt;&lt;th scope="col"&gt;Boat&lt;/th&gt;&lt;th scope="col"&gt;Alerts&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+	&lt;tbody&gt;
+		&lt;tr&gt;&lt;td&gt;Boat A&lt;/td&gt;&lt;td&gt;&lt;input class="switch" type="checkbox" role="switch" id="busy-check-a" aria-label="Alerts for Boat A" data-apply checked&gt;&lt;/td&gt;&lt;/tr&gt;
+		&lt;tr&gt;&lt;td&gt;Boat B&lt;/td&gt;&lt;td&gt;&lt;input class="switch" type="checkbox" role="switch" id="busy-check-b" aria-label="Alerts for Boat B" data-apply&gt;&lt;/td&gt;&lt;/tr&gt;
+		&lt;tr&gt;&lt;td&gt;Boat C&lt;/td&gt;&lt;td&gt;&lt;input class="switch" type="checkbox" role="switch" id="busy-check-c" aria-label="Alerts for Boat C" data-apply data-busy="Turning the alerts on"&gt;&lt;/td&gt;&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;</code></pre></div>
+					<pre class="docs-code" tabindex="0"><code>document.addEventListener('redz:apply', (event) =&gt; {
+  event.preventDefault();
+  const {checked, signal} = event.detail;
+  event.detail.respondWith(fetch(url, {method: 'POST', body: checked ? '1' : '0', signal}).then((answer) =&gt; {
+    if (!answer.ok) throw new Error('The alerts were not changed.');
+  }));
+});</code></pre>
+					<p>From code, in the control's own <code>change</code> - here the page refuses the hotel, outside the pickup area:</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="busy-check-code">
+						<fieldset class="vstack gap-8" id="busy-check-pickup">
+							<legend class="form-label">Pickup</legend>
+							<label class="form-check"><input class="radio" type="radio" name="busy-pickup" value="pier" checked> At the pier</label>
+							<label class="form-check"><input class="radio" type="radio" name="busy-pickup" value="hotel"> At the hotel</label>
+							<label class="form-check"><input class="radio" type="radio" name="busy-pickup" value="none"> No pickup</label>
+						</fieldset>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;fieldset class="vstack gap-8" id="busy-check-pickup"&gt;
+	&lt;legend class="form-label"&gt;Pickup&lt;/legend&gt;
+	&lt;label class="form-check"&gt;&lt;input class="radio" type="radio" name="busy-pickup" value="pier" checked&gt; At the pier&lt;/label&gt;
+	&lt;label class="form-check"&gt;&lt;input class="radio" type="radio" name="busy-pickup" value="hotel"&gt; At the hotel&lt;/label&gt;
+	&lt;label class="form-check"&gt;&lt;input class="radio" type="radio" name="busy-pickup" value="none"&gt; No pickup&lt;/label&gt;
+&lt;/fieldset&gt;</code></pre></div>
+					<pre class="docs-code" tabindex="0"><code>radio.addEventListener('change', () =&gt; REDZ.ui.busy(radio, save(radio.value)).catch(() =&gt; {}));</code></pre>
 					<p>Any other element - a cell whose check runs, a line - shows a small ring after 400 ms and, to a screen reader, the words of its <code>data-busy</code> or the page's text <code>busy</code>, saying nothing aloud: many such checks at once would be noise.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="busy-cell">
 						<table class="table" aria-label="Agents">
@@ -262,6 +306,16 @@
 									<td><button class="btn btn-primary" type="button">Save</button></td>
 									<td><button class="btn btn-primary" type="button" aria-busy="true" aria-disabled="true">Save</button></td>
 								</tr>
+								<tr>
+									<th scope="row">switch</th>
+									<td><input class="switch" type="checkbox" role="switch" name="at-rest" aria-label="At rest" checked></td>
+									<td><input class="switch" type="checkbox" role="switch" name="busy" aria-label="Busy" aria-busy="true" aria-disabled="true" checked></td>
+								</tr>
+								<tr>
+									<th scope="row">check</th>
+									<td><input class="check" type="checkbox" name="at-rest" aria-label="At rest" checked></td>
+									<td><input class="check" type="checkbox" name="busy" aria-label="Busy" aria-busy="true" aria-disabled="true" checked></td>
+								</tr>
 							</tbody>
 						</table>
 					</div>
@@ -272,6 +326,7 @@
 					<ul>
 						<li>Screen readers mostly ignore <code>aria-busy</code>, and on a live region it breaks the region in some of them: here it is a styling hook, and <code>busy()</code> refuses a live region in the console.</li>
 						<li>The region is <code>inert</code> while busy: no focus, no clicks, out of the accessibility tree. When the overlay shows, one polite message says so - the page's text <code>busy</code>, “Loading…”.</li>
+						<li>A busy check, radio or switch keeps its focus and its state, so a screen reader hears the flip it made; its ring is not read, its words are said politely after 400 ms and a refusal at once.</li>
 						<li>For a first load, where there is nothing to cover yet, use <a href="placeholder.html">placeholders</a>.</li>
 					</ul>
 				</section>

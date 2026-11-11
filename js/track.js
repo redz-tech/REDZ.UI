@@ -81,7 +81,7 @@ const fieldsOf = (form) => {
 	const fields = new Map();
 	for (const control of form.elements) {
 		const usable = control instanceof HTMLInputElement || control instanceof HTMLSelectElement || control instanceof HTMLTextAreaElement;
-		if (!usable || control.name === '' || PLAIN.test(control.type) || kept.has(control) || control.closest('.combobox-menu, [data-track="off"]') !== null) {
+		if (!usable || control.name === '' || PLAIN.test(control.type) || kept.has(control) || control.closest('.combobox-menu, [data-track="off"], [data-apply]') !== null) {
 			continue;
 		}
 		const kind = control.type === 'radio' || control.type === 'checkbox' ? control.type : control instanceof HTMLSelectElement && control.multiple ? 'many' : control.type === 'password' && 'secret' in control.dataset ? 'secret' : 'one';

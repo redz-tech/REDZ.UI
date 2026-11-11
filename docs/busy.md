@@ -2,7 +2,7 @@
 
 # Busy
 
-`REDZ.ui.busy(element, promise)` marks a button or a region busy until the promise settles: a button shows a spinner and ignores clicks, a region turns inert under an overlay.
+`REDZ.ui.busy(element, promise)` marks a button or a region busy until the promise settles: a button shows a spinner and ignores clicks, a region turns inert under an overlay, a switch the person flipped goes back on a refusal.
 
 ## Examples
 
@@ -82,6 +82,48 @@ An item of a menu - Delete in a row's menu - is busy with the button that opened
 </div>
 ```
 
+### A check, a radio or a switch
+
+A check, a radio or a switch that applies at once is held while the page saves the person's flip: `busy(control, promise)` from its `change` marks it `aria-busy` and `aria-disabled`, so it keeps its focus and its look and swallows clicks and keys - a radio's whole group does. After 400 ms its mark, or a switch's knob, turns into a spinning ring, and the words of its `data-busy` or the page's text `busy` are said politely. Resolved, the flip stays. Refused, it goes back without a `change` - a radio to the choice its group held before -, and the refusal's words, the `message` of an `Error` or of an object, or a string, show in a danger toast, said at once; an empty refusal or an `AbortError` says nothing.
+
+`data-apply` on the control does it without a listener of its own: its `change` fires the cancelable `redz:apply` with `{checked, value, signal}`, and the page answers with `event.detail.respondWith(promise)`. Left alone, or cancelled without an answer, the flip just stands. A newer `redz:apply` of the same control or radio group aborts the last one's `signal`. A tracked form leaves a `data-apply` control out, as it is saved at once; a control in a tracked form that `busy()` holds without it needs `data-track="off"`. Here the page answers in 1.5 seconds and refuses alerts for Boat C, which has no phone on board.
+
+```html
+<table class="table" aria-label="Alerts by boat">
+	<thead><tr><th scope="col">Boat</th><th scope="col">Alerts</th></tr></thead>
+	<tbody>
+		<tr><td>Boat A</td><td><input class="switch" type="checkbox" role="switch" id="busy-check-a" aria-label="Alerts for Boat A" data-apply checked></td></tr>
+		<tr><td>Boat B</td><td><input class="switch" type="checkbox" role="switch" id="busy-check-b" aria-label="Alerts for Boat B" data-apply></td></tr>
+		<tr><td>Boat C</td><td><input class="switch" type="checkbox" role="switch" id="busy-check-c" aria-label="Alerts for Boat C" data-apply data-busy="Turning the alerts on"></td></tr>
+	</tbody>
+</table>
+```
+
+```js
+document.addEventListener('redz:apply', (event) => {
+  event.preventDefault();
+  const {checked, signal} = event.detail;
+  event.detail.respondWith(fetch(url, {method: 'POST', body: checked ? '1' : '0', signal}).then((answer) => {
+    if (!answer.ok) throw new Error('The alerts were not changed.');
+  }));
+});
+```
+
+From code, in the control's own `change` - here the page refuses the hotel, outside the pickup area:
+
+```html
+<fieldset class="vstack gap-8" id="busy-check-pickup">
+	<legend class="form-label">Pickup</legend>
+	<label class="form-check"><input class="radio" type="radio" name="busy-pickup" value="pier" checked> At the pier</label>
+	<label class="form-check"><input class="radio" type="radio" name="busy-pickup" value="hotel"> At the hotel</label>
+	<label class="form-check"><input class="radio" type="radio" name="busy-pickup" value="none"> No pickup</label>
+</fieldset>
+```
+
+```js
+radio.addEventListener('change', () => REDZ.ui.busy(radio, save(radio.value)).catch(() => {}));
+```
+
 Any other element - a cell whose check runs, a line - shows a small ring after 400 ms and, to a screen reader, the words of its `data-busy` or the page's text `busy`, saying nothing aloud: many such checks at once would be noise.
 
 ```html
@@ -102,6 +144,7 @@ What `busy()` sets, written by hand - the overlay appears 400 ms after the page 
 
 - Screen readers mostly ignore `aria-busy`, and on a live region it breaks the region in some of them: here it is a styling hook, and `busy()` refuses a live region in the console.
 - The region is `inert` while busy: no focus, no clicks, out of the accessibility tree. When the overlay shows, one polite message says so - the page's text `busy`, “Loading…”.
+- A busy check, radio or switch keeps its focus and its state, so a screen reader hears the flip it made; its ring is not read, its words are said politely after 400 ms and a refusal at once.
 - For a first load, where there is nothing to cover yet, use [placeholders](placeholder.md).
 
 ## Tokens

@@ -3449,6 +3449,61 @@ Buttons with `command="--step-up"` or `"--step-down"` and `aria-controls` naming
 </form>
 ```
 
+### Enabled or required by another field
+
+`data-enable-when` enables its element while a field of its form holds a value `data-enable-in` lists, and `data-require-when` with `data-require-in` makes it required, read as `data-show-when` reads: the values a space apart, any value without the list. A rule on a field owns its `disabled` or `required`, as the server drew it too; a `fieldset` takes its own `disabled`; any other element sets each field inside it, and a field the page disabled or required itself stays so. A disabled field counts as empty for every rule, as the form sends nothing of it: the fields of a hidden region drive nothing. A field hidden by a class or by `hidden` counts by its value, a hidden input too, and a field inside the rule's element never counts.
+
+A disabled field is out of the keyboard's reach, so the field that drives it says why: while a rule disables a field, a text with its own `data-show-when` that the field names in `aria-describedby` joins, as long as it shows, the `aria-describedby` of every control of the driving name. A checked radio a rule disables hands its check to the radio of its group with `data-enable-else`, which fires `input` and `change`; without one the group is left with none checked. A number's step buttons follow the field.
+
+```html
+<form class="vstack gap-16">
+	<div class="vstack gap-8">
+		<input type="hidden" name="wait_on" value="0">
+		<label class="form-check"><input class="switch" type="checkbox" role="switch" name="wait_on" value="1" id="form-enable-wait-on"> Wait for late guests</label>
+		<div class="form-field">
+			<label class="form-label" for="form-enable-wait">Minutes</label>
+			<div class="input-group max-w-160">
+				<button class="btn btn-icon" type="button" command="--step-down" aria-controls="form-enable-wait" aria-label="One minute fewer"><i class="bi bi-dash-lg" aria-hidden="true"></i></button>
+				<input class="form-control tabular-nums text-center" id="form-enable-wait" name="wait" type="number" min="1" max="60" value="10" aria-describedby="form-enable-wait-why" data-enable-when="wait_on" data-enable-in="1">
+				<button class="btn btn-icon" type="button" command="--step-up" aria-controls="form-enable-wait" aria-label="One minute more"><i class="bi bi-plus-lg" aria-hidden="true"></i></button>
+			</div>
+			<div class="form-text" id="form-enable-wait-why" data-show-when="wait_on" data-show-in="0">Turn on Wait for late guests to set the minutes.</div>
+		</div>
+	</div>
+	<fieldset class="vstack gap-8" id="form-enable-kind">
+		<legend class="form-label">Key kind</legend>
+		<label class="form-check"><input class="radio" type="radio" name="kind" value="secret" checked> Secret</label>
+		<label class="form-check"><input class="radio" type="radio" name="kind" value="public"> Public</label>
+		<label class="form-check"><input class="radio" type="radio" name="kind" value="test"> Test</label>
+	</fieldset>
+	<div class="form-field">
+		<label class="form-label" for="form-enable-domains">Domains</label>
+		<textarea class="form-control" id="form-enable-domains" name="domains" rows="2" aria-describedby="form-enable-domains-hint" data-require-when="kind" data-require-in="public"></textarea>
+		<div class="form-text" id="form-enable-domains-hint">A public key needs its domains, one a line.</div>
+	</div>
+	<fieldset class="vstack gap-8">
+		<legend class="form-label">Check by</legend>
+		<label class="form-check"><input class="radio" type="radio" name="call" value="format" id="form-enable-format" data-enable-else checked> Format check</label>
+		<label class="form-check"><input class="radio" type="radio" name="call" value="network" id="form-enable-network" aria-describedby="form-enable-call-why" data-enable-when="kind" data-enable-in="test"> Network call</label>
+		<div class="form-text" id="form-enable-call-why" data-show-when="kind" data-show-in="secret public">Only a test key can make a network call.</div>
+	</fieldset>
+</form>
+```
+
+| Attribute | On | What it does |
+| --- | --- | --- |
+| `data-show-when`, `data-show-in` | Any element | Shows it while the field holds a listed value, else hides it and disables its fields |
+| `data-enable-when`, `data-enable-in` | A field, a fieldset or any element of fields | Enables it while the field holds a listed value, else disables it |
+| `data-require-when`, `data-require-in` | A field or any element of fields | Makes it required while the field holds a listed value |
+| `data-enable-else` | A radio | Takes its group's check from a checked radio a rule disables |
+
+Rules follow `input`, `change` and `reset`, so a tracked form's Discard needs nothing. A value set by code fires no event: `REDZ.ui.follow(form)` reads the rules of the form again, or of the whole page without one.
+
+```js
+form.elements.kind.value = 'test';
+REDZ.ui.follow(form);
+```
+
 ## States
 
 ## Keyboard and accessibility
@@ -3461,6 +3516,7 @@ Buttons with `command="--step-up"` or `"--step-down"` and `aria-controls` naming
 - A count of characters is said only near or over its most, once the typing pauses; at every key it would drown the typing.
 - Number step buttons are named by `aria-label` and keep their place in the Tab order; from the keyboard the field's own arrow keys step it.
 - A region shown by another field is `hidden` while it does not apply, so a screen reader skips it and the form sends nothing of it.
+- A field disabled by another field is skipped by `Tab`: its reason, joined to the driving field, is heard there.
 
 ## Tokens
 
@@ -3669,7 +3725,7 @@ A check with some of its items chosen is `indeterminate` - a property set from s
 
 From [`css/components/check.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/check.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-border-strong`, `--redz-bg`, `--redz-primary-contrast`, `--redz-primary`, `--redz-focus`, `--redz-border`, `--redz-bg-page`, `--redz-bg-hover`, `--redz-motion`, `--redz-ease`.
+It reads the theme's `--redz-border-strong`, `--redz-bg`, `--redz-primary-contrast`, `--redz-primary`, `--redz-focus`, `--redz-border`, `--redz-bg-page`, `--redz-text-muted`, `--redz-bg-hover`, `--redz-motion`, `--redz-ease`.
 
 ## From Bootstrap 5.3
 
@@ -7964,7 +8020,7 @@ It reads the theme's `--redz-bg-hover`, `--redz-primary`, `--redz-secondary`, `-
 
 # Busy
 
-`REDZ.ui.busy(element, promise)` marks a button or a region busy until the promise settles: a button shows a spinner and ignores clicks, a region turns inert under an overlay.
+`REDZ.ui.busy(element, promise)` marks a button or a region busy until the promise settles: a button shows a spinner and ignores clicks, a region turns inert under an overlay, a switch the person flipped goes back on a refusal.
 
 ## Examples
 
@@ -8044,6 +8100,48 @@ An item of a menu - Delete in a row's menu - is busy with the button that opened
 </div>
 ```
 
+### A check, a radio or a switch
+
+A check, a radio or a switch that applies at once is held while the page saves the person's flip: `busy(control, promise)` from its `change` marks it `aria-busy` and `aria-disabled`, so it keeps its focus and its look and swallows clicks and keys - a radio's whole group does. After 400 ms its mark, or a switch's knob, turns into a spinning ring, and the words of its `data-busy` or the page's text `busy` are said politely. Resolved, the flip stays. Refused, it goes back without a `change` - a radio to the choice its group held before -, and the refusal's words, the `message` of an `Error` or of an object, or a string, show in a danger toast, said at once; an empty refusal or an `AbortError` says nothing.
+
+`data-apply` on the control does it without a listener of its own: its `change` fires the cancelable `redz:apply` with `{checked, value, signal}`, and the page answers with `event.detail.respondWith(promise)`. Left alone, or cancelled without an answer, the flip just stands. A newer `redz:apply` of the same control or radio group aborts the last one's `signal`. A tracked form leaves a `data-apply` control out, as it is saved at once; a control in a tracked form that `busy()` holds without it needs `data-track="off"`. Here the page answers in 1.5 seconds and refuses alerts for Boat C, which has no phone on board.
+
+```html
+<table class="table" aria-label="Alerts by boat">
+	<thead><tr><th scope="col">Boat</th><th scope="col">Alerts</th></tr></thead>
+	<tbody>
+		<tr><td>Boat A</td><td><input class="switch" type="checkbox" role="switch" id="busy-check-a" aria-label="Alerts for Boat A" data-apply checked></td></tr>
+		<tr><td>Boat B</td><td><input class="switch" type="checkbox" role="switch" id="busy-check-b" aria-label="Alerts for Boat B" data-apply></td></tr>
+		<tr><td>Boat C</td><td><input class="switch" type="checkbox" role="switch" id="busy-check-c" aria-label="Alerts for Boat C" data-apply data-busy="Turning the alerts on"></td></tr>
+	</tbody>
+</table>
+```
+
+```js
+document.addEventListener('redz:apply', (event) => {
+  event.preventDefault();
+  const {checked, signal} = event.detail;
+  event.detail.respondWith(fetch(url, {method: 'POST', body: checked ? '1' : '0', signal}).then((answer) => {
+    if (!answer.ok) throw new Error('The alerts were not changed.');
+  }));
+});
+```
+
+From code, in the control's own `change` - here the page refuses the hotel, outside the pickup area:
+
+```html
+<fieldset class="vstack gap-8" id="busy-check-pickup">
+	<legend class="form-label">Pickup</legend>
+	<label class="form-check"><input class="radio" type="radio" name="busy-pickup" value="pier" checked> At the pier</label>
+	<label class="form-check"><input class="radio" type="radio" name="busy-pickup" value="hotel"> At the hotel</label>
+	<label class="form-check"><input class="radio" type="radio" name="busy-pickup" value="none"> No pickup</label>
+</fieldset>
+```
+
+```js
+radio.addEventListener('change', () => REDZ.ui.busy(radio, save(radio.value)).catch(() => {}));
+```
+
 Any other element - a cell whose check runs, a line - shows a small ring after 400 ms and, to a screen reader, the words of its `data-busy` or the page's text `busy`, saying nothing aloud: many such checks at once would be noise.
 
 ```html
@@ -8064,6 +8162,7 @@ What `busy()` sets, written by hand - the overlay appears 400 ms after the page 
 
 - Screen readers mostly ignore `aria-busy`, and on a live region it breaks the region in some of them: here it is a styling hook, and `busy()` refuses a live region in the console.
 - The region is `inert` while busy: no focus, no clicks, out of the accessibility tree. When the overlay shows, one polite message says so - the page's text `busy`, “Loading…”.
+- A busy check, radio or switch keeps its focus and its state, so a screen reader hears the flip it made; its ring is not read, its words are said politely after 400 ms and a refusal at once.
 - For a first load, where there is nothing to cover yet, use [placeholders](placeholder.md).
 
 ## Tokens

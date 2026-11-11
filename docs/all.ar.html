@@ -837,6 +837,40 @@ Boat C	 9 trips	201 seats</pre>
 							</div>
 						</form>
 					</div>
+					<div class="docs-example docs-example-stack" id="form-enable">
+						<form class="vstack gap-16">
+							<div class="vstack gap-8">
+								<input type="hidden" name="wait_on" value="0">
+								<label class="form-check"><input class="switch" type="checkbox" role="switch" name="wait_on" value="1" id="form-enable-wait-on"> انتظار الضيوف المتأخرين</label>
+								<div class="form-field">
+									<label class="form-label" for="form-enable-wait">الدقائق</label>
+									<div class="input-group max-w-160">
+										<button class="btn btn-icon" type="button" command="--step-down" aria-controls="form-enable-wait" aria-label="دقيقة أقل"><i class="bi bi-dash-lg" aria-hidden="true"></i></button>
+										<input class="form-control tabular-nums text-center" id="form-enable-wait" name="wait" type="number" min="1" max="60" value="10" aria-describedby="form-enable-wait-why" data-enable-when="wait_on" data-enable-in="1">
+										<button class="btn btn-icon" type="button" command="--step-up" aria-controls="form-enable-wait" aria-label="دقيقة أكثر"><i class="bi bi-plus-lg" aria-hidden="true"></i></button>
+									</div>
+									<div class="form-text" id="form-enable-wait-why" data-show-when="wait_on" data-show-in="0">فعّل انتظار الضيوف المتأخرين لتحديد الدقائق.</div>
+								</div>
+							</div>
+							<fieldset class="vstack gap-8" id="form-enable-kind">
+								<legend class="form-label">نوع المفتاح</legend>
+								<label class="form-check"><input class="radio" type="radio" name="kind" value="secret" checked=""> سري</label>
+								<label class="form-check"><input class="radio" type="radio" name="kind" value="public"> عام</label>
+								<label class="form-check"><input class="radio" type="radio" name="kind" value="test"> الاختبار</label>
+							</fieldset>
+							<div class="form-field">
+								<label class="form-label" for="form-enable-domains">النطاقات</label>
+								<textarea class="form-control" id="form-enable-domains" name="domains" rows="2" aria-describedby="form-enable-domains-hint" data-require-when="kind" data-require-in="public"></textarea>
+								<div class="form-text" id="form-enable-domains-hint">يحتاج المفتاح العام إلى نطاقاته، نطاق في كل سطر.</div>
+							</div>
+							<fieldset class="vstack gap-8">
+								<legend class="form-label">التحقق عبر</legend>
+								<label class="form-check"><input class="radio" type="radio" name="call" value="format" id="form-enable-format" data-enable-else="" checked=""> فحص الصيغة</label>
+								<label class="form-check"><input class="radio" type="radio" name="call" value="network" id="form-enable-network" aria-describedby="form-enable-call-why" data-enable-when="kind" data-enable-in="test"> اتصال بالشبكة</label>
+								<div class="form-text" id="form-enable-call-why" data-show-when="kind" data-show-in="secret public">مفتاح الاختبار وحده يستطيع إجراء اتصال بالشبكة.</div>
+							</fieldset>
+						</form>
+					</div>
 					<div class="docs-states" id="form-states" tabindex="0" role="region" aria-labelledby="form-states-title">
 						<table class="docs-matrix">
 							<thead>
@@ -3460,6 +3494,24 @@ Boat C	 9 trips	201 seats</pre>
 							<button class="menu-item" type="button" role="menuitem" data-docs-run="busy-menu-item" commandfor="busy-menu-list" command="hide-popover"><i class="bi bi-arrow-repeat" aria-hidden="true"></i>افحص الآن</button>
 						</div>
 					</div>
+					<div class="docs-example docs-example-stack" id="busy-check-apply">
+						<table class="table" aria-label="التنبيهات حسب القارب">
+							<thead><tr><th scope="col">القارب</th><th scope="col">التنبيهات</th></tr></thead>
+							<tbody>
+								<tr><td>القارب أ</td><td><input class="switch" type="checkbox" role="switch" id="busy-check-a" aria-label="تنبيهات القارب أ" data-apply="" checked=""></td></tr>
+								<tr><td>القارب ب</td><td><input class="switch" type="checkbox" role="switch" id="busy-check-b" aria-label="تنبيهات القارب ب" data-apply=""></td></tr>
+								<tr><td>القارب ج</td><td><input class="switch" type="checkbox" role="switch" id="busy-check-c" aria-label="تنبيهات القارب ج" data-apply="" data-busy="Turning the alerts on"></td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="docs-example docs-example-stack" id="busy-check-code">
+						<fieldset class="vstack gap-8" id="busy-check-pickup">
+							<legend class="form-label">الاستقبال</legend>
+							<label class="form-check"><input class="radio" type="radio" name="busy-pickup" value="pier" checked=""> عند الرصيف</label>
+							<label class="form-check"><input class="radio" type="radio" name="busy-pickup" value="hotel"> عند الفندق</label>
+							<label class="form-check"><input class="radio" type="radio" name="busy-pickup" value="none"> بلا توصيل</label>
+						</fieldset>
+					</div>
 					<div class="docs-example docs-example-stack" id="busy-cell">
 						<table class="table" aria-label="الوكلاء">
 							<thead><tr><th scope="col">الوكيل</th><th scope="col">الحالة</th></tr></thead>
@@ -3482,6 +3534,16 @@ Boat C	 9 trips	201 seats</pre>
 									<th scope="row">btn</th>
 									<td><button class="btn btn-primary" type="button">حفظ</button></td>
 									<td><button class="btn btn-primary" type="button" aria-busy="true" aria-disabled="true">حفظ</button></td>
+								</tr>
+								<tr>
+									<th scope="row">switch</th>
+									<td><input class="switch" type="checkbox" role="switch" name="at-rest" aria-label="في وضع السكون" checked=""></td>
+									<td><input class="switch" type="checkbox" role="switch" name="busy" aria-label="الانشغال" aria-busy="true" aria-disabled="true" checked=""></td>
+								</tr>
+								<tr>
+									<th scope="row">check</th>
+									<td><input class="check" type="checkbox" name="at-rest" aria-label="في وضع السكون" checked=""></td>
+									<td><input class="check" type="checkbox" name="busy" aria-label="الانشغال" aria-busy="true" aria-disabled="true" checked=""></td>
 								</tr>
 							</tbody>
 						</table>

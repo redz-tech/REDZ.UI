@@ -79,12 +79,63 @@
 	.check:disabled,
 	.radio:disabled,
 	.switch:disabled,
-	.check[aria-disabled="true"],
-	.radio[aria-disabled="true"],
-	.switch[aria-disabled="true"] {
+	.check[aria-disabled="true"]:not([aria-busy="true"]),
+	.radio[aria-disabled="true"]:not([aria-busy="true"]),
+	.switch[aria-disabled="true"]:not([aria-busy="true"]) {
 		border-color: var(--redz-border);
 		background: var(--redz-bg-page);
 		cursor: not-allowed;
+	}
+
+	/* Busy keeps the look; after 400 ms the mark gives way to a ring, and a switch's knob turns into one. */
+	.check[aria-busy="true"],
+	.radio[aria-busy="true"],
+	.switch[aria-busy="true"] {
+		place-items: center;
+		cursor: progress;
+	}
+
+	.check[aria-busy="true"]::before,
+	.radio[aria-busy="true"]::before {
+		grid-area: 1 / 1;
+		animation: check-busy 0s 400ms both;
+	}
+
+	.check[aria-busy="true"]::after,
+	.radio[aria-busy="true"]::after {
+		content: "";
+		grid-area: 1 / 1;
+		inline-size: 0.625rem;
+		block-size: 0.625rem;
+		border: 2px solid;
+		border-inline-end-color: transparent;
+		border-radius: 50%;
+		animation: busy-show 0s 400ms both, spinner-turn 0.7s linear infinite;
+	}
+
+	.switch[aria-busy="true"]::before {
+		border: 2px solid transparent;
+		animation: switch-busy 0s 400ms both, spinner-turn 0.7s linear 400ms infinite;
+	}
+
+	.check[aria-busy="true"]::after,
+	.radio[aria-busy="true"]::after,
+	.switch[aria-busy="true"]::before {
+		color: var(--redz-text-muted);
+	}
+
+	.check:checked[aria-busy="true"]::after,
+	.radio:checked[aria-busy="true"]::after,
+	.switch:checked[aria-busy="true"]::before {
+		color: var(--redz-primary-contrast);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.check[aria-busy="true"]::after,
+		.radio[aria-busy="true"]::after,
+		.switch[aria-busy="true"]::before {
+			animation-duration: 0s, 1.4s;
+		}
 	}
 
 	.switch {
@@ -115,7 +166,7 @@
 	}
 
 	.switch:disabled::before,
-	.switch[aria-disabled="true"]::before {
+	.switch[aria-disabled="true"]:not([aria-busy="true"])::before {
 		box-shadow: 0 0 0 1px var(--redz-border);
 	}
 
@@ -159,10 +210,36 @@
 		.check:disabled,
 		.radio:disabled,
 		.switch:disabled,
-		.check[aria-disabled="true"],
-		.radio[aria-disabled="true"],
-		.switch[aria-disabled="true"] {
+		.check[aria-disabled="true"]:not([aria-busy="true"]),
+		.radio[aria-disabled="true"]:not([aria-busy="true"]),
+		.switch[aria-disabled="true"]:not([aria-busy="true"]) {
 			border-color: GrayText;
+		}
+
+		.check[aria-busy="true"]::after,
+		.radio[aria-busy="true"]::after,
+		.switch[aria-busy="true"]::before {
+			color: ButtonText;
+		}
+
+		.check:checked[aria-busy="true"]::after,
+		.radio:checked[aria-busy="true"]::after,
+		.switch:checked[aria-busy="true"]::before {
+			color: HighlightText;
+		}
+	}
+
+	@keyframes check-busy {
+		to {
+			opacity: 0;
+		}
+	}
+
+	@keyframes switch-busy {
+		to {
+			border-color: currentColor transparent currentColor currentColor;
+			background-color: transparent;
+			box-shadow: none;
 		}
 	}
 }

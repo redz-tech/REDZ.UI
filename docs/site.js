@@ -480,6 +480,24 @@
 		event.detail.respondWith(new Promise((saved, refused) => setTimeout(() => (value === '' ? refused('A title cannot be empty') : saved(value)), 600)));
 	});
 
+	// The switches applied at once: an answer in 1.5 s, alerts for Boat C refused.
+	document.addEventListener('redz:apply', (event) => {
+		if (!event.target.closest('#busy-check-apply')) {
+			return;
+		}
+		event.preventDefault();
+		const refused = event.target.id === 'busy-check-c' && event.detail.checked;
+		event.detail.respondWith(new Promise((done, refuse) => setTimeout(() => (refused ? refuse(new Error('Boat C has no phone on board, so it cannot get alerts.')) : done()), 1500)));
+	});
+
+	// The pickup held by busy() from its change: an answer in 1.5 s, the hotel refused.
+	document.addEventListener('change', (event) => {
+		const radio = event.target instanceof Element ? event.target.closest('#busy-check-pickup input') : null;
+		if (radio !== null) {
+			REDZ.ui.busy(radio, new Promise((done, refuse) => setTimeout(() => (radio.value === 'hotel' ? refuse('The hotel is outside the pickup area.') : done()), 1500))).catch(() => {});
+		}
+	});
+
 	// The tracked forms: an answer in 700 ms; an adult price below the child price and an empty boat name refused; with
 	// "A conflict" chosen, a name changed from one the person never saw stored.
 	document.addEventListener('redz:save', (event) => {
