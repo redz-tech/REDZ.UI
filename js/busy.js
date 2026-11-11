@@ -10,8 +10,8 @@
 // readers mostly ignore it, and on a live region it breaks the region. A button that
 // counts a cooldown meanwhile stays disabled until its count ends too (js/hold.js). A region's data-busy says its own
 // words under the spinner and aloud instead of "busy". An item of a menu holds the button that opened the menu busy
-// with it, as the menu closes. Any other element - a cell that checks, a line - shows a small ring after 400 ms and,
-// for a screen reader, the words of its data-busy or "busy", saying nothing aloud.
+// with it, as the menu closes. Any other element - a cell that checks, a line, a field - shows a small ring after 400 ms,
+// inside it or after a field, and, for a screen reader, the words of its data-busy or "busy", saying nothing aloud.
 import {text} from './text.js';
 import {announce} from './say.js';
 import {take, leave} from './hold.js';
@@ -81,7 +81,7 @@ const mark = (element, promise) => {
 	ring.setAttribute('aria-hidden', 'true');
 	const words = Object.assign(document.createElement('span'), {className: 'visually-hidden', textContent: element.dataset.busy || text('busy')});
 	element.setAttribute('aria-busy', 'true');
-	const shown = setTimeout(() => element.append(ring, words), SHOW);
+	const shown = setTimeout(() => element.matches('input, select, textarea') ? element.after(ring, words) : element.append(ring, words), SHOW);
 	return Promise.resolve(promise).finally(() => {
 		clearTimeout(shown);
 		ring.remove();

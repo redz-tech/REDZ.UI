@@ -1562,6 +1562,16 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a busy button without words draws no spinner');
 			}
 			await quiet;
+			const field = Object.assign(document.createElement('input'), {className: 'form-control', type: 'text'});
+			plain.parentElement.append(field);
+			const checked = REDZ.ui.busy(field, wait(600));
+			await wait(450);
+			const ring = field.nextElementSibling;
+			if (field.childElementCount !== 0 || !ring?.matches('.busy-ring') || ring.getBoundingClientRect().width === 0) {
+				out.push('a busy field holds ' + field.childElementCount + ' children and is followed by ' + say(ring?.className ?? null));
+			}
+			await checked;
+			field.remove();
 		}]},
 		confirm: {target: '#dialog-confirm-lists', steps: [async (out) => {
 			const asked = REDZ.ui.confirm({title: 'Delete the project?', text: 'Gone for good.', note: {tone: 'danger', text: 'This cannot be undone.'}, sections: [{title: 'Will be deleted:', items: ['128 tasks', '342 <b>files</b>']}, {title: 'Kept:', items: ['The audit history']}], ok: 'Delete', tone: 'danger', phrase: 'Riverside'});
@@ -1873,6 +1883,15 @@ window.REDZ_BEHAVE = (() => {
 			const bottom = [down.getAttribute('aria-disabled'), up.getAttribute('aria-disabled')];
 			if (say(once) !== say(['3', 1]) || say(top) !== say(['12', 'true', null]) || say(bottom) !== say(['true', null])) {
 				out.push('a step up from 2 gives ' + say(once) + ' (value, changes), at the max ' + say(top) + ' (value, up and down aria-disabled), at the min ' + say(bottom) + ' (down, up)');
+			}
+			field.disabled = true;
+			await wait(0);
+			const off = [down.getAttribute('aria-disabled'), up.getAttribute('aria-disabled')];
+			field.disabled = false;
+			await wait(0);
+			const on = [down.getAttribute('aria-disabled'), up.getAttribute('aria-disabled')];
+			if (say(off) !== say(['true', 'true']) || say(on) !== say(['true', null])) {
+				out.push('a field disabled by code leaves its buttons ' + say(off) + ' (down, up aria-disabled), enabled again ' + say(on));
 			}
 		}]},
 		color: {target: '#form-color-pick', steps: [async (out) => {

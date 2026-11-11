@@ -35,9 +35,11 @@ const veil = () => {
 };
 
 const skip = (event) => {
-	if (mode() === 'none' && event.viewTransition) {
-		event.viewTransition.ready.catch(() => {});
-		event.viewTransition.skipTransition();
+	for (const promise of [event.viewTransition?.ready, event.viewTransition?.finished, event.viewTransition?.updateCallbackDone]) {
+		promise?.catch(() => {});
+	}
+	if (mode() === 'none') {
+		event.viewTransition?.skipTransition();
 	}
 };
 addEventListener('pageswap', skip);

@@ -38,6 +38,11 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - A combobox put in after the page loaded was not drawn - its options' choice and its face's words - until the page set
   its value, and its face did not refit as it resized.
 - In forced colors a check, a radio or a switch with `aria-disabled="true"` was not greyed as a disabled one is.
+- A number field's step buttons followed its `disabled` only at load and on its own input: a field the page, its
+  fieldset or a hidden region disabled later kept its buttons looking live.
+- `busy()` on a field put its ring and its words inside the field, where nothing shows; they now follow the field.
+- A page change whose view transition the browser aborted - the window resized or hidden as the page went - left an
+  uncaught error in the console of the page that left.
 
 ## 0.23.0 - 2026-11-10
 
