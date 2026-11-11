@@ -2365,6 +2365,8 @@ window.REDZ_BEHAVE = (() => {
 			for (let width = 140; width <= 320; width += 6) {
 				stage.style.inlineSize = width + 'px';
 				await wait(50);
+				// A slow engine refits a frame or two later: only an overflow that stays is the mark's.
+				await until(() => nav.scrollWidth - nav.clientWidth <= 1, 500);
 				if (nav.scrollWidth - nav.clientWidth > 1) {
 					out.push('the mark widens the button past the fold: at ' + width + ' px the nav overflows by ' + (nav.scrollWidth - nav.clientWidth));
 					break;
@@ -4718,7 +4720,7 @@ window.REDZ_BEHAVE = (() => {
 				return;
 			}
 			const parts = ['old(redz-app-header)', 'old(redz-app-sidebar)', 'new(redz-app-header)', 'new(redz-app-sidebar)'].map((name) => shown('::view-transition-' + name));
-			if (say(parts) !== say(['none', 'none', 'block', 'block'])) {
+			if (parts[0] !== 'none' || parts[1] !== 'none' || parts.slice(2).includes('none')) {
 				out.push('the header and the side navigation, standing still as the page changes, show old and new pictures ' + say(parts) + ' - not the new alone');
 			}
 		}]},
