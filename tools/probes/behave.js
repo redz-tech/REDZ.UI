@@ -2349,7 +2349,8 @@ window.REDZ_BEHAVE = (() => {
 			const mirrored = shown();
 			document.documentElement.dir = 'ltr';
 			$('.viewer-close', viewer).click();
-			await wait(50);
+			// A busy Firefox 132 gives the focus back later than 50 ms.
+			await until(() => !viewer.open && document.activeElement === links[0], 2000);
 			if (say(first) !== say([true, 'lagoon.svg', 'The lagoon at North Bay · 1 of 3']) || second[0] !== 'pier.svg' || say(wrapped) !== say(['cliffs.svg', 'Cliffs above a bay with a boat · 3 of 3']) || mirrored[0] !== 'lagoon.svg' || viewer.open || document.activeElement !== links[0]) {
 				out.push('a set of three opens ' + say(first) + ', steps to ' + say(second) + ', wraps back to ' + say(wrapped) + ', right to left on to ' + say(mirrored) + ', and closed leaves the focus ' + (document.activeElement === links[0] ? 'on its link' : 'elsewhere'));
 			}

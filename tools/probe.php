@@ -1,7 +1,7 @@
 <?php
 // probe - the library's pages in real engines: Chrome, Firefox and Safari as installed; the floor - Chrome 130 and
 // Firefox 132 fetched once into the cache, Safari 18 in the iOS simulator; the engines whose bugs js/menu-place.js repairs -
-// Chrome 136, Safari 26 in the simulator. Each cell - a page at a width, light LTR or dark RTL, right to left on the
+// Chrome 136, Safari 26 in the simulator; the current iOS, Safari 27 in the simulator. Each cell - a page at a width, light LTR or dark RTL, right to left on the
 // page's Arabic twin when it has one - is judged for overflow, unmasked icons, width prefixes outside a region, cut
 // labels, busy marks on live regions and errors; at the shot widths it is shot, every popover and dialog opened and axe
 // run; at 1440 its widgets are walked by keyboard, the docs' state mirror is held against the real hover and focus, and
@@ -9,18 +9,22 @@
 // minifier's scripts of tools/min/ as written and minified, and reads the release's stylesheet as written and squeezed,
 // which must agree. The pages of the config run that whole way; the docs pages run in the "docs" engines at their
 // widths, without shots or walks. Writes the sheet
-// .dev/probes/index.html with its report.json and exits 1 on any finding; an engine whose cell runs past five minutes
+// .dev/probes/index.html with its report.json and exits 1 on any finding, and as it goes each engine's progress in
+// .dev/live/probe-ENGINE.json for a board; an engine whose cell runs past five minutes
 // stops as stalling, that cell named. The screen readers hear the config's speech steps: VoiceOver in Safari on a Mac,
 // NVDA in Chrome and Firefox on Windows, where NVDA also reads each speech page whole by its quick navigation. Usage:
-// php tools/probe.php [--pages=PAGE,…] [--serial | --jobs=N] [ENGINE…] - an engine named that cannot run here is a
-// finding, one left out of a full run only a note; --pages runs only those pages, the exceptions of the others left
-// unjudged; outside CI the engines run at once, a process each (the engines safaridriver drives one after another) - at
-// most N at a time with --jobs, in the order named, the next as one ends; one after another with --serial - or
+// php tools/probe.php [--pages=PAGE,…] [--serial | --jobs=N] [--dry] [ENGINE[@PAGE,…]…] - an engine named that cannot
+// run here is a finding, one left out of a full run only a note; --pages runs only those pages, the exceptions of the
+// others left unjudged, and ENGINE@PAGE,… runs that engine on its own pages alone (ENGINE@* on all, and so does an
+// engine named bare beside one with pages); outside CI the engines run at once, a process each (the engines safaridriver
+// drives one after another) - at most N at a time with --jobs, in the order named, the next as one ends; one after
+// another with --serial; --dry prints the pages each engine would run, and runs nothing - or
+// php tools/probe.php check [BASE] [--dry] [--jobs=N] - the Mac's run before a commit: the engines of the config's
+// "check" on what changed since BASE (HEAD when none, the files git does not track yet included), 3 at a time - or
 // php tools/probe.php merge [--base=DIR] DIR… - one sheet of the sheets of several runs, as CI's parallel jobs leave them -
 // or php tools/probe.php affected BASE - what the files changed since BASE ask of each part - or plan | gather, CI's
 // plan of the parts and its one sheet of them - or php tools/probe.php voiceover-setup | nvda-setup, which ready CI's
-// machines for the readers. $REDZ_UI_ENGINES names a JSON file that amends the config's engines for one machine - its
-// own build of an engine; $REDZ_UI_CACHE moves the cache of fetched engines.
+// machines for the readers. $REDZ_UI_CACHE moves the cache of fetched engines.
 
 require __DIR__ . '/lib.php';
 require __DIR__ . '/min.php';
@@ -38,6 +42,8 @@ const PROBE_CONFIG = __DIR__ . '/probes/config.json';
 const PROBE_PAGE = __DIR__ . '/probes/page.js';
 const PROBE_READ = __DIR__ . '/probes/read.js';
 const PROBE_BEHAVE = __DIR__ . '/probes/behave.js';
+// The page that holds every behaviour check's target and names a check that finds none.
+const PROBE_BEHAVE_HOME = 'docs/all.html';
 const PROBE_NULL = PHP_OS_FAMILY === 'Windows' ? 'NUL' : '/dev/null';
 const PROBE_SHEET = __DIR__ . '/../.dev/probes';
 const PROBE_FORCED_PREFS = ['browser.display.document_color_use' => 2];
@@ -48,8 +54,8 @@ const PROBE_BEHAVE_STEPS = 1200;
 // The longest a cell may run, in seconds: CI's iOS 26 simulator, the slowest engine, spends about a minute on a cell.
 const PROBE_CELL_MAX = 300;
 // The probe code by the engines that run it, as PROBE__Reach's marks: the engines of a kind, "browser:NAME" for a reader
-// in that browser, "behave" for the full pages in the desktop engines. A file of the probes not named here reaches every
-// engine.
+// in that browser, "behave" for the full pages in the desktop engines. A change to one is tried on the config's sample
+// pages in those engines - a change to the rest of the probe code in every engine -, never on every page.
 const PROBE_CODE = [
 	'tools/probes/page.js' => ['kind:chrome', 'kind:firefox', 'kind:safari'],
 	'tools/probes/behave.js' => ['behave'],
@@ -89,10 +95,11 @@ function PROBE__FreePort(): int
 	return $port;
 }
 
-/** Runs $command without a shell and answers its output; a failure throws with its message. */
-function PROBE__Run(array $command): string
+/** Runs $command without a shell, with $env added to the environment, and answers its output; a failure throws with
+ *  its message. */
+function PROBE__Run(array $command, array $env = []): string
 {
-	$proc = proc_open($command, [0 => ['file', PROBE_NULL, 'r'], 1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes);
+	$proc = proc_open($command, [0 => ['file', PROBE_NULL, 'r'], 1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes, null, $env === [] ? null : $env + getenv());
 	if (!is_resource($proc)) {
 		throw new RuntimeException('cannot run ' . $command[0]);
 	}
@@ -164,13 +171,8 @@ function PROBE__ScreenLocked(): bool
  *  '' with the reason in $why when it cannot run on this machine. */
 function PROBE__Binary(string $name, array $engine, string &$why): string
 {
-	// An engine's build for this system, as CI's Linux machines run Chrome and Firefox; on an ARM Linux its native build
-	// where the config names one, cached apart from the x86-64 one.
+	// An engine's build for this system, as CI's Linux machines run Chrome and Firefox.
 	$engine = array_replace($engine, $engine[strtolower(PHP_OS_FAMILY)] ?? []);
-	if (PHP_OS_FAMILY === 'Linux' && in_array(php_uname('m'), ['aarch64', 'arm64'], true) && isset($engine['linux-arm64'])) {
-		$engine = array_replace($engine, $engine['linux-arm64']);
-		$name .= '-arm64';
-	}
 	if (PHP_OS_FAMILY === 'Darwin' && isset($engine['macos']) && preg_match('~^<\s*(\d+)$~', $engine['macos'], $m) === 1 && (int)PROBE__Run(['/usr/bin/sw_vers', '-productVersion']) >= (int)$m[1]) {
 		$why = $engine['why'];
 		return '';
@@ -339,8 +341,21 @@ function PROBE__EngineRun(string $name, array $engine, string $binary, string $d
 		'safari' => PROBE__SafariStart($dir, isset($engine['ios']) ? PROBE__IosRuntime($engine) : '', $binary, $engine['app'] ?? 'safari'),
 	};
 	$report['engines'][$name] = ['version' => $h['version'], 'cells' => 0];
+	$widths = isset($engine['ios']) ? [0 => 0] : $run['config']['widths'];
+	$pages = count($run['config']['pages']);
+	$combos = count($run['config']['combos']);
+	PROBE__LiveStart($name, implode('/', $run['config']['share'] ?? []), [
+		'normal' => $pages * $combos * count($widths),
+		'docs' => in_array($name, $run['config']['docs']['engines'], true) ? count(PROBE__DocsPages($run['config'])) * $combos * count($run['config']['docs']['widths']) : 0,
+		'print' => $engine['kind'] !== 'safari' ? $pages : 0,
+		'forced' => $pages * match ($engine['kind']) {
+			'chrome' => 2,
+			'firefox' => 1,
+			default => 0,
+		},
+		'min' => ($run['config']['share'][0] ?? 1) === 1 ? 1 : 0,
+	], count($report['findings']));
 	try {
-		$widths = isset($engine['ios']) ? [0 => 0] : $run['config']['widths'];
 		foreach ($run['config']['pages'] as $page) {
 			foreach ($run['config']['combos'] as $combo => [$theme, $direction]) {
 				foreach ($widths as $width => $height) {
@@ -444,6 +459,7 @@ function PROBE__Mirror(array &$h): array
  *  checked. */
 function PROBE__Cell(array &$h, string $name, string $page, string $combo, string $theme, string $dir, int $width, int $height, string $mode, array $run, array &$report): void
 {
+	PROBE__LiveCell($name, $page, $combo, $width, $mode, count($report['findings']));
 	$forced = $mode === 'forced';
 	$shown = PROBE__Shown($page, $dir);
 	$label = ($width === 0 ? 'phone' : $width) . ' · ' . $theme . ' · ' . strtoupper($dir) . ($shown !== $page ? ' · Arabic' : '') . ($forced ? ' · forced colors' : '');
@@ -515,7 +531,9 @@ function PROBE__Cell(array &$h, string $name, string $page, string $combo, strin
 	if ($at && !$forced) {
 		PROBE__Do($h, 'Inject', $run['axe']);
 		foreach (PROBE__Do($h, 'Eval', 'REDZ_PROBE.axe(' . json_encode($run['config']['axe']['tags']) . ')') as $v) {
-			$targets = array_values(array_filter($v['targets'], fn(string $target): bool => !PROBE__AxeAllowed($run['config'], $name, $v['id'], $target, $report)));
+			$targets = array_values(array_filter($v['targets'], function (string $target) use ($run, $name, $v, $page, &$report): bool {
+				return !PROBE__AxeAllowed($run['config'], $name, $v['id'], $target, $page, $report);
+			}));
 			if ($targets !== []) {
 				$findings[] = 'axe ' . $v['id'] . ' (' . $v['impact'] . ', ' . $v['help'] . '): ' . implode(' | ', $targets);
 			}
@@ -532,7 +550,7 @@ function PROBE__Cell(array &$h, string $name, string $page, string $combo, strin
 		}
 	}
 	foreach ($findings as $finding) {
-		if (!PROBE__FindingAllowed($run['config'], $name, $where . $finding, $report)) {
+		if (!PROBE__FindingAllowed($run['config'], $name, $where . $finding, $page, $report)) {
 			$report['findings'][] = $where . $finding;
 		}
 	}
@@ -564,7 +582,7 @@ function PROBE__Input(array &$h, array $input): void
 function PROBE__Behave(array &$h, string $page, string $url, int $height, array $run, array &$walked): array
 {
 	PROBE__Do($h, 'Inject', $run['behave']);
-	$findings = $page === 'docs/all.html' ? array_map(fn(string $check): string => 'the behaviour check "' . $check . '" finds no target', PROBE__Do($h, 'Eval', 'REDZ_BEHAVE.missing()')) : [];
+	$findings = $page === PROBE_BEHAVE_HOME ? array_map(fn(string $check): string => 'the behaviour check "' . $check . '" finds no target', PROBE__Do($h, 'Eval', 'REDZ_BEHAVE.missing()')) : [];
 	$checks = PROBE__Do($h, 'Eval', 'REDZ_BEHAVE.targets()');
 	if ($checks === []) {
 		return $findings;
@@ -943,12 +961,13 @@ function PROBE__AllowKey(array $entry): string
 	return 'x' . substr(sha1((string)json_encode($entry, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)), 0, 16);
 }
 
-/** Whether an exception of the probes' config allows axe rule $rule at $target in engine $engine; marks it used. */
-function PROBE__AxeAllowed(array $config, string $engine, string $rule, string $target, array &$report): bool
+/** Whether an exception of the probes' config allows axe rule $rule at $target in engine $engine; marks it used on
+ *  $page. */
+function PROBE__AxeAllowed(array $config, string $engine, string $rule, string $target, string $page, array &$report): bool
 {
 	foreach ($config['allow'] as $entry) {
 		if (($entry['rule'] ?? null) === $rule && str_contains($target, $entry['target']) && in_array($engine, $entry['engines'] ?? [$engine], true)) {
-			$report['used'][PROBE__AllowKey($entry)] = true;
+			$report['used'][PROBE__AllowKey($entry)][$page] = true;
 			return true;
 		}
 	}
@@ -956,12 +975,12 @@ function PROBE__AxeAllowed(array $config, string $engine, string $rule, string $
 }
 
 /** Whether an exception of the config - {"finding": a part of its text, "engines", "reason"} - allows the finding
- *  $text of engine $engine; marks the exception used. */
-function PROBE__FindingAllowed(array $config, string $engine, string $text, array &$report): bool
+ *  $text of engine $engine; marks the exception used on $page. */
+function PROBE__FindingAllowed(array $config, string $engine, string $text, string $page, array &$report): bool
 {
 	foreach ($config['allow'] as $entry) {
 		if (isset($entry['finding']) && str_contains($text, $entry['finding']) && in_array($engine, $entry['engines'] ?? [$engine], true)) {
-			$report['used'][PROBE__AllowKey($entry)] = true;
+			$report['used'][PROBE__AllowKey($entry)][$page] = true;
 			return true;
 		}
 	}
@@ -975,6 +994,7 @@ function PROBE__FindingAllowed(array $config, string $engine, string $text, arra
  */
 function PROBE__MinCell(array &$h, string $name, array $run, array &$report): void
 {
+	PROBE__LiveCell($name, '', '', 0, 'min', count($report['findings']));
 	$answer = function (string $code) use (&$h): mixed {
 		PROBE__Do($h, 'Load', 'about:blank', 1280, 900, 'light', false);
 		return PROBE__Do($h, 'Eval', "(async () => {'use strict';\n" . $code . "\nreturn globalThis.REDZ_MIN_RESULT;})()");
@@ -1021,6 +1041,7 @@ function PROBE__MinCell(array &$h, string $name, array $run, array &$report): vo
 /** $page printed by the engine on A4, light: the PDF beside the sheet and its first page as a shot. */
 function PROBE__PrintCell(array &$h, string $name, string $page, array $run, array &$report): void
 {
+	PROBE__LiveCell($name, $page, '', 0, 'print', count($report['findings']));
 	PROBE__Do($h, 'Load', $run['base'] . $page . '?theme=light&dir=ltr', 1440, 900, 'light', false);
 	PROBE__Do($h, 'Inject', $run['page']);
 	PROBE__Do($h, 'Eval', 'REDZ_PROBE.prepare("light", "ltr")');
@@ -1036,6 +1057,74 @@ function PROBE__Slug(string $text): string
 	return trim((string)preg_replace('~[^a-z0-9]+~', '-', strtolower(str_replace('.html', '', $text))), '-');
 }
 
+/** The live state of this process's engine runs, by engine. */
+function &PROBE__LiveState(): array
+{
+	static $state = [];
+	return $state;
+}
+
+/** Writes an engine's live state to .dev/live/probe-ENGINE[-K-of-N].json in one move, for a board to read as the run
+ *  goes; a failure to write is no failure of the run. */
+function PROBE__LiveWrite(array $one): void
+{
+	$dir = PROBE_ROOT . '/.dev/live';
+	@mkdir($dir, 0777, true);
+	$file = $dir . '/probe-' . PROBE__Slug($one['engine'] . ($one['share'] === '' ? '' : '-' . str_replace('/', '-of-', $one['share']))) . '.json';
+	unset($one['base']);
+	if (@file_put_contents($file . '.part', json_encode($one, JSON_UNESCAPED_SLASHES)) !== false) {
+		@rename($file . '.part', $file);
+	}
+}
+
+/** An engine's run starts: the cells it will take by mode - normal, docs, print, forced, min -, none done yet, its
+ *  findings counted from the report's $findings now. */
+function PROBE__LiveStart(string $name, string $share, array $cells, int $findings): void
+{
+	$state = &PROBE__LiveState();
+	$state[$name] = ['engine' => $name, 'share' => $share, 'pid' => getmypid(), 'started' => time(), 'cells' => array_filter($cells), 'done' => [], 'spent' => [], 'cell' => null, 'findings' => 0, 'ended' => null, 'base' => $findings];
+	PROBE__LiveWrite($state[$name]);
+}
+
+/** The cell an engine was on is done - counted with the time it took -, and it is on the next: $page at $width in
+ *  $combo, of $mode. */
+function PROBE__LiveCell(string $name, string $page, string $combo, int $width, string $mode, int $findings): void
+{
+	$state = &PROBE__LiveState();
+	if (!isset($state[$name])) {
+		return;
+	}
+	PROBE__LiveDone($state[$name]);
+	$state[$name]['cell'] = ['page' => $page, 'combo' => $combo, 'width' => $width, 'mode' => $mode, 'since' => microtime(true)];
+	$state[$name]['findings'] = $findings - $state[$name]['base'];
+	PROBE__LiveWrite($state[$name]);
+}
+
+/** The cell an engine's state is on, done. */
+function PROBE__LiveDone(array &$one): void
+{
+	if ($one['cell'] !== null) {
+		$mode = $one['cell']['mode'];
+		$one['done'][$mode] = ($one['done'][$mode] ?? 0) + 1;
+		$one['spent'][$mode] = round(($one['spent'][$mode] ?? 0) + microtime(true) - $one['cell']['since'], 2);
+		$one['cell'] = null;
+	}
+}
+
+/** An engine's run ends, with the report's $findings now. */
+function PROBE__LiveEnd(string $name, int $findings): void
+{
+	$state = &PROBE__LiveState();
+	if (!isset($state[$name])) {
+		return;
+	}
+	PROBE__LiveDone($state[$name]);
+	$state[$name]['findings'] = $findings - $state[$name]['base'];
+	$state[$name]['ended'] = time();
+	PROBE__LiveWrite($state[$name]);
+	unset($state[$name]);
+}
+
 /** The entry point: every engine of the config, or the ones named. */
 /** Prints the findings and the verdict of $report and checks the config's exceptions against the engines that ran;
  *  the exit code. */
@@ -1045,9 +1134,11 @@ function PROBE__Verdict(array $config, array &$report): int
 	// A run of chosen pages leaves the other pages' exceptions unused by design, and so does an engine that ran some of
 	// its shares only.
 	$partial = array_keys(array_filter($report['share'] ?? [], fn(array $shares): bool => count(array_unique($shares)) < PROBE__ShareOf($shares[0])[1]));
-	foreach (($report['only'] ?? []) === [] ? $config['allow'] : [] as $entry) {
+	foreach ($config['allow'] as $entry) {
 		$engines = $entry['engines'] ?? array_keys($config['engines']);
-		if (!isset($report['used'][PROBE__AllowKey($entry)]) && array_diff($engines, $ran) === [] && array_intersect($engines, $partial) === []) {
+		// Judged when the run's pages were all of them, or each engine the exception names ran whole.
+		$judged = ($report['only'] ?? []) === [] || array_diff($engines, $report['whole'] ?? []) === [];
+		if ($judged && !isset($report['used'][PROBE__AllowKey($entry)]) && array_diff($engines, $ran) === [] && array_intersect($engines, $partial) === []) {
 			$report['findings'][] = 'tools/probes/config.json - the exception ' . ($entry['finding'] ?? $entry['rule'] . ' at ' . $entry['target']) . ' allows nothing any more';
 		}
 	}
@@ -1056,6 +1147,17 @@ function PROBE__Verdict(array $config, array &$report): int
 	}
 	echo count($report['findings']) === 0 ? 'CLEAN' : count($report['findings']) . ' findings', ' · sheet .dev/probes/index.html', "\n";
 	return $report['findings'] === [] ? 0 : 1;
+}
+
+/** The exceptions two sheets used, joined: each with the pages either used it on - true, used somewhere, from a sheet
+ *  older than the pages it names.
+ *  @return array<string, array<string, true>|true> */
+function PROBE__UsedJoin(array $a, array $b): array
+{
+	foreach ($b as $key => $pages) {
+		$a[$key] = is_array($pages) && is_array($a[$key] ?? []) ? ($a[$key] ?? []) + $pages : true;
+	}
+	return $a;
 }
 
 /** merge: one sheet of the sheets in $dirs - their reports joined, their shots, prints and logs copied, the commit each
@@ -1098,7 +1200,7 @@ function PROBE__Merge(array $config, array $dirs, string $base = ''): int
 			}
 			$report['share'] = array_merge_recursive($report['share'] ?? [], $part['share'] ?? []);
 			$report['skipped'] += $part['skipped'];
-			$report['used'] += $part['used'];
+			$report['used'] = PROBE__UsedJoin($report['used'], $part['used']);
 			$report['findings'] = [...$report['findings'], ...$part['findings']];
 			$report['guarded'] = [...$report['guarded'], ...$part['guarded']];
 			$report['walked'] = array_replace_recursive($report['walked'], $part['walked']);
@@ -1106,6 +1208,7 @@ function PROBE__Merge(array $config, array $dirs, string $base = ''): int
 			$report['read'] = array_merge_recursive($report['read'] ?? [], $part['read'] ?? []);
 			$report['shots'] = array_merge_recursive($report['shots'], $part['shots']);
 			$report['only'] = array_values(array_unique([...$report['only'] ?? [], ...$part['only'] ?? []]));
+			$report['whole'] = array_values(array_unique([...$report['whole'] ?? [], ...$part['whole'] ?? []]));
 		}
 		foreach (['shots', 'print', 'logs'] as $folder) {
 			@mkdir($work . '/' . $folder, 0777, true);
@@ -1134,7 +1237,9 @@ function PROBE__Merge(array $config, array $dirs, string $base = ''): int
 		unset($report['from']);
 		$report['engines'] = $fresh['engines'] + $under['engines'];
 		$report['skipped'] = $fresh['skipped'] + $under['skipped'];
-		$report['used'] = $fresh['used'] + $under['used'];
+		// An exception the base used on a page checked again is used only if the fresh run used it there.
+		$kept = array_filter(array_map(fn(array|bool $pages): array|bool => is_array($pages) ? array_diff_key($pages, array_flip($fresh['only'] ?? [])) : $pages, $under['used']), fn(array|bool $pages): bool => $pages !== []);
+		$report['used'] = PROBE__UsedJoin($kept, $fresh['used']);
 		$report['findings'] = [...$under['findings'], ...$fresh['findings']];
 		$report['guarded'] = [...$under['guarded'], ...$fresh['guarded']];
 		foreach (['walked', 'spoken', 'read', 'shots'] as $key) {
@@ -1199,45 +1304,747 @@ function PROBE__KnownPages(array $config): array
 
 /**
  * What a file changed since $base asks of the probes, as marks: none when they read nothing of it (texts, skills, the
- * build and release tools, the passport, the sheet's own code); "page:P" for a page, and for each page that loads a
- * package's file; what PROBE_CODE says for the probe code and PROBE__ConfigReach for the config; "*" for every engine
- * and page - the stylesheets, the scripts, the icons, the probe's core, anything else.
+ * build and release tools, the floor's data, the passport, the sheet's own code) or it changed in its comments alone;
+ * "page:P" for a page, for each page that loads a package's file, and for each page that holds a component, a utility
+ * or a layout class whose stylesheet or script changed - "look:P" for a change of a stylesheet or a picture no reader
+ * hears, which the readers leave -; "sample:..." - the config's sample pages - for the probe code, in the engines
+ * PROBE_CODE names; PROBE__ConfigReach for the config; "visual" for every page of the desktop engines, with the readers'
+ * sample pages when heard - the stylesheets under every page, a utility rule that asks for no class -; the icons'
+ * look; "*" for every engine and page - the scripts' entry, anything else.
  * @return list<string>
  */
 function PROBE__Reach(array $config, string $base, string $file): array
 {
-	$inert = '~\.md$|^skills/|^llms(-full)?\.txt$|^(dist/)?(LICENSE|NOTICE|redz-ui\.json)$|^(\.gitignore|redz-ui-icons\.json)$|^tools/(build|release|map|docs|floor|dashes)\.php$|^tools/(map|floor)/|^tools/(docs|vocabulary)\.json$|^docs/ar\.tsv$|^\.github/workflows/(check|pages|rerun|probe-part)\.yml$~';
+	// tools/dist/ is the build's copy of tools a probe reads in their sources; tools/catalog.json reaches the pages by
+	// the editor's catalog the build makes of it; floor.json is the floor checker's.
+	$inert = '~\.md$|^skills/|^llms(-full)?\.txt$|^(dist/)?(LICENSE|NOTICE|redz-ui\.json)$|^(\.gitignore|redz-ui-icons\.json|floor\.json)$|^tools/(build|release|map|docs|floor|dashes|judge)\.php$|^tools/(map|floor|dist)/|^tools/(docs|vocabulary|catalog)\.json$|^docs/ar\.tsv$|^\.github/workflows/(check|pages|rerun|probe-part|icons)\.yml$~';
 	if (preg_match($inert, $file) === 1) {
 		return [];
 	}
 	if (preg_match('~^(index\.html)$|^docs/src/([\w-]+)\.html$|^(docs|reference/demo)/([\w-]+?)(\.ar)?\.html$~', $file, $m) === 1) {
-		return ['page:' . match (true) {
+		$page = match (true) {
 			($m[1] ?? '') !== '' => 'index.html',
 			($m[2] ?? '') !== '' => 'docs/' . $m[2] . '.html',
 			default => $m[3] . '/' . $m[4] . '.html',
-		}];
+		};
+		// A page that is gone has nothing to run; the pages that linked to it changed with it.
+		return is_file(PROBE_ROOT . '/' . $page) ? ['page:' . $page] : [];
 	}
+	if (preg_match('~\.(css|js)$~', $file) === 1 && PROBE__CommentsOnly($base, $file)) {
+		return [];
+	}
+	if ($file === 'tools/probes/behave.js') {
+		return PROBE__BehaveReach($config, $base);
+	}
+	if ($file === '.github/workflows/probes.yml') {
+		return PROBE__WorkflowReach($base);
+	}
+	// The probe code is tried on the config's sample pages, the engines it drives each on its own.
 	if (array_key_exists($file, PROBE_CODE)) {
-		return PROBE_CODE[$file];
+		return array_map(fn(string $mark): string => $mark === 'behave' ? $mark : 'sample:' . $mark, PROBE_CODE[$file]);
 	}
 	if ($file === 'tools/probes/config.json') {
 		return PROBE__ConfigReach($config, $base);
 	}
-	if (preg_match('~\.(css|js)$~', $file) === 1 && is_file(PROBE_ROOT . '/' . $file) && PROBE__CommentsOnly($base, $file)) {
-		return [];
+	if (preg_match('~^tools/(probe|lib|min)\.php$|^tools/(min|probes)/~', $file) === 1) {
+		return ['sample'];
 	}
 	$folder = (string)strstr($file, '/', true);
 	$package = in_array($folder, PROBE_PACKAGES, true) ? $folder : (preg_match('~^dist/(?:css|js)/redz-ui-([a-z]+)~', $file, $m) === 1 && in_array($m[1], PROBE_PACKAGES, true) ? $m[1] : '');
+	// A stylesheet's change that a screen reader cannot hear - a colour, a size, a space - reaches the pages' look alone:
+	// "look:P", "visual" without the readers; so does a picture.
+	$spoken = preg_match('~^(css|docs|reference|' . implode('|', PROBE_PACKAGES) . ')/.+\.css$~', $file) === 1 && PROBE__StyleSpoken($file, $base);
+	$seen = (str_ends_with($file, '.css') && !$spoken) || preg_match('~\.(svg|png|jpe?g|webp|avif|gif|ico)$~', $file) === 1 ? 'look:' : 'page:';
+	// A component reaches the pages that hold it, and so does a utility or a layout rule that asks for a class. A script
+	// that names no markup its pages hold reaches the full pages besides, where the behaviour checks drive the widgets,
+	// and the sample; a stylesheet that names nothing is one under every page.
+	$classed = preg_match('~^css/(utilities|layout)\.css$~', $file) === 1 && !PROBE__StyleChanged($file, (string)@file_get_contents(PROBE_ROOT . '/' . $file), $base)[3];
+	if ($classed || (preg_match('~^css/components/[\w-]+\.css$|^js/[\w-]+\.js$~', $file) === 1 && $file !== 'js/index.js')) {
+		$reach = PROBE__ComponentPages($config, $file, $base);
+		$pages = array_map(fn(string $page): string => (str_ends_with($file, '.js') ? 'page:' : $seen) . $page, $reach['pages']);
+		return match (true) {
+			$reach['named'] => $pages,
+			str_ends_with($file, '.js') => array_values(array_unique([...$pages, ...array_map(fn(string $page): string => 'page:' . $page, $config['pages']), 'sample'])),
+			default => ['visual', ...($spoken ? ['sample:kind:nvda', 'sample:kind:voiceover'] : [])],
+		};
+	}
+	if (preg_match('~^css/[\w.-]+\.css$~', $file) === 1) {
+		return ['visual', ...($spoken ? ['sample:kind:nvda', 'sample:kind:voiceover'] : [])];
+	}
+	if (str_starts_with($file, 'icons/')) {
+		return ['visual'];
+	}
+	// A file the pages load - a picture, the docs' own script or stylesheet - reaches the pages that name it.
+	if (preg_match('~^(docs|reference)/.+\.(?!html$)\w+$~', $file) === 1) {
+		return array_map(fn(string $page): string => $seen . $page, array_values(array_filter(PROBE__KnownPages($config), fn(string $page): bool => str_contains((string)@file_get_contents(PROBE_ROOT . '/' . $page), basename($file)))));
+	}
 	if ($package !== '') {
-		return array_map(fn(string $page): string => 'page:' . $page, array_values(array_filter(PROBE__KnownPages($config), fn(string $page): bool => preg_match('~/redz-ui-' . $package . '[.-]~', (string)@file_get_contents(PROBE_ROOT . '/' . $page)) === 1)));
+		return array_map(fn(string $page): string => $seen . $page, PROBE__PackagePages($config, $package));
 	}
 	return ['*'];
+}
+
+/** The pages that load the package $package - its stylesheet or its script from dist/.
+ *  @return list<string> */
+function PROBE__PackagePages(array $config, string $package): array
+{
+	return array_values(array_filter(PROBE__KnownPages($config), fn(string $page): bool => preg_match('~/redz-ui-' . preg_quote($package, '~') . '[.-]~', (string)@file_get_contents(PROBE_ROOT . '/' . $page)) === 1));
+}
+
+/**
+ * The pages a component's stylesheet or script reaches, and whether its file names anything a page holds ("named"). A
+ * script: PROBE__ScriptReach. A stylesheet: the pages whose markup holds what its changed rules ask (PROBE__StyleChanged),
+ * and what the rules of other files ask that run a keyframe it changed; the pages of each script that makes a class or an
+ * element those rules ask for (PROBE__MakerPages) - combobox.js its chips -; its own docs page.
+ * @return array{pages: list<string>, named: bool}
+ */
+function PROBE__ComponentPages(array $config, string $file, string $base = ''): array
+{
+	if (str_ends_with($file, '.js')) {
+		return PROBE__ScriptReach($config, $file);
+	}
+	[$needles, $names, $frames] = PROBE__StyleChanged($file, (string)@file_get_contents(PROBE_ROOT . '/' . $file), $base);
+	foreach ($frames as $frame) {
+		[$users, $named] = PROBE__AnimationNeedles($frame);
+		$needles = [...$needles, ...$users];
+		$names = [...$names, ...$named];
+	}
+	$pages = PROBE__PagesHolding($config, $needles);
+	foreach (PROBE__ScriptsNaming($names) as $maker => $direct) {
+		$pages = [...$pages, ...PROBE__MakerPages($config, $maker, $names, $direct)];
+	}
+	// A component's own docs page; a utility's or a layout's shows the class it changed if any, as every page does.
+	if (str_starts_with($file, 'css/components/')) {
+		$pages[] = 'docs/' . basename($file, '.css') . '.html';
+	}
+	return ['pages' => array_values(array_intersect(PROBE__KnownPages($config), $pages)), 'named' => $needles !== []];
+}
+
+/** The pages among every page some engine runs whose markup - a docs page's main alone - holds one of $needles, each a
+ *  list of patterns that must all hold.
+ *  @param list<list<string>> $needles
+ *  @return list<string> */
+function PROBE__PagesHolding(array $config, array $needles): array
+{
+	return array_values(array_filter(PROBE__KnownPages($config), fn(string $page): bool => array_filter($needles, fn(array $needle): bool => array_filter($needle, fn(string $pattern): bool => preg_match($pattern, PROBE__Markup($page, true)) !== 1) === []) !== []));
+}
+
+/**
+ * The pages where the script $maker makes what $names name: the pages holding its selectors that hold one of those names
+ * - combobox.js makes chips where [data-chips] stands -; when none does, all of its reach for a maker ($direct), nothing
+ * for a script that only imports one. A package's script makes them on the pages that load the package, and only there.
+ * @param list<string> $names
+ * @return list<string>
+ */
+function PROBE__MakerPages(array $config, string $maker, array $names, bool $direct): array
+{
+	$package = (string)strstr($maker, '/', true);
+	if ($package !== 'js') {
+		return PROBE__PackagePages($config, $package);
+	}
+	$words = array_map(fn(string $name): string => ltrim($name, '.'), $names);
+	$narrow = array_values(array_filter(PROBE__ScriptNeedles((string)@file_get_contents(PROBE_ROOT . '/' . $maker)), fn(array $needle): bool => array_filter($words, fn(string $word): bool => str_contains(stripslashes(implode(' ', $needle)), $word)) !== []));
+	return match (true) {
+		$narrow !== [] => PROBE__PagesHolding($config, $narrow),
+		$direct => PROBE__ScriptReach($config, $maker)['pages'],
+		default => [],
+	};
+}
+
+/**
+ * The pages a script of js/ reaches, and whether it names markup some page holds ("named"): the pages holding what its
+ * selector strings name (PROBE__ScriptNeedles); each page that calls it by its name under REDZ.ui in any of its scripts,
+ * and the full pages holding the target of each behaviour check that calls it so (PROBE__UiCalled); its own docs page;
+ * and for each script that imports it, near or far, its docs page and its reach among the pages where the probes work
+ * the widgets - the full pages, by the behaviour checks, the speech pages, by the speech steps -: its code runs where
+ * theirs does, and the other pages are only drawn.
+ * @return array{pages: list<string>, named: bool}
+ */
+function PROBE__ScriptReach(array $config, string $file): array
+{
+	static $reach = [];
+	static $walking = [];
+	if (isset($reach[$file])) {
+		return $reach[$file];
+	}
+	if (isset($walking[$file])) {
+		return ['pages' => [], 'named' => true];
+	}
+	$walking[$file] = true;
+	$named = PROBE__PagesHolding($config, PROBE__ScriptNeedles((string)@file_get_contents(PROBE_ROOT . '/' . $file)));
+	$pages = $named;
+	$called = PROBE__UiCalled($file);
+	if ($called !== '') {
+		$pages = [...$pages, ...array_values(array_filter(PROBE__KnownPages($config), fn(string $page): bool => preg_match($called, PROBE__Markup($page, false)) === 1))];
+		foreach (PROBE__BehaveChecks((string)@file_get_contents(PROBE_BEHAVE)) as ['target' => $target, 'text' => $text]) {
+			if (preg_match($called, $text) === 1) {
+				$pages = [...$pages, ...(PROBE__TargetPages($config, $target) ?? $config['pages'])];
+			}
+		}
+	}
+	$pages = [...$pages, 'docs/' . basename($file, '.js') . '.html', ...PROBE__ImporterPages($config, $file)];
+	unset($walking[$file]);
+	return $reach[$file] = ['pages' => array_values(array_intersect(PROBE__KnownPages($config), $pages)), 'named' => $named !== []];
+}
+
+/**
+ * The pages where the scripts that import $file, near or far, run its code with theirs: each one's docs page, and among
+ * the pages where the probes work the widgets - the full pages, the speech pages - those holding its selectors that
+ * carry its own name, where it sets to work (data-track for track.js, .chip-input for chip-input.js); all of its reach
+ * there when none does.
+ * @param array<string, true> $seen
+ * @return list<string>
+ */
+function PROBE__ImporterPages(array $config, string $file, array $seen = []): array
+{
+	$worked = [...$config['pages'], ...array_keys($config['speech'])];
+	$seen[$file] = true;
+	$pages = [];
+	foreach (glob(PROBE_ROOT . '/js/*.js') ?: [] as $path) {
+		$importer = 'js/' . basename($path);
+		if (basename($path) === 'index.js' || isset($seen[$importer]) || preg_match('~^import\s[^;]*[\'"]\./' . preg_quote(basename($file), '~') . '[\'"]~m', (string)file_get_contents($path)) !== 1) {
+			continue;
+		}
+		$name = basename($path, '.js');
+		$own = array_values(array_filter(PROBE__ScriptNeedles((string)file_get_contents($path)), fn(array $needle): bool => str_contains(stripslashes(implode(' ', $needle)), $name)));
+		$reached = $own !== [] ? PROBE__PagesHolding($config, $own) : PROBE__ScriptReach($config, $importer)['pages'];
+		$pages = [...$pages, 'docs/' . $name . '.html', ...array_intersect($reached, $worked), ...PROBE__ImporterPages($config, $importer, $seen)];
+	}
+	return $pages;
+}
+
+/** The pattern of a call of the script $file by its names under REDZ.ui - those js/index.js gives what it imports from
+ *  it: REDZ.ui.select for tabs.js's selectTab, REDZ.ui.upload for upload.js's clear -; '' when it gives none. */
+function PROBE__UiCalled(string $file): string
+{
+	static $keys = null;
+	if ($keys === null) {
+		$keys = [];
+		$index = (string)@file_get_contents(PROBE_ROOT . '/js/index.js');
+		preg_match_all('~^import\s*\{([^}]*)\}\s*from\s*[\'"]\./([\w-]+\.js)[\'"]~m', $index, $imports, PREG_SET_ORDER);
+		$ui = preg_match('~\bui:\s*\{(.*)\}\s*\}\s*\)~s', $index, $m) === 1 ? $m[1] : '';
+		// The object's entries at its own depth: a key and the names its value holds.
+		$entries = [];
+		$depth = 0;
+		$entry = '';
+		foreach (str_split($ui . ',') as $char) {
+			$depth += $char === '{' ? 1 : ($char === '}' ? -1 : 0);
+			if ($char === ',' && $depth === 0) {
+				if (preg_match('~^\s*([\w$]+)\s*(?::(.*))?$~s', $entry, $part) === 1) {
+					preg_match_all('~[\w$]+~', ($part[2] ?? '') === '' ? $part[1] : (string)preg_replace('~[\w$]+\s*:~', '', $part[2]), $values);
+					$entries[$part[1]] = $values[0];
+				}
+				$entry = '';
+				continue;
+			}
+			$entry .= $char;
+		}
+		foreach ($imports as [, $names, $module]) {
+			preg_match_all('~(?:[\w$]+\s+as\s+)?([\w$]+)~', $names, $locals);
+			$keys['js/' . $module] = array_keys(array_filter($entries, fn(array $values): bool => array_intersect($values, $locals[1]) !== []));
+		}
+	}
+	return ($keys[$file] ?? []) === [] ? '' : '#REDZ\.ui\.(?:' . implode('|', array_map(fn(string $key): string => preg_quote($key, '#'), $keys[$file])) . ')\b#';
+}
+
+/** The markup of $page; with $main what a docs page's main holds - the docs' own header, sidebar and main element, a
+ *  menu, a search, the theme, stand on every docs page alike, and the component's own page holds them too -, but the
+ *  whole of the page the behaviour checks run on, whose checks drive the shell as well. */
+function PROBE__Markup(string $page, bool $main): string
+{
+	static $markup = [];
+	$markup[$page] ??= (string)@file_get_contents(PROBE_ROOT . '/' . $page);
+	if (!$main || !str_starts_with($page, 'docs/') || $page === PROBE_BEHAVE_HOME) {
+		return $markup[$page];
+	}
+	return $markup[$page . ' main'] ??= (string)preg_replace('#^.*?<main\b[^>]*>(.*)</main>.*$#s', '$1', $markup[$page]);
+}
+
+/** The scripts of js/ that make what $names name, each with true: a class - ".name" - they give an element (className,
+ *  a class attribute in markup they write, classList.add, toggle or replace), an element - "name" - they create; and with
+ *  false each script that imports one of those, as it may make them by the other's hand - chip-input.js draws its chips
+ *  by combobox.js's chipOf(). A script that only seeks a class holds it in its selectors, and its pages hold it.
+ *  @param list<string> $names
+ *  @return array<string, bool> */
+function PROBE__ScriptsNaming(array $names): array
+{
+	static $made = null;
+	static $imports = [];
+	if ($made === null) {
+		$made = [];
+		foreach (glob(PROBE_ROOT . '/{js,' . implode(',', PROBE_PACKAGES) . '}/*.js', GLOB_BRACE) ?: [] as $path) {
+			if ($path === PROBE_ROOT . '/js/index.js') {
+				continue;
+			}
+			$script = basename(dirname($path)) . '/' . basename($path);
+			$js = PROBE__Code((string)file_get_contents($path), 'js');
+			preg_match_all('#^import\s[^;]*[\'"]\./([\w-]+\.js)[\'"]#m', $js, $from);
+			$imports[$script] = array_map(fn(string $file): string => dirname($script) . '/' . $file, $from[1]);
+			preg_match_all('#className\s*[:=]\s*([\'"`])((?:\\\\.|(?!\1).)*?)\1|\bclass=\\\\?["\']([^"\'\\\\]*)|classList\.(?:add|toggle|replace)\(([^)]*)\)|setAttribute\(\s*[\'"]class[\'"]\s*,\s*([\'"`])((?:\\\\.|(?!\5).)*?)\5#s', $js, $found, PREG_SET_ORDER);
+			$classes = [];
+			foreach ($found as $one) {
+				$text = ($one[2] ?? '') . ' ' . ($one[3] ?? '') . ' ' . ($one[6] ?? '');
+				if (($one[4] ?? '') !== '') {
+					preg_match_all('#([\'"`])((?:\\\\.|(?!\1).)*?)\1#s', $one[4], $strings);
+					$text .= ' ' . implode(' ', $strings[2]);
+				}
+				preg_match_all('#-?[_a-zA-Z][\w-]*#', $text, $words);
+				$classes = [...$classes, ...array_map(fn(string $word): string => '.' . $word, $words[0])];
+			}
+			preg_match_all('#createElement(?:NS)?\((?:[^,)]*,\s*)?[\'"]([\w-]+)[\'"]#', $js, $elements);
+			$made[$script] = array_flip([...$classes, ...array_map('strtolower', $elements[1])]);
+		}
+	}
+	$names = array_flip($names);
+	$makers = array_keys(array_filter($made, fn(array $found): bool => array_intersect_key($names, $found) !== []));
+	return array_fill_keys(array_keys(array_filter($imports, fn(array $from): bool => array_intersect($from, $makers) !== [])), false) + array_fill_keys($makers, true);
+}
+
+/** The class attribute holding $class, as a pattern on a page's markup. */
+function PROBE__ClassNeedle(string $class): string
+{
+	return '#class="(?:[^"]*\s)?' . preg_quote($class, '#') . '(?:\s[^"]*)?"#';
+}
+
+/** A class - ".name" - or an element - "name" -, as a pattern on a page's markup; one of several such names when given
+ *  a list. */
+function PROBE__NameNeedle(string ...$names): string
+{
+	$classes = array_map(fn(string $name): string => preg_quote(substr($name, 1), '#'), array_values(array_filter($names, fn(string $name): bool => str_starts_with($name, '.'))));
+	$types = array_map(fn(string $name): string => preg_quote($name, '#'), array_values(array_filter($names, fn(string $name): bool => !str_starts_with($name, '.'))));
+	return '#' . implode('|', [...($classes === [] ? [] : ['class="(?:[^"]*\s)?(?:' . implode('|', $classes) . ')(?:\s[^"]*)?"']), ...($types === [] ? [] : ['<(?i:' . implode('|', $types) . ')[\s>/]'])]) . '#';
+}
+
+/**
+ * What a change of the behaviour checks since $base reaches: "behave:P" for each full page PROBE__TargetPages gives the
+ * target of a check whose lines changed - on the side the diff adds them and the side it removes them -; "behave", every
+ * full page, for a change outside the checks - their helpers before them, the runner after them -, a target with no id
+ * or class to look for, or no diff to read.
+ * @return list<string>
+ */
+function PROBE__BehaveReach(array $config, string $base): array
+{
+	$file = 'tools/probes/behave.js';
+	$diff = PROBE__Diff($base, $file);
+	if (preg_match_all('#^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@#m', $diff, $hunks, PREG_SET_ORDER) === 0) {
+		return ['behave'];
+	}
+	try {
+		$sides = ['old' => PROBE__Run(['git', '-C', PROBE_ROOT, 'show', $base . ':' . $file]), 'new' => (string)file_get_contents(PROBE_ROOT . '/' . $file)];
+	} catch (RuntimeException) {
+		return ['behave'];
+	}
+	$targets = [];
+	foreach ($sides as $side => $text) {
+		$checks = PROBE__BehaveChecks($text);
+		foreach ($hunks as $hunk) {
+			[$from, $count] = $side === 'old' ? [(int)$hunk[1], ($hunk[2] ?? '') === '' ? 1 : (int)$hunk[2]] : [(int)$hunk[3], ($hunk[4] ?? '') === '' ? 1 : (int)$hunk[4]];
+			foreach ($count > 0 ? range($from, $from + $count - 1) : [] as $line) {
+				$at = array_values(array_filter($checks, fn(array $check): bool => $check['from'] <= $line && $check['to'] >= $line));
+				if ($at === []) {
+					return ['behave'];
+				}
+				$targets[] = $at[0]['target'];
+			}
+		}
+	}
+	$marks = [];
+	foreach (array_unique($targets) as $target) {
+		$pages = PROBE__TargetPages($config, $target);
+		if ($pages === null) {
+			return ['behave'];
+		}
+		$marks = [...$marks, ...array_map(fn(string $page): string => 'behave:' . $page, $pages)];
+	}
+	return array_values(array_unique($marks));
+}
+
+/**
+ * The behaviour checks of behave.js's text, each its name, its target, its first and last line and its text: a check
+ * starts on its own line, name: {target: '...', and runs to the next one, the last to the line before the one that
+ * closes the checks. None when that line is not found.
+ * @return list<array{name: string, target: string, from: int, to: int, text: string}>
+ */
+function PROBE__BehaveChecks(string $text): array
+{
+	$lines = explode("\n", $text);
+	$checks = [];
+	foreach ($lines as $i => $line) {
+		if (preg_match("#^\t\t(\w+): \{target: '([^']+)'#", $line, $m) === 1) {
+			if ($checks !== []) {
+				$checks[count($checks) - 1]['to'] = $i;
+			}
+			$checks[] = ['name' => $m[1], 'target' => $m[2], 'from' => $i + 1, 'to' => 0];
+		} elseif ($checks !== [] && preg_match("#^\t\};#", $line) === 1) {
+			$checks[count($checks) - 1]['to'] = $i;
+			return array_map(fn(array $check): array => $check + ['text' => implode("\n", array_slice($lines, $check['from'] - 1, $check['to'] - $check['from'] + 1))], $checks);
+		}
+	}
+	return [];
+}
+
+/** The full pages that hold a check's target - by its id, else its first class -; the page that names the checks that
+ *  find no target (PROBE_BEHAVE_HOME) when none does; null when the target has neither to look for. */
+function PROBE__TargetPages(array $config, string $target): ?array
+{
+	if (preg_match('#\#([\w-]+)|\.(-?[_a-zA-Z][\w-]*)#', $target, $m) !== 1) {
+		return null;
+	}
+	$needle = ($m[1] ?? '') !== '' ? '#\sid="' . preg_quote($m[1], '#') . '"#' : PROBE__ClassNeedle($m[2]);
+	return array_values(array_filter($config['pages'], fn(string $page): bool => preg_match($needle, PROBE__Markup($page, false)) === 1)) ?: [PROBE_BEHAVE_HOME];
+}
+
+/**
+ * What the rules of the stylesheet $file that changed since $base ask of a page's markup, and the names they ask for, as
+ * PROBE__StyleNeedles says them - the rules on its lines that the diff adds, and the rules on its lines it removes, read
+ * in $base's copy -; every rule's when there is no $base or no diff, as for a file git does not track yet, and when one
+ * of those rules asks for nothing a page's markup shows: such a rule of a component's file acts where the component is.
+ * With them the keyframes whose frames changed, and whether one of the changed rules asks for nothing a page shows.
+ * @return array{list<list<string>>, list<string>, list<string>, bool}
+ */
+function PROBE__StyleChanged(string $file, string $text, string $base): array
+{
+	$diff = $base === '' ? '' : PROBE__Diff($base, $file);
+	if (preg_match_all('#^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@#m', $diff, $hunks, PREG_SET_ORDER) === 0) {
+		[$needles, $names, $open, $frames] = PROBE__StyleNeedles($text);
+		return [$needles, $names, $frames, $open];
+	}
+	$old = [];
+	$new = [];
+	foreach ($hunks as $hunk) {
+		[$oldCount, $newCount] = [($hunk[2] ?? '') === '' ? 1 : (int)$hunk[2], ($hunk[4] ?? '') === '' ? 1 : (int)$hunk[4]];
+		$old = [...$old, ...($oldCount > 0 ? range((int)$hunk[1], (int)$hunk[1] + $oldCount - 1) : [])];
+		$new = [...$new, ...($newCount > 0 ? range((int)$hunk[3], (int)$hunk[3] + $newCount - 1) : [])];
+	}
+	try {
+		$was = $old === [] ? '' : PROBE__Run(['git', '-C', PROBE_ROOT, 'show', $base . ':' . $file]);
+	} catch (RuntimeException) {
+		$was = '';
+	}
+	$sides = [...($new === [] ? [] : [PROBE__StyleNeedles($text, $new)]), ...($was === '' ? [] : [PROBE__StyleNeedles($was, $old)])];
+	$frames = array_values(array_unique(array_merge([], ...array_column($sides, 3))));
+	$open = in_array(true, array_column($sides, 2), true);
+	if ($open) {
+		$sides = [PROBE__StyleNeedles($text), ...($was === '' ? [] : [PROBE__StyleNeedles($was)])];
+	}
+	return [array_values(array_unique(array_merge([], ...array_column($sides, 0)), SORT_REGULAR)), array_values(array_unique(array_merge([], ...array_column($sides, 1)))), $frames, $open];
+}
+
+/**
+ * Whether the change of the stylesheet $file since $base can change what a screen reader hears: a declaration it changes
+ * of a property that shows, hides or words things for a reader - display, visibility, content, list-style, counters,
+ * quotes -, or of a custom property one of those reads; a selector, a brace or an at-rule it changes over a rule that
+ * holds one. A colour, a size, a space no reader hears. Yes when there is no diff to read - a file new since $base.
+ */
+function PROBE__StyleSpoken(string $file, string $base): bool
+{
+	$diff = PROBE__Diff($base, $file);
+	if (preg_match_all('#^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@#m', $diff, $hunks, PREG_SET_ORDER) === 0) {
+		return true;
+	}
+	try {
+		$sides = ['old' => PROBE__Run(['git', '-C', PROBE_ROOT, 'show', $base . ':' . $file]), 'new' => (string)@file_get_contents(PROBE_ROOT . '/' . $file)];
+	} catch (RuntimeException) {
+		return true;
+	}
+	// A scroller with nothing to focus in it is a Tab stop of its own in Chrome from 130, which a reader announces.
+	$heard = '~^(display|visibility|content|content-visibility|interactivity|list-style(-type|-image)?|counter-(reset|increment|set)|quotes|speak(-as)?|overflow(-x|-y|-block|-inline)?)$~';
+	foreach ($sides as $side => $text) {
+		$text = (string)preg_replace_callback('#/\*.*?\*/#s', fn(array $m): string => (string)preg_replace('#[^\n]#', ' ', $m[0]), $text);
+		$declarations = fn(string $block): array => preg_match_all('#(?:^|[{;\n])\s*([\w-]+)\s*:([^;{}]*)#', $block, $found, PREG_SET_ORDER) > 0 ? $found : [];
+		// The custom properties a heard property reads, and those they read in turn.
+		$read = [];
+		do {
+			$before = count($read);
+			foreach ($declarations($text) as [, $name, $value]) {
+				if (preg_match($heard, $name) === 1 || isset($read[$name])) {
+					preg_match_all('#var\(\s*(--[\w-]+)#', $value, $vars);
+					$read += array_fill_keys($vars[1], true);
+				}
+			}
+		} while (count($read) > $before);
+		$lines = explode("\n", $text);
+		$rules = PROBE__StyleRules($text);
+		foreach ($hunks as $hunk) {
+			[$from, $count] = $side === 'old' ? [(int)$hunk[1], ($hunk[2] ?? '') === '' ? 1 : (int)$hunk[2]] : [(int)$hunk[3], ($hunk[4] ?? '') === '' ? 1 : (int)$hunk[4]];
+			foreach ($count > 0 ? range($from, $from + $count - 1) : [] as $at) {
+				$line = trim($lines[$at - 1] ?? '');
+				if ($line === '') {
+					continue;
+				}
+				// A declaration alone is read as it stands; anything else - a selector, a brace, an at-rule, a value's
+				// next line - with the whole of the innermost rule around it. Outside every rule - an @import, the order
+				// of the layers - it moves rules from one cascade to another: heard.
+				$block = $line;
+				if (!str_contains($line, ':') || str_contains($line, '{') || str_ends_with($line, ',')) {
+					$around = array_filter($rules, fn(array $rule): bool => $rule[1] <= $at && $rule[2] >= $at);
+					if ($around === []) {
+						return true;
+					}
+					usort($around, fn(array $a, array $b): int => $b[1] <=> $a[1]);
+					$block .= "\n" . implode("\n", array_slice($lines, $around[0][1] - 1, $around[0][2] - $around[0][1] + 1));
+				}
+				foreach ($declarations($block) as [, $name]) {
+					if (preg_match($heard, $name) === 1 || isset($read[$name])) {
+						return true;
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
+
+/**
+ * The rules of a stylesheet: each block's prelude - a selector list, or an at-rule's - with the lines it starts and
+ * ends on.
+ * @return list<array{string, int, int}>
+ */
+function PROBE__StyleRules(string $css): array
+{
+	$css = (string)preg_replace_callback('#/\*.*?\*/#s', fn(array $m): string => (string)preg_replace('#[^\n]#', ' ', $m[0]), $css);
+	$rules = [];
+	$open = [];
+	$prelude = '';
+	$line = 1;
+	$from = 1;
+	for ($i = 0, $n = strlen($css); $i < $n; $i++) {
+		$char = $css[$i];
+		if ($char === '{') {
+			$open[] = [trim($prelude), $from];
+			$prelude = '';
+		} elseif ($char === '}') {
+			[$text, $start] = array_pop($open) ?? ['', $line];
+			$rules[] = [$text, $start, $line];
+			$prelude = '';
+		} elseif ($char === ';') {
+			$prelude = '';
+		} else {
+			if (trim($prelude) === '' && !ctype_space($char)) {
+				$from = $line;
+			}
+			$prelude .= $char;
+		}
+		$line += $char === "\n" ? 1 : 0;
+	}
+	return $rules;
+}
+
+/**
+ * What the stylesheet $css asks of a page's markup, as PROBE__SelectorNeedles says it, for the rules on the $lines
+ * given - every rule of an at-rule whose own line is among them -, or for every rule when $lines is null or reaches none:
+ * the needles, the names they ask for, whether one of the chosen rules is open - it asks for nothing a page's markup
+ * shows, or it is a frame of @keyframes, which acts wherever its animation runs -, and the keyframes those frames are
+ * of. Every rule's open selectors are left out.
+ * @param list<int>|null $lines
+ * @return array{list<list<string>>, list<string>, bool, list<string>}
+ */
+function PROBE__StyleNeedles(string $css, ?array $lines = null): array
+{
+	$rules = PROBE__StyleRules($css);
+	$needles = [];
+	$names = [];
+	$open = false;
+	$frames = [];
+	$chosen = 0;
+	foreach ($rules as [$prelude, $start, $end]) {
+		if (str_starts_with($prelude, '@') || $prelude === '') {
+			continue;
+		}
+		$touched = $lines === null || array_filter($lines, fn(int $line): bool => $line >= $start && $line <= $end) !== [];
+		$frame = '';
+		foreach ($rules as [$outer, $outerStart, $outerEnd]) {
+			$around = str_starts_with($outer, '@') && $outerStart <= $start && $outerEnd >= $end && [$outer, $outerStart, $outerEnd] !== [$prelude, $start, $end];
+			$touched = $touched || ($around && in_array($outerStart, $lines ?? [], true));
+			$frame = $around && preg_match('#^@(?:-webkit-)?keyframes\s+([\w-]+)#', $outer, $m) === 1 ? $m[1] : $frame;
+		}
+		if (!$touched) {
+			continue;
+		}
+		$chosen++;
+		[$found, $named, $loose] = $frame !== '' ? [[], [], true] : PROBE__SelectorNeedles($prelude);
+		$needles = [...$needles, ...$found];
+		$names = [...$names, ...$named];
+		$open = $open || $loose;
+		$frames = $frame === '' ? $frames : [...$frames, $frame];
+	}
+	if ($chosen === 0 && $lines !== null) {
+		return PROBE__StyleNeedles($css);
+	}
+	return [array_values(array_unique($needles, SORT_REGULAR)), array_values(array_unique($names)), $open, array_values(array_unique($frames))];
+}
+
+/**
+ * What the rules of the components' stylesheets that run the keyframes $frame ask of a page's markup - an animation of
+ * that name in their declarations -, and the names they ask for, as PROBE__SelectorNeedles says them.
+ * @return array{list<list<string>>, list<string>}
+ */
+function PROBE__AnimationNeedles(string $frame): array
+{
+	$needles = [];
+	$names = [];
+	foreach (glob(PROBE_ROOT . '/css/components/*.css') ?: [] as $path) {
+		$css = (string)file_get_contents($path);
+		$lines = explode("\n", $css);
+		foreach (PROBE__StyleRules($css) as [$prelude, $start, $end]) {
+			if (!str_starts_with($prelude, '@') && $prelude !== '' && preg_match('#animation(?:-name)?\s*:[^;{}]*(?<![\w-])' . preg_quote($frame, '#') . '(?![\w-])#', implode("\n", array_slice($lines, $start - 1, $end - $start + 1))) === 1) {
+				[$found, $named] = PROBE__SelectorNeedles($prelude);
+				$needles = [...$needles, ...$found];
+				$names = [...$names, ...$named];
+			}
+		}
+	}
+	return [$needles, $names];
+}
+
+/**
+ * What each selector of a selector list asks of a page's markup to match, as patterns that must all hold: its classes,
+ * else its elements - but html and body, which every page has -; one of the classes or elements :is(), :where() or
+ * :has() hold - nothing when one of their selectors holds neither -; nothing of :not() or another functional
+ * pseudo-class, as it may ask for less; nothing of an attribute, as a script sets most of them while the page lives - a
+ * state, the theme, the direction, a role. Answers the needles, the names they ask for (".class" or "element"), and
+ * whether a selector is open: it asks for none of those, or it has an escaped name.
+ * @return array{list<list<string>>, list<string>, bool}
+ */
+function PROBE__SelectorNeedles(string $prelude): array
+{
+	if (str_contains($prelude, '\\')) {
+		return [[], [], true];
+	}
+	$needles = [];
+	$names = [];
+	$open = false;
+	$either = [];
+	$prelude = (string)preg_replace('#\[[^\]]*\]#', '', $prelude);
+	do {
+		$prelude = (string)preg_replace_callback('#:([\w-]+)\(([^()]*)\)#', function (array $m) use (&$either): string {
+			$alternatives = array_map('PROBE__SelectorNames', explode(',', $m[2]));
+			if (!in_array($m[1], ['is', 'where', 'has'], true) || in_array([], $alternatives, true)) {
+				return '';
+			}
+			$either[] = array_values(array_unique(array_merge(...$alternatives)));
+			return ' %' . (count($either) - 1) . '% ';
+		}, $prelude, -1, $count);
+	} while ($count > 0);
+	foreach (explode(',', $prelude) as $selector) {
+		preg_match_all('#%(\d+)%#', $selector, $marks);
+		$own = PROBE__SelectorNames((string)preg_replace('#%\d+%#', ' ', $selector));
+		$one = array_map(fn(string $mark): array => $either[(int)$mark], $marks[1]);
+		$needle = [...array_map(fn(string $name): string => PROBE__NameNeedle($name), $own), ...array_map(fn(array $names): string => PROBE__NameNeedle(...$names), $one)];
+		if ($needle === []) {
+			$open = true;
+			continue;
+		}
+		$needles[] = array_values(array_unique($needle));
+		$names = [...$names, ...$own, ...array_merge([], ...$one)];
+	}
+	return [$needles, array_values(array_unique($names)), $open];
+}
+
+/** The names a compound selector asks for: its classes as ".class", else its elements - but html and body.
+ *  @return list<string> */
+function PROBE__SelectorNames(string $selector): array
+{
+	$selector = (string)preg_replace(['#\[[^\]]*\]#', '#::?[\w-]+(\([^()]*\))?#'], '', $selector);
+	if (preg_match_all('#\.(-?[_a-zA-Z][\w-]*)#', $selector, $classes) > 0) {
+		return array_values(array_unique(array_map(fn(string $class): string => '.' . $class, $classes[1])));
+	}
+	preg_match_all('#(?:^|[\s>+~])([a-zA-Z][\w-]*)#', $selector, $types);
+	return array_values(array_diff(array_unique(array_map('strtolower', $types[1])), ['html', 'body']));
+}
+
+/**
+ * What a script's selector strings name that a page's markup could hold - classes, data attributes, roles, commands,
+ * attributes with a value of their own -, and the classes and data its classList and dataset touch, as patterns, each
+ * enough alone. An attribute any widget may carry - [href], [hidden], aria-hidden="true" - counts only for a script that
+ * names nothing narrower.
+ * @return list<list<string>>
+ */
+function PROBE__ScriptNeedles(string $js): array
+{
+	$js = PROBE__Code($js, 'js');
+	// A class at the edge where a string is joined to a name is not one: key + '.other', '.chip-' + tone.
+	preg_match_all('#(\+\s*)?([\'"`])((?:\\\\.|(?!\2).)*?)\2(\s*\+)?#s', $js, $found, PREG_SET_ORDER);
+	$strings = [2 => array_map(fn(array $one): string => (string)preg_replace([...(($one[1] ?? '') === '' ? [] : ['#^\.[\w-]*#']), ...(($one[4] ?? '') === '' ? [] : ['#\.[\w-]*$#'])], '', $one[3]), $found)];
+	$narrow = [];
+	$broad = [];
+	// The class words of a list a script tests an element's classes against: ['menu', 'popover'].some((name) =>
+	// el.classList.contains(name)).
+	foreach (explode("\n", $js) as $line) {
+		if (preg_match('#classList\.(?:contains|add|remove|toggle)\(\s*[A-Za-z_$][\w$]*\s*\)#', $line) === 1 && preg_match_all('#\[\s*((?:[\'"][\w-]+[\'"]\s*,\s*)*[\'"][\w-]+[\'"])\s*\]#', $line, $lists) > 0) {
+			preg_match_all('#[\'"]([\w-]+)[\'"]#', implode(',', $lists[1]), $words);
+			$narrow = [...$narrow, ...array_map('PROBE__ClassNeedle', $words[1])];
+		}
+	}
+	foreach ($strings[2] as $string) {
+		preg_match_all('#\[([a-z][\w-]*)(?:\s*[~|^$*]?=\s*\\\\?["\']?([^"\'\]\\\\]*))?#', $string, $attributes, PREG_SET_ORDER);
+		foreach ($attributes as $attribute) {
+			[, $name, $value] = $attribute + [2 => ''];
+			$common = preg_match('#^(aria-[\w-]+|value|hidden|disabled|tabindex|href|id|name|lang|dir|command|commandfor|popovertarget)$#', $name) === 1 && !str_starts_with($value, '--') && ($value === '' || !str_starts_with($name, 'aria-') || in_array($value, ['true', 'false'], true));
+			$pattern = $value === '' ? '#\s' . preg_quote($name, '#') . '[\s=>/]#' : '#\s' . preg_quote($name, '#') . '="' . preg_quote($value, '#') . '"#';
+			if ($common || ($value === '' && !str_starts_with($name, 'data-'))) {
+				$broad[] = $pattern;
+			} else {
+				$narrow[] = $pattern;
+			}
+		}
+		preg_match_all('#(?:^|[\s,>+~(])\.(-?[_a-zA-Z][\w-]*)#', $string, $classes);
+		foreach ($classes[1] as $class) {
+			// An icon stands on almost every page.
+			if (preg_match('#^bi(-|$)#', $class) === 1) {
+				$broad[] = PROBE__ClassNeedle($class);
+			} else {
+				$narrow[] = PROBE__ClassNeedle($class);
+			}
+		}
+		if (preg_match('#^--[a-z][\w-]*$#', $string) === 1) {
+			$narrow[] = '#command="' . preg_quote($string, '#') . '"#';
+		}
+	}
+	preg_match_all('#classList\.(?:add|remove|toggle|contains|replace)\(\s*[\'"]([\w-]+)#', $js, $listed);
+	preg_match_all('#dataset\.([a-zA-Z]+)#', $js, $data);
+	$narrow = [...$narrow, ...array_map('PROBE__ClassNeedle', $listed[1]), ...array_map(fn(string $key): string => '#\sdata-' . strtolower((string)preg_replace('#[A-Z]#', '-$0', $key)) . '[\s=>/]#', $data[1])];
+	return array_map(fn(string $pattern): array => [$pattern], array_values(array_unique($narrow ?: $broad)));
+}
+
+/**
+ * What the change of the probes' workflow since $base reaches, as PROBE__Reach's marks: "part:NAME", every page of it,
+ * for each part its list ALL adds or changes - a runner, a share -; "sample", the sample pages in every engine, which
+ * prove the workflow still runs, for a change anywhere else but its comments - a step, a trigger -; everything when the
+ * list cannot be read.
+ * @return list<string>
+ */
+function PROBE__WorkflowReach(string $base): array
+{
+	$file = '.github/workflows/probes.yml';
+	$list = '~^  ALL: >-\n((?:    .*\n)+)~m';
+	// A part runs on its own runner, else on the one the probes job names when it has none.
+	$default = '~matrix\.part\.runner \|\| \'([\w.-]+)\'~';
+	$parts = fn(string $text): ?array => preg_match($list, $text, $m) === 1 && preg_match($default, $text, $d) === 1 && is_array($all = json_decode((string)preg_replace('~\s+~', ' ', $m[1]), true)) ? array_map(function (array $part) use ($d): array {
+		$part += ['runner' => $d[1]];
+		ksort($part);
+		return $part;
+	}, array_column($all, null, 'name')) : null;
+	$rest = fn(string $text): string => (string)preg_replace([$list, '~^\s*#.*\n~m', $default], '', $text);
+	try {
+		$was = PROBE__Run(['git', '-C', PROBE_ROOT, 'show', $base . ':' . $file]);
+	} catch (RuntimeException) {
+		return ['*'];
+	}
+	$now = (string)@file_get_contents(PROBE_ROOT . '/' . $file);
+	[$old, $new] = [$parts($was), $parts($now)];
+	if ($old === null || $new === null) {
+		return ['*'];
+	}
+	$marks = array_map(fn(string $name): string => 'part:' . $name, array_keys(array_filter($new, fn(array $part, string $name): bool => ($old[$name] ?? null) !== $part, ARRAY_FILTER_USE_BOTH)));
+	return $rest($was) === $rest($now) ? $marks : [...$marks, 'sample'];
 }
 
 /**
  * What the config's change since $base reaches, as PROBE__Reach's marks: the engine whose entry changed; the page whose
  * speech steps changed, or every reader when a page lost them all; the engines an exception added or removed names
- * (every engine for one that names none); the NVDA engines for NVDA's settings; everything for any other key.
+ * (every engine for one that names none); the NVDA engines for NVDA's settings; the sample pages for the sample; nothing
+ * for "check"; everything for any other key.
  * @return list<string>
  */
 function PROBE__ConfigReach(array $config, string $base): array
@@ -1251,12 +2058,15 @@ function PROBE__ConfigReach(array $config, string $base): array
 	foreach (array_unique([...array_keys($old), ...array_keys($config)]) as $key) {
 		$was = $old[$key] ?? [];
 		$is = $config[$key] ?? [];
-		if ($was === $is) {
+		// The engines a Mac checks before a commit choose nothing a probe does.
+		if ($was === $is || $key === 'check') {
 			continue;
 		}
 		if ($key === 'engines' || $key === 'speech') {
 			foreach (array_unique([...array_keys($was), ...array_keys($is)]) as $name) {
-				if (($was[$name] ?? null) !== ($is[$name] ?? null)) {
+				// An engine's words of why change nothing it runs.
+				$entry = fn(?array $engine): ?array => $engine === null || $key !== 'engines' ? $engine : array_diff_key($engine, ['why' => true]);
+				if ($entry($was[$name] ?? null) !== $entry($is[$name] ?? null)) {
 					$reach = [...$reach, ...($key === 'engines' ? ['engine:' . $name] : (isset($is[$name]) ? ['speech:' . $name] : ['kind:voiceover', 'kind:nvda']))];
 				}
 			}
@@ -1266,24 +2076,82 @@ function PROBE__ConfigReach(array $config, string $base): array
 				$reach = [...$reach, ...array_map(fn(string $name): string => 'engine:' . $name, json_decode($entry, true)['engines'] ?? ['*'])];
 			}
 		} else {
-			$reach[] = $key === 'nvda' ? 'kind:nvda' : '*';
+			$reach[] = match ($key) {
+				'nvda' => 'kind:nvda',
+				'sample' => 'sample',
+				default => '*',
+			};
 		}
 	}
 	return array_values(array_unique(array_map(fn(string $mark): string => $mark === 'engine:*' ? '*' : $mark, $reach)));
 }
 
-/** Whether the stylesheet or script $file changed since $base in its comments alone - a whole-line comment, a banner,
- *  a docblock's line in a script -, which no engine renders or runs. */
+/** Whether the stylesheet or script $file changed since $base in its comments and its spacing alone, which no engine
+ *  renders or runs: its code - PROBE__Code - reads the same in both. Not for a file new or gone since $base. */
 function PROBE__CommentsOnly(string $base, string $file): bool
 {
-	$diff = PROBE__Run(['git', '-C', PROBE_ROOT, 'diff', '-U0', '--no-color', $base, 'HEAD', '--', $file]);
-	$comment = str_ends_with($file, '.js') ? '~^[+-]\s*(/\*.*\*/|//.*|\*( .*)?|\*/)?\s*$~' : '~^[+-]\s*(/\*.*\*/)?\s*$~';
-	foreach (explode("\n", $diff) as $line) {
-		if (preg_match('~^[+-]~', $line) === 1 && !str_starts_with($line, '+++') && !str_starts_with($line, '---') && preg_match($comment, $line) !== 1) {
+	$now = @file_get_contents(PROBE_ROOT . '/' . $file);
+	try {
+		$was = PROBE__Run(['git', '-C', PROBE_ROOT, 'show', $base . ':' . $file]);
+	} catch (RuntimeException) {
+		return false;
+	}
+	$kind = str_ends_with($file, '.js') ? 'js' : 'css';
+	if (!is_string($now) || PROBE__Code($was, $kind) !== PROBE__Code($now, $kind)) {
+		return false;
+	}
+	// In a script each changed line is a comment's own, as a slash the reading above mistakes stays code.
+	foreach ($kind === 'js' ? explode("\n", PROBE__Diff($base, $file)) : [] as $line) {
+		if (preg_match('#^[+-](?![+-]{2} )#', $line) === 1 && preg_match('#^[+-]\s*(//|/\*|\*|$)#', $line) !== 1) {
 			return false;
 		}
 	}
 	return true;
+}
+
+/**
+ * The code of a script ("js") or a stylesheet ("css") without its comments, its spacing made one: a run of white space
+ * one space, or one line break when it holds one - a script's line breaks can end its statements. A string stays as
+ * written, a comment marker inside it too; a stylesheet has no line comment, as // starts a URL in it.
+ */
+function PROBE__Code(string $text, string $kind): string
+{
+	// Kept as written: a string, and in a script a regular expression literal - a slash where an operand starts, after
+	// an operator, a bracket or return -, whose slashes are no comment.
+	$keep = '"(?:\\\\.|[^"\\\\])*"|\'(?:\\\\.|[^\'\\\\])*\'' . ($kind === 'js' ? '|`(?:\\\\.|[^`\\\\])*`|(?:(?<=[(,=:\[!&|?{};+\-*%<>~^])|(?<=\breturn)|(?<=\btypeof)|^)[ \t]*/(?![*/])(?:\\\\.|\[(?:\\\\.|[^\]\\\\\n])*\]|[^/\\\\\n\[])+/[a-z]*' : '');
+	$text = (string)preg_replace_callback('#(' . $keep . ')|/\*.*?\*/' . ($kind === 'js' ? '|//[^\n]*' : '') . '#sm', fn(array $m): string => ($m[1] ?? '') !== '' ? $m[1] : (str_starts_with($m[0], '/*') ? ' ' : ''), $text);
+	return trim((string)preg_replace_callback('#(' . $keep . ')|\s+#sm', fn(array $m): string => ($m[1] ?? '') !== '' ? $m[1] : (str_contains($m[0], "\n") ? "\n" : ' '), $text));
+}
+
+/** The tree of the working copy as it stands, the files git does not track yet among them - but those it ignores -:
+ *  git's index copied, the working copy added to the copy. The same tree for each call of one process. */
+function PROBE__WorkTree(): string
+{
+	static $tree = null;
+	if ($tree !== null) {
+		return $tree;
+	}
+	$index = sys_get_temp_dir() . '/redz-ui-index-' . getmypid();
+	@unlink($index);
+	try {
+		$real = trim(PROBE__Run(['git', '-C', PROBE_ROOT, 'rev-parse', '--path-format=absolute', '--git-path', 'index']));
+		if (is_file($real)) {
+			copy($real, $index);
+		} else {
+			PROBE__Run(['git', '-C', PROBE_ROOT, 'read-tree', 'HEAD'], ['GIT_INDEX_FILE' => $index]);
+		}
+		PROBE__Run(['git', '-C', PROBE_ROOT, 'add', '--all'], ['GIT_INDEX_FILE' => $index]);
+		return $tree = trim(PROBE__Run(['git', '-C', PROBE_ROOT, 'write-tree'], ['GIT_INDEX_FILE' => $index]));
+	} finally {
+		@unlink($index);
+	}
+}
+
+/** The changes of $file between $base - a commit or a tree - and the working copy, with no lines around them; a file
+ *  moved is a file gone and a file new. */
+function PROBE__Diff(string $base, string $file): string
+{
+	return PROBE__Run(['git', '-C', PROBE_ROOT, 'diff', '-U0', '--no-color', '--no-renames', $base, PROBE__WorkTree(), '--', $file]);
 }
 
 /**
@@ -1302,23 +2170,32 @@ function PROBE__EnginePages(array $config, string $name): array
 	};
 }
 
-/** Each file changed between the commit $base and HEAD, with what it asks of the probes (PROBE__Reach's marks).
+/** Each file changed between $base - a commit or a tree - and the working copy (PROBE__WorkTree), with what it asks of
+ *  the probes (PROBE__Reach's marks). A built file of dist/ asks nothing when the sources it is built from changed with
+ *  it and the build did not - the sources say what they reach -, and everything otherwise.
  *  @return array<string, list<string>> */
 function PROBE__Changed(array $config, string $base): array
 {
 	$changed = [];
-	foreach (array_filter(explode("\n", PROBE__Run(['git', '-C', PROBE_ROOT, 'diff', '--name-only', $base, 'HEAD']))) as $file) {
+	foreach (array_filter(explode("\n", PROBE__Run(['git', '-C', PROBE_ROOT, 'diff', '--name-only', '--no-renames', $base, PROBE__WorkTree()]))) as $file) {
 		$changed[$file] = PROBE__Reach($config, $base, $file);
+	}
+	$sources = preg_grep('~^(css|js|icons|' . implode('|', PROBE_PACKAGES) . ')/~', array_keys($changed));
+	$build = preg_grep('~^tools/(build|min|lib|floor)(\.php$|/)~', array_keys($changed));
+	foreach ($sources === [] || $build !== [] ? [] : preg_grep('~^dist/~', array_keys($changed)) as $file) {
+		$changed[$file] = [];
 	}
 	return $changed;
 }
 
 /**
  * What the changed files $changed ask of a part of CI, whose engines are $part['engines'], in its $part['share'] of the
- * pages when it has one: "full" - every page of its engines, as a file reaches the whole of one, or a page no engine
- * knows -, "pages" with the pages of its engines they reach - "behave" the full pages of a desktop browser -, or "none".
+ * pages when it has one: "full" - every page of its engines, as a file reaches the whole of one ("visual" the whole of a
+ * desktop engine), or a page no engine knows -, "pages" with the pages of its engines they reach - "behave" the full
+ * pages of a desktop browser, "sample" the config's sample pages -, or "none"; and "why", the files that make it run -
+ * those that make it run whole, when it does.
  * @param array<string, list<string>> $changed
- * @return array{mode: string, pages: list<string>}
+ * @return array{mode: string, pages: list<string>, why: list<string>}
  */
 function PROBE__PartRun(array $config, array $changed, array $part): array
 {
@@ -1326,32 +2203,51 @@ function PROBE__PartRun(array $config, array $changed, array $part): array
 	$share = PROBE__ShareOf($part['share'] ?? '');
 	$config = $share === null ? $config : PROBE__Share($config, $share);
 	$pages = [];
-	foreach (array_unique(array_merge([], ...array_values($changed))) as $mark) {
-		[$what, $value] = explode(':', $mark, 2) + [1 => ''];
-		foreach (preg_split('~\s+~', trim($part['engines'])) as $name) {
-			$engine = $config['engines'][$name] ?? null;
-			$full = $engine === null || match ($what) {
-				'*' => true,
-				'kind' => $engine['kind'] === $value,
-				'browser' => ($engine['browser'] ?? '') === $value,
-				'engine' => $name === $value,
-				'page' => !in_array($value, $known, true),
-				default => false,
-			};
-			if ($full) {
-				return ['mode' => 'full', 'pages' => []];
-			}
-			$reader = in_array($engine['kind'], ['voiceover', 'nvda'], true);
-			if (($what === 'page' || ($what === 'speech' && $reader)) && in_array($value, PROBE__EnginePages($config, $name), true)) {
-				$pages[] = $value;
-			}
-			if ($what === 'behave' && !$reader && !isset($engine['ios'])) {
-				$pages = [...$pages, ...$config['pages']];
+	$why = [];
+	$whole = [];
+	foreach ($changed as $file => $marks) {
+		foreach ($marks as $mark) {
+			[$what, $value] = explode(':', $mark, 2) + [1 => ''];
+			foreach (preg_split('~\s+~', trim($part['engines'])) as $name) {
+				$engine = $config['engines'][$name] ?? null;
+				$reader = in_array($engine['kind'] ?? '', ['voiceover', 'nvda'], true);
+				$full = $engine === null || match ($what) {
+					'*' => true,
+					'visual' => !$reader,
+					'kind' => $engine['kind'] === $value,
+					'browser' => ($engine['browser'] ?? '') === $value,
+					'engine' => $name === $value,
+					'part' => ($part['name'] ?? '') === $value,
+					'page' => !in_array($value, $known, true),
+					'look' => !$reader && !in_array($value, $known, true),
+					default => false,
+				};
+				if ($full) {
+					$whole[] = $file;
+					continue;
+				}
+				$before = count($pages);
+				[$by, $which] = explode(':', $value, 2) + [1 => ''];
+				if ($what === 'sample' && ($value === '' || ($by === 'kind' && $engine['kind'] === $which) || ($by === 'browser' && ($engine['browser'] ?? '') === $which))) {
+					$pages = [...$pages, ...array_intersect($config['sample'] ?? [], PROBE__EnginePages($config, $name))];
+				}
+				if (($what === 'page' || ($what === 'look' && !$reader) || ($what === 'speech' && $reader)) && in_array($value, PROBE__EnginePages($config, $name), true)) {
+					$pages[] = $value;
+				}
+				if ($what === 'behave' && !$reader && !isset($engine['ios'])) {
+					$pages = [...$pages, ...($value === '' ? $config['pages'] : array_intersect([$value], $config['pages']))];
+				}
+				if (count($pages) > $before) {
+					$why[] = $file;
+				}
 			}
 		}
 	}
+	if ($whole !== []) {
+		return ['mode' => 'full', 'pages' => [], 'why' => array_values(array_unique($whole))];
+	}
 	$pages = array_values(array_unique($pages));
-	return ['mode' => $pages === [] ? 'none' : 'pages', 'pages' => $pages];
+	return ['mode' => $pages === [] ? 'none' : 'pages', 'pages' => $pages, 'why' => array_values(array_unique($why))];
 }
 
 /** affected: what the files changed since the commit $base ask of each of CI's parts ($all, the workflow's list; each
@@ -1467,7 +2363,7 @@ function PROBE__Plan(array $config): int
 				$summary[] = '- ' . $part['name'] . ': it stands on ' . $on . ' - nothing changed reaches it.';
 			} else {
 				$run[] = $part + ['pages' => implode(',', $verdict['pages']), 'base_run' => $verdict['mode'] === 'pages' ? $holder : ''];
-				$summary[] = '- ' . $part['name'] . ': it stands on ' . $on . ' - ' . ($verdict['mode'] === 'pages' ? 'again on ' . implode(', ', $verdict['pages']) : 'every page again') . '.';
+				$summary[] = '- ' . $part['name'] . ': it stands on ' . $on . ' - ' . ($verdict['mode'] === 'pages' ? 'again on ' . implode(', ', $verdict['pages']) : 'every page again') . ', for `' . implode('`, `', $verdict['why']) . '`.';
 			}
 		}
 		foreach ($changed as $sha => $files) {
@@ -1483,6 +2379,10 @@ function PROBE__Plan(array $config): int
 	$outputs = ['mode' => $mode, 'parts' => json_encode($run === [] ? $all : $run, JSON_UNESCAPED_SLASHES), 'standing' => json_encode((object)$standing, JSON_UNESCAPED_SLASHES)];
 	file_put_contents((string)getenv('GITHUB_OUTPUT') ?: 'php://stdout', implode('', array_map(fn(string $key, string $value): string => $key . '=' . $value . "\n", array_keys($outputs), $outputs)), FILE_APPEND);
 	file_put_contents((string)getenv('GITHUB_STEP_SUMMARY') ?: 'php://stderr', implode("\n", $summary) . "\n", FILE_APPEND);
+	// The job's log holds it too, for a reader of the run that has no page: the parts, their pages and why.
+	if (getenv('GITHUB_STEP_SUMMARY') !== false) {
+		echo implode("\n", $summary), "\n";
+	}
 	return 0;
 }
 
@@ -1518,8 +2418,14 @@ function PROBE__Gather(array $config): int
 		}
 	}
 	$status = $holders === [] ? 2 : PROBE__Merge($config, array_map(fn(string $name): string => $root . '/' . $name, array_keys($holders)));
-	if ($mode !== 'lab') {
-		$clean = array_filter($holders, fn(string $holder, string $name): bool => (json_decode((string)@file_get_contents($root . '/' . $name . '/report.json'), true)['findings'] ?? null) === [], ARRAY_FILTER_USE_BOTH);
+	// A pull request's run checks a merge no branch holds.
+	if ($mode !== 'lab' && getenv('GITHUB_EVENT_NAME') !== 'pull_request') {
+		// A part stands clean on a whole sheet with no finding: some pages run again and never laid over the sheet they
+		// stood on - its download failed - stand on nothing.
+		$clean = array_filter($holders, function (string $holder, string $name) use ($root): bool {
+			$report = json_decode((string)@file_get_contents($root . '/' . $name . '/report.json'), true);
+			return ($report['findings'] ?? null) === [] && ($report['only'] ?? null) === [];
+		}, ARRAY_FILTER_USE_BOTH);
 		$commit = (string)getenv('GITHUB_SHA');
 		foreach (['standing' => ['commit' => $commit, 'parts' => (object)$clean], 'verified' => ['commit' => $commit, 'mode' => $mode]] as $what => $record) {
 			if ($what === 'verified' && ($status !== 0 || count($clean) !== count($all))) {
@@ -1551,7 +2457,7 @@ function PROBE__Parallel(array $config, array $groups, array $options): int
 		while ($waiting !== [] && ($options['jobs'] === 0 || count($running) < $options['jobs'])) {
 			$group = array_key_first($waiting);
 			$names = array_shift($waiting);
-			$command = [PHP_BINARY, '-d', 'xdebug.mode=off', __FILE__, '--serial', '--sheet=' . $root . '/' . $group, ...($options['named'] ? [] : ['--full']), ...($options['pages'] === [] ? [] : ['--pages=' . implode(',', $options['pages'])]), ...($options['share'] === '' ? [] : ['--share=' . $options['share']]), ...$names];
+			$command = [PHP_BINARY, '-d', 'xdebug.mode=off', __FILE__, '--serial', '--sheet=' . $root . '/' . $group, ...($options['named'] ? [] : ['--full']), ...($options['pages'] === [] || $options['own'] !== [] ? [] : ['--pages=' . implode(',', $options['pages'])]), ...($options['share'] === '' ? [] : ['--share=' . $options['share']]), ...array_map(fn(string $name): string => isset($options['own'][$name]) ? $name . '@' . ($options['own'][$name] === '*' ? '*' : implode(',', $options['own'][$name])) : $name, $names)];
 			$proc = proc_open($command, [0 => ['file', PROBE_NULL, 'r'], 1 => ['file', $root . '/' . $group . '.log', 'a'], 2 => ['file', $root . '/' . $group . '.log', 'a']], $pipes, PROBE_ROOT);
 			if (!is_resource($proc)) {
 				throw new RuntimeException('cannot start the run of ' . implode(', ', $names));
@@ -1572,22 +2478,72 @@ function PROBE__Parallel(array $config, array $groups, array $options): int
 	return $status;
 }
 
-/** The config, its engines amended for this machine by the JSON file $REDZ_UI_ENGINES names, if any: an engine's build
- *  where the machine keeps its own, as {"chrome-130": {"linux-arm64": {"binary": "/opt/chromium-130/chromium"}}}. */
+/** PROBE__Binary for check: an engine whose build cannot be had - a download that fails or does not match its sum -
+ *  cannot run here, its reason in $why. */
+function PROBE__CheckBinary(string $name, array $engine, string &$why): string
+{
+	try {
+		return PROBE__Binary($name, $engine, $why);
+	} catch (RuntimeException $e) {
+		$why = $e->getMessage();
+		return '';
+	}
+}
+
+/**
+ * check: the Mac's run before a commit - each engine of the config's "check" on what the files changed since $base,
+ * HEAD when none, ask of it, as CI's parts take what changed since they last stood clean: every page, some pages, or
+ * none. Prints the plan - each engine's pages and the files that ask for them -, then runs it, at most $options['jobs']
+ * engines at once, 3 when not given; an engine that cannot run here is named and left out. With --dry the plan alone.
+ * The run's exit code; 0 when nothing runs.
+ */
+function PROBE__Check(array $config, string $base, array $options): int
+{
+	try {
+		$changed = PROBE__Changed($config, $base === '' ? 'HEAD' : $base);
+	} catch (RuntimeException $e) {
+		fwrite(STDERR, $e->getMessage() . "\n");
+		return 2;
+	}
+	$args = [];
+	$plan = [];
+	foreach ($config['check'] ?? [] as $name) {
+		if (!isset($config['engines'][$name])) {
+			fwrite(STDERR, 'no engine ' . $name . ' in tools/probes/config.json, which "check" names' . "\n");
+			return 2;
+		}
+		$part = PROBE__PartRun($config, $changed, ['engines' => $name]);
+		$why = '';
+		$pages = $part['mode'] === 'full' ? PROBE__EnginePages($config, $name) : $part['pages'];
+		printf("%-15s %s\n", $name, match (true) {
+			$part['mode'] === 'none' => 'nothing changed reaches it',
+			!$options['dry'] && PROBE__CheckBinary($name, $config['engines'][$name], $why) === '' => 'cannot run here: ' . $why,
+			default => ($part['mode'] === 'full' ? 'every page, ' : '') . count($pages) . ' ' . (count($pages) === 1 ? 'page' : 'pages') . ($part['mode'] === 'full' ? '' : ': ' . implode(', ', $pages)) . ' <- ' . implode(', ', $part['why']),
+		});
+		$plan[$name] = $why === '' ? ['mode' => $part['mode'], 'pages' => $part['pages']] : ['mode' => 'none', 'pages' => []];
+		if ($part['mode'] !== 'none' && $why === '') {
+			$args[] = $name . '@' . ($part['mode'] === 'full' ? '*' : implode(',', $part['pages']));
+		}
+	}
+	if ($options['dry'] || $args === []) {
+		return 0;
+	}
+	// The plan for a board, beside the engines' own live states.
+	@mkdir(PROBE_ROOT . '/.dev/live', 0777, true);
+	@file_put_contents(PROBE_ROOT . '/.dev/live/check.json', json_encode(['base' => $base === '' ? 'HEAD' : $base, 'pid' => getmypid(), 'started' => time(), 'engines' => $plan], JSON_UNESCAPED_SLASHES));
+	return PROBE__Main(['probe.php', '--jobs=' . ($options['jobs'] ?: 3), ...$args]);
+}
+
+/** The config, tools/probes/config.json. */
 function PROBE__Config(): array
 {
-	$config = json_decode((string)file_get_contents(PROBE_CONFIG), true, 512, JSON_THROW_ON_ERROR);
-	$local = (string)getenv('REDZ_UI_ENGINES');
-	if ($local !== '') {
-		$config['engines'] = array_replace_recursive($config['engines'], json_decode((string)file_get_contents($local), true, 512, JSON_THROW_ON_ERROR));
-	}
-	return $config;
+	return json_decode((string)file_get_contents(PROBE_CONFIG), true, 512, JSON_THROW_ON_ERROR);
 }
 
 function PROBE__Main(array $argv): int
 {
 	$config = PROBE__Config();
-	$options = ['pages' => [], 'sheet' => PROBE_SHEET, 'serial' => false, 'jobs' => 0, 'full' => false, 'base' => '', 'share' => ''];
+	$options = ['pages' => [], 'sheet' => PROBE_SHEET, 'serial' => false, 'jobs' => 0, 'full' => false, 'base' => '', 'share' => '', 'dry' => false];
 	$args = [];
 	foreach (array_slice($argv, 1) as $arg) {
 		match (true) {
@@ -1597,6 +2553,7 @@ function PROBE__Main(array $argv): int
 			str_starts_with($arg, '--share=') => $options['share'] = substr($arg, strlen('--share=')),
 			str_starts_with($arg, '--jobs=') => $options['jobs'] = preg_match('~^--jobs=([1-9]\d*)$~', $arg, $m) === 1 ? (int)$m[1] : -1,
 			$arg === '--serial' => $options['serial'] = true,
+			$arg === '--dry' => $options['dry'] = true,
 			// A group of a full run: its engines were not named, so one that cannot run here is only a note.
 			$arg === '--full' => $options['full'] = true,
 			default => $args[] = $arg,
@@ -1609,6 +2566,9 @@ function PROBE__Main(array $argv): int
 	}
 	if (($args[0] ?? '') === 'merge') {
 		return PROBE__Merge($config, array_slice($args, 1), $options['base']);
+	}
+	if (($args[0] ?? '') === 'check') {
+		return PROBE__Check($config, $args[1] ?? '', $options);
 	}
 	if (($args[0] ?? '') === 'affected') {
 		return PROBE__Affected($config, $args[1] ?? '', json_decode((string)getenv('ALL'), true) ?: []);
@@ -1625,6 +2585,30 @@ function PROBE__Main(array $argv): int
 	if (($args[0] ?? '') === 'nvda-setup') {
 		return PROBE__NvdaSetup();
 	}
+	// ENGINE@PAGE,PAGE runs that engine on those pages alone, its lists joined when it is named more than once; ENGINE@*
+	// runs it whole, and so does an engine named bare beside them - on the pages of --pages when given; the run's pages
+	// are then all of the lists together. An engine run whole has its exceptions judged.
+	$own = [];
+	foreach ($args as $arg) {
+		if (str_contains($arg, '@')) {
+			[$name, $list] = explode('@', $arg, 2);
+			$pages = $list === '*' ? '*' : preg_split('~[\s,]+~', $list, -1, PREG_SPLIT_NO_EMPTY);
+			if ($pages === []) {
+				fwrite(STDERR, $arg . ': no page named - ENGINE@PAGE,PAGE or ENGINE@*' . "\n");
+				return 2;
+			}
+			$own[$name] = $pages === '*' || ($own[$name] ?? null) === '*' ? '*' : array_values(array_unique([...($own[$name] ?? []), ...$pages]));
+		}
+	}
+	$bare = array_values(array_filter($args, fn(string $arg): bool => !str_contains($arg, '@')));
+	$args = array_values(array_unique(array_map(fn(string $arg): string => explode('@', $arg, 2)[0], $args)));
+	if ($own !== []) {
+		foreach ($bare as $name) {
+			$pages = $options['pages'] ?: '*';
+			$own[$name] = $pages === '*' || ($own[$name] ?? null) === '*' ? '*' : array_values(array_unique([...($own[$name] ?? []), ...$pages]));
+		}
+		$options['pages'] = array_values(array_unique([...$options['pages'], ...array_merge([], ...array_values(array_filter($own, 'is_array')))]));
+	}
 	$names = $args ?: array_keys(array_filter($config['engines'], fn(array $engine): bool => $engine['default'] ?? true));
 	foreach ($names as $name) {
 		if (!isset($config['engines'][$name])) {
@@ -1632,13 +2616,15 @@ function PROBE__Main(array $argv): int
 			return 2;
 		}
 	}
-	if ($options['pages'] !== []) {
-		try {
-			$config = PROBE__Only($config, $options['pages']);
-		} catch (InvalidArgumentException $e) {
-			fwrite(STDERR, $e->getMessage() . "\n");
-			return 2;
-		}
+	$options['own'] = $own;
+	$options['whole'] = $own === [] ? ($options['pages'] === [] ? $names : []) : array_keys(array_filter($own, fn(array|string $pages): bool => $pages === '*'));
+	$whole = $config;
+	try {
+		$config = $options['pages'] === [] ? $config : PROBE__Only($config, $options['pages']);
+		$own = array_map(fn(array|string $pages): array => $pages === '*' ? $whole : PROBE__Only($whole, $pages), $own);
+	} catch (InvalidArgumentException $e) {
+		fwrite(STDERR, $e->getMessage() . "\n");
+		return 2;
 	}
 	if ($options['share'] !== '') {
 		$share = PROBE__ShareOf($options['share']);
@@ -1647,6 +2633,12 @@ function PROBE__Main(array $argv): int
 			return 2;
 		}
 		$config = PROBE__Share($config, $share);
+		$own = array_map(fn(array $config): array => PROBE__Share($config, $share), $own);
+	}
+	if ($options['dry']) {
+		// The plan alone: the pages each engine would run, and the engines that run whole.
+		echo json_encode(['engines' => array_combine($names, array_map(fn(string $name): array => PROBE__EnginePages($own[$name] ?? $config, $name), $names)), 'whole' => $options['whole']], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), "\n";
+		return 0;
 	}
 	$groups = [];
 	foreach ($names as $name) {
@@ -1668,7 +2660,7 @@ function PROBE__Main(array $argv): int
 	} catch (RuntimeException) {
 		$commit = '';
 	}
-	$report = ['when' => gmdate('Y-m-d H:i') . ' UTC', 'commit' => $commit === '' ? 'no commit' : 'commit ' . $commit, 'widths' => array_keys($config['widths']), 'only' => $config['only'] ?? [], 'share' => $options['share'] === '' ? [] : array_fill_keys($names, [$options['share']]), 'engines' => [], 'skipped' => [], 'findings' => [], 'guarded' => [], 'walked' => [], 'spoken' => [], 'read' => [], 'shots' => [], 'used' => []];
+	$report = ['when' => gmdate('Y-m-d H:i') . ' UTC', 'commit' => $commit === '' ? 'no commit' : 'commit ' . $commit, 'widths' => array_keys($config['widths']), 'only' => $config['only'] ?? [], 'whole' => $options['whole'], 'share' => $options['share'] === '' ? [] : array_fill_keys($names, [$options['share']]), 'engines' => [], 'skipped' => [], 'findings' => [], 'guarded' => [], 'walked' => [], 'spoken' => [], 'read' => [], 'shots' => [], 'used' => []];
 	$run = ['config' => $config, 'page' => (string)file_get_contents(PROBE_PAGE), 'read' => (string)file_get_contents(PROBE_READ), 'behave' => (string)file_get_contents(PROBE_BEHAVE), 'axe' => PROBE__Axe($config['axe']), 'sheet' => $work];
 	[$server, $run['base']] = PROBE__ServerStart($tmp);
 	register_shutdown_function(fn() => is_resource($server) && proc_terminate($server));
@@ -1693,12 +2685,13 @@ function PROBE__Main(array $argv): int
 					continue;
 				}
 				// A share's logs keep their own names in the sheet the shares are joined into.
-				$own = $tmp . '/' . $name . ($options['share'] === '' ? '' : '-share-' . str_replace('/', '-of-', $options['share']));
-				mkdir($own, 0777, true);
-				PROBE__EngineRun($name, $config['engines'][$name], $binary, $own, $run, $report);
+				$folder = $tmp . '/' . $name . ($options['share'] === '' ? '' : '-share-' . str_replace('/', '-of-', $options['share']));
+				mkdir($folder, 0777, true);
+				PROBE__EngineRun($name, $config['engines'][$name], $binary, $folder, isset($own[$name]) ? ['config' => $own[$name]] + $run : $run, $report);
 			} catch (Throwable $e) {
 				$report['findings'][] = $name . ' - stopped: ' . $e->getMessage();
 			}
+			PROBE__LiveEnd($name, count($report['findings']));
 			printf("%-12s %s · %d cells · %d findings\n", $name, $report['engines'][$name]['version'] ?? '?', $report['engines'][$name]['cells'] ?? 0, count($report['findings']) - $before);
 		}
 	} finally {

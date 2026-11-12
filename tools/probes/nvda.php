@@ -430,7 +430,7 @@ function PROBE__NvdaRead(array &$r, array &$h, string $page, array $run, array &
 				default => '',
 			};
 			$at = $found === null ? $at : $found + 1;
-			if ($finding !== '' && !PROBE__FindingAllowed($run['config'], $name, $finding, $report)) {
+			if ($finding !== '' && !PROBE__FindingAllowed($run['config'], $name, $finding, $page, $report)) {
 				$findings[] = $finding;
 			}
 		}

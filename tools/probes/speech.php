@@ -84,7 +84,7 @@ function PROBE__SpeechPage(array &$r, array &$h, string $page, array $steps, arr
 		$finding = $name . ' ' . $page . ' - ' . $step['label'] . ': ' . $r['reader'] . ' said «' . implode(' · ', $heard) . '», without «' . implode('», «', $missing) . '»';
 		if ($missing !== [] && isset($step['unsteady'][$name])) {
 			echo 'note: ', $finding, ' - unsteady here: ', $step['unsteady'][$name], "\n";
-		} elseif ($missing !== [] && !PROBE__FindingAllowed($run['config'], $name, $finding, $report)) {
+		} elseif ($missing !== [] && !PROBE__FindingAllowed($run['config'], $name, $finding, $page, $report)) {
 			$findings[] = $finding;
 		}
 	}
