@@ -3,7 +3,7 @@
 The interface library of the REDZ products: plain CSS and small JavaScript on the browser platform - no framework, no
 build step.
 
-**Status:** 0.24.1 (2026-11-11) - see [Releases](#releases). Three demo screens in `reference/demo/` -
+**Status:** 0.25.0 (2026-11-12) - see [Releases](#releases). Three demo screens in `reference/demo/` -
 a list, a resource page and a settings form - show it in light and dark themes, left-to-right and right-to-left.
 
 **Site:** [redz-tech.github.io/REDZ.UI](https://redz-tech.github.io/REDZ.UI/) - documentation and the demo screens of
@@ -107,6 +107,9 @@ attaches by delegation on `document`, so nothing is set up per element and marku
   cross-document view transitions. `data-transition` on `<html>` is `fade`, the default, `instant`, `busy` - the main
   column under the busy overlay while the next page comes, where the browser has the Navigation API - or `none`
   (`js/transition.js`).
+- **A white label:** `data-brand` derives the primary tone of one colour, also on a region set after load; `REDZ.ui.brand(colour)`
+  answers what it paints in each theme - the tone, the words on it, the links, the focus ring and the ground, with their
+  contrast ratios - for a settings screen that lets a person choose the colour.
 - **Notices:** `REDZ.ui.toast({title, text, tone, action, persistent})` shows a toast in the live regions of
   `.toast-container` - `role="status"`, `role="alert"` for `danger` - or in an open modal dialog's own. Success and info
   leave after 8 seconds unless the pointer or the focus rests on them; an error and a notice with an action stay until
@@ -366,13 +369,13 @@ holds `css/icons.min.css`, `icons/` and the pack's passport `redz-ui-icons.json`
 the version it needs. `php tools/build.php --check` refuses icons that changed under a published version.
 
 ```sh
-gh release download v0.24.1 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
-gh release verify-asset v0.24.1 redz-ui-0.24.1.zip --repo redz-tech/REDZ.UI
+gh release download v0.25.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
+gh release verify-asset v0.25.0 redz-ui-0.25.0.zip --repo redz-tech/REDZ.UI
 gh release download icons-1.13.2 --repo redz-tech/REDZ.UI --pattern 'redz-ui-icons-*.zip'
 gh release verify-asset icons-1.13.2 redz-ui-icons-1.13.2.zip --repo redz-tech/REDZ.UI
 ```
 
-jsDelivr serves a release by its tag: `https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.24.1/dist/css/redz-ui.min.css`
+jsDelivr serves a release by its tag: `https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.25.0/dist/css/redz-ui.min.css`
 and `https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@icons-1.13.2/css/icons.min.css`. Versions
 follow Semantic Versioning: a class, token, attribute or JavaScript call removed or renamed is a major release, one
 added is a minor release, a fix is a patch; while the version is 0.x, a removal or a rename is a minor release.
