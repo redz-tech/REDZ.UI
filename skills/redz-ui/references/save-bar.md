@@ -138,7 +138,7 @@ A tracked form in a dialog keeps its own button, which takes `Control` `S` when 
 
 ## What a field is
 
-- One field per name: a radio group, checkboxes of one name, a `select multiple` and a combobox's list each count once. A disabled field is compared too, by its value. Words typed in a chips field's entry and not yet taken are a change of that field.
+- One field per name: a radio group, checkboxes of one name, a `select multiple` and a combobox's list each count once. A checkbox or a switch after a hidden field of its name - `<input type="hidden" name="shown" value="0">`, sent while the box is unchecked - is one checkbox field: its value is the box's, or the hidden one's while unchecked, and its change and its refusal show on the box's row. A disabled field is compared too, by its value. Words typed in a chips field's entry and not yet taken are a change of that field.
 - The saved state is read one task after `DOMContentLoaded` - after the page's own scripts, so a field a script formats at load is already in it - and one task after a tracked form lands later. A value typed back to the saved one is no change; a field added or removed since is one.
 - `data-track="off"` on a control or a fieldset leaves it out. Hidden fields are compared but never marked. A field's words in the bar are its `data-track-label`, else its label, its group's legend or its combobox's label.
 - A value set by code: `REDZ.ui.track.refresh(form)` draws the change, `REDZ.ui.track.baseline(form)` takes what the form holds as saved - a dialog refilled for another record.

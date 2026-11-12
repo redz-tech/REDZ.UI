@@ -25,7 +25,7 @@
 		<header class="app-header">
 			<button class="btn btn-text btn-icon app-burger" type="button" commandfor="docs-nav" command="toggle-popover" aria-label="الصفحات"><i class="bi bi-list" aria-hidden="true"></i></button>
 			<button class="btn btn-text btn-icon" type="button" command="--fold" aria-controls="docs-nav" aria-label="اطوِ الصفحات"><i class="bi bi-layout-sidebar" aria-hidden="true"></i></button>
-			<a class="app-brand" href="../index.html"><span class="app-mark">RZ</span><span>REDZ.UI</span></a>
+			<a class="app-brand" href="../index.html"><span class="app-mark" aria-hidden="true">RZ</span><span class="app-name">REDZ.UI</span></a>
 			<div class="hstack gap-4 ms-auto">
 				<button class="btn btn-text btn-icon" type="button" commandfor="docs-view" command="toggle-popover" aria-haspopup="menu" aria-label="العرض"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
 				<div id="docs-view" class="menu" popover="" role="menu" aria-label="العرض">
@@ -1458,6 +1458,24 @@ Boat C	 9 trips	201 seats</pre>
 								<li data-file-stored="7"><input type="hidden" name="cover_kept" value="7"><img data-file-preview="" src="img/lagoon.svg" alt=""><span data-file-name="">lagoon.svg</span><span class="invalid-feedback" data-file-error=""></span><button class="btn btn-xs btn-icon" type="button" data-file-remove="" aria-label="إزالة lagoon.svg"><i class="bi bi-x-lg" aria-hidden="true"></i></button></li>
 							</ul>
 							<button class="upload-zone btn btn-sm" type="button"><i class="bi bi-image" aria-hidden="true"></i>اختر صورة أخرى</button>
+							<template>
+								<li>
+									<img data-file-preview="" alt="">
+									<span data-file-name=""></span>
+									<progress class="progress progress-xs"></progress>
+									<span class="invalid-feedback" data-file-error=""></span>
+									<button class="btn btn-xs btn-icon" type="button" data-file-remove=""><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+								</li>
+							</template>
+						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="upload-image-dark">
+						<div class="upload upload-image upload-image-dark max-w-360">
+							<input class="visually-hidden" id="upload-dark-input" type="file" name="logo_dark" accept="image/*" tabindex="-1" aria-label="الشعار للسمة الداكنة">
+							<ul class="upload-list" aria-label="الشعار للسمة الداكنة">
+								<li data-file-stored="9"><input type="hidden" name="logo_dark_kept" value="9"><img data-file-preview="" src="img/brand-dark.svg" alt=""><span data-file-name="">logo-dark.svg</span><span class="invalid-feedback" data-file-error=""></span><button class="btn btn-xs btn-icon" type="button" data-file-remove="" aria-label="إزالة logo-dark.svg"><i class="bi bi-x-lg" aria-hidden="true"></i></button></li>
+							</ul>
+							<button class="upload-zone btn btn-sm" type="button"><i class="bi bi-image" aria-hidden="true"></i>اختر شعارًا آخر</button>
 							<template>
 								<li>
 									<img data-file-preview="" alt="">
@@ -4104,6 +4122,24 @@ Boat C	 9 trips	201 seats</pre>
 
 				<section class="vstack gap-16" aria-labelledby="all-app">
 					<h2 id="all-app"><a href="app.html">هيكل التطبيق</a></h2>
+					<div class="docs-example docs-example-stack" id="app-brand-logo">
+						<header class="app-header">
+							<a class="app-brand" href="#app-brand"><img class="brand-logo" src="img/brand-light.svg" width="112" height="28" alt="Velmora"><img class="brand-logo brand-logo-dark" src="img/brand-dark.svg" width="112" height="28" alt="Velmora"><span class="app-mark" aria-hidden="true">V</span></a>
+							<button class="btn btn-text btn-icon ms-auto" type="button" aria-label="السمة"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+						</header>
+						<header class="app-header">
+							<a class="app-brand" href="#app-brand"><img class="brand-logo" src="img/brand-light.svg" width="112" height="28" alt="Velmora"></a>
+							<button class="btn btn-text btn-icon ms-auto" type="button" aria-label="السمة"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+						</header>
+						<header class="app-header max-w-360">
+							<a class="app-brand" href="#app-brand"><img class="brand-logo" src="img/brand-light.svg" width="112" height="28" alt="Velmora"><img class="brand-logo brand-logo-dark" src="img/brand-dark.svg" width="112" height="28" alt="Velmora"><span class="app-mark" aria-hidden="true">V</span></a>
+							<button class="btn btn-text btn-icon ms-auto" type="button" aria-label="السمة"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+						</header>
+						<header class="app-header max-w-360">
+							<a class="app-brand" href="#app-brand"><span class="app-mark" aria-hidden="true">V</span><span class="app-name">Velmora</span></a>
+							<button class="btn btn-text btn-icon ms-auto" type="button" aria-label="السمة"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+						</header>
+					</div>
 					<div class="docs-example" id="app-banner-calls">
 						<button class="btn" type="button" data-docs-run="banner-warning">متوقف مؤقتًا</button>
 						<button class="btn" type="button" data-docs-run="banner-danger">انقطع الاتصال</button>
@@ -4194,6 +4230,7 @@ Boat C	 9 trips	201 seats</pre>
 								<a href="#page-center-example">نسيت كلمة المرور؟</a>
 								<a href="#page-center-example">تسجيل الدخول برمز</a>
 							</div>
+							<p class="app-credit">بدعم من <a href="#page-center-example">REDZ CMS</a></p>
 						</div>
 					</div>
 				</section>

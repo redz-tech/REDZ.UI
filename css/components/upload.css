@@ -37,6 +37,12 @@
 		background: #fff;
 	}
 
+	/* A picture for the dark theme - a white label's dark logo - shows on the dark page's ground, where it will stand. */
+	.upload-image-dark .upload-list > :not([data-state="failed"]) {
+		color-scheme: dark;
+		background: var(--redz-bg-page);
+	}
+
 	.upload-image .upload-list > :not([data-state="failed"]) [data-file-preview] {
 		display: block;
 		inline-size: 100%;

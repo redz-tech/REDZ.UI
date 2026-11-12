@@ -9,7 +9,7 @@
 	<pre class="docs-code" tabindex="0"><code>&lt;div class="app"&gt;
   &lt;header class="app-header"&gt;
     &lt;button class="btn btn-text btn-icon app-burger" type="button" commandfor="side" command="toggle-popover" aria-label="Sections"&gt;…&lt;/button&gt;
-    &lt;a class="app-brand" href="/"&gt;&lt;span class="app-mark"&gt;RZ&lt;/span&gt;REDZ CMS&lt;/a&gt;
+    &lt;a class="app-brand" href="/"&gt;&lt;span class="app-mark" aria-hidden="true"&gt;RZ&lt;/span&gt;&lt;span class="app-name"&gt;REDZ CMS&lt;/span&gt;&lt;/a&gt;
     &lt;button class="btn app-search" type="button" aria-keyshortcuts="Meta+K"&gt;…&lt;/button&gt;
   &lt;/header&gt;
   &lt;nav id="side" class="app-sidebar" popover aria-label="Sections"&gt;
@@ -30,6 +30,49 @@
 &lt;/div&gt;</code></pre>
 	<p>The side column <code>app-aside</code> stands in the main column's grid, beside its content, and goes under it where the column is narrow; the shell's own grid has no place for it.</p>
 	<p>The <a href="../reference/demo/list.html">demo screens</a> show the whole shell: a list, a resource page with its side column, a settings form.</p>
+
+	<h3 id="app-brand">The brand</h3>
+	<p><code>app-brand</code> is the link home at the header's start: the product's mark, <code>app-mark</code>, and its name, <code>app-name</code>. The mark is a picture of the name, so it carries <code>aria-hidden="true"</code>. Where the header is under 576 px wide, the brand is its mark alone. The name leaves the sight but stays the link's name for a screen reader.</p>
+	<p>A product with its own logo puts it in place of the name: <code>&lt;img class="brand-logo"&gt;</code>, the picture for the light theme, then <code>&lt;img class="brand-logo brand-logo-dark"&gt;</code>, its twin for the dark one. Each carries the file's own <code>width</code> and <code>height</code>: the logo stands 28 px tall, as wide as its proportions make it, and nothing moves as it loads. In the header it is at most 160 px wide.</p>
+	<ul>
+		<li>The page's theme picks the picture: <code>data-theme</code> on <code>html</code>, or the system's without it. A region's own <code>data-theme</code> leaves the logo as it is.</li>
+		<li>A light picture with no twin stands on a white mat in the dark theme.</li>
+		<li>With the mark printed too, the header under 576 px shows the mark and keeps the logo's <code>alt</code> as the link's name. Without the mark, the logo narrows where the header is full, its picture kept whole.</li>
+		<li>The <code>alt</code> of both pictures is the product's name; only the one shown is read.</li>
+	</ul>
+	<div class="docs-example docs-example-stack" id="app-brand-logo">
+		<header class="app-header">
+			<a class="app-brand" href="#app-brand"><img class="brand-logo" src="img/brand-light.svg" width="112" height="28" alt="Velmora"><img class="brand-logo brand-logo-dark" src="img/brand-dark.svg" width="112" height="28" alt="Velmora"><span class="app-mark" aria-hidden="true">V</span></a>
+			<button class="btn btn-text btn-icon ms-auto" type="button" aria-label="Theme"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+		</header>
+		<header class="app-header">
+			<a class="app-brand" href="#app-brand"><img class="brand-logo" src="img/brand-light.svg" width="112" height="28" alt="Velmora"></a>
+			<button class="btn btn-text btn-icon ms-auto" type="button" aria-label="Theme"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+		</header>
+		<header class="app-header max-w-360">
+			<a class="app-brand" href="#app-brand"><img class="brand-logo" src="img/brand-light.svg" width="112" height="28" alt="Velmora"><img class="brand-logo brand-logo-dark" src="img/brand-dark.svg" width="112" height="28" alt="Velmora"><span class="app-mark" aria-hidden="true">V</span></a>
+			<button class="btn btn-text btn-icon ms-auto" type="button" aria-label="Theme"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+		</header>
+		<header class="app-header max-w-360">
+			<a class="app-brand" href="#app-brand"><span class="app-mark" aria-hidden="true">V</span><span class="app-name">Velmora</span></a>
+			<button class="btn btn-text btn-icon ms-auto" type="button" aria-label="Theme"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+		</header>
+	</div>
+	<p>Above: the pair with its mark, a light logo alone - on its mat in the dark theme - and the pair and the name in a header narrower than 576 px.</p>
+	<pre class="docs-code" tabindex="0"><code>&lt;a class="app-brand" href="/"&gt;
+  &lt;img class="brand-logo" src="logo-light.svg" width="112" height="28" alt="Velmora"&gt;
+  &lt;img class="brand-logo brand-logo-dark" src="logo-dark.svg" width="112" height="28" alt="Velmora"&gt;
+  &lt;span class="app-mark" aria-hidden="true"&gt;V&lt;/span&gt;
+&lt;/a&gt;</code></pre>
+
+	<h3 id="app-credit">A credit line</h3>
+	<p><code>&lt;footer class="app-credit"&gt;</code> after <code>app-main</code>, in <code>app</code> itself, is a quiet line under the main column: small, muted, its link in the line's colour and underlined. The words are the page's. On a short page it stands at the window's foot; on a long one after the column's end. It is the page's <code>contentinfo</code>, outside <code>main</code>, so a <a href="save-bar.html">save bar</a> in the column never covers it. Print leaves it out.</p>
+	<pre class="docs-code" tabindex="0"><code>&lt;div class="app"&gt;
+  &lt;header class="app-header"&gt;…&lt;/header&gt;
+  &lt;nav class="app-sidebar" …&gt;…&lt;/nav&gt;
+  &lt;main class="app-main"&gt;…&lt;/main&gt;
+  &lt;footer class="app-credit"&gt;Powered by &lt;a href="https://example.com/"&gt;Example CMS&lt;/a&gt;&lt;/footer&gt;
+&lt;/div&gt;</code></pre>
 
 	<h3>Folded to a rail</h3>
 	<p>On a wide window the side navigation folds into a rail of its icons and back: a header button with <code>command="--fold"</code> and <code>aria-controls</code> naming the sidebar puts <code>data-folded</code> on it and says so in <code>aria-pressed</code>. Folded, each link shows its words as a tooltip and keeps them as its name. The library stores nothing: it tells the page in <code>redz:fold</code> (<code>detail.folded</code>), and the page that keeps the choice writes <code>data-folded</code> back on the sidebar when it loads. These docs fold so - the button beside their burger.</p>

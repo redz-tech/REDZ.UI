@@ -12,7 +12,7 @@ The shell is the one part of the library that looks at the window; everything in
 <div class="app">
   <header class="app-header">
     <button class="btn btn-text btn-icon app-burger" type="button" commandfor="side" command="toggle-popover" aria-label="Sections">…</button>
-    <a class="app-brand" href="/"><span class="app-mark">RZ</span>REDZ CMS</a>
+    <a class="app-brand" href="/"><span class="app-mark" aria-hidden="true">RZ</span><span class="app-name">REDZ CMS</span></a>
     <button class="btn app-search" type="button" aria-keyshortcuts="Meta+K">…</button>
   </header>
   <nav id="side" class="app-sidebar" popover aria-label="Sections">
@@ -36,6 +36,59 @@ The shell is the one part of the library that looks at the window; everything in
 The side column `app-aside` stands in the main column's grid, beside its content, and goes under it where the column is narrow; the shell's own grid has no place for it.
 
 The [demo screens](https://redz-tech.github.io/REDZ.UI/reference/demo/list.html) show the whole shell: a list, a resource page with its side column, a settings form.
+
+### The brand
+
+`app-brand` is the link home at the header's start: the product's mark, `app-mark`, and its name, `app-name`. The mark is a picture of the name, so it carries `aria-hidden="true"`. Where the header is under 576 px wide, the brand is its mark alone. The name leaves the sight but stays the link's name for a screen reader.
+
+A product with its own logo puts it in place of the name: `<img class="brand-logo">`, the picture for the light theme, then `<img class="brand-logo brand-logo-dark">`, its twin for the dark one. Each carries the file's own `width` and `height`: the logo stands 28 px tall, as wide as its proportions make it, and nothing moves as it loads. In the header it is at most 160 px wide.
+
+- The page's theme picks the picture: `data-theme` on `html`, or the system's without it. A region's own `data-theme` leaves the logo as it is.
+- A light picture with no twin stands on a white mat in the dark theme.
+- With the mark printed too, the header under 576 px shows the mark and keeps the logo's `alt` as the link's name. Without the mark, the logo narrows where the header is full, its picture kept whole.
+- The `alt` of both pictures is the product's name; only the one shown is read.
+
+```html
+<header class="app-header">
+	<a class="app-brand" href="#app-brand"><img class="brand-logo" src="img/brand-light.svg" width="112" height="28" alt="Velmora"><img class="brand-logo brand-logo-dark" src="img/brand-dark.svg" width="112" height="28" alt="Velmora"><span class="app-mark" aria-hidden="true">V</span></a>
+	<button class="btn btn-text btn-icon ms-auto" type="button" aria-label="Theme"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+</header>
+<header class="app-header">
+	<a class="app-brand" href="#app-brand"><img class="brand-logo" src="img/brand-light.svg" width="112" height="28" alt="Velmora"></a>
+	<button class="btn btn-text btn-icon ms-auto" type="button" aria-label="Theme"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+</header>
+<header class="app-header max-w-360">
+	<a class="app-brand" href="#app-brand"><img class="brand-logo" src="img/brand-light.svg" width="112" height="28" alt="Velmora"><img class="brand-logo brand-logo-dark" src="img/brand-dark.svg" width="112" height="28" alt="Velmora"><span class="app-mark" aria-hidden="true">V</span></a>
+	<button class="btn btn-text btn-icon ms-auto" type="button" aria-label="Theme"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+</header>
+<header class="app-header max-w-360">
+	<a class="app-brand" href="#app-brand"><span class="app-mark" aria-hidden="true">V</span><span class="app-name">Velmora</span></a>
+	<button class="btn btn-text btn-icon ms-auto" type="button" aria-label="Theme"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+</header>
+```
+
+Above: the pair with its mark, a light logo alone - on its mat in the dark theme - and the pair and the name in a header narrower than 576 px.
+
+```html
+<a class="app-brand" href="/">
+  <img class="brand-logo" src="logo-light.svg" width="112" height="28" alt="Velmora">
+  <img class="brand-logo brand-logo-dark" src="logo-dark.svg" width="112" height="28" alt="Velmora">
+  <span class="app-mark" aria-hidden="true">V</span>
+</a>
+```
+
+### A credit line
+
+`<footer class="app-credit">` after `app-main`, in `app` itself, is a quiet line under the main column: small, muted, its link in the line's colour and underlined. The words are the page's. On a short page it stands at the window's foot; on a long one after the column's end. It is the page's `contentinfo`, outside `main`, so a [save bar](save-bar.md) in the column never covers it. Print leaves it out.
+
+```html
+<div class="app">
+  <header class="app-header">…</header>
+  <nav class="app-sidebar" …>…</nav>
+  <main class="app-main">…</main>
+  <footer class="app-credit">Powered by <a href="https://example.com/">Example CMS</a></footer>
+</div>
+```
 
 ### Folded to a rail
 

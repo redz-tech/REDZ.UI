@@ -45,10 +45,23 @@ A page without the app shell: the brand, one card and a way on, in a column at t
 		<a href="#page-center-example">Forgot the password?</a>
 		<a href="#page-center-example">Sign in with a code</a>
 	</div>
+	<p class="app-credit">Powered by <a href="#page-center-example">REDZ CMS</a></p>
 </div>
 ```
 
 Every child but the corner stands in the column, whatever it is itself - a `vstack` or an `hstack` of links under the card stays under the card, not at the start of a wide window.
+
+A product with its own logo puts the [brand's pair](app.md#app-brand) in `page-center-brand` in place of the mark, 40 px tall: the light picture, then its twin for the dark theme, and a light one alone on a white mat in the dark. The [credit line](app.md#app-credit), `app-credit`, stands last in the column, centred under the card.
+
+```html
+<header class="page-center-brand">
+  <img class="brand-logo" src="logo-light.svg" width="112" height="28" alt="Velmora">
+  <img class="brand-logo brand-logo-dark" src="logo-dark.svg" width="112" height="28" alt="Velmora">
+  <p>Sign in to manage your sites</p>
+</header>
+<form class="card">…</form>
+<p class="app-credit">Powered by <a href="https://example.com/">Example CMS</a></p>
+```
 
 In a page `page-center` is the `main` and the brand's name its `h1`; here they are a `div` and an `h2` under the page's own.
 

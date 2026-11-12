@@ -6,13 +6,31 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 
 ## Unreleased
 
+### Added
+- A product's own logo in the brand: `img.brand-logo`, the light picture, and `img.brand-logo.brand-logo-dark`, its twin.
+  The page's theme picks one: `data-theme` on `html`, or the system's. A light one alone stands on a white mat in the
+  dark. It is 28 px tall, as wide as the img's `width` and `height` make it, at most 160 px in the header and 40 px
+  tall in `page-center-brand`.
+- `app-name`, the product's name beside `app-mark`. Under a 576 px header the brand is its mark: the logo or the name
+  leaves the sight but stays the link's name.
+- `app-credit`, a quiet credit line. As `<footer>` after `app-main` it is the shell's row under the main column, at the
+  window's foot on a short page, never under the save bar. It also stands last in `page-center`.
+- `upload-image-dark` shows an image field's picture on the dark theme's page ground.
+- `REDZ.ui.brand(colour)` answers what `data-brand` of a colour paints in each theme: the tone, the words on it, the
+  links, the focus ring and the ground as `#rrggbb`, and four contrast ratios.
+
 ### Changed
+- The demos' brand is the mark and `app-name`: the mark is `aria-hidden`, and the name, hidden under 768 px before, is
+  now the link's name at every width.
 - Tracked forms: words typed in a chips field's entry and not yet taken are a change of that field. The box is marked,
   the bar names it, and leaving asks first. Discard and `REDZ.ui.track.reset()` empty the entry, the bar's Undo brings
   the words back, and `REDZ.ui.track.baseline()` leaves them.
 - The script's budget is 54 KB gzipped, up from 52 KB.
 
 ### Fixed
+- Tracked forms: a checkbox or a switch after a hidden field of its name, which sends a value while the box is
+  unchecked, is one checkbox field. Its flip was never a change: the field took the hidden field's kind and value, so
+  the bar stayed clean and the flip was not sent. Its change and its refusal show on the box's row.
 - A white label's focus ring reads on the ground: under `data-brand` it is `--redz-primary-text`, as the links are.
   It was the colour as given, so a pale one hid it: #f4c542 stood at 1.63:1 on white, under the 3:1 a focus ring needs.
 - Every save of tracked forms takes the words left in the chips fields' entries first, and a refused one holds it:

@@ -14,6 +14,16 @@ The custom properties on `:root` that the components read: colors by role in pai
 
 `data-brand` on `html`, or on one region, makes the primary tone of one colour, `--redz-brand`: the library derives the tone, its `-subtle` fill, its `-contrast` text - black or white, whichever reads at 4.5:1 on it, as one of the two always does - the focus ring and the links, in both themes; in the dark one the tone is lightened until it reads on the dark ground. `data-brand="#0a7f5a"` gives the colour, which the library sets through the CSSOM after its script loads; a page that knows the colour on its server writes `--redz-brand` in its own stylesheet beside the attribute, and nothing waits for the script. Where the tone is text or a line on the ground - a link, a subtle badge, an outline button, `text-primary`, an alert's icon, the focus ring - it is `--redz-primary-text`: in the light theme the colour darkened, its hue kept, until its luminance is at most 0.13, which reads at 4.5:1 on white and on its subtle fill; in the dark theme the tone itself. A fill keeps the colour as given. The other tones follow their own keys the same way: `data-brand-secondary`, `data-brand-success`, `data-brand-info`, `data-brand-warning` and `data-brand-danger` - a company's own red for its errors - each derive that tone, its `-subtle`, `-contrast` and `-text`. Every tone has its `--redz-TONE-text`, the tone itself unless a brand key derives it. The relative colours it is derived with are on the floor: Chrome 119, Firefox 128, Safari 18.
 
+The key may change while the page stands: set on a region after load, `data-brand` derives the tone there at the next frame, and the region's own `data-theme` gives it the other theme. A settings screen that lets a person choose the colour asks the library what it will paint: `REDZ.ui.brand(colour)` answers for both themes with the tone, the words on it, the links, the focus ring and the ground under them, each `#rrggbb`, and four contrast ratios, read from the stylesheet the page loads. The words on the tone and the links reach 4.5:1 by themselves and the ring 3:1; a fill keeps the colour as given, so `toneOnGround` is the one to warn about - a pale colour makes pale buttons and bars. A value that is no colour answers `null`.
+
+```js
+REDZ.ui.brand('#f4c542')
+// {light: {tone: '#f4c542', text: '#000000', link: '#7b621c', ring: '#7b621c', ground: '#ffffff',
+//          textOnTone: 12.91, linkOnGround: 5.82, ringOnGround: 5.82, toneOnGround: 1.63},
+//  dark:  {tone: '#f4c542', text: '#000000', link: '#f4c542', ring: '#f4c542', ground: '#161719',
+//          textOnTone: 12.91, linkOnGround: 11.03, ringOnGround: 11.03, toneOnGround: 11.03}}
+```
+
 ```html
 <div class="hstack flex-wrap gap-8" data-brand="#0a7f5a">
 	<button class="btn btn-primary" type="button">Book now</button>

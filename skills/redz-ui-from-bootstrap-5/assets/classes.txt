@@ -360,11 +360,13 @@ app-banner-success
 app-banner-warning
 app-brand
 app-burger
+app-credit
 app-group
 app-header
 app-link
 app-main
 app-mark
+app-name
 app-search
 app-section
 app-sidebar
@@ -2506,6 +2508,8 @@ border-warning-subtle
 bottom-0
 bottom-100
 bottom-50
+brand-logo
+brand-logo-dark
 breadcrumb
 breadcrumb-item
 btn
@@ -4384,6 +4388,7 @@ tree-row
 tree-toggle
 upload
 upload-image
+upload-image-dark
 upload-list
 upload-thumbs
 upload-zone

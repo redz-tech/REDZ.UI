@@ -1206,6 +1206,16 @@ The custom properties on `:root` that the components read: colors by role in pai
 
 `data-brand` on `html`, or on one region, makes the primary tone of one colour, `--redz-brand`: the library derives the tone, its `-subtle` fill, its `-contrast` text - black or white, whichever reads at 4.5:1 on it, as one of the two always does - the focus ring and the links, in both themes; in the dark one the tone is lightened until it reads on the dark ground. `data-brand="#0a7f5a"` gives the colour, which the library sets through the CSSOM after its script loads; a page that knows the colour on its server writes `--redz-brand` in its own stylesheet beside the attribute, and nothing waits for the script. Where the tone is text or a line on the ground - a link, a subtle badge, an outline button, `text-primary`, an alert's icon, the focus ring - it is `--redz-primary-text`: in the light theme the colour darkened, its hue kept, until its luminance is at most 0.13, which reads at 4.5:1 on white and on its subtle fill; in the dark theme the tone itself. A fill keeps the colour as given. The other tones follow their own keys the same way: `data-brand-secondary`, `data-brand-success`, `data-brand-info`, `data-brand-warning` and `data-brand-danger` - a company's own red for its errors - each derive that tone, its `-subtle`, `-contrast` and `-text`. Every tone has its `--redz-TONE-text`, the tone itself unless a brand key derives it. The relative colours it is derived with are on the floor: Chrome 119, Firefox 128, Safari 18.
 
+The key may change while the page stands: set on a region after load, `data-brand` derives the tone there at the next frame, and the region's own `data-theme` gives it the other theme. A settings screen that lets a person choose the colour asks the library what it will paint: `REDZ.ui.brand(colour)` answers for both themes with the tone, the words on it, the links, the focus ring and the ground under them, each `#rrggbb`, and four contrast ratios, read from the stylesheet the page loads. The words on the tone and the links reach 4.5:1 by themselves and the ring 3:1; a fill keeps the colour as given, so `toneOnGround` is the one to warn about - a pale colour makes pale buttons and bars. A value that is no colour answers `null`.
+
+```js
+REDZ.ui.brand('#f4c542')
+// {light: {tone: '#f4c542', text: '#000000', link: '#7b621c', ring: '#7b621c', ground: '#ffffff',
+//          textOnTone: 12.91, linkOnGround: 5.82, ringOnGround: 5.82, toneOnGround: 1.63},
+//  dark:  {tone: '#f4c542', text: '#000000', link: '#f4c542', ring: '#f4c542', ground: '#161719',
+//          textOnTone: 12.91, linkOnGround: 11.03, ringOnGround: 11.03, toneOnGround: 11.03}}
+```
+
 ```html
 <div class="hstack flex-wrap gap-8" data-brand="#0a7f5a">
 	<button class="btn btn-primary" type="button">Book now</button>
@@ -4341,6 +4351,27 @@ send.addEventListener('click', async () => {
 </div>
 ```
 
+`upload-image-dark` beside it shows the image on the dark theme's page ground, in either theme: the field for a logo meant for the dark theme shows it where it will stand, and a white box round a picture shows at once.
+
+```html
+<div class="upload upload-image upload-image-dark max-w-360">
+	<input class="visually-hidden" id="upload-dark-input" type="file" name="logo_dark" accept="image/*" tabindex="-1" aria-label="Logo for the dark theme">
+	<ul class="upload-list" aria-label="Logo for the dark theme">
+		<li data-file-stored="9"><input type="hidden" name="logo_dark_kept" value="9"><img data-file-preview src="img/brand-dark.svg" alt=""><span data-file-name>logo-dark.svg</span><span class="invalid-feedback" data-file-error></span><button class="btn btn-xs btn-icon" type="button" data-file-remove aria-label="Remove logo-dark.svg"><i class="bi bi-x-lg" aria-hidden="true"></i></button></li>
+	</ul>
+	<button class="upload-zone btn btn-sm" type="button"><i class="bi bi-image" aria-hidden="true"></i>Choose another logo</button>
+	<template>
+		<li>
+			<img data-file-preview alt="">
+			<span data-file-name></span>
+			<progress class="progress progress-xs"></progress>
+			<span class="invalid-feedback" data-file-error></span>
+			<button class="btn btn-xs btn-icon" type="button" data-file-remove><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+		</li>
+	</template>
+</div>
+```
+
 ## Keyboard and accessibility
 
 - The zone is one real button: `Enter` or `Space` opens the browser's picker; the input itself stays out of the Tab order, and its words - which follow the browser's language, not the page's - never show.
@@ -4359,7 +4390,7 @@ send.addEventListener('click', async () => {
 
 From [`css/components/upload.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/upload.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-8`, `--redz-space-4`, `--redz-space-24`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-primary`, `--redz-bg-hover`, `--redz-border`, `--redz-upload-image-height`, `--redz-radius-8`, `--redz-bg-page`, `--redz-space-2`.
+It reads the theme's `--redz-space-8`, `--redz-space-4`, `--redz-space-24`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-primary`, `--redz-bg-hover`, `--redz-border`, `--redz-bg-page`, `--redz-upload-image-height`, `--redz-radius-8`, `--redz-space-2`.
 
 # Choice tiles
 
@@ -8361,7 +8392,7 @@ A tracked form in a dialog keeps its own button, which takes `Control` `S` when 
 
 ## What a field is
 
-- One field per name: a radio group, checkboxes of one name, a `select multiple` and a combobox's list each count once. A disabled field is compared too, by its value. Words typed in a chips field's entry and not yet taken are a change of that field.
+- One field per name: a radio group, checkboxes of one name, a `select multiple` and a combobox's list each count once. A checkbox or a switch after a hidden field of its name - `<input type="hidden" name="shown" value="0">`, sent while the box is unchecked - is one checkbox field: its value is the box's, or the hidden one's while unchecked, and its change and its refusal show on the box's row. A disabled field is compared too, by its value. Words typed in a chips field's entry and not yet taken are a change of that field.
 - The saved state is read one task after `DOMContentLoaded` - after the page's own scripts, so a field a script formats at load is already in it - and one task after a tracked form lands later. A value typed back to the saved one is no change; a field added or removed since is one.
 - `data-track="off"` on a control or a fieldset leaves it out. Hidden fields are compared but never marked. A field's words in the bar are its `data-track-label`, else its label, its group's legend or its combobox's label.
 - A value set by code: `REDZ.ui.track.refresh(form)` draws the change, `REDZ.ui.track.baseline(form)` takes what the form holds as saved - a dialog refilled for another record.
@@ -9095,7 +9126,7 @@ The shell is the one part of the library that looks at the window; everything in
 <div class="app">
   <header class="app-header">
     <button class="btn btn-text btn-icon app-burger" type="button" commandfor="side" command="toggle-popover" aria-label="Sections">…</button>
-    <a class="app-brand" href="/"><span class="app-mark">RZ</span>REDZ CMS</a>
+    <a class="app-brand" href="/"><span class="app-mark" aria-hidden="true">RZ</span><span class="app-name">REDZ CMS</span></a>
     <button class="btn app-search" type="button" aria-keyshortcuts="Meta+K">…</button>
   </header>
   <nav id="side" class="app-sidebar" popover aria-label="Sections">
@@ -9119,6 +9150,59 @@ The shell is the one part of the library that looks at the window; everything in
 The side column `app-aside` stands in the main column's grid, beside its content, and goes under it where the column is narrow; the shell's own grid has no place for it.
 
 The [demo screens](https://redz-tech.github.io/REDZ.UI/reference/demo/list.html) show the whole shell: a list, a resource page with its side column, a settings form.
+
+### The brand
+
+`app-brand` is the link home at the header's start: the product's mark, `app-mark`, and its name, `app-name`. The mark is a picture of the name, so it carries `aria-hidden="true"`. Where the header is under 576 px wide, the brand is its mark alone. The name leaves the sight but stays the link's name for a screen reader.
+
+A product with its own logo puts it in place of the name: `<img class="brand-logo">`, the picture for the light theme, then `<img class="brand-logo brand-logo-dark">`, its twin for the dark one. Each carries the file's own `width` and `height`: the logo stands 28 px tall, as wide as its proportions make it, and nothing moves as it loads. In the header it is at most 160 px wide.
+
+- The page's theme picks the picture: `data-theme` on `html`, or the system's without it. A region's own `data-theme` leaves the logo as it is.
+- A light picture with no twin stands on a white mat in the dark theme.
+- With the mark printed too, the header under 576 px shows the mark and keeps the logo's `alt` as the link's name. Without the mark, the logo narrows where the header is full, its picture kept whole.
+- The `alt` of both pictures is the product's name; only the one shown is read.
+
+```html
+<header class="app-header">
+	<a class="app-brand" href="#app-brand"><img class="brand-logo" src="img/brand-light.svg" width="112" height="28" alt="Velmora"><img class="brand-logo brand-logo-dark" src="img/brand-dark.svg" width="112" height="28" alt="Velmora"><span class="app-mark" aria-hidden="true">V</span></a>
+	<button class="btn btn-text btn-icon ms-auto" type="button" aria-label="Theme"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+</header>
+<header class="app-header">
+	<a class="app-brand" href="#app-brand"><img class="brand-logo" src="img/brand-light.svg" width="112" height="28" alt="Velmora"></a>
+	<button class="btn btn-text btn-icon ms-auto" type="button" aria-label="Theme"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+</header>
+<header class="app-header max-w-360">
+	<a class="app-brand" href="#app-brand"><img class="brand-logo" src="img/brand-light.svg" width="112" height="28" alt="Velmora"><img class="brand-logo brand-logo-dark" src="img/brand-dark.svg" width="112" height="28" alt="Velmora"><span class="app-mark" aria-hidden="true">V</span></a>
+	<button class="btn btn-text btn-icon ms-auto" type="button" aria-label="Theme"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+</header>
+<header class="app-header max-w-360">
+	<a class="app-brand" href="#app-brand"><span class="app-mark" aria-hidden="true">V</span><span class="app-name">Velmora</span></a>
+	<button class="btn btn-text btn-icon ms-auto" type="button" aria-label="Theme"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+</header>
+```
+
+Above: the pair with its mark, a light logo alone - on its mat in the dark theme - and the pair and the name in a header narrower than 576 px.
+
+```html
+<a class="app-brand" href="/">
+  <img class="brand-logo" src="logo-light.svg" width="112" height="28" alt="Velmora">
+  <img class="brand-logo brand-logo-dark" src="logo-dark.svg" width="112" height="28" alt="Velmora">
+  <span class="app-mark" aria-hidden="true">V</span>
+</a>
+```
+
+### A credit line
+
+`<footer class="app-credit">` after `app-main`, in `app` itself, is a quiet line under the main column: small, muted, its link in the line's colour and underlined. The words are the page's. On a short page it stands at the window's foot; on a long one after the column's end. It is the page's `contentinfo`, outside `main`, so a [save bar](save-bar.md) in the column never covers it. Print leaves it out.
+
+```html
+<div class="app">
+  <header class="app-header">…</header>
+  <nav class="app-sidebar" …>…</nav>
+  <main class="app-main">…</main>
+  <footer class="app-credit">Powered by <a href="https://example.com/">Example CMS</a></footer>
+</div>
+```
 
 ### Folded to a rail
 
@@ -9284,10 +9368,23 @@ A page without the app shell: the brand, one card and a way on, in a column at t
 		<a href="#page-center-example">Forgot the password?</a>
 		<a href="#page-center-example">Sign in with a code</a>
 	</div>
+	<p class="app-credit">Powered by <a href="#page-center-example">REDZ CMS</a></p>
 </div>
 ```
 
 Every child but the corner stands in the column, whatever it is itself - a `vstack` or an `hstack` of links under the card stays under the card, not at the start of a wide window.
+
+A product with its own logo puts the [brand's pair](app.md#app-brand) in `page-center-brand` in place of the mark, 40 px tall: the light picture, then its twin for the dark theme, and a light one alone on a white mat in the dark. The [credit line](app.md#app-credit), `app-credit`, stands last in the column, centred under the card.
+
+```html
+<header class="page-center-brand">
+  <img class="brand-logo" src="logo-light.svg" width="112" height="28" alt="Velmora">
+  <img class="brand-logo brand-logo-dark" src="logo-dark.svg" width="112" height="28" alt="Velmora">
+  <p>Sign in to manage your sites</p>
+</header>
+<form class="card">…</form>
+<p class="app-credit">Powered by <a href="https://example.com/">Example CMS</a></p>
+```
 
 In a page `page-center` is the `main` and the brand's name its `h1`; here they are a `div` and an `h2` under the page's own.
 

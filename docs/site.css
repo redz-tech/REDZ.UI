@@ -193,6 +193,16 @@
 		position: static;
 	}
 
+	/* Headers shown as examples stand in place, framed, and take no part in the change of pages. */
+	.docs-example .app-header {
+		position: relative;
+		inset: auto;
+		z-index: auto;
+		border: 1px solid var(--redz-border);
+		border-radius: var(--redz-radius-8);
+		view-transition-name: none;
+	}
+
 	.docs-matrix .menu {
 		position: static;
 		min-inline-size: 0;

@@ -98,7 +98,8 @@ const entryOf = (target) => target.matches('.chip-input') ? target.querySelector
 /** Whether a control has nothing on the page to show it: a hidden field that no chips field draws. */
 const unseen = (control) => targetOf(control).type === 'hidden';
 
-/** The fields of a form by name: their kind and controls, a combobox's list standing for the hidden fields it writes. */
+/** The fields of a form by name: their kind and controls, a combobox's list standing for the hidden fields it writes, a
+ *  checkbox for the hidden field of its name that sends a value while it is unchecked - the field's partner. */
 const fieldsOf = (form) => {
 	const fields = new Map();
 	for (const control of form.elements) {
@@ -116,6 +117,13 @@ const fieldsOf = (form) => {
 			fields.set(list.dataset.name, {name: list.dataset.name, kind: 'list', controls: [list]});
 		}
 	}
+	for (const field of fields.values()) {
+		const boxes = field.controls.filter((control) => control.type === 'checkbox');
+		const partner = field.controls.find((control) => control.type === 'hidden');
+		if (boxes.length > 0 && partner !== undefined && field.controls.every((control) => control.type === 'checkbox' || control.type === 'hidden')) {
+			Object.assign(field, {kind: 'checkbox', controls: boxes, partner});
+		}
+	}
 	return fields;
 };
 
@@ -131,7 +139,8 @@ const valueOf = (field) => {
 		return field.controls.find((one) => one.checked)?.value ?? null;
 	}
 	if (field.kind === 'checkbox') {
-		const on = field.controls.filter((one) => one.checked).map((one) => one.value);
+		const checked = field.controls.filter((one) => one.checked).map((one) => one.value);
+		const on = checked.length === 0 && field.partner !== undefined ? [field.partner.value] : checked;
 		return field.controls.length > 1 || field.name.endsWith('[]') ? on : on[0] ?? null;
 	}
 	if (field.kind === 'many') {

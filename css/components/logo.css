@@ -91,4 +91,56 @@
 		border-radius: var(--redz-radius-6);
 		box-shadow: var(--redz-shadow-2);
 	}
+
+	/* A product's own logo, its width by the img's width and height: the light picture, then its twin for the dark theme.
+	   The page's theme picks one - data-theme on html, else the system's; a light one with no twin stands on a white mat
+	   in the dark. */
+	.brand-logo {
+		display: block;
+		flex: 0 1 auto;
+		min-inline-size: 0;
+		inline-size: auto;
+		max-inline-size: 100%;
+		block-size: 1.75rem;
+		object-fit: contain;
+		object-position: left center;
+	}
+
+	.brand-logo:dir(rtl) {
+		object-position: right center;
+	}
+
+	.brand-logo-dark {
+		display: none;
+	}
+
+	:root[data-theme="dark"] .brand-logo-dark {
+		display: block;
+	}
+
+	:root[data-theme="dark"] .brand-logo:not(.brand-logo-dark):has(~ .brand-logo-dark) {
+		display: none;
+	}
+
+	:root[data-theme="dark"] .brand-logo:not(.brand-logo-dark, :has(~ .brand-logo-dark)) {
+		padding: 0.1875rem 0.375rem;
+		border-radius: var(--redz-radius-6);
+		background: #fff;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		:root:not([data-theme]) .brand-logo-dark {
+			display: block;
+		}
+
+		:root:not([data-theme]) .brand-logo:not(.brand-logo-dark):has(~ .brand-logo-dark) {
+			display: none;
+		}
+
+		:root:not([data-theme]) .brand-logo:not(.brand-logo-dark, :has(~ .brand-logo-dark)) {
+			padding: 0.1875rem 0.375rem;
+			border-radius: var(--redz-radius-6);
+			background: #fff;
+		}
+	}
 }

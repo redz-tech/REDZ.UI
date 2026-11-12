@@ -41,6 +41,37 @@
 		white-space: nowrap;
 	}
 
+	/* A logo gives way where the header is full: it narrows, its picture kept whole. */
+	.app-brand:has(> .brand-logo) {
+		flex-shrink: 1;
+		min-inline-size: 0;
+	}
+
+	.app-brand > .brand-logo {
+		max-inline-size: min(10rem, 100%);
+	}
+
+	.app-brand:has(> .brand-logo) > .app-mark {
+		display: none;
+	}
+
+	/* Under a 576 px header the brand is its mark: the logo or the name beside it leaves the sight, not the link's name. */
+	@container region (width < 576px) {
+		.app-brand:has(> .app-mark) > :is(.brand-logo, .app-name) {
+			position: absolute;
+			inline-size: 1px;
+			block-size: 1px;
+			overflow: hidden;
+			padding: 0;
+			clip-path: inset(50%);
+			white-space: nowrap;
+		}
+
+		.app-brand:has(> .brand-logo) > .app-mark {
+			display: grid;
+		}
+	}
+
 	.app-mark {
 		display: grid;
 		place-items: center;
@@ -251,6 +282,42 @@
 		grid-template-areas: "banner" "header" "main";
 	}
 
+	/* A credit line - "Powered by" and its link - is the shell's own row under the main column, its contentinfo. */
+	.app-credit {
+		margin: 0;
+		color: var(--redz-text-muted);
+		font-size: var(--redz-fs-12);
+	}
+
+	.app-credit a {
+		color: inherit;
+		text-decoration: underline;
+		text-underline-offset: 0.125rem;
+	}
+
+	.app > .app-credit {
+		grid-area: credit;
+		padding: var(--redz-space-4) var(--redz-space-32) var(--redz-space-12);
+	}
+
+	.app:has(> .app-credit) {
+		grid-template-rows: auto 1fr auto;
+		grid-template-areas: "header header" "sidebar main" "sidebar credit";
+	}
+
+	.app:has(> .app-banner):has(> .app-credit) {
+		grid-template-rows: auto auto 1fr auto;
+		grid-template-areas: "banner banner" "header header" "sidebar main" "sidebar credit";
+	}
+
+	.app:not(:has(> .app-sidebar)):has(> .app-credit) {
+		grid-template-areas: "header" "main" "credit";
+	}
+
+	.app:has(> .app-banner):not(:has(> .app-sidebar)):has(> .app-credit) {
+		grid-template-areas: "banner" "header" "main" "credit";
+	}
+
 	@media (width >= 64rem) {
 		.app:has(> .app-sidebar[data-folded]) {
 			grid-template-columns: 3.5rem minmax(0, 1fr);
@@ -313,6 +380,18 @@
 			grid-template-areas: "banner" "header" "main";
 		}
 
+		.app:has(> .app-credit) {
+			grid-template-areas: "header" "main" "credit";
+		}
+
+		.app:has(> .app-banner):has(> .app-credit) {
+			grid-template-areas: "banner" "header" "main" "credit";
+		}
+
+		.app > .app-credit {
+			padding: var(--redz-space-12);
+		}
+
 		.app-burger {
 			display: inline-flex;
 		}
@@ -352,7 +431,8 @@
 
 		.app-banner,
 		.app-header,
-		.app-sidebar {
+		.app-sidebar,
+		.app > .app-credit {
 			display: none;
 		}
 

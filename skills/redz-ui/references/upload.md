@@ -164,6 +164,27 @@ send.addEventListener('click', async () => {
 </div>
 ```
 
+`upload-image-dark` beside it shows the image on the dark theme's page ground, in either theme: the field for a logo meant for the dark theme shows it where it will stand, and a white box round a picture shows at once.
+
+```html
+<div class="upload upload-image upload-image-dark max-w-360">
+	<input class="visually-hidden" id="upload-dark-input" type="file" name="logo_dark" accept="image/*" tabindex="-1" aria-label="Logo for the dark theme">
+	<ul class="upload-list" aria-label="Logo for the dark theme">
+		<li data-file-stored="9"><input type="hidden" name="logo_dark_kept" value="9"><img data-file-preview src="img/brand-dark.svg" alt=""><span data-file-name>logo-dark.svg</span><span class="invalid-feedback" data-file-error></span><button class="btn btn-xs btn-icon" type="button" data-file-remove aria-label="Remove logo-dark.svg"><i class="bi bi-x-lg" aria-hidden="true"></i></button></li>
+	</ul>
+	<button class="upload-zone btn btn-sm" type="button"><i class="bi bi-image" aria-hidden="true"></i>Choose another logo</button>
+	<template>
+		<li>
+			<img data-file-preview alt="">
+			<span data-file-name></span>
+			<progress class="progress progress-xs"></progress>
+			<span class="invalid-feedback" data-file-error></span>
+			<button class="btn btn-xs btn-icon" type="button" data-file-remove><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+		</li>
+	</template>
+</div>
+```
+
 ## Keyboard and accessibility
 
 - The zone is one real button: `Enter` or `Space` opens the browser's picker; the input itself stays out of the Tab order, and its words - which follow the browser's language, not the page's - never show.
@@ -182,4 +203,4 @@ send.addEventListener('click', async () => {
 
 From [`css/components/upload.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/upload.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-8`, `--redz-space-4`, `--redz-space-24`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-primary`, `--redz-bg-hover`, `--redz-border`, `--redz-upload-image-height`, `--redz-radius-8`, `--redz-bg-page`, `--redz-space-2`.
+It reads the theme's `--redz-space-8`, `--redz-space-4`, `--redz-space-24`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-primary`, `--redz-bg-hover`, `--redz-border`, `--redz-bg-page`, `--redz-upload-image-height`, `--redz-radius-8`, `--redz-space-2`.

@@ -2015,6 +2015,114 @@ window.REDZ_BEHAVE = (() => {
 				}
 			}
 		}]},
+		brandApi: {target: '#tokens-brand-region [data-brand]', steps: [async (out) => {
+			// REDZ.ui.brand answers what a white label paints in each theme, the same as a region of that colour paints it.
+			const junk = [REDZ.ui.brand('nonsense'), REDZ.ui.brand(''), REDZ.ui.brand(7)];
+			if (say(junk) !== say([null, null, null])) {
+				out.push('REDZ.ui.brand of no colour answers ' + say(junk));
+			}
+			const left = $$('div[hidden][data-brand]').length;
+			const yellow = REDZ.ui.brand('#f4c542');
+			const facts = yellow === null ? null : [yellow.light.tone, yellow.light.text, yellow.light.ground, yellow.dark.ground, yellow.light.toneOnGround, yellow.light.textOnTone >= 4.5, yellow.light.linkOnGround >= 4.5, yellow.light.ringOnGround >= 3, yellow.dark.textOnTone >= 4.5, yellow.dark.linkOnGround >= 4.5, yellow.dark.ringOnGround >= 3];
+			if (say(facts) !== say(['#f4c542', '#000000', '#ffffff', '#161719', 1.63, true, true, true, true, true, true]) || left !== 0) {
+				out.push('REDZ.ui.brand(#f4c542) answers ' + say(yellow) + ' and leaves ' + left + ' regions');
+			}
+			const region = $$('#tokens-brand-region [data-brand]')[1];
+			const button = $('.btn-primary', region);
+			await Promise.all(button.getAnimations().map((one) => one.finished.catch(() => null)));
+			const theme = document.documentElement.dataset.theme ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+			const painted = '#' + rgb(getComputedStyle(button).backgroundColor).split(',').map((one) => Number(one).toString(16).padStart(2, '0')).join('');
+			if (await readable && painted !== yellow?.[theme].tone) {
+				out.push('the #f4c542 region paints its button ' + painted + ', REDZ.ui.brand says ' + say(yellow?.[theme].tone));
+			}
+		}]},
+		brandLogo: {target: '#app-brand-logo', steps: [async (out) => {
+			// The pair follows the page's theme, a light logo alone stands on a white mat in the dark, and under a 576 px
+			// header the brand is its mark, the logo or the name still the link's name.
+			const [pair, alone, narrow, named] = $$('#app-brand-logo > .app-header');
+			const root = document.documentElement;
+			const before = root.getAttribute('data-theme');
+			pair.style.inlineSize = '40rem';
+			alone.style.inlineSize = '40rem';
+			const shown = (header) => $$('.app-brand > *', header).filter((one) => getComputedStyle(one).display !== 'none' && getComputedStyle(one).clipPath === 'none').map((one) => one.className);
+			const named_ = (header) => $$('.app-brand > *', header).filter((one) => getComputedStyle(one).display !== 'none' && one.getAttribute('aria-hidden') !== 'true').map((one) => one instanceof HTMLImageElement ? one.alt : one.textContent).join(' ');
+			const look = {};
+			for (const theme of ['light', 'dark']) {
+				root.setAttribute('data-theme', theme);
+				await settled();
+				look[theme] = [shown(pair), shown(alone), getComputedStyle($('.brand-logo', alone)).backgroundColor, shown(narrow), named_(narrow), shown(named), named_(named)];
+			}
+			if (before === null) {
+				root.removeAttribute('data-theme');
+			} else {
+				root.setAttribute('data-theme', before);
+			}
+			const want = {
+				light: [['brand-logo'], ['brand-logo'], 'rgba(0, 0, 0, 0)', ['app-mark'], 'Velmora', ['app-mark'], 'Velmora'],
+				dark: [['brand-logo brand-logo-dark'], ['brand-logo'], 'rgb(255, 255, 255)', ['app-mark'], 'Velmora', ['app-mark'], 'Velmora'],
+			};
+			if (say(look) !== say(want)) {
+				out.push('the brand shows ' + say(look) + ', not ' + say(want));
+			}
+			await settled();
+			const box = $('.brand-logo:not(.brand-logo-dark)', pair).getBoundingClientRect();
+			if (getComputedStyle($('.brand-logo:not(.brand-logo-dark)', pair)).display !== 'none' && (Math.round(box.height) !== 28 || Math.round(box.width) !== 112)) {
+				out.push('a 112 by 28 logo stands ' + Math.round(box.width) + ' by ' + Math.round(box.height));
+			}
+			pair.style.removeProperty('inline-size');
+			alone.style.removeProperty('inline-size');
+		}]},
+		uploadDark: {target: '#upload-image-dark', steps: [async (out) => {
+			// The dark logo's field shows it on the dark page's ground in either theme; the plain field stays on white.
+			const ground = (id) => getComputedStyle($(id + ' .upload-list > li')).backgroundColor;
+			const look = [ground('#upload-image'), ground('#upload-image-dark'), getComputedStyle($('#upload-image-dark [data-file-remove]')).colorScheme];
+			if (say(look) !== say(['rgb(255, 255, 255)', 'rgb(15, 15, 17)', 'dark'])) {
+				out.push('the image fields stand on ' + say(look));
+			}
+		}]},
+		creditRow: {target: '#app-brand-logo', steps: [async (out) => {
+			// A credit line in a frame of the docs' shell, a wide window's size and a phone's: under the main column, at the
+			// window's foot on a short page, after the column on a long one, and a save bar of the column above it.
+			const frame = Object.assign(document.createElement('iframe'), {title: 'A credit line', src: 'app.html'});
+			document.body.append(frame);
+			for (const [width, height] of [[1100, 600], [390, 600]]) {
+				frame.style.cssText = 'position: fixed; inset: 0 auto auto 0; z-index: 2147483647; inline-size: ' + width + 'px; block-size: ' + height + 'px; border: 0; background: Canvas';
+				frame.contentWindow.location.replace('app.html?credit=' + width);
+				await until(() => frame.contentWindow?.location.search === '?credit=' + width && frame.contentDocument?.readyState === 'complete', 8000);
+				await wait(200);
+				const doc = frame.contentDocument;
+				const view = frame.contentWindow;
+				const main = doc.querySelector('.app-main');
+				const credit = Object.assign(doc.createElement('footer'), {className: 'app-credit', textContent: 'Powered by Example CMS'});
+				doc.querySelector('.app').append(credit);
+				main.replaceChildren(Object.assign(doc.createElement('p'), {textContent: 'A short page.'}));
+				await settled();
+				const at = () => [credit.getBoundingClientRect(), main.getBoundingClientRect()];
+				let [line, column] = at();
+				if (Math.abs(line.bottom - view.innerHeight) > 1 || line.height > 48 || line.top < column.bottom - 0.5 || Math.abs(line.left - column.left) > 40) {
+					out.push(width + ': on a short page the credit stands ' + Math.round(line.top) + '-' + Math.round(line.bottom) + ' at ' + Math.round(line.left) + ', the column ends at ' + Math.round(column.bottom) + ' from ' + Math.round(column.left) + ', the window at ' + view.innerHeight);
+				}
+				const form = Object.assign(doc.createElement('form'), {className: 'vstack gap-8'});
+				form.dataset.track = 'Credit';
+				const field = Object.assign(doc.createElement('input'), {className: 'form-control', name: 'title', value: 'One'});
+				form.append(field, Object.assign(doc.createElement('div'), {style: 'block-size: 120rem'}));
+				main.append(form);
+				await settled();
+				field.value = 'Two';
+				field.dispatchEvent(new Event('input', {bubbles: true}));
+				await until(() => doc.querySelector('.save-bar:not([hidden])') !== null);
+				view.scrollTo(0, doc.documentElement.scrollHeight);
+				await settled();
+				[line, column] = at();
+				const bar = doc.querySelector('.save-bar').getBoundingClientRect();
+				if (Math.abs(line.bottom - view.innerHeight) > 1 || line.top < column.bottom - 0.5 || bar.bottom > line.top + 0.5 || bar.height === 0) {
+					out.push(width + ': at a long page\'s end the credit stands ' + Math.round(line.top) + '-' + Math.round(line.bottom) + ', the column ends at ' + Math.round(column.bottom) + ', the save bar at ' + Math.round(bar.bottom));
+				}
+				view.REDZ.ui.track.reset(form);
+				await settled();
+			}
+			frame.remove();
+		}]},
 		segmented: {target: '#btn-segmented', steps: [async (out) => {
 			const look = (id) => getComputedStyle($('label[for="' + id + '"]')).backgroundColor;
 			const before = [look('btn-segmented-week'), look('btn-segmented-day')];
@@ -5717,6 +5825,60 @@ window.REDZ_BEHAVE = (() => {
 			}
 			if (say(reset) !== say(['30,14,7,1', '30,7,1', ['30', 'A week before', 'The day before']])) {
 				out.push('a form\'s reset after 14 is added gives ' + say(reset.slice(1)) + ' - not the value and chips the box came with');
+			}
+		}]},
+		switchPartner: {target: '#save-bar-live', steps: [async (out) => {
+			// A switch after a hidden field of its name that sends 0 while it is off is one checkbox field: a flip is a change
+			// on the switch's row, the bar's Discard and Undo put it back with input and change, a refusal marks the row.
+			const form = Object.assign(document.createElement('form'), {action: '#save-bar-live'});
+			form.dataset.track = 'Partner';
+			const hidden = Object.assign(document.createElement('input'), {type: 'hidden', name: 'reauth', value: '0'});
+			const label = Object.assign(document.createElement('label'), {className: 'form-check'});
+			const box = Object.assign(document.createElement('input'), {className: 'switch', type: 'checkbox', name: 'reauth', value: '1', checked: true});
+			box.setAttribute('role', 'switch');
+			label.append(box, 'Ask again after an hour');
+			form.append(hidden, label);
+			$('#save-bar-live').after(form);
+			await wait(50);
+			const heard = [];
+			const hear = (event) => {
+				if (event.target === box) {
+					heard.push(event.type);
+				}
+			};
+			form.addEventListener('input', hear);
+			form.addEventListener('change', hear);
+			box.click();
+			await wait(50);
+			const flipped = [REDZ.ui.track.dirty(form), label.hasAttribute('data-changed'), REDZ.ui.track.changed(form).map((change) => [change.name, change.was, change.now])];
+			const bar = $('.save-bar[data-track]');
+			heard.length = 0;
+			$('[data-track-action="discard"]', bar).click();
+			await wait(50);
+			const discarded = [box.checked, REDZ.ui.track.dirty(form), [...heard]];
+			heard.length = 0;
+			$('[data-track-action="undo"]', bar).click();
+			await wait(50);
+			const undone = [box.checked, REDZ.ui.track.dirty(form), [...heard]];
+			const refuse = (event) => {
+				if (event.target === form) {
+					event.preventDefault();
+					event.detail.respondWith(Promise.reject({fields: {reauth: 'Choose again.'}}));
+				}
+			};
+			document.addEventListener('redz:save', refuse);
+			const saved = await REDZ.ui.track.save(form);
+			await wait(50);
+			const marked = [saved, box.getAttribute('aria-invalid'), hidden.hasAttribute('aria-invalid'), $('[data-track-error="reauth"]', form)?.previousElementSibling === label];
+			document.removeEventListener('redz:save', refuse);
+			REDZ.ui.track.reset(form);
+			form.remove();
+			await wait(50);
+			if (say(flipped) !== say([true, true, [['reauth', '1', '0']]]) || say(discarded) !== say([true, false, ['input', 'change']]) || say(undone) !== say([false, true, ['input', 'change']])) {
+				out.push('a switch with a hidden partner of its name flipped off gives ' + say(flipped) + ' (changed, its row marked, 1 to 0), the bar\'s Discard ' + say(discarded) + ' (on, no change, input and change), Undo ' + say(undone) + ' (off, changed, input and change)');
+			}
+			if (say(marked) !== say([false, 'true', false, true])) {
+				out.push('a refusal of a switch with a hidden partner gives ' + say(marked) + ' (not saved, the switch invalid, the hidden field not, the words after the switch\'s row)');
 			}
 		}]},
 		chipsTracked: {target: '#form-chips-days', steps: [async (out) => {

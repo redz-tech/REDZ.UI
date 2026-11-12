@@ -20,7 +20,7 @@
 		<header class="app-header">
 			<button class="btn btn-text btn-icon app-burger" type="button" commandfor="docs-nav" command="toggle-popover" aria-label="Pages"><i class="bi bi-list" aria-hidden="true"></i></button>
 			<button class="btn btn-text btn-icon" type="button" command="--fold" aria-controls="docs-nav" aria-label="Fold the pages"><i class="bi bi-layout-sidebar" aria-hidden="true"></i></button>
-			<a class="app-brand" href="../index.html"><span class="app-mark">RZ</span><span>REDZ.UI</span></a>
+			<a class="app-brand" href="../index.html"><span class="app-mark" aria-hidden="true">RZ</span><span class="app-name">REDZ.UI</span></a>
 			<div class="hstack gap-4 ms-auto">
 				<button class="btn btn-text btn-icon" type="button" commandfor="docs-view" command="toggle-popover" aria-haspopup="menu" aria-label="View"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
 				<div id="docs-view" class="menu" popover role="menu" aria-label="View">
@@ -362,7 +362,7 @@
 				<section class="vstack gap-12" aria-labelledby="save-bar-fields">
 					<h2 id="save-bar-fields">What a field is</h2>
 					<ul>
-						<li>One field per name: a radio group, checkboxes of one name, a <code>select multiple</code> and a combobox's list each count once. A disabled field is compared too, by its value. Words typed in a chips field's entry and not yet taken are a change of that field.</li>
+						<li>One field per name: a radio group, checkboxes of one name, a <code>select multiple</code> and a combobox's list each count once. A checkbox or a switch after a hidden field of its name - <code>&lt;input type="hidden" name="shown" value="0"&gt;</code>, sent while the box is unchecked - is one checkbox field: its value is the box's, or the hidden one's while unchecked, and its change and its refusal show on the box's row. A disabled field is compared too, by its value. Words typed in a chips field's entry and not yet taken are a change of that field.</li>
 						<li>The saved state is read one task after <code>DOMContentLoaded</code> - after the page's own scripts, so a field a script formats at load is already in it - and one task after a tracked form lands later. A value typed back to the saved one is no change; a field added or removed since is one.</li>
 						<li><code>data-track="off"</code> on a control or a fieldset leaves it out. Hidden fields are compared but never marked. A field's words in the bar are its <code>data-track-label</code>, else its label, its group's legend or its combobox's label.</li>
 						<li>A value set by code: <code>REDZ.ui.track.refresh(form)</code> draws the change, <code>REDZ.ui.track.baseline(form)</code> takes what the form holds as saved - a dialog refilled for another record.</li>

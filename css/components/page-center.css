@@ -32,6 +32,14 @@
 		max-block-size: 7.5rem;
 	}
 
+	.page-center-brand > .brand-logo {
+		block-size: 2.5rem;
+	}
+
+	.page-center > .app-credit {
+		text-align: center;
+	}
+
 	.page-center-brand > p {
 		color: var(--redz-text-muted);
 	}

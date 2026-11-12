@@ -20,7 +20,7 @@
 		<header class="app-header">
 			<button class="btn btn-text btn-icon app-burger" type="button" commandfor="docs-nav" command="toggle-popover" aria-label="Pages"><i class="bi bi-list" aria-hidden="true"></i></button>
 			<button class="btn btn-text btn-icon" type="button" command="--fold" aria-controls="docs-nav" aria-label="Fold the pages"><i class="bi bi-layout-sidebar" aria-hidden="true"></i></button>
-			<a class="app-brand" href="../index.html"><span class="app-mark">RZ</span><span>REDZ.UI</span></a>
+			<a class="app-brand" href="../index.html"><span class="app-mark" aria-hidden="true">RZ</span><span class="app-name">REDZ.UI</span></a>
 			<div class="hstack gap-4 ms-auto">
 				<button class="btn btn-text btn-icon" type="button" commandfor="docs-view" command="toggle-popover" aria-haspopup="menu" aria-label="View"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
 				<div id="docs-view" class="menu" popover role="menu" aria-label="View">
@@ -362,6 +362,41 @@
 		&lt;/li&gt;
 	&lt;/template&gt;
 &lt;/div&gt;</code></pre></div>
+					<p><code>upload-image-dark</code> beside it shows the image on the dark theme's page ground, in either theme: the field for a logo meant for the dark theme shows it where it will stand, and a white box round a picture shows at once.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="upload-image-dark">
+						<div class="upload upload-image upload-image-dark max-w-360">
+							<input class="visually-hidden" id="upload-dark-input" type="file" name="logo_dark" accept="image/*" tabindex="-1" aria-label="Logo for the dark theme">
+							<ul class="upload-list" aria-label="Logo for the dark theme">
+								<li data-file-stored="9"><input type="hidden" name="logo_dark_kept" value="9"><img data-file-preview src="img/brand-dark.svg" alt=""><span data-file-name>logo-dark.svg</span><span class="invalid-feedback" data-file-error></span><button class="btn btn-xs btn-icon" type="button" data-file-remove aria-label="Remove logo-dark.svg"><i class="bi bi-x-lg" aria-hidden="true"></i></button></li>
+							</ul>
+							<button class="upload-zone btn btn-sm" type="button"><i class="bi bi-image" aria-hidden="true"></i>Choose another logo</button>
+							<template>
+								<li>
+									<img data-file-preview alt="">
+									<span data-file-name></span>
+									<progress class="progress progress-xs"></progress>
+									<span class="invalid-feedback" data-file-error></span>
+									<button class="btn btn-xs btn-icon" type="button" data-file-remove><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+								</li>
+							</template>
+						</div>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;div class="upload upload-image upload-image-dark max-w-360"&gt;
+	&lt;input class="visually-hidden" id="upload-dark-input" type="file" name="logo_dark" accept="image/*" tabindex="-1" aria-label="Logo for the dark theme"&gt;
+	&lt;ul class="upload-list" aria-label="Logo for the dark theme"&gt;
+		&lt;li data-file-stored="9"&gt;&lt;input type="hidden" name="logo_dark_kept" value="9"&gt;&lt;img data-file-preview src="img/brand-dark.svg" alt=""&gt;&lt;span data-file-name&gt;logo-dark.svg&lt;/span&gt;&lt;span class="invalid-feedback" data-file-error&gt;&lt;/span&gt;&lt;button class="btn btn-xs btn-icon" type="button" data-file-remove aria-label="Remove logo-dark.svg"&gt;&lt;i class="bi bi-x-lg" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+	&lt;button class="upload-zone btn btn-sm" type="button"&gt;&lt;i class="bi bi-image" aria-hidden="true"&gt;&lt;/i&gt;Choose another logo&lt;/button&gt;
+	&lt;template&gt;
+		&lt;li&gt;
+			&lt;img data-file-preview alt=""&gt;
+			&lt;span data-file-name&gt;&lt;/span&gt;
+			&lt;progress class="progress progress-xs"&gt;&lt;/progress&gt;
+			&lt;span class="invalid-feedback" data-file-error&gt;&lt;/span&gt;
+			&lt;button class="btn btn-xs btn-icon" type="button" data-file-remove&gt;&lt;i class="bi bi-x-lg" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;
+		&lt;/li&gt;
+	&lt;/template&gt;
+&lt;/div&gt;</code></pre></div>
 				</section>
 
 				<section class="vstack gap-12" aria-labelledby="upload-access">
@@ -388,7 +423,7 @@
 						<section class="vstack gap-12" aria-labelledby="upload-tokens">
 							<h2 id="upload-tokens">Tokens</h2>
 							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/upload.css"><code>css/components/upload.css</code></a>, which declares no custom property of its own.</p>
-							<p>It reads the theme's <code>--redz-space-8</code>, <code>--redz-space-4</code>, <code>--redz-space-24</code>, <code>--redz-space-16</code>, <code>--redz-border-strong</code>, <code>--redz-radius-12</code>, <code>--redz-bg</code>, <code>--redz-text-muted</code>, <code>--redz-primary</code>, <code>--redz-bg-hover</code>, <code>--redz-border</code>, <code>--redz-upload-image-height</code>, <code>--redz-radius-8</code>, <code>--redz-bg-page</code>, <code>--redz-space-2</code>.</p>
+							<p>It reads the theme's <code>--redz-space-8</code>, <code>--redz-space-4</code>, <code>--redz-space-24</code>, <code>--redz-space-16</code>, <code>--redz-border-strong</code>, <code>--redz-radius-12</code>, <code>--redz-bg</code>, <code>--redz-text-muted</code>, <code>--redz-primary</code>, <code>--redz-bg-hover</code>, <code>--redz-border</code>, <code>--redz-bg-page</code>, <code>--redz-upload-image-height</code>, <code>--redz-radius-8</code>, <code>--redz-space-2</code>.</p>
 						</section>
 				<footer class="d-flex flex-wrap justify-content-between gap-8 pt-16 border-top text-muted fs-12">
 					<span>MIT license · © 2026 Red Z Group · includes Bootstrap Icons (MIT)</span>
