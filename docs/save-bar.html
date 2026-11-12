@@ -328,7 +328,7 @@
 &lt;label class="form-check" data-changed&gt;&lt;input class="check" type="checkbox" name="shown-on-the-site" checked&gt; Shown on the site&lt;/label&gt;</code></pre></div>
 
 					<h3>A form in a dialog</h3>
-					<p>A tracked form in a dialog keeps its own button, which takes <kbd>Control</kbd> <kbd>S</kbd> when it is the form's only one; the dialog waits while the page saves, and closing it with changes asks first.</p>
+					<p>A tracked form in a dialog keeps its own button, which takes <kbd>Control</kbd> <kbd>S</kbd> when it is the form's only one; the dialog waits while the page saves, and closing it with changes asks first. A form with several buttons names the one the keys press: <code>aria-keyshortcuts="Control+S Meta+S"</code> on it, and the library leaves it so.</p>
 					<div class="docs-sample"><div class="docs-example" id="save-bar-dialog">
 						<button class="btn" type="button" commandfor="save-bar-dialog-panel" command="show-modal"><i class="bi bi-pencil" aria-hidden="true"></i>Rename the boat</button>
 						<dialog class="dialog dialog-sm" id="save-bar-dialog-panel" aria-labelledby="save-bar-dialog-title">
@@ -362,7 +362,7 @@
 				<section class="vstack gap-12" aria-labelledby="save-bar-fields">
 					<h2 id="save-bar-fields">What a field is</h2>
 					<ul>
-						<li>One field per name: a radio group, checkboxes of one name, a <code>select multiple</code> and a combobox's list each count once. A disabled field is compared too, by its value.</li>
+						<li>One field per name: a radio group, checkboxes of one name, a <code>select multiple</code> and a combobox's list each count once. A disabled field is compared too, by its value. Words typed in a chips field's entry and not yet taken are a change of that field.</li>
 						<li>The saved state is read one task after <code>DOMContentLoaded</code> - after the page's own scripts, so a field a script formats at load is already in it - and one task after a tracked form lands later. A value typed back to the saved one is no change; a field added or removed since is one.</li>
 						<li><code>data-track="off"</code> on a control or a fieldset leaves it out. Hidden fields are compared but never marked. A field's words in the bar are its <code>data-track-label</code>, else its label, its group's legend or its combobox's label.</li>
 						<li>A value set by code: <code>REDZ.ui.track.refresh(form)</code> draws the change, <code>REDZ.ui.track.baseline(form)</code> takes what the form holds as saved - a dialog refilled for another record.</li>
@@ -371,7 +371,7 @@
 
 				<section class="vstack gap-12" aria-labelledby="save-bar-saving">
 					<h2 id="save-bar-saving">Saving</h2>
-					<p>Save, <kbd>Control</kbd> <kbd>S</kbd>, <kbd>Enter</kbd> in a field or <code>REDZ.ui.track.save()</code> fires the cancelable <code>redz:save</code> on each changed form in turn, and stops at the first refusal. The page answers with <code>event.detail.respondWith(promise)</code>; what the form held when it was sent becomes the saved state once the promise resolves, so what the person typed meanwhile stays changed. Nothing changed: the bar says so, and nothing is sent.</p>
+					<p>Save, <kbd>Control</kbd> <kbd>S</kbd>, <kbd>Enter</kbd> in a field or <code>REDZ.ui.track.save()</code> takes the words left in the chips fields' entries first - a refused one holds the save, the focus on it - then fires the cancelable <code>redz:save</code> on each changed form in turn, and stops at the first refusal. The page answers with <code>event.detail.respondWith(promise)</code>; what the form held when it was sent becomes the saved state once the promise resolves, so what the person typed meanwhile stays changed. Nothing changed: the bar says so, and nothing is sent.</p>
 					<table class="table docs-table">
 						<thead><tr><th scope="col">In <code>redz:save</code></th><th scope="col">What it is</th></tr></thead>
 						<tbody>
@@ -392,7 +392,7 @@
 				<section class="vstack gap-12" aria-labelledby="save-bar-leaving">
 					<h2 id="save-bar-leaving">Discarding and leaving</h2>
 					<ul>
-						<li>Discard puts the saved values back, each with <code>input</code> and <code>change</code> so whatever a field drives follows, fires <code>redz:discard</code> on the form, and offers Undo until the next edit or ten seconds.</li>
+						<li>Discard puts the saved values back, each with <code>input</code> and <code>change</code> so whatever a field drives follows, empties the chips fields' entries, fires <code>redz:discard</code> on the form, and offers Undo, which brings all of it back, until the next edit or ten seconds.</li>
 						<li>While anything is changed, a link that leaves the page, a tab whose pane holds a changed form and a dialog's cancel or close ask first: Save and go - the focus starts there -, Discard, Stay. The browser's own question guards the rest, and only while something is changed.</li>
 						<li>An <code>input type="password"</code> with <code>data-secret</code> keeps the stored value while it is empty. A button with <code>command="--clear"</code> for it and <code>data-clear</code> clears it: the field is disabled and emptied, <code>aria-pressed="true"</code>, and the form sends the name <code>data-clear</code> gives as <code>1</code>.</li>
 					</ul>

@@ -118,7 +118,7 @@ At rest the bar says everything is saved; with unsaved changes it names them. Th
 
 ### A form in a dialog
 
-A tracked form in a dialog keeps its own button, which takes `Control` `S` when it is the form's only one; the dialog waits while the page saves, and closing it with changes asks first.
+A tracked form in a dialog keeps its own button, which takes `Control` `S` when it is the form's only one; the dialog waits while the page saves, and closing it with changes asks first. A form with several buttons names the one the keys press: `aria-keyshortcuts="Control+S Meta+S"` on it, and the library leaves it so.
 
 ```html
 <button class="btn" type="button" commandfor="save-bar-dialog-panel" command="show-modal"><i class="bi bi-pencil" aria-hidden="true"></i>Rename the boat</button>
@@ -138,14 +138,14 @@ A tracked form in a dialog keeps its own button, which takes `Control` `S` when 
 
 ## What a field is
 
-- One field per name: a radio group, checkboxes of one name, a `select multiple` and a combobox's list each count once. A disabled field is compared too, by its value.
+- One field per name: a radio group, checkboxes of one name, a `select multiple` and a combobox's list each count once. A disabled field is compared too, by its value. Words typed in a chips field's entry and not yet taken are a change of that field.
 - The saved state is read one task after `DOMContentLoaded` - after the page's own scripts, so a field a script formats at load is already in it - and one task after a tracked form lands later. A value typed back to the saved one is no change; a field added or removed since is one.
 - `data-track="off"` on a control or a fieldset leaves it out. Hidden fields are compared but never marked. A field's words in the bar are its `data-track-label`, else its label, its group's legend or its combobox's label.
 - A value set by code: `REDZ.ui.track.refresh(form)` draws the change, `REDZ.ui.track.baseline(form)` takes what the form holds as saved - a dialog refilled for another record.
 
 ## Saving
 
-Save, `Control` `S`, `Enter` in a field or `REDZ.ui.track.save()` fires the cancelable `redz:save` on each changed form in turn, and stops at the first refusal. The page answers with `event.detail.respondWith(promise)`; what the form held when it was sent becomes the saved state once the promise resolves, so what the person typed meanwhile stays changed. Nothing changed: the bar says so, and nothing is sent.
+Save, `Control` `S`, `Enter` in a field or `REDZ.ui.track.save()` takes the words left in the chips fields' entries first - a refused one holds the save, the focus on it - then fires the cancelable `redz:save` on each changed form in turn, and stops at the first refusal. The page answers with `event.detail.respondWith(promise)`; what the form held when it was sent becomes the saved state once the promise resolves, so what the person typed meanwhile stays changed. Nothing changed: the bar says so, and nothing is sent.
 
 | In `redz:save` | What it is |
 | --- | --- |
@@ -161,7 +161,7 @@ Save, `Control` `S`, `Enter` in a field or `REDZ.ui.track.save()` fires the canc
 
 ## Discarding and leaving
 
-- Discard puts the saved values back, each with `input` and `change` so whatever a field drives follows, fires `redz:discard` on the form, and offers Undo until the next edit or ten seconds.
+- Discard puts the saved values back, each with `input` and `change` so whatever a field drives follows, empties the chips fields' entries, fires `redz:discard` on the form, and offers Undo, which brings all of it back, until the next edit or ten seconds.
 - While anything is changed, a link that leaves the page, a tab whose pane holds a changed form and a dialog's cancel or close ask first: Save and go - the focus starts there -, Discard, Stay. The browser's own question guards the rest, and only while something is changed.
 - An `input type="password"` with `data-secret` keeps the stored value while it is empty. A button with `command="--clear"` for it and `data-clear` clears it: the field is disabled and emptied, `aria-pressed="true"`, and the form sends the name `data-clear` gives as `1`.
 

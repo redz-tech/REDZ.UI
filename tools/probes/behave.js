@@ -5706,6 +5706,82 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a form\'s reset after 14 is added gives ' + say(reset.slice(1)) + ' - not the value and chips the box came with');
 			}
 		}]},
+		chipsTracked: {target: '#form-chips-days', steps: [async (out) => {
+			// A chips field in tracked forms: words typed and not yet taken are its change, the bar's Discard empties the entry
+			// and Undo brings them back; every save takes them first and a refused one holds it - in a page's form without the
+			// browser's checks, and in a dialog's form, which a question's Save and go saves as REDZ.ui.track.save() does.
+			const make = (where, id, plain) => {
+				const field = $('#form-chips-days').closest('.form-field').cloneNode(true);
+				for (const element of [field, ...$$('*', field)]) {
+					for (const name of ['id', 'for', 'list', 'aria-controls', 'aria-describedby']) {
+						if (element.hasAttribute(name)) {
+							element.setAttribute(name, element.getAttribute(name).replace(/form-chips-days/g, id));
+						}
+					}
+				}
+				const form = Object.assign(document.createElement('form'), {action: '#form-chips', noValidate: plain});
+				form.dataset.track = 'Reminders';
+				form.append(field, Object.assign(document.createElement('button'), {type: 'submit', textContent: 'Save'}));
+				where.append(form);
+				return form;
+			};
+			const enter = (entry, words) => {
+				input(entry, words);
+				entry.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true, cancelable: true}));
+			};
+			let asked = 0;
+			const count = (event) => {
+				if (event.target.dataset.track === 'Reminders') {
+					asked++;
+					event.preventDefault();
+					event.detail.respondWith(Promise.resolve());
+				}
+			};
+			document.addEventListener('redz:save', count);
+			const page = make($('#form-chips').parentElement, 'form-chips-plain', true);
+			await wait(50);
+			const entry = $('#form-chips-plain');
+			const box = entry.closest('.chip-input');
+			const bar = $('.save-bar[data-track]');
+			input(entry, '14');
+			await wait(50);
+			const typed = [REDZ.ui.track.dirty(page), box.hasAttribute('data-changed'), REDZ.ui.track.changed(page).map((change) => [change.name, change.was === change.now])];
+			$('[data-track-action="discard"]', bar).click();
+			await wait(50);
+			const dropped = [entry.value, REDZ.ui.track.dirty(page), box.hasAttribute('data-changed')];
+			$('[data-track-action="undo"]', bar).click();
+			await wait(50);
+			const back = [entry.value, REDZ.ui.track.dirty(page)];
+			input(entry, '7');
+			const plainSaved = await REDZ.ui.track.save(page);
+			await wait(50);
+			const plainHeld = [plainSaved, asked, document.activeElement === entry, entry.getAttribute('aria-invalid')];
+			REDZ.ui.track.reset(page);
+			const emptied = [entry.value, entry.hasAttribute('aria-invalid'), REDZ.ui.track.dirty(page)];
+			const dialog = Object.assign(document.createElement('dialog'), {className: 'dialog'});
+			document.body.append(dialog);
+			const boxed = make(dialog, 'form-chips-dialog', false);
+			dialog.showModal();
+			await wait(50);
+			const inner = $('#form-chips-dialog');
+			enter(inner, '21');
+			input(inner, '7');
+			const dialogSaved = await REDZ.ui.track.save(boxed);
+			await wait(50);
+			const dialogHeld = [dialogSaved, asked, document.activeElement === inner, inner.getAttribute('aria-invalid')];
+			REDZ.ui.track.reset(boxed);
+			dialog.close();
+			dialog.remove();
+			page.remove();
+			document.removeEventListener('redz:save', count);
+			await wait(50);
+			if (say(typed) !== say([true, true, [['remind_days', true]]]) || say(dropped) !== say(['', false, false]) || say(back) !== say(['14', true])) {
+				out.push('words typed in a tracked chips field and not taken give ' + say(typed) + ' (changed, its box marked, one change of its field), the bar\'s Discard ' + say(dropped) + ' (the entry emptied, no change), Undo ' + say(back) + ' (the words back, changed)');
+			}
+			if (say(plainHeld) !== say([false, 0, true, 'true']) || say(emptied) !== say(['', false, false]) || say(dialogHeld) !== say([false, 0, true, 'true'])) {
+				out.push('a refused word left in a chips entry: a page\'s form without the browser\'s checks saves ' + say(plainHeld) + ', a dialog\'s form ' + say(dialogHeld) + ' (not held, redz:save fired, the focus, the refusal); reset() leaves the entry ' + say(emptied));
+			}
+		}]},
 		editor: {target: '#editor-demo-host', walk: editorWalk},
 		enable: {target: '#form-enable-wait', steps: [async (out) => {
 			const on = $('#form-enable-wait-on');

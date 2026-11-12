@@ -41,7 +41,7 @@ The stylesheet, the icons and the scripts, with the page's own words for the few
 
 - `css/redz-ui.min.css` is the layers, the tokens, the components and the utilities in one file, within its budget of 38 KB gzipped: the stylesheets `css/index.css` pulls in, squeezed.
 - `css/icons.min.css` is apart: one mask per Bootstrap Icons file, used only by name. It reaches each file by a URL relative to itself, `../icons/NAME.svg`, so the pack's folders keep their shape where a project serves them. A project that marks its static files by their content (`?h=…`) cannot mark the icons this way, and needs not: the pack's folder is named by its version, which changes only with Bootstrap Icons.
-- `js/redz-ui.min.js` is one ES module of the behaviors, within its budget of 52 KB gzipped: the modules of `js/index.js` joined, squeezed and given short local names. It sets `REDZ.ui` for calls from code.
+- `js/redz-ui.min.js` is one ES module of the behaviors, within its budget of 54 KB gzipped: the modules of `js/index.js` joined, squeezed and given short local names. It sets `REDZ.ui` for calls from code.
 - The island `#redz-ui-text` gives the library its words, in the page's language: every key of the passport's `texts`, and for each key of its `plurals` the other forms its language's plural rules name (`found.one`, `found.few`). Its `args` names the `{names}` the library fills in each of them, `[]` for none: a text of the page that uses another name shows it as it is. The example shows four of them.
 - The two files are made from `css/` and `js/`, which stay to read. A project that bundles its own may join the stylesheets in the passport's order instead.
 
@@ -3429,7 +3429,7 @@ Buttons with `command="--step-up"` or `"--step-down"` and `aria-controls` naming
 | `invalid-feedback` | The refusal's words, which the library puts after the box and joins to the entry by `aria-describedby`; the next edit of the entry takes them away. |
 | `REDZ.ui.settle(form)` | For a page that saves a form by its own script, with no submit event and no tracked form's Save: takes what the form's entries still hold, as sending does, and answers `false` - the refusal under its box, said at once, the focus on the first entry refused - or `true`. An entry that holds nothing is left as it is. |
 
-In a tracked form the hidden field is one field: `data-changed` and a refusal's `aria-invalid` go on the box, the field is named by the entry's label, the refusal's words stand under the box, and Discard draws the chips again.
+In a tracked form the hidden field is one field: `data-changed` and a refusal's `aria-invalid` go on the box, the field is named by the entry's label, the refusal's words stand under the box, and Discard draws the chips again. Words typed in the entry and not yet taken are a change of the field: the box is marked and the bar names it, leaving asks first, Discard empties the entry and Undo brings the words back.
 
 ### A colour
 
@@ -8341,7 +8341,7 @@ At rest the bar says everything is saved; with unsaved changes it names them. Th
 
 ### A form in a dialog
 
-A tracked form in a dialog keeps its own button, which takes `Control` `S` when it is the form's only one; the dialog waits while the page saves, and closing it with changes asks first.
+A tracked form in a dialog keeps its own button, which takes `Control` `S` when it is the form's only one; the dialog waits while the page saves, and closing it with changes asks first. A form with several buttons names the one the keys press: `aria-keyshortcuts="Control+S Meta+S"` on it, and the library leaves it so.
 
 ```html
 <button class="btn" type="button" commandfor="save-bar-dialog-panel" command="show-modal"><i class="bi bi-pencil" aria-hidden="true"></i>Rename the boat</button>
@@ -8361,14 +8361,14 @@ A tracked form in a dialog keeps its own button, which takes `Control` `S` when 
 
 ## What a field is
 
-- One field per name: a radio group, checkboxes of one name, a `select multiple` and a combobox's list each count once. A disabled field is compared too, by its value.
+- One field per name: a radio group, checkboxes of one name, a `select multiple` and a combobox's list each count once. A disabled field is compared too, by its value. Words typed in a chips field's entry and not yet taken are a change of that field.
 - The saved state is read one task after `DOMContentLoaded` - after the page's own scripts, so a field a script formats at load is already in it - and one task after a tracked form lands later. A value typed back to the saved one is no change; a field added or removed since is one.
 - `data-track="off"` on a control or a fieldset leaves it out. Hidden fields are compared but never marked. A field's words in the bar are its `data-track-label`, else its label, its group's legend or its combobox's label.
 - A value set by code: `REDZ.ui.track.refresh(form)` draws the change, `REDZ.ui.track.baseline(form)` takes what the form holds as saved - a dialog refilled for another record.
 
 ## Saving
 
-Save, `Control` `S`, `Enter` in a field or `REDZ.ui.track.save()` fires the cancelable `redz:save` on each changed form in turn, and stops at the first refusal. The page answers with `event.detail.respondWith(promise)`; what the form held when it was sent becomes the saved state once the promise resolves, so what the person typed meanwhile stays changed. Nothing changed: the bar says so, and nothing is sent.
+Save, `Control` `S`, `Enter` in a field or `REDZ.ui.track.save()` takes the words left in the chips fields' entries first - a refused one holds the save, the focus on it - then fires the cancelable `redz:save` on each changed form in turn, and stops at the first refusal. The page answers with `event.detail.respondWith(promise)`; what the form held when it was sent becomes the saved state once the promise resolves, so what the person typed meanwhile stays changed. Nothing changed: the bar says so, and nothing is sent.
 
 | In `redz:save` | What it is |
 | --- | --- |
@@ -8384,7 +8384,7 @@ Save, `Control` `S`, `Enter` in a field or `REDZ.ui.track.save()` fires the canc
 
 ## Discarding and leaving
 
-- Discard puts the saved values back, each with `input` and `change` so whatever a field drives follows, fires `redz:discard` on the form, and offers Undo until the next edit or ten seconds.
+- Discard puts the saved values back, each with `input` and `change` so whatever a field drives follows, empties the chips fields' entries, fires `redz:discard` on the form, and offers Undo, which brings all of it back, until the next edit or ten seconds.
 - While anything is changed, a link that leaves the page, a tab whose pane holds a changed form and a dialog's cancel or close ask first: Save and go - the focus starts there -, Discard, Stay. The browser's own question guards the rest, and only while something is changed.
 - An `input type="password"` with `data-secret` keeps the stored value while it is empty. A button with `command="--clear"` for it and `data-clear` clears it: the field is disabled and emptied, `aria-pressed="true"`, and the form sends the name `data-clear` gives as `1`.
 

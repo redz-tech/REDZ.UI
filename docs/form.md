@@ -224,7 +224,7 @@ Buttons with `command="--step-up"` or `"--step-down"` and `aria-controls` naming
 | `invalid-feedback` | The refusal's words, which the library puts after the box and joins to the entry by `aria-describedby`; the next edit of the entry takes them away. |
 | `REDZ.ui.settle(form)` | For a page that saves a form by its own script, with no submit event and no tracked form's Save: takes what the form's entries still hold, as sending does, and answers `false` - the refusal under its box, said at once, the focus on the first entry refused - or `true`. An entry that holds nothing is left as it is. |
 
-In a tracked form the hidden field is one field: `data-changed` and a refusal's `aria-invalid` go on the box, the field is named by the entry's label, the refusal's words stand under the box, and Discard draws the chips again.
+In a tracked form the hidden field is one field: `data-changed` and a refusal's `aria-invalid` go on the box, the field is named by the entry's label, the refusal's words stand under the box, and Discard draws the chips again. Words typed in the entry and not yet taken are a change of the field: the box is marked and the bar names it, leaving asks first, Discard empties the entry and Undo brings the words back.
 
 ### A colour
 

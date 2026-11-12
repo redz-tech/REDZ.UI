@@ -1,24 +1,28 @@
 // REDZ.UI, tracked forms: a form with data-track keeps what it held one task after DOMContentLoaded - after the page's
 // own scripts, a mask's formatting too - or one task after it lands later, and compares every field with it: a radio
 // group, checkboxes of one name, a select multiple and a combobox's list count as one field, disabled ones too, and a
-// value typed back is no change. A changed field wears data-changed - the control, a check's .form-check row, a
-// combobox's face, a chips field's box - and so do its form and the tab of every pane that holds it. The page's tracked
-// forms outside a dialog share one save bar, the page's .save-bar[data-track] or one made at the end of .app-main,
-// which names the changes in the page's words, stays at rest while such a form is in view and, shown, puts its height
-// on the root as --redz-save-bar-height, so a field the keys reach stands above it; Save and Discard are
-// never disabled and say when there is nothing to do, Save takes Control+S and Meta+S. Save takes the words left in a
-// chips field's entry first, then fires the cancelable redz:save on each changed form in turn - {form, changed: [{name,
-// label, was, now}], data, submitter, signal} - and, answered with a promise, what was sent becomes the saved state once
-// it resolves, then redz:saved {form, value}; a refusal {message, fields} marks each named field under its control -
-// {text, stored} offers Keep mine and Take saved - and reveals the first. Left alone, a lone changed form is submitted as usual. A form in a dialog saves by its own
-// button (js/wait.js). Discard puts the saved values back, each with input and change, fires redz:discard and offers
-// Undo until the next edit or ten seconds. While anything is changed, a link that leaves the page, a tab whose pane
-// holds a changed form and a dialog's cancel or close ask first - Save and go, Discard, Stay - and the browser's own
-// question guards the rest. An input[type=password][data-secret] keeps the stored value while it is empty; a button
-// with command="--clear" for it and data-clear empties and disables it, and the form then sends that name as 1.
+// value typed back is no change; words typed in a chips field's entry and not yet taken are a change of that field. A
+// changed field wears data-changed - the control, a check's .form-check row, a combobox's face, a chips field's box -
+// and so do its form and the tab of every pane that holds it. The page's tracked forms outside a dialog share one save
+// bar, the page's .save-bar[data-track] or one made at the end of .app-main, which names the changes in the page's
+// words, stays at rest while such a form is in view and, shown, puts its height on the root as --redz-save-bar-height,
+// so a field the keys reach stands above it; Save and Discard are never disabled and say when there is nothing to do,
+// Save takes Control+S and Meta+S. Every save - the bar's, a question's Save and go, REDZ.ui.track.save() - takes the
+// words left in the chips fields' entries first, and a refused one holds it, then fires the cancelable redz:save on each
+// changed form in turn - {form, changed: [{name, label, was, now}], data, submitter, signal} - and, answered with a
+// promise, what was sent becomes the saved state once it resolves, then redz:saved {form, value}; a refusal {message,
+// fields} marks each named field under its control - {text, stored} offers Keep mine and Take saved - and reveals the
+// first. Left alone, a lone changed form is submitted as usual. A form in a dialog saves by its own button (js/wait.js),
+// which takes Control+S when it is the form's only one; of several, the page names one by aria-keyshortcuts. Discard puts
+// the saved values back, each with input and change, empties the chips fields' entries, fires redz:discard and offers
+// Undo, which brings all of it back, until the next edit or ten seconds. While anything is changed, a link that leaves
+// the page, a tab whose pane holds a changed form and a dialog's cancel or close ask first - Save and go, Discard, Stay -
+// and the browser's own question guards the rest. An input[type=password][data-secret] keeps the stored value while it
+// is empty; a button with command="--clear" for it and data-clear empties and disables it, and the form then sends that
+// name as 1.
 import {ask} from './answer.js';
 import {busy} from './busy.js';
-import {settle} from './chip-input.js';
+import {left, settle} from './chip-input.js';
 import {setList} from './combobox.js';
 import {confirm} from './confirm.js';
 import {announce} from './say.js';
@@ -27,6 +31,7 @@ import {text, textCount} from './text.js';
 import {wait} from './wait.js';
 
 const FORM = 'form[data-track]';
+const ENTRY = '.chip-input > .form-ghost';
 const KEYS = 'Control+S Meta+S';
 const CLEAR = '--clear';
 const CLEARED = '\u0000';
@@ -163,7 +168,8 @@ const labelOf = (field) => {
 };
 
 /** What every field of a form sends now, by name. */
-const valuesOf = (form) => new Map([...fieldsOf(form)].map(([name, field]) => [name, valueOf(field)]));
+const entries = (form, words) => [...form.querySelectorAll(ENTRY)].map((entry) => [entry, words ?? entry.value]);
+const valuesOf = (form) => new Map([...[...fieldsOf(form)].map(([name, field]) => [name, valueOf(field)]), ...entries(form)]);
 
 /** The changes of a form against its saved state: [{name, label, was, now}], a secret's with secret and cleared. */
 const changesOf = (form) => {
@@ -176,7 +182,8 @@ const changesOf = (form) => {
 	for (const [name, field] of fields) {
 		const now = valueOf(field);
 		const had = before.get(name);
-		if (had !== undefined && same(had.value, now)) {
+		const entry = entryOf(faceOf(field.controls[0]));
+		if (had !== undefined && same(had.value, now) && !(entry.matches(ENTRY) && left(entry))) {
 			continue;
 		}
 		if (field.kind === 'secret') {
@@ -274,6 +281,12 @@ const restore = (form, values) => {
 		for (const [name, field] of fieldsOf(form)) {
 			if (values.has(name) && !same(valueOf(field), values.get(name))) {
 				put(field, values.get(name));
+			}
+		}
+		for (const [entry, words] of values) {
+			if (entry instanceof Element && entry.value !== words) {
+				entry.value = words;
+				entry.dispatchEvent(new Event('input', {bubbles: true}));
 			}
 		}
 	} finally {
@@ -695,7 +708,9 @@ const savePage = (forms, submitter = null) => {
 	if (saving !== null) {
 		return saving;
 	}
-	forms.forEach(settle);
+	if (!forms.map(settle).every(Boolean)) {
+		return Promise.resolve(false);
+	}
 	const dirty = dirtyForms(forms);
 	if (dirty.length === 0) {
 		tell(text('changes.nothing'));
@@ -764,7 +779,7 @@ const saveForms = async (forms) => {
 		return false;
 	}
 	for (const form of forms.filter((one) => one.closest('dialog') !== null)) {
-		if (!checked([form])) {
+		if (!settle(form) || !checked([form])) {
 			return false;
 		}
 		const submitter = [...form.elements].find((one) => one.type === 'submit') ?? null;
@@ -788,7 +803,7 @@ const discard = (form, undoable) => {
 		undos.set(form, valuesOf(form));
 	}
 	unmarkAll(form);
-	restore(form, savedValues(form));
+	restore(form, new Map([...savedValues(form), ...entries(form, '')]));
 	form.dispatchEvent(new CustomEvent('redz:discard', {bubbles: true, detail: {form}}));
 };
 
@@ -1029,8 +1044,5 @@ export const track = {
 	},
 	dirty: (form) => form === undefined ? dirtyForms() : changesOf(form).length > 0,
 	changed: (form) => changesOf(form),
-	save: (form) => {
-		(form === undefined ? tracked() : [form]).forEach(settle);
-		return saveForms(form === undefined ? dirtyForms() : dirtyForms([form]));
-	},
+	save: (form) => saveForms(form === undefined ? dirtyForms() : dirtyForms([form])),
 };

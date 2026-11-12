@@ -182,7 +182,7 @@ const take = (entry, loud = true) => {
 };
 
 /** Whether the entry holds words not taken yet. */
-const left = (entry) => entry.value.trim() !== '' || entry.validity.badInput;
+export const left = (entry) => entry.value.trim() !== '' || entry.validity.badInput;
 
 /** REDZ.ui.settle: takes what the entries of the form still hold, as it is sent or saved; false, the focus on the first
  *  entry refused, when one is refused; true otherwise. */

@@ -4,6 +4,22 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Changed
+- Tracked forms: words typed in a chips field's entry and not yet taken are a change of that field. The box is marked,
+  the bar names it, and leaving asks first. Discard and `REDZ.ui.track.reset()` empty the entry, the bar's Undo brings
+  the words back, and `REDZ.ui.track.baseline()` leaves them.
+- The script's budget is 54 KB gzipped, up from 52 KB.
+
+### Fixed
+- Every save of tracked forms takes the words left in the chips fields' entries first, and a refused one holds it:
+  - the bar's Save of a form with `novalidate`, which saved anyway;
+  - a dialog's form saved by a question's Save and go, which never took them.
+  `REDZ.ui.track.save()` no longer says a refusal twice.
+- The save bar's docs say how a dialog's form with several buttons names the one Control+S presses:
+  `aria-keyshortcuts="Control+S Meta+S"` on it.
+
 ## 0.24.1 - 2026-11-11
 
 ### Fixed
