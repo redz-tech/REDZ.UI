@@ -2017,12 +2017,20 @@ window.REDZ_BEHAVE = (() => {
 		}]},
 		brandApi: {target: '#tokens-brand-region [data-brand]', steps: [async (out) => {
 			// REDZ.ui.brand answers what a white label paints in each theme, the same as a region of that colour paints it.
-			const junk = [REDZ.ui.brand('nonsense'), REDZ.ui.brand(''), REDZ.ui.brand(7)];
+			const attempt = (label, run) => {
+				try {
+					return run();
+				} catch (error) {
+					out.push('REDZ.ui.brand ' + label + ' threw ' + error.name + ': ' + error.message + ' at ' + String(error.stack).split('\n').slice(0, 3).join(' < '));
+					return undefined;
+				}
+			};
+			const junk = [attempt('of no colour', () => REDZ.ui.brand('nonsense')), REDZ.ui.brand(''), REDZ.ui.brand(7)];
 			if (say(junk) !== say([null, null, null])) {
 				out.push('REDZ.ui.brand of no colour answers ' + say(junk));
 			}
 			const left = $$('div[hidden][data-brand]').length;
-			const yellow = REDZ.ui.brand('#f4c542');
+			const yellow = attempt('of #f4c542', () => REDZ.ui.brand('#f4c542')) ?? null;
 			const facts = yellow === null ? null : [yellow.light.tone, yellow.light.text, yellow.light.ground, yellow.dark.ground, yellow.light.toneOnGround, yellow.light.textOnTone >= 4.5, yellow.light.linkOnGround >= 4.5, yellow.light.ringOnGround >= 3, yellow.dark.textOnTone >= 4.5, yellow.dark.linkOnGround >= 4.5, yellow.dark.ringOnGround >= 3];
 			if (say(facts) !== say(['#f4c542', '#000000', '#ffffff', '#161719', 1.63, true, true, true, true, true, true]) || left !== 0) {
 				out.push('REDZ.ui.brand(#f4c542) answers ' + say(yellow) + ' and leaves ' + left + ' regions');

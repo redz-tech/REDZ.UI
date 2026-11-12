@@ -3,9 +3,14 @@
 // It reads them from the stylesheet the page loads, so it never disagrees with the page; null for a value that is no colour.
 const PARTS = {tone: '--redz-primary', text: '--redz-primary-contrast', link: '--redz-link', ring: '--redz-focus', ground: '--redz-bg'};
 
-/** The colour a probe paints as red, green and blue in sRGB, 0 to 1: the engine converts it, and it is clipped to the gamut. */
-const srgb = (probe) => {
-	const color = getComputedStyle(probe).color;
+/** The colour a probe paints as red, green and blue in sRGB, 0 to 1, clipped to the gamut: the engine converts the colour
+ *  it computed, which may be in another space, through a second probe - a relative colour of a light-dark() origin is
+ *  refused by some engines on the floor, of a computed one by none. */
+const srgb = (probe, scratch) => {
+	const computed = getComputedStyle(probe).color;
+	scratch.style.removeProperty('color');
+	scratch.style.setProperty('color', 'color(from ' + computed + ' srgb r g b)');
+	const color = scratch.style.getPropertyValue('color') === '' ? computed : getComputedStyle(scratch).color;
 	const modern = /color\(srgb ([-\d.e]+) ([-\d.e]+) ([-\d.e]+)/.exec(color);
 	const legacy = /rgba?\((\d+), (\d+), (\d+)/.exec(color);
 	const channels = modern !== null ? modern.slice(1, 4).map(Number) : legacy !== null ? legacy.slice(1, 4).map((one) => Number(one) / 255) : [0, 0, 0];
@@ -32,15 +37,16 @@ export const brand = (colour) => {
 	region.style.setProperty('--redz-brand', colour);
 	const probes = Object.values(PARTS).map((property) => {
 		const probe = document.createElement('span');
-		probe.style.setProperty('color', 'color(from var(' + property + ') srgb r g b)');
+		probe.style.setProperty('color', 'var(' + property + ')');
 		return probe;
 	});
-	region.append(...probes);
+	const scratch = document.createElement('span');
+	region.append(...probes, scratch);
 	(document.body ?? document.documentElement).append(region);
 	const answer = {};
 	for (const theme of ['light', 'dark']) {
 		region.dataset.theme = theme;
-		const rgb = Object.fromEntries(Object.keys(PARTS).map((part, i) => [part, srgb(probes[i])]));
+		const rgb = Object.fromEntries(Object.keys(PARTS).map((part, i) => [part, srgb(probes[i], scratch)]));
 		answer[theme] = {
 			...Object.fromEntries(Object.entries(rgb).map(([part, one]) => [part, '#' + one.map((value) => Math.round(value * 255).toString(16).padStart(2, '0')).join('')])),
 			textOnTone: ratio(rgb.text, rgb.tone),
