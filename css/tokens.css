@@ -74,7 +74,7 @@
 		--redz-primary: light-dark(var(--redz-brand), oklch(from var(--redz-brand) max(l, 0.72) c h));
 		--redz-primary-subtle: light-dark(oklch(from var(--redz-brand) 0.96 calc(c * 0.25) h), oklch(from var(--redz-brand) 0.3 calc(c * 0.35) h));
 		--redz-primary-contrast: light-dark(color(from var(--redz-brand) xyz-d65 calc(clamp(0, (0.1791 - y) * 100000, 1) * 0.9505) clamp(0, (0.1791 - y) * 100000, 1) calc(clamp(0, (0.1791 - y) * 100000, 1) * 1.0891)), #000000);
-		--redz-primary-text: light-dark(color(from var(--redz-brand) xyz-d65 calc(x * min(1, 0.13 / y)) calc(y * min(1, 0.13 / y)) calc(z * min(1, 0.13 / y))), oklch(from var(--redz-brand) max(l, 0.72) c h));
+		--redz-primary-text: light-dark(color(from var(--redz-brand) xyz-d65 calc(x * min(1, 0.13 * pow(y, -1))) calc(y * min(1, 0.13 * pow(y, -1))) calc(z * min(1, 0.13 * pow(y, -1)))), oklch(from var(--redz-brand) max(l, 0.72) c h));
 		--redz-focus: var(--redz-primary-text);
 		--redz-link: var(--redz-primary-text);
 	}
@@ -83,35 +83,35 @@
 		--redz-secondary: light-dark(var(--redz-brand-secondary), oklch(from var(--redz-brand-secondary) max(l, 0.72) c h));
 		--redz-secondary-subtle: light-dark(oklch(from var(--redz-brand-secondary) 0.96 calc(c * 0.25) h), oklch(from var(--redz-brand-secondary) 0.3 calc(c * 0.35) h));
 		--redz-secondary-contrast: light-dark(color(from var(--redz-brand-secondary) xyz-d65 calc(clamp(0, (0.1791 - y) * 100000, 1) * 0.9505) clamp(0, (0.1791 - y) * 100000, 1) calc(clamp(0, (0.1791 - y) * 100000, 1) * 1.0891)), #000000);
-		--redz-secondary-text: light-dark(color(from var(--redz-brand-secondary) xyz-d65 calc(x * min(1, 0.13 / y)) calc(y * min(1, 0.13 / y)) calc(z * min(1, 0.13 / y))), oklch(from var(--redz-brand-secondary) max(l, 0.72) c h));
+		--redz-secondary-text: light-dark(color(from var(--redz-brand-secondary) xyz-d65 calc(x * min(1, 0.13 * pow(y, -1))) calc(y * min(1, 0.13 * pow(y, -1))) calc(z * min(1, 0.13 * pow(y, -1)))), oklch(from var(--redz-brand-secondary) max(l, 0.72) c h));
 	}
 
 	[data-brand-success] {
 		--redz-success: light-dark(var(--redz-brand-success), oklch(from var(--redz-brand-success) max(l, 0.72) c h));
 		--redz-success-subtle: light-dark(oklch(from var(--redz-brand-success) 0.96 calc(c * 0.25) h), oklch(from var(--redz-brand-success) 0.3 calc(c * 0.35) h));
 		--redz-success-contrast: light-dark(color(from var(--redz-brand-success) xyz-d65 calc(clamp(0, (0.1791 - y) * 100000, 1) * 0.9505) clamp(0, (0.1791 - y) * 100000, 1) calc(clamp(0, (0.1791 - y) * 100000, 1) * 1.0891)), #000000);
-		--redz-success-text: light-dark(color(from var(--redz-brand-success) xyz-d65 calc(x * min(1, 0.13 / y)) calc(y * min(1, 0.13 / y)) calc(z * min(1, 0.13 / y))), oklch(from var(--redz-brand-success) max(l, 0.72) c h));
+		--redz-success-text: light-dark(color(from var(--redz-brand-success) xyz-d65 calc(x * min(1, 0.13 * pow(y, -1))) calc(y * min(1, 0.13 * pow(y, -1))) calc(z * min(1, 0.13 * pow(y, -1)))), oklch(from var(--redz-brand-success) max(l, 0.72) c h));
 	}
 
 	[data-brand-info] {
 		--redz-info: light-dark(var(--redz-brand-info), oklch(from var(--redz-brand-info) max(l, 0.72) c h));
 		--redz-info-subtle: light-dark(oklch(from var(--redz-brand-info) 0.96 calc(c * 0.25) h), oklch(from var(--redz-brand-info) 0.3 calc(c * 0.35) h));
 		--redz-info-contrast: light-dark(color(from var(--redz-brand-info) xyz-d65 calc(clamp(0, (0.1791 - y) * 100000, 1) * 0.9505) clamp(0, (0.1791 - y) * 100000, 1) calc(clamp(0, (0.1791 - y) * 100000, 1) * 1.0891)), #000000);
-		--redz-info-text: light-dark(color(from var(--redz-brand-info) xyz-d65 calc(x * min(1, 0.13 / y)) calc(y * min(1, 0.13 / y)) calc(z * min(1, 0.13 / y))), oklch(from var(--redz-brand-info) max(l, 0.72) c h));
+		--redz-info-text: light-dark(color(from var(--redz-brand-info) xyz-d65 calc(x * min(1, 0.13 * pow(y, -1))) calc(y * min(1, 0.13 * pow(y, -1))) calc(z * min(1, 0.13 * pow(y, -1)))), oklch(from var(--redz-brand-info) max(l, 0.72) c h));
 	}
 
 	[data-brand-warning] {
 		--redz-warning: light-dark(var(--redz-brand-warning), oklch(from var(--redz-brand-warning) max(l, 0.72) c h));
 		--redz-warning-subtle: light-dark(oklch(from var(--redz-brand-warning) 0.96 calc(c * 0.25) h), oklch(from var(--redz-brand-warning) 0.3 calc(c * 0.35) h));
 		--redz-warning-contrast: light-dark(color(from var(--redz-brand-warning) xyz-d65 calc(clamp(0, (0.1791 - y) * 100000, 1) * 0.9505) clamp(0, (0.1791 - y) * 100000, 1) calc(clamp(0, (0.1791 - y) * 100000, 1) * 1.0891)), #000000);
-		--redz-warning-text: light-dark(color(from var(--redz-brand-warning) xyz-d65 calc(x * min(1, 0.13 / y)) calc(y * min(1, 0.13 / y)) calc(z * min(1, 0.13 / y))), oklch(from var(--redz-brand-warning) max(l, 0.72) c h));
+		--redz-warning-text: light-dark(color(from var(--redz-brand-warning) xyz-d65 calc(x * min(1, 0.13 * pow(y, -1))) calc(y * min(1, 0.13 * pow(y, -1))) calc(z * min(1, 0.13 * pow(y, -1)))), oklch(from var(--redz-brand-warning) max(l, 0.72) c h));
 	}
 
 	[data-brand-danger] {
 		--redz-danger: light-dark(var(--redz-brand-danger), oklch(from var(--redz-brand-danger) max(l, 0.72) c h));
 		--redz-danger-subtle: light-dark(oklch(from var(--redz-brand-danger) 0.96 calc(c * 0.25) h), oklch(from var(--redz-brand-danger) 0.3 calc(c * 0.35) h));
 		--redz-danger-contrast: light-dark(color(from var(--redz-brand-danger) xyz-d65 calc(clamp(0, (0.1791 - y) * 100000, 1) * 0.9505) clamp(0, (0.1791 - y) * 100000, 1) calc(clamp(0, (0.1791 - y) * 100000, 1) * 1.0891)), #000000);
-		--redz-danger-text: light-dark(color(from var(--redz-brand-danger) xyz-d65 calc(x * min(1, 0.13 / y)) calc(y * min(1, 0.13 / y)) calc(z * min(1, 0.13 / y))), oklch(from var(--redz-brand-danger) max(l, 0.72) c h));
+		--redz-danger-text: light-dark(color(from var(--redz-brand-danger) xyz-d65 calc(x * min(1, 0.13 * pow(y, -1))) calc(y * min(1, 0.13 * pow(y, -1))) calc(z * min(1, 0.13 * pow(y, -1)))), oklch(from var(--redz-brand-danger) max(l, 0.72) c h));
 	}
 
 	[data-density="compact"] {

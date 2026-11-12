@@ -2,19 +2,18 @@
 // the words on it, the links, the focus ring and the ground under them, each #rrggbb in sRGB, and their contrast ratios.
 // It reads them from the stylesheet the page loads, so it never disagrees with the page; null for a value that is no colour.
 const PARTS = {tone: '--redz-primary', text: '--redz-primary-contrast', link: '--redz-link', ring: '--redz-focus', ground: '--redz-bg'};
-let paint = null;
 
-/** The colour's red, green and blue in sRGB, 0 to 255: the canvas converts any space the engine computes in. */
-const srgb = (color) => {
-	paint ??= Object.assign(document.createElement('canvas'), {width: 1, height: 1}).getContext('2d', {willReadFrequently: true});
-	paint.clearRect(0, 0, 1, 1);
-	paint.fillStyle = color;
-	paint.fillRect(0, 0, 1, 1);
-	return [...paint.getImageData(0, 0, 1, 1).data.slice(0, 3)];
+/** The colour a probe paints as red, green and blue in sRGB, 0 to 1: the engine converts it, and it is clipped to the gamut. */
+const srgb = (probe) => {
+	const color = getComputedStyle(probe).color;
+	const modern = /color\(srgb ([-\d.e]+) ([-\d.e]+) ([-\d.e]+)/.exec(color);
+	const legacy = /rgba?\((\d+), (\d+), (\d+)/.exec(color);
+	const channels = modern !== null ? modern.slice(1, 4).map(Number) : legacy !== null ? legacy.slice(1, 4).map((one) => Number(one) / 255) : [0, 0, 0];
+	return channels.map((one) => Math.min(1, Math.max(0, one)));
 };
 
 /** WCAG 2's relative luminance. */
-const luminance = (rgb) => rgb.map((one) => one / 255).map((one) => one <= 0.04045 ? one / 12.92 : ((one + 0.055) / 1.055) ** 2.4).reduce((sum, one, i) => sum + one * [0.2126, 0.7152, 0.0722][i], 0);
+const luminance = (rgb) => rgb.map((one) => one <= 0.04045 ? one / 12.92 : ((one + 0.055) / 1.055) ** 2.4).reduce((sum, one, i) => sum + one * [0.2126, 0.7152, 0.0722][i], 0);
 
 /** The contrast ratio of two colours, to two decimals. */
 const ratio = (one, other) => {
@@ -33,7 +32,7 @@ export const brand = (colour) => {
 	region.style.setProperty('--redz-brand', colour);
 	const probes = Object.values(PARTS).map((property) => {
 		const probe = document.createElement('span');
-		probe.style.setProperty('color', 'var(' + property + ')');
+		probe.style.setProperty('color', 'color(from var(' + property + ') srgb r g b)');
 		return probe;
 	});
 	region.append(...probes);
@@ -41,9 +40,9 @@ export const brand = (colour) => {
 	const answer = {};
 	for (const theme of ['light', 'dark']) {
 		region.dataset.theme = theme;
-		const rgb = Object.fromEntries(Object.keys(PARTS).map((part, i) => [part, srgb(getComputedStyle(probes[i]).color)]));
+		const rgb = Object.fromEntries(Object.keys(PARTS).map((part, i) => [part, srgb(probes[i])]));
 		answer[theme] = {
-			...Object.fromEntries(Object.entries(rgb).map(([part, one]) => [part, '#' + one.map((value) => value.toString(16).padStart(2, '0')).join('')])),
+			...Object.fromEntries(Object.entries(rgb).map(([part, one]) => [part, '#' + one.map((value) => Math.round(value * 255).toString(16).padStart(2, '0')).join('')])),
 			textOnTone: ratio(rgb.text, rgb.tone),
 			linkOnGround: ratio(rgb.link, rgb.ground),
 			ringOnGround: ratio(rgb.ring, rgb.ground),

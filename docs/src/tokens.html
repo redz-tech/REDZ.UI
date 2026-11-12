@@ -18,7 +18,7 @@
 	<p>The key may change while the page stands: set on a region after load, <code>data-brand</code> derives the tone there at the next frame, and the region's own <code>data-theme</code> gives it the other theme. A settings screen that lets a person choose the colour asks the library what it will paint: <code>REDZ.ui.brand(colour)</code> answers for both themes with the tone, the words on it, the links, the focus ring and the ground under them, each <code>#rrggbb</code>, and four contrast ratios, read from the stylesheet the page loads. The words on the tone and the links reach 4.5:1 by themselves and the ring 3:1; a fill keeps the colour as given, so <code>toneOnGround</code> is the one to warn about - a pale colour makes pale buttons and bars. A value that is no colour answers <code>null</code>.</p>
 	<pre class="docs-code" tabindex="0"><code>REDZ.ui.brand('#f4c542')
 // {light: {tone: '#f4c542', text: '#000000', link: '#7b621c', ring: '#7b621c', ground: '#ffffff',
-//          textOnTone: 12.91, linkOnGround: 5.82, ringOnGround: 5.82, toneOnGround: 1.63},
+//          textOnTone: 12.91, linkOnGround: 5.83, ringOnGround: 5.83, toneOnGround: 1.63},
 //  dark:  {tone: '#f4c542', text: '#000000', link: '#f4c542', ring: '#f4c542', ground: '#161719',
 //          textOnTone: 12.91, linkOnGround: 11.03, ringOnGround: 11.03, toneOnGround: 11.03}}</code></pre>
 	<div class="docs-example docs-example-stack" id="tokens-brand-region">

@@ -1211,7 +1211,7 @@ The key may change while the page stands: set on a region after load, `data-bran
 ```js
 REDZ.ui.brand('#f4c542')
 // {light: {tone: '#f4c542', text: '#000000', link: '#7b621c', ring: '#7b621c', ground: '#ffffff',
-//          textOnTone: 12.91, linkOnGround: 5.82, ringOnGround: 5.82, toneOnGround: 1.63},
+//          textOnTone: 12.91, linkOnGround: 5.83, ringOnGround: 5.83, toneOnGround: 1.63},
 //  dark:  {tone: '#f4c542', text: '#000000', link: '#f4c542', ring: '#f4c542', ground: '#161719',
 //          textOnTone: 12.91, linkOnGround: 11.03, ringOnGround: 11.03, toneOnGround: 11.03}}
 ```
