@@ -28,6 +28,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - The script's budget is 54 KB gzipped, up from 52 KB.
 
 ### Fixed
+- `form-field` keeps its parts' own heights. Stretched in a grid's row beside a field with a longer hint, it gave
+  the height to its rows: an `input-group`'s addon stood taller than its floating field, a gap under the field.
 - `app-header`, `app-sidebar` and `app-main` take the shell's areas only right in `app`. In a grid of the page's
   own, every header fell into one cell, each over the last, as `app-banner` did before 0.24.1.
 - Tracked forms: a checkbox or a switch after a hidden field of its name, which sends a value while the box is

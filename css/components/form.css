@@ -1,6 +1,7 @@
 @layer components {
 	.form-field {
 		display: grid;
+		align-content: start;
 		gap: var(--redz-space-4);
 	}
 

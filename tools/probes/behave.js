@@ -5843,6 +5843,30 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a form\'s reset after 14 is added gives ' + say(reset.slice(1)) + ' - not the value and chips the box came with');
 			}
 		}]},
+		fieldRows: {target: '#form-floating', steps: [async (out) => {
+			// Fields side by side whose hints differ in length: the cell of the short hint is stretched to the row, and its
+			// parts keep their own heights - a floating field's addon stands as tall as the field, no gap under it.
+			const row = Object.assign(document.createElement('div'), {className: 'grid cols-2 gap-16'});
+			row.style.cssText = 'position: fixed; inset: 0 auto auto 0; inline-size: 36rem; background: Canvas';
+			const field = (hint) => {
+				const one = Object.assign(document.createElement('div'), {className: 'form-field'});
+				const group = Object.assign(document.createElement('div'), {className: 'input-group'});
+				const floating = Object.assign(document.createElement('div'), {className: 'form-floating'});
+				floating.append(Object.assign(document.createElement('input'), {className: 'form-control', placeholder: 'Days'}), Object.assign(document.createElement('label'), {textContent: 'Keep for'}));
+				group.append(floating, Object.assign(document.createElement('span'), {className: 'input-group-text', textContent: 'days'}));
+				one.append(group, Object.assign(document.createElement('div'), {className: 'form-text', textContent: hint}));
+				return one;
+			};
+			const short = field('Days.');
+			row.append(short, field('How many days the copies stay before the oldest goes, counted from the night they were made.'));
+			document.body.append(row);
+			await settled();
+			const sizes = [$('.form-control', short), $('.input-group', short), $('.input-group-text', short)].map((one) => Math.round(one.getBoundingClientRect().height));
+			row.remove();
+			if (sizes[1] !== sizes[0] || sizes[2] !== sizes[0]) {
+				out.push('a field beside a taller one stands its input, group and addon ' + say(sizes) + ' tall');
+			}
+		}]},
 		switchPartner: {target: '#save-bar-live', steps: [async (out) => {
 			// A switch after a hidden field of its name that sends 0 while it is off is one checkbox field: a flip is a change
 			// on the switch's row, the bar's Discard and Undo put it back with input and change, a refusal marks the row.
