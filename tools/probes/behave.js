@@ -618,6 +618,8 @@ window.REDZ_BEHAVE = (() => {
 		const width = (name) => lens.querySelector('[data-value="' + name + '"]');
 		yield {click: pt(width('phone'))};
 		say('the phone lens narrows the frame', Math.round(frame.getBoundingClientRect().width) === 390, frame.getBoundingClientRect().width);
+		// WebKit gives the frame's window its new width a moment after the frame is laid out.
+		await until(() => doc.defaultView.innerWidth === 390, 2000);
 		say('the frame answers to its width', doc.defaultView.innerWidth === 390, doc.defaultView.innerWidth);
 		yield {click: pt(blk('alert1').querySelector('[data-editor-field]'), 0.3)};
 		yield {type: 'T'};
