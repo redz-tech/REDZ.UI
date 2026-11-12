@@ -303,4 +303,4 @@ The library has no words of its own; it reads these from the page's island `#red
 
 From [`css/components/combobox.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/combobox.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-8`, `--redz-focus`, `--redz-text-muted`, `--redz-border`, `--redz-space-4`, `--redz-bg-hover`, `--redz-space-12`, `--redz-primary-subtle`, `--redz-primary`.
+It reads the theme's `--redz-space-8`, `--redz-focus`, `--redz-text-muted`, `--redz-border`, `--redz-space-4`, `--redz-bg-hover`, `--redz-space-12`, `--redz-primary-subtle`, `--redz-primary-text`.

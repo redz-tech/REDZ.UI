@@ -12,6 +12,11 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   Before, the name stayed in sight beside the badge.
 - Docs: in `page-center-brand` a badge takes a height utility on both pictures, `h-72` or `h-88`, over the brand's 40 px.
 
+### Fixed
+- Under `data-brand` a pressed or current `chip` and a combobox's matched letters were written in the tone itself:
+  under 4.5:1 on their ground for most brands, 1.45:1 with `#f4c542`. They take the tone's words form,
+  `--redz-primary-text`, as links do.
+
 ## 0.25.0 - 2026-11-12
 
 ### Added

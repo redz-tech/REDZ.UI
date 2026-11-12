@@ -44,4 +44,4 @@ Links between saved views mark the current one with `aria-current="true"`. An ap
 
 From [`css/components/chip.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/chip.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-control-height-sm`, `--redz-border`, `--redz-bg`, `--redz-text`, `--redz-fs-12`, `--redz-bg-hover`, `--redz-primary-subtle`, `--redz-primary`, `--redz-text-muted`.
+It reads the theme's `--redz-control-height-sm`, `--redz-border`, `--redz-bg`, `--redz-text`, `--redz-fs-12`, `--redz-bg-hover`, `--redz-primary-subtle`, `--redz-primary-text`, `--redz-text-muted`.

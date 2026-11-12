@@ -99,7 +99,7 @@
 	@supports selector(::highlight(redz-match)) {
 		::highlight(redz-match) {
 			background-color: var(--redz-primary-subtle);
-			color: var(--redz-primary);
+			color: var(--redz-primary-text);
 		}
 	}
 

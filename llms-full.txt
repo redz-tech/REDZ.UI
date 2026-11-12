@@ -3102,7 +3102,7 @@ Links between saved views mark the current one with `aria-current="true"`. An ap
 
 From [`css/components/chip.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/chip.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-control-height-sm`, `--redz-border`, `--redz-bg`, `--redz-text`, `--redz-fs-12`, `--redz-bg-hover`, `--redz-primary-subtle`, `--redz-primary`, `--redz-text-muted`.
+It reads the theme's `--redz-control-height-sm`, `--redz-border`, `--redz-bg`, `--redz-text`, `--redz-fs-12`, `--redz-bg-hover`, `--redz-primary-subtle`, `--redz-primary-text`, `--redz-text-muted`.
 
 # Menus
 
@@ -4102,7 +4102,7 @@ The library has no words of its own; it reads these from the page's island `#red
 
 From [`css/components/combobox.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/combobox.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-8`, `--redz-focus`, `--redz-text-muted`, `--redz-border`, `--redz-space-4`, `--redz-bg-hover`, `--redz-space-12`, `--redz-primary-subtle`, `--redz-primary`.
+It reads the theme's `--redz-space-8`, `--redz-focus`, `--redz-text-muted`, `--redz-border`, `--redz-space-4`, `--redz-bg-hover`, `--redz-space-12`, `--redz-primary-subtle`, `--redz-primary-text`.
 
 # Inline edit
 
