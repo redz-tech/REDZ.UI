@@ -2052,23 +2052,24 @@ window.REDZ_BEHAVE = (() => {
 		}]},
 		brandLogo: {target: '#app-brand-logo', steps: [async (out) => {
 			// The pair follows the page's theme, a light logo alone stands on a white mat in the dark, and under a 576 px
-			// header the brand is its mark, the logo or the name still the link's name.
-			const [pair, alone, narrow, named] = $$('#app-brand-logo > .app-header');
-			const tops = [pair, alone, narrow, named].map((one) => one.getBoundingClientRect());
+			// header the brand keeps its smallest sign - the mark, else the logo - the rest still the link's name.
+			const [pair, alone, narrow, named, badge, badgeNarrow] = $$('#app-brand-logo > .app-header');
+			const tops = [pair, alone, narrow, named, badge, badgeNarrow].map((one) => one.getBoundingClientRect());
 			if (tops.some((one, i) => i > 0 && one.top < tops[i - 1].bottom - 0.5)) {
 				out.push('headers in a grid of the page\'s own stand at ' + say(tops.map((one) => Math.round(one.top))) + ', over each other');
 			}
 			const root = document.documentElement;
 			const before = root.getAttribute('data-theme');
-			pair.style.inlineSize = '40rem';
-			alone.style.inlineSize = '40rem';
+			for (const wide of [pair, alone, badge]) {
+				wide.style.inlineSize = '40rem';
+			}
 			const shown = (header) => $$('.app-brand > *', header).filter((one) => getComputedStyle(one).display !== 'none' && getComputedStyle(one).clipPath === 'none').map((one) => one.className);
-			const named_ = (header) => $$('.app-brand > *', header).filter((one) => getComputedStyle(one).display !== 'none' && one.getAttribute('aria-hidden') !== 'true').map((one) => one instanceof HTMLImageElement ? one.alt : one.textContent).join(' ');
+			const named_ = (header) => $$('.app-brand > *', header).filter((one) => getComputedStyle(one).display !== 'none' && one.getAttribute('aria-hidden') !== 'true').map((one) => one instanceof HTMLImageElement ? one.alt : one.textContent).filter((one) => one !== '').join(' ');
 			const look = {};
 			for (const theme of ['light', 'dark']) {
 				root.setAttribute('data-theme', theme);
 				await settled();
-				look[theme] = [shown(pair), shown(alone), getComputedStyle($('.brand-logo', alone)).backgroundColor, shown(narrow), named_(narrow), shown(named), named_(named)];
+				look[theme] = [shown(pair), shown(alone), getComputedStyle($('.brand-logo', alone)).backgroundColor, shown(narrow), named_(narrow), shown(named), named_(named), shown(badge), shown(badgeNarrow), named_(badgeNarrow)];
 			}
 			if (before === null) {
 				root.removeAttribute('data-theme');
@@ -2076,8 +2077,8 @@ window.REDZ_BEHAVE = (() => {
 				root.setAttribute('data-theme', before);
 			}
 			const want = {
-				light: [['brand-logo'], ['brand-logo'], 'rgba(0, 0, 0, 0)', ['app-mark'], 'Velmora', ['app-mark'], 'Velmora'],
-				dark: [['brand-logo brand-logo-dark'], ['brand-logo'], 'rgb(255, 255, 255)', ['app-mark'], 'Velmora', ['app-mark'], 'Velmora'],
+				light: [['brand-logo'], ['brand-logo'], 'rgba(0, 0, 0, 0)', ['app-mark'], 'Velmora', ['app-mark'], 'Velmora', ['brand-logo', 'app-name'], ['brand-logo'], 'Velmora'],
+				dark: [['brand-logo brand-logo-dark'], ['brand-logo'], 'rgb(255, 255, 255)', ['app-mark'], 'Velmora', ['app-mark'], 'Velmora', ['brand-logo brand-logo-dark', 'app-name'], ['brand-logo brand-logo-dark'], 'Velmora'],
 			};
 			if (say(look) !== say(want)) {
 				out.push('the brand shows ' + say(look) + ', not ' + say(want));
@@ -2087,8 +2088,9 @@ window.REDZ_BEHAVE = (() => {
 			if (getComputedStyle($('.brand-logo:not(.brand-logo-dark)', pair)).display !== 'none' && (Math.round(box.height) !== 28 || Math.round(box.width) !== 112)) {
 				out.push('a 112 by 28 logo stands ' + Math.round(box.width) + ' by ' + Math.round(box.height));
 			}
-			pair.style.removeProperty('inline-size');
-			alone.style.removeProperty('inline-size');
+			for (const wide of [pair, alone, badge]) {
+				wide.style.removeProperty('inline-size');
+			}
 		}]},
 		uploadDark: {target: '#upload-image-dark', steps: [async (out) => {
 			// The dark logo's field shows it on the dark page's ground in either theme; the plain field stays on white.
@@ -4494,6 +4496,34 @@ window.REDZ_BEHAVE = (() => {
 			const off = $$(':scope > :not(.page-center-corner)', page).filter((child) => !near(middle(child), middle(page), 2));
 			if (off.length > 0) {
 				out.push(off.length + ' children of a centered page stand off its middle: ' + say(off.map((child) => child.className)));
+			}
+		}]},
+		badgeSignIn: {target: '#page-center-example .page-center', steps: [async (out) => {
+			// A badge pair in page-center-brand takes a height utility over the brand's 40 px, in either theme.
+			const head = Object.assign(document.createElement('header'), {className: 'page-center-brand'});
+			for (const [file, extra] of [['badge-light', ''], ['badge-dark', ' brand-logo-dark']]) {
+				head.append(Object.assign(document.createElement('img'), {className: 'brand-logo h-88' + extra, src: 'img/' + file + '.svg', width: 28, height: 28, alt: ''}));
+			}
+			$('#page-center-example .page-center').prepend(head);
+			const root = document.documentElement;
+			const before = root.getAttribute('data-theme');
+			const look = [];
+			for (const theme of ['light', 'dark']) {
+				root.setAttribute('data-theme', theme);
+				await settled();
+				look.push(...$$('img', head).filter((img) => getComputedStyle(img).display !== 'none').map((img) => {
+					const box = img.getBoundingClientRect();
+					return theme + ' ' + Math.round(box.width) + ' by ' + Math.round(box.height);
+				}));
+			}
+			if (before === null) {
+				root.removeAttribute('data-theme');
+			} else {
+				root.setAttribute('data-theme', before);
+			}
+			head.remove();
+			if (say(look) !== say(['light 88 by 88', 'dark 88 by 88'])) {
+				out.push('a badge pair with h-88 in page-center-brand shows ' + say(look));
 			}
 		}]},
 		chooser: {target: '#media-pick .media-grid-compact', steps: [async (out) => {

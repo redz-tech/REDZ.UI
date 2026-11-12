@@ -54,9 +54,11 @@
 		display: none;
 	}
 
-	/* Under a 576 px header the brand is its mark: the logo or the name beside it leaves the sight, not the link's name. */
+	/* Under a 576 px header the brand keeps its smallest sign - the mark, else the logo, else the name: the rest leaves the
+	   sight, not the link's name. */
 	@container region (width < 576px) {
-		.app-brand:has(> .app-mark) > :is(.brand-logo, .app-name) {
+		.app-brand:has(> .app-mark) > .brand-logo,
+		.app-brand:has(> :is(.app-mark, .brand-logo)) > .app-name {
 			position: absolute;
 			inline-size: 1px;
 			block-size: 1px;

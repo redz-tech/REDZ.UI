@@ -4,6 +4,14 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Changed
+- Under a 576 px header the brand keeps its smallest sign: the mark, else the logo, else the name. A logo with
+  `app-name` beside it - a badge - now keeps the logo there, and the name leaves the sight but stays the link's name.
+  Before, the name stayed in sight beside the badge.
+- Docs: in `page-center-brand` a badge takes a height utility on both pictures, `h-72` or `h-88`, over the brand's 40 px.
+
 ## 0.25.0 - 2026-11-12
 
 ### Added

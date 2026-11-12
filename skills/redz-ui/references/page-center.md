@@ -51,7 +51,7 @@ A page without the app shell: the brand, one card and a way on, in a column at t
 
 Every child but the corner stands in the column, whatever it is itself - a `vstack` or an `hstack` of links under the card stays under the card, not at the start of a wide window.
 
-A product with its own logo puts the [brand's pair](app.md#app-brand) in `page-center-brand` in place of the mark, 40 px tall: the light picture, then its twin for the dark theme, and a light one alone on a white mat in the dark. The [credit line](app.md#app-credit), `app-credit`, stands last in the column, centred under the card.
+A product with its own logo puts the [brand's pair](app.md#app-brand) in `page-center-brand` in place of the mark, 40 px tall: the light picture, then its twin for the dark theme, and a light one alone on a white mat in the dark. 40 px suits a word; a badge takes a height utility on both pictures, `h-72` or `h-88`, up to the column's 120 px for a picture. The [credit line](app.md#app-credit), `app-credit`, stands last in the column, centred under the card.
 
 ```html
 <header class="page-center-brand">
@@ -61,6 +61,12 @@ A product with its own logo puts the [brand's pair](app.md#app-brand) in `page-c
 </header>
 <form class="card">…</form>
 <p class="app-credit">Powered by <a href="https://example.com/">Example CMS</a></p>
+
+<header class="page-center-brand">
+  <img class="brand-logo h-88" src="badge-light.svg" width="28" height="28" alt="">
+  <img class="brand-logo brand-logo-dark h-88" src="badge-dark.svg" width="28" height="28" alt="">
+  <h1>Velmora</h1>
+</header>
 ```
 
 In a page `page-center` is the `main` and the brand's name its `h1`; here they are a `div` and an `h2` under the page's own.

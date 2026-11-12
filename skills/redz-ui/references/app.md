@@ -39,14 +39,15 @@ The [demo screens](https://redz-tech.github.io/REDZ.UI/reference/demo/list.html)
 
 ### The brand
 
-`app-brand` is the link home at the header's start: the product's mark, `app-mark`, and its name, `app-name`. The mark is a picture of the name, so it carries `aria-hidden="true"`. Where the header is under 576 px wide, the brand is its mark alone. The name leaves the sight but stays the link's name for a screen reader.
+`app-brand` is the link home at the header's start: the product's mark, `app-mark`, and its name, `app-name`. The mark is a picture of the name, so it carries `aria-hidden="true"`. Where the header is under 576 px wide, the brand keeps one sign, the smallest it has: the mark, else the logo, else the name. The rest leaves the sight but stays the link's name for a screen reader.
 
 A product with its own logo puts it in place of the name: `<img class="brand-logo">`, the picture for the light theme, then `<img class="brand-logo brand-logo-dark">`, its twin for the dark one. Each carries the file's own `width` and `height`: the logo stands 28 px tall, as wide as its proportions make it, and nothing moves as it loads. In the header it is at most 160 px wide.
 
 - The page's theme picks the picture: `data-theme` on `html`, or the system's without it. A region's own `data-theme` leaves the logo as it is.
 - A light picture with no twin stands on a white mat in the dark theme.
 - With the mark printed too, the header under 576 px shows the mark and keeps the logo's `alt` as the link's name. Without the mark, the logo narrows where the header is full, its picture kept whole.
-- The `alt` of both pictures is the product's name; only the one shown is read.
+- A logo that is a badge, not a word, takes `app-name` after it. Under 576 px the badge stays and the name leaves the sight, still the link's name.
+- The `alt` of both pictures is the product's name, or empty with `app-name` beside them; only the one shown is read.
 
 ```html
 <header class="app-header">
@@ -65,15 +66,28 @@ A product with its own logo puts it in place of the name: `<img class="brand-log
 	<a class="app-brand" href="#app-brand"><span class="app-mark" aria-hidden="true">V</span><span class="app-name">Velmora</span></a>
 	<button class="btn btn-text btn-icon ms-auto" type="button" aria-label="Theme"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
 </header>
+<header class="app-header">
+	<a class="app-brand" href="#app-brand"><img class="brand-logo" src="img/badge-light.svg" width="28" height="28" alt=""><img class="brand-logo brand-logo-dark" src="img/badge-dark.svg" width="28" height="28" alt=""><span class="app-name">Velmora</span></a>
+	<button class="btn btn-text btn-icon ms-auto" type="button" aria-label="Theme"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+</header>
+<header class="app-header max-w-360">
+	<a class="app-brand" href="#app-brand"><img class="brand-logo" src="img/badge-light.svg" width="28" height="28" alt=""><img class="brand-logo brand-logo-dark" src="img/badge-dark.svg" width="28" height="28" alt=""><span class="app-name">Velmora</span></a>
+	<button class="btn btn-text btn-icon ms-auto" type="button" aria-label="Theme"><i class="bi bi-circle-half" aria-hidden="true"></i></button>
+</header>
 ```
 
-Above: the pair with its mark, a light logo alone - on its mat in the dark theme - and the pair and the name in a header narrower than 576 px.
+Above: the pair with its mark, a light logo alone - on its mat in the dark theme - and the pair and the name in a header narrower than 576 px; then a badge with the name, wide and narrow.
 
 ```html
 <a class="app-brand" href="/">
   <img class="brand-logo" src="logo-light.svg" width="112" height="28" alt="Velmora">
   <img class="brand-logo brand-logo-dark" src="logo-dark.svg" width="112" height="28" alt="Velmora">
   <span class="app-mark" aria-hidden="true">V</span>
+</a>
+<a class="app-brand" href="/">
+  <img class="brand-logo" src="badge-light.svg" width="28" height="28" alt="">
+  <img class="brand-logo brand-logo-dark" src="badge-dark.svg" width="28" height="28" alt="">
+  <span class="app-name">Velmora</span>
 </a>
 ```
 

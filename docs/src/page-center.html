@@ -47,14 +47,20 @@
 		</div>
 	</div>
 	<p>Every child but the corner stands in the column, whatever it is itself - a <code>vstack</code> or an <code>hstack</code> of links under the card stays under the card, not at the start of a wide window.</p>
-	<p>A product with its own logo puts the <a href="app.html#app-brand">brand's pair</a> in <code>page-center-brand</code> in place of the mark, 40 px tall: the light picture, then its twin for the dark theme, and a light one alone on a white mat in the dark. The <a href="app.html#app-credit">credit line</a>, <code>app-credit</code>, stands last in the column, centred under the card.</p>
+	<p>A product with its own logo puts the <a href="app.html#app-brand">brand's pair</a> in <code>page-center-brand</code> in place of the mark, 40 px tall: the light picture, then its twin for the dark theme, and a light one alone on a white mat in the dark. 40 px suits a word; a badge takes a height utility on both pictures, <code>h-72</code> or <code>h-88</code>, up to the column's 120 px for a picture. The <a href="app.html#app-credit">credit line</a>, <code>app-credit</code>, stands last in the column, centred under the card.</p>
 	<pre class="docs-code" tabindex="0"><code>&lt;header class="page-center-brand"&gt;
   &lt;img class="brand-logo" src="logo-light.svg" width="112" height="28" alt="Velmora"&gt;
   &lt;img class="brand-logo brand-logo-dark" src="logo-dark.svg" width="112" height="28" alt="Velmora"&gt;
   &lt;p&gt;Sign in to manage your sites&lt;/p&gt;
 &lt;/header&gt;
 &lt;form class="card"&gt;…&lt;/form&gt;
-&lt;p class="app-credit"&gt;Powered by &lt;a href="https://example.com/"&gt;Example CMS&lt;/a&gt;&lt;/p&gt;</code></pre>
+&lt;p class="app-credit"&gt;Powered by &lt;a href="https://example.com/"&gt;Example CMS&lt;/a&gt;&lt;/p&gt;
+
+&lt;header class="page-center-brand"&gt;
+  &lt;img class="brand-logo h-88" src="badge-light.svg" width="28" height="28" alt=""&gt;
+  &lt;img class="brand-logo brand-logo-dark h-88" src="badge-dark.svg" width="28" height="28" alt=""&gt;
+  &lt;h1&gt;Velmora&lt;/h1&gt;
+&lt;/header&gt;</code></pre>
 	<p>In a page <code>page-center</code> is the <code>main</code> and the brand's name its <code>h1</code>; here they are a <code>div</code> and an <code>h2</code> under the page's own.</p>
 </section>
 
