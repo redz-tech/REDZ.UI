@@ -6281,7 +6281,7 @@ window.REDZ_BEHAVE = (() => {
 					}
 				}
 			} catch (error) {
-				run.out.push('threw ' + (error instanceof Error ? error.name + ': ' + error.message : String(error)));
+				run.out.push('threw ' + (error instanceof Error ? error.name + ': ' + error.message + (error.stack ? ' at ' + String(error.stack).split('\n').slice(0, 2).join(' < ').slice(0, 300) : '') : String(error)));
 			}
 			return {findings: run.out};
 		},
