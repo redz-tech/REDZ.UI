@@ -45,7 +45,8 @@ function PROBE__NvdaPortable(array $nvda): string
 }
 
 /** NVDA's config of a run: no welcome, updates, statistics, sounds or reading a page aloud at its load; the I/O log;
- *  the browse and focus mode said, not sounded; Remote Access serving itself on $port with $key as the follower. */
+ *  the browse and focus mode said, not sounded; no reading under the mouse, which the probe never moves - a pointer
+ *  passing over a watched desktop would speak; Remote Access serving itself on $port with $key as the follower. */
 function PROBE__NvdaIni(int $port, string $key): string
 {
 	return <<<INI
@@ -69,6 +70,8 @@ function PROBE__NvdaIni(int $port, string $key): string
 	[virtualBuffers]
 		autoSayAllOnPageLoad = False
 		passThroughAudioIndication = False
+	[mouse]
+		enableMouseTracking = False
 	[remote]
 		enabled = True
 		[[controlServer]]
@@ -182,15 +185,22 @@ function PROBE__NvdaPump(array &$r, float $seconds): void
 	} while (microtime(true) < $until);
 }
 
-/** Keeps the words of an utterance - its strings; its commands of pitch, pauses and indexes left out - as a phrase. */
+/** Keeps the words of an utterance - its strings; its commands of pitch, pauses and indexes left out - as a phrase. The
+ *  state of a lock key is no page's word: a virtual machine's host syncs NumLock as its window takes the focus, so it is
+ *  logged, not heard. */
 function PROBE__NvdaPhrase(array &$r, array $sequence): void
 {
 	$phrase = trim((string)preg_replace('~\s+~u', ' ', implode(', ', array_filter($sequence, fn(mixed $part): bool => is_string($part) && trim($part) !== ''))));
-	if ($phrase !== '') {
-		$at = microtime(true) * 1000;
-		$r['heard'][] = [$at, $phrase];
-		file_put_contents($r['log'], round($at) . "\t" . $phrase . "\n", FILE_APPEND);
+	if ($phrase === '') {
+		return;
 	}
+	$at = microtime(true) * 1000;
+	if (preg_match('~^(caps|num|scroll) lock (on|off)$~i', $phrase) === 1) {
+		file_put_contents($r['log'], round($at) . "\t(not heard) " . $phrase . "\n", FILE_APPEND);
+		return;
+	}
+	$r['heard'][] = [$at, $phrase];
+	file_put_contents($r['log'], round($at) . "\t" . $phrase . "\n", FILE_APPEND);
 }
 
 /** The phrases NVDA said since the action began at $since (ms), in order: read for at least 0.3 s after it ended at
@@ -325,11 +335,17 @@ function PROBE__NvdaReady(array &$r, array &$h, string $page): void
 		PROBE__NvdaSay($r, 'F6');
 	}
 	// Firefox can leave NVDA on the whole browser after its window comes in front (nvaccess/nvda #5758); a switch to focus
-	// mode and back puts NVDA on the page. The switch focuses what NVDA's cursor is on - NVDA brings its cursor back where
-	// it was on the page's last load -, so the focus leaves it again: a step's focus must arrive.
-	PROBE__NvdaSay($r, 'NVDA+Space');
-	PROBE__NvdaSay($r, 'NVDA+Space');
-	PROBE__Do($h, 'Eval', '(() => { document.activeElement?.blur(); addEventListener("keydown", (event) => { if (event.key === "Escape") { window.REDZ_PROBE_ESCAPES = (window.REDZ_PROBE_ESCAPES ?? 0) + 1; } }, true); return true; })()');
+	// mode and back puts NVDA on the page - told by NVDA's words, as the page may come up in focus mode already, the focus
+	// put in a menu or a field. The switch focuses what NVDA's cursor is on - NVDA brings its cursor back where it was on
+	// the page's last load -, so the focus leaves it again: a step's focus must arrive.
+	for ($modes = []; array_slice($modes, -2) !== ['focus mode', 'browse mode'];) {
+		if (count($modes) >= 4) {
+			throw new RuntimeException($page . ': NVDA+Space never went to focus mode and back - NVDA said «' . implode(' · ', $modes) . '»');
+		}
+		$said = PROBE__SpeechWords(implode(', ', PROBE__NvdaSay($r, 'NVDA+Space', 0.5, true)));
+		$modes[] = str_contains($said, 'browse mode') ? 'browse mode' : (str_contains($said, 'focus mode') ? 'focus mode' : $said);
+	}
+	PROBE__Do($h, 'Eval', '(() => { document.activeElement?.blur(); window.REDZ_PROBE_ESCAPES ??= (addEventListener("keydown", (event) => { if (event.key === "Escape") { window.REDZ_PROBE_ESCAPES += 1; } }, true), 0); return true; })()');
 	PROBE__NvdaSay($r, 'Control+Home');
 	PROBE__NvdaHeard($r, microtime(true) * 1000, microtime(true) * 1000, 1.0, 5);
 }
@@ -355,6 +371,26 @@ function PROBE__NvdaEscape(array &$r, array &$h): void
 	}
 }
 
+/** What NVDA says at each press of its quick navigation's $key from the top of the page until it says $end, at most
+ *  $presses; null when it answers a press with nothing - in browse mode it answers every one, past the last with "no next
+ *  heading" and the like. */
+function PROBE__NvdaReadKind(array &$r, string $key, string $end, int $presses): ?array
+{
+	// The top of the page is already inside its first item - the banner -, which NVDA says there, not at the first key.
+	$said = [implode(', ', PROBE__NvdaSay($r, 'Control+Home', 0.5, true))];
+	for ($press = 0; $press < $presses; $press++) {
+		$words = implode(', ', PROBE__NvdaSay($r, $key, 0.4, true));
+		if ($words === '') {
+			return null;
+		}
+		if (str_contains(PROBE__SpeechWords($words), $end)) {
+			break;
+		}
+		$said[] = $words;
+	}
+	return $said;
+}
+
 /** NVDA reads the page whole by its quick navigation, on a page of its own: for each kind of item - headings by H,
  *  landmarks by D, form fields by F - from the top until NVDA says there is no next one, each press's words held in
  *  order against what the page holds (tools/probes/read.js). An item NVDA never says, and an item with no words to say,
@@ -369,14 +405,15 @@ function PROBE__NvdaRead(array &$r, array &$h, string $page, array $run, array &
 	$findings = [];
 	foreach (PROBE_NVDA_READ as $kind => [$key, $end]) {
 		$items = $holds[$kind];
-		// The top of the page is already inside its first item - the banner -, which NVDA says there, not at the first key.
-		$said = [implode(', ', PROBE__NvdaSay($r, 'Control+Home', 0.5, true))];
-		for ($press = 0; $press < 2 * count($items) + 10; $press++) {
-			$words = implode(', ', PROBE__NvdaSay($r, $key, 0.4, true));
-			if (str_contains(PROBE__SpeechWords($words), $end)) {
-				break;
+		// A key NVDA leaves unanswered went to the page in focus mode - a click in the window put the focus in a menu or a
+		// field -: the page made ready again, the kind is read anew.
+		for ($again = 0; ($said = PROBE__NvdaReadKind($r, $key, $end, 2 * count($items) + 10)) === null; $again++) {
+			if ($again >= 2) {
+				throw new RuntimeException($page . ': NVDA answered no ' . strtoupper($key) . ' - it does not read the page in browse mode');
 			}
-			$said[] = $words;
+			PROBE__NvdaReady($r, $h, $page);
+			// Ready leaves NVDA at the top, inside the banner, which the kind's own Control+Home then would not say.
+			PROBE__NvdaSay($r, 'Control+End');
 		}
 		$at = 0;
 		foreach ($items as $k => $item) {

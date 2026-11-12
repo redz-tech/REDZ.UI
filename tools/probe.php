@@ -12,13 +12,15 @@
 // .dev/probes/index.html with its report.json and exits 1 on any finding; an engine whose cell runs past five minutes
 // stops as stalling, that cell named. The screen readers hear the config's speech steps: VoiceOver in Safari on a Mac,
 // NVDA in Chrome and Firefox on Windows, where NVDA also reads each speech page whole by its quick navigation. Usage:
-// php tools/probe.php [--pages=PAGE,…] [--serial] [ENGINE…] - an engine named that cannot run here is a finding, one left
-// out of a full run only a note; --pages runs only those pages, the exceptions of the others left unjudged; outside CI the
-// engines run at once, a process each (the engines safaridriver drives one after another), unless --serial - or
+// php tools/probe.php [--pages=PAGE,…] [--serial | --jobs=N] [ENGINE…] - an engine named that cannot run here is a
+// finding, one left out of a full run only a note; --pages runs only those pages, the exceptions of the others left
+// unjudged; outside CI the engines run at once, a process each (the engines safaridriver drives one after another) - at
+// most N at a time with --jobs, in the order named, the next as one ends; one after another with --serial - or
 // php tools/probe.php merge [--base=DIR] DIR… - one sheet of the sheets of several runs, as CI's parallel jobs leave them -
 // or php tools/probe.php affected BASE - what the files changed since BASE ask of each part - or plan | gather, CI's
 // plan of the parts and its one sheet of them - or php tools/probe.php voiceover-setup | nvda-setup, which ready CI's
-// machines for the readers.
+// machines for the readers. $REDZ_UI_ENGINES names a JSON file that amends the config's engines for one machine - its
+// own build of an engine; $REDZ_UI_CACHE moves the cache of fetched engines.
 
 require __DIR__ . '/lib.php';
 require __DIR__ . '/min.php';
@@ -162,8 +164,13 @@ function PROBE__ScreenLocked(): bool
  *  '' with the reason in $why when it cannot run on this machine. */
 function PROBE__Binary(string $name, array $engine, string &$why): string
 {
-	// An engine's build for this system, as CI's Linux machines run Chrome and Firefox.
+	// An engine's build for this system, as CI's Linux machines run Chrome and Firefox; on an ARM Linux its native build
+	// where the config names one, cached apart from the x86-64 one.
 	$engine = array_replace($engine, $engine[strtolower(PHP_OS_FAMILY)] ?? []);
+	if (PHP_OS_FAMILY === 'Linux' && in_array(php_uname('m'), ['aarch64', 'arm64'], true) && isset($engine['linux-arm64'])) {
+		$engine = array_replace($engine, $engine['linux-arm64']);
+		$name .= '-arm64';
+	}
 	if (PHP_OS_FAMILY === 'Darwin' && isset($engine['macos']) && preg_match('~^<\s*(\d+)$~', $engine['macos'], $m) === 1 && (int)PROBE__Run(['/usr/bin/sw_vers', '-productVersion']) >= (int)$m[1]) {
 		$why = $engine['why'];
 		return '';
@@ -777,10 +784,18 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 		} elseif ($kind === 'strength') {
 			foreach (['correct horse battery staple', ''] as $typed) {
 				PROBE__Do($h, 'Eval', 'REDZ_PROBE.typeInto(' . json_encode('#' . $id) . ', ' . json_encode($typed) . ')');
-				usleep(1000000);
-				$s = $state();
 				$wrong = fn(mixed $shown): bool => ($shown !== null && $shown !== '' && $shown !== 0 && $shown !== 0.0) !== ($typed !== '');
-				if (($s['levels'] === [] && $s['words'] === []) || array_filter([...$s['levels'], ...$s['valuetexts'], ...$s['words']], $wrong) !== []) {
+				// The words come once the typing pauses, 0.7 s - later on a busy machine: the meters read until they hold,
+				// 5 s at most.
+				for ($until = microtime(true) + 5; true;) {
+					usleep(250000);
+					$s = $state();
+					$off = ($s['levels'] === [] && $s['words'] === []) || array_filter([...$s['levels'], ...$s['valuetexts'], ...$s['words']], $wrong) !== [];
+					if (!$off || microtime(true) > $until) {
+						break;
+					}
+				}
+				if ($off) {
 					$findings[] = $what . ($typed === '' ? 'the field emptied' : 'a password typed') . ': its meters show ' . json_encode($s['levels']) . ' said as ' . json_encode($s['valuetexts']) . ', its words ' . json_encode($s['words']);
 					break;
 				}
@@ -1517,30 +1532,33 @@ function PROBE__Gather(array $config): int
 	return $missing === [] ? $status : max($status, 1);
 }
 
-/** Runs the engines at once, a process a group, each writing a sheet of its own, then one sheet of them all: every
- *  engine safaridriver drives - desktop Safari, VoiceOver's, the simulators' - goes one after another, as two of its
- *  sessions starting together time out; every other engine runs alone. Answers the merged sheet's exit code. */
+/** Runs the engines at once - at most $options['jobs'] at a time when it is set, the next group as one ends -, a process
+ *  a group, each writing a sheet of its own, then one sheet of them all: every engine safaridriver drives - desktop
+ *  Safari, VoiceOver's, the simulators' - goes one after another, as two of its sessions starting together time out;
+ *  every other engine runs alone. Answers the merged sheet's exit code. */
 function PROBE__Parallel(array $config, array $groups, array $options): int
 {
 	$root = sys_get_temp_dir() . '/redz-ui-parallel-' . getmypid();
 	PROBE__Remove($root);
 	mkdir($root, 0777, true);
 	$running = [];
-	foreach ($groups as $group => $names) {
-		$command = [PHP_BINARY, '-d', 'xdebug.mode=off', __FILE__, '--serial', '--sheet=' . $root . '/' . $group, ...($options['named'] ? [] : ['--full']), ...($options['pages'] === [] ? [] : ['--pages=' . implode(',', $options['pages'])]), ...($options['share'] === '' ? [] : ['--share=' . $options['share']]), ...$names];
-		$proc = proc_open($command, [0 => ['file', PROBE_NULL, 'r'], 1 => ['file', $root . '/' . $group . '.log', 'a'], 2 => ['file', $root . '/' . $group . '.log', 'a']], $pipes, PROBE_ROOT);
-		if (!is_resource($proc)) {
-			throw new RuntimeException('cannot start the run of ' . implode(', ', $names));
-		}
-		$running[$group] = $proc;
-		echo 'started ', implode(', ', $names), "\n";
-	}
 	register_shutdown_function(function () use (&$running): void {
 		foreach ($running as $proc) {
 			proc_terminate($proc);
 		}
 	});
-	while ($running !== []) {
+	for ($waiting = $groups; $running !== [] || $waiting !== []; usleep(500000)) {
+		while ($waiting !== [] && ($options['jobs'] === 0 || count($running) < $options['jobs'])) {
+			$group = array_key_first($waiting);
+			$names = array_shift($waiting);
+			$command = [PHP_BINARY, '-d', 'xdebug.mode=off', __FILE__, '--serial', '--sheet=' . $root . '/' . $group, ...($options['named'] ? [] : ['--full']), ...($options['pages'] === [] ? [] : ['--pages=' . implode(',', $options['pages'])]), ...($options['share'] === '' ? [] : ['--share=' . $options['share']]), ...$names];
+			$proc = proc_open($command, [0 => ['file', PROBE_NULL, 'r'], 1 => ['file', $root . '/' . $group . '.log', 'a'], 2 => ['file', $root . '/' . $group . '.log', 'a']], $pipes, PROBE_ROOT);
+			if (!is_resource($proc)) {
+				throw new RuntimeException('cannot start the run of ' . implode(', ', $names));
+			}
+			$running[$group] = $proc;
+			echo 'started ', implode(', ', $names), "\n";
+		}
 		foreach ($running as $group => $proc) {
 			if (!proc_get_status($proc)['running']) {
 				proc_close($proc);
@@ -1548,17 +1566,28 @@ function PROBE__Parallel(array $config, array $groups, array $options): int
 				echo implode("\n", array_filter(file($root . '/' . $group . '.log', FILE_IGNORE_NEW_LINES) ?: [], fn(string $line): bool => preg_match('~ · \d+ cells · \d+ findings$| skipped: ~', $line) === 1)), "\n";
 			}
 		}
-		usleep(500000);
 	}
 	$status = PROBE__Merge($config, array_map(fn(string $group): string => $root . '/' . $group, array_keys($groups)));
 	PROBE__Remove($root);
 	return $status;
 }
 
-function PROBE__Main(array $argv): int
+/** The config, its engines amended for this machine by the JSON file $REDZ_UI_ENGINES names, if any: an engine's build
+ *  where the machine keeps its own, as {"chrome-130": {"linux-arm64": {"binary": "/opt/chromium-130/chromium"}}}. */
+function PROBE__Config(): array
 {
 	$config = json_decode((string)file_get_contents(PROBE_CONFIG), true, 512, JSON_THROW_ON_ERROR);
-	$options = ['pages' => [], 'sheet' => PROBE_SHEET, 'serial' => false, 'full' => false, 'base' => '', 'share' => ''];
+	$local = (string)getenv('REDZ_UI_ENGINES');
+	if ($local !== '') {
+		$config['engines'] = array_replace_recursive($config['engines'], json_decode((string)file_get_contents($local), true, 512, JSON_THROW_ON_ERROR));
+	}
+	return $config;
+}
+
+function PROBE__Main(array $argv): int
+{
+	$config = PROBE__Config();
+	$options = ['pages' => [], 'sheet' => PROBE_SHEET, 'serial' => false, 'jobs' => 0, 'full' => false, 'base' => '', 'share' => ''];
 	$args = [];
 	foreach (array_slice($argv, 1) as $arg) {
 		match (true) {
@@ -1566,6 +1595,7 @@ function PROBE__Main(array $argv): int
 			str_starts_with($arg, '--sheet=') => $options['sheet'] = substr($arg, strlen('--sheet=')),
 			str_starts_with($arg, '--base=') => $options['base'] = substr($arg, strlen('--base=')),
 			str_starts_with($arg, '--share=') => $options['share'] = substr($arg, strlen('--share=')),
+			str_starts_with($arg, '--jobs=') => $options['jobs'] = preg_match('~^--jobs=([1-9]\d*)$~', $arg, $m) === 1 ? (int)$m[1] : -1,
 			$arg === '--serial' => $options['serial'] = true,
 			// A group of a full run: its engines were not named, so one that cannot run here is only a note.
 			$arg === '--full' => $options['full'] = true,
@@ -1573,6 +1603,10 @@ function PROBE__Main(array $argv): int
 		};
 	}
 	$options['named'] = $args !== [] && !$options['full'];
+	if ($options['jobs'] < 0) {
+		fwrite(STDERR, '--jobs takes N, the most engines that run at once, 1 or more' . "\n");
+		return 2;
+	}
 	if (($args[0] ?? '') === 'merge') {
 		return PROBE__Merge($config, array_slice($args, 1), $options['base']);
 	}
@@ -1620,7 +1654,7 @@ function PROBE__Main(array $argv): int
 		$groups[in_array($engine['kind'], ['safari', 'voiceover'], true) ? 'safari' : $name][] = $name;
 	}
 	if (count($groups) > 1 && !$options['serial'] && getenv('CI') === false) {
-		return PROBE__Parallel(json_decode((string)file_get_contents(PROBE_CONFIG), true, 512, JSON_THROW_ON_ERROR), $groups, $options);
+		return PROBE__Parallel(PROBE__Config(), $groups, $options);
 	}
 	$sheet = $options['sheet'];
 	$tmp = sys_get_temp_dir() . '/redz-ui-probe-' . getmypid();

@@ -2296,7 +2296,11 @@ window.REDZ_BEHAVE = (() => {
 			const hour = elapsed.textContent;
 			await wait(1100);
 			const [minutes, seconds] = at[0].split(':').map(Number);
-			if (!/^\d+:\d\d$/.test(at[0]) || minutes * 60 + seconds < 95 || minutes * 60 + seconds > 240 || at[1] !== '5 minutes ago' || at[2] !== 'in 2 hours' || !at[3] || !/^1:02:0[5-7]$/.test(hour) || elapsed.textContent === hour) {
+			// The message came 300 s before the load: its minutes at the moment the elapsed time counts, as a step
+			// that comes late on a busy machine reads "6 minutes ago".
+			const since = minutes * 60 + seconds - 95;
+			const came = [since - 1, since, since + 1].map((late) => Math.round((300 + late) / 60) + ' minutes ago');
+			if (!/^\d+:\d\d$/.test(at[0]) || since < 0 || since > 145 || !came.includes(at[1]) || at[2] !== 'in 2 hours' || !at[3] || !/^1:02:0[5-7]$/.test(hour) || elapsed.textContent === hour) {
 				out.push('the times read ' + say(at) + ', an elapsed time of an hour and more ' + say(hour) + ' then ' + say(elapsed.textContent));
 			}
 			const words = (style) => new Intl.RelativeTimeFormat(document.documentElement.lang, {numeric: 'auto', style}).format(-42, 'minute');
