@@ -2040,6 +2040,10 @@ window.REDZ_BEHAVE = (() => {
 			// The pair follows the page's theme, a light logo alone stands on a white mat in the dark, and under a 576 px
 			// header the brand is its mark, the logo or the name still the link's name.
 			const [pair, alone, narrow, named] = $$('#app-brand-logo > .app-header');
+			const tops = [pair, alone, narrow, named].map((one) => one.getBoundingClientRect());
+			if (tops.some((one, i) => i > 0 && one.top < tops[i - 1].bottom - 0.5)) {
+				out.push('headers in a grid of the page\'s own stand at ' + say(tops.map((one) => Math.round(one.top))) + ', over each other');
+			}
 			const root = document.documentElement;
 			const before = root.getAttribute('data-theme');
 			pair.style.inlineSize = '40rem';

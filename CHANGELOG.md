@@ -28,6 +28,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - The script's budget is 54 KB gzipped, up from 52 KB.
 
 ### Fixed
+- `app-header`, `app-sidebar` and `app-main` take the shell's areas only right in `app`. In a grid of the page's
+  own, every header fell into one cell, each over the last, as `app-banner` did before 0.24.1.
 - Tracked forms: a checkbox or a switch after a hidden field of its name, which sends a value while the box is
   unchecked, is one checkbox field. Its flip was never a change: the field took the hidden field's kind and value, so
   the bar stayed clean and the flip was not sent. Its change and its refusal show on the box's row.
