@@ -86,7 +86,7 @@ export const toolbarOf = (ed) => {
 		list.addEventListener('toggle', (event) => {
 			if (event.newState === 'closed') {
 				ed.tryOff();
-				if (caret !== null && ed.doc.getSelection().rangeCount === 0) {
+				if (caret !== null && ed.doc?.getSelection()?.rangeCount === 0) {
 					caretPut(ed.doc, caret);
 				}
 			}
