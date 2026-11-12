@@ -1975,6 +1975,7 @@ window.REDZ_BEHAVE = (() => {
 		}]},
 		brand: {target: '#tokens-brand-region [data-brand]', steps: [async (out) => {
 			const [green, yellow] = $$('#tokens-brand-region [data-brand]');
+			await Promise.all([green, yellow].flatMap((one) => $('.btn-primary', one).getAnimations()).map((one) => one.finished.catch(() => null)));
 			const look = await readable ? [rgb(getComputedStyle($('.btn-primary', green)).backgroundColor), green.style.getPropertyValue('--redz-brand'), rgb(getComputedStyle($('.btn-primary', yellow)).color)] : ['10,127,90', green.style.getPropertyValue('--redz-brand'), '0,0,0'];
 			if (say(look) !== say(['10,127,90', '#0a7f5a', '0,0,0'])) {
 				out.push('a white label of #0a7f5a draws its button ' + say(look[0]) + ' with --redz-brand ' + say(look[1]) + ', one of #f4c542 its words ' + say(look[2]));
@@ -1988,17 +1989,29 @@ window.REDZ_BEHAVE = (() => {
 				region.firstElementChild.style.transition = 'none';
 				document.body.append(region);
 				const low = [];
-				for (const brand of ['#0a7f5a', '#b85c57', '#bf625c', '#a86d15', '#af731f', '#498e4d', '#4f9453', '#4e878a', '#548d90', '#5879c3', '#5e7fc9', '#9b63a8', '#a168ae', '#7a7a7a', '#767676', '#f4c542']) {
+				const faint = [];
+				for (const brand of ['#0a7f5a', '#b85c57', '#bf625c', '#a86d15', '#af731f', '#498e4d', '#4f9453', '#4e878a', '#548d90', '#5879c3', '#5e7fc9', '#9b63a8', '#a168ae', '#7a7a7a', '#767676', '#f4c542', '#ffeeaa']) {
 					region.style.setProperty('--redz-brand', brand);
 					const button = getComputedStyle($('.btn', region));
 					const ratio = contrast(rgb(button.backgroundColor), rgb(button.color));
 					if (ratio < 4.5) {
 						low.push(brand + ' ' + ratio.toFixed(2));
 					}
+					for (const ground of ['--redz-bg', '--redz-bg-page']) {
+						region.style.setProperty('outline-color', 'var(--redz-focus)');
+						region.style.setProperty('background-color', 'var(' + ground + ')');
+						const ring = contrast(rgb(getComputedStyle(region).outlineColor), rgb(getComputedStyle(region).backgroundColor));
+						if (ring < 3) {
+							faint.push(brand + ' on ' + ground + ' ' + ring.toFixed(2));
+						}
+					}
 				}
 				region.remove();
 				if (low.length > 0) {
 					out.push('a white label\'s button words fall under 4.5:1 on ' + say(low));
+				}
+				if (faint.length > 0) {
+					out.push('a white label\'s focus ring falls under 3:1 on ' + say(faint));
 				}
 			}
 		}]},

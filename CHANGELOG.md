@@ -13,6 +13,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - The script's budget is 54 KB gzipped, up from 52 KB.
 
 ### Fixed
+- A white label's focus ring reads on the ground: under `data-brand` it is `--redz-primary-text`, as the links are.
+  It was the colour as given, so a pale one hid it: #f4c542 stood at 1.63:1 on white, under the 3:1 a focus ring needs.
 - Every save of tracked forms takes the words left in the chips fields' entries first, and a refused one holds it:
   - the bar's Save of a form with `novalidate`, which saved anyway;
   - a dialog's form saved by a question's Save and go, which never took them.
