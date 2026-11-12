@@ -33,8 +33,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - Tracked forms: a checkbox or a switch after a hidden field of its name, which sends a value while the box is
   unchecked, is one checkbox field. Its flip was never a change: the field took the hidden field's kind and value, so
   the bar stayed clean and the flip was not sent. Its change and its refusal show on the box's row.
-- A white label's links and every tone's `-text` form show in Firefox 132 to 134. They divided by a colour's channel,
-  which those versions refuse, so the links fell back to the text's colour. They now multiply by its power of -1.
+- A white label's links and every tone's `-text` form show in Firefox 132, the floor. They divided by a colour's
+  channel, which it refuses, so the links fell back to the text's colour. They now multiply by its power of -1.
 - A white label's focus ring reads on the ground: under `data-brand` it is `--redz-primary-text`, as the links are.
   It was the colour as given, so a pale one hid it: #f4c542 stood at 1.63:1 on white, under the 3:1 a focus ring needs.
 - Every save of tracked forms takes the words left in the chips fields' entries first, and a refused one holds it:
