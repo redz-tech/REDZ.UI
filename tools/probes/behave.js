@@ -54,8 +54,12 @@ window.REDZ_BEHAVE = (() => {
 			return false;
 		}
 	})();
+	// One canvas for every reading: a new one per reading ran WebKit out of canvas memory late in a page's checks.
+	let paint = null;
 	const rgb = (color) => {
-		const paint = Object.assign(document.createElement('canvas'), {width: 1, height: 1}).getContext('2d');
+		paint ??= Object.assign(document.createElement('canvas'), {width: 1, height: 1}).getContext('2d', {willReadFrequently: true});
+		paint.clearRect(0, 0, 1, 1);
+		paint.fillStyle = '#000';
 		paint.fillStyle = color;
 		paint.fillRect(0, 0, 1, 1);
 		return [...paint.getImageData(0, 0, 1, 1).data.slice(0, 3)].join(',');

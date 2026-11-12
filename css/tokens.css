@@ -116,7 +116,7 @@
 
 	/* An engine that refuses a channel as a divisor - Firefox 132 on the floor - darkens a tone's text form to a CIE
 	   lightness of 40 instead, a luminance of about 0.11. */
-	@supports not (color: color(from red xyz-d65 calc(x * min(1, 0.13 / y)) y z)) {
+	@supports not (color: color(from red xyz-d65 calc(x / y) y z)) {
 		[data-brand] {
 			--redz-primary-text: light-dark(lch(from var(--redz-brand) min(l, 40) c h), oklch(from var(--redz-brand) max(l, 0.72) c h));
 		}
