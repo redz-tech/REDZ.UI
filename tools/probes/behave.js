@@ -2028,8 +2028,12 @@ window.REDZ_BEHAVE = (() => {
 					}
 					const mark = contrast(rgb(getComputedStyle(check, '::before').backgroundColor), fill);
 					const knob = contrast(rgb(getComputedStyle(toggle, '::before').backgroundColor), rgb(getComputedStyle(toggle).backgroundColor));
-					if (mark < 3 || knob < 3) {
-						flat.push(brand + ' its mark ' + mark.toFixed(2) + ', a switch\'s knob ' + knob.toFixed(2));
+					// The dark theme lifts the tone: the knob takes its words form there too.
+					region.style.colorScheme = 'dark';
+					const knobDark = contrast(rgb(getComputedStyle(toggle, '::before').backgroundColor), rgb(getComputedStyle(toggle).backgroundColor));
+					region.style.colorScheme = 'light';
+					if (mark < 3 || knob < 3 || knobDark < 3) {
+						flat.push(brand + ' its mark ' + mark.toFixed(2) + ', a switch\'s knob ' + knob.toFixed(2) + ', in the dark ' + knobDark.toFixed(2));
 					}
 					for (const ground of ['--redz-bg', '--redz-bg-page']) {
 						region.style.setProperty('outline-color', 'var(--redz-focus)');

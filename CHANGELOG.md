@@ -20,11 +20,14 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 
 ### Fixed
 - Under a brand key a pale colour filled the states and values it marks at under 3:1 on their ground, 1.63:1
-  with `#f4c542` (the CMS's): a checked checkbox, radio or switch - its white knob too -, a range, a progress bar, a
+  with `#f4c542` (the CMS's): a checked checkbox, radio or switch, a range, a progress bar, a
   dot, the current page, step and stat, a row's mark, a picked option's check, a picked `choice`, a list group's
   current bar, a drop zone ready, a spinner, a field's changed or invalid mark. They take the fill form; a button keeps
   the colour as given, as its words identify it. A danger menu item's words take the danger tone's words form,
   `--redz-danger-text`, as other words in a tone do.
+- A checked switch's knob was white on every track: in the dark theme, on the lifted tone, under 3:1 for every
+  colour, the library's own included (2.46:1). It takes the fill's words form, `--redz-primary-contrast`, as a
+  checkbox's mark does: black in the dark theme, white in the light one but on a pale brand.
 - Under `data-brand` a pressed or current `chip` and a combobox's matched letters were written in the tone itself:
   under 4.5:1 on their ground for most brands, 1.45:1 with `#f4c542`. They take the tone's words form,
   `--redz-primary-text`, as links do.
