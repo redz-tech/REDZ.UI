@@ -28,15 +28,15 @@
 	}
 
 	.chip-input:is([aria-invalid="true"], :has(> .form-ghost:is([aria-invalid="true"], :user-invalid))) {
-		border-color: var(--redz-danger);
+		border-color: var(--redz-danger-fill);
 	}
 
 	.chip-input[data-changed] {
-		box-shadow: inset 3px 0 0 var(--redz-warning);
+		box-shadow: inset 3px 0 0 var(--redz-warning-fill);
 	}
 
 	.chip-input[data-changed]:dir(rtl) {
-		box-shadow: inset -3px 0 0 var(--redz-warning);
+		box-shadow: inset -3px 0 0 var(--redz-warning-fill);
 	}
 
 	.chip-list {

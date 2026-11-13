@@ -1,6 +1,6 @@
 @layer components {
 	.choice {
-		--redz-choice-tone: var(--redz-primary);
+		--redz-choice-tone: var(--redz-primary-fill);
 		--redz-choice-subtle: var(--redz-primary-subtle);
 		position: relative;
 		display: flex;
@@ -35,12 +35,12 @@
 	}
 
 	.choice-danger {
-		--redz-choice-tone: var(--redz-danger);
+		--redz-choice-tone: var(--redz-danger-fill);
 		--redz-choice-subtle: var(--redz-danger-subtle);
 	}
 
 	.choice-danger:hover {
-		border-color: var(--redz-danger);
+		border-color: var(--redz-danger-fill);
 	}
 
 	.choice-media[data-color] {

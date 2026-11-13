@@ -56,4 +56,4 @@ A step done may lead back to its screen: its words are a link inside the `steppe
 
 From [`css/components/stepper.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/stepper.css). It declares `--redz-stepper-size`, `--redz-stepper-gap` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-12`, `--redz-space-8`, `--redz-text-muted`, `--redz-border-strong`, `--redz-bg`, `--redz-fs-12`, `--redz-border`, `--redz-primary`, `--redz-primary-contrast`, `--redz-text`.
+It reads the theme's `--redz-space-12`, `--redz-space-8`, `--redz-text-muted`, `--redz-border-strong`, `--redz-bg`, `--redz-fs-12`, `--redz-border`, `--redz-primary-fill`, `--redz-primary-contrast`, `--redz-text`.

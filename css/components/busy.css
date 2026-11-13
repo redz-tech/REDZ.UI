@@ -25,7 +25,7 @@
 		block-size: 1.5rem;
 		margin-block-start: -0.75rem;
 		margin-inline-start: -0.75rem;
-		border: 2px solid var(--redz-primary);
+		border: 2px solid var(--redz-primary-fill);
 		border-inline-end-color: transparent;
 		border-radius: 50%;
 		animation: busy-show 0s 400ms both, spinner-turn 0.7s linear infinite;
@@ -80,7 +80,7 @@
 	.busy-art > .spinner-border {
 		inline-size: 1.5rem;
 		block-size: 1.5rem;
-		color: var(--redz-primary);
+		color: var(--redz-primary-fill);
 	}
 
 	.busy-words {

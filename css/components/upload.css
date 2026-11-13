@@ -20,7 +20,7 @@
 
 	.upload-zone:not(.btn):hover,
 	.upload-zone[data-over] {
-		border-color: var(--redz-primary);
+		border-color: var(--redz-primary-fill);
 		background: var(--redz-bg-hover);
 	}
 

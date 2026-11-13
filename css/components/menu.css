@@ -86,7 +86,7 @@
 		inline-size: 0.875rem;
 		block-size: 0.875rem;
 		margin-inline-start: auto;
-		color: var(--redz-primary);
+		color: var(--redz-primary-fill);
 		background: currentColor;
 		-webkit-print-color-adjust: exact;
 		print-color-adjust: exact;
@@ -95,7 +95,7 @@
 
 	.menu-item-danger,
 	.menu-item-danger .bi {
-		color: var(--redz-danger);
+		color: var(--redz-danger-text);
 	}
 
 	.menu-divider {

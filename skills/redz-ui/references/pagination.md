@@ -70,4 +70,4 @@ A list that reads its rows page by page from where the last one ended - the fast
 
 From [`css/components/pagination.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/pagination.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-4`, `--redz-control-height`, `--redz-space-8`, `--redz-border`, `--redz-radius-8`, `--redz-bg`, `--redz-text`, `--redz-text-muted`, `--redz-bg-hover`, `--redz-primary`, `--redz-primary-contrast`, `--redz-text-faint`, `--redz-control-height-sm`, `--redz-fs-12`, `--redz-control-height-lg`, `--redz-space-12`, `--redz-fs-16`.
+It reads the theme's `--redz-space-4`, `--redz-control-height`, `--redz-space-8`, `--redz-border`, `--redz-radius-8`, `--redz-bg`, `--redz-text`, `--redz-text-muted`, `--redz-bg-hover`, `--redz-primary-fill`, `--redz-primary-contrast`, `--redz-text-faint`, `--redz-control-height-sm`, `--redz-fs-12`, `--redz-control-height-lg`, `--redz-space-12`, `--redz-fs-16`.

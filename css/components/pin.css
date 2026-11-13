@@ -45,12 +45,12 @@
 	}
 
 	.pin-dots > [data-filled] {
-		border-color: var(--redz-primary);
-		background: var(--redz-primary);
+		border-color: var(--redz-primary-fill);
+		background: var(--redz-primary-fill);
 	}
 
 	.pin:has(> input[aria-invalid="true"]) > .pin-dots > span {
-		border-color: var(--redz-danger);
+		border-color: var(--redz-danger-fill);
 	}
 
 	.pin-keypad {

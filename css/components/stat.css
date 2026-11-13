@@ -133,23 +133,23 @@
 	}
 
 	.stat-primary {
-		--redz-stat-tone: var(--redz-primary);
+		--redz-stat-tone: var(--redz-primary-fill);
 	}
 
 	.stat-success {
-		--redz-stat-tone: var(--redz-success);
+		--redz-stat-tone: var(--redz-success-fill);
 	}
 
 	.stat-warning {
-		--redz-stat-tone: var(--redz-warning);
+		--redz-stat-tone: var(--redz-warning-fill);
 	}
 
 	.stat-danger {
-		--redz-stat-tone: var(--redz-danger);
+		--redz-stat-tone: var(--redz-danger-fill);
 	}
 
 	.stat-info {
-		--redz-stat-tone: var(--redz-info);
+		--redz-stat-tone: var(--redz-info-fill);
 	}
 
 	.stat-secondary {

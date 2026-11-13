@@ -1204,16 +1204,16 @@ The custom properties on `:root` that the components read: colors by role in pai
 
 ## A white label from one colour
 
-`data-brand` on `html`, or on one region, makes the primary tone of one colour, `--redz-brand`: the library derives the tone, its `-subtle` fill, its `-contrast` text - black or white, whichever reads at 4.5:1 on it, as one of the two always does - the focus ring and the links, in both themes; in the dark one the tone is lightened until it reads on the dark ground. `data-brand="#0a7f5a"` gives the colour, which the library sets through the CSSOM after its script loads; a page that knows the colour on its server writes `--redz-brand` in its own stylesheet beside the attribute, and nothing waits for the script. Where the tone is text or a line on the ground - a link, a subtle badge, an outline button, `text-primary`, an alert's icon, the focus ring - it is `--redz-primary-text`: in the light theme the colour darkened, its hue kept, until its luminance is at most 0.13, which reads at 4.5:1 on white and on its subtle fill - an engine that refuses a colour's channel as a divisor, Firefox 132 on the floor, darkens it to a CIE lightness of 40 instead; in the dark theme the tone itself. A fill keeps the colour as given. The other tones follow their own keys the same way: `data-brand-secondary`, `data-brand-success`, `data-brand-info`, `data-brand-warning` and `data-brand-danger` - a company's own red for its errors - each derive that tone, its `-subtle`, `-contrast` and `-text`. Every tone has its `--redz-TONE-text`, the tone itself unless a brand key derives it. The relative colours it is derived with are on the floor: Chrome 119, Firefox 128, Safari 18.
+`data-brand` on `html`, or on one region, makes the primary tone of one colour, `--redz-brand`: the library derives the tone, its `-subtle` fill, its `-contrast` text - black or white, whichever reads at 4.5:1 on it, as one of the two always does - the focus ring and the links, in both themes; in the dark one the tone is lightened until it reads on the dark ground. `data-brand="#0a7f5a"` gives the colour, which the library sets through the CSSOM after its script loads; a page that knows the colour on its server writes `--redz-brand` in its own stylesheet beside the attribute, and nothing waits for the script. Where the tone is text or a line on the ground - a link, a subtle badge, an outline button, `text-primary`, an alert's icon, the focus ring - it is `--redz-primary-text`: in the light theme the colour darkened, its hue kept, until its luminance is at most 0.13, which reads at 4.5:1 on white and on its subtle fill - an engine that refuses a colour's channel as a divisor, Firefox 132 on the floor, darkens it to a CIE lightness of 40 instead; in the dark theme the tone itself. A button keeps the colour as given in its fill - its words identify it. Where the tone fills a state or a value - a checked checkbox, radio or switch, a range, a progress bar, a dot, the current page, step or stat, a row's mark, a picked option's check, a field's changed or invalid mark - it is `--redz-primary-fill`: in the light theme the colour darkened, its hue kept, until its luminance is at most 0.25, which holds 3:1 on white, on the page's ground and on a track, and keeps its `-contrast` words at 4.5:1 - Firefox 132 darkens it to a CIE lightness of 56; in the dark theme the tone itself. The other tones follow their own keys the same way: `data-brand-secondary`, `data-brand-success`, `data-brand-info`, `data-brand-warning` and `data-brand-danger` - a company's own red for its errors - each derive that tone, its `-subtle`, `-contrast`, `-text` and `-fill`. Every tone has its `--redz-TONE-text` and `--redz-TONE-fill`, the tone itself unless a brand key derives them. The relative colours it is derived with are on the floor: Chrome 119, Firefox 128, Safari 18.
 
-The key may change while the page stands: set on a region after load, `data-brand` derives the tone there at the next frame, and the region's own `data-theme` gives it the other theme. A settings screen that lets a person choose the colour asks the library what it will paint: `REDZ.ui.brand(colour)` answers for both themes with the tone, the words on it, the links, the focus ring and the ground under them, each `#rrggbb`, and four contrast ratios, read from the stylesheet the page loads. The words on the tone and the links reach 4.5:1 by themselves and the ring 3:1; a fill keeps the colour as given, so `toneOnGround` is the one to warn about - a pale colour makes pale buttons and bars. A value that is no colour answers `null`.
+The key may change while the page stands: set on a region after load, `data-brand` derives the tone there at the next frame, and the region's own `data-theme` gives it the other theme. A settings screen that lets a person choose the colour asks the library what it will paint: `REDZ.ui.brand(colour)` answers for both themes with the tone, the words on it, the links, the focus ring, the fill of a checked box or a bar and the ground under them, each `#rrggbb`, and six contrast ratios, read from the stylesheet the page loads. The words on the tone and the links reach 4.5:1 by themselves, the ring and the fill 3:1; a button keeps the colour as given, so `toneOnGround` is the one to warn about - a pale colour makes pale buttons. A value that is no colour answers `null`.
 
 ```js
 REDZ.ui.brand('#f4c542')
-// {light: {tone: '#f4c542', text: '#000000', link: '#7b621c', ring: '#7b621c', ground: '#ffffff',
-//          textOnTone: 12.91, linkOnGround: 5.83, ringOnGround: 5.83, toneOnGround: 1.63},
-//  dark:  {tone: '#f4c542', text: '#000000', link: '#f4c542', ring: '#f4c542', ground: '#161719',
-//          textOnTone: 12.91, linkOnGround: 11.03, ringOnGround: 11.03, toneOnGround: 11.03}}
+// {light: {tone: '#f4c542', text: '#000000', link: '#7b621c', ring: '#7b621c', fill: '#a6852a', ground: '#ffffff',
+//          textOnTone: 12.91, linkOnGround: 5.83, ringOnGround: 5.83, toneOnGround: 1.63, fillOnGround: 3.5, textOnFill: 6},
+//  dark:  {tone: '#f4c542', text: '#000000', link: '#f4c542', ring: '#f4c542', fill: '#f4c542', ground: '#161719',
+//          textOnTone: 12.91, linkOnGround: 11.03, ringOnGround: 11.03, toneOnGround: 11.03, fillOnGround: 11.03, textOnFill: 12.91}}
 ```
 
 ```html
@@ -1222,12 +1222,16 @@ REDZ.ui.brand('#f4c542')
 	<button class="btn btn-outline-primary" type="button">Details</button>
 	<span class="badge badge-subtle-primary">New</span>
 	<a href="#tokens-brand">A link</a>
+	<label class="form-check"><input class="check" type="checkbox" id="tokens-brand-kept-green" checked> Kept</label>
+	<label class="form-check"><input class="switch" type="checkbox" role="switch" id="tokens-brand-alerts-green" checked> Alerts</label>
 </div>
 <div class="hstack flex-wrap gap-8" data-brand="#f4c542">
 	<button class="btn btn-primary" type="button">Book now</button>
 	<button class="btn btn-outline-primary" type="button">Details</button>
 	<span class="badge badge-subtle-primary">New</span>
 	<a href="#tokens-brand">A link</a>
+	<label class="form-check"><input class="check" type="checkbox" id="tokens-brand-kept-yellow" checked> Kept</label>
+	<label class="form-check"><input class="switch" type="checkbox" role="switch" id="tokens-brand-alerts-yellow" checked> Alerts</label>
 </div>
 <div class="hstack flex-wrap gap-8" data-brand-danger="#ff6b5b" data-brand-success="#3ddc84">
 	<button class="btn btn-danger" type="button">Delete</button>
@@ -1274,6 +1278,12 @@ REDZ.ui.brand('#f4c542')
 | `--redz-danger-text` | `var(--redz-danger)` |
 | `--redz-warning-text` | `var(--redz-warning)` |
 | `--redz-info-text` | `var(--redz-info)` |
+| `--redz-primary-fill` | `var(--redz-primary)` |
+| `--redz-secondary-fill` | `var(--redz-secondary)` |
+| `--redz-success-fill` | `var(--redz-success)` |
+| `--redz-info-fill` | `var(--redz-info)` |
+| `--redz-warning-fill` | `var(--redz-warning)` |
+| `--redz-danger-fill` | `var(--redz-danger)` |
 | `--redz-chart-1` | `light-dark(#2a78d6, #3987e5)` |
 | `--redz-chart-2` | `light-dark(#eb6834, #d95926)` |
 | `--redz-chart-3` | `light-dark(#1baf7a, #199e70)` |
@@ -3179,7 +3189,7 @@ The items of an open menu. `:focus-visible` is where the arrow keys are; `aria-c
 
 From [`css/components/menu.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/menu.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-4`, `--redz-border`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-2`, `--redz-text`, `--redz-space-8`, `--redz-text-muted`, `--redz-fs-12`, `--redz-control-height`, `--redz-radius-8`, `--redz-bg-hover`, `--redz-text-faint`, `--redz-primary`, `--redz-danger`, `--redz-motion`, `--redz-ease`.
+It reads the theme's `--redz-space-4`, `--redz-border`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-2`, `--redz-text`, `--redz-space-8`, `--redz-text-muted`, `--redz-fs-12`, `--redz-control-height`, `--redz-radius-8`, `--redz-bg-hover`, `--redz-text-faint`, `--redz-primary-fill`, `--redz-danger-text`, `--redz-motion`, `--redz-ease`.
 
 ## From Bootstrap 5.3
 
@@ -3584,7 +3594,7 @@ The library has no words of its own; it reads these from the page's island `#red
 
 From [`css/components/form.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/form.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-4`, `--redz-text`, `--redz-fs-12`, `--redz-text-muted`, `--redz-link`, `--redz-motion`, `--redz-ease`, `--redz-danger-text`, `--redz-control-height`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg`, `--redz-focus`, `--redz-space-8`, `--redz-grow-rows`, `--redz-form-select-chevron`, `--redz-danger`, `--redz-warning`, `--redz-warning-text`, `--redz-radius-6`, `--redz-bg-page`, `--redz-primary-subtle`, `--redz-control-height-sm`, `--redz-control-height-lg`, `--redz-fs-16`, `--redz-control-height-float`, `--redz-fs-14`, `--redz-primary`.
+It reads the theme's `--redz-space-4`, `--redz-text`, `--redz-fs-12`, `--redz-text-muted`, `--redz-link`, `--redz-motion`, `--redz-ease`, `--redz-danger-text`, `--redz-control-height`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg`, `--redz-focus`, `--redz-space-8`, `--redz-grow-rows`, `--redz-form-select-chevron`, `--redz-danger-fill`, `--redz-warning-fill`, `--redz-warning-text`, `--redz-radius-6`, `--redz-bg-page`, `--redz-primary-subtle`, `--redz-control-height-sm`, `--redz-control-height-lg`, `--redz-fs-16`, `--redz-control-height-float`, `--redz-fs-14`, `--redz-primary-fill`.
 
 ## From Bootstrap 5.3
 
@@ -3787,7 +3797,7 @@ A check with some of its items chosen is `indeterminate` - a property set from s
 
 From [`css/components/check.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/check.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-border-strong`, `--redz-bg`, `--redz-primary-contrast`, `--redz-primary`, `--redz-focus`, `--redz-border`, `--redz-bg-page`, `--redz-text-muted`, `--redz-bg-hover`, `--redz-motion`, `--redz-ease`.
+It reads the theme's `--redz-border-strong`, `--redz-bg`, `--redz-primary-contrast`, `--redz-primary-fill`, `--redz-focus`, `--redz-border`, `--redz-bg-page`, `--redz-text-muted`, `--redz-bg-hover`, `--redz-motion`, `--redz-ease`.
 
 ## From Bootstrap 5.3
 
@@ -4390,7 +4400,7 @@ send.addEventListener('click', async () => {
 
 From [`css/components/upload.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/upload.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-8`, `--redz-space-4`, `--redz-space-24`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-primary`, `--redz-bg-hover`, `--redz-border`, `--redz-bg-page`, `--redz-upload-image-height`, `--redz-radius-8`, `--redz-space-2`.
+It reads the theme's `--redz-space-8`, `--redz-space-4`, `--redz-space-24`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-primary-fill`, `--redz-bg-hover`, `--redz-border`, `--redz-bg-page`, `--redz-upload-image-height`, `--redz-radius-8`, `--redz-space-2`.
 
 # Choice tiles
 
@@ -4449,7 +4459,7 @@ A group of radios or checks drawn as tiles - a package, a plan, a way to pay - t
 
 From [`css/components/choice.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/choice.css). It declares `--redz-choice-tone`, `--redz-choice-subtle` on its root, never on rows or items.
 
-It reads the theme's `--redz-primary`, `--redz-primary-subtle`, `--redz-space-4`, `--redz-space-12`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-danger`, `--redz-danger-subtle`, `--redz-color`, `--redz-focus`, `--redz-space-8`, `--redz-border`.
+It reads the theme's `--redz-primary-fill`, `--redz-primary-subtle`, `--redz-space-4`, `--redz-space-12`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-danger-fill`, `--redz-danger-subtle`, `--redz-color`, `--redz-focus`, `--redz-space-8`, `--redz-border`.
 
 # Ratings
 
@@ -4551,7 +4561,7 @@ A `minlength` below the `maxlength` takes any length between them: the dots grow
 
 From [`css/components/pin.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/pin.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-24`, `--redz-radius-8`, `--redz-focus`, `--redz-space-12`, `--redz-border-strong`, `--redz-primary`, `--redz-danger`, `--redz-space-8`, `--redz-fs-24`.
+It reads the theme's `--redz-space-24`, `--redz-radius-8`, `--redz-focus`, `--redz-space-12`, `--redz-border-strong`, `--redz-primary-fill`, `--redz-danger-fill`, `--redz-space-8`, `--redz-fs-24`.
 
 # Repeaters
 
@@ -5487,7 +5497,7 @@ document.addEventListener('redz:move', (event) => {
 
 From [`css/components/list-group.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/list-group.css). It declares `--redz-list-group-row`, `--redz-list-group-column` on its root, never on rows or items.
 
-It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-row-pad`, `--redz-space-16`, `--redz-text`, `--redz-row-hover`, `--redz-primary`, `--redz-space-4`, `--redz-space-8`, `--redz-bg-page`, `--redz-text-muted`, `--redz-fs-12`, `--redz-bg-hover`, `--redz-primary-subtle`, `--redz-text-faint`, `--redz-space-12`.
+It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-row-pad`, `--redz-space-16`, `--redz-text`, `--redz-row-hover`, `--redz-primary`, `--redz-space-4`, `--redz-space-8`, `--redz-bg-page`, `--redz-text-muted`, `--redz-fs-12`, `--redz-bg-hover`, `--redz-primary-subtle`, `--redz-primary-fill`, `--redz-text-faint`, `--redz-space-12`.
 
 ## From Bootstrap 5.3
 
@@ -6413,7 +6423,7 @@ A row's tone marks what needs attention: `table-danger` failed, `table-warning` 
 
 From [`css/components/table.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css). It declares `--redz-table-head-border`, `--redz-table-head-weight`, `--redz-row-tint`, `--redz-row-mark` on its root, never on rows or items.
 
-It reads the theme's `--redz-sticky-top`, `--redz-space-12`, `--redz-space-8`, `--redz-row-pad`, `--redz-border`, `--redz-table-head-bg`, `--redz-bg`, `--redz-table-head-text`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-fs-14`, `--redz-bg-page`, `--redz-space-16`, `--redz-space-4`, `--redz-table-scroll-size`, `--redz-border-strong`, `--redz-row-hover`, `--redz-primary`, `--redz-radius-12`, `--redz-font-mono`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-primary-subtle`.
+It reads the theme's `--redz-sticky-top`, `--redz-space-12`, `--redz-space-8`, `--redz-row-pad`, `--redz-border`, `--redz-table-head-bg`, `--redz-bg`, `--redz-table-head-text`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-fs-14`, `--redz-bg-page`, `--redz-space-16`, `--redz-space-4`, `--redz-table-scroll-size`, `--redz-border-strong`, `--redz-row-hover`, `--redz-primary`, `--redz-radius-12`, `--redz-font-mono`, `--redz-danger-subtle`, `--redz-danger-fill`, `--redz-warning-subtle`, `--redz-warning-fill`, `--redz-primary-subtle`, `--redz-primary-fill`.
 
 ## From Bootstrap 5.3
 
@@ -6831,7 +6841,7 @@ An 8 px dot of a tone beside a word: online, live, the color of a site. The dot 
 
 From [`css/components/dot.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/dot.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-text-faint`, `--redz-primary`, `--redz-secondary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-color`, `--redz-chart-1`, `--redz-chart-2`, `--redz-chart-3`, `--redz-chart-4`, `--redz-chart-5`, `--redz-chart-6`, `--redz-chart-7`, `--redz-chart-8`.
+It reads the theme's `--redz-text-faint`, `--redz-primary-fill`, `--redz-secondary-fill`, `--redz-success-fill`, `--redz-danger-fill`, `--redz-warning-fill`, `--redz-info-fill`, `--redz-color`, `--redz-chart-1`, `--redz-chart-2`, `--redz-chart-3`, `--redz-chart-4`, `--redz-chart-5`, `--redz-chart-6`, `--redz-chart-7`, `--redz-chart-8`.
 
 # Avatars
 
@@ -7028,7 +7038,7 @@ As an `a` a tile leads to the list it counts, filtered on its server; the tile o
 
 From [`css/components/stat.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/stat.css). It declares `--redz-stat-tone`, `--redz-tile-base-bg`, `--redz-tile-base-fg` on its root, never on rows or items.
 
-It reads the theme's `--redz-text`, `--redz-space-12`, `--redz-space-16`, `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-bg-hover`, `--redz-space-8`, `--redz-text-muted`, `--redz-fs-12`, `--redz-space-2`, `--redz-success`, `--redz-danger`, `--redz-radius-6`, `--redz-fs-24`, `--redz-primary`, `--redz-warning`, `--redz-info`.
+It reads the theme's `--redz-text`, `--redz-space-12`, `--redz-space-16`, `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-bg-hover`, `--redz-space-8`, `--redz-text-muted`, `--redz-fs-12`, `--redz-space-2`, `--redz-success`, `--redz-danger`, `--redz-radius-6`, `--redz-fs-24`, `--redz-primary-fill`, `--redz-success-fill`, `--redz-warning-fill`, `--redz-danger-fill`, `--redz-info-fill`.
 
 # QR codes
 
@@ -7210,7 +7220,7 @@ A stage that is next and waits for a press is `ready`: it wears the frame of `cu
 
 From [`css/components/step-list.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/step-list.css). It declares `--redz-step-edge`, `--redz-step-top` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-4`, `--redz-space-2`, `--redz-space-16`, `--redz-text-muted`, `--redz-space-8`, `--redz-text`, `--redz-success`, `--redz-primary`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-text-faint`, `--redz-space-12`, `--redz-radius-8`, `--redz-primary-subtle`, `--redz-warning-subtle`, `--redz-danger-subtle`, `--redz-fs-14`, `--redz-border`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-fs-12`.
+It reads the theme's `--redz-space-4`, `--redz-space-2`, `--redz-space-16`, `--redz-text-muted`, `--redz-space-8`, `--redz-text`, `--redz-success-fill`, `--redz-primary-fill`, `--redz-danger-fill`, `--redz-warning-fill`, `--redz-info-fill`, `--redz-text-faint`, `--redz-space-12`, `--redz-radius-8`, `--redz-primary-subtle`, `--redz-warning-subtle`, `--redz-danger-subtle`, `--redz-fs-14`, `--redz-border`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-fs-12`.
 
 # Empty states
 
@@ -7250,7 +7260,7 @@ What a list, a panel or a search shows when it has nothing yet: what would be he
 
 From [`css/components/empty-state.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/empty-state.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-8`, `--redz-space-32`, `--redz-space-16`, `--redz-text-muted`, `--redz-text-faint`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-12`, `--redz-primary`, `--redz-primary-subtle`.
+It reads the theme's `--redz-space-8`, `--redz-space-32`, `--redz-space-16`, `--redz-text-muted`, `--redz-text-faint`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-12`, `--redz-primary-fill`, `--redz-primary-subtle`.
 
 # Placeholders
 
@@ -8089,7 +8099,7 @@ A product sets how much it shows in its tokens: `--redz-progress-top-size`, `--r
 
 From [`css/components/progress.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/progress.css). It declares `--redz-part`, `--redz-track` on its root, never on rows or items.
 
-It reads the theme's `--redz-bg-hover`, `--redz-primary`, `--redz-secondary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-danger-contrast`, `--redz-progress-top-track`, `--redz-progress-top-size`, `--redz-progress-top-glow`, `--redz-motion`, `--redz-ease`.
+It reads the theme's `--redz-bg-hover`, `--redz-primary-fill`, `--redz-secondary-fill`, `--redz-success-fill`, `--redz-danger-fill`, `--redz-warning-fill`, `--redz-info-fill`, `--redz-danger-contrast`, `--redz-progress-top-track`, `--redz-progress-top-size`, `--redz-progress-top-glow`, `--redz-motion`, `--redz-ease`.
 
 ## From Bootstrap 5.3
 
@@ -8252,7 +8262,7 @@ What `busy()` sets, written by hand - the overlay appears 400 ms after the page 
 
 From [`css/components/busy.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/busy.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-bg`, `--redz-primary`, `--redz-space-8`, `--redz-space-16`, `--redz-app-banner-height`, `--redz-space-2`, `--redz-radius-6`, `--redz-text`, `--redz-fs-14`, `--redz-space-4`, `--redz-text-muted`.
+It reads the theme's `--redz-bg`, `--redz-primary-fill`, `--redz-space-8`, `--redz-space-16`, `--redz-app-banner-height`, `--redz-space-2`, `--redz-radius-6`, `--redz-text`, `--redz-fs-14`, `--redz-space-4`, `--redz-text-muted`.
 
 # Save bar
 
@@ -8743,7 +8753,7 @@ Tabs fold the same way. The arrows move between the tabs in the row; a tab chose
 
 From [`css/components/nav.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/nav.css). It declares `--redz-fade-left`, `--redz-fade-right` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-16`, `--redz-space-8`, `--redz-text-muted`, `--redz-text`, `--redz-warning`, `--redz-border`, `--redz-space-4`, `--redz-radius-8`, `--redz-bg-hover`, `--redz-space-12`, `--redz-radius-6`, `--redz-fs-12`, `--redz-bg`, `--redz-shadow-1`.
+It reads the theme's `--redz-space-16`, `--redz-space-8`, `--redz-text-muted`, `--redz-text`, `--redz-warning-fill`, `--redz-border`, `--redz-space-4`, `--redz-radius-8`, `--redz-bg-hover`, `--redz-space-12`, `--redz-radius-6`, `--redz-fs-12`, `--redz-bg`, `--redz-shadow-1`.
 
 ## From Bootstrap 5.3
 
@@ -8993,7 +9003,7 @@ A list that reads its rows page by page from where the last one ended - the fast
 
 From [`css/components/pagination.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/pagination.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-4`, `--redz-control-height`, `--redz-space-8`, `--redz-border`, `--redz-radius-8`, `--redz-bg`, `--redz-text`, `--redz-text-muted`, `--redz-bg-hover`, `--redz-primary`, `--redz-primary-contrast`, `--redz-text-faint`, `--redz-control-height-sm`, `--redz-fs-12`, `--redz-control-height-lg`, `--redz-space-12`, `--redz-fs-16`.
+It reads the theme's `--redz-space-4`, `--redz-control-height`, `--redz-space-8`, `--redz-border`, `--redz-radius-8`, `--redz-bg`, `--redz-text`, `--redz-text-muted`, `--redz-bg-hover`, `--redz-primary-fill`, `--redz-primary-contrast`, `--redz-text-faint`, `--redz-control-height-sm`, `--redz-fs-12`, `--redz-control-height-lg`, `--redz-space-12`, `--redz-fs-16`.
 
 # Steppers
 
@@ -9051,7 +9061,7 @@ A step done may lead back to its screen: its words are a link inside the `steppe
 
 From [`css/components/stepper.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/stepper.css). It declares `--redz-stepper-size`, `--redz-stepper-gap` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-12`, `--redz-space-8`, `--redz-text-muted`, `--redz-border-strong`, `--redz-bg`, `--redz-fs-12`, `--redz-border`, `--redz-primary`, `--redz-primary-contrast`, `--redz-text`.
+It reads the theme's `--redz-space-12`, `--redz-space-8`, `--redz-text-muted`, `--redz-border-strong`, `--redz-bg`, `--redz-fs-12`, `--redz-border`, `--redz-primary-fill`, `--redz-primary-contrast`, `--redz-text`.
 
 # Command palette
 

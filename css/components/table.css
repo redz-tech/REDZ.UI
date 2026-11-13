@@ -320,18 +320,18 @@
 
 	.table-danger {
 		--redz-row-tint: var(--redz-danger-subtle);
-		--redz-row-mark: var(--redz-danger);
+		--redz-row-mark: var(--redz-danger-fill);
 	}
 
 	.table-warning {
 		--redz-row-tint: var(--redz-warning-subtle);
-		--redz-row-mark: var(--redz-warning);
+		--redz-row-mark: var(--redz-warning-fill);
 	}
 
 	.table-active,
 	.table tr[aria-current]:not([aria-current="false"]) {
 		--redz-row-tint: var(--redz-primary-subtle);
-		--redz-row-mark: var(--redz-primary);
+		--redz-row-mark: var(--redz-primary-fill);
 	}
 
 	.table-danger td,
@@ -381,11 +381,11 @@
 	}
 
 	.table-danger .table-note .bi {
-		color: var(--redz-danger);
+		color: var(--redz-danger-fill);
 	}
 
 	.table-warning .table-note .bi {
-		color: var(--redz-warning);
+		color: var(--redz-warning-fill);
 	}
 
 	.table-secondary td {

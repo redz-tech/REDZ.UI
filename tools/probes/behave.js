@@ -1989,7 +1989,7 @@ window.REDZ_BEHAVE = (() => {
 			if (await readable) {
 				const luminance = (color) => color.split(',').map((one) => Number(one) / 255).map((one) => (one <= 0.04045 ? one / 12.92 : ((one + 0.055) / 1.055) ** 2.4)).reduce((sum, one, i) => sum + one * [0.2126, 0.7152, 0.0722][i], 0);
 				const contrast = (one, other) => (Math.max(luminance(one), luminance(other)) + 0.05) / (Math.min(luminance(one), luminance(other)) + 0.05);
-				const region = Object.assign(document.createElement('div'), {innerHTML: trusted('<button type="button" class="btn btn-primary">Save</button><button type="button" class="chip" aria-pressed="true">Tag</button>')});
+				const region = Object.assign(document.createElement('div'), {innerHTML: trusted('<button type="button" class="btn btn-primary">Save</button><button type="button" class="chip" aria-pressed="true">Tag</button><input class="check" type="checkbox" checked aria-label="Kept"><input class="switch" type="checkbox" role="switch" checked aria-label="On"><progress class="progress" value="60" max="100" aria-label="Sent"></progress>')});
 				region.setAttribute('data-brand', '');
 				region.style.colorScheme = 'light';
 				for (const one of region.children) {
@@ -1999,6 +1999,7 @@ window.REDZ_BEHAVE = (() => {
 				const low = [];
 				const faint = [];
 				const dim = [];
+				const flat = [];
 				for (const brand of ['#0a7f5a', '#b85c57', '#bf625c', '#a86d15', '#af731f', '#498e4d', '#4f9453', '#4e878a', '#548d90', '#5879c3', '#5e7fc9', '#9b63a8', '#a168ae', '#7a7a7a', '#767676', '#f4c542', '#ffeeaa']) {
 					region.style.setProperty('--redz-brand', brand);
 					const button = getComputedStyle($('.btn', region));
@@ -2010,6 +2011,25 @@ window.REDZ_BEHAVE = (() => {
 					const pressed = contrast(rgb(chip.color), rgb(chip.backgroundColor));
 					if (pressed < 4.5) {
 						dim.push(brand + ' ' + pressed.toFixed(2));
+					}
+					// A checked box and a progress bar fill with the tone's fill form: 3:1 on every ground they sit on, the track
+					// too; the mark and a switch's knob 3:1 on it.
+					const check = $('.check', region);
+					const toggle = $('.switch', region);
+					const fill = rgb(getComputedStyle(check).backgroundColor);
+					const bar = rgb(getComputedStyle($('.progress', region)).color);
+					for (const ground of ['--redz-bg', '--redz-bg-page', '--redz-bg-hover']) {
+						region.style.setProperty('background-color', 'var(' + ground + ')');
+						const behind = rgb(getComputedStyle(region).backgroundColor);
+						const least = Math.min(contrast(fill, behind), contrast(bar, behind));
+						if (least < 3) {
+							flat.push(brand + ' on ' + ground + ' ' + least.toFixed(2));
+						}
+					}
+					const mark = contrast(rgb(getComputedStyle(check, '::before').backgroundColor), fill);
+					const knob = contrast(rgb(getComputedStyle(toggle, '::before').backgroundColor), rgb(getComputedStyle(toggle).backgroundColor));
+					if (mark < 3 || knob < 3) {
+						flat.push(brand + ' its mark ' + mark.toFixed(2) + ', a switch\'s knob ' + knob.toFixed(2));
 					}
 					for (const ground of ['--redz-bg', '--redz-bg-page']) {
 						region.style.setProperty('outline-color', 'var(--redz-focus)');
@@ -2029,6 +2049,9 @@ window.REDZ_BEHAVE = (() => {
 				}
 				if (dim.length > 0) {
 					out.push('a white label\'s pressed chip words fall under 4.5:1 on ' + say(dim));
+				}
+				if (flat.length > 0) {
+					out.push('a white label\'s checked box, progress bar, mark or knob falls under 3:1: ' + say(flat));
 				}
 				// A combobox's matched letters take the same pair, which no style of the page reports: their rule is read.
 				const rules = (list) => [...list].flatMap((rule) => [rule, ...(rule.cssRules ? rules(rule.cssRules) : [])]);
@@ -2054,8 +2077,8 @@ window.REDZ_BEHAVE = (() => {
 			}
 			const left = $$('div[hidden][data-brand]').length;
 			const yellow = attempt('of #f4c542', () => REDZ.ui.brand('#f4c542')) ?? null;
-			const facts = yellow === null ? null : [yellow.light.tone, yellow.light.text, yellow.light.ground, yellow.dark.ground, yellow.light.toneOnGround, yellow.light.textOnTone >= 4.5, yellow.light.linkOnGround >= 4.5, yellow.light.ringOnGround >= 3, yellow.dark.textOnTone >= 4.5, yellow.dark.linkOnGround >= 4.5, yellow.dark.ringOnGround >= 3];
-			if (say(facts) !== say(['#f4c542', '#000000', '#ffffff', '#161719', 1.63, true, true, true, true, true, true]) || left !== 0) {
+			const facts = yellow === null ? null : [yellow.light.tone, yellow.light.text, yellow.light.ground, yellow.dark.ground, yellow.light.toneOnGround, yellow.light.textOnTone >= 4.5, yellow.light.linkOnGround >= 4.5, yellow.light.ringOnGround >= 3, yellow.dark.textOnTone >= 4.5, yellow.dark.linkOnGround >= 4.5, yellow.dark.ringOnGround >= 3, yellow.light.fillOnGround >= 3, yellow.light.textOnFill >= 3];
+			if (say(facts) !== say(['#f4c542', '#000000', '#ffffff', '#161719', 1.63, true, true, true, true, true, true, true, true]) || left !== 0) {
 				out.push('REDZ.ui.brand(#f4c542) answers ' + say(yellow) + ' and leaves ' + left + ' regions');
 			}
 			const region = $$('#tokens-brand-region [data-brand]')[1];

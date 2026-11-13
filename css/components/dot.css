@@ -11,27 +11,27 @@
 	}
 
 	.dot-primary {
-		background: var(--redz-primary);
+		background: var(--redz-primary-fill);
 	}
 
 	.dot-secondary {
-		background: var(--redz-secondary);
+		background: var(--redz-secondary-fill);
 	}
 
 	.dot-success {
-		background: var(--redz-success);
+		background: var(--redz-success-fill);
 	}
 
 	.dot-danger {
-		background: var(--redz-danger);
+		background: var(--redz-danger-fill);
 	}
 
 	.dot-warning {
-		background: var(--redz-warning);
+		background: var(--redz-warning-fill);
 	}
 
 	.dot-info {
-		background: var(--redz-info);
+		background: var(--redz-info-fill);
 	}
 
 	.dot[data-color] {

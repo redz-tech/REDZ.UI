@@ -91,11 +91,11 @@
 		background: var(--redz-primary-subtle);
 		color: var(--redz-text);
 		font-weight: 550;
-		box-shadow: inset 3px 0 0 var(--redz-primary);
+		box-shadow: inset 3px 0 0 var(--redz-primary-fill);
 	}
 
 	.list-group-item[aria-current]:not([aria-current="false"]):dir(rtl) {
-		box-shadow: inset -3px 0 0 var(--redz-primary);
+		box-shadow: inset -3px 0 0 var(--redz-primary-fill);
 	}
 
 	.list-group-item:is([aria-disabled="true"], :disabled) {

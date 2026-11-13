@@ -57,4 +57,4 @@ A group of radios or checks drawn as tiles - a package, a plan, a way to pay - t
 
 From [`css/components/choice.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/choice.css). It declares `--redz-choice-tone`, `--redz-choice-subtle` on its root, never on rows or items.
 
-It reads the theme's `--redz-primary`, `--redz-primary-subtle`, `--redz-space-4`, `--redz-space-12`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-danger`, `--redz-danger-subtle`, `--redz-color`, `--redz-focus`, `--redz-space-8`, `--redz-border`.
+It reads the theme's `--redz-primary-fill`, `--redz-primary-subtle`, `--redz-space-4`, `--redz-space-12`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-danger-fill`, `--redz-danger-subtle`, `--redz-color`, `--redz-focus`, `--redz-space-8`, `--redz-border`.

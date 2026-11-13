@@ -75,7 +75,7 @@ The items of an open menu. `:focus-visible` is where the arrow keys are; `aria-c
 
 From [`css/components/menu.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/menu.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-4`, `--redz-border`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-2`, `--redz-text`, `--redz-space-8`, `--redz-text-muted`, `--redz-fs-12`, `--redz-control-height`, `--redz-radius-8`, `--redz-bg-hover`, `--redz-text-faint`, `--redz-primary`, `--redz-danger`, `--redz-motion`, `--redz-ease`.
+It reads the theme's `--redz-space-4`, `--redz-border`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-2`, `--redz-text`, `--redz-space-8`, `--redz-text-muted`, `--redz-fs-12`, `--redz-control-height`, `--redz-radius-8`, `--redz-bg-hover`, `--redz-text-faint`, `--redz-primary-fill`, `--redz-danger-text`, `--redz-motion`, `--redz-ease`.
 
 ## From Bootstrap 5.3
 

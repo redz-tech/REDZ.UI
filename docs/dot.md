@@ -49,4 +49,4 @@ An 8 px dot of a tone beside a word: online, live, the color of a site. The dot 
 
 From [`css/components/dot.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/dot.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-text-faint`, `--redz-primary`, `--redz-secondary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-color`, `--redz-chart-1`, `--redz-chart-2`, `--redz-chart-3`, `--redz-chart-4`, `--redz-chart-5`, `--redz-chart-6`, `--redz-chart-7`, `--redz-chart-8`.
+It reads the theme's `--redz-text-faint`, `--redz-primary-fill`, `--redz-secondary-fill`, `--redz-success-fill`, `--redz-danger-fill`, `--redz-warning-fill`, `--redz-info-fill`, `--redz-color`, `--redz-chart-1`, `--redz-chart-2`, `--redz-chart-3`, `--redz-chart-4`, `--redz-chart-5`, `--redz-chart-6`, `--redz-chart-7`, `--redz-chart-8`.

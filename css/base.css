@@ -96,7 +96,7 @@
 	progress {
 		inline-size: 100%;
 		block-size: 0.5rem;
-		accent-color: var(--redz-primary);
+		accent-color: var(--redz-primary-fill);
 	}
 
 	@keyframes flash {

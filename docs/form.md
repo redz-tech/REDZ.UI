@@ -369,7 +369,7 @@ The library has no words of its own; it reads these from the page's island `#red
 
 From [`css/components/form.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/form.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-4`, `--redz-text`, `--redz-fs-12`, `--redz-text-muted`, `--redz-link`, `--redz-motion`, `--redz-ease`, `--redz-danger-text`, `--redz-control-height`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg`, `--redz-focus`, `--redz-space-8`, `--redz-grow-rows`, `--redz-form-select-chevron`, `--redz-danger`, `--redz-warning`, `--redz-warning-text`, `--redz-radius-6`, `--redz-bg-page`, `--redz-primary-subtle`, `--redz-control-height-sm`, `--redz-control-height-lg`, `--redz-fs-16`, `--redz-control-height-float`, `--redz-fs-14`, `--redz-primary`.
+It reads the theme's `--redz-space-4`, `--redz-text`, `--redz-fs-12`, `--redz-text-muted`, `--redz-link`, `--redz-motion`, `--redz-ease`, `--redz-danger-text`, `--redz-control-height`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg`, `--redz-focus`, `--redz-space-8`, `--redz-grow-rows`, `--redz-form-select-chevron`, `--redz-danger-fill`, `--redz-warning-fill`, `--redz-warning-text`, `--redz-radius-6`, `--redz-bg-page`, `--redz-primary-subtle`, `--redz-control-height-sm`, `--redz-control-height-lg`, `--redz-fs-16`, `--redz-control-height-float`, `--redz-fs-14`, `--redz-primary-fill`.
 
 ## From Bootstrap 5.3
 

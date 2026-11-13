@@ -12,16 +12,16 @@ The custom properties on `:root` that the components read: colors by role in pai
 
 ## A white label from one colour
 
-`data-brand` on `html`, or on one region, makes the primary tone of one colour, `--redz-brand`: the library derives the tone, its `-subtle` fill, its `-contrast` text - black or white, whichever reads at 4.5:1 on it, as one of the two always does - the focus ring and the links, in both themes; in the dark one the tone is lightened until it reads on the dark ground. `data-brand="#0a7f5a"` gives the colour, which the library sets through the CSSOM after its script loads; a page that knows the colour on its server writes `--redz-brand` in its own stylesheet beside the attribute, and nothing waits for the script. Where the tone is text or a line on the ground - a link, a subtle badge, an outline button, `text-primary`, an alert's icon, the focus ring - it is `--redz-primary-text`: in the light theme the colour darkened, its hue kept, until its luminance is at most 0.13, which reads at 4.5:1 on white and on its subtle fill - an engine that refuses a colour's channel as a divisor, Firefox 132 on the floor, darkens it to a CIE lightness of 40 instead; in the dark theme the tone itself. A fill keeps the colour as given. The other tones follow their own keys the same way: `data-brand-secondary`, `data-brand-success`, `data-brand-info`, `data-brand-warning` and `data-brand-danger` - a company's own red for its errors - each derive that tone, its `-subtle`, `-contrast` and `-text`. Every tone has its `--redz-TONE-text`, the tone itself unless a brand key derives it. The relative colours it is derived with are on the floor: Chrome 119, Firefox 128, Safari 18.
+`data-brand` on `html`, or on one region, makes the primary tone of one colour, `--redz-brand`: the library derives the tone, its `-subtle` fill, its `-contrast` text - black or white, whichever reads at 4.5:1 on it, as one of the two always does - the focus ring and the links, in both themes; in the dark one the tone is lightened until it reads on the dark ground. `data-brand="#0a7f5a"` gives the colour, which the library sets through the CSSOM after its script loads; a page that knows the colour on its server writes `--redz-brand` in its own stylesheet beside the attribute, and nothing waits for the script. Where the tone is text or a line on the ground - a link, a subtle badge, an outline button, `text-primary`, an alert's icon, the focus ring - it is `--redz-primary-text`: in the light theme the colour darkened, its hue kept, until its luminance is at most 0.13, which reads at 4.5:1 on white and on its subtle fill - an engine that refuses a colour's channel as a divisor, Firefox 132 on the floor, darkens it to a CIE lightness of 40 instead; in the dark theme the tone itself. A button keeps the colour as given in its fill - its words identify it. Where the tone fills a state or a value - a checked checkbox, radio or switch, a range, a progress bar, a dot, the current page, step or stat, a row's mark, a picked option's check, a field's changed or invalid mark - it is `--redz-primary-fill`: in the light theme the colour darkened, its hue kept, until its luminance is at most 0.25, which holds 3:1 on white, on the page's ground and on a track, and keeps its `-contrast` words at 4.5:1 - Firefox 132 darkens it to a CIE lightness of 56; in the dark theme the tone itself. The other tones follow their own keys the same way: `data-brand-secondary`, `data-brand-success`, `data-brand-info`, `data-brand-warning` and `data-brand-danger` - a company's own red for its errors - each derive that tone, its `-subtle`, `-contrast`, `-text` and `-fill`. Every tone has its `--redz-TONE-text` and `--redz-TONE-fill`, the tone itself unless a brand key derives them. The relative colours it is derived with are on the floor: Chrome 119, Firefox 128, Safari 18.
 
-The key may change while the page stands: set on a region after load, `data-brand` derives the tone there at the next frame, and the region's own `data-theme` gives it the other theme. A settings screen that lets a person choose the colour asks the library what it will paint: `REDZ.ui.brand(colour)` answers for both themes with the tone, the words on it, the links, the focus ring and the ground under them, each `#rrggbb`, and four contrast ratios, read from the stylesheet the page loads. The words on the tone and the links reach 4.5:1 by themselves and the ring 3:1; a fill keeps the colour as given, so `toneOnGround` is the one to warn about - a pale colour makes pale buttons and bars. A value that is no colour answers `null`.
+The key may change while the page stands: set on a region after load, `data-brand` derives the tone there at the next frame, and the region's own `data-theme` gives it the other theme. A settings screen that lets a person choose the colour asks the library what it will paint: `REDZ.ui.brand(colour)` answers for both themes with the tone, the words on it, the links, the focus ring, the fill of a checked box or a bar and the ground under them, each `#rrggbb`, and six contrast ratios, read from the stylesheet the page loads. The words on the tone and the links reach 4.5:1 by themselves, the ring and the fill 3:1; a button keeps the colour as given, so `toneOnGround` is the one to warn about - a pale colour makes pale buttons. A value that is no colour answers `null`.
 
 ```js
 REDZ.ui.brand('#f4c542')
-// {light: {tone: '#f4c542', text: '#000000', link: '#7b621c', ring: '#7b621c', ground: '#ffffff',
-//          textOnTone: 12.91, linkOnGround: 5.83, ringOnGround: 5.83, toneOnGround: 1.63},
-//  dark:  {tone: '#f4c542', text: '#000000', link: '#f4c542', ring: '#f4c542', ground: '#161719',
-//          textOnTone: 12.91, linkOnGround: 11.03, ringOnGround: 11.03, toneOnGround: 11.03}}
+// {light: {tone: '#f4c542', text: '#000000', link: '#7b621c', ring: '#7b621c', fill: '#a6852a', ground: '#ffffff',
+//          textOnTone: 12.91, linkOnGround: 5.83, ringOnGround: 5.83, toneOnGround: 1.63, fillOnGround: 3.5, textOnFill: 6},
+//  dark:  {tone: '#f4c542', text: '#000000', link: '#f4c542', ring: '#f4c542', fill: '#f4c542', ground: '#161719',
+//          textOnTone: 12.91, linkOnGround: 11.03, ringOnGround: 11.03, toneOnGround: 11.03, fillOnGround: 11.03, textOnFill: 12.91}}
 ```
 
 ```html
@@ -30,12 +30,16 @@ REDZ.ui.brand('#f4c542')
 	<button class="btn btn-outline-primary" type="button">Details</button>
 	<span class="badge badge-subtle-primary">New</span>
 	<a href="#tokens-brand">A link</a>
+	<label class="form-check"><input class="check" type="checkbox" id="tokens-brand-kept-green" checked> Kept</label>
+	<label class="form-check"><input class="switch" type="checkbox" role="switch" id="tokens-brand-alerts-green" checked> Alerts</label>
 </div>
 <div class="hstack flex-wrap gap-8" data-brand="#f4c542">
 	<button class="btn btn-primary" type="button">Book now</button>
 	<button class="btn btn-outline-primary" type="button">Details</button>
 	<span class="badge badge-subtle-primary">New</span>
 	<a href="#tokens-brand">A link</a>
+	<label class="form-check"><input class="check" type="checkbox" id="tokens-brand-kept-yellow" checked> Kept</label>
+	<label class="form-check"><input class="switch" type="checkbox" role="switch" id="tokens-brand-alerts-yellow" checked> Alerts</label>
 </div>
 <div class="hstack flex-wrap gap-8" data-brand-danger="#ff6b5b" data-brand-success="#3ddc84">
 	<button class="btn btn-danger" type="button">Delete</button>
@@ -82,6 +86,12 @@ REDZ.ui.brand('#f4c542')
 | `--redz-danger-text` | `var(--redz-danger)` |
 | `--redz-warning-text` | `var(--redz-warning)` |
 | `--redz-info-text` | `var(--redz-info)` |
+| `--redz-primary-fill` | `var(--redz-primary)` |
+| `--redz-secondary-fill` | `var(--redz-secondary)` |
+| `--redz-success-fill` | `var(--redz-success)` |
+| `--redz-info-fill` | `var(--redz-info)` |
+| `--redz-warning-fill` | `var(--redz-warning)` |
+| `--redz-danger-fill` | `var(--redz-danger)` |
 | `--redz-chart-1` | `light-dark(#2a78d6, #3987e5)` |
 | `--redz-chart-2` | `light-dark(#eb6834, #d95926)` |
 | `--redz-chart-3` | `light-dark(#1baf7a, #199e70)` |

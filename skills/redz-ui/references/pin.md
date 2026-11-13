@@ -54,4 +54,4 @@ A `minlength` below the `maxlength` takes any length between them: the dots grow
 
 From [`css/components/pin.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/pin.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-24`, `--redz-radius-8`, `--redz-focus`, `--redz-space-12`, `--redz-border-strong`, `--redz-primary`, `--redz-danger`, `--redz-space-8`, `--redz-fs-24`.
+It reads the theme's `--redz-space-24`, `--redz-radius-8`, `--redz-focus`, `--redz-space-12`, `--redz-border-strong`, `--redz-primary-fill`, `--redz-danger-fill`, `--redz-space-8`, `--redz-fs-24`.

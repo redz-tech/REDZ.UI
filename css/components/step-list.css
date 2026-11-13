@@ -29,7 +29,7 @@
 	}
 
 	.step-list > [data-state="done"] > .bi:first-child {
-		color: var(--redz-success);
+		color: var(--redz-success-fill);
 	}
 
 	.step-list > :is([data-state="current"], [data-state="ready"]) {
@@ -37,7 +37,7 @@
 	}
 
 	.step-list > :is([data-state="current"], [data-state="ready"]) > .bi:first-child {
-		color: var(--redz-primary);
+		color: var(--redz-primary-fill);
 	}
 
 	@media (prefers-reduced-motion: no-preference) {
@@ -47,11 +47,11 @@
 	}
 
 	.step-list > [data-state="failed"] {
-		color: var(--redz-danger);
+		color: var(--redz-danger-fill);
 	}
 
 	.step-list > [data-state="kept"] {
-		color: var(--redz-warning);
+		color: var(--redz-warning-fill);
 	}
 
 	.step-list > :is([data-state="warning"], [data-state="info"], [data-state="ask"]) {
@@ -63,11 +63,11 @@
 	}
 
 	.step-list > :is([data-state="warning"], [data-state="ask"]) > .bi:first-child {
-		color: var(--redz-warning);
+		color: var(--redz-warning-fill);
 	}
 
 	.step-list > [data-state="info"] > .bi:first-child {
-		color: var(--redz-info);
+		color: var(--redz-info-fill);
 	}
 
 	.step-list > :is([data-state="skipped"], [data-state="waiting"], [data-state="locked"]) > .bi:first-child {
@@ -134,16 +134,16 @@
 	}
 
 	.stage-list > [data-state="done"] {
-		border-block-start-color: var(--redz-success);
+		border-block-start-color: var(--redz-success-fill);
 	}
 
 	.stage-list > :is([data-state="current"], [data-state="ready"]) {
-		border-color: var(--redz-primary);
-		box-shadow: inset 0 0 0 1px var(--redz-primary);
+		border-color: var(--redz-primary-fill);
+		box-shadow: inset 0 0 0 1px var(--redz-primary-fill);
 	}
 
 	.stage-list > :is([data-state="ask"], [data-state="warning"]) {
-		border-block-start-color: var(--redz-warning);
+		border-block-start-color: var(--redz-warning-fill);
 	}
 
 	.stage-list > [data-state="ask"] {
@@ -151,24 +151,24 @@
 	}
 
 	.stage-list > [data-state="failed"] {
-		border-color: var(--redz-danger);
+		border-color: var(--redz-danger-fill);
 		background: var(--redz-danger-subtle);
 	}
 
 	.stage-list > [data-state="done"] > :first-child > .bi:first-child {
-		color: var(--redz-success);
+		color: var(--redz-success-fill);
 	}
 
 	.stage-list > :is([data-state="current"], [data-state="ready"]) > :first-child > .bi:first-child {
-		color: var(--redz-primary);
+		color: var(--redz-primary-fill);
 	}
 
 	.stage-list > :is([data-state="ask"], [data-state="warning"]) > :first-child > .bi:first-child {
-		color: var(--redz-warning);
+		color: var(--redz-warning-fill);
 	}
 
 	.stage-list > [data-state="failed"] > :first-child > .bi:first-child {
-		color: var(--redz-danger);
+		color: var(--redz-danger-fill);
 	}
 
 	@media (prefers-reduced-motion: no-preference) {

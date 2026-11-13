@@ -1,7 +1,8 @@
 // REDZ.UI, a white label measured: brand(colour) answers what data-brand of that colour paints in each theme - the tone,
-// the words on it, the links, the focus ring and the ground under them, each #rrggbb in sRGB, and their contrast ratios.
-// It reads them from the stylesheet the page loads, so it never disagrees with the page; null for a value that is no colour.
-const PARTS = {tone: '--redz-primary', text: '--redz-primary-contrast', link: '--redz-link', ring: '--redz-focus', ground: '--redz-bg'};
+// the words on it, the links, the focus ring, the fill of a checked box or a bar and the ground under them, each #rrggbb
+// in sRGB, and their contrast ratios. It reads them from the stylesheet the page loads, so it never disagrees with the
+// page; null for a value that is no colour.
+const PARTS = {tone: '--redz-primary', text: '--redz-primary-contrast', link: '--redz-link', ring: '--redz-focus', fill: '--redz-primary-fill', ground: '--redz-bg'};
 
 /** The colour a probe paints as red, green and blue in sRGB, 0 to 1, clipped to the gamut: the engine converts the colour
  *  it computed, which may be in another space, through a second probe - a relative colour of a light-dark() origin is
@@ -53,6 +54,8 @@ export const brand = (colour) => {
 			linkOnGround: ratio(rgb.link, rgb.ground),
 			ringOnGround: ratio(rgb.ring, rgb.ground),
 			toneOnGround: ratio(rgb.tone, rgb.ground),
+			fillOnGround: ratio(rgb.fill, rgb.ground),
+			textOnFill: ratio(rgb.text, rgb.fill),
 		};
 	}
 	region.remove();

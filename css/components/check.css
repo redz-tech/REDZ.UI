@@ -54,8 +54,8 @@
 	.check:indeterminate,
 	.radio:checked,
 	.switch:checked {
-		border-color: var(--redz-primary);
-		background: var(--redz-primary);
+		border-color: var(--redz-primary-fill);
+		background: var(--redz-primary-fill);
 	}
 
 	.check:checked::before,

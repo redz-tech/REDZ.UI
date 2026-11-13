@@ -6,6 +6,12 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 
 ## Unreleased
 
+### Added
+- A fill form of every tone, `--redz-primary-fill` and the same for secondary, success, info, warning and danger:
+  the tone itself, or under a brand key the colour darkened, its hue kept, until it holds 3:1 on white, on the page's
+  ground and on a track (a luminance of at most 0.25; Firefox 132, a CIE lightness of 56). `REDZ.ui.brand()` answers
+  it as `fill`, with `fillOnGround` and `textOnFill`.
+
 ### Changed
 - Under a 576 px header the brand keeps its smallest sign: the mark, else the logo, else the name. A logo with
   `app-name` beside it - a badge - now keeps the logo there, and the name leaves the sight but stays the link's name.
@@ -13,6 +19,12 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - Docs: in `page-center-brand` a badge takes a height utility on both pictures, `h-72` or `h-88`, over the brand's 40 px.
 
 ### Fixed
+- Under a brand key a pale colour filled the states and values it marks at under 3:1 on their ground, 1.63:1
+  with `#f4c542` (the CMS's): a checked checkbox, radio or switch - its white knob too -, a range, a progress bar, a
+  dot, the current page, step and stat, a row's mark, a picked option's check, a picked `choice`, a list group's
+  current bar, a drop zone ready, a spinner, a field's changed or invalid mark. They take the fill form; a button keeps
+  the colour as given, as its words identify it. A danger menu item's words take the danger tone's words form,
+  `--redz-danger-text`, as other words in a tone do.
 - Under `data-brand` a pressed or current `chip` and a combobox's matched letters were written in the tone itself:
   under 4.5:1 on their ground for most brands, 1.45:1 with `#f4c542`. They take the tone's words form,
   `--redz-primary-text`, as links do.

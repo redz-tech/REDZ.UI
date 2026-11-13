@@ -51,13 +51,13 @@
 
 	.stepper-item:has(~ [aria-current="step"])::before,
 	.stepper-item[aria-current="step"]::before {
-		border-color: var(--redz-primary);
-		background: var(--redz-primary);
+		border-color: var(--redz-primary-fill);
+		background: var(--redz-primary-fill);
 		color: var(--redz-primary-contrast);
 	}
 
 	.stepper-item:has(~ [aria-current="step"])::after {
-		background: var(--redz-primary);
+		background: var(--redz-primary-fill);
 	}
 
 	.stepper-item[aria-current="step"] {

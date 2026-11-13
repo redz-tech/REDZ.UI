@@ -362,7 +362,7 @@ A row's tone marks what needs attention: `table-danger` failed, `table-warning` 
 
 From [`css/components/table.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css). It declares `--redz-table-head-border`, `--redz-table-head-weight`, `--redz-row-tint`, `--redz-row-mark` on its root, never on rows or items.
 
-It reads the theme's `--redz-sticky-top`, `--redz-space-12`, `--redz-space-8`, `--redz-row-pad`, `--redz-border`, `--redz-table-head-bg`, `--redz-bg`, `--redz-table-head-text`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-fs-14`, `--redz-bg-page`, `--redz-space-16`, `--redz-space-4`, `--redz-table-scroll-size`, `--redz-border-strong`, `--redz-row-hover`, `--redz-primary`, `--redz-radius-12`, `--redz-font-mono`, `--redz-danger-subtle`, `--redz-danger`, `--redz-warning-subtle`, `--redz-warning`, `--redz-primary-subtle`.
+It reads the theme's `--redz-sticky-top`, `--redz-space-12`, `--redz-space-8`, `--redz-row-pad`, `--redz-border`, `--redz-table-head-bg`, `--redz-bg`, `--redz-table-head-text`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-fs-14`, `--redz-bg-page`, `--redz-space-16`, `--redz-space-4`, `--redz-table-scroll-size`, `--redz-border-strong`, `--redz-row-hover`, `--redz-primary`, `--redz-radius-12`, `--redz-font-mono`, `--redz-danger-subtle`, `--redz-danger-fill`, `--redz-warning-subtle`, `--redz-warning-fill`, `--redz-primary-subtle`, `--redz-primary-fill`.
 
 ## From Bootstrap 5.3
 

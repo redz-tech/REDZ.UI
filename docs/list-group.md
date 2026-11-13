@@ -259,7 +259,7 @@ document.addEventListener('redz:move', (event) => {
 
 From [`css/components/list-group.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/list-group.css). It declares `--redz-list-group-row`, `--redz-list-group-column` on its root, never on rows or items.
 
-It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-row-pad`, `--redz-space-16`, `--redz-text`, `--redz-row-hover`, `--redz-primary`, `--redz-space-4`, `--redz-space-8`, `--redz-bg-page`, `--redz-text-muted`, `--redz-fs-12`, `--redz-bg-hover`, `--redz-primary-subtle`, `--redz-text-faint`, `--redz-space-12`.
+It reads the theme's `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-row-pad`, `--redz-space-16`, `--redz-text`, `--redz-row-hover`, `--redz-primary`, `--redz-space-4`, `--redz-space-8`, `--redz-bg-page`, `--redz-text-muted`, `--redz-fs-12`, `--redz-bg-hover`, `--redz-primary-subtle`, `--redz-primary-fill`, `--redz-text-faint`, `--redz-space-12`.
 
 ## From Bootstrap 5.3
 

@@ -38,4 +38,4 @@ What a list, a panel or a search shows when it has nothing yet: what would be he
 
 From [`css/components/empty-state.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/empty-state.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-8`, `--redz-space-32`, `--redz-space-16`, `--redz-text-muted`, `--redz-text-faint`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-12`, `--redz-primary`, `--redz-primary-subtle`.
+It reads the theme's `--redz-space-8`, `--redz-space-32`, `--redz-space-16`, `--redz-text-muted`, `--redz-text-faint`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-12`, `--redz-primary-fill`, `--redz-primary-subtle`.

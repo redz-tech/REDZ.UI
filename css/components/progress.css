@@ -14,7 +14,7 @@
 	}
 
 	.progress {
-		color: var(--redz-primary);
+		color: var(--redz-primary-fill);
 	}
 
 	.progress::-webkit-progress-bar {
@@ -32,23 +32,23 @@
 	}
 
 	.progress-secondary {
-		color: var(--redz-secondary);
+		color: var(--redz-secondary-fill);
 	}
 
 	.progress-success {
-		color: var(--redz-success);
+		color: var(--redz-success-fill);
 	}
 
 	.progress-danger {
-		color: var(--redz-danger);
+		color: var(--redz-danger-fill);
 	}
 
 	.progress-warning {
-		color: var(--redz-warning);
+		color: var(--redz-warning-fill);
 	}
 
 	.progress-info {
-		color: var(--redz-info);
+		color: var(--redz-info-fill);
 	}
 
 	.progress-sm {
@@ -68,7 +68,7 @@
 	.meter-stacked > * {
 		flex: var(--v, 0) 0 0;
 		min-inline-size: 0;
-		background: var(--redz-part, var(--redz-secondary));
+		background: var(--redz-part, var(--redz-secondary-fill));
 	}
 
 	.meter-stacked > :first-child {
@@ -82,27 +82,27 @@
 	}
 
 	.meter-stacked > [data-tone="primary"] {
-		--redz-part: var(--redz-primary);
+		--redz-part: var(--redz-primary-fill);
 	}
 
 	.meter-stacked > [data-tone="success"] {
-		--redz-part: var(--redz-success);
+		--redz-part: var(--redz-success-fill);
 	}
 
 	.meter-stacked > [data-tone="info"] {
-		--redz-part: var(--redz-info);
+		--redz-part: var(--redz-info-fill);
 	}
 
 	.meter-stacked > [data-tone="warning"] {
-		--redz-part: var(--redz-warning);
+		--redz-part: var(--redz-warning-fill);
 	}
 
 	.meter-stacked > [data-tone="danger"] {
-		--redz-part: var(--redz-danger);
+		--redz-part: var(--redz-danger-fill);
 	}
 
 	.meter-stacked > [data-over] {
-		background: repeating-linear-gradient(-45deg, color-mix(in oklch, var(--redz-danger-contrast) 55%, transparent) 0 1.5px, transparent 1.5px 4.5px), var(--redz-danger);
+		background: repeating-linear-gradient(-45deg, color-mix(in oklch, var(--redz-danger-contrast) 55%, transparent) 0 1.5px, transparent 1.5px 4.5px), var(--redz-danger-fill);
 	}
 
 	.meter-xs {
@@ -201,30 +201,30 @@
 
 	.meter::-webkit-meter-optimum-value {
 		border-radius: inherit;
-		background: var(--redz-success);
+		background: var(--redz-success-fill);
 	}
 
 	.meter::-webkit-meter-suboptimum-value {
 		border-radius: inherit;
-		background: var(--redz-warning);
+		background: var(--redz-warning-fill);
 	}
 
 	.meter::-webkit-meter-even-less-good-value {
 		border-radius: inherit;
-		background: var(--redz-danger);
+		background: var(--redz-danger-fill);
 	}
 
 	.meter::-moz-meter-bar {
 		border-radius: inherit;
-		background: var(--redz-success);
+		background: var(--redz-success-fill);
 	}
 
 	.meter:-moz-meter-sub-optimum::-moz-meter-bar {
-		background: var(--redz-warning);
+		background: var(--redz-warning-fill);
 	}
 
 	.meter:-moz-meter-sub-sub-optimum::-moz-meter-bar {
-		background: var(--redz-danger);
+		background: var(--redz-danger-fill);
 	}
 
 	@media (forced-colors: active) {

@@ -108,7 +108,7 @@ A product sets how much it shows in its tokens: `--redz-progress-top-size`, `--r
 
 From [`css/components/progress.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/progress.css). It declares `--redz-part`, `--redz-track` on its root, never on rows or items.
 
-It reads the theme's `--redz-bg-hover`, `--redz-primary`, `--redz-secondary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`, `--redz-danger-contrast`, `--redz-progress-top-track`, `--redz-progress-top-size`, `--redz-progress-top-glow`, `--redz-motion`, `--redz-ease`.
+It reads the theme's `--redz-bg-hover`, `--redz-primary-fill`, `--redz-secondary-fill`, `--redz-success-fill`, `--redz-danger-fill`, `--redz-warning-fill`, `--redz-info-fill`, `--redz-danger-contrast`, `--redz-progress-top-track`, `--redz-progress-top-size`, `--redz-progress-top-glow`, `--redz-motion`, `--redz-ease`.
 
 ## From Bootstrap 5.3
 

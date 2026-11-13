@@ -223,7 +223,7 @@ Tabs fold the same way. The arrows move between the tabs in the row; a tab chose
 
 From [`css/components/nav.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/nav.css). It declares `--redz-fade-left`, `--redz-fade-right` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-16`, `--redz-space-8`, `--redz-text-muted`, `--redz-text`, `--redz-warning`, `--redz-border`, `--redz-space-4`, `--redz-radius-8`, `--redz-bg-hover`, `--redz-space-12`, `--redz-radius-6`, `--redz-fs-12`, `--redz-bg`, `--redz-shadow-1`.
+It reads the theme's `--redz-space-16`, `--redz-space-8`, `--redz-text-muted`, `--redz-text`, `--redz-warning-fill`, `--redz-border`, `--redz-space-4`, `--redz-radius-8`, `--redz-bg-hover`, `--redz-space-12`, `--redz-radius-6`, `--redz-fs-12`, `--redz-bg`, `--redz-shadow-1`.
 
 ## From Bootstrap 5.3
 

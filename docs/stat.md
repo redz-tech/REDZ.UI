@@ -74,4 +74,4 @@ As an `a` a tile leads to the list it counts, filtered on its server; the tile o
 
 From [`css/components/stat.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/stat.css). It declares `--redz-stat-tone`, `--redz-tile-base-bg`, `--redz-tile-base-fg` on its root, never on rows or items.
 
-It reads the theme's `--redz-text`, `--redz-space-12`, `--redz-space-16`, `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-bg-hover`, `--redz-space-8`, `--redz-text-muted`, `--redz-fs-12`, `--redz-space-2`, `--redz-success`, `--redz-danger`, `--redz-radius-6`, `--redz-fs-24`, `--redz-primary`, `--redz-warning`, `--redz-info`.
+It reads the theme's `--redz-text`, `--redz-space-12`, `--redz-space-16`, `--redz-border`, `--redz-radius-12`, `--redz-bg`, `--redz-bg-hover`, `--redz-space-8`, `--redz-text-muted`, `--redz-fs-12`, `--redz-space-2`, `--redz-success`, `--redz-danger`, `--redz-radius-6`, `--redz-fs-24`, `--redz-primary-fill`, `--redz-success-fill`, `--redz-warning-fill`, `--redz-danger-fill`, `--redz-info-fill`.

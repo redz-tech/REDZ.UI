@@ -40,7 +40,7 @@
 
 	.page-link[aria-current="page"] {
 		border-color: transparent;
-		background: var(--redz-primary);
+		background: var(--redz-primary-fill);
 		color: var(--redz-primary-contrast);
 		font-weight: 600;
 	}

@@ -203,4 +203,4 @@ send.addEventListener('click', async () => {
 
 From [`css/components/upload.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/upload.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-8`, `--redz-space-4`, `--redz-space-24`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-primary`, `--redz-bg-hover`, `--redz-border`, `--redz-bg-page`, `--redz-upload-image-height`, `--redz-radius-8`, `--redz-space-2`.
+It reads the theme's `--redz-space-8`, `--redz-space-4`, `--redz-space-24`, `--redz-space-16`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-text-muted`, `--redz-primary-fill`, `--redz-bg-hover`, `--redz-border`, `--redz-bg-page`, `--redz-upload-image-height`, `--redz-radius-8`, `--redz-space-2`.

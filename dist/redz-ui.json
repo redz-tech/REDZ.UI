@@ -4792,6 +4792,7 @@
 		"--redz-control-height-xs",
 		"--redz-danger",
 		"--redz-danger-contrast",
+		"--redz-danger-fill",
 		"--redz-danger-subtle",
 		"--redz-danger-text",
 		"--redz-ease",
@@ -4819,6 +4820,7 @@
 		"--redz-group-hover-fg",
 		"--redz-info",
 		"--redz-info-contrast",
+		"--redz-info-fill",
 		"--redz-info-subtle",
 		"--redz-info-text",
 		"--redz-lanes-track",
@@ -4835,6 +4837,7 @@
 		"--redz-part",
 		"--redz-primary",
 		"--redz-primary-contrast",
+		"--redz-primary-fill",
 		"--redz-primary-subtle",
 		"--redz-primary-text",
 		"--redz-radius-0",
@@ -4849,6 +4852,7 @@
 		"--redz-row-tint",
 		"--redz-secondary",
 		"--redz-secondary-contrast",
+		"--redz-secondary-fill",
 		"--redz-secondary-subtle",
 		"--redz-secondary-text",
 		"--redz-series",
@@ -4879,6 +4883,7 @@
 		"--redz-sticky-top",
 		"--redz-success",
 		"--redz-success-contrast",
+		"--redz-success-fill",
 		"--redz-success-subtle",
 		"--redz-success-text",
 		"--redz-table-head-border",
@@ -4895,6 +4900,7 @@
 		"--redz-track",
 		"--redz-warning",
 		"--redz-warning-contrast",
+		"--redz-warning-fill",
 		"--redz-warning-subtle",
 		"--redz-warning-text"
 	],
@@ -5092,11 +5098,11 @@
 		"css/redz-ui-editor-surface.min.css": "sha256-UM94RO+TgrNvrofD/tKVbnKeTGSvpkK+4JAuqApOO50=",
 		"css/redz-ui-editor.min.css": "sha256-Qxy1eHhfAotYts6tY7a9z2fnYiS2+WjSCFF3jhVCWpE=",
 		"css/redz-ui-media.min.css": "sha256-4+5Di9Nu8wuERNMkrMvc9rU1kVNMpo/7k/T5i1XxGIQ=",
-		"css/redz-ui.min.css": "sha256-pRccXFoTfotTEIcxz8xUVXcG0NBp1hBqrPZ9kwqv33s=",
+		"css/redz-ui.min.css": "sha256-Ulkr1GnAdS4Qmg6q20i7qC6NdO9bo7BFwJnav+0Lez0=",
 		"js/floor.min.js": "sha256-SlXScca0xV+TpFCu1YIXMzlHJEnXeX8Az9gukSn5Ph0=",
 		"js/redz-ui-charts.min.js": "sha256-1dSq946dnPNnXU8k1gMoOGEPo9b4QmG9hyVHxZuFSME=",
 		"js/redz-ui-editor.min.js": "sha256-nEX13AFMNjeAJfRETL8ngkLJfG2GB2ljFE2CAWRatgI=",
 		"js/redz-ui-qr.min.js": "sha256-8AgWz06SWLYwuOCi7FQA6bXBgjJfxeRYx5tFCWlrEts=",
-		"js/redz-ui.min.js": "sha256-gOF8K8+ER4eqkpIzoPiEWsjtwY3dWOqiTZTkNxT/g9Y="
+		"js/redz-ui.min.js": "sha256-TzutoT1Try94zXHClrlQdkV3h+ayP6xiSrLGdGq44kk="
 	}
 }
