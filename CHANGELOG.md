@@ -11,8 +11,13 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   the tone itself, or under a brand key the colour darkened, its hue kept, until it holds 3:1 on white, on the page's
   ground and on a track (a luminance of at most 0.25; Firefox 132, a CIE lightness of 56). `REDZ.ui.brand()` answers
   it as `fill`, with `fillOnGround` and `textOnFill`.
+- The product's mark has a colour pair of its own, `--redz-app-mark-bg` and `--redz-app-mark-fg`; a project sets them
+  on `:root` to give its mark another colour.
 
 ### Changed
+- The product's mark, `app-mark`, is the red of the REDZ logo, `#cd3428`, with white words at 5.1:1 in both themes,
+  where it was the primary tone. Under `data-brand` it still takes the tone and its words, so a white label shows no
+  REDZ red.
 - Under a 576 px header the brand keeps its smallest sign: the mark, else the logo, else the name. A logo with
   `app-name` beside it - a badge - now keeps the logo there, and the name leaves the sight but stays the link's name.
   Before, the name stayed in sight beside the badge.

@@ -32,7 +32,7 @@
 	<p>The <a href="../reference/demo/list.html">demo screens</a> show the whole shell: a list, a resource page with its side column, a settings form.</p>
 
 	<h3 id="app-brand">The brand</h3>
-	<p><code>app-brand</code> is the link home at the header's start: the product's mark, <code>app-mark</code>, and its name, <code>app-name</code>. The mark is a picture of the name, so it carries <code>aria-hidden="true"</code>. Where the header is under 576 px wide, the brand keeps one sign, the smallest it has: the mark, else the logo, else the name. The rest leaves the sight but stays the link's name for a screen reader.</p>
+	<p><code>app-brand</code> is the link home at the header's start: the product's mark, <code>app-mark</code>, and its name, <code>app-name</code>. The mark is a picture of the name, so it carries <code>aria-hidden="true"</code>. It is the red of the REDZ logo with white words in both themes, and under <code>data-brand</code> the brand's tone: a product with a logo of its own gives its colour there, and the mark that stands for the logo in a narrow header matches it. <code>--redz-app-mark-bg</code> and <code>--redz-app-mark-fg</code> give the mark another colour. Where the header is under 576 px wide, the brand keeps one sign, the smallest it has: the mark, else the logo, else the name. The rest leaves the sight but stays the link's name for a screen reader.</p>
 	<p>A product with its own logo puts it in place of the name: <code>&lt;img class="brand-logo"&gt;</code>, the picture for the light theme, then <code>&lt;img class="brand-logo brand-logo-dark"&gt;</code>, its twin for the dark one. Each carries the file's own <code>width</code> and <code>height</code>: the logo stands 28 px tall, as wide as its proportions make it, and nothing moves as it loads. In the header it is at most 160 px wide.</p>
 	<ul>
 		<li>The page's theme picks the picture: <code>data-theme</code> on <code>html</code>, or the system's without it. A region's own <code>data-theme</code> leaves the logo as it is.</li>
@@ -41,7 +41,7 @@
 		<li>A logo that is a badge, not a word, takes <code>app-name</code> after it. Under 576 px the badge stays and the name leaves the sight, still the link's name.</li>
 		<li>The <code>alt</code> of both pictures is the product's name, or empty with <code>app-name</code> beside them; only the one shown is read.</li>
 	</ul>
-	<div class="docs-example docs-example-stack" id="app-brand-logo">
+	<div class="docs-example docs-example-stack" id="app-brand-logo" data-brand="#0a7f5a">
 		<header class="app-header">
 			<a class="app-brand" href="#app-brand"><img class="brand-logo" src="img/brand-light.svg" width="112" height="28" alt="Velmora"><img class="brand-logo brand-logo-dark" src="img/brand-dark.svg" width="112" height="28" alt="Velmora"><span class="app-mark" aria-hidden="true">V</span></a>
 			<button class="btn btn-text btn-icon ms-auto" type="button" aria-label="Theme"><i class="bi bi-circle-half" aria-hidden="true"></i></button>

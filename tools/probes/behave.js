@@ -1989,7 +1989,7 @@ window.REDZ_BEHAVE = (() => {
 			if (await readable) {
 				const luminance = (color) => color.split(',').map((one) => Number(one) / 255).map((one) => (one <= 0.04045 ? one / 12.92 : ((one + 0.055) / 1.055) ** 2.4)).reduce((sum, one, i) => sum + one * [0.2126, 0.7152, 0.0722][i], 0);
 				const contrast = (one, other) => (Math.max(luminance(one), luminance(other)) + 0.05) / (Math.min(luminance(one), luminance(other)) + 0.05);
-				const region = Object.assign(document.createElement('div'), {innerHTML: trusted('<button type="button" class="btn btn-primary">Save</button><button type="button" class="chip" aria-pressed="true">Tag</button><input class="check" type="checkbox" checked aria-label="Kept"><input class="switch" type="checkbox" role="switch" checked aria-label="On"><progress class="progress" value="60" max="100" aria-label="Sent"></progress>')});
+				const region = Object.assign(document.createElement('div'), {innerHTML: trusted('<button type="button" class="btn btn-primary">Save</button><button type="button" class="chip" aria-pressed="true">Tag</button><input class="check" type="checkbox" checked aria-label="Kept"><input class="switch" type="checkbox" role="switch" checked aria-label="On"><progress class="progress" value="60" max="100" aria-label="Sent"></progress><span class="app-mark" aria-hidden="true">V</span>')});
 				region.setAttribute('data-brand', '');
 				region.style.colorScheme = 'light';
 				for (const one of region.children) {
@@ -2000,6 +2000,14 @@ window.REDZ_BEHAVE = (() => {
 				const faint = [];
 				const dim = [];
 				const flat = [];
+				const stray = [];
+				// The mark takes the tone and its words under a brand, so no REDZ red shows in a white label.
+				const follows = (brand) => {
+					const [sign, button] = [getComputedStyle($('.app-mark', region)), getComputedStyle($('.btn', region))];
+					if (sign.backgroundColor !== button.backgroundColor || sign.color !== button.color) {
+						stray.push(brand + ' in the ' + region.style.colorScheme + ' theme ' + rgb(sign.backgroundColor) + ' with ' + rgb(sign.color));
+					}
+				};
 				for (const brand of ['#0a7f5a', '#b85c57', '#bf625c', '#a86d15', '#af731f', '#498e4d', '#4f9453', '#4e878a', '#548d90', '#5879c3', '#5e7fc9', '#9b63a8', '#a168ae', '#7a7a7a', '#767676', '#f4c542', '#ffeeaa']) {
 					region.style.setProperty('--redz-brand', brand);
 					const button = getComputedStyle($('.btn', region));
@@ -2012,6 +2020,7 @@ window.REDZ_BEHAVE = (() => {
 					if (pressed < 4.5) {
 						dim.push(brand + ' ' + pressed.toFixed(2));
 					}
+					follows(brand);
 					// A checked box and a progress bar fill with the tone's fill form: 3:1 on every ground they sit on, the track
 					// too; the mark and a switch's knob 3:1 on it.
 					const check = $('.check', region);
@@ -2031,6 +2040,7 @@ window.REDZ_BEHAVE = (() => {
 					// The dark theme lifts the tone: the knob takes its words form there too.
 					region.style.colorScheme = 'dark';
 					const knobDark = contrast(rgb(getComputedStyle(toggle, '::before').backgroundColor), rgb(getComputedStyle(toggle).backgroundColor));
+					follows(brand);
 					region.style.colorScheme = 'light';
 					if (mark < 3 || knob < 3 || knobDark < 3) {
 						flat.push(brand + ' its mark ' + mark.toFixed(2) + ', a switch\'s knob ' + knob.toFixed(2) + ', in the dark ' + knobDark.toFixed(2));
@@ -2044,7 +2054,21 @@ window.REDZ_BEHAVE = (() => {
 						}
 					}
 				}
+				// With no brand the mark is REDZ red, the logo's own, with white words in both themes.
+				region.removeAttribute('data-brand');
+				region.style.removeProperty('--redz-brand');
+				const red = ['light', 'dark'].map((theme) => {
+					region.style.colorScheme = theme;
+					const sign = getComputedStyle($('.app-mark', region));
+					return [rgb(sign.backgroundColor), rgb(sign.color)];
+				});
 				region.remove();
+				if (say(red) !== say([['205,52,40', '255,255,255'], ['205,52,40', '255,255,255']])) {
+					out.push('the mark with no brand stands ' + say(red) + ' in the light and the dark theme, not #cd3428 with white words');
+				}
+				if (stray.length > 0) {
+					out.push('a white label\'s mark takes no tone and words of its own: ' + say(stray));
+				}
 				if (low.length > 0) {
 					out.push('a white label\'s button words fall under 4.5:1 on ' + say(low));
 				}

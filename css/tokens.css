@@ -54,6 +54,8 @@
 
 		--redz-focus: var(--redz-primary);
 		--redz-link: var(--redz-primary);
+		--redz-app-mark-bg: #cd3428;
+		--redz-app-mark-fg: #ffffff;
 		--redz-shadow-strength: 1;
 		--redz-shadow-1: 0 1px 2px rgb(16 18 24 / calc(0.06 * var(--redz-shadow-strength)));
 		--redz-shadow-2: 0 2px 6px -1px rgb(16 18 24 / calc(0.06 * var(--redz-shadow-strength))), 0 8px 18px -4px rgb(16 18 24 / calc(0.08 * var(--redz-shadow-strength))), 0 16px 32px -8px rgb(16 18 24 / calc(0.08 * var(--redz-shadow-strength)));
@@ -84,6 +86,8 @@
 		--redz-primary-fill: light-dark(color(from var(--redz-brand) xyz-d65 calc(x * min(1, 0.25 / y)) calc(y * min(1, 0.25 / y)) calc(z * min(1, 0.25 / y))), oklch(from var(--redz-brand) max(l, 0.72) c h));
 		--redz-focus: var(--redz-primary-text);
 		--redz-link: var(--redz-primary-text);
+		--redz-app-mark-bg: var(--redz-primary);
+		--redz-app-mark-fg: var(--redz-primary-contrast);
 	}
 
 	[data-brand-secondary] {

@@ -79,8 +79,8 @@
 		inline-size: 1.75rem;
 		block-size: 1.75rem;
 		border-radius: var(--redz-radius-8);
-		background: var(--redz-primary);
-		color: var(--redz-primary-contrast);
+		background: var(--redz-app-mark-bg);
+		color: var(--redz-app-mark-fg);
 		font-size: var(--redz-fs-12);
 		font-weight: 750;
 		-webkit-print-color-adjust: exact;
