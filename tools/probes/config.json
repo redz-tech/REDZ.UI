@@ -23,6 +23,7 @@
 		"nvda-firefox": {"kind": "nvda", "browser": "firefox", "default": false, "why": "The same in the Firefox of CI's windows-2025 image.", "binary": "C:\\Program Files\\Mozilla Firefox\\firefox.exe"},
 		"safari-preview": {"kind": "safari", "driver": "/Applications/Safari Technology Preview.app/Contents/MacOS/safaridriver", "app": "Safari Technology Preview", "why": "WebKit a step ahead of the shipping Safari, with a driver of its own, so it runs on a Mac whose owner keeps Safari open, where safaridriver cannot take Safari; on the Mac before CI, which runs the shipping Safari."}
 	},
+	"simulators": {"blocked": {"xcode": ">= 27, <= 27.2", "safari": "<= 27.2"}, "why": "safaridriver of Safari 27 drives no iOS simulator under Xcode 27, a fault of the platform, not of the probe: it finds no session host for an iOS 27 simulator, whose Web Inspector socket Xcode 27 moved to /private/var/tmp, and an iOS 26 one never pairs (measured 2026-11-13 on CI's xcode-27 image and on a Mac with Xcode 27.2; other projects met it and gave up). While Xcode and Safari are both of these builds an iOS engine is skipped, no finding even when named; a newer one runs it again by itself."},
 	"nvda": {"version": "2026.3", "url": "https://github.com/nvaccess/nvda/releases/download/release-2026.3/nvda_2026.3.exe", "sha256": "a8a87cb823da0c62cfbae4a444ae5ae238d54dc82ad6d46d3fdb3fef082799b2"},
 	"speech": {
 		"docs/menu.html": [

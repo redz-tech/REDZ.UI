@@ -161,6 +161,44 @@ function PROBE__IosRuntime(array $engine): string
 	return '';
 }
 
+/** Why no iOS simulator can be driven on this Mac: the config's "simulators" why when its Xcode and its safaridriver
+ *  are both of the builds "blocked" names, a fault of the platform; '' otherwise, and where either cannot be read. */
+function PROBE__SimulatorFault(): string
+{
+	static $why = null;
+	if ($why !== null) {
+		return $why;
+	}
+	$fault = PROBE__Config()['simulators'] ?? [];
+	try {
+		$found = [
+			'xcode' => preg_match('~^Xcode (\d+(?:\.\d+)*)~m', PROBE__Run(['/usr/bin/xcrun', 'xcodebuild', '-version']), $m) === 1 ? $m[1] : '',
+			'safari' => preg_match('~Safari (\d+(?:\.\d+)*)~', PROBE__Run(['/usr/bin/safaridriver', '--version']), $m) === 1 ? $m[1] : '',
+		];
+	} catch (RuntimeException) {
+		return $why = '';
+	}
+	return $why = PROBE__FaultHolds($fault['blocked'] ?? [], $found) ? (($fault['why'] ?? '') ?: 'tools/probes/config.json\'s "simulators" blocks Xcode ' . $found['xcode'] . ' with Safari ' . $found['safari']) : '';
+}
+
+/** Whether each version of $found - by name: xcode, safari - is in every range $blocked gives that name, comparisons
+ *  joined by commas (">= 27, <= 27.2"); false when $blocked is empty or a version it names was not found. */
+function PROBE__FaultHolds(array $blocked, array $found): bool
+{
+	$bare = fn(string $version): string => (string)preg_replace('~(\.0+)+$~', '', $version);
+	foreach ($blocked as $name => $ranges) {
+		foreach (explode(',', (string)$ranges) as $range) {
+			if (preg_match('~^\s*(<=|>=|<|>|=)\s*(\d+(?:\.\d+)*)\s*$~', $range, $m) !== 1) {
+				throw new RuntimeException('tools/probes/config.json: "simulators" blocks ' . $name . ' by "' . trim($range) . '", not a comparison such as ">= 27"');
+			}
+			if (($found[$name] ?? '') === '' || !version_compare($bare($found[$name]), $bare($m[2]), $m[1])) {
+				return false;
+			}
+		}
+	}
+	return $blocked !== [];
+}
+
 /** Whether the Mac's screen is locked: Safari draws no frames then. */
 function PROBE__ScreenLocked(): bool
 {
@@ -188,6 +226,9 @@ function PROBE__Binary(string $name, array $engine, string &$why): string
 		$driver = $engine['driver'] ?? '/usr/bin/safaridriver';
 		if (!is_file($driver)) {
 			$why = isset($engine['driver']) ? 'not installed at ' . $driver : 'no safaridriver on this machine';
+			return '';
+		}
+		if (isset($engine['ios']) && ($why = PROBE__SimulatorFault()) !== '') {
 			return '';
 		}
 		if (isset($engine['ios']) && PROBE__IosRuntime($engine) === '') {
@@ -635,8 +676,23 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 			$press('Enter', $cap);
 		}
 	};
+	$spare = 20.0;
 	foreach (PROBE__Do($h, 'Eval', 'REDZ_PROBE.keyTargets()') as ['kind' => $kind, 'id' => $id, 'outside' => $outside]) {
-		$state = fn(): array => PROBE__Do($h, 'Eval', 'REDZ_PROBE.state(' . json_encode($kind) . ', ' . json_encode($id) . ')');
+		$state = function () use (&$h, $kind, $id): array {
+			return PROBE__Do($h, 'Eval', 'REDZ_PROBE.state(' . json_encode($kind) . ', ' . json_encode($id) . ')');
+		};
+		// The state read frame by frame until it is what the step wants, 2 s at most - a busy machine answers late, and a
+		// finding is a state that never came: the last state read, and whether it held. The page's waits share $spare, so
+		// widgets broken all together are found within the cell's time.
+		$until = function (callable $wanted) use (&$h, &$spare, $state): array {
+			$s = $state();
+			$from = microtime(true);
+			for ($end = $from + min(2.0, $spare); !$wanted($s) && microtime(true) < $end; $s = $state()) {
+				PROBE__Settle($h, 0);
+			}
+			$spare -= microtime(true) - $from;
+			return [$s, $wanted($s)];
+		};
 		$what = match ($kind) {
 			'tabs' => 'the tab list ' . $id,
 			'accordion' => 'the accordion ' . $id,
@@ -650,47 +706,46 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 		PROBE__Do($h, 'Eval', 'REDZ_PROBE.focus(' . json_encode($kind) . ', ' . json_encode($id) . ')');
 		if ($kind === 'menu') {
 			$activate($id);
-			$s = $state();
+			[$s, $held] = $until(fn(array $s): bool => $s['open'] && $s['item'] === max(0, $s['checked']));
 			$first = max(0, $s['checked']);
 			$steps = [['opening', $first], ['ArrowDown', ($first + 1) % max(1, $s['items'])], ['End', $s['items'] - 1], ['Home', 0]];
 			foreach ($steps as $i => [$key, $item]) {
 				if ($i > 0) {
 					$press($key);
-					$s = $state();
+					[$s, $held] = $until(fn(array $s): bool => $s['open'] && $s['item'] === $item);
 				}
-				if (!$s['open'] || $s['item'] !== $item) {
+				if (!$held) {
 					$findings[] = $what . $key . ': ' . ($s['open'] ? 'the focus is on item ' . $s['item'] . ', not ' . $item : 'the menu is closed');
 					continue 2;
 				}
 			}
 			$press('Escape');
-			$s = $state();
-			if ($s['open'] || !$s['onInvoker']) {
+			[$s, $held] = $until(fn(array $s): bool => !$s['open'] && $s['onInvoker']);
+			if (!$held) {
 				$findings[] = $what . 'Escape: ' . ($s['open'] ? 'the menu stays open' : 'the focus is not back on its button');
 				continue;
 			}
 			$press('ArrowDown');
-			$s = $state();
-			if (!$s['open'] || $s['item'] !== $first) {
+			[$s, $held] = $until(fn(array $s): bool => $s['open'] && $s['item'] === $first);
+			if (!$held) {
 				$findings[] = $what . 'ArrowDown on its button: ' . ($s['open'] ? 'the focus is on item ' . $s['item'] . ', not ' . $first : 'the menu does not open');
 				continue;
 			}
 			$press('Tab');
-			$s = $state();
-			if ($s['open'] || $s['inside']) {
+			if (!$until(fn(array $s): bool => !$s['open'] && !$s['inside'])[1]) {
 				$findings[] = $what . 'Tab: the menu stays open';
 			}
 		} elseif ($kind === 'dialog') {
 			$activate($id);
-			$s = $state();
-			if (!$s['open'] || !$s['inside']) {
+			[$s, $held] = $until(fn(array $s): bool => $s['open'] && $s['inside']);
+			if (!$held) {
 				$findings[] = $what . 'opening: ' . ($s['open'] ? 'the focus is not inside the dialog' : 'the dialog does not open');
 				continue;
 			}
 			if ($s['search'] !== null) {
 				$press('ArrowDown');
-				$s = $state();
-				if ($s['search']['active'] === null) {
+				[$s, $held] = $until(fn(array $s): bool => ($s['search']['active'] ?? null) !== null);
+				if (!$held) {
 					$findings[] = $what . 'ArrowDown in its search: no option is active';
 				}
 			}
@@ -702,8 +757,8 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 				$findings[] = $what . 'Tab: the focus left the open dialog';
 			}
 			$press('Escape');
-			$s = $state();
-			if ($s['open'] || !$s['onInvoker']) {
+			[$s, $held] = $until(fn(array $s): bool => !$s['open'] && $s['onInvoker']);
+			if (!$held) {
 				$findings[] = $what . 'Escape: ' . ($s['open'] ? 'the dialog stays open' : 'the focus is not back on its button');
 				continue;
 			}
@@ -714,7 +769,7 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 				if ($point !== null) {
 					PROBE__Do($h, 'Click', $point[0], $point[1]);
 					PROBE__Settle($h, 0);
-					if ($state()['open']) {
+					if (!$until(fn(array $s): bool => !$s['open'])[1]) {
 						$findings[] = '#' . $id . ' - a click outside it does not close it (closedby="any")';
 					}
 				}
@@ -722,24 +777,24 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 			}
 		} elseif ($kind === 'combobox') {
 			$activate($id);
-			$s = $state();
-			if (!$s['open'] || !$s['onSearch'] || $s['expanded'] !== 'true') {
+			[$s, $held] = $until(fn(array $s): bool => $s['open'] && $s['onSearch'] && $s['expanded'] === 'true');
+			if (!$held) {
 				$findings[] = $what . 'opening: ' . (!$s['open'] ? 'the panel does not open' : (!$s['onSearch'] ? 'the focus is not in its search' : 'its button says aria-expanded="' . $s['expanded'] . '"'));
 				continue;
 			}
 			if ($s['options'] > 0) {
 				$before = $s['values'];
 				$press('ArrowDown');
-				$s = $state();
-				if ($s['active'] === null) {
+				[$s, $held] = $until(fn(array $s): bool => $s['active'] !== null);
+				if (!$held) {
 					$findings[] = $what . 'ArrowDown: no option is active';
 					continue;
 				}
 				$taken = $s['active'];
-				$press('Enter');
-				$s = $state();
 				$values = $s['multiple'] ? (in_array($taken, $before, true) ? array_values(array_diff($before, [$taken])) : [...$before, $taken]) : [$taken];
-				if ($s['values'] !== $values || $s['open'] !== $s['multiple']) {
+				$press('Enter');
+				[$s, $held] = $until(fn(array $s): bool => $s['values'] === $values && $s['open'] === $s['multiple']);
+				if (!$held) {
 					$findings[] = $what . 'Enter on "' . $taken . '": the values should be ' . json_encode($values) . ' with the panel ' . ($s['multiple'] ? 'open' : 'closed') . ' - they are ' . json_encode($s['values']) . ', the panel ' . ($s['open'] ? 'open' : 'closed');
 					continue;
 				}
@@ -748,23 +803,22 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 				$word = 'Probe tag ' . substr(md5($id), 0, 6);
 				PROBE__Do($h, 'Eval', 'REDZ_PROBE.typeInto(' . json_encode('#' . $id . ' input[role="combobox"]') . ', ' . json_encode($word) . ')');
 				usleep(200000);
-				$s = $state();
-				if (!$s['activeCreate']) {
+				if (!$until(fn(array $s): bool => $s['activeCreate'])[1]) {
 					$findings[] = $what . 'a new word in the search: "Create …" is not the active option';
 					continue;
 				}
 				$press('Enter');
-				$s = $state();
-				if (!in_array($word, $s['created'], true)) {
+				[$s, $held] = $until(fn(array $s): bool => in_array($word, $s['created'], true));
+				if (!$held) {
 					$findings[] = $what . 'Enter on "Create …": the new label is not in its field, which holds ' . json_encode($s['created']);
 					continue;
 				}
 			}
 			if ($s['open']) {
 				$press('Escape');
-				$s = $state();
 			}
-			if ($s['open'] || !$s['onInvoker'] || $s['expanded'] !== 'false') {
+			[$s, $held] = $until(fn(array $s): bool => !$s['open'] && $s['onInvoker'] && $s['expanded'] === 'false');
+			if (!$held) {
 				$findings[] = $what . 'closing: ' . ($s['open'] ? 'the panel stays open' : (!$s['onInvoker'] ? 'the focus is not back on its button' : 'its button says aria-expanded="' . $s['expanded'] . '"'));
 			}
 		} elseif ($kind === 'accordion') {
@@ -776,27 +830,25 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 				} else {
 					$press($key);
 				}
-				$s = $state();
-				$open = in_array($s['walked'], $s['open'], true);
-				if ($open === ($step === 0 ? $was : !$was)) {
-					$findings[] = $what . $key . ': item ' . $s['walked'] . ' ' . ($open ? 'stays open' : 'stays closed');
-					break;
-				}
-				if ($open && $s['grouped'] && $s['open'] !== [$s['walked']]) {
-					$findings[] = $what . $key . ': opening item ' . $s['walked'] . ' of a group leaves ' . json_encode($s['open']) . ' open';
+				// Enter opens a closed item, Space closes it again - or the other way round.
+				$wanted = $step === 0 ? !$was : $was;
+				[$s, $held] = $until(fn(array $s): bool => in_array($s['walked'], $s['open'], true) === $wanted && !($wanted && $s['grouped'] && $s['open'] !== [$s['walked']]));
+				if (!$held) {
+					$open = in_array($s['walked'], $s['open'], true);
+					$findings[] = $what . $key . ': ' . ($open !== $wanted ? 'item ' . $s['walked'] . ' ' . ($open ? 'stays open' : 'stays closed') : 'opening item ' . $s['walked'] . ' of a group leaves ' . json_encode($s['open']) . ' open');
 					break;
 				}
 			}
 		} elseif ($kind === 'edit') {
 			$activate($id);
-			$s = $state();
-			if (!$s['open'] || !$s['inField']) {
+			[$s, $held] = $until(fn(array $s): bool => $s['open'] && $s['inField']);
+			if (!$held) {
 				$findings[] = $what . 'Enter on Edit: ' . ($s['open'] ? 'the focus is not in its field' : 'the form does not open');
 				continue;
 			}
 			$press('Escape');
-			$s = $state();
-			if ($s['open'] || !$s['valueShown'] || !$s['onInvoker']) {
+			[$s, $held] = $until(fn(array $s): bool => !$s['open'] && $s['valueShown'] && $s['onInvoker']);
+			if (!$held) {
 				$findings[] = $what . 'Escape: ' . ($s['open'] ? 'the form stays open' : (!$s['valueShown'] ? 'the value does not show again' : 'the focus is not back on Edit'));
 			}
 		} elseif ($kind === 'strength') {
@@ -820,14 +872,14 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 			}
 		} elseif ($kind === 'trees') {
 			$activate($id);
-			$s = $state();
-			if ($s['open'] !== $s['groups'] || $s['said'] !== $s['groups']) {
+			[$s, $held] = $until(fn(array $s): bool => $s['open'] === $s['groups'] && $s['said'] === $s['groups']);
+			if (!$held) {
 				$findings[] = $what . 'Expand all: ' . $s['open'] . ' of ' . $s['groups'] . ' groups open, ' . $s['said'] . ' toggles saying so';
 				continue;
 			}
 			PROBE__Do($h, 'Eval', '(document.querySelector(' . json_encode('[commandfor="' . $id . '"][command="--collapse-all"]') . ').click(), true)');
-			$s = $state();
-			if ($s['open'] !== 0 || $s['said'] !== $s['groups']) {
+			[$s, $held] = $until(fn(array $s): bool => $s['open'] === 0 && $s['said'] === $s['groups']);
+			if (!$held) {
 				$findings[] = $what . 'Collapse all: ' . $s['open'] . ' of ' . $s['groups'] . ' groups still open, ' . $s['said'] . ' toggles saying their state';
 			}
 		} elseif ($kind === 'reorder') {
@@ -838,7 +890,7 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 			} else {
 				$press('Enter');
 			}
-			$s = $state();
+			[$s] = $until(fn(array $s): bool => $s['open']);
 			if (!$s['open'] || !PROBE__Do($h, 'Eval', 'REDZ_PROBE.pickMove(' . json_encode($id) . ', "down")')) {
 				$findings[] = $what . 'Enter on its first handle: ' . ($s['open'] ? 'its menu has no "down"' : 'the menu of moves does not open');
 				continue;
@@ -849,42 +901,43 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 			} else {
 				$press('Enter');
 			}
-			$s = $state();
 			$moved = [$before[1], $before[0], ...array_slice($before, 2)];
-			if ($s['order'] !== $moved || !$s['onGrip'] || $s['said'] === '' || $s['open']) {
+			[$s, $held] = $until(fn(array $s): bool => $s['order'] === $moved && $s['onGrip'] && $s['said'] !== '' && !$s['open']);
+			if (!$held) {
 				$findings[] = $what . 'Move down: the order should be ' . json_encode($moved) . ', the focus on the moved handle and the move said - it is ' . json_encode($s['order']) . ($s['onGrip'] ? '' : ', the focus elsewhere') . ($s['said'] === '' ? ', nothing said' : '') . ($s['open'] ? ', the menu still open' : '');
 			}
 		} elseif ($kind === 'upload') {
+			$accepted = fn(array $row): bool => in_array($row['state'], ['sending', 'done', 'ready'], true);
+			$refused = fn(array $row): bool => $row['state'] === 'failed' && $row['error'] !== '';
+			// The last two rows: one file it takes, then one it refuses.
+			$pair = fn(array $rows): bool => count($rows) === 2 && $accepted($rows[0]) && $refused($rows[1]);
 			PROBE__Do($h, 'Eval', 'REDZ_PROBE.chooseFiles(' . json_encode($id) . ')');
 			usleep(300000);
-			$s = $state();
+			[$s] = $until(fn(array $s): bool => $s['multiple'] ? $pair(array_slice($s['rows'], -2)) : count($s['rows']) === 1 && $refused($s['rows'][0]));
 			if (!$s['multiple']) {
 				$first = $s['rows'];
 				PROBE__Do($h, 'Eval', 'REDZ_PROBE.chooseFiles(' . json_encode($id) . ', 2)');
 				usleep(300000);
-				$s = $state();
-				if (count($first) !== 1 || $first[0]['state'] !== 'failed' || $first[0]['error'] === '' || count($s['rows']) !== 1 || !in_array($s['rows'][0]['state'], ['sending', 'done', 'ready'], true)) {
+				[$s, $held] = $until(fn(array $s): bool => count($s['rows']) === 1 && $accepted($s['rows'][0]));
+				if (count($first) !== 1 || !$refused($first[0]) || !$held) {
 					$findings[] = $what . 'one file at a time: of two chosen the first, refused, and then a good one in its place - the rows say ' . json_encode($first) . ', then ' . json_encode($s['rows']);
 					continue;
 				}
-			} else {
-				$rows = array_slice($s['rows'], -2);
-				if (count($rows) !== 2 || !in_array($rows[0]['state'], ['sending', 'done', 'ready'], true) || $rows[1]['state'] !== 'failed' || $rows[1]['error'] === '') {
-					$findings[] = $what . 'two files chosen, one it takes and one it refuses: their rows say ' . json_encode($rows);
-					continue;
-				}
+			} elseif (!$pair(array_slice($s['rows'], -2))) {
+				$findings[] = $what . 'two files chosen, one it takes and one it refuses: their rows say ' . json_encode(array_slice($s['rows'], -2));
+				continue;
 			}
 			$count = count($s['rows']);
 			PROBE__Do($h, 'Eval', '(document.getElementById(' . json_encode($id) . ').querySelector(".upload-list > :last-child [data-file-remove]").click(), true)');
-			$s = $state();
-			if (count($s['rows']) !== $count - 1 || !($s['onRemove'] || $s['onZone'])) {
+			[$s, $held] = $until(fn(array $s): bool => count($s['rows']) === $count - 1 && ($s['onRemove'] || $s['onZone']));
+			if (!$held) {
 				$findings[] = $what . 'Remove on a file: ' . (count($s['rows']) === $count ? 'the row stays' : 'the focus is on neither the next file nor the zone');
 			}
 		} elseif ($kind === 'reveal') {
 			foreach (['text' => 'true', 'password' => 'false'] as $type => $pressed) {
 				$activate($id);
-				$s = $state();
-				if ($s['type'] !== $type || $s['pressed'] !== $pressed) {
+				[$s, $held] = $until(fn(array $s): bool => $s['type'] === $type && $s['pressed'] === $pressed);
+				if (!$held) {
 					$findings[] = $what . 'Enter: the field should be ' . $type . ', its button aria-pressed="' . $pressed . '" - it is ' . $s['type'] . ', aria-pressed="' . $s['pressed'] . '"';
 					break;
 				}
@@ -899,7 +952,9 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 					usleep(100000);
 					$s = $state();
 				}
-				if ($s['open'] !== $open || $s['expanded'] !== ($open ? 'true' : 'false')) {
+				$wanted = fn(array $s): bool => $s['open'] === $open && $s['expanded'] === ($open ? 'true' : 'false');
+				[$s, $held] = $wanted($s) ? [$s, true] : $until($wanted);
+				if (!$held) {
 					$findings[] = $what . 'Enter: the region should be ' . ($open ? 'open' : 'closed') . ' - it is ' . ($s['open'] ? 'open' : 'closed') . ', its button says aria-expanded="' . $s['expanded'] . '"';
 					break;
 				}
@@ -908,11 +963,13 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 			$s = $state();
 			$start = $s['selected'][0] ?? 0;
 			$last = $s['count'] - 1;
+			$shown = fn(array $s, int $tab): bool => $s['selected'] === [$tab] && $s['focused'] === $tab && $s['shown'] === [$tab];
 			foreach ([[$s['rtl'] ? 'ArrowLeft' : 'ArrowRight', ($start + 1) % $s['count']], ['End', $last], ['Home', 0]] as [$key, $tab]) {
 				$press($key);
-				$s = $state();
+				// Manual activation moves the focus alone; automatic selects the tab too.
+				[$s, $held] = $until(fn(array $s): bool => $s['manual'] ? $s['focused'] === $tab && $s['selected'] === [$start] : $shown($s, $tab));
 				if ($s['manual']) {
-					if ($s['focused'] !== $tab || $s['selected'] !== [$start]) {
+					if (!$held) {
 						$findings[] = $what . $key . ' (manual activation): the focus should move to tab ' . $tab . ' and the selection stay on ' . $start . ' - selected ' . json_encode($s['selected']) . ', focused ' . $s['focused'];
 						break;
 					}
@@ -920,10 +977,10 @@ function PROBE__KeyWalk(array &$h, array &$walked): array
 						continue;
 					}
 					$press('Enter');
-					$s = $state();
 					$start = $tab;
+					[$s, $held] = $until(fn(array $s): bool => $shown($s, $tab));
 				}
-				if ($s['selected'] !== [$tab] || $s['focused'] !== $tab || $s['shown'] !== [$tab]) {
+				if (!$held) {
 					$findings[] = $what . $key . ($s['manual'] ? ' and Enter' : '') . ': tab ' . $tab . ' should be selected, focused and its panel alone shown - selected ' . json_encode($s['selected']) . ', focused ' . $s['focused'] . ', shown ' . json_encode($s['shown']);
 					break;
 				}
@@ -2075,6 +2132,11 @@ function PROBE__ConfigReach(array $config, string $base): array
 			foreach (array_merge(array_diff($entries($was), $entries($is)), array_diff($entries($is), $entries($was))) as $entry) {
 				$reach = [...$reach, ...array_map(fn(string $name): string => 'engine:' . $name, json_decode($entry, true)['engines'] ?? ['*'])];
 			}
+		} elseif ($key === 'simulators') {
+			// The builds it blocks choose whether every iOS engine runs; its why, nothing.
+			if (array_diff_key((array)$was, ['why' => true]) !== array_diff_key((array)$is, ['why' => true])) {
+				$reach = [...$reach, ...array_map(fn(string $name): string => 'engine:' . $name, array_keys(array_filter($config['engines'], fn(array $engine): bool => isset($engine['ios']))))];
+			}
 		} else {
 			$reach[] = match ($key) {
 				'nvda' => 'kind:nvda',
@@ -2390,8 +2452,8 @@ function PROBE__Plan(array $config): int
  * gather: one sheet of every part of the run in .dev/probes - each part's sheet from this run when it ran here ($RAN,
  * the plan's parts, unless $MODE is none) or from the run it stands on ($STANDING) - and, unless a lab run,
  * .dev/standing/standing.json naming the parts clean in it with the run that holds each one's sheet, and
- * .dev/verified/verified.json when every part of $ALL is and the sheet is clean; the sheet's exit code, or 1 when a
- * part's sheet cannot be had.
+ * .dev/verified/verified.json when every part of $ALL is - or is skipped by the platform's fault, which it names - and
+ * the sheet is clean; the sheet's exit code, or 1 when a part's sheet cannot be had.
  */
 function PROBE__Gather(array $config): int
 {
@@ -2421,14 +2483,18 @@ function PROBE__Gather(array $config): int
 	// A pull request's run checks a merge no branch holds.
 	if ($mode !== 'lab' && getenv('GITHUB_EVENT_NAME') !== 'pull_request') {
 		// A part stands clean on a whole sheet with no finding: some pages run again and never laid over the sheet they
-		// stood on - its download failed - stand on nothing.
-		$clean = array_filter($holders, function (string $holder, string $name) use ($root): bool {
-			$report = json_decode((string)@file_get_contents($root . '/' . $name . '/report.json'), true);
-			return ($report['findings'] ?? null) === [] && ($report['only'] ?? null) === [];
-		}, ARRAY_FILTER_USE_BOTH);
+		// stood on - its download failed - stand on nothing, and so does an engine skipped, which checked nothing. CI names
+		// every engine, so a skip with no finding is the platform's fault the config names: it blocks no verified commit.
+		$reports = [];
+		foreach ($holders as $name => $holder) {
+			$reports[$name] = json_decode((string)@file_get_contents($root . '/' . $name . '/report.json'), true) ?: [];
+		}
+		$whole = fn(array $report): bool => ($report['findings'] ?? null) === [] && ($report['only'] ?? null) === [];
+		$clean = array_filter($holders, fn(string $name): bool => $whole($reports[$name]) && ($reports[$name]['skipped'] ?? []) === [], ARRAY_FILTER_USE_KEY);
+		$blocked = array_keys(array_filter($reports, fn(array $report): bool => $whole($report) && ($report['skipped'] ?? []) !== []));
 		$commit = (string)getenv('GITHUB_SHA');
-		foreach (['standing' => ['commit' => $commit, 'parts' => (object)$clean], 'verified' => ['commit' => $commit, 'mode' => $mode]] as $what => $record) {
-			if ($what === 'verified' && ($status !== 0 || count($clean) !== count($all))) {
+		foreach (['standing' => ['commit' => $commit, 'parts' => (object)$clean], 'verified' => ['commit' => $commit, 'mode' => $mode, ...($blocked === [] ? [] : ['blocked' => $blocked])]] as $what => $record) {
+			if ($what === 'verified' && ($status !== 0 || count($clean) + count($blocked) !== count($all))) {
 				continue;
 			}
 			@mkdir(PROBE_ROOT . '/.dev/' . $what, 0777, true);
@@ -2678,7 +2744,8 @@ function PROBE__Main(array $argv): int
 				$binary = PROBE__Binary($name, $config['engines'][$name], $why);
 				if ($binary === '') {
 					$report['skipped'][$name] = $why;
-					if ($options['named']) {
+					// Named, it is a finding - unless the platform's fault the config names keeps it from running anywhere so.
+					if ($options['named'] && !(isset($config['engines'][$name]['ios']) && $why !== '' && $why === PROBE__SimulatorFault())) {
 						$report['findings'][] = $name . ' - named, but cannot run here: ' . $why;
 					}
 					echo $name, ' skipped: ', $why, "\n";
