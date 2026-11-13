@@ -4,7 +4,7 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
-## Unreleased
+## 0.26.0 - 2026-11-13
 
 ### Added
 - A fill form of every tone, `--redz-primary-fill` and the same for secondary, success, info, warning and danger:
@@ -36,6 +36,10 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - Under `data-brand` a pressed or current `chip` and a combobox's matched letters were written in the tone itself:
   under 4.5:1 on their ground for most brands, 1.45:1 with `#f4c542`. They take the tone's words form,
   `--redz-primary-text`, as links do.
+
+### Not checked
+- Safari on iOS 27: safaridriver 27 drives no iOS simulator under Xcode 27, a fault of the platform. Safari on iOS 18
+  and iOS 26 was checked, as was every other engine.
 
 ## 0.25.0 - 2026-11-12
 
