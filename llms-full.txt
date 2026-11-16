@@ -6070,7 +6070,7 @@ A list of records: a title that links to the record, a line under it, a note whe
 
 ## Examples
 
-`table` on the `<table>`; the row under the pointer lights on a device with one, in the color of `--redz-row-hover`, set on the page or on one table, and `table-static` keeps a table's rows still. The head stays at the top of the screen as the page scrolls, under the shell's header. A page with a sticky bar of its own sets `--redz-sticky-top` to the bar's height plus 12 px. Columns that only help on a wide screen hide below `md` of their card.
+`table` on the `<table>`; the row under the pointer lights on a device with one, in the color of `--redz-row-hover`, set on the page or on one table, and `table-static` keeps a table's rows still, or one row on its `tr`. The head stays at the top of the screen as the page scrolls, under the shell's header. A page with a sticky bar of its own sets `--redz-sticky-top` to the bar's height plus 12 px. Columns that only help on a wide screen hide below `md` of their card.
 
 ```html
 <section class="card" aria-labelledby="table-list-title">
@@ -6199,13 +6199,14 @@ A checked row is tinted: its check is the only state. An element with `data-sele
 
 ### Rows that stay still
 
-Every table lights the row under the pointer. `table-static` keeps the rows of one still, for a table with nothing to do in a row.
+Every table lights the row under the pointer. `table-static` keeps the rows of one still, for a table with nothing to do in a row. On a `tr` it keeps that row still, and its `table-detail` row with it: a row that is no record, such as a form to add one.
 
 ```html
 <table class="table" aria-label="Departures">
 	<tbody>
 		<tr><td>North Bay</td><td>08:00</td></tr>
 		<tr><td>Turtle Cove</td><td>10:30</td></tr>
+		<tr class="table-static"><td colspan="2"><div class="hstack gap-8"><input class="form-control form-control-sm" type="text" name="departure" aria-label="New departure" autocomplete="off"><button class="btn btn-sm btn-primary" type="button">Add</button></div></td></tr>
 	</tbody>
 </table>
 <table class="table table-static" aria-label="Fares">

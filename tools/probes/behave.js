@@ -4175,6 +4175,22 @@ window.REDZ_BEHAVE = (() => {
 			if (quiet !== getComputedStyle($('tbody tr:last-child td', still)).backgroundColor) {
 				out.push('table-static lights its row: ' + quiet);
 			}
+			const row = $('tr.table-static', lit);
+			const resting = getComputedStyle(row.cells[0]).backgroundColor;
+			yield {hover: await point(row.cells[0])};
+			if (getComputedStyle(row.cells[0]).backgroundColor !== resting) {
+				out.push('a table-static row lights: ' + getComputedStyle(row.cells[0]).backgroundColor);
+			}
+			const detail = document.createElement('tr');
+			detail.className = 'table-detail';
+			detail.append(Object.assign(document.createElement('td'), {colSpan: 2, textContent: 'Detail'}));
+			row.after(detail);
+			yield {hover: await point(detail.cells[0])};
+			const lights = [row, detail].map((tr) => getComputedStyle(tr.cells[0]).backgroundColor).filter((color) => color !== resting);
+			detail.remove();
+			if (lights.length > 0) {
+				out.push('the detail row of a table-static row lights: ' + lights.join(', '));
+			}
 			lit.style.setProperty('--redz-row-hover', 'rgb(1, 2, 3)');
 			yield {hover: await point($('td', lit))};
 			if (matchMedia('(hover: hover)').matches && getComputedStyle($('td', lit)).backgroundColor !== 'rgb(1, 2, 3)') {
@@ -4608,6 +4624,16 @@ window.REDZ_BEHAVE = (() => {
 			editor.remove();
 			if (lone.label !== '-' || Math.abs(lone.fill) > 1) {
 				out.push('a row of one cell across a table-stack takes no label and its card\'s whole width: ' + say(lone));
+			}
+		}]},
+		// A band paints in its rows' layer: a shadow from the row above falls under the band as a whole, never under its end words alone.
+		bandLayer: {target: '#table-grouped', steps: [async (out) => {
+			const flat = (el) => getComputedStyle(el).position === 'static';
+			for (const band of $$('.table > tbody > .table-group > th')) {
+				const cell = $('tbody > tr:not(.table-group) > td', band.closest('table'));
+				if (cell && !flat(cell) && flat(band) && flat(band.parentElement)) {
+					out.push('a band paints under its rows: ' + band.firstChild.textContent.trim());
+				}
 			}
 		}]},
 		// A group's end words reach the end of its band and no further, in a wide card, a narrow one and stacked.

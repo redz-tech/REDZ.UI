@@ -22,6 +22,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   is in sight, a bar of the library's own, `table-scroll-bar`, holds to the bottom of the screen under the table:
   drag its thumb, or press its rail to move by most of the width that shows. The bar is hidden from screen readers
   and out of the tab order, and a focused table shows no fade over its focus ring.
+- `table-static` on a `tr` keeps that row still under the pointer, and its `table-detail` row with it: a row that is
+  no record, such as a form to add one. On a `table` it keeps every row still, as before.
 - Types for an editor: `js/redz-ui.d.ts` declares `REDZ.ui`, as `REDZ` and `window.REDZ` - each call with its options
   and its answer, such as `confirm` a promise of a boolean, or of the chosen value with a `choice` - and every
   `redz:*` event with its `detail` and, where the page answers, `respondWith`, as `document`, `window` and an element
@@ -38,6 +40,9 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   product's owner agreed that the screen scrolls sideways.
 
 ### Fixed
+- A group's band paints in its rows' layer. A shadow cast from the row above, such as a raised card's, fell on the
+  band and under its end words, which drew a light patch over it (the tourism pack's editor row). The band now covers
+  such a shadow evenly, and a card lifted with `position-relative z-1` casts it over the whole band.
 - A group's end words, `table-group-end`, reach the end of their band in a region under 30rem, where a table's edge
   cells take 12 px. They stood 4 px past it, into the card's border under `table-stack` and into a sideways scroll in
   a `table-scroll` (the tourism pack's walk at 390 px).

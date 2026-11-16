@@ -189,7 +189,7 @@
 	}
 
 	.table > tbody > .table-group > th {
-		position: static;
+		position: relative;
 		padding-block: var(--redz-space-8);
 		background: var(--redz-bg-page);
 		color: var(--redz-text);
@@ -474,16 +474,16 @@
 	}
 
 	@media (hover: hover) {
-		.table:not(.table-static) > tbody > tr:not([aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th),
-		.table:not(.table-static) > tbody > tr:not([aria-selected="true"], :has(> .table-check :checked)):has(+ .table-detail:hover, + .table-detail :is(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th),
-		.table:not(.table-static) > tbody > tr:not([aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) + .table-detail > td {
+		.table:not(.table-static) > tbody > tr:not(.table-static, .table-static + .table-detail, [aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th),
+		.table:not(.table-static) > tbody > tr:not(.table-static, .table-static + .table-detail, [aria-selected="true"], :has(> .table-check :checked)):has(+ .table-detail:hover, + .table-detail :is(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th),
+		.table:not(.table-static) > tbody > tr:not(.table-static, .table-static + .table-detail, [aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) + .table-detail > td {
 			background: var(--redz-row-hover, color-mix(in srgb, var(--redz-primary) 7%, var(--redz-bg)));
 		}
 
-		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not([aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th),
-		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not([aria-selected="true"], :has(> .table-check :checked)):has(+ .table-detail:hover, + .table-detail :is(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th),
-		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not([aria-selected="true"], :has(> .table-check :checked)) + .table-detail:is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) > td,
-		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not([aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) + .table-detail > td {
+		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th),
+		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)):has(+ .table-detail:hover, + .table-detail :is(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th),
+		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)) + .table-detail:is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) > td,
+		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) + .table-detail > td {
 			background: color-mix(in oklch, var(--redz-row-tint) 90%, var(--redz-bg));
 		}
 	}
@@ -653,8 +653,8 @@
 		}
 
 		@media (hover: hover) {
-			.table-stack:not(.table-static) > tbody > tr:not([aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"]), :has(+ .table-detail:hover, + .table-detail :is(:popover-open, [commandfor][aria-expanded="true"]))),
-			.table-stack:not(.table-static) > tbody > tr:not([aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) + .table-detail {
+			.table-stack:not(.table-static) > tbody > tr:not(.table-static, .table-static + .table-detail, [aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"]), :has(+ .table-detail:hover, + .table-detail :is(:popover-open, [commandfor][aria-expanded="true"]))),
+			.table-stack:not(.table-static) > tbody > tr:not(.table-static, .table-static + .table-detail, [aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) + .table-detail {
 				background: var(--redz-row-hover, color-mix(in srgb, var(--redz-primary) 7%, var(--redz-bg)));
 			}
 		}
