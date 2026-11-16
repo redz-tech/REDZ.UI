@@ -4,7 +4,7 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
-## Unreleased
+## 0.27.0 - 2026-11-17
 
 ### Added
 - `table-stack` on a table read row by row: while its region is under 576 px, each row is a card. The row's head is
@@ -50,6 +50,10 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   the build now holds the numbers they state to its own.
 - The head of a held column, under `table-scroll-first` or `table-scroll-last`, stays over the heads that scroll
   under it. The column's own rule won over the head's, so the next heads covered it as the table scrolled.
+
+### Not checked
+- Safari on iOS 27: safaridriver 27 drives no iOS simulator under Xcode 27, a fault of the platform. Safari on iOS 18
+  and iOS 26 was checked, as was every other engine.
 
 ## 0.26.0 - 2026-11-13
 
