@@ -9,8 +9,9 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 ### Added
 - `table-stack` on a table read row by row: while its region is under 576 px, each row is a card. The row's head is
   its title, and every other cell shows its column head's words above it, which the library copies from `thead` into
-  the cell's `data-label`; a label the page writes stays, and a head with no words a person sees gives none. From
-  576 px it is the table, and a screen reader reads a table at every width.
+  the cell's `data-label`; a label the page writes stays, a head with no words a person sees gives none, and a cell
+  across several columns, such as a row's form, takes none and fills its card. From 576 px it is the table, and a
+  screen reader reads a table at every width.
 - `table-detail` on a row under another: one cell across the table, each element in it held to the start of the part
   of the table that shows and as wide as that part, so a table wider than its `table-scroll` hides no detail past its
   edge; where the table fits it is a plain row. It reads as one record with the row above it - no line between them,

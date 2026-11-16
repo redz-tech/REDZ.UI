@@ -4597,6 +4597,18 @@ window.REDZ_BEHAVE = (() => {
 			if (got !== '-|Seats|Own|Paid') {
 				out.push('a row added to a table-stack reads ' + say(got) + ', not "-|Seats|Own|Paid"');
 			}
+			const editor = body.insertRow();
+			editor.className = 'table-active';
+			const across = editor.insertCell();
+			across.colSpan = 4;
+			across.append(Object.assign(document.createElement('input'), {className: 'form-control form-control-sm'}));
+			await settled();
+			const inside = editor.getBoundingClientRect().width - parseFloat(getComputedStyle(editor).paddingInlineStart) - parseFloat(getComputedStyle(editor).paddingInlineEnd);
+			const lone = {label: across.dataset.label ?? '-', fill: Math.round(inside - across.getBoundingClientRect().width)};
+			editor.remove();
+			if (lone.label !== '-' || Math.abs(lone.fill) > 1) {
+				out.push('a row of one cell across a table-stack takes no label and its card\'s whole width: ' + say(lone));
+			}
 		}]},
 		scrollCue: {target: '#table-wide', steps: [async (out) => {
 			const card = $('#table-wide .card');
@@ -4631,7 +4643,7 @@ window.REDZ_BEHAVE = (() => {
 					const seen = read();
 					const turned = !seen.shade || seen.turn === (dir === 'ltr' ? '1' : '-1 1');
 					if (seen.more !== want || !seen.mask || (seen.fade === '2rem') !== want.includes('end') || seen.shade !== want.includes('start') || !turned || !seen.head) {
-						wrong.push(say({dir, want, ...seen}));
+						wrong.push(say({dir, want, ...seen, at: Math.round(box.scrollLeft), range}));
 					}
 				}
 				box.scrollLeft = 0;

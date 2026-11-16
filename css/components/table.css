@@ -602,6 +602,10 @@
 			box-shadow: none;
 		}
 
+		.table-stack > :is(tbody, tfoot) > tr > td:not([colspan="1"])[colspan] {
+			flex: 1 1 100%;
+		}
+
 		.table-stack > :is(tbody, tfoot) > tr:not(.table-group, .table-detail) > th {
 			flex: 1 1 auto;
 			align-self: center;

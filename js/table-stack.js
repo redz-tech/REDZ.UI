@@ -1,5 +1,6 @@
 // REDZ.UI, a table that stacks: on a phone each row of a table-stack is a card, and each of its cells shows its column
-// head's words, copied here from the head into the cell's data-label; a label the page wrote stays.
+// head's words, copied here from the head into the cell's data-label; a label the page wrote stays, and a cell across
+// several columns, such as a row's form, takes none.
 const TABLES = 'table.table-stack';
 
 /** A head's words as a person sees them: no hidden text and no layer it holds. */
@@ -31,7 +32,7 @@ const label = (table) => {
 			for (const cell of row.cells) {
 				const text = columns[column] ?? '';
 				column += cell.colSpan;
-				if (cell.localName === 'td' && text !== '' && !cell.hasAttribute('data-label')) {
+				if (cell.localName === 'td' && cell.colSpan === 1 && text !== '' && !cell.hasAttribute('data-label')) {
 					cell.setAttribute('data-label', text);
 				}
 			}

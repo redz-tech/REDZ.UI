@@ -348,7 +348,7 @@ A row whose terms do not fit its columns takes a `table-detail` row under it, on
 
 ### Cards on a phone
 
-A screen does not scroll sideways where it can help it. A table read row by row - a row of fields to fill, a list to act on - takes `table-stack`: while its region is under 576 px wide, each row is a card. The row's head is the card's title, and every other cell shows its column head's words above it, which the library copies from `thead` into the cell's `data-label`; a label the page writes stays, and a head with no words a person sees, as over a column of checks or buttons, gives none. A `table-detail` row goes in its row's card, and the bodies stay apart by their lines. From 576 px it is the table. A screen reader reads it as a table at every width. Keep [`table-scroll`](#table-scroll) for a table read across its columns, such as figures compared by day.
+A screen does not scroll sideways where it can help it. A table read row by row - a row of fields to fill, a list to act on - takes `table-stack`: while its region is under 576 px wide, each row is a card. The row's head is the card's title, and every other cell shows its column head's words above it, which the library copies from `thead` into the cell's `data-label`; a label the page writes stays, a head with no words a person sees, as over a column of checks or buttons, gives none, and a cell across several columns, such as a row's form, takes none and fills its card. A `table-detail` row goes in its row's card, and the bodies stay apart by their lines. From 576 px it is the table. A screen reader reads it as a table at every width. Keep [`table-scroll`](#table-scroll) for a table read across its columns, such as figures compared by day.
 
 ```html
 <div class="vstack gap-16">

@@ -167,6 +167,9 @@ const watch = (scroller) => {
 
 document.querySelectorAll(SCROLLERS).forEach(watch);
 
+// A page turned to the other side keeps or moves its scroll offsets without telling: follow every scroller again.
+new MutationObserver(() => document.querySelectorAll(SCROLLERS).forEach(queue)).observe(document.documentElement, {attributes: true, attributeFilter: ['dir']});
+
 new MutationObserver((records) => {
 	for (const record of records) {
 		for (const node of record.addedNodes) {
