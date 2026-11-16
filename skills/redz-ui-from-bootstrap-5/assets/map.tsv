@@ -1910,12 +1910,12 @@ table-hover		remove	class	table	every table lights its row under the pointer; ta
 table-info		review	class	table	row tones are danger, warning and secondary
 table-light		review	class	table	row tones are danger, warning and secondary
 table-primary		review	class	table	row tones are danger, warning and secondary
-table-responsive	table-scroll	rename	class	table	the wrapper scrolls sideways, table-scroll-first holds the first column; or columns hide below md:
-table-responsive-lg	table-scroll	review	class	table	it scrolls sideways at every width; hide columns below md: instead where they only help on a wide screen
-table-responsive-md	table-scroll	review	class	table	it scrolls sideways at every width; hide columns below md: instead where they only help on a wide screen
-table-responsive-sm	table-scroll	review	class	table	it scrolls sideways at every width; hide columns below md: instead where they only help on a wide screen
-table-responsive-xl	table-scroll	review	class	table	it scrolls sideways at every width; hide columns below md: instead where they only help on a wide screen
-table-responsive-xxl	table-scroll	review	class	table	it scrolls sideways at every width; hide columns below md: instead where they only help on a wide screen
+table-responsive	table-scroll	review	class	table	decide by how the table is read: by rows (fields to fill, a list to act on) drop the wrapper and put table-stack on the table, cards on a phone; across its columns keep table-scroll, only where the product's owner agreed
+table-responsive-lg	table-scroll	review	class	table	as table-responsive: table-stack for a table read by rows; table-scroll scrolls at every width, only where the product's owner agreed
+table-responsive-md	table-scroll	review	class	table	as table-responsive: table-stack for a table read by rows; table-scroll scrolls at every width, only where the product's owner agreed
+table-responsive-sm	table-scroll	review	class	table	as table-responsive: table-stack for a table read by rows; table-scroll scrolls at every width, only where the product's owner agreed
+table-responsive-xl	table-scroll	review	class	table	as table-responsive: table-stack for a table read by rows; table-scroll scrolls at every width, only where the product's owner agreed
+table-responsive-xxl	table-scroll	review	class	table	as table-responsive: table-stack for a table read by rows; table-scroll scrolls at every width, only where the product's owner agreed
 table-secondary	table-secondary	same	class	table	
 table-sm		review	class	table	data-density="compact" on the table, its card or <html>
 table-striped	table-striped	same	class	table	

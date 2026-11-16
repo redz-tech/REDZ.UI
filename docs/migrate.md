@@ -471,7 +471,7 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `table-info` | - | review | row tones are danger, warning and secondary |
 | `table-light` | - | review | row tones are danger, warning and secondary |
 | `table-primary` | - | review | row tones are danger, warning and secondary |
-| `table-responsive` | `table-scroll` | rename | the wrapper scrolls sideways, table-scroll-first holds the first column; or columns hide below md: |
+| `table-responsive` | `table-scroll` | review | decide by how the table is read: by rows (fields to fill, a list to act on) drop the wrapper and put table-stack on the table, cards on a phone; across its columns keep table-scroll, only where the product's owner agreed |
 | `table-success` | - | review | row tones are danger, warning and secondary |
 | `text-bg-danger` | `badge-danger` | review | on a badge; elsewhere bg-danger with the tone's -contrast text in the module's CSS |
 | `text-bg-dark` | `badge-inverse` | review | on a badge: the text color as its background, light in the dark theme |

@@ -263,6 +263,8 @@ The head of a table sticks under the app's header as the page scrolls; inside a 
 
 A table with more columns than its card has room for goes in a `table-scroll`: it scrolls sideways inside the card, and `table-scroll-first` holds its first column in place, `table-scroll-last` its last, where a row's buttons stay in view. Where the browser lets an element scroll on one axis alone - Chrome 156 on - the head still sticks to the page as it scrolls down; elsewhere the head scrolls away with the page and the rest works the same. The wrapper is a named region. The library makes it a tab stop while its table is wider than it, so a keyboard can scroll it, and takes the stop away while the table fits.
 
+Where columns go on past what shows, that edge fades, and a held column casts a shade on what went under it. While the table's own scrollbar is below the screen, a bar of the library's own holds to the bottom of the screen under the table: drag its thumb, or press its rail to move by most of the width that shows. The bar is out of the tab order and hidden from screen readers, as the table scrolls by the keyboard already, and a focused table shows no fade, so its focus ring stays whole. A sideways scroll is the last resort: a table read row by row takes [`table-stack`](#table-stack) instead.
+
 ```html
 <section class="card" aria-labelledby="table-wide-title">
 	<div class="card-header"><h2 class="fs-14" id="table-wide-title">Seats by day</h2></div>
@@ -318,6 +320,63 @@ Put a band's label and its end slot in a `table-group-line` to keep them both in
 
 A product sets the look of every table head in its tokens: `--redz-table-head-bg`, `--redz-table-head-text`, `--redz-table-head-weight`, and `--redz-table-head-border`, the whole line under it.
 
+### A row's details
+
+A row whose terms do not fit its columns takes a `table-detail` row under it, one cell across the table. Each element in that cell keeps to the start of the part of the table that shows and wraps at its width, so a table wider than its card hides no detail past its edge; where the table fits, it is a plain row. It reads as one record with the row above it: no line between them, one hover, and that row's tone, check and stripe. It stays out of `table-scroll-first` and `table-scroll-last`, as a band does. Text right in the cell is not held: put it in an element.
+
+```html
+<section class="card" aria-labelledby="table-details-title">
+	<div class="card-header"><h2 class="fs-14" id="table-details-title">Who goes</h2></div>
+	<div class="table-scroll table-scroll-first" role="region" aria-labelledby="table-details-title">
+		<table class="table">
+			<thead><tr><th scope="col">Kind</th><th scope="col">In tour</th><th scope="col">How</th><th scope="col" class="text-end">From</th><th scope="col" class="text-end">To</th><th scope="col">Only with</th></tr></thead>
+			<tbody class="table-group-divider">
+				<tr><th scope="row">Adult</th><td><label class="form-check"><input id="table-details-field-1" class="switch" type="checkbox" role="switch" checked><span class="visually-hidden">In tour: Adult</span></label></td><td><div class="btn-group" role="group" aria-label="How: Adult"><input class="btn-check" type="checkbox" id="table-details-ad-seat" checked><label class="btn btn-sm btn-outline-primary" for="table-details-ad-seat">Seat</label><input class="btn-check" type="checkbox" id="table-details-ad-pays" checked><label class="btn btn-sm btn-outline-primary" for="table-details-ad-pays">Pays</label><input class="btn-check" type="checkbox" id="table-details-ad-bus" checked><label class="btn btn-sm btn-outline-primary" for="table-details-ad-bus">Transfer</label></div></td><td class="text-end"><input id="table-details-from-adult" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" value="1" aria-label="From: Adult"></td><td class="text-end"><input id="table-details-to-adult" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" placeholder="∞" aria-label="To: Adult"></td><td><select id="table-details-only-with-adult" class="form-select form-select-sm min-w-120" aria-label="Only with: Adult"><option>Nobody</option><option>Child</option></select></td></tr>
+				<tr class="table-detail"><td colspan="6"><div class="hstack flex-wrap gap-24 align-items-end fs-12"><span class="hstack gap-4">Age <input id="table-details-age-from-adult" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" value="18" aria-label="Age from: Adult"><span aria-hidden="true">-</span><input id="table-details-age-to-adult" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" aria-label="Age to: Adult"></span><div class="hstack flex-wrap gap-4" role="group" aria-label="Each guest gives: Adult"><button class="chip" type="button" aria-pressed="true">Name</button><button class="chip" type="button" aria-pressed="false">Birth date</button><button class="chip" type="button" aria-pressed="true">Passport</button><button class="chip" type="button" aria-pressed="false">Phone</button></div><label class="form-check"><input id="table-details-field-7" class="switch" type="checkbox" role="switch" checked>In the day report</label></div></td></tr>
+			</tbody>
+			<tbody class="table-group-divider">
+				<tr><th scope="row">Child</th><td><label class="form-check"><input id="table-details-field-8" class="switch" type="checkbox" role="switch" checked><span class="visually-hidden">In tour: Child</span></label></td><td><div class="btn-group" role="group" aria-label="How: Child"><input class="btn-check" type="checkbox" id="table-details-ch-seat" checked><label class="btn btn-sm btn-outline-primary" for="table-details-ch-seat">Seat</label><input class="btn-check" type="checkbox" id="table-details-ch-pays" checked><label class="btn btn-sm btn-outline-primary" for="table-details-ch-pays">Pays</label><input class="btn-check" type="checkbox" id="table-details-ch-bus"><label class="btn btn-sm btn-outline-primary" for="table-details-ch-bus">Transfer</label></div></td><td class="text-end"><input id="table-details-from-child" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" value="0" aria-label="From: Child"></td><td class="text-end"><input id="table-details-to-child" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" value="4" aria-label="To: Child"></td><td><select id="table-details-only-with-child" class="form-select form-select-sm min-w-120" aria-label="Only with: Child"><option>Nobody</option><option selected>Adult</option></select></td></tr>
+				<tr class="table-detail"><td colspan="6"><div class="hstack flex-wrap gap-24 align-items-end fs-12"><span class="hstack gap-4">Age <input id="table-details-age-from-child" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" value="4" aria-label="Age from: Child"><span aria-hidden="true">-</span><input id="table-details-age-to-child" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" value="11" aria-label="Age to: Child"></span><div class="hstack flex-wrap gap-4" role="group" aria-label="Each guest gives: Child"><button class="chip" type="button" aria-pressed="true">Name</button><button class="chip" type="button" aria-pressed="true">Birth date</button><button class="chip" type="button" aria-pressed="false">Passport</button><button class="chip" type="button" aria-pressed="false">Phone</button></div><label class="form-check"><input id="table-details-field-14" class="switch" type="checkbox" role="switch" checked>In the day report</label></div></td></tr>
+			</tbody>
+			<tbody class="table-group-divider">
+				<tr class="text-muted"><th scope="row">Infant</th><td><label class="form-check"><input id="table-details-field-15" class="switch" type="checkbox" role="switch"><span class="visually-hidden">In tour: Infant</span></label></td><td><div class="btn-group" role="group" aria-label="How: Infant"><input class="btn-check" type="checkbox" id="table-details-in-seat" disabled><label class="btn btn-sm btn-outline-primary" for="table-details-in-seat">Seat</label><input class="btn-check" type="checkbox" id="table-details-in-pays" disabled><label class="btn btn-sm btn-outline-primary" for="table-details-in-pays">Pays</label><input class="btn-check" type="checkbox" id="table-details-in-bus" disabled><label class="btn btn-sm btn-outline-primary" for="table-details-in-bus">Transfer</label></div></td><td class="text-end"><input id="table-details-from-infant" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" disabled aria-label="From: Infant"></td><td class="text-end"><input id="table-details-to-infant" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" disabled aria-label="To: Infant"></td><td><select id="table-details-only-with-infant" class="form-select form-select-sm min-w-120" aria-label="Only with: Infant" disabled><option>Nobody</option></select></td></tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+```
+
+### Cards on a phone
+
+A screen does not scroll sideways where it can help it. A table read row by row - a row of fields to fill, a list to act on - takes `table-stack`: while its region is under 576 px wide, each row is a card. The row's head is the card's title, and every other cell shows its column head's words above it, which the library copies from `thead` into the cell's `data-label`; a label the page writes stays, and a head with no words a person sees, as over a column of checks or buttons, gives none. A `table-detail` row goes in its row's card, and the bodies stay apart by their lines. From 576 px it is the table. A screen reader reads it as a table at every width. Keep [`table-scroll`](#table-scroll) for a table read across its columns, such as figures compared by day.
+
+```html
+<div class="vstack gap-16">
+	<section class="card" aria-labelledby="table-stacked-title">
+		<div class="card-header"><h2 class="fs-14" id="table-stacked-title">Pickups</h2></div>
+		<table class="table table-stack">
+			<thead><tr><th scope="col">Guest</th><th scope="col" class="text-end">Seats</th><th scope="col">Hotel</th><th scope="col">Paid</th></tr></thead>
+			<tbody>
+				<tr><th scope="row">Example Guest</th><td class="text-end"><input id="table-stacked-seats-example-guest" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" value="2" aria-label="Seats: Example Guest"></td><td><select id="table-stacked-hotel-example-guest" class="form-select form-select-sm min-w-120" aria-label="Hotel: Example Guest"><option>Harbor Inn</option><option>Palm Court</option></select></td><td><label class="form-check"><input id="table-stacked-field-3" class="switch" type="checkbox" role="switch" checked><span class="visually-hidden">Paid: Example Guest</span></label></td></tr>
+				<tr class="table-detail"><td colspan="4"><p class="fs-12 text-muted m-0">Ground floor room, a wheelchair at the pier.</p></td></tr>
+				<tr><th scope="row">Second Guest</th><td class="text-end"><input id="table-stacked-seats-second-guest" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" value="1" aria-label="Seats: Second Guest"></td><td><select id="table-stacked-hotel-second-guest" class="form-select form-select-sm min-w-120" aria-label="Hotel: Second Guest"><option>Palm Court</option><option>Harbor Inn</option></select></td><td><label class="form-check"><input id="table-stacked-field-6" class="switch" type="checkbox" role="switch"><span class="visually-hidden">Paid: Second Guest</span></label></td></tr>
+			</tbody>
+		</table>
+	</section>
+	<section class="card max-w-360" aria-labelledby="table-stacked-narrow-title">
+		<div class="card-header"><h2 class="fs-14" id="table-stacked-narrow-title">Pickups in a narrow column</h2></div>
+		<table class="table table-stack">
+			<thead><tr><th scope="col">Guest</th><th scope="col" class="text-end">Seats</th><th scope="col">Hotel</th><th scope="col">Paid</th></tr></thead>
+			<tbody>
+				<tr><th scope="row">Example Guest</th><td class="text-end"><input id="table-stacked-narrow-seats-example-guest" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" value="2" aria-label="Seats: Example Guest"></td><td><select id="table-stacked-narrow-hotel-example-guest" class="form-select form-select-sm min-w-120" aria-label="Hotel: Example Guest"><option>Harbor Inn</option><option>Palm Court</option></select></td><td><label class="form-check"><input id="table-stacked-narrow-field-3" class="switch" type="checkbox" role="switch" checked><span class="visually-hidden">Paid: Example Guest</span></label></td></tr>
+				<tr class="table-detail"><td colspan="4"><p class="fs-12 text-muted m-0">Ground floor room, a wheelchair at the pier.</p></td></tr>
+				<tr><th scope="row">Second Guest</th><td class="text-end"><input id="table-stacked-narrow-seats-second-guest" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" value="1" aria-label="Seats: Second Guest"></td><td><select id="table-stacked-narrow-hotel-second-guest" class="form-select form-select-sm min-w-120" aria-label="Hotel: Second Guest"><option>Palm Court</option><option>Harbor Inn</option></select></td><td><label class="form-check"><input id="table-stacked-narrow-field-6" class="switch" type="checkbox" role="switch"><span class="visually-hidden">Paid: Second Guest</span></label></td></tr>
+			</tbody>
+		</table>
+	</section>
+</div>
+```
+
 ### The current, the chosen and the running row
 
 A row with `aria-current` - the record open beside the list - carries the accent's mark at its start; a row with `aria-selected="true"`, chosen in a grid of rows, is tinted; `table-active`, Bootstrap's name, marks the row that is running now.
@@ -360,9 +419,9 @@ A row's tone marks what needs attention: `table-danger` failed, `table-warning` 
 
 ## Tokens
 
-From [`css/components/table.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css). It declares `--redz-table-head-border`, `--redz-table-head-weight`, `--redz-row-tint`, `--redz-row-mark` on its root, never on rows or items.
+From [`css/components/table.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css). It declares `--redz-table-head-border`, `--redz-table-head-weight`, `--redz-table-shade-flip`, `--redz-table-fade-start`, `--redz-table-fade-end`, `--redz-table-shade-side`, `--redz-table-shade-at`, `--redz-row-tint`, `--redz-row-mark` on its root, never on rows or items.
 
-It reads the theme's `--redz-sticky-top`, `--redz-space-12`, `--redz-space-8`, `--redz-row-pad`, `--redz-border`, `--redz-table-head-bg`, `--redz-bg`, `--redz-table-head-text`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-fs-14`, `--redz-bg-page`, `--redz-space-16`, `--redz-space-4`, `--redz-table-scroll-size`, `--redz-border-strong`, `--redz-row-hover`, `--redz-primary`, `--redz-radius-12`, `--redz-font-mono`, `--redz-danger-subtle`, `--redz-danger-fill`, `--redz-warning-subtle`, `--redz-warning-fill`, `--redz-primary-subtle`, `--redz-primary-fill`.
+It reads the theme's `--redz-sticky-top`, `--redz-space-12`, `--redz-space-8`, `--redz-row-pad`, `--redz-border`, `--redz-table-head-bg`, `--redz-bg`, `--redz-table-head-text`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-fs-14`, `--redz-shadow-strength`, `--redz-table-bar-gap`, `--redz-space-4`, `--redz-table-bar-size`, `--redz-table-bar-at`, `--redz-bg-page`, `--redz-space-16`, `--redz-table-scroll-size`, `--redz-danger-subtle`, `--redz-warning-subtle`, `--redz-primary-subtle`, `--redz-border-strong`, `--redz-row-hover`, `--redz-primary`, `--redz-radius-12`, `--redz-font-mono`, `--redz-danger-fill`, `--redz-warning-fill`, `--redz-primary-fill`.
 
 ## From Bootstrap 5.3
 
@@ -374,5 +433,5 @@ It reads the theme's `--redz-sticky-top`, `--redz-space-12`, `--redz-space-8`, `
 | `table-info` | - | review | row tones are danger, warning and secondary |
 | `table-light` | - | review | row tones are danger, warning and secondary |
 | `table-primary` | - | review | row tones are danger, warning and secondary |
-| `table-responsive` | `table-scroll` | rename | the wrapper scrolls sideways, table-scroll-first holds the first column; or columns hide below md: |
+| `table-responsive` | `table-scroll` | review | decide by how the table is read: by rows (fields to fill, a list to act on) drop the wrapper and put table-stack on the table, cards on a phone; across its columns keep table-scroll, only where the product's owner agreed |
 | `table-success` | - | review | row tones are danger, warning and secondary |

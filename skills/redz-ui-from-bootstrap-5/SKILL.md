@@ -67,6 +67,10 @@ row, state class, `data-bs-*` attribute and unknown class stays as it was and is
   is about 740 px wide - `sm:` inside it, not `md:`. A page without the shell marks its own `region`.
 - **No wrappers.** `modal-dialog` and `modal-content`, the `dropdown` wrapper, `nav-item` items go: the `<dialog>`, the
   popover menu and the links are the boxes.
+- **No sideways scroll by default.** `table-responsive` is a `review`, not a rename. A table read by rows - fields to
+  fill, a list to act on - drops the wrapper and takes `table-stack`, a card per row on a phone. Keep `table-scroll`
+  only for a table read across its columns and only where the product's owner agreed that the screen scrolls
+  sideways. A row's terms that do not fit go in a `table-detail` row under it, not in more columns.
 - **States are attributes.** Script that selected `.active` or `.show` must select `[aria-current]` or `:popover-open`
   now - the scan reports class names in `querySelector`, `closest`, `matches` and `classList`.
 - **Classes built in code** (`'btn-' . $tone`, `class="alert-<?= $x ?>"`) are invisible to any scan: write the full

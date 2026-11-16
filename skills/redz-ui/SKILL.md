@@ -32,6 +32,11 @@ where the meaning is the same, and like the platform where Bootstrap 6 moved ont
 7. Tokens are `--redz-` with the classes' words: `--redz-text-muted`, `--redz-space-16`. No inline styles: values come
    from classes, `<progress>` / `<meter>`, or the module's CSS.
 8. A module's own classes carry its prefix: `orders-summary`, never a bare name that could collide.
+9. A screen does not scroll sideways. A table read row by row - fields to fill, a list to act on - takes `table-stack`:
+   on a phone each row is a card, with its column heads' words over its cells. Keep `table-scroll` for a table read
+   across its columns, such as figures compared by day, and only where the product's owner agreed that this screen
+   scrolls sideways; the library then shows by itself that it does. A row's terms that do not fit its columns go in a
+   `table-detail` row under it, which stays in sight whatever the table's width.
 
 ## The page
 

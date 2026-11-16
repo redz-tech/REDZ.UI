@@ -70,36 +70,122 @@
 		}
 	}
 
-	.table-scroll-first > .table > * > tr:not(.table-group) > :first-child {
+	.table-scroll-first > .table > * > tr:not(.table-group, .table-detail) > :first-child {
 		position: sticky;
 		inset-inline-start: 0;
 		z-index: 1;
 		border-inline-end: 1px solid var(--redz-border);
 	}
 
-	:where(.table-scroll-first > .table > * > tr:not(.table-group)) > :first-child,
-	.table-scroll-first > .table > tbody > tr:not(.table-group) > th:first-child {
+	:where(.table-scroll-first > .table > * > tr:not(.table-group, .table-detail)) > :first-child,
+	.table-scroll-first > .table > tbody > tr:not(.table-group, .table-detail) > th:first-child {
 		background-color: var(--redz-bg);
 	}
 
-	.table-scroll-first > .table > thead > tr > :first-child {
+	.table-scroll-first > .table > thead > tr:not(.table-group, .table-detail) > :first-child {
 		z-index: 2;
 	}
 
-	.table-scroll-last > .table > * > tr:not(.table-group) > :last-child {
+	.table-scroll-last > .table > * > tr:not(.table-group, .table-detail) > :last-child {
 		position: sticky;
 		inset-inline-end: 0;
 		z-index: 1;
 		border-inline-start: 1px solid var(--redz-border);
 	}
 
-	:where(.table-scroll-last > .table > * > tr:not(.table-group)) > :last-child,
-	.table-scroll-last > .table > tbody > tr:not(.table-group) > th:last-child {
+	:where(.table-scroll-last > .table > * > tr:not(.table-group, .table-detail)) > :last-child,
+	.table-scroll-last > .table > tbody > tr:not(.table-group, .table-detail) > th:last-child {
 		background-color: var(--redz-bg);
 	}
 
-	.table-scroll-last > .table > thead > tr > :last-child {
+	.table-scroll-last > .table > thead > tr:not(.table-group, .table-detail) > :last-child {
 		z-index: 2;
+	}
+
+	/* Where columns go on past what shows, that edge fades; a held column casts a shade on what went under it. */
+	.table-scroll[data-more]:not(:focus-visible) {
+		mask-image: linear-gradient(to right, transparent, #000 var(--redz-table-fade-start, 0px), #000 calc(100% - var(--redz-table-fade-end, 0px)), transparent);
+	}
+
+	.table-scroll[data-more]:not(:focus-visible):dir(rtl) {
+		mask-image: linear-gradient(to left, transparent, #000 var(--redz-table-fade-start, 0px), #000 calc(100% - var(--redz-table-fade-end, 0px)), transparent);
+	}
+
+	.table-scroll:dir(rtl) {
+		--redz-table-shade-flip: -1;
+	}
+
+	.table-scroll:not(.table-scroll-first)[data-more~="start"] {
+		--redz-table-fade-start: 2rem;
+	}
+
+	.table-scroll:not(.table-scroll-last)[data-more~="end"] {
+		--redz-table-fade-end: 2rem;
+	}
+
+	.table-scroll-first[data-more~="start"] > .table > * > tr:not(.table-group, .table-detail) > :first-child::after,
+	.table-scroll-last[data-more~="end"] > .table > * > tr:not(.table-group, .table-detail) > :last-child::after {
+		content: "";
+		position: absolute;
+		inset-block: 0;
+		inset-inline-start: var(--redz-table-shade-at, 100%);
+		inline-size: 0.5rem;
+		background: linear-gradient(to right, rgb(16 18 24 / calc(0.1 * var(--redz-shadow-strength))), transparent);
+		scale: calc(var(--redz-table-shade-flip, 1) * var(--redz-table-shade-side, 1)) 1;
+		pointer-events: none;
+	}
+
+	.table-scroll-last > .table > * > tr > :last-child::after {
+		--redz-table-shade-side: -1;
+		--redz-table-shade-at: -0.5rem;
+	}
+
+	/* The library's own bar after a table-scroll: it holds to the bottom of the screen while the table's own scrollbar is below it. */
+	.table-scroll-bar {
+		position: sticky;
+		inset-block-end: -1px;
+		z-index: 3;
+		block-size: 0;
+		margin-block-start: calc(-1 * var(--redz-table-bar-gap));
+	}
+
+	.table-scroll-bar > span {
+		position: absolute;
+		inset-inline: 0;
+		inset-block-end: 1px;
+		padding: var(--redz-space-4) var(--redz-space-12);
+		border-block-start: 1px solid var(--redz-border);
+		background: var(--redz-bg);
+	}
+
+	.table-scroll-bar:not([data-stuck]) > span {
+		visibility: hidden;
+	}
+
+	.table-scroll-bar > span > span {
+		position: relative;
+		display: block;
+		block-size: 0.5rem;
+		border-radius: 999px;
+		background: color-mix(in oklch, var(--redz-text) 9%, transparent);
+		cursor: pointer;
+	}
+
+	.table-scroll-bar > span > span > span {
+		position: absolute;
+		inset-block: 0;
+		inset-inline-start: calc((100% - max(2rem, var(--redz-table-bar-size))) * var(--redz-table-bar-at));
+		inline-size: max(2rem, var(--redz-table-bar-size));
+		border-radius: 999px;
+		background: color-mix(in oklch, var(--redz-text) 42%, transparent);
+		cursor: grab;
+		touch-action: none;
+	}
+
+	@media print {
+		.table-scroll-bar {
+			display: none;
+		}
 	}
 
 	.table > tbody > .table-group > th {
@@ -149,6 +235,43 @@
 		background: none;
 	}
 
+	/* A detail row: each block of its cell keeps to the part of the table that shows and is as wide as that part. */
+	.table > * > tr.table-detail > td {
+		padding-inline: 0;
+	}
+
+	.table > * > .table-detail > td > :not([popover], dialog) {
+		position: sticky;
+		inset-inline-start: 0;
+		inline-size: min(100%, var(--redz-table-scroll-size, 100%));
+		padding-inline: var(--redz-space-16);
+	}
+
+	/* It is one record with the row above it: no line between them, and that row's tone, choice and stripe. */
+	.table > tbody > tr:has(+ .table-detail) > :is(td, th) {
+		border-block-end: 0;
+	}
+
+	.table > tbody > tr:has(+ .table-detail) + .table-detail > td {
+		padding-block-start: 0;
+	}
+
+	.table-danger + .table-detail {
+		--redz-row-tint: var(--redz-danger-subtle);
+	}
+
+	.table-warning + .table-detail {
+		--redz-row-tint: var(--redz-warning-subtle);
+	}
+
+	.table-active + .table-detail {
+		--redz-row-tint: var(--redz-primary-subtle);
+	}
+
+	:is(.table-danger, .table-warning, .table-active) + .table-detail > td {
+		background: color-mix(in oklch, var(--redz-row-tint) 55%, var(--redz-bg));
+	}
+
 	.table > * > .table-subtotal > :is(td, th) {
 		border-block-start: 1px solid var(--redz-border-strong);
 		color: var(--redz-text);
@@ -194,7 +317,8 @@
 		padding-inline-end: var(--redz-space-16);
 	}
 
-	.table-striped > tbody > tr:nth-child(odd) > td,
+	.table-striped > tbody > tr:nth-child(odd of :not(.table-detail)) > td,
+	.table-striped > tbody > tr:nth-child(odd of :not(.table-detail)) + .table-detail > td,
 	.table-striped-columns :is(th, td):nth-child(even) {
 		box-shadow: inset 0 0 0 100vmax color-mix(in oklch, var(--redz-text) 4%, transparent);
 	}
@@ -340,7 +464,8 @@
 		background: color-mix(in oklch, var(--redz-row-tint) 55%, var(--redz-bg));
 	}
 
-	.table tr:is([aria-selected="true"], :has(> .table-check :checked)) > td {
+	.table tr:is([aria-selected="true"], :has(> .table-check :checked)) > td,
+	.table tr:is([aria-selected="true"], :has(> .table-check :checked)) + .table-detail > td {
 		background: color-mix(in oklch, var(--redz-primary) 10%, var(--redz-bg));
 	}
 
@@ -349,11 +474,16 @@
 	}
 
 	@media (hover: hover) {
-		.table:not(.table-static) > tbody > tr:not([aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th) {
+		.table:not(.table-static) > tbody > tr:not([aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th),
+		.table:not(.table-static) > tbody > tr:not([aria-selected="true"], :has(> .table-check :checked)):has(+ .table-detail:hover, + .table-detail :is(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th),
+		.table:not(.table-static) > tbody > tr:not([aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) + .table-detail > td {
 			background: var(--redz-row-hover, color-mix(in srgb, var(--redz-primary) 7%, var(--redz-bg)));
 		}
 
-		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not([aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th) {
+		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not([aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th),
+		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not([aria-selected="true"], :has(> .table-check :checked)):has(+ .table-detail:hover, + .table-detail :is(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th),
+		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not([aria-selected="true"], :has(> .table-check :checked)) + .table-detail:is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) > td,
+		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not([aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) + .table-detail > td {
 			background: color-mix(in oklch, var(--redz-row-tint) 90%, var(--redz-bg));
 		}
 	}
@@ -413,7 +543,116 @@
 			padding-inline-end: var(--redz-space-12);
 		}
 
-		.table-group-line {
+		.table-group-line,
+		.table > * > .table-detail > td > :not([popover], dialog) {
+			padding-inline: var(--redz-space-12);
+		}
+	}
+
+	/* A table read row by row: in a region under 576 px each row is a card, its column head's words over each cell. */
+	@container region (width < 576px) {
+		.table-stack,
+		.table-stack > :is(tbody, tfoot),
+		.table-stack > :is(tbody, tfoot) > tr,
+		.table-stack > :is(tbody, tfoot) > tr > :is(td, th) {
+			display: block;
+		}
+
+		.table-stack > thead {
+			position: absolute;
+			inline-size: 1px;
+			block-size: 1px;
+			margin: -1px;
+			overflow: hidden;
+			clip-path: inset(50%);
+			white-space: nowrap;
+		}
+
+		.table-stack > :is(tbody, tfoot) > tr {
+			position: relative;
+			border-block-end: 1px solid var(--redz-border);
+		}
+
+		.table-stack > :is(tbody, tfoot) > tr:is(:last-child, :has(+ .table-detail)) {
+			border-block-end: 0;
+		}
+
+		.table-stack > :is(tbody, tfoot) + :is(tbody, tfoot) {
+			border-block-start: 1px solid var(--redz-border);
+		}
+
+		.table-stack > :is(tbody, tfoot) + .table-group-divider {
+			border-block-start: 2px solid var(--redz-border-strong);
+		}
+
+		.table-stack > :is(tbody, tfoot) > tr:not(.table-group, .table-detail) {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: flex-end;
+			gap: var(--redz-space-12) var(--redz-space-16);
+			padding: var(--redz-space-12) var(--redz-space-16);
+		}
+
+		.table.table-stack > :is(tbody, tfoot) > tr:not(.table-group, .table-detail) > :is(td, th),
+		.table-scroll-first > .table-stack > * > tr:not(.table-group, .table-detail) > :first-child,
+		.table-scroll-last > .table-stack > * > tr:not(.table-group, .table-detail) > :last-child {
+			position: static;
+			padding: 0;
+			border: 0;
+			box-shadow: none;
+		}
+
+		.table-stack > :is(tbody, tfoot) > tr:not(.table-group, .table-detail) > th {
+			flex: 1 1 auto;
+			align-self: center;
+			white-space: normal;
+		}
+
+		.table.table-stack > :is(tbody, tfoot) > .table-detail > td {
+			padding: 0 0 var(--redz-space-12);
+			border: 0;
+		}
+
+		.table-stack > :is(tbody, tfoot) > tr > td[data-label] {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: var(--redz-space-4);
+		}
+
+		.table-stack > :is(tbody, tfoot) > tr > td[data-label]:has(> :is(.form-check, .check, .switch):only-child) {
+			flex-direction: row;
+			align-items: center;
+			gap: var(--redz-space-8);
+		}
+
+		.table-stack > :is(tbody, tfoot) > tr > td[data-label]::after {
+			content: attr(data-label) / "";
+			order: -1;
+			color: var(--redz-text-muted);
+			font-size: var(--redz-fs-12);
+		}
+
+		.table-stack > tbody > :is(.table-danger, .table-warning, .table-active),
+		.table-stack > tbody > :is(.table-danger, .table-warning, .table-active) + .table-detail {
+			background: color-mix(in oklch, var(--redz-row-tint) 55%, var(--redz-bg));
+		}
+
+		.table-stack > tbody > tr:is([aria-selected="true"], :has(> .table-check :checked)),
+		.table-stack > tbody > tr:is([aria-selected="true"], :has(> .table-check :checked)) + .table-detail {
+			background: color-mix(in oklch, var(--redz-primary) 10%, var(--redz-bg));
+		}
+
+		@media (hover: hover) {
+			.table-stack:not(.table-static) > tbody > tr:not([aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"]), :has(+ .table-detail:hover, + .table-detail :is(:popover-open, [commandfor][aria-expanded="true"]))),
+			.table-stack:not(.table-static) > tbody > tr:not([aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) + .table-detail {
+				background: var(--redz-row-hover, color-mix(in srgb, var(--redz-primary) 7%, var(--redz-bg)));
+			}
+		}
+	}
+
+	@container region (width < 30rem) {
+		.table-stack > :is(tbody, tfoot) > tr:not(.table-group, .table-detail) {
 			padding-inline: var(--redz-space-12);
 		}
 	}
@@ -430,10 +669,20 @@
 			background: CanvasText;
 		}
 
-		.table tr:is([aria-selected="true"], :has(> .table-check :checked)) > td {
+		.table tr:is([aria-selected="true"], :has(> .table-check :checked)) > td,
+		.table tr:is([aria-selected="true"], :has(> .table-check :checked)) + .table-detail > td {
 			forced-color-adjust: none;
 			background: Highlight;
 			color: HighlightText;
+		}
+
+		.table-scroll-bar > span > span {
+			border: 1px solid CanvasText;
+		}
+
+		.table-scroll-bar > span > span > span {
+			forced-color-adjust: none;
+			background: CanvasText;
 		}
 	}
 }

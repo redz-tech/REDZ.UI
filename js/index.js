@@ -12,6 +12,7 @@ import './scrollspy.js';
 import './nav-overflow.js';
 import './nav-scroll.js';
 import './table-scroll.js';
+import './table-stack.js';
 import './navbar.js';
 import './tooltips.js';
 import './fold.js';

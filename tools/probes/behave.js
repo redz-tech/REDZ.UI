@@ -4462,6 +4462,272 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a band line with room: ' + say([wideLong, wideShort]) + ', a table of its own width stays narrower than its scroller ' + fits);
 			}
 		}]},
+		detailRow: {target: '#table-details', steps: [async (out) => {
+			const card = $('#table-details .card');
+			const box = $('.table-scroll', card);
+			const table = $('table', box);
+			const details = $$('.table-detail', table);
+			card.style.inlineSize = '340px';
+			await until(() => parseFloat(box.style.getPropertyValue('--redz-table-scroll-size')) === box.clientWidth);
+			if (table.scrollWidth <= box.clientWidth + 1) {
+				out.push('a detail row\'s table fits a 340 px card, so its hold is not tried');
+			}
+			const wrong = [];
+			for (const dir of ['ltr', 'rtl']) {
+				document.documentElement.dir = dir;
+				await settled();
+				for (const to of [0, dir === 'ltr' ? box.scrollWidth : -box.scrollWidth]) {
+					box.scrollLeft = to;
+					await wait(50);
+					const from = box.getBoundingClientRect().left + box.clientLeft;
+					const end = from + box.clientWidth;
+					for (const row of details) {
+						const block = row.cells[0].firstElementChild.getBoundingClientRect();
+						const past = $$('input, button, select', row).filter((field) => {
+							const rect = field.getBoundingClientRect();
+							return rect.left < from - 1 || rect.right > end + 1;
+						}).length;
+						if (!near(block.left, from, 1) || !near(block.right, end, 1) || past > 0) {
+							wrong.push(say({dir, at: to === 0 ? 'rest' : 'scrolled', start: Math.round(block.left - from), end: Math.round(end - block.right), past}));
+						}
+					}
+				}
+				box.scrollLeft = 0;
+			}
+			document.documentElement.dir = 'ltr';
+			card.style.removeProperty('inline-size');
+			await settled();
+			if (wrong.length > 0) {
+				out.push('a detail row in a narrow scroller: ' + wrong.join(' ; '));
+			}
+			const detail = details[0];
+			const main = detail.previousElementSibling;
+			const pair = () => [getComputedStyle(main.cells[1]), getComputedStyle(detail.cells[0])];
+			const [row, own] = pair();
+			const loose = {held: own.position, line: own.borderInlineEndWidth, between: row.borderBlockEndWidth};
+			if (loose.held === 'sticky' || loose.line !== '0px' || loose.between !== '0px') {
+				out.push('a detail row stays out of the held column and has no line above it: ' + say(loose));
+			}
+			const alike = [];
+			for (const [name, set, unset] of [
+				['tone', () => main.classList.add('table-danger'), () => main.classList.remove('table-danger')],
+				['choice', () => main.setAttribute('aria-selected', 'true'), () => main.removeAttribute('aria-selected')],
+				['stripe', () => table.classList.add('table-striped'), () => table.classList.remove('table-striped')],
+			]) {
+				set();
+				const [lit, its] = pair();
+				const seen = name === 'stripe' ? [lit.boxShadow, its.boxShadow] : [lit.backgroundColor, its.backgroundColor];
+				unset();
+				if (seen[0] !== seen[1] || seen[0] === pair()[1][name === 'stripe' ? 'boxShadow' : 'backgroundColor']) {
+					alike.push(name + ' ' + say(seen));
+				}
+			}
+			if (alike.length > 0) {
+				out.push('a detail row takes its row\'s look: ' + alike.join(' ; '));
+			}
+		}]},
+		detailHover: {target: '#table-details', walk: async function* (out) {
+			if (!matchMedia('(hover: hover)').matches) {
+				return;
+			}
+			const detail = $('#table-details .table-detail');
+			const main = detail.previousElementSibling;
+			const lit = () => [getComputedStyle(main.cells[1]).backgroundColor, getComputedStyle(detail.cells[0]).backgroundColor];
+			detail.scrollIntoView({block: 'center'});
+			await settled();
+			const base = lit();
+			yield {hover: center(detail.cells[0], 0.98, 0.5)};
+			const byDetail = lit();
+			yield {hover: center(main.cells[0])};
+			const byRow = lit();
+			yield {hover: [5, 5]};
+			const away = lit();
+			const fine = byDetail[0] !== base[0] && byDetail[0] === byDetail[1] && byRow[1] !== base[1] && byRow[0] === byRow[1] && say(away) === say(base);
+			if (!fine) {
+				out.push('a detail row and its row light together: ' + say({base, byDetail, byRow, away}));
+			}
+		}},
+		stackCards: {target: '#table-stacked', steps: [async (out) => {
+			const [wide, narrow] = $$('#table-stacked .card');
+			const want = say(['-|Seats|Hotel|Paid', '-|Seats|Hotel|Paid']);
+			const read = (card) => {
+				const table = $('table', card);
+				const row = table.tBodies[0].rows[0];
+				const [seats, , paid] = [...row.cells].slice(1);
+				return {
+					table: getComputedStyle(table).display,
+					row: getComputedStyle(row).display,
+					labels: say([...table.tBodies[0].rows].filter((one) => !one.classList.contains('table-detail')).map((one) => [...one.cells].map((cell) => cell.dataset.label ?? '-').join('|'))),
+					over: Math.round(seats.getBoundingClientRect().height - $('input', seats).getBoundingClientRect().height),
+					beside: Math.round(paid.getBoundingClientRect().width - $('.switch', paid).getBoundingClientRect().width),
+					spill: Math.round(table.getBoundingClientRect().width - card.clientWidth),
+				};
+			};
+			const check = (name, seen, stacked) => {
+				const fine = seen.labels === want && (stacked
+					? seen.table === 'block' && seen.row === 'flex' && seen.over >= 10 && seen.beside >= 20 && seen.spill <= 1
+					: seen.table === 'table' && seen.row === 'table-row');
+				if (!fine) {
+					out.push(name + ': ' + say(seen));
+				}
+			};
+			await settled();
+			check('a table-stack in a wide card', read(wide), false);
+			check('a table-stack in a 360 px card', read(narrow), true);
+			wide.style.inlineSize = '340px';
+			narrow.style.maxInlineSize = 'none';
+			narrow.style.inlineSize = '700px';
+			await settled();
+			check('a table-stack whose card narrows to 340 px', read(wide), true);
+			check('a table-stack whose card widens to 700 px', read(narrow), false);
+			wide.style.removeProperty('inline-size');
+			narrow.style.removeProperty('max-inline-size');
+			narrow.style.removeProperty('inline-size');
+			const body = $('table', narrow).tBodies[0];
+			const added = body.rows[0].cloneNode(true);
+			added.querySelectorAll('[id]').forEach((field) => field.removeAttribute('id'));
+			for (const cell of added.cells) {
+				cell.removeAttribute('data-label');
+			}
+			added.cells[2].dataset.label = 'Own';
+			body.append(added);
+			await until(() => added.cells[1].dataset.label !== undefined, 1000);
+			const got = [...added.cells].map((cell) => cell.dataset.label ?? '-').join('|');
+			added.remove();
+			if (got !== '-|Seats|Own|Paid') {
+				out.push('a row added to a table-stack reads ' + say(got) + ', not "-|Seats|Own|Paid"');
+			}
+		}]},
+		scrollCue: {target: '#table-wide', steps: [async (out) => {
+			const card = $('#table-wide .card');
+			const box = $('.table-scroll', card);
+			const head = $('thead th', box);
+			const first = $('tbody tr:not(.table-group) > th', box);
+			card.style.inlineSize = '340px';
+			box.scrollIntoView({block: 'center'});
+			await until(() => box.dataset.more === 'end');
+			const range = box.scrollWidth - box.clientWidth;
+			const onTop = (cell) => {
+				const rect = cell.getBoundingClientRect();
+				const top = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+				return top === cell || cell.contains(top);
+			};
+			const read = () => ({
+				more: box.dataset.more ?? '',
+				mask: getComputedStyle(box).maskImage !== 'none',
+				fade: getComputedStyle(box).getPropertyValue('--redz-table-fade-end').trim(),
+				shade: !['none', 'normal'].includes(getComputedStyle(first, '::after').content),
+				turn: getComputedStyle(first, '::after').scale,
+				head: onTop(head),
+			});
+			const wrong = [];
+			for (const dir of ['ltr', 'rtl']) {
+				document.documentElement.dir = dir;
+				await settled();
+				const sign = dir === 'ltr' ? 1 : -1;
+				for (const [to, want] of [[0, 'end'], [sign * Math.round(range / 2), 'start end'], [sign * range, 'start']]) {
+					box.scrollLeft = to;
+					await until(() => (box.dataset.more ?? '') === want, 1000);
+					const seen = read();
+					const turned = !seen.shade || seen.turn === (dir === 'ltr' ? '1' : '-1 1');
+					if (seen.more !== want || !seen.mask || (seen.fade === '2rem') !== want.includes('end') || seen.shade !== want.includes('start') || !turned || !seen.head) {
+						wrong.push(say({dir, want, ...seen}));
+					}
+				}
+				box.scrollLeft = 0;
+			}
+			document.documentElement.dir = 'ltr';
+			await settled();
+			if (wrong.length > 0) {
+				out.push('a table-scroll shows where its columns go on: ' + wrong.join(' ; '));
+			}
+			const lastCard = $('#table-wide-last .card');
+			const lastBox = $('.table-scroll', lastCard);
+			const lastCell = $('tbody tr > :last-child', lastBox);
+			lastCard.style.inlineSize = '340px';
+			await until(() => lastBox.dataset.more === 'end');
+			const shades = [];
+			for (const dir of ['ltr', 'rtl']) {
+				document.documentElement.dir = dir;
+				await settled();
+				const style = getComputedStyle(lastCell, '::after');
+				const shade = {dir, content: style.content, at: Math.round(parseFloat(style.insetInlineStart)), turn: style.scale};
+				if (['none', 'normal'].includes(shade.content) || shade.at !== -8 || shade.turn !== (dir === 'ltr' ? '-1 1' : '1')) {
+					shades.push(say(shade));
+				}
+			}
+			document.documentElement.dir = 'ltr';
+			lastCard.style.removeProperty('inline-size');
+			await settled();
+			if (shades.length > 0) {
+				out.push('a held last column casts its shade on the columns before it: ' + shades.join(' ; '));
+			}
+			const own = box.nextElementSibling;
+			if (own?.matches('.table-scroll-bar') !== true || own.getAttribute('aria-hidden') !== 'true' || own.hidden) {
+				out.push('a table wider than its scroller has no bar of its own hidden from screen readers after it: ' + say(own?.outerHTML.slice(0, 80) ?? null));
+				card.style.removeProperty('inline-size');
+				return;
+			}
+			const panel = own.firstElementChild;
+			const thumb = panel.firstElementChild.firstElementChild;
+			const share = Math.max(32, panel.firstElementChild.clientWidth * box.clientWidth / box.scrollWidth);
+			const place = async (top) => {
+				scrollBy(0, box.getBoundingClientRect().top - top);
+				await settled();
+			};
+			const stuck = () => own.hasAttribute('data-stuck');
+			await place(innerHeight - 150);
+			await until(stuck, 1000);
+			const held = {stuck: stuck(), bottom: Math.round(innerHeight - panel.getBoundingClientRect().bottom), shown: getComputedStyle(panel).visibility, thumb: Math.round(thumb.getBoundingClientRect().width - share)};
+			await place(innerHeight - 10);
+			await until(() => !stuck(), 1000);
+			const below = {stuck: stuck(), shown: getComputedStyle(panel).visibility};
+			box.scrollIntoView({block: 'center'});
+			await until(() => !stuck(), 1000);
+			const rest = {stuck: stuck(), shown: getComputedStyle(panel).visibility};
+			if (!held.stuck || Math.abs(held.bottom) > 2 || held.shown !== 'visible' || Math.abs(held.thumb) > 2 || below.stuck || below.shown !== 'hidden' || rest.stuck || rest.shown !== 'hidden') {
+				out.push('a bar of its own holds to the screen\'s bottom only while its table is in sight and its scrollbar is not: ' + say({held, below, rest}));
+			}
+			box.focus({focusVisible: true});
+			if (box.matches(':focus-visible') && getComputedStyle(box).maskImage !== 'none') {
+				out.push('a focused table-scroll still fades its edge, over its focus ring');
+			}
+			box.blur();
+			card.style.removeProperty('inline-size');
+			await settled();
+			if (box.scrollWidth <= box.clientWidth + 1 && (box.hasAttribute('data-more') || !own.hidden)) {
+				out.push('a table that fits keeps ' + say({more: box.dataset.more, bar: !own.hidden}));
+			}
+		}]},
+		scrollBar: {target: '#table-wide', walk: async function* (out) {
+			const card = $('#table-wide .card');
+			const box = $('.table-scroll', card);
+			card.style.inlineSize = '340px';
+			box.scrollIntoView({block: 'center'});
+			await until(() => box.dataset.more === 'end');
+			scrollBy(0, box.getBoundingClientRect().top - (innerHeight - 150));
+			const own = box.nextElementSibling;
+			await until(() => own.hasAttribute('data-stuck'), 1000);
+			const rail = own.firstElementChild.firstElementChild;
+			const thumb = rail.firstElementChild;
+			const edge = rail.getBoundingClientRect();
+			const page = Math.min(box.scrollWidth - box.clientWidth, box.clientWidth * 0.9);
+			yield {click: [Math.round(edge.right - 4), Math.round(edge.top + edge.height / 2)]};
+			await until(() => box.scrollLeft >= page - 2, 2000);
+			const paged = Math.round(box.scrollLeft);
+			box.scrollLeft = 0;
+			await settled();
+			const [x, y] = center(thumb);
+			const want = 60 * (box.scrollWidth - box.clientWidth) / (rail.clientWidth - thumb.offsetWidth);
+			yield {drag: [x, y, x + 60, y]};
+			await settled();
+			const dragged = Math.round(box.scrollLeft);
+			box.scrollLeft = 0;
+			card.style.removeProperty('inline-size');
+			if (!near(paged, page, 2) || !near(dragged, want, want * 0.25 + 4)) {
+				out.push('a bar of its own moves its table: ' + say({paged, page: Math.round(page), dragged, want: Math.round(want)}));
+			}
+		}},
 		scroller: {target: '#table-wide .table-scroll', steps: [async (out) => {
 			const box = $('#table-wide .table-scroll');
 			const first = $('tbody tr:not(.table-group) > th', box);

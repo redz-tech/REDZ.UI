@@ -4,6 +4,33 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Added
+- `table-stack` on a table read row by row: while its region is under 576 px, each row is a card. The row's head is
+  its title, and every other cell shows its column head's words above it, which the library copies from `thead` into
+  the cell's `data-label`; a label the page writes stays, and a head with no words a person sees gives none. From
+  576 px it is the table, and a screen reader reads a table at every width.
+- `table-detail` on a row under another: one cell across the table, each element in it held to the start of the part
+  of the table that shows and as wide as that part, so a table wider than its `table-scroll` hides no detail past its
+  edge; where the table fits it is a plain row. It reads as one record with the row above it - no line between them,
+  one hover, that row's tone, check and stripe - stays out of `table-scroll-first` and `table-scroll-last` as a band
+  does, and goes in its row's card under `table-stack`.
+- A `table-scroll` shows where its columns go on: that edge fades, `data-more="start end"` naming the sides, and a
+  held column casts a shade on what went under it. While the table's own scrollbar is below the screen and the table
+  is in sight, a bar of the library's own, `table-scroll-bar`, holds to the bottom of the screen under the table:
+  drag its thumb, or press its rail to move by most of the width that shows. The bar is hidden from screen readers
+  and out of the tab order, and a focused table shows no fade over its focus ring.
+
+### Changed
+- The Bootstrap map no longer turns `table-responsive` into `table-scroll` by itself: it is a `review`. A table read by
+  rows drops the wrapper and takes `table-stack`; one read across its columns keeps `table-scroll`, only where the
+  product's owner agreed that the screen scrolls sideways.
+
+### Fixed
+- The head of a held column, under `table-scroll-first` or `table-scroll-last`, stays over the heads that scroll
+  under it. The column's own rule won over the head's, so the next heads covered it as the table scrolled.
+
 ## 0.26.0 - 2026-11-13
 
 ### Added

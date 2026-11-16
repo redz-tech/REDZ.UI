@@ -192,8 +192,8 @@ table-bordered	table-bordered	same	table	in a card the card's border is the tabl
 caption-top		missing	table
 table-sm		review	table	data-density="compact" on the table, its card or <html>
 table-active	table-active	same	table	the row that runs now; aria-current marks the open record, aria-selected="true" a chosen one
-table-responsive	table-scroll	rename	table	the wrapper scrolls sideways, table-scroll-first holds the first column; or columns hide below md:
-table-responsive-.+	table-scroll	review	table	it scrolls sideways at every width; hide columns below md: instead where they only help on a wide screen
+table-responsive	table-scroll	review	table	decide by how the table is read: by rows (fields to fill, a list to act on) drop the wrapper and put table-stack on the table, cards on a phone; across its columns keep table-scroll, only where the product's owner agreed
+table-responsive-.+	table-scroll	review	table	as table-responsive: table-stack for a table read by rows; table-scroll scrolls at every width, only where the product's owner agreed
 toast-header		review	toast	REDZ.ui.toast builds the toast from its title, text and tone
 tooltip-inner|tooltip-arrow|bs-tooltip-.+		remove	tooltip	the tooltip is one element
 (popover|popover-header|popover-body)	$1	same	popover	the panel has popover, right after its button; with a title and a link in it, role="dialog"
