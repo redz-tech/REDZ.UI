@@ -4610,6 +4610,26 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a row of one cell across a table-stack takes no label and its card\'s whole width: ' + say(lone));
 			}
 		}]},
+		// A group's end words reach the end of its band and no further, in a wide card, a narrow one and stacked.
+		groupEnd: {target: '#table-stacked', steps: [async (out) => {
+			const wrong = [];
+			for (const dir of ['ltr', 'rtl']) {
+				document.documentElement.dir = dir;
+				await settled();
+				for (const end of $$('#table-stacked .table-group-end')) {
+					const band = end.closest('th').getBoundingClientRect();
+					const box = end.getBoundingClientRect();
+					const past = Math.round(dir === 'ltr' ? box.right - band.right : band.left - box.left);
+					if (past !== 0) {
+						wrong.push(say({dir, card: Math.round(end.closest('.card').clientWidth), past}));
+					}
+				}
+			}
+			document.documentElement.dir = 'ltr';
+			if (wrong.length > 0) {
+				out.push('a table-group-end stands past or short of its band\'s end: ' + wrong.join(', '));
+			}
+		}]},
 		scrollCue: {target: '#table-wide', steps: [async (out) => {
 			const card = $('#table-wide .card');
 			const box = $('.table-scroll', card);

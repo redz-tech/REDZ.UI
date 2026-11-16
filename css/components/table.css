@@ -543,6 +543,11 @@
 			padding-inline-end: var(--redz-space-12);
 		}
 
+		.table-group-end {
+			margin-inline-end: calc(-1 * var(--redz-space-12));
+			padding-inline-end: var(--redz-space-12);
+		}
+
 		.table-group-line,
 		.table > * > .table-detail > td > :not([popover], dialog) {
 			padding-inline: var(--redz-space-12);

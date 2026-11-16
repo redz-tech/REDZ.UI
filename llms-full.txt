@@ -6425,6 +6425,10 @@ A screen does not scroll sideways where it can help it. A table read row by row 
 				<tr class="table-detail"><td colspan="4"><p class="fs-12 text-muted m-0">Ground floor room, a wheelchair at the pier.</p></td></tr>
 				<tr><th scope="row">Second Guest</th><td class="text-end"><input id="table-stacked-seats-second-guest" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" value="1" aria-label="Seats: Second Guest"></td><td><select id="table-stacked-hotel-second-guest" class="form-select form-select-sm min-w-120" aria-label="Hotel: Second Guest"><option>Palm Court</option><option>Harbor Inn</option></select></td><td><label class="form-check"><input id="table-stacked-field-6" class="switch" type="checkbox" role="switch"><span class="visually-hidden">Paid: Second Guest</span></label></td></tr>
 			</tbody>
+			<tbody class="table-group-divider">
+				<tr class="table-group"><th scope="rowgroup" colspan="4">Afternoon boat<span class="table-group-end">1 pickup</span></th></tr>
+				<tr><th scope="row">Third Guest</th><td class="text-end tabular-nums">3</td><td>Harbor View</td><td>Not yet</td></tr>
+			</tbody>
 		</table>
 	</section>
 	<section class="card max-w-360" aria-labelledby="table-stacked-narrow-title">
@@ -6435,6 +6439,10 @@ A screen does not scroll sideways where it can help it. A table read row by row 
 				<tr><th scope="row">Example Guest</th><td class="text-end"><input id="table-stacked-narrow-seats-example-guest" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" value="2" aria-label="Seats: Example Guest"></td><td><select id="table-stacked-narrow-hotel-example-guest" class="form-select form-select-sm min-w-120" aria-label="Hotel: Example Guest"><option>Harbor Inn</option><option>Palm Court</option></select></td><td><label class="form-check"><input id="table-stacked-narrow-field-3" class="switch" type="checkbox" role="switch" checked><span class="visually-hidden">Paid: Example Guest</span></label></td></tr>
 				<tr class="table-detail"><td colspan="4"><p class="fs-12 text-muted m-0">Ground floor room, a wheelchair at the pier.</p></td></tr>
 				<tr><th scope="row">Second Guest</th><td class="text-end"><input id="table-stacked-narrow-seats-second-guest" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" value="1" aria-label="Seats: Second Guest"></td><td><select id="table-stacked-narrow-hotel-second-guest" class="form-select form-select-sm min-w-120" aria-label="Hotel: Second Guest"><option>Palm Court</option><option>Harbor Inn</option></select></td><td><label class="form-check"><input id="table-stacked-narrow-field-6" class="switch" type="checkbox" role="switch"><span class="visually-hidden">Paid: Second Guest</span></label></td></tr>
+			</tbody>
+			<tbody class="table-group-divider">
+				<tr class="table-group"><th scope="rowgroup" colspan="4">Afternoon boat<span class="table-group-end">1 pickup</span></th></tr>
+				<tr><th scope="row">Third Guest</th><td class="text-end tabular-nums">3</td><td>Harbor View</td><td>Not yet</td></tr>
 			</tbody>
 		</table>
 	</section>

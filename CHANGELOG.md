@@ -38,6 +38,9 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   product's owner agreed that the screen scrolls sideways.
 
 ### Fixed
+- A group's end words, `table-group-end`, reach the end of their band in a region under 30rem, where a table's edge
+  cells take 12 px. They stood 4 px past it, into the card's border under `table-stack` and into a sideways scroll in
+  a `table-scroll` (the tourism pack's walk at 390 px).
 - The first page of the docs and the README give the two main files' budgets as 40 KB and 56 KB, not 38 KB and 54 KB;
   the build now holds the numbers they state to its own.
 - The head of a held column, under `table-scroll-first` or `table-scroll-last`, stays over the heads that scroll
