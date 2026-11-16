@@ -5218,6 +5218,10 @@ window.REDZ_BEHAVE = (() => {
 			yield {key: 'Enter'};
 			await until(() => group.open, 600);
 			const keyed = group.open;
+			// Its toggle comes a task later: closed before it, the two toggles merge into one that changed nothing.
+			if (keyed) {
+				await until(() => told.length > 1, 600);
+			}
 			group.open = false;
 			await settled();
 			group.open = true;
