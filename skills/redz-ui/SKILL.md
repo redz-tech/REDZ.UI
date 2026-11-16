@@ -66,6 +66,7 @@ form the page language's plural rules name (`found.one`, `found.few`, …), else
 Every call of `REDZ.ui` and every `redz:*` event with its `detail` is declared in `js/redz-ui.d.ts` of the release
 (`js/redz-ui-editor.d.ts`, `js/redz-ui-qr.d.ts` for the packages): read it before calling one, and keep a project's own
 members in its own `.d.ts` by declaring `interface Redz` or `interface RedzUi` again - never a cast or a JSDoc copy.
+A listener names its event for PhpStorm: `/** @param {RedzEventMap['redz:save']} event */`.
 
 ## Before you write a class
 

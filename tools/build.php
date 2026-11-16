@@ -858,7 +858,7 @@ function BUILD__TypesCheck(): array
 	foreach (array_merge(array_diff(BUILD_TRACK['api'], $calls), array_diff($calls, BUILD_TRACK['api'])) as $name) {
 		$wrong[] = 'interface RedzTrack of ' . array_key_first(BUILD_TYPES) . ' and BUILD_TRACK\'s calls differ by ' . $name;
 	}
-	foreach (['declare var REDZ: Redz;', 'interface DocumentEventMap extends RedzEventMap {}', 'interface WindowEventMap extends RedzEventMap {}', 'interface HTMLElementEventMap extends RedzEventMap {}'] as $line) {
+	foreach (['declare var REDZ: Redz;', 'interface Window {', "\tREDZ: Redz;", 'interface DocumentEventMap extends RedzEventMap {}', 'interface WindowEventMap extends RedzEventMap {}', 'interface HTMLElementEventMap extends RedzEventMap {}'] as $line) {
 		if (preg_match('~^' . preg_quote($line, '~') . '$~m', $main) !== 1) {
 			$wrong[] = array_key_first(BUILD_TYPES) . ' does not say ' . $line;
 		}

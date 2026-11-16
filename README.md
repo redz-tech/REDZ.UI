@@ -193,7 +193,9 @@ The library has no words of its own: every word it shows comes from the caller o
 answer - and every `redz:*` event with its `detail`, as `document`, `window` and an element hear it; the editor's and
 the QR codes' packages have theirs, `js/redz-ui-editor.d.ts` and `js/redz-ui-qr.d.ts`. A browser never loads them and a
 project needs no TypeScript: PhpStorm and VS Code read a declaration file in the project as it is and type what a plain
-script writes - `await REDZ.ui.confirm(...)` is a boolean, `event.detail.respondWith` the widget's own. Each is a global
+script writes - `await REDZ.ui.confirm(...)` is a boolean, `REDZ` and `window.REDZ` alike. VS Code types a listener's
+event from the event's name; PhpStorm reads it from the listener's annotation,
+`/** @param {RedzEventMap['redz:save']} event */`, so the names `RedzEventMap` and `RedzSaveDetail` stay. Each is a global
 script with no import or export: a project gives `REDZ` and `REDZ.ui` its own members in a file of its own by declaring
 `interface Redz` or `interface RedzUi` again. The build holds them to the scripts: every member `js/index.js` and a
 package put in `REDZ.ui`, and every event a script fires, is declared.

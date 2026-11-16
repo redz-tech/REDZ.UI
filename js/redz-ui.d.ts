@@ -253,6 +253,11 @@ interface Redz {
 
 declare var REDZ: Redz;
 
+/** window.REDZ, as a script reads it: PhpStorm types it from here, not from declare var. */
+interface Window {
+	REDZ: Redz;
+}
+
 /** A moment only the page can carry out, as a cancelable event's detail: the page that takes it cancels the event, and
  *  with respondWith lets the widget wait and finish when the promise settles; left alone, the widget acts on its own. */
 type RedzAsk<Detail, Answer = unknown> = Detail & {respondWith(answer: Answer | PromiseLike<Answer>): void};
@@ -270,7 +275,8 @@ interface RedzSaveDetail {
 	value?: string;
 }
 
-/** The redz:* events, each on its widget, bubbling to the document and the window. */
+/** The redz:* events, each on its widget, bubbling to the document and the window. PhpStorm does not take a listener's
+ *  event from these maps: it reads it from the listener's annotation, @param {RedzEventMap['redz:save']} event. */
 interface RedzEventMap {
 	/** A form to save; an inline edit shows the saved text a promise answers, a tracked form's answer becomes redz:saved's value. */
 	'redz:save': CustomEvent<RedzAsk<RedzSaveDetail>>;

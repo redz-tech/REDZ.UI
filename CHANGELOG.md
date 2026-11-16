@@ -22,9 +22,11 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   is in sight, a bar of the library's own, `table-scroll-bar`, holds to the bottom of the screen under the table:
   drag its thumb, or press its rail to move by most of the width that shows. The bar is hidden from screen readers
   and out of the tab order, and a focused table shows no fade over its focus ring.
-- Types for an editor: `js/redz-ui.d.ts` declares `REDZ.ui` - each call with its options and its answer, such as
-  `confirm` a promise of a boolean, or of the chosen value with a `choice` - and every `redz:*` event with its `detail`
-  and, where the page answers, `respondWith`, as `document`, `window` and an element hear them. The packages bring
+- Types for an editor: `js/redz-ui.d.ts` declares `REDZ.ui`, as `REDZ` and `window.REDZ` - each call with its options
+  and its answer, such as `confirm` a promise of a boolean, or of the chosen value with a `choice` - and every
+  `redz:*` event with its `detail` and, where the page answers, `respondWith`, as `document`, `window` and an element
+  hear them; PhpStorm reads a listener's event from its annotation, `/** @param {RedzEventMap['redz:save']} event */`.
+  The packages bring
   `js/redz-ui-editor.d.ts` and `js/redz-ui-qr.d.ts`. PhpStorm and VS Code read them with no TypeScript in the project,
   and a browser never loads them. A project adds its own members by declaring `interface Redz` or `interface RedzUi`
   again in a file of its own. The build fails when a member set in `REDZ.ui` or an event a script fires is not
