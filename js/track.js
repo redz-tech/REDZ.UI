@@ -1039,7 +1039,28 @@ addEventListener('pageshow', (event) => {
 /** Whether the browser's own question guards the page now: a navigation then may still be refused. */
 export const guarding = () => guarded;
 
-/** The tracked forms for code: refresh, baseline, reset, dirty, changed and save. */
+/**
+ * @typedef {object} RedzChange One change of a tracked form against its saved state.
+ * @property {string} name The field's name.
+ * @property {string} label The words a person reads for it.
+ * @property {*} was Its saved value; null for a secret.
+ * @property {*} now Its value now; null for a secret.
+ * @property {boolean} [secret] A secret's field: its values are not told.
+ * @property {boolean} [cleared] The secret was cleared.
+ */
+
+/**
+ * @typedef {object} RedzTrack The tracked forms for code.
+ * @property {() => void} refresh Draws the save bar and the changed marks again.
+ * @property {(form: HTMLFormElement) => void} baseline Takes the form as it is now for its saved state.
+ * @property {(form: HTMLFormElement) => void} reset Puts the form back to its saved state.
+ * @property {(form?: HTMLFormElement) => (boolean | HTMLFormElement[])} dirty Whether the form changed; with no form, the
+ *  forms that did.
+ * @property {(form: HTMLFormElement) => RedzChange[]} changed The form's changes against its saved state.
+ * @property {(form?: HTMLFormElement) => Promise<boolean>} save Saves the form, or every changed one; whether it saved.
+ */
+
+/** @type {RedzTrack} The tracked forms for code: refresh, baseline, reset, dirty, changed and save. */
 export const track = {
 	refresh: () => paint(),
 	baseline: (form) => {
