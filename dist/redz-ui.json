@@ -5111,8 +5111,11 @@
 		"css/redz-ui.min.css": "sha256-teKyIqqGq1CKbC9uz5FRx8V4NwUam706+ZzJaDjCePs=",
 		"js/floor.min.js": "sha256-SlXScca0xV+TpFCu1YIXMzlHJEnXeX8Az9gukSn5Ph0=",
 		"js/redz-ui-charts.min.js": "sha256-1dSq946dnPNnXU8k1gMoOGEPo9b4QmG9hyVHxZuFSME=",
+		"js/redz-ui-editor.d.ts": "sha256-j3G8bXJoZ4H4XioOEFbQkhz2bzbk9Gy01X+SETX+JKs=",
 		"js/redz-ui-editor.min.js": "sha256-nEX13AFMNjeAJfRETL8ngkLJfG2GB2ljFE2CAWRatgI=",
+		"js/redz-ui-qr.d.ts": "sha256-niMx8le7TCyDzabKAskgpzcDm722QRJakX2G08xqxMY=",
 		"js/redz-ui-qr.min.js": "sha256-8AgWz06SWLYwuOCi7FQA6bXBgjJfxeRYx5tFCWlrEts=",
+		"js/redz-ui.d.ts": "sha256-m+ROGI51WNysAi9bHzmxzXfYRhDS5hI7/2Q2k+A0m5s=",
 		"js/redz-ui.min.js": "sha256-uPQdtyUlVRQM9E4Z2y0SoDucXqxajU44DksxTcLobJs="
 	}
 }

@@ -22,6 +22,13 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   is in sight, a bar of the library's own, `table-scroll-bar`, holds to the bottom of the screen under the table:
   drag its thumb, or press its rail to move by most of the width that shows. The bar is hidden from screen readers
   and out of the tab order, and a focused table shows no fade over its focus ring.
+- Types for an editor: `js/redz-ui.d.ts` declares `REDZ.ui` - each call with its options and its answer, such as
+  `confirm` a promise of a boolean, or of the chosen value with a `choice` - and every `redz:*` event with its `detail`
+  and, where the page answers, `respondWith`, as `document`, `window` and an element hear them. The packages bring
+  `js/redz-ui-editor.d.ts` and `js/redz-ui-qr.d.ts`. PhpStorm and VS Code read them with no TypeScript in the project,
+  and a browser never loads them. A project adds its own members by declaring `interface Redz` or `interface RedzUi`
+  again in a file of its own. The build fails when a member set in `REDZ.ui` or an event a script fires is not
+  declared, or one declared is gone; esbuild parses each file.
 
 ### Changed
 - The Bootstrap map no longer turns `table-responsive` into `table-scroll` by itself: it is a `review`. A table read by
@@ -29,6 +36,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   product's owner agreed that the screen scrolls sideways.
 
 ### Fixed
+- The first page of the docs and the README give the two main files' budgets as 40 KB and 56 KB, not 38 KB and 54 KB;
+  the build now holds the numbers they state to its own.
 - The head of a held column, under `table-scroll-first` or `table-scroll-last`, stays over the heads that scroll
   under it. The column's own rule won over the head's, so the next heads covered it as the table scrolled.
 

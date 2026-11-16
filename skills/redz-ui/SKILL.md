@@ -63,6 +63,10 @@ form the page language's plural rules name (`found.one`, `found.few`, …), else
 - `await REDZ.ui.confirm({title, text, ok, cancel, tone})` - a question; `true` or `false`.
 - `await REDZ.ui.busy(element, promise)` - a button or a region busy until the promise settles.
 
+Every call of `REDZ.ui` and every `redz:*` event with its `detail` is declared in `js/redz-ui.d.ts` of the release
+(`js/redz-ui-editor.d.ts`, `js/redz-ui-qr.d.ts` for the packages): read it before calling one, and keep a project's own
+members in its own `.d.ts` by declaring `interface Redz` or `interface RedzUi` again - never a cast or a JSDoc copy.
+
 ## Before you write a class
 
 Check it exists: `grep -x 'CLASS' assets/classes.txt`. A class that is not there does not exist in REDZ.UI - Bootstrap

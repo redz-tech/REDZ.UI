@@ -4,7 +4,7 @@
 // css-tokenizer-tests corpus it takes - as written and as squeezed, with no minifying and no targets: the two must read
 // the same, but for what CSS does not tell apart and Lightning CSS keeps as written in a value it does not parse -
 // comments, the length of a run of white space, the space after a comma. esbuild
-// parses every script the minifier writes for the browser floor. A watch compares the size of the two main files with
+// parses every script the minifier writes for the browser floor, and each declaration file of dist/js/ as TypeScript. A watch compares the size of the two main files with
 // esbuild's --minify, gzip -9, and warns when the gap leaves its band. Each judge is a native binary from npm, pinned by
 // version and sha512 and kept in .dev/judges/ with its sha256; one missing, changed or for no known platform fails.
 // Usage: php tools/judge.php
@@ -178,9 +178,10 @@ function JUDGE__Css(): array
 }
 
 /**
- * The scripts the minifier writes, each parsed by esbuild for the browser floor: the release's, and tools/min/*.js
- * squeezed and named.
- * @return array{list<string>, int}
+ * The scripts the minifier writes, each parsed by esbuild for the browser floor - the release's, and tools/min/*.js
+ * squeezed and named -, and each declaration file of the release parsed as TypeScript; answers the findings, the count
+ * of scripts and the count of declaration files.
+ * @return array{list<string>, int, int}
  */
 function JUDGE__Js(): array
 {
@@ -198,7 +199,14 @@ function JUDGE__Js(): array
 			$findings[] = $name . '  esbuild does not parse it for the floor: ' . trim(substr($err, 0, 400));
 		}
 	}
-	return [$findings, count($scripts)];
+	$types = glob(JUDGE_ROOT . '/dist/js/*.d.ts') ?: [];
+	foreach ($types as $file) {
+		[$code, , $err] = JUDGE__Run([JUDGE__Binary('esbuild'), '--loader=ts', '--log-level=error'], (string)file_get_contents($file));
+		if ($code !== 0) {
+			$findings[] = substr($file, strlen(JUDGE_ROOT) + 1) . '  esbuild does not parse it as TypeScript: ' . trim(substr($err, 0, 400));
+		}
+	}
+	return [$findings, count($scripts), count($types)];
 }
 
 /**
@@ -227,7 +235,7 @@ function JUDGE__Main(): int
 {
 	try {
 		[$css, $counts] = JUDGE__Css();
-		[$js, $scripts] = JUDGE__Js();
+		[$js, $scripts, $types] = JUDGE__Js();
 		$sizes = JUDGE__Sizes();
 	} catch (RuntimeException $e) {
 		fwrite(STDERR, 'judge: ' . $e->getMessage() . "\n");
@@ -237,7 +245,7 @@ function JUDGE__Main(): int
 	foreach ([...$findings, ...$sizes] as $line) {
 		echo $line, "\n";
 	}
-	printf("judges · Lightning CSS %s: %d library sheets, %d corpus samples (%d refused by the minifier, %d unread by Lightning CSS) · esbuild %s: %d scripts · %s\n", JUDGE_BINARIES['lightningcss']['version'], $counts['library'], $counts['corpus'], $counts['corpus refused'], $counts['corpus unread'], JUDGE_BINARIES['esbuild']['version'], $scripts, $findings === [] ? 'CLEAN' : count($findings) . ' findings');
+	printf("judges · Lightning CSS %s: %d library sheets, %d corpus samples (%d refused by the minifier, %d unread by Lightning CSS) · esbuild %s: %d scripts, %d declaration files · %s\n", JUDGE_BINARIES['lightningcss']['version'], $counts['library'], $counts['corpus'], $counts['corpus refused'], $counts['corpus unread'], JUDGE_BINARIES['esbuild']['version'], $scripts, $types, $findings === [] ? 'CLEAN' : count($findings) . ' findings');
 	return $findings === [] ? 0 : 1;
 }
 

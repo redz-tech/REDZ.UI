@@ -27,30 +27,7 @@ const ratio = (one, other) => {
 	return Math.round((light + 0.05) / (dark + 0.05) * 100) / 100;
 };
 
-/**
- * @typedef {object} RedzBrandTheme What a white label paints in one theme: each colour as #rrggbb in sRGB, each ratio
- *  to two decimals.
- * @property {string} tone The tone, --redz-primary.
- * @property {string} text The words on the tone, --redz-primary-contrast.
- * @property {string} link A link on the ground, --redz-link.
- * @property {string} ring The focus ring, --redz-focus.
- * @property {string} fill A checked box, a bar, a mark, --redz-primary-fill.
- * @property {string} ground The ground, --redz-bg.
- * @property {number} textOnTone The words on the tone.
- * @property {number} linkOnGround A link on the ground.
- * @property {number} ringOnGround The focus ring on the ground.
- * @property {number} toneOnGround The tone on the ground.
- * @property {number} fillOnGround The fill on the ground.
- * @property {number} textOnFill The words on the fill.
- */
-
-/** @typedef {{light: RedzBrandTheme, dark: RedzBrandTheme}} RedzBrand What a white label of a colour paints, theme by theme. */
-
-/**
- * What a white label of the colour paints, theme by theme.
- * @param {string} colour Any CSS colour.
- * @returns {RedzBrand | null} null for a value that is no colour.
- */
+/** What a white label of the colour paints, theme by theme. */
 export const brand = (colour) => {
 	if (typeof colour !== 'string' || colour.trim() === '' || !CSS.supports('color', colour)) {
 		return null;

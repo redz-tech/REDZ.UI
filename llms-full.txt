@@ -6,7 +6,7 @@ REDZ.UI is a stylesheet, its icons and one small script on the browser platform.
 
 ## Get it
 
-Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. `redz-ui-0.26.0.zip` is the folder a project serves, as it is: `css/` and `js/` with minified files only, the license files and the passport, `redz-ui.json` - the version, the floor, the files to link, every class, token, command and text key, and the sha256 of every file. The icons are a release of their own, `redz-ui-icons-1.13.2.zip`, which changes only with Bootstrap Icons: the passport's `icons` names the version a release needs, and a project keeps it in a folder of its own, so a new release of the library leaves the icons and their cache alone. `checks.zip` beside the library is the sheet of the probes the release passed in every engine.
+Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. `redz-ui-0.26.0.zip` is the folder a project serves, as it is: `css/` and `js/` with minified files and the declaration files an editor reads, the license files and the passport, `redz-ui.json` - the version, the floor, the files to link, every class, token, command and text key, and the sha256 of every file. The icons are a release of their own, `redz-ui-icons-1.13.2.zip`, which changes only with Bootstrap Icons: the passport's `icons` names the version a release needs, and a project keeps it in a folder of its own, so a new release of the library leaves the icons and their cache alone. `checks.zip` beside the library is the sheet of the probes the release passed in every engine.
 
 ```js
 gh release download v0.26.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
@@ -39,9 +39,10 @@ The stylesheet, the icons and the scripts, with the page's own words for the few
 </head>
 ```
 
-- `css/redz-ui.min.css` is the layers, the tokens, the components and the utilities in one file, within its budget of 38 KB gzipped: the stylesheets `css/index.css` pulls in, squeezed.
+- `css/redz-ui.min.css` is the layers, the tokens, the components and the utilities in one file, within its budget of 40 KB gzipped: the stylesheets `css/index.css` pulls in, squeezed.
 - `css/icons.min.css` is apart: one mask per Bootstrap Icons file, used only by name. It reaches each file by a URL relative to itself, `../icons/NAME.svg`, so the pack's folders keep their shape where a project serves them. A project that marks its static files by their content (`?h=…`) cannot mark the icons this way, and needs not: the pack's folder is named by its version, which changes only with Bootstrap Icons.
-- `js/redz-ui.min.js` is one ES module of the behaviors, within its budget of 54 KB gzipped: the modules of `js/index.js` joined, squeezed and given short local names. It sets `REDZ.ui` for calls from code.
+- `js/redz-ui.min.js` is one ES module of the behaviors, within its budget of 56 KB gzipped: the modules of `js/index.js` joined, squeezed and given short local names. It sets `REDZ.ui` for calls from code.
+- `js/redz-ui.d.ts` beside it types `REDZ.ui` and every `redz:*` event for an editor - PhpStorm, VS Code - with no TypeScript in the project and nothing for the browser to load; the packages bring `js/redz-ui-editor.d.ts` and `js/redz-ui-qr.d.ts`. A project adds its own members by declaring `interface Redz` or `interface RedzUi` again in a file of its own.
 - The island `#redz-ui-text` gives the library its words, in the page's language: every key of the passport's `texts`, and for each key of its `plurals` the other forms its language's plural rules name (`found.one`, `found.few`). Its `args` names the `{names}` the library fills in each of them, `[]` for none: a text of the page that uses another name shows it as it is. The example shows four of them.
 - The two files are made from `css/` and `js/`, which stay to read. A project that bundles its own may join the stylesheets in the passport's order instead.
 

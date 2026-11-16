@@ -3,16 +3,16 @@
 // (Bootstrap 5's utility names, the number is the value, width prefixes measured by the region, print); then dist/, the
 // folder a project receives as it is, by tools/min.php - css/redz-ui.min.css, the stylesheets css/index.css pulls in,
 // js/redz-ui.min.js, the modules of js/index.js as one, js/floor.min.js from tools/floor/tests.json, each package's
-// css/redz-ui-NAME.min.css and js/redz-ui-NAME.min.js from charts/, calendar/, media/, qr/ and editor/, LICENSE and NOTICE -
-// with its passport dist/redz-ui.json: the version of the changelog's newest section, the floor, the files to link, the
+// css/redz-ui-NAME.min.css and js/redz-ui-NAME.min.js from charts/, calendar/, media/, qr/ and editor/, the declaration
+// files js/redz-ui.d.ts, js/redz-ui-editor.d.ts and js/redz-ui-qr.d.ts as written, LICENSE and NOTICE - with its
+// passport dist/redz-ui.json: the version of the changelog's newest section, the floor, the files to link, the
 // vocabulary and the sha256 of every file beside it; then the icon pack, css/icons.min.css (one mask per file of icons/)
 // and its passport redz-ui-icons.json, and that the pack a tag already published has not changed under its version;
 // then tools/dist/, the release's tools - tools/floor/floor.php, floor.json and tools/min.php as they are, LICENSE,
 // NOTICE and their passport redz-ui-tools.json -, that the tools call only what every PHP has built in and that the
 // minifier proves itself on its fuses; then that every skill carries the version, and the budgets of the two files and
-// of the packages', gzip -9. Usage: php
-// tools/build.php [--check] - --check writes nothing and exits 1 when a file is out of date, a skill's version is not
-// the passport's, a published pack changed or a budget is exceeded.
+// of the packages', gzip -9. Usage: php tools/build.php [--check] - --check writes nothing and exits 1 when a file is
+// out of date, a skill's version is not the passport's, a published pack changed or a budget is exceeded.
 require __DIR__ . '/lib.php';
 require __DIR__ . '/min.php';
 
@@ -62,7 +62,12 @@ const BUILD_RIGHTS = ['html', 'ai', 'design', 'structure', 'facts', 'lock', 'rev
 // The stylesheets the passport's tokens are read from.
 const BUILD_STYLES = ['css/*.css', 'css/components/*.css', 'charts/*.css', 'calendar/*.css', 'media/*.css', 'editor/*.css'];
 // The files of dist/ the passport hashes, relative to dist/.
-const BUILD_ARCHIVED = ['css/*.min.css', 'js/*.min.js', 'LICENSE', 'LICENSE-editor', 'NOTICE'];
+const BUILD_ARCHIVED = ['css/*.min.css', 'js/*.min.js', 'js/*.d.ts', 'LICENSE', 'LICENSE-editor', 'NOTICE'];
+// The declaration files an editor types REDZ.ui and the redz:* events by, each in dist/ by its source, and the script
+// whose REDZ.ui members it declares.
+const BUILD_TYPES = ['js/redz-ui.d.ts' => ['source' => 'js/redz-ui.d.ts', 'sets' => 'js/index.js'], 'js/redz-ui-editor.d.ts' => ['source' => 'editor/redz-ui-editor.d.ts', 'sets' => 'editor/editor.js'], 'js/redz-ui-qr.d.ts' => ['source' => 'qr/redz-ui-qr.d.ts', 'sets' => 'qr/qr.js']];
+// The scripts whose redz:* events the declaration files name.
+const BUILD_EVENT_SCRIPTS = ['js/*.js', 'editor/*.js', 'qr/*.js', 'charts/*.js'];
 // The icon pack: Bootstrap Icons as published, by the version it follows; a change of icons/ is a new version.
 const BUILD_ICONS = ['name' => 'redz-ui-icons', 'version' => '1.13.2', 'css' => 'css/icons.min.css'];
 const BUILD_ICONS_PASSPORT = 'redz-ui-icons.json';
@@ -763,6 +768,161 @@ function BUILD__ChipsCheck(): array
 }
 
 /**
+ * The names REDZ.ui gets in the script: the keys of its literal {ui: {...globalThis.REDZ?.ui, ...}}, and those of each
+ * object in it by its key, as [names, [key => names]].
+ * @return array{list<string>, array<string, list<string>>}
+ */
+function BUILD__UiNames(string $file): array
+{
+	$js = (string)file_get_contents(BUILD_ROOT . '/' . $file);
+	$open = '{ui: {...globalThis.REDZ?.ui, ';
+	$at = strpos($js, $open);
+	if ($at === false) {
+		throw new RuntimeException($file . ' sets no REDZ.ui by ' . $open . '...}');
+	}
+	$at += strlen($open);
+	$names = BUILD__ObjectKeys($js, $at);
+	$end = strpos($js, '}}', $at);
+	preg_match_all('~\b([A-Za-z_$][\w$]*): \{~', substr($js, $at, $end === false ? null : $end - $at), $objects, PREG_OFFSET_CAPTURE);
+	$nested = [];
+	foreach ($objects[1] as $i => [$key]) {
+		$nested[$key] = BUILD__ObjectKeys($js, $at + $objects[0][$i][1] + strlen($objects[0][$i][0]));
+	}
+	ksort($nested, SORT_STRING);
+	return [$names, $nested];
+}
+
+/**
+ * The members a declaration file gives an interface: its own at the first level, and those of each object type in it
+ * by its key, as [names, [key => names]]; null when the file does not declare it.
+ * @return array{list<string>, array<string, list<string>>}|null
+ */
+function BUILD__TypeMembers(string $dts, string $interface): ?array
+{
+	if (preg_match('~^interface ' . $interface . ' \{\n(.*?)^\}~ms', $dts, $block) !== 1) {
+		return null;
+	}
+	$member = '([A-Za-z_$][\w$]*)\??(?:<[^>\n]*>)?[(:]';
+	preg_match_all('~^\t' . $member . '~m', $block[1], $names);
+	preg_match_all('~^\t([A-Za-z_$][\w$]*): \{\n(.*?)^\t\};~ms', $block[1], $objects, PREG_SET_ORDER);
+	$nested = [];
+	foreach ($objects as [, $key, $body]) {
+		preg_match_all('~^\t\t' . $member . '~m', $body, $inner);
+		$nested[$key] = array_values(array_unique($inner[1]));
+		sort($nested[$key], SORT_STRING);
+	}
+	ksort($nested, SORT_STRING);
+	$names = array_values(array_unique($names[1]));
+	sort($names, SORT_STRING);
+	return [$names, $nested];
+}
+
+/**
+ * The declaration files held to the scripts: each one's RedzUi members are the names its script puts in REDZ.ui, an
+ * object's names too, and RedzTrack's are BUILD_TRACK's calls; RedzEventMap names every redz:* event a script fires -
+ * with respondWith for one fired by ask() (js/answer.js), optional for one fired both ways, none for one never asked -,
+ * and the document, the window and each HTML element hear them. Answers what is wrong.
+ * @return list<string>
+ */
+function BUILD__TypesCheck(): array
+{
+	$strip = fn(string $file): string => (string)preg_replace(['~/\*.*?\*/~s', '~^\s*//.*$~m'], '', (string)file_get_contents(BUILD_ROOT . '/' . $file));
+	$wrong = [];
+	$declared = [];
+	foreach (BUILD_TYPES as $type) {
+		$dts = $strip($type['source']);
+		[$names, $nested] = BUILD__UiNames($type['sets']);
+		[$members, $objects] = BUILD__TypeMembers($dts, 'RedzUi') ?? [[], []];
+		foreach (array_diff($names, $members) as $name) {
+			$wrong[] = $type['source'] . ' declares no REDZ.ui.' . $name . ', which ' . $type['sets'] . ' sets';
+		}
+		foreach (array_diff($members, $names) as $name) {
+			$wrong[] = $type['source'] . ' declares REDZ.ui.' . $name . ', which ' . $type['sets'] . ' does not set';
+		}
+		foreach (array_unique([...array_keys($nested), ...array_keys($objects)]) as $key) {
+			foreach (array_diff($nested[$key] ?? [], $objects[$key] ?? []) as $name) {
+				$wrong[] = $type['source'] . ' declares no REDZ.ui.' . $key . '.' . $name . ', which ' . $type['sets'] . ' sets';
+			}
+			foreach (array_diff($objects[$key] ?? [], $nested[$key] ?? []) as $name) {
+				$wrong[] = $type['source'] . ' declares REDZ.ui.' . $key . '.' . $name . ', which ' . $type['sets'] . ' does not set';
+			}
+		}
+		$map = preg_match('~^interface RedzEventMap \{\n(.*?)^\}~ms', $dts, $block) === 1 ? $block[1] : '';
+		preg_match_all('~^\t\'(redz:[a-z-]+)\': (.*)$~m', $map, $events, PREG_SET_ORDER);
+		foreach ($events as [, $event, $line]) {
+			$declared[$event] = $line;
+		}
+	}
+	$main = $strip(array_key_first(BUILD_TYPES));
+	[$calls] = BUILD__TypeMembers($main, 'RedzTrack') ?? [[]];
+	foreach (array_merge(array_diff(BUILD_TRACK['api'], $calls), array_diff($calls, BUILD_TRACK['api'])) as $name) {
+		$wrong[] = 'interface RedzTrack of ' . array_key_first(BUILD_TYPES) . ' and BUILD_TRACK\'s calls differ by ' . $name;
+	}
+	foreach (['declare var REDZ: Redz;', 'interface DocumentEventMap extends RedzEventMap {}', 'interface WindowEventMap extends RedzEventMap {}', 'interface HTMLElementEventMap extends RedzEventMap {}'] as $line) {
+		if (preg_match('~^' . preg_quote($line, '~') . '$~m', $main) !== 1) {
+			$wrong[] = array_key_first(BUILD_TYPES) . ' does not say ' . $line;
+		}
+	}
+	$fired = [];
+	foreach (array_merge(...array_map(fn(string $pattern): array => glob(BUILD_ROOT . '/' . $pattern) ?: [], BUILD_EVENT_SCRIPTS)) as $file) {
+		$js = (string)file_get_contents($file);
+		preg_match_all('~\bask\([\w.]+, \'(redz:[a-z-]+)\'~', $js, $asked);
+		preg_match_all('~\bnew CustomEvent\(\'(redz:[a-z-]+)\'~', $js, $plain);
+		foreach ($asked[1] as $event) {
+			$fired[$event]['asked'] = true;
+		}
+		foreach ($plain[1] as $event) {
+			$fired[$event]['plain'] = true;
+		}
+	}
+	ksort($fired, SORT_STRING);
+	foreach ($fired as $event => $how) {
+		$line = $declared[$event] ?? null;
+		if ($line === null) {
+			$wrong[] = 'no declaration file names ' . $event . ' in interface RedzEventMap, which a script fires';
+			continue;
+		}
+		$answers = str_contains($line, 'RedzAsk<') || str_contains($line, 'respondWith(');
+		$maybe = str_contains($line, 'respondWith?(');
+		$want = isset($how['asked']) ? (isset($how['plain']) ? 'maybe' : 'answers') : 'none';
+		if ($want !== ($answers ? 'answers' : ($maybe ? 'maybe' : 'none'))) {
+			$wrong[] = 'interface RedzEventMap gives ' . $event . ' ' . ($answers ? 'a respondWith' : ($maybe ? 'an optional respondWith' : 'no respondWith')) . ', where the scripts fire it ' . ['answers' => 'by ask() alone', 'maybe' => 'by ask() and as a plain event', 'none' => 'as a plain event alone'][$want];
+		}
+	}
+	foreach (array_diff(array_keys($declared), array_keys($fired)) as $event) {
+		$wrong[] = 'interface RedzEventMap names ' . $event . ', which no script fires';
+	}
+	return $wrong;
+}
+
+/**
+ * The two main files' budgets as the README and the docs' first page state them, held to BUILD_BUDGETS. Answers what
+ * is wrong.
+ * @return list<string>
+ */
+function BUILD__BudgetWordsCheck(): array
+{
+	$kb = fn(string $file): string => (string)intdiv(BUILD_BUDGETS['dist/' . $file], 1024);
+	$said = [
+		'README.md' => ['~the stylesheet at most (\d+) KB and the script (\d+) KB~', [BUILD_MAIN['css'], BUILD_MAIN['js']]],
+		'docs/src/index.html' => ['~<code>' . preg_quote(BUILD_MAIN['css'], '~') . '</code> is [^<]*?budget of (\d+) KB.*?<code>' . preg_quote(BUILD_MAIN['js'], '~') . '</code> is [^<]*?budget of (\d+) KB~s', [BUILD_MAIN['css'], BUILD_MAIN['js']]],
+	];
+	$wrong = [];
+	foreach ($said as $file => [$pattern, $files]) {
+		if (preg_match($pattern, (string)file_get_contents(BUILD_ROOT . '/' . $file), $m) !== 1) {
+			$wrong[] = $file . ' does not state the budgets of ' . implode(' and ', $files);
+			continue;
+		}
+		foreach ($files as $i => $one) {
+			if ($m[$i + 1] !== $kb($one)) {
+				$wrong[] = $file . ' gives ' . $one . ' a budget of ' . $m[$i + 1] . ' KB, where BUILD_BUDGETS holds ' . $kb($one) . ' KB';
+			}
+		}
+	}
+	return $wrong;
+}
+
+/**
  * An endless animation outside a no-preference block runs for a person who asks for less motion, so that it says work
  * goes on: each one is slowed in a reduce block of its own stylesheet. Answers what is wrong.
  * @return list<string>
@@ -957,7 +1117,7 @@ function BUILD__Main(array $argv): int
 {
 	$check = in_array('--check', $argv, true);
 	$vocab = BUILD__Vocabulary();
-	$wrong = [...BUILD__TextsCheck($vocab), ...BUILD__CommandsCheck(), ...BUILD__SamplesCheck(), ...BUILD__MotionCheck(), ...BUILD__SinksCheck(), ...BUILD__TrackCheck(), ...BUILD__SwapCheck(), ...BUILD__ChipsCheck(), ...BUILD__CatalogCheck(), ...BUILD__ToolsCalls(), ...array_map(fn(string $failure): string => 'tools/min.php  ' . $failure, MIN__SelfTest())];
+	$wrong = [...BUILD__TextsCheck($vocab), ...BUILD__CommandsCheck(), ...BUILD__SamplesCheck(), ...BUILD__MotionCheck(), ...BUILD__SinksCheck(), ...BUILD__TrackCheck(), ...BUILD__SwapCheck(), ...BUILD__ChipsCheck(), ...BUILD__TypesCheck(), ...BUILD__BudgetWordsCheck(), ...BUILD__CatalogCheck(), ...BUILD__ToolsCalls(), ...array_map(fn(string $failure): string => 'tools/min.php  ' . $failure, MIN__SelfTest())];
 	if ($wrong !== []) {
 		fwrite(STDERR, implode("\n", $wrong) . "\n");
 		return 1;
@@ -965,6 +1125,9 @@ function BUILD__Main(array $argv): int
 	$packages = [];
 	foreach (array_keys(BUILD_PACKAGE_SOURCES) as $dist) {
 		$packages['dist/' . $dist] = fn(): string => BUILD__Package($dist);
+	}
+	foreach (BUILD_TYPES as $dist => $type) {
+		$packages['dist/' . $dist] = fn(): string => (str_starts_with($type['source'], 'editor/') ? BUILD_EDITOR_HEAD : BUILD_DIST_HEAD) . "\n" . (string)file_get_contents(BUILD_ROOT . '/' . $type['source']);
 	}
 	$tools = [];
 	foreach (BUILD_TOOLS_SOURCES as $file => $source) {

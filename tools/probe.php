@@ -1361,20 +1361,20 @@ function PROBE__KnownPages(array $config): array
 
 /**
  * What a file changed since $base asks of the probes, as marks: none when they read nothing of it (texts, skills, the
- * build and release tools, the floor's data, the passport, the sheet's own code) or it changed in its comments alone;
- * "page:P" for a page, for each page that loads a package's file, and for each page that holds a component, a utility
- * or a layout class whose stylesheet or script changed - "look:P" for a change of a stylesheet or a picture no reader
- * hears, which the readers leave -; "sample:..." - the config's sample pages - for the probe code, in the engines
- * PROBE_CODE names; PROBE__ConfigReach for the config; "visual" for every page of the desktop engines, with the readers'
- * sample pages when heard - the stylesheets under every page, a utility rule that asks for no class -; the icons'
- * look; "*" for every engine and page - the scripts' entry, anything else.
+ * declaration files, the build and release tools, the floor's data, the passport, the sheet's own code) or it changed
+ * in its comments alone; "page:P" for a page, for each page that loads a package's file, and for each page that holds
+ * a component, a utility or a layout class whose stylesheet or script changed - "look:P" for a change of a stylesheet
+ * or a picture no reader hears, which the readers leave -; "sample:..." - the config's sample pages - for the probe
+ * code, in the engines PROBE_CODE names; PROBE__ConfigReach for the config; "visual" for every page of the desktop
+ * engines, with the readers' sample pages when heard - the stylesheets under every page, a utility rule that asks for
+ * no class -; the icons' look; "*" for every engine and page - the scripts' entry, anything else.
  * @return list<string>
  */
 function PROBE__Reach(array $config, string $base, string $file): array
 {
 	// tools/dist/ is the build's copy of tools a probe reads in their sources; tools/catalog.json reaches the pages by
 	// the editor's catalog the build makes of it; floor.json is the floor checker's.
-	$inert = '~\.md$|^skills/|^llms(-full)?\.txt$|^(dist/)?(LICENSE|NOTICE|redz-ui\.json)$|^(\.gitignore|redz-ui-icons\.json|floor\.json)$|^tools/(build|release|map|docs|floor|dashes|judge)\.php$|^tools/(map|floor|dist)/|^tools/(docs|vocabulary|catalog)\.json$|^docs/ar\.tsv$|^\.github/workflows/(check|pages|rerun|probe-part|icons)\.yml$~';
+	$inert = '~\.md$|\.d\.ts$|^skills/|^llms(-full)?\.txt$|^(dist/)?(LICENSE|NOTICE|redz-ui\.json)$|^(\.gitignore|redz-ui-icons\.json|floor\.json)$|^tools/(build|release|map|docs|floor|dashes|judge)\.php$|^tools/(map|floor|dist)/|^tools/(docs|vocabulary|catalog)\.json$|^docs/ar\.tsv$|^\.github/workflows/(check|pages|rerun|probe-part|icons)\.yml$~';
 	if (preg_match($inert, $file) === 1) {
 		return [];
 	}
@@ -2317,6 +2317,10 @@ function PROBE__PartRun(array $config, array $changed, array $part): array
  *  code. */
 function PROBE__Affected(array $config, string $base, array $all): int
 {
+	if ($base === '') {
+		fwrite(STDERR, "usage: php tools/probe.php affected BASE - the commit the changes are read from\n");
+		return 2;
+	}
 	try {
 		$changed = PROBE__Changed($config, $base);
 	} catch (RuntimeException $e) {

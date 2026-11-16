@@ -28,7 +28,7 @@ the latest release at the root, of the main branch under `next/`, and of every r
   fixture checked in real engines, with its Arabic twin (see [Documentation](#documentation)).
 - Two agent skills in `skills/`: building screens with REDZ.UI, and moving a project from Bootstrap 5.3 with a scan
   and a map of every Bootstrap class (see [Skills](#skills)).
-- Budgets held on every commit: the stylesheet at most 38 KB and the script 54 KB, gzipped - the two files a project
+- Budgets held on every commit: the stylesheet at most 40 KB and the script 56 KB, gzipped - the two files a project
   serves.
 
 ## How it reads
@@ -188,6 +188,15 @@ attaches by delegation on `document`, so nothing is set up per element and marku
 
 The library has no words of its own: every word it shows comes from the caller or from the page's island
 `#redz-ui-text`, and a missing one is named in the console.
+
+**Types for an editor.** `js/redz-ui.d.ts` beside the script declares `REDZ.ui` - each call with its options and its
+answer - and every `redz:*` event with its `detail`, as `document`, `window` and an element hear it; the editor's and
+the QR codes' packages have theirs, `js/redz-ui-editor.d.ts` and `js/redz-ui-qr.d.ts`. A browser never loads them and a
+project needs no TypeScript: PhpStorm and VS Code read a declaration file in the project as it is and type what a plain
+script writes - `await REDZ.ui.confirm(...)` is a boolean, `event.detail.respondWith` the widget's own. Each is a global
+script with no import or export: a project gives `REDZ` and `REDZ.ui` its own members in a file of its own by declaring
+`interface Redz` or `interface RedzUi` again. The build holds them to the scripts: every member `js/index.js` and a
+package put in `REDZ.ui`, and every event a script fires, is declared.
 
 ## The editor
 
@@ -356,7 +365,7 @@ Every release is an [immutable GitHub release](https://github.com/redz-tech/REDZ
 its tag nor its files can change, and GitHub signs an attestation of both. A tag `v*` becomes a release only when the
 probes are clean in every engine; the release carries three files:
 - `redz-ui-<version>.zip` - `dist/` of the tag, the folder a project serves as it is: `css/` and `js/` with minified
-  files only, the license files and the passport `redz-ui.json`: the version, the floor, the files to link, every
+  files and [the declaration files](#scripts) an editor reads, the license files and the passport `redz-ui.json`: the version, the floor, the files to link, every
   class, custom property, command and text key of the library, and the sha256 of every file in the SRI form.
   `php tools/build.php` writes the folder, and `--check` holds it current on every commit. The sources and the docs
   stay in the repository and in the tag's source archive;
