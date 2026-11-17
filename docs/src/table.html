@@ -86,12 +86,12 @@
 			<table class="table table-striped">
 				<thead><tr><th scope="col">Boat</th><th class="text-end" scope="col">Trips</th><th class="text-end" scope="col">Seats sold</th></tr></thead>
 				<tbody>
-					<tr><td>Boat A</td><td class="text-end tabular-nums">12</td><td class="text-end tabular-nums">286</td></tr>
-					<tr><td>Boat C</td><td class="text-end tabular-nums">9</td><td class="text-end tabular-nums">201</td></tr>
-					<tr><td>Boat B</td><td class="text-end tabular-nums">7</td><td class="text-end tabular-nums">164</td></tr>
+					<tr><th scope="row">Boat A</th><td class="text-end tabular-nums">12</td><td class="text-end tabular-nums">286</td></tr>
+					<tr><th scope="row">Boat C</th><td class="text-end tabular-nums">9</td><td class="text-end tabular-nums">201</td></tr>
+					<tr><th scope="row">Boat B</th><td class="text-end tabular-nums">7</td><td class="text-end tabular-nums">164</td></tr>
 				</tbody>
 				<tbody class="table-group-divider">
-					<tr><td>All boats</td><td class="text-end tabular-nums">28</td><td class="text-end tabular-nums">651</td></tr>
+					<tr><th scope="row">All boats</th><td class="text-end tabular-nums">28</td><td class="text-end tabular-nums">651</td></tr>
 				</tbody>
 			</table>
 		</section>
@@ -319,7 +319,7 @@
 	</div>
 
 	<h3 id="table-stack">Cards on a phone</h3>
-	<p>A screen does not scroll sideways where it can help it. A table read row by row - a row of fields to fill, a list to act on - takes <code>table-stack</code>: while its region is under 576 px wide, each row is a card. The row's head is the card's title, and every other cell shows its column head's words above it, which the library copies from <code>thead</code> into the cell's <code>data-label</code>; a label the page writes stays, a head with no words a person sees, as over a column of checks or buttons, gives none, and a cell across several columns, such as a row's form, takes none and fills its card. A <code>table-detail</code> row goes in its row's card, and the bodies stay apart by their lines. From 576 px it is the table. A screen reader reads it as a table at every width. Keep <a href="#table-scroll"><code>table-scroll</code></a> for a table read across its columns, such as figures compared by day.</p>
+	<p>A screen does not scroll sideways where it can help it. A table read row by row - a row of fields to fill, a list to act on - takes <code>table-stack</code>: while its region is under 576 px wide, each row is a card. The row's head, <code>th scope="row"</code>, is the card's title on a line of its own, the row's check staying beside it, so every card of a list starts alike; every other cell shows its column head's words above it, which the library copies from <code>thead</code> into the cell's <code>data-label</code>; a label the page writes stays, a head with no words a person sees, as over a column of checks or buttons, gives none, and a cell across several columns, such as a row's form, takes none and fills its card. A <code>table-detail</code> row goes in its row's card, and the bodies stay apart by their lines. From 576 px it is the table. A screen reader reads it as a table at every width. Keep <a href="#table-scroll"><code>table-scroll</code></a> for a table read across its columns, such as figures compared by day.</p>
 	<div class="docs-example docs-example-stack" id="table-stacked">
 		<div class="vstack gap-16">
 			<section class="card" aria-labelledby="table-stacked-title">
@@ -329,7 +329,7 @@
 					<tbody>
 						<tr><th scope="row">Example Guest</th><td class="text-end"><input id="table-stacked-seats-example-guest" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" value="2" aria-label="Seats: Example Guest"></td><td><select id="table-stacked-hotel-example-guest" class="form-select form-select-sm min-w-120" aria-label="Hotel: Example Guest"><option>Harbor Inn</option><option>Palm Court</option></select></td><td><label class="form-check"><input id="table-stacked-field-3" class="switch" type="checkbox" role="switch" checked><span class="visually-hidden">Paid: Example Guest</span></label></td></tr>
 						<tr class="table-detail"><td colspan="4"><p class="fs-12 text-muted m-0">Ground floor room, a wheelchair at the pier.</p></td></tr>
-						<tr><th scope="row">Second Guest</th><td class="text-end"><input id="table-stacked-seats-second-guest" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" value="1" aria-label="Seats: Second Guest"></td><td><select id="table-stacked-hotel-second-guest" class="form-select form-select-sm min-w-120" aria-label="Hotel: Second Guest"><option>Palm Court</option><option>Harbor Inn</option></select></td><td><label class="form-check"><input id="table-stacked-field-6" class="switch" type="checkbox" role="switch"><span class="visually-hidden">Paid: Second Guest</span></label></td></tr>
+						<tr class="table-warning"><th scope="row">Second Guest<div class="table-note"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i><span class="text-muted">The hotel has not confirmed the booking yet</span></div></th><td class="text-end"><input id="table-stacked-seats-second-guest" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" value="1" aria-label="Seats: Second Guest"></td><td><select id="table-stacked-hotel-second-guest" class="form-select form-select-sm min-w-120" aria-label="Hotel: Second Guest"><option>Palm Court</option><option>Harbor Inn</option></select></td><td><label class="form-check"><input id="table-stacked-field-6" class="switch" type="checkbox" role="switch"><span class="visually-hidden">Paid: Second Guest</span></label></td></tr>
 					</tbody>
 					<tbody class="table-group-divider">
 						<tr class="table-group"><th scope="rowgroup" colspan="4">Afternoon boat<span class="table-group-end">1 pickup</span></th></tr>
@@ -344,7 +344,7 @@
 					<tbody>
 						<tr><th scope="row">Example Guest</th><td class="text-end"><input id="table-stacked-narrow-seats-example-guest" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" value="2" aria-label="Seats: Example Guest"></td><td><select id="table-stacked-narrow-hotel-example-guest" class="form-select form-select-sm min-w-120" aria-label="Hotel: Example Guest"><option>Harbor Inn</option><option>Palm Court</option></select></td><td><label class="form-check"><input id="table-stacked-narrow-field-3" class="switch" type="checkbox" role="switch" checked><span class="visually-hidden">Paid: Example Guest</span></label></td></tr>
 						<tr class="table-detail"><td colspan="4"><p class="fs-12 text-muted m-0">Ground floor room, a wheelchair at the pier.</p></td></tr>
-						<tr><th scope="row">Second Guest</th><td class="text-end"><input id="table-stacked-narrow-seats-second-guest" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" value="1" aria-label="Seats: Second Guest"></td><td><select id="table-stacked-narrow-hotel-second-guest" class="form-select form-select-sm min-w-120" aria-label="Hotel: Second Guest"><option>Palm Court</option><option>Harbor Inn</option></select></td><td><label class="form-check"><input id="table-stacked-narrow-field-6" class="switch" type="checkbox" role="switch"><span class="visually-hidden">Paid: Second Guest</span></label></td></tr>
+						<tr class="table-warning"><th scope="row">Second Guest<div class="table-note"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i><span class="text-muted">The hotel has not confirmed the booking yet</span></div></th><td class="text-end"><input id="table-stacked-narrow-seats-second-guest" class="form-control form-control-sm tabular-nums text-end w-56" type="text" inputmode="numeric" value="1" aria-label="Seats: Second Guest"></td><td><select id="table-stacked-narrow-hotel-second-guest" class="form-select form-select-sm min-w-120" aria-label="Hotel: Second Guest"><option>Palm Court</option><option>Harbor Inn</option></select></td><td><label class="form-check"><input id="table-stacked-narrow-field-6" class="switch" type="checkbox" role="switch"><span class="visually-hidden">Paid: Second Guest</span></label></td></tr>
 					</tbody>
 					<tbody class="table-group-divider">
 						<tr class="table-group"><th scope="rowgroup" colspan="4">Afternoon boat<span class="table-group-end">1 pickup</span></th></tr>
@@ -360,10 +360,10 @@
 	<div class="docs-example docs-example-stack" id="table-marks">
 		<table class="table" aria-label="Jobs">
 			<tbody>
-				<tr aria-current="true"><td>Rebuild the Thai pages</td><td class="text-muted">Open on the right</td></tr>
-				<tr aria-selected="true"><td>Import the price list</td><td class="text-muted">Chosen</td></tr>
-				<tr class="table-active"><td>Send the morning letters</td><td class="text-muted">Running now</td></tr>
-				<tr><td>Clean the old photos</td><td class="text-muted">Waiting</td></tr>
+				<tr aria-current="true"><th scope="row">Rebuild the Thai pages</th><td class="text-muted">Open on the right</td></tr>
+				<tr aria-selected="true"><th scope="row">Import the price list</th><td class="text-muted">Chosen</td></tr>
+				<tr class="table-active"><th scope="row">Send the morning letters</th><td class="text-muted">Running now</td></tr>
+				<tr><th scope="row">Clean the old photos</th><td class="text-muted">Waiting</td></tr>
 			</tbody>
 		</table>
 	</div>

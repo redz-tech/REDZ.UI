@@ -4656,6 +4656,58 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a table-group-end stands past or short of its band\'s end: ' + wrong.join(', '));
 			}
 		}]},
+		// A row's head, th scope="row", takes its row's ground, stripe and mark as a data cell does, in a held column too;
+		// in a card it is the title on a line of its own, and a check before it stays beside it, clear of its words.
+		rowHead: {target: '#table-stacked', steps: [async (out) => {
+			const ground = (cell) => getComputedStyle(cell).backgroundColor + ' ' + getComputedStyle(cell).boxShadow;
+			const marked = (row) => [...row.cells].some((cell) => getComputedStyle(cell, '::before').content !== 'none');
+			const name = (row) => row.cells[0].firstChild.textContent.trim();
+			const wrong = [];
+			const rows = [...$$('#table-marks tbody tr'), ...$$('#table-variants .table-striped tbody tr')];
+			const held = $('#table-wide tbody tr:not(.table-group)');
+			const plain = ground(held.cells[0]);
+			held.classList.add('table-danger');
+			await settled();
+			for (const row of [...rows, held, ...$$('#table-stacked tr.table-warning')]) {
+				const stacked = getComputedStyle(row).display !== 'table-row';
+				if (!stacked && ground(row.cells[0]) !== ground(row.cells[1])) {
+					wrong.push(say({row: name(row), head: ground(row.cells[0]), cell: ground(row.cells[1])}));
+				}
+				if (row.matches('[aria-current="true"], .table-danger, .table-warning, .table-active') && !marked(row)) {
+					wrong.push(say({row: name(row), stacked, mark: 'none'}));
+				}
+			}
+			if (ground(held.cells[0]) === plain) {
+				wrong.push(say({row: name(held), held: 'no tone', head: plain}));
+			}
+			held.classList.remove('table-danger');
+			const card = $('#table-stacked .card.max-w-360 tbody tr:not(.table-group, .table-detail)');
+			const all = Object.assign(document.createElement('th'), {className: 'table-check', innerHTML: trusted('<input class="check" type="checkbox" aria-label="Select all">')});
+			const check = Object.assign(document.createElement('td'), {className: 'table-check', innerHTML: trusted('<input class="check" type="checkbox" aria-label="Select: Example Guest">')});
+			card.closest('table').tHead.rows[0].prepend(all);
+			card.prepend(check);
+			for (const dir of ['ltr', 'rtl']) {
+				document.documentElement.dir = dir;
+				await settled();
+				const box = $('input', check).getBoundingClientRect();
+				const head = card.cells[1].getBoundingClientRect();
+				const next = card.cells[2].getBoundingClientRect();
+				const words = document.createRange();
+				words.selectNodeContents(card.cells[1].firstChild);
+				const text = words.getBoundingClientRect();
+				const clear = (dir === 'ltr' ? text.left - box.right : box.left - text.right) >= 8;
+				if (next.top < head.bottom || box.top >= head.bottom || !clear) {
+					wrong.push(say({dir, check: [Math.round(box.left), Math.round(box.top)], head: [Math.round(text.left), Math.round(head.top), Math.round(head.bottom)], next: Math.round(next.top)}));
+				}
+			}
+			document.documentElement.dir = 'ltr';
+			check.remove();
+			all.remove();
+			await settled();
+			if (wrong.length > 0) {
+				out.push('a row\'s head is painted or placed unlike its row: ' + wrong.join(', '));
+			}
+		}]},
 		scrollCue: {target: '#table-wide', steps: [async (out) => {
 			const card = $('#table-wide .card');
 			const box = $('.table-scroll', card);

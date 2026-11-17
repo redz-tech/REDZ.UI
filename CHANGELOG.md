@@ -4,6 +4,25 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Changed
+- In a `table-stack` card the row's head, `th scope="row"`, takes a line of its own, so every card of a list starts
+  alike whatever the length of its title; a `table-check` before the head stays beside it. A short head used to share
+  its line with the next cell and a long one did not.
+
+### Fixed
+- A row whose first cell is its head, `th scope="row"`, takes its row's ground and mark as a row of data cells does:
+  `table-danger`, `table-warning`, `table-active`, `table-secondary`, a chosen row, a stripe of `table-striped`, a row
+  with a `stretched-link` under focus and the mark of `aria-current`, in a table, in a column held by
+  `table-scroll-first` or `table-scroll-last` and in a `table-stack` card. The head stayed white and the row had no
+  mark. A row's state now sets its ground on the row, `--redz-row-bg`, and one rule paints every cell of the row
+  from it, as Bootstrap does.
+- A `table-stack` card under the pointer is one color: a toned card lit its cells in its tone and the rest of the card
+  in the plain light, and a card with a `stretched-link` lit its cells alone.
+- In a `table-stack` card a `table-check` is as wide as its check: it kept a column's 1 px, and the check stood against
+  the head's words.
+
 ## 0.27.0 - 2026-11-17
 
 ### Added

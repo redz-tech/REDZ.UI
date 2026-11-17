@@ -1,5 +1,6 @@
 @layer components {
 	.table {
+		--redz-row-bg: initial;
 		inline-size: 100%;
 		border-collapse: separate;
 		border-spacing: 0;
@@ -40,10 +41,14 @@
 		inset-block-start: auto;
 		z-index: auto;
 		padding-block: var(--redz-row-pad);
-		background: none;
 		color: var(--redz-text);
 		font-size: inherit;
 		white-space: normal;
+	}
+
+	/* A row's state sets its ground on the row, and every cell of the row paints it, a row's head as a data cell. */
+	.table > :is(tbody, tfoot) > tr > :is(td, th) {
+		background-color: var(--redz-row-bg, transparent);
 	}
 
 	/* In a region that scrolls on its own the head sticks to its top. */
@@ -77,9 +82,8 @@
 		border-inline-end: 1px solid var(--redz-border);
 	}
 
-	:where(.table-scroll-first > .table > * > tr:not(.table-group, .table-detail)) > :first-child,
-	.table-scroll-first > .table > tbody > tr:not(.table-group, .table-detail) > th:first-child {
-		background-color: var(--redz-bg);
+	.table-scroll-first > .table > :is(tbody, tfoot) > tr:not(.table-group, .table-detail) > :first-child {
+		background-color: var(--redz-row-bg, var(--redz-bg));
 	}
 
 	.table-scroll-first > .table > thead > tr:not(.table-group, .table-detail) > :first-child {
@@ -93,9 +97,8 @@
 		border-inline-start: 1px solid var(--redz-border);
 	}
 
-	:where(.table-scroll-last > .table > * > tr:not(.table-group, .table-detail)) > :last-child,
-	.table-scroll-last > .table > tbody > tr:not(.table-group, .table-detail) > th:last-child {
-		background-color: var(--redz-bg);
+	.table-scroll-last > .table > :is(tbody, tfoot) > tr:not(.table-group, .table-detail) > :last-child {
+		background-color: var(--redz-row-bg, var(--redz-bg));
 	}
 
 	.table-scroll-last > .table > thead > tr:not(.table-group, .table-detail) > :last-child {
@@ -188,10 +191,13 @@
 		}
 	}
 
+	.table > tbody > .table-group {
+		--redz-row-bg: var(--redz-bg-page);
+	}
+
 	.table > tbody > .table-group > th {
 		position: relative;
 		padding-block: var(--redz-space-8);
-		background: var(--redz-bg-page);
 		color: var(--redz-text);
 		font-size: var(--redz-fs-12);
 		font-weight: 600;
@@ -268,10 +274,6 @@
 		--redz-row-tint: var(--redz-primary-subtle);
 	}
 
-	:is(.table-danger, .table-warning, .table-active) + .table-detail > td {
-		background: color-mix(in oklch, var(--redz-row-tint) 55%, var(--redz-bg));
-	}
-
 	.table > * > .table-subtotal > :is(td, th) {
 		border-block-start: 1px solid var(--redz-border-strong);
 		color: var(--redz-text);
@@ -286,8 +288,8 @@
 		cursor: pointer;
 	}
 
-	.table tr:has(.stretched-link):is(:hover, :focus-within, :has(:popover-open, [commandfor][aria-expanded="true"])) > td {
-		background: var(--redz-row-hover, color-mix(in srgb, var(--redz-primary) 7%, var(--redz-bg)));
+	.table tr:has(.stretched-link):is(:hover, :focus-within, :has(:popover-open, [commandfor][aria-expanded="true"])) {
+		--redz-row-bg: var(--redz-row-hover, color-mix(in srgb, var(--redz-primary) 7%, var(--redz-bg)));
 	}
 
 	.table td:has(> .stretched-link) :is(a, button, input, select, label):not(.stretched-link) {
@@ -317,7 +319,7 @@
 		padding-inline-end: var(--redz-space-16);
 	}
 
-	.table-striped > tbody > tr:nth-child(odd of :not(.table-detail)) > td,
+	.table-striped > tbody > tr:nth-child(odd of :not(.table-detail)):not(.table-group) > :is(td, th),
 	.table-striped > tbody > tr:nth-child(odd of :not(.table-detail)) + .table-detail > td,
 	.table-striped-columns :is(th, td):nth-child(even) {
 		box-shadow: inset 0 0 0 100vmax color-mix(in oklch, var(--redz-text) 4%, transparent);
@@ -458,15 +460,18 @@
 		--redz-row-mark: var(--redz-primary-fill);
 	}
 
-	.table-danger td,
-	.table-warning td,
-	.table-active td {
-		background: color-mix(in oklch, var(--redz-row-tint) 55%, var(--redz-bg));
+	:is(.table-danger, .table-warning, .table-active),
+	:is(.table-danger, .table-warning, .table-active) + .table-detail {
+		--redz-row-bg: color-mix(in oklch, var(--redz-row-tint) 55%, var(--redz-bg));
 	}
 
-	.table tr:is([aria-selected="true"], :has(> .table-check :checked)) > td,
-	.table tr:is([aria-selected="true"], :has(> .table-check :checked)) + .table-detail > td {
-		background: color-mix(in oklch, var(--redz-primary) 10%, var(--redz-bg));
+	.table-secondary {
+		--redz-row-bg: var(--redz-bg-page);
+	}
+
+	.table tr:is([aria-selected="true"], :has(> .table-check :checked)),
+	.table tr:is([aria-selected="true"], :has(> .table-check :checked)) + .table-detail {
+		--redz-row-bg: color-mix(in oklch, var(--redz-primary) 10%, var(--redz-bg));
 	}
 
 	.table[data-select="rows"] > tbody > tr:has(> .table-check) {
@@ -474,26 +479,26 @@
 	}
 
 	@media (hover: hover) {
-		.table:not(.table-static) > tbody > tr:not(.table-static, .table-static + .table-detail, [aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th),
-		.table:not(.table-static) > tbody > tr:not(.table-static, .table-static + .table-detail, [aria-selected="true"], :has(> .table-check :checked)):has(+ .table-detail:hover, + .table-detail :is(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th),
-		.table:not(.table-static) > tbody > tr:not(.table-static, .table-static + .table-detail, [aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) + .table-detail > td {
-			background: var(--redz-row-hover, color-mix(in srgb, var(--redz-primary) 7%, var(--redz-bg)));
+		.table:not(.table-static) > tbody > tr:not(.table-static, .table-static + .table-detail, [aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])),
+		.table:not(.table-static) > tbody > tr:not(.table-static, .table-static + .table-detail, [aria-selected="true"], :has(> .table-check :checked)):has(+ .table-detail:hover, + .table-detail :is(:popover-open, [commandfor][aria-expanded="true"])),
+		.table:not(.table-static) > tbody > tr:not(.table-static, .table-static + .table-detail, [aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) + .table-detail {
+			--redz-row-bg: var(--redz-row-hover, color-mix(in srgb, var(--redz-primary) 7%, var(--redz-bg)));
 		}
 
-		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th),
-		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)):has(+ .table-detail:hover, + .table-detail :is(:popover-open, [commandfor][aria-expanded="true"])) > :is(td, th),
-		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)) + .table-detail:is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) > td,
-		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) + .table-detail > td {
-			background: color-mix(in oklch, var(--redz-row-tint) 90%, var(--redz-bg));
+		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])),
+		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)):has(+ .table-detail:hover, + .table-detail :is(:popover-open, [commandfor][aria-expanded="true"])),
+		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)) + .table-detail:is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])),
+		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) + .table-detail {
+			--redz-row-bg: color-mix(in oklch, var(--redz-row-tint) 90%, var(--redz-bg));
 		}
 	}
 
 	/* The row's mark stands on its first cell, and on a phone on the first one the phone shows: a pseudo-element of a row would take a column in Chrome. */
-	:is(.table-danger, .table-warning, .table-active, .table tr[aria-current]:not([aria-current="false"])) > td:first-child::before {
+	:is(.table-danger, .table-warning, .table-active, .table tr[aria-current]:not([aria-current="false"])) > :is(td, th):first-child::before {
 		content: "";
 	}
 
-	:is(.table-danger, .table-warning, .table-active, .table tr[aria-current]:not([aria-current="false"])) > td::before {
+	:is(.table-danger, .table-warning, .table-active, .table tr[aria-current]:not([aria-current="false"])) > :is(td, th)::before {
 		position: absolute;
 		inset-block-start: 50%;
 		inset-inline-start: 0;
@@ -505,7 +510,7 @@
 	}
 
 	@container region (width < 768px) {
-		:is(.table-danger, .table-warning, .table-active, .table tr[aria-current]:not([aria-current="false"])) > td:nth-child(1 of :not(.d-none))::before {
+		:is(.table-danger, .table-warning, .table-active, .table tr[aria-current]:not([aria-current="false"])) > :is(td, th):nth-child(1 of :not(.d-none))::before {
 			content: "";
 		}
 	}
@@ -516,10 +521,6 @@
 
 	.table-warning .table-note .bi {
 		color: var(--redz-warning-fill);
-	}
-
-	.table-secondary td {
-		background: var(--redz-bg-page);
 	}
 
 	.table-secondary .table-title {
@@ -612,9 +613,18 @@
 		}
 
 		.table-stack > :is(tbody, tfoot) > tr:not(.table-group, .table-detail) > th {
-			flex: 1 1 auto;
-			align-self: center;
+			flex: 1 1 100%;
 			white-space: normal;
+		}
+
+		.table-stack > :is(tbody, tfoot) > tr:not(.table-group, .table-detail) > .table-check {
+			align-self: flex-start;
+			inline-size: auto;
+		}
+
+		/* A check before the row's head stays on its line: the head takes the rest of it, less the check and the gap. */
+		.table-stack > :is(tbody, tfoot) > tr:not(.table-group, .table-detail) > .table-check + th {
+			flex-basis: calc(100% - 1rem - var(--redz-space-16));
 		}
 
 		.table.table-stack > :is(tbody, tfoot) > .table-detail > td {
@@ -642,21 +652,8 @@
 			font-size: var(--redz-fs-12);
 		}
 
-		.table-stack > tbody > :is(.table-danger, .table-warning, .table-active),
-		.table-stack > tbody > :is(.table-danger, .table-warning, .table-active) + .table-detail {
-			background: color-mix(in oklch, var(--redz-row-tint) 55%, var(--redz-bg));
-		}
-
-		.table-stack > tbody > tr:is([aria-selected="true"], :has(> .table-check :checked)),
-		.table-stack > tbody > tr:is([aria-selected="true"], :has(> .table-check :checked)) + .table-detail {
-			background: color-mix(in oklch, var(--redz-primary) 10%, var(--redz-bg));
-		}
-
-		@media (hover: hover) {
-			.table-stack:not(.table-static) > tbody > tr:not(.table-static, .table-static + .table-detail, [aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"]), :has(+ .table-detail:hover, + .table-detail :is(:popover-open, [commandfor][aria-expanded="true"]))),
-			.table-stack:not(.table-static) > tbody > tr:not(.table-static, .table-static + .table-detail, [aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) + .table-detail {
-				background: var(--redz-row-hover, color-mix(in srgb, var(--redz-primary) 7%, var(--redz-bg)));
-			}
+		:where(.table-stack > :is(tbody, tfoot)) > tr {
+			background-color: var(--redz-row-bg, transparent);
 		}
 	}
 
@@ -673,15 +670,19 @@
 	}
 
 	@media (forced-colors: active) {
-		:is(.table-danger, .table-warning, .table-active, .table tr[aria-current]:not([aria-current="false"])) > td::before {
+		:is(.table-danger, .table-warning, .table-active, .table tr[aria-current]:not([aria-current="false"])) > :is(td, th)::before {
 			forced-color-adjust: none;
 			background: CanvasText;
 		}
 
-		.table tr:is([aria-selected="true"], :has(> .table-check :checked)) > td,
+		.table tr:is([aria-selected="true"], :has(> .table-check :checked)),
+		.table tr:is([aria-selected="true"], :has(> .table-check :checked)) + .table-detail {
+			--redz-row-bg: Highlight;
+		}
+
+		.table tr:is([aria-selected="true"], :has(> .table-check :checked)) > :is(td, th),
 		.table tr:is([aria-selected="true"], :has(> .table-check :checked)) + .table-detail > td {
 			forced-color-adjust: none;
-			background: Highlight;
 			color: HighlightText;
 		}
 
