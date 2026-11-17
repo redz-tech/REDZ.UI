@@ -311,7 +311,7 @@ if (name !== null) {
 }</code></pre>
 
 					<h3>On a phone and full screen</h3>
-					<p>On any window a long dialog keeps its header and its footer in view: only <code>dialog-body</code> scrolls between them. A <code>&lt;form&gt;</code> may hold all three - <code>&lt;form method="dialog"&gt;</code> right inside the dialog, its submit buttons in the footer - and the body still scrolls alone. On a window narrower than 576 px a dialog fills the screen by itself, while <code>dialog-sm</code> and a confirmation stay a card in the middle. <code>dialog-fullscreen</code> fills the screen on any window.</p>
+					<p>On any window a long dialog keeps its header and its footer in view: only <code>dialog-body</code> scrolls between them. A <code>&lt;form&gt;</code> may hold all three - <code>&lt;form method="dialog"&gt;</code> right inside the dialog, its submit buttons in the footer - and the body still scrolls alone. On a window narrower than 576 px a dialog is a sheet by itself: from a 36 px strip of the dimmed page to the bottom, edge to edge, a grab bar over its header, so a person sees what waits under it; dragged down by its header past a third of its height it closes as Escape asks - a page that keeps it open by its <code>cancel</code> keeps it open - and short of that it goes back. <code>dialog-sm</code> and a confirmation stay a card in the middle. <code>dialog-fullscreen</code> fills the screen on any window.</p>
 					<div class="docs-sample"><div class="docs-example" id="dialog-full">
 						<button class="btn" type="button" commandfor="dialog-full-panel" command="show-modal"><i class="bi bi-arrows-fullscreen" aria-hidden="true"></i>Open full screen</button>
 						<dialog class="dialog dialog-fullscreen" id="dialog-full-panel" aria-labelledby="dialog-full-title">
@@ -347,8 +347,8 @@ if (name !== null) {
 
 						<section class="vstack gap-12" aria-labelledby="dialog-tokens">
 							<h2 id="dialog-tokens">Tokens</h2>
-							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/dialog.css"><code>css/components/dialog.css</code></a>, which declares no custom property of its own.</p>
-							<p>It reads the theme's <code>--redz-border</code>, <code>--redz-radius-16</code>, <code>--redz-bg-raised</code>, <code>--redz-shadow-3</code>, <code>--redz-space-12</code>, <code>--redz-space-16</code>, <code>--redz-space-24</code>, <code>--redz-dialog-header-end</code>, <code>--redz-dialog-header-line</code>, <code>--redz-dialog-header-bg</code>, <code>--redz-fs-16</code>, <code>--redz-text-muted</code>, <code>--redz-space-8</code>, <code>--redz-bg-page</code>, <code>--redz-ease</code>.</p>
+							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/dialog.css"><code>css/components/dialog.css</code></a>. It declares <code>--redz-sheet</code> on its root, never on rows or items.</p>
+							<p>It reads the theme's <code>--redz-border</code>, <code>--redz-radius-16</code>, <code>--redz-bg-raised</code>, <code>--redz-shadow-3</code>, <code>--redz-space-24</code>, <code>--redz-space-8</code>, <code>--redz-border-strong</code>, <code>--redz-space-12</code>, <code>--redz-space-16</code>, <code>--redz-dialog-header-end</code>, <code>--redz-dialog-header-line</code>, <code>--redz-dialog-header-bg</code>, <code>--redz-fs-16</code>, <code>--redz-text-muted</code>, <code>--redz-bg-page</code>, <code>--redz-ease</code>.</p>
 						</section>
 
 						<section class="vstack gap-12" aria-labelledby="dialog-from-bootstrap">

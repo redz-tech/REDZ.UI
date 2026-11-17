@@ -4740,6 +4740,46 @@ window.REDZ_BEHAVE = (() => {
 				out.push('controls ' + (coarse ? 'under a finger' : 'under a mouse') + ' are ' + say(seen) + ', not ' + say(want));
 			}
 		}]},
+		// A sheet dragged down by its head goes back short of a third of its height and closes past it; a press on a
+		// control of its head drags nothing. At 1440 the dialog is told it is a sheet, as the phone's stylesheet tells it.
+		sheetDrag: {target: '#dialog-edit-note', walk: async function* (out) {
+			const dialog = $('#dialog-edit-note');
+			const title = $('.dialog-title', dialog);
+			const open = async () => {
+				dialog.showModal();
+				await settled();
+				await settled();
+			};
+			dialog.style.setProperty('--redz-sheet', '1');
+			await open();
+			const height = dialog.offsetHeight;
+			let [x, y] = center(title);
+			yield {drag: [x, y, x, y + Math.round(height / 6)]};
+			await settled();
+			const short = {open: dialog.open, moved: getComputedStyle(dialog).translate};
+			[x, y] = center(title);
+			yield {drag: [x, y, x, Math.min(innerHeight - 2, y + Math.round(height / 2))]};
+			await until(() => !dialog.open, 1000);
+			const long = {open: dialog.open, moved: dialog.style.translate};
+			if (dialog.open) {
+				dialog.close();
+			}
+			await settled();
+			await open();
+			[x, y] = center($('.dialog-header button', dialog));
+			yield {drag: [x, y, x, Math.min(innerHeight - 2, y + Math.round(height / 2))]};
+			await settled();
+			const control = {open: dialog.open};
+			if (dialog.open) {
+				dialog.close();
+			}
+			dialog.style.removeProperty('--redz-sheet');
+			await settled();
+			const seen = {short, long, control};
+			if (say(seen) !== say({short: {open: true, moved: 'none'}, long: {open: false, moved: ''}, control: {open: true}})) {
+				out.push('a sheet dragged by its head goes back short of a third and closes past it: ' + say(seen));
+			}
+		}},
 		// A combobox-clear button shows while its search holds words, empties it, shows the whole list and keeps the focus.
 		comboboxClear: {target: '#combobox-one', steps: [async (out) => {
 			const panel = $('#combobox-one-panel');

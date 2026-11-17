@@ -9,8 +9,17 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 ### Added
 - `combobox-clear`, a button in a combobox's search with `command="--clear"` for it: it shows while the search holds
   words, empties it, shows the whole list and keeps the focus in the search.
+- A combobox's panel on a window narrower than 576 px is a sheet: from a 36 px strip of the dimmed page to the bottom,
+  edge to edge, with a grab bar, a head - the words of the face's label and a Close button, which the library makes -,
+  the search and the list, each option 52 px. `combobox-action`, a button the page puts in the panel, stands in that
+  head beside Close, and under the list on a wider window. Dragged down by its head past a third of its height a sheet
+  closes; short of that it goes back. A finger met a list over a form it could not tell apart from the form.
 
 ### Changed
+- A dialog on a window narrower than 576 px is the same sheet, its grab bar over its header, in place of filling the
+  screen: a person sees the dimmed page under it, and a second dialog dims the first. Dragged down by its header it
+  closes as Escape asks - a page that keeps it open by its `cancel` keeps it open - never with `closedby="none"`.
+  `dialog-sm` stays a card in the middle and `dialog-fullscreen` fills the screen.
 - Sizes for a finger: under `pointer: coarse` no control is under 44 px - every size of a field, a select, a button,
   an icon button, a chip, a page link - a large one is 48 and a floating field stays 52, whatever `data-density` says;
   an option of a menu or a combobox is 48, and a combobox's search 48 with 16 px words. A check, a radio or a switch

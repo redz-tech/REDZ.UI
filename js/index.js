@@ -2,6 +2,7 @@
 import './commands.js';
 import './menu.js';
 import './menu-place.js';
+import './sheet.js';
 import './tabs.js';
 import './toggle.js';
 import './dialog.js';

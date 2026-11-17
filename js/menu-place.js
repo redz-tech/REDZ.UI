@@ -3,6 +3,8 @@
 // cell, Safari 26 at the bottom of a page taller than the viewport); such a layer carries data-placed="script" while it
 // is open. It looks again when the page scrolls, the window resizes, or the layer or its button changes size; a layer
 // with no box yet waits for one.
+import {sheeted} from './sheet.js';
+
 const anchors = CSS.supports('position-area', 'block-end');
 const overrides = ['position-area', 'position-try-fallbacks', 'inset', 'top', 'left', 'margin'];
 const open = new Map();
@@ -63,11 +65,24 @@ const place = (menu, button) => {
 	menu.dataset.placed = 'script';
 };
 
-/** Checks every open menu that has a box and places by script the ones the engine did not put beside their button. */
+/** Hands the menu back to the stylesheet. */
+const unplace = (menu) => {
+	for (const property of overrides) {
+		menu.style.removeProperty(property);
+	}
+	delete menu.dataset.placed;
+};
+
+/** Checks every open menu that has a box and places by script the ones the engine did not put beside their button; a
+ *  sheet stands where the stylesheet puts it. */
 const watch = () => {
 	frame = 0;
 	for (const [menu, button] of open) {
-		if (menu.offsetWidth > 0 && (!anchors || menu.dataset.placed === 'script' || !wellPlaced(menu, button))) {
+		if (sheeted(menu)) {
+			if (menu.dataset.placed === 'script') {
+				unplace(menu);
+			}
+		} else if (menu.offsetWidth > 0 && (!anchors || menu.dataset.placed === 'script' || !wellPlaced(menu, button))) {
 			place(menu, button);
 		}
 	}
@@ -99,10 +114,7 @@ document.addEventListener('beforetoggle', (event) => {
 		}
 		return;
 	}
-	for (const property of overrides) {
-		menu.style.removeProperty(property);
-	}
-	delete menu.dataset.placed;
+	unplace(menu);
 	const button = buttonOf(menu);
 	if (button !== null) {
 		open.set(menu, button);

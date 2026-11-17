@@ -8,7 +8,8 @@
 // takes the words as Enter does, and a search with a pattern or inputmode="email" - type="email" too, though
 // role="combobox" belongs on type="text" - refuses words it does not hold. Options in levels (data-level: an option has
 // no aria-level) keep the page's order, a match shown with its parents. A button with command="--clear" for the search
-// empties it and keeps the focus there.
+// empties it and keeps the focus there. On a phone a panel is a sheet: its head shows the face's words and Close, made
+// here, beside the page's combobox-action.
 import {ask} from './answer.js';
 import {text, textCount} from './text.js';
 
@@ -520,6 +521,24 @@ const unwatch = (list, input) => {
 	list.removeAttribute('aria-busy');
 };
 
+/** Gives the panel, once, the head it shows as a sheet on a phone: the face's words and a button that closes it. */
+const head = (panel, face) => {
+	if (panel.querySelector(':scope > .combobox-title') !== null) {
+		return;
+	}
+	const title = Object.assign(document.createElement('div'), {className: 'combobox-title'});
+	title.setAttribute('aria-hidden', 'true');
+	title.textContent = (face?.labels?.[0]?.textContent || face?.getAttribute('aria-label') || panel.getAttribute('aria-label') || '').trim();
+	const close = Object.assign(document.createElement('button'), {type: 'button', className: 'btn btn-icon btn-text combobox-close'});
+	close.setAttribute('command', 'hide-popover');
+	close.setAttribute('commandfor', panel.id);
+	close.setAttribute('aria-label', text('close'));
+	const icon = Object.assign(document.createElement('i'), {className: 'bi bi-x-lg'});
+	icon.setAttribute('aria-hidden', 'true');
+	close.append(icon);
+	panel.prepend(title, close);
+};
+
 /** Empties the search and shows the list as the page made it, no option active: a screen reader names the search. */
 const fresh = (input) => {
 	input.value = '';
@@ -731,6 +750,7 @@ document.addEventListener('toggle', (event) => {
 		return;
 	}
 	if (event.newState === 'open') {
+		head(panel, face);
 		fresh(input);
 		if (pending !== '') {
 			input.value = pending;

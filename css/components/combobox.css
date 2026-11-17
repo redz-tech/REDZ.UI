@@ -124,6 +124,111 @@
 		}
 	}
 
+	.combobox-title,
+	.combobox-close {
+		display: none;
+	}
+
+	.combobox-menu > .combobox-action {
+		margin: var(--redz-space-4) var(--redz-space-8) var(--redz-space-8);
+	}
+
+	/* On a phone the panel is a sheet from a strip of the dimmed page to the bottom: a grab bar, a head with the face's words, the page's action and Close, the search, the list. */
+	@media (width < 36rem) {
+		.combobox-menu {
+			--redz-sheet: 1;
+		}
+
+		.combobox-menu:popover-open {
+			position: fixed;
+			inset: 2.25rem 0 0;
+			display: grid;
+			grid-template: "grab grab grab" auto "title action close" auto "search search search" auto "list list list" minmax(0, 1fr) / minmax(0, 1fr) auto auto;
+			align-items: center;
+			inline-size: auto;
+			block-size: auto;
+			max-block-size: none;
+			margin: 0;
+			border: 0;
+			border-radius: var(--redz-radius-16) var(--redz-radius-16) 0 0;
+			box-shadow: 0 -10px 30px rgb(16 18 24 / calc(0.2 * var(--redz-shadow-strength)));
+			position-area: none;
+			position-try-fallbacks: none;
+			touch-action: none;
+		}
+
+		.combobox-menu::backdrop {
+			background: rgb(8 10 14 / 0.45);
+		}
+
+		.combobox-menu:popover-open::before {
+			content: "";
+			grid-area: grab;
+			justify-self: center;
+			inline-size: 2.5rem;
+			block-size: 4px;
+			margin-block: var(--redz-space-8) var(--redz-space-4);
+			border-radius: 2px;
+			background: var(--redz-border-strong);
+		}
+
+		.combobox-title {
+			display: block;
+			grid-area: title;
+			min-inline-size: 0;
+			padding-inline-start: var(--redz-space-16);
+			overflow: hidden;
+			font-size: var(--redz-fs-18);
+			font-weight: 600;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+
+		.combobox-menu > .combobox-action {
+			grid-area: action;
+			margin: 0;
+		}
+
+		.combobox-close {
+			display: inline-flex;
+			grid-area: close;
+			margin-inline: var(--redz-space-4) var(--redz-space-8);
+		}
+
+		.combobox-menu > .combobox-search {
+			grid-area: search;
+			padding: var(--redz-space-8) var(--redz-space-12);
+		}
+
+		.combobox-menu > .combobox-search > .bi {
+			inset-inline-start: calc(var(--redz-space-12) + var(--redz-space-12));
+		}
+
+		.combobox-menu > .combobox-search > .combobox-clear {
+			inset-inline-end: calc(var(--redz-space-12) + 2px);
+		}
+
+		.combobox-menu > .combobox-search > .combobox-search-input {
+			min-block-size: 3rem;
+			border-radius: var(--redz-radius-12);
+			font-size: max(16px, 1em);
+		}
+
+		.combobox-menu > :is(.combobox-list, .combobox-no-results) {
+			grid-area: list;
+			align-self: stretch;
+			max-block-size: none;
+		}
+
+		.combobox-menu > .combobox-no-results {
+			align-self: start;
+		}
+
+		.combobox-menu .menu-item {
+			min-block-size: 3.25rem;
+		}
+	}
+
 	@media (forced-colors: active) {
 		.combobox-list .menu-item[data-active] {
 			forced-color-adjust: none;

@@ -2613,14 +2613,17 @@ column-gap-40
 column-gap-48
 column-gap-64
 column-gap-8
+combobox-action
 combobox-chips
 combobox-clear
+combobox-close
 combobox-list
 combobox-menu
 combobox-more
 combobox-no-results
 combobox-search
 combobox-search-input
+combobox-title
 combobox-toggle
 combobox-value
 command-line

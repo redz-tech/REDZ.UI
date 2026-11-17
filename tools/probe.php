@@ -545,6 +545,8 @@ function PROBE__Cell(array &$h, string $name, string $page, string $combo, strin
 				$findings[] = $what . ' did not open';
 			} elseif (!$p['inside']) {
 				$findings[] = $what . ' leaves the viewport at [' . implode(', ', $p['box']) . ']';
+			} elseif (!$p['sheet']) {
+				$findings[] = $what . ' is no sheet from the strip at the top to the bottom, edge to edge: [' . implode(', ', $p['box']) . ']';
 			} elseif (!$p['anchored']) {
 				$findings[] = $what . ' is not beside its button: [' . implode(', ', $p['box']) . '] by [' . implode(', ', $p['by']) . ']';
 			}

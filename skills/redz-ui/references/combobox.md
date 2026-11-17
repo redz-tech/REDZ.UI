@@ -8,6 +8,8 @@ A choice from a list long enough to search: a button in the look of a select sho
 
 The face is a button with `role="combobox"` that opens its panel by the browser's command; the panel is a popover with the search, the `listbox` and the value: one hidden field per chosen value, named by the list's `data-name`, so a form posts it as it is. Typing filters the list - case and accents aside, every word found, the best first - and the arrow keys move the active option while the focus stays in the search. A `combobox-clear` button in the search, `command="--clear"` for it, shows while the search holds words, empties it and keeps the focus there. Under a finger the search is 48 px with 16 px words, and each option 48 px.
 
+On a window narrower than 576 px the panel is a sheet from a 36 px strip of the dimmed page to the bottom: a grab bar, a head with the words of the face's label and a Close button the library makes, the search and the list, each option 52 px. A `combobox-action` the page puts in the panel - "New language" here - stands in that head beside Close, and under the list on a wider window. Dragged down by its head past a third of its height the sheet closes; short of that it goes back.
+
 ```html
 <div class="form-floating">
 	<button class="form-select combobox-toggle" type="button" id="combobox-one-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-one-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Choose a language…">Thai</span></button>
@@ -34,6 +36,7 @@ The face is a button with `role="combobox"` that opens its panel by the browser'
 		<div class="menu-item" role="option" id="combobox-one-vi" data-value="vi" aria-selected="false">Vietnamese</div>
 	</div>
 	<p class="combobox-no-results" hidden>Nothing found</p>
+	<button class="btn combobox-action" type="button"><i class="bi bi-plus-lg" aria-hidden="true"></i>New language</button>
 	<input type="hidden" name="language" value="th" data-label="Thai">
 </div>
 ```
@@ -302,6 +305,6 @@ The library has no words of its own; it reads these from the page's island `#red
 
 ## Tokens
 
-From [`css/components/combobox.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/combobox.css), which declares no custom property of its own.
+From [`css/components/combobox.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/combobox.css). It declares `--redz-sheet` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-8`, `--redz-focus`, `--redz-text-muted`, `--redz-border`, `--redz-control-height-sm`, `--redz-space-4`, `--redz-bg-hover`, `--redz-space-12`, `--redz-primary-subtle`, `--redz-primary-text`.
+It reads the theme's `--redz-space-8`, `--redz-focus`, `--redz-text-muted`, `--redz-border`, `--redz-control-height-sm`, `--redz-space-4`, `--redz-bg-hover`, `--redz-space-12`, `--redz-primary-subtle`, `--redz-primary-text`, `--redz-radius-16`, `--redz-shadow-strength`, `--redz-border-strong`, `--redz-space-16`, `--redz-fs-18`, `--redz-radius-12`.

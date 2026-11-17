@@ -55,20 +55,42 @@
 		border-radius: 0;
 	}
 
+	/* On a phone a dialog is a sheet from a strip of the dimmed page to the bottom, a grab bar over its head. */
 	@media (width < 36rem) {
-		.dialog:not(.dialog-sm) {
+		.dialog:not(.dialog-sm, .dialog-fullscreen) {
+			--redz-sheet: 1;
+			inset: 2.25rem 0 0;
 			inline-size: 100%;
 			max-inline-size: none;
-			block-size: 100%;
+			block-size: auto;
 			max-block-size: none;
 			margin: 0;
 			border: 0;
-			border-radius: 0;
+			border-radius: var(--redz-radius-16) var(--redz-radius-16) 0 0;
 		}
 
 		.dialog:not(.dialog-sm) > .dialog-footer,
 		.dialog:not(.dialog-sm) > form > .dialog-footer {
 			border-radius: 0;
+		}
+
+		.dialog:not(.dialog-sm, .dialog-fullscreen) > .dialog-header,
+		.dialog:not(.dialog-sm, .dialog-fullscreen) > form > .dialog-header {
+			position: relative;
+			padding-block-start: var(--redz-space-24);
+			touch-action: none;
+		}
+
+		.dialog:not(.dialog-sm, .dialog-fullscreen) > .dialog-header::before,
+		.dialog:not(.dialog-sm, .dialog-fullscreen) > form > .dialog-header::before {
+			content: "";
+			position: absolute;
+			inset-block-start: var(--redz-space-8);
+			inset-inline-start: calc(50% - 1.25rem);
+			inline-size: 2.5rem;
+			block-size: 4px;
+			border-radius: 2px;
+			background: var(--redz-border-strong);
 		}
 	}
 

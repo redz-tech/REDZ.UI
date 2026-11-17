@@ -148,7 +148,7 @@ if (name !== null) {
 
 ### On a phone and full screen
 
-On any window a long dialog keeps its header and its footer in view: only `dialog-body` scrolls between them. A `<form>` may hold all three - `<form method="dialog">` right inside the dialog, its submit buttons in the footer - and the body still scrolls alone. On a window narrower than 576 px a dialog fills the screen by itself, while `dialog-sm` and a confirmation stay a card in the middle. `dialog-fullscreen` fills the screen on any window.
+On any window a long dialog keeps its header and its footer in view: only `dialog-body` scrolls between them. A `<form>` may hold all three - `<form method="dialog">` right inside the dialog, its submit buttons in the footer - and the body still scrolls alone. On a window narrower than 576 px a dialog is a sheet by itself: from a 36 px strip of the dimmed page to the bottom, edge to edge, a grab bar over its header, so a person sees what waits under it; dragged down by its header past a third of its height it closes as Escape asks - a page that keeps it open by its `cancel` keeps it open - and short of that it goes back. `dialog-sm` and a confirmation stay a card in the middle. `dialog-fullscreen` fills the screen on any window.
 
 ```html
 <button class="btn" type="button" commandfor="dialog-full-panel" command="show-modal"><i class="bi bi-arrows-fullscreen" aria-hidden="true"></i>Open full screen</button>
@@ -172,9 +172,9 @@ On any window a long dialog keeps its header and its footer in view: only `dialo
 
 ## Tokens
 
-From [`css/components/dialog.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/dialog.css), which declares no custom property of its own.
+From [`css/components/dialog.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/dialog.css). It declares `--redz-sheet` on its root, never on rows or items.
 
-It reads the theme's `--redz-border`, `--redz-radius-16`, `--redz-bg-raised`, `--redz-shadow-3`, `--redz-space-12`, `--redz-space-16`, `--redz-space-24`, `--redz-dialog-header-end`, `--redz-dialog-header-line`, `--redz-dialog-header-bg`, `--redz-fs-16`, `--redz-text-muted`, `--redz-space-8`, `--redz-bg-page`, `--redz-ease`.
+It reads the theme's `--redz-border`, `--redz-radius-16`, `--redz-bg-raised`, `--redz-shadow-3`, `--redz-space-24`, `--redz-space-8`, `--redz-border-strong`, `--redz-space-12`, `--redz-space-16`, `--redz-dialog-header-end`, `--redz-dialog-header-line`, `--redz-dialog-header-bg`, `--redz-fs-16`, `--redz-text-muted`, `--redz-bg-page`, `--redz-ease`.
 
 ## From Bootstrap 5.3
 
