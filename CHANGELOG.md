@@ -41,6 +41,19 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - In a `table-stack` card a `table-check` is as wide as its check: it kept a column's 1 px, and the check stood against
   the head's words.
 
+### Checks
+- `php tools/probe.php check`, `plan` and `affected` read a change by its sources. A built file of `dist/` follows the
+  sources it is built from, a build tool changed or not, when the tools as they were make from the sources as they
+  stand the very files the pages load (`php tools/build.php --check --files` on a copy of the tree, a few seconds).
+  `css/index.css` and `js/index.js` reach what their files reach when they only import a new file (a stylesheet after
+  `layers.css`), drop a file deleted with them, give an import more names in its place, or give `REDZ.ui` new names
+  bound by such an import. A script deleted reaches every page. A docs page whose only change is texts added to its
+  island, no plural form among them, runs nothing. A change that touched a bundle ran every page in every engine; the
+  time field's change runs 46 of the 75 pages.
+- A file edited to the same size within the second its index entry was written counts as changed: the probes' copy of
+  git's index trusts no file's time, as git on macOS counts whole seconds. A case of the bench failed now and then.
+- `php tools/build.php --check --files` compares the generated files alone, no rule and no budget held.
+
 ## 0.27.0 - 2026-11-17
 
 ### Added

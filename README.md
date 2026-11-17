@@ -302,7 +302,8 @@ the current Chrome, as the images' own lag; every release carries its sheet, and
 engines run at once, a process each (the engines `safaridriver` drives, Safari, VoiceOver and the simulators, one after
 another; `--serial` runs them all so), and `--pages=docs/menu.html,…` checks only those pages, as the workflow's `pages` input does for a lab
 run. CI checks only what changed since the nearest commit that passed (`php tools/probe.php affected BASE` says what and
-why: nothing for texts and tools, the changed pages alone, or everything), a commit that passed runs nothing again, and a run whose job GitHub
+why: nothing for texts and tools, the changed pages alone, or everything; a bundle of `dist/` and the entries that only
+import a new file follow their sources), a commit that passed runs nothing again, and a run whose job GitHub
 never placed on a runner runs its failed jobs once more by itself.
 
 ## Tools for a project

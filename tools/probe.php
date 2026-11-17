@@ -1386,8 +1386,9 @@ function PROBE__Reach(array $config, string $base, string $file): array
 			($m[2] ?? '') !== '' => 'docs/' . $m[2] . '.html',
 			default => $m[3] . '/' . $m[4] . '.html',
 		};
-		// A page that is gone has nothing to run; the pages that linked to it changed with it.
-		return is_file(PROBE_ROOT . '/' . $page) ? ['page:' . $page] : [];
+		// A page that is gone has nothing to run; the pages that linked to it changed with it. Texts added to a docs page's
+		// island change nothing it shows (PROBE__TextsAdded): the script that reads them changed with them.
+		return is_file(PROBE_ROOT . '/' . $page) && !PROBE__TextsAdded($base, $file) ? ['page:' . $page] : [];
 	}
 	if (preg_match('~\.(css|js)$~', $file) === 1 && PROBE__CommentsOnly($base, $file)) {
 		return [];
@@ -1417,6 +1418,10 @@ function PROBE__Reach(array $config, string $base, string $file): array
 	// A component reaches the pages that hold it, and so does a utility or a layout rule that asks for a class. A script
 	// that names no markup its pages hold reaches the full pages besides, where the behaviour checks drive the widgets,
 	// and the sample; a stylesheet that names nothing is one under every page.
+	// A script gone can no longer say what markup it served: every page.
+	if (preg_match('~^js/[\w-]+\.js$~', $file) === 1 && !is_file(PROBE_ROOT . '/' . $file)) {
+		return ['*'];
+	}
 	$classed = preg_match('~^css/(utilities|layout)\.css$~', $file) === 1 && !PROBE__StyleChanged($file, (string)@file_get_contents(PROBE_ROOT . '/' . $file), $base)[3];
 	if ($classed || (preg_match('~^css/components/[\w-]+\.css$|^js/[\w-]+\.js$~', $file) === 1 && $file !== 'js/index.js')) {
 		$reach = PROBE__ComponentPages($config, $file, $base);
@@ -2173,6 +2178,184 @@ function PROBE__CommentsOnly(string $base, string $file): bool
 	return true;
 }
 
+/** Whether the docs page $file changed in its texts alone - the island <script type="application/json" id="redz-ui-text">,
+ *  one line the docs build writes from the whole vocabulary, so a text a script asks is never missing from it - and only
+ *  by texts added, every text it held kept as it was, none a plural form ("found.few"): a count reads its form when the
+ *  island has it, "other" when not. The hand-written islands of index.html and the demos are no build's: they say no. */
+function PROBE__TextsAdded(string $base, string $file): bool
+{
+	if (preg_match('~^docs/[\w-]+(\.ar)?\.html$~', $file) !== 1) {
+		return false;
+	}
+	$texts = [];
+	foreach (explode("\n", PROBE__Diff($base, $file)) as $line) {
+		if (preg_match('#^[+-](?![+-]{2} )#', $line) !== 1) {
+			continue;
+		}
+		if (preg_match('#^([+-])\s*<script type="application/json" id="redz-ui-text">(.*)</script>\s*$#', $line, $m) !== 1 || isset($texts[$m[1]]) || !is_array($texts[$m[1]] = json_decode($m[2], true))) {
+			return false;
+		}
+	}
+	if (!isset($texts['-'], $texts['+'])) {
+		return false;
+	}
+	foreach ($texts['-'] as $key => $text) {
+		if (!array_key_exists($key, $texts['+']) || $texts['+'][$key] !== $text) {
+			return false;
+		}
+	}
+	return preg_grep('~\.(zero|one|two|few|many|other)$~', array_keys(array_diff_key($texts['+'], $texts['-']))) === [];
+}
+
+/** Whether $file is in the tree of $base. */
+function PROBE__InBase(string $base, string $file): bool
+{
+	try {
+		PROBE__Run(['git', '-C', PROBE_ROOT, 'cat-file', '-e', $base . ':' . $file]);
+		return true;
+	} catch (RuntimeException) {
+		return false;
+	}
+}
+
+/**
+ * Whether the entry $entry - css/index.css or js/index.js - changed only so that the files it imports say what it
+ * reaches: an import added of a file new since $base - after the line of layers.css, which orders the layers, in the
+ * stylesheet -, an import dropped of a file gone with it, an import given more names in its place; and the line that
+ * gives REDZ.ui its names, by names added, each bound by such an import.
+ * An import of a file that stays and goes, or comes, joins or leaves every page whole: the file's own change reaches
+ * only what changed in it. A moved import reorders; a name gone or given another function changes every page calling it.
+ */
+function PROBE__ImportsOnly(string $base, string $entry): bool
+{
+	$ui = [];
+	$imports = [];
+	$hunk = 0;
+	$place = ['-' => 0, '+' => 0];
+	foreach (explode("\n", PROBE__Diff($base, $entry)) as $line) {
+		if (str_starts_with($line, '@@')) {
+			$hunk++;
+			$place = ['-' => 0, '+' => 0];
+			continue;
+		}
+		if (preg_match('#^[+-](?![+-]{2} )#', $line) !== 1) {
+			continue;
+		}
+		[$sign, $text] = [$line[0], rtrim(substr($line, 1), "\r")];
+		$names = $entry === 'js/index.js' ? PROBE__UiNames($text) : null;
+		if ($names !== null && !isset($ui[$sign])) {
+			$ui[$sign] = $names;
+			continue;
+		}
+		if (preg_match('#^(?:@import url\("([\w./-]+)"\);|import (?:\{([^}]*)\} from |([\w$]+) from )?\'(\./[\w./-]+)\';)\s*$#', $text, $m) !== 1) {
+			return false;
+		}
+		$file = dirname($entry) . '/' . preg_replace('#^\./#', '', ($m[1] ?? '') !== '' ? $m[1] : $m[4]);
+		$bound = ($m[3] ?? '') !== '' ? [$m[3]] : array_values(array_filter(array_map(fn(string $name): string => trim((string)preg_replace('#^.*\bas\s+#', '', $name)), explode(',', $m[2] ?? ''))));
+		if (isset($imports[$file][$sign])) {
+			return false;
+		}
+		$imports[$file][$sign] = ['hunk' => $hunk, 'place' => $place[$sign]++, 'bound' => $bound, 'line' => $text];
+	}
+	$gained = [];
+	foreach ($imports as $file => $signs) {
+		$was = PROBE__InBase($base, $file);
+		$is = is_file(PROBE_ROOT . '/' . $file);
+		$ok = match (true) {
+			isset($signs['-'], $signs['+']) => $was && $is && $signs['-']['hunk'] === $signs['+']['hunk'] && $signs['-']['place'] === $signs['+']['place'] && array_diff($signs['-']['bound'], $signs['+']['bound']) === [],
+			isset($signs['+']) => !$was && $is && ($entry !== 'css/index.css' || PROBE__AfterLayers($signs['+']['line'])),
+			default => $was && !$is,
+		};
+		if (!$ok) {
+			return false;
+		}
+		$gained = [...$gained, ...array_diff($signs['+']['bound'] ?? [], $signs['-']['bound'] ?? [])];
+	}
+	if ($ui !== []) {
+		if (!isset($ui['-'], $ui['+']) || array_diff($ui['-'], $ui['+']) !== []) {
+			return false;
+		}
+		foreach (array_diff($ui['+'], $ui['-']) as $name) {
+			if (!in_array(substr($name, (int)strpos($name, '=') + 1), $gained, true)) {
+				return false;
+			}
+		}
+	}
+	return $imports !== [] || $ui !== [];
+}
+
+/** Whether the import $line stands after the import of layers.css in css/index.css as it is now: a file imported before
+ *  it would name a layer first and reorder them all. */
+function PROBE__AfterLayers(string $line): bool
+{
+	$lines = array_map(fn(string $text): string => rtrim($text, "\r"), explode("\n", (string)@file_get_contents(PROBE_ROOT . '/css/index.css')));
+	$layers = array_search('@import url("layers.css");', $lines, true);
+	$at = array_search($line, $lines, true);
+	return $layers !== false && $at !== false && $at > $layers;
+}
+
+/** The names the line `globalThis.REDZ = Object.assign(...{ui: {...globalThis.REDZ?.ui, ...}})` of js/index.js gives
+ *  REDZ.ui, each as its path and its function - "upload.clear=clear", "select=selectTab" -, or null for another line.
+ *  @return list<string>|null */
+function PROBE__UiNames(string $line): ?array
+{
+	if (preg_match('#^globalThis\.REDZ = Object\.assign\(globalThis\.REDZ \?\? \{\}, \{ui: \{\.\.\.globalThis\.REDZ\?\.ui, (.*)\}\}\);\s*$#', $line, $m) !== 1) {
+		return null;
+	}
+	$names = [];
+	$path = [];
+	preg_match_all('#([\w$]+)\s*:\s*\{|([\w$]+)\s*:\s*([\w$]+)|([\w$]+)|\}|[^\s,]#', $m[1], $tokens, PREG_SET_ORDER);
+	foreach ($tokens as $token) {
+		if (($token[1] ?? '') !== '') {
+			$path[] = $token[1];
+		} elseif ($token[0] === '}' && $path !== []) {
+			array_pop($path);
+		} elseif (($token[2] ?? '') !== '' || ($token[4] ?? '') !== '') {
+			$names[] = implode('.', [...$path, ($token[2] ?? '') !== '' ? $token[2] : $token[4]]) . '=' . (($token[2] ?? '') !== '' ? $token[3] : $token[4]);
+		} else {
+			return null;
+		}
+	}
+	return $path === [] ? $names : null;
+}
+
+/** Whether the build tools as they were in $base - $tools, the changed ones, put back over the working copy's tree in a
+ *  scratch folder, a new one taken away - make from the sources as they stand the built files as they stand:
+ *  `build.php --check --files` there finds nothing out of date but the copies of the tools in tools/dist/, which no page
+ *  loads. A tool that changes only what it makes of new code, or no longer makes a file, is caught; an old build that
+ *  cannot make the new sources, or knows no --files and fails a rule, says no. Answered once a base. */
+function PROBE__BuildSame(string $base, array $tools): bool
+{
+	static $same = [];
+	if (isset($same[$base])) {
+		return $same[$base];
+	}
+	$dir = sys_get_temp_dir() . '/redz-ui-build-' . getmypid();
+	PROBE__Remove($dir);
+	mkdir($dir, 0777, true);
+	try {
+		// git archive takes a tree as it takes a commit.
+		PROBE__Run(['git', '-C', PROBE_ROOT, 'archive', '--format=tar', '-o', $dir . '/now.tar', PROBE__WorkTree()]);
+		PROBE__Run(['tar', '-xf', $dir . '/now.tar', '-C', $dir]);
+		foreach ($tools as $tool) {
+			@unlink($dir . '/' . $tool);
+			if (PROBE__InBase($base, $tool)) {
+				@mkdir(dirname($dir . '/' . $tool), 0777, true);
+				file_put_contents($dir . '/' . $tool, PROBE__Run(['git', '-C', PROBE_ROOT, 'show', $base . ':' . $tool]));
+			}
+		}
+		$proc = proc_open([PHP_BINARY, $dir . '/tools/build.php', '--check', '--files'], [0 => ['file', PROBE_NULL, 'r'], 1 => ['file', PROBE_NULL, 'w'], 2 => ['pipe', 'w']], $pipes);
+		$err = is_resource($proc) ? (string)stream_get_contents($pipes[2]) : '';
+		$status = is_resource($proc) ? proc_close($proc) : -1;
+		$stale = preg_match('~^out of date: (.+?) - run php tools/build\.php$~m', $err, $m) === 1 ? explode(', ', $m[1]) : [];
+		return $same[$base] = $status === 0 || ($status === 1 && $stale !== [] && preg_grep('~^tools/dist/~', $stale, PREG_GREP_INVERT) === []);
+	} catch (RuntimeException) {
+		return $same[$base] = false;
+	} finally {
+		PROBE__Remove($dir);
+	}
+}
+
 /**
  * The code of a script ("js") or a stylesheet ("css") without its comments, its spacing made one: a run of white space
  * one space, or one line break when it holds one - a script's line breaks can end its statements. A string stays as
@@ -2188,7 +2371,9 @@ function PROBE__Code(string $text, string $kind): string
 }
 
 /** The tree of the working copy as it stands, the files git does not track yet among them - but those it ignores -:
- *  git's index copied, the working copy added to the copy. The same tree for each call of one process. */
+ *  git's index copied, the working copy added to the copy. The copy's time is set to the first second: git then trusts
+ *  no file's time and size and reads each one again - a file edited to the same size within the second the index was
+ *  written stays changed (git on macOS counts whole seconds). The same tree for each call of one process. */
 function PROBE__WorkTree(): string
 {
 	static $tree = null;
@@ -2201,6 +2386,7 @@ function PROBE__WorkTree(): string
 		$real = trim(PROBE__Run(['git', '-C', PROBE_ROOT, 'rev-parse', '--path-format=absolute', '--git-path', 'index']));
 		if (is_file($real)) {
 			copy($real, $index);
+			touch($index, 1);
 		} else {
 			PROBE__Run(['git', '-C', PROBE_ROOT, 'read-tree', 'HEAD'], ['GIT_INDEX_FILE' => $index]);
 		}
@@ -2236,7 +2422,9 @@ function PROBE__EnginePages(array $config, string $name): array
 
 /** Each file changed between $base - a commit or a tree - and the working copy (PROBE__WorkTree), with what it asks of
  *  the probes (PROBE__Reach's marks). A built file of dist/ asks nothing when the sources it is built from changed with
- *  it and the build did not - the sources say what they reach -, and everything otherwise.
+ *  it and the build makes from the old sources what it made before (PROBE__BuildSame, when a build tool changed) - the
+ *  sources say what they reach -, and everything otherwise. An entry that only imports a file changed with it, or no
+ *  longer imports it, asks nothing more than that file (PROBE__ImportsOnly).
  *  @return array<string, list<string>> */
 function PROBE__Changed(array $config, string $base): array
 {
@@ -2246,8 +2434,14 @@ function PROBE__Changed(array $config, string $base): array
 	}
 	$sources = preg_grep('~^(css|js|icons|' . implode('|', PROBE_PACKAGES) . ')/~', array_keys($changed));
 	$build = preg_grep('~^tools/(build|min|lib|floor)(\.php$|/)~', array_keys($changed));
-	foreach ($sources === [] || $build !== [] ? [] : preg_grep('~^dist/~', array_keys($changed)) as $file) {
+	$dist = preg_grep('~^dist/~', array_keys($changed));
+	foreach ($dist === [] || $sources === [] || ($build !== [] && !PROBE__BuildSame($base, array_values($build))) ? [] : $dist as $file) {
 		$changed[$file] = [];
+	}
+	foreach (['css/index.css', 'js/index.js'] as $entry) {
+		if (($changed[$entry] ?? []) !== [] && PROBE__ImportsOnly($base, $entry)) {
+			$changed[$entry] = [];
+		}
 	}
 	return $changed;
 }

@@ -11,8 +11,9 @@
 // then tools/dist/, the release's tools - tools/floor/floor.php, floor.json and tools/min.php as they are, LICENSE,
 // NOTICE and their passport redz-ui-tools.json -, that the tools call only what every PHP has built in and that the
 // minifier proves itself on its fuses; then that every skill carries the version, and the budgets of the two files and
-// of the packages', gzip -9. Usage: php tools/build.php [--check] - --check writes nothing and exits 1 when a file is
-// out of date, a skill's version is not the passport's, a published pack changed or a budget is exceeded.
+// of the packages', gzip -9. Usage: php tools/build.php [--check [--files]] - --check writes nothing and exits 1 when a
+// file is out of date, a skill's version is not the passport's, a published pack changed or a budget is exceeded; --files
+// compares the generated files alone, no rule and no budget held (the probes ask it whether a changed tool makes the same).
 require __DIR__ . '/lib.php';
 require __DIR__ . '/min.php';
 
@@ -1110,14 +1111,16 @@ function BUILD__Budgets(): array
 }
 
 /**
- * Writes the generated files, or with --check only compares them, then holds the budgets; the exit code.
+ * Writes the generated files, or with --check only compares them, then holds the budgets - with --files too, the files
+ * alone -; the exit code.
  * @param list<string> $argv
  */
 function BUILD__Main(array $argv): int
 {
 	$check = in_array('--check', $argv, true);
+	$alone = $check && in_array('--files', $argv, true);
 	$vocab = BUILD__Vocabulary();
-	$wrong = [...BUILD__TextsCheck($vocab), ...BUILD__CommandsCheck(), ...BUILD__SamplesCheck(), ...BUILD__MotionCheck(), ...BUILD__SinksCheck(), ...BUILD__TrackCheck(), ...BUILD__SwapCheck(), ...BUILD__ChipsCheck(), ...BUILD__TypesCheck(), ...BUILD__BudgetWordsCheck(), ...BUILD__CatalogCheck(), ...BUILD__ToolsCalls(), ...array_map(fn(string $failure): string => 'tools/min.php  ' . $failure, MIN__SelfTest())];
+	$wrong = $alone ? [] : [...BUILD__TextsCheck($vocab), ...BUILD__CommandsCheck(), ...BUILD__SamplesCheck(), ...BUILD__MotionCheck(), ...BUILD__SinksCheck(), ...BUILD__TrackCheck(), ...BUILD__SwapCheck(), ...BUILD__ChipsCheck(), ...BUILD__TypesCheck(), ...BUILD__BudgetWordsCheck(), ...BUILD__CatalogCheck(), ...BUILD__ToolsCalls(), ...array_map(fn(string $failure): string => 'tools/min.php  ' . $failure, MIN__SelfTest())];
 	if ($wrong !== []) {
 		fwrite(STDERR, implode("\n", $wrong) . "\n");
 		return 1;
@@ -1155,6 +1158,9 @@ function BUILD__Main(array $argv): int
 	if ($stale !== []) {
 		fwrite(STDERR, 'out of date: ' . implode(', ', $stale) . " - run php tools/build.php\n");
 		return 1;
+	}
+	if ($alone) {
+		return 0;
 	}
 	$changed = BUILD__IconsChanged();
 	if ($changed !== '') {
