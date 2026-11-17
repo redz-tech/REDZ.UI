@@ -61,6 +61,27 @@
 		padding-inline-start: 2rem;
 	}
 
+	@media (pointer: coarse) {
+		.combobox-search-input {
+			min-block-size: 3rem;
+		}
+	}
+
+	.combobox-search:has(> .combobox-clear) > .combobox-search-input {
+		padding-inline-end: calc(var(--redz-control-height-sm) + var(--redz-space-4));
+	}
+
+	.combobox-clear {
+		position: absolute;
+		inset-block-start: 50%;
+		inset-inline-end: calc(var(--redz-space-8) + 2px);
+		translate: 0 -50%;
+	}
+
+	.combobox-search:has(> .combobox-search-input:placeholder-shown) > .combobox-clear {
+		display: none;
+	}
+
 	.combobox-list {
 		max-block-size: min(18rem, 50dvh);
 		padding: var(--redz-space-4);

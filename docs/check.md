@@ -6,7 +6,7 @@ The browser's own checkbox and radio, drawn by the library: `check`, `radio` and
 
 ## Examples
 
-The class goes on the `<input>`; the label wraps it, so a click anywhere on the words toggles it.
+The class goes on the `<input>`; the label wraps it, so a click anywhere on the words toggles it. Under a finger, `pointer: coarse`, a check, a radio or a switch outside a label, as in a table's `table-check` cell, answers in 44 px around it while it looks the same.
 
 ```html
 <fieldset class="vstack gap-8">

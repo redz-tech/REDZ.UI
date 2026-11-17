@@ -7,7 +7,8 @@
 // redz:create (js/answer.js), else the new label goes into a hidden field data-create names. In such a list a comma
 // takes the words as Enter does, and a search with a pattern or inputmode="email" - type="email" too, though
 // role="combobox" belongs on type="text" - refuses words it does not hold. Options in levels (data-level: an option has
-// no aria-level) keep the page's order, a match shown with its parents.
+// no aria-level) keep the page's order, a match shown with its parents. A button with command="--clear" for the search
+// empties it and keeps the focus there.
 import {ask} from './answer.js';
 import {text, textCount} from './text.js';
 
@@ -781,6 +782,14 @@ export const setList = (target, values) => {
 		return option === undefined ? held.find(([one]) => one === value) ?? [value, value, 'create' in list.dataset] : [value, labelOf(option), false];
 	}));
 };
+
+document.addEventListener('command', (event) => {
+	const input = event.target;
+	if (event.command === '--clear' && input instanceof HTMLInputElement && input.getAttribute('role') === 'combobox' && listOf(input) !== null) {
+		fresh(input);
+		input.focus();
+	}
+}, true);
 
 document.addEventListener('reset', (event) => {
 	const form = event.target;

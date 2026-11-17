@@ -5,7 +5,7 @@
 
 <section class="vstack gap-16" aria-labelledby="combobox-examples">
 	<h2 id="combobox-examples">Examples</h2>
-	<p>The face is a button with <code>role="combobox"</code> that opens its panel by the browser's command; the panel is a popover with the search, the <code>listbox</code> and the value: one hidden field per chosen value, named by the list's <code>data-name</code>, so a form posts it as it is. Typing filters the list - case and accents aside, every word found, the best first - and the arrow keys move the active option while the focus stays in the search.</p>
+	<p>The face is a button with <code>role="combobox"</code> that opens its panel by the browser's command; the panel is a popover with the search, the <code>listbox</code> and the value: one hidden field per chosen value, named by the list's <code>data-name</code>, so a form posts it as it is. Typing filters the list - case and accents aside, every word found, the best first - and the arrow keys move the active option while the focus stays in the search. A <code>combobox-clear</code> button in the search, <code>command="--clear"</code> for it, shows while the search holds words, empties it and keeps the focus there. Under a finger the search is 48 px with 16 px words, and each option 48 px.</p>
 	<div class="docs-example docs-example-stack" id="combobox-one">
 		<div class="form-floating">
 			<button class="form-select combobox-toggle" type="button" id="combobox-one-face" role="combobox" aria-haspopup="dialog" aria-expanded="false" commandfor="combobox-one-panel" command="toggle-popover"><span class="combobox-value" data-placeholder="Choose a language…">Thai</span></button>
@@ -15,6 +15,7 @@
 			<div class="combobox-search">
 				<i class="bi bi-search" aria-hidden="true"></i>
 				<input class="form-control form-control-sm combobox-search-input" type="text" enterkeyhint="search" id="combobox-one-search" role="combobox" aria-controls="combobox-one-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a language" placeholder="Find a language" autocomplete="off" autofocus>
+				<button class="btn btn-icon btn-sm btn-text combobox-clear" type="button" command="--clear" commandfor="combobox-one-search" aria-label="Clear the search"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
 			</div>
 			<div class="combobox-list" id="combobox-one-list" role="listbox" aria-label="Languages" data-name="language">
 				<div class="menu-item" role="option" id="combobox-one-en" data-value="en" aria-selected="false">English</div>

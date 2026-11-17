@@ -113,7 +113,7 @@ A checked row is tinted: its check is the only state. An element with `data-sele
 
 ### Row sizes
 
-`data-density="compact"` tightens the rows and the controls of the element it is on and of everything inside it: a table, the card that holds it, a region, or the whole page on `<html>`. A compact table can stand beside a normal one on the same screen. Bootstrap 5 calls it `table-sm`. `data-density="comfortable"` and `data-density="spacious"` open the rows up the other way, for a short table that is the point of a page.
+`data-density="compact"` tightens the rows and the controls of the element it is on and of everything inside it: a table, the card that holds it, a region, or the whole page on `<html>`. A compact table can stand beside a normal one on the same screen. Bootstrap 5 calls it `table-sm`. Under a finger the rows tighten and the controls keep 44 px. `data-density="comfortable"` and `data-density="spacious"` open the rows up the other way, for a short table that is the point of a page.
 
 ```html
 <table class="table table-bordered" data-density="compact" aria-label="Seasons on Main Island, compact">

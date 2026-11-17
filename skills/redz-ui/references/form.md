@@ -88,7 +88,7 @@ A `details` with `form-more` folds what a short hint cannot say. Its chevron tur
 
 ### Sizes
 
-`form-control-sm` and `form-select-sm` are 28 px high, the default 32 px, `-lg` 40 px - the same heights as the buttons beside them.
+`form-control-sm` and `form-select-sm` are 28 px high, the default 32 px, `-lg` 40 px - the same heights as the buttons beside them. Under a finger, `pointer: coarse`, a field is 44 px at least, a large one 48, a floating one 52, and its words are 16 px, so a phone does not zoom into it.
 
 ```html
 <input class="form-control form-control-sm" name="small-field" placeholder="Small" aria-label="Small field">

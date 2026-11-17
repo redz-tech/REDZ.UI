@@ -2614,6 +2614,7 @@ column-gap-48
 column-gap-64
 column-gap-8
 combobox-chips
+combobox-clear
 combobox-list
 combobox-menu
 combobox-more

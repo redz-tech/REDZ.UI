@@ -6,7 +6,16 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 
 ## Unreleased
 
+### Added
+- `combobox-clear`, a button in a combobox's search with `command="--clear"` for it: it shows while the search holds
+  words, empties it, shows the whole list and keeps the focus in the search.
+
 ### Changed
+- Sizes for a finger: under `pointer: coarse` no control is under 44 px - every size of a field, a select, a button,
+  an icon button, a chip, a page link - a large one is 48 and a floating field stays 52, whatever `data-density` says;
+  an option of a menu or a combobox is 48, and a combobox's search 48 with 16 px words. A check, a radio or a switch
+  outside a label, as in a `table-check` cell, answers in 44 px around it and looks the same. A mouse keeps every
+  size. Apple asks 44 points of a touch target, Material 48 dp; a finger missed the 28 px search of a combobox.
 - In a `table-stack` card the row's head, `th scope="row"`, takes a line of its own, so every card of a list starts
   alike whatever the length of its title; a `table-check` before the head stays beside it. A short head used to share
   its line with the next cell and a long one did not.

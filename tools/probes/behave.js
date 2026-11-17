@@ -4708,6 +4708,61 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a row\'s head is painted or placed unlike its row: ' + wrong.join(', '));
 			}
 		}]},
+		// Under a finger no control is under 44 px - a large one 48, a floating one 52, at any density -, an option and the
+		// panel's search are 48 with 16 px words, and a check outside a label answers in 44 px; a mouse keeps every size.
+		fingerSizes: {target: '#combobox-one', steps: [async (out) => {
+			const coarse = matchMedia('(pointer: coarse)').matches;
+			const box = Object.assign(document.createElement('div'), {innerHTML: trusted('<input class="form-control" id="finger-md" aria-label="Md"><input class="form-control form-control-sm" id="finger-sm" aria-label="Sm">'
+				+ '<button class="btn btn-icon btn-xs" type="button" id="finger-xs" aria-label="Xs">x</button><button class="btn btn-lg" type="button" id="finger-lg">Lg</button>'
+				+ '<div class="form-floating"><input class="form-control" id="finger-float" placeholder=" "><label for="finger-float">Float</label></div>'
+				+ '<div data-density="compact"><input class="form-control" id="finger-compact" aria-label="Compact"><button class="btn btn-sm" type="button" id="finger-compact-sm">Sm</button></div>'
+				+ '<table class="table"><tbody><tr><td class="table-check"><input class="check" type="checkbox" id="finger-cell" aria-label="Cell"></td><td>Row</td></tr></tbody></table>'
+				+ '<label class="form-check"><input class="check" type="checkbox" id="finger-label"> Label</label><input class="switch" type="checkbox" role="switch" id="finger-switch" aria-label="Switch">')});
+			document.body.append(box);
+			await settled();
+			const tall = (id) => document.getElementById(id).offsetHeight;
+			const zone = (id) => {
+				const after = getComputedStyle(document.getElementById(id), '::after');
+				return after.content === 'none' || after.position !== 'absolute' ? '-' : Math.round(parseFloat(after.width)) + 'x' + Math.round(parseFloat(after.height));
+			};
+			const option = getComputedStyle($('#combobox-one-list [role="option"]'));
+			const search = getComputedStyle($('#combobox-one-search'));
+			const seen = {
+				md: tall('finger-md'), sm: tall('finger-sm'), xs: tall('finger-xs'), lg: tall('finger-lg'), float: tall('finger-float'),
+				compact: tall('finger-compact'), compactSm: tall('finger-compact-sm'), cell: zone('finger-cell'), label: zone('finger-label'), switch: zone('finger-switch'),
+				option: option.minBlockSize, search: search.minBlockSize + ' ' + search.fontSize,
+			};
+			box.remove();
+			const want = coarse
+				? {md: 44, sm: 44, xs: 44, lg: 48, float: 52, compact: 44, compactSm: 44, cell: '44x44', label: '-', switch: '44x44', option: '48px', search: '48px 16px'}
+				: {md: 32, sm: 28, xs: 24, lg: 40, float: 52, compact: 28, compactSm: 24, cell: '-', label: '-', switch: '-', option: '32px', search: '28px 12px'};
+			if (say(seen) !== say(want)) {
+				out.push('controls ' + (coarse ? 'under a finger' : 'under a mouse') + ' are ' + say(seen) + ', not ' + say(want));
+			}
+		}]},
+		// A combobox-clear button shows while its search holds words, empties it, shows the whole list and keeps the focus.
+		comboboxClear: {target: '#combobox-one', steps: [async (out) => {
+			const panel = $('#combobox-one-panel');
+			const search = $('#combobox-one-search');
+			const clear = $('#combobox-one .combobox-clear');
+			const shown = () => getComputedStyle(clear).display !== 'none';
+			$('#combobox-one-face').click();
+			await until(() => panel.matches(':popover-open') && document.activeElement === search);
+			await settled();
+			const empty = shown();
+			input(search, 'ger');
+			await settled();
+			const typed = shown();
+			const found = $$('#combobox-one-list [role="option"]').filter((option) => option.checkVisibility()).length;
+			clear.click();
+			await settled();
+			const seen = {empty, typed, found, value: search.value, focus: document.activeElement === search, after: shown(), options: $$('#combobox-one-list [role="option"]').filter((option) => option.checkVisibility()).length};
+			panel.hidePopover();
+			await settled();
+			if (say(seen) !== say({empty: false, typed: true, found: 1, value: '', focus: true, after: false, options: 12})) {
+				out.push('a combobox-clear button empties its search and keeps the focus there: ' + say(seen));
+			}
+		}]},
 		scrollCue: {target: '#table-wide', steps: [async (out) => {
 			const card = $('#table-wide .card');
 			const box = $('.table-scroll', card);

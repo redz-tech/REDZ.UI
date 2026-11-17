@@ -181,6 +181,18 @@
 		--redz-row-pad: 1.125rem;
 	}
 
+	/* Under a finger no control is less than 44 px, a large one 48, a floating one 52, whatever the density. */
+	@media (pointer: coarse) {
+		:root,
+		[data-density] {
+			--redz-control-height: 2.75rem;
+			--redz-control-height-xs: 2.75rem;
+			--redz-control-height-sm: 2.75rem;
+			--redz-control-height-lg: 3rem;
+			--redz-control-height-float: 3.25rem;
+		}
+	}
+
 	[data-theme="light"] {
 		color-scheme: light;
 		--redz-shadow-strength: 1;

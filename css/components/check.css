@@ -170,6 +170,19 @@
 		box-shadow: 0 0 0 1px var(--redz-border);
 	}
 
+	/* Under a finger a check outside a label answers in 44 px around it; in a label the label's words answer. */
+	@media (pointer: coarse) {
+		:is(.check, .radio, .switch):not(label *, [aria-busy="true"]) {
+			position: relative;
+		}
+
+		:is(.check, .radio, .switch):not(label *, [aria-busy="true"])::after {
+			content: "";
+			position: absolute;
+			inset: min(0px, (100% - 2.75rem) / 2);
+		}
+	}
+
 	@media (prefers-reduced-motion: no-preference) {
 		.check::before,
 		.radio::before,

@@ -6,7 +6,7 @@ A choice from a list long enough to search: a button in the look of a select sho
 
 ## Examples
 
-The face is a button with `role="combobox"` that opens its panel by the browser's command; the panel is a popover with the search, the `listbox` and the value: one hidden field per chosen value, named by the list's `data-name`, so a form posts it as it is. Typing filters the list - case and accents aside, every word found, the best first - and the arrow keys move the active option while the focus stays in the search.
+The face is a button with `role="combobox"` that opens its panel by the browser's command; the panel is a popover with the search, the `listbox` and the value: one hidden field per chosen value, named by the list's `data-name`, so a form posts it as it is. Typing filters the list - case and accents aside, every word found, the best first - and the arrow keys move the active option while the focus stays in the search. A `combobox-clear` button in the search, `command="--clear"` for it, shows while the search holds words, empties it and keeps the focus there. Under a finger the search is 48 px with 16 px words, and each option 48 px.
 
 ```html
 <div class="form-floating">
@@ -17,6 +17,7 @@ The face is a button with `role="combobox"` that opens its panel by the browser'
 	<div class="combobox-search">
 		<i class="bi bi-search" aria-hidden="true"></i>
 		<input class="form-control form-control-sm combobox-search-input" type="text" enterkeyhint="search" id="combobox-one-search" role="combobox" aria-controls="combobox-one-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a language" placeholder="Find a language" autocomplete="off" autofocus>
+		<button class="btn btn-icon btn-sm btn-text combobox-clear" type="button" command="--clear" commandfor="combobox-one-search" aria-label="Clear the search"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
 	</div>
 	<div class="combobox-list" id="combobox-one-list" role="listbox" aria-label="Languages" data-name="language">
 		<div class="menu-item" role="option" id="combobox-one-en" data-value="en" aria-selected="false">English</div>
@@ -303,4 +304,4 @@ The library has no words of its own; it reads these from the page's island `#red
 
 From [`css/components/combobox.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/combobox.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-8`, `--redz-focus`, `--redz-text-muted`, `--redz-border`, `--redz-space-4`, `--redz-bg-hover`, `--redz-space-12`, `--redz-primary-subtle`, `--redz-primary-text`.
+It reads the theme's `--redz-space-8`, `--redz-focus`, `--redz-text-muted`, `--redz-border`, `--redz-control-height-sm`, `--redz-space-4`, `--redz-bg-hover`, `--redz-space-12`, `--redz-primary-subtle`, `--redz-primary-text`.

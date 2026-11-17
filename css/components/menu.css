@@ -43,6 +43,12 @@
 		cursor: pointer;
 	}
 
+	@media (pointer: coarse) {
+		.menu-item {
+			min-block-size: 3rem;
+		}
+	}
+
 	.menu-item .bi {
 		color: var(--redz-text-muted);
 	}

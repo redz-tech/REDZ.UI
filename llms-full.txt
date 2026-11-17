@@ -2836,7 +2836,7 @@ Quieter forms of the same tones for secondary actions, rows and toolbars. `btn-t
 
 ### Sizes
 
-A size is a word: `btn-xs` 24 px, `btn-sm` 28 px, the default 32 px, `btn-lg` 40 px - the heights of every control of the same size. `btn-xl`, 56 px, is for a touch screen and the one action of a page; in a [kiosk](kiosk.md) it grows to a kiosk's size.
+A size is a word: `btn-xs` 24 px, `btn-sm` 28 px, the default 32 px, `btn-lg` 40 px - the heights of every control of the same size. Under a finger, `pointer: coarse`, every size is 44 px at least and `btn-lg` 48, as Apple and Material ask of a touch target. `btn-xl`, 56 px, is for a touch screen and the one action of a page; in a [kiosk](kiosk.md) it grows to a kiosk's size.
 
 ```html
 <button class="btn btn-primary btn-xs" type="button">Extra small</button>
@@ -3316,7 +3316,7 @@ A `details` with `form-more` folds what a short hint cannot say. Its chevron tur
 
 ### Sizes
 
-`form-control-sm` and `form-select-sm` are 28 px high, the default 32 px, `-lg` 40 px - the same heights as the buttons beside them.
+`form-control-sm` and `form-select-sm` are 28 px high, the default 32 px, `-lg` 40 px - the same heights as the buttons beside them. Under a finger, `pointer: coarse`, a field is 44 px at least, a large one 48, a floating one 52, and its words are 16 px, so a phone does not zoom into it.
 
 ```html
 <input class="form-control form-control-sm" name="small-field" placeholder="Small" aria-label="Small field">
@@ -3749,7 +3749,7 @@ The browser's own checkbox and radio, drawn by the library: `check`, `radio` and
 
 ## Examples
 
-The class goes on the `<input>`; the label wraps it, so a click anywhere on the words toggles it.
+The class goes on the `<input>`; the label wraps it, so a click anywhere on the words toggles it. Under a finger, `pointer: coarse`, a check, a radio or a switch outside a label, as in a table's `table-check` cell, answers in 44 px around it while it looks the same.
 
 ```html
 <fieldset class="vstack gap-8">
@@ -3818,7 +3818,7 @@ A choice from a list long enough to search: a button in the look of a select sho
 
 ## Examples
 
-The face is a button with `role="combobox"` that opens its panel by the browser's command; the panel is a popover with the search, the `listbox` and the value: one hidden field per chosen value, named by the list's `data-name`, so a form posts it as it is. Typing filters the list - case and accents aside, every word found, the best first - and the arrow keys move the active option while the focus stays in the search.
+The face is a button with `role="combobox"` that opens its panel by the browser's command; the panel is a popover with the search, the `listbox` and the value: one hidden field per chosen value, named by the list's `data-name`, so a form posts it as it is. Typing filters the list - case and accents aside, every word found, the best first - and the arrow keys move the active option while the focus stays in the search. A `combobox-clear` button in the search, `command="--clear"` for it, shows while the search holds words, empties it and keeps the focus there. Under a finger the search is 48 px with 16 px words, and each option 48 px.
 
 ```html
 <div class="form-floating">
@@ -3829,6 +3829,7 @@ The face is a button with `role="combobox"` that opens its panel by the browser'
 	<div class="combobox-search">
 		<i class="bi bi-search" aria-hidden="true"></i>
 		<input class="form-control form-control-sm combobox-search-input" type="text" enterkeyhint="search" id="combobox-one-search" role="combobox" aria-controls="combobox-one-list" aria-expanded="true" aria-autocomplete="list" aria-label="Find a language" placeholder="Find a language" autocomplete="off" autofocus>
+		<button class="btn btn-icon btn-sm btn-text combobox-clear" type="button" command="--clear" commandfor="combobox-one-search" aria-label="Clear the search"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
 	</div>
 	<div class="combobox-list" id="combobox-one-list" role="listbox" aria-label="Languages" data-name="language">
 		<div class="menu-item" role="option" id="combobox-one-en" data-value="en" aria-selected="false">English</div>
@@ -4115,7 +4116,7 @@ The library has no words of its own; it reads these from the page's island `#red
 
 From [`css/components/combobox.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/combobox.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-8`, `--redz-focus`, `--redz-text-muted`, `--redz-border`, `--redz-space-4`, `--redz-bg-hover`, `--redz-space-12`, `--redz-primary-subtle`, `--redz-primary-text`.
+It reads the theme's `--redz-space-8`, `--redz-focus`, `--redz-text-muted`, `--redz-border`, `--redz-control-height-sm`, `--redz-space-4`, `--redz-bg-hover`, `--redz-space-12`, `--redz-primary-subtle`, `--redz-primary-text`.
 
 # Inline edit
 
@@ -6177,7 +6178,7 @@ A checked row is tinted: its check is the only state. An element with `data-sele
 
 ### Row sizes
 
-`data-density="compact"` tightens the rows and the controls of the element it is on and of everything inside it: a table, the card that holds it, a region, or the whole page on `<html>`. A compact table can stand beside a normal one on the same screen. Bootstrap 5 calls it `table-sm`. `data-density="comfortable"` and `data-density="spacious"` open the rows up the other way, for a short table that is the point of a page.
+`data-density="compact"` tightens the rows and the controls of the element it is on and of everything inside it: a table, the card that holds it, a region, or the whole page on `<html>`. A compact table can stand beside a normal one on the same screen. Bootstrap 5 calls it `table-sm`. Under a finger the rows tighten and the controls keep 44 px. `data-density="comfortable"` and `data-density="spacious"` open the rows up the other way, for a short table that is the point of a page.
 
 ```html
 <table class="table table-bordered" data-density="compact" aria-label="Seasons on Main Island, compact">
