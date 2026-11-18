@@ -64,7 +64,7 @@ form the page language's plural rules name (`found.one`, `found.few`, …), else
 - `await REDZ.ui.busy(element, promise)` - a button or a region busy until the promise settles.
 
 Every call of `REDZ.ui` and every `redz:*` event with its `detail` is declared in `js/redz-ui.d.ts` of the release
-(`js/redz-ui-editor.d.ts`, `js/redz-ui-qr.d.ts` for the packages): read it before calling one, and keep a project's own
+(`js/redz-ui-editor.d.ts`, `js/redz-ui-qr.d.ts`, `js/redz-ui-crop.d.ts` for the packages): read it before calling one, and keep a project's own
 members in its own `.d.ts` by declaring `interface Redz` or `interface RedzUi` again - never a cast or a JSDoc copy.
 A listener names its event for PhpStorm: `/** @param {RedzEventMap['redz:save']} event */`.
 
@@ -73,7 +73,8 @@ A listener names its event for PhpStorm: `/** @param {RedzEventMap['redz:save']}
 Check it exists: `grep -x 'CLASS' assets/classes.txt`. A class that is not there does not exist in REDZ.UI - Bootstrap
 6 habits (`md:col-6`, `btn-solid`, `fg-*`) and invented names included. The packages' classes are there too: a page
 that uses one links its package - `chart`, `spark` and `lanes` need `css/redz-ui-charts.min.css` and .min.js, and
-`date-input` and `date-pick` need `css/redz-ui-calendar.min.css` and .min.js.
+`date-input` and `date-pick` need `css/redz-ui-calendar.min.css` and .min.js, and `data-crop` needs
+`css/redz-ui-crop.min.css` and .min.js.
 
 ## References - one per page of the docs
 

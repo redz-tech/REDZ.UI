@@ -191,7 +191,8 @@ The library has no words of its own: every word it shows comes from the caller o
 
 **Types for an editor.** `js/redz-ui.d.ts` beside the script declares `REDZ.ui` - each call with its options and its
 answer - and every `redz:*` event with its `detail`, as `document`, `window` and an element hear it; the editor's and
-the QR codes' packages have theirs, `js/redz-ui-editor.d.ts` and `js/redz-ui-qr.d.ts`. A browser never loads them and a
+the QR codes' and the crop's packages have theirs, `js/redz-ui-editor.d.ts`, `js/redz-ui-qr.d.ts` and
+`js/redz-ui-crop.d.ts`. A browser never loads them and a
 project needs no TypeScript: PhpStorm and VS Code read a declaration file in the project as it is and type what a plain
 script writes - `await REDZ.ui.confirm(...)` is a boolean, `REDZ` and `window.REDZ` alike. VS Code types a listener's
 event from the event's name; PhpStorm reads it from the listener's annotation,
@@ -217,10 +218,10 @@ the clipboard runs. On a page that requires Trusted Types it makes one policy, `
 `trusted-types` directive; no other package needs one. Its words are the island's `editor.*` texts, which the passport's `editor.texts` lists apart from the
 library's; its soft ceilings are 70 KB of script and 8 KB of styles, gzipped.
 
-## Charts, calendars, the media library and QR codes
+## Charts, calendars, the media library, QR codes and the crop
 
-Four more packages, linked on the screens that show them, listed in the passport's `packages` - each built into
-`dist/` from its folder, `charts/`, `calendar/`, `media/` and `qr/`, which stay to read:
+Five more packages, linked on the screens that show them, listed in the passport's `packages` - each built into
+`dist/` from its folder, `charts/`, `calendar/`, `media/`, `qr/` and `crop/`, which stay to read:
 - `css/redz-ui-charts.min.css` and the module `js/redz-ui-charts.min.js` - a chart is the table of its numbers
   drawn by CSS: columns stacked by day (`chart`), a row's sparkline of runs (`spark`), a board of lanes over a time
   window (`lanes`). The numbers are `data-v`, `data-at`, `data-from`, `data-to`, `data-median` and `data-now`, shares
@@ -233,9 +234,11 @@ Four more packages, linked on the screens that show them, listed in the passport
   `--view` and its reordering `data-reorder`, both in the main script.
 - the module `js/redz-ui-qr.min.js` - draws the QR code of a text into a `qr` tile as one SVG path: `data-qr` in the
   markup, or `REDZ.ui.qr(element, text)` for a text such as a secret that should sit in no attribute.
+- `css/redz-ui-crop.min.css` and the module `js/redz-ui-crop.min.js` - a photo of a paper framed by four corners and
+  straightened in the browser: `data-crop` on an `input type="file"`, or `REDZ.ui.crop(file, options)`.
 
 Their budgets, gzipped: charts 3 KB of styles and 2 KB of script, the calendar 3 KB of styles and 6 KB of script, the
-media library 2 KB, QR codes 4 KB of script.
+media library 2 KB, QR codes 4 KB of script, the crop 2 KB of styles and 8 KB of script.
 
 ## Documentation
 `docs/` on the site: getting started, layout, utilities, tokens, icons, the move from Bootstrap 5.3, and a page per

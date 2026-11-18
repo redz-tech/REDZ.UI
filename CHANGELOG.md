@@ -49,6 +49,18 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   the field, or a time or date input's face for its hidden input, lights in the success tone and fades in 2 s, and the
   page's words are said politely; under less motion the tone holds the 2 s. A tracked form's save flashes the fields
   it took.
+- The crop package, `css/redz-ui-crop.min.css` and the module `js/redz-ui-crop.min.js` (6 KB gzipped), built from
+  `crop/`: `REDZ.ui.crop(file, options)` opens a photo of a paper full screen under a frame of four corners the
+  library places on the paper's edges, or around the whole photo when it finds none. A corner is dragged with a loupe
+  above the finger, or pressed and then the spot tapped, or moved by the arrow keys; Rotate turns the photo by 90 and
+  Retake calls the page's `options.retake`. Done straightens the frame into a rectangle as the paper's proportions
+  were framed, its long side at most `max` (600 px unless told, never enlarged), a `type` (JPEG unless told) at a
+  `quality` (0.6 unless told). The answer is `{blob, width, height, points}`, or `null` when cancelled: `points` are
+  the frame's corners in the photo's own pixels, and `options.points` opens the frame there again. An
+  `input type="file"` with `data-crop` opens it on its change, `data-crop-max` and `data-crop-quality` its options,
+  puts the cropped file back into the input and fires `redz:crop`; a photo the browser cannot open empties the input
+  and says so. The photo is never sent anywhere, its EXIF turn is the browser's, and the page's texts `crop.*` give
+  every word. Types in `js/redz-ui-crop.d.ts`.
 
 ### Changed
 - The main script's budget is 58 KB gzipped, from 56: the time field takes 2 KB.
@@ -112,6 +124,9 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - Checks `stackHead` (the head's bar, its words, select all and a sort there, a head without controls hidden, a wide
   table's head row), `requiredShow` (waits, refused after a send with the focus, plain once filled) and `flash` (lit,
   animated, said, gone in 2 s); `track` asks a saved field to flash. Red on 9 planted faults.
+- Check `crop`: a drawn sample paper framed by its own detection within 16 px, Done's size and type, a turn and its
+  points, a frame opened again by its points, the defaults, four turns back to the start, the shortest side kept, and
+  Escape; under a finger too. Red on 8 planted faults, a shrink that never ends among them.
 - `php tools/build.php` reads a package's classes from its sources: a docs example of a class new in a package failed
   the build, which held it against the package as last built, and the build writes the package only once it passes.
 - The check of `combobox-clear` types in the very task the panel opens in, so a panel made after its search has the

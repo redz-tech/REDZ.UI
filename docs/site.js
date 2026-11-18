@@ -404,6 +404,44 @@
 		}
 	});
 
+	// The crop's sample: a paper photographed on a table, put into the field as a person would pick it, and the size of what
+	// came back written beside it.
+	document.addEventListener('click', (event) => {
+		const button = event.target instanceof Element ? event.target.closest('[data-docs-crop]') : null;
+		const input = button === null ? null : document.getElementById(button.dataset.docsCrop);
+		if (input === null) {
+			return;
+		}
+		const canvas = Object.assign(document.createElement('canvas'), {width: 1600, height: 1200});
+		const context = canvas.getContext('2d');
+		context.fillStyle = '#3b2a1e';
+		context.fillRect(0, 0, 1600, 1200);
+		context.fillStyle = '#f7f5ef';
+		context.beginPath();
+		[[430, 170], [1190, 120], [1250, 1080], [380, 1110]].forEach(([x, y]) => context.lineTo(x, y));
+		context.closePath();
+		context.fill();
+		context.fillStyle = '#333';
+		context.font = 'bold 48px sans-serif';
+		context.fillText('Sample Tours', 520, 300);
+		context.font = '30px sans-serif';
+		for (let line = 0; line < 12; line++) {
+			context.fillText('Voucher 4821, line ' + (line + 1), 520, 380 + line * 50);
+		}
+		canvas.toBlob((blob) => {
+			const list = new DataTransfer();
+			list.items.add(new File([blob], 'sample.jpg', {type: 'image/jpeg'}));
+			input.files = list.files;
+			input.dispatchEvent(new Event('change', {bubbles: true}));
+		}, 'image/jpeg', 0.9);
+	});
+	document.addEventListener('redz:crop', (event) => {
+		const shown = event.target.closest('.docs-example')?.querySelector('[data-docs-cropped]');
+		if (shown) {
+			shown.textContent = event.detail.width + ' x ' + event.detail.height + ' px, ' + Math.round(event.detail.blob.size / 1024) + ' KB';
+		}
+	});
+
 	// A result in its field: the next agent's name, flashed with its words.
 	let agents = 0;
 	document.addEventListener('click', (event) => {

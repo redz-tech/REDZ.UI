@@ -6199,6 +6199,76 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a combobox put in after load draws its options and face as ' + say(drawn) + ', not German chosen on its face');
 			}
 		}]},
+		// The crop: a photo picked into a data-crop field opens a modal screen with the paper's corners found; Done puts back a
+		// straightened JPEG at the field's size with the frame's points; a frame turned once answers its points in the turned
+		// order and opens there again as it was; the size is 600 unless told; Escape answers null. Under a finger the walk
+		// runs 500 px wide, where a fraction of a pixel once made the screen draw without end.
+		crop: {target: '#crop-sample', walk: async function* (out) {
+			const field = $('#crop-sample-photo');
+			const truth = [[430, 170], [1190, 120], [1250, 1080], [380, 1110]];
+			const off = (points, want) => Math.round(Math.max(...points.map((p, i) => Math.hypot(p[0] - want[i][0], p[1] - want[i][1]))));
+			const open = async () => {
+				await until(() => $('dialog.crop[data-ready]') !== null, 8000);
+				return $('dialog.crop[data-ready]');
+			};
+			const done = () => center($$('dialog.crop .crop-bar .btn').at(-1));
+			let original = null;
+			let answer = null;
+			field.addEventListener('change', () => {
+				original ??= field.files[0];
+			}, {capture: true});
+			field.addEventListener('redz:crop', (event) => {
+				answer = event.detail;
+			}, {once: true});
+			field.scrollIntoView({block: 'center'});
+			await settled();
+			yield {click: center($('#crop-sample [data-docs-crop]'))};
+			const screen = await open();
+			const seen = {screen: screen === null ? 'none' : [screen.matches(':modal'), $$('.crop-handle', screen).length, $('.crop-handles', screen).getAttribute('role'), $$('.crop-handle', screen).every((handle) => Math.round(handle.getBoundingClientRect().width) >= 44)].join(' ')};
+			yield {click: done()};
+			await until(() => answer !== null, 8000);
+			const file = field.files[0];
+			seen.done = answer === null ? 'none' : [off(answer.points, truth) <= 16, Math.max(answer.width, answer.height) > 600 && Math.max(answer.width, answer.height) <= 2560, answer.blob.type, file.name, file.type, $('dialog.crop') === null].join(' ');
+			const turned = REDZ.ui.crop(original, {max: 400});
+			await open();
+			yield {click: center($('dialog.crop .crop-bar .btn'))};
+			await settled();
+			yield {click: done()};
+			const first = await turned;
+			seen.turned = [off(first.points, [truth[3], truth[0], truth[1], truth[2]]) <= 16, first.width, first.height < first.width].join(' ');
+			const again = REDZ.ui.crop(original, {max: 400, points: first.points});
+			await open();
+			yield {click: done()};
+			const second = await again;
+			seen.again = [off(second.points, first.points) <= 2, second.width === first.width && second.height === first.height].join(' ');
+			const plain = REDZ.ui.crop(original);
+			await open();
+			yield {click: done()};
+			seen.plain = Math.max(...[await plain].map((one) => Math.max(one.width, one.height)));
+			const round = REDZ.ui.crop(original, {max: 400});
+			await open();
+			for (let k = 0; k < 4; k++) {
+				yield {click: center($('dialog.crop .crop-bar .btn'))};
+				await settled();
+			}
+			yield {click: done()};
+			const turnedFour = await round;
+			seen.round = off(turnedFour.points, truth) <= 16;
+			const left = REDZ.ui.crop(original);
+			const last = await open();
+			const [corner, next] = $$('.crop-handle', last);
+			corner.focus();
+			for (let step = 0; step < 200; step++) {
+				corner.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', shiftKey: true, bubbles: true, cancelable: true}));
+			}
+			seen.side = Math.round(Math.hypot(next.getBoundingClientRect().left - corner.getBoundingClientRect().left, next.getBoundingClientRect().top - corner.getBoundingClientRect().top)) >= 43;
+			yield {key: 'Escape'};
+			seen.left = [String(await left), $('dialog.crop') === null].join(' ');
+			const want = {screen: 'true 4 application true', done: 'true true image/jpeg sample.jpg image/jpeg true', turned: 'true 400 true', again: 'true true', plain: 600, round: true, side: true, left: 'null true'};
+			if (say(seen) !== say(want)) {
+				out.push('a data-crop field crops a paper\'s photo, turns it, opens a frame again and cancels: ' + say(seen));
+			}
+		}},
 		// data-required="show": an empty required field waits in the warning's ground, a refused send turns it to the
 		// danger's and brings it the focus, words typed take the ground away.
 		requiredShow: {target: '#form-required', walk: async function* (out) {

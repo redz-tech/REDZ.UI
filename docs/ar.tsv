@@ -2101,3 +2101,28 @@ Guests to write to	ضيوف للكتابة إليهم
 Palm Garden	حديقة النخيل
 Guest name	اسم الضيف
 Add agent	إضافة وكيل
+Photo crop	قص الصورة
+Voucher photo	صورة القسيمة
+On a phone, from the gallery or the camera.	على الهاتف، من المعرض أو الكاميرا.
+Try a sample photo	جرّب صورة نموذجية
+Frame the paper	أطّر الورقة
+Drag the corners to the edges of the paper	اسحب الزوايا إلى حواف الورقة
+Retake	التقط من جديد
+Rotate	تدوير
+Whole photo	الصورة كاملة
+Auto frame	إطار تلقائي
+Frame of the paper	إطار الورقة
+Arrow keys move a corner, with Shift by 10. Or press a corner, then tap where it goes. Escape cancels.	تحرّك مفاتيح الأسهم الزاوية، ومع Shift بمقدار 10. أو اضغط زاوية ثم انقر حيث تذهب. Escape يلغي.
+Top left corner	الزاوية العلوية اليسرى
+Top right corner	الزاوية العلوية اليمنى
+Bottom right corner	الزاوية السفلية اليمنى
+Bottom left corner	الزاوية السفلية اليسرى
+{name}: {x}% from the left, {y}% from the top	{name}: ‏{x}% من اليسار، ‏{y}% من الأعلى
+{name} picked: tap where it goes	اختيرت {name}: انقر حيث تذهب
+The frame is on the edges of the paper	الإطار على حواف الورقة
+No paper found: the frame holds the whole photo	لم يُعثر على ورقة: الإطار يضم الصورة كاملة
+The frame holds the whole photo	الإطار يضم الصورة كاملة
+The frame stands where it was set	الإطار في موضعه السابق
+Rotated	تم التدوير
+The photo could not be saved	تعذّر حفظ الصورة
+This photo cannot be opened. Choose a JPEG or PNG photo.	لا يمكن فتح هذه الصورة. اختر صورة JPEG أو PNG.

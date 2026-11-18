@@ -78,7 +78,7 @@ function TOOL__NpmFile(string $package, string $version, string $name, string $i
 }
 
 // Each package file of dist/ by its source, which tools/build.php builds it from.
-const TOOL_PACKAGE_SOURCES = ['css/redz-ui-charts.min.css' => 'charts/charts.css', 'js/redz-ui-charts.min.js' => 'charts/charts.js', 'css/redz-ui-calendar.min.css' => 'calendar/calendar.css', 'js/redz-ui-calendar.min.js' => 'calendar/calendar.js', 'css/redz-ui-media.min.css' => 'media/media.css', 'js/redz-ui-qr.min.js' => 'qr/qr.js', 'css/redz-ui-editor.min.css' => 'editor/editor.css', 'js/redz-ui-editor.min.js' => 'editor/editor.js', 'css/redz-ui-editor-surface.min.css' => 'editor/surface.css'];
+const TOOL_PACKAGE_SOURCES = ['css/redz-ui-charts.min.css' => 'charts/charts.css', 'js/redz-ui-charts.min.js' => 'charts/charts.js', 'css/redz-ui-calendar.min.css' => 'calendar/calendar.css', 'js/redz-ui-calendar.min.js' => 'calendar/calendar.js', 'css/redz-ui-media.min.css' => 'media/media.css', 'css/redz-ui-crop.min.css' => 'crop/crop.css', 'js/redz-ui-crop.min.js' => 'crop/crop.js', 'js/redz-ui-qr.min.js' => 'qr/qr.js', 'css/redz-ui-editor.min.css' => 'editor/editor.css', 'js/redz-ui-editor.min.js' => 'editor/editor.js', 'css/redz-ui-editor-surface.min.css' => 'editor/surface.css'];
 
 /**
  * Every class of the library's stylesheets, unescaped - components, utilities with their prefixes, icons, and the

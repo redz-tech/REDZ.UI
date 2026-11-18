@@ -29,7 +29,7 @@ const JUDGE_CORPUS = ['@rmenke/css-tokenizer-tests', '1.4.0', 'package/index.mjs
 // The browser floor as esbuild names it.
 const JUDGE_TARGETS = '--target=chrome130,edge130,firefox132,safari18';
 // The stylesheets the minifier squeezes in the library, beside the main file and the hostile sample.
-const JUDGE_SHEETS = ['css/*.css', 'css/components/*.css', 'charts/*.css', 'calendar/*.css', 'media/*.css', 'editor/*.css'];
+const JUDGE_SHEETS = ['css/*.css', 'css/components/*.css', 'charts/*.css', 'calendar/*.css', 'media/*.css', 'crop/*.css', 'editor/*.css'];
 // The main files' size by gzip -9 as a share of esbuild --minify's, as measured on 2026-11-08, and how far it may drift
 // before the watch warns.
 const JUDGE_SIZE = ['css' => [1.004, 0.03], 'js' => [1.095, 0.03]];

@@ -28,6 +28,7 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 - [Combobox](docs/combobox.md): A choice from a list long enough to search: a button in the look of a select shows the value and opens a panel with a search field and the list. One core - the WAI-ARIA combobox with a listbox - also drives the command palette and a list in the page.
 - [Inline edit](docs/inline-edit.md): A value changed where it shows - a title in a list, a name on a page - behind a real Edit button, in a small form of its own that saves or cancels.
 - [File upload](docs/upload.md): Photos, documents, a price list: chosen, dropped or pasted, each file checked at once and sent on its own, with its own progress and its own error.
+- [Photo crop](docs/crop.md): A photo of a paper - a voucher, a receipt, a form - taken by a phone, framed by four corners the library places on the paper's edges and straightened into a flat rectangle before it is sent.
 - [Choice tiles](docs/choice.md): A group of radios or checks drawn as tiles - a package, a plan, a way to pay - the chosen one the only thing in color.
 - [Ratings](docs/rating.md): Stars that show a mark out of five - an average of reviews, a guide's score - and five radios drawn as stars for giving one.
 - [PIN pad](docs/pin.md): A short number that unlocks a trusted device: dots that fill as it is typed and a keypad for a finger, while the keyboard types as it always does.
