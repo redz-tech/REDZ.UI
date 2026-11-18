@@ -4,6 +4,23 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## 0.28.1 - 2026-11-18
+
+### Fixed
+- Fourteen text keys held a dash, which a project that stores its texts under keys of lowercase words joined by dots
+  cannot hold: REDZ CMS could not take 0.28.0. The crop's `crop.top-left`, `crop.top-right`, `crop.bottom-right`,
+  `crop.bottom-left`, `crop.zoom-in` and `crop.zoom-out` are `crop.top_left`, `crop.top_right`, `crop.bottom_right`,
+  `crop.bottom_left`, `crop.zoom_in` and `crop.zoom_out`; the editor's `block.alert-info`, `block.alert-success`,
+  `block.alert-warning`, `block.alert-danger`, `block.list-group`, `block.button-group`, `block.grid-2` and
+  `block.grid-3` are `block.alert_info`, `block.alert_success`, `block.alert_warning`, `block.alert_danger`,
+  `block.list_group`, `block.button_group`, `block.grid_2` and `block.grid_3`. A page that gave the old keys gives the
+  new ones. A renamed key is a minor release by the rule above; this one is a patch, as no project had taken those
+  keys yet.
+
+### Checks
+- `php tools/build.php` refuses a text key outside the keys' grammar - words of a-z, 0-9 and "_", a letter first,
+  joined by dots - in the library's, the editor's and the docs' texts.
+
 ## 0.28.0 - 2026-11-18
 
 ### Added

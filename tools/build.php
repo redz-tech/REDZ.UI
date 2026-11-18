@@ -1028,6 +1028,14 @@ function BUILD__TextsCheck(stdClass $vocab): array
 			$wrong[] = 'tools/docs.json has no text for "' . $word . '"';
 		}
 	}
+	// A consumer stores its texts under these keys, many by this very grammar: no dash, no capital.
+	foreach (['tools/vocabulary.json\'s texts' => array_keys($declared), 'tools/vocabulary.json\'s editor.texts' => array_keys($keys), 'tools/docs.json\'s texts' => array_keys($docs)] as $where => $names) {
+		foreach ($names as $key) {
+			if (preg_match('~^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)*$~', (string)$key) !== 1) {
+				$wrong[] = $where . ' hold the key "' . $key . '", outside the keys\' grammar: words of a-z, 0-9 and "_", a letter first, joined by dots';
+			}
+		}
+	}
 	return $wrong;
 }
 

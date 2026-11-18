@@ -43,7 +43,7 @@ const WORDS = {
 	photo: {title: 'crop.photo.title', hint: 'crop.photo.hint', keys: 'crop.photo.keys', frame: 'crop.photo.frame'},
 };
 // The corners clockwise from the top left, then the edges from the top: edge k joins corners k - 4 and k - 3.
-const NAMES = ['crop.top-left', 'crop.top-right', 'crop.bottom-right', 'crop.bottom-left', 'crop.top', 'crop.right', 'crop.bottom', 'crop.left'];
+const NAMES = ['crop.top_left', 'crop.top_right', 'crop.bottom_right', 'crop.bottom_left', 'crop.top', 'crop.right', 'crop.bottom', 'crop.left'];
 const TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 let made = 0;
 
@@ -423,8 +423,8 @@ export const crop = (file, options = {}) => new Promise((resolve, reject) => {
 	const wait = make('div', {class: 'crop-wait'}, make('span', {class: 'spinner-border', 'aria-hidden': 'true'}));
 	const stage = make('div', {class: 'crop-stage'}, ...[wait, shade, layer, loupe].filter(Boolean));
 	const range = kind === 'avatar' ? make('input', {class: 'form-range', type: 'range', min: '0', max: '1000', step: '1', 'aria-label': text('crop.zoom')}) : null;
-	const smaller = range ? make('button', {class: 'btn btn-icon btn-text', type: 'button', 'aria-label': text('crop.zoom-out')}, icon('bi-zoom-out')) : null;
-	const larger = range ? make('button', {class: 'btn btn-icon btn-text', type: 'button', 'aria-label': text('crop.zoom-in')}, icon('bi-zoom-in')) : null;
+	const smaller = range ? make('button', {class: 'btn btn-icon btn-text', type: 'button', 'aria-label': text('crop.zoom_out')}, icon('bi-zoom-out')) : null;
+	const larger = range ? make('button', {class: 'btn btn-icon btn-text', type: 'button', 'aria-label': text('crop.zoom_in')}, icon('bi-zoom-in')) : null;
 	const again = retake ? button('btn-text', 'bi-camera', text('crop.retake')) : null;
 	const rotate = button('btn-text', 'bi-arrow-clockwise', text('crop.rotate'));
 	const toggle = paper ? button('btn-text', 'bi-fullscreen', text('crop.whole')) : null;

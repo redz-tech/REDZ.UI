@@ -117,9 +117,9 @@ The library has no words of its own; the crop reads these from the page's island
 | `crop.keys`, `crop.avatar.keys`, `crop.photo.keys` | How the keys move it | Arrow keys move a corner or an edge… |
 | `crop.cancel`, `crop.retake`, `crop.rotate`, `crop.done` | The buttons | Cancel, Retake, Rotate, Done |
 | `crop.whole`, `crop.auto` | A paper's switch, to the whole photo and back to the paper found | Whole photo, Auto frame |
-| `crop.top-left`, `crop.top-right`, `crop.bottom-right`, `crop.bottom-left` | The corners | Top left corner… |
+| `crop.top_left`, `crop.top_right`, `crop.bottom_right`, `crop.bottom_left` | The corners | Top left corner… |
 | `crop.top`, `crop.right`, `crop.bottom`, `crop.left` | The edges | Top edge… |
-| `crop.zoom`, `crop.zoom-in`, `crop.zoom-out`, `crop.zoomed` | An avatar's slider, its buttons, its value; `{n}` in per cent | Zoom, Zoom in, Zoom out, Zoom {n}% |
+| `crop.zoom`, `crop.zoom_in`, `crop.zoom_out`, `crop.zoomed` | An avatar's slider, its buttons, its value; `{n}` in per cent | Zoom, Zoom in, Zoom out, Zoom {n}% |
 | `crop.at` | Where a corner, an edge or a frame stands; `{name}`, `{x}` and `{y}` in per cent | {name}: {x}% from the left, {y}% from the top |
 | `crop.picked` | A corner or an edge pressed, waiting for its spot | {name} picked: tap where it goes |
 | `crop.found`, `crop.none`, `crop.all`, `crop.again`, `crop.turned` | Said as the frame changes | The frame is on the edges of the paper… |
