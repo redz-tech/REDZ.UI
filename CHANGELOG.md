@@ -162,7 +162,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   its ratio through an edge's drag and a turn, moved by keys and a drag, a free edge moving alone. Red on 23 planted
   faults, a shrink that never ends among them. Each waits at most 8 s for the crop's answer, so a layer that never answers is a
   finding, not a stalled engine, and presses the docs' sample by script after shutting what an earlier check left open.
-  When no crop comes, the finding names the page's errors and its toasts.
+  When no crop comes, the finding names the page's errors and its toasts, the file's size, type and first bytes, its
+  own decode and a pixel drawn of it, and the crop's answer when asked again by script.
 - The speech checks no longer read the calendar's strip of days: its table scrolls on a phone alone now, and a
   `table-scroll` that does not scroll is no tab stop, so at 1440 px there was nothing to read.
 - `php tools/build.php` reads a package's classes from its sources: a docs example of a class new in a package failed

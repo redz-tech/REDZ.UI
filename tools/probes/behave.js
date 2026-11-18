@@ -19,6 +19,39 @@ window.REDZ_BEHAVE = (() => {
 		context.drawImage(bitmap, 0, 0);
 		return [...context.getImageData(x, y, 1, 1).data];
 	};
+	/** Why no crop came, for its finding: the file's size, type and first bytes, its own decode and a pixel drawn of it, and
+	 *  the crop's answer when asked again by script, a screen it opens cancelled at once. */
+	const cropWhy = async (file, options = {}) => {
+		if (!(file instanceof Blob)) {
+			return 'no file';
+		}
+		const told = (error) => String(error?.name) + ': ' + String(error?.message) + ' @ ' + String(error?.stack ?? '').split('\n').slice(0, 4).join(' < ');
+		const head = [...new Uint8Array(await file.slice(0, 4).arrayBuffer())].map((byte) => byte.toString(16).padStart(2, '0')).join('');
+		const url = URL.createObjectURL(file);
+		const image = new Image();
+		image.src = url;
+		const decoded = await within(image.decode().then(() => image.naturalWidth + 'x' + image.naturalHeight, told));
+		let drawn = 'not drawn';
+		try {
+			const context = Object.assign(document.createElement('canvas'), {width: 8, height: 8}).getContext('2d');
+			context.drawImage(image, 0, 0, 8, 8);
+			drawn = [...context.getImageData(4, 4, 1, 1).data].join(',');
+		} catch (error) {
+			drawn = told(error);
+		}
+		URL.revokeObjectURL(url);
+		const answer = await within(new Promise((done) => {
+			globalThis.REDZ.ui.crop(file, options).then(() => done('answered'), (error) => done(told(error)));
+			until(() => $('dialog.crop[data-ready]') !== null, 6000).then(() => {
+				const cancel = $('dialog.crop[data-ready] .crop-head > .btn');
+				if (cancel !== null) {
+					cancel.click();
+					done('opened');
+				}
+			});
+		}));
+		return say([file.size, file.type, head, decoded, drawn, answer]);
+	};
 	// The checks' own markup goes through a policy of theirs: the probes' pages require Trusted Types.
 	const policy = globalThis.trustedTypes?.createPolicy('redz-probe', {createHTML: (markup) => markup});
 	const trusted = (markup) => (policy === undefined ? markup : policy.createHTML(markup));
@@ -6239,13 +6272,17 @@ window.REDZ_BEHAVE = (() => {
 			$$('dialog[open]').forEach((one) => one.close());
 			$$(':popover-open').forEach((one) => one.hidePopover());
 			const thrown = [];
+			let picked = null;
+			addEventListener('change', (event) => {
+				picked ??= event.target.files?.[0] ?? null;
+			}, {capture: true});
 			const heard = (event) => thrown.push(String(event.reason?.message ?? event.message ?? event.reason));
 			addEventListener('error', heard);
 			addEventListener('unhandledrejection', heard);
 			$('#crop-sample [data-docs-crop]').click();
 			const screen = await open();
 			if (screen === null) {
-				out.push('a data-crop field opened no crop; layers open before: ' + say(layers) + ', errors: ' + say(thrown) + ', toasts: ' + say($$('.toast').map((one) => one.textContent.trim())));
+				out.push('a data-crop field opened no crop; layers open before: ' + say(layers) + ', errors: ' + say(thrown) + ', toasts: ' + say($$('.toast').map((one) => one.textContent.trim())) + ', the file (size, type, first bytes, decode, a pixel) and the crop asked again: ' + await cropWhy(picked, {}));
 				return;
 			}
 			const seen = {screen: screen === null ? 'none' : [screen.matches(':modal'), $$('.crop-handle', screen).length, $('.crop-handles', screen).getAttribute('role'), $$('.crop-handle', screen).every((handle) => Math.round(handle.getBoundingClientRect().width) >= 44)].join(' ')};
@@ -6349,13 +6386,17 @@ window.REDZ_BEHAVE = (() => {
 			$$('dialog[open]').forEach((one) => one.close());
 			$$(':popover-open').forEach((one) => one.hidePopover());
 			const thrown = [];
+			let picked = null;
+			addEventListener('change', (event) => {
+				picked ??= event.target.files?.[0] ?? null;
+			}, {capture: true});
 			const heard = (event) => thrown.push(String(event.reason?.message ?? event.message ?? event.reason));
 			addEventListener('error', heard);
 			addEventListener('unhandledrejection', heard);
 			$('#crop-avatar-sample [data-docs-crop]').click();
 			const screen = await open();
 			if (screen === null) {
-				out.push('a data-crop="avatar" field opened no crop; layers open before: ' + say(layers) + ', errors: ' + say(thrown) + ', toasts: ' + say($$('.toast').map((one) => one.textContent.trim())));
+				out.push('a data-crop="avatar" field opened no crop; layers open before: ' + say(layers) + ', errors: ' + say(thrown) + ', toasts: ' + say($$('.toast').map((one) => one.textContent.trim())) + ', the file (size, type, first bytes, decode, a pixel) and the crop asked again: ' + await cropWhy(picked, {mode: 'avatar'}));
 				return;
 			}
 			const layer = $('.crop-handles', screen);
@@ -6449,13 +6490,17 @@ window.REDZ_BEHAVE = (() => {
 			$$('dialog[open]').forEach((one) => one.close());
 			$$(':popover-open').forEach((one) => one.hidePopover());
 			const thrown = [];
+			let picked = null;
+			addEventListener('change', (event) => {
+				picked ??= event.target.files?.[0] ?? null;
+			}, {capture: true});
 			const heard = (event) => thrown.push(String(event.reason?.message ?? event.message ?? event.reason));
 			addEventListener('error', heard);
 			addEventListener('unhandledrejection', heard);
 			$('#crop-photo-sample [data-docs-crop]').click();
 			const screen = await open();
 			if (screen === null) {
-				out.push('a data-crop="photo" field opened no crop; layers open before: ' + say(layers) + ', errors: ' + say(thrown) + ', toasts: ' + say($$('.toast').map((one) => one.textContent.trim())));
+				out.push('a data-crop="photo" field opened no crop; layers open before: ' + say(layers) + ', errors: ' + say(thrown) + ', toasts: ' + say($$('.toast').map((one) => one.textContent.trim())) + ', the file (size, type, first bytes, decode, a pixel) and the crop asked again: ' + await cropWhy(picked, {mode: 'photo'}));
 				return;
 			}
 			const mover = $('.crop-move', screen);
