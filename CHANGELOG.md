@@ -72,6 +72,10 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - An `img` in an `avatar` fills it, round: a person's photo in place of the initials.
 
 ### Changed
+- A drawer lays out as a dialog, the tourism pack's wish for its booking form: its header and a `dialog-footer` as its
+  last child stay, and only the `drawer-body` scrolls between them; a form that is the drawer's child lays out the
+  same way, so its Save is its own submit button. A footer scrolled away with the body, and with it the header, the
+  docs saying otherwise; a navbar's drawer shown in its bar stays a row.
 - The main script's budget is 58 KB gzipped, from 56: the time field takes 2 KB.
 - The calendar package's stylesheet budget is 3 KB gzipped, from 2, and its new script's 6 KB.
 - A dialog on a window narrower than 576 px is the same sheet, its grab bar over its header, in place of filling the
@@ -114,6 +118,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   typed or pasted in between were erased.
 
 ### Checks
+- Check `drawerFooter`: a drawer's form keeps its header at the top and its footer at the bottom while only the body
+  scrolls, the drawer never; a navbar's drawer in its bar a row. Red on 4 planted faults.
 - `php tools/probe.php check`, `plan` and `affected` read a change by its sources. A built file of `dist/` follows the
   sources it is built from, a build tool changed or not, when the tools as they were make from the sources as they
   stand the very files the pages load (`php tools/build.php --check --files` on a copy of the tree, a few seconds).

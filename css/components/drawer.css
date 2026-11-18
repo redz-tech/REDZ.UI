@@ -43,6 +43,30 @@
 		overflow: auto;
 	}
 
+	/* A drawer lays out as a dialog: its header and its footer, a dialog-footer, stay, and its body scrolls between them.
+	   The direction stays while it closes: its display is held for the transition, [open] is already gone. */
+	.drawer,
+	.drawer > form {
+		flex-direction: column;
+	}
+
+	.drawer:is([open], :popover-open),
+	.drawer > form {
+		display: flex;
+	}
+
+	.drawer > form,
+	.drawer-body {
+		flex: 1 1 auto;
+		min-block-size: 0;
+	}
+
+	.drawer > .dialog-footer,
+	.drawer > form > .dialog-footer {
+		border-end-start-radius: var(--redz-radius-12);
+		border-end-end-radius: var(--redz-radius-12);
+	}
+
 	@media (prefers-reduced-motion: no-preference) {
 		.drawer,
 		.drawer::backdrop {

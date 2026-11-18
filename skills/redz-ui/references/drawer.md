@@ -58,11 +58,54 @@ A product tints the head of every drawer with `--redz-drawer-header-bg`.
 </dialog>
 ```
 
+## With a footer
+
+A drawer lays out as a dialog does: a `dialog-footer` as its last child stays at the bottom, the header at the top, and only the `drawer-body` scrolls between them. A form that is the drawer's child lays out the same way, so its Save is its own submit button.
+
+```html
+<button class="btn" type="button" commandfor="drawer-form-panel" command="show-modal"><i class="bi bi-plus-lg" aria-hidden="true"></i>New booking</button>
+<dialog id="drawer-form-panel" class="drawer drawer-lg" closedby="any" aria-labelledby="drawer-form-panel-title">
+	<form method="dialog">
+		<div class="drawer-header">
+			<h2 class="drawer-title" id="drawer-form-panel-title">New booking</h2>
+			<button class="btn-close" type="button" commandfor="drawer-form-panel" command="close" aria-label="Close"></button>
+		</div>
+		<div class="drawer-body vstack gap-12">
+			<div class="form-field">
+				<label class="form-label" for="drawer-form-guest">Guest</label>
+				<input class="form-control" id="drawer-form-guest" name="guest" autocomplete="off">
+			</div>
+			<div class="form-field">
+				<label class="form-label" for="drawer-form-tour">Tour</label>
+				<select class="form-select" id="drawer-form-tour" name="tour"><option>North Bay by speedboat</option><option>Old town on foot</option><option>Hill temples</option></select>
+			</div>
+			<div class="form-field">
+				<label class="form-label" for="drawer-form-guests">Guests</label>
+				<input class="form-control" id="drawer-form-guests" name="guests" type="number" min="1" value="2">
+			</div>
+			<div class="form-field">
+				<label class="form-label" for="drawer-form-pickup">Pickup</label>
+				<input class="form-control" id="drawer-form-pickup" name="pickup" autocomplete="off">
+			</div>
+			<div class="form-field">
+				<label class="form-label" for="drawer-form-notes">Notes</label>
+				<textarea class="form-control" id="drawer-form-notes" name="notes" rows="6"></textarea>
+			</div>
+		</div>
+		<div class="dialog-footer">
+			<span class="dialog-footer-start text-muted">Seller: Kim L.</span>
+			<button class="btn" type="button" commandfor="drawer-form-panel" command="close">Cancel</button>
+			<button class="btn btn-primary">Save</button>
+		</div>
+	</form>
+</dialog>
+```
+
 ## Keyboard and accessibility
 
 - Everything said of [dialogs](dialog.md) holds: the focus moves in and back, `Tab` stays inside, `Esc` closes.
 - A drawer is a region: the width prefixes inside it measure the drawer, 28 rem wide at most.
-- The drawer's body scrolls by itself; its header stays.
+- The drawer's body scrolls by itself; its header and its footer stay.
 
 ## Tokens
 

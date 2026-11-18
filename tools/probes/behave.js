@@ -6466,6 +6466,38 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a data-crop="photo" field frames a photo at its ratio, by its edges, keys and a drag: ' + say(seen));
 			}
 		}},
+		// A drawer lays out as a dialog: its form's footer stays at the bottom and its header at the top while only the body
+		// scrolls, the drawer itself never; a navbar's drawer shown in its bar stays a row.
+		drawerFooter: {target: '#drawer-form', walk: async function* (out) {
+			const drawer = $('#drawer-form-panel');
+			$('#drawer-form').scrollIntoView({block: 'center'});
+			await settled();
+			yield {click: center($('#drawer-form [command="show-modal"]'))};
+			await until(() => drawer.matches(':modal'));
+			await wait(300);
+			const body = $('.drawer-body', drawer);
+			const tall = Object.assign(document.createElement('div'), {className: 'docs-spacer'});
+			tall.style.blockSize = '2000px';
+			tall.style.flex = 'none';
+			body.append(tall);
+			body.scrollTop = 100000;
+			await settled();
+			const box = drawer.getBoundingClientRect();
+			const near = (a, b) => Math.abs(a - b) <= 1.5;
+			const seen = {
+				layout: [getComputedStyle(drawer).display, getComputedStyle($('form', drawer)).display, getComputedStyle($('form', drawer)).flexDirection].join(' '),
+				scroll: [body.scrollTop > 0, drawer.scrollTop, near($('.drawer-header', drawer).getBoundingClientRect().top, box.top + 1), near($('.dialog-footer', drawer).getBoundingClientRect().bottom, box.bottom - 1)].join(' '),
+			};
+			tall.remove();
+			const bar = $$('.navbar .drawer[popover]').find((one) => !one.matches(':popover-open') && getComputedStyle(one).display === 'flex');
+			seen.navbar = bar === undefined ? 'none' : getComputedStyle(bar).flexDirection;
+			yield {key: 'Escape'};
+			await until(() => !drawer.open);
+			const want = {layout: 'flex flex column', scroll: 'true 0 true true', navbar: seen.navbar === 'none' ? 'none' : 'row'};
+			if (say(seen) !== say(want)) {
+				out.push('a drawer with a form keeps its header and footer while its body scrolls: ' + say(seen));
+			}
+		}},
 		// data-required="show": an empty required field waits in the warning's ground, a refused send turns it to the
 		// danger's and brings it the focus, words typed take the ground away.
 		requiredShow: {target: '#form-required', walk: async function* (out) {

@@ -3500,6 +3500,44 @@ Boat C	 9 trips	201 seats</pre>
 							<div class="drawer-body"><p>الخليج الشمالي بالقارب السريع، 4 ضيوف، 12 نوفمبر 2026. مدفوع بالكامل بالبطاقة.</p></div>
 						</dialog>
 					</div>
+					<div class="docs-example" id="drawer-form">
+						<button class="btn" type="button" commandfor="drawer-form-panel" command="show-modal"><i class="bi bi-plus-lg" aria-hidden="true"></i>حجز جديد</button>
+						<dialog id="drawer-form-panel" class="drawer drawer-lg" closedby="any" aria-labelledby="drawer-form-panel-title">
+							<form method="dialog">
+								<div class="drawer-header">
+									<h2 class="drawer-title" id="drawer-form-panel-title">حجز جديد</h2>
+									<button class="btn-close" type="button" commandfor="drawer-form-panel" command="close" aria-label="إغلاق"></button>
+								</div>
+								<div class="drawer-body vstack gap-12">
+									<div class="form-field">
+										<label class="form-label" for="drawer-form-guest">الضيف</label>
+										<input class="form-control" id="drawer-form-guest" name="guest" autocomplete="off">
+									</div>
+									<div class="form-field">
+										<label class="form-label" for="drawer-form-tour">الجولة</label>
+										<select class="form-select" id="drawer-form-tour" name="tour"><option>الخليج الشمالي بالقارب السريع</option><option>البلدة القديمة سيرًا على الأقدام</option><option>معابد التلال</option></select>
+									</div>
+									<div class="form-field">
+										<label class="form-label" for="drawer-form-guests">الضيوف</label>
+										<input class="form-control" id="drawer-form-guests" name="guests" type="number" min="1" value="2">
+									</div>
+									<div class="form-field">
+										<label class="form-label" for="drawer-form-pickup">الاستقبال</label>
+										<input class="form-control" id="drawer-form-pickup" name="pickup" autocomplete="off">
+									</div>
+									<div class="form-field">
+										<label class="form-label" for="drawer-form-notes">الملاحظات</label>
+										<textarea class="form-control" id="drawer-form-notes" name="notes" rows="6"></textarea>
+									</div>
+								</div>
+								<div class="dialog-footer">
+									<span class="dialog-footer-start text-muted">البائع: كيم ل.</span>
+									<button class="btn" type="button" commandfor="drawer-form-panel" command="close">إلغاء</button>
+									<button class="btn btn-primary">حفظ</button>
+								</div>
+							</form>
+						</dialog>
+					</div>
 				</section>
 
 				<section class="vstack gap-16" aria-labelledby="all-popover">
