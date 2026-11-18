@@ -520,8 +520,9 @@ window.REDZ_PROBE = (() => {
 				const inside = r.left >= -1 && r.top >= -1 && r.right <= root.clientWidth + 1 && r.bottom <= innerHeight + 1;
 				const near = Math.min(Math.abs(r.top - q.bottom), Math.abs(q.top - r.bottom)) <= 12;
 				const aligned = Math.abs(r.left - q.left) <= 2 || Math.abs(r.right - q.right) <= 2;
-				// On a phone a combobox's panel and a dialog not small nor full stand as a sheet: from a 2.25rem strip to the bottom, edge to edge.
-				const sheet = matchMedia('(width < 36rem)').matches && target.matches('.combobox-menu, .dialog:not(.dialog-sm, .dialog-fullscreen)');
+				// On a phone a combobox's panel and a dialog not small nor full stand as a sheet: from a 2.25rem strip to the bottom, edge to
+				// edge; a date input's month stands so on the bottom, as high as its month.
+				const sheet = matchMedia('(width < 36rem)').matches && target.matches('.combobox-menu, .date-input-menu, .dialog:not(.dialog-sm, .dialog-fullscreen)');
 				const strip = parseFloat(getComputedStyle(root).fontSize) * 2.25;
 				// The page's edge: a modal dialog's page keeps its scrollbar's gutter, which a sheet does not cover.
 				const edge = Math.min(root.clientWidth, root.getBoundingClientRect().right);
@@ -530,7 +531,7 @@ window.REDZ_PROBE = (() => {
 					target: '#' + target.id,
 					open,
 					inside,
-					sheet: !sheet || [r.top - strip, r.bottom - innerHeight, r.left, r.right - edge].every((gap) => Math.abs(gap) <= 1),
+					sheet: !sheet || [target.matches('.date-input-menu') ? 0 : r.top - strip, r.bottom - innerHeight, r.left, r.right - edge].every((gap) => Math.abs(gap) <= 1),
 					anchored: sheet || !target.classList.contains('menu') || (near && aligned),
 					guard: target.dataset.placed === 'script',
 					box: [r.left, r.top, r.right, r.bottom].map(Math.round),

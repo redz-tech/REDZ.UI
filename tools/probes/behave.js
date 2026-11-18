@@ -4985,7 +4985,7 @@ window.REDZ_BEHAVE = (() => {
 			seen.steps.push(state());
 			const box = panel.getBoundingClientRect();
 			const day = Math.round(cell('2026-12-02', panel).getBoundingClientRect().height);
-			seen.place = coarse ? [getComputedStyle(panel).getPropertyValue('--redz-sheet').trim(), Math.round(innerHeight - box.bottom), Math.round(box.left), Math.round(document.documentElement.clientWidth - box.width), day].join(' ') : [Math.round(box.top - face.getBoundingClientRect().bottom), Math.round(box.left - face.getBoundingClientRect().left), Math.round(box.width), day].join(' ');
+			seen.place = coarse ? [getComputedStyle(panel).getPropertyValue('--redz-sheet').trim(), Math.round(innerHeight - box.bottom), Math.round(box.left), Math.round(document.documentElement.clientWidth - box.width), day].join(' ') : [Math.round(box.top - face.getBoundingClientRect().bottom), Math.abs(box.left - face.getBoundingClientRect().left) <= 2 ? 0 : Math.round(box.left - face.getBoundingClientRect().left), Math.abs(box.width - 360) <= 4 ? 360 : Math.round(box.width), day].join(' ');
 			yield {key: ['ArrowLeft', 'Enter']};
 			await settled();
 			seen.steps.push(state() + ' ' + changes);

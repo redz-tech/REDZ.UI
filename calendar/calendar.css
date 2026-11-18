@@ -147,8 +147,15 @@
 
 	.calendar-more {
 		display: block;
+		direction: ltr;
+		unicode-bidi: isolate;
 		color: var(--redz-text-muted);
 		font-size: var(--redz-fs-12);
+	}
+
+	/* "+2" is read left to right in every page; it stands at its cell's start. */
+	.calendar-more:dir(rtl) {
+		text-align: right;
 	}
 
 	@container region (width < 576px) {

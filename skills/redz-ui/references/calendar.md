@@ -68,7 +68,7 @@ A day's `data-state` tints it: `worked`, `open`, `pending`, `absent` and `off` -
 `table class="schedule"`: a column of names, kept in view while the days scroll by, then a column per day with its number and weekday. A cell holds how many are out; `data-state="busy"` tints it, `"over"` - more out than there are - marks it, and `data-weekend` tints a weekend's column. Put it in a scroller: `overflow-x-auto`.
 
 ```html
-<div class="overflow-x-auto" tabindex="0" role="region" aria-labelledby="calendar-days-title">
+<div class="table-scroll" tabindex="0" role="region" aria-labelledby="calendar-days-title">
 	<table class="schedule">
 		<caption class="visually-hidden" id="calendar-days-title">Equipment out, November 2 to 8</caption>
 		<thead><tr><th scope="col">Equipment</th><th scope="col">2<abbr title="Monday">Mon</abbr></th><th scope="col">3<abbr title="Tuesday">Tue</abbr></th><th scope="col">4<abbr title="Wednesday">Wed</abbr></th><th scope="col">5<abbr title="Thursday">Thu</abbr></th><th scope="col">6<abbr title="Friday">Fri</abbr></th><th scope="col" data-weekend>7<abbr title="Saturday">Sat</abbr></th><th scope="col" data-weekend>8<abbr title="Sunday">Sun</abbr></th></tr></thead>

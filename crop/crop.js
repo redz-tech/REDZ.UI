@@ -431,8 +431,7 @@ export const crop = (file, options = {}) => new Promise((resolve, reject) => {
 	const done = button('btn-primary', 'bi-check-lg', text('crop.done'));
 	const live = make('p', {class: 'visually-hidden', 'aria-live': 'polite'});
 	const dialog = make('dialog', {class: 'crop', 'data-mode': kind, 'aria-labelledby': id + '-title', 'aria-describedby': id + '-hint'},
-		make('div', {class: 'crop-head'}, cancel, make('h2', {class: 'crop-title', id: id + '-title'}, text(label.title))),
-		make('p', {class: 'crop-hint', id: id + '-hint'}, text(label.hint)),
+		make('div', {class: 'crop-head'}, cancel, make('h2', {class: 'crop-title', id: id + '-title'}, text(label.title)), make('p', {class: 'crop-hint', id: id + '-hint'}, text(label.hint))),
 		stage,
 		make('p', {class: 'visually-hidden', id: id + '-keys'}, text(label.keys)),
 		make('div', {class: 'crop-bar'}, ...[again, rotate, toggle, range && make('div', {class: 'crop-zoom'}, smaller, range, larger), done].filter(Boolean)),

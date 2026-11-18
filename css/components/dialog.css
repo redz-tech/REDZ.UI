@@ -125,6 +125,7 @@
 	.dialog-footer {
 		display: flex;
 		flex-wrap: wrap;
+		align-items: center;
 		justify-content: flex-end;
 		gap: var(--redz-space-8);
 		padding: var(--redz-space-12) var(--redz-space-24);

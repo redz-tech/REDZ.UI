@@ -258,7 +258,10 @@ const mount = (box, root, inputs, done, quiet = false) => {
 	for (let w = 0; w < 6; w++) {
 		const row = body.insertRow();
 		for (let d = 0; d < 7; d++) {
-			row.insertCell().append(document.createElement('span'), Object.assign(document.createElement('span'), {className: 'date-pick-count'}));
+			// The count is said in the cell's name: its words are shown, not read twice.
+			const count = Object.assign(document.createElement('span'), {className: 'date-pick-count'});
+			count.setAttribute('aria-hidden', 'true');
+			row.insertCell().append(document.createElement('span'), count);
 		}
 	}
 	const quick = box.querySelector(':scope > .date-pick-quick');
