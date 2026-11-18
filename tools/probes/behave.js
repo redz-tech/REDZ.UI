@@ -7408,12 +7408,14 @@ window.REDZ_BEHAVE = (() => {
 			sw.focus();
 			sw.click();
 			const flipped = [look(sw), look(sw, '::before')];
+			const flippedFocus = sw.matches(':focus-visible');
 			let fail;
 			const held = REDZ.ui.busy(sw, new Promise((done, refuse) => {
 				fail = refuse;
 			}));
 			await wait(50);
-			const early = [sw.getAttribute('aria-busy'), sw.getAttribute('aria-disabled'), document.activeElement === sw, say([look(sw), look(sw, '::before')]) === say(flipped), getComputedStyle(sw).cursor];
+			const busyLook = [look(sw), look(sw, '::before'), sw.matches(':focus-visible'), (sw.getAnimations?.({subtree: true}) ?? []).map((one) => (one.animationName ?? 'transition of ' + one.transitionProperty) + ' ' + one.playState + ' ' + Math.round(one.currentTime ?? -1))];
+			const early = [sw.getAttribute('aria-busy'), sw.getAttribute('aria-disabled'), document.activeElement === sw, say(busyLook.slice(0, 2)) === say(flipped), getComputedStyle(sw).cursor];
 			sw.click();
 			const swallowed = [sw.checked, changes];
 			await wait(450);
@@ -7448,7 +7450,7 @@ window.REDZ_BEHAVE = (() => {
 			$$('.toast-danger').filter((toast) => toast.textContent.includes('An object said no.')).forEach((toast) => toast.remove());
 			box.remove();
 			if (say(early) !== say(['true', 'true', true, true, 'progress']) || say(swallowed) !== say([true, 1]) || say(late) !== say([true, true, true, true]) || say(back) !== say([false, 1, false, false, true, 'alert'])) {
-				out.push('a switch flipped on and busy: at 50 ms ' + say(early) + ' (aria-busy, aria-disabled, focused, its look and knob as flipped, cursor); a second click leaves ' + say(swallowed) + ' (checked, changes); at 450 ms ' + say(late) + ' (its look kept, not grey, the knob a ring, said politely); refused ' + say(back) + ' (checked, changes, aria-busy, aria-disabled, focused, the toast\'s region)');
+				out.push('a switch flipped on and busy: at 50 ms ' + say(early) + ' (aria-busy, aria-disabled, focused, its look and knob as flipped, cursor); a second click leaves ' + say(swallowed) + ' (checked, changes); at 450 ms ' + say(late) + ' (its look kept, not grey, the knob a ring, said politely); refused ' + say(back) + ' (checked, changes, aria-busy, aria-disabled, focused, the toast\'s region)' + (early[3] ? '' : '; flipped ' + say([...flipped, flippedFocus]) + ', at 50 ms ' + say(busyLook) + ' (the switch, its knob, focus-visible, animations)'));
 			}
 			if (say(before) !== say(['hidden', '1']) || say(after) !== say(['visible', '0']) || say(kept) !== say([true, false, 7])) {
 				out.push('a busy check shows [its ring, its mark] ' + say(before) + ' at 50 ms and ' + say(after) + ' at 450 ms; resolved, [checked, aria-busy, the answer] ' + say(kept));
