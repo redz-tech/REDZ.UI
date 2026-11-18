@@ -2,7 +2,7 @@
 
 # Avatars
 
-A round mark of a person: their initials in the accent, 32 px or 24 px with `avatar-sm`.
+A round mark of a person: their initials in the accent or their photo, 32 px or 24 px with `avatar-sm`.
 
 ## Examples
 
@@ -12,6 +12,13 @@ An avatar beside the person's name hides from assistive technology; an avatar al
 <span class="hstack gap-8"><span class="avatar" aria-hidden="true">MK</span>Marina K.</span>
 <span class="hstack gap-8"><span class="avatar avatar-sm" aria-hidden="true">AT</span>Arthit T.</span>
 <button class="btn btn-text btn-icon" type="button" aria-label="MK, profile"><span class="avatar">MK</span></button>
+```
+
+A person's photo goes inside as an `img`, a square shown round at the avatar's size: the crop's [avatar](crop.md#crop-avatar) gives such a square.
+
+```html
+<span class="hstack gap-8"><span class="avatar"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%239fc7e8'/%3E%3Cellipse cx='32' cy='64' rx='22' ry='22' fill='%232f4f8f'/%3E%3Ccircle cx='32' cy='27' r='12' fill='%23e8b896'/%3E%3C/svg%3E" alt=""></span>Dana M.</span>
+<span class="hstack gap-8"><span class="avatar avatar-sm"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%239fc7e8'/%3E%3Cellipse cx='32' cy='64' rx='22' ry='22' fill='%232f4f8f'/%3E%3Ccircle cx='32' cy='27' r='12' fill='%23e8b896'/%3E%3C/svg%3E" alt=""></span>Dana M.</span>
 ```
 
 ## Accessibility

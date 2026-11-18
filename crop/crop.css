@@ -84,6 +84,7 @@
 		inset: 0 auto auto 0;
 		max-inline-size: none;
 		max-block-size: none;
+		transform-origin: 0 0;
 		transition: none;
 	}
 
@@ -141,6 +142,18 @@
 		box-shadow: 0 0 0 1px rgb(0 0 0 / 0.45), 0 1px 6px rgb(0 0 0 / 0.5);
 	}
 
+	/* An edge's handle: a bar along its edge, out of the way on a short side unless it has the focus. */
+	.crop-handle[data-edge]::before {
+		inset: 17px 7px;
+		border-radius: 999px;
+		rotate: var(--crop-turn, 0rad);
+	}
+
+	.crop-handle[data-short]:not(:focus-visible) {
+		opacity: 0;
+		pointer-events: none;
+	}
+
 	.crop-handle[aria-pressed="true"]::before {
 		background: var(--redz-primary);
 	}
@@ -152,6 +165,42 @@
 
 	.crop-handle:active {
 		cursor: grabbing;
+	}
+
+	/* A photo's frame, dragged whole. */
+	.crop-move {
+		position: absolute;
+		inset: 0 auto auto 0;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		box-sizing: border-box;
+		background: none;
+		cursor: move;
+		pointer-events: auto;
+		touch-action: none;
+		transition: none;
+	}
+
+	.crop-move:focus-visible {
+		outline: 2px solid #fff;
+		outline-offset: -4px;
+	}
+
+	/* An avatar's photo, moved and zoomed under the circle. */
+	.crop-handles[data-pan] {
+		cursor: grab;
+		pointer-events: auto;
+		touch-action: none;
+	}
+
+	.crop-handles[data-pan]:active {
+		cursor: grabbing;
+	}
+
+	.crop-handles[data-pan]:focus-visible {
+		outline: 2px solid #fff;
+		outline-offset: -4px;
 	}
 
 	.crop-loupe {
@@ -182,6 +231,25 @@
 
 	.crop-bar .bi {
 		font-size: 1.25rem;
+	}
+
+	.crop-zoom {
+		display: flex;
+		flex: 3 1 0;
+		align-items: center;
+		gap: var(--redz-space-4);
+		min-inline-size: 0;
+	}
+
+	.crop-zoom .btn {
+		flex: none;
+		min-block-size: 2.75rem;
+	}
+
+	.crop-zoom .form-range {
+		flex: 1;
+		min-inline-size: 3rem;
+		accent-color: #fff;
 	}
 
 	@media (forced-colors: active) {

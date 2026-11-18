@@ -49,18 +49,27 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   the field, or a time or date input's face for its hidden input, lights in the success tone and fades in 2 s, and the
   page's words are said politely; under less motion the tone holds the 2 s. A tracked form's save flashes the fields
   it took.
-- The crop package, `css/redz-ui-crop.min.css` and the module `js/redz-ui-crop.min.js` (6 KB gzipped), built from
-  `crop/`: `REDZ.ui.crop(file, options)` opens a photo of a paper full screen under a frame of four corners the
-  library places on the paper's edges, or around the whole photo when it finds none. A corner is dragged with a loupe
-  above the finger, or pressed and then the spot tapped, or moved by the arrow keys; Rotate turns the photo by 90 and
-  Retake calls the page's `options.retake`. Done straightens the frame into a rectangle as the paper's proportions
-  were framed, its long side at most `max` (600 px unless told, never enlarged), a `type` (JPEG unless told) at a
-  `quality` (0.6 unless told). The answer is `{blob, width, height, points}`, or `null` when cancelled: `points` are
-  the frame's corners in the photo's own pixels, and `options.points` opens the frame there again. An
-  `input type="file"` with `data-crop` opens it on its change, `data-crop-max` and `data-crop-quality` its options,
-  puts the cropped file back into the input and fires `redz:crop`; a photo the browser cannot open empties the input
-  and says so. The photo is never sent anywhere, its EXIF turn is the browser's, and the page's texts `crop.*` give
-  every word. Types in `js/redz-ui-crop.d.ts`.
+- The crop package, `css/redz-ui-crop.min.css` and the module `js/redz-ui-crop.min.js` (9 KB gzipped), built from
+  `crop/`: `REDZ.ui.crop(file, options)` opens a photo full screen to frame it before it is sent, in three modes.
+  A paper, unless told: four corners the library places on the paper's edges, or around the whole photo when it
+  finds none; a corner or an edge is dragged with a loupe above the finger, or pressed and then the spot tapped, or
+  moved by the arrow keys, an edge across itself; Done straightens the frame into a rectangle as framed, what is clear
+  in the photo white. An avatar, `mode: 'avatar'`: a circle stands in the middle and the photo moves under it,
+  dragged, zoomed by two fingers, the wheel, a slider or plus and minus, out to the whole photo inside the circle - a
+  firm's logo fits - and in to six times the circle covered; the result is the circle's square, white around the
+  photo in a JPEG, clear in a PNG or a WebP. A photo, `mode: 'photo'`: a frame of `ratio` as large as the photo
+  holds, or the whole photo when free, dragged by its corners and edges, the ratio kept, and moved by a drag or the
+  arrow keys. Rotate turns the photo by 90 and Retake calls the page's `options.retake`. The long side is at most
+  `max` - 600 for a paper, 512 for an avatar, 1600 for a photo unless told, never enlarged - a `type`, JPEG unless
+  told, a PNG where the browser writes no WebP, at a `quality`, 0.6 or 0.85 unless told: a page gives its own
+  settings, these are only a fallback. The answer is `{blob, width, height, points}`, or `null` when cancelled:
+  `points` are the frame's corners in the photo's own pixels, and `options.points` opens the frame there again. An
+  `input type="file"` with `data-crop` - `avatar` or `photo` for those modes - opens it on its change,
+  `data-crop-ratio`, `data-crop-max`, `data-crop-quality` and `data-crop-type` its options, puts the cropped file back
+  into the input and fires `redz:crop` with the answer and `original`, the file as picked; a photo the browser cannot
+  open empties the input and says so. The photo is never sent anywhere, its EXIF turn is the browser's, and the
+  page's texts `crop.*` give every word. Types in `js/redz-ui-crop.d.ts`.
+- An `img` in an `avatar` fills it, round: a person's photo in place of the initials.
 
 ### Changed
 - The main script's budget is 58 KB gzipped, from 56: the time field takes 2 KB.
@@ -124,9 +133,13 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - Checks `stackHead` (the head's bar, its words, select all and a sort there, a head without controls hidden, a wide
   table's head row), `requiredShow` (waits, refused after a send with the focus, plain once filled) and `flash` (lit,
   animated, said, gone in 2 s); `track` asks a saved field to flash. Red on 9 planted faults.
-- Check `crop`: a drawn sample paper framed by its own detection within 16 px, Done's size and type, a turn and its
-  points, a frame opened again by its points, the defaults, four turns back to the start, the shortest side kept, and
-  Escape; under a finger too. Red on 8 planted faults, a shrink that never ends among them.
+- Checks `crop`, `cropAvatar` and `cropPhoto`, under a mouse and a finger: a drawn sample paper framed by its own
+  detection within 16 px, Done's size and type, a turn and its points, a frame opened again by its points, the
+  defaults, four turns back to the start, an edge moved across itself, the shortest side kept, a clear ground turned
+  white, and Escape; an avatar moved by keys and a drag, zoomed by plus, the wheel and two fingers, out to the whole
+  photo white in a JPEG and clear in a PNG, its square after a turn and its original on the event; a photo's frame at
+  its ratio through an edge's drag and a turn, moved by keys and a drag, a free edge moving alone. Red on 23 planted
+  faults, a shrink that never ends among them.
 - `php tools/build.php` reads a package's classes from its sources: a docs example of a class new in a package failed
   the build, which held it against the package as last built, and the build writes the package only once it passes.
 - The check of `combobox-clear` types in the very task the panel opens in, so a panel made after its search has the

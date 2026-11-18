@@ -234,11 +234,12 @@ Five more packages, linked on the screens that show them, listed in the passport
   `--view` and its reordering `data-reorder`, both in the main script.
 - the module `js/redz-ui-qr.min.js` - draws the QR code of a text into a `qr` tile as one SVG path: `data-qr` in the
   markup, or `REDZ.ui.qr(element, text)` for a text such as a secret that should sit in no attribute.
-- `css/redz-ui-crop.min.css` and the module `js/redz-ui-crop.min.js` - a photo of a paper framed by four corners and
-  straightened in the browser: `data-crop` on an `input type="file"`, or `REDZ.ui.crop(file, options)`.
+- `css/redz-ui-crop.min.css` and the module `js/redz-ui-crop.min.js` - a photo framed in the browser before it is
+  sent: a paper straightened from four corners, an avatar under a circle, a photo in a frame of a ratio;
+  `data-crop`, `data-crop="avatar"` or `data-crop="photo"` on an `input type="file"`, or `REDZ.ui.crop(file, options)`.
 
 Their budgets, gzipped: charts 3 KB of styles and 2 KB of script, the calendar 3 KB of styles and 6 KB of script, the
-media library 2 KB, QR codes 4 KB of script, the crop 2 KB of styles and 8 KB of script.
+media library 2 KB, QR codes 4 KB of script, the crop 2 KB of styles and 10 KB of script.
 
 ## Documentation
 `docs/` on the site: getting started, layout, utilities, tokens, icons, the move from Bootstrap 5.3, and a page per

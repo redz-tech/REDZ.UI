@@ -2637,11 +2637,13 @@ crop-head
 crop-hint
 crop-line
 crop-loupe
+crop-move
 crop-photo
 crop-shade
 crop-stage
 crop-title
 crop-wait
+crop-zoom
 d-block
 d-contents
 d-flex

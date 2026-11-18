@@ -19,4 +19,12 @@
 		block-size: 1.5rem;
 		font-size: 0.625rem;
 	}
+
+	/* A person's photo in place of the initials: a square, as the crop's avatar gives it, shown round. */
+	.avatar > img {
+		inline-size: 100%;
+		block-size: 100%;
+		border-radius: inherit;
+		object-fit: cover;
+	}
 }

@@ -404,8 +404,84 @@
 		}
 	});
 
-	// The crop's sample: a paper photographed on a table, put into the field as a person would pick it, and the size of what
-	// came back written beside it.
+	// The crop's samples, drawn and put into the field as a person would pick them: a paper photographed on a table, a
+	// person in a park for an avatar, a view for a cover; the size of what came back written beside it, an avatar shown.
+	const samples = {
+		paper: (context) => {
+			context.fillStyle = '#3b2a1e';
+			context.fillRect(0, 0, 1600, 1200);
+			context.fillStyle = '#f7f5ef';
+			context.beginPath();
+			[[430, 170], [1190, 120], [1250, 1080], [380, 1110]].forEach(([x, y]) => context.lineTo(x, y));
+			context.closePath();
+			context.fill();
+			context.fillStyle = '#333';
+			context.font = 'bold 48px sans-serif';
+			context.fillText('Sample Tours', 520, 300);
+			context.font = '30px sans-serif';
+			for (let line = 0; line < 12; line++) {
+				context.fillText('Voucher 4821, line ' + (line + 1), 520, 380 + line * 50);
+			}
+		},
+		person: (context) => {
+			const sky = context.createLinearGradient(0, 0, 0, 1200);
+			sky.addColorStop(0, '#9fc7e8');
+			sky.addColorStop(0.6, '#d9ecf7');
+			sky.addColorStop(0.6, '#7fae63');
+			sky.addColorStop(1, '#4f7d3c');
+			context.fillStyle = sky;
+			context.fillRect(0, 0, 1600, 1200);
+			context.fillStyle = '#3e6b2e';
+			context.beginPath();
+			context.arc(260, 700, 180, 0, 2 * Math.PI);
+			context.fill();
+			context.fillStyle = '#2f4f8f';
+			context.beginPath();
+			context.ellipse(980, 1200, 300, 380, 0, Math.PI, 2 * Math.PI);
+			context.fill();
+			context.fillStyle = '#e8b896';
+			context.fillRect(930, 690, 100, 140);
+			context.beginPath();
+			context.ellipse(980, 580, 150, 190, 0, 0, 2 * Math.PI);
+			context.fill();
+			context.fillStyle = '#4a3324';
+			context.beginPath();
+			context.ellipse(980, 480, 165, 115, 0, Math.PI, 2 * Math.PI);
+			context.fill();
+			context.fillStyle = '#222';
+			for (const x of [925, 1035]) {
+				context.beginPath();
+				context.arc(x, 570, 13, 0, 2 * Math.PI);
+				context.fill();
+			}
+		},
+		view: (context) => {
+			context.fillStyle = '#bcd9ef';
+			context.fillRect(0, 0, 1600, 1200);
+			context.fillStyle = '#f2c14e';
+			context.beginPath();
+			context.arc(1250, 260, 90, 0, 2 * Math.PI);
+			context.fill();
+			for (const [color, base, peak] of [['#7f9fb8', 640, 260], ['#5d8a5a', 820, 520]]) {
+				context.fillStyle = color;
+				context.beginPath();
+				context.moveTo(0, base);
+				context.quadraticCurveTo(500, peak, 1000, base - 60);
+				context.quadraticCurveTo(1300, base - 140, 1600, base);
+				context.lineTo(1600, 1200);
+				context.lineTo(0, 1200);
+				context.fill();
+			}
+			context.fillStyle = '#e9e1d3';
+			context.fillRect(620, 760, 260, 180);
+			context.fillStyle = '#a8483a';
+			context.beginPath();
+			context.moveTo(590, 770);
+			context.lineTo(750, 650);
+			context.lineTo(910, 770);
+			context.fill();
+		},
+	};
 	document.addEventListener('click', (event) => {
 		const button = event.target instanceof Element ? event.target.closest('[data-docs-crop]') : null;
 		const input = button === null ? null : document.getElementById(button.dataset.docsCrop);
@@ -413,21 +489,7 @@
 			return;
 		}
 		const canvas = Object.assign(document.createElement('canvas'), {width: 1600, height: 1200});
-		const context = canvas.getContext('2d');
-		context.fillStyle = '#3b2a1e';
-		context.fillRect(0, 0, 1600, 1200);
-		context.fillStyle = '#f7f5ef';
-		context.beginPath();
-		[[430, 170], [1190, 120], [1250, 1080], [380, 1110]].forEach(([x, y]) => context.lineTo(x, y));
-		context.closePath();
-		context.fill();
-		context.fillStyle = '#333';
-		context.font = 'bold 48px sans-serif';
-		context.fillText('Sample Tours', 520, 300);
-		context.font = '30px sans-serif';
-		for (let line = 0; line < 12; line++) {
-			context.fillText('Voucher 4821, line ' + (line + 1), 520, 380 + line * 50);
-		}
+		samples[button.dataset.docsSample ?? 'paper'](canvas.getContext('2d'));
 		canvas.toBlob((blob) => {
 			const list = new DataTransfer();
 			list.items.add(new File([blob], 'sample.jpg', {type: 'image/jpeg'}));
@@ -436,9 +498,17 @@
 		}, 'image/jpeg', 0.9);
 	});
 	document.addEventListener('redz:crop', (event) => {
-		const shown = event.target.closest('.docs-example')?.querySelector('[data-docs-cropped]');
+		const example = event.target.closest('.docs-example');
+		const shown = example?.querySelector('[data-docs-cropped]');
 		if (shown) {
 			shown.textContent = event.detail.width + ' x ' + event.detail.height + ' px, ' + Math.round(event.detail.blob.size / 1024) + ' KB';
+		}
+		const avatar = example?.querySelector('[data-docs-avatar]');
+		if (avatar) {
+			const image = avatar.querySelector('img') ?? avatar.appendChild(Object.assign(document.createElement('img'), {alt: ''}));
+			URL.revokeObjectURL(image.src);
+			image.src = URL.createObjectURL(event.detail.blob);
+			avatar.hidden = false;
 		}
 	});
 

@@ -1,6 +1,6 @@
 <header class="vstack gap-8">
 	<h1>Photo crop</h1>
-	<p class="docs-lead">A photo of a paper - a voucher, a receipt, a form - taken by a phone, framed by four corners the library places on the paper's edges and straightened into a flat rectangle before it is sent.</p>
+	<p class="docs-lead">A photo framed in the browser before it is sent: a paper - a voucher, a receipt, a form - straightened from four corners the library places on its edges, an avatar under a circle, or a photo in a frame of a ratio.</p>
 </header>
 
 <section class="vstack gap-12" aria-labelledby="crop-package">
@@ -11,12 +11,12 @@
 </section>
 
 <section class="vstack gap-16" aria-labelledby="crop-field">
-	<h2 id="crop-field">A file field that crops</h2>
-	<p><code>data-crop</code> on an <code>input type="file" accept="image/*"</code> opens the photo a person picks full screen, dark, under a frame the library placed on the paper's edges, or around the whole photo when it found no paper. A corner is dragged, a loupe above the finger showing what the finger hides; or pressed, and then the spot it goes to is tapped; or moved by the arrow keys. Rotate turns the photo by 90 degrees, Whole photo and Auto frame switch the frame, Retake opens the picker again, Cancel and <kbd>Escape</kbd> leave the field empty. Done puts the straightened photo back into the field as a file, so the form sends it as it is. Without the script the field sends the photo as it was taken.</p>
+	<h2 id="crop-field">A paper</h2>
+	<p><code>data-crop</code> on an <code>input type="file" accept="image/*"</code> opens the photo a person picks full screen, dark, under a frame the library placed on the paper's edges, or around the whole photo when it found no paper. A corner or an edge is dragged, a loupe above the finger showing what the finger hides; or pressed, and then the spot it goes to is tapped; or moved by the arrow keys. An edge moves across itself, both its corners with it. Rotate turns the photo by 90 degrees, Whole photo and Auto frame switch the frame, Retake opens the picker again, Cancel and <kbd>Escape</kbd> leave the field empty. Done puts the straightened photo back into the field as a file, so the form sends it as it is; what is clear in the photo turns white. Without the script the field sends the photo as it was taken.</p>
 	<div class="docs-example docs-example-stack" id="crop-sample">
 		<div class="form-field max-w-360">
 			<label class="form-label" for="crop-sample-photo">Voucher photo</label>
-			<input class="form-control" type="file" id="crop-sample-photo" name="voucher" accept="image/*" data-crop data-crop-max="2560" data-crop-quality="0.85" aria-describedby="crop-sample-hint">
+			<input class="form-control" type="file" id="crop-sample-photo" name="voucher" accept="image/*" data-crop data-crop-max="1200" data-crop-quality="0.6" aria-describedby="crop-sample-hint">
 			<div class="form-text" id="crop-sample-hint">On a phone, from the gallery or the camera.</div>
 		</div>
 		<div class="hstack flex-wrap gap-12">
@@ -24,22 +24,56 @@
 			<output class="text-muted" data-docs-cropped></output>
 		</div>
 	</div>
+	<p>The sizes are the page's: its own settings go into <code>data-crop-max</code>, <code>data-crop-quality</code> and <code>data-crop-type</code>. The numbers below are only what a field that says nothing gets.</p>
 	<table class="table docs-table">
 		<thead><tr><th scope="col">Part</th><th scope="col">What it does</th></tr></thead>
 		<tbody>
-			<tr><td><code>data-crop</code></td><td>On an <code>input type="file"</code>: its photo opens in the crop as it is picked, and the straightened file takes its place, named as the photo was with the result's extension. A photo the browser cannot open leaves the field empty and says so in a toast, the page's text <code>crop.unreadable</code>. Leave out <code>capture</code>, so a phone offers the gallery too.</td></tr>
-			<tr><td><code>data-crop-max</code></td><td>The result's long side at most, in pixels: <code>600</code> unless it says. A photo is never enlarged.</td></tr>
-			<tr><td><code>data-crop-quality</code></td><td>The JPEG's quality from 0 to 1: <code>0.6</code> unless it says.</td></tr>
-			<tr><td><code>redz:crop</code></td><td>Fired on the field once it holds the cropped file: <code>detail</code> is the answer of <code>REDZ.ui.crop</code>.</td></tr>
-			<tr><td><code>crop</code></td><td>The screen the library makes: a modal <code>dialog</code>, its photo in <code>crop-stage</code>, the corners <code>crop-handle</code> buttons in <code>crop-handles</code>, a group with <code>role="application"</code>, the buttons in <code>crop-bar</code>.</td></tr>
+			<tr><td><code>data-crop</code></td><td>On an <code>input type="file"</code>: its photo opens in the crop as it is picked, and the cropped file takes its place, named as the photo was with the result's extension. Empty or <code>paper</code> for a paper, <code>avatar</code> or <code>photo</code> for those. A photo the browser cannot open leaves the field empty and says so in a toast, the page's text <code>crop.unreadable</code>. Leave out <code>capture</code>, so a phone offers the gallery too.</td></tr>
+			<tr><td><code>data-crop-max</code></td><td>The result's long side at most, in pixels: <code>600</code> for a paper, <code>512</code> for an avatar, <code>1600</code> for a photo, unless it says. A photo is never enlarged past its own pixels.</td></tr>
+			<tr><td><code>data-crop-quality</code></td><td>The quality from 0 to 1 of a JPEG or a WebP: <code>0.6</code> for a paper, <code>0.85</code> for an avatar or a photo, unless it says.</td></tr>
+			<tr><td><code>data-crop-type</code></td><td><code>image/jpeg</code> unless it says, or <code>image/png</code> or <code>image/webp</code>, which keep what is clear in an avatar or a photo; a browser that writes no WebP gives a PNG.</td></tr>
+			<tr><td><code>data-crop-ratio</code></td><td>A photo's frame, its width to its height: <code>4/3</code>, <code>16:9</code> or <code>1.5</code>; free without it.</td></tr>
+			<tr><td><code>redz:crop</code></td><td>Fired on the field once it holds the cropped file: <code>detail</code> is the answer of <code>REDZ.ui.crop</code> and <code>original</code>, the file as it was picked, for a server that cuts its own sizes from it by the <code>points</code>.</td></tr>
+			<tr><td><code>crop</code></td><td>The screen the library makes: a modal <code>dialog</code> with <code>data-mode</code>, its photo in <code>crop-stage</code>, the corners and the edges <code>crop-handle</code> buttons in <code>crop-handles</code>, a group with <code>role="application"</code>, a photo's frame <code>crop-move</code>, the buttons in <code>crop-bar</code>, an avatar's zoom in <code>crop-zoom</code>.</td></tr>
 		</tbody>
 	</table>
 </section>
 
+<section class="vstack gap-16" aria-labelledby="crop-avatar">
+	<h2 id="crop-avatar">An avatar</h2>
+	<p><code>data-crop="avatar"</code> stands a circle in the middle and moves the photo under it: dragged by a finger, zoomed by two, by the wheel, by the slider or by <kbd>+</kbd> and <kbd>-</kbd>, moved by the arrow keys. It zooms out until the whole photo is in the circle - a firm's logo fits - and in to six times the circle covered. The result is the circle's square, the circle only drawn where the avatar stands; outside the photo it is white in a JPEG and clear in a PNG or a WebP.</p>
+	<div class="docs-example docs-example-stack" id="crop-avatar-sample">
+		<div class="form-field max-w-360">
+			<label class="form-label" for="crop-avatar-photo">Your photo</label>
+			<input class="form-control" type="file" id="crop-avatar-photo" name="avatar" accept="image/*" data-crop="avatar">
+		</div>
+		<div class="hstack flex-wrap gap-12">
+			<button class="btn" type="button" data-docs-crop="crop-avatar-photo" data-docs-sample="person"><i class="bi bi-person-circle" aria-hidden="true"></i>Try a sample photo</button>
+			<span class="avatar" data-docs-avatar hidden></span>
+			<output class="text-muted" data-docs-cropped></output>
+		</div>
+	</div>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="crop-photo">
+	<h2 id="crop-photo">A photo</h2>
+	<p><code>data-crop="photo"</code> lays a frame over the photo, as large as the photo holds at <code>data-crop-ratio</code>, or the whole photo when the ratio is free. Its corners and its edges are dragged, a ratio kept about the middle of the other way; the frame itself is dragged, or moved by the arrow keys when it has the focus. Rotate keeps the ratio. A cover, a photo of a place, an icon of 1:1 in a PNG.</p>
+	<div class="docs-example docs-example-stack" id="crop-photo-sample">
+		<div class="form-field max-w-360">
+			<label class="form-label" for="crop-photo-file">Cover</label>
+			<input class="form-control" type="file" id="crop-photo-file" name="cover" accept="image/*" data-crop="photo" data-crop-ratio="16/9" data-crop-type="image/webp">
+		</div>
+		<div class="hstack flex-wrap gap-12">
+			<button class="btn" type="button" data-docs-crop="crop-photo-file" data-docs-sample="view"><i class="bi bi-image" aria-hidden="true"></i>Try a sample photo</button>
+			<output class="text-muted" data-docs-cropped></output>
+		</div>
+	</div>
+</section>
+
 <section class="vstack gap-12" aria-labelledby="crop-call">
 	<h2 id="crop-call">From a script</h2>
-	<p><code>REDZ.ui.crop(file, options)</code> opens the same screen for a file the page holds and answers a promise: <code>{blob, width, height, points}</code>, or <code>null</code> when the person cancelled; it rejects for a file the browser cannot open as an image. The result is the longer of each pair of the frame's opposite edges, its long side at most <code>max</code>, read from a copy at most twice its size so small text stays clean. <code>points</code> are the frame's corners in the photo's own pixels, upright as the photo shows, the result's top left first, so a turn is in their order: given back as <code>options.points</code>, they open the frame where it was, turned as it was, to set it again or to read the original anew.</p>
-	<pre class="docs-code" tabindex="0"><code>const result = await REDZ.ui.crop(file, {max: 2560, quality: 0.85, retake: () =&gt; input.click()});
+	<p><code>REDZ.ui.crop(file, options)</code> opens the same screen for a file the page holds and answers a promise: <code>{blob, width, height, points}</code>, or <code>null</code> when the person cancelled; it rejects for a file the browser cannot open as an image. A paper's result is the longer of each pair of the frame's opposite edges, read from a copy at most twice its size so small text stays clean. <code>points</code> are the frame's corners in the photo's own pixels, upright as the photo shows, the result's top left first, so a turn is in their order: given back as <code>options.points</code>, they open the frame where it was, turned as it was, to set it again or to read the original anew.</p>
+	<pre class="docs-code" tabindex="0"><code>const result = await REDZ.ui.crop(file, {max: settings.maxPx, quality: settings.quality / 100, retake: () =&gt; input.click()});
 if (result !== null) {
 	form.append('voucher', result.blob, 'voucher.jpg');
 	form.append('frame', JSON.stringify(result.points));
@@ -47,9 +81,11 @@ if (result !== null) {
 	<table class="table docs-table">
 		<thead><tr><th scope="col">Option</th><th scope="col">What it does</th></tr></thead>
 		<tbody>
-			<tr><td><code>max</code></td><td>The result's long side at most, <code>600</code> unless given.</td></tr>
+			<tr><td><code>mode</code></td><td><code>paper</code> unless given, <code>avatar</code> or <code>photo</code>.</td></tr>
+			<tr><td><code>ratio: 4/3</code></td><td>A photo's frame, its width to its height, a number or a text such as <code>"16:9"</code>; free unless given. An avatar's is 1.</td></tr>
+			<tr><td><code>max</code></td><td>The result's long side at most: 600, 512 or 1600 by the mode unless given.</td></tr>
 			<tr><td><code>type</code></td><td>The result's type, <code>image/jpeg</code> unless given; a type the browser cannot write fails with the page's text <code>crop.failed</code>.</td></tr>
-			<tr><td><code>quality</code></td><td>The quality from 0 to 1, <code>0.6</code> unless given.</td></tr>
+			<tr><td><code>quality</code></td><td>The quality from 0 to 1, 0.6 or 0.85 by the mode unless given.</td></tr>
 			<tr><td><code>points</code></td><td>The frame to open with, as an answer gave it.</td></tr>
 			<tr><td><code>retake</code></td><td>A function the Retake button calls after it closes the screen; without it there is no Retake.</td></tr>
 		</tbody>
@@ -61,27 +97,31 @@ if (result !== null) {
 	<h2 id="crop-access">Accessibility</h2>
 	<ul>
 		<li>The screen is a modal <code>dialog</code> named by its title; <kbd>Escape</kbd> cancels, and the focus goes back where it was.</li>
-		<li>Each corner is a 44 px button named by the page's words, "Top left corner"; the arrow keys move a focused one by a pixel of the screen, with <kbd>Shift</kbd> by 10.</li>
-		<li>A drag has a one-pointer way too: press a corner, then tap where it goes.</li>
-		<li>Where a corner stands, in per cent of the photo, and whether a paper was found are read politely.</li>
-		<li>No side of the frame gets shorter than a handle, so two corners never sit on one another.</li>
+		<li>Each corner and edge is a 44 px button named by the page's words, "Top left corner", "Top edge"; the arrow keys move a focused one by a pixel of the screen, with <kbd>Shift</kbd> by 10. An edge's handle steps aside on a side shorter than two handles, unless it has the focus.</li>
+		<li>A drag has a one-pointer way too: press a corner or an edge, then tap where it goes.</li>
+		<li>An avatar's photo is a group that takes the focus: the arrow keys move the photo, <kbd>+</kbd> and <kbd>-</kbd> zoom it, and the zoom is a slider that says its per cent.</li>
+		<li>Where a corner or the frame stands, in per cent of the photo, the zoom and whether a paper was found are read politely.</li>
+		<li>No side of a frame gets shorter than a handle, so two corners never sit on one another.</li>
 	</ul>
 </section>
 
 <section class="vstack gap-12" aria-labelledby="crop-texts">
 	<h2 id="crop-texts">Texts</h2>
-	<p>The library has no words of its own; the crop reads these from the page's island <code>#redz-ui-text</code>.</p>
+	<p>The library has no words of its own; the crop reads these from the page's island <code>#redz-ui-text</code>. A page gives the words of the modes it uses.</p>
 	<table class="table docs-table">
 		<thead><tr><th scope="col">Key</th><th scope="col">For</th><th scope="col">In English</th></tr></thead>
 		<tbody>
-			<tr><td><code>crop.title</code></td><td>The screen's title</td><td>Frame the paper</td></tr>
-			<tr><td><code>crop.hint</code></td><td>The line under it</td><td>Drag the corners to the edges of the paper</td></tr>
+			<tr><td><code>crop.title</code>, <code>crop.avatar.title</code>, <code>crop.photo.title</code></td><td>The screen's title by the mode</td><td>Frame the paper, Frame your photo, Frame the photo</td></tr>
+			<tr><td><code>crop.hint</code>, <code>crop.avatar.hint</code>, <code>crop.photo.hint</code></td><td>The line under it</td><td>Drag the corners to the edges of the paper…</td></tr>
+			<tr><td><code>crop.frame</code>, <code>crop.avatar.frame</code>, <code>crop.photo.frame</code></td><td>The frame's group; a photo's frame itself</td><td>Frame of the paper, Photo under the circle, Frame</td></tr>
+			<tr><td><code>crop.keys</code>, <code>crop.avatar.keys</code>, <code>crop.photo.keys</code></td><td>How the keys move it</td><td>Arrow keys move a corner or an edge…</td></tr>
 			<tr><td><code>crop.cancel</code>, <code>crop.retake</code>, <code>crop.rotate</code>, <code>crop.done</code></td><td>The buttons</td><td>Cancel, Retake, Rotate, Done</td></tr>
-			<tr><td><code>crop.whole</code>, <code>crop.auto</code></td><td>The frame's switch, to the whole photo and back to the paper found</td><td>Whole photo, Auto frame</td></tr>
-			<tr><td><code>crop.frame</code>, <code>crop.keys</code></td><td>The corners' group and how to move them</td><td>Frame of the paper; Arrow keys move a corner…</td></tr>
+			<tr><td><code>crop.whole</code>, <code>crop.auto</code></td><td>A paper's switch, to the whole photo and back to the paper found</td><td>Whole photo, Auto frame</td></tr>
 			<tr><td><code>crop.top-left</code>, <code>crop.top-right</code>, <code>crop.bottom-right</code>, <code>crop.bottom-left</code></td><td>The corners</td><td>Top left corner…</td></tr>
-			<tr><td><code>crop.at</code></td><td>Where a corner stands; <code>{name}</code>, <code>{x}</code> and <code>{y}</code> in per cent</td><td>{name}: {x}% from the left, {y}% from the top</td></tr>
-			<tr><td><code>crop.picked</code></td><td>A corner pressed, waiting for its spot</td><td>{name} picked: tap where it goes</td></tr>
+			<tr><td><code>crop.top</code>, <code>crop.right</code>, <code>crop.bottom</code>, <code>crop.left</code></td><td>The edges</td><td>Top edge…</td></tr>
+			<tr><td><code>crop.zoom</code>, <code>crop.zoom-in</code>, <code>crop.zoom-out</code>, <code>crop.zoomed</code></td><td>An avatar's slider, its buttons, its value; <code>{n}</code> in per cent</td><td>Zoom, Zoom in, Zoom out, Zoom {n}%</td></tr>
+			<tr><td><code>crop.at</code></td><td>Where a corner, an edge or a frame stands; <code>{name}</code>, <code>{x}</code> and <code>{y}</code> in per cent</td><td>{name}: {x}% from the left, {y}% from the top</td></tr>
+			<tr><td><code>crop.picked</code></td><td>A corner or an edge pressed, waiting for its spot</td><td>{name} picked: tap where it goes</td></tr>
 			<tr><td><code>crop.found</code>, <code>crop.none</code>, <code>crop.all</code>, <code>crop.again</code>, <code>crop.turned</code></td><td>Said as the frame changes</td><td>The frame is on the edges of the paper…</td></tr>
 			<tr><td><code>crop.failed</code>, <code>crop.unreadable</code></td><td>A result that could not be written, a file that cannot be opened</td><td>The photo could not be saved…</td></tr>
 		</tbody>

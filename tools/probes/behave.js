@@ -9,6 +9,14 @@ window.REDZ_BEHAVE = (() => {
 	const $ = (selector, root = document) => root.querySelector(selector);
 	const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 	const say = JSON.stringify;
+	/** A pixel of an image file, [r, g, b, a]. */
+	const cropPixel = async (blob, x, y) => {
+		const bitmap = await createImageBitmap(blob);
+		const canvas = Object.assign(document.createElement('canvas'), {width: bitmap.width, height: bitmap.height});
+		const context = canvas.getContext('2d');
+		context.drawImage(bitmap, 0, 0);
+		return [...context.getImageData(x, y, 1, 1).data];
+	};
 	// The checks' own markup goes through a policy of theirs: the probes' pages require Trusted Types.
 	const policy = globalThis.trustedTypes?.createPolicy('redz-probe', {createHTML: (markup) => markup});
 	const trusted = (markup) => (policy === undefined ? markup : policy.createHTML(markup));
@@ -6199,7 +6207,8 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a combobox put in after load draws its options and face as ' + say(drawn) + ', not German chosen on its face');
 			}
 		}]},
-		// The crop: a photo picked into a data-crop field opens a modal screen with the paper's corners found; Done puts back a
+		// The crop: a photo picked into a data-crop field opens a modal screen with the paper's corners found and a handle on
+		// each edge, which the arrow keys move across itself, both its corners alike; Done puts back a
 		// straightened JPEG at the field's size with the frame's points; a frame turned once answers its points in the turned
 		// order and opens there again as it was; the size is 600 unless told; Escape answers null. Under a finger the walk
 		// runs 500 px wide, where a fraction of a pixel once made the screen draw without end.
@@ -6257,6 +6266,16 @@ window.REDZ_BEHAVE = (() => {
 			const left = REDZ.ui.crop(original);
 			const last = await open();
 			const [corner, next] = $$('.crop-handle', last);
+			const edge = $$('.crop-handle', last)[4];
+			const tops = () => [corner, next].map((handle) => handle.getBoundingClientRect().top);
+			const before = tops();
+			edge.focus();
+			for (let step = 0; step < 10; step++) {
+				edge.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true, cancelable: true}));
+			}
+			const moves = tops().map((y, k) => y - before[k]);
+			const mid = (k) => (corner.getBoundingClientRect()[k] + next.getBoundingClientRect()[k]) / 2;
+			seen.edge = [Math.abs(moves[0] - moves[1]) < 1, moves[0] >= 8, Math.abs(edge.getBoundingClientRect().left - mid('left')) < 1 && Math.abs(edge.getBoundingClientRect().top - mid('top')) < 1].join(' ');
 			corner.focus();
 			for (let step = 0; step < 200; step++) {
 				corner.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', shiftKey: true, bubbles: true, cancelable: true}));
@@ -6264,9 +6283,187 @@ window.REDZ_BEHAVE = (() => {
 			seen.side = Math.round(Math.hypot(next.getBoundingClientRect().left - corner.getBoundingClientRect().left, next.getBoundingClientRect().top - corner.getBoundingClientRect().top)) >= 43;
 			yield {key: 'Escape'};
 			seen.left = [String(await left), $('dialog.crop') === null].join(' ');
-			const want = {screen: 'true 4 application true', done: 'true true image/jpeg sample.jpg image/jpeg true', turned: 'true 400 true', again: 'true true', plain: 600, round: true, side: true, left: 'null true'};
+			// A paper on a clear ground, taken whole: the clear turns white, not black.
+			const clear = await new Promise((done) => {
+				const canvas = Object.assign(document.createElement('canvas'), {width: 800, height: 600});
+				const context = canvas.getContext('2d');
+				context.fillStyle = '#f7f5ef';
+				context.fillRect(200, 100, 400, 400);
+				canvas.toBlob(done, 'image/png');
+			});
+			const flat = REDZ.ui.crop(clear, {max: 200});
+			await open();
+			const toggle = $$('dialog.crop .crop-bar .btn').find((one) => one.querySelector('.bi-fullscreen'));
+			if (toggle) {
+				yield {click: center(toggle)};
+				await settled();
+			}
+			yield {click: done()};
+			const white = await flat;
+			seen.white = white === null ? 'none' : (await cropPixel(white.blob, 2, 2)).slice(0, 3).every((v) => v >= 250);
+			const want = {screen: 'true 8 application true', done: 'true true image/jpeg sample.jpg image/jpeg true', turned: 'true 400 true', again: 'true true', plain: 600, round: true, edge: 'true true true', side: true, left: 'null true', white: true};
 			if (say(seen) !== say(want)) {
 				out.push('a data-crop field crops a paper\'s photo, turns it, opens a frame again and cancels: ' + say(seen));
+			}
+		}},
+		// An avatar: the photo under a fixed circle moves by the arrow keys and a drag, zooms by plus, the wheel and two fingers
+		// spread apart, and out to the whole photo, white around it in a JPEG and clear in a PNG; Done answers the circle's
+		// square, 512 unless told, with the original on the event; a frame opens again by its points, a turn stays square.
+		cropAvatar: {target: '#crop-avatar-sample', walk: async function* (out) {
+			const field = $('#crop-avatar-photo');
+			const open = async () => {
+				await until(() => $('dialog.crop[data-ready]') !== null, 8000);
+				return $('dialog.crop[data-ready]');
+			};
+			const done = () => center($$('dialog.crop .crop-bar .btn').at(-1));
+			const shift = (view) => new DOMMatrix(getComputedStyle(view).transform).m41;
+			const off = (points, want) => Math.round(Math.max(...points.map((p, i) => Math.hypot(p[0] - want[i][0], p[1] - want[i][1]))));
+			const whole = (range) => {
+				range.value = '0';
+				range.dispatchEvent(new Event('input', {bubbles: true}));
+			};
+			let answer = null;
+			field.addEventListener('redz:crop', (event) => {
+				answer = event.detail;
+			}, {once: true});
+			field.scrollIntoView({block: 'center'});
+			await settled();
+			yield {click: center($('#crop-avatar-sample [data-docs-crop]'))};
+			const screen = await open();
+			const layer = $('.crop-handles', screen);
+			const range = $('.crop-zoom input[type="range"]', screen);
+			const view = $('.crop-photo', screen);
+			const seen = {screen: [screen.dataset.mode, layer.getAttribute('role'), layer.tabIndex, $$('.crop-handle', screen).length, /%/.test(range?.getAttribute('aria-valuetext') ?? '')].join(' ')};
+			const x0 = shift(view);
+			layer.focus();
+			for (let step = 0; step < 5; step++) {
+				layer.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight', shiftKey: true, bubbles: true, cancelable: true}));
+			}
+			seen.keys = Math.round(shift(view) - x0);
+			const zooms = [+range.value];
+			layer.dispatchEvent(new KeyboardEvent('keydown', {key: '+', bubbles: true, cancelable: true}));
+			zooms.push(+range.value);
+			const [cx, cy] = center(layer);
+			layer.dispatchEvent(new WheelEvent('wheel', {deltaY: -200, clientX: cx, clientY: cy, bubbles: true, cancelable: true}));
+			zooms.push(+range.value);
+			layer.setPointerCapture = () => {};
+			const finger = (type, id, x) => layer.dispatchEvent(new PointerEvent(type, {pointerId: id, clientX: x, clientY: cy, button: 0, buttons: 1, isPrimary: id === 21, bubbles: true}));
+			finger('pointerdown', 21, cx - 40);
+			finger('pointerdown', 22, cx + 40);
+			finger('pointermove', 22, cx + 120);
+			finger('pointerup', 22, cx + 120);
+			finger('pointerup', 21, cx - 40);
+			delete layer.setPointerCapture;
+			zooms.push(+range.value);
+			seen.zoom = zooms.slice(1).map((value, k) => value > zooms[k]).join(' ');
+			const x1 = shift(view);
+			yield {drag: [Math.round(cx), Math.round(cy), Math.round(cx) - 30, Math.round(cy)]};
+			await settled();
+			seen.drag = Math.round(shift(view) - x1);
+			whole(range);
+			yield {click: done()};
+			await until(() => answer !== null, 8000);
+			const file = field.files[0];
+			const rows = answer === null ? [] : [await cropPixel(answer.blob, 256, 2), await cropPixel(answer.blob, 256, 509)];
+			seen.done = answer === null ? 'none' : [answer.width, answer.height, answer.blob.type, answer.original?.name, file?.name, rows.some((pixel) => pixel.slice(0, 3).every((v) => v >= 250))].join(' ');
+			const again = REDZ.ui.crop(answer.original, {mode: 'avatar', points: answer.points});
+			await open();
+			yield {click: done()};
+			const second = await again;
+			seen.again = [off(second.points, answer.points) <= 2, second.width].join(' ');
+			const clear = REDZ.ui.crop(answer.original, {mode: 'avatar', type: 'image/png', max: 200});
+			whole($('.crop-zoom input', await open()));
+			yield {click: done()};
+			const png = await clear;
+			seen.clear = [png.width, png.blob.type, [await cropPixel(png.blob, 100, 1), await cropPixel(png.blob, 100, 198)].some((pixel) => pixel[3] === 0)].join(' ');
+			const turned = REDZ.ui.crop(answer.original, {mode: 'avatar', max: 300});
+			await open();
+			yield {click: center($('dialog.crop .crop-bar .btn'))};
+			await settled();
+			yield {click: done()};
+			const turn = await turned;
+			seen.turned = [turn.width, turn.height].join(' ');
+			const left = REDZ.ui.crop(answer.original, {mode: 'avatar'});
+			await open();
+			yield {key: 'Escape'};
+			seen.left = [String(await left), $('dialog.crop') === null].join(' ');
+			const want = {screen: 'avatar application 0 0 true', keys: 50, zoom: 'true true true', drag: -30, done: '512 512 image/jpeg sample.jpg sample.jpg true', again: 'true 512', clear: '200 image/png true', turned: '300 300', left: 'null true'};
+			if (say(seen) !== say(want)) {
+				out.push('a data-crop="avatar" field moves, zooms and crops a photo under its circle: ' + say(seen));
+			}
+		}},
+		// A photo: a frame of the field's ratio as large as the photo holds; an edge dragged keeps the ratio, the frame moves
+		// by the arrow keys and a drag; Done answers that ratio as WebP, or PNG where the browser writes no WebP; a free
+		// frame's edge moves alone; a turn keeps the ratio; a narrowed frame opens again by its points.
+		cropPhoto: {target: '#crop-photo-sample', walk: async function* (out) {
+			const field = $('#crop-photo-file');
+			const open = async () => {
+				await until(() => $('dialog.crop[data-ready]') !== null, 8000);
+				return $('dialog.crop[data-ready]');
+			};
+			const done = () => center($$('dialog.crop .crop-bar .btn').at(-1));
+			const off = (points, want) => Math.round(Math.max(...points.map((p, i) => Math.hypot(p[0] - want[i][0], p[1] - want[i][1]))));
+			const sized = (element) => element.getBoundingClientRect();
+			const key = (element, name, times, shiftKey = true) => {
+				for (let step = 0; step < times; step++) {
+					element.dispatchEvent(new KeyboardEvent('keydown', {key: name, shiftKey, bubbles: true, cancelable: true}));
+				}
+			};
+			let answer = null;
+			field.addEventListener('redz:crop', (event) => {
+				answer = event.detail;
+			}, {once: true});
+			field.scrollIntoView({block: 'center'});
+			await settled();
+			yield {click: center($('#crop-photo-sample [data-docs-crop]'))};
+			const screen = await open();
+			const mover = $('.crop-move', screen);
+			const seen = {screen: [screen.dataset.mode, $$('.crop-handle', screen).length, mover !== null, Math.abs(sized(mover).width / sized(mover).height - 16 / 9) < 0.02].join(' ')};
+			const right = $$('.crop-handle', screen)[5];
+			const wide = sized(mover).width;
+			const [hx, hy] = center(right);
+			yield {drag: [Math.round(hx), Math.round(hy), Math.round(hx) - 60, Math.round(hy)]};
+			await settled();
+			seen.edge = [Math.round(wide - sized(mover).width), Math.abs(sized(mover).width / sized(mover).height - 16 / 9) < 0.02].join(' ');
+			const top = sized(mover).top;
+			mover.focus();
+			key(mover, 'ArrowDown', 3);
+			seen.keys = Math.round(sized(mover).top - top);
+			const start = sized(mover).left;
+			const [mx, my] = center(mover);
+			yield {drag: [Math.round(mx), Math.round(my), Math.round(mx) + 20, Math.round(my)]};
+			await settled();
+			seen.drag = Math.round(sized(mover).left - start);
+			yield {click: done()};
+			await until(() => answer !== null, 8000);
+			const file = field.files[0];
+			const type = answer?.blob.type;
+			seen.done = answer === null ? 'none' : [Math.abs(answer.width / answer.height - 16 / 9) < 0.01, answer.width <= 1600, ['image/webp', 'image/png'].includes(type), file?.name === 'sample.' + type.split('/')[1], answer.original?.name].join(' ');
+			const free = REDZ.ui.crop(answer.original, {mode: 'photo'});
+			const loose = await open();
+			const frame = $('.crop-move', loose);
+			const [w0, h0] = [sized(frame).width, sized(frame).height];
+			key($$('.crop-handle', loose)[5], 'ArrowLeft', 10);
+			seen.free = [Math.round(w0 - sized(frame).width), Math.round(h0 - sized(frame).height)].join(' ');
+			yield {key: 'Escape'};
+			await free;
+			const turned = REDZ.ui.crop(answer.original, {mode: 'photo', ratio: '16/9', max: 320});
+			const turning = await open();
+			yield {click: center($('dialog.crop .crop-bar .btn'))};
+			await settled();
+			// Narrowed off the frame it opens with, so a frame opened again shows it came back by its points.
+			key($$('.crop-handle', turning)[5], 'ArrowLeft', 5);
+			yield {click: done()};
+			const turn = await turned;
+			seen.turned = [turn.width, turn.height].join(' ');
+			const again = REDZ.ui.crop(answer.original, {mode: 'photo', ratio: '16/9', max: 320, points: turn.points});
+			await open();
+			yield {click: done()};
+			const second = await again;
+			seen.again = [off(second.points, turn.points) <= 2, second.width, second.height].join(' ');
+			const want = {screen: 'photo 8 true true', edge: '60 true', keys: 30, drag: 20, done: 'true true true true sample.jpg', free: '100 0', turned: '320 180', again: 'true 320 180'};
+			if (say(seen) !== say(want)) {
+				out.push('a data-crop="photo" field frames a photo at its ratio, by its edges, keys and a drag: ' + say(seen));
 			}
 		}},
 		// data-required="show": an empty required field waits in the warning's ground, a refused send turns it to the

@@ -1,16 +1,25 @@
-// REDZ.UI, crop (a package of the release, linked apart): REDZ.ui.crop(file, options) opens a photo of a paper full
-// screen, dark, under a frame of four corners the library placed on the paper's edges, or around the whole photo when it
-// found none. A corner is dragged, a loupe above the finger showing what the finger hides; or pressed, and then the spot
-// it goes to is tapped; or moved by the arrow keys, by 10 with Shift. No side of the frame gets shorter than a handle.
-// Rotate turns the photo by 90, a toggle takes the whole photo or the found frame again, Retake calls the page's
-// options.retake, Escape cancels. Done straightens the frame into a rectangle - the longer of each pair of opposite
-// edges, its long side at most options.max, 600 unless told, never enlarged, read from a copy at most twice its size so
-// small text stays clean - as options.type, a JPEG unless told, at options.quality, 0.6 unless told. The promise answers
-// {blob, width, height, points}: points are the frame's corners in the photo's own pixels, upright as the photo shows,
-// the result's top left first, so a turn is in their order; options.points opens the frame there again. The photo is
-// read through an img, which stands it upright by its EXIF, and worked on at most 4096 px. An input type="file" with
-// data-crop opens it on its change - data-crop-max and data-crop-quality its options - and puts the cropped file back
-// into the input, then fires redz:crop with the answer on it; a photo the browser cannot open empties the input and
+// REDZ.UI, crop (a package of the release, linked apart): REDZ.ui.crop(file, options) opens a photo full screen, dark,
+// to frame it, in one of three modes.
+// - paper, unless told: a frame of four corners the library placed on the paper's edges, or around the whole photo
+//   when it found none. A corner or an edge is dragged, a loupe above the finger showing what the finger hides; or
+//   pressed, and then the spot it goes to is tapped; or moved by the arrow keys, by 10 with Shift. An edge moves across
+//   itself. A toggle takes the whole photo or the found frame again. Done straightens the frame into a rectangle - the
+//   longer of each pair of opposite edges - read from a copy at most twice its size so small text stays clean; what is
+//   transparent in the photo turns white. 600 px, a JPEG at 0.6, unless told.
+// - avatar: a circle stands in the middle and the photo moves under it - dragged, zoomed by two fingers, the wheel, a
+//   slider or plus and minus, moved by the arrow keys - from the whole photo inside the circle to six times the circle
+//   covered. The result is the circle's square: 512 px, a JPEG at 0.85, unless told; outside the photo it is white in a
+//   JPEG, clear in a PNG or a WebP.
+// - photo: a rectangle over the photo, of options.ratio or free, dragged by its corners and edges, moved by dragging it
+//   or by the arrow keys. 1600 px, a JPEG at 0.85, unless told.
+// No side of a frame gets shorter than a handle. Rotate turns the photo by 90, Retake calls the page's options.retake,
+// Escape cancels. The long side is at most options.max and never enlarged past the photo's own pixels. The promise
+// answers {blob, width, height, points}: points are the frame's corners in the photo's own pixels, upright as the photo
+// shows, the result's top left first, so a turn is in their order; options.points opens the frame there again. The
+// photo is read through an img, which stands it upright by its EXIF, and worked on at most 4096 px. An input
+// type="file" with data-crop - "avatar" or "photo" for those modes - opens it on its change, data-crop-ratio,
+// data-crop-max, data-crop-quality and data-crop-type its options, and puts the cropped file back into the input, then
+// fires redz:crop with the answer and the original file on it; a photo the browser cannot open empties the input and
 // says so in a toast.
 import {text} from '../js/text.js';
 
@@ -21,8 +30,21 @@ const LOUPE = 112;
 const ZOOM = 2.5;
 // The shortest side a frame keeps on the screen, a handle's size: two corners never sit on one another.
 const SIDE = 44;
-const DEFAULTS = {max: 600, type: 'image/jpeg', quality: 0.6};
-const NAMES = ['crop.top-left', 'crop.top-right', 'crop.bottom-right', 'crop.bottom-left'];
+// The deepest an avatar's photo is zoomed, in times the circle covered.
+const DEEP = 6;
+const MODES = {
+	paper: {max: 600, type: 'image/jpeg', quality: 0.6},
+	avatar: {max: 512, type: 'image/jpeg', quality: 0.85},
+	photo: {max: 1600, type: 'image/jpeg', quality: 0.85},
+};
+const WORDS = {
+	paper: {title: 'crop.title', hint: 'crop.hint', keys: 'crop.keys', frame: 'crop.frame'},
+	avatar: {title: 'crop.avatar.title', hint: 'crop.avatar.hint', keys: 'crop.avatar.keys', frame: 'crop.avatar.frame'},
+	photo: {title: 'crop.photo.title', hint: 'crop.photo.hint', keys: 'crop.photo.keys', frame: 'crop.photo.frame'},
+};
+// The corners clockwise from the top left, then the edges from the top: edge k joins corners k - 4 and k - 3.
+const NAMES = ['crop.top-left', 'crop.top-right', 'crop.bottom-right', 'crop.bottom-left', 'crop.top', 'crop.right', 'crop.bottom', 'crop.left'];
+const TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 let made = 0;
 
 /** An element with its attributes and children. */
@@ -299,6 +321,7 @@ const warp = (photo, quad, width, height) => {
 	const maxX = sw - 1;
 	const maxY = sh - 1;
 	const row = sw * 4;
+	const value = [0, 0, 0, 0];
 	let o = 0;
 	for (let j = 0; j < height; j++) {
 		const v = (j + 0.5) / height;
@@ -315,11 +338,16 @@ const warp = (photo, quad, width, height) => {
 			const p = y0 * row + x0 * 4;
 			const right = x0 < maxX ? 4 : 0;
 			const down = y0 < maxY ? row : 0;
-			for (let k = 0; k < 3; k++) {
+			for (let k = 0; k < 4; k++) {
 				const upper = source[p + k] + (source[p + right + k] - source[p + k]) * fx;
 				const lower = source[p + down + k] + (source[p + down + right + k] - source[p + down + k]) * fx;
-				target[o + k] = upper + (lower - upper) * fy;
+				value[k] = upper + (lower - upper) * fy;
 			}
+			// What is clear in the photo lies on white: a paper is never see-through.
+			const opaque = value[3] / 255;
+			target[o] = value[0] * opaque + 255 - value[3];
+			target[o + 1] = value[1] * opaque + 255 - value[3];
+			target[o + 2] = value[2] * opaque + 255 - value[3];
 			target[o + 3] = 255;
 		}
 	}
@@ -338,9 +366,25 @@ const sizeOf = (q, max) => {
 /** A point of a photo turned by 90 degrees clockwise, the turned photo's width given, back on the photo before the turn. */
 const unturn = ([x, y], width) => [y, width - x];
 
-/** Opens the file's photo to frame and straighten; answers {blob, width, height, points}, or null when cancelled. */
+/** A ratio given as a number or as "4/3", "4:3" or "1.5"; 0, free, for anything else. */
+const ratioOf = (value) => {
+	const [a, b = 1] = String(value ?? '').split(/[/:]/).map(Number);
+	const ratio = a / b;
+	return Number.isFinite(ratio) && ratio > 0 ? ratio : 0;
+};
+
+/** A rectangle's box from its corners, and the corners of a box, clockwise from the top left. */
+const boxOf = (q) => ({x: q[0][0], y: q[0][1], w: q[2][0] - q[0][0], h: q[2][1] - q[0][1]});
+const rectOf = ({x, y, w, h}) => [[x, y], [x + w, y], [x + w, y + h], [x, y + h]];
+
+/** Opens the file's photo to frame - a paper, an avatar or a photo; answers {blob, width, height, points}, or null when
+ *  cancelled. */
 export const crop = (file, options = {}) => new Promise((resolve, reject) => {
-	const {max, type, quality} = {...DEFAULTS, ...Object.fromEntries(Object.entries(options).filter(([, value]) => value !== undefined && value !== null))};
+	const kind = Object.hasOwn(MODES, options.mode) ? options.mode : 'paper';
+	const paper = kind === 'paper';
+	const {max, type, quality} = {...MODES[kind], ...Object.fromEntries(Object.entries(options).filter(([name, value]) => name in MODES.paper && value !== undefined && value !== null))};
+	const ratio = kind === 'avatar' ? 1 : kind === 'photo' ? ratioOf(options.ratio) : 0;
+	const label = WORDS[kind];
 	const retake = typeof options.retake === 'function' ? options.retake : null;
 	const opener = document.activeElement;
 	const id = 'redz-crop-' + ++made;
@@ -362,6 +406,9 @@ export const crop = (file, options = {}) => new Promise((resolve, reject) => {
 	let turns = 0;
 	// The photo's own size over the size worked on.
 	let own = 1;
+	// An avatar's circle on the screen, and the pointers on it.
+	let frame = {x: 0, y: 0, w: 1, h: 1};
+	const pointers = new Map();
 
 	const button = (kind, name, label) => make('button', {class: 'btn ' + kind, type: 'button'}, icon(name), label);
 	const cancel = make('button', {class: 'btn btn-icon btn-text', type: 'button', 'aria-label': text('crop.cancel')}, icon('bi-x-lg'));
@@ -369,56 +416,126 @@ export const crop = (file, options = {}) => new Promise((resolve, reject) => {
 	const line = vector('path', {class: 'crop-line'});
 	const shade = vector('svg', {class: 'crop-shade', 'aria-hidden': 'true'});
 	shade.append(dim, line);
-	const handles = NAMES.map((name, i) => make('button', {class: 'crop-handle', type: 'button', 'aria-label': text(name), 'aria-pressed': 'false', 'data-index': i}));
-	const layer = make('div', {class: 'crop-handles', role: 'application', 'aria-label': text('crop.frame'), 'aria-describedby': id + '-keys'}, ...handles);
-	const loupe = make('canvas', {class: 'crop-loupe', 'aria-hidden': 'true', hidden: ''});
+	const handles = kind === 'avatar' ? [] : NAMES.map((name, i) => make('button', {class: 'crop-handle', type: 'button', 'aria-label': text(name), 'aria-pressed': 'false', 'data-index': i, ...(i > 3 ? {'data-edge': ''} : {})}));
+	const mover = kind === 'photo' ? make('button', {class: 'crop-move', type: 'button', 'aria-label': text(label.frame)}) : null;
+	const layer = make('div', {class: 'crop-handles', role: 'application', 'aria-label': text(label.frame), 'aria-describedby': id + '-keys', ...(kind === 'avatar' ? {tabindex: '0', 'data-pan': ''} : {})}, ...[mover, ...handles].filter(Boolean));
+	const loupe = paper ? make('canvas', {class: 'crop-loupe', 'aria-hidden': 'true', hidden: ''}) : null;
 	const wait = make('div', {class: 'crop-wait'}, make('span', {class: 'spinner-border', 'aria-hidden': 'true'}));
-	const stage = make('div', {class: 'crop-stage'}, wait, shade, layer, loupe);
+	const stage = make('div', {class: 'crop-stage'}, ...[wait, shade, layer, loupe].filter(Boolean));
+	const range = kind === 'avatar' ? make('input', {class: 'form-range', type: 'range', min: '0', max: '1000', step: '1', 'aria-label': text('crop.zoom')}) : null;
+	const smaller = range ? make('button', {class: 'btn btn-icon btn-text', type: 'button', 'aria-label': text('crop.zoom-out')}, icon('bi-zoom-out')) : null;
+	const larger = range ? make('button', {class: 'btn btn-icon btn-text', type: 'button', 'aria-label': text('crop.zoom-in')}, icon('bi-zoom-in')) : null;
 	const again = retake ? button('btn-text', 'bi-camera', text('crop.retake')) : null;
 	const rotate = button('btn-text', 'bi-arrow-clockwise', text('crop.rotate'));
-	const toggle = button('btn-text', 'bi-fullscreen', text('crop.whole'));
+	const toggle = paper ? button('btn-text', 'bi-fullscreen', text('crop.whole')) : null;
 	const done = button('btn-primary', 'bi-check-lg', text('crop.done'));
 	const live = make('p', {class: 'visually-hidden', 'aria-live': 'polite'});
-	const dialog = make('dialog', {class: 'crop', 'aria-labelledby': id + '-title', 'aria-describedby': id + '-hint'},
-		make('div', {class: 'crop-head'}, cancel, make('h2', {class: 'crop-title', id: id + '-title'}, text('crop.title'))),
-		make('p', {class: 'crop-hint', id: id + '-hint'}, text('crop.hint')),
+	const dialog = make('dialog', {class: 'crop', 'data-mode': kind, 'aria-labelledby': id + '-title', 'aria-describedby': id + '-hint'},
+		make('div', {class: 'crop-head'}, cancel, make('h2', {class: 'crop-title', id: id + '-title'}, text(label.title))),
+		make('p', {class: 'crop-hint', id: id + '-hint'}, text(label.hint)),
 		stage,
-		make('p', {class: 'visually-hidden', id: id + '-keys'}, text('crop.keys')),
-		make('div', {class: 'crop-bar'}, ...[again, rotate, toggle, done].filter(Boolean)),
+		make('p', {class: 'visually-hidden', id: id + '-keys'}, text(label.keys)),
+		make('div', {class: 'crop-bar'}, ...[again, rotate, toggle, range && make('div', {class: 'crop-zoom'}, smaller, range, larger), done].filter(Boolean)),
 		live);
 
 	const say = (words) => {
 		live.textContent = words;
 	};
+	const sayLater = (words) => {
+		clearTimeout(later);
+		later = setTimeout(() => say(words()), 500);
+	};
 	const whole = () => [[0, 0], [work.width, 0], [work.width, work.height], [0, work.height]];
 	const at = (p) => [left + p[0] * scale, top + p[1] * scale];
-	const where = (i) => text('crop.at', {name: text(NAMES[i]), x: Math.round(points[i][0] / work.width * 100), y: Math.round(points[i][1] / work.height * 100)});
+	const spot = (i) => i < 4 ? points[i] : points[i - 4].map((v, k) => (v + points[(i - 3) % 4][k]) / 2);
+	const where = (i) => text('crop.at', {name: text(NAMES[i]), x: Math.round(spot(i)[0] / work.width * 100), y: Math.round(spot(i)[1] / work.height * 100)});
+	const placed = () => text('crop.at', {name: text(label.frame), x: Math.round(points[0][0] / work.width * 100), y: Math.round(points[0][1] / work.height * 100)});
+
+	// An avatar's frame on the photo: the widest inside it, the narrowest holding it whole, a sixth of the widest at most deep.
+	const cover = () => Math.min(work.width, work.height * ratio);
+	const contain = () => Math.max(work.width, work.height * ratio);
+	const zoomed = () => text('crop.zoomed', {n: Math.round(cover() / boxOf(points).w * 100)});
+
+	/** An avatar's frame held to its zooms and on the photo, or around it when it is wider than the photo. */
+	const held = ({x, y, w}) => {
+		const width = clamp(w, cover() / DEEP, contain());
+		const along = (at, size, room) => clamp(at, Math.min(0, room - size), Math.max(0, room - size));
+		return {x: along(x, width, work.width), y: along(y, width / ratio, work.height), w: width, h: width / ratio};
+	};
+
+	/** A rectangle of the ratio as large as the photo holds, in its middle; the whole photo when the ratio is free. */
+	const fitted = () => {
+		const w = ratio ? cover() : work.width;
+		const h = ratio ? w / ratio : work.height;
+		return rectOf({x: (work.width - w) / 2, y: (work.height - h) / 2, w, h});
+	};
 
 	const draw = () => {
+		if (kind === 'avatar') {
+			const b = boxOf(points);
+			scale = frame.w / b.w;
+			left = frame.x - b.x * scale;
+			top = frame.y - b.y * scale;
+			view.style.transform = `translate(${left}px, ${top}px) scale(${scale})`;
+			const r = frame.w / 2;
+			const circle = `M${frame.x} ${frame.y + r}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0Z`;
+			dim.setAttribute('d', `M0 0H${stage.clientWidth}V${stage.clientHeight}H0Z${circle}`);
+			line.setAttribute('d', circle);
+			range.value = String(Math.round(Math.log(contain() / b.w) / Math.log(contain() * DEEP / cover()) * 1000));
+			range.setAttribute('aria-valuetext', zoomed());
+			return;
+		}
 		const screen = points.map(at);
-		const frame = 'M' + screen.map((p) => p.join(' ')).join('L') + 'Z';
-		dim.setAttribute('d', `M${left} ${top}h${work.width * scale}v${work.height * scale}h${-work.width * scale}Z${frame}`);
-		line.setAttribute('d', frame);
+		const path = 'M' + screen.map((p) => p.join(' ')).join('L') + 'Z';
+		dim.setAttribute('d', `M${left} ${top}h${work.width * scale}v${work.height * scale}h${-work.width * scale}Z${path}`);
+		line.setAttribute('d', path);
 		handles.forEach((handle, i) => {
-			handle.style.translate = `${screen[i][0]}px ${screen[i][1]}px`;
+			const [x, y] = at(spot(i));
+			handle.style.translate = `${x}px ${y}px`;
+			if (i > 3) {
+				const [a, b] = [screen[i - 4], screen[(i - 3) % 4]];
+				handle.style.setProperty('--crop-turn', Math.atan2(b[1] - a[1], b[0] - a[0]) + 'rad');
+				// An edge's handle gives way to its corners on a short side.
+				handle.toggleAttribute('data-short', distance(a, b) < 2 * SIDE);
+			}
 		});
-		if ((mode === 'whole') !== (toggled === 'whole')) {
+		if (mover) {
+			Object.assign(mover.style, {translate: `${screen[0][0]}px ${screen[0][1]}px`, width: screen[2][0] - screen[0][0] + 'px', height: screen[2][1] - screen[0][1] + 'px'});
+		}
+		if (toggle && (mode === 'whole') !== (toggled === 'whole')) {
 			toggle.replaceChildren(icon(mode === 'whole' ? 'bi-magic' : 'bi-fullscreen'), text(mode === 'whole' ? 'crop.auto' : 'crop.whole'));
 		}
 		toggled = mode;
 	};
 
-	/** Fits the photo in the stage, inset so a corner's handle and the screen's edge gestures stay apart, drawn small in
-	 *  halving steps. */
+	/** Fits the photo in the stage, inset so a handle and the screen's edge gestures stay apart, drawn small in halving
+	 *  steps; an avatar's circle in the middle, over the photo worked on, which a transform moves and zooms. */
 	const fit = () => {
 		const {clientWidth: width, clientHeight: height} = stage;
 		if (width <= 2 * INSET || height <= 2 * INSET) {
 			return;
 		}
+		shade.setAttribute('viewBox', `0 0 ${width} ${height}`);
+		if (kind === 'avatar') {
+			const w = Math.min(width - 2 * INSET, (height - 2 * INSET) * ratio);
+			frame = {x: (width - w) / 2, y: (height - w / ratio) / 2, w, h: w / ratio};
+			if (view !== work) {
+				work.className = 'crop-photo';
+				work.style.width = work.width + 'px';
+				work.style.height = work.height + 'px';
+				if (view) {
+					view.replaceWith(work);
+				} else {
+					stage.prepend(work);
+				}
+				view = work;
+			}
+			draw();
+			return;
+		}
 		scale = Math.min((width - 2 * INSET) / work.width, (height - 2 * INSET) / work.height);
 		left = (width - work.width * scale) / 2;
 		top = (height - work.height * scale) / 2;
-		shade.setAttribute('viewBox', `0 0 ${width} ${height}`);
 		const next = shrink(work, Math.max(work.width, work.height) * scale * devicePixelRatio);
 		next.className = 'crop-photo';
 		next.style.width = work.width * scale + 'px';
@@ -434,13 +551,91 @@ export const crop = (file, options = {}) => new Promise((resolve, reject) => {
 		draw();
 	};
 
-	/** The frame with corner i moved by dx, dy px of the photo, or null when it would not stay convex or a side would be
-	 *  shorter than a handle on the screen. */
+	/** A paper's frame with handle i moved by dx, dy px of the photo - an edge across itself -, or null when it would not
+	 *  stay convex or a side would be shorter than a handle on the screen. */
 	const moved = (from, i, dx, dy) => {
 		const q = copy(from);
-		q[i] = [clamp(q[i][0] + dx, 0, work.width), clamp(q[i][1] + dy, 0, work.height)];
+		const ends = i < 4 ? [i] : [i - 4, (i - 3) % 4];
+		if (i > 3) {
+			const [a, b] = ends.map((k) => q[k]);
+			const length = distance(a, b) || 1;
+			const across = (dx * (a[1] - b[1]) + dy * (b[0] - a[0])) / length;
+			dx = across * (a[1] - b[1]) / length;
+			dy = across * (b[0] - a[0]) / length;
+		}
+		for (const k of ends) {
+			q[k] = [clamp(q[k][0] + dx, 0, work.width), clamp(q[k][1] + dy, 0, work.height)];
+		}
 		return convex(q) && q.every((p, k) => distance(p, q[(k + 1) % 4]) * scale >= SIDE) ? q : null;
 	};
+
+	/** A photo's frame with handle i moved by dx, dy px of the photo against the side or corner across from it, a ratio
+	 *  kept about the middle of the other way; on the photo, no side shorter than a handle, or null. */
+	const resized = (from, i, dx, dy) => {
+		const b = boxOf(from);
+		const least = SIDE / scale;
+		// How each way moves: -1 its start, 1 its end, 0 neither.
+		const sx = [-1, 1, 1, -1, 0, 1, 0, -1][i];
+		const sy = [-1, -1, 1, 1, -1, 0, 1, 0][i];
+		let [x0, y0, x1, y1] = [b.x, b.y, b.x + b.w, b.y + b.h];
+		x0 = sx < 0 ? clamp(x0 + dx, 0, x1 - least) : x0;
+		x1 = sx > 0 ? clamp(x1 + dx, x0 + least, work.width) : x1;
+		y0 = sy < 0 ? clamp(y0 + dy, 0, y1 - least) : y0;
+		y1 = sy > 0 ? clamp(y1 + dy, y0 + least, work.height) : y1;
+		if (!ratio) {
+			return rectOf({x: x0, y: y0, w: x1 - x0, h: y1 - y0});
+		}
+		const ax = sx < 0 ? x1 : sx > 0 ? x0 : (x0 + x1) / 2;
+		const ay = sy < 0 ? y1 : sy > 0 ? y0 : (y0 + y1) / 2;
+		const room = (a, s, size) => s < 0 ? a : s > 0 ? size - a : 2 * Math.min(a, size - a);
+		const most = Math.min(room(ax, sx, work.width), room(ay, sy, work.height) * ratio);
+		const fewest = least * Math.max(1, ratio);
+		if (most < fewest) {
+			return null;
+		}
+		const w = clamp(sx && sy ? Math.max(x1 - x0, (y1 - y0) * ratio) : sx ? x1 - x0 : (y1 - y0) * ratio, fewest, most);
+		const h = w / ratio;
+		return rectOf({x: sx < 0 ? ax - w : sx > 0 ? ax : ax - w / 2, y: sy < 0 ? ay - h : sy > 0 ? ay : ay - h / 2, w, h});
+	};
+	const moveHandle = (from, i, dx, dy) => paper ? moved(from, i, dx, dy) : resized(from, i, dx, dy);
+
+	/** A photo's frame moved whole by dx, dy px of the photo, on the photo. */
+	const shifted = (from, dx, dy) => {
+		const b = boxOf(from);
+		return rectOf({...b, x: clamp(b.x + dx, 0, work.width - b.w), y: clamp(b.y + dy, 0, work.height - b.h)});
+	};
+
+	/** A rectangle's frame from four points: their box, of the ratio about its middle, on the photo. */
+	const settle = (q) => {
+		const xs = q.map((p) => p[0]);
+		const ys = q.map((p) => p[1]);
+		let b = {x: Math.min(...xs), y: Math.min(...ys), w: Math.max(...xs) - Math.min(...xs), h: Math.max(...ys) - Math.min(...ys)};
+		if (kind === 'avatar') {
+			return rectOf(held(b));
+		}
+		if (ratio) {
+			const w = Math.min(b.w, b.h * ratio);
+			b = {x: b.x + (b.w - w) / 2, y: b.y + (b.h - w / ratio) / 2, w, h: w / ratio};
+		}
+		return b.w > work.width || b.h > work.height ? fitted() : rectOf({...b, x: clamp(b.x, 0, work.width - b.w), y: clamp(b.y, 0, work.height - b.h)});
+	};
+
+	/** An avatar's photo zoomed to a frame w px of the photo wide, the spot cx, cy of the stage staying where it is. */
+	const zoomTo = (w, cx, cy) => {
+		const b = boxOf(points);
+		const x = b.x + (cx - frame.x) / scale;
+		const y = b.y + (cy - frame.y) / scale;
+		const width = clamp(w, cover() / DEEP, contain());
+		const k = frame.w / width;
+		points = rectOf(held({x: x - (cx - frame.x) / k, y: y - (cy - frame.y) / k, w: width}));
+		draw();
+	};
+	const panBy = (dx, dy) => {
+		const b = boxOf(points);
+		points = rectOf(held({x: b.x - dx / scale, y: b.y - dy / scale, w: b.w}));
+		draw();
+	};
+	const middle = () => [frame.x + frame.w / 2, frame.y + frame.h / 2];
 
 	const place = (q) => {
 		if (q) {
@@ -456,14 +651,14 @@ export const crop = (file, options = {}) => new Promise((resolve, reject) => {
 		stage.toggleAttribute('data-armed', i >= 0);
 	};
 
-	/** The loupe over corner i: above the finger, or beside it at the top edge. */
+	/** The loupe over handle i: above the finger, or beside it at the top edge. */
 	const magnify = (i) => {
 		const ratio = devicePixelRatio;
 		const size = Math.round(LOUPE * ratio);
 		if (loupe.width !== size) {
 			loupe.width = loupe.height = size;
 		}
-		const p = points[i];
+		const p = spot(i);
 		const [x, y] = at(p);
 		let lx = x;
 		let ly = y - LOUPE;
@@ -529,9 +724,20 @@ export const crop = (file, options = {}) => new Promise((resolve, reject) => {
 		});
 	};
 
-	/** The frame straightened into the asked type. */
+	const settled = () => new Promise((go) => requestAnimationFrame(() => setTimeout(go)));
+	const written = async (out, width, height) => {
+		const blob = await new Promise((go) => out.toBlob(go, type, quality));
+		release(out);
+		// A browser that writes no WebP gives a PNG, which keeps what is clear as a WebP would.
+		if (blob?.type !== type && !(type === 'image/webp' && blob?.type === 'image/png')) {
+			throw new Error(text('crop.failed'));
+		}
+		return {blob, width, height, points: ownPoints()};
+	};
+
+	/** A paper's frame straightened into the asked type. */
 	const straighten = async () => {
-		await new Promise((go) => requestAnimationFrame(() => setTimeout(go)));
+		await settled();
 		const [width, height] = sizeOf(points, max);
 		const long = Math.max(distance(points[0], points[1]), distance(points[3], points[2]), distance(points[0], points[3]), distance(points[1], points[2]));
 		// Read from a copy at most twice the result's size: one step of bilinear reading further down smears small text.
@@ -543,12 +749,33 @@ export const crop = (file, options = {}) => new Promise((resolve, reject) => {
 		if (source !== work) {
 			release(source);
 		}
-		const blob = await new Promise((go) => out.toBlob(go, type, quality));
-		release(out);
-		if (blob?.type !== type) {
-			throw new Error(text('crop.failed'));
+		return written(out, width, height);
+	};
+
+	/** An avatar's or a photo's frame cut out as it shows, white under a JPEG where the photo is clear or absent. */
+	const cut = async () => {
+		await settled();
+		const {x, y, w, h} = boxOf(points);
+		// The result's pixels per pixel worked on: its long side at most max, never past the photo's own pixels.
+		const k = Math.min(1, max / (Math.max(w, h) * own)) * own;
+		const goal = Math.max(1, Math.round(Math.max(w, h) * k));
+		// Drawn at the result's size when that is not smaller than the frame; else at most twice it, then halved down.
+		const m = Math.max(k, Math.min(1, 2 * goal / Math.max(w, h)));
+		let out = canvasOf(Math.max(1, Math.round(w * m)), Math.max(1, Math.round(h * m)));
+		const context = out.getContext('2d');
+		if (type === 'image/jpeg') {
+			context.fillStyle = '#fff';
+			context.fillRect(0, 0, out.width, out.height);
 		}
-		return {blob, width, height, points: ownPoints()};
+		context.imageSmoothingQuality = 'high';
+		context.setTransform(m, 0, 0, m, -x * m, -y * m);
+		context.drawImage(work, 0, 0);
+		if (m > k) {
+			const big = out;
+			out = shrink(big, goal);
+			release(big);
+		}
+		return written(out, out.width, out.height);
 	};
 
 	const shut = () => {
@@ -575,18 +802,52 @@ export const crop = (file, options = {}) => new Promise((resolve, reject) => {
 		}
 	};
 
+	const local = (event) => {
+		const box = stage.getBoundingClientRect();
+		return [event.clientX - box.left, event.clientY - box.top];
+	};
+
 	layer.addEventListener('pointerdown', (event) => {
-		const handle = event.target.closest('.crop-handle');
-		if (!handle || drag || event.button !== 0 || working) {
+		if (event.button !== 0 || working || !work) {
+			return;
+		}
+		if (kind === 'avatar') {
+			layer.setPointerCapture(event.pointerId);
+			pointers.set(event.pointerId, local(event));
+			return;
+		}
+		const handle = event.target.closest('.crop-handle, .crop-move');
+		if (!handle || drag) {
 			return;
 		}
 		handle.setPointerCapture(event.pointerId);
 		handle.focus({preventScroll: true});
 		dragged = false;
-		drag = {i: +handle.dataset.index, id: event.pointerId, x: event.clientX, y: event.clientY, from: copy(points)};
+		drag = {i: handle === mover ? -1 : +handle.dataset.index, id: event.pointerId, x: event.clientX, y: event.clientY, from: copy(points)};
 	});
 
 	layer.addEventListener('pointermove', (event) => {
+		if (kind === 'avatar') {
+			const was = pointers.get(event.pointerId);
+			if (!was) {
+				return;
+			}
+			const now = local(event);
+			pointers.set(event.pointerId, now);
+			const other = [...pointers].find(([key]) => key !== event.pointerId)?.[1];
+			if (!other) {
+				panBy(now[0] - was[0], now[1] - was[1]);
+				return;
+			}
+			// Two fingers: the photo follows their middle and zooms by their spread about it.
+			panBy((now[0] - was[0]) / 2, (now[1] - was[1]) / 2);
+			const before = distance(was, other);
+			const after = distance(now, other);
+			if (before > 0 && after > 0) {
+				zoomTo(boxOf(points).w * before / after, (now[0] + other[0]) / 2, (now[1] + other[1]) / 2);
+			}
+			return;
+		}
 		if (drag?.id !== event.pointerId) {
 			return;
 		}
@@ -597,24 +858,50 @@ export const crop = (file, options = {}) => new Promise((resolve, reject) => {
 		}
 		dragged = true;
 		arm(-1);
-		place(moved(drag.from, drag.i, dx / scale, dy / scale));
-		magnify(drag.i);
+		if (drag.i < 0) {
+			place(shifted(drag.from, dx / scale, dy / scale));
+			return;
+		}
+		place(moveHandle(drag.from, drag.i, dx / scale, dy / scale));
+		if (paper) {
+			magnify(drag.i);
+		}
 	});
 
 	const drop = (event) => {
+		if (kind === 'avatar') {
+			if (pointers.size > 1 && pointers.delete(event.pointerId)) {
+				sayLater(zoomed);
+			}
+			pointers.delete(event.pointerId);
+			return;
+		}
 		if (drag?.id !== event.pointerId) {
 			return;
 		}
 		const {i} = drag;
 		drag = null;
-		loupe.hidden = true;
+		if (loupe) {
+			loupe.hidden = true;
+		}
 		if (dragged) {
-			say(where(i));
+			say(i < 0 ? placed() : where(i));
 		}
 	};
 	for (const name of ['pointerup', 'pointercancel', 'lostpointercapture']) {
 		layer.addEventListener(name, drop);
 	}
+
+	layer.addEventListener('wheel', (event) => {
+		if (kind !== 'avatar' || !work || working) {
+			return;
+		}
+		event.preventDefault();
+		const [x, y] = local(event);
+		const delta = event.deltaY * [1, 16, 400][event.deltaMode];
+		zoomTo(boxOf(points).w * Math.exp(delta * (event.ctrlKey ? 0.01 : 0.002)), x, y);
+		sayLater(zoomed);
+	}, {passive: false});
 
 	layer.addEventListener('click', (event) => {
 		const handle = event.target.closest('.crop-handle');
@@ -632,29 +919,60 @@ export const crop = (file, options = {}) => new Promise((resolve, reject) => {
 		if (armed < 0 || event.target.closest('.crop-handle')) {
 			return;
 		}
-		const box = stage.getBoundingClientRect();
-		const [sx, sy] = points[armed];
-		const x = clamp((event.clientX - box.left - left) / scale, 0, work.width);
-		const y = clamp((event.clientY - box.top - top) / scale, 0, work.height);
+		const [sx, sy] = spot(armed);
+		const [x, y] = local(event);
 		const i = armed;
 		arm(-1);
-		place(moved(points, i, x - sx, y - sy));
+		place(moveHandle(points, i, clamp((x - left) / scale, 0, work.width) - sx, clamp((y - top) / scale, 0, work.height) - sy));
 		say(where(i));
 	});
 
 	layer.addEventListener('keydown', (event) => {
-		const handle = event.target.closest('.crop-handle');
 		const by = {ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1]}[event.key];
-		if (!handle || !by || working) {
+		if (working || !work) {
+			return;
+		}
+		if (kind === 'avatar') {
+			const zoom = {'+': 1 / 1.1, '=': 1 / 1.1, '-': 1.1, '_': 1.1}[event.key];
+			if (by) {
+				event.preventDefault();
+				panBy(by[0] * (event.shiftKey ? 10 : 1), by[1] * (event.shiftKey ? 10 : 1));
+			} else if (zoom) {
+				event.preventDefault();
+				zoomTo(boxOf(points).w * zoom, ...middle());
+				sayLater(zoomed);
+			}
+			return;
+		}
+		const handle = event.target.closest('.crop-handle, .crop-move');
+		if (!handle || !by) {
 			return;
 		}
 		event.preventDefault();
-		const i = +handle.dataset.index;
 		const step = (event.shiftKey ? 10 : 1) / scale;
-		place(moved(points, i, by[0] * step, by[1] * step));
-		clearTimeout(later);
-		later = setTimeout(() => say(where(i)), 500);
+		if (handle === mover) {
+			place(shifted(points, by[0] * step, by[1] * step));
+			sayLater(placed);
+			return;
+		}
+		const i = +handle.dataset.index;
+		place(moveHandle(points, i, by[0] * step, by[1] * step));
+		sayLater(() => where(i));
 	});
+
+	range?.addEventListener('input', () => {
+		if (work) {
+			zoomTo(contain() / (contain() * DEEP / cover()) ** (Number(range.value) / 1000), ...middle());
+		}
+	});
+	for (const [control, by] of [[smaller, 1.25], [larger, 1 / 1.25]]) {
+		control?.addEventListener('click', () => {
+			if (work && !working) {
+				zoomTo(boxOf(points).w * by, ...middle());
+				sayLater(zoomed);
+			}
+		});
+	}
 
 	dialog.addEventListener('keydown', (event) => {
 		if (event.key === 'Escape') {
@@ -676,13 +994,20 @@ export const crop = (file, options = {}) => new Promise((resolve, reject) => {
 		retake();
 	});
 	rotate.addEventListener('click', () => {
-		if (work && !working) {
-			turn();
-			fit();
-			say(text('crop.turned'));
+		if (!work || working) {
+			return;
 		}
+		turn();
+		// A frame of a ratio stays of it: an avatar's square on the turned photo, a photo's as large as it holds.
+		if (kind === 'avatar') {
+			points = rectOf(held(boxOf(points)));
+		} else if (ratio) {
+			points = fitted();
+		}
+		fit();
+		say(text('crop.turned'));
 	});
-	toggle.addEventListener('click', () => {
+	toggle?.addEventListener('click', () => {
 		if (!work || working) {
 			return;
 		}
@@ -703,7 +1028,7 @@ export const crop = (file, options = {}) => new Promise((resolve, reject) => {
 			return;
 		}
 		working = true;
-		globalThis.REDZ.ui.busy(done, straighten()).then(finish, (error) => {
+		globalThis.REDZ.ui.busy(done, paper ? straighten() : cut()).then(finish, (error) => {
 			working = false;
 			globalThis.REDZ.ui.toast({text: error.message, tone: 'danger'});
 		});
@@ -721,8 +1046,10 @@ export const crop = (file, options = {}) => new Promise((resolve, reject) => {
 		}
 		work = photo;
 		own = width / work.width;
-		found = detect(work);
-		const given = Array.isArray(options.points) && options.points.length === 4 ? options.points.map(([x, y]) => [clamp(x / own, 0, work.width), clamp(y / own, 0, work.height)]) : null;
+		found = paper ? detect(work) : null;
+		const given = Array.isArray(options.points) && options.points.length === 4
+			? options.points.map(([x, y]) => paper ? [clamp(x / own, 0, work.width), clamp(y / own, 0, work.height)] : [x / own, y / own])
+			: null;
 		if (given !== null && convex(given)) {
 			// The given frame's top left on the photo as it came tells how many turns made it: turn as many again.
 			const first = given.indexOf(farthest(given, ([x, y]) => -x - y));
@@ -730,14 +1057,20 @@ export const crop = (file, options = {}) => new Promise((resolve, reject) => {
 			for (let k = 0; k < first; k++) {
 				turn();
 			}
+			points = paper ? points : settle(points);
 			mode = 'own';
-		} else {
+		} else if (paper) {
 			[points, mode] = [found ? copy(found) : whole(), found ? 'auto' : 'whole'];
+		} else {
+			points = fitted();
 		}
 		wait.remove();
 		fit();
 		dialog.toggleAttribute('data-ready', true);
-		later = setTimeout(() => say(text(mode === 'own' ? 'crop.again' : found ? 'crop.found' : 'crop.none')), 300);
+		const told = mode === 'own' ? 'crop.again' : paper ? (found ? 'crop.found' : 'crop.none') : '';
+		if (told) {
+			later = setTimeout(() => say(text(told)), 300);
+		}
 	}, (error) => {
 		shut();
 		reject(error);
@@ -758,7 +1091,15 @@ document.addEventListener('change', (event) => {
 		input.value = '';
 		input.click();
 	};
-	crop(file, {retake, max: number('data-crop-max'), quality: number('data-crop-quality')}).then((result) => {
+	const type = input.getAttribute('data-crop-type');
+	crop(file, {
+		mode: input.getAttribute('data-crop'),
+		ratio: input.getAttribute('data-crop-ratio'),
+		type: TYPES.includes(type) ? type : undefined,
+		retake,
+		max: number('data-crop-max'),
+		quality: number('data-crop-quality'),
+	}).then((result) => {
 		if (!result) {
 			input.value = '';
 			return;
@@ -766,7 +1107,7 @@ document.addEventListener('change', (event) => {
 		const list = new DataTransfer();
 		list.items.add(new File([result.blob], file.name.replace(/\.[^.]*$/, '') + '.' + result.blob.type.split('/')[1].replace('jpeg', 'jpg'), {type: result.blob.type}));
 		input.files = list.files;
-		input.dispatchEvent(new CustomEvent('redz:crop', {bubbles: true, detail: result}));
+		input.dispatchEvent(new CustomEvent('redz:crop', {bubbles: true, detail: {...result, original: file}}));
 	}, () => {
 		input.value = '';
 		globalThis.REDZ.ui.toast({text: text('crop.unreadable'), tone: 'danger'});
