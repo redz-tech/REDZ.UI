@@ -166,6 +166,9 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   machine without a GPU, writes none on docs/all.html and does on docs/crop.html, where they run.
 - The checks of a sheet dragged closed and of the editor's link wait for the dialog's close event, which comes a task
   after it shuts: Safari read the translate still on the sheet and the words without their link now and then.
+- `busyCheck` reads a busy switch's look as busy begins, in the same task: CI's Safari, loaded late in its run, fired
+  its 50 ms timer 440 ms late, when the knob had rightly turned into a ring. Its finding names both looks,
+  `:focus-visible` at both moments and the animations running.
 - The speech checks no longer read the calendar's strip of days: its table scrolls on a phone alone now, and a
   `table-scroll` that does not scroll is no tab stop, so at 1440 px there was nothing to read.
 - `php tools/build.php` reads a package's classes from its sources: a docs example of a class new in a package failed
