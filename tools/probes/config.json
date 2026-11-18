@@ -227,7 +227,6 @@
 			{"label": "the cover picked in a chooser", "do": "focus", "target": "#media-pick input:checked", "expect": ["lagoon.svg"]}
 		],
 		"docs/calendar.html": [
-			{"label": "the strip of days, a scrolling region", "do": "focus", "target": "#calendar-days > .table-scroll", "expect": ["Equipment out, November 2 to 8"]},
 			{"label": "a day that is a button, picked", "do": "focus", "target": "#calendar-sheet button[aria-pressed=\"true\"]", "expect": ["November 4, waiting for approval"]}
 		]
 	},

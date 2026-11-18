@@ -122,6 +122,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - A combobox's panel is made before it shows - an empty search over the whole list, the key typed on its button, its
   head as a sheet -, in `beforetoggle`: it was made in `toggle`, which comes after the search has the focus, and words
   typed or pasted in between were erased.
+- A photo whose `decode()` an engine refuses still opens in the crop once it has loaded; a file that is no image is
+  refused at once, as before.
 
 ### Checks
 - The probes judge a date input's month on a phone as a sheet on the bottom, as high as its month; `datePick` takes a
@@ -160,6 +162,9 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   its ratio through an edge's drag and a turn, moved by keys and a drag, a free edge moving alone. Red on 23 planted
   faults, a shrink that never ends among them. Each waits at most 8 s for the crop's answer, so a layer that never answers is a
   finding, not a stalled engine, and presses the docs' sample by script after shutting what an earlier check left open.
+  When no crop comes, the finding names the page's errors and its toasts.
+- The speech checks no longer read the calendar's strip of days: its table scrolls on a phone alone now, and a
+  `table-scroll` that does not scroll is no tab stop, so at 1440 px there was nothing to read.
 - `php tools/build.php` reads a package's classes from its sources: a docs example of a class new in a package failed
   the build, which held it against the package as last built, and the build writes the package only once it passes.
 - The check of `combobox-clear` types in the very task the panel opens in, so a panel made after its search has the

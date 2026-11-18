@@ -6238,10 +6238,14 @@ window.REDZ_BEHAVE = (() => {
 			const layers = $$('dialog[open], :popover-open').map((one) => '#' + one.id);
 			$$('dialog[open]').forEach((one) => one.close());
 			$$(':popover-open').forEach((one) => one.hidePopover());
+			const thrown = [];
+			const heard = (event) => thrown.push(String(event.reason?.message ?? event.message ?? event.reason));
+			addEventListener('error', heard);
+			addEventListener('unhandledrejection', heard);
 			$('#crop-sample [data-docs-crop]').click();
 			const screen = await open();
 			if (screen === null) {
-				out.push('a data-crop field opened no crop; layers open before: ' + say(layers));
+				out.push('a data-crop field opened no crop; layers open before: ' + say(layers) + ', errors: ' + say(thrown) + ', toasts: ' + say($$('.toast').map((one) => one.textContent.trim())));
 				return;
 			}
 			const seen = {screen: screen === null ? 'none' : [screen.matches(':modal'), $$('.crop-handle', screen).length, $('.crop-handles', screen).getAttribute('role'), $$('.crop-handle', screen).every((handle) => Math.round(handle.getBoundingClientRect().width) >= 44)].join(' ')};
@@ -6344,10 +6348,14 @@ window.REDZ_BEHAVE = (() => {
 			const layers = $$('dialog[open], :popover-open').map((one) => '#' + one.id);
 			$$('dialog[open]').forEach((one) => one.close());
 			$$(':popover-open').forEach((one) => one.hidePopover());
+			const thrown = [];
+			const heard = (event) => thrown.push(String(event.reason?.message ?? event.message ?? event.reason));
+			addEventListener('error', heard);
+			addEventListener('unhandledrejection', heard);
 			$('#crop-avatar-sample [data-docs-crop]').click();
 			const screen = await open();
 			if (screen === null) {
-				out.push('a data-crop="avatar" field opened no crop; layers open before: ' + say(layers));
+				out.push('a data-crop="avatar" field opened no crop; layers open before: ' + say(layers) + ', errors: ' + say(thrown) + ', toasts: ' + say($$('.toast').map((one) => one.textContent.trim())));
 				return;
 			}
 			const layer = $('.crop-handles', screen);
@@ -6440,10 +6448,14 @@ window.REDZ_BEHAVE = (() => {
 			const layers = $$('dialog[open], :popover-open').map((one) => '#' + one.id);
 			$$('dialog[open]').forEach((one) => one.close());
 			$$(':popover-open').forEach((one) => one.hidePopover());
+			const thrown = [];
+			const heard = (event) => thrown.push(String(event.reason?.message ?? event.message ?? event.reason));
+			addEventListener('error', heard);
+			addEventListener('unhandledrejection', heard);
 			$('#crop-photo-sample [data-docs-crop]').click();
 			const screen = await open();
 			if (screen === null) {
-				out.push('a data-crop="photo" field opened no crop; layers open before: ' + say(layers));
+				out.push('a data-crop="photo" field opened no crop; layers open before: ' + say(layers) + ', errors: ' + say(thrown) + ', toasts: ' + say($$('.toast').map((one) => one.textContent.trim())));
 				return;
 			}
 			const mover = $('.crop-move', screen);
