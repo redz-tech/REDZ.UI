@@ -2,24 +2,24 @@
 // own scripts, a mask's formatting too - or one task after it lands later, and compares every field with it: a radio
 // group, checkboxes of one name, a select multiple and a combobox's list count as one field, disabled ones too, and a
 // value typed back is no change; words typed in a chips field's entry and not yet taken are a change of that field. A
-// changed field wears data-changed - the control, a check's .form-check row, a combobox's face, a chips field's box -
-// and so do its form and the tab of every pane that holds it. The page's tracked forms outside a dialog share one save
-// bar, the page's .save-bar[data-track] or one made at the end of .app-main, which names the changes in the page's
-// words, stays at rest while such a form is in view and, shown, puts its height on the root as --redz-save-bar-height,
-// so a field the keys reach stands above it; Save and Discard are never disabled and say when there is nothing to do,
-// Save takes Control+S and Meta+S. Every save - the bar's, a question's Save and go, REDZ.ui.track.save() - takes the
-// words left in the chips fields' entries first, and a refused one holds it, then fires the cancelable redz:save on each
-// changed form in turn - {form, changed: [{name, label, was, now}], data, submitter, signal} - and, answered with a
-// promise, what was sent becomes the saved state once it resolves, then redz:saved {form, value}; a refusal {message,
-// fields} marks each named field under its control - {text, stored} offers Keep mine and Take saved - and reveals the
-// first. Left alone, a lone changed form is submitted as usual. A form in a dialog saves by its own button (js/wait.js),
-// which takes Control+S when it is the form's only one; of several, the page names one by aria-keyshortcuts. Discard puts
-// the saved values back, each with input and change, empties the chips fields' entries, fires redz:discard and offers
-// Undo, which brings all of it back, until the next edit or ten seconds. While anything is changed, a link that leaves
-// the page, a tab whose pane holds a changed form and a dialog's cancel or close ask first - Save and go, Discard, Stay -
-// and the browser's own question guards the rest. An input[type=password][data-secret] keeps the stored value while it
-// is empty; a button with command="--clear" for it and data-clear empties and disables it, and the form then sends that
-// name as 1.
+// changed field wears data-changed - the control, a check's .form-check row, a combobox's face, a chips field's box, a
+// time input's frame, a date input's face - and so do its form and the tab of every pane that holds it. The page's
+// tracked forms outside a dialog share one save bar, the page's .save-bar[data-track] or one made at the end of
+// .app-main, which names the changes in the page's words, stays at rest while such a form is in view and, shown, puts
+// its height on the root as --redz-save-bar-height, so a field the keys reach stands above it; Save and Discard are
+// never disabled and say when there is nothing to do, Save takes Control+S and Meta+S. Every save - the bar's, a
+// question's Save and go, REDZ.ui.track.save() - takes the words left in the chips fields' entries first, and a refused
+// one holds it, then fires the cancelable redz:save on each changed form in turn - {form, changed: [{name, label, was,
+// now}], data, submitter, signal} - and, answered with a promise, what was sent becomes the saved state once it
+// resolves, then redz:saved {form, value}; a refusal {message, fields} marks each named field under its control -
+// {text, stored} offers Keep mine and Take saved - and reveals the first. Left alone, a lone changed form is submitted
+// as usual. A form in a dialog saves by its own button (js/wait.js), which takes Control+S when it is the form's only
+// one; of several, the page names one by aria-keyshortcuts. Discard puts the saved values back, each with input and
+// change, empties the chips fields' entries, fires redz:discard and offers Undo, which brings all of it back, until the
+// next edit or ten seconds. While anything is changed, a link that leaves the page, a tab whose pane holds a changed
+// form and a dialog's cancel or close ask first - Save and go, Discard, Stay - and the browser's own question guards
+// the rest. An input[type=password][data-secret] keeps the stored value while it is empty; a button with
+// command="--clear" for it and data-clear empties and disables it, and the form then sends that name as 1.
 import {ask} from './answer.js';
 import {busy} from './busy.js';
 import {left, settle} from './chip-input.js';
@@ -76,26 +76,29 @@ const glyph = (name) => {
 /** The button that clears a secret field, or null. */
 const clearOf = (field) => field.id === '' ? null : document.querySelector('[command="' + CLEAR + '"][commandfor="' + CSS.escape(field.id) + '"]');
 
-/** What shows a control's change and its refusal: a combobox's face for its list, a chips field's box for its hidden
- *  value, a check's row for a check. */
+/** What shows a control's change and its refusal: a combobox's face for its list, a chips field's box, a time input's
+ *  frame or a date input's face for its hidden value, a check's row for a check. */
 const faceOf = (control) => {
 	if (control.getAttribute('role') === 'listbox') {
 		const panel = control.closest('[popover]');
 		return panel === null ? control : document.querySelector('.combobox-toggle[commandfor="' + CSS.escape(panel.id) + '"]') ?? control;
 	}
 	if (control.type === 'hidden') {
-		return control.closest('.chip-input') ?? control;
+		return control.closest('.chip-input') ?? control.parentElement.querySelector(':scope.time-input > .time-input-face, :scope.date-input > .date-input-face') ?? control;
 	}
 	return control.type === 'checkbox' || control.type === 'radio' ? control.closest('.form-check') ?? control : control;
 };
 
-/** What a refusal marks: a combobox's face for its list, a chips field's box for its value, else the control itself. */
+/** What a refusal marks: a combobox's face for its list, a chips field's box, a time input's frame or a date input's
+ *  face for its value, else the control itself. */
 const targetOf = (control) => control.getAttribute('role') === 'listbox' || control.type === 'hidden' ? faceOf(control) : control;
 
-/** What a target's words are read with and what takes its focus: a chips field's entry for its box, else the target. */
-const entryOf = (target) => target.matches('.chip-input') ? target.querySelector(':scope > .form-ghost') ?? target : target;
+/** What a target's words are read with and what takes its focus: a chips field's entry for its box, a time input's
+ *  hours for its frame, else the target. */
+const entryOf = (target) => target.matches('.chip-input, .time-input-face') ? target.querySelector(':scope > :is(.form-ghost, .time-input-part)') ?? target : target;
 
-/** Whether a control has nothing on the page to show it: a hidden field that no chips field draws. */
+/** Whether a control has nothing on the page to show it: a hidden field that no chips field, time input nor date input
+ *  draws. */
 const unseen = (control) => targetOf(control).type === 'hidden';
 
 /** The fields of a form by name: their kind and controls, a combobox's list standing for the hidden fields it writes, a

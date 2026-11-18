@@ -1242,8 +1242,8 @@ Speedboat to the marine park	قارب سريع إلى المحمية البحر�
 Page title	عنوان الصفحة
 One guest fewer	ضيف واحد أقل
 One guest more	ضيف واحد أكثر
-Label colour	لون التسمية
-Pick the label colour	اختر لون التسمية
+Label color	لون التسمية
+Pick the label color	اختر لون التسمية
 Sort by	الترتيب حسب
 Newest first	الأحدث أولًا
 Lowest price first	الأقل سعرًا أولًا
@@ -2072,3 +2072,24 @@ New departure	مغادرة جديدة
 Add	إضافة
 Clear the search	مسح البحث
 New language	لغة جديدة
+By zone, 50 min before the tour	حسب المنطقة، قبل الجولة بـ 50 دقيقة
+Entered before	أُدخل من قبل
+Arrival	الوصول
+From 14:00 to 23:00, by quarter hours.	من 14:00 إلى 23:00، كل ربع ساعة.
+Hours	الساعات
+Start date	تاريخ البدء
+Due date	تاريخ الاستحقاق
+Quick dates	تواريخ سريعة
+End of November	نهاية نوفمبر
+End of December	نهاية ديسمبر
+Any day; the day's name shows first.	أي يوم؛ يظهر اسم اليوم أولًا.
+Quick periods	فترات سريعة
+Week 45	الأسبوع 45
+Week 46	الأسبوع 46
+No date chosen	لم يُختر تاريخ
+{count} day	{count} يوم
+{count} days	{count} أيام
+{count} event	{count} حدث
+{count} events	{count} أحداث
+Previous month	الشهر السابق
+Next month	الشهر التالي

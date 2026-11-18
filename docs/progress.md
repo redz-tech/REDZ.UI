@@ -32,7 +32,7 @@ The browser's own `<progress>` for work under way and `<meter>` for a measure wi
 
 ### Meters
 
-`meter` on a `<meter>`: `low`, `high` and `optimum` divide the range, and the browser colours the value by the part it falls in - green in the good part, amber next to it, red in the far one.
+`meter` on a `<meter>`: `low`, `high` and `optimum` divide the range, and the browser colors the value by the part it falls in - green in the good part, amber next to it, red in the far one.
 
 ```html
 <div class="form-field">
@@ -48,7 +48,7 @@ The browser's own `<progress>` for work under way and `<meter>` for a measure wi
 
 ### A meter of several parts
 
-`meter meter-stacked` on a `div role="meter"` shows the parts of one amount - the free, the paid, what goes over the limit - each a child with its `data-v`, its share of the whole scale, and `data-tone`; 2 px apart, the ends rounded. A part with `data-over`, past the limit, is hatched red, so it reads without its colour too. The meter's numbers and its words are the page's: `aria-valuenow`, `aria-valuemax`, an `aria-valuetext` that says the parts, and a legend of [dots](dot.md) beside it.
+`meter meter-stacked` on a `div role="meter"` shows the parts of one amount - the free, the paid, what goes over the limit - each a child with its `data-v`, its share of the whole scale, and `data-tone`; 2 px apart, the ends rounded. A part with `data-over`, past the limit, is hatched red, so it reads without its color too. The meter's numbers and its words are the page's: `aria-valuenow`, `aria-valuemax`, an `aria-valuetext` that says the parts, and a legend of [dots](dot.md) beside it.
 
 ```html
 <div class="vstack gap-8 max-w-480">
@@ -100,9 +100,9 @@ A product sets how much it shows in its tokens: `--redz-progress-top-size`, `--r
 ## Keyboard and accessibility
 
 - Name every bar: a `<label for>`, `aria-label` or `aria-labelledby`. The browser announces the value as a percentage of `max`; the words beside the bar are for the eye.
-- Colour is not the message: a meter in the red part also says so in words where it matters.
+- Color is not the message: a meter in the red part also says so in words where it matters.
 - A screen reader does not follow a bar as it fills: say the end of a long task in a notice, by `REDZ.ui.toast`.
-- In forced colours the bar takes the system's highlight; right to left it fills from the right.
+- In forced colors the bar takes the system's highlight; right to left it fills from the right.
 
 ## Tokens
 

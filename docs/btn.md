@@ -77,7 +77,7 @@ An icon sits beside the words, or alone in a square `btn-icon` whose name is its
 
 ### A choice of one
 
-A segmented choice is Bootstrap's: in a `btn-group`, each `input type="radio" class="btn-check"` before its `label class="btn"`. The radio stays the control - the arrow keys move the choice, the form sends it - and the checked one is drawn pressed, an outline tone filled with its colour; the focus ring goes on the label. A link or a button that is the current one of a group carries `aria-current` and is drawn pressed too.
+A segmented choice is Bootstrap's: in a `btn-group`, each `input type="radio" class="btn-check"` before its `label class="btn"`. The radio stays the control - the arrow keys move the choice, the form sends it - and the checked one is drawn pressed, an outline tone filled with its color; the focus ring goes on the label. A link or a button that is the current one of a group carries `aria-current` and is drawn pressed too.
 
 ```html
 <div class="btn-toolbar">

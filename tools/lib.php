@@ -77,10 +77,13 @@ function TOOL__NpmFile(string $package, string $version, string $name, string $i
 	return ['version' => (string)$meta['version'], 'integrity' => $published, 'body' => TOOL__TarFile($tgz, $name)];
 }
 
+// Each package file of dist/ by its source, which tools/build.php builds it from.
+const TOOL_PACKAGE_SOURCES = ['css/redz-ui-charts.min.css' => 'charts/charts.css', 'js/redz-ui-charts.min.js' => 'charts/charts.js', 'css/redz-ui-calendar.min.css' => 'calendar/calendar.css', 'js/redz-ui-calendar.min.js' => 'calendar/calendar.js', 'css/redz-ui-media.min.css' => 'media/media.css', 'js/redz-ui-qr.min.js' => 'qr/qr.js', 'css/redz-ui-editor.min.css' => 'editor/editor.css', 'js/redz-ui-editor.min.js' => 'editor/editor.js', 'css/redz-ui-editor-surface.min.css' => 'editor/surface.css'];
+
 /**
  * Every class of the library's stylesheets, unescaped - components, utilities with their prefixes, icons, and the
- * packages' as the docs link them (tools/docs.json's "packages"), and the classes a consumer writes that only a script
- * reads - with the docs page of its stylesheet ('' for the base layers).
+ * packages' as the docs link them (tools/docs.json's "packages"), read from their sources, and the classes a consumer
+ * writes that only a script reads - with the docs page of its stylesheet ('' for the base layers).
  * @return array<string, string>
  */
 function TOOL__Classes(): array
@@ -92,7 +95,7 @@ function TOOL__Classes(): array
 	}
 	foreach (json_decode((string)file_get_contents(__DIR__ . '/docs.json'), true, 512, JSON_THROW_ON_ERROR)['packages'] ?? [] as $page => $files) {
 		foreach (array_filter($files, fn(string $file): bool => str_ends_with($file, '.css')) as $file) {
-			$sheets[dirname(__DIR__) . '/' . $file] = $page;
+			$sheets[dirname(__DIR__) . '/' . (TOOL_PACKAGE_SOURCES[substr($file, strlen('dist/'))] ?? $file)] = $page;
 		}
 	}
 	$classes = ['nav-overflow-keep' => ['nav']];

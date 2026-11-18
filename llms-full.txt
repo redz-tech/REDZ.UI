@@ -41,7 +41,7 @@ The stylesheet, the icons and the scripts, with the page's own words for the few
 
 - `css/redz-ui.min.css` is the layers, the tokens, the components and the utilities in one file, within its budget of 40 KB gzipped: the stylesheets `css/index.css` pulls in, squeezed.
 - `css/icons.min.css` is apart: one mask per Bootstrap Icons file, used only by name. It reaches each file by a URL relative to itself, `../icons/NAME.svg`, so the pack's folders keep their shape where a project serves them. A project that marks its static files by their content (`?h=…`) cannot mark the icons this way, and needs not: the pack's folder is named by its version, which changes only with Bootstrap Icons.
-- `js/redz-ui.min.js` is one ES module of the behaviors, within its budget of 56 KB gzipped: the modules of `js/index.js` joined, squeezed and given short local names. It sets `REDZ.ui` for calls from code.
+- `js/redz-ui.min.js` is one ES module of the behaviors, within its budget of 58 KB gzipped: the modules of `js/index.js` joined, squeezed and given short local names. It sets `REDZ.ui` for calls from code.
 - `js/redz-ui.d.ts` beside it types `REDZ.ui` and every `redz:*` event for an editor - PhpStorm, VS Code - with no TypeScript in the project and nothing for the browser to load; the packages bring `js/redz-ui-editor.d.ts` and `js/redz-ui-qr.d.ts`. PhpStorm reads a listener's event from its annotation, `/** @param {RedzEventMap['redz:save']} event */`. A project adds its own members by declaring `interface Redz` or `interface RedzUi` again in a file of its own.
 - The island `#redz-ui-text` gives the library its words, in the page's language: every key of the passport's `texts`, and for each key of its `plurals` the other forms its language's plural rules name (`found.one`, `found.few`). Its `args` names the `{names}` the library fills in each of them, `[]` for none: a text of the page that uses another name shows it as it is. The example shows four of them.
 - The two files are made from `css/` and `js/`, which stay to read. A project that bundles its own may join the stylesheets in the passport's order instead.
@@ -1199,15 +1199,15 @@ The custom properties on `:root` that the components read: colors by role in pai
 
 ## How they are made
 
-- Colors by role: `--redz-text`, `-muted`, `-faint`; `--redz-bg-page`, `--redz-bg`, `-raised`, `-hover`; a tone, its `-subtle` fill and its `-contrast` text for primary, secondary, success, danger, warning and info. `--redz-focus` and `--redz-link` are the primary tone unless a theme gives them their own - a white-label palette sets the links' color in `--redz-link` alone. The product's mark, `app-mark`, has a pair of its own, `--redz-app-mark-bg` and `--redz-app-mark-fg`: the red of the REDZ logo, `#cd3428`, with white words at 5.1:1 in both themes, or under `data-brand` the tone and its `-contrast` words. A project gives its mark another colour by setting the pair on `:root` in its own stylesheet.
+- Colors by role: `--redz-text`, `-muted`, `-faint`; `--redz-bg-page`, `--redz-bg`, `-raised`, `-hover`; a tone, its `-subtle` fill and its `-contrast` text for primary, secondary, success, danger, warning and info. `--redz-focus` and `--redz-link` are the primary tone unless a theme gives them their own - a white-label palette sets the links' color in `--redz-link` alone. The product's mark, `app-mark`, has a pair of its own, `--redz-app-mark-bg` and `--redz-app-mark-fg`: the red of the REDZ logo, `#cd3428`, with white words at 5.1:1 in both themes, or under `data-brand` the tone and its `-contrast` words. A project gives its mark another color by setting the pair on `:root` in its own stylesheet.
 - Text is at least 4.5:1 on its background, the borders of fields and the focus ring 3:1, in the light and the dark theme - computed in OKLCH and written as checked hex.
 - A component declares a few properties of its own on its root and never on rows or items: hundreds of properties on small elements slow every style recalculation.
 
-## A white label from one colour
+## A white label from one color
 
-`data-brand` on `html`, or on one region, makes the primary tone of one colour, `--redz-brand`: the library derives the tone, its `-subtle` fill, its `-contrast` text - black or white, whichever reads at 4.5:1 on it, as one of the two always does - the focus ring, the links and the product's mark, in both themes; in the dark one the tone is lightened until it reads on the dark ground. `data-brand="#0a7f5a"` gives the colour, which the library sets through the CSSOM after its script loads; a page that knows the colour on its server writes `--redz-brand` in its own stylesheet beside the attribute, and nothing waits for the script. Where the tone is text or a line on the ground - a link, a subtle badge, an outline button, `text-primary`, an alert's icon, the focus ring - it is `--redz-primary-text`: in the light theme the colour darkened, its hue kept, until its luminance is at most 0.13, which reads at 4.5:1 on white and on its subtle fill - an engine that refuses a colour's channel as a divisor, Firefox 132 on the floor, darkens it to a CIE lightness of 40 instead; in the dark theme the tone itself. A button keeps the colour as given in its fill - its words identify it. Where the tone fills a state or a value - a checked checkbox, radio or switch, a range, a progress bar, a dot, the current page, step or stat, a row's mark, a picked option's check, a field's changed or invalid mark - it is `--redz-primary-fill`: in the light theme the colour darkened, its hue kept, until its luminance is at most 0.25, which holds 3:1 on white, on the page's ground and on a track, and keeps its `-contrast` words at 4.5:1 - Firefox 132 darkens it to a CIE lightness of 56; in the dark theme the tone itself. The other tones follow their own keys the same way: `data-brand-secondary`, `data-brand-success`, `data-brand-info`, `data-brand-warning` and `data-brand-danger` - a company's own red for its errors - each derive that tone, its `-subtle`, `-contrast`, `-text` and `-fill`. Every tone has its `--redz-TONE-text` and `--redz-TONE-fill`, the tone itself unless a brand key derives them. The relative colours it is derived with are on the floor: Chrome 119, Firefox 128, Safari 18.
+`data-brand` on `html`, or on one region, makes the primary tone of one color, `--redz-brand`: the library derives the tone, its `-subtle` fill, its `-contrast` text - black or white, whichever reads at 4.5:1 on it, as one of the two always does - the focus ring, the links and the product's mark, in both themes; in the dark one the tone is lightened until it reads on the dark ground. `data-brand="#0a7f5a"` gives the color, which the library sets through the CSSOM after its script loads; a page that knows the color on its server writes `--redz-brand` in its own stylesheet beside the attribute, and nothing waits for the script. Where the tone is text or a line on the ground - a link, a subtle badge, an outline button, `text-primary`, an alert's icon, the focus ring - it is `--redz-primary-text`: in the light theme the color darkened, its hue kept, until its luminance is at most 0.13, which reads at 4.5:1 on white and on its subtle fill - an engine that refuses a color's channel as a divisor, Firefox 132 on the floor, darkens it to a CIE lightness of 40 instead; in the dark theme the tone itself. A button keeps the color as given in its fill - its words identify it. Where the tone fills a state or a value - a checked checkbox, radio or switch, a range, a progress bar, a dot, the current page, step or stat, a row's mark, a picked option's check, a field's changed or invalid mark - it is `--redz-primary-fill`: in the light theme the color darkened, its hue kept, until its luminance is at most 0.25, which holds 3:1 on white, on the page's ground and on a track, and keeps its `-contrast` words at 4.5:1 - Firefox 132 darkens it to a CIE lightness of 56; in the dark theme the tone itself. The other tones follow their own keys the same way: `data-brand-secondary`, `data-brand-success`, `data-brand-info`, `data-brand-warning` and `data-brand-danger` - a company's own red for its errors - each derive that tone, its `-subtle`, `-contrast`, `-text` and `-fill`. Every tone has its `--redz-TONE-text` and `--redz-TONE-fill`, the tone itself unless a brand key derives them. The relative colors it is derived with are on the floor: Chrome 119, Firefox 128, Safari 18.
 
-The key may change while the page stands: set on a region after load, `data-brand` derives the tone there at the next frame, and the region's own `data-theme` gives it the other theme. A settings screen that lets a person choose the colour asks the library what it will paint: `REDZ.ui.brand(colour)` answers for both themes with the tone, the words on it, the links, the focus ring, the fill of a checked box or a bar and the ground under them, each `#rrggbb`, and six contrast ratios, read from the stylesheet the page loads. The words on the tone and the links reach 4.5:1 by themselves, the ring and the fill 3:1; a button keeps the colour as given, so `toneOnGround` is the one to warn about - a pale colour makes pale buttons. A value that is no colour answers `null`.
+The key may change while the page stands: set on a region after load, `data-brand` derives the tone there at the next frame, and the region's own `data-theme` gives it the other theme. A settings screen that lets a person choose the color asks the library what it will paint: `REDZ.ui.brand(color)` answers for both themes with the tone, the words on it, the links, the focus ring, the fill of a checked box or a bar and the ground under them, each `#rrggbb`, and six contrast ratios, read from the stylesheet the page loads. The words on the tone and the links reach 4.5:1 by themselves, the ring and the fill 3:1; a button keeps the color as given, so `toneOnGround` is the one to warn about - a pale color makes pale buttons. A value that is no color answers `null`.
 
 ```js
 REDZ.ui.brand('#f4c542')
@@ -2879,7 +2879,7 @@ An icon sits beside the words, or alone in a square `btn-icon` whose name is its
 
 ### A choice of one
 
-A segmented choice is Bootstrap's: in a `btn-group`, each `input type="radio" class="btn-check"` before its `label class="btn"`. The radio stays the control - the arrow keys move the choice, the form sends it - and the checked one is drawn pressed, an outline tone filled with its colour; the focus ring goes on the label. A link or a button that is the current one of a group carries `aria-current` and is drawn pressed too.
+A segmented choice is Bootstrap's: in a `btn-group`, each `input type="radio" class="btn-check"` before its `label class="btn"`. The radio stays the control - the arrow keys move the choice, the form sends it - and the checked one is drawn pressed, an outline tone filled with its color; the focus ring goes on the label. A link or a button that is the current one of a group carries `aria-current` and is drawn pressed too.
 
 ```html
 <div class="btn-toolbar">
@@ -3020,7 +3020,7 @@ Buttons with `command="--theme"` and the value `light`, `dark` or `system` set t
 
 ## Share
 
-`command="--share"` shares `data-share-url` - the page's own address when it has none - and `data-share-title` through the device's share sheet where it has one, as a phone does. Elsewhere it opens its menu, `aria-controls`, whose links the library writes by their class: `share-telegram`, `share-facebook`, `share-messenger`, `share-linkedin`, `share-vk`, `share-line` and `share-whatsapp`; a `--copy` item without `data-copy` copies the address. Each class gives its icon the network's colour; Bootstrap Icons has no VK mark, so `share-vk` draws its letters. Messenger opens its app, on a phone.
+`command="--share"` shares `data-share-url` - the page's own address when it has none - and `data-share-title` through the device's share sheet where it has one, as a phone does. Elsewhere it opens its menu, `aria-controls`, whose links the library writes by their class: `share-telegram`, `share-facebook`, `share-messenger`, `share-linkedin`, `share-vk`, `share-line` and `share-whatsapp`; a `--copy` item without `data-copy` copies the address. Each class gives its icon the network's color; Bootstrap Icons has no VK mark, so `share-vk` draws its letters. Messenger opens its app, on a phone.
 
 ```html
 <button class="btn" type="button" command="--share" aria-controls="commands-share-menu" aria-haspopup="menu" data-share-url="https://lagoon.example/tours/north-bay" data-share-title="North Bay by speedboat"><i class="bi bi-share" aria-hidden="true"></i>Share</button>
@@ -3036,7 +3036,7 @@ Buttons with `command="--theme"` and the value `light`, `dark` or `system` set t
 </div>
 ```
 
-Three more networks: `share-x` posts on X with the title as its words, `share-viber` opens Viber's app with them - its mark drawn as letters, as VK's, or the page's own `img` or `svg` in the link -, and `share-wechat`, which has no address to share by, is a plain button that opens the page's popover with a [QR code](qr.md) of the address to scan in WeChat. `data-share-url` and `data-share-title` on any element write the links and the copy inside it, a row on the page without a menu: neutral buttons, each with the network's coloured icon and its name, as a filled brand colour leaves most names unreadable.
+Three more networks: `share-x` posts on X with the title as its words, `share-viber` opens Viber's app with them - its mark drawn as letters, as VK's, or the page's own `img` or `svg` in the link -, and `share-wechat`, which has no address to share by, is a plain button that opens the page's popover with a [QR code](qr.md) of the address to scan in WeChat. `data-share-url` and `data-share-title` on any element write the links and the copy inside it, a row on the page without a menu: neutral buttons, each with the network's colored icon and its name, as a filled brand color leaves most names unreadable.
 
 ```html
 <div class="hstack flex-wrap gap-8" role="group" aria-label="Share your link" data-share-url="https://lagoon.example/join?ref=sample" data-share-title="Book North Bay trips with my link">
@@ -3454,15 +3454,48 @@ Buttons with `command="--step-up"` or `"--step-down"` and `aria-controls` naming
 
 In a tracked form the hidden field is one field: `data-changed` and a refusal's `aria-invalid` go on the box, the field is named by the entry's label, the refusal's words stand under the box, and Discard draws the chips again. Words typed in the entry and not yet taken are a change of the field: the box is marked and the bar names it, leaving asks first, Discard empties the entry and Undo brings the words back.
 
-### A colour
+### A time
 
-`form-control-color` is the browser's own colour picker in a field's box. A text field with `data-color-for` naming the picker is its hex twin: each follows the other, and a twin that holds no colour - `#rgb` or `#rrggbb`, the `#` optional - is `aria-invalid`. A stored colour is drawn by `data-color`, which the library sets as `--redz-color` through the CSSOM, so a page under a strict CSP writes no style: on a `dot`, an `icon-tile` - its icon black or white by the colour's lightness -, a `choice-media`, and the edges `edge-top-color` and `edge-start-color`.
+`time-input` around one `input type="time"` draws it as two fields in one frame, the hours and the minutes, each with a numeric keyboard on a phone. The input stays the form's value, `HH:MM`, with its `name`, `min`, `max`, `step` and `required`; without the script it is the browser's own time field. A part taken - by a tap, a click or `Tab` - is taken whole: its first digit replaces it. Two digits of the hours, or one above 2, go on to the minutes; a first minute digit above 5 is 0X; hours stop at 23 and minutes at 59. `915`, `9.15` or `09:15`, typed or pasted, fill both parts, and leaving with the hours alone sets `:00`. The times of the input's `datalist`, each with its option's words, open as a list as the field takes the focus, narrowed to the hour typed; under a finger the list stands above the field, as the keyboard holds the bottom of the screen.
+
+```html
+<div class="form-floating time-input max-w-240">
+	<input class="form-control" id="form-time-pickup" type="time" name="pickup" value="09:15" list="form-time-pickup-times">
+	<label for="form-time-pickup">Pickup time</label>
+</div>
+<datalist id="form-time-pickup-times"><option value="08:40">By zone, 50 min before the tour</option><option value="08:30">Entered before</option><option value="09:00">Entered before</option></datalist>
+<div class="form-field max-w-240">
+	<label class="form-label" for="form-time-arrival">Arrival</label>
+	<div class="time-input">
+		<input class="form-control" id="form-time-arrival" type="time" name="arrival" min="14:00" max="23:00" step="900" required aria-describedby="form-time-arrival-hint">
+	</div>
+	<div class="form-text" id="form-time-arrival-hint">From 14:00 to 23:00, by quarter hours.</div>
+</div>
+```
+
+| Part | What it does |
+| --- | --- |
+| `time-input` | The box around one `input type="time"`: in a `form-floating`, or with a label of its own. |
+| `input type="time"` | The value the form sends, `HH:MM`, its `name` the field's; the library turns it `hidden`. Every change fires `input` and `change` on it; a script that sets it has the parts drawn again, and the form's reset puts back the time it came with. `min`, `max`, `step` and `required` check the time in the browser's words, held on the hours part, where its `aria-describedby` goes too; `step`, in seconds, is what the arrow keys step the minutes by; `list` names the `datalist` of suggested times; `disabled` and `readonly` pass to the parts. |
+| `time-input-face` | The frame the library draws, a `form-control` with `role="group"` named by the input's label; the label then names the hours part, so a click on it takes the hours. |
+| `time-input-part` | The hours and the minutes, text fields with `inputmode="numeric"` and no `name`, named by the page's texts `time.hours` and `time.minutes`. The part taken is filled; no caret or selection is drawn. |
+| `time-input-list` | The suggested times, a `menu` popover after the frame: each a `menu-item` button, its time in `time-input-time`, its option's words in `menu-item-description`. |
+
+The face shows the hours without a leading zero, and the field counts 24 hours. In a tracked form the input is one field: `data-changed` and a refusal's `aria-invalid` go on the frame, the field is named by its label, and the refusal's words and the focus go to the hours part.
+
+### A date
+
+`date-input` around one `input type="date"` draws it as a field that opens a month to pick a day from, below the field and on a phone as a sheet, always in the Gregorian year; `date-pick` draws such a month for a day or a period on the page itself. Both are in the calendar package: see [Calendars](calendar.md#calendar-date).
+
+### A color
+
+`form-control-color` is the browser's own color picker in a field's box. A text field with `data-color-for` naming the picker is its hex twin: each follows the other, and a twin that holds no color - `#rgb` or `#rrggbb`, the `#` optional - is `aria-invalid`. A stored color is drawn by `data-color`, which the library sets as `--redz-color` through the CSSOM, so a page under a strict CSP writes no style: on a `dot`, an `icon-tile` - its icon black or white by the color's lightness -, a `choice-media`, and the edges `edge-top-color` and `edge-start-color`.
 
 ```html
 <div class="form-field">
-	<label class="form-label" for="form-color-hex">Label colour</label>
+	<label class="form-label" for="form-color-hex">Label color</label>
 	<div class="input-group max-w-240">
-		<input class="form-control form-control-color" id="form-color-pick" type="color" value="#2a9d8f" aria-label="Pick the label colour">
+		<input class="form-control form-control-color" id="form-color-pick" type="color" value="#2a9d8f" aria-label="Pick the label color">
 		<input class="form-control font-monospace" id="form-color-hex" data-color-for="form-color-pick" value="#2a9d8f" spellcheck="false" autocomplete="off">
 	</div>
 </div>
@@ -3579,6 +3612,7 @@ REDZ.ui.follow(form);
 - A field disabled by another field is skipped by `Tab`: its reason, joined to the driving field, is heard there.
 - In a chips field, `Enter`, the separator or the `--add` button takes the entry, and `Enter` never sends the form. Each chip's remove button keeps its place in the Tab order; a click, `Delete` or `Backspace` on it removes the chip, and the focus goes to the next chip, else to the entry. `Backspace` in the entry only edits its text: a person who clears the text by it never loses a chip.
 - A refused value is said at once, in the words that stand under the box; an added or a removed value is said politely. The remove buttons and the `--add` button follow the entry's `disabled`, its fieldset's too.
+- In a time input, `Tab` goes from the hours to the minutes and then to the list of times while it is open. The up and down arrows step a part, the left and right arrows go between the parts, `Enter` in the hours goes to the minutes, and `Backspace` clears a part - in empty minutes it goes back to the hours. `Escape` closes the list. A screen reader hears the frame's label, then the part's name and its digits.
 
 ## Texts
 
@@ -3592,6 +3626,8 @@ The library has no words of its own; it reads these from the page's island `#red
 | `chip.invalid` | What the entry's rules refuse; `{label}` is the typed words, or the entry's label when a number cannot be read | {label} is not valid |
 | `chip.held` | A value held already; `{label}` is its label | {label} is already in the list |
 | `chip.full.one`, `chip.full.other` | A value past `data-chips-max`; `{count}` is the most, in the page's digits | Up to {count} value, Up to {count} values |
+| `time.hours` | The hours part of a time input | Hours |
+| `time.minutes` | The minutes part of a time input | Minutes |
 
 ## Tokens
 
@@ -4444,7 +4480,7 @@ A group of radios or checks drawn as tiles - a package, a plan, a way to pay - t
 
 ### A choice that destroys
 
-`choice-danger` draws a tile in the danger tone when chosen - the way out of a set of ways to keep. A colour beside the words: the tile's words say what it does.
+`choice-danger` draws a tile in the danger tone when chosen - the way out of a set of ways to keep. A color beside the words: the tile's words say what it does.
 
 ```html
 <fieldset class="vstack gap-8">
@@ -4506,7 +4542,7 @@ Stars that show a mark out of five - an average of reviews, a guide's score - an
 
 - A shown mark is one picture with its words - "4.2 of 5" - not five stars read one by one.
 - A mark given is a group of radios: `Tab` into it, the arrows move the mark, a screen reader says "4 stars, radio button, checked, 4 of 5".
-- The stars are drawn in the warning tone on the strong border's grey; in forced colors, in the text colour on grey.
+- The stars are drawn in the warning tone on the strong border's grey; in forced colors, in the text color on grey.
 
 ## Tokens
 
@@ -5864,7 +5900,7 @@ Series without a tone take the chart colors by their column.
 
 ### A strip of days
 
-`spark spark-strip` fills its box with one cell a day, oldest first, each its state's colour by `data-tone` - `success`, `warning`, `danger`, `info` -, a day without one a grey track: not a short bar, which would read as a small value. In a `strip`, a box the strip measures, it shows 90 days, 60 below 560 px and 30 below 360 px, the oldest going first; the `strip-head`'s caption with the `data-days` of the days shown is the one that shows, so its words always match. A cell's `title` is its tooltip.
+`spark spark-strip` fills its box with one cell a day, oldest first, each its state's color by `data-tone` - `success`, `warning`, `danger`, `info` -, a day without one a grey track: not a short bar, which would read as a small value. In a `strip`, a box the strip measures, it shows 90 days, 60 below 560 px and 30 below 360 px, the oldest going first; the `strip-head`'s caption with the `data-days` of the days shown is the one that shows, so its words always match. A cell's `title` is its tooltip.
 
 ```html
 <div class="strip" aria-label="Uptime of the site" role="group">
@@ -5909,14 +5945,15 @@ Series without a tone take the chart colors by their column.
 
 # Calendars
 
-A month of days with what happens on each, and a strip of days across the things that can be busy on them - equipment, rooms, boats.
+A month of days with what happens on each, a strip of days across the things that can be busy on them - equipment, rooms, boats -, and a month to pick a day or a period from.
 
 ## A package of the release
 
-Calendars are linked apart, on the screens that show them, beside the two files; they need no script.
+Calendars are linked apart, on the screens that show them, beside the two files. A month or a strip needs no script; picking a date needs the package's script too, after the library's.
 
 ```html
 <link rel="stylesheet" href="redz-ui/css/redz-ui-calendar.min.css">
+<script type="module" src="redz-ui/js/redz-ui-calendar.min.js"></script>
 ```
 
 ## A month
@@ -5987,12 +6024,91 @@ A day's `data-state` tints it: `worked`, `open`, `pending`, `absent` and `off` -
 </div>
 ```
 
+## A date field
+
+`date-input` around one `input type="date"` draws it as a field that shows the day and opens a month below it to pick one from; on a window narrower than 576 px the month is a sheet from the bottom of the dimmed page, with a grab bar, the words of the field's label and a Close button the library makes, dragged down by its head to close. The input stays the form's value, an ISO date such as `2026-11-18`, with its `name`, `min` and `max`; without the script it is the browser's own date field. Every year shown is the Gregorian one, whatever calendar the phone is set to, and the names of the months and the days are the page language's. A day picked closes the month and gives the focus back to the field.
+
+```html
+<div class="form-floating date-input max-w-240">
+	<input class="form-control" id="calendar-date-start" type="date" name="start" value="2026-12-02" min="2026-11-18" max="2027-03-31">
+	<label for="calendar-date-start">Start date</label>
+</div>
+<div class="form-field max-w-240">
+	<label class="form-label" for="calendar-date-due">Due date</label>
+	<div class="date-input" data-weekday>
+		<input class="form-control" id="calendar-date-due" type="date" name="due" aria-describedby="calendar-date-due-hint">
+		<div class="date-pick-quick" role="group" aria-label="Quick dates">
+			<button class="chip" type="button" value="2026-11-30">End of November</button>
+			<button class="chip" type="button" value="2026-12-31">End of December</button>
+		</div>
+	</div>
+	<div class="form-text" id="calendar-date-due-hint">Any day; the day's name shows first.</div>
+</div>
+```
+
+| Part | What it does |
+| --- | --- |
+| `date-input` | The box around one `input type="date"`: in a `form-floating`, or with a label of its own. `data-weekday` shows the day's name first, `Wed, 02.12.2026`; `data-first-day`, `data-counts` and a `date-pick-quick` inside it work as on a `date-pick`. |
+| `input type="date"` | The value the form sends, its `name` the field's; the library turns it `hidden`. A day picked fires `input` and `change` on it; a script that sets it has the field drawn again, and the form's reset puts back the day it came with. Days before `min` and after `max` cannot be picked; `disabled` passes to the face, `required` as `aria-required`, and the page checks a required day on its server, as for a combobox. |
+| `date-input-face` | The field the library draws, a `form-select` button with `role="combobox"` named by the input's label, which then names it; the day's words are in `date-input-value`. The down and up arrows open it too. |
+| `date-input-menu` | The month, a `menu` popover with `role="dialog"` after the face, 360 px wide below it; on a phone a sheet with `date-input-head` holding `date-input-title` and Close. |
+
+In a tracked form the input is one field: `data-changed` and a refusal's `aria-invalid` go on the face, and the refusal's words and the focus there too.
+
+## A day or a period
+
+`date-pick` draws the month itself, for the page to put on a screen, in its own sheet or below a column's filter: a day for its one `input type="date"`, a period for its two, the first the start and the second the end. In a period the first pick is a period of that one day at once, and the second its end; a pick before the start, or after a whole period, starts it again. Above the month the choice is in words, a period with its length; the page's quick picks follow, then the month's bar with the previous and the next month and Today when another month is shown. A week starts on Monday unless `data-first-day` says, `1` for Monday to `7` for Sunday.
+
+```html
+<div class="date-pick max-w-360" data-counts='{"2026-11-03": 2, "2026-11-04": 5, "2026-11-10": 1, "2026-11-12": 4, "2026-11-17": 3, "2026-11-19": 6, "2026-11-24": 2}'>
+	<input type="date" name="from" value="2026-11-09" aria-label="From">
+	<input type="date" name="to" value="2026-11-13" aria-label="To">
+	<div class="date-pick-quick" role="group" aria-label="Quick periods">
+		<button class="chip" type="button" value="2026-11-02/2026-11-08">Week 45</button>
+		<button class="chip" type="button" value="2026-11-09/2026-11-15">Week 46</button>
+		<button class="chip" type="button" value="2026-11-01/2026-11-30">November</button>
+	</div>
+</div>
+```
+
+| Part | What it does |
+| --- | --- |
+| `date-pick` | The box of one or two `input type="date"`, which the library turns `hidden` and keeps as the form's values; days outside the first input's `min` and `max` cannot be picked. Each change fires `input` and `change` on the input it changed. |
+| `data-counts` | On the box, a number to show under a day, `{"2026-11-04": 5}`, said after the day's name with the page's text `date.count`. Set it again and the month is drawn again. |
+| `redz:month` | Fired on the box as it shows another month, and once as it is drawn: `detail.from` and `detail.to` are the first and the last day of the six weeks shown, for the page to bring their counts. |
+| `date-pick-quick` | The page's quick picks, a group of buttons in the box, each with its `value` a day, `2026-11-18`, or a period, `2026-11-02/2026-11-08`; the one the choice equals is `aria-pressed="true"`. |
+| `date-pick-chosen` | The words of the choice, an `output` read politely: the day, the period and its length, or the page's text `date.none`. |
+| `date-pick-nav`, `date-pick-title` | The month's bar: the previous and the next month, the month and the year, read politely as they change, and Today. |
+| `date-pick-grid` | The month, a table with `role="grid"` of six weeks; a day is a cell with its whole date as its name, `aria-selected` when it is chosen, `aria-current="date"` today, `aria-disabled` outside the bounds, its number in `date-pick-count`; a period's ends carry `data-from` and `data-to`, the days between `data-in`, the next month's and the last one's `data-other`. Under a finger a day is 48 px high, 40 under a mouse. |
+
+| Key | In the month |
+| --- | --- |
+| `←` `→` | The day before or after, the other way in a right-to-left page |
+| `↑` `↓` | The same day a week before or after |
+| `Home` `End` | The first or the last day of the week |
+| `Page Up` `Page Down` | The same day a month before or after; with `Shift`, a year |
+| `Enter` `Space` | Picks the day |
+
+## Texts
+
+The library has no words of its own; picking a date reads these from the page's island `#redz-ui-text`, and `close` for the sheet's Close. A count takes the form the page language's plural rules name - `date.days.one`, `date.days.few` - and `date.days.other` when the page gives no such form.
+
+| Key | For | In English |
+| --- | --- | --- |
+| `date.none` | The words of the choice while no day is chosen | No date chosen |
+| `date.days.one`, `date.days.other` | A period's length; `{count}` is its days, in the page's digits | {count} days |
+| `date.count.one`, `date.count.other` | A day's number from `data-counts`, said after its name | {count} events |
+| `date.today` | The button back to today's month | Today |
+| `date.previous` | The button to the month before | Previous month |
+| `date.next` | The button to the month after | Next month |
+
 ## Accessibility
 
 - Both are tables: a screen reader reads a day with its weekday's header, a cell with its thing and its day. Weekdays are `abbr` with the full name.
 - A day's number is a `time` with its date; "+2" says "+2 more" with a hidden word.
 - A busy or over cell says its number; the tint repeats it, and an over cell is also outlined in forced colors.
 - A day's state is in words, never in its tint alone; a day that is a button is named by its whole date and its state, "November 4, waiting for approval", and the picked one says `aria-pressed="true"`.
+- A month to pick from is the WAI-ARIA grid: one day takes the `Tab` stop and the arrows move it, a screen reader enters it as an application and reads each day by its whole date, chosen, today or not available. The month and the choice are read politely as they change.
 
 # Media library
 
@@ -7404,7 +7520,7 @@ Long text that comes from an editor or from Markdown, where no element carries a
 
 - Prose styles the elements the text already has: its headings stay headings, so a screen reader walks them as it walks any page. Start the text's headings below the page's own: a `prose` inside a page with an `<h1>` starts at `<h2>`.
 - The measure keeps lines short enough to read; the text still wraps at any width, and a long word breaks rather than widening the page.
-- Links are underlined in the text, so they are not told apart by colour alone.
+- Links are underlined in the text, so they are not told apart by color alone.
 
 ## Tokens
 
@@ -8098,7 +8214,7 @@ The browser's own `<progress>` for work under way and `<meter>` for a measure wi
 
 ### Meters
 
-`meter` on a `<meter>`: `low`, `high` and `optimum` divide the range, and the browser colours the value by the part it falls in - green in the good part, amber next to it, red in the far one.
+`meter` on a `<meter>`: `low`, `high` and `optimum` divide the range, and the browser colors the value by the part it falls in - green in the good part, amber next to it, red in the far one.
 
 ```html
 <div class="form-field">
@@ -8114,7 +8230,7 @@ The browser's own `<progress>` for work under way and `<meter>` for a measure wi
 
 ### A meter of several parts
 
-`meter meter-stacked` on a `div role="meter"` shows the parts of one amount - the free, the paid, what goes over the limit - each a child with its `data-v`, its share of the whole scale, and `data-tone`; 2 px apart, the ends rounded. A part with `data-over`, past the limit, is hatched red, so it reads without its colour too. The meter's numbers and its words are the page's: `aria-valuenow`, `aria-valuemax`, an `aria-valuetext` that says the parts, and a legend of [dots](dot.md) beside it.
+`meter meter-stacked` on a `div role="meter"` shows the parts of one amount - the free, the paid, what goes over the limit - each a child with its `data-v`, its share of the whole scale, and `data-tone`; 2 px apart, the ends rounded. A part with `data-over`, past the limit, is hatched red, so it reads without its color too. The meter's numbers and its words are the page's: `aria-valuenow`, `aria-valuemax`, an `aria-valuetext` that says the parts, and a legend of [dots](dot.md) beside it.
 
 ```html
 <div class="vstack gap-8 max-w-480">
@@ -8166,9 +8282,9 @@ A product sets how much it shows in its tokens: `--redz-progress-top-size`, `--r
 ## Keyboard and accessibility
 
 - Name every bar: a `<label for>`, `aria-label` or `aria-labelledby`. The browser announces the value as a percentage of `max`; the words beside the bar are for the eye.
-- Colour is not the message: a meter in the red part also says so in words where it matters.
+- Color is not the message: a meter in the red part also says so in words where it matters.
 - A screen reader does not follow a bar as it fills: say the end of a long task in a notice, by `REDZ.ui.toast`.
-- In forced colours the bar takes the system's highlight; right to left it fills from the right.
+- In forced colors the bar takes the system's highlight; right to left it fills from the right.
 
 ## Tokens
 
@@ -9238,7 +9354,7 @@ The [demo screens](https://redz-tech.github.io/REDZ.UI/reference/demo/list.html)
 
 ### The brand
 
-`app-brand` is the link home at the header's start: the product's mark, `app-mark`, and its name, `app-name`. The mark is a picture of the name, so it carries `aria-hidden="true"`. It is the red of the REDZ logo with white words in both themes, and under `data-brand` the brand's tone: a product with a logo of its own gives its colour there, and the mark that stands for the logo in a narrow header matches it. `--redz-app-mark-bg` and `--redz-app-mark-fg` give the mark another colour. Where the header is under 576 px wide, the brand keeps one sign, the smallest it has: the mark, else the logo, else the name. The rest leaves the sight but stays the link's name for a screen reader.
+`app-brand` is the link home at the header's start: the product's mark, `app-mark`, and its name, `app-name`. The mark is a picture of the name, so it carries `aria-hidden="true"`. It is the red of the REDZ logo with white words in both themes, and under `data-brand` the brand's tone: a product with a logo of its own gives its color there, and the mark that stands for the logo in a narrow header matches it. `--redz-app-mark-bg` and `--redz-app-mark-fg` give the mark another color. Where the header is under 576 px wide, the brand keeps one sign, the smallest it has: the mark, else the logo, else the name. The rest leaves the sight but stays the link's name for a screen reader.
 
 A product with its own logo puts it in place of the name: `<img class="brand-logo">`, the picture for the light theme, then `<img class="brand-logo brand-logo-dark">`, its twin for the dark one. Each carries the file's own `width` and `height`: the logo stands 28 px tall, as wide as its proportions make it, and nothing moves as it loads. In the header it is at most 160 px wide.
 
@@ -9292,7 +9408,7 @@ Above: the pair with its mark, a light logo alone - on its mat in the dark theme
 
 ### A credit line
 
-`<footer class="app-credit">` after `app-main`, in `app` itself, is a quiet line under the main column: small, muted, its link in the line's colour and underlined. The words are the page's. On a short page it stands at the window's foot; on a long one after the column's end. It is the page's `contentinfo`, outside `main`, so a [save bar](save-bar.md) in the column never covers it. Print leaves it out.
+`<footer class="app-credit">` after `app-main`, in `app` itself, is a quiet line under the main column: small, muted, its link in the line's color and underlined. The words are the page's. On a short page it stands at the window's foot; on a long one after the column's end. It is the page's `contentinfo`, outside `main`, so a [save bar](save-bar.md) in the column never covers it. Print leaves it out.
 
 ```html
 <div class="app">

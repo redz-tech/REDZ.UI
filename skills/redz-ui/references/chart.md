@@ -141,7 +141,7 @@ Series without a tone take the chart colors by their column.
 
 ### A strip of days
 
-`spark spark-strip` fills its box with one cell a day, oldest first, each its state's colour by `data-tone` - `success`, `warning`, `danger`, `info` -, a day without one a grey track: not a short bar, which would read as a small value. In a `strip`, a box the strip measures, it shows 90 days, 60 below 560 px and 30 below 360 px, the oldest going first; the `strip-head`'s caption with the `data-days` of the days shown is the one that shows, so its words always match. A cell's `title` is its tooltip.
+`spark spark-strip` fills its box with one cell a day, oldest first, each its state's color by `data-tone` - `success`, `warning`, `danger`, `info` -, a day without one a grey track: not a short bar, which would read as a small value. In a `strip`, a box the strip measures, it shows 90 days, 60 below 560 px and 30 below 360 px, the oldest going first; the `strip-head`'s caption with the `data-days` of the days shown is the one that shows, so its words always match. A cell's `title` is its tooltip.
 
 ```html
 <div class="strip" aria-label="Uptime of the site" role="group">

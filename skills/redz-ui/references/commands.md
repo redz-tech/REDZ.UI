@@ -57,7 +57,7 @@ Buttons with `command="--theme"` and the value `light`, `dark` or `system` set t
 
 ## Share
 
-`command="--share"` shares `data-share-url` - the page's own address when it has none - and `data-share-title` through the device's share sheet where it has one, as a phone does. Elsewhere it opens its menu, `aria-controls`, whose links the library writes by their class: `share-telegram`, `share-facebook`, `share-messenger`, `share-linkedin`, `share-vk`, `share-line` and `share-whatsapp`; a `--copy` item without `data-copy` copies the address. Each class gives its icon the network's colour; Bootstrap Icons has no VK mark, so `share-vk` draws its letters. Messenger opens its app, on a phone.
+`command="--share"` shares `data-share-url` - the page's own address when it has none - and `data-share-title` through the device's share sheet where it has one, as a phone does. Elsewhere it opens its menu, `aria-controls`, whose links the library writes by their class: `share-telegram`, `share-facebook`, `share-messenger`, `share-linkedin`, `share-vk`, `share-line` and `share-whatsapp`; a `--copy` item without `data-copy` copies the address. Each class gives its icon the network's color; Bootstrap Icons has no VK mark, so `share-vk` draws its letters. Messenger opens its app, on a phone.
 
 ```html
 <button class="btn" type="button" command="--share" aria-controls="commands-share-menu" aria-haspopup="menu" data-share-url="https://lagoon.example/tours/north-bay" data-share-title="North Bay by speedboat"><i class="bi bi-share" aria-hidden="true"></i>Share</button>
@@ -73,7 +73,7 @@ Buttons with `command="--theme"` and the value `light`, `dark` or `system` set t
 </div>
 ```
 
-Three more networks: `share-x` posts on X with the title as its words, `share-viber` opens Viber's app with them - its mark drawn as letters, as VK's, or the page's own `img` or `svg` in the link -, and `share-wechat`, which has no address to share by, is a plain button that opens the page's popover with a [QR code](qr.md) of the address to scan in WeChat. `data-share-url` and `data-share-title` on any element write the links and the copy inside it, a row on the page without a menu: neutral buttons, each with the network's coloured icon and its name, as a filled brand colour leaves most names unreadable.
+Three more networks: `share-x` posts on X with the title as its words, `share-viber` opens Viber's app with them - its mark drawn as letters, as VK's, or the page's own `img` or `svg` in the link -, and `share-wechat`, which has no address to share by, is a plain button that opens the page's popover with a [QR code](qr.md) of the address to scan in WeChat. `data-share-url` and `data-share-title` on any element write the links and the copy inside it, a row on the page without a menu: neutral buttons, each with the network's colored icon and its name, as a filled brand color leaves most names unreadable.
 
 ```html
 <div class="hstack flex-wrap gap-8" role="group" aria-label="Share your link" data-share-url="https://lagoon.example/join?ref=sample" data-share-title="Book North Bay trips with my link">

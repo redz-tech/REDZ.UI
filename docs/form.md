@@ -226,15 +226,48 @@ Buttons with `command="--step-up"` or `"--step-down"` and `aria-controls` naming
 
 In a tracked form the hidden field is one field: `data-changed` and a refusal's `aria-invalid` go on the box, the field is named by the entry's label, the refusal's words stand under the box, and Discard draws the chips again. Words typed in the entry and not yet taken are a change of the field: the box is marked and the bar names it, leaving asks first, Discard empties the entry and Undo brings the words back.
 
-### A colour
+### A time
 
-`form-control-color` is the browser's own colour picker in a field's box. A text field with `data-color-for` naming the picker is its hex twin: each follows the other, and a twin that holds no colour - `#rgb` or `#rrggbb`, the `#` optional - is `aria-invalid`. A stored colour is drawn by `data-color`, which the library sets as `--redz-color` through the CSSOM, so a page under a strict CSP writes no style: on a `dot`, an `icon-tile` - its icon black or white by the colour's lightness -, a `choice-media`, and the edges `edge-top-color` and `edge-start-color`.
+`time-input` around one `input type="time"` draws it as two fields in one frame, the hours and the minutes, each with a numeric keyboard on a phone. The input stays the form's value, `HH:MM`, with its `name`, `min`, `max`, `step` and `required`; without the script it is the browser's own time field. A part taken - by a tap, a click or `Tab` - is taken whole: its first digit replaces it. Two digits of the hours, or one above 2, go on to the minutes; a first minute digit above 5 is 0X; hours stop at 23 and minutes at 59. `915`, `9.15` or `09:15`, typed or pasted, fill both parts, and leaving with the hours alone sets `:00`. The times of the input's `datalist`, each with its option's words, open as a list as the field takes the focus, narrowed to the hour typed; under a finger the list stands above the field, as the keyboard holds the bottom of the screen.
+
+```html
+<div class="form-floating time-input max-w-240">
+	<input class="form-control" id="form-time-pickup" type="time" name="pickup" value="09:15" list="form-time-pickup-times">
+	<label for="form-time-pickup">Pickup time</label>
+</div>
+<datalist id="form-time-pickup-times"><option value="08:40">By zone, 50 min before the tour</option><option value="08:30">Entered before</option><option value="09:00">Entered before</option></datalist>
+<div class="form-field max-w-240">
+	<label class="form-label" for="form-time-arrival">Arrival</label>
+	<div class="time-input">
+		<input class="form-control" id="form-time-arrival" type="time" name="arrival" min="14:00" max="23:00" step="900" required aria-describedby="form-time-arrival-hint">
+	</div>
+	<div class="form-text" id="form-time-arrival-hint">From 14:00 to 23:00, by quarter hours.</div>
+</div>
+```
+
+| Part | What it does |
+| --- | --- |
+| `time-input` | The box around one `input type="time"`: in a `form-floating`, or with a label of its own. |
+| `input type="time"` | The value the form sends, `HH:MM`, its `name` the field's; the library turns it `hidden`. Every change fires `input` and `change` on it; a script that sets it has the parts drawn again, and the form's reset puts back the time it came with. `min`, `max`, `step` and `required` check the time in the browser's words, held on the hours part, where its `aria-describedby` goes too; `step`, in seconds, is what the arrow keys step the minutes by; `list` names the `datalist` of suggested times; `disabled` and `readonly` pass to the parts. |
+| `time-input-face` | The frame the library draws, a `form-control` with `role="group"` named by the input's label; the label then names the hours part, so a click on it takes the hours. |
+| `time-input-part` | The hours and the minutes, text fields with `inputmode="numeric"` and no `name`, named by the page's texts `time.hours` and `time.minutes`. The part taken is filled; no caret or selection is drawn. |
+| `time-input-list` | The suggested times, a `menu` popover after the frame: each a `menu-item` button, its time in `time-input-time`, its option's words in `menu-item-description`. |
+
+The face shows the hours without a leading zero, and the field counts 24 hours. In a tracked form the input is one field: `data-changed` and a refusal's `aria-invalid` go on the frame, the field is named by its label, and the refusal's words and the focus go to the hours part.
+
+### A date
+
+`date-input` around one `input type="date"` draws it as a field that opens a month to pick a day from, below the field and on a phone as a sheet, always in the Gregorian year; `date-pick` draws such a month for a day or a period on the page itself. Both are in the calendar package: see [Calendars](calendar.md#calendar-date).
+
+### A color
+
+`form-control-color` is the browser's own color picker in a field's box. A text field with `data-color-for` naming the picker is its hex twin: each follows the other, and a twin that holds no color - `#rgb` or `#rrggbb`, the `#` optional - is `aria-invalid`. A stored color is drawn by `data-color`, which the library sets as `--redz-color` through the CSSOM, so a page under a strict CSP writes no style: on a `dot`, an `icon-tile` - its icon black or white by the color's lightness -, a `choice-media`, and the edges `edge-top-color` and `edge-start-color`.
 
 ```html
 <div class="form-field">
-	<label class="form-label" for="form-color-hex">Label colour</label>
+	<label class="form-label" for="form-color-hex">Label color</label>
 	<div class="input-group max-w-240">
-		<input class="form-control form-control-color" id="form-color-pick" type="color" value="#2a9d8f" aria-label="Pick the label colour">
+		<input class="form-control form-control-color" id="form-color-pick" type="color" value="#2a9d8f" aria-label="Pick the label color">
 		<input class="form-control font-monospace" id="form-color-hex" data-color-for="form-color-pick" value="#2a9d8f" spellcheck="false" autocomplete="off">
 	</div>
 </div>
@@ -351,6 +384,7 @@ REDZ.ui.follow(form);
 - A field disabled by another field is skipped by `Tab`: its reason, joined to the driving field, is heard there.
 - In a chips field, `Enter`, the separator or the `--add` button takes the entry, and `Enter` never sends the form. Each chip's remove button keeps its place in the Tab order; a click, `Delete` or `Backspace` on it removes the chip, and the focus goes to the next chip, else to the entry. `Backspace` in the entry only edits its text: a person who clears the text by it never loses a chip.
 - A refused value is said at once, in the words that stand under the box; an added or a removed value is said politely. The remove buttons and the `--add` button follow the entry's `disabled`, its fieldset's too.
+- In a time input, `Tab` goes from the hours to the minutes and then to the list of times while it is open. The up and down arrows step a part, the left and right arrows go between the parts, `Enter` in the hours goes to the minutes, and `Backspace` clears a part - in empty minutes it goes back to the hours. `Escape` closes the list. A screen reader hears the frame's label, then the part's name and its digits.
 
 ## Texts
 
@@ -364,6 +398,8 @@ The library has no words of its own; it reads these from the page's island `#red
 | `chip.invalid` | What the entry's rules refuse; `{label}` is the typed words, or the entry's label when a number cannot be read | {label} is not valid |
 | `chip.held` | A value held already; `{label}` is its label | {label} is already in the list |
 | `chip.full.one`, `chip.full.other` | A value past `data-chips-max`; `{count}` is the most, in the page's digits | Up to {count} value, Up to {count} values |
+| `time.hours` | The hours part of a time input | Hours |
+| `time.minutes` | The minutes part of a time input | Minutes |
 
 ## Tokens
 

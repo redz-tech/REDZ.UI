@@ -38,7 +38,7 @@ Stars that show a mark out of five - an average of reviews, a guide's score - an
 
 - A shown mark is one picture with its words - "4.2 of 5" - not five stars read one by one.
 - A mark given is a group of radios: `Tab` into it, the arrows move the mark, a screen reader says "4 stars, radio button, checked, 4 of 5".
-- The stars are drawn in the warning tone on the strong border's grey; in forced colors, in the text colour on grey.
+- The stars are drawn in the warning tone on the strong border's grey; in forced colors, in the text color on grey.
 
 ## Tokens
 

@@ -4736,6 +4736,10 @@ window.REDZ_BEHAVE = (() => {
 			const want = coarse
 				? {md: 44, sm: 44, xs: 44, lg: 48, float: 52, compact: 44, compactSm: 44, cell: '44x44', label: '-', switch: '44x44', option: '48px', search: '48px 16px'}
 				: {md: 32, sm: 28, xs: 24, lg: 40, float: 52, compact: 28, compactSm: 24, cell: '-', label: '-', switch: '-', option: '32px', search: '28px 12px'};
+			// Under 36rem the panel is a sheet: its options 52 px, its search 48 px with 16 px words.
+			if (matchMedia('(width < 36rem)').matches) {
+				Object.assign(want, {option: '52px', search: '48px 16px'});
+			}
 			if (say(seen) !== say(want)) {
 				out.push('controls ' + (coarse ? 'under a finger' : 'under a mouse') + ' are ' + say(seen) + ', not ' + say(want));
 			}
@@ -4780,15 +4784,204 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a sheet dragged by its head goes back short of a third and closes past it: ' + say(seen));
 			}
 		}},
+		// A time input: two parts over the page's input type="time" - a part taken whole, the hours going on, the clamps, a
+		// whole time typed or pasted, Backspace and the arrows, the datalist's times narrowed to the hour and picked, a
+		// script's value, the input's own checks on the hours part and, under a finger, the times above the field.
+		timeInput: {target: '#form-time', walk: async function* (out) {
+			const box = $('#form-time .form-floating');
+			const input = $('#form-time-pickup');
+			const [hours, minutes] = $$('.time-input-part', box);
+			const list = $('.time-input-list', box);
+			const [early] = $$('#form-time .form-field .time-input-part');
+			const coarse = matchMedia('(pointer: coarse)').matches;
+			const now = () => input.value + ' ' + hours.value + '|' + minutes.value + ' ' + (document.activeElement === hours ? 'h' : document.activeElement === minutes ? 'm' : '-');
+			const times = () => list.matches(':popover-open') ? $$('[data-time]', list).map((item) => item.dataset.time).join(',') : '';
+			// A window without the focus - headless Firefox's - sends no focus nor focusout: the walk sends them for it.
+			const focused = async (part) => {
+				if (!document.hasFocus()) {
+					part.dispatchEvent(new FocusEvent('focus'));
+				}
+				await settled();
+			};
+			const away = async () => {
+				const was = document.activeElement;
+				was.blur();
+				if (!document.hasFocus()) {
+					was.dispatchEvent(new FocusEvent('focusout', {bubbles: true}));
+				}
+				await settled();
+			};
+			const paste = (words) => {
+				const event = new Event('paste', {bubbles: true, cancelable: true});
+				const data = new DataTransfer();
+				data.setData('text/plain', words);
+				Object.defineProperty(event, 'clipboardData', {value: data});
+				document.activeElement.dispatchEvent(event);
+			};
+			const seen = {built: [input.type, $('.time-input-face', box).getAttribute('role'), $('label', box).htmlFor === hours.id, hours.inputMode, hours.getAttribute('aria-label'), minutes.getAttribute('aria-label'), early.getAttribute('aria-describedby')].join(' '), steps: [], checks: []};
+			$('#form-time').scrollIntoView({block: 'center'});
+			await settled();
+			yield {click: center(hours)};
+			await focused(hours);
+			seen.steps.push(times());
+			yield {type: '915'};
+			await settled();
+			seen.steps.push(now());
+			await away();
+			yield {click: center(hours)};
+			yield {type: '7'};
+			await settled();
+			seen.steps.push(now());
+			yield {type: '3'};
+			await away();
+			seen.steps.push(now());
+			yield {click: center(hours)};
+			yield {type: '257'};
+			await settled();
+			seen.steps.push(now());
+			yield {key: 'Backspace'};
+			yield {key: 'Backspace'};
+			await settled();
+			seen.steps.push(now());
+			yield {key: 'ArrowDown'};
+			await settled();
+			seen.steps.push(now());
+			paste('9.75');
+			await settled();
+			seen.steps.push(now());
+			yield {key: 'ArrowLeft'};
+			yield {key: 'Enter'};
+			yield {key: 'ArrowUp'};
+			await settled();
+			seen.steps.push(now());
+			await away();
+			yield {click: center(hours)};
+			yield {type: '8'};
+			await settled();
+			seen.steps.push(times());
+			if (coarse) {
+				seen.steps.push(list.getBoundingClientRect().bottom <= $('.time-input-face', box).getBoundingClientRect().top + 1 ? 'above' : 'below');
+			}
+			yield {click: center($('[data-time="08:30"]', list))};
+			await settled();
+			seen.steps.push(now() + ' ' + times());
+			await away();
+			input.value = '10:45';
+			await settled();
+			seen.steps.push(now());
+			seen.checks.push(early.validationMessage !== '');
+			for (const typed of ['9', '1507', '1530']) {
+				yield {click: center(early)};
+				yield {type: typed};
+				await away();
+				seen.checks.push(early.validationMessage !== '');
+			}
+			seen.checks.push($('#form-time-arrival').value);
+			const want = {built: 'hidden group true numeric Hours Minutes form-time-arrival-hint', steps: ['08:40,08:30,09:00', '09:15 9|15 m', '07:15 7|15 m', '07:03 7|03 -', '23:07 23|07 m', '23:00 23| h', '22:00 22| h', '09:59 9|59 m', '09:00 9|00 m', '08:40,08:30', ...(coarse ? ['above'] : []), '08:30 8|30 m ', '10:45 10|45 -'], checks: [true, true, true, false, '15:30']};
+			if (say(seen) !== say(want)) {
+				out.push('a time input takes a part whole, goes on from the hours, reads a whole time and holds the input\'s checks: ' + say(seen));
+			}
+		}},
+		// A date-pick takes a period in two picks and starts it again, moves by the grid's keys, takes the page's quick
+		// picks and shows its counts, and says each other month in redz:month; a date-input opens its month below the face,
+		// as a sheet on a phone, closes on a day picked, refuses a day out of bounds and follows a script's value.
+		datePick: {target: '#calendar-pick-period', walk: async function* (out) {
+			const pick = $('#calendar-pick-period .date-pick');
+			const [from, to] = $$('input', pick);
+			const grid = $('.date-pick-grid', pick);
+			const title = () => $('.date-pick-title', pick).textContent;
+			const cell = (day, root = grid) => $('td[data-day="' + day + '"]', root);
+			const months = [];
+			pick.addEventListener('redz:month', (event) => months.push(event.detail.from + '/' + event.detail.to));
+			const now = () => from.value + '/' + to.value + ' ' + $('.date-pick-chosen > span', pick).textContent + ' ' + (document.activeElement?.dataset?.day ?? '-');
+			const seen = {built: [from.type, to.type, grid.getAttribute('role'), $('th', grid).getAttribute('aria-label'), title(), $$('td[aria-selected="true"]', grid).length, cell('2026-11-04').getAttribute('aria-label'), $('.date-pick-count', cell('2026-11-04')).textContent].join('|'), steps: []};
+			pick.scrollIntoView({block: 'center'});
+			await settled();
+			for (const day of ['2026-11-20', '2026-11-24', '2026-11-03', '2026-11-01']) {
+				yield {click: center(cell(day))};
+				await settled();
+				seen.steps.push(now());
+			}
+			yield {key: ['ArrowRight', 'ArrowDown', 'End']};
+			await settled();
+			seen.steps.push(now());
+			yield {key: ['Home', 'PageDown']};
+			await settled();
+			seen.steps.push(now() + ' ' + title());
+			// The probes press no Shift: the year's step goes as an event.
+			document.activeElement.dispatchEvent(new KeyboardEvent('keydown', {key: 'PageUp', shiftKey: true, bubbles: true, cancelable: true}));
+			await settled();
+			seen.steps.push(now() + ' ' + title());
+			yield {key: 'Enter'};
+			await settled();
+			seen.steps.push(now());
+			const quick = $$('.date-pick-quick > button', pick)[1];
+			yield {click: center(quick)};
+			await settled();
+			seen.steps.push(now() + ' ' + quick.getAttribute('aria-pressed') + ' ' + title());
+			seen.months = months.join(' ');
+			const field = $('#calendar-date-field .form-floating');
+			const start = $('#calendar-date-start');
+			const face = $('.date-input-face', field);
+			const panel = $('.date-input-menu', field);
+			const coarse = matchMedia('(pointer: coarse)').matches;
+			let changes = 0;
+			start.addEventListener('change', () => changes++);
+			const state = () => start.value + ' ' + face.textContent + ' ' + (panel.matches(':popover-open') ? 'open' : 'shut') + ' ' + (document.activeElement === face ? 'face' : document.activeElement?.dataset?.day ?? '-');
+			seen.field = [start.type, face.getAttribute('role'), $('label', field).htmlFor === face.id, panel.getAttribute('aria-labelledby') === $('label', field).id].join(' ');
+			// The face near the top, the month's room below it.
+			scrollBy(0, face.getBoundingClientRect().top - 120);
+			await settled();
+			yield {click: center(face)};
+			await settled();
+			seen.steps.push(state());
+			const box = panel.getBoundingClientRect();
+			const day = Math.round(cell('2026-12-02', panel).getBoundingClientRect().height);
+			seen.place = coarse ? [getComputedStyle(panel).getPropertyValue('--redz-sheet').trim(), Math.round(innerHeight - box.bottom), Math.round(box.left), Math.round(document.documentElement.clientWidth - box.width), day].join(' ') : [Math.round(box.top - face.getBoundingClientRect().bottom), Math.round(box.left - face.getBoundingClientRect().left), Math.round(box.width), day].join(' ');
+			yield {key: ['ArrowLeft', 'Enter']};
+			await settled();
+			seen.steps.push(state() + ' ' + changes);
+			yield {key: 'ArrowDown'};
+			await settled();
+			yield {key: 'PageUp'};
+			await settled();
+			seen.steps.push(state() + ' ' + cell('2026-11-17', panel).getAttribute('aria-disabled') + ' ' + cell('2026-11-18', panel).getAttribute('aria-disabled'));
+			yield {key: 'Enter'};
+			await settled();
+			seen.steps.push(state());
+			yield {key: 'Escape'};
+			await settled();
+			seen.steps.push(state() + ' ' + changes);
+			start.value = '2027-01-15';
+			await settled();
+			seen.steps.push(state());
+			const due = $('#calendar-date-due');
+			const dueFace = $('#calendar-date-field .form-field .date-input-face');
+			yield {click: center(dueFace)};
+			await settled();
+			yield {click: center($('#calendar-date-field .form-field .date-input-menu .date-pick-quick > button'))};
+			await settled();
+			seen.steps.push(due.value + ' ' + dueFace.textContent + ' ' + dueFace.getAttribute('aria-expanded'));
+			const want = {
+				built: 'hidden|hidden|grid|Monday|November 2026|5|Wednesday, November 4, 2026, 5 events|5',
+				steps: ['2026-11-20/2026-11-20 1 day 2026-11-20', '2026-11-20/2026-11-24 5 days 2026-11-24', '2026-11-03/2026-11-03 1 day 2026-11-03', '2026-11-01/2026-11-01 1 day 2026-11-01', '2026-11-01/2026-11-01 1 day 2026-11-15', '2026-11-01/2026-11-01 1 day 2026-12-09 December 2026', '2026-11-01/2026-11-01 1 day 2025-12-09 December 2025', '2025-12-09/2025-12-09 1 day 2025-12-09', '2026-11-09/2026-11-15 7 days - true November 2026', '2026-12-02 12/02/2026 open 2026-12-02', '2026-12-01 12/01/2026 shut face 1', '2026-12-01 12/01/2026 open 2026-11-01 true null', '2026-12-01 12/01/2026 open 2026-11-01', '2026-12-01 12/01/2026 shut face 1', '2027-01-15 01/15/2027 shut face', '2026-11-30 Mon, 11/30/2026 false'],
+				months: '2026-11-30/2027-01-10 2025-12-01/2026-01-11 2026-10-26/2026-12-06',
+				field: 'hidden combobox true true',
+				place: coarse ? '1 0 0 0 48' : '4 0 360 40',
+			};
+			if (say(seen) !== say(want)) {
+				out.push('a date-pick takes a period, its keys, quick picks and counts, and a date-input opens, picks, refuses and follows its input: ' + say(seen));
+			}
+		}},
 		// A combobox-clear button shows while its search holds words, empties it, shows the whole list and keeps the focus.
 		comboboxClear: {target: '#combobox-one', steps: [async (out) => {
 			const panel = $('#combobox-one-panel');
 			const search = $('#combobox-one-search');
 			const clear = $('#combobox-one .combobox-clear');
 			const shown = () => getComputedStyle(clear).display !== 'none';
+			// Typed in the very task the panel opens in, before its toggle event: nothing typed once the search has the
+			// focus may be lost.
 			$('#combobox-one-face').click();
-			await until(() => panel.matches(':popover-open') && document.activeElement === search);
-			await settled();
 			const empty = shown();
 			input(search, 'ger');
 			await settled();
@@ -5604,6 +5797,11 @@ window.REDZ_BEHAVE = (() => {
 		sectionHeads: {target: '.drawer-header', steps: [async (out) => {
 			const main = document.documentElement.style;
 			const heads = {card: '.card-header', drawer: '.drawer-header', dialog: '.dialog-header'};
+			// Read shown: WebKit gives a closed dialog's style as it last showed, whatever a token says since.
+			const layers = [$(heads.drawer).closest('dialog'), $(heads.dialog).closest('dialog')];
+			for (const layer of layers) {
+				layer.show();
+			}
 			const tints = Object.keys(heads).map((name, index) => {
 				main.setProperty('--redz-' + name + '-header-bg', 'rgb(1, 2, ' + index + ')');
 				return getComputedStyle($(heads[name])).backgroundColor;
@@ -5616,8 +5814,13 @@ window.REDZ_BEHAVE = (() => {
 				main.removeProperty('--redz-' + name);
 			}
 			const rest = getComputedStyle($('.dialog-header'));
-			if (say(tints) !== say(['rgb(1, 2, 0)', 'rgb(1, 2, 1)', 'rgb(1, 2, 2)']) || say(under) !== say(['12px', '1px']) || rest.paddingBlockEnd !== '0px' || rest.borderBlockEndWidth !== '0px') {
-				out.push('the heads\' tokens: ' + say(tints) + ', a dialog\'s room and line ' + say(under) + ', at rest ' + rest.paddingBlockEnd + ' and ' + rest.borderBlockEndWidth);
+			const still = [rest.paddingBlockEnd, rest.borderBlockEndWidth];
+			for (const layer of layers) {
+				layer.close();
+			}
+			await settled();
+			if (say(tints) !== say(['rgb(1, 2, 0)', 'rgb(1, 2, 1)', 'rgb(1, 2, 2)']) || say(under) !== say(['12px', '1px']) || say(still) !== say(['0px', '0px'])) {
+				out.push('the heads\' tokens: ' + say(tints) + ', a dialog\'s room and line ' + say(under) + ', at rest ' + still.join(' and '));
 			}
 		}]},
 		longWord: {target: '#stat-narrow', steps: [async (out) => {

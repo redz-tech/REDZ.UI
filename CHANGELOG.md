@@ -14,8 +14,29 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   the search and the list, each option 52 px. `combobox-action`, a button the page puts in the panel, stands in that
   head beside Close, and under the list on a wider window. Dragged down by its head past a third of its height a sheet
   closes; short of that it goes back. A finger met a list over a form it could not tell apart from the form.
+- `time-input`, a time field of two parts: around one `input type="time"` it draws the hours and the minutes as two
+  fields in one frame, each with a numeric keyboard on a phone; the input stays the form's value, `HH:MM`, with its
+  `min`, `max`, `step` and `required`, and without the script it is the browser's own time field. A part taken by a tap
+  is taken whole, two digits of the hours or one above 2 go on to the minutes, `915`, `9.15` and `09:15` typed or
+  pasted fill both, hours stop at 23 and minutes at 59. The input's `datalist` offers its times with their words,
+  narrowed to the hour typed and, under a finger, above the field. On a phone the browser's own time field opens a
+  wheel or a dial that takes no typing and no paste. The page's texts `time.hours` and `time.minutes` name the parts.
+- Picking a date, in the calendar package, which now has a script of its own, `js/redz-ui-calendar.min.js` (4 KB
+  gzipped), linked after the library's. `date-input` around one `input type="date"` draws a field that shows the day
+  and opens a month below it, on a window narrower than 576 px a sheet like a combobox's; `date-pick` draws such a
+  month on the page, for a day with one `input type="date"` or a period with two, from and to. The inputs stay the
+  form's values, ISO dates, and without the script they are the browser's own date fields. Every year shown is the
+  Gregorian one: a phone set to the Buddhist calendar shows 2569 in its own date field. The names of the months and
+  the days are the page language's, a week starts on Monday unless `data-first-day` says, and `data-weekday` shows the
+  day's name first. In a period the first pick is a period of that day at once and the second its end; days outside
+  `min` and `max` are not picked; `data-counts` shows a number under a day; a `date-pick-quick` group holds the page's
+  quick picks, each with its `value` a day or `from/to`; `redz:month` tells the page the six weeks shown, to bring
+  their counts. The month is the WAI-ARIA grid: arrows, Home and End, Page Up and Page Down, a year with Shift. The
+  page's texts `date.none`, `date.days`, `date.count`, `date.today`, `date.previous` and `date.next` give its words.
 
 ### Changed
+- The main script's budget is 58 KB gzipped, from 56: the time field takes 2 KB.
+- The calendar package's stylesheet budget is 3 KB gzipped, from 2, and its new script's 6 KB.
 - A dialog on a window narrower than 576 px is the same sheet, its grab bar over its header, in place of filling the
   screen: a person sees the dimmed page under it, and a second dialog dims the first. Dragged down by its header it
   closes as Escape asks - a page that keeps it open by its `cancel` keeps it open - never with `closedby="none"`.
@@ -40,6 +61,12 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   in the plain light, and a card with a `stretched-link` lit its cells alone.
 - In a `table-stack` card a `table-check` is as wide as its check: it kept a column's 1 px, and the check stood against
   the head's words.
+- A menu placed by script - where the engine cannot anchor it, or it fits neither below nor above its button - stands
+  at the start edge of a date field's face, as a combobox's panel does.
+- The docs write American English: "color" where they wrote "colour".
+- A combobox's panel is made before it shows - an empty search over the whole list, the key typed on its button, its
+  head as a sheet -, in `beforetoggle`: it was made in `toggle`, which comes after the search has the focus, and words
+  typed or pasted in between were erased.
 
 ### Checks
 - `php tools/probe.php check`, `plan` and `affected` read a change by its sources. A built file of `dist/` follows the
@@ -53,6 +80,20 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - A file edited to the same size within the second its index entry was written counts as changed: the probes' copy of
   git's index trusts no file's time, as git on macOS counts whole seconds. A case of the bench failed now and then.
 - `php tools/build.php --check --files` compares the generated files alone, no rule and no budget held.
+- An engine's run writes its progress as `.dev/live/progress-probe-ENGINE.json`, a shape any tool can write and any
+  viewer can read: `group`, `name`, `pid`, `started`, `ended`, the cells `done` of the `total`, `findings`, the cell it
+  is on (`now`) and the seconds `left` by the pace of its cells so far. It replaces `.dev/live/probe-ENGINE.json` and
+  the plan `check` wrote to `.dev/live/check.json`, which only a board of our own read.
+- A check of picking a date, `datePick`: a period picked, started again and taken from a quick pick, the grid's keys
+  by a day, a week, a month and a year, the counts and `redz:month`; a date field that opens below its face, as a sheet
+  under a finger with 48 px days, closes on a day picked, refuses a day out of bounds and follows a script's value. The
+  probes press Page Up and Page Down. Red on 11 planted faults.
+- `php tools/build.php` reads a package's classes from its sources: a docs example of a class new in a package failed
+  the build, which held it against the package as last built, and the build writes the package only once it passes.
+- The check of `combobox-clear` types in the very task the panel opens in, so a panel made after its search has the
+  focus fails it in every engine, not in a slow Safari alone. The check of the heads' tokens reads a drawer's and a
+  dialog's head while they show: WebKit gives a closed dialog's style as it last showed, whatever a token says since,
+  and the sheet's check opens that dialog first. The check of sizes for a finger asks a sheet's sizes under 36rem.
 
 ## 0.27.0 - 2026-11-17
 

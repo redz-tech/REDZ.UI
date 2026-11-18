@@ -2,14 +2,15 @@
 
 # Calendars
 
-A month of days with what happens on each, and a strip of days across the things that can be busy on them - equipment, rooms, boats.
+A month of days with what happens on each, a strip of days across the things that can be busy on them - equipment, rooms, boats -, and a month to pick a day or a period from.
 
 ## A package of the release
 
-Calendars are linked apart, on the screens that show them, beside the two files; they need no script.
+Calendars are linked apart, on the screens that show them, beside the two files. A month or a strip needs no script; picking a date needs the package's script too, after the library's.
 
 ```html
 <link rel="stylesheet" href="redz-ui/css/redz-ui-calendar.min.css">
+<script type="module" src="redz-ui/js/redz-ui-calendar.min.js"></script>
 ```
 
 ## A month
@@ -80,9 +81,88 @@ A day's `data-state` tints it: `worked`, `open`, `pending`, `absent` and `off` -
 </div>
 ```
 
+## A date field
+
+`date-input` around one `input type="date"` draws it as a field that shows the day and opens a month below it to pick one from; on a window narrower than 576 px the month is a sheet from the bottom of the dimmed page, with a grab bar, the words of the field's label and a Close button the library makes, dragged down by its head to close. The input stays the form's value, an ISO date such as `2026-11-18`, with its `name`, `min` and `max`; without the script it is the browser's own date field. Every year shown is the Gregorian one, whatever calendar the phone is set to, and the names of the months and the days are the page language's. A day picked closes the month and gives the focus back to the field.
+
+```html
+<div class="form-floating date-input max-w-240">
+	<input class="form-control" id="calendar-date-start" type="date" name="start" value="2026-12-02" min="2026-11-18" max="2027-03-31">
+	<label for="calendar-date-start">Start date</label>
+</div>
+<div class="form-field max-w-240">
+	<label class="form-label" for="calendar-date-due">Due date</label>
+	<div class="date-input" data-weekday>
+		<input class="form-control" id="calendar-date-due" type="date" name="due" aria-describedby="calendar-date-due-hint">
+		<div class="date-pick-quick" role="group" aria-label="Quick dates">
+			<button class="chip" type="button" value="2026-11-30">End of November</button>
+			<button class="chip" type="button" value="2026-12-31">End of December</button>
+		</div>
+	</div>
+	<div class="form-text" id="calendar-date-due-hint">Any day; the day's name shows first.</div>
+</div>
+```
+
+| Part | What it does |
+| --- | --- |
+| `date-input` | The box around one `input type="date"`: in a `form-floating`, or with a label of its own. `data-weekday` shows the day's name first, `Wed, 02.12.2026`; `data-first-day`, `data-counts` and a `date-pick-quick` inside it work as on a `date-pick`. |
+| `input type="date"` | The value the form sends, its `name` the field's; the library turns it `hidden`. A day picked fires `input` and `change` on it; a script that sets it has the field drawn again, and the form's reset puts back the day it came with. Days before `min` and after `max` cannot be picked; `disabled` passes to the face, `required` as `aria-required`, and the page checks a required day on its server, as for a combobox. |
+| `date-input-face` | The field the library draws, a `form-select` button with `role="combobox"` named by the input's label, which then names it; the day's words are in `date-input-value`. The down and up arrows open it too. |
+| `date-input-menu` | The month, a `menu` popover with `role="dialog"` after the face, 360 px wide below it; on a phone a sheet with `date-input-head` holding `date-input-title` and Close. |
+
+In a tracked form the input is one field: `data-changed` and a refusal's `aria-invalid` go on the face, and the refusal's words and the focus there too.
+
+## A day or a period
+
+`date-pick` draws the month itself, for the page to put on a screen, in its own sheet or below a column's filter: a day for its one `input type="date"`, a period for its two, the first the start and the second the end. In a period the first pick is a period of that one day at once, and the second its end; a pick before the start, or after a whole period, starts it again. Above the month the choice is in words, a period with its length; the page's quick picks follow, then the month's bar with the previous and the next month and Today when another month is shown. A week starts on Monday unless `data-first-day` says, `1` for Monday to `7` for Sunday.
+
+```html
+<div class="date-pick max-w-360" data-counts='{"2026-11-03": 2, "2026-11-04": 5, "2026-11-10": 1, "2026-11-12": 4, "2026-11-17": 3, "2026-11-19": 6, "2026-11-24": 2}'>
+	<input type="date" name="from" value="2026-11-09" aria-label="From">
+	<input type="date" name="to" value="2026-11-13" aria-label="To">
+	<div class="date-pick-quick" role="group" aria-label="Quick periods">
+		<button class="chip" type="button" value="2026-11-02/2026-11-08">Week 45</button>
+		<button class="chip" type="button" value="2026-11-09/2026-11-15">Week 46</button>
+		<button class="chip" type="button" value="2026-11-01/2026-11-30">November</button>
+	</div>
+</div>
+```
+
+| Part | What it does |
+| --- | --- |
+| `date-pick` | The box of one or two `input type="date"`, which the library turns `hidden` and keeps as the form's values; days outside the first input's `min` and `max` cannot be picked. Each change fires `input` and `change` on the input it changed. |
+| `data-counts` | On the box, a number to show under a day, `{"2026-11-04": 5}`, said after the day's name with the page's text `date.count`. Set it again and the month is drawn again. |
+| `redz:month` | Fired on the box as it shows another month, and once as it is drawn: `detail.from` and `detail.to` are the first and the last day of the six weeks shown, for the page to bring their counts. |
+| `date-pick-quick` | The page's quick picks, a group of buttons in the box, each with its `value` a day, `2026-11-18`, or a period, `2026-11-02/2026-11-08`; the one the choice equals is `aria-pressed="true"`. |
+| `date-pick-chosen` | The words of the choice, an `output` read politely: the day, the period and its length, or the page's text `date.none`. |
+| `date-pick-nav`, `date-pick-title` | The month's bar: the previous and the next month, the month and the year, read politely as they change, and Today. |
+| `date-pick-grid` | The month, a table with `role="grid"` of six weeks; a day is a cell with its whole date as its name, `aria-selected` when it is chosen, `aria-current="date"` today, `aria-disabled` outside the bounds, its number in `date-pick-count`; a period's ends carry `data-from` and `data-to`, the days between `data-in`, the next month's and the last one's `data-other`. Under a finger a day is 48 px high, 40 under a mouse. |
+
+| Key | In the month |
+| --- | --- |
+| `←` `→` | The day before or after, the other way in a right-to-left page |
+| `↑` `↓` | The same day a week before or after |
+| `Home` `End` | The first or the last day of the week |
+| `Page Up` `Page Down` | The same day a month before or after; with `Shift`, a year |
+| `Enter` `Space` | Picks the day |
+
+## Texts
+
+The library has no words of its own; picking a date reads these from the page's island `#redz-ui-text`, and `close` for the sheet's Close. A count takes the form the page language's plural rules name - `date.days.one`, `date.days.few` - and `date.days.other` when the page gives no such form.
+
+| Key | For | In English |
+| --- | --- | --- |
+| `date.none` | The words of the choice while no day is chosen | No date chosen |
+| `date.days.one`, `date.days.other` | A period's length; `{count}` is its days, in the page's digits | {count} days |
+| `date.count.one`, `date.count.other` | A day's number from `data-counts`, said after its name | {count} events |
+| `date.today` | The button back to today's month | Today |
+| `date.previous` | The button to the month before | Previous month |
+| `date.next` | The button to the month after | Next month |
+
 ## Accessibility
 
 - Both are tables: a screen reader reads a day with its weekday's header, a cell with its thing and its day. Weekdays are `abbr` with the full name.
 - A day's number is a `time` with its date; "+2" says "+2 more" with a hidden word.
 - A busy or over cell says its number; the tint repeats it, and an over cell is also outlined in forced colors.
 - A day's state is in words, never in its tint alone; a day that is a button is named by its whole date and its state, "November 4, waiting for approval", and the picked one says `aria-pressed="true"`.
+- A month to pick from is the WAI-ARIA grid: one day takes the `Tab` stop and the arrows move it, a screen reader enters it as an application and reads each day by its whole date, chosen, today or not available. The month and the choice are read politely as they change.

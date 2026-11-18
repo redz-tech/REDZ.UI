@@ -39,7 +39,7 @@ The [demo screens](https://redz-tech.github.io/REDZ.UI/reference/demo/list.html)
 
 ### The brand
 
-`app-brand` is the link home at the header's start: the product's mark, `app-mark`, and its name, `app-name`. The mark is a picture of the name, so it carries `aria-hidden="true"`. It is the red of the REDZ logo with white words in both themes, and under `data-brand` the brand's tone: a product with a logo of its own gives its colour there, and the mark that stands for the logo in a narrow header matches it. `--redz-app-mark-bg` and `--redz-app-mark-fg` give the mark another colour. Where the header is under 576 px wide, the brand keeps one sign, the smallest it has: the mark, else the logo, else the name. The rest leaves the sight but stays the link's name for a screen reader.
+`app-brand` is the link home at the header's start: the product's mark, `app-mark`, and its name, `app-name`. The mark is a picture of the name, so it carries `aria-hidden="true"`. It is the red of the REDZ logo with white words in both themes, and under `data-brand` the brand's tone: a product with a logo of its own gives its color there, and the mark that stands for the logo in a narrow header matches it. `--redz-app-mark-bg` and `--redz-app-mark-fg` give the mark another color. Where the header is under 576 px wide, the brand keeps one sign, the smallest it has: the mark, else the logo, else the name. The rest leaves the sight but stays the link's name for a screen reader.
 
 A product with its own logo puts it in place of the name: `<img class="brand-logo">`, the picture for the light theme, then `<img class="brand-logo brand-logo-dark">`, its twin for the dark one. Each carries the file's own `width` and `height`: the logo stands 28 px tall, as wide as its proportions make it, and nothing moves as it loads. In the header it is at most 160 px wide.
 
@@ -93,7 +93,7 @@ Above: the pair with its mark, a light logo alone - on its mat in the dark theme
 
 ### A credit line
 
-`<footer class="app-credit">` after `app-main`, in `app` itself, is a quiet line under the main column: small, muted, its link in the line's colour and underlined. The words are the page's. On a short page it stands at the window's foot; on a long one after the column's end. It is the page's `contentinfo`, outside `main`, so a [save bar](save-bar.md) in the column never covers it. Print leaves it out.
+`<footer class="app-credit">` after `app-main`, in `app` itself, is a quiet line under the main column: small, muted, its link in the line's color and underlined. The words are the page's. On a short page it stands at the window's foot; on a long one after the column's end. It is the page's `contentinfo`, outside `main`, so a [save bar](save-bar.md) in the column never covers it. Print leaves it out.
 
 ```html
 <div class="app">

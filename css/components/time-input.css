@@ -1,0 +1,97 @@
+@layer components {
+	/* A time input: two fields in one frame, the hours and the minutes; the part taken is filled, no caret nor selection drawn. */
+	.time-input-face {
+		display: flex;
+		align-items: center;
+		padding-inline: calc(var(--redz-space-12) - 5px);
+		cursor: text;
+	}
+
+	.time-input-face:dir(rtl) {
+		flex-direction: row-reverse;
+		justify-content: flex-end;
+	}
+
+	/* The frame is lit while the focus is in the field or in its list of times. */
+	.time-input:focus-within > .time-input-face {
+		border-color: var(--redz-focus);
+		outline: 2px solid var(--redz-focus);
+		outline-offset: -1px;
+	}
+
+	.time-input-face:has(> .time-input-part:user-invalid) {
+		border-color: var(--redz-danger-fill);
+	}
+
+	.time-input-face:has(> .time-input-part:disabled) {
+		background-color: var(--redz-bg-page);
+		color: var(--redz-text-muted);
+		cursor: default;
+	}
+
+	.time-input-part {
+		inline-size: calc(2ch + 10px);
+		min-inline-size: calc(1ch + 10px);
+		block-size: 1.625rem;
+		padding: 0 5px;
+		border: 0;
+		border-radius: var(--redz-radius-4);
+		background: none;
+		color: inherit;
+		font: inherit;
+		font-variant-numeric: tabular-nums;
+		text-align: center;
+		caret-color: transparent;
+		outline: 0;
+	}
+
+	@supports (field-sizing: content) {
+		.time-input-part {
+			field-sizing: content;
+		}
+	}
+
+	.time-input-part::placeholder {
+		color: var(--redz-text-muted);
+		opacity: 1;
+	}
+
+	.time-input-part::selection {
+		background: none;
+	}
+
+	.time-input-part:focus {
+		background: var(--redz-primary-subtle);
+		color: var(--redz-primary-text);
+	}
+
+	.time-input-colon {
+		font-weight: 600;
+	}
+
+	.time-input-list {
+		min-inline-size: 16rem;
+	}
+
+	.time-input-time {
+		min-inline-size: 3.5ch;
+		font-weight: 600;
+		font-variant-numeric: tabular-nums;
+	}
+
+	/* Under a finger the times stand above the field: the keyboard holds the bottom of the screen. */
+	@media (pointer: coarse) {
+		.time-input-list {
+			--redz-above: 1;
+			position-area: block-start span-inline-start;
+		}
+	}
+
+	@media (forced-colors: active) {
+		.time-input-part:focus {
+			forced-color-adjust: none;
+			background: Highlight;
+			color: HighlightText;
+		}
+	}
+}

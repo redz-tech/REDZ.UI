@@ -723,7 +723,9 @@ document.addEventListener('click', (event) => {
 }, true);
 
 /** The button of a combobox's panel says the state the panel goes into before it does: a closing panel hands the focus
- *  back to the button at once, and a screen reader takes the button as it finds it then. */
+ *  back to the button at once, and a screen reader takes the button as it finds it then. An opening panel is made
+ *  before it shows - its head, an empty search over the whole list or the key typed on the button -, so nothing typed
+ *  once its search has the focus is lost. */
 document.addEventListener('beforetoggle', (event) => {
 	const panel = event.target;
 	if (!(panel instanceof HTMLElement) || !panel.classList.contains('combobox-menu')) {
@@ -731,16 +733,27 @@ document.addEventListener('beforetoggle', (event) => {
 	}
 	const face = document.querySelector('.combobox-toggle[commandfor="' + CSS.escape(panel.id) + '"]');
 	face?.setAttribute('aria-expanded', String(event.newState === 'open'));
-	if (event.newState === 'open') {
-		face?.setAttribute('aria-controls', panel.id);
-	} else {
+	if (event.newState !== 'open') {
 		face?.removeAttribute('aria-controls');
+		return;
+	}
+	face?.setAttribute('aria-controls', panel.id);
+	const input = panel.querySelector('input[role="combobox"]');
+	if (input === null || listOf(input) === null) {
+		return;
+	}
+	head(panel, face);
+	fresh(input);
+	if (pending !== '') {
+		input.value = pending;
+		pending = '';
+		input.dispatchEvent(new Event('input', {bubbles: true}));
 	}
 }, true);
 
 document.addEventListener('toggle', (event) => {
 	const panel = event.target;
-	if (!(panel instanceof HTMLElement) || !panel.classList.contains('combobox-menu')) {
+	if (!(panel instanceof HTMLElement) || !panel.classList.contains('combobox-menu') || event.newState === 'open') {
 		return;
 	}
 	const face = document.querySelector('.combobox-toggle[commandfor="' + CSS.escape(panel.id) + '"]');
@@ -749,19 +762,9 @@ document.addEventListener('toggle', (event) => {
 	if (list === null) {
 		return;
 	}
-	if (event.newState === 'open') {
-		head(panel, face);
-		fresh(input);
-		if (pending !== '') {
-			input.value = pending;
-			pending = '';
-			input.dispatchEvent(new Event('input', {bubbles: true}));
-		}
-	} else {
-		unwatch(list, input);
-		if (face !== null) {
-			fit(face, list);
-		}
+	unwatch(list, input);
+	if (face !== null) {
+		fit(face, list);
 	}
 }, true);
 

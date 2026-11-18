@@ -8,6 +8,7 @@ import './toggle.js';
 import './dialog.js';
 import './combobox.js';
 import {settle} from './chip-input.js';
+import './time-input.js';
 import './shortcuts.js';
 import './scrollspy.js';
 import './nav-overflow.js';

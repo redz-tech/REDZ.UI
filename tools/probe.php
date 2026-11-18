@@ -10,7 +10,7 @@
 // which must agree. The pages of the config run that whole way; the docs pages run in the "docs" engines at their
 // widths, without shots or walks. Writes the sheet
 // .dev/probes/index.html with its report.json and exits 1 on any finding, and as it goes each engine's progress in
-// .dev/live/probe-ENGINE.json for a board; an engine whose cell runs past five minutes
+// .dev/live/progress-probe-ENGINE.json for any viewer; an engine whose cell runs past five minutes
 // stops as stalling, that cell named. The screen readers hear the config's speech steps: VoiceOver in Safari on a Mac,
 // NVDA in Chrome and Firefox on Windows, where NVDA also reads each speech page whole by its quick navigation. Usage:
 // php tools/probe.php [--pages=PAGE,…] [--serial | --jobs=N] [--dry] [ENGINE[@PAGE,…]…] - an engine named that cannot
@@ -74,7 +74,7 @@ const PROBE_CODE = [
 // that link those.
 const PROBE_PACKAGES = ['charts', 'calendar', 'media', 'qr', 'editor'];
 // The keys of the keyboard walk: the WebDriver code point (Firefox, Safari), the Windows key code and the text (Chrome).
-const PROBE_KEYS = ['Enter' => ["\u{E006}", 13, "\r"], 'Space' => ["\u{E00D}", 32, ' '], 'Escape' => ["\u{E00C}", 27, ''], 'Tab' => ["\u{E004}", 9, ''], 'ArrowDown' => ["\u{E015}", 40, ''], 'ArrowUp' => ["\u{E013}", 38, ''], 'ArrowLeft' => ["\u{E012}", 37, ''], 'ArrowRight' => ["\u{E014}", 39, ''], 'Home' => ["\u{E011}", 36, ''], 'End' => ["\u{E010}", 35, ''], 'Backspace' => ["\u{E003}", 8, '']];
+const PROBE_KEYS = ['Enter' => ["\u{E006}", 13, "\r"], 'Space' => ["\u{E00D}", 32, ' '], 'Escape' => ["\u{E00C}", 27, ''], 'Tab' => ["\u{E004}", 9, ''], 'ArrowDown' => ["\u{E015}", 40, ''], 'ArrowUp' => ["\u{E013}", 38, ''], 'ArrowLeft' => ["\u{E012}", 37, ''], 'ArrowRight' => ["\u{E014}", 39, ''], 'Home' => ["\u{E011}", 36, ''], 'End' => ["\u{E010}", 35, ''], 'PageUp' => ["\u{E00E}", 33, ''], 'PageDown' => ["\u{E00F}", 34, ''], 'Backspace' => ["\u{E003}", 8, '']];
 
 /** The folder of fetched engines and packages: $REDZ_UI_CACHE, or ~/Library/Caches/redz-ui, or %LOCALAPPDATA%\redz-ui
  *  on Windows. */
@@ -1123,17 +1123,43 @@ function &PROBE__LiveState(): array
 	return $state;
 }
 
-/** Writes an engine's live state to .dev/live/probe-ENGINE[-K-of-N].json in one move, for a board to read as the run
- *  goes; a failure to write is no failure of the run. */
+/** Writes an engine's live state as a progress file, .dev/live/progress-probe-ENGINE[-K-of-N].json, in one move and in
+ *  the shape any tool may write, for any viewer to read as the run goes; a failure to write is no failure of the run. */
 function PROBE__LiveWrite(array $one): void
 {
 	$dir = PROBE_ROOT . '/.dev/live';
 	@mkdir($dir, 0777, true);
-	$file = $dir . '/probe-' . PROBE__Slug($one['engine'] . ($one['share'] === '' ? '' : '-' . str_replace('/', '-of-', $one['share']))) . '.json';
-	unset($one['base']);
-	if (@file_put_contents($file . '.part', json_encode($one, JSON_UNESCAPED_SLASHES)) !== false) {
+	$file = $dir . '/progress-probe-' . PROBE__Slug($one['engine'] . ($one['share'] === '' ? '' : '-' . str_replace('/', '-of-', $one['share']))) . '.json';
+	if (@file_put_contents($file . '.part', json_encode(PROBE__Progress($one), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)) !== false) {
 		@rename($file . '.part', $file);
 	}
+}
+
+/**
+ * An engine's live state as a progress file: {group, name, pid, started, ended, done, total, findings, now, left} -
+ * the cells done of all it takes, the cell it is on, and the seconds left by the pace of each mode's cells so far (a
+ * mode not begun takes the pace of all the cells done; null before any cell is done).
+ */
+function PROBE__Progress(array $one): array
+{
+	$done = array_sum($one['done']);
+	$spent = array_sum($one['spent']);
+	$left = null;
+	if ($done > 0) {
+		$left = 0.0;
+		foreach ($one['cells'] as $mode => $cells) {
+			$doneHere = $one['done'][$mode] ?? 0;
+			$pace = $doneHere > 0 ? $one['spent'][$mode] / $doneHere : $spent / $done;
+			$left += max(0, $cells - $doneHere) * $pace;
+		}
+		$left = (int)round($left);
+	}
+	$cell = $one['cell'];
+	return [
+		'group' => 'Probes on this Mac', 'name' => $one['engine'] . ($one['share'] === '' ? '' : ' ' . $one['share']), 'pid' => $one['pid'],
+		'started' => $one['started'], 'ended' => $one['ended'], 'done' => $done, 'total' => array_sum($one['cells']), 'findings' => $one['findings'],
+		'now' => $cell === null ? '' : trim($cell['page'] . ' ' . $cell['combo'] . ($cell['width'] > 0 ? ' ' . $cell['width'] : '') . ' ' . $cell['mode']), 'left' => $left,
+	];
 }
 
 /** An engine's run starts: the cells it will take by mode - normal, docs, print, forced, min -, none done yet, its
@@ -2772,7 +2798,6 @@ function PROBE__Check(array $config, string $base, array $options): int
 		return 2;
 	}
 	$args = [];
-	$plan = [];
 	foreach ($config['check'] ?? [] as $name) {
 		if (!isset($config['engines'][$name])) {
 			fwrite(STDERR, 'no engine ' . $name . ' in tools/probes/config.json, which "check" names' . "\n");
@@ -2786,7 +2811,6 @@ function PROBE__Check(array $config, string $base, array $options): int
 			!$options['dry'] && PROBE__CheckBinary($name, $config['engines'][$name], $why) === '' => 'cannot run here: ' . $why,
 			default => ($part['mode'] === 'full' ? 'every page, ' : '') . count($pages) . ' ' . (count($pages) === 1 ? 'page' : 'pages') . ($part['mode'] === 'full' ? '' : ': ' . implode(', ', $pages)) . ' <- ' . implode(', ', $part['why']),
 		});
-		$plan[$name] = $why === '' ? ['mode' => $part['mode'], 'pages' => $part['pages']] : ['mode' => 'none', 'pages' => []];
 		if ($part['mode'] !== 'none' && $why === '') {
 			$args[] = $name . '@' . ($part['mode'] === 'full' ? '*' : implode(',', $part['pages']));
 		}
@@ -2794,9 +2818,6 @@ function PROBE__Check(array $config, string $base, array $options): int
 	if ($options['dry'] || $args === []) {
 		return 0;
 	}
-	// The plan for a board, beside the engines' own live states.
-	@mkdir(PROBE_ROOT . '/.dev/live', 0777, true);
-	@file_put_contents(PROBE_ROOT . '/.dev/live/check.json', json_encode(['base' => $base === '' ? 'HEAD' : $base, 'pid' => getmypid(), 'started' => time(), 'engines' => $plan], JSON_UNESCAPED_SLASHES));
 	return PROBE__Main(['probe.php', '--jobs=' . ($options['jobs'] ?: 3), ...$args]);
 }
 

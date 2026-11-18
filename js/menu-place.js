@@ -2,7 +2,7 @@
 // it (Firefox before 147, Safari before 26) or anchors it out of view or away from its button (Chrome 135-136 in a table
 // cell, Safari 26 at the bottom of a page taller than the viewport); such a layer carries data-placed="script" while it
 // is open. It looks again when the page scrolls, the window resizes, or the layer or its button changes size; a layer
-// with no box yet waits for one.
+// with no box yet waits for one. A script that opens a layer with no button names what it stands by in follow().
 import {sheeted} from './sheet.js';
 
 const anchors = CSS.supports('position-area', 'block-end');
@@ -31,16 +31,18 @@ const wellPlaced = (menu, button) => {
 	return inside && near && aligned;
 };
 
-/** Places the menu by script: below the button (a tooltip above it) or on the other side when only there it fits; its
- *  inline end edge on the button's (its start edge for .menu-start, a combobox's panel, a popover and a tooltip), the
- *  other edge when that one leaves the viewport; always inside the viewport. It is measured in the viewport's corner
- *  first, as its width depends on the room where it stands. */
+/** Places the menu by script: below the button (a tooltip, and a layer whose --redz-above is 1, above it) or on the
+ *  other side when only there it fits; its inline end edge on the button's (its start edge for .menu-start, a
+ *  combobox's panel, a date input's month, a popover and a tooltip), the other edge when that one leaves the
+ *  viewport; always inside the viewport. It is measured in the viewport's corner first, as its width depends on the
+ *  room where it stands. */
 const place = (menu, button) => {
 	menu.style.removeProperty('margin');
 	const style = getComputedStyle(menu);
 	const gap = parseFloat(style.marginBlockStart) || 0;
 	const tooltip = menu.classList.contains('tooltip');
-	const end = (tooltip || menu.classList.contains('menu-start') || menu.classList.contains('combobox-menu') || menu.classList.contains('popover')) === (style.direction === 'rtl');
+	const up = tooltip || style.getPropertyValue('--redz-above').trim() === '1';
+	const end = (tooltip || menu.matches('.menu-start, .combobox-menu, .date-input-menu, .popover')) === (style.direction === 'rtl');
 	for (const [property, value] of [['position-area', 'none'], ['position-try-fallbacks', 'none'], ['inset', 'auto'], ['top', '0px'], ['left', '0px'], ['margin', '0']]) {
 		menu.style.setProperty(property, value);
 	}
@@ -50,10 +52,10 @@ const place = (menu, button) => {
 	const room = document.documentElement.clientWidth;
 	const below = b.bottom + gap;
 	const above = b.top - gap - height;
-	let top = tooltip ? above : below;
-	if (tooltip && top < 0 && below + height <= innerHeight) {
+	let top = up ? above : below;
+	if (up && top < 0 && below + height <= innerHeight) {
 		top = below;
-	} else if (!tooltip && top + height > innerHeight && above >= 0) {
+	} else if (!up && top + height > innerHeight && above >= 0) {
 		top = above;
 	}
 	let left = end ? b.right - width : b.left;
@@ -97,6 +99,14 @@ const schedule = () => {
 
 const sized = new ResizeObserver(schedule);
 
+/** Keeps the open menu beside what it stands by, placing it by script where the engine does not. */
+export const follow = (menu, button) => {
+	open.set(menu, button);
+	sized.observe(menu);
+	sized.observe(button);
+	schedule();
+};
+
 document.addEventListener('click', (event) => {
 	invoker = event.target instanceof Element ? event.target.closest('button[commandfor], button[popovertarget]') : null;
 }, true);
@@ -117,10 +127,7 @@ document.addEventListener('beforetoggle', (event) => {
 	unplace(menu);
 	const button = buttonOf(menu);
 	if (button !== null) {
-		open.set(menu, button);
-		sized.observe(menu);
-		sized.observe(button);
-		schedule();
+		follow(menu, button);
 	}
 }, true);
 

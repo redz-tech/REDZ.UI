@@ -1,8 +1,8 @@
-// REDZ.UI, sheets: on a phone a combobox's panel and a dialog stand as a sheet from a strip of the dimmed page to the
-// bottom, as the stylesheet says with --redz-sheet: 1. A press on its top strip, its title or a dialog's header - not
-// on a control - drags it down: past a third of its height it closes, a dialog as Escape asks, so a page may keep it
-// open, and never one with closedby="none"; short of that it goes back.
-const HANDLE = '.combobox-title, .dialog-header';
+// REDZ.UI, sheets: on a phone a combobox's panel, a date input's month and a dialog stand as a sheet from a strip of the
+// dimmed page to the bottom, as the stylesheet says with --redz-sheet: 1. A press on its top strip, its title or a
+// dialog's header - not on a control - drags it down: past a third of its height it closes, a dialog as Escape asks, so
+// a page may keep it open, and never one with closedby="none"; short of that it goes back.
+const HANDLE = '.combobox-title, .date-input-head, .dialog-header';
 const CONTROL = 'a[href], button, input, select, textarea, label, [contenteditable]';
 const STRIP = 24;
 

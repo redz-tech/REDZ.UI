@@ -27,7 +27,7 @@
 	</div>
 
 	<h3>Meters</h3>
-	<p><code>meter</code> on a <code>&lt;meter&gt;</code>: <code>low</code>, <code>high</code> and <code>optimum</code> divide the range, and the browser colours the value by the part it falls in - green in the good part, amber next to it, red in the far one.</p>
+	<p><code>meter</code> on a <code>&lt;meter&gt;</code>: <code>low</code>, <code>high</code> and <code>optimum</code> divide the range, and the browser colors the value by the part it falls in - green in the good part, amber next to it, red in the far one.</p>
 	<div class="docs-example docs-example-stack" id="progress-meter">
 		<div class="form-field">
 			<label class="form-label" for="progress-meter-storage">Storage used</label>
@@ -41,7 +41,7 @@
 	</div>
 
 	<h3 id="progress-stacked">A meter of several parts</h3>
-	<p><code>meter meter-stacked</code> on a <code>div role="meter"</code> shows the parts of one amount - the free, the paid, what goes over the limit - each a child with its <code>data-v</code>, its share of the whole scale, and <code>data-tone</code>; 2 px apart, the ends rounded. A part with <code>data-over</code>, past the limit, is hatched red, so it reads without its colour too. The meter's numbers and its words are the page's: <code>aria-valuenow</code>, <code>aria-valuemax</code>, an <code>aria-valuetext</code> that says the parts, and a legend of <a href="dot.html">dots</a> beside it.</p>
+	<p><code>meter meter-stacked</code> on a <code>div role="meter"</code> shows the parts of one amount - the free, the paid, what goes over the limit - each a child with its <code>data-v</code>, its share of the whole scale, and <code>data-tone</code>; 2 px apart, the ends rounded. A part with <code>data-over</code>, past the limit, is hatched red, so it reads without its color too. The meter's numbers and its words are the page's: <code>aria-valuenow</code>, <code>aria-valuemax</code>, an <code>aria-valuetext</code> that says the parts, and a legend of <a href="dot.html">dots</a> beside it.</p>
 	<div class="docs-example docs-example-stack" id="progress-stacked-quota">
 		<div class="vstack gap-8 max-w-480">
 			<div class="hstack gap-8 fs-14"><span class="flex-grow-1" id="progress-stacked-title">Seats this month</span><span class="text-muted tabular-nums">130 of 120</span></div>
@@ -86,8 +86,8 @@
 	<h2 id="progress-access">Keyboard and accessibility</h2>
 	<ul>
 		<li>Name every bar: a <code>&lt;label for&gt;</code>, <code>aria-label</code> or <code>aria-labelledby</code>. The browser announces the value as a percentage of <code>max</code>; the words beside the bar are for the eye.</li>
-		<li>Colour is not the message: a meter in the red part also says so in words where it matters.</li>
+		<li>Color is not the message: a meter in the red part also says so in words where it matters.</li>
 		<li>A screen reader does not follow a bar as it fills: say the end of a long task in a notice, by <code>REDZ.ui.toast</code>.</li>
-		<li>In forced colours the bar takes the system's highlight; right to left it fills from the right.</li>
+		<li>In forced colors the bar takes the system's highlight; right to left it fills from the right.</li>
 	</ul>
 </section>

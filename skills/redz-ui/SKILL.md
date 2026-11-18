@@ -72,7 +72,8 @@ A listener names its event for PhpStorm: `/** @param {RedzEventMap['redz:save']}
 
 Check it exists: `grep -x 'CLASS' assets/classes.txt`. A class that is not there does not exist in REDZ.UI - Bootstrap
 6 habits (`md:col-6`, `btn-solid`, `fg-*`) and invented names included. The packages' classes are there too: a page
-that uses one links its package - `chart`, `spark` and `lanes` need `css/redz-ui-charts.min.css` and .min.js.
+that uses one links its package - `chart`, `spark` and `lanes` need `css/redz-ui-charts.min.css` and .min.js, and
+`date-input` and `date-pick` need `css/redz-ui-calendar.min.css` and .min.js.
 
 ## References - one per page of the docs
 

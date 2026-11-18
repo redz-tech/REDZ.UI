@@ -35,7 +35,7 @@ A group of radios or checks drawn as tiles - a package, a plan, a way to pay - t
 
 ### A choice that destroys
 
-`choice-danger` draws a tile in the danger tone when chosen - the way out of a set of ways to keep. A colour beside the words: the tile's words say what it does.
+`choice-danger` draws a tile in the danger tone when chosen - the way out of a set of ways to keep. A color beside the words: the tile's words say what it does.
 
 ```html
 <fieldset class="vstack gap-8">

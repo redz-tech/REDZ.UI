@@ -28,7 +28,7 @@ the latest release at the root, of the main branch under `next/`, and of every r
   fixture checked in real engines, with its Arabic twin (see [Documentation](#documentation)).
 - Two agent skills in `skills/`: building screens with REDZ.UI, and moving a project from Bootstrap 5.3 with a scan
   and a map of every Bootstrap class (see [Skills](#skills)).
-- Budgets held on every commit: the stylesheet at most 40 KB and the script 56 KB, gzipped - the two files a project
+- Budgets held on every commit: the stylesheet at most 40 KB and the script 58 KB, gzipped - the two files a project
   serves.
 
 ## How it reads
@@ -226,14 +226,16 @@ Four more packages, linked on the screens that show them, listed in the passport
   window (`lanes`). The numbers are `data-v`, `data-at`, `data-from`, `data-to`, `data-median` and `data-now`, shares
   from 0 to 1, which the module hands to the stylesheet through the CSSOM - a strict CSP that refuses `style`
   attributes allows it - and a chart table keeps its table roles for screen readers.
-- `css/redz-ui-calendar.min.css` - a month of days (`calendar`) and days across things (`schedule`); no script.
+- `css/redz-ui-calendar.min.css` - a month of days (`calendar`) and days across things (`schedule`), which need no
+  script; with the module `js/redz-ui-calendar.min.js`, picking a date: a field over `input type="date"` that opens a
+  month (`date-input`) and a month to pick a day or a period from (`date-pick`), always in the Gregorian year.
 - `css/redz-ui-media.min.css` - a folder of images as tiles or rows (`media-grid`, `media-tile`); its view switch is
   `--view` and its reordering `data-reorder`, both in the main script.
 - the module `js/redz-ui-qr.min.js` - draws the QR code of a text into a `qr` tile as one SVG path: `data-qr` in the
   markup, or `REDZ.ui.qr(element, text)` for a text such as a secret that should sit in no attribute.
 
-Their budgets, gzipped: charts 3 KB of styles and 2 KB of script, the calendar and the media library 2 KB each, QR
-codes 4 KB of script.
+Their budgets, gzipped: charts 3 KB of styles and 2 KB of script, the calendar 3 KB of styles and 6 KB of script, the
+media library 2 KB, QR codes 4 KB of script.
 
 ## Documentation
 `docs/` on the site: getting started, layout, utilities, tokens, icons, the move from Bootstrap 5.3, and a page per

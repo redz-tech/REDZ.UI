@@ -29,7 +29,7 @@ Long text that comes from an editor or from Markdown, where no element carries a
 
 - Prose styles the elements the text already has: its headings stay headings, so a screen reader walks them as it walks any page. Start the text's headings below the page's own: a `prose` inside a page with an `<h1>` starts at `<h2>`.
 - The measure keeps lines short enough to read; the text still wraps at any width, and a long word breaks rather than widening the page.
-- Links are underlined in the text, so they are not told apart by colour alone.
+- Links are underlined in the text, so they are not told apart by color alone.
 
 ## Tokens
 
