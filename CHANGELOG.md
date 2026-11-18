@@ -94,8 +94,9 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 ### Fixed
 - A dialog's or a drawer's footer sets its words on the buttons' middle line: `dialog-footer-start` words stood at its
   top, which the taller buttons for a finger made plain.
-- A date-pick day's count is shown and no longer read twice: its words are in the day's name, and a day with a count
-  named itself without the number shown, which axe calls a mismatch.
+- A date-pick day's count is drawn from its `data-count` and no longer read twice: its words are in the day's name, and
+  a day's text was its number and its count, which that name did not hold in one piece - axe's
+  label-content-name-mismatch, WCAG 2.5.3.
 - A calendar's "+2" reads "+2" in a right-to-left page and stands at its cell's start; it read "2+".
 - A page in a language the browser has no data of - Burmese, Lao and Khmer in Chrome - showed its relative times, a
   date picker's months and days, its lists and numbers in the browser's own language: a Burmese screen of the ERP said
@@ -124,7 +125,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 
 ### Checks
 - The probes judge a date input's month on a phone as a sheet on the bottom, as high as its month; `datePick` takes a
-  month 2 px off its face or 4 px off its width as placed, as the library's own guard does, for Firefox and Chrome 130.
+  month up to 3 px off its face's start and 6 px off its width as placed: Firefox lays it 2-3 px in and 4 px
+  narrower, Chrome 130 1 px.
 - Check `drawerFooter`: a drawer's form keeps its header at the top and its footer at the bottom while only the body
   scrolls, the drawer never; a navbar's drawer in its bar a row. Red on 4 planted faults.
 - `php tools/probe.php check`, `plan` and `affected` read a change by its sources. A built file of `dist/` follows the

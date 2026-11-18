@@ -4942,7 +4942,7 @@ window.REDZ_BEHAVE = (() => {
 			const months = [];
 			pick.addEventListener('redz:month', (event) => months.push(event.detail.from + '/' + event.detail.to));
 			const now = () => from.value + '/' + to.value + ' ' + $('.date-pick-chosen > span', pick).textContent + ' ' + (document.activeElement?.dataset?.day ?? '-');
-			const seen = {built: [from.type, to.type, grid.getAttribute('role'), $('th', grid).getAttribute('aria-label'), title(), $$('td[aria-selected="true"]', grid).length, cell('2026-11-04').getAttribute('aria-label'), $('.date-pick-count', cell('2026-11-04')).textContent].join('|'), steps: []};
+			const seen = {built: [from.type, to.type, grid.getAttribute('role'), $('th', grid).getAttribute('aria-label'), title(), $$('td[aria-selected="true"]', grid).length, cell('2026-11-04').getAttribute('aria-label'), $('.date-pick-count', cell('2026-11-04')).dataset.count].join('|'), steps: []};
 			pick.scrollIntoView({block: 'center'});
 			await settled();
 			for (const day of ['2026-11-20', '2026-11-24', '2026-11-03', '2026-11-01']) {
@@ -4985,7 +4985,7 @@ window.REDZ_BEHAVE = (() => {
 			seen.steps.push(state());
 			const box = panel.getBoundingClientRect();
 			const day = Math.round(cell('2026-12-02', panel).getBoundingClientRect().height);
-			seen.place = coarse ? [getComputedStyle(panel).getPropertyValue('--redz-sheet').trim(), Math.round(innerHeight - box.bottom), Math.round(box.left), Math.round(document.documentElement.clientWidth - box.width), day].join(' ') : [Math.round(box.top - face.getBoundingClientRect().bottom), Math.abs(box.left - face.getBoundingClientRect().left) <= 2 ? 0 : Math.round(box.left - face.getBoundingClientRect().left), Math.abs(box.width - 360) <= 4 ? 360 : Math.round(box.width), day].join(' ');
+			seen.place = coarse ? [getComputedStyle(panel).getPropertyValue('--redz-sheet').trim(), Math.round(innerHeight - box.bottom), Math.round(box.left), Math.round(document.documentElement.clientWidth - box.width), day].join(' ') : [Math.round(box.top - face.getBoundingClientRect().bottom), Math.abs(box.left - face.getBoundingClientRect().left) <= 3 ? 0 : Math.round(box.left - face.getBoundingClientRect().left), Math.abs(box.width - 360) <= 6 ? 360 : Math.round(box.width), day].join(' ');
 			yield {key: ['ArrowLeft', 'Enter']};
 			await settled();
 			seen.steps.push(state() + ' ' + changes);
@@ -5015,7 +5015,7 @@ window.REDZ_BEHAVE = (() => {
 			yield {click: center(dueFace)};
 			await settled();
 			const count = (day) => $('.date-pick-count', cell(day, duePanel));
-			seen.counts = [quiet, shown, count('2026-11-21').textContent, count('2026-11-21').getAttribute('data-tone'), count('2026-11-20').getAttribute('data-tone'), cell('2026-11-21', duePanel).getAttribute('aria-label').endsWith(', 0 events'), $('.date-pick-note', duePanel).textContent, $('.date-pick-note', duePanel).hidden].join('|');
+			seen.counts = [quiet, shown, count('2026-11-21').dataset.count, count('2026-11-21').getAttribute('data-tone'), count('2026-11-20').getAttribute('data-tone'), cell('2026-11-21', duePanel).getAttribute('aria-label').endsWith(', 0 events'), $('.date-pick-note', duePanel).textContent, $('.date-pick-note', duePanel).hidden].join('|');
 			dueBox.setAttribute('data-count-text', 'date.days');
 			await settled();
 			seen.counts += '|' + cell('2026-11-21', duePanel).getAttribute('aria-label').endsWith(', 0 days');

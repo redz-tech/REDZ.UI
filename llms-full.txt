@@ -6251,7 +6251,7 @@ In a tracked form the input is one field: `data-changed` and a refusal's `aria-i
 | `date-pick-quick` | The page's quick picks, a group of buttons in the box, each with its `value` a day, `2026-11-18`, or a period, `2026-11-02/2026-11-08`; the one the choice equals is `aria-pressed="true"`. |
 | `date-pick-chosen` | The words of the choice, an `output` read politely: the day, the period and its length, or the page's text `date.none`. |
 | `date-pick-nav`, `date-pick-title` | The month's bar: the previous and the next month, the month and the year, read politely as they change, and Today. |
-| `date-pick-grid` | The month, a table with `role="grid"` of six weeks; a day is a cell with its whole date as its name, `aria-selected` when it is chosen, `aria-current="date"` today, `aria-disabled` outside the bounds, its number in `date-pick-count`; a period's ends carry `data-from` and `data-to`, the days between `data-in`, the next month's and the last one's `data-other`. Under a finger a day is 48 px high, 40 under a mouse. |
+| `date-pick-grid` | The month, a table with `role="grid"` of six weeks; a day is a cell with its whole date as its name, `aria-selected` when it is chosen, `aria-current="date"` today, `aria-disabled` outside the bounds, its count in `date-pick-count`, drawn from its `data-count` so the day's text stays its number, the count's words being in its name; a period's ends carry `data-from` and `data-to`, the days between `data-in`, the next month's and the last one's `data-other`. Under a finger a day is 48 px high, 40 under a mouse. |
 
 | Key | In the month |
 | --- | --- |

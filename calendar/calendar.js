@@ -151,7 +151,7 @@ const draw = (state, keep = false) => {
 		off(state, t) ? cell.setAttribute('aria-disabled', 'true') : cell.removeAttribute('aria-disabled');
 		t === now ? cell.setAttribute('aria-current', 'date') : cell.removeAttribute('aria-current');
 		number.textContent = names.day.format(t);
-		count.textContent = shown ? String(one.text ?? names.number.format(n)) : '';
+		count.dataset.count = shown ? String(one.text ?? names.number.format(n)) : '';
 		['danger', 'warning', 'success'].includes(one.tone) && shown ? count.setAttribute('data-tone', one.tone) : count.removeAttribute('data-tone');
 	});
 	if (keep) {
@@ -258,7 +258,8 @@ const mount = (box, root, inputs, done, quiet = false) => {
 	for (let w = 0; w < 6; w++) {
 		const row = body.insertRow();
 		for (let d = 0; d < 7; d++) {
-			// The count is said in the cell's name: its words are shown, not read twice.
+			// The count is said in the cell's name: it is drawn from data-count, so the day's text stays its number alone
+			// and its name holds that text (WCAG 2.5.3, axe's label-content-name-mismatch).
 			const count = Object.assign(document.createElement('span'), {className: 'date-pick-count'});
 			count.setAttribute('aria-hidden', 'true');
 			row.insertCell().append(document.createElement('span'), count);

@@ -359,6 +359,10 @@
 		font-weight: 600;
 	}
 
+	.date-pick-count::after {
+		content: attr(data-count);
+	}
+
 	.date-pick-count[data-tone="danger"] {
 		color: var(--redz-danger-text);
 	}
