@@ -158,7 +158,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   white, and Escape; an avatar moved by keys and a drag, zoomed by plus, the wheel and two fingers, out to the whole
   photo white in a JPEG and clear in a PNG, its square after a turn and its original on the event; a photo's frame at
   its ratio through an edge's drag and a turn, moved by keys and a drag, a free edge moving alone. Red on 23 planted
-  faults, a shrink that never ends among them.
+  faults, a shrink that never ends among them. Each waits at most 8 s for the crop's answer, so a layer that never answers is a
+  finding, not a stalled engine, and presses the docs' sample by script after shutting what an earlier check left open.
 - `php tools/build.php` reads a package's classes from its sources: a docs example of a class new in a package failed
   the build, which held it against the package as last built, and the build writes the package only once it passes.
 - The check of `combobox-clear` types in the very task the panel opens in, so a panel made after its search has the

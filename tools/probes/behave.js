@@ -9,6 +9,8 @@ window.REDZ_BEHAVE = (() => {
 	const $ = (selector, root = document) => root.querySelector(selector);
 	const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 	const say = JSON.stringify;
+	/** A promise's answer, or 'timeout' after ms: a walk never hangs on a layer that never answers. */
+	const within = (promise, ms = 8000) => Promise.race([promise, wait(ms).then(() => 'timeout')]);
 	/** A pixel of an image file, [r, g, b, a]. */
 	const cropPixel = async (blob, x, y) => {
 		const bitmap = await createImageBitmap(blob);
@@ -6231,8 +6233,17 @@ window.REDZ_BEHAVE = (() => {
 			}, {once: true});
 			field.scrollIntoView({block: 'center'});
 			await settled();
-			yield {click: center($('#crop-sample [data-docs-crop]'))};
+			// The docs' sample button is pressed by script, and layers an earlier check left open are shut first: the crop
+			// is under test, not the page's state.
+			const layers = $$('dialog[open], :popover-open').map((one) => '#' + one.id);
+			$$('dialog[open]').forEach((one) => one.close());
+			$$(':popover-open').forEach((one) => one.hidePopover());
+			$('#crop-sample [data-docs-crop]').click();
 			const screen = await open();
+			if (screen === null) {
+				out.push('a data-crop field opened no crop; layers open before: ' + say(layers));
+				return;
+			}
 			const seen = {screen: screen === null ? 'none' : [screen.matches(':modal'), $$('.crop-handle', screen).length, $('.crop-handles', screen).getAttribute('role'), $$('.crop-handle', screen).every((handle) => Math.round(handle.getBoundingClientRect().width) >= 44)].join(' ')};
 			yield {click: done()};
 			await until(() => answer !== null, 8000);
@@ -6243,17 +6254,17 @@ window.REDZ_BEHAVE = (() => {
 			yield {click: center($('dialog.crop .crop-bar .btn'))};
 			await settled();
 			yield {click: done()};
-			const first = await turned;
+			const first = await within(turned);
 			seen.turned = [off(first.points, [truth[3], truth[0], truth[1], truth[2]]) <= 16, first.width, first.height < first.width].join(' ');
 			const again = REDZ.ui.crop(original, {max: 400, points: first.points});
 			await open();
 			yield {click: done()};
-			const second = await again;
+			const second = await within(again);
 			seen.again = [off(second.points, first.points) <= 2, second.width === first.width && second.height === first.height].join(' ');
 			const plain = REDZ.ui.crop(original);
 			await open();
 			yield {click: done()};
-			seen.plain = Math.max(...[await plain].map((one) => Math.max(one.width, one.height)));
+			seen.plain = Math.max(...[await within(plain)].map((one) => Math.max(one.width, one.height)));
 			const round = REDZ.ui.crop(original, {max: 400});
 			await open();
 			for (let k = 0; k < 4; k++) {
@@ -6261,7 +6272,7 @@ window.REDZ_BEHAVE = (() => {
 				await settled();
 			}
 			yield {click: done()};
-			const turnedFour = await round;
+			const turnedFour = await within(round);
 			seen.round = off(turnedFour.points, truth) <= 16;
 			const left = REDZ.ui.crop(original);
 			const last = await open();
@@ -6282,7 +6293,7 @@ window.REDZ_BEHAVE = (() => {
 			}
 			seen.side = Math.round(Math.hypot(next.getBoundingClientRect().left - corner.getBoundingClientRect().left, next.getBoundingClientRect().top - corner.getBoundingClientRect().top)) >= 43;
 			yield {key: 'Escape'};
-			seen.left = [String(await left), $('dialog.crop') === null].join(' ');
+			seen.left = [String(await within(left)), $('dialog.crop') === null].join(' ');
 			// A paper on a clear ground, taken whole: the clear turns white, not black.
 			const clear = await new Promise((done) => {
 				const canvas = Object.assign(document.createElement('canvas'), {width: 800, height: 600});
@@ -6299,7 +6310,7 @@ window.REDZ_BEHAVE = (() => {
 				await settled();
 			}
 			yield {click: done()};
-			const white = await flat;
+			const white = await within(flat);
 			seen.white = white === null ? 'none' : (await cropPixel(white.blob, 2, 2)).slice(0, 3).every((v) => v >= 250);
 			const want = {screen: 'true 8 application true', done: 'true true image/jpeg sample.jpg image/jpeg true', turned: 'true 400 true', again: 'true true', plain: 600, round: true, edge: 'true true true', side: true, left: 'null true', white: true};
 			if (say(seen) !== say(want)) {
@@ -6328,8 +6339,17 @@ window.REDZ_BEHAVE = (() => {
 			}, {once: true});
 			field.scrollIntoView({block: 'center'});
 			await settled();
-			yield {click: center($('#crop-avatar-sample [data-docs-crop]'))};
+			// The docs' sample button is pressed by script, and layers an earlier check left open are shut first: the crop
+			// is under test, not the page's state.
+			const layers = $$('dialog[open], :popover-open').map((one) => '#' + one.id);
+			$$('dialog[open]').forEach((one) => one.close());
+			$$(':popover-open').forEach((one) => one.hidePopover());
+			$('#crop-avatar-sample [data-docs-crop]').click();
 			const screen = await open();
+			if (screen === null) {
+				out.push('a data-crop="avatar" field opened no crop; layers open before: ' + say(layers));
+				return;
+			}
 			const layer = $('.crop-handles', screen);
 			const range = $('.crop-zoom input[type="range"]', screen);
 			const view = $('.crop-photo', screen);
@@ -6369,24 +6389,24 @@ window.REDZ_BEHAVE = (() => {
 			const again = REDZ.ui.crop(answer.original, {mode: 'avatar', points: answer.points});
 			await open();
 			yield {click: done()};
-			const second = await again;
+			const second = await within(again);
 			seen.again = [off(second.points, answer.points) <= 2, second.width].join(' ');
 			const clear = REDZ.ui.crop(answer.original, {mode: 'avatar', type: 'image/png', max: 200});
 			whole($('.crop-zoom input', await open()));
 			yield {click: done()};
-			const png = await clear;
+			const png = await within(clear);
 			seen.clear = [png.width, png.blob.type, [await cropPixel(png.blob, 100, 1), await cropPixel(png.blob, 100, 198)].some((pixel) => pixel[3] === 0)].join(' ');
 			const turned = REDZ.ui.crop(answer.original, {mode: 'avatar', max: 300});
 			await open();
 			yield {click: center($('dialog.crop .crop-bar .btn'))};
 			await settled();
 			yield {click: done()};
-			const turn = await turned;
+			const turn = await within(turned);
 			seen.turned = [turn.width, turn.height].join(' ');
 			const left = REDZ.ui.crop(answer.original, {mode: 'avatar'});
 			await open();
 			yield {key: 'Escape'};
-			seen.left = [String(await left), $('dialog.crop') === null].join(' ');
+			seen.left = [String(await within(left)), $('dialog.crop') === null].join(' ');
 			const want = {screen: 'avatar application 0 0 true', keys: 50, zoom: 'true true true', drag: -30, done: '512 512 image/jpeg sample.jpg sample.jpg true', again: 'true 512', clear: '200 image/png true', turned: '300 300', left: 'null true'};
 			if (say(seen) !== say(want)) {
 				out.push('a data-crop="avatar" field moves, zooms and crops a photo under its circle: ' + say(seen));
@@ -6415,8 +6435,17 @@ window.REDZ_BEHAVE = (() => {
 			}, {once: true});
 			field.scrollIntoView({block: 'center'});
 			await settled();
-			yield {click: center($('#crop-photo-sample [data-docs-crop]'))};
+			// The docs' sample button is pressed by script, and layers an earlier check left open are shut first: the crop
+			// is under test, not the page's state.
+			const layers = $$('dialog[open], :popover-open').map((one) => '#' + one.id);
+			$$('dialog[open]').forEach((one) => one.close());
+			$$(':popover-open').forEach((one) => one.hidePopover());
+			$('#crop-photo-sample [data-docs-crop]').click();
 			const screen = await open();
+			if (screen === null) {
+				out.push('a data-crop="photo" field opened no crop; layers open before: ' + say(layers));
+				return;
+			}
 			const mover = $('.crop-move', screen);
 			const seen = {screen: [screen.dataset.mode, $$('.crop-handle', screen).length, mover !== null, Math.abs(sized(mover).width / sized(mover).height - 16 / 9) < 0.02].join(' ')};
 			const right = $$('.crop-handle', screen)[5];
@@ -6446,7 +6475,7 @@ window.REDZ_BEHAVE = (() => {
 			key($$('.crop-handle', loose)[5], 'ArrowLeft', 10);
 			seen.free = [Math.round(w0 - sized(frame).width), Math.round(h0 - sized(frame).height)].join(' ');
 			yield {key: 'Escape'};
-			await free;
+			await within(free);
 			const turned = REDZ.ui.crop(answer.original, {mode: 'photo', ratio: '16/9', max: 320});
 			const turning = await open();
 			yield {click: center($('dialog.crop .crop-bar .btn'))};
@@ -6454,12 +6483,12 @@ window.REDZ_BEHAVE = (() => {
 			// Narrowed off the frame it opens with, so a frame opened again shows it came back by its points.
 			key($$('.crop-handle', turning)[5], 'ArrowLeft', 5);
 			yield {click: done()};
-			const turn = await turned;
+			const turn = await within(turned);
 			seen.turned = [turn.width, turn.height].join(' ');
 			const again = REDZ.ui.crop(answer.original, {mode: 'photo', ratio: '16/9', max: 320, points: turn.points});
 			await open();
 			yield {click: done()};
-			const second = await again;
+			const second = await within(again);
 			seen.again = [off(second.points, turn.points) <= 2, second.width, second.height].join(' ');
 			const want = {screen: 'photo 8 true true', edge: '60 true', keys: 30, drag: 20, done: 'true true true true sample.jpg', free: '100 0', turned: '320 180', again: 'true 320 180'};
 			if (say(seen) !== say(want)) {
