@@ -30,6 +30,10 @@ export const text = (key, args = {}) => {
  *  language the browser has no data of (Burmese, Lao and Khmer in Chrome), it would take the browser's own. */
 export const locales = (lang = document.documentElement.lang) => [lang || 'en', 'en'];
 
+/** The language an element is written in: its nearest lang, the page's when that is empty, else English - for words
+ *  the browser's Intl writes whole; a number inside an island text keeps the page's, the language of its sentence. */
+export const langAt = (element) => element.closest('[lang]')?.lang || document.documentElement.lang || 'en';
+
 /** The page's text for a count: the form of the key its language's plural rules pick, {count} in its digits, its other
  *  {names} from the arguments. */
 export const textCount = (key, count, args = {}) => {

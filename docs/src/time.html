@@ -5,12 +5,34 @@
 
 <section class="vstack gap-16" aria-labelledby="time-examples">
 	<h2 id="time-examples">Examples</h2>
-	<p>A <code>time</code> whose <code>datetime</code> is the moment - ISO, with its zone. With <code>data-elapsed</code> it shows the time since then as a clock, <code>m:ss</code> under an hour and <code>h:mm:ss</code> after; with <code>data-ago</code> it says how long ago it was, or how soon it comes, in the page's language, and its <code>title</code> holds the full moment; <code>data-ago="short"</code> says it short, for a narrow place such as a stat tile. One ticker serves every one on the page: each second while an elapsed time is there, else every 30 seconds, and none while the page is hidden. The page's own words stand inside until the library starts.</p>
+	<p>A <code>time</code> whose <code>datetime</code> is the moment - ISO, with its zone. With <code>data-elapsed</code> it shows the time since then as a clock, <code>m:ss</code> under an hour and <code>h:mm:ss</code> after; with <code>data-ago</code> it says how long ago it was, or how soon it comes, in the language of its nearest <code>lang</code>, and its <code>title</code> holds the full moment with the reader's time zone; <code>data-ago="short"</code> says it short, for a narrow place such as a stat tile. One ticker serves every one on the page: each second while an elapsed time is there, else every 30 seconds, and none while the page is hidden. The page's own words stand inside until the library starts.</p>
 	<div class="docs-example docs-example-stack" id="time-ticking">
 		<p>The backup has been running for <time datetime="2026-11-04T08:00:00Z" data-elapsed data-docs-since="95">1:35</time>.</p>
 		<p>The last message came <time datetime="2026-11-04T08:00:00Z" data-ago data-docs-since="300">5 minutes ago</time>; the next tour leaves <time datetime="2026-11-04T08:00:00Z" data-ago data-docs-since="-7200">in 2 hours</time>.</p>
 		<p>Last backup <time datetime="2026-11-04T08:00:00Z" data-ago="short" data-docs-since="2520">42 min. ago</time>.</p>
 	</div>
+	<p>The words follow the nearest <code>lang</code>, not the page's: a sentence the page keeps in another language - a text not yet translated - has its time in that language too.</p>
+	<div class="docs-example docs-example-stack" id="time-lang">
+		<p lang="de">Die letzte Sicherung lief <time datetime="2026-11-04T08:00:00Z" data-ago data-docs-since="3600">vor 1 Stunde</time>.</p>
+	</div>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="time-local-title">
+	<h2 id="time-local-title">The reader's own clock</h2>
+	<p>A moment the server knows in UTC, shown by the reader's clock: <code>data-local</code> writes its time, <code>data-local="date"</code> its date and time, and <code>data-local="auto"</code> the time when it falls on the reader's today, the weekday and time in the six days ahead, else the date and time. The hours are written as the language writes them - <code>07:00</code> in Russian, <code>7:00 AM</code> in American English - and the <code>title</code> holds the full moment with the reader's time zone. The server's own text, its UTC time, stands without the script.</p>
+	<div class="docs-example docs-example-stack" id="time-local">
+		<p>The daily limit starts again at <time datetime="2026-11-05T00:00:00Z" data-local="auto" data-docs-utc-day>00:00 UTC</time>, your time.</p>
+		<p>The report was sent <time datetime="2026-11-04T08:00:00Z" data-local="date">Nov 4, 2026, 08:00 UTC</time>.</p>
+	</div>
+	<table class="table docs-table">
+		<thead><tr><th scope="col">Attribute</th><th scope="col">What it does</th></tr></thead>
+		<tbody>
+			<tr><td><code>data-elapsed</code></td><td>The time since the moment as a clock, <code>m:ss</code> or <code>h:mm:ss</code>, each second.</td></tr>
+			<tr><td><code>data-ago</code>, <code>data-ago="short"</code></td><td>How long ago, or how soon, in words.</td></tr>
+			<tr><td><code>data-local</code>, <code>data-local="date"</code>, <code>data-local="auto"</code></td><td>The moment by the reader's clock: the time, the date and time, or as much as its distance from today needs.</td></tr>
+		</tbody>
+	</table>
+	<p>One of the three on a time; given more, <code>data-elapsed</code> wins, then <code>data-ago</code>. A <code>title</code> the page writes itself stays.</p>
 </section>
 
 <section class="vstack gap-12" aria-labelledby="time-access">

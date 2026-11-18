@@ -7496,13 +7496,36 @@ A time that keeps itself current: how long a job has been running, how long ago 
 
 ## Examples
 
-A `time` whose `datetime` is the moment - ISO, with its zone. With `data-elapsed` it shows the time since then as a clock, `m:ss` under an hour and `h:mm:ss` after; with `data-ago` it says how long ago it was, or how soon it comes, in the page's language, and its `title` holds the full moment; `data-ago="short"` says it short, for a narrow place such as a stat tile. One ticker serves every one on the page: each second while an elapsed time is there, else every 30 seconds, and none while the page is hidden. The page's own words stand inside until the library starts.
+A `time` whose `datetime` is the moment - ISO, with its zone. With `data-elapsed` it shows the time since then as a clock, `m:ss` under an hour and `h:mm:ss` after; with `data-ago` it says how long ago it was, or how soon it comes, in the language of its nearest `lang`, and its `title` holds the full moment with the reader's time zone; `data-ago="short"` says it short, for a narrow place such as a stat tile. One ticker serves every one on the page: each second while an elapsed time is there, else every 30 seconds, and none while the page is hidden. The page's own words stand inside until the library starts.
 
 ```html
 <p>The backup has been running for <time datetime="2026-11-04T08:00:00Z" data-elapsed data-docs-since="95">1:35</time>.</p>
 <p>The last message came <time datetime="2026-11-04T08:00:00Z" data-ago data-docs-since="300">5 minutes ago</time>; the next tour leaves <time datetime="2026-11-04T08:00:00Z" data-ago data-docs-since="-7200">in 2 hours</time>.</p>
 <p>Last backup <time datetime="2026-11-04T08:00:00Z" data-ago="short" data-docs-since="2520">42 min. ago</time>.</p>
 ```
+
+The words follow the nearest `lang`, not the page's: a sentence the page keeps in another language - a text not yet translated - has its time in that language too.
+
+```html
+<p lang="de">Die letzte Sicherung lief <time datetime="2026-11-04T08:00:00Z" data-ago data-docs-since="3600">vor 1 Stunde</time>.</p>
+```
+
+## The reader's own clock
+
+A moment the server knows in UTC, shown by the reader's clock: `data-local` writes its time, `data-local="date"` its date and time, and `data-local="auto"` the time when it falls on the reader's today, the weekday and time in the six days ahead, else the date and time. The hours are written as the language writes them - `07:00` in Russian, `7:00 AM` in American English - and the `title` holds the full moment with the reader's time zone. The server's own text, its UTC time, stands without the script.
+
+```html
+<p>The daily limit starts again at <time datetime="2026-11-05T00:00:00Z" data-local="auto" data-docs-utc-day>00:00 UTC</time>, your time.</p>
+<p>The report was sent <time datetime="2026-11-04T08:00:00Z" data-local="date">Nov 4, 2026, 08:00 UTC</time>.</p>
+```
+
+| Attribute | What it does |
+| --- | --- |
+| `data-elapsed` | The time since the moment as a clock, `m:ss` or `h:mm:ss`, each second. |
+| `data-ago`, `data-ago="short"` | How long ago, or how soon, in words. |
+| `data-local`, `data-local="date"`, `data-local="auto"` | The moment by the reader's clock: the time, the date and time, or as much as its distance from today needs. |
+
+One of the three on a time; given more, `data-elapsed` wins, then `data-ago`. A `title` the page writes itself stays.
 
 ## Accessibility
 

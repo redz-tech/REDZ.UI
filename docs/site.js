@@ -65,6 +65,10 @@
 		for (const time of document.querySelectorAll('time[data-docs-since]')) {
 			time.dateTime = new Date(Date.now() - Number(time.dataset.docsSince) * 1000).toISOString();
 		}
+		// The next turn of the UTC day.
+		for (const time of document.querySelectorAll('time[data-docs-utc-day]')) {
+			time.dateTime = new Date(Math.ceil((Date.now() + 1) / 86400000) * 86400000).toISOString();
+		}
 	});
 	document.addEventListener('click', (event) => {
 		const item = event.target instanceof Element ? event.target.closest('[data-docs-theme], [data-docs-dir]') : null;

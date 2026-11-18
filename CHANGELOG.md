@@ -4,6 +4,26 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Added
+- `data-local` on a ticking `time`: the moment by the reader's own clock, from an ISO moment with its zone - the time
+  with `data-local`, the date and time with `data-local="date"`, and with `data-local="auto"` the time when it falls on
+  the reader's today, the weekday and time in the six days ahead, else the date and time. The hours are written as the
+  language writes its short time (`07:00` in Russian, `7:00 AM` in American English); the server's own text stands
+  without the script. REDZ CMS's order, for a UTC moment shown in the reader's time.
+
+### Changed
+- A ticking time's words and its title are in the language of its nearest `lang`, not the page's: a sentence a page
+  keeps in another language, a text not yet translated, has its time in that language too (WCAG 3.1.2). The calendar's
+  names follow the same rule, from one place. Numbers inside the library's own texts keep the page's language, the
+  language of their sentence.
+- The title of a time with `data-ago` names the reader's time zone and the weekday.
+
+### Fixed
+- The title the library gave a time with `data-ago` stayed at its first moment when the page changed `datetime`; it
+  follows it now. A title the page writes itself stays.
+
 ## 0.28.1 - 2026-11-18
 
 ### Fixed

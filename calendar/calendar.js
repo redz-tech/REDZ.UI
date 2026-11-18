@@ -14,7 +14,7 @@
 // fires redz:month with the first and the last day it shows, for the page to bring its counts - a date-input's only
 // once its month opens. A script that sets an input's value, a tracked form's Discard and the form's reset draw it
 // again; a date-input's face follows its input's disabled.
-import {locales, text, textCount} from '../js/text.js';
+import {langAt, locales, text, textCount} from '../js/text.js';
 
 const DAY = 86400000;
 const BOXES = '.date-pick, .date-input';
@@ -221,7 +221,7 @@ const button = (className, words, icon) => {
 /** Builds the month into root for the box's inputs: the words of the choice, the page's quick picks, the bar, the grid. */
 const mount = (box, root, inputs, done, quiet = false) => {
 	const id = 'redz-date-' + ++made;
-	const lang = box.closest('[lang]')?.lang || 'en';
+	const lang = langAt(box);
 	const firstDay = Math.min(7, Math.max(1, Math.round(+box.getAttribute('data-first-day')) || 1));
 	const weekday = format(lang, {weekday: 'short'});
 	const names = {

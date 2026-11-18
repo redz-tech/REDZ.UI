@@ -2428,6 +2428,54 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a time 42 minutes ago reads ' + say(short) + ' with data-ago="short" and ' + say(ago.textContent) + ' with data-ago, not ' + say([words('short'), words('long')]));
 			}
 		}]},
+		// The nearest lang and the reader's own clock: each expected text from the browser's short time and date, not
+		// from the library's own choice of hour form.
+		timeLocal: {target: '#time-local', steps: [async (out) => {
+			const german = $('#time-lang time');
+			const hour = new Intl.RelativeTimeFormat('de', {numeric: 'auto'}).format(-1, 'hour');
+			if (german.textContent !== hour || !/\d{4}/.test(german.title) || german.title === new Intl.DateTimeFormat(document.documentElement.lang, {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short'}).format(new Date(german.dateTime))) {
+				out.push('a time in a German sentence reads ' + say([german.textContent, german.title]) + ', not ' + say(hour) + ' with a German title');
+			}
+			const [auto, dated] = $$('#time-local time');
+			const lang = auto.closest('[lang]').lang;
+			const now = new Date();
+			const morning = (days) => new Date(now.getFullYear(), now.getMonth(), now.getDate() + days, 9, 5);
+			const write = (moment, options) => new Intl.DateTimeFormat([lang, 'en'], options).format(moment);
+			const read = async (time, moment, mode) => {
+				time.dataset.local = mode;
+				time.dateTime = moment.toISOString();
+				await wait(50);
+				return time.textContent;
+			};
+			const short = (moment) => write(moment, {timeStyle: 'short'});
+			const seen = [await read(auto, morning(0), 'auto'), await read(auto, morning(3), 'auto'), await read(auto, morning(10), 'auto'), await read(auto, morning(-1), 'auto'), await read(auto, morning(10), ''), await read(dated, morning(10), 'date')];
+			const weekday = write(morning(3), {weekday: 'short'});
+			const month = write(morning(10), {month: 'short'});
+			const want = [
+				seen[0] === short(morning(0)),
+				seen[1].includes(weekday) && seen[1].includes(short(morning(3))),
+				seen[2].includes(month) && !seen[2].includes(write(morning(10), {weekday: 'short'})) && seen[2].includes(short(morning(10))),
+				seen[3] !== short(morning(-1)) && !seen[3].includes(write(morning(-1), {weekday: 'short'})),
+				seen[4] === short(morning(10)),
+				seen[5] === write(morning(10), {dateStyle: 'medium', timeStyle: 'short'}),
+			];
+			if (want.includes(false)) {
+				out.push('the reader\'s clock reads ' + say(seen) + ' for 9:05 today, in 3 days and 10 days and yesterday with data-local="auto", in 10 days with data-local and data-local="date"; right: ' + say(want));
+			}
+			const before = auto.title;
+			await read(auto, morning(20), 'auto');
+			const after = auto.title;
+			auto.title = 'The page\'s own';
+			await read(auto, morning(30), 'auto');
+			auto.closest('p').lang = 'ru';
+			await wait(50);
+			const russian = auto.textContent;
+			auto.closest('p').removeAttribute('lang');
+			await wait(50);
+			if (before === '' || after === before || auto.title !== 'The page\'s own' || russian !== new Intl.DateTimeFormat('ru', {day: 'numeric', month: 'short', ...(morning(30).getFullYear() === now.getFullYear() ? {} : {year: 'numeric'}), hour: '2-digit', minute: '2-digit'}).format(morning(30))) {
+				out.push('the title ' + say(before) + ' then ' + say(after) + ' as the moment moves, the page\'s own then ' + say(auto.title) + ', in Russian ' + say(russian));
+			}
+		}]},
 		viewer: {target: '#viewer-set', steps: [async (out) => {
 			const links = $$('#viewer-set a[data-zoom]');
 			links[0].click();
