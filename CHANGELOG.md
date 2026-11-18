@@ -25,14 +25,22 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   gzipped), linked after the library's. `date-input` around one `input type="date"` draws a field that shows the day
   and opens a month below it, on a window narrower than 576 px a sheet like a combobox's; `date-pick` draws such a
   month on the page, for a day with one `input type="date"` or a period with two, from and to. The inputs stay the
-  form's values, ISO dates, and without the script they are the browser's own date fields. Every year shown is the
-  Gregorian one: a phone set to the Buddhist calendar shows 2569 in its own date field. The names of the months and
-  the days are the page language's, a week starts on Monday unless `data-first-day` says, and `data-weekday` shows the
-  day's name first. In a period the first pick is a period of that day at once and the second its end; days outside
-  `min` and `max` are not picked; `data-counts` shows a number under a day; a `date-pick-quick` group holds the page's
-  quick picks, each with its `value` a day or `from/to`; `redz:month` tells the page the six weeks shown, to bring
-  their counts. The month is the WAI-ARIA grid: arrows, Home and End, Page Up and Page Down, a year with Shift. The
-  page's texts `date.none`, `date.days`, `date.count`, `date.today`, `date.previous` and `date.next` give its words.
+  form's values, ISO dates, and without the script they are the browser's own date fields; with it the browser's own
+  date picker never opens. Every year shown is the Gregorian one: a phone set to the Buddhist calendar shows 2569 in
+  its own date field. The names of the months and the days are the page language's and a week starts on Monday unless
+  `data-first-day` says. A field's face is `02.12.2026` in the page language's order, `02.12` under
+  `data-format="short"`; under `data-weekday` the page's Today, Tomorrow or Yesterday comes before the date, else the
+  day's whole name. In a period the first pick is a period of that day at once and the second its end; days outside
+  `min` and `max` are not picked. `data-counts` shows a number under a day, or words in its place, in a tone -
+  `{"2026-11-21": {"n": 0, "tone": "danger", "text": "none"}}` -, said with the count text `data-count-text` names, and
+  `data-counts-note` says under the month what they count; a `date-pick-quick` group holds the page's quick picks,
+  each with its `value` a day or `from/to`; `redz:month` tells the page the six weeks shown, to bring their counts - a
+  field's once its month opens. The month is the WAI-ARIA grid: arrows, Home and End, Page Up and Page Down, a year
+  with Shift. The page's texts `date.none`, `date.days`, `date.count`, `date.today`, `date.tomorrow`,
+  `date.yesterday`, `date.previous` and `date.next` give its words.
+- `data-warn` on a field: a hint that is no refusal - a value past what is usual, which the form still takes - in the
+  warning's tone, the page's words in `warning-feedback`; a time input's or a date input's face follows its input's.
+  `aria-invalid` stays for a refusal, and wins over it.
 
 ### Changed
 - The main script's budget is 58 KB gzipped, from 56: the time field takes 2 KB.
@@ -86,8 +94,9 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   the plan `check` wrote to `.dev/live/check.json`, which only a board of our own read.
 - A check of picking a date, `datePick`: a period picked, started again and taken from a quick pick, the grid's keys
   by a day, a week, a month and a year, the counts and `redz:month`; a date field that opens below its face, as a sheet
-  under a finger with 48 px days, closes on a day picked, refuses a day out of bounds and follows a script's value. The
-  probes press Page Up and Page Down. Red on 11 planted faults.
+  under a finger with 48 px days, closes on a day picked, refuses a day out of bounds and follows a script's value, its
+  face short or naming the day, its counts in a tone, in words, with a note and the page's count text, its
+  `redz:month` only once the month opens. The probes press Page Up and Page Down. Red on 18 planted faults.
 - `php tools/build.php` reads a package's classes from its sources: a docs example of a class new in a package failed
   the build, which held it against the package as last built, and the build writes the package only once it passes.
 - The check of `combobox-clear` types in the very task the panel opens in, so a panel made after its search has the

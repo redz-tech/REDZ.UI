@@ -352,8 +352,26 @@
 		font-weight: 600;
 	}
 
+	.date-pick-count[data-tone="danger"] {
+		color: var(--redz-danger-text);
+	}
+
+	.date-pick-count[data-tone="warning"] {
+		color: var(--redz-warning-text);
+	}
+
+	.date-pick-count[data-tone="success"] {
+		color: var(--redz-success-text);
+	}
+
 	.date-pick-grid td[aria-selected="true"]:not([data-in]) > .date-pick-count {
 		color: inherit;
+	}
+
+	.date-pick-note {
+		margin: 0;
+		color: var(--redz-text-muted);
+		font-size: var(--redz-fs-12);
 	}
 
 	@media (pointer: coarse) {
@@ -373,6 +391,10 @@
 
 	.date-input > .date-input-face[aria-expanded="true"] {
 		border-color: var(--redz-focus);
+	}
+
+	:where(.date-input:has(> input[data-warn])) > .date-input-face {
+		border-color: var(--redz-warning-fill);
 	}
 
 	.date-input > .date-input-face[aria-invalid="true"] {

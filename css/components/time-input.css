@@ -19,6 +19,10 @@
 		outline-offset: -1px;
 	}
 
+	:where(.time-input:has(> input[data-warn])) > .time-input-face {
+		border-color: var(--redz-warning-fill);
+	}
+
 	.time-input-face:has(> .time-input-part:user-invalid) {
 		border-color: var(--redz-danger-fill);
 	}

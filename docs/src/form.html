@@ -26,7 +26,7 @@
 	</div>
 
 	<h3>A label above, a hint, an error</h3>
-	<p><code>form-field</code> stacks a field's parts: <code>form-label</code>, the control, <code>form-text</code> for a hint and <code>invalid-feedback</code> for an error. The control points at both with <code>aria-describedby</code>; an error sets <code>aria-invalid="true"</code>, and the browser's own <code>:user-invalid</code> draws the same after the person has edited the field.</p>
+	<p><code>form-field</code> stacks a field's parts: <code>form-label</code>, the control, <code>form-text</code> for a hint and <code>invalid-feedback</code> for an error. The control points at both with <code>aria-describedby</code>; an error sets <code>aria-invalid="true"</code>, and the browser's own <code>:user-invalid</code> draws the same after the person has edited the field. A hint that is no refusal - a value past what is usual, which the form still takes - sets <code>data-warn</code> on the control and says why in <code>warning-feedback</code>: the border takes the warning's tone, and a time input's or a date input's face follows its input's <code>data-warn</code>.</p>
 	<div class="docs-example docs-example-stack" id="form-stacked">
 		<div class="form-field">
 			<label class="form-label" for="form-stacked-slug">Address</label>
@@ -37,6 +37,11 @@
 			<label class="form-label" for="form-stacked-price">Adult price, THB</label>
 			<input class="form-control tabular-nums" id="form-stacked-price" type="number" value="2500" min="0" step="100" aria-invalid="true" aria-describedby="form-stacked-price-error">
 			<div class="invalid-feedback" id="form-stacked-price-error"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>Lower than the child price</div>
+		</div>
+		<div class="form-field">
+			<label class="form-label" for="form-stacked-seats">Seats</label>
+			<input class="form-control tabular-nums" id="form-stacked-seats" type="number" value="14" min="1" data-warn aria-describedby="form-stacked-seats-warning">
+			<div class="warning-feedback" id="form-stacked-seats-warning"><i class="bi bi-exclamation-circle" aria-hidden="true"></i>More than the boat usually takes</div>
 		</div>
 	</div>
 

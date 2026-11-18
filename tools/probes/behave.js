@@ -4884,7 +4884,8 @@ window.REDZ_BEHAVE = (() => {
 		}},
 		// A date-pick takes a period in two picks and starts it again, moves by the grid's keys, takes the page's quick
 		// picks and shows its counts, and says each other month in redz:month; a date-input opens its month below the face,
-		// as a sheet on a phone, closes on a day picked, refuses a day out of bounds and follows a script's value.
+		// as a sheet on a phone, closes on a day picked, refuses a day out of bounds and follows a script's value; its face
+		// is short or names the day, its counts take a tone, words and a note, and its redz:month waits for the month.
 		datePick: {target: '#calendar-pick-period', walk: async function* (out) {
 			const pick = $('#calendar-pick-period .date-pick');
 			const [from, to] = $$('input', pick);
@@ -4956,18 +4957,36 @@ window.REDZ_BEHAVE = (() => {
 			await settled();
 			seen.steps.push(state());
 			const due = $('#calendar-date-due');
-			const dueFace = $('#calendar-date-field .form-field .date-input-face');
+			const dueBox = due.closest('.date-input');
+			const dueFace = $('.date-input-face', dueBox);
+			const duePanel = $('.date-input-menu', dueBox);
+			let shown = 0;
+			dueBox.addEventListener('redz:month', () => shown++);
+			due.value = '2026-11-19';
+			await settled();
+			const quiet = shown;
 			yield {click: center(dueFace)};
 			await settled();
-			yield {click: center($('#calendar-date-field .form-field .date-input-menu .date-pick-quick > button'))};
+			const count = (day) => $('.date-pick-count', cell(day, duePanel));
+			seen.counts = [quiet, shown, count('2026-11-21').textContent, count('2026-11-21').getAttribute('data-tone'), count('2026-11-20').getAttribute('data-tone'), cell('2026-11-21', duePanel).getAttribute('aria-label').endsWith(', 0 events'), $('.date-pick-note', duePanel).textContent, $('.date-pick-note', duePanel).hidden].join('|');
+			dueBox.setAttribute('data-count-text', 'date.days');
+			await settled();
+			seen.counts += '|' + cell('2026-11-21', duePanel).getAttribute('aria-label').endsWith(', 0 days');
+			dueBox.removeAttribute('data-count-text');
+			yield {click: center($('.date-pick-quick > button', duePanel))};
 			await settled();
 			seen.steps.push(due.value + ' ' + dueFace.textContent + ' ' + dueFace.getAttribute('aria-expanded'));
+			// The words before a day under data-weekday hang on today's date: the walk counts them the same way.
+			const local = new Date();
+			const away = Math.round((Date.UTC(2026, 10, 30) - Date.UTC(local.getFullYear(), local.getMonth(), local.getDate())) / 86400000);
+			const word = {0: 'Today', 1: 'Tomorrow', [-1]: 'Yesterday'}[away] ?? 'Monday';
 			const want = {
 				built: 'hidden|hidden|grid|Monday|November 2026|5|Wednesday, November 4, 2026, 5 events|5',
-				steps: ['2026-11-20/2026-11-20 1 day 2026-11-20', '2026-11-20/2026-11-24 5 days 2026-11-24', '2026-11-03/2026-11-03 1 day 2026-11-03', '2026-11-01/2026-11-01 1 day 2026-11-01', '2026-11-01/2026-11-01 1 day 2026-11-15', '2026-11-01/2026-11-01 1 day 2026-12-09 December 2026', '2026-11-01/2026-11-01 1 day 2025-12-09 December 2025', '2025-12-09/2025-12-09 1 day 2025-12-09', '2026-11-09/2026-11-15 7 days - true November 2026', '2026-12-02 12/02/2026 open 2026-12-02', '2026-12-01 12/01/2026 shut face 1', '2026-12-01 12/01/2026 open 2026-11-01 true null', '2026-12-01 12/01/2026 open 2026-11-01', '2026-12-01 12/01/2026 shut face 1', '2027-01-15 01/15/2027 shut face', '2026-11-30 Mon, 11/30/2026 false'],
+				steps: ['2026-11-20/2026-11-20 1 day 2026-11-20', '2026-11-20/2026-11-24 5 days 2026-11-24', '2026-11-03/2026-11-03 1 day 2026-11-03', '2026-11-01/2026-11-01 1 day 2026-11-01', '2026-11-01/2026-11-01 1 day 2026-11-15', '2026-11-01/2026-11-01 1 day 2026-12-09 December 2026', '2026-11-01/2026-11-01 1 day 2025-12-09 December 2025', '2025-12-09/2025-12-09 1 day 2025-12-09', '2026-11-09/2026-11-15 7 days - true November 2026', '2026-12-02 12/02 open 2026-12-02', '2026-12-01 12/01 shut face 1', '2026-12-01 12/01 open 2026-11-01 true null', '2026-12-01 12/01 open 2026-11-01', '2026-12-01 12/01 shut face 1', '2027-01-15 01/15 shut face', '2026-11-30 ' + word + ', 11/30/2026 false'],
 				months: '2026-11-30/2027-01-10 2025-12-01/2026-01-11 2026-10-26/2026-12-06',
 				field: 'hidden combobox true true',
 				place: coarse ? '1 0 0 0 48' : '4 0 360 40',
+				counts: '0|1|none|danger|warning|true|Free places on the 9:00 run|false|true',
 			};
 			if (say(seen) !== say(want)) {
 				out.push('a date-pick takes a period, its keys, quick picks and counts, and a date-input opens, picks, refuses and follows its input: ' + say(seen));

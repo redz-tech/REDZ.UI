@@ -52,13 +52,18 @@
 		}
 	}
 
-	.invalid-feedback {
+	.invalid-feedback,
+	.warning-feedback {
 		display: flex;
 		align-items: center;
 		gap: var(--redz-space-4);
 		color: var(--redz-danger-text);
 		font-size: var(--redz-fs-12);
 		font-weight: 550;
+	}
+
+	.warning-feedback {
+		color: var(--redz-warning-text);
 	}
 
 	.form-control,
@@ -141,6 +146,10 @@
 			forced-color-adjust: none;
 			background: CanvasText;
 		}
+	}
+
+	:is(.form-control, .form-select)[data-warn] {
+		border-color: var(--redz-warning-fill);
 	}
 
 	:is(.form-control, .form-select)[aria-invalid="true"],
@@ -305,7 +314,7 @@
 		border-start-start-radius: var(--redz-radius-8);
 	}
 
-	:not(.form-field) > .form-floating + :is(.form-text, .invalid-feedback) {
+	:not(.form-field) > .form-floating + :is(.form-text, .invalid-feedback, .warning-feedback) {
 		margin-block-start: var(--redz-space-4);
 	}
 

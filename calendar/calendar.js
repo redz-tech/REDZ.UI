@@ -1,15 +1,19 @@
 // REDZ.UI, picking a date (the calendar package, linked apart): a .date-pick draws a month to pick from - a day for its
 // one input type="date", a period for its two, from and to -, and a .date-input draws its one input type="date" as a
-// face that opens such a month below the field, on a phone as a sheet. The inputs, turned hidden, stay the form's values,
-// ISO dates; every year shown is the Gregorian one, whatever calendar the phone is set to, and the names of the months
-// and the days are the page language's. A week starts on Monday unless data-first-day says, 1 to 7. The month is a
-// WAI-ARIA grid: the arrows move by a day and a week, Home and End to the ends of the week, Page Up and Page Down by a
-// month, by a year with Shift; Enter or Space picks. In a period the first pick is a period of that one day at once and
-// the second its end; a pick before the start, or after a whole period, starts it again. Days outside the first input's
-// min and max are not picked; data-counts, {"YYYY-MM-DD": n}, shows a number under a day; a button of the page in a
-// date-pick-quick, its value a date or "from/to", picks that. A month drawn anew fires redz:month with the first and the
-// last day it shows, for the page to bring its counts. A script that sets an input's value, a tracked form's Discard
-// and the form's reset draw it again; a date-input's face follows its input's disabled.
+// face that opens such a month below the field, on a phone as a sheet; the browser's own date picker never opens. The
+// inputs, turned hidden, stay the form's values, ISO dates; every year shown is the Gregorian one, whatever calendar
+// the phone is set to, and the names of the months and the days are the page language's. A day reads 18.11.2026, a face
+// under data-format="short" 18.11; under data-weekday Today, Tomorrow or Yesterday comes before it, else the day's
+// whole name. A week starts on Monday unless data-first-day says, 1 to 7. The month is a WAI-ARIA grid: the arrows move
+// by a day and a week, Home and End to the ends of the week, Page Up and Page Down by a month, by a year with Shift;
+// Enter or Space picks. In a period the first pick is a period of that one day at once and the second its end; a pick
+// before the start, or after a whole period, starts it again. Days outside the first input's min and max are not
+// picked. data-counts, {"YYYY-MM-DD": n or {n, tone, text}}, shows a number - or the words of text - under a day, in a
+// tone, said with the page's text data-count-text names, date.count unless it says; data-counts-note is a line under
+// the month. A button of the page in a date-pick-quick, its value a date or "from/to", picks that. A month shown anew
+// fires redz:month with the first and the last day it shows, for the page to bring its counts - a date-input's only
+// once its month opens. A script that sets an input's value, a tracked form's Discard and the form's reset draw it
+// again; a date-input's face follows its input's disabled.
 import {text, textCount} from '../js/text.js';
 
 const DAY = 86400000;
@@ -49,8 +53,16 @@ const today = () => {
 /** The page language's names of days, always the Gregorian year. */
 const format = (lang, options) => new Intl.DateTimeFormat(lang, {...options, calendar: 'gregory', timeZone: 'UTC'});
 
-/** The words of a day as a field shows it: 18.11.2026, with the day's name first under data-weekday. */
-const said = (state, t) => (state.box.hasAttribute('data-weekday') ? state.names.weekday.format(t) + ', ' : '') + state.names.date.format(t);
+/** The words of a day: 18.11.2026, a field's face without the year under data-format="short"; under data-weekday
+ *  Today, Tomorrow or Yesterday before it, else the day's whole name. */
+const said = (state, t, face = false) => {
+	const date = (face && state.box.getAttribute('data-format') === 'short' ? state.names.short : state.names.date).format(t);
+	if (!state.box.hasAttribute('data-weekday')) {
+		return date;
+	}
+	const away = Math.round((t - today()) / DAY);
+	return (away === 0 ? text('date.today') : away === 1 ? text('date.tomorrow') : away === -1 ? text('date.yesterday') : state.names.weekday.format(t)) + ', ' + date;
+};
 
 /** The day the inputs hold, from and to; to is from for one input. */
 const chosen = (state) => {
@@ -90,7 +102,7 @@ const write = (state, from, to) => {
 	}
 };
 
-/** The page's counts by day, from the box's data-counts. */
+/** The page's counts by day, from the box's data-counts: a number, or {n, tone, text}. */
 const countsOf = (state) => {
 	try {
 		const counts = JSON.parse(state.box.getAttribute('data-counts') || '{}');
@@ -106,10 +118,14 @@ const draw = (state, keep = false) => {
 	const {box, grid, names} = state;
 	const [from, to] = chosen(state);
 	const counts = countsOf(state);
+	const key = state.box.getAttribute('data-count-text');
 	const now = today();
 	const first = state.shown - ((new Date(state.shown).getUTCDay() || 7) - state.firstDay + 7) % 7 * DAY;
 	state.title.textContent = names.month.format(state.shown);
 	state.home.hidden = state.shown === monthOf(now);
+	const note = state.box.getAttribute('data-counts-note') ?? '';
+	state.note.textContent = note;
+	state.note.hidden = note === '';
 	const [words, length] = state.chosen.children;
 	words.textContent = from === null ? text('date.none') : from === to ? said(state, from) : said(state, from) + ' - ' + said(state, to);
 	length.textContent = state.inputs.length > 1 && from !== null ? textCount('date.days', Math.round((to - from) / DAY) + 1) : '';
@@ -119,11 +135,14 @@ const draw = (state, keep = false) => {
 	}
 	grid.querySelectorAll('td').forEach((cell, i) => {
 		const t = first + i * DAY;
-		const n = Number(counts[isoOf(t)]) || 0;
+		const value = counts[isoOf(t)];
+		const one = value !== null && typeof value === 'object' ? value : {n: value};
+		const n = Number(one.n) || 0;
+		const shown = value !== undefined && value !== null && !off(state, t);
 		const [number, count] = cell.children;
 		cell.dataset.day = isoOf(t);
 		cell.tabIndex = t === state.focus ? 0 : -1;
-		cell.setAttribute('aria-label', names.long.format(t) + (n > 0 ? ', ' + textCount('date.count', n) : ''));
+		cell.setAttribute('aria-label', names.long.format(t) + (shown ? ', ' + (key ? textCount(key, n) : textCount('date.count', n)) : ''));
 		cell.setAttribute('aria-selected', String(from !== null && t >= from && t <= to));
 		cell.toggleAttribute('data-from', t === from && state.inputs.length > 1);
 		cell.toggleAttribute('data-to', t === to && state.inputs.length > 1);
@@ -132,12 +151,13 @@ const draw = (state, keep = false) => {
 		off(state, t) ? cell.setAttribute('aria-disabled', 'true') : cell.removeAttribute('aria-disabled');
 		t === now ? cell.setAttribute('aria-current', 'date') : cell.removeAttribute('aria-current');
 		number.textContent = names.day.format(t);
-		count.textContent = n > 0 ? names.number.format(n) : '';
+		count.textContent = shown ? String(one.text ?? names.number.format(n)) : '';
+		['danger', 'warning', 'success'].includes(one.tone) && shown ? count.setAttribute('data-tone', one.tone) : count.removeAttribute('data-tone');
 	});
 	if (keep) {
 		grid.querySelector('[tabindex="0"]')?.focus();
 	}
-	if (state.month !== first) {
+	if (state.month !== first && !state.quiet) {
 		state.month = first;
 		box.dispatchEvent(new CustomEvent('redz:month', {bubbles: true, detail: {from: isoOf(first), to: isoOf(first + 41 * DAY)}}));
 	}
@@ -199,14 +219,15 @@ const button = (className, words, icon) => {
 };
 
 /** Builds the month into root for the box's inputs: the words of the choice, the page's quick picks, the bar, the grid. */
-const mount = (box, root, inputs, done) => {
+const mount = (box, root, inputs, done, quiet = false) => {
 	const id = 'redz-date-' + ++made;
 	const lang = box.closest('[lang]')?.lang || 'en';
 	const firstDay = Math.min(7, Math.max(1, Math.round(+box.getAttribute('data-first-day')) || 1));
 	const weekday = format(lang, {weekday: 'short'});
 	const names = {
 		date: format(lang, {day: '2-digit', month: '2-digit', year: 'numeric'}),
-		weekday,
+		short: format(lang, {day: '2-digit', month: '2-digit'}),
+		weekday: format(lang, {weekday: 'long'}),
 		long: format(lang, {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'}),
 		month: format(lang, {month: 'long', year: 'numeric'}),
 		day: format(lang, {day: 'numeric'}),
@@ -241,8 +262,9 @@ const mount = (box, root, inputs, done) => {
 		}
 	}
 	const quick = box.querySelector(':scope > .date-pick-quick');
-	root.append(words, ...(quick === null ? [] : [quick]), bar, grid);
-	const state = {box, root, inputs, done, names, firstDay, grid, title, home, chosen: words, shown: 0, focus: 0, month: null, drawn: []};
+	const note = Object.assign(document.createElement('p'), {className: 'date-pick-note'});
+	root.append(words, ...(quick === null ? [] : [quick]), bar, grid, note);
+	const state = {box, root, inputs, done, names, firstDay, grid, title, home, note, quiet, chosen: words, shown: 0, focus: 0, month: null, drawn: []};
 	state.focus = chosen(state)[0] ?? near(state);
 	state.shown = monthOf(state.focus);
 	state.drawn = inputs.map((input) => input.value);
@@ -321,7 +343,7 @@ const buildInput = (box) => {
 	input.type = 'hidden';
 	input.after(face, panel);
 	panel.append(head, root);
-	const state = mount(box, root, [input], () => panel.hidePopover());
+	const state = mount(box, root, [input], () => panel.hidePopover(), true);
 	Object.assign(state, {face, value, panel, first: [input.value]});
 	states.set(box, state);
 	face.addEventListener('keydown', (event) => {
@@ -332,6 +354,7 @@ const buildInput = (box) => {
 	});
 	panel.addEventListener('beforetoggle', (event) => {
 		if (event.newState === 'open') {
+			state.quiet = false;
 			state.focus = chosen(state)[0] ?? near(state);
 			state.shown = monthOf(state.focus);
 			draw(state);
@@ -340,6 +363,7 @@ const buildInput = (box) => {
 	panel.addEventListener('toggle', (event) => {
 		const open = event.newState === 'open';
 		face.setAttribute('aria-expanded', String(open));
+		state.quiet = !open;
 		if (open) {
 			state.grid.querySelector('[tabindex="0"]')?.focus();
 		} else if (panel.contains(document.activeElement) || document.activeElement === document.body) {
@@ -352,7 +376,7 @@ const buildInput = (box) => {
 /** Draws a date-input's face from its input: the day's words, the input's disabled and required. */
 const drawFace = (state) => {
 	const [from] = chosen(state);
-	state.value.textContent = from === null ? '' : said(state, from);
+	state.value.textContent = from === null ? '' : said(state, from, true);
 	state.face.disabled = state.inputs[0].disabled;
 	state.inputs[0].required ? state.face.setAttribute('aria-required', 'true') : state.face.removeAttribute('aria-required');
 };
@@ -385,7 +409,7 @@ const start = (records = []) => {
 	}
 };
 start();
-new MutationObserver(start).observe(document.documentElement, {childList: true, subtree: true, attributeFilter: ['value', 'min', 'max', 'disabled', 'required', 'data-counts']});
+new MutationObserver(start).observe(document.documentElement, {childList: true, subtree: true, attributeFilter: ['value', 'min', 'max', 'disabled', 'required', 'data-counts', 'data-counts-note', 'data-count-text', 'data-format', 'data-weekday']});
 
 document.addEventListener('reset', (event) => {
 	setTimeout(() => event.target.querySelectorAll(BOXES).forEach((box) => {

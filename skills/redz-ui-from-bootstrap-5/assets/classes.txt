@@ -2651,6 +2651,7 @@ date-pick-chosen
 date-pick-count
 date-pick-grid
 date-pick-nav
+date-pick-note
 date-pick-quick
 date-pick-title
 dialog
@@ -4447,6 +4448,7 @@ w-75
 w-80
 w-96
 w-auto
+warning-feedback
 xl:align-content-around
 xl:align-content-between
 xl:align-content-center

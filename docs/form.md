@@ -29,7 +29,7 @@ Text fields, selects and text areas with Bootstrap 5's names: a label floating i
 
 ### A label above, a hint, an error
 
-`form-field` stacks a field's parts: `form-label`, the control, `form-text` for a hint and `invalid-feedback` for an error. The control points at both with `aria-describedby`; an error sets `aria-invalid="true"`, and the browser's own `:user-invalid` draws the same after the person has edited the field.
+`form-field` stacks a field's parts: `form-label`, the control, `form-text` for a hint and `invalid-feedback` for an error. The control points at both with `aria-describedby`; an error sets `aria-invalid="true"`, and the browser's own `:user-invalid` draws the same after the person has edited the field. A hint that is no refusal - a value past what is usual, which the form still takes - sets `data-warn` on the control and says why in `warning-feedback`: the border takes the warning's tone, and a time input's or a date input's face follows its input's `data-warn`.
 
 ```html
 <div class="form-field">
@@ -41,6 +41,11 @@ Text fields, selects and text areas with Bootstrap 5's names: a label floating i
 	<label class="form-label" for="form-stacked-price">Adult price, THB</label>
 	<input class="form-control tabular-nums" id="form-stacked-price" type="number" value="2500" min="0" step="100" aria-invalid="true" aria-describedby="form-stacked-price-error">
 	<div class="invalid-feedback" id="form-stacked-price-error"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>Lower than the child price</div>
+</div>
+<div class="form-field">
+	<label class="form-label" for="form-stacked-seats">Seats</label>
+	<input class="form-control tabular-nums" id="form-stacked-seats" type="number" value="14" min="1" data-warn aria-describedby="form-stacked-seats-warning">
+	<div class="warning-feedback" id="form-stacked-seats-warning"><i class="bi bi-exclamation-circle" aria-hidden="true"></i>More than the boat usually takes</div>
 </div>
 ```
 
@@ -405,7 +410,7 @@ The library has no words of its own; it reads these from the page's island `#red
 
 From [`css/components/form.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/form.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-4`, `--redz-text`, `--redz-fs-12`, `--redz-text-muted`, `--redz-link`, `--redz-motion`, `--redz-ease`, `--redz-danger-text`, `--redz-control-height`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg`, `--redz-focus`, `--redz-space-8`, `--redz-grow-rows`, `--redz-form-select-chevron`, `--redz-danger-fill`, `--redz-warning-fill`, `--redz-warning-text`, `--redz-radius-6`, `--redz-bg-page`, `--redz-primary-subtle`, `--redz-control-height-sm`, `--redz-control-height-lg`, `--redz-fs-16`, `--redz-control-height-float`, `--redz-fs-14`, `--redz-primary-fill`.
+It reads the theme's `--redz-space-4`, `--redz-text`, `--redz-fs-12`, `--redz-text-muted`, `--redz-link`, `--redz-motion`, `--redz-ease`, `--redz-danger-text`, `--redz-warning-text`, `--redz-control-height`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg`, `--redz-focus`, `--redz-space-8`, `--redz-grow-rows`, `--redz-form-select-chevron`, `--redz-warning-fill`, `--redz-danger-fill`, `--redz-radius-6`, `--redz-bg-page`, `--redz-primary-subtle`, `--redz-control-height-sm`, `--redz-control-height-lg`, `--redz-fs-16`, `--redz-control-height-float`, `--redz-fs-14`, `--redz-primary-fill`.
 
 ## From Bootstrap 5.3
 
