@@ -11,7 +11,7 @@
 // empties it and keeps the focus there. On a phone a panel is a sheet: its head shows the face's words and Close, made
 // here, beside the page's combobox-action.
 import {ask} from './answer.js';
-import {text, textCount} from './text.js';
+import {locales, text, textCount} from './text.js';
 
 const OPTION = '[role="option"]';
 const MARKS = /[\u{300}-\u{36f}\u{640}\u{64b}-\u{65f}\u{670}]/gu;
@@ -69,7 +69,7 @@ const indexOf = (option) => {
 	let entry = index.get(option);
 	if (entry === undefined || entry.source !== source) {
 		const {folded, at} = fold(source);
-		const words = new Intl.Segmenter(langOf(), {granularity: 'word'}).segment(folded);
+		const words = new Intl.Segmenter(locales(langOf()), {granularity: 'word'}).segment(folded);
 		entry = {source, folded, at, starts: new Set([...words].filter((word) => word.isWordLike).map((word) => word.index)), keys: fold(option.dataset.keywords || '').folded};
 		index.set(option, entry);
 	}
@@ -325,17 +325,17 @@ const fit = (face, list) => {
 		return;
 	}
 	const lang = langOf();
-	value.textContent = new Intl.ListFormat(lang, {type: 'conjunction'}).format(labels);
+	value.textContent = new Intl.ListFormat(locales(lang), {type: 'conjunction'}).format(labels);
 	more?.remove();
 	if (value.scrollWidth <= value.clientWidth) {
 		return;
 	}
-	const comma = new Intl.ListFormat(lang, {type: 'conjunction', style: 'narrow'}).formatToParts(['a', 'b', 'c', 'd']).find((part) => part.type === 'literal').value;
+	const comma = new Intl.ListFormat(locales(lang), {type: 'conjunction', style: 'narrow'}).formatToParts(['a', 'b', 'c', 'd']).find((part) => part.type === 'literal').value;
 	more = Object.assign(document.createElement('span'), {className: 'badge badge-subtle-secondary combobox-more'});
 	value.after(more);
 	for (let shown = labels.length - 1; shown >= 1; shown--) {
 		value.textContent = labels.slice(0, shown).join(comma);
-		more.textContent = new Intl.NumberFormat(lang, {signDisplay: 'always'}).format(labels.length - shown);
+		more.textContent = new Intl.NumberFormat(locales(lang), {signDisplay: 'always'}).format(labels.length - shown);
 		if (value.scrollWidth <= value.clientWidth) {
 			return;
 		}

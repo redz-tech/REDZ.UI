@@ -17,7 +17,7 @@
 // the entry's disabled.
 import {chipOf} from './combobox.js';
 import {announce} from './say.js';
-import {text, textCount} from './text.js';
+import {locales, text, textCount} from './text.js';
 
 const BOX = '.chip-input';
 const ENTRY = BOX + ' > .form-ghost';
@@ -151,7 +151,7 @@ const take = (entry, loud = true) => {
 	const parts = entry.validity.badInput ? [''] : entry.value.split(join).map((part) => part.trim()).filter((part) => part !== '');
 	const values = valuesOf(box);
 	const max = Number.parseInt(box.dataset.chipsMax, 10);
-	const collator = new Intl.Collator(lang(), {numeric: true, sensitivity: 'base'});
+	const collator = new Intl.Collator(locales(lang()), {numeric: true, sensitivity: 'base'});
 	const added = [];
 	let words = '';
 	let at = 0;
@@ -171,7 +171,7 @@ const take = (entry, loud = true) => {
 	if (added.length > 0) {
 		const way = {ascending: 1, descending: -1}[box.dataset.chipsOrder] ?? 0;
 		write(box, way === 0 ? values : values.sort((a, b) => way * (entry.type === 'number' ? a - b : collator.compare(a, b))));
-		announce(text('chip.added', {label: new Intl.ListFormat(lang(), {type: 'conjunction'}).format(added)}));
+		announce(text('chip.added', {label: new Intl.ListFormat(locales(lang()), {type: 'conjunction'}).format(added)}));
 	}
 	if (words === '' || parts.length > 1) {
 		entry.value = parts.slice(at).join(join);

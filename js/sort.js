@@ -9,7 +9,7 @@
 // sorts again.
 import {ask} from './answer.js';
 import {busy} from './busy.js';
-import {text} from './text.js';
+import {locales, text} from './text.js';
 import {announce} from './say.js';
 
 // The order each row was drawn in.
@@ -29,7 +29,7 @@ const valueOf = (row, head) => {
 
 /** Puts the rows of each body - each band's rows apart - in the order of the header cell, or in the drawn order. */
 const order = (table, head, direction) => {
-	const collator = new Intl.Collator(document.documentElement.lang || 'en', {numeric: true, sensitivity: 'base'});
+	const collator = new Intl.Collator(locales(), {numeric: true, sensitivity: 'base'});
 	const sign = direction === 'descending' ? -1 : 1;
 	const compare = (one, two) => {
 		const [a, b] = [one, two].map((row) => head === null ? '' : valueOf(row, head));

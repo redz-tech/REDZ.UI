@@ -1,5 +1,6 @@
 // REDZ.UI editor, the card of a block or a part: its properties, tried on before they are kept, its form, its history, its protection and,
 // for an expert, its HTML. The card never covers what it changes: it stands beside the editor, or as a sheet at the foot of a phone.
+import {locales} from '../js/text.js';
 import {say} from './words.js';
 import {escape, clean, safe, trusted} from './clean.js';
 import {nodeAt, unmark, drawTop} from './marks.js';
@@ -205,7 +206,7 @@ export const cardOf = (ed) => {
 		const id = top.getAttribute('data-block');
 		const now = unmark(top.cloneNode(true), true).outerHTML;
 		const list = (ed.versions.get(id) ?? []).filter((one) => one.html !== now).reverse();
-		const when = (at) => at instanceof Date ? at.toLocaleTimeString(ed.config.lang, {hour: '2-digit', minute: '2-digit'}) : String(at);
+		const when = (at) => at instanceof Date ? at.toLocaleTimeString(locales(ed.config.lang), {hour: '2-digit', minute: '2-digit'}) : String(at);
 		const words = (html) => {
 			const box = document.createElement('template');
 			box.innerHTML = trusted(html);

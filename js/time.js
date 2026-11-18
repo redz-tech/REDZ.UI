@@ -3,6 +3,8 @@
 // comes, in the page's language ("5 minutes ago", or "5 min. ago" with data-ago="short"), its full moment in its title.
 // One ticker serves them all: each second while an elapsed time is on the page, else every 30 seconds, still while the
 // page is hidden. They are never read out.
+import {locales} from './text.js';
+
 const UNITS = [['year', 31536000], ['month', 2592000], ['day', 86400], ['hour', 3600], ['minute', 60], ['second', 1]];
 let timer = 0;
 
@@ -20,7 +22,7 @@ const clock = (seconds) => {
 /** Words for so many seconds ago, or ahead when negative, in the page's language, long or short. */
 const ago = (seconds, lang, style) => {
 	const [unit, size] = UNITS.find(([, length]) => Math.abs(seconds) >= length) ?? UNITS.at(-1);
-	return new Intl.RelativeTimeFormat(lang, {numeric: 'auto', style}).format(-Math.round(seconds / size), unit);
+	return new Intl.RelativeTimeFormat(locales(lang), {numeric: 'auto', style}).format(-Math.round(seconds / size), unit);
 };
 
 /** Writes every ticking time and plans the next tick. */
@@ -38,7 +40,7 @@ const tick = () => {
 			next = Math.min(next, 1010 - (Math.max(0, seconds) * 1000) % 1000);
 		} else {
 			time.textContent = ago(seconds, lang, time.dataset.ago === 'short' ? 'short' : 'long');
-			time.title ||= new Intl.DateTimeFormat(lang, {dateStyle: 'medium', timeStyle: 'short'}).format(new Date(time.dateTime));
+			time.title ||= new Intl.DateTimeFormat(locales(lang), {dateStyle: 'medium', timeStyle: 'short'}).format(new Date(time.dateTime));
 		}
 	}
 	if (!document.hidden) {

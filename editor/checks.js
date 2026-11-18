@@ -1,6 +1,7 @@
 // REDZ.UI editor, the foot and the checks before publishing: what a reader, a screen reader or a search engine would stumble on, each with a way to it,
 // and the count of words, by the language's own word breaks, so Thai and Burmese count too. Text an AI wrote that nobody checked, a price typed by hand
 // where a fact stands, and translations left behind are stumbles too.
+import {locales} from '../js/text.js';
 import {say, sayCount} from './words.js';
 import {escape, trusted} from './clean.js';
 import {charsOf, rangeOf, slotsOf} from './plain.js';
@@ -128,7 +129,7 @@ export const checksOf = (ed) => {
 	const open = tools.appendChild(button('check', 'clipboard-check', null));
 	const badge = open.appendChild(Object.assign(document.createElement('span'), {className: 'badge badge-sm'}));
 
-	const words = () => [...new Intl.Segmenter(ed.config.lang, {granularity: 'word'}).segment(ed.doc.body.textContent)].filter((one) => one.isWordLike).length;
+	const words = () => [...new Intl.Segmenter(locales(ed.config.lang), {granularity: 'word'}).segment(ed.doc.body.textContent)].filter((one) => one.isWordLike).length;
 
 	ed.changed = () => {
 		const many = words();

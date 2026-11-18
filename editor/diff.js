@@ -1,10 +1,12 @@
 // REDZ.UI editor, a diff by the language's own word breaks, so Thai and Burmese divide too. A fact stays one word, and two changes a few letters
 // apart read as one: a heavy rewrite stays a few changes, not confetti. Each browser has its own segmenter, so segments are never stored.
+import {locales} from '../js/text.js';
+
 const JOIN = 14;
 const CELLS = 4000000;
 
 const tokens = (value, lang) => {
-	const segmenter = new Intl.Segmenter(lang, {granularity: 'word'});
+	const segmenter = new Intl.Segmenter(locales(lang), {granularity: 'word'});
 	const out = [];
 	for (const part of value.split(/(⟦[\w.-]+⟧)/)) {
 		if (part.startsWith('⟦')) {

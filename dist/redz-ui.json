@@ -5257,15 +5257,15 @@
 		"css/redz-ui-media.min.css": "sha256-4+5Di9Nu8wuERNMkrMvc9rU1kVNMpo/7k/T5i1XxGIQ=",
 		"css/redz-ui.min.css": "sha256-r4dG7KcfEBEvIKjuGouSFUT0UnZmLH4BoZyZKUVyzd4=",
 		"js/floor.min.js": "sha256-SlXScca0xV+TpFCu1YIXMzlHJEnXeX8Az9gukSn5Ph0=",
-		"js/redz-ui-calendar.min.js": "sha256-YjOE/M4O565ubhAcwOrZAvX2DbBbYrJWfpNFlD3dWjA=",
+		"js/redz-ui-calendar.min.js": "sha256-5huX1R+x37XiGjMJ3DeKNzGjR05LHv8MK77T50A5U2Y=",
 		"js/redz-ui-charts.min.js": "sha256-1dSq946dnPNnXU8k1gMoOGEPo9b4QmG9hyVHxZuFSME=",
 		"js/redz-ui-crop.d.ts": "sha256-YHBcMtfKz7XihPhHYBSAVxVN007KKG+cMlRiO7vChCc=",
-		"js/redz-ui-crop.min.js": "sha256-Wv9yxyx1yFM5zifg6YzeOKgFnBstK3YYnqNAkrNIpY8=",
+		"js/redz-ui-crop.min.js": "sha256-uvm+M4ctnEfIS6MNFdC/V25peWe6Wy196qdTWFEwisg=",
 		"js/redz-ui-editor.d.ts": "sha256-j3G8bXJoZ4H4XioOEFbQkhz2bzbk9Gy01X+SETX+JKs=",
-		"js/redz-ui-editor.min.js": "sha256-nEX13AFMNjeAJfRETL8ngkLJfG2GB2ljFE2CAWRatgI=",
+		"js/redz-ui-editor.min.js": "sha256-BWyGyZC96NkacStVXzY5jvk3haXQID8joSVCBUqo764=",
 		"js/redz-ui-qr.d.ts": "sha256-niMx8le7TCyDzabKAskgpzcDm722QRJakX2G08xqxMY=",
 		"js/redz-ui-qr.min.js": "sha256-8AgWz06SWLYwuOCi7FQA6bXBgjJfxeRYx5tFCWlrEts=",
 		"js/redz-ui.d.ts": "sha256-MFjkvq2D5qWqIk4AMw7khT0HQgI6C7SSMdq9V5ZQfos=",
-		"js/redz-ui.min.js": "sha256-6JnVcG3aJWqETkAooVffMfe0+o5MvHnyRcSG1YPv4rA="
+		"js/redz-ui.min.js": "sha256-msyAcq2p5SSysQrPjVWn7KTG2dIT8mX6a8Ngoh5Qz/0="
 	}
 }

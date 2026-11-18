@@ -3,7 +3,7 @@
 // digits, in data-state "near" from nine tenths and "over" past the most. Once the typing pauses, near or over, the
 // count is said politely in the page's text "counter", only when it changed: a count said at every key would drown
 // the typing.
-import {text} from './text.js';
+import {locales, text} from './text.js';
 
 const PAUSE = 1000;
 const NEAR = 0.9;
@@ -34,7 +34,7 @@ const count = (counter, typed) => {
 	}
 	const most = mostOf(counter, field);
 	const length = field.value.length;
-	const digits = new Intl.NumberFormat(document.documentElement.lang || 'en');
+	const digits = new Intl.NumberFormat(locales());
 	counter.textContent = most > 0 ? digits.format(length) + ' / ' + digits.format(most) : digits.format(length);
 	const state = most > 0 && length > most ? 'over' : (most > 0 && length >= most * NEAR ? 'near' : '');
 	if (state === '') {

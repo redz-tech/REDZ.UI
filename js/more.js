@@ -12,7 +12,7 @@
 // search over the list does the same (js/filter.js).
 import {ask} from './answer.js';
 import {busy} from './busy.js';
-import {text, textCount} from './text.js';
+import {locales, text, textCount} from './text.js';
 import {announce} from './say.js';
 
 const MORE = 'button[command="--more"][aria-controls]';
@@ -22,7 +22,7 @@ const FOCUSABLE = 'a[href], button:not(:disabled), input:not(:disabled), [tabind
 const itemsOf = (list) => list.matches('table, tbody') ? [...list.querySelectorAll('tbody > tr:not(.table-group, .table-subtotal)')] : [...list.children].filter((child) => !child.matches('[data-filter-empty], template, script'));
 
 /** A number in the page's digits. */
-const digits = (count) => new Intl.NumberFormat(document.documentElement.lang || 'en').format(count);
+const digits = (count) => new Intl.NumberFormat(locales()).format(count);
 
 // The lists whose page said they have no more.
 const ended = new WeakSet();

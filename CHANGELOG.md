@@ -88,6 +88,10 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   its line with the next cell and a long one did not.
 
 ### Fixed
+- A page in a language the browser has no data of - Burmese, Lao and Khmer in Chrome - showed its relative times, a
+  date picker's months and days, its lists and numbers in the browser's own language: a Burmese screen of the ERP said
+  "5 hours ago" in Russian in a Russian browser. Every formatter now takes the page's language, then English, and
+  `php tools/build.php` holds every script to it.
 - A stacked table's head that holds controls stands as a bar above the cards under 576 px: a `table-check` select all
   with the words of its check's label or `aria-label`, a `table-sort` and any other control in a row, the head's other
   cells kept for a screen reader alone. Hidden whole, its controls took the focus out of sight (WCAG 2.4.11), and a

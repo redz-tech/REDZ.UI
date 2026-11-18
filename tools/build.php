@@ -950,6 +950,25 @@ function BUILD__MotionCheck(): array
 }
 
 /**
+ * Every formatter of the browser's Intl in a script takes locales() of js/text.js - the page's language, then English:
+ * given the page's language alone, one the browser has no data of (Burmese, Lao and Khmer in Chrome) takes the
+ * browser's own, and a Burmese page said "5 hours ago" in Russian in a Russian browser. Answers what is wrong.
+ * @return list<string>
+ */
+function BUILD__LocalesCheck(): array
+{
+	$wrong = [];
+	foreach (array_merge(...array_map(fn(string $pattern): array => glob(BUILD_ROOT . '/' . $pattern) ?: [], BUILD_EVENT_SCRIPTS)) as $file) {
+		$js = (string)file_get_contents($file);
+		preg_match_all('~new Intl\.\w+\((?!locales\()|\.toLocale(?:Date|Time)?String\((?!locales\(|\))~', $js, $found, PREG_OFFSET_CAPTURE);
+		foreach ($found[0] as [$call, $at]) {
+			$wrong[] = substr($file, strlen(BUILD_ROOT) + 1) . ':' . (substr_count($js, "\n", 0, $at) + 1) . '  ' . $call . ' takes the page\'s language without English after it: give it locales()';
+		}
+	}
+	return $wrong;
+}
+
+/**
  * The island's keys of tools/vocabulary.json held against the scripts and the docs: every key a script asks for by
  * text('key', …) or textCount('key', …) is declared, a count as "count"; every declared key is a string in a script;
  * the docs' texts hold each one, a count by its .other form. Answers what is wrong.
@@ -1124,7 +1143,7 @@ function BUILD__Main(array $argv): int
 	$check = in_array('--check', $argv, true);
 	$alone = $check && in_array('--files', $argv, true);
 	$vocab = BUILD__Vocabulary();
-	$wrong = $alone ? [] : [...BUILD__TextsCheck($vocab), ...BUILD__CommandsCheck(), ...BUILD__SamplesCheck(), ...BUILD__MotionCheck(), ...BUILD__SinksCheck(), ...BUILD__TrackCheck(), ...BUILD__SwapCheck(), ...BUILD__ChipsCheck(), ...BUILD__TypesCheck(), ...BUILD__BudgetWordsCheck(), ...BUILD__CatalogCheck(), ...BUILD__ToolsCalls(), ...array_map(fn(string $failure): string => 'tools/min.php  ' . $failure, MIN__SelfTest())];
+	$wrong = $alone ? [] : [...BUILD__TextsCheck($vocab), ...BUILD__CommandsCheck(), ...BUILD__SamplesCheck(), ...BUILD__MotionCheck(), ...BUILD__LocalesCheck(), ...BUILD__SinksCheck(), ...BUILD__TrackCheck(), ...BUILD__SwapCheck(), ...BUILD__ChipsCheck(), ...BUILD__TypesCheck(), ...BUILD__BudgetWordsCheck(), ...BUILD__CatalogCheck(), ...BUILD__ToolsCalls(), ...array_map(fn(string $failure): string => 'tools/min.php  ' . $failure, MIN__SelfTest())];
 	if ($wrong !== []) {
 		fwrite(STDERR, implode("\n", $wrong) . "\n");
 		return 1;

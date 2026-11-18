@@ -26,10 +26,13 @@ export const text = (key, args = {}) => {
 	return key;
 };
 
+/** The languages a formatter of the browser's Intl takes: the page's, then English, which every browser has - for a
+ *  language the browser has no data of (Burmese, Lao and Khmer in Chrome), it would take the browser's own. */
+export const locales = (lang = document.documentElement.lang) => [lang || 'en', 'en'];
+
 /** The page's text for a count: the form of the key its language's plural rules pick, {count} in its digits, its other
  *  {names} from the arguments. */
 export const textCount = (key, count, args = {}) => {
-	const lang = document.documentElement.lang || 'en';
-	const form = key + '.' + new Intl.PluralRules(lang).select(count);
-	return text(typeof island()[form] === 'string' ? form : key + '.other', {...args, count: new Intl.NumberFormat(lang).format(count)});
+	const form = key + '.' + new Intl.PluralRules(locales()).select(count);
+	return text(typeof island()[form] === 'string' ? form : key + '.other', {...args, count: new Intl.NumberFormat(locales()).format(count)});
 };

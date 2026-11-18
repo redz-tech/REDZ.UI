@@ -9,7 +9,7 @@
 // a badge of the worst tone with the sum of their numbers, or a dot of that tone when one of them is not a plain number,
 // and the button's name says which links they are, in the links' own words. A wrapper added to the page later is taken
 // up as it comes.
-import {text} from './text.js';
+import {locales, text} from './text.js';
 
 const state = new WeakMap();
 let made = 0;
@@ -99,7 +99,7 @@ const wordsOf = (element, less) => {
 
 /** The whole number the words show, in Latin digits or the language's own, or NaN. */
 const wholeIn = (words) => {
-	const digits = [...new Intl.NumberFormat(lang(), {useGrouping: false}).format(9876543210)].reverse();
+	const digits = [...new Intl.NumberFormat(locales(lang()), {useGrouping: false}).format(9876543210)].reverse();
 	const plain = [...words].map((one) => digits.includes(one) ? digits.indexOf(one) : one).join('');
 	return /^\d+$/.test(plain) ? Number(plain) : NaN;
 };
@@ -118,11 +118,11 @@ const markFor = (own, moved) => {
 	const worst = raised.find(({badge}) => toneOf(badge) === 'danger') ?? raised[0];
 	const tone = toneOf(worst.badge);
 	const sum = raised.reduce((all, {badge}) => all + wholeIn(wordsOf(badge, '.visually-hidden')), 0);
-	const shown = Number.isNaN(sum) ? '' : new Intl.NumberFormat(lang()).format(sum);
+	const shown = Number.isNaN(sum) ? '' : new Intl.NumberFormat(locales(lang())).format(sum);
 	own.mark.className = shown === '' ? 'dot dot-' + tone : 'badge badge-' + (worst.badge.classList.contains('badge-subtle-' + tone) ? 'subtle-' : '') + tone + ' tabular-nums';
 	own.mark.textContent = shown;
 	const who = [...new Set(raised.map(({link, badge}) => link.getAttribute('aria-label') ?? wordsOf(link, '.badge') + ' ' + badge.textContent.trim()))];
-	own.said.textContent = (shown === '' ? '' : ' ' + shown) + ': ' + new Intl.ListFormat(lang(), {type: 'conjunction'}).format(who);
+	own.said.textContent = (shown === '' ? '' : ' ' + shown) + ': ' + new Intl.ListFormat(locales(lang()), {type: 'conjunction'}).format(who);
 };
 
 /** The wrapper's button and menu: the page's own, else made once after the nav. */

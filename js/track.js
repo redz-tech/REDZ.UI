@@ -29,7 +29,7 @@ import {confirm} from './confirm.js';
 import {flash} from './flash.js';
 import {announce} from './say.js';
 import {selectTab} from './tabs.js';
-import {text, textCount} from './text.js';
+import {locales, text, textCount} from './text.js';
 import {wait} from './wait.js';
 
 const FORM = 'form[data-track]';
@@ -466,7 +466,7 @@ const wordsOf = (changes, forms) => {
 	if (labels.length > 3) {
 		shown.push(textCount('changes.more', labels.length - 3));
 	}
-	const list = new Intl.ListFormat(lang(), {type: 'conjunction'});
+	const list = new Intl.ListFormat(locales(lang()), {type: 'conjunction'});
 	return {fields: list.format(shown), forms: list.format([...new Set(forms.map((form) => form.dataset.track).filter((name) => name !== ''))])};
 };
 
@@ -748,7 +748,7 @@ const savePage = (forms, submitter = null) => {
 	})().then((done) => {
 		saving = null;
 		if (done) {
-			savedAt = new Intl.DateTimeFormat(lang(), {hour: 'numeric', minute: '2-digit'}).format(new Date());
+			savedAt = new Intl.DateTimeFormat(locales(lang()), {hour: 'numeric', minute: '2-digit'}).format(new Date());
 			clearTimeout(timers.saved);
 			timers.saved = setTimeout(() => {
 				savedAt = '';

@@ -14,7 +14,7 @@
 // fires redz:month with the first and the last day it shows, for the page to bring its counts - a date-input's only
 // once its month opens. A script that sets an input's value, a tracked form's Discard and the form's reset draw it
 // again; a date-input's face follows its input's disabled.
-import {text, textCount} from '../js/text.js';
+import {locales, text, textCount} from '../js/text.js';
 
 const DAY = 86400000;
 const BOXES = '.date-pick, .date-input';
@@ -51,7 +51,7 @@ const today = () => {
 };
 
 /** The page language's names of days, always the Gregorian year. */
-const format = (lang, options) => new Intl.DateTimeFormat(lang, {...options, calendar: 'gregory', timeZone: 'UTC'});
+const format = (lang, options) => new Intl.DateTimeFormat(locales(lang), {...options, calendar: 'gregory', timeZone: 'UTC'});
 
 /** The words of a day: 18.11.2026, a field's face without the year under data-format="short"; under data-weekday
  *  Today, Tomorrow or Yesterday before it, else the day's whole name. */
@@ -231,7 +231,7 @@ const mount = (box, root, inputs, done, quiet = false) => {
 		long: format(lang, {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'}),
 		month: format(lang, {month: 'long', year: 'numeric'}),
 		day: format(lang, {day: 'numeric'}),
-		number: new Intl.NumberFormat(lang),
+		number: new Intl.NumberFormat(locales(lang)),
 	};
 	const words = Object.assign(document.createElement('output'), {className: 'date-pick-chosen'});
 	words.setAttribute('aria-live', 'polite');

@@ -13,7 +13,7 @@
 // nothing itself: it asks the page by redz:search {query, form, signal} (js/answer.js) after a pause, at once on Enter
 // or Escape and when another control of its search changes, and drops an answer a newer question overtook.
 import {ask} from './answer.js';
-import {text, textCount} from './text.js';
+import {locales, text, textCount} from './text.js';
 import {announce} from './say.js';
 import {mark} from './toggle.js';
 import {restart} from './more.js';
@@ -36,7 +36,7 @@ const fold = (words) => words.normalize('NFD').replace(/\p{M}/gu, '').toLowerCas
 const tokens = (value) => (value ?? '').split(/\s+/).filter(Boolean);
 
 /** A number in the page's digits. */
-const digits = (count) => new Intl.NumberFormat(document.documentElement.lang || 'en').format(count);
+const digits = (count) => new Intl.NumberFormat(locales()).format(count);
 
 /** The elements naming the region by its id: SELECTOR is completed with the id's attribute value. */
 const naming = (region, selector) => region.id === '' ? [] : [...document.querySelectorAll(selector.replace('?', CSS.escape(region.id)))];

@@ -22,7 +22,7 @@
 // zone may be a plain button.btn. A file dropped elsewhere on the page does not open in the window.
 import {ask} from './answer.js';
 import {announce} from './say.js';
-import {text} from './text.js';
+import {locales, text} from './text.js';
 
 const kept = new WeakMap();
 const files = new WeakMap();
@@ -52,7 +52,7 @@ const accepts = (input, file) => {
 /** The byte count in the page language's units. */
 const sizeOf = (bytes) => {
 	const mega = bytes >= 1048576;
-	return new Intl.NumberFormat(document.documentElement.lang || 'en', {style: 'unit', unit: mega ? 'megabyte' : 'kilobyte', maximumFractionDigits: 1}).format(bytes / (mega ? 1048576 : 1024));
+	return new Intl.NumberFormat(locales(), {style: 'unit', unit: mega ? 'megabyte' : 'kilobyte', maximumFractionDigits: 1}).format(bytes / (mega ? 1048576 : 1024));
 };
 
 // The settled() promises each upload owes.
