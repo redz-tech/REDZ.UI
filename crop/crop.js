@@ -110,11 +110,7 @@ const load = async (file) => {
 	try {
 		const image = new Image();
 		image.src = url;
-		// An engine that refuses decode() still opens the photo once it has loaded; a broken one is refused below.
-		await image.decode().catch(() => image.complete ? null : new Promise((loaded, failed) => {
-			image.addEventListener('load', loaded, {once: true});
-			image.addEventListener('error', failed, {once: true});
-		}));
+		await image.decode();
 		if (!image.naturalWidth || !image.naturalHeight) {
 			throw new RangeError('The image has no size of its own');
 		}

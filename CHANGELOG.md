@@ -122,8 +122,6 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - A combobox's panel is made before it shows - an empty search over the whole list, the key typed on its button, its
   head as a sheet -, in `beforetoggle`: it was made in `toggle`, which comes after the search has the focus, and words
   typed or pasted in between were erased.
-- A photo whose `decode()` an engine refuses still opens in the crop once it has loaded; a file that is no image is
-  refused at once, as before.
 
 ### Checks
 - The probes judge a date input's month on a phone as a sheet on the bottom, as high as its month; `datePick` takes a
@@ -163,7 +161,11 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   faults, a shrink that never ends among them. Each waits at most 8 s for the crop's answer, so a layer that never answers is a
   finding, not a stalled engine, and presses the docs' sample by script after shutting what an earlier check left open.
   When no crop comes, the finding names the page's errors and its toasts, the file's size, type and first bytes, its
-  own decode and a pixel drawn of it, and the crop's answer when asked again by script.
+  own decode and a pixel drawn of it, and the crop's answer when asked again by script. A page where the engine writes
+  no canvas now, not even 8 px of PNG, they leave, as the checks of colors and of a drawn PNG do: CI's Safari, on a
+  machine without a GPU, writes none on docs/all.html and does on docs/crop.html, where they run.
+- The checks of a sheet dragged closed and of the editor's link wait for the dialog's close event, which comes a task
+  after it shuts: Safari read the translate still on the sheet and the words without their link now and then.
 - The speech checks no longer read the calendar's strip of days: its table scrolls on a phone alone now, and a
   `table-scroll` that does not scroll is no tab stop, so at 1440 px there was nothing to read.
 - `php tools/build.php` reads a package's classes from its sources: a docs example of a class new in a package failed
