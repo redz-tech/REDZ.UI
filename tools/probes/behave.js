@@ -4563,6 +4563,45 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a detail row and its row light together: ' + say({base, byDetail, byRow, away}));
 			}
 		}},
+		// A stacked table's head that holds controls stands as a bar above the cards: select all with its check's words, the
+		// sorts in a row, the other heads for a screen reader alone; it selects and sorts there. A head without controls
+		// stays hidden whole, and a wide table keeps its head row.
+		stackHead: {target: '#table-stacked-head', walk: async function* (out) {
+			const card = $('#table-stacked-head .card');
+			const table = $('table', card);
+			const all = $('#table-stacked-head-all');
+			const [, guest, seats, hotel] = table.tHead.rows[0].cells;
+			const size = (el) => {
+				const box = el.getBoundingClientRect();
+				return Math.round(box.width) + 'x' + Math.round(box.height);
+			};
+			const names = () => [...table.tBodies[0].rows].map((row) => row.cells[1].textContent.split(' ')[0]).join(',');
+			card.scrollIntoView({block: 'center'});
+			await settled();
+			const head = all.closest('th');
+			const seen = {
+				bar: [getComputedStyle(table.tHead).display, size(all), head.dataset.label, head.getBoundingClientRect().width > all.getBoundingClientRect().width + 40, size(hotel), $('button', guest).getBoundingClientRect().height > 10, table.tHead.getBoundingClientRect().bottom <= table.tBodies[0].getBoundingClientRect().top + 1].join(' '),
+				plain: size($$('#table-stacked .card table')[1].tHead),
+			};
+			yield {click: center(all)};
+			await settled();
+			seen.selected = $$('tbody .check', table).filter((check) => check.checked).length;
+			yield {click: center($('button', seats))};
+			await settled();
+			seen.sorted = names() + ' ' + seats.getAttribute('aria-sort');
+			yield {click: center(all)};
+			await settled();
+			card.style.maxInlineSize = 'none';
+			card.style.inlineSize = '700px';
+			await settled();
+			seen.wide = getComputedStyle(table.tHead).display + ' ' + (hotel.getBoundingClientRect().width > 20);
+			card.style.removeProperty('max-inline-size');
+			card.style.removeProperty('inline-size');
+			const want = {bar: 'block 16x16 Select all true 1x1 true true', plain: '1x1', selected: 3, sorted: 'Alex,Ben,Chris ascending', wide: 'table-header-group true'};
+			if (say(seen) !== say(want)) {
+				out.push('a stacked table\'s head with controls stands as a bar above the cards and works there: ' + say(seen));
+			}
+		}},
 		stackCards: {target: '#table-stacked', steps: [async (out) => {
 			const [wide, narrow] = $$('#table-stacked .card');
 			const want = say(['-|Seats|Hotel|Paid', '-|Seats|Hotel|Paid']);
@@ -6160,6 +6199,51 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a combobox put in after load draws its options and face as ' + say(drawn) + ', not German chosen on its face');
 			}
 		}]},
+		// data-required="show": an empty required field waits in the warning's ground, a refused send turns it to the
+		// danger's and brings it the focus, words typed take the ground away.
+		requiredShow: {target: '#form-required', walk: async function* (out) {
+			const form = $('#form-required form');
+			const guest = $('#form-required-guest');
+			const seats = $('#form-required-seats');
+			const probe = document.createElement('div');
+			form.append(probe);
+			const tone = (name) => {
+				probe.style.backgroundColor = 'var(--redz-' + name + ')';
+				return getComputedStyle(probe).backgroundColor;
+			};
+			const ground = (field) => {
+				const color = getComputedStyle(field).backgroundColor;
+				return color === tone('warning-subtle') ? 'waits' : color === tone('danger-subtle') ? 'refused' : 'plain';
+			};
+			form.scrollIntoView({block: 'center'});
+			await wait(300);
+			const seen = [ground(guest) + ' ' + ground(seats)];
+			yield {click: center($('button[type="submit"]', form))};
+			await wait(300);
+			seen.push(ground(guest) + ' ' + ground(seats) + ' ' + (document.activeElement === guest));
+			yield {type: 'Alex Sample'};
+			await wait(300);
+			seen.push(ground(guest));
+			probe.hidden = true;
+			if (say(seen) !== say(['waits plain', 'refused plain true', 'plain'])) {
+				out.push('a form with data-required="show" shows its empty required field waiting, refused after a send, plain once filled: ' + say(seen));
+			}
+		}},
+		// REDZ.ui.flash lights a field for 2 s and says the page's words politely.
+		flash: {target: '#form-flash', walk: async function* (out) {
+			const field = $('#form-flash-agent');
+			field.scrollIntoView({block: 'center'});
+			await settled();
+			yield {click: center($('#form-flash [data-docs-flash]'))};
+			await wait(300);
+			const said = $$('.visually-hidden[role="status"]').some((region) => region.textContent.includes('Sample Travel added'));
+			const seen = [field.value, field.hasAttribute('data-flash'), field.getAnimations().length, said];
+			await wait(2000);
+			seen.push(field.hasAttribute('data-flash'));
+			if (say(seen) !== say(['Sample Travel', true, 1, true, false])) {
+				out.push('REDZ.ui.flash lights the field, animates it, says its words and goes in 2 s: ' + say(seen));
+			}
+		}},
 		track: {target: '#save-bar-live', steps: [async (out) => {
 			const form = $('#save-bar-form');
 			const bar = $('#save-bar-live .save-bar[data-track]');
@@ -6225,8 +6309,8 @@ window.REDZ_BEHAVE = (() => {
 			}
 			act('save').click();
 			await wait(900);
-			if (say(told) === 'null' || told[0] !== 7 || bar.dataset.state !== 'saved' || REDZ.ui.track.dirty(form) || !words().startsWith('Saved at ')) {
-				out.push('a resolved save tells ' + say(told) + ', the bar ' + say([bar.dataset.state, words()]) + ', dirty ' + REDZ.ui.track.dirty(form));
+			if (say(told) === 'null' || told[0] !== 7 || bar.dataset.state !== 'saved' || REDZ.ui.track.dirty(form) || !words().startsWith('Saved at ') || !adult.hasAttribute('data-flash')) {
+				out.push('a resolved save tells ' + say(told) + ', the bar ' + say([bar.dataset.state, words()]) + ', dirty ' + REDZ.ui.track.dirty(form) + ', the saved price flashing ' + adult.hasAttribute('data-flash'));
 			}
 			put('adult', '2500');
 			const heard = [];

@@ -45,6 +45,40 @@
 		</div>
 	</div>
 
+	<h3>Fields that wait for words</h3>
+	<p><code>data-required="show"</code> on a form, or on a part of it, shows what waits for words before the person is told anything is wrong: a required field that is empty or not yet right - the browser's own <code>:invalid</code> -, a time input whose hours are missing, and a combobox's or a date input's face with <code>aria-required="true"</code> and no value stand in the warning's soft ground at once. After a send the browser refused, or with <code>aria-invalid="true"</code>, a field takes the danger's ground as well as its border; the browser brings the first into view and says why. A face holds no browser check: the page's server refuses it.</p>
+	<div class="docs-example docs-example-stack" id="form-required">
+		<form class="vstack gap-12 max-w-360" action="#form-required" data-required="show" data-docs-submit>
+			<div class="form-floating">
+				<input class="form-control" id="form-required-guest" name="guest" placeholder=" " required>
+				<label for="form-required-guest">Guest name</label>
+			</div>
+			<div class="form-floating">
+				<input class="form-control tabular-nums" id="form-required-seats" name="seats" type="number" min="1" placeholder=" " value="2" required>
+				<label for="form-required-seats">Seats</label>
+			</div>
+			<div class="form-floating">
+				<textarea class="form-control" id="form-required-note" name="note" placeholder=" " rows="2"></textarea>
+				<label for="form-required-note">Note</label>
+			</div>
+			<div class="hstack gap-12">
+				<button class="btn btn-primary" type="submit">Save</button>
+				<output class="text-muted" data-docs-sent></output>
+			</div>
+		</form>
+	</div>
+
+	<h3>A result in its field</h3>
+	<p>A result the person sees in the field itself - an agent added, a point added, a photo attached - needs no toast: <code>REDZ.ui.flash(element, words)</code> lights the field in the success tone and fades it in 2 s, and says the page's words politely, so a screen reader hears what the eye sees. Given a time or a date input's hidden input, it lights the face. Under less motion the tone holds the 2 s and goes. A tracked form flashes the fields its save took.</p>
+	<div class="docs-example docs-example-stack" id="form-flash">
+		<div class="form-floating max-w-360">
+			<input class="form-control" id="form-flash-agent" name="agent" placeholder=" " readonly>
+			<label for="form-flash-agent">Agent</label>
+		</div>
+		<div><button class="btn" type="button" data-docs-flash="form-flash-agent"><i class="bi bi-plus-lg" aria-hidden="true"></i>Add agent</button></div>
+	</div>
+	<pre class="docs-code" tabindex="0"><code>REDZ.ui.flash(document.getElementById('agent'), 'Sample Travel added');</code></pre>
+
 	<h3>A longer hint</h3>
 	<p>A <code>details</code> with <code>form-more</code> folds what a short hint cannot say. Its chevron turns as it opens.</p>
 	<div class="docs-example docs-example-stack" id="form-more">

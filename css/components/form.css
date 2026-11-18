@@ -157,6 +157,39 @@
 		border-color: var(--redz-danger-fill);
 	}
 
+	/* A form with data-required="show" shows what waits for words: a required field empty or unfinished in the warning's
+	   soft ground at once, a refused one in the danger's - after a failed send, or by aria-invalid. */
+	[data-required="show"] :is(.form-control, .form-select):invalid:not(:user-invalid, [aria-invalid="true"]),
+	[data-required="show"] .time-input-face:has(> .time-input-part:invalid):not(:has(> .time-input-part:user-invalid), [aria-invalid="true"]),
+	[data-required="show"] .combobox-toggle[aria-required="true"]:has(> .combobox-value:empty):not([aria-invalid="true"]) {
+		background-color: var(--redz-warning-subtle);
+	}
+
+	[data-required="show"] :is(.form-control, .form-select):is(:user-invalid, [aria-invalid="true"]),
+	[data-required="show"] .time-input-face:has(> .time-input-part:user-invalid) {
+		background-color: var(--redz-danger-subtle);
+	}
+
+	/* A field that took a result the person sees in it lights in the success tone and fades in 2 s (js/flash.js). */
+	[data-flash] {
+		animation: redz-flash 2s var(--redz-ease) both;
+	}
+
+	@keyframes redz-flash {
+		0%,
+		60% {
+			border-color: var(--redz-success-fill);
+			background-color: var(--redz-success-subtle);
+			box-shadow: 0 0 0 3px color-mix(in oklab, var(--redz-success-fill) 25%, transparent);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		[data-flash] {
+			animation-timing-function: steps(1, end);
+		}
+	}
+
 	:is(.form-control, .form-select)[data-changed] {
 		box-shadow: inset 3px 0 0 var(--redz-warning-fill);
 	}

@@ -386,6 +386,22 @@ A screen does not scroll sideways where it can help it. A table read row by row 
 </div>
 ```
 
+A head that holds controls - a `table-check` with `data-select-all`, a `table-sort` - stands as a bar above the cards: its controls in a row, the select all with the words of its check's label or `aria-label`, the head's other cells kept for a screen reader alone. Hidden whole, the head's controls took the focus out of sight, and a phone could neither select all nor sort.
+
+```html
+<section class="card max-w-360" aria-labelledby="table-stacked-head-title" data-select="rows">
+	<div class="card-header"><h2 class="fs-14" id="table-stacked-head-title">Guests to write to</h2></div>
+	<table class="table table-stack" id="table-stacked-head-rows">
+		<thead><tr><th class="table-check"><input class="check" type="checkbox" id="table-stacked-head-all" data-select-all aria-label="Select all"></th><th scope="col"><button class="table-sort" type="button" value="name">Guest</button></th><th scope="col" class="text-end"><button class="table-sort" type="button" value="seats">Seats</button></th><th scope="col">Hotel</th></tr></thead>
+		<tbody>
+			<tr data-sort-name="Alex Sample" data-sort-seats="2"><td class="table-check"><input class="check" type="checkbox" name="selected" value="21" aria-label="Select: Alex Sample"></td><td>Alex Sample</td><td class="text-end tabular-nums">2</td><td>Harbor View</td></tr>
+			<tr data-sort-name="Chris Sample" data-sort-seats="4"><td class="table-check"><input class="check" type="checkbox" name="selected" value="22" aria-label="Select: Chris Sample"></td><td>Chris Sample</td><td class="text-end tabular-nums">4</td><td>Palm Garden</td></tr>
+			<tr data-sort-name="Ben Sample" data-sort-seats="3"><td class="table-check"><input class="check" type="checkbox" name="selected" value="23" aria-label="Select: Ben Sample"></td><td>Ben Sample</td><td class="text-end tabular-nums">3</td><td>Harbor View</td></tr>
+		</tbody>
+	</table>
+</section>
+```
+
 ### The current, the chosen and the running row
 
 A row with `aria-current` - the record open beside the list - carries the accent's mark at its start; a row with `aria-selected="true"`, chosen in a grid of rows, is tinted; `table-active`, Bootstrap's name, marks the row that is running now.

@@ -49,6 +49,47 @@ Text fields, selects and text areas with Bootstrap 5's names: a label floating i
 </div>
 ```
 
+### Fields that wait for words
+
+`data-required="show"` on a form, or on a part of it, shows what waits for words before the person is told anything is wrong: a required field that is empty or not yet right - the browser's own `:invalid` -, a time input whose hours are missing, and a combobox's or a date input's face with `aria-required="true"` and no value stand in the warning's soft ground at once. After a send the browser refused, or with `aria-invalid="true"`, a field takes the danger's ground as well as its border; the browser brings the first into view and says why. A face holds no browser check: the page's server refuses it.
+
+```html
+<form class="vstack gap-12 max-w-360" action="#form-required" data-required="show" data-docs-submit>
+	<div class="form-floating">
+		<input class="form-control" id="form-required-guest" name="guest" placeholder=" " required>
+		<label for="form-required-guest">Guest name</label>
+	</div>
+	<div class="form-floating">
+		<input class="form-control tabular-nums" id="form-required-seats" name="seats" type="number" min="1" placeholder=" " value="2" required>
+		<label for="form-required-seats">Seats</label>
+	</div>
+	<div class="form-floating">
+		<textarea class="form-control" id="form-required-note" name="note" placeholder=" " rows="2"></textarea>
+		<label for="form-required-note">Note</label>
+	</div>
+	<div class="hstack gap-12">
+		<button class="btn btn-primary" type="submit">Save</button>
+		<output class="text-muted" data-docs-sent></output>
+	</div>
+</form>
+```
+
+### A result in its field
+
+A result the person sees in the field itself - an agent added, a point added, a photo attached - needs no toast: `REDZ.ui.flash(element, words)` lights the field in the success tone and fades it in 2 s, and says the page's words politely, so a screen reader hears what the eye sees. Given a time or a date input's hidden input, it lights the face. Under less motion the tone holds the 2 s and goes. A tracked form flashes the fields its save took.
+
+```html
+<div class="form-floating max-w-360">
+	<input class="form-control" id="form-flash-agent" name="agent" placeholder=" " readonly>
+	<label for="form-flash-agent">Agent</label>
+</div>
+<div><button class="btn" type="button" data-docs-flash="form-flash-agent"><i class="bi bi-plus-lg" aria-hidden="true"></i>Add agent</button></div>
+```
+
+```js
+REDZ.ui.flash(document.getElementById('agent'), 'Sample Travel added');
+```
+
 ### A longer hint
 
 A `details` with `form-more` folds what a short hint cannot say. Its chevron turns as it opens.
@@ -410,7 +451,7 @@ The library has no words of its own; it reads these from the page's island `#red
 
 From [`css/components/form.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/form.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-space-4`, `--redz-text`, `--redz-fs-12`, `--redz-text-muted`, `--redz-link`, `--redz-motion`, `--redz-ease`, `--redz-danger-text`, `--redz-warning-text`, `--redz-control-height`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg`, `--redz-focus`, `--redz-space-8`, `--redz-grow-rows`, `--redz-form-select-chevron`, `--redz-warning-fill`, `--redz-danger-fill`, `--redz-radius-6`, `--redz-bg-page`, `--redz-primary-subtle`, `--redz-control-height-sm`, `--redz-control-height-lg`, `--redz-fs-16`, `--redz-control-height-float`, `--redz-fs-14`, `--redz-primary-fill`.
+It reads the theme's `--redz-space-4`, `--redz-text`, `--redz-fs-12`, `--redz-text-muted`, `--redz-link`, `--redz-motion`, `--redz-ease`, `--redz-danger-text`, `--redz-warning-text`, `--redz-control-height`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg`, `--redz-focus`, `--redz-space-8`, `--redz-grow-rows`, `--redz-form-select-chevron`, `--redz-warning-fill`, `--redz-danger-fill`, `--redz-warning-subtle`, `--redz-danger-subtle`, `--redz-success-fill`, `--redz-success-subtle`, `--redz-radius-6`, `--redz-bg-page`, `--redz-primary-subtle`, `--redz-control-height-sm`, `--redz-control-height-lg`, `--redz-fs-16`, `--redz-control-height-float`, `--redz-fs-14`, `--redz-primary-fill`.
 
 ## From Bootstrap 5.3
 

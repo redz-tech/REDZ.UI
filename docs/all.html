@@ -714,6 +714,33 @@ Boat C	 9 trips	201 seats</pre>
 							<div class="warning-feedback" id="form-stacked-seats-warning"><i class="bi bi-exclamation-circle" aria-hidden="true"></i>More than the boat usually takes</div>
 						</div>
 					</div>
+					<div class="docs-example docs-example-stack" id="form-required">
+						<form class="vstack gap-12 max-w-360" action="#form-required" data-required="show" data-docs-submit>
+							<div class="form-floating">
+								<input class="form-control" id="form-required-guest" name="guest" placeholder=" " required>
+								<label for="form-required-guest">Guest name</label>
+							</div>
+							<div class="form-floating">
+								<input class="form-control tabular-nums" id="form-required-seats" name="seats" type="number" min="1" placeholder=" " value="2" required>
+								<label for="form-required-seats">Seats</label>
+							</div>
+							<div class="form-floating">
+								<textarea class="form-control" id="form-required-note" name="note" placeholder=" " rows="2"></textarea>
+								<label for="form-required-note">Note</label>
+							</div>
+							<div class="hstack gap-12">
+								<button class="btn btn-primary" type="submit">Save</button>
+								<output class="text-muted" data-docs-sent></output>
+							</div>
+						</form>
+					</div>
+					<div class="docs-example docs-example-stack" id="form-flash">
+						<div class="form-floating max-w-360">
+							<input class="form-control" id="form-flash-agent" name="agent" placeholder=" " readonly>
+							<label for="form-flash-agent">Agent</label>
+						</div>
+						<div><button class="btn" type="button" data-docs-flash="form-flash-agent"><i class="bi bi-plus-lg" aria-hidden="true"></i>Add agent</button></div>
+					</div>
 					<div class="docs-example docs-example-stack" id="form-more">
 						<div class="form-field">
 							<label class="form-label" for="form-more-keep">Keep the log for, days</label>
@@ -2765,6 +2792,19 @@ Boat C	 9 trips	201 seats</pre>
 								</table>
 							</section>
 						</div>
+					</div>
+					<div class="docs-example docs-example-stack" id="table-stacked-head">
+						<section class="card max-w-360" aria-labelledby="table-stacked-head-title" data-select="rows">
+							<div class="card-header"><h2 class="fs-14" id="table-stacked-head-title">Guests to write to</h2></div>
+							<table class="table table-stack" id="table-stacked-head-rows">
+								<thead><tr><th class="table-check"><input class="check" type="checkbox" id="table-stacked-head-all" data-select-all aria-label="Select all"></th><th scope="col"><button class="table-sort" type="button" value="name">Guest</button></th><th scope="col" class="text-end"><button class="table-sort" type="button" value="seats">Seats</button></th><th scope="col">Hotel</th></tr></thead>
+								<tbody>
+									<tr data-sort-name="Alex Sample" data-sort-seats="2"><td class="table-check"><input class="check" type="checkbox" name="selected" value="21" aria-label="Select: Alex Sample"></td><td>Alex Sample</td><td class="text-end tabular-nums">2</td><td>Harbor View</td></tr>
+									<tr data-sort-name="Chris Sample" data-sort-seats="4"><td class="table-check"><input class="check" type="checkbox" name="selected" value="22" aria-label="Select: Chris Sample"></td><td>Chris Sample</td><td class="text-end tabular-nums">4</td><td>Palm Garden</td></tr>
+									<tr data-sort-name="Ben Sample" data-sort-seats="3"><td class="table-check"><input class="check" type="checkbox" name="selected" value="23" aria-label="Select: Ben Sample"></td><td>Ben Sample</td><td class="text-end tabular-nums">3</td><td>Harbor View</td></tr>
+								</tbody>
+							</table>
+						</section>
 					</div>
 					<div class="docs-example docs-example-stack" id="table-marks">
 						<table class="table" aria-label="Jobs">

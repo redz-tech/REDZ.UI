@@ -1,6 +1,7 @@
 // REDZ.UI, a table that stacks: on a phone each row of a table-stack is a card, and each of its cells shows its column
 // head's words, copied here from the head into the cell's data-label; a label the page wrote stays, and a cell across
-// several columns, such as a row's form, takes none.
+// several columns, such as a row's form, takes none. A head's select all, standing in the bar above the cards, shows
+// the words of its check - its label or aria-label - copied into its cell's data-label.
 const TABLES = 'table.table-stack';
 
 /** A head's words as a person sees them: no hidden text and no layer it holds. */
@@ -18,6 +19,11 @@ const label = (table) => {
 	}
 	const columns = [];
 	for (const cell of head.cells) {
+		const check = cell.matches('.table-check') ? cell.querySelector('input[type="checkbox"]') : null;
+		const named = check === null ? '' : check.labels?.[0]?.textContent.trim() || check.getAttribute('aria-label') || '';
+		if (named !== '' && !cell.hasAttribute('data-label')) {
+			cell.setAttribute('data-label', named);
+		}
 		const text = words(cell);
 		for (let span = 0; span < cell.colSpan; span++) {
 			columns.push(text);

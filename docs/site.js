@@ -404,6 +404,18 @@
 		}
 	});
 
+	// A result in its field: the next agent's name, flashed with its words.
+	let agents = 0;
+	document.addEventListener('click', (event) => {
+		const button = event.target instanceof Element ? event.target.closest('[data-docs-flash]') : null;
+		const field = button === null ? null : document.getElementById(button.dataset.docsFlash);
+		if (field !== null) {
+			const name = ['Sample Travel', 'Example Tours', 'Demo Holidays'][agents++ % 3];
+			field.value = name;
+			REDZ.ui.flash(field, name + ' added');
+		}
+	});
+
 	// The tree's lazy Archive: two pages after 400 ms.
 	document.addEventListener('redz:load', (event) => {
 		if (!event.target.hasAttribute('data-docs-lazy')) {

@@ -72,5 +72,6 @@ import {download} from './download.js';
 import {clear, settled} from './upload.js';
 import {follow} from './show-when.js';
 import {brand} from './brand.js';
+import {flash} from './flash.js';
 
-globalThis.REDZ = Object.assign(globalThis.REDZ ?? {}, {ui: {...globalThis.REDZ?.ui, toast, confirm, busy, prompt, progress, select: selectTab, status, banner, filter: filterRegion, sort, more: restart, selection, alert, download, upload: {clear, settled}, combobox: {set: setList}, track, swap, follow, settle, brand}});
+globalThis.REDZ = Object.assign(globalThis.REDZ ?? {}, {ui: {...globalThis.REDZ?.ui, toast, confirm, busy, prompt, progress, select: selectTab, status, banner, filter: filterRegion, sort, more: restart, selection, alert, download, upload: {clear, settled}, combobox: {set: setList}, track, swap, follow, settle, brand, flash}});

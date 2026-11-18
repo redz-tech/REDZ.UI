@@ -189,6 +189,9 @@ interface RedzTrack {
 interface RedzUi {
 	/** Shows a toast; answers a function that closes it. */
 	toast(toast?: RedzToast): () => void;
+	/** Lights a field that took a result the person sees in it - a hidden input's time or date face - in the success tone
+	 *  for 2 s, in place of a toast, and says the page's words politely. */
+	flash(element: Element, words?: string): void;
 	/** Asks; with a choice, a promise of the chosen value or false. */
 	confirm(question: RedzConfirm & {choice: RedzConfirmChoice}): Promise<string | false>;
 	/** Asks; with alt, a promise of true, alt's value or false. */

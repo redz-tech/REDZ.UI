@@ -766,6 +766,31 @@
 		&lt;/table&gt;
 	&lt;/section&gt;
 &lt;/div&gt;</code></pre></div>
+					<p>A head that holds controls - a <code>table-check</code> with <code>data-select-all</code>, a <code>table-sort</code> - stands as a bar above the cards: its controls in a row, the select all with the words of its check's label or <code>aria-label</code>, the head's other cells kept for a screen reader alone. Hidden whole, the head's controls took the focus out of sight, and a phone could neither select all nor sort.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="table-stacked-head">
+						<section class="card max-w-360" aria-labelledby="table-stacked-head-title" data-select="rows">
+							<div class="card-header"><h2 class="fs-14" id="table-stacked-head-title">Guests to write to</h2></div>
+							<table class="table table-stack" id="table-stacked-head-rows">
+								<thead><tr><th class="table-check"><input class="check" type="checkbox" id="table-stacked-head-all" data-select-all aria-label="Select all"></th><th scope="col"><button class="table-sort" type="button" value="name">Guest</button></th><th scope="col" class="text-end"><button class="table-sort" type="button" value="seats">Seats</button></th><th scope="col">Hotel</th></tr></thead>
+								<tbody>
+									<tr data-sort-name="Alex Sample" data-sort-seats="2"><td class="table-check"><input class="check" type="checkbox" name="selected" value="21" aria-label="Select: Alex Sample"></td><td>Alex Sample</td><td class="text-end tabular-nums">2</td><td>Harbor View</td></tr>
+									<tr data-sort-name="Chris Sample" data-sort-seats="4"><td class="table-check"><input class="check" type="checkbox" name="selected" value="22" aria-label="Select: Chris Sample"></td><td>Chris Sample</td><td class="text-end tabular-nums">4</td><td>Palm Garden</td></tr>
+									<tr data-sort-name="Ben Sample" data-sort-seats="3"><td class="table-check"><input class="check" type="checkbox" name="selected" value="23" aria-label="Select: Ben Sample"></td><td>Ben Sample</td><td class="text-end tabular-nums">3</td><td>Harbor View</td></tr>
+								</tbody>
+							</table>
+						</section>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;section class="card max-w-360" aria-labelledby="table-stacked-head-title" data-select="rows"&gt;
+	&lt;div class="card-header"&gt;&lt;h2 class="fs-14" id="table-stacked-head-title"&gt;Guests to write to&lt;/h2&gt;&lt;/div&gt;
+	&lt;table class="table table-stack" id="table-stacked-head-rows"&gt;
+		&lt;thead&gt;&lt;tr&gt;&lt;th class="table-check"&gt;&lt;input class="check" type="checkbox" id="table-stacked-head-all" data-select-all aria-label="Select all"&gt;&lt;/th&gt;&lt;th scope="col"&gt;&lt;button class="table-sort" type="button" value="name"&gt;Guest&lt;/button&gt;&lt;/th&gt;&lt;th scope="col" class="text-end"&gt;&lt;button class="table-sort" type="button" value="seats"&gt;Seats&lt;/button&gt;&lt;/th&gt;&lt;th scope="col"&gt;Hotel&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+		&lt;tbody&gt;
+			&lt;tr data-sort-name="Alex Sample" data-sort-seats="2"&gt;&lt;td class="table-check"&gt;&lt;input class="check" type="checkbox" name="selected" value="21" aria-label="Select: Alex Sample"&gt;&lt;/td&gt;&lt;td&gt;Alex Sample&lt;/td&gt;&lt;td class="text-end tabular-nums"&gt;2&lt;/td&gt;&lt;td&gt;Harbor View&lt;/td&gt;&lt;/tr&gt;
+			&lt;tr data-sort-name="Chris Sample" data-sort-seats="4"&gt;&lt;td class="table-check"&gt;&lt;input class="check" type="checkbox" name="selected" value="22" aria-label="Select: Chris Sample"&gt;&lt;/td&gt;&lt;td&gt;Chris Sample&lt;/td&gt;&lt;td class="text-end tabular-nums"&gt;4&lt;/td&gt;&lt;td&gt;Palm Garden&lt;/td&gt;&lt;/tr&gt;
+			&lt;tr data-sort-name="Ben Sample" data-sort-seats="3"&gt;&lt;td class="table-check"&gt;&lt;input class="check" type="checkbox" name="selected" value="23" aria-label="Select: Ben Sample"&gt;&lt;/td&gt;&lt;td&gt;Ben Sample&lt;/td&gt;&lt;td class="text-end tabular-nums"&gt;3&lt;/td&gt;&lt;td&gt;Harbor View&lt;/td&gt;&lt;/tr&gt;
+		&lt;/tbody&gt;
+	&lt;/table&gt;
+&lt;/section&gt;</code></pre></div>
 
 					<h3 id="table-marked">The current, the chosen and the running row</h3>
 					<p>A row with <code>aria-current</code> - the record open beside the list - carries the accent's mark at its start; a row with <code>aria-selected="true"</code>, chosen in a grid of rows, is tinted; <code>table-active</code>, Bootstrap's name, marks the row that is running now.</p>

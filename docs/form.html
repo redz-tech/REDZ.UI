@@ -211,6 +211,63 @@
 	&lt;div class="warning-feedback" id="form-stacked-seats-warning"&gt;&lt;i class="bi bi-exclamation-circle" aria-hidden="true"&gt;&lt;/i&gt;More than the boat usually takes&lt;/div&gt;
 &lt;/div&gt;</code></pre></div>
 
+					<h3>Fields that wait for words</h3>
+					<p><code>data-required="show"</code> on a form, or on a part of it, shows what waits for words before the person is told anything is wrong: a required field that is empty or not yet right - the browser's own <code>:invalid</code> -, a time input whose hours are missing, and a combobox's or a date input's face with <code>aria-required="true"</code> and no value stand in the warning's soft ground at once. After a send the browser refused, or with <code>aria-invalid="true"</code>, a field takes the danger's ground as well as its border; the browser brings the first into view and says why. A face holds no browser check: the page's server refuses it.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="form-required">
+						<form class="vstack gap-12 max-w-360" action="#form-required" data-required="show" data-docs-submit>
+							<div class="form-floating">
+								<input class="form-control" id="form-required-guest" name="guest" placeholder=" " required>
+								<label for="form-required-guest">Guest name</label>
+							</div>
+							<div class="form-floating">
+								<input class="form-control tabular-nums" id="form-required-seats" name="seats" type="number" min="1" placeholder=" " value="2" required>
+								<label for="form-required-seats">Seats</label>
+							</div>
+							<div class="form-floating">
+								<textarea class="form-control" id="form-required-note" name="note" placeholder=" " rows="2"></textarea>
+								<label for="form-required-note">Note</label>
+							</div>
+							<div class="hstack gap-12">
+								<button class="btn btn-primary" type="submit">Save</button>
+								<output class="text-muted" data-docs-sent></output>
+							</div>
+						</form>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;form class="vstack gap-12 max-w-360" action="#form-required" data-required="show" data-docs-submit&gt;
+	&lt;div class="form-floating"&gt;
+		&lt;input class="form-control" id="form-required-guest" name="guest" placeholder=" " required&gt;
+		&lt;label for="form-required-guest"&gt;Guest name&lt;/label&gt;
+	&lt;/div&gt;
+	&lt;div class="form-floating"&gt;
+		&lt;input class="form-control tabular-nums" id="form-required-seats" name="seats" type="number" min="1" placeholder=" " value="2" required&gt;
+		&lt;label for="form-required-seats"&gt;Seats&lt;/label&gt;
+	&lt;/div&gt;
+	&lt;div class="form-floating"&gt;
+		&lt;textarea class="form-control" id="form-required-note" name="note" placeholder=" " rows="2"&gt;&lt;/textarea&gt;
+		&lt;label for="form-required-note"&gt;Note&lt;/label&gt;
+	&lt;/div&gt;
+	&lt;div class="hstack gap-12"&gt;
+		&lt;button class="btn btn-primary" type="submit"&gt;Save&lt;/button&gt;
+		&lt;output class="text-muted" data-docs-sent&gt;&lt;/output&gt;
+	&lt;/div&gt;
+&lt;/form&gt;</code></pre></div>
+
+					<h3>A result in its field</h3>
+					<p>A result the person sees in the field itself - an agent added, a point added, a photo attached - needs no toast: <code>REDZ.ui.flash(element, words)</code> lights the field in the success tone and fades it in 2 s, and says the page's words politely, so a screen reader hears what the eye sees. Given a time or a date input's hidden input, it lights the face. Under less motion the tone holds the 2 s and goes. A tracked form flashes the fields its save took.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="form-flash">
+						<div class="form-floating max-w-360">
+							<input class="form-control" id="form-flash-agent" name="agent" placeholder=" " readonly>
+							<label for="form-flash-agent">Agent</label>
+						</div>
+						<div><button class="btn" type="button" data-docs-flash="form-flash-agent"><i class="bi bi-plus-lg" aria-hidden="true"></i>Add agent</button></div>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;div class="form-floating max-w-360"&gt;
+	&lt;input class="form-control" id="form-flash-agent" name="agent" placeholder=" " readonly&gt;
+	&lt;label for="form-flash-agent"&gt;Agent&lt;/label&gt;
+&lt;/div&gt;
+&lt;div&gt;&lt;button class="btn" type="button" data-docs-flash="form-flash-agent"&gt;&lt;i class="bi bi-plus-lg" aria-hidden="true"&gt;&lt;/i&gt;Add agent&lt;/button&gt;&lt;/div&gt;</code></pre></div>
+					<pre class="docs-code" tabindex="0"><code>REDZ.ui.flash(document.getElementById('agent'), 'Sample Travel added');</code></pre>
+
 					<h3>A longer hint</h3>
 					<p>A <code>details</code> with <code>form-more</code> folds what a short hint cannot say. Its chevron turns as it opens.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="form-more">
@@ -758,7 +815,7 @@ REDZ.ui.follow(form);</code></pre>
 						<section class="vstack gap-12" aria-labelledby="form-tokens">
 							<h2 id="form-tokens">Tokens</h2>
 							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/form.css"><code>css/components/form.css</code></a>, which declares no custom property of its own.</p>
-							<p>It reads the theme's <code>--redz-space-4</code>, <code>--redz-text</code>, <code>--redz-fs-12</code>, <code>--redz-text-muted</code>, <code>--redz-link</code>, <code>--redz-motion</code>, <code>--redz-ease</code>, <code>--redz-danger-text</code>, <code>--redz-warning-text</code>, <code>--redz-control-height</code>, <code>--redz-space-12</code>, <code>--redz-border-strong</code>, <code>--redz-radius-8</code>, <code>--redz-bg</code>, <code>--redz-focus</code>, <code>--redz-space-8</code>, <code>--redz-grow-rows</code>, <code>--redz-form-select-chevron</code>, <code>--redz-warning-fill</code>, <code>--redz-danger-fill</code>, <code>--redz-radius-6</code>, <code>--redz-bg-page</code>, <code>--redz-primary-subtle</code>, <code>--redz-control-height-sm</code>, <code>--redz-control-height-lg</code>, <code>--redz-fs-16</code>, <code>--redz-control-height-float</code>, <code>--redz-fs-14</code>, <code>--redz-primary-fill</code>.</p>
+							<p>It reads the theme's <code>--redz-space-4</code>, <code>--redz-text</code>, <code>--redz-fs-12</code>, <code>--redz-text-muted</code>, <code>--redz-link</code>, <code>--redz-motion</code>, <code>--redz-ease</code>, <code>--redz-danger-text</code>, <code>--redz-warning-text</code>, <code>--redz-control-height</code>, <code>--redz-space-12</code>, <code>--redz-border-strong</code>, <code>--redz-radius-8</code>, <code>--redz-bg</code>, <code>--redz-focus</code>, <code>--redz-space-8</code>, <code>--redz-grow-rows</code>, <code>--redz-form-select-chevron</code>, <code>--redz-warning-fill</code>, <code>--redz-danger-fill</code>, <code>--redz-warning-subtle</code>, <code>--redz-danger-subtle</code>, <code>--redz-success-fill</code>, <code>--redz-success-subtle</code>, <code>--redz-radius-6</code>, <code>--redz-bg-page</code>, <code>--redz-primary-subtle</code>, <code>--redz-control-height-sm</code>, <code>--redz-control-height-lg</code>, <code>--redz-fs-16</code>, <code>--redz-control-height-float</code>, <code>--redz-fs-14</code>, <code>--redz-primary-fill</code>.</p>
 						</section>
 
 						<section class="vstack gap-12" aria-labelledby="form-from-bootstrap">

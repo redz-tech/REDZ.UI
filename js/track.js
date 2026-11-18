@@ -11,20 +11,22 @@
 // question's Save and go, REDZ.ui.track.save() - takes the words left in the chips fields' entries first, and a refused
 // one holds it, then fires the cancelable redz:save on each changed form in turn - {form, changed: [{name, label, was,
 // now}], data, submitter, signal} - and, answered with a promise, what was sent becomes the saved state once it
-// resolves, then redz:saved {form, value}; a refusal {message, fields} marks each named field under its control -
-// {text, stored} offers Keep mine and Take saved - and reveals the first. Left alone, a lone changed form is submitted
-// as usual. A form in a dialog saves by its own button (js/wait.js), which takes Control+S when it is the form's only
-// one; of several, the page names one by aria-keyshortcuts. Discard puts the saved values back, each with input and
-// change, empties the chips fields' entries, fires redz:discard and offers Undo, which brings all of it back, until the
-// next edit or ten seconds. While anything is changed, a link that leaves the page, a tab whose pane holds a changed
-// form and a dialog's cancel or close ask first - Save and go, Discard, Stay - and the browser's own question guards
-// the rest. An input[type=password][data-secret] keeps the stored value while it is empty; a button with
-// command="--clear" for it and data-clear empties and disables it, and the form then sends that name as 1.
+// resolves, then redz:saved {form, value}, and the fields the bar's save took flash (js/flash.js); a refusal {message,
+// fields} marks each named field under its control - {text, stored} offers Keep mine and Take saved - and reveals the
+// first. Left alone, a lone changed form is submitted as usual. A form in a dialog saves by its own button
+// (js/wait.js), which takes Control+S when it is the form's only one; of several, the page names one by
+// aria-keyshortcuts. Discard puts the saved values back, each with input and change, empties the chips fields' entries,
+// fires redz:discard and offers Undo, which brings all of it back, until the next edit or ten seconds. While anything
+// is changed, a link that leaves the page, a tab whose pane holds a changed form and a dialog's cancel or close ask
+// first - Save and go, Discard, Stay - and the browser's own question guards the rest. An
+// input[type=password][data-secret] keeps the stored value while it is empty; a button with command="--clear" for it
+// and data-clear empties and disables it, and the form then sends that name as 1.
 import {ask} from './answer.js';
 import {busy} from './busy.js';
 import {left, settle} from './chip-input.js';
 import {setList} from './combobox.js';
 import {confirm} from './confirm.js';
+import {flash} from './flash.js';
 import {announce} from './say.js';
 import {selectTab} from './tabs.js';
 import {text, textCount} from './text.js';
@@ -735,6 +737,7 @@ const savePage = (forms, submitter = null) => {
 	savedAt = '';
 	undoing = false;
 	const all = dirtyForms(pageForms()).length === 1;
+	const fields = dirty.flatMap((form) => [...form.querySelectorAll('[data-changed]')]);
 	saving = (async () => {
 		for (const form of dirty) {
 			if (!await saveOne(form, submitter, all)) {
@@ -752,6 +755,7 @@ const savePage = (forms, submitter = null) => {
 				paint();
 			}, NOTE);
 			announce(text('changes.saved', {time: savedAt}));
+			fields.filter((field) => field.isConnected).forEach((field) => flash(field));
 		}
 		paint();
 		return done;

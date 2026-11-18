@@ -397,6 +397,14 @@
 		border-color: var(--redz-warning-fill);
 	}
 
+	[data-required="show"] .date-input-face[aria-required="true"]:has(> .date-input-value:empty):not([aria-invalid="true"]) {
+		background-color: var(--redz-warning-subtle);
+	}
+
+	[data-required="show"] .date-input-face[aria-invalid="true"] {
+		background-color: var(--redz-danger-subtle);
+	}
+
 	.date-input > .date-input-face[aria-invalid="true"] {
 		border-color: var(--redz-danger);
 	}

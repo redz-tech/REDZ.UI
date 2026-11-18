@@ -41,6 +41,14 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - `data-warn` on a field: a hint that is no refusal - a value past what is usual, which the form still takes - in the
   warning's tone, the page's words in `warning-feedback`; a time input's or a date input's face follows its input's.
   `aria-invalid` stays for a refusal, and wins over it.
+- `data-required="show"` on a form or a part of it shows what waits for words before anything is called wrong: a
+  required field empty or not yet right, a time input without its hours, a combobox's or a date input's face with
+  `aria-required="true"` and no value stand in the warning's soft ground at once; after a send the browser refused,
+  or with `aria-invalid="true"`, in the danger's. Red at once would read as an error before the person began.
+- `REDZ.ui.flash(element, words)`, a result shown in its field in place of a toast - an agent added, a photo attached:
+  the field, or a time or date input's face for its hidden input, lights in the success tone and fades in 2 s, and the
+  page's words are said politely; under less motion the tone holds the 2 s. A tracked form's save flashes the fields
+  it took.
 
 ### Changed
 - The main script's budget is 58 KB gzipped, from 56: the time field takes 2 KB.
@@ -59,6 +67,10 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   its line with the next cell and a long one did not.
 
 ### Fixed
+- A stacked table's head that holds controls stands as a bar above the cards under 576 px: a `table-check` select all
+  with the words of its check's label or `aria-label`, a `table-sort` and any other control in a row, the head's other
+  cells kept for a screen reader alone. Hidden whole, its controls took the focus out of sight (WCAG 2.4.11), and a
+  phone could neither select all nor sort.
 - A row whose first cell is its head, `th scope="row"`, takes its row's ground and mark as a row of data cells does:
   `table-danger`, `table-warning`, `table-active`, `table-secondary`, a chosen row, a stripe of `table-striped`, a row
   with a `stretched-link` under focus and the mark of `aria-current`, in a table, in a column held by
@@ -97,6 +109,9 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   under a finger with 48 px days, closes on a day picked, refuses a day out of bounds and follows a script's value, its
   face short or naming the day, its counts in a tone, in words, with a note and the page's count text, its
   `redz:month` only once the month opens. The probes press Page Up and Page Down. Red on 18 planted faults.
+- Checks `stackHead` (the head's bar, its words, select all and a sort there, a head without controls hidden, a wide
+  table's head row), `requiredShow` (waits, refused after a send with the focus, plain once filled) and `flash` (lit,
+  animated, said, gone in 2 s); `track` asks a saved field to flash. Red on 9 planted faults.
 - `php tools/build.php` reads a package's classes from its sources: a docs example of a class new in a package failed
   the build, which held it against the package as last built, and the build writes the package only once it passes.
 - The check of `combobox-clear` types in the very task the panel opens in, so a panel made after its search has the
