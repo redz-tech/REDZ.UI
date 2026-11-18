@@ -19,6 +19,7 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   names follow the same rule, from one place. Numbers inside the library's own texts keep the page's language, the
   language of their sentence.
 - The title of a time with `data-ago` names the reader's time zone and the weekday.
+- The main script's budget is 60 KB gzipped, from 58: the main script stood at 57.3 KB.
 
 ### Fixed
 - The title the library gave a time with `data-ago` stayed at its first moment when the page changed `datetime`; it
