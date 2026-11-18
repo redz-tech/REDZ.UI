@@ -19,8 +19,8 @@ window.REDZ_BEHAVE = (() => {
 		context.drawImage(bitmap, 0, 0);
 		return [...context.getImageData(x, y, 1, 1).data];
 	};
-	/** Why no crop came, for its finding: the file's size, type and first bytes, its own decode and a pixel drawn of it, and
-	 *  the crop's answer when asked again by script, a screen it opens cancelled at once. */
+	/** Why no crop came, for its finding: the file's size, type and first bytes, its own decode and a pixel drawn of it, the
+	 *  crop's answer when asked again by script, a screen it opens cancelled at once, and what a canvas writes here. */
 	const cropWhy = async (file, options = {}) => {
 		if (!(file instanceof Blob)) {
 			return 'no file';
@@ -50,7 +50,21 @@ window.REDZ_BEHAVE = (() => {
 				}
 			});
 		}));
-		return say([file.size, file.type, head, decoded, drawn, answer]);
+		// What a canvas writes here: a crop's answer, and the docs' sample, are a canvas's toBlob().
+		const writes = [];
+		for (const [width, type, how] of [[8, 'image/png', 'blob'], [8, 'image/jpeg', 'blob'], [1600, 'image/png', 'blob'], [1600, 'image/jpeg', 'blob'], [1600, 'image/jpeg', 'url'], [1600, 'image/jpeg', 'offscreen']]) {
+			try {
+				const canvas = how === 'offscreen' ? new OffscreenCanvas(width, width * 3 / 4) : Object.assign(document.createElement('canvas'), {width, height: width * 3 / 4});
+				const context = canvas.getContext('2d');
+				context.fillStyle = '#c33';
+				context.fillRect(0, 0, width, width * 3 / 4);
+				const blob = how === 'url' ? canvas.toDataURL(type).length : await within(how === 'offscreen' ? canvas.convertToBlob({type}) : new Promise((done) => canvas.toBlob(done, type)), 4000);
+				writes.push(width + ' ' + type.slice(6) + ' ' + how + ': ' + (blob instanceof Blob ? blob.type + ' ' + blob.size : String(blob)));
+			} catch (error) {
+				writes.push(width + ' ' + type.slice(6) + ' ' + how + ': ' + told(error));
+			}
+		}
+		return say([file.size, file.type, head, decoded, drawn, answer, writes]);
 	};
 	// The checks' own markup goes through a policy of theirs: the probes' pages require Trusted Types.
 	const policy = globalThis.trustedTypes?.createPolicy('redz-probe', {createHTML: (markup) => markup});
@@ -6282,7 +6296,7 @@ window.REDZ_BEHAVE = (() => {
 			$('#crop-sample [data-docs-crop]').click();
 			const screen = await open();
 			if (screen === null) {
-				out.push('a data-crop field opened no crop; layers open before: ' + say(layers) + ', errors: ' + say(thrown) + ', toasts: ' + say($$('.toast').map((one) => one.textContent.trim())) + ', the file (size, type, first bytes, decode, a pixel) and the crop asked again: ' + await cropWhy(picked, {}));
+				out.push('a data-crop field opened no crop; layers open before: ' + say(layers) + ', errors: ' + say(thrown) + ', toasts: ' + say($$('.toast').map((one) => one.textContent.trim())) + ', the file (size, type, first bytes, decode, a pixel), the crop asked again and what a canvas writes: ' + await cropWhy(picked, {}));
 				return;
 			}
 			const seen = {screen: screen === null ? 'none' : [screen.matches(':modal'), $$('.crop-handle', screen).length, $('.crop-handles', screen).getAttribute('role'), $$('.crop-handle', screen).every((handle) => Math.round(handle.getBoundingClientRect().width) >= 44)].join(' ')};
@@ -6396,7 +6410,7 @@ window.REDZ_BEHAVE = (() => {
 			$('#crop-avatar-sample [data-docs-crop]').click();
 			const screen = await open();
 			if (screen === null) {
-				out.push('a data-crop="avatar" field opened no crop; layers open before: ' + say(layers) + ', errors: ' + say(thrown) + ', toasts: ' + say($$('.toast').map((one) => one.textContent.trim())) + ', the file (size, type, first bytes, decode, a pixel) and the crop asked again: ' + await cropWhy(picked, {mode: 'avatar'}));
+				out.push('a data-crop="avatar" field opened no crop; layers open before: ' + say(layers) + ', errors: ' + say(thrown) + ', toasts: ' + say($$('.toast').map((one) => one.textContent.trim())) + ', the file (size, type, first bytes, decode, a pixel), the crop asked again and what a canvas writes: ' + await cropWhy(picked, {mode: 'avatar'}));
 				return;
 			}
 			const layer = $('.crop-handles', screen);
@@ -6500,7 +6514,7 @@ window.REDZ_BEHAVE = (() => {
 			$('#crop-photo-sample [data-docs-crop]').click();
 			const screen = await open();
 			if (screen === null) {
-				out.push('a data-crop="photo" field opened no crop; layers open before: ' + say(layers) + ', errors: ' + say(thrown) + ', toasts: ' + say($$('.toast').map((one) => one.textContent.trim())) + ', the file (size, type, first bytes, decode, a pixel) and the crop asked again: ' + await cropWhy(picked, {mode: 'photo'}));
+				out.push('a data-crop="photo" field opened no crop; layers open before: ' + say(layers) + ', errors: ' + say(thrown) + ', toasts: ' + say($$('.toast').map((one) => one.textContent.trim())) + ', the file (size, type, first bytes, decode, a pixel), the crop asked again and what a canvas writes: ' + await cropWhy(picked, {mode: 'photo'}));
 				return;
 			}
 			const mover = $('.crop-move', screen);
