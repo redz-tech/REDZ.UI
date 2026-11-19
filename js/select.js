@@ -4,8 +4,9 @@
 // group: its own head heads its checks and the outer head all of them. Only the checks a person can use count -
 // enabled, and not in an item a filter hides (js/filter.js) or code hides in the selection: a checked one hidden leaves
 // the count until it is shown again, checked again. A selection-bar in the scope hides at zero; a data-select-count
-// says "selected" in the page's words; the scope fires redz:selection {count, total, values}, the values of its checked
-// checks, and a head that changes them all says the count too. data-select="rows" on a table also checks a row clicked
+// says "selected" in the page's words; the scope fires redz:selection {count, total, values, order}, the values of its
+// checked checks in the page's order and in the order they were checked, and a head that changes them all says the
+// count too. data-select="rows" on a table also checks a row clicked
 // anywhere but on its controls or its text being selected. A button with command="--select-all" or "--select-none" and
 // aria-controls naming a scope does the same as its head. Scopes put in later or given data-select later are watched
 // the same; a check's disabled, checked or hidden and an item's hidden set by code are seen. A check's checked property
@@ -77,15 +78,39 @@ const sync = (scope) => {
 	}
 	const checks = checksOf(scope);
 	const values = checks.filter((check) => check.checked).map((check) => check.value);
+	const held = [...scope.querySelectorAll('input[type="checkbox"]:not([data-select-all])')].filter((check) => 'selectKept' in check.dataset || (check.disabled && check.checked)).map((check) => check.value);
+	const order = ordered(scope, values, held);
 	const state = JSON.stringify([checks.length, values]);
 	if (fired.get(scope) !== state) {
 		fired.set(scope, state);
-		scope.dispatchEvent(new CustomEvent('redz:selection', {bubbles: true, detail: {count: values.length, total: checks.length, values}}));
+		scope.dispatchEvent(new CustomEvent('redz:selection', {bubbles: true, detail: {count: values.length, total: checks.length, values, order}}));
 	}
 };
 
 // The state each scope last told the page.
 const fired = new WeakMap();
+
+// The values each scope holds a place for, in the order they were checked.
+const places = new WeakMap();
+
+/** The checked values in the order they were checked: a value keeps its place while it stays checked, or out of the count checked (hidden or disabled); one checked since joins at the end, several at once in the page's order. */
+const ordered = (scope, values, held) => {
+	const take = (list, value) => list.includes(value) && list.splice(list.indexOf(value), 1).length === 1;
+	const fresh = [...values];
+	const kept = [...held];
+	const place = [];
+	const order = [];
+	for (const value of places.get(scope) ?? []) {
+		if (take(fresh, value)) {
+			place.push(value);
+			order.push(value);
+		} else if (take(kept, value)) {
+			place.push(value);
+		}
+	}
+	places.set(scope, [...place, ...fresh]);
+	return [...order, ...fresh];
+};
 
 /** Checks or clears every check of the scopes, then says how many are chosen. */
 const all = (scopes, checked) => {

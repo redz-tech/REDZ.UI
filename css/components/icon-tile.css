@@ -66,6 +66,11 @@
 		--redz-tile-chart: var(--redz-chart-8);
 	}
 
+	.icon-tile-primary {
+		--redz-tile-bg: var(--redz-primary-subtle);
+		--redz-tile-fg: var(--redz-primary-text);
+	}
+
 	.icon-tile-secondary {
 		--redz-tile-bg: var(--redz-secondary-subtle);
 		--redz-tile-fg: var(--redz-secondary-text);

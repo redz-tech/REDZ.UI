@@ -316,8 +316,8 @@ interface RedzEventMap {
 	'redz:reveal': CustomEvent<{revealed: boolean}>;
 	/** Contents to load the first time the region shows; group is the element with data-lazy. */
 	'redz:load': CustomEvent<RedzAsk<{region: Element; group: Element}>>;
-	/** A selection's checks changed: the values of the checked ones. */
-	'redz:selection': CustomEvent<{count: number; total: number; values: string[]}>;
+	/** A selection's checks changed: the values of the checked ones in the page's order, and in the order they were checked. */
+	'redz:selection': CustomEvent<{count: number; total: number; values: string[]; order: string[]}>;
 	/** A switch or a check to carry out: refused, it turns back. */
 	'redz:apply': CustomEvent<RedzAsk<{checked: boolean; value: string; signal: AbortSignal}>>;
 	/** A sidebar folded or opened. */

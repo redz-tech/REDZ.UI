@@ -3110,7 +3110,7 @@ window.REDZ_BEHAVE = (() => {
 			$('[command="--select-none"]', bar).click();
 			const none = [bar.hidden, head.checked, head.indeterminate];
 			scope.removeEventListener('redz:selection', listen);
-			if (say(start) !== say([true, false, false]) || say(one) !== say([false, '1 selected', true, say({count: 1, total: 3, values: ['11']})]) || tint[0] === tint[1] || !row || say(all) !== say([true, false, false, '3 selected']) || !told || say(hidden) !== say([false, '1 selected', true, say(['13'])]) || say(shown) !== say([true, true, '3 selected']) || say(none) !== say([true, false, false])) {
+			if (say(start) !== say([true, false, false]) || say(one) !== say([false, '1 selected', true, say({count: 1, total: 3, values: ['11'], order: ['11']})]) || tint[0] === tint[1] || !row || say(all) !== say([true, false, false, '3 selected']) || !told || say(hidden) !== say([false, '1 selected', true, say(['13'])]) || say(shown) !== say([true, true, '3 selected']) || say(none) !== say([true, false, false])) {
 				out.push('selection: at load ' + say(start) + ' (bar hidden, head), one check ' + say(one) + ', tint ' + say(tint) + ', a row click checks ' + row + ', the head ' + say(all) + ' (said ' + told + '), a search hiding two ' + say(hidden) + ', cleared ' + say(shown) + ', select none ' + say(none));
 			}
 		}]},
@@ -3152,6 +3152,62 @@ window.REDZ_BEHAVE = (() => {
 			box.remove();
 			if (say(put) !== say(['probe-select 0/3', true]) || say(called) !== say(['probe-select 1/3', true, false]) || quiet !== 2 || disabled !== 'probe-select 1/2' || say(hidden) !== say(['probe-select 0/1', false, true]) || say(back) !== say(['probe-select 1/2', true]) || say(attribute) !== say(['probe-select 2/2', true]) || marked !== 'probe-select-late 1/1') {
 				out.push('a selection put in later: told ' + say(put) + ' (event, bar hidden); REDZ.ui.selection after .checked ' + say(called) + ' (event, head mixed, bar), again ' + (quiet === 2 ? 'silent' : 'told') + ', a check disabled ' + say(disabled) + ', its item hidden ' + say(hidden) + ' (event, checked, bar hidden), shown ' + say(back) + ', a checked attribute ' + say(attribute) + ' (event, head), data-select given later ' + say(marked));
+			}
+		}]},
+		selectionOrder: {target: '#table-select-rows', steps: [async (out) => {
+			const rows = (checked) => ['a', 'b', 'c', 'd', 'e'].map((value) => '<li><input type="checkbox" value="' + value + '" aria-label="' + value.toUpperCase() + '"' + (checked.includes(value) ? ' checked' : '') + '></li>').join('');
+			const box = document.createElement('div');
+			box.innerHTML = trusted('<div data-select id="probe-order"><input type="checkbox" data-select-all aria-label="All"><ul>' + rows(['b', 'd']) + '</ul></div>');
+			const scope = $('#probe-order', box);
+			const list = $('ul', scope);
+			const check = (value) => $('input[value="' + value + '"]', list);
+			const heard = [];
+			const listen = (event) => heard.push(event.detail);
+			const order = () => (heard.at(-1)?.order ?? []).join('');
+			box.addEventListener('redz:selection', listen);
+			document.body.append(box);
+			await settled();
+			const got = {load: order()};
+			check('e').click();
+			check('a').click();
+			got.clicked = [order(), heard.at(-1).values.join('')];
+			check('b').click();
+			check('b').click();
+			got.again = order();
+			check('a').closest('li').hidden = true;
+			await settled();
+			got.hidden = order();
+			check('a').closest('li').hidden = false;
+			await settled();
+			got.shown = order();
+			check('e').disabled = true;
+			await settled();
+			got.disabled = order();
+			check('e').disabled = false;
+			await settled();
+			got.enabled = order();
+			check('c').checked = true;
+			REDZ.ui.selection(scope);
+			got.code = order();
+			list.innerHTML = trusted(rows(['a', 'd']));
+			await settled();
+			got.redrawn = order();
+			list.innerHTML = trusted(rows([]));
+			for (const value of ['c', 'e', 'b']) {
+				check(value).checked = true;
+				REDZ.ui.selection(scope);
+			}
+			got.rebuilt = order();
+			const told = heard.length;
+			await settled();
+			got.settled = [order(), heard.length === told];
+			$('[data-select-all]', scope).click();
+			got.all = order();
+			box.removeEventListener('redz:selection', listen);
+			box.remove();
+			const want = {load: 'bd', clicked: ['bdea', 'abde'], again: 'deab', hidden: 'deb', shown: 'deab', disabled: 'dab', enabled: 'deab', code: 'deabc', redrawn: 'da', rebuilt: 'ceb', settled: ['ceb', true], all: 'cebad'};
+			if (say(got) !== say(want)) {
+				out.push('a selection\'s order (want ' + say(want) + '): checked in the markup, clicked, unchecked and checked again, hidden and shown, disabled and enabled, checked by code, a redraw bringing two back checked, re-checked by code one at a time, then the head ' + say(got));
 			}
 		}]},
 		barTones: {target: '#table-select-rows', steps: [async (out) => {

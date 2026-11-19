@@ -374,8 +374,56 @@ function BUILD__FloorJs(): string
 		. "\tif (below) {\n\t\tdocument.documentElement.setAttribute('data-floor', 'below');\n\t}\n})();\n") . "\n";
 }
 
+/**
+ * The hooks: the classes the scripts write on a page or read from it that no stylesheet names, which a project's check
+ * of unstyled classes leaves alone - set by className, classList or a class="" of the markup a script writes, or asked
+ * by classList.contains, a querySelector, closest or matches, or an upper-case constant's selector. A name a script
+ * finishes at run time ('dot-' + tone) and the icon pack's bi are not hooks.
+ * @return list<string>
+ */
+function BUILD__Hooks(): array
+{
+	$styled = [];
+	foreach (array_merge(...array_map(fn(string $pattern): array => glob(BUILD_ROOT . '/' . $pattern) ?: [], BUILD_STYLES)) as $sheet) {
+		$styled += array_flip(TOOL__CssClasses((string)file_get_contents($sheet)));
+	}
+	$quoted = '([\'"`])((?:(?!\1)[^\\\\\n]|\\\\.)*)\1';
+	// The whole names a written class list holds: up to where the script joins in a value, the name it joins into left out.
+	$names = function (string $list): array {
+		$cut = (int)strcspn($list, '\'"`$+');
+		$words = preg_split('~\s+~', substr($list, 0, $cut), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+		return $cut < strlen($list) && !preg_match('~\s$~', substr($list, 0, $cut)) ? array_slice($words, 0, -1) : $words;
+	};
+	$asked = fn(string $selector): array => preg_match_all('~(?<![\w$-])\.(-?[a-zA-Z_][\w-]*)~', $selector, $found) > 0 ? $found[1] : [];
+	$hooks = [];
+	foreach (array_merge(...array_map(fn(string $pattern): array => glob(BUILD_ROOT . '/' . $pattern) ?: [], BUILD_EVENT_SCRIPTS)) as $script) {
+		$js = (string)file_get_contents($script);
+		$found = [];
+		preg_match_all('~className\s*[:=]\s*' . $quoted . '~', $js, $set);
+		array_push($found, ...array_merge([], ...array_map($names, $set[2])));
+		preg_match_all('~class="([^"]*)"~', $js, $markup);
+		array_push($found, ...array_merge([], ...array_map($names, $markup[1])));
+		preg_match_all('~classList\.(add|remove|replace|toggle|contains)\(([^)]*)\)~', $js, $calls, PREG_SET_ORDER);
+		foreach ($calls as [, $verb, $args]) {
+			preg_match_all('~' . $quoted . '~', in_array($verb, ['toggle', 'contains'], true) ? (string)strtok($args, ',') : $args, $literals);
+			array_push($found, ...array_merge([], ...array_map(fn(string $one): array => preg_split('~\s+~', $one, -1, PREG_SPLIT_NO_EMPTY) ?: [], $literals[2])));
+		}
+		preg_match_all('~(?:querySelector(?:All)?|closest|matches)\(\s*' . $quoted . '~', $js, $queries);
+		preg_match_all('~const [A-Z][A-Z0-9_]*\s*=\s*' . $quoted . '~', $js, $constants);
+		array_push($found, ...array_merge([], ...array_map($asked, [...$queries[2], ...$constants[2]])));
+		foreach ($found as $class) {
+			if (!isset($styled[$class]) && $class !== 'bi' && !str_starts_with($class, 'bi-') && !str_ends_with($class, '-') && preg_match('~^-?[a-zA-Z_][\w:-]*$~', $class) === 1) {
+				$hooks[$class] = true;
+			}
+		}
+	}
+	$hooks = array_keys($hooks);
+	sort($hooks, SORT_STRING);
+	return $hooks;
+}
+
 /** The passport: the version, the floor, the files to link - the main three, the icon pack this release needs, the
- *  editor and the packages -, the vocabulary - every class, every custom property the stylesheets define, the commands
+ *  editor and the packages -, the vocabulary - every class, the hooks, every custom property the stylesheets define, the commands
  *  js/commands.js stands in for and every -- command the scripts handle, the keys the page's texts must hold (a count by its .other form), the counts whose
  *  other plural forms the page may add and the {names} each of those texts is given - and the sha256 of every file
  *  beside it in the SRI form. */
@@ -418,6 +466,7 @@ function BUILD__Passport(): string
 		'main' => $encode(BUILD_MAIN),
 		'icons' => $encode(BUILD_ICONS),
 		'classes' => $list(array_map('strval', array_keys(TOOL__Classes()))),
+		'hooks' => $list(BUILD__Hooks()),
 		'tokens' => $list($sorted($tokens[1])),
 		'commands' => $list($sorted([...$commands[1], ...BUILD__CustomCommands()])),
 		'texts' => $list($sorted(array_map(fn(string $key, string $kind): string => $kind === 'count' ? $key . '.other' : $key, array_keys($texts), $texts))),

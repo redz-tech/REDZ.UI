@@ -77,8 +77,29 @@ function TOOL__NpmFile(string $package, string $version, string $name, string $i
 	return ['version' => (string)$meta['version'], 'integrity' => $published, 'body' => TOOL__TarFile($tgz, $name)];
 }
 
+/**
+ * The classes a stylesheet's selectors name, unescaped, in their order; at-rules' preludes and url()s left out.
+ * @return list<string>
+ */
+function TOOL__CssClasses(string $css): array
+{
+	$css = (string)preg_replace(['~/\*.*?\*/~s', '~url\([^)]*\)~'], '', $css);
+	preg_match_all('~([^{}]+)\{~', $css, $selectors);
+	$classes = [];
+	foreach ($selectors[1] as $selector) {
+		if (str_starts_with(trim($selector), '@')) {
+			continue;
+		}
+		preg_match_all('~\.((?:\\\\[0-9a-f]{1,6} ?|\\\\.|[\w-])+)~', $selector, $found);
+		foreach ($found[1] as $class) {
+			$classes[] = (string)preg_replace_callback('~\\\\([0-9a-f]{1,6}) ?|\\\\(.)~', fn(array $m): string => ($m[2] ?? '') !== '' ? $m[2] : mb_chr((int)hexdec($m[1])), $class);
+		}
+	}
+	return $classes;
+}
+
 // Each package file of dist/ by its source, which tools/build.php builds it from.
-const TOOL_PACKAGE_SOURCES = ['css/redz-ui-charts.min.css' => 'charts/charts.css', 'js/redz-ui-charts.min.js' => 'charts/charts.js', 'css/redz-ui-calendar.min.css' => 'calendar/calendar.css', 'js/redz-ui-calendar.min.js' => 'calendar/calendar.js', 'css/redz-ui-media.min.css' => 'media/media.css', 'css/redz-ui-crop.min.css' => 'crop/crop.css', 'js/redz-ui-crop.min.js' => 'crop/crop.js', 'js/redz-ui-qr.min.js' => 'qr/qr.js', 'css/redz-ui-editor.min.css' => 'editor/editor.css', 'js/redz-ui-editor.min.js' => 'editor/editor.js', 'css/redz-ui-editor-surface.min.css' => 'editor/surface.css'];
+const TOOL_PACKAGE_SOURCES =['css/redz-ui-charts.min.css' => 'charts/charts.css', 'js/redz-ui-charts.min.js' => 'charts/charts.js', 'css/redz-ui-calendar.min.css' => 'calendar/calendar.css', 'js/redz-ui-calendar.min.js' => 'calendar/calendar.js', 'css/redz-ui-media.min.css' => 'media/media.css', 'css/redz-ui-crop.min.css' => 'crop/crop.css', 'js/redz-ui-crop.min.js' => 'crop/crop.js', 'js/redz-ui-qr.min.js' => 'qr/qr.js', 'css/redz-ui-editor.min.css' => 'editor/editor.css', 'js/redz-ui-editor.min.js' => 'editor/editor.js', 'css/redz-ui-editor-surface.min.css' => 'editor/surface.css'];
 
 /**
  * Every class of the library's stylesheets, unescaped - components, utilities with their prefixes, icons, and the
@@ -100,17 +121,8 @@ function TOOL__Classes(): array
 	}
 	$classes = ['nav-overflow-keep' => ['nav']];
 	foreach ($sheets as $file => $page) {
-		$css = (string)preg_replace(['~/\*.*?\*/~s', '~url\([^)]*\)~'], '', (string)file_get_contents($file));
-		preg_match_all('~([^{}]+)\{~', $css, $selectors);
-		foreach ($selectors[1] as $selector) {
-			if (str_starts_with(trim($selector), '@')) {
-				continue;
-			}
-			preg_match_all('~\.((?:\\\\[0-9a-f]{1,6} ?|\\\\.|[\w-])+)~', $selector, $found);
-			foreach ($found[1] as $class) {
-				$class = (string)preg_replace_callback('~\\\\([0-9a-f]{1,6}) ?|\\\\(.)~', fn(array $m): string => ($m[2] ?? '') !== '' ? $m[2] : mb_chr((int)hexdec($m[1])), $class);
-				$classes[$class][] = $page;
-			}
+		foreach (TOOL__CssClasses((string)file_get_contents($file)) as $class) {
+			$classes[$class][] = $page;
 		}
 	}
 	ksort($classes, SORT_STRING);

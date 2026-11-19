@@ -2886,6 +2886,7 @@ icon-tile-chart-8
 icon-tile-danger
 icon-tile-info
 icon-tile-lg
+icon-tile-primary
 icon-tile-secondary
 icon-tile-sm
 icon-tile-success

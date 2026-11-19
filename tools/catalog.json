@@ -88,6 +88,6 @@
 		"progress": {"meter": "a value of a screen", "meter-xs": "as meter", "progress-animated": "moves on the page by itself", "progress-top": "a screen's page progress"},
 		"stepper": {"stepper-item": "structure"},
 		"stat": {"stat-delta": "structure", "stat-label": "structure", "stat-meta": "structure", "stat-sub": "structure", "stat-value": "structure"},
-		"icon-tile": {"icon-tile-chart-1": "a chart's series", "icon-tile-chart-2": "a chart's series", "icon-tile-chart-3": "a chart's series", "icon-tile-chart-4": "a chart's series", "icon-tile-chart-5": "a chart's series", "icon-tile-chart-6": "a chart's series", "icon-tile-chart-7": "a chart's series", "icon-tile-chart-8": "a chart's series"}
+		"icon-tile": {"icon-tile-primary": "the plain tile's accent, kept inside a stat", "icon-tile-chart-1": "a chart's series", "icon-tile-chart-2": "a chart's series", "icon-tile-chart-3": "a chart's series", "icon-tile-chart-4": "a chart's series", "icon-tile-chart-5": "a chart's series", "icon-tile-chart-6": "a chart's series", "icon-tile-chart-7": "a chart's series", "icon-tile-chart-8": "a chart's series"}
 	}
 }

@@ -2895,6 +2895,7 @@
 		"icon-tile-danger",
 		"icon-tile-info",
 		"icon-tile-lg",
+		"icon-tile-primary",
 		"icon-tile-secondary",
 		"icon-tile-sm",
 		"icon-tile-success",
@@ -4795,6 +4796,15 @@
 		"z-3",
 		"z-n1"
 	],
+	"hooks": [
+		"combobox-create",
+		"combobox-status",
+		"editor-count",
+		"editor-pad",
+		"nav-overflow-keep",
+		"nav-overflow-menu",
+		"reorder-status"
+	],
 	"tokens": [
 		"--redz-above",
 		"--redz-alert-bg",
@@ -5255,7 +5265,7 @@
 		"css/redz-ui-editor-surface.min.css": "sha256-UM94RO+TgrNvrofD/tKVbnKeTGSvpkK+4JAuqApOO50=",
 		"css/redz-ui-editor.min.css": "sha256-Qxy1eHhfAotYts6tY7a9z2fnYiS2+WjSCFF3jhVCWpE=",
 		"css/redz-ui-media.min.css": "sha256-4+5Di9Nu8wuERNMkrMvc9rU1kVNMpo/7k/T5i1XxGIQ=",
-		"css/redz-ui.min.css": "sha256-bex6b2+loiogIh1lcvCDZ/T4mRjuU2FgjPsbFl1kfZ8=",
+		"css/redz-ui.min.css": "sha256-YcRjL1JdYK9OFgBXrZvqLMEZiU77bWMbwXHkUr9cWFg=",
 		"js/floor.min.js": "sha256-SlXScca0xV+TpFCu1YIXMzlHJEnXeX8Az9gukSn5Ph0=",
 		"js/redz-ui-calendar.min.js": "sha256-TEs1/O8px15gqo6tNp2NhVpjXWZrRBfZDHHvnfJU96Y=",
 		"js/redz-ui-charts.min.js": "sha256-1dSq946dnPNnXU8k1gMoOGEPo9b4QmG9hyVHxZuFSME=",
@@ -5265,7 +5275,7 @@
 		"js/redz-ui-editor.min.js": "sha256-cOPn3m3f+nzqD9cNXXOh+aiyDey1RITxp+OSYNC0Wy0=",
 		"js/redz-ui-qr.d.ts": "sha256-niMx8le7TCyDzabKAskgpzcDm722QRJakX2G08xqxMY=",
 		"js/redz-ui-qr.min.js": "sha256-8AgWz06SWLYwuOCi7FQA6bXBgjJfxeRYx5tFCWlrEts=",
-		"js/redz-ui.d.ts": "sha256-MFjkvq2D5qWqIk4AMw7khT0HQgI6C7SSMdq9V5ZQfos=",
-		"js/redz-ui.min.js": "sha256-PZGQ2DnF920+8USHJy6qai4istWQ0TejLRcLNxtYQ1E="
+		"js/redz-ui.d.ts": "sha256-9ZCquITCSr1vlGT58IVRFragWq8hofLHjDV8d+BEH6I=",
+		"js/redz-ui.min.js": "sha256-KHM+3yO+AMu1kKCbTrWP/9FFuhrYfDAbOWLGkT6fckY="
 	}
 }

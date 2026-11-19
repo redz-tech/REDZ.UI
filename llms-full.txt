@@ -6417,7 +6417,7 @@ A list of records: a title that links to the record, a line under it, a note whe
 
 ### Checked rows
 
-A checked row is tinted: its check is the only state. An element with `data-select` - the table, or the card holding it with its [selection bar](selection-bar.md) - holds a selection; a check with `data-select-all` heads its checks, checked when all are, mixed when some are, and pressed it checks or clears them all. Only the checks a person can use count: enabled, and not in a row a filter or the page hides - a checked row hidden leaves the count while hidden and is checked again when it shows. The `selection-bar` inside hides at zero, a `data-select-count` says the page's text `selected`, and the scope fires `redz:selection` with `{count, total, values}`, the values of the checked checks; a head that changes them all says the count aloud. With `data-select="rows"` a click anywhere on a row but on its controls checks it, unless its text is being selected. A `data-select` inside another is a group with a head of its own; buttons with `command="--select-all"` or `"--select-none"` and `aria-controls` naming a scope do what its head does. Scopes the page puts in or marks later are read the same, and so are a check's `disabled`, `checked` or `hidden` and a row's `hidden` set by code. A check's `checked` property set by code fires nothing a script can see: the page fires `change` on the check, or calls `REDZ.ui.selection(scope)`, which reads the scope again and fires `redz:selection` if the selection changed.
+A checked row is tinted: its check is the only state. An element with `data-select` - the table, or the card holding it with its [selection bar](selection-bar.md) - holds a selection; a check with `data-select-all` heads its checks, checked when all are, mixed when some are, and pressed it checks or clears them all. Only the checks a person can use count: enabled, and not in a row a filter or the page hides - a checked row hidden leaves the count while hidden and is checked again when it shows. The `selection-bar` inside hides at zero, a `data-select-count` says the page's text `selected`, and the scope fires `redz:selection` with `{count, total, values, order}`: `values` are the values of the checked checks in the page's order, `order` the same values in the order they were checked - one checked joins the end, the ones a head or a button checks at once in the page's order, and one a filter hides keeps its place till it is shown again, so a page reading a sequence (a route, a queue) needs no list of its own; a head that changes them all says the count aloud. With `data-select="rows"` a click anywhere on a row but on its controls checks it, unless its text is being selected. A `data-select` inside another is a group with a head of its own; buttons with `command="--select-all"` or `"--select-none"` and `aria-controls` naming a scope do what its head does. Scopes the page puts in or marks later are read the same, and so are a check's `disabled`, `checked` or `hidden` and a row's `hidden` set by code. A check's `checked` property set by code fires nothing a script can see: the page fires `change` on the check, or calls `REDZ.ui.selection(scope)`, which reads the scope again and fires `redz:selection` if the selection changed.
 
 ```html
 <input class="form-control" type="search" name="q" data-filter="table-select-rows" aria-label="Find a guest" placeholder="Find a guest" autocomplete="off">
@@ -7304,10 +7304,11 @@ A rounded square with an icon in it: the mark of a screen's subject in its title
 
 ## Examples
 
-The plain tile is in the accent; the tones and `icon-tile-sm` follow Bootstrap's grammar.
+The plain tile is in the accent, and in a [stat](stat.md) in the stat's tone; `icon-tile-primary` is in the accent wherever it stands. The tones and `icon-tile-sm` follow Bootstrap's grammar.
 
 ```html
 <span class="icon-tile"><i class="bi bi-compass" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-primary"><i class="bi bi-gear" aria-hidden="true"></i></span>
 <span class="icon-tile icon-tile-secondary"><i class="bi bi-archive" aria-hidden="true"></i></span>
 <span class="icon-tile icon-tile-success"><i class="bi bi-check-circle" aria-hidden="true"></i></span>
 <span class="icon-tile icon-tile-danger"><i class="bi bi-x-octagon" aria-hidden="true"></i></span>
@@ -7350,7 +7351,7 @@ The plain tile is in the accent; the tones and `icon-tile-sm` follow Bootstrap's
 
 From [`css/components/icon-tile.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/icon-tile.css). It declares `--redz-tile-bg`, `--redz-tile-fg`, `--redz-tile-chart` on its root, never on rows or items.
 
-It reads the theme's `--redz-tile-base-bg`, `--redz-primary-subtle`, `--redz-tile-base-fg`, `--redz-primary`, `--redz-radius-12`, `--redz-radius-8`, `--redz-radius-16`, `--redz-bg`, `--redz-text`, `--redz-chart-1`, `--redz-chart-2`, `--redz-chart-3`, `--redz-chart-4`, `--redz-chart-5`, `--redz-chart-6`, `--redz-chart-7`, `--redz-chart-8`, `--redz-secondary-subtle`, `--redz-secondary-text`, `--redz-success-subtle`, `--redz-success-text`, `--redz-danger-subtle`, `--redz-danger-text`, `--redz-warning-subtle`, `--redz-warning-text`, `--redz-info-subtle`, `--redz-info-text`, `--redz-color`.
+It reads the theme's `--redz-tile-base-bg`, `--redz-primary-subtle`, `--redz-tile-base-fg`, `--redz-primary`, `--redz-radius-12`, `--redz-radius-8`, `--redz-radius-16`, `--redz-bg`, `--redz-text`, `--redz-chart-1`, `--redz-chart-2`, `--redz-chart-3`, `--redz-chart-4`, `--redz-chart-5`, `--redz-chart-6`, `--redz-chart-7`, `--redz-chart-8`, `--redz-primary-text`, `--redz-secondary-subtle`, `--redz-secondary-text`, `--redz-success-subtle`, `--redz-success-text`, `--redz-danger-subtle`, `--redz-danger-text`, `--redz-warning-subtle`, `--redz-warning-text`, `--redz-info-subtle`, `--redz-info-text`, `--redz-color`.
 
 # Stat tiles
 

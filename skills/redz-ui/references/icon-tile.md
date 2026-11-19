@@ -6,10 +6,11 @@ A rounded square with an icon in it: the mark of a screen's subject in its title
 
 ## Examples
 
-The plain tile is in the accent; the tones and `icon-tile-sm` follow Bootstrap's grammar.
+The plain tile is in the accent, and in a [stat](stat.md) in the stat's tone; `icon-tile-primary` is in the accent wherever it stands. The tones and `icon-tile-sm` follow Bootstrap's grammar.
 
 ```html
 <span class="icon-tile"><i class="bi bi-compass" aria-hidden="true"></i></span>
+<span class="icon-tile icon-tile-primary"><i class="bi bi-gear" aria-hidden="true"></i></span>
 <span class="icon-tile icon-tile-secondary"><i class="bi bi-archive" aria-hidden="true"></i></span>
 <span class="icon-tile icon-tile-success"><i class="bi bi-check-circle" aria-hidden="true"></i></span>
 <span class="icon-tile icon-tile-danger"><i class="bi bi-x-octagon" aria-hidden="true"></i></span>
@@ -52,4 +53,4 @@ The plain tile is in the accent; the tones and `icon-tile-sm` follow Bootstrap's
 
 From [`css/components/icon-tile.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/icon-tile.css). It declares `--redz-tile-bg`, `--redz-tile-fg`, `--redz-tile-chart` on its root, never on rows or items.
 
-It reads the theme's `--redz-tile-base-bg`, `--redz-primary-subtle`, `--redz-tile-base-fg`, `--redz-primary`, `--redz-radius-12`, `--redz-radius-8`, `--redz-radius-16`, `--redz-bg`, `--redz-text`, `--redz-chart-1`, `--redz-chart-2`, `--redz-chart-3`, `--redz-chart-4`, `--redz-chart-5`, `--redz-chart-6`, `--redz-chart-7`, `--redz-chart-8`, `--redz-secondary-subtle`, `--redz-secondary-text`, `--redz-success-subtle`, `--redz-success-text`, `--redz-danger-subtle`, `--redz-danger-text`, `--redz-warning-subtle`, `--redz-warning-text`, `--redz-info-subtle`, `--redz-info-text`, `--redz-color`.
+It reads the theme's `--redz-tile-base-bg`, `--redz-primary-subtle`, `--redz-tile-base-fg`, `--redz-primary`, `--redz-radius-12`, `--redz-radius-8`, `--redz-radius-16`, `--redz-bg`, `--redz-text`, `--redz-chart-1`, `--redz-chart-2`, `--redz-chart-3`, `--redz-chart-4`, `--redz-chart-5`, `--redz-chart-6`, `--redz-chart-7`, `--redz-chart-8`, `--redz-primary-text`, `--redz-secondary-subtle`, `--redz-secondary-text`, `--redz-success-subtle`, `--redz-success-text`, `--redz-danger-subtle`, `--redz-danger-text`, `--redz-warning-subtle`, `--redz-warning-text`, `--redz-info-subtle`, `--redz-info-text`, `--redz-color`.

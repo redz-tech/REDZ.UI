@@ -12,6 +12,15 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   the reader's today, the weekday and time in the six days ahead, else the date and time. The hours are written as the
   language writes its short time (`07:00` in Russian, `7:00 AM` in American English); the server's own text stands
   without the script. REDZ CMS's order, for a UTC moment shown in the reader's time.
+- `icon-tile-primary`: the tile in the accent wherever it stands, inside a `stat` too, where the plain tile takes the
+  stat's tone - the grammar every other tone family follows. The tourism pack's order.
+- `order` in `redz:selection`'s detail: the checked values in the order they were checked, beside `values` in the
+  page's order. One checked joins the end, the ones a head or a button checks at once join in the page's order, and one
+  a filter hides or a script disables keeps its place till it counts again; places are kept by value, so rows a
+  redraw brings back checked keep theirs. The tourism pack's order, for a pickup run built by ticks.
+- `hooks` in the passport `redz-ui.json`: the classes the scripts write on a page or read from it that no stylesheet
+  names, such as `combobox-status` and `nav-overflow-menu` - what a project's check of unstyled classes leaves
+  alone. The build derives it from the scripts. The tourism pack's order.
 
 ### Changed
 - A ticking time's words and its title are in the language of its nearest `lang`, not the page's: a sentence a page
@@ -783,7 +792,7 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   locale, so a byte such as 0xA0 counted as a space there and not on Linux.
 
 ### Fixed
-- The minifier no longer hangs on a stylesheet that ends in a `\`; it refuses it (since 0.4.0).
+- The minifier no longer hangs on a stylesheet that ends in a ``; it refuses it (since 0.4.0).
 - The minifier refuses a script with a string, a pattern, a template or a comment that runs to its end, and a string or
   a pattern that runs past its line, instead of failing in its own proof.
 - A `table`'s head sticks at the top of a page without the shell, or under a page's own bar by `--redz-sticky-top`. It held the shell header's

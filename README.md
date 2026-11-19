@@ -375,7 +375,9 @@ its tag nor its files can change, and GitHub signs an attestation of both. A tag
 probes are clean in every engine; the release carries three files:
 - `redz-ui-<version>.zip` - `dist/` of the tag, the folder a project serves as it is: `css/` and `js/` with minified
   files and [the declaration files](#scripts) an editor reads, the license files and the passport `redz-ui.json`: the version, the floor, the files to link, every
-  class, custom property, command and text key of the library, and the sha256 of every file in the SRI form.
+  class, custom property, command and text key of the library, the hooks - the classes its scripts write on a page or
+  read from it that no stylesheet names, which a check of unstyled classes leaves alone - and the sha256 of every file
+  in the SRI form.
   `php tools/build.php` writes the folder, and `--check` holds it current on every commit. The sources and the docs
   stay in the repository and in the tag's source archive;
 - `redz-ui-tools-<version>.zip` - `tools/dist/` of the tag, [the tools](#tools-for-a-project) a project runs on its own
