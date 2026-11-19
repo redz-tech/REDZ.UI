@@ -326,6 +326,8 @@ The face shows the hours without a leading zero, and the field counts 24 hours. 
 </div>
 ```
 
+`data-ratio` on any element passes a stored ratio the same way, its width by its height as the server measured it: the library sets it as `--redz-ratio`, which a product's own stylesheet reads - `aspect-ratio: var(--redz-ratio)`.
+
 ### Sent on a change
 
 `data-submit="change"` on a form or on one of its controls sends the form when such a control changes - a filter's select, a sort, a switch - by `requestSubmit`, so the browser's checks and the page's submit listeners run. A text field changes when it is left, not at every key; a combobox's list when a value is chosen.

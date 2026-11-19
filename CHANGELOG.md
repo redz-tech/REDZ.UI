@@ -4,6 +4,25 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## 0.31.0 - 2026-11-19
+
+### Removed
+Parts only one product used leave the library, which builds the general engine and frame; that product keeps them in
+its own stylesheet. A removal in a minor release, as Semantic Versioning allows while the version is 0.x. Nothing is
+renamed.
+- `kiosk` and its parts (`kiosk-head`, `kiosk-main`, `kiosk-state`, `kiosk-corner` and the rest), the full-screen
+  entrance tablet. `btn-xl` stays.
+- `thread` and its parts (`thread-message`, `thread-bubble`, `thread-files` and the rest), the message thread.
+- `action-bar` and `action-bar-text`, the bar at the bottom of a screen.
+- `logo`, `logo-sm`, `logo-lg`, `logo-ground`, `logo-fade` and the logo banner on a choice tile, with the tokens
+  `--redz-logo-ground` and `--redz-logo-side`. `brand-logo` stays.
+- `meter-stacked`, the meter of several parts, with `--redz-part`; `data-v` sets `--v` on a `rating` only.
+- `stage-list` and `stage-list-actions`, the pipeline of stages.
+
+### Changed
+- `data-ratio` on any element sets `--redz-ratio`, its width by its height, through the CSSOM: a product's own
+  stylesheet reads it, as it reads `--redz-color` from `data-color`.
+
 ## 0.30.0 - 2026-11-19
 
 ### Added

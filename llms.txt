@@ -43,7 +43,6 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 - [Collapse](docs/collapse.md): A button that opens and closes a region elsewhere on the page - help under a toolbar, more filters, the details of a row - by the library's own command, --toggle. A closed region is hidden="until-found", so the browser's find in page still reaches its words and opens it. A section that opens under its own header is an accordion.
 - [List groups](docs/list-group.md): A column of items in one frame - plain rows, or links and buttons to choose from - with the current one and the unavailable ones marked by the same attributes the browser reads.
 - [Trees](docs/tree.md): Pages under pages, a menu's items, folders: a list whose items open their own lists, each a link or a name, and moved by a handle.
-- [Message threads](docs/thread.md): A conversation in a card: each message with its author, time and files, the person's own at the end in a tint, the other side's at the start - edited in place, the reply box held under the thread.
 - [Charts](docs/chart.md): A chart is the table of its numbers, drawn: columns stacked by day, a sparkline of the last runs, a board of lanes over the next hours. The numbers stay in the page as text, so a screen reader reads the table; a small script only hands them to the stylesheet.
 - [Calendars](docs/calendar.md): A month of days with what happens on each, a strip of days across the things that can be busy on them - equipment, rooms, boats -, and a month to pick a day or a period from.
 - [Media library](docs/media.md): A folder of images as square tiles or as compact rows: checked for actions on many at once, moved by a handle, each with its own actions.
@@ -55,7 +54,6 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 - [Badges](docs/badge.md): A badge is a short label of state or count beside the thing it describes: Published, Draft, 5 new. It never acts - a badge that does something is a chip or a button.
 - [Dots](docs/dot.md): An 8 px dot of a tone beside a word: online, live, the color of a site. The dot repeats what the word says; it never says it alone.
 - [Avatars](docs/avatar.md): A round mark of a person: their initials in the accent or their photo, 32 px or 24 px with avatar-sm.
-- [Logos](docs/logo.md): A white mat for someone else's logo - a bank, a payment service, a partner - that keeps it readable in both themes and gives logos of any shape the same weight on a line.
 - [Icon tiles](docs/icon-tile.md): A rounded square with an icon in it: the mark of a screen's subject in its title, of a kind of record, of a drop zone.
 - [Stat tiles](docs/stat.md): A number with its label and an icon in a tone - and, as a button, the filter for what it counts: the numbers a person reads are the buttons they press.
 - [QR codes](docs/qr.md): A white tile for a QR code: a scanner reads dark modules on white, so the tile stays white in the dark theme, in forced colors and on paper.
@@ -97,7 +95,6 @@ Bootstrap 5's class names (Bootstrap 6's where it moved onto the platform), the 
 
 - [App shell](docs/app.md): The frame of an admin screen: app with a header, a side navigation, the main column and an optional side column. Below 1024 px the side navigation becomes a panel opened from the header. These docs stand in it. A site's header is a navbar.
 - [Centered page](docs/page-center.md): A page without the app shell: the brand, one card and a way on, in a column at the middle of the window - sign-in, registration, a password reset, a second factor, an unlock, an enrolment.
-- [Kiosk](docs/kiosk.md): A full screen for a tablet that stays on at a door: a name on top, big language buttons, a huge clock while it waits, one round state and one or two huge actions - read from across a room and pressed with a glove.
 
 ## Skills
 

@@ -73,7 +73,6 @@
 				<a class="app-link" href="collapse.html"><i class="bi bi-arrows-collapse" aria-hidden="true"></i>Collapse</a>
 				<a class="app-link" href="list-group.html"><i class="bi bi-list-ul" aria-hidden="true"></i>List groups</a>
 				<a class="app-link" href="tree.html"><i class="bi bi-diagram-3" aria-hidden="true"></i>Trees</a>
-				<a class="app-link" href="thread.html"><i class="bi bi-chat-dots" aria-hidden="true"></i>Message threads</a>
 				<a class="app-link" href="chart.html"><i class="bi bi-bar-chart" aria-hidden="true"></i>Charts</a>
 				<a class="app-link" href="calendar.html"><i class="bi bi-calendar3" aria-hidden="true"></i>Calendars</a>
 				<a class="app-link" href="media.html"><i class="bi bi-collection" aria-hidden="true"></i>Media library</a>
@@ -85,7 +84,6 @@
 				<a class="app-link" href="badge.html"><i class="bi bi-patch-check" aria-hidden="true"></i>Badges</a>
 				<a class="app-link" href="dot.html"><i class="bi bi-record-circle" aria-hidden="true"></i>Dots</a>
 				<a class="app-link" href="avatar.html"><i class="bi bi-person-circle" aria-hidden="true"></i>Avatars</a>
-				<a class="app-link" href="logo.html"><i class="bi bi-patch-check" aria-hidden="true"></i>Logos</a>
 				<a class="app-link" href="icon-tile.html"><i class="bi bi-app" aria-hidden="true"></i>Icon tiles</a>
 				<a class="app-link" href="stat.html"><i class="bi bi-speedometer2" aria-hidden="true"></i>Stat tiles</a>
 				<a class="app-link" href="qr.html"><i class="bi bi-qr-code" aria-hidden="true"></i>QR codes</a>
@@ -123,7 +121,6 @@
 			<details class="app-group" id="docs-nav-pages" open><summary class="app-section">Pages</summary>
 				<a class="app-link" href="app.html"><i class="bi bi-window-sidebar" aria-hidden="true"></i>App shell</a>
 				<a class="app-link" href="page-center.html"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Centered page</a>
-				<a class="app-link" href="kiosk.html"><i class="bi bi-tablet-landscape" aria-hidden="true"></i>Kiosk</a>
 			</details>
 			<details class="app-group" id="docs-nav-reference" open><summary class="app-section">Reference</summary>
 				<a class="app-link" href="all.html"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i>All components</a>
@@ -197,37 +194,6 @@
 &lt;meter class="meter" value="8" min="0" max="10" low="7" high="9" optimum="0" aria-label="Photos, 8 of 10 GB"&gt;8 of 10 GB&lt;/meter&gt;
 &lt;meter class="meter" value="9.6" min="0" max="10" low="7" high="9" optimum="0" aria-label="Backups, 9.6 of 10 GB"&gt;9.6 of 10 GB&lt;/meter&gt;</code></pre></div>
 
-					<h3 id="progress-stacked">A meter of several parts</h3>
-					<p><code>meter meter-stacked</code> on a <code>div role="meter"</code> shows the parts of one amount - the free, the paid, what goes over the limit - each a child with its <code>data-v</code>, its share of the whole scale, and <code>data-tone</code>; 2 px apart, the ends rounded. A part with <code>data-over</code>, past the limit, is hatched red, so it reads without its color too. The meter's numbers and its words are the page's: <code>aria-valuenow</code>, <code>aria-valuemax</code>, an <code>aria-valuetext</code> that says the parts, and a legend of <a href="dot.html">dots</a> beside it.</p>
-					<div class="docs-sample"><div class="docs-example docs-example-stack" id="progress-stacked-quota">
-						<div class="vstack gap-8 max-w-480">
-							<div class="hstack gap-8 fs-14"><span class="flex-grow-1" id="progress-stacked-title">Seats this month</span><span class="text-muted tabular-nums">130 of 120</span></div>
-							<div class="meter meter-stacked" role="meter" aria-labelledby="progress-stacked-title" aria-valuenow="130" aria-valuemin="0" aria-valuemax="130" aria-valuetext="130 seats: 50 free, 70 paid, 10 over the limit">
-								<span data-tone="success" data-v="0.385"></span>
-								<span data-tone="primary" data-v="0.538"></span>
-								<span data-over data-v="0.077"></span>
-							</div>
-							<ul class="hstack flex-wrap gap-12 fs-12 text-muted" aria-hidden="true">
-								<li class="hstack gap-4"><span class="dot dot-success"></span>Free 50</li>
-								<li class="hstack gap-4"><span class="dot dot-primary"></span>Paid 70</li>
-								<li class="hstack gap-4"><span class="dot dot-danger"></span>Over 10</li>
-							</ul>
-						</div>
-					</div>
-					<pre class="docs-code" tabindex="0"><code>&lt;div class="vstack gap-8 max-w-480"&gt;
-	&lt;div class="hstack gap-8 fs-14"&gt;&lt;span class="flex-grow-1" id="progress-stacked-title"&gt;Seats this month&lt;/span&gt;&lt;span class="text-muted tabular-nums"&gt;130 of 120&lt;/span&gt;&lt;/div&gt;
-	&lt;div class="meter meter-stacked" role="meter" aria-labelledby="progress-stacked-title" aria-valuenow="130" aria-valuemin="0" aria-valuemax="130" aria-valuetext="130 seats: 50 free, 70 paid, 10 over the limit"&gt;
-		&lt;span data-tone="success" data-v="0.385"&gt;&lt;/span&gt;
-		&lt;span data-tone="primary" data-v="0.538"&gt;&lt;/span&gt;
-		&lt;span data-over data-v="0.077"&gt;&lt;/span&gt;
-	&lt;/div&gt;
-	&lt;ul class="hstack flex-wrap gap-12 fs-12 text-muted" aria-hidden="true"&gt;
-		&lt;li class="hstack gap-4"&gt;&lt;span class="dot dot-success"&gt;&lt;/span&gt;Free 50&lt;/li&gt;
-		&lt;li class="hstack gap-4"&gt;&lt;span class="dot dot-primary"&gt;&lt;/span&gt;Paid 70&lt;/li&gt;
-		&lt;li class="hstack gap-4"&gt;&lt;span class="dot dot-danger"&gt;&lt;/span&gt;Over 10&lt;/li&gt;
-	&lt;/ul&gt;
-&lt;/div&gt;</code></pre></div>
-
 					<h3>Hairlines</h3>
 					<p><code>progress-xs</code>, 3 px, and <code>meter-xs</code>, 2 px, sit under a row's words without fighting them: how far a job is between its runs, amber when it is late, and how often it succeeded, colored by the meter's own parts.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="progress-hairlines">
@@ -275,8 +241,8 @@
 
 						<section class="vstack gap-12" aria-labelledby="progress-tokens">
 							<h2 id="progress-tokens">Tokens</h2>
-							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/progress.css"><code>css/components/progress.css</code></a>. It declares <code>--redz-part</code>, <code>--redz-track</code> on its root, never on rows or items.</p>
-							<p>It reads the theme's <code>--redz-bg-hover</code>, <code>--redz-primary-fill</code>, <code>--redz-secondary-fill</code>, <code>--redz-success-fill</code>, <code>--redz-danger-fill</code>, <code>--redz-warning-fill</code>, <code>--redz-info-fill</code>, <code>--redz-danger-contrast</code>, <code>--redz-progress-top-track</code>, <code>--redz-progress-top-size</code>, <code>--redz-progress-top-glow</code>, <code>--redz-motion</code>, <code>--redz-ease</code>.</p>
+							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/progress.css"><code>css/components/progress.css</code></a>. It declares <code>--redz-track</code> on its root, never on rows or items.</p>
+							<p>It reads the theme's <code>--redz-bg-hover</code>, <code>--redz-primary-fill</code>, <code>--redz-secondary-fill</code>, <code>--redz-success-fill</code>, <code>--redz-danger-fill</code>, <code>--redz-warning-fill</code>, <code>--redz-info-fill</code>, <code>--redz-progress-top-track</code>, <code>--redz-progress-top-size</code>, <code>--redz-progress-top-glow</code>, <code>--redz-motion</code>, <code>--redz-ease</code>.</p>
 						</section>
 
 						<section class="vstack gap-12" aria-labelledby="progress-from-bootstrap">

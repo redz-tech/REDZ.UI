@@ -34,7 +34,7 @@ Quieter forms of the same tones for secondary actions, rows and toolbars. `btn-t
 
 ### Sizes
 
-A size is a word: `btn-xs` 24 px, `btn-sm` 28 px, the default 32 px, `btn-lg` 40 px - the heights of every control of the same size. Under a finger, `pointer: coarse`, every size is 44 px at least and `btn-lg` 48, as Apple and Material ask of a touch target. `btn-xl`, 56 px, is for a touch screen and the one action of a page; in a [kiosk](kiosk.md) it grows to a kiosk's size.
+A size is a word: `btn-xs` 24 px, `btn-sm` 28 px, the default 32 px, `btn-lg` 40 px - the heights of every control of the same size. Under a finger, `pointer: coarse`, every size is 44 px at least and `btn-lg` 48, as Apple and Material ask of a touch target. `btn-xl`, 56 px, is for a touch screen and the one action of a page.
 
 ```html
 <button class="btn btn-primary btn-xs" type="button">Extra small</button>

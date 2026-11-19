@@ -289,6 +289,7 @@
 			<div class="card edge-start-color" data-color="#e76f51"><div class="card-body">Overdue</div></div>
 		</div>
 	</div>
+	<p><code>data-ratio</code> on any element passes a stored ratio the same way, its width by its height as the server measured it: the library sets it as <code>--redz-ratio</code>, which a product's own stylesheet reads - <code>aspect-ratio: var(--redz-ratio)</code>.</p>
 
 	<h3>Sent on a change</h3>
 	<p><code>data-submit="change"</code> on a form or on one of its controls sends the form when such a control changes - a filter's select, a sort, a switch - by <code>requestSubmit</code>, so the browser's checks and the page's submit listeners run. A text field changes when it is left, not at every key; a combobox's list when a value is chosen.</p>

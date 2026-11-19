@@ -75,7 +75,7 @@ The parent sets the grid; each card measures itself. Under 576 px of the region 
 
 ### A body that scrolls
 
-`card-scroll` with a height - `max-h-*`, from 160 to 640 px - keeps the card's header and footer in view and scrolls its body between them, as a dialog does: a list of tickets, a [thread](thread.md) above its reply box.
+`card-scroll` with a height - `max-h-*`, from 160 to 640 px - keeps the card's header and footer in view and scrolls its body between them, as a dialog does: a list of tickets, a conversation above its reply box.
 
 ```html
 <section class="card card-scroll max-h-240" aria-labelledby="card-scrolling-title">

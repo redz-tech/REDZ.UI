@@ -73,7 +73,6 @@
 				<a class="app-link" href="collapse.html"><i class="bi bi-arrows-collapse" aria-hidden="true"></i>Collapse</a>
 				<a class="app-link" href="list-group.html"><i class="bi bi-list-ul" aria-hidden="true"></i>List groups</a>
 				<a class="app-link" href="tree.html"><i class="bi bi-diagram-3" aria-hidden="true"></i>Trees</a>
-				<a class="app-link" href="thread.html"><i class="bi bi-chat-dots" aria-hidden="true"></i>Message threads</a>
 				<a class="app-link" href="chart.html"><i class="bi bi-bar-chart" aria-hidden="true"></i>Charts</a>
 				<a class="app-link" href="calendar.html"><i class="bi bi-calendar3" aria-hidden="true"></i>Calendars</a>
 				<a class="app-link" href="media.html"><i class="bi bi-collection" aria-hidden="true"></i>Media library</a>
@@ -85,7 +84,6 @@
 				<a class="app-link" href="badge.html"><i class="bi bi-patch-check" aria-hidden="true"></i>Badges</a>
 				<a class="app-link" href="dot.html"><i class="bi bi-record-circle" aria-hidden="true"></i>Dots</a>
 				<a class="app-link" href="avatar.html"><i class="bi bi-person-circle" aria-hidden="true"></i>Avatars</a>
-				<a class="app-link" href="logo.html"><i class="bi bi-patch-check" aria-hidden="true"></i>Logos</a>
 				<a class="app-link" href="icon-tile.html"><i class="bi bi-app" aria-hidden="true"></i>Icon tiles</a>
 				<a class="app-link" href="stat.html"><i class="bi bi-speedometer2" aria-hidden="true"></i>Stat tiles</a>
 				<a class="app-link" href="qr.html"><i class="bi bi-qr-code" aria-hidden="true"></i>QR codes</a>
@@ -123,7 +121,6 @@
 			<details class="app-group" id="docs-nav-pages" open><summary class="app-section">Pages</summary>
 				<a class="app-link" href="app.html"><i class="bi bi-window-sidebar" aria-hidden="true"></i>App shell</a>
 				<a class="app-link" href="page-center.html"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Centered page</a>
-				<a class="app-link" href="kiosk.html"><i class="bi bi-tablet-landscape" aria-hidden="true"></i>Kiosk</a>
 			</details>
 			<details class="app-group" id="docs-nav-reference" open><summary class="app-section">Reference</summary>
 				<a class="app-link" href="all.html"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i>All components</a>
@@ -598,6 +595,7 @@
 	&lt;span class="icon-tile" data-color="#264653"&gt;&lt;i class="bi bi-tag" aria-hidden="true"&gt;&lt;/i&gt;&lt;/span&gt;
 	&lt;div class="card edge-start-color" data-color="#e76f51"&gt;&lt;div class="card-body"&gt;Overdue&lt;/div&gt;&lt;/div&gt;
 &lt;/div&gt;</code></pre></div>
+					<p><code>data-ratio</code> on any element passes a stored ratio the same way, its width by its height as the server measured it: the library sets it as <code>--redz-ratio</code>, which a product's own stylesheet reads - <code>aspect-ratio: var(--redz-ratio)</code>.</p>
 
 					<h3>Sent on a change</h3>
 					<p><code>data-submit="change"</code> on a form or on one of its controls sends the form when such a control changes - a filter's select, a sort, a switch - by <code>requestSubmit</code>, so the browser's checks and the page's submit listeners run. A text field changes when it is left, not at every key; a combobox's list when a value is chosen.</p>

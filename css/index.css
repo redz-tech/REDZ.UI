@@ -30,7 +30,6 @@
 @import url("components/command-line.css");
 @import url("components/choice.css");
 @import url("components/rating.css");
-@import url("components/thread.css");
 @import url("components/chip.css");
 @import url("components/chip-input.css");
 @import url("components/table.css");
@@ -61,10 +60,8 @@
 @import url("components/busy.css");
 @import url("components/empty-state.css");
 @import url("components/selection-bar.css");
-@import url("components/action-bar.css");
 @import url("components/save-bar.css");
 @import url("components/form-status.css");
 @import url("components/app.css");
 @import url("components/page-center.css");
-@import url("components/kiosk.css");
 @import url("utilities.css");

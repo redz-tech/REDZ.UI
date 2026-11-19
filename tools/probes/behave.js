@@ -1861,24 +1861,6 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a file the page makes smaller: ' + busy + ' then ' + state + ', the field holds ' + say([...field.files].map((file) => file.name)));
 			}
 		}]},
-		thread: {target: '#thread-desk', steps: [async (out) => {
-			const remove = $('#thread-desk .thread-file-remove');
-			const at = [getComputedStyle(remove).display];
-			$('#thread-desk [command="--edit"]').click();
-			await wait(100);
-			at.push(getComputedStyle(remove).display);
-			const focus = document.activeElement.tagName;
-			document.activeElement.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true, cancelable: true}));
-			await wait(100);
-			at.push(getComputedStyle(remove).display);
-			if (at[0] !== 'none' || at[1] === 'none' || at[2] !== 'none' || focus !== 'TEXTAREA') {
-				out.push('a message\'s file Remove shows ' + say(at) + ' at rest, editing and after Escape, the focus in ' + focus + ' while editing');
-			}
-			const body = $('#thread-desk .card-body');
-			if (body.scrollHeight <= body.clientHeight) {
-				out.push('a long thread does not scroll in its card');
-			}
-		}]},
 		alert: {target: '#alert-fill-words', steps: [async (out) => {
 			const alert = $('#alert-fill-words');
 			const run = $('[data-docs-run="alert-fill"]');
@@ -3705,16 +3687,6 @@ window.REDZ_BEHAVE = (() => {
 			}
 			host.remove();
 		}]},
-		actionBar: {target: '#app-action-bar-example', steps: [async (out) => {
-			const bar = $('#app-action-bar-example .action-bar');
-			const style = getComputedStyle(bar);
-			const floor = document.body.appendChild(Object.assign(document.createElement('div'), {className: 'bg-page'}));
-			const page = getComputedStyle(floor).backgroundColor;
-			floor.remove();
-			if (style.position !== 'sticky' || style.bottom !== '0px' || style.backgroundColor !== page) {
-				out.push('an action bar is ' + style.position + ' at bottom ' + style.bottom + ' on ' + style.backgroundColor + ', not sticky on the page\'s floor');
-			}
-		}]},
 		toneText: {target: '#tokens-brand-region', steps: [async (out) => {
 			if (!await readable) {
 				return;
@@ -3742,24 +3714,6 @@ window.REDZ_BEHAVE = (() => {
 			}
 			if (low.length > 0 && document.documentElement.dataset.theme !== 'dark') {
 				out.push('text in a brand tone below 4.5:1 on its ground: ' + say(low));
-			}
-		}]},
-		logoSize: {target: '#logo-sizes', steps: [async (out) => {
-			const [small, plain, large, mark] = $$('#logo-sizes .logo').map((one) => one.getBoundingClientRect());
-			const ground = getComputedStyle($('#logo-sizes .logo')).backgroundColor;
-			const got = [Math.round(small.height), Math.round(plain.height), Math.round(large.height), Math.round(large.width), Math.round(mark.width), ground];
-			if (say(got) !== say([28, 32, 40, 113, 40, 'rgb(255, 255, 255)'])) {
-				out.push('logos: heights, the 4:1 large one\'s width and the round mark\'s width, the ground ' + say(got) + ' - a width is the height times the ratio to the power 0.75');
-			}
-		}]},
-		logoChoice: {target: '#logo-choice', steps: [async (out) => {
-			const [wide, solid] = $$('#logo-choice .choice-media').map((media) => {
-				const style = getComputedStyle(media);
-				const room = media.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
-				return Math.round($('img', media).getBoundingClientRect().height / room * 100);
-			});
-			if (Math.abs(wide - 71) > 3 || solid < 97) {
-				out.push('a choice tile draws a 4:1 wordmark ' + wide + ' % as high as its banner, not about 71 % (the fourth root), and a logo on its own color ' + solid + ' %, not all of it');
 			}
 		}]},
 		overlayShade: {target: '#card-images', steps: [async (out) => {
@@ -3817,16 +3771,6 @@ window.REDZ_BEHAVE = (() => {
 			const look = [getComputedStyle(pre).whiteSpace, getComputedStyle(pre).direction, pre.scrollWidth > pre.clientWidth || pre.scrollWidth <= pre.clientWidth, box.getAttribute('role'), getComputedStyle($('#command-line-key var')).backgroundColor !== 'rgba(0, 0, 0, 0)'];
 			if (say(copied) !== say(['curl -fsSLO https://get.example.com/agent/agent-2.4.tar.gz\ntar -xzf agent-2.4.tar.gz -C /opt\n/opt/agent/start --key YOUR_KEY', 'curl -fsSLO https://get.example.com/agent/agent-2.4.tar.gz', $('code', pre).textContent]) || say(look) !== say(['pre', 'ltr', true, 'group', true])) {
 				out.push('commands to copy: copied ' + say(copied) + ' (all steps a line each, one step, the crontab line); look ' + say(look));
-			}
-		}]},
-		meterStacked: {target: '#progress-stacked-quota', steps: [async (out) => {
-			const meter = $('#progress-stacked-quota .meter-stacked');
-			const parts = $$(':scope > *', meter);
-			const whole = meter.getBoundingClientRect().width - 4;
-			const shares = parts.map((part) => +(part.getBoundingClientRect().width / whole).toFixed(2));
-			const hatched = getComputedStyle(parts[2]).backgroundImage.includes('repeating-linear-gradient');
-			if (shares.some((value, i) => Math.abs(value - [0.385, 0.538, 0.077][i]) > 0.02) || !hatched) {
-				out.push('a stacked meter draws its parts at ' + say(shares) + ' of the scale, not their data-v, and its part over the limit is ' + (hatched ? '' : 'not ') + 'hatched');
 			}
 		}]},
 		chartLine: {target: '#chart-line-usage', steps: [async (out) => {
@@ -4237,19 +4181,14 @@ window.REDZ_BEHAVE = (() => {
 			tabs[0].click();
 			await settled();
 		}]},
-		readyStep: {target: '#step-list-pipeline-ready [data-state="ready"]', steps: [async (out) => {
-			const stage = $('#step-list-pipeline-ready [data-state="ready"]');
-			const icon = $('.bi', stage);
+		readyStep: {target: '#step-list-narrow [data-state="ready"]', steps: [async (out) => {
 			const step = $('#step-list-narrow [data-state="ready"] > .bi');
 			const turning = $('#step-list-job [data-state="current"] > .bi');
 			if (matchMedia('(prefers-reduced-motion: no-preference)').matches && getComputedStyle(turning).animationName === 'none') {
 				out.push('a current step no longer turns, so this check proves nothing');
 			}
-			if (getComputedStyle(icon).animationName !== 'none' || getComputedStyle(step).animationName !== 'none') {
+			if (getComputedStyle(step).animationName !== 'none') {
 				out.push('a ready step turns its icon');
-			}
-			if (getComputedStyle(icon).color !== getComputedStyle(step).color || getComputedStyle(stage).borderInlineStartColor !== getComputedStyle($('#step-list-pipeline [data-state="current"]')).borderInlineStartColor) {
-				out.push('a ready step does not wear the look of the current one');
 			}
 		}]},
 		tileTone: {target: '#stat-tile-tone .stat', steps: [async (out) => {

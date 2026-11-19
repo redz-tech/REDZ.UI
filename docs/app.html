@@ -73,7 +73,6 @@
 				<a class="app-link" href="collapse.html"><i class="bi bi-arrows-collapse" aria-hidden="true"></i>Collapse</a>
 				<a class="app-link" href="list-group.html"><i class="bi bi-list-ul" aria-hidden="true"></i>List groups</a>
 				<a class="app-link" href="tree.html"><i class="bi bi-diagram-3" aria-hidden="true"></i>Trees</a>
-				<a class="app-link" href="thread.html"><i class="bi bi-chat-dots" aria-hidden="true"></i>Message threads</a>
 				<a class="app-link" href="chart.html"><i class="bi bi-bar-chart" aria-hidden="true"></i>Charts</a>
 				<a class="app-link" href="calendar.html"><i class="bi bi-calendar3" aria-hidden="true"></i>Calendars</a>
 				<a class="app-link" href="media.html"><i class="bi bi-collection" aria-hidden="true"></i>Media library</a>
@@ -85,7 +84,6 @@
 				<a class="app-link" href="badge.html"><i class="bi bi-patch-check" aria-hidden="true"></i>Badges</a>
 				<a class="app-link" href="dot.html"><i class="bi bi-record-circle" aria-hidden="true"></i>Dots</a>
 				<a class="app-link" href="avatar.html"><i class="bi bi-person-circle" aria-hidden="true"></i>Avatars</a>
-				<a class="app-link" href="logo.html"><i class="bi bi-patch-check" aria-hidden="true"></i>Logos</a>
 				<a class="app-link" href="icon-tile.html"><i class="bi bi-app" aria-hidden="true"></i>Icon tiles</a>
 				<a class="app-link" href="stat.html"><i class="bi bi-speedometer2" aria-hidden="true"></i>Stat tiles</a>
 				<a class="app-link" href="qr.html"><i class="bi bi-qr-code" aria-hidden="true"></i>QR codes</a>
@@ -123,7 +121,6 @@
 			<details class="app-group" id="docs-nav-pages" open><summary class="app-section">Pages</summary>
 				<a class="app-link" href="app.html" aria-current="page"><i class="bi bi-window-sidebar" aria-hidden="true"></i>App shell</a>
 				<a class="app-link" href="page-center.html"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Centered page</a>
-				<a class="app-link" href="kiosk.html"><i class="bi bi-tablet-landscape" aria-hidden="true"></i>Kiosk</a>
 			</details>
 			<details class="app-group" id="docs-nav-reference" open><summary class="app-section">Reference</summary>
 				<a class="app-link" href="all.html"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i>All components</a>
@@ -309,39 +306,6 @@ REDZ.ui.banner(null);</code></pre>
 &lt;div class="app-banner app-banner-success"&gt;&lt;i class="bi bi-check-circle-fill" aria-hidden="true"&gt;&lt;/i&gt;&lt;span&gt;The system is back. Every change is saved.&lt;/span&gt;&lt;/div&gt;
 &lt;div class="app-banner app-banner-warning"&gt;&lt;i class="bi bi-exclamation-triangle-fill" aria-hidden="true"&gt;&lt;/i&gt;&lt;span&gt;The system is paused for maintenance. Your changes are kept; try again in a few minutes.&lt;/span&gt;&lt;/div&gt;
 &lt;div class="app-banner app-banner-danger"&gt;&lt;i class="bi bi-x-octagon-fill" aria-hidden="true"&gt;&lt;/i&gt;&lt;span&gt;The connection is lost. Changes made now are not saved.&lt;/span&gt;&lt;/div&gt;</code></pre></div>
-				</section>
-
-				<section class="vstack gap-16" aria-labelledby="app-action-bar">
-					<h2 id="app-action-bar">A bar at the bottom</h2>
-					<p><code>action-bar</code> holds what a long screen is for - a total and Pay, a count and Save - at the bottom of the window while the page scrolls under it: sticky, across its region on the page's own tinted floor, a line above it. As the last child of <code>app-main</code> it reaches the region's edges. Its padding keeps clear of a phone's home bar and rounded corners - the page asks for that room with <code>viewport-fit=cover</code> in its viewport meta - and on a touch screen it steps aside while a field has the focus, as the keyboard takes its place. <code>action-bar-text</code> is its words, which take the room left. It stays off paper.</p>
-					<div class="docs-sample"><div class="docs-example docs-example-stack" id="app-action-bar-example">
-						<div class="card card-scroll max-h-240" role="group" aria-label="The bill">
-							<div class="card-body vstack gap-8">
-								<p>North Bay by speedboat · 2 adults · 5,000 THB</p>
-								<p>Lunch on the beach · 2 · 600 THB</p>
-								<p>Hotel pickup · 1 · 250 THB</p>
-								<p>Park fee · 2 · 800 THB</p>
-								<p>Snorkelling gear · 2 · 0 THB</p>
-							</div>
-							<div class="action-bar">
-								<span class="action-bar-text"><strong class="tabular-nums">6,650 THB</strong> <span class="text-muted">for 4 items</span></span>
-								<button class="btn btn-primary" type="button">Pay</button>
-							</div>
-						</div>
-					</div>
-					<pre class="docs-code" tabindex="0"><code>&lt;div class="card card-scroll max-h-240" role="group" aria-label="The bill"&gt;
-	&lt;div class="card-body vstack gap-8"&gt;
-		&lt;p&gt;North Bay by speedboat · 2 adults · 5,000 THB&lt;/p&gt;
-		&lt;p&gt;Lunch on the beach · 2 · 600 THB&lt;/p&gt;
-		&lt;p&gt;Hotel pickup · 1 · 250 THB&lt;/p&gt;
-		&lt;p&gt;Park fee · 2 · 800 THB&lt;/p&gt;
-		&lt;p&gt;Snorkelling gear · 2 · 0 THB&lt;/p&gt;
-	&lt;/div&gt;
-	&lt;div class="action-bar"&gt;
-		&lt;span class="action-bar-text"&gt;&lt;strong class="tabular-nums"&gt;6,650 THB&lt;/strong&gt; &lt;span class="text-muted"&gt;for 4 items&lt;/span&gt;&lt;/span&gt;
-		&lt;button class="btn btn-primary" type="button"&gt;Pay&lt;/button&gt;
-	&lt;/div&gt;
-&lt;/div&gt;</code></pre></div>
 				</section>
 
 				<section class="vstack gap-16">

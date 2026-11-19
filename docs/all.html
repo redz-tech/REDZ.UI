@@ -83,7 +83,6 @@
 				<a class="app-link" href="collapse.html"><i class="bi bi-arrows-collapse" aria-hidden="true"></i>Collapse</a>
 				<a class="app-link" href="list-group.html"><i class="bi bi-list-ul" aria-hidden="true"></i>List groups</a>
 				<a class="app-link" href="tree.html"><i class="bi bi-diagram-3" aria-hidden="true"></i>Trees</a>
-				<a class="app-link" href="thread.html"><i class="bi bi-chat-dots" aria-hidden="true"></i>Message threads</a>
 				<a class="app-link" href="chart.html"><i class="bi bi-bar-chart" aria-hidden="true"></i>Charts</a>
 				<a class="app-link" href="calendar.html"><i class="bi bi-calendar3" aria-hidden="true"></i>Calendars</a>
 				<a class="app-link" href="media.html"><i class="bi bi-collection" aria-hidden="true"></i>Media library</a>
@@ -95,7 +94,6 @@
 				<a class="app-link" href="badge.html"><i class="bi bi-patch-check" aria-hidden="true"></i>Badges</a>
 				<a class="app-link" href="dot.html"><i class="bi bi-record-circle" aria-hidden="true"></i>Dots</a>
 				<a class="app-link" href="avatar.html"><i class="bi bi-person-circle" aria-hidden="true"></i>Avatars</a>
-				<a class="app-link" href="logo.html"><i class="bi bi-patch-check" aria-hidden="true"></i>Logos</a>
 				<a class="app-link" href="icon-tile.html"><i class="bi bi-app" aria-hidden="true"></i>Icon tiles</a>
 				<a class="app-link" href="stat.html"><i class="bi bi-speedometer2" aria-hidden="true"></i>Stat tiles</a>
 				<a class="app-link" href="qr.html"><i class="bi bi-qr-code" aria-hidden="true"></i>QR codes</a>
@@ -133,7 +131,6 @@
 			<details class="app-group" id="docs-nav-pages" open><summary class="app-section">Pages</summary>
 				<a class="app-link" href="app.html"><i class="bi bi-window-sidebar" aria-hidden="true"></i>App shell</a>
 				<a class="app-link" href="page-center.html"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Centered page</a>
-				<a class="app-link" href="kiosk.html"><i class="bi bi-tablet-landscape" aria-hidden="true"></i>Kiosk</a>
 			</details>
 			<details class="app-group" id="docs-nav-reference" open><summary class="app-section">Reference</summary>
 				<a class="app-link" href="all.html" aria-current="page"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i>All components</a>
@@ -2231,46 +2228,6 @@ Boat C	 9 trips	201 seats</pre>
 					</div>
 				</section>
 
-				<section class="vstack gap-16" aria-labelledby="all-thread">
-					<h2 id="all-thread"><a href="thread.html">Message threads</a></h2>
-					<div class="docs-example docs-example-stack" id="thread-desk">
-						<section class="card card-scroll max-h-560" aria-labelledby="thread-desk-title">
-							<div class="card-header hstack flex-wrap gap-8"><h2 id="thread-desk-title">The booking page shows the wrong price</h2><span class="badge badge-subtle-warning">Open</span></div>
-							<div class="card-body">
-								<ol class="thread" aria-label="Messages">
-									<li class="thread-message">
-										<span class="avatar avatar-sm" aria-hidden="true">AR</span>
-										<div class="thread-body">
-											<div class="thread-meta"><span>Example Resort</span><time datetime="2026-11-04T09:12">09:12</time></div>
-											<div class="thread-bubble">The child price on North Bay shows 2,500 THB.&#10;It should be 1,900 THB since Monday.</div>
-											<div class="thread-files"><a href="img/lagoon.svg"><img src="img/lagoon.svg" alt="Screenshot of the price"></a></div>
-										</div>
-									</li>
-									<li class="thread-message" data-mine>
-										<span class="avatar avatar-sm" aria-hidden="true">RZ</span>
-										<div class="thread-body">
-											<div class="thread-meta"><span>REDZ support</span><time datetime="2026-11-04T09:30">09:30</time><span class="thread-edited">edited</span><button class="btn btn-xs btn-icon btn-text" type="button" commandfor="thread-desk-edit" command="--edit" aria-label="Edit the message"><i class="bi bi-pencil" aria-hidden="true"></i></button></div>
-											<div class="thread-bubble" id="thread-desk-reply">Thank you - the price list was published before the change. It is fixed now; please check the page again.</div>
-											<form class="inline-edit-form" id="thread-desk-edit" data-for="thread-desk-reply" hidden>
-												<textarea class="form-control" name="text" aria-label="Message" rows="3">Thank you - the price list was published before the change. It is fixed now; please check the page again.</textarea>
-												<button class="btn btn-sm btn-primary" type="submit">Save</button>
-												<button class="btn btn-sm" type="button" commandfor="thread-desk-edit" command="--cancel">Cancel</button>
-												<div class="invalid-feedback" hidden></div>
-											</form>
-											<div class="thread-files"><span><img src="img/qr.svg" alt="The fixed page"><button class="btn btn-xs btn-icon thread-file-remove" type="button" aria-label="Remove the fixed page"><i class="bi bi-x-lg" aria-hidden="true"></i></button></span></div>
-										</div>
-									</li>
-								</ol>
-							</div>
-							<div class="card-footer">
-								<textarea class="form-control" name="reply" rows="2" aria-label="Reply" placeholder="Write a reply"></textarea>
-								<button class="btn btn-primary" type="button"><i class="bi bi-send" aria-hidden="true"></i>Send</button>
-								<button class="btn ms-auto" type="button">Close the ticket</button>
-							</div>
-						</section>
-					</div>
-				</section>
-
 				<section class="vstack gap-16" aria-labelledby="all-chart">
 					<h2 id="all-chart"><a href="chart.html">Charts</a></h2>
 					<div class="docs-example docs-example-stack" id="chart-messages">
@@ -3133,26 +3090,6 @@ Boat C	 9 trips	201 seats</pre>
 					</div>
 				</section>
 
-				<section class="vstack gap-16" aria-labelledby="all-logo">
-					<h2 id="all-logo"><a href="logo.html">Logos</a></h2>
-					<div class="docs-example" id="logo-sizes">
-						<span class="logo logo-sm" data-ratio="4"><img src="img/logo-wide.svg" alt="Lagoonpay"></span>
-						<span class="logo" data-ratio="4"><img src="img/logo-wide.svg" alt="Lagoonpay"></span>
-						<span class="logo logo-lg" data-ratio="4"><img src="img/logo-wide.svg" alt="Lagoonpay"></span>
-						<span class="logo logo-lg"><img src="img/logo-mark.svg" alt="North Bay Tours"></span>
-					</div>
-					<div class="docs-example" id="logo-grounds">
-						<span class="logo logo-lg" data-ratio="3" data-color="#1f3a93"><img class="logo-fade" src="img/logo-solid.svg" alt="Baybank"></span>
-						<span class="logo logo-lg" data-ratio="1.5"><img class="logo-ground" src="img/lagoon.svg" alt=""><img src="img/lagoon.svg" alt="The lagoon at noon"></span>
-					</div>
-					<div class="docs-example docs-example-stack" id="logo-choice">
-						<div class="grid cols-2 gap-12 max-w-480" role="radiogroup" aria-label="Pay with">
-							<label class="choice"><input type="radio" name="logo-choice-pay" checked><span class="choice-media" data-ratio="4"><img src="img/logo-wide.svg" alt=""></span><span class="fw-600">Lagoonpay</span><span class="fs-12 text-muted">Card or wallet</span></label>
-							<label class="choice"><input type="radio" name="logo-choice-pay"><span class="choice-media" data-ratio="3" data-color="#1f3a93"><img src="img/logo-solid.svg" alt=""></span><span class="fw-600">Baybank</span><span class="fs-12 text-muted">Bank transfer</span></label>
-						</div>
-					</div>
-				</section>
-
 				<section class="vstack gap-16" aria-labelledby="all-icon-tile">
 					<h2 id="all-icon-tile"><a href="icon-tile.html">Icon tiles</a></h2>
 					<div class="docs-example" id="icon-tile-tones">
@@ -3304,21 +3241,6 @@ Boat C	 9 trips	201 seats</pre>
 							<li data-state="waiting"><i class="bi bi-hourglass-split" aria-hidden="true"></i>Issue the certificate<span class="step-list-detail">after the domain</span></li>
 							<li data-state="skipped"><i class="bi bi-skip-forward flip-rtl" aria-hidden="true"></i>Import the old comments<span class="step-list-detail">skipped</span></li>
 							<li data-state="locked"><i class="bi bi-lock" aria-hidden="true"></i>Switch off the old site<span class="step-list-detail">an owner's step</span></li>
-						</ol>
-					</div>
-					<div class="docs-example docs-example-stack" id="step-list-pipeline">
-						<ol class="stage-list" aria-label="The release of 2.4">
-							<li data-state="done"><span class="hstack gap-8"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><strong>Build</strong></span><span class="fs-12">2 min 14 s</span><div class="stage-list-actions"><button class="btn btn-sm" type="button">Log</button></div></li>
-							<li data-state="current" aria-current="step"><span class="hstack gap-8"><i class="bi bi-arrow-repeat" aria-hidden="true"></i><strong>Test</strong></span><span class="fs-12">412 of 580 checks</span><div class="stage-list-actions"><button class="btn btn-sm" type="button">Log</button><button class="btn btn-sm" type="button">Stop</button></div></li>
-							<li data-state="ask"><span class="hstack gap-8"><i class="bi bi-question-circle-fill" aria-hidden="true"></i><strong>Approve</strong></span><span class="fs-12">An owner signs off</span><div class="stage-list-actions"><button class="btn btn-sm btn-primary" type="button">Approve</button></div></li>
-							<li data-state="waiting"><span class="hstack gap-8"><i class="bi bi-hourglass-split" aria-hidden="true"></i><strong>Deploy</strong></span><span class="fs-12">After the approval</span></li>
-						</ol>
-					</div>
-					<div class="docs-example docs-example-stack" id="step-list-pipeline-ready">
-						<ol class="stage-list" aria-label="The update">
-							<li data-state="done"><span class="hstack gap-8"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><strong>Download</strong></span><span class="fs-12">4.6 MB</span></li>
-							<li data-state="ready" aria-current="step"><span class="hstack gap-8"><i class="bi bi-play-circle" aria-hidden="true"></i><strong>Install</strong></span><span class="fs-12">Waits for your press</span><div class="stage-list-actions"><button class="btn btn-sm btn-primary" type="button">Start</button></div></li>
-							<li data-state="pending"><span class="hstack gap-8"><i class="bi bi-circle" aria-hidden="true"></i><strong>Verify</strong></span><span class="fs-12">After the install</span></li>
 						</ol>
 					</div>
 					<div class="docs-example docs-example-stack" id="step-list-events">
@@ -3728,21 +3650,6 @@ Boat C	 9 trips	201 seats</pre>
 						</div>
 						<meter class="meter" value="8" min="0" max="10" low="7" high="9" optimum="0" aria-label="Photos, 8 of 10 GB">8 of 10 GB</meter>
 						<meter class="meter" value="9.6" min="0" max="10" low="7" high="9" optimum="0" aria-label="Backups, 9.6 of 10 GB">9.6 of 10 GB</meter>
-					</div>
-					<div class="docs-example docs-example-stack" id="progress-stacked-quota">
-						<div class="vstack gap-8 max-w-480">
-							<div class="hstack gap-8 fs-14"><span class="flex-grow-1" id="progress-stacked-title">Seats this month</span><span class="text-muted tabular-nums">130 of 120</span></div>
-							<div class="meter meter-stacked" role="meter" aria-labelledby="progress-stacked-title" aria-valuenow="130" aria-valuemin="0" aria-valuemax="130" aria-valuetext="130 seats: 50 free, 70 paid, 10 over the limit">
-								<span data-tone="success" data-v="0.385"></span>
-								<span data-tone="primary" data-v="0.538"></span>
-								<span data-over data-v="0.077"></span>
-							</div>
-							<ul class="hstack flex-wrap gap-12 fs-12 text-muted" aria-hidden="true">
-								<li class="hstack gap-4"><span class="dot dot-success"></span>Free 50</li>
-								<li class="hstack gap-4"><span class="dot dot-primary"></span>Paid 70</li>
-								<li class="hstack gap-4"><span class="dot dot-danger"></span>Over 10</li>
-							</ul>
-						</div>
 					</div>
 					<div class="docs-example docs-example-stack" id="progress-hairlines">
 						<div class="vstack gap-4">
@@ -4420,21 +4327,6 @@ Boat C	 9 trips	201 seats</pre>
 						<div class="app-banner app-banner-warning"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i><span>The system is paused for maintenance. Your changes are kept; try again in a few minutes.</span></div>
 						<div class="app-banner app-banner-danger"><i class="bi bi-x-octagon-fill" aria-hidden="true"></i><span>The connection is lost. Changes made now are not saved.</span></div>
 					</div>
-					<div class="docs-example docs-example-stack" id="app-action-bar-example">
-						<div class="card card-scroll max-h-240" role="group" aria-label="The bill">
-							<div class="card-body vstack gap-8">
-								<p>North Bay by speedboat · 2 adults · 5,000 THB</p>
-								<p>Lunch on the beach · 2 · 600 THB</p>
-								<p>Hotel pickup · 1 · 250 THB</p>
-								<p>Park fee · 2 · 800 THB</p>
-								<p>Snorkelling gear · 2 · 0 THB</p>
-							</div>
-							<div class="action-bar">
-								<span class="action-bar-text"><strong class="tabular-nums">6,650 THB</strong> <span class="text-muted">for 4 items</span></span>
-								<button class="btn btn-primary" type="button">Pay</button>
-							</div>
-						</div>
-					</div>
 					<div class="docs-states" id="app-states" tabindex="0" role="region" aria-labelledby="app-states-title">
 						<table class="docs-matrix">
 							<thead>
@@ -4500,41 +4392,6 @@ Boat C	 9 trips	201 seats</pre>
 								<a href="#page-center-example">Sign in with a code</a>
 							</div>
 							<p class="app-credit">Powered by <a href="#page-center-example">REDZ CMS</a></p>
-						</div>
-					</div>
-				</section>
-
-				<section class="vstack gap-16" aria-labelledby="all-kiosk">
-					<h2 id="all-kiosk"><a href="kiosk.html">Kiosk</a></h2>
-					<div class="docs-example" id="kiosk-example">
-						<div class="kiosk" data-theme="dark">
-							<div class="kiosk-head"><i class="bi bi-geo-alt" aria-hidden="true"></i> Riverside tower</div>
-							<div class="kiosk-langs" role="group" aria-label="Language">
-								<button class="btn btn-xl" type="button" lang="en" aria-pressed="true">English</button>
-								<button class="btn btn-xl" type="button" lang="th" aria-pressed="false">ไทย</button>
-								<button class="btn btn-xl" type="button" lang="my" aria-pressed="false">မြန်မာ</button>
-							</div>
-							<div class="kiosk-main">
-								<div class="kiosk-date">Wednesday, November 4</div>
-								<div class="kiosk-clock">07:42</div>
-								<div class="icon-tile icon-tile-info kiosk-state kiosk-state-idle"><i class="bi bi-person-badge" aria-hidden="true"></i></div>
-								<div class="kiosk-title">Tap your card</div>
-								<div class="kiosk-line">Hold it to the reader under the screen</div>
-							</div>
-							<div class="kiosk-foot">REDZ ERP · Site entrance</div>
-						</div>
-					</div>
-					<div class="docs-example" id="kiosk-states">
-						<div class="kiosk" data-theme="dark">
-							<div class="kiosk-main">
-								<div class="icon-tile icon-tile-success kiosk-state"><i class="bi bi-check-lg" aria-hidden="true"></i></div>
-								<div class="kiosk-title">Sid Sample</div>
-								<div class="kiosk-line">Last in at 07:02</div>
-								<button class="btn btn-xl btn-success" type="button"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Check in</button>
-								<button class="btn btn-xl btn-warning" type="button"><i class="bi bi-box-arrow-right" aria-hidden="true"></i>Check out</button>
-								<button class="btn btn-text" type="button"><i class="bi bi-x-lg" aria-hidden="true"></i>Cancel</button>
-							</div>
-							<div class="kiosk-corner"></div>
 						</div>
 					</div>
 				</section>

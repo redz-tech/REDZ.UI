@@ -53,29 +53,6 @@ Six more states: `warning` - done with a warning, `info`, `ask` - the job waits 
 </ol>
 ```
 
-## A pipeline
-
-`stage-list` is an `ol` of stages, each a frame: first a line with its icon and its name, then what it says, and a `stage-list-actions` slot for its buttons at the bottom. The stages run across from a region of 768 px and down below it, joined by a line; `data-state` takes the steps' states.
-
-```html
-<ol class="stage-list" aria-label="The release of 2.4">
-	<li data-state="done"><span class="hstack gap-8"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><strong>Build</strong></span><span class="fs-12">2 min 14 s</span><div class="stage-list-actions"><button class="btn btn-sm" type="button">Log</button></div></li>
-	<li data-state="current" aria-current="step"><span class="hstack gap-8"><i class="bi bi-arrow-repeat" aria-hidden="true"></i><strong>Test</strong></span><span class="fs-12">412 of 580 checks</span><div class="stage-list-actions"><button class="btn btn-sm" type="button">Log</button><button class="btn btn-sm" type="button">Stop</button></div></li>
-	<li data-state="ask"><span class="hstack gap-8"><i class="bi bi-question-circle-fill" aria-hidden="true"></i><strong>Approve</strong></span><span class="fs-12">An owner signs off</span><div class="stage-list-actions"><button class="btn btn-sm btn-primary" type="button">Approve</button></div></li>
-	<li data-state="waiting"><span class="hstack gap-8"><i class="bi bi-hourglass-split" aria-hidden="true"></i><strong>Deploy</strong></span><span class="fs-12">After the approval</span></li>
-</ol>
-```
-
-A stage that is next and waits for a press is `ready`: it wears the frame of `current`, and its icon stays still.
-
-```html
-<ol class="stage-list" aria-label="The update">
-	<li data-state="done"><span class="hstack gap-8"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><strong>Download</strong></span><span class="fs-12">4.6 MB</span></li>
-	<li data-state="ready" aria-current="step"><span class="hstack gap-8"><i class="bi bi-play-circle" aria-hidden="true"></i><strong>Install</strong></span><span class="fs-12">Waits for your press</span><div class="stage-list-actions"><button class="btn btn-sm btn-primary" type="button">Start</button></div></li>
-	<li data-state="pending"><span class="hstack gap-8"><i class="bi bi-circle" aria-hidden="true"></i><strong>Verify</strong></span><span class="fs-12">After the install</span></li>
-</ol>
-```
-
 ## A timeline
 
 `timeline` is an `ol` of events joined by a line: each starts with an [icon tile](icon-tile.md) in its tone, then a `timeline-time`, the words, and a `dl` of details when it has them.
@@ -90,8 +67,7 @@ A stage that is next and waits for a press is `ready`: it wears the frame of `cu
 
 ## Accessibility
 
-- The words carry the state; the icon and the color repeat them - write the state in the step's detail when its name does not say it. Mark the current step `aria-current="step"`; a step or a stage that asks the person holds its own buttons.
-- A pipeline's stages are a list in their order, read one after the other wherever they stand on the screen; the current, the asking and the failed one are also outlined in forced colors.
+- The words carry the state; the icon and the color repeat them - write the state in the step's detail when its name does not say it. Mark the current step `aria-current="step"`; a step that asks the person holds its own buttons.
 - A job that runs while the person waits says its new step in a polite live region the page keeps - one line per step, not every tick of the clock.
 - A timeline's times are `<time datetime>`; its details are a description list, read as pairs.
 
@@ -99,4 +75,4 @@ A stage that is next and waits for a press is `ready`: it wears the frame of `cu
 
 From [`css/components/step-list.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/step-list.css). It declares `--redz-step-edge`, `--redz-step-top` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-4`, `--redz-space-2`, `--redz-space-16`, `--redz-text-muted`, `--redz-space-8`, `--redz-text`, `--redz-success-fill`, `--redz-primary-fill`, `--redz-danger-fill`, `--redz-warning-fill`, `--redz-info-fill`, `--redz-text-faint`, `--redz-space-12`, `--redz-radius-8`, `--redz-primary-subtle`, `--redz-warning-subtle`, `--redz-danger-subtle`, `--redz-fs-14`, `--redz-border`, `--redz-border-strong`, `--redz-radius-12`, `--redz-bg`, `--redz-fs-12`.
+It reads the theme's `--redz-space-4`, `--redz-space-2`, `--redz-space-16`, `--redz-text-muted`, `--redz-space-8`, `--redz-text`, `--redz-success-fill`, `--redz-primary-fill`, `--redz-danger-fill`, `--redz-warning-fill`, `--redz-info-fill`, `--redz-text-faint`, `--redz-space-12`, `--redz-radius-8`, `--redz-primary-subtle`, `--redz-warning-subtle`, `--redz-danger-subtle`, `--redz-fs-14`, `--redz-border`, `--redz-fs-12`.

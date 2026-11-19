@@ -81,7 +81,6 @@
 				<a class="app-link" href="collapse.html"><i class="bi bi-arrows-collapse" aria-hidden="true"></i>الطي</a>
 				<a class="app-link" href="list-group.html"><i class="bi bi-list-ul" aria-hidden="true"></i>مجموعات القوائم</a>
 				<a class="app-link" href="tree.html"><i class="bi bi-diagram-3" aria-hidden="true"></i>الأشجار</a>
-				<a class="app-link" href="thread.html"><i class="bi bi-chat-dots" aria-hidden="true"></i>سلاسل الرسائل</a>
 				<a class="app-link" href="chart.html"><i class="bi bi-bar-chart" aria-hidden="true"></i>الرسوم البيانية</a>
 				<a class="app-link" href="calendar.html"><i class="bi bi-calendar3" aria-hidden="true"></i>التقاويم</a>
 				<a class="app-link" href="media.html"><i class="bi bi-collection" aria-hidden="true"></i>مكتبة الوسائط</a>
@@ -93,7 +92,6 @@
 				<a class="app-link" href="badge.html"><i class="bi bi-patch-check" aria-hidden="true"></i>الشارات</a>
 				<a class="app-link" href="dot.html"><i class="bi bi-record-circle" aria-hidden="true"></i>النقاط</a>
 				<a class="app-link" href="avatar.html"><i class="bi bi-person-circle" aria-hidden="true"></i>الصور الرمزية</a>
-				<a class="app-link" href="logo.html"><i class="bi bi-patch-check" aria-hidden="true"></i>الشعارات</a>
 				<a class="app-link" href="icon-tile.html"><i class="bi bi-app" aria-hidden="true"></i>مربعات الأيقونات</a>
 				<a class="app-link" href="stat.html"><i class="bi bi-speedometer2" aria-hidden="true"></i>بطاقات الأرقام</a>
 				<a class="app-link" href="qr.html"><i class="bi bi-qr-code" aria-hidden="true"></i>رموز QR</a>
@@ -131,7 +129,6 @@
 			<details class="app-group" id="docs-nav-pages" open=""><summary class="app-section">الصفحات</summary>
 				<a class="app-link" href="app.html"><i class="bi bi-window-sidebar" aria-hidden="true"></i>هيكل التطبيق</a>
 				<a class="app-link" href="page-center.html"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>صفحة في الوسط</a>
-				<a class="app-link" href="kiosk.html"><i class="bi bi-tablet-landscape" aria-hidden="true"></i>الكشك</a>
 			</details>
 			<details class="app-group" id="docs-nav-reference" open=""><summary class="app-section">المرجع</summary>
 				<a class="app-link" href="all.html" aria-current="page"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i>جميع المكونات</a>
@@ -2229,46 +2226,6 @@ Boat C	 9 trips	201 seats</pre>
 					</div>
 				</section>
 
-				<section class="vstack gap-16" aria-labelledby="all-thread">
-					<h2 id="all-thread"><a href="thread.html">سلاسل الرسائل</a></h2>
-					<div class="docs-example docs-example-stack" id="thread-desk">
-						<section class="card card-scroll max-h-560" aria-labelledby="thread-desk-title">
-							<div class="card-header hstack flex-wrap gap-8"><h2 id="thread-desk-title">صفحة الحجز تعرض سعرًا خاطئًا</h2><span class="badge badge-subtle-warning">فتح</span></div>
-							<div class="card-body">
-								<ol class="thread" aria-label="الرسائل">
-									<li class="thread-message">
-										<span class="avatar avatar-sm" aria-hidden="true">AR</span>
-										<div class="thread-body">
-											<div class="thread-meta"><span>Example Resort</span><time datetime="2026-11-04T09:12">09:12</time></div>
-											<div class="thread-bubble">سعر الطفل في الخليج الشمالي يظهر 2,500 بات. يجب أن يكون 1,900 بات منذ الاثنين.</div>
-											<div class="thread-files"><a href="img/lagoon.svg"><img src="img/lagoon.svg" alt="لقطة شاشة للسعر"></a></div>
-										</div>
-									</li>
-									<li class="thread-message" data-mine="">
-										<span class="avatar avatar-sm" aria-hidden="true">RZ</span>
-										<div class="thread-body">
-											<div class="thread-meta"><span>دعم REDZ</span><time datetime="2026-11-04T09:30">09:30</time><span class="thread-edited">مُعدّلة</span><button class="btn btn-xs btn-icon btn-text" type="button" commandfor="thread-desk-edit" command="--edit" aria-label="عدّل الرسالة"><i class="bi bi-pencil" aria-hidden="true"></i></button></div>
-											<div class="thread-bubble" id="thread-desk-reply">شكرًا - نُشرت قائمة الأسعار قبل التغيير. تم إصلاحها الآن؛ يرجى مراجعة الصفحة مرة أخرى.</div>
-											<form class="inline-edit-form" id="thread-desk-edit" data-for="thread-desk-reply" hidden="">
-												<textarea class="form-control" name="text" aria-label="الرسالة" rows="3">شكرًا - نُشرت قائمة الأسعار قبل التغيير. تم إصلاحها الآن؛ يرجى مراجعة الصفحة مرة أخرى.</textarea>
-												<button class="btn btn-sm btn-primary" type="submit">حفظ</button>
-												<button class="btn btn-sm" type="button" commandfor="thread-desk-edit" command="--cancel">إلغاء</button>
-												<div class="invalid-feedback" hidden=""></div>
-											</form>
-											<div class="thread-files"><span><img src="img/qr.svg" alt="الصفحة بعد الإصلاح"><button class="btn btn-xs btn-icon thread-file-remove" type="button" aria-label="أزل الصفحة بعد الإصلاح"><i class="bi bi-x-lg" aria-hidden="true"></i></button></span></div>
-										</div>
-									</li>
-								</ol>
-							</div>
-							<div class="card-footer">
-								<textarea class="form-control" name="reply" rows="2" aria-label="الرد" placeholder="اكتب ردًا"></textarea>
-								<button class="btn btn-primary" type="button"><i class="bi bi-send" aria-hidden="true"></i>إرسال</button>
-								<button class="btn ms-auto" type="button">أغلق التذكرة</button>
-							</div>
-						</section>
-					</div>
-				</section>
-
 				<section class="vstack gap-16" aria-labelledby="all-chart">
 					<h2 id="all-chart"><a href="chart.html">الرسوم البيانية</a></h2>
 					<div class="docs-example docs-example-stack" id="chart-messages">
@@ -3131,26 +3088,6 @@ Boat C	 9 trips	201 seats</pre>
 					</div>
 				</section>
 
-				<section class="vstack gap-16" aria-labelledby="all-logo">
-					<h2 id="all-logo"><a href="logo.html">الشعارات</a></h2>
-					<div class="docs-example" id="logo-sizes">
-						<span class="logo logo-sm" data-ratio="4"><img src="img/logo-wide.svg" alt="Lagoonpay"></span>
-						<span class="logo" data-ratio="4"><img src="img/logo-wide.svg" alt="Lagoonpay"></span>
-						<span class="logo logo-lg" data-ratio="4"><img src="img/logo-wide.svg" alt="Lagoonpay"></span>
-						<span class="logo logo-lg"><img src="img/logo-mark.svg" alt="North Bay Tours"></span>
-					</div>
-					<div class="docs-example" id="logo-grounds">
-						<span class="logo logo-lg" data-ratio="3" data-color="#1f3a93"><img class="logo-fade" src="img/logo-solid.svg" alt="Baybank"></span>
-						<span class="logo logo-lg" data-ratio="1.5"><img class="logo-ground" src="img/lagoon.svg" alt=""><img src="img/lagoon.svg" alt="البحيرة عند الظهر"></span>
-					</div>
-					<div class="docs-example docs-example-stack" id="logo-choice">
-						<div class="grid cols-2 gap-12 max-w-480" role="radiogroup" aria-label="ادفع عبر">
-							<label class="choice"><input type="radio" name="logo-choice-pay" checked=""><span class="choice-media" data-ratio="4"><img src="img/logo-wide.svg" alt=""></span><span class="fw-600">Lagoonpay</span><span class="fs-12 text-muted">بطاقة أو محفظة</span></label>
-							<label class="choice"><input type="radio" name="logo-choice-pay"><span class="choice-media" data-ratio="3" data-color="#1f3a93"><img src="img/logo-solid.svg" alt=""></span><span class="fw-600">Baybank</span><span class="fs-12 text-muted">تحويل مصرفي</span></label>
-						</div>
-					</div>
-				</section>
-
 				<section class="vstack gap-16" aria-labelledby="all-icon-tile">
 					<h2 id="all-icon-tile"><a href="icon-tile.html">مربعات الأيقونات</a></h2>
 					<div class="docs-example" id="icon-tile-tones">
@@ -3302,21 +3239,6 @@ Boat C	 9 trips	201 seats</pre>
 							<li data-state="waiting"><i class="bi bi-hourglass-split" aria-hidden="true"></i>إصدار الشهادة<span class="step-list-detail">بعد النطاق</span></li>
 							<li data-state="skipped"><i class="bi bi-skip-forward flip-rtl" aria-hidden="true"></i>استيراد التعليقات القديمة<span class="step-list-detail">تم التخطي</span></li>
 							<li data-state="locked"><i class="bi bi-lock" aria-hidden="true"></i>إيقاف الموقع القديم<span class="step-list-detail">خطوة المالك</span></li>
-						</ol>
-					</div>
-					<div class="docs-example docs-example-stack" id="step-list-pipeline">
-						<ol class="stage-list" aria-label="إصدار 2.4">
-							<li data-state="done"><span class="hstack gap-8"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><strong>البناء</strong></span><span class="fs-12">2 د 14 ث</span><div class="stage-list-actions"><button class="btn btn-sm" type="button">السجل</button></div></li>
-							<li data-state="current" aria-current="step"><span class="hstack gap-8"><i class="bi bi-arrow-repeat" aria-hidden="true"></i><strong>الاختبار</strong></span><span class="fs-12">412 من 580 فحصًا</span><div class="stage-list-actions"><button class="btn btn-sm" type="button">السجل</button><button class="btn btn-sm" type="button">إيقاف</button></div></li>
-							<li data-state="ask"><span class="hstack gap-8"><i class="bi bi-question-circle-fill" aria-hidden="true"></i><strong>الموافقة</strong></span><span class="fs-12">يوافق المالك</span><div class="stage-list-actions"><button class="btn btn-sm btn-primary" type="button">الموافقة</button></div></li>
-							<li data-state="waiting"><span class="hstack gap-8"><i class="bi bi-hourglass-split" aria-hidden="true"></i><strong>النشر</strong></span><span class="fs-12">بعد الموافقة</span></li>
-						</ol>
-					</div>
-					<div class="docs-example docs-example-stack" id="step-list-pipeline-ready">
-						<ol class="stage-list" aria-label="التحديث">
-							<li data-state="done"><span class="hstack gap-8"><i class="bi bi-check-circle-fill" aria-hidden="true"></i><strong>التنزيل</strong></span><span class="fs-12">4.6 ميغابايت</span></li>
-							<li data-state="ready" aria-current="step"><span class="hstack gap-8"><i class="bi bi-play-circle" aria-hidden="true"></i><strong>التثبيت</strong></span><span class="fs-12">ينتظر ضغطتك</span><div class="stage-list-actions"><button class="btn btn-sm btn-primary" type="button">البداية</button></div></li>
-							<li data-state="pending"><span class="hstack gap-8"><i class="bi bi-circle" aria-hidden="true"></i><strong>التحقق</strong></span><span class="fs-12">بعد التثبيت</span></li>
 						</ol>
 					</div>
 					<div class="docs-example docs-example-stack" id="step-list-events">
@@ -3726,21 +3648,6 @@ Boat C	 9 trips	201 seats</pre>
 						</div>
 						<meter class="meter" value="8" min="0" max="10" low="7" high="9" optimum="0" aria-label="الصور، 8 من 10 غيغابايت">8 من 10 غيغابايت</meter>
 						<meter class="meter" value="9.6" min="0" max="10" low="7" high="9" optimum="0" aria-label="النسخ الاحتياطية، 9.6 من 10 غيغابايت">9.6 من 10 غيغابايت</meter>
-					</div>
-					<div class="docs-example docs-example-stack" id="progress-stacked-quota">
-						<div class="vstack gap-8 max-w-480">
-							<div class="hstack gap-8 fs-14"><span class="flex-grow-1" id="progress-stacked-title">المقاعد هذا الشهر</span><span class="text-muted tabular-nums">130 من 120</span></div>
-							<div class="meter meter-stacked" role="meter" aria-labelledby="progress-stacked-title" aria-valuenow="130" aria-valuemin="0" aria-valuemax="130" aria-valuetext="130 seats: 50 free, 70 paid, 10 over the limit">
-								<span data-tone="success" data-v="0.385"></span>
-								<span data-tone="primary" data-v="0.538"></span>
-								<span data-over="" data-v="0.077"></span>
-							</div>
-							<ul class="hstack flex-wrap gap-12 fs-12 text-muted" aria-hidden="true">
-								<li class="hstack gap-4"><span class="dot dot-success"></span>مجاني 50</li>
-								<li class="hstack gap-4"><span class="dot dot-primary"></span>مدفوع 70</li>
-								<li class="hstack gap-4"><span class="dot dot-danger"></span>زيادة 10</li>
-							</ul>
-						</div>
 					</div>
 					<div class="docs-example docs-example-stack" id="progress-hairlines">
 						<div class="vstack gap-4">
@@ -4418,21 +4325,6 @@ Boat C	 9 trips	201 seats</pre>
 						<div class="app-banner app-banner-warning"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i><span>النظام متوقف مؤقتًا للصيانة. تغييراتك محفوظة؛ حاول مرة أخرى بعد دقائق.</span></div>
 						<div class="app-banner app-banner-danger"><i class="bi bi-x-octagon-fill" aria-hidden="true"></i><span>انقطع الاتصال. التغييرات التي تُجرى الآن لا تُحفظ.</span></div>
 					</div>
-					<div class="docs-example docs-example-stack" id="app-action-bar-example">
-						<div class="card card-scroll max-h-240" role="group" aria-label="الفاتورة">
-							<div class="card-body vstack gap-8">
-								<p>الخليج الشمالي بالقارب السريع · 2 بالغان · 5,000 THB</p>
-								<p>غداء على الشاطئ · 2 · 600 THB</p>
-								<p>النقل من الفندق · 1 · 250 THB</p>
-								<p>رسوم المنتزه · 2 · 800 THB</p>
-								<p>معدات الغطس · 2 · 0 THB</p>
-							</div>
-							<div class="action-bar">
-								<span class="action-bar-text"><strong class="tabular-nums">6,650 THB</strong> <span class="text-muted">مقابل 4 عناصر</span></span>
-								<button class="btn btn-primary" type="button">ادفع</button>
-							</div>
-						</div>
-					</div>
 					<div class="docs-states" id="app-states" tabindex="0" role="region" aria-labelledby="app-states-title">
 						<table class="docs-matrix">
 							<thead>
@@ -4498,41 +4390,6 @@ Boat C	 9 trips	201 seats</pre>
 								<a href="#page-center-example">تسجيل الدخول برمز</a>
 							</div>
 							<p class="app-credit">بدعم من <a href="#page-center-example">REDZ CMS</a></p>
-						</div>
-					</div>
-				</section>
-
-				<section class="vstack gap-16" aria-labelledby="all-kiosk">
-					<h2 id="all-kiosk"><a href="kiosk.html">الكشك</a></h2>
-					<div class="docs-example" id="kiosk-example">
-						<div class="kiosk" data-theme="dark">
-							<div class="kiosk-head"><i class="bi bi-geo-alt" aria-hidden="true"></i> برج ريفرسايد</div>
-							<div class="kiosk-langs" role="group" aria-label="اللغة">
-								<button class="btn btn-xl" type="button" lang="en" aria-pressed="true">الإنجليزية</button>
-								<button class="btn btn-xl" type="button" lang="th" aria-pressed="false">ไทย</button>
-								<button class="btn btn-xl" type="button" lang="my" aria-pressed="false">မြန်မာ</button>
-							</div>
-							<div class="kiosk-main">
-								<div class="kiosk-date">الأربعاء، 4 نوفمبر</div>
-								<div class="kiosk-clock">07:42</div>
-								<div class="icon-tile icon-tile-info kiosk-state kiosk-state-idle"><i class="bi bi-person-badge" aria-hidden="true"></i></div>
-								<div class="kiosk-title">المس بطاقتك</div>
-								<div class="kiosk-line">قرّبها من القارئ تحت الشاشة</div>
-							</div>
-							<div class="kiosk-foot">REDZ ERP · مدخل الموقع</div>
-						</div>
-					</div>
-					<div class="docs-example" id="kiosk-states">
-						<div class="kiosk" data-theme="dark">
-							<div class="kiosk-main">
-								<div class="icon-tile icon-tile-success kiosk-state"><i class="bi bi-check-lg" aria-hidden="true"></i></div>
-								<div class="kiosk-title">Sid Sample</div>
-								<div class="kiosk-line">آخر دخول في 07:02</div>
-								<button class="btn btn-xl btn-success" type="button"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>تسجيل الحضور</button>
-								<button class="btn btn-xl btn-warning" type="button"><i class="bi bi-box-arrow-right" aria-hidden="true"></i>تسجيل الانصراف</button>
-								<button class="btn btn-text" type="button"><i class="bi bi-x-lg" aria-hidden="true"></i>إلغاء</button>
-							</div>
-							<div class="kiosk-corner"></div>
 						</div>
 					</div>
 				</section>
