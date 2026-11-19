@@ -51,6 +51,7 @@ const FLOOR_FUSES = [
 	['css', '@media (forced-colors: active) { .a { forced-color-adjust: preserve-parent-color; } }', 'preserve-parent-color'],
 	['css', '.a { word-wrap: break-word; }', ''],
 	['css', "/* floor-allow selector:open -- styled as closed below the floor */\ndetails:open { color: red; }", ''],
+	['css', "/*\ffloor-allow selector:open -- styled as closed below the floor\f*/\ndetails:open { color: red; }", ''],
 	['css', "details:open { color: red; } /* floor-allow selector:open, property:field-sizing, value:field-sizing:content -- the same line */\n.a { field-sizing: content; }", ''],
 	['css', "/* floor-allow selector:open */\ndetails:open { color: red; }", 'needs NAME'],
 	['css', "/* floor-allow selector:open -- two lines away */\n\ndetails:open { color: red; }", 'fuse:3  selector:open (css.selectors.open)'],
@@ -77,6 +78,7 @@ const FLOOR_FUSES = [
 	['js', "/* floor-allow member:moveBefore -- two lines away */\n\nlist.moveBefore(a, b);", 'fuse:3  member:moveBefore'],
 	['js', "const s = '// floor-allow member:moveBefore -- in a string';\nlist.moveBefore(a, b);", 'fuse:2  member:moveBefore ('],
 	['js', "// floor-allow member:moveBefore -- the page's own list\nlist.moveBefore(a, b);", ''],
+	['js', "//\ffloor-allow member:moveBefore -- the page's own list\nlist.moveBefore(a, b);", ''],
 	['js', "if ('cookieStore' in window) {\n\tcookieStore.get('a');\n}", ''],
 	['js', "if (typeof cookieStore !== 'undefined') {\n\tcookieStore.get('a');\n}", ''],
 	['js', "if (typeof list.moveBefore === 'function') {\n\tlist.moveBefore(a, b);\n}", ''],
@@ -226,7 +228,7 @@ function FLOOR__AllowFile(string $path): array
 	$allow = [];
 	foreach ($list['allow'] as $k => $entry) {
 		$browsers = $entry['browsers'] ?? null;
-		if (!is_array($entry) || !is_string($entry['name'] ?? null) || preg_match('~^\S+$~', $entry['name']) !== 1 || trim((string)($entry['reason'] ?? '')) === '' || ($browsers !== null && (!array_is_list($browsers) || $browsers === [] || array_diff($browsers, FLOOR_BROWSERS) !== []))) {
+		if (!is_array($entry) || !is_string($entry['name'] ?? null) || preg_match('~^\S+$~', $entry['name']) !== 1 || trim((string)($entry['reason'] ?? ''), MIN_SPACE) === '' || ($browsers !== null && (!array_is_list($browsers) || $browsers === [] || array_diff($browsers, FLOOR_BROWSERS) !== []))) {
 			throw new RuntimeException($path . ': an exception needs a name, a reason and maybe browsers of ' . implode(', ', FLOOR_BROWSERS) . ': ' . json_encode($entry));
 		}
 		$allow['file#' . $k] = ['name' => $entry['name'], 'reason' => $entry['reason'], 'file' => $path] + ($browsers === null ? [] : ['browsers' => $browsers]);
@@ -262,7 +264,7 @@ function FLOOR__CssAllowComments(string $css, string $file, array &$findings): a
 			$end = $end === false ? $n : $end + 2;
 			$body = substr($css, $i + 2, max(0, $end - $i - 4));
 			$last = $line + substr_count($css, "\n", $i, $end - $i);
-			FLOOR__AllowCommentParse(trim($body), $file, $line, $last, $allow, $findings);
+			FLOOR__AllowCommentParse(trim($body, MIN_SPACE), $file, $line, $last, $allow, $findings);
 			$line = $last;
 			$i = $end;
 			continue;
@@ -767,7 +769,7 @@ function FLOOR__CssDeclarations(array &$facts, array $declarations, array $live,
 			continue;
 		}
 		$head = array_column(array_slice($tokens, 0, $colon), 1);
-		$property = trim(implode('', $head));
+		$property = trim(implode('', $head), MIN_SPACE);
 		$property = strtolower($property);
 		$parsed[] = [$property, array_slice($tokens, $colon + 1), $line];
 		if (preg_match(FLOOR_VENDOR, $property, $m) === 1) {
@@ -929,7 +931,7 @@ function FLOOR__JsAllowComments(array $comments, string $file, array &$findings)
 {
 	$allow = [];
 	foreach ($comments as [$text, $line, $last]) {
-		FLOOR__AllowCommentParse(trim(str_starts_with($text, '//') ? substr($text, 2) : substr($text, 2, -2)), $file, $line, $last, $allow, $findings);
+		FLOOR__AllowCommentParse(trim(str_starts_with($text, '//') ? substr($text, 2) : substr($text, 2, -2), MIN_SPACE), $file, $line, $last, $allow, $findings);
 	}
 	return $allow;
 }

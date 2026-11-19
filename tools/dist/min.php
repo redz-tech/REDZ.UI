@@ -450,11 +450,11 @@ function MIN__JsScan(string $js, int $from = 0, bool $inner = false): array
 			$gap = false;
 			continue;
 		}
-		if ($c === ' ' || $c === "\t" || $c === "\n" || $c === "\r") {
+		if (MIN__Bytes($c, MIN_SPACE)) {
 			$flush();
 			$j = $i;
 			$newline = false;
-			while ($j < $n && ($js[$j] === ' ' || $js[$j] === "\t" || $js[$j] === "\n" || $js[$j] === "\r")) {
+			while ($j < $n && MIN__Bytes($js[$j], MIN_SPACE)) {
 				$newline = $newline || $js[$j] === "\n";
 				$j++;
 			}
@@ -498,7 +498,7 @@ function MIN__JsScan(string $js, int $from = 0, bool $inner = false): array
 		$i++;
 	}
 	$flush();
-	return [trim($out), $tokens, $hazards, $i];
+	return [trim($out, MIN_SPACE), $tokens, $hazards, $i];
 }
 
 /**
@@ -511,7 +511,7 @@ function MIN__JsSafe(string $js): string
 	if ($hazards !== []) {
 		MIN__Refuse('a newline is the only separator at ' . count($hazards) . ' place(s) - add the operator or `;` it lacks', $js, $hazards[0][0]);
 	}
-	if (trim($js) !== '' && $min === '') {
+	if (trim($js, MIN_SPACE) !== '' && $min === '') {
 		MIN__Refuse('the squeezed script is empty', $js, 0);
 	}
 	if (strlen($min) > strlen($js)) {
@@ -1424,7 +1424,7 @@ function MIN__JsBlockCheck(string $js): void
 			$word && $text === 'with' => MIN__Refuse('with is an error in a module\'s strict code', $js, $at),
 			$word && $text === 'import' && $next[1] !== '(' && $next[1] !== '.', $word && $text === 'export' => MIN__Refuse('a static ' . $text . ' does not run in a block', $js, $at),
 			$kind === 'punctuator' && $text === '<' && $next[1] === '!' && $next[2] === $at + 1 && ($tokens[$t + 2] ?? ['', '', -1])[1] === '--' && ($tokens[$t + 2] ?? ['', '', -1])[2] === $at + 2 => MIN__Refuse('<!-- begins a comment in a script, not in a module', $js, $at),
-			$kind === 'punctuator' && $text === '--' && $next[1] === '>' && $next[2] === $at + 2 && trim(substr($js, ($line = strrpos(substr($js, 0, $at), "\n")) === false ? 0 : $line + 1, $at - ($line === false ? 0 : $line + 1))) === '' => MIN__Refuse('--> at a line\'s start begins a comment in a script, not in a module', $js, $at),
+			$kind === 'punctuator' && $text === '--' && $next[1] === '>' && $next[2] === $at + 2 && trim(substr($js, ($line = strrpos(substr($js, 0, $at), "\n")) === false ? 0 : $line + 1, $at - ($line === false ? 0 : $line + 1)), MIN_SPACE) === '' => MIN__Refuse('--> at a line\'s start begins a comment in a script, not in a module', $js, $at),
 			$kind === 'number' && preg_match('~^0[0-9]~', $text) === 1 => MIN__Refuse('a number with a leading 0 is an error in a module\'s strict code', $js, $at),
 			$kind === 'string' && preg_match_all('~\\\\(.)(.?)~s', $text, $escapes, PREG_SET_ORDER) > 0 && array_filter($escapes, fn(array $e): bool => str_contains('123456789', $e[1]) || ($e[1] === '0' && MIN__Bytes($e[2], MIN_DIGITS))) !== [] => MIN__Refuse('an octal escape is an error in a module\'s strict code', $js, $at),
 			default => null,
@@ -1648,6 +1648,7 @@ const MIN_FUSES = [
 	['css', '@foo{}', 'refuses', 'the at-rule @foo is not one this pass knows at byte 4'],
 	['css', '.a{b:c}\\', 'refuses', 'a \\ with nothing after it at byte 7, line 1'],
 	['js', "const a = 1;\n// x\nconst b = a + 1;", 'gives', 'const a=1;const b=a+1;'],
+	['js', "\fconst a = 1;\f\x0Bconst b = a + 1;\f", 'gives', 'const a=1;const b=a+1;'],
 	['js', "a\n'b'", 'refuses', 'a newline is the only separator at 1 place(s) - add the operator or `;` it lacks at byte 2, line 2'],
 	['js', "const a = 'open", 'refuses', 'a string runs to the end of the script at byte 10'],
 	['js', "const a = 'one\ntwo';", 'refuses', 'a string runs past its line at byte 10'],
@@ -1694,6 +1695,7 @@ const MIN_FUSES = [
 	['blocks', 'export const a = 1;', 'refuses', 'a.js: a static export does not run in a block'],
 	['blocks', 'a<!--b', 'refuses', 'a.js: <!-- begins a comment in a script, not in a module at byte 1'],
 	['blocks', "x = 1;\n  --> note", 'refuses', 'a.js: --> at a line\'s start begins a comment in a script, not in a module at byte 9, line 2'],
+	['blocks', "x = 1;\n\f--> note", 'refuses', 'a.js: --> at a line\'s start begins a comment in a script, not in a module at byte 8, line 2'],
 	['blocks', 'const a = 010;', 'refuses', 'a.js: a number with a leading 0 is an error'],
 	['blocks', "const s = '\\1';", 'refuses', 'a.js: an octal escape is an error'],
 	['blocks', 'if (a) {', 'refuses', 'a.js: a { without its closing at byte 7'],

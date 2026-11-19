@@ -4,6 +4,21 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Fixed
+- The release's minifier, `tools/dist/min.php`, reads a form feed or a vertical tab between a script's tokens as white
+  space, as JavaScript does: a script that began or ended with one stopped its squeeze with an internal error on PHP
+  8.6, and one between tokens stayed in the output.
+- The minifier and the floor checker trim with one list of white space, so PHP 8.4, 8.5 and 8.6 read a text alike
+  (PHP 8.6's `trim()` strips a form feed by default, earlier ones do not): a `-->` after a form feed at a line's start
+  is refused, and a `floor-allow` comment that opens with a form feed holds, on every PHP.
+
+### Checks
+- New fuses of the minifier and of the floor checker hold the form feed: a script that opens, ends and breaks with
+  form feeds and vertical tabs, a `-->` after a form feed, and a `floor-allow` comment opening with a form feed in a
+  stylesheet and in a script.
+
 ## 0.31.0 - 2026-11-19
 
 ### Removed
