@@ -4,7 +4,7 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
-## Unreleased
+## 0.29.0 - 2026-11-19
 
 ### Added
 - `data-local` on a ticking `time`: the moment by the reader's own clock, from an ISO moment with its zone - the time
