@@ -94,4 +94,9 @@
 		--redz-badge-bg: var(--redz-info-subtle);
 		--redz-badge-fg: var(--redz-info-text);
 	}
+
+	.badge[data-color] {
+		--redz-badge-bg: var(--redz-color);
+		--redz-badge-fg: var(--redz-color-fg);
+	}
 }

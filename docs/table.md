@@ -82,6 +82,21 @@ A checked row is tinted: its check is the only state. An element with `data-sele
 </section>
 ```
 
+A check in a `label` in its `table-check` cell is pressed anywhere in the cell - the whole height of its row, and on a phone's card the cell around the check - so a finger needs no aim at the box, while a click elsewhere in the row stays the row's. A cell paints its row's ground from `--redz-row-bg`, so a product's own stylesheet tints one cell by setting it on that cell.
+
+```html
+<section class="card" aria-labelledby="table-check-label-title">
+	<div class="card-header"><h2 class="fs-14" id="table-check-label-title">Pickups</h2></div>
+	<table class="table table-stack">
+		<thead><tr><th class="table-check"><span class="visually-hidden">Pick up</span></th><th scope="col">Guest</th><th scope="col">Tour</th><th scope="col" class="text-end">Seats</th></tr></thead>
+		<tbody>
+			<tr><td class="table-check"><label><input class="check" type="checkbox" name="pickup" value="21" aria-label="Pick up: Alex Sample"></label></td><th scope="row">Alex Sample</th><td><span class="badge" data-color="#f6d55c">Island hopping</span></td><td class="text-end tabular-nums">2</td></tr>
+			<tr><td class="table-check"><label><input class="check" type="checkbox" name="pickup" value="22" aria-label="Pick up: Ben Sample"></label></td><th scope="row">Ben Sample</th><td><span class="badge" data-color="#264653">Night market</span></td><td class="text-end tabular-nums">3</td></tr>
+		</tbody>
+	</table>
+</section>
+```
+
 ### Stripes, borders and groups
 
 `table-striped` shades every other row, `table-striped-columns` every other column - under the hover's light and a row's tone alike; `table-group-divider` on a `tbody` draws a stronger line above it. `table-bordered` draws the lines between columns and, outside a card, the table's own frame; `table-borderless` takes the lines between rows away.

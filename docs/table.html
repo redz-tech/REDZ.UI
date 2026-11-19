@@ -277,6 +277,29 @@
 		&lt;/tbody&gt;
 	&lt;/table&gt;
 &lt;/section&gt;</code></pre></div>
+					<p>A check in a <code>label</code> in its <code>table-check</code> cell is pressed anywhere in the cell - the whole height of its row, and on a phone's card the cell around the check - so a finger needs no aim at the box, while a click elsewhere in the row stays the row's. A cell paints its row's ground from <code>--redz-row-bg</code>, so a product's own stylesheet tints one cell by setting it on that cell.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="table-check-label">
+						<section class="card" aria-labelledby="table-check-label-title">
+							<div class="card-header"><h2 class="fs-14" id="table-check-label-title">Pickups</h2></div>
+							<table class="table table-stack">
+								<thead><tr><th class="table-check"><span class="visually-hidden">Pick up</span></th><th scope="col">Guest</th><th scope="col">Tour</th><th scope="col" class="text-end">Seats</th></tr></thead>
+								<tbody>
+									<tr><td class="table-check"><label><input class="check" type="checkbox" name="pickup" value="21" aria-label="Pick up: Alex Sample"></label></td><th scope="row">Alex Sample</th><td><span class="badge" data-color="#f6d55c">Island hopping</span></td><td class="text-end tabular-nums">2</td></tr>
+									<tr><td class="table-check"><label><input class="check" type="checkbox" name="pickup" value="22" aria-label="Pick up: Ben Sample"></label></td><th scope="row">Ben Sample</th><td><span class="badge" data-color="#264653">Night market</span></td><td class="text-end tabular-nums">3</td></tr>
+								</tbody>
+							</table>
+						</section>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;section class="card" aria-labelledby="table-check-label-title"&gt;
+	&lt;div class="card-header"&gt;&lt;h2 class="fs-14" id="table-check-label-title"&gt;Pickups&lt;/h2&gt;&lt;/div&gt;
+	&lt;table class="table table-stack"&gt;
+		&lt;thead&gt;&lt;tr&gt;&lt;th class="table-check"&gt;&lt;span class="visually-hidden"&gt;Pick up&lt;/span&gt;&lt;/th&gt;&lt;th scope="col"&gt;Guest&lt;/th&gt;&lt;th scope="col"&gt;Tour&lt;/th&gt;&lt;th scope="col" class="text-end"&gt;Seats&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+		&lt;tbody&gt;
+			&lt;tr&gt;&lt;td class="table-check"&gt;&lt;label&gt;&lt;input class="check" type="checkbox" name="pickup" value="21" aria-label="Pick up: Alex Sample"&gt;&lt;/label&gt;&lt;/td&gt;&lt;th scope="row"&gt;Alex Sample&lt;/th&gt;&lt;td&gt;&lt;span class="badge" data-color="#f6d55c"&gt;Island hopping&lt;/span&gt;&lt;/td&gt;&lt;td class="text-end tabular-nums"&gt;2&lt;/td&gt;&lt;/tr&gt;
+			&lt;tr&gt;&lt;td class="table-check"&gt;&lt;label&gt;&lt;input class="check" type="checkbox" name="pickup" value="22" aria-label="Pick up: Ben Sample"&gt;&lt;/label&gt;&lt;/td&gt;&lt;th scope="row"&gt;Ben Sample&lt;/th&gt;&lt;td&gt;&lt;span class="badge" data-color="#264653"&gt;Night market&lt;/span&gt;&lt;/td&gt;&lt;td class="text-end tabular-nums"&gt;3&lt;/td&gt;&lt;/tr&gt;
+		&lt;/tbody&gt;
+	&lt;/table&gt;
+&lt;/section&gt;</code></pre></div>
 
 					<h3>Stripes, borders and groups</h3>
 					<p><code>table-striped</code> shades every other row, <code>table-striped-columns</code> every other column - under the hover's light and a row's tone alike; <code>table-group-divider</code> on a <code>tbody</code> draws a stronger line above it. <code>table-bordered</code> draws the lines between columns and, outside a card, the table's own frame; <code>table-borderless</code> takes the lines between rows away.</p>

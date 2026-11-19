@@ -272,7 +272,7 @@
 	<p><code>date-input</code> around one <code>input type="date"</code> draws it as a field that opens a month to pick a day from, below the field and on a phone as a sheet, always in the Gregorian year; <code>date-pick</code> draws such a month for a day or a period on the page itself. Both are in the calendar package: see <a href="calendar.html#calendar-date">Calendars</a>.</p>
 
 	<h3>A color</h3>
-	<p><code>form-control-color</code> is the browser's own color picker in a field's box. A text field with <code>data-color-for</code> naming the picker is its hex twin: each follows the other, and a twin that holds no color - <code>#rgb</code> or <code>#rrggbb</code>, the <code>#</code> optional - is <code>aria-invalid</code>. A stored color is drawn by <code>data-color</code>, which the library sets as <code>--redz-color</code> through the CSSOM, so a page under a strict CSP writes no style: on a <code>dot</code>, an <code>icon-tile</code> - its icon black or white by the color's lightness -, a <code>choice-media</code>, and the edges <code>edge-top-color</code> and <code>edge-start-color</code>.</p>
+	<p><code>form-control-color</code> is the browser's own color picker in a field's box. A text field with <code>data-color-for</code> naming the picker is its hex twin: each follows the other, and a twin that holds no color - <code>#rgb</code> or <code>#rrggbb</code>, the <code>#</code> optional - is <code>aria-invalid</code>. A stored color is drawn by <code>data-color</code>, which the library sets as <code>--redz-color</code> through the CSSOM, so a page under a strict CSP writes no style: on a <code>dot</code>, a <a href="badge.html#badge-color"><code>badge</code></a> and an <code>icon-tile</code> - their text and icon black or white, whichever reads better on it by WCAG 2 -, a <code>choice-media</code>, and the edges <code>edge-top-color</code> and <code>edge-start-color</code>. A product's own stylesheet reads the same pair on any element with <code>data-color</code>: <code>--redz-color</code> and <code>--redz-color-fg</code>, the text color for it.</p>
 	<div class="docs-example docs-example-stack" id="form-color">
 		<div class="form-field">
 			<label class="form-label" for="form-color-hex">Label color</label>
@@ -283,6 +283,7 @@
 		</div>
 		<div class="hstack gap-12">
 			<span class="dot" data-color="#2a9d8f"></span>
+			<span class="badge" data-color="#2a9d8f">Label</span>
 			<span class="icon-tile" data-color="#e9c46a"><i class="bi bi-tag" aria-hidden="true"></i></span>
 			<span class="icon-tile" data-color="#264653"><i class="bi bi-tag" aria-hidden="true"></i></span>
 			<div class="card edge-start-color" data-color="#e76f51"><div class="card-body">Overdue</div></div>

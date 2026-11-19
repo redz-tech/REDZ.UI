@@ -6,11 +6,11 @@ REDZ.UI is a stylesheet, its icons and one small script on the browser platform.
 
 ## Get it
 
-Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. `redz-ui-0.29.0.zip` is the folder a project serves, as it is: `css/` and `js/` with minified files and the declaration files an editor reads, the license files and the passport, `redz-ui.json` - the version, the floor, the files to link, every class, token, command and text key, and the sha256 of every file. The icons are a release of their own, `redz-ui-icons-1.13.2.zip`, which changes only with Bootstrap Icons: the passport's `icons` names the version a release needs, and a project keeps it in a folder of its own, so a new release of the library leaves the icons and their cache alone. `checks.zip` beside the library is the sheet of the probes the release passed in every engine.
+Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. `redz-ui-0.30.0.zip` is the folder a project serves, as it is: `css/` and `js/` with minified files and the declaration files an editor reads, the license files and the passport, `redz-ui.json` - the version, the floor, the files to link, every class, token, command and text key, and the sha256 of every file. The icons are a release of their own, `redz-ui-icons-1.13.2.zip`, which changes only with Bootstrap Icons: the passport's `icons` names the version a release needs, and a project keeps it in a folder of its own, so a new release of the library leaves the icons and their cache alone. `checks.zip` beside the library is the sheet of the probes the release passed in every engine.
 
 ```js
-gh release download v0.29.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
-gh release verify-asset v0.29.0 redz-ui-0.29.0.zip --repo redz-tech/REDZ.UI
+gh release download v0.30.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
+gh release verify-asset v0.30.0 redz-ui-0.30.0.zip --repo redz-tech/REDZ.UI
 gh release download icons-1.13.2 --repo redz-tech/REDZ.UI --pattern 'redz-ui-icons-*.zip'
 gh release verify-asset icons-1.13.2 redz-ui-icons-1.13.2.zip --repo redz-tech/REDZ.UI
 ```
@@ -18,7 +18,7 @@ gh release verify-asset icons-1.13.2 redz-ui-icons-1.13.2.zip --repo redz-tech/R
 Or from jsDelivr, which serves a release by its tag:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.29.0/dist/css/redz-ui.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.30.0/dist/css/redz-ui.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@icons-1.13.2/css/icons.min.css">
 ```
 
@@ -1314,6 +1314,7 @@ REDZ.ui.brand('#f4c542')
 | `--redz-ease` | `cubic-bezier(0.22, 1, 0.36, 1)` |
 | `--redz-form-select-chevron` | `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23595b5f'%3E%3Cpath d='M1.6 4.6a.6.6 0 0 1 .85 0L8 10.15l5.55-5.55a.6.6 0 1 1 .85.85l-5.98 5.97a.6.6 0 0 1-.84 0L1.6 5.45a.6.6 0 0 1 0-.85'/%3E%3C/svg%3E")` |
 | `--redz-star` | `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-1.5 -1.5 19 19'%3E%3Cpath d='M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z'/%3E%3C/svg%3E")` |
+| `--redz-color-fg` | `color(from var(--redz-color) xyz-d65 calc(clamp(0, (0.1791 - y) * 100000, 1) * 0.9505) clamp(0, (0.1791 - y) * 100000, 1) calc(clamp(0, (0.1791 - y) * 100000, 1) * 1.0891))` |
 | `--redz-space-0` | `0` |
 | `--redz-space-2` | `0.125rem` |
 | `--redz-space-4` | `0.25rem` |
@@ -3535,7 +3536,7 @@ The face shows the hours without a leading zero, and the field counts 24 hours. 
 
 ### A color
 
-`form-control-color` is the browser's own color picker in a field's box. A text field with `data-color-for` naming the picker is its hex twin: each follows the other, and a twin that holds no color - `#rgb` or `#rrggbb`, the `#` optional - is `aria-invalid`. A stored color is drawn by `data-color`, which the library sets as `--redz-color` through the CSSOM, so a page under a strict CSP writes no style: on a `dot`, an `icon-tile` - its icon black or white by the color's lightness -, a `choice-media`, and the edges `edge-top-color` and `edge-start-color`.
+`form-control-color` is the browser's own color picker in a field's box. A text field with `data-color-for` naming the picker is its hex twin: each follows the other, and a twin that holds no color - `#rgb` or `#rrggbb`, the `#` optional - is `aria-invalid`. A stored color is drawn by `data-color`, which the library sets as `--redz-color` through the CSSOM, so a page under a strict CSP writes no style: on a `dot`, a [`badge`](badge.md#badge-color) and an `icon-tile` - their text and icon black or white, whichever reads better on it by WCAG 2 -, a `choice-media`, and the edges `edge-top-color` and `edge-start-color`. A product's own stylesheet reads the same pair on any element with `data-color`: `--redz-color` and `--redz-color-fg`, the text color for it.
 
 ```html
 <div class="form-field">
@@ -3547,6 +3548,7 @@ The face shows the hours without a leading zero, and the field counts 24 hours. 
 </div>
 <div class="hstack gap-12">
 	<span class="dot" data-color="#2a9d8f"></span>
+	<span class="badge" data-color="#2a9d8f">Label</span>
 	<span class="icon-tile" data-color="#e9c46a"><i class="bi bi-tag" aria-hidden="true"></i></span>
 	<span class="icon-tile" data-color="#264653"><i class="bi bi-tag" aria-hidden="true"></i></span>
 	<div class="card edge-start-color" data-color="#e76f51"><div class="card-body">Overdue</div></div>
@@ -6440,6 +6442,21 @@ A checked row is tinted: its check is the only state. An element with `data-sele
 </section>
 ```
 
+A check in a `label` in its `table-check` cell is pressed anywhere in the cell - the whole height of its row, and on a phone's card the cell around the check - so a finger needs no aim at the box, while a click elsewhere in the row stays the row's. A cell paints its row's ground from `--redz-row-bg`, so a product's own stylesheet tints one cell by setting it on that cell.
+
+```html
+<section class="card" aria-labelledby="table-check-label-title">
+	<div class="card-header"><h2 class="fs-14" id="table-check-label-title">Pickups</h2></div>
+	<table class="table table-stack">
+		<thead><tr><th class="table-check"><span class="visually-hidden">Pick up</span></th><th scope="col">Guest</th><th scope="col">Tour</th><th scope="col" class="text-end">Seats</th></tr></thead>
+		<tbody>
+			<tr><td class="table-check"><label><input class="check" type="checkbox" name="pickup" value="21" aria-label="Pick up: Alex Sample"></label></td><th scope="row">Alex Sample</th><td><span class="badge" data-color="#f6d55c">Island hopping</span></td><td class="text-end tabular-nums">2</td></tr>
+			<tr><td class="table-check"><label><input class="check" type="checkbox" name="pickup" value="22" aria-label="Pick up: Ben Sample"></label></td><th scope="row">Ben Sample</th><td><span class="badge" data-color="#264653">Night market</span></td><td class="text-end tabular-nums">3</td></tr>
+		</tbody>
+	</table>
+</section>
+```
+
 ### Stripes, borders and groups
 
 `table-striped` shades every other row, `table-striped-columns` every other column - under the hover's light and a row's tone alike; `table-group-divider` on a `tbody` draws a stronger line above it. `table-bordered` draws the lines between columns and, outside a card, the table's own frame; `table-borderless` takes the lines between rows away.
@@ -7137,6 +7154,18 @@ The plain `badge` is neutral, for a status that needs no attention. `badge-subtl
 <span class="badge badge-subtle-primary badge-lg">Large</span>
 ```
 
+### In a stored color
+
+`data-color` fills a badge with a color a person picked - a tag's, a category's, a tour's. The library sets it as `--redz-color` through the CSSOM, so a page under a strict CSP writes no style, and the text is black or white, whichever reads better on it by WCAG 2: at least 4.5:1 on any color. The color stays the same in both themes. A product's own stylesheet reads the same pair on any element with `data-color`: `--redz-color` and `--redz-color-fg`, the text color for it.
+
+```html
+<span class="badge" data-color="#f6d55c">Gold</span>
+<span class="badge" data-color="#b8c0c8">Silver</span>
+<span class="badge" data-color="#2a9d8f">Garden</span>
+<span class="badge" data-color="#264653">Night</span>
+<span class="badge badge-lg" data-color="#e76f51"><i class="bi bi-tag" aria-hidden="true"></i>Promo</span>
+```
+
 ### Beside other things
 
 A count in a navigation link, a status in a heading.
@@ -7153,12 +7182,13 @@ A count in a navigation link, a status in a heading.
 
 - A badge's words are read with the thing it stands beside; write them so - "5" in "New 5" reads as five new orders only if the link says New.
 - The tones of text against their fill are at least 4.5:1 in both themes; a tone alone is never the meaning.
+- A badge in a stored color names its color in words: the color helps a person find it, the words say what it is.
 
 ## Tokens
 
 From [`css/components/badge.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/badge.css). It declares `--redz-badge-bg`, `--redz-badge-fg` on its root, never on rows or items.
 
-It reads the theme's `--redz-bg-hover`, `--redz-text-muted`, `--redz-fs-12`, `--redz-fs-11`, `--redz-fs-14`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-text`, `--redz-bg`, `--redz-primary-subtle`, `--redz-primary-text`, `--redz-secondary-subtle`, `--redz-secondary-text`, `--redz-success-subtle`, `--redz-success-text`, `--redz-danger-subtle`, `--redz-danger-text`, `--redz-warning-subtle`, `--redz-warning-text`, `--redz-info-subtle`, `--redz-info-text`.
+It reads the theme's `--redz-bg-hover`, `--redz-text-muted`, `--redz-fs-12`, `--redz-fs-11`, `--redz-fs-14`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-text`, `--redz-bg`, `--redz-primary-subtle`, `--redz-primary-text`, `--redz-secondary-subtle`, `--redz-secondary-text`, `--redz-success-subtle`, `--redz-success-text`, `--redz-danger-subtle`, `--redz-danger-text`, `--redz-warning-subtle`, `--redz-warning-text`, `--redz-info-subtle`, `--redz-info-text`, `--redz-color`, `--redz-color-fg`.
 
 ## From Bootstrap 5.3
 
@@ -7351,7 +7381,7 @@ The plain tile is in the accent, and in a [stat](stat.md) in the stat's tone; `i
 
 From [`css/components/icon-tile.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/icon-tile.css). It declares `--redz-tile-bg`, `--redz-tile-fg`, `--redz-tile-chart` on its root, never on rows or items.
 
-It reads the theme's `--redz-tile-base-bg`, `--redz-primary-subtle`, `--redz-tile-base-fg`, `--redz-primary`, `--redz-radius-12`, `--redz-radius-8`, `--redz-radius-16`, `--redz-bg`, `--redz-text`, `--redz-chart-1`, `--redz-chart-2`, `--redz-chart-3`, `--redz-chart-4`, `--redz-chart-5`, `--redz-chart-6`, `--redz-chart-7`, `--redz-chart-8`, `--redz-primary-text`, `--redz-secondary-subtle`, `--redz-secondary-text`, `--redz-success-subtle`, `--redz-success-text`, `--redz-danger-subtle`, `--redz-danger-text`, `--redz-warning-subtle`, `--redz-warning-text`, `--redz-info-subtle`, `--redz-info-text`, `--redz-color`.
+It reads the theme's `--redz-tile-base-bg`, `--redz-primary-subtle`, `--redz-tile-base-fg`, `--redz-primary`, `--redz-radius-12`, `--redz-radius-8`, `--redz-radius-16`, `--redz-bg`, `--redz-text`, `--redz-chart-1`, `--redz-chart-2`, `--redz-chart-3`, `--redz-chart-4`, `--redz-chart-5`, `--redz-chart-6`, `--redz-chart-7`, `--redz-chart-8`, `--redz-primary-text`, `--redz-secondary-subtle`, `--redz-secondary-text`, `--redz-success-subtle`, `--redz-success-text`, `--redz-danger-subtle`, `--redz-danger-text`, `--redz-warning-subtle`, `--redz-warning-text`, `--redz-info-subtle`, `--redz-info-text`, `--redz-color`, `--redz-color-fg`.
 
 # Stat tiles
 

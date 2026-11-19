@@ -444,6 +444,20 @@
 		inline-size: 1px;
 	}
 
+	/* A check in a label is pressed anywhere in its cell. */
+	.table > :is(tbody, tfoot) > tr > .table-check > label {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--redz-space-8);
+		cursor: pointer;
+	}
+
+	.table > :is(tbody, tfoot) > tr > .table-check > label::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+	}
+
 	.table-danger {
 		--redz-row-tint: var(--redz-danger-subtle);
 		--redz-row-mark: var(--redz-danger-fill);
@@ -653,6 +667,10 @@
 			padding: 0;
 			border: 0;
 			box-shadow: none;
+		}
+
+		.table.table-stack > :is(tbody, tfoot) > tr:not(.table-group, .table-detail) > .table-check:has(> label) {
+			position: relative;
 		}
 
 		.table-stack > :is(tbody, tfoot) > tr > td:not([colspan="1"])[colspan] {

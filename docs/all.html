@@ -883,6 +883,7 @@ Boat C	 9 trips	201 seats</pre>
 						</div>
 						<div class="hstack gap-12">
 							<span class="dot" data-color="#2a9d8f"></span>
+							<span class="badge" data-color="#2a9d8f">Label</span>
 							<span class="icon-tile" data-color="#e9c46a"><i class="bi bi-tag" aria-hidden="true"></i></span>
 							<span class="icon-tile" data-color="#264653"><i class="bi bi-tag" aria-hidden="true"></i></span>
 							<div class="card edge-start-color" data-color="#e76f51"><div class="card-body">Overdue</div></div>
@@ -2593,6 +2594,18 @@ Boat C	 9 trips	201 seats</pre>
 							</table>
 						</section>
 					</div>
+					<div class="docs-example docs-example-stack" id="table-check-label">
+						<section class="card" aria-labelledby="table-check-label-title">
+							<div class="card-header"><h2 class="fs-14" id="table-check-label-title">Pickups</h2></div>
+							<table class="table table-stack">
+								<thead><tr><th class="table-check"><span class="visually-hidden">Pick up</span></th><th scope="col">Guest</th><th scope="col">Tour</th><th scope="col" class="text-end">Seats</th></tr></thead>
+								<tbody>
+									<tr><td class="table-check"><label><input class="check" type="checkbox" name="pickup" value="21" aria-label="Pick up: Alex Sample"></label></td><th scope="row">Alex Sample</th><td><span class="badge" data-color="#f6d55c">Island hopping</span></td><td class="text-end tabular-nums">2</td></tr>
+									<tr><td class="table-check"><label><input class="check" type="checkbox" name="pickup" value="22" aria-label="Pick up: Ben Sample"></label></td><th scope="row">Ben Sample</th><td><span class="badge" data-color="#264653">Night market</span></td><td class="text-end tabular-nums">3</td></tr>
+								</tbody>
+							</table>
+						</section>
+					</div>
 					<div class="docs-example docs-example-stack" id="table-variants">
 						<section class="card" aria-labelledby="table-variants-title">
 							<div class="card-header"><h2 class="fs-14" id="table-variants-title">Boats this week</h2></div>
@@ -3063,6 +3076,13 @@ Boat C	 9 trips	201 seats</pre>
 						<span class="badge badge-subtle-primary badge-sm">Small</span>
 						<span class="badge badge-subtle-primary">Regular</span>
 						<span class="badge badge-subtle-primary badge-lg">Large</span>
+					</div>
+					<div class="docs-example" id="badge-colors">
+						<span class="badge" data-color="#f6d55c">Gold</span>
+						<span class="badge" data-color="#b8c0c8">Silver</span>
+						<span class="badge" data-color="#2a9d8f">Garden</span>
+						<span class="badge" data-color="#264653">Night</span>
+						<span class="badge badge-lg" data-color="#e76f51"><i class="bi bi-tag" aria-hidden="true"></i>Promo</span>
 					</div>
 					<div class="docs-example docs-example-stack" id="badge-beside">
 						<nav class="nav nav-pills" aria-label="Orders">

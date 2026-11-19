@@ -4,6 +4,22 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## 0.30.0 - 2026-11-19
+
+### Added
+- `--redz-color-fg` on every element with `data-color`: black or white, whichever reads better on the stored color by
+  WCAG 2 - at least 4.5:1 on any color, the formula the brand's contrast already uses. A product's own stylesheet fills
+  its own parts with `--redz-color` and writes on them with `--redz-color-fg`.
+- `data-color` on a `badge` fills it with the stored color, its text in `--redz-color-fg`: a tag's, a category's, a
+  tour's own color, the same in both themes. The tourism pack's order.
+- A check in a `label` in its `table-check` cell is pressed anywhere in the cell - the whole height of its row, and on a
+  `table-stack` card the cell around the check - so a finger needs no aim at a 16 px box (WCAG 2.5.8). A click elsewhere
+  in the row stays the row's. The tourism pack's order.
+
+### Changed
+- `icon-tile` with `data-color` takes its icon's color from `--redz-color-fg`: on a mid gray such as `#808080` the icon
+  turns black at 5.3:1, where the old lightness cut gave white at 3.95:1.
+
 ## 0.29.0 - 2026-11-19
 
 ### Added

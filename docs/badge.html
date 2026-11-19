@@ -197,6 +197,21 @@
 &lt;span class="badge badge-subtle-primary"&gt;Regular&lt;/span&gt;
 &lt;span class="badge badge-subtle-primary badge-lg"&gt;Large&lt;/span&gt;</code></pre></div>
 
+					<h3 id="badge-color">In a stored color</h3>
+					<p><code>data-color</code> fills a badge with a color a person picked - a tag's, a category's, a tour's. The library sets it as <code>--redz-color</code> through the CSSOM, so a page under a strict CSP writes no style, and the text is black or white, whichever reads better on it by WCAG 2: at least 4.5:1 on any color. The color stays the same in both themes. A product's own stylesheet reads the same pair on any element with <code>data-color</code>: <code>--redz-color</code> and <code>--redz-color-fg</code>, the text color for it.</p>
+					<div class="docs-sample"><div class="docs-example" id="badge-colors">
+						<span class="badge" data-color="#f6d55c">Gold</span>
+						<span class="badge" data-color="#b8c0c8">Silver</span>
+						<span class="badge" data-color="#2a9d8f">Garden</span>
+						<span class="badge" data-color="#264653">Night</span>
+						<span class="badge badge-lg" data-color="#e76f51"><i class="bi bi-tag" aria-hidden="true"></i>Promo</span>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;span class="badge" data-color="#f6d55c"&gt;Gold&lt;/span&gt;
+&lt;span class="badge" data-color="#b8c0c8"&gt;Silver&lt;/span&gt;
+&lt;span class="badge" data-color="#2a9d8f"&gt;Garden&lt;/span&gt;
+&lt;span class="badge" data-color="#264653"&gt;Night&lt;/span&gt;
+&lt;span class="badge badge-lg" data-color="#e76f51"&gt;&lt;i class="bi bi-tag" aria-hidden="true"&gt;&lt;/i&gt;Promo&lt;/span&gt;</code></pre></div>
+
 					<h3>Beside other things</h3>
 					<p>A count in a navigation link, a status in a heading.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="badge-beside">
@@ -218,13 +233,14 @@
 					<ul>
 						<li>A badge's words are read with the thing it stands beside; write them so - "5" in "New 5" reads as five new orders only if the link says New.</li>
 						<li>The tones of text against their fill are at least 4.5:1 in both themes; a tone alone is never the meaning.</li>
+						<li>A badge in a stored color names its color in words: the color helps a person find it, the words say what it is.</li>
 					</ul>
 				</section>
 
 						<section class="vstack gap-12" aria-labelledby="badge-tokens">
 							<h2 id="badge-tokens">Tokens</h2>
 							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/badge.css"><code>css/components/badge.css</code></a>. It declares <code>--redz-badge-bg</code>, <code>--redz-badge-fg</code> on its root, never on rows or items.</p>
-							<p>It reads the theme's <code>--redz-bg-hover</code>, <code>--redz-text-muted</code>, <code>--redz-fs-12</code>, <code>--redz-fs-11</code>, <code>--redz-fs-14</code>, <code>--redz-primary</code>, <code>--redz-primary-contrast</code>, <code>--redz-secondary</code>, <code>--redz-secondary-contrast</code>, <code>--redz-success</code>, <code>--redz-success-contrast</code>, <code>--redz-danger</code>, <code>--redz-danger-contrast</code>, <code>--redz-warning</code>, <code>--redz-warning-contrast</code>, <code>--redz-info</code>, <code>--redz-info-contrast</code>, <code>--redz-text</code>, <code>--redz-bg</code>, <code>--redz-primary-subtle</code>, <code>--redz-primary-text</code>, <code>--redz-secondary-subtle</code>, <code>--redz-secondary-text</code>, <code>--redz-success-subtle</code>, <code>--redz-success-text</code>, <code>--redz-danger-subtle</code>, <code>--redz-danger-text</code>, <code>--redz-warning-subtle</code>, <code>--redz-warning-text</code>, <code>--redz-info-subtle</code>, <code>--redz-info-text</code>.</p>
+							<p>It reads the theme's <code>--redz-bg-hover</code>, <code>--redz-text-muted</code>, <code>--redz-fs-12</code>, <code>--redz-fs-11</code>, <code>--redz-fs-14</code>, <code>--redz-primary</code>, <code>--redz-primary-contrast</code>, <code>--redz-secondary</code>, <code>--redz-secondary-contrast</code>, <code>--redz-success</code>, <code>--redz-success-contrast</code>, <code>--redz-danger</code>, <code>--redz-danger-contrast</code>, <code>--redz-warning</code>, <code>--redz-warning-contrast</code>, <code>--redz-info</code>, <code>--redz-info-contrast</code>, <code>--redz-text</code>, <code>--redz-bg</code>, <code>--redz-primary-subtle</code>, <code>--redz-primary-text</code>, <code>--redz-secondary-subtle</code>, <code>--redz-secondary-text</code>, <code>--redz-success-subtle</code>, <code>--redz-success-text</code>, <code>--redz-danger-subtle</code>, <code>--redz-danger-text</code>, <code>--redz-warning-subtle</code>, <code>--redz-warning-text</code>, <code>--redz-info-subtle</code>, <code>--redz-info-text</code>, <code>--redz-color</code>, <code>--redz-color-fg</code>.</p>
 						</section>
 
 						<section class="vstack gap-12" aria-labelledby="badge-from-bootstrap">

@@ -48,6 +48,18 @@ The plain `badge` is neutral, for a status that needs no attention. `badge-subtl
 <span class="badge badge-subtle-primary badge-lg">Large</span>
 ```
 
+### In a stored color
+
+`data-color` fills a badge with a color a person picked - a tag's, a category's, a tour's. The library sets it as `--redz-color` through the CSSOM, so a page under a strict CSP writes no style, and the text is black or white, whichever reads better on it by WCAG 2: at least 4.5:1 on any color. The color stays the same in both themes. A product's own stylesheet reads the same pair on any element with `data-color`: `--redz-color` and `--redz-color-fg`, the text color for it.
+
+```html
+<span class="badge" data-color="#f6d55c">Gold</span>
+<span class="badge" data-color="#b8c0c8">Silver</span>
+<span class="badge" data-color="#2a9d8f">Garden</span>
+<span class="badge" data-color="#264653">Night</span>
+<span class="badge badge-lg" data-color="#e76f51"><i class="bi bi-tag" aria-hidden="true"></i>Promo</span>
+```
+
 ### Beside other things
 
 A count in a navigation link, a status in a heading.
@@ -64,12 +76,13 @@ A count in a navigation link, a status in a heading.
 
 - A badge's words are read with the thing it stands beside; write them so - "5" in "New 5" reads as five new orders only if the link says New.
 - The tones of text against their fill are at least 4.5:1 in both themes; a tone alone is never the meaning.
+- A badge in a stored color names its color in words: the color helps a person find it, the words say what it is.
 
 ## Tokens
 
 From [`css/components/badge.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/badge.css). It declares `--redz-badge-bg`, `--redz-badge-fg` on its root, never on rows or items.
 
-It reads the theme's `--redz-bg-hover`, `--redz-text-muted`, `--redz-fs-12`, `--redz-fs-11`, `--redz-fs-14`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-text`, `--redz-bg`, `--redz-primary-subtle`, `--redz-primary-text`, `--redz-secondary-subtle`, `--redz-secondary-text`, `--redz-success-subtle`, `--redz-success-text`, `--redz-danger-subtle`, `--redz-danger-text`, `--redz-warning-subtle`, `--redz-warning-text`, `--redz-info-subtle`, `--redz-info-text`.
+It reads the theme's `--redz-bg-hover`, `--redz-text-muted`, `--redz-fs-12`, `--redz-fs-11`, `--redz-fs-14`, `--redz-primary`, `--redz-primary-contrast`, `--redz-secondary`, `--redz-secondary-contrast`, `--redz-success`, `--redz-success-contrast`, `--redz-danger`, `--redz-danger-contrast`, `--redz-warning`, `--redz-warning-contrast`, `--redz-info`, `--redz-info-contrast`, `--redz-text`, `--redz-bg`, `--redz-primary-subtle`, `--redz-primary-text`, `--redz-secondary-subtle`, `--redz-secondary-text`, `--redz-success-subtle`, `--redz-success-text`, `--redz-danger-subtle`, `--redz-danger-text`, `--redz-warning-subtle`, `--redz-warning-text`, `--redz-info-subtle`, `--redz-info-text`, `--redz-color`, `--redz-color-fg`.
 
 ## From Bootstrap 5.3
 

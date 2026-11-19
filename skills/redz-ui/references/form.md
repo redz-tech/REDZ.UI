@@ -307,7 +307,7 @@ The face shows the hours without a leading zero, and the field counts 24 hours. 
 
 ### A color
 
-`form-control-color` is the browser's own color picker in a field's box. A text field with `data-color-for` naming the picker is its hex twin: each follows the other, and a twin that holds no color - `#rgb` or `#rrggbb`, the `#` optional - is `aria-invalid`. A stored color is drawn by `data-color`, which the library sets as `--redz-color` through the CSSOM, so a page under a strict CSP writes no style: on a `dot`, an `icon-tile` - its icon black or white by the color's lightness -, a `choice-media`, and the edges `edge-top-color` and `edge-start-color`.
+`form-control-color` is the browser's own color picker in a field's box. A text field with `data-color-for` naming the picker is its hex twin: each follows the other, and a twin that holds no color - `#rgb` or `#rrggbb`, the `#` optional - is `aria-invalid`. A stored color is drawn by `data-color`, which the library sets as `--redz-color` through the CSSOM, so a page under a strict CSP writes no style: on a `dot`, a [`badge`](badge.md#badge-color) and an `icon-tile` - their text and icon black or white, whichever reads better on it by WCAG 2 -, a `choice-media`, and the edges `edge-top-color` and `edge-start-color`. A product's own stylesheet reads the same pair on any element with `data-color`: `--redz-color` and `--redz-color-fg`, the text color for it.
 
 ```html
 <div class="form-field">
@@ -319,6 +319,7 @@ The face shows the hours without a leading zero, and the field counts 24 hours. 
 </div>
 <div class="hstack gap-12">
 	<span class="dot" data-color="#2a9d8f"></span>
+	<span class="badge" data-color="#2a9d8f">Label</span>
 	<span class="icon-tile" data-color="#e9c46a"><i class="bi bi-tag" aria-hidden="true"></i></span>
 	<span class="icon-tile" data-color="#264653"><i class="bi bi-tag" aria-hidden="true"></i></span>
 	<div class="card edge-start-color" data-color="#e76f51"><div class="card-body">Overdue</div></div>
