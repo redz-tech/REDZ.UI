@@ -4,7 +4,8 @@
 // css-tokenizer-tests corpus it takes - as written and as squeezed, with no minifying and no targets: the two must read
 // the same, but for what CSS does not tell apart and Lightning CSS keeps as written in a value it does not parse -
 // comments, the length of a run of white space, the space after a comma. esbuild
-// parses every script the minifier writes for the browser floor, and each declaration file of dist/js/ as TypeScript. A watch compares the size of the two main files with
+// parses every script the minifier writes for the browser floor, holds dist/js/floor.min.js to plain ES5, and parses each
+// declaration file of dist/js/ as TypeScript. A watch compares the size of the two main files with
 // esbuild's --minify, gzip -9, and warns when the gap leaves its band. Each judge is a native binary from npm, pinned by
 // version and sha512 and kept in .dev/judges/ with its sha256; one missing, changed or for no known platform fails.
 // Usage: php tools/judge.php
@@ -198,6 +199,14 @@ function JUDGE__Js(): array
 		if ($code !== 0) {
 			$findings[] = $name . '  esbuild does not parse it for the floor: ' . trim(substr($err, 0, 400));
 		}
+	}
+	// A browser below the floor must read the floor script whole to show the page's own words: plain ES5, which esbuild
+	// prints for ES5 as it prints it for today - a syntax it would rewrite, or refuse, is newer.
+	$floor = $scripts['dist/js/floor.min.js'] ?? '';
+	[$code, $old, $err] = JUDGE__Run([JUDGE__Binary('esbuild'), '--loader=js', '--target=es5', '--log-level=error'], $floor);
+	[, $new] = JUDGE__Run([JUDGE__Binary('esbuild'), '--loader=js', '--target=esnext', '--log-level=error'], $floor);
+	if ($floor === '' || $code !== 0 || $old !== $new) {
+		$findings[] = 'dist/js/floor.min.js  is not plain ES5, so a browser below the floor cannot read it to mark the page: ' . trim(substr($code !== 0 ? $err : 'esbuild rewrites it for ES5', 0, 400));
 	}
 	$types = glob(JUDGE_ROOT . '/dist/js/*.d.ts') ?: [];
 	foreach ($types as $file) {

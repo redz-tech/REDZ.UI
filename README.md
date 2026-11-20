@@ -106,7 +106,8 @@ attaches by delegation on `document`, so nothing is set up per element and marku
 - **Changing pages:** the header and the side navigation stand still while the rest cross-fades, where the browser has
   cross-document view transitions. `data-transition` on `<html>` is `fade`, the default, `instant`, `busy` - the main
   column under the busy overlay while the next page comes, where the browser has the Navigation API - or `none`
-  (`js/transition.js`).
+  (`js/transition.js`). `js/floor.min.js`, first in the head, opts the page in before its stylesheet comes, so a first
+  visit changes the same way (`js/transition-head.js`).
 - **A white label:** `data-brand` derives the primary tone of one colour, also on a region set after load; `REDZ.ui.brand(colour)`
   answers what it paints in each theme - the tone, the words on it, the links, the focus ring and the ground, with their
   contrast ratios - for a settings screen that lets a person choose the colour.

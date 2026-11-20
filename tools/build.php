@@ -52,6 +52,8 @@ const BUILD_CHIPS = [
 ];
 // What a project links first, as the passport names it, from the version's folder.
 const BUILD_MAIN = ['css' => 'css/redz-ui.min.css', 'js' => 'js/redz-ui.min.js', 'floor' => 'js/floor.min.js'];
+// The plain script js/floor.min.js runs after the floor's tests: the change of pages, opted in before the stylesheets come.
+const BUILD_FLOOR_AFTER = 'js/transition-head.js';
 // The editor, a package of its own: its stylesheet, its module, and the marks of the frame it edits in.
 const BUILD_EDITOR = ['css' => 'css/redz-ui-editor.min.css', 'js' => 'js/redz-ui-editor.min.js', 'surface' => 'css/redz-ui-editor-surface.min.css'];
 // The packages a screen links beside the two files when it shows what they draw.
@@ -365,13 +367,13 @@ function BUILD__Package(string $dist): string
 
 /** js/floor.min.js: a classic script for the page's head, before the stylesheets, that marks <html data-floor="below">
  *  when one test of tools/floor/tests.json fails, or the browser cannot run them, so that the page shows its own words
- *  in place of a broken screen. */
+ *  in place of a broken screen; then, apart from that verdict, BUILD_FLOOR_AFTER. */
 function BUILD__FloorJs(): string
 {
 	$tests = json_decode((string)file_get_contents(BUILD_ROOT . '/tools/floor/tests.json'), true, 512, JSON_THROW_ON_ERROR)['tests'];
 	$lines = array_map(fn(array $test): string => "\t\t\t" . $test['test'], $tests);
 	return BUILD_DIST_HEAD . "\n" . MIN__JsSafe("(function () {\n\tvar below = true;\n\ttry {\n\t\tbelow = !(\n" . implode(" &&\n", $lines) . "\n\t\t);\n\t} catch (error) {\n\t\tbelow = true;\n\t}\n"
-		. "\tif (below) {\n\t\tdocument.documentElement.setAttribute('data-floor', 'below');\n\t}\n})();\n") . "\n";
+		. "\tif (below) {\n\t\tdocument.documentElement.setAttribute('data-floor', 'below');\n\t}\n})();\n" . (string)file_get_contents(BUILD_ROOT . '/' . BUILD_FLOOR_AFTER)) . "\n";
 }
 
 /**

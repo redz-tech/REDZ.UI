@@ -7,6 +7,16 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 ## Unreleased
 
 ### Fixed
+- A page changed to another of the site on its first visit, its stylesheet not yet cached, often did not cross-fade,
+  and Chrome logged "InvalidStateError: Transition was aborted because of invalid state. ViewTransition opt-in
+  disabled": the browser asked the new page whether it opts into the transition before the stylesheet that holds
+  `@view-transition` had come, and rejected a promise of its own that no page code reaches. `js/floor.min.js`, the
+  plain script first in the head, now opts the page in itself, the stylesheet's own rule in a sheet it builds (no inline
+  style, so a Content-Security-Policy needs nothing new), and catches the promises of a transition and skips it under
+  `data-transition="none"` before the module runs. Its verdict on the floor is byte for byte as before and runs first;
+  the new part, `js/transition-head.js`, is plain ES5 in a try of its own and acts only where the browser has
+  cross-document view transitions, so it never marks a browser below the floor, and a browser below it still reads the
+  file whole. A page that loads `js/floor.min.js` first in its head, as the docs show, needs no change.
 - The release's minifier, `tools/dist/min.php`, reads a form feed or a vertical tab between a script's tokens as white
   space, as JavaScript does: a script that began or ended with one stopped its squeeze with an internal error on PHP
   8.6, and one between tokens stayed in the output.
@@ -20,6 +30,9 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   stylesheet and in a script.
 - `php tools/docs.php` refuses a row of `docs/ar.tsv` that no twin asks for, as it refuses a text with no row: the 70
   rows the removed parts and older samples left are gone.
+- `php tools/judge.php` refuses a `dist/js/floor.min.js` that is not plain ES5 - one esbuild prints for ES5 otherwise
+  than for today's JavaScript, or cannot -, as a browser below the floor must read it whole to mark the page.
+- The probes' page-change walk holds that no engine they run, at the floor or above it, reads as below the floor.
 
 ## 0.31.0 - 2026-11-19
 

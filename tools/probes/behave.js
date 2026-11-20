@@ -5819,6 +5819,11 @@ window.REDZ_BEHAVE = (() => {
 					out.push('data-transition="' + mode + '": the next page brought ' + say(seen) + ', its header named ' + say(header) + ', for a transition ' + shown + (shown ? (mode === 'fade' ? ' that fades the page' : ' that leaves the page still') : ''));
 				}
 			}
+			// No engine here, at the floor or above, reads as below it: this page, and the page its frame came to.
+			const marked = [document.documentElement.dataset.floor ?? null, frame.contentDocument.documentElement.dataset.floor ?? null];
+			if (marked.some((mark) => mark !== null)) {
+				out.push('the pages read as ' + say(marked) + ' of the floor, in an engine at the floor or above it');
+			}
 			const doc = await open('app.html?probe-transition=busy');
 			const view = frame.contentWindow;
 			view.scrollTo(0, 2500);

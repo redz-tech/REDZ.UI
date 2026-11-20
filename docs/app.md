@@ -142,6 +142,8 @@ From one page of a site to the next the header and the side navigation stand sti
 
 For people who ask for less motion nothing fades and nothing moves; `"busy"` keeps its overlay, the spinner turning slower.
 
+The page asks for the change as its head is read: `js/floor.min.js`, first in the head, opts it in before the stylesheet comes, so a first visit, the stylesheet not yet cached, changes like any other. A page without that script changes so once its stylesheet has come.
+
 ```html
 <html lang="en" data-transition="busy">
 ```

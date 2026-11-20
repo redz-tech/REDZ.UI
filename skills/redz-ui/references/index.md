@@ -76,7 +76,7 @@ Menus, tabs, dialogs and their keys need no call: the library listens on the doc
 
 Bootstrap 6's floor: Chrome and Edge 130+, Firefox 132+, Safari 18+ on macOS and iOS. What must work rests on features of the floor; invoker commands and anchor positioning are written in their final form, and a small script stands in below them. Every page of these docs is checked in real engines at the floor and above - [the checks](https://redz-tech.github.io/REDZ.UI/checks/).
 
-Below the floor a page shows its own words, not a broken screen. `js/floor.min.js`, a plain script first in the head, before the stylesheets, marks `<html data-floor="below">` when the browser lacks a feature the library is built on; the page's own style shows its "update your browser" then. Every product that loads it judges a browser the same way, and the floor gate holds that no browser at the floor fails it.
+Below the floor a page shows its own words, not a broken screen. `js/floor.min.js`, a plain script first in the head, before the stylesheets, marks `<html data-floor="below">` when the browser lacks a feature the library is built on; the page's own style shows its "update your browser" then. Every product that loads it judges a browser the same way, and the floor gate holds that no browser at the floor fails it. Apart from that verdict it also opts the page into the change of pages before the stylesheets come - see [App](app.md#app-pages).
 
 ```html
 <script src="redz-ui/js/floor.min.js"></script>
