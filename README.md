@@ -246,8 +246,9 @@ media library 2 KB, QR codes 4 KB of script, the crop 2 KB of styles and 10 KB o
 component - examples whose code is printed from the same markup, every state as a named grid, keyboard and
 accessibility, the tokens the component reads and its rows of the Bootstrap map. `php tools/docs.php` writes them from
 their sources in `docs/src/` inside one shell, with `docs/all.html` - every example and state of every page on one
-page - the Arabic twins of that page and of the demo screens (`docs/ar.tsv`), a Markdown twin of every page, and
-`llms.txt` with `llms-full.txt`; `--check` holds them to their sources on every commit. States the pointer or the keys
+page - the Arabic twins of that page and of the demo screens (`docs/ar.tsv`, a row for every text they show and none
+other), a Markdown twin of every page, and `llms.txt` with `llms-full.txt`; `--check` holds them to their sources on
+every commit. States the pointer or the keys
 make - `:hover`, `:focus-visible`, `:focus` - are shown by the docs' own script, which copies those rules under
 `[data-docs-state]`; the library's stylesheets carry no classes for the docs.
 

@@ -18,6 +18,8 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - New fuses of the minifier and of the floor checker hold the form feed: a script that opens, ends and breaks with
   form feeds and vertical tabs, a `-->` after a form feed, and a `floor-allow` comment opening with a form feed in a
   stylesheet and in a script.
+- `php tools/docs.php` refuses a row of `docs/ar.tsv` that no twin asks for, as it refuses a text with no row: the 70
+  rows the removed parts and older samples left are gone.
 
 ## 0.31.0 - 2026-11-19
 

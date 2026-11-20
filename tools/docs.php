@@ -402,15 +402,16 @@ function DOCS__Table(string $file): array
 	return $table;
 }
 
-/** The text in the other language, its surrounding white space kept; what the table lacks goes to $missing. */
-function DOCS__Translated(string $text, array $table, array &$missing): string
+/** The text in the other language, its surrounding white space kept; each text looked up goes to $asked, true where
+ *  the table has it. */
+function DOCS__Translated(string $text, array $table, array &$asked): string
 {
 	$plain = trim((string)preg_replace('~\s+~u', ' ', $text));
 	if ($plain === '' || preg_match('~\p{L}~u', $plain) !== 1) {
 		return $text;
 	}
-	if (!isset($table[$plain])) {
-		$missing[$plain] = true;
+	$asked[$plain] = isset($table[$plain]);
+	if (!$asked[$plain]) {
 		return $text;
 	}
 	preg_match('~^(\s*).*?(\s*)$~su', $text, $edges);
@@ -418,11 +419,11 @@ function DOCS__Translated(string $text, array $table, array &$missing): string
 }
 
 /** Translates the texts and named attributes under $node, but not inside code, scripts or translate="no". */
-function DOCS__TwinWalk(Dom\Node $node, array $table, array &$missing): void
+function DOCS__TwinWalk(Dom\Node $node, array $table, array &$asked): void
 {
 	foreach ($node->childNodes as $child) {
 		if ($child instanceof Dom\Text) {
-			$child->data = DOCS__Translated($child->data, $table, $missing);
+			$child->data = DOCS__Translated($child->data, $table, $asked);
 			continue;
 		}
 		if (!$child instanceof Dom\Element || in_array($child->localName, DOCS_KEPT, true) || $child->getAttribute('translate') === 'no' || ($child->localName === 'th' && $child->closest('.docs-matrix') !== null)) {
@@ -430,26 +431,26 @@ function DOCS__TwinWalk(Dom\Node $node, array $table, array &$missing): void
 		}
 		foreach (DOCS_NAMED as $name) {
 			if ($child->hasAttribute($name)) {
-				$child->setAttribute($name, DOCS__Translated((string)$child->getAttribute($name), $table, $missing));
+				$child->setAttribute($name, DOCS__Translated((string)$child->getAttribute($name), $table, $asked));
 			}
 		}
-		DOCS__TwinWalk($child, $table, $missing);
+		DOCS__TwinWalk($child, $table, $asked);
 	}
 }
 
 /** The twin of $html in $lang, right to left: every text, named attribute, title and the island translated. */
-function DOCS__Twin(string $html, string $lang, array $table, array &$missing): string
+function DOCS__Twin(string $html, string $lang, array $table, array &$asked): string
 {
 	$doc = Dom\HTMLDocument::createFromString($html, LIBXML_NOERROR);
 	$doc->documentElement->setAttribute('lang', $lang);
 	$doc->documentElement->setAttribute('dir', 'rtl');
-	DOCS__TwinWalk($doc->body, $table, $missing);
-	$doc->title = DOCS__Translated($doc->title, $table, $missing);
+	DOCS__TwinWalk($doc->body, $table, $asked);
+	$doc->title = DOCS__Translated($doc->title, $table, $asked);
 	$island = $doc->getElementById('redz-ui-text');
 	if ($island !== null) {
 		$texts = json_decode($island->textContent, true) ?: [];
 		foreach ($texts as $name => $value) {
-			$texts[$name] = DOCS__Translated($value, $table, $missing);
+			$texts[$name] = DOCS__Translated($value, $table, $asked);
 		}
 		$island->textContent = json_encode($texts, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP);
 	}
@@ -564,7 +565,8 @@ function DOCS__Llms(array $config, array $sources, array $markdown): array
 }
 
 /**
- * Every generated file: path => content; the sources' broken rules and the twins' missing translations land in $errors.
+ * Every generated file: path => content; the sources' broken rules, the twins' missing translations and the rows no
+ * twin asks for land in $errors.
  * @return array<string, string>
  */
 function DOCS__Files(array &$errors): array
@@ -595,14 +597,17 @@ function DOCS__Files(array &$errors): array
 	$files['docs/all.html'] = DOCS__Page($config, 'all', 'All components', 'Every example and every state of every page on one page.', DOCS__All($config, $sources), DOCS_MARK . ' from the examples and state grids of docs/src/ - edit the sources, not this file.');
 	foreach ($config['twins'] as $lang => $pages) {
 		$table = DOCS__Table('docs/' . $lang . '.tsv');
-		$missing = [];
+		$asked = [];
 		foreach ($pages as $page) {
 			$html = $files[$page] ?? (string)file_get_contents(DOCS_ROOT . '/' . $page);
-			$twin = DOCS__Twin($html, $lang, $table, $missing);
+			$twin = DOCS__Twin($html, $lang, $table, $asked);
 			$files[substr($page, 0, -5) . '.' . $lang . '.html'] = (string)preg_replace('~<html~', "<!-- " . DOCS_MARK . ' from ' . $page . ' and docs/' . $lang . ".tsv - edit those, not this file. -->\n<html", $twin, 1);
 		}
-		foreach (array_keys($missing) as $text) {
+		foreach (array_keys($asked, false, true) as $text) {
 			$errors[] = 'docs/' . $lang . '.tsv has no translation of "' . $text . '"';
+		}
+		foreach (array_keys(array_diff_key($table, $asked)) as $text) {
+			$errors[] = 'docs/' . $lang . '.tsv translates "' . $text . '", which no twin asks for - remove the row';
 		}
 	}
 	return $files + DOCS__Llms($config, $sources, $markdown);
