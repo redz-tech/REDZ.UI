@@ -866,7 +866,6 @@ Play the slides	شغّل الشرائح
 Accent	اللون المميز
 Accordion	أكورديون
 Align	المحاذاة
-Always	دائمًا
 Ask search engines not to follow it	اطلب من محركات البحث ألا تتبعه
 Block	كتلة
 Blocks	الكتل
@@ -881,11 +880,9 @@ Code	شيفرة
 Color	اللون
 Danger	خطر
 Danger note	ملاحظة خطر
-Edit HTML	تحرير HTML
 End	النهاية
 Format	التنسيق
 Formatting	أدوات التنسيق
-From the width	من العرض
 Gap	المسافة
 HTML source	مصدر HTML
 Heading 2	عنوان 2
@@ -920,7 +917,6 @@ YouTube or Vimeo address	عنوان YouTube أو Vimeo
 PIN pad	لوحة الرمز السري
 QR codes	رموز QR
 Centered page	صفحة في الوسط
-Kiosk	الكشك
 Company site	موقع الشركة
 A field is here, off the screen.	هنا حقل خارج الشاشة.
 Extra large	كبير جدًا
@@ -940,17 +936,7 @@ Sign in to manage your sites	سجّل الدخول لإدارة مواقعك
 Language	اللغة
 ไทย	ไทย
 Русский	Русский
-မြန်မာ	မြန်မာ
 Forgot the password?	نسيت كلمة المرور؟
-Riverside tower	برج ريفرسايد
-Wednesday, November 4	الأربعاء، 4 نوفمبر
-Tap your card	المس بطاقتك
-Hold it to the reader under the screen	قرّبها من القارئ تحت الشاشة
-REDZ ERP · Site entrance	REDZ ERP · مدخل الموقع
-Sid Sample	Sid Sample
-Last in at 07:02	آخر دخول في 07:02
-Check in	تسجيل الحضور
-Check out	تسجيل الانصراف
 Enter	إدخال
 {seconds} s	{seconds} ث
 Choice tiles	بطاقات الاختيار
@@ -1199,7 +1185,6 @@ Doing	قيد التنفيذ
 Checking	قيد المراجعة
 Returned	مُعادة
 Cancelled	ملغاة
-Message threads	سلاسل الرسائل
 Screenshots	لقطات الشاشة
 Drop or paste screenshots here, or choose them	أفلت لقطات الشاشة هنا أو الصقها، أو اخترها
 Up to 3 images	حتى 3 صور
@@ -1211,20 +1196,6 @@ Photos do not upload from a phone	الصور لا تُرفع من الهاتف
 Change the site's address	تغيير عنوان الموقع
 Two owners for one site	مالكان لموقع واحد
 New ticket	تذكرة جديدة
-AR	AR
-The child price on North Bay shows 2,500 THB. It should be 1,900 THB since Monday.	سعر الطفل في الخليج الشمالي يظهر 2,500 بات. يجب أن يكون 1,900 بات منذ الاثنين.
-Screenshot of the price	لقطة شاشة للسعر
-REDZ support	دعم REDZ
-edited	مُعدّلة
-Edit the message	عدّل الرسالة
-Thank you - the price list was published before the change. It is fixed now; please check the page again.	شكرًا - نُشرت قائمة الأسعار قبل التغيير. تم إصلاحها الآن؛ يرجى مراجعة الصفحة مرة أخرى.
-Message	الرسالة
-The fixed page	الصفحة بعد الإصلاح
-Remove the fixed page	أزل الصفحة بعد الإصلاح
-Reply	الرد
-Write a reply	اكتب ردًا
-Send	إرسال
-Close the ticket	أغلق التذكرة
 {name}: up to {count} files	{name}: حتى {count} ملفات
 Fill the alert	املأ التنبيه
 Ratings	التقييمات
@@ -1431,17 +1402,8 @@ Import the old comments	استيراد التعليقات القديمة
 skipped	تم التخطي
 Switch off the old site	إيقاف الموقع القديم
 an owner's step	خطوة المالك
-The release of 2.4	إصدار 2.4
-Build	البناء
-2 min 14 s	2 د 14 ث
-Log	السجل
 Test	الاختبار
-412 of 580 checks	412 من 580 فحصًا
 Stop	إيقاف
-Approve	الموافقة
-An owner signs off	يوافق المالك
-Deploy	النشر
-After the approval	بعد الموافقة
 Guests per month	الضيوف شهريًا
 Jul	يوليو
 Aug	أغسطس
@@ -1603,20 +1565,17 @@ Fill	ملء
 Even	متساوٍ
 Highlighted	مميز
 Bullets	نقاط
-A longer hint	تلميح أطول
 Keep the log for, days	مدة الاحتفاظ بالسجل، بالأيام
 Older records are removed at night.	تُحذف السجلات الأقدم ليلًا.
 The count starts from the day a record is written. A record a person marked to keep stays, whatever this number says, until the mark is taken off.	يبدأ العد من يوم كتابة السجل. ويبقى السجل الذي علّمه شخص للاحتفاظ به، مهما كان هذا الرقم، حتى تُزال العلامة.
 Remind the guest	تذكير الضيف
 A message goes out the evening before.	تُرسل رسالة في المساء السابق.
 The guest is told nothing.	لا يُبلَّغ الضيف بشيء.
-A tab with changes	تبويب فيه تغييرات
 Company	الشركة
 Mail	البريد
 The company's name and address.	اسم الشركة وعنوانها.
 The address mail is sent from.	العنوان الذي يُرسل منه البريد.
 not saved	غير محفوظ
-A value set from the page	قيمة تضبطها الصفحة
 AI	الذكاء الاصطناعي
 Shorter	أقصر
 Simpler	أبسط
@@ -1726,11 +1685,6 @@ matched 2,126 · fetched 14 · 4.6 MB · 2 migrations · 1 seed	متطابقة 2
 Check the schema	فحص المخطط
 Clean	سليم
 Switch to the new version	الانتقال إلى الإصدار الجديد
-The update	التحديث
-Install	التثبيت
-Waits for your press	ينتظر ضغطتك
-Verify	التحقق
-After the install	بعد التثبيت
 The backup is two days old	عمر النسخة الاحتياطية يومان
 The nightly copy stopped on Tuesday, so today's changes are not in it yet. Run one by hand before the next update.	توقفت النسخة الليلية يوم الثلاثاء، لذا فإن تغييرات اليوم ليست فيها بعد. شغّل نسخة يدويا قبل التحديث التالي.
 Leaves	المغادرة
@@ -1820,21 +1774,10 @@ Actions: Boat A	إجراءات: القارب A
 Check now	افحص الآن
 State	الحالة
 Check for 2 seconds	افحص لمدة ثانيتين
-The bill	الفاتورة
-North Bay by speedboat · 2 adults · 5,000 THB	الخليج الشمالي بالقارب السريع · 2 بالغان · 5,000 THB
-Lunch on the beach · 2 · 600 THB	غداء على الشاطئ · 2 · 600 THB
-Hotel pickup · 1 · 250 THB	النقل من الفندق · 1 · 250 THB
-Park fee · 2 · 800 THB	رسوم المنتزه · 2 · 800 THB
-Snorkelling gear · 2 · 0 THB	معدات الغطس · 2 · 0 THB
-6,650 THB	6,650 THB
-for 4 items	مقابل 4 عناصر
-Pay	ادفع
-Drawn by the package	ترسمه الحزمة
 QR code: a key for the app	رمز QR: مفتاح للتطبيق
 Drawn from data-qr	مرسوم من data-qr
 Drawn by REDZ.ui.qr	ترسمه REDZ.ui.qr
 Copy the settings: Bank card	نسخ الإعدادات: البطاقة المصرفية
-130 of 120	130 من 120
 2 failed	2 فشلت
 30 days ago	قبل 30 يومًا
 40.5 GB	40.5 GB
@@ -1857,18 +1800,12 @@ Copy the settings: Bank card	نسخ الإعدادات: البطاقة المص�
 90 days: 84 up, 2 slow, 2 down, 2 without data	90 يومًا: 84 يعمل، 2 بطيء، 2 متوقف، 2 بلا بيانات
 Add this line to the server's crontab:	أضف هذا السطر إلى crontab الخادم:
 Ask for the bookings of today:	اطلب حجوزات اليوم:
-Baybank	Baybank
-Card or wallet	بطاقة أو محفظة
 Commands to copy	أوامر للنسخ
 Copy all	انسخ الكل
 Copy the command	انسخ الأمر
 Copy the link	انسخ الرابط
 Download it:	نزّله:
-Free 50	مجاني 50
 Install the agent	ثبّت الوكيل
-Lagoonpay	Lagoonpay
-Logos	الشعارات
-North Bay Tours	North Bay Tours
 Nov 1 · 40.5 GB	1 نوفمبر · 40.5 GB
 Nov 10 · 47.5 GB	10 نوفمبر · 47.5 GB
 Nov 11 · 47.0 GB	11 نوفمبر · 47.0 GB
@@ -1883,17 +1820,13 @@ Nov 6 · 43.8 GB	6 نوفمبر · 43.8 GB
 Nov 7 · 44.5 GB	7 نوفمبر · 44.5 GB
 Nov 8 · 44.2 GB	8 نوفمبر · 44.2 GB
 Nov 9 · 45.5 GB	9 نوفمبر · 45.5 GB
-Over 10	زيادة 10
-Paid 70	مدفوع 70
 QR code of your link	رمز QR لرابطك
 Scan in WeChat	امسح في WeChat
 Scan in WeChat to share	امسح في WeChat للمشاركة
-Seats this month	المقاعد هذا الشهر
 Share your link	شارك رابطك
 Start it:	شغّله:
 Storage over 10 days: 41 to 48 GB	التخزين خلال 10 أيام: من 41 إلى 48 GB
 Storage used, last 14 days	التخزين المستخدم، آخر 14 يومًا
-The lagoon at noon	البحيرة عند الظهر
 Unpack it:	فك ضغطه:
 Uptime of the site	مدة تشغيل الموقع
 Used	المستخدم
@@ -2078,11 +2011,9 @@ Arrival	الوصول
 From 14:00 to 23:00, by quarter hours.	من 14:00 إلى 23:00، كل ربع ساعة.
 Hours	الساعات
 Start date	تاريخ البدء
-Due date	تاريخ الاستحقاق
 Quick dates	تواريخ سريعة
 End of November	نهاية نوفمبر
 End of December	نهاية ديسمبر
-Any day; the day's name shows first.	أي يوم؛ يظهر اسم اليوم أولًا.
 Quick periods	فترات سريعة
 Week 45	الأسبوع 45
 Week 46	الأسبوع 46
@@ -2112,7 +2043,6 @@ Rotate	تدوير
 Whole photo	الصورة كاملة
 Auto frame	إطار تلقائي
 Frame of the paper	إطار الورقة
-Arrow keys move a corner, with Shift by 10. Or press a corner, then tap where it goes. Escape cancels.	تحرّك مفاتيح الأسهم الزاوية، ومع Shift بمقدار 10. أو اضغط زاوية ثم انقر حيث تذهب. Escape يلغي.
 Top left corner	الزاوية العلوية اليسرى
 Top right corner	الزاوية العلوية اليمنى
 Bottom right corner	الزاوية السفلية اليمنى
