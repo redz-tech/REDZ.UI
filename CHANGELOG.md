@@ -46,7 +46,29 @@ IT pack and REDZ CMS; all in the calendar package.
   `date.shortest`, `date.since`, `date.unavailable`, `date.until` and `date.year`; `date.chosen`, `date.longest` and
   `date.shortest` are counts.
 
+Times by the same settings, the ERP's and the IT pack's order.
+- `data-time-format`, PHP's letters `G H g h i A a`, read from the nearest element like the date's settings: a
+  `time-input` writes its hours in the pattern - `09:15` under `H:i` -, and under `g:i A` runs them from 1 to 12 with a
+  third part, `time-input-period`, that says AM or PM as PHP prints `A` (am and pm for `a`) in every language. A tap, a
+  click, Space, the arrows, `a` and `p` set it; 13 to 23 typed in the hours are their PM hour and 00 is 12 AM; `3:30 pm`
+  or `330p` typed or pasted fill all three; the list's times are in the pattern. An empty field has neither word, and
+  hours left without one are refused in the page's words. The value stays `HH:MM`, 24-hour; without the attribute a
+  field reads as before. New texts: `time.period` (its name) and `time.period_missing`.
+- A day and its time: a `date-input` around one `input type="datetime-local"`, or two for a period with an end that may
+  stay open, draws each end's day - a button that opens the months, or typed under `data-typing` - and its time, the
+  main script's time input, in one frame (`date-input-timed`, `date-input-end`, `date-input-day`, `date-input-time`).
+  A day picked keeps its time, or hands the focus to its time when it has none; the end's day opens the months to pick
+  the end with the start kept. The value stays `YYYY-MM-DDTHH:MM`, empty until both are there, with its `name`.
+- `data-min="now"` and `data-max="now"`: today for the days and, on a day and its time, the time now in the box's
+  `data-time-zone`; the input's own `min` and `max` bound the times on their own day, and a period's start its end's.
+- A `time` with `data-local` writes its hours by the nearest `data-time-format`: 24 or 12 hours, AM and PM as PHP
+  prints them.
+
 ### Changed
+- A `time-input` fires `change` once per completed choice - a time picked from the list, the focus leaving the field -
+  where it fired on every key; `input` still fires on every change of the time. Its parts' own `input` and `change`
+  stay inside the frame, and so do the inner parts' and lists' of a `date-pick` and a `date-input` - the months' and
+  the years' lists, a typed day -: a form that sends itself on `change` hears only the field's own inputs.
 - `change` fires once per completed choice - a period's end, a quick pick, Clear, a typed part, the month closing, the
   focus leaving an inline box; for several days only the last two -, where it fired on every pick; `input` still fires
   on every pick. A period left with a start alone, its end required, is given back as it was.
@@ -65,6 +87,12 @@ IT pack and REDZ CMS; all in the calendar package.
   gives a reason.
 - The probes judge a typed date field's months against the field, which they stand by, and the `datePick` walk
   measures a day by its layout, not while the month's opening transition scales it.
+- The probes' new `timeAndDay` walk holds a 12-hour time - AM or PM asked for when the hours are left without it, set
+  by a click and by `p`, 13 to 23 typed as their PM hour, a pasted `3:30 pm`, the pattern read again when it changes -
+  and a day with its time - the months under the frame, a day picked keeping its time, the end's day keeping the
+  start and handing the focus to the end's time, now bounding today's time and the start the end's, one change as the
+  focus leaves each field; proven red on nine planted defects. The `timeLocal` walk holds a ticking time under
+  `data-time-format`: 12 hours with AM or PM, then 24.
 
 ## 0.31.1 - 2026-11-20
 

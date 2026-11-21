@@ -587,8 +587,90 @@
 		outline-offset: -1px;
 	}
 
-	.date-input > div.date-input-typed > span {
+	.date-input > div.date-input-typed > span:not(.date-input-end) {
 		color: var(--redz-text-muted);
+	}
+
+	/* A day and its time over input type="datetime-local": each end's day - a button that opens the months, or typed -
+	   and its time in one frame, which wraps between the ends; the time is the main script's time input, its frame the
+	   field's. */
+	.date-input > .date-input-timed {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 2px var(--redz-space-4);
+		block-size: auto;
+		min-block-size: var(--redz-control-height);
+		padding-inline-start: calc(var(--redz-space-12) - 6px);
+		cursor: default;
+	}
+
+	.date-input:is(:focus-within, :has(> .date-input-menu:popover-open)) > .date-input-timed {
+		border-color: var(--redz-focus);
+		outline: 2px solid var(--redz-focus);
+		outline-offset: -1px;
+	}
+
+	.date-input > .date-input-timed:has(:user-invalid) {
+		border-color: var(--redz-danger-fill);
+	}
+
+	.date-input > .date-input-timed:has(.time-input-part:disabled) {
+		background-color: var(--redz-bg-page);
+		color: var(--redz-text-muted);
+	}
+
+	.date-input-end {
+		display: inline-flex;
+		align-items: center;
+		gap: 2px;
+		min-inline-size: 0;
+	}
+
+	.date-input-day {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		block-size: 1.625rem;
+		padding: 0 6px;
+		border: 0;
+		border-radius: var(--redz-radius-4);
+		background: none;
+		color: inherit;
+		font: inherit;
+		white-space: nowrap;
+		cursor: pointer;
+	}
+
+	.date-input-day > .bi {
+		color: var(--redz-text-muted);
+	}
+
+	.date-input-day:hover:not(:disabled) {
+		background: var(--redz-bg-hover);
+	}
+
+	.date-input-day:is(:focus-visible, [aria-expanded="true"]) {
+		background: var(--redz-primary-subtle);
+		color: var(--redz-primary-text);
+		outline: 0;
+	}
+
+	.date-input-day[data-empty] > .date-input-value {
+		color: var(--redz-text-muted);
+	}
+
+	.date-input-day:disabled {
+		cursor: default;
+	}
+
+	.date-input .date-input-time > .time-input-face {
+		block-size: auto;
+		min-block-size: 0;
+		padding: 0;
+		border: 0;
+		background: none;
+		outline: 0;
 	}
 
 	.date-input-part {

@@ -2655,11 +2655,15 @@ d-table
 d-table-cell
 d-table-row
 date-input
+date-input-day
+date-input-end
 date-input-face
 date-input-head
 date-input-menu
 date-input-open
 date-input-part
+date-input-time
+date-input-timed
 date-input-title
 date-input-typed
 date-input-value
@@ -4377,6 +4381,7 @@ time-input-colon
 time-input-face
 time-input-list
 time-input-part
+time-input-period
 time-input-time
 timeline
 timeline-time

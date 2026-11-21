@@ -73,6 +73,28 @@
 		font-weight: 600;
 	}
 
+	/* AM or PM, a part like the others; its two words while none is chosen. */
+	.time-input-period {
+		inline-size: auto;
+		min-inline-size: 3ch;
+		margin-inline-start: 2px;
+		line-height: 1.625rem;
+		white-space: nowrap;
+		cursor: pointer;
+	}
+
+	.time-input-period:first-child {
+		margin-inline: 0 2px;
+	}
+
+	.time-input-period[data-empty] {
+		color: var(--redz-text-muted);
+	}
+
+	.time-input-period[aria-disabled] {
+		cursor: default;
+	}
+
 	.time-input-list {
 		min-inline-size: 16rem;
 	}

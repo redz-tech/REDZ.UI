@@ -2457,6 +2457,17 @@ window.REDZ_BEHAVE = (() => {
 			if (before === '' || after === before || auto.title !== 'The page\'s own' || russian !== new Intl.DateTimeFormat('ru', {day: 'numeric', month: 'short', ...(morning(30).getFullYear() === now.getFullYear() ? {} : {year: 'numeric'}), hour: '2-digit', minute: '2-digit'}).format(morning(30))) {
 				out.push('the title ' + say(before) + ' then ' + say(after) + ' as the moment moves, the page\'s own then ' + say(auto.title) + ', in Russian ' + say(russian));
 			}
+			// A product's pattern of the time: 12 hours with AM or PM as PHP prints them, then 24 hours.
+			const office = $$('#time-local time')[2];
+			const twelve = office.textContent;
+			office.parentElement.setAttribute('data-time-format', 'H:i');
+			await wait(50);
+			const day = office.textContent;
+			office.parentElement.setAttribute('data-time-format', 'g:i A');
+			await wait(50);
+			if (!/^\d{1,2}:\d\d [AP]M$/.test(twelve) || !/^\d\d:\d\d$/.test(day)) {
+				out.push('a time under data-time-format reads ' + say([twelve, day]) + ', not 12 hours with AM or PM, then 24 hours');
+			}
 		}]},
 		viewer: {target: '#viewer-set', steps: [async (out) => {
 			const links = $$('#viewer-set a[data-zoom]');
@@ -5286,6 +5297,150 @@ window.REDZ_BEHAVE = (() => {
 			};
 			if (say(seen) !== say(want)) {
 				out.push('a date-pick takes the page\'s rules, bounds, pattern, answer and settings, a typed period and several days, with one change per choice: ' + say(seen));
+			}
+		}},
+		// A 12-hour time and a day with its time: AM or PM a part of the frame, asked for when the hours are left without
+		// it, set by a click and by p; 13 to 23 typed are their PM hour; the pattern read from the nearest element; a
+		// pasted time with its pm; a day picked keeps its time, the end's day keeps the start and hands the focus to the
+		// end's time; now bounds today's time and the start the end's; one change as the focus leaves each field.
+		timeAndDay: {target: '#calendar-date-time', walk: async function* (out) {
+			const DAY = 86400000;
+			const local = new Date();
+			const today = Date.UTC(local.getFullYear(), local.getMonth(), local.getDate());
+			const iso = (t) => new Date(t).toISOString().slice(0, 10);
+			// A window without the focus - headless Firefox's - sends no focusout: the walk sends it for it.
+			const away = async () => {
+				const was = document.activeElement;
+				was.blur();
+				if (!document.hasFocus()) {
+					was.dispatchEvent(new FocusEvent('focusout', {bubbles: true}));
+				}
+				await settled();
+			};
+			const paste = (words) => {
+				const event = new Event('paste', {bubbles: true, cancelable: true});
+				const data = new DataTransfer();
+				data.setData('text/plain', words);
+				Object.defineProperty(event, 'clipboardData', {value: data});
+				document.activeElement.dispatchEvent(event);
+			};
+			const seen = {};
+			const close = $('#form-time-close');
+			const closeBox = close.closest('.time-input');
+			const [hours] = $$('input.time-input-part', closeBox);
+			const period = () => $('.time-input-period', closeBox);
+			let changes = 0;
+			close.addEventListener('change', () => changes++);
+			closeBox.scrollIntoView({block: 'center'});
+			await settled();
+			yield {click: center(hours)};
+			yield {type: '930'};
+			await settled();
+			const twelve = [close.value, document.activeElement === period(), period().textContent];
+			await away();
+			twelve.push(hours.validationMessage);
+			yield {click: center(period())};
+			await settled();
+			twelve.push(close.value);
+			yield {type: 'p'};
+			await settled();
+			twelve.push(close.value);
+			await away();
+			twelve.push(changes, hours.validationMessage === '');
+			yield {click: center(hours)};
+			paste('3:30 pm');
+			await settled();
+			twelve.push(close.value);
+			await away();
+			seen.twelve = twelve.join('|');
+			const shift = $('#form-time-shift');
+			const shiftBox = shift.closest('.time-input');
+			const [shiftHours, shiftMinutes] = $$('input.time-input-part', shiftBox);
+			const shiftFace = () => [shiftHours.value, shiftMinutes.value, $('.time-input-period', shiftBox).hidden ? '-' : $('.time-input-period', shiftBox).textContent].join(' ');
+			const pattern = [shiftFace()];
+			yield {click: center(shiftHours)};
+			yield {type: '15'};
+			await settled();
+			pattern.push(shift.value);
+			await away();
+			shiftBox.closest('[data-time-format]').setAttribute('data-time-format', 'H:i');
+			await settled();
+			pattern.push(shiftFace());
+			shiftBox.closest('[data-time-format]').setAttribute('data-time-format', 'g:i A');
+			await settled();
+			pattern.push(shiftFace());
+			close.value = '09:00';
+			await settled();
+			yield {click: center(hours)};
+			yield {type: '15'};
+			await settled();
+			pattern.push(close.value);
+			await away();
+			seen.pattern = pattern.join('|');
+			const at = $('#calendar-time-at');
+			const atBox = at.closest('.date-input');
+			const atPanel = $('.date-input-menu', atBox);
+			const atTime = $('.date-input-time input.time-input-part', atBox);
+			let atChanges = 0;
+			at.addEventListener('change', () => atChanges++);
+			at.value = iso(today + 2 * DAY) + 'T09:00';
+			await settled();
+			atBox.scrollIntoView({block: 'start'});
+			await settled();
+			yield {click: center($('.date-input-day', atBox))};
+			await settled();
+			const panelBox = atPanel.getBoundingClientRect();
+			const faceBox = $('.date-input-timed', atBox).getBoundingClientRect();
+			const yesterday = $('td[data-day="' + iso(today - DAY) + '"]', atPanel);
+			const one = [atPanel.matches(':popover-open'), Math.min(Math.abs(panelBox.top - faceBox.bottom), Math.abs(faceBox.top - panelBox.bottom)) <= 6, Math.abs(panelBox.left - faceBox.left) <= 3, yesterday === null || yesterday.hasAttribute('aria-disabled')];
+			yield {click: center($('td[data-day="' + iso(today + 4 * DAY) + '"]', atPanel))};
+			await settled();
+			one.push(at.value === iso(today + 4 * DAY) + 'T09:00', atPanel.matches(':popover-open'), atChanges);
+			await away();
+			one.push(atChanges);
+			at.value = iso(today) + 'T00:00';
+			await settled();
+			one.push(local.getHours() + local.getMinutes() === 0 || atTime.validationMessage !== '');
+			at.value = '2026-12-02T09:00';
+			await settled();
+			seen.one = one.join('|');
+			const start = $('#calendar-time-start');
+			const rentBox = start.closest('.date-input');
+			const end = $$(':scope > input', rentBox)[1];
+			const rentPanel = $('.date-input-menu', rentBox);
+			const endHours = $$('.date-input-time', rentBox)[1].querySelector('input.time-input-part');
+			let endChanges = 0;
+			end.addEventListener('change', () => endChanges++);
+			start.value = iso(today + 2 * DAY) + 'T08:00';
+			end.value = '';
+			await settled();
+			rentBox.scrollIntoView({block: 'start'});
+			await settled();
+			yield {click: center($$('.date-input-day', rentBox)[1])};
+			await settled();
+			yield {click: center($('td[data-day="' + iso(today + 5 * DAY) + '"]', rentPanel))};
+			await settled();
+			const two = [start.value === iso(today + 2 * DAY) + 'T08:00', end.value, rentPanel.matches(':popover-open'), document.activeElement === endHours];
+			yield {type: '600p'};
+			await settled();
+			two.push(end.value === iso(today + 5 * DAY) + 'T18:00', endChanges);
+			await away();
+			two.push(endChanges);
+			end.value = iso(today + 2 * DAY) + 'T07:00';
+			await settled();
+			two.push(endHours.validationMessage !== '');
+			start.value = '2026-12-04T08:00';
+			end.value = '';
+			await settled();
+			seen.two = two.join('|');
+			const want = {
+				twelve: '|true|AM/PM|Choose AM or PM|09:30|21:30|1|true|15:30',
+				pattern: '9 30 PM|15:30|15 30 -|3 30 PM|15:00',
+				one: 'true|true|true|true|true|false|0|1|true',
+				two: 'true||false|true|true|0|1|true',
+			};
+			if (say(seen) !== say(want)) {
+				out.push('a 12-hour time and a day with its time take AM or PM, the pattern, the days and the times, their bounds and one change each: ' + say(seen));
 			}
 		}},
 		// A combobox-clear button shows while its search holds words, empties it, shows the whole list and keeps the focus.

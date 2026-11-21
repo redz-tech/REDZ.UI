@@ -242,6 +242,7 @@
 
 	<h3>A time</h3>
 	<p><code>time-input</code> around one <code>input type="time"</code> draws it as two fields in one frame, the hours and the minutes, each with a numeric keyboard on a phone. The input stays the form's value, <code>HH:MM</code>, with its <code>name</code>, <code>min</code>, <code>max</code>, <code>step</code> and <code>required</code>; without the script it is the browser's own time field. A part taken - by a tap, a click or <kbd>Tab</kbd> - is taken whole: its first digit replaces it. Two digits of the hours, or one above 2, go on to the minutes; a first minute digit above 5 is 0X; hours stop at 23 and minutes at 59. <code>915</code>, <code>9.15</code> or <code>09:15</code>, typed or pasted, fill both parts, and leaving with the hours alone sets <code>:00</code>. The times of the input's <code>datalist</code>, each with its option's words, open as a list as the field takes the focus, narrowed to the hour typed; under a finger the list stands above the field, as the keyboard holds the bottom of the screen.</p>
+	<p>The face writes the time in the page's pattern: <code>data-time-format</code>, PHP's letters, on the nearest element that has it, so a product sets it once on <code>&lt;html&gt;</code> and a box overrides - <code>G:i</code> unless it says, <code>9:15</code>, or <code>09:15</code> under <code>H:i</code>. Under <code>g:i A</code> the hours run from 1 to 12 and a third part says AM or PM, as PHP prints <code>A</code> - am and pm for <code>a</code>, in every language, as the server prints them beside the field. A tap, a click, <kbd>Space</kbd>, the arrows, <kbd>A</kbd> and <kbd>P</kbd> set it; 13 to 23 typed in the hours are their PM hour, 00 is 12 AM, and <code>3:30 pm</code> or <code>330p</code> typed or pasted fill all three. An empty field has neither, and hours left without it are refused in the page's words: nobody writes 9 PM as 9 AM. The value stays <code>HH:MM</code>, 24-hour.</p>
 	<div class="docs-example docs-example-stack" id="form-time">
 		<div class="form-floating time-input max-w-240">
 			<input class="form-control" id="form-time-pickup" type="time" name="pickup" value="09:15" list="form-time-pickup-times">
@@ -255,18 +256,31 @@
 			</div>
 			<div class="form-text" id="form-time-arrival-hint">From 14:00 to 23:00, by quarter hours.</div>
 		</div>
+		<div class="form-field max-w-240" data-time-format="g:i A">
+			<label class="form-label" for="form-time-shift">Shift starts</label>
+			<div class="time-input">
+				<input class="form-control" id="form-time-shift" type="time" name="shift" value="21:30">
+			</div>
+		</div>
+		<div class="form-field max-w-240" data-time-format="g:i A">
+			<label class="form-label" for="form-time-close">Shift ends</label>
+			<div class="time-input">
+				<input class="form-control" id="form-time-close" type="time" name="close">
+			</div>
+		</div>
 	</div>
 	<table class="table docs-table">
 		<thead><tr><th scope="col">Part</th><th scope="col">What it does</th></tr></thead>
 		<tbody>
 			<tr><td><code>time-input</code></td><td>The box around one <code>input type="time"</code>: in a <code>form-floating</code>, or with a label of its own.</td></tr>
-			<tr><td><code>input type="time"</code></td><td>The value the form sends, <code>HH:MM</code>, its <code>name</code> the field's; the library turns it <code>hidden</code>. Every change fires <code>input</code> and <code>change</code> on it; a script that sets it has the parts drawn again, and the form's reset puts back the time it came with. <code>min</code>, <code>max</code>, <code>step</code> and <code>required</code> check the time in the browser's words, held on the hours part, where its <code>aria-describedby</code> goes too; <code>step</code>, in seconds, is what the arrow keys step the minutes by; <code>list</code> names the <code>datalist</code> of suggested times; <code>disabled</code> and <code>readonly</code> pass to the parts.</td></tr>
+			<tr><td><code>input type="time"</code></td><td>The value the form sends, <code>HH:MM</code>, 24-hour, its <code>name</code> the field's; the library turns it <code>hidden</code>. Every change of the time fires <code>input</code> on it, and each completed choice one <code>change</code> - a time picked from the list, the focus leaving the field; the parts' own events stay inside the frame. A script that sets it has the parts drawn again, and the form's reset puts back the time it came with. <code>min</code>, <code>max</code>, <code>step</code> and <code>required</code> check the time in the browser's words, held on the hours part, where its <code>aria-describedby</code> goes too; <code>step</code>, in seconds, is what the arrow keys step the minutes by; <code>list</code> names the <code>datalist</code> of suggested times; <code>disabled</code> and <code>readonly</code> pass to the parts.</td></tr>
 			<tr><td><code>time-input-face</code></td><td>The frame the library draws, a <code>form-control</code> with <code>role="group"</code> named by the input's label; the label then names the hours part, so a click on it takes the hours.</td></tr>
 			<tr><td><code>time-input-part</code></td><td>The hours and the minutes, text fields with <code>inputmode="numeric"</code> and no <code>name</code>, named by the page's texts <code>time.hours</code> and <code>time.minutes</code>. The part taken is filled; no caret or selection is drawn.</td></tr>
+			<tr><td><code>time-input-period</code></td><td>Under a pattern of 12 hours, AM or PM: a part with <code>role="spinbutton"</code> named by the page's text <code>time.period</code>, its word its <code>aria-valuetext</code>, both words while none is chosen; <code>time.period_missing</code> refuses hours left without it.</td></tr>
 			<tr><td><code>time-input-list</code></td><td>The suggested times, a <code>menu</code> popover after the frame: each a <code>menu-item</code> button, its time in <code>time-input-time</code>, its option's words in <code>menu-item-description</code>.</td></tr>
 		</tbody>
 	</table>
-	<p>The face shows the hours without a leading zero, and the field counts 24 hours. In a tracked form the input is one field: <code>data-changed</code> and a refusal's <code>aria-invalid</code> go on the frame, the field is named by its label, and the refusal's words and the focus go to the hours part.</p>
+	<p>Without <code>data-time-format</code> the face shows the hours without a leading zero and counts 24 hours, as before. In a tracked form the input is one field: <code>data-changed</code> and a refusal's <code>aria-invalid</code> go on the frame, the field is named by its label, and the refusal's words and the focus go to the hours part.</p>
 
 	<h3>A date</h3>
 	<p><code>date-input</code> around one <code>input type="date"</code> draws it as a field that opens a month to pick a day from, below the field and on a phone as a sheet, always in the Gregorian year; <code>date-pick</code> draws such a month for a day or a period on the page itself. Both are in the calendar package: see <a href="calendar.html#calendar-date">Calendars</a>.</p>

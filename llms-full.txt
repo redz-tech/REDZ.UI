@@ -3505,6 +3505,8 @@ In a tracked form the hidden field is one field: `data-changed` and a refusal's 
 
 `time-input` around one `input type="time"` draws it as two fields in one frame, the hours and the minutes, each with a numeric keyboard on a phone. The input stays the form's value, `HH:MM`, with its `name`, `min`, `max`, `step` and `required`; without the script it is the browser's own time field. A part taken - by a tap, a click or `Tab` - is taken whole: its first digit replaces it. Two digits of the hours, or one above 2, go on to the minutes; a first minute digit above 5 is 0X; hours stop at 23 and minutes at 59. `915`, `9.15` or `09:15`, typed or pasted, fill both parts, and leaving with the hours alone sets `:00`. The times of the input's `datalist`, each with its option's words, open as a list as the field takes the focus, narrowed to the hour typed; under a finger the list stands above the field, as the keyboard holds the bottom of the screen.
 
+The face writes the time in the page's pattern: `data-time-format`, PHP's letters, on the nearest element that has it, so a product sets it once on `<html>` and a box overrides - `G:i` unless it says, `9:15`, or `09:15` under `H:i`. Under `g:i A` the hours run from 1 to 12 and a third part says AM or PM, as PHP prints `A` - am and pm for `a`, in every language, as the server prints them beside the field. A tap, a click, `Space`, the arrows, `A` and `P` set it; 13 to 23 typed in the hours are their PM hour, 00 is 12 AM, and `3:30 pm` or `330p` typed or pasted fill all three. An empty field has neither, and hours left without it are refused in the page's words: nobody writes 9 PM as 9 AM. The value stays `HH:MM`, 24-hour.
+
 ```html
 <div class="form-floating time-input max-w-240">
 	<input class="form-control" id="form-time-pickup" type="time" name="pickup" value="09:15" list="form-time-pickup-times">
@@ -3518,17 +3520,30 @@ In a tracked form the hidden field is one field: `data-changed` and a refusal's 
 	</div>
 	<div class="form-text" id="form-time-arrival-hint">From 14:00 to 23:00, by quarter hours.</div>
 </div>
+<div class="form-field max-w-240" data-time-format="g:i A">
+	<label class="form-label" for="form-time-shift">Shift starts</label>
+	<div class="time-input">
+		<input class="form-control" id="form-time-shift" type="time" name="shift" value="21:30">
+	</div>
+</div>
+<div class="form-field max-w-240" data-time-format="g:i A">
+	<label class="form-label" for="form-time-close">Shift ends</label>
+	<div class="time-input">
+		<input class="form-control" id="form-time-close" type="time" name="close">
+	</div>
+</div>
 ```
 
 | Part | What it does |
 | --- | --- |
 | `time-input` | The box around one `input type="time"`: in a `form-floating`, or with a label of its own. |
-| `input type="time"` | The value the form sends, `HH:MM`, its `name` the field's; the library turns it `hidden`. Every change fires `input` and `change` on it; a script that sets it has the parts drawn again, and the form's reset puts back the time it came with. `min`, `max`, `step` and `required` check the time in the browser's words, held on the hours part, where its `aria-describedby` goes too; `step`, in seconds, is what the arrow keys step the minutes by; `list` names the `datalist` of suggested times; `disabled` and `readonly` pass to the parts. |
+| `input type="time"` | The value the form sends, `HH:MM`, 24-hour, its `name` the field's; the library turns it `hidden`. Every change of the time fires `input` on it, and each completed choice one `change` - a time picked from the list, the focus leaving the field; the parts' own events stay inside the frame. A script that sets it has the parts drawn again, and the form's reset puts back the time it came with. `min`, `max`, `step` and `required` check the time in the browser's words, held on the hours part, where its `aria-describedby` goes too; `step`, in seconds, is what the arrow keys step the minutes by; `list` names the `datalist` of suggested times; `disabled` and `readonly` pass to the parts. |
 | `time-input-face` | The frame the library draws, a `form-control` with `role="group"` named by the input's label; the label then names the hours part, so a click on it takes the hours. |
 | `time-input-part` | The hours and the minutes, text fields with `inputmode="numeric"` and no `name`, named by the page's texts `time.hours` and `time.minutes`. The part taken is filled; no caret or selection is drawn. |
+| `time-input-period` | Under a pattern of 12 hours, AM or PM: a part with `role="spinbutton"` named by the page's text `time.period`, its word its `aria-valuetext`, both words while none is chosen; `time.period_missing` refuses hours left without it. |
 | `time-input-list` | The suggested times, a `menu` popover after the frame: each a `menu-item` button, its time in `time-input-time`, its option's words in `menu-item-description`. |
 
-The face shows the hours without a leading zero, and the field counts 24 hours. In a tracked form the input is one field: `data-changed` and a refusal's `aria-invalid` go on the frame, the field is named by its label, and the refusal's words and the focus go to the hours part.
+Without `data-time-format` the face shows the hours without a leading zero and counts 24 hours, as before. In a tracked form the input is one field: `data-changed` and a refusal's `aria-invalid` go on the frame, the field is named by its label, and the refusal's words and the focus go to the hours part.
 
 ### A date
 
@@ -6063,7 +6078,7 @@ Series without a tone take the chart colors by their column.
 
 # Calendars
 
-A month of days with what happens on each, a strip of days across the things that can be busy on them - equipment, rooms, boats -, and months to pick a day, a period or several days from, by the page's own rules and settings.
+A month of days with what happens on each, a strip of days across the things that can be busy on them - equipment, rooms, boats -, and months to pick a day, a period, several days or a day and its time from, by the page's own rules and settings.
 
 ## A package of the release
 
@@ -6188,6 +6203,33 @@ Two inputs make the field a period: one face over both, the start and the end, t
 
 In a tracked form the inputs are one field: `data-changed` and a refusal's `aria-invalid` go on the face, and the refusal's words and the focus there too.
 
+## A day and its time
+
+`date-input` around one `input type="datetime-local"`, or two for a period, draws a day and its time in one frame: each end its day - a button that opens the months, typed under `data-typing` - and its time, the main script's [time input](form.md#form-time) in the page's `data-time-format`. A day picked closes the months and the focus goes to its time; the end's day opens them to pick the end, the start kept. The input stays the form's value, `2026-12-02T09:00`, empty until both its day and its time are there, with its `name`; its `min` and `max`, moments, bound the days and, on their own day, the times. `data-min="now"` and `data-max="now"` count now in the box's `data-time-zone`: the days gone by are not to pick, and on today a time before now is refused in the browser's words. A period's end is not before its start, and with `data-open-end` it may stay empty. The frame wraps between its ends, never inside a time.
+
+```html
+<div class="form-field max-w-360">
+	<label class="form-label" for="calendar-time-at">Maintenance at</label>
+	<div class="date-input" data-min="now">
+		<input class="form-control" id="calendar-time-at" type="datetime-local" name="at" value="2026-12-02T09:00">
+	</div>
+</div>
+<div class="form-field">
+	<label class="form-label" for="calendar-time-start">Booking</label>
+	<div class="date-input" data-min="now" data-open-end data-max-days="30">
+		<input class="form-control" id="calendar-time-start" type="datetime-local" name="start_at" value="2026-12-04T08:00" aria-label="Start">
+		<input class="form-control" type="datetime-local" name="end_at" aria-label="End">
+	</div>
+</div>
+```
+
+| Part | What it does |
+| --- | --- |
+| `input type="datetime-local"` | The value the form sends, its `name` the field's; the library turns it `hidden`. Each change fires `input`, and one `change` comes as the focus leaves the field; a script that sets it has the day and the time drawn again, and the form's reset puts back the moment it came with. Its `aria-label` names its end of a period. |
+| `date-input-timed` | The frame, a `form-control` with `role="group"` named by the field's label; each end a `date-input-end`. |
+| `date-input-day` | An end's day, a button that opens the months, its words in `date-input-value`: the day in the page's pattern, or the end's name, or the page's `date.choose`, while none is chosen. Typed, it is a `date-input-part`, and `date-input-open` opens the months. |
+| `date-input-time` | An end's time: a `time-input` without a frame of its own, over a time field of no name; the main script draws it. |
+
 ## A day or a period
 
 `date-pick` draws the month itself, for the page to put on a screen, in its own sheet or below a column's filter: a day for its one `input type="date"`, a period for its two, the first the start and the second the end. In a period the first pick is a period of that one day at once, and the second its end; a pick before the start starts it again, and the start again keeps the one day. Above the month the choice is in words, a period with its length, and Clear while there is one; the page's quick picks follow, then the bar with the previous and the next month, the lists of the months and the years, and Today when today's month is not shown. Today is tinted and framed, the days before it quiet on the page's grey and still to pick, a day not to pick struck through.
@@ -6240,7 +6282,7 @@ A box picks only the days its bounds and its rules allow; the others are struck 
 | Attribute | What it does |
 | --- | --- |
 | `min`, `max` | On the first input, the first and the last day to pick, ISO dates. |
-| `data-min`, `data-max` | On the box, the same counted from today: `today`, `+1` from tomorrow, `-30` thirty days back - or an ISO date, for a box of several days whose input is no date. With the input's own, the stricter holds; counted from today, it never goes stale on a page left open past midnight. `data-min="today"` takes no day in the past, `data-max="today"` none in the future. |
+| `data-min`, `data-max` | On the box, the same counted from today: `today`, `+1` from tomorrow, `-30` thirty days back - or an ISO date, for a box of several days whose input is no date; `now` is today, and on a day and its time also the time. With the input's own, the stricter holds; counted from today, it never goes stale on a page left open past midnight. `data-min="today"` takes no day in the past, `data-max="today"` none in the future. |
 | `data-enable` | On the box, the days that may be picked, when it has the attribute: comma-separated rules, any of which takes a day. |
 | `data-disable` | On the box, the days that may not, whatever `data-enable` says: the same rules. |
 | `data-min-days`, `data-max-days` | On a period's box, its fewest and its most days: once its start is picked, an end out of reach is not to pick and says `date.shortest` or `date.longest`. With more than one day at least, the first pick leaves the end empty. |
@@ -6276,15 +6318,16 @@ A box picks only the days its bounds and its rules allow; the others are struck 
 How a date reads, where a week starts and when today is belong to the person or the company, not to each field: a page sets them once on `<html>`, and any element around a box - the box itself - sets them for the boxes inside it. Without them a box reads as before: the page language's order, Monday first, the Gregorian year, today on the device's clock.
 
 ```html
-<html lang="en" data-date-format="d.m.Y" data-first-day="0" data-time-zone="Asia/Bangkok" data-typing>
+<html lang="en" data-date-format="d.m.Y" data-time-format="g:i A" data-first-day="0" data-time-zone="Asia/Bangkok" data-typing>
 ```
 
 | Attribute | What it does |
 | --- | --- |
 | `data-date-format` | A pattern of PHP's date() letters: `d` and `j` the day with and without its zero, `m` and `n` the month, `Y` and `y` the year, `M` and `F` the month's short and whole name, `D` and `l` the weekday's; a backslash writes a letter as it is. `d.m.Y`, `m/d/Y`, `j M Y`, `M j, Y`. Names and digits are the page language's, a month's name as it stands beside a day. |
+| `data-time-format` | A pattern of PHP's time letters: `G` and `H` the hours of 24 without and with their zero, `g` and `h` of 12, `i` the minutes, `A` and `a` AM and PM, as PHP prints them. `H:i`, `g:i A`. Read by every [time input](form.md#form-time) and every [ticking time](time.md) on the page, not by the calendar alone. |
 | `data-first-day` | The first day of a week, `1` for Monday to `7` for Sunday; `0` is Sunday too. |
 | `data-calendar` | `buddhist` writes the year 543 ahead, in the faces, the titles and the year list, and reads a typed one back; `gregorian` keeps a box to the Gregorian year under a page that says otherwise. |
-| `data-time-zone` | The zone today is counted in, an IANA name, `Asia/Bangkok`: today's frame, the past's grey, Today, `data-min` and `data-max`. A company's business day, while the person may be elsewhere. |
+| `data-time-zone` | The zone today and now are counted in, an IANA name, `Asia/Bangkok`: today's frame, the past's grey, Today, `data-min` and `data-max`. A company's business day on `<html>`, while the person may be elsewhere - a box of a day and its time may count in the person's own. |
 | `data-weekend` | The weekdays the heads tint and a `weekend` rule takes, `6 7` unless it says; `5 6` for Friday and Saturday. |
 | `data-typing` | Days typed in the face where the pointer is not a finger; `data-typing="off"` below it keeps a box to its button. |
 
@@ -6310,6 +6353,7 @@ The library has no words of its own; picking a date reads these from the page's 
 | `date.today` | The button back to today's month, and today's word before its date under `data-weekday` | Today |
 | `date.tomorrow` | Tomorrow's word before its date under `data-weekday` | Tomorrow |
 | `date.yesterday` | Yesterday's word before its date under `data-weekday` | Yesterday |
+| `time.hours`, `time.minutes`, `time.period`, `time.period_missing` | The time of a day and its time, as every time input reads them: see [Forms](form.md#form-time) | Hours, Minutes, AM or PM, Choose AM or PM |
 | `date.previous` | The button to the month before | Previous month |
 | `date.next` | The button to the month after | Next month |
 
@@ -6322,6 +6366,7 @@ The library has no words of its own; picking a date reads these from the page's 
 - A month to pick from is the WAI-ARIA grid, one grid per month: one day takes the `Tab` stop and the arrows move it across the months shown, a screen reader enters it as an application and reads each day by its whole date, its count, chosen, today or not available and why. The month and the choice are read politely as they change; several days make the grids `aria-multiselectable`, and their list says each day again with its remove.
 - The lists of the months and the years are the browser's own selects, named by the page's words: the keyboard, a screen reader and a phone's wheel take them as any select.
 - A typed day is refused with the browser's own message, the page's words; under a finger the field stays a button, so the keyboard never covers the month.
+- A day and its time is a group named by its label: each end's day a button named by its date - and its end's name in a period -, each time the time input's group of the hours, the minutes and AM or PM. A day picked hands the focus to its time.
 
 # Media library
 
@@ -7538,11 +7583,12 @@ The words follow the nearest `lang`, not the page's: a sentence the page keeps i
 
 ## The reader's own clock
 
-A moment the server knows in UTC, shown by the reader's clock: `data-local` writes its time, `data-local="date"` its date and time, and `data-local="auto"` the time when it falls on the reader's today, the weekday and time in the six days ahead, else the date and time. The hours are written as the language writes them - `07:00` in Russian, `7:00 AM` in American English - and the `title` holds the full moment with the reader's time zone. The server's own text, its UTC time, stands without the script.
+A moment the server knows in UTC, shown by the reader's clock: `data-local` writes its time, `data-local="date"` its date and time, and `data-local="auto"` the time when it falls on the reader's today, the weekday and time in the six days ahead, else the date and time. The hours are written as the language writes them - `07:00` in Russian, `7:00 AM` in American English -, or as the nearest `data-time-format` says, a product's setting in PHP's letters: 24 hours under `G:i` or `H:i`, 12 under `g:i A` with AM and PM as PHP prints them, in every language. The `title` holds the full moment with the reader's time zone. The server's own text, its UTC time, stands without the script.
 
 ```html
 <p>The daily limit starts again at <time datetime="2026-11-05T00:00:00Z" data-local="auto" data-docs-utc-day>00:00 UTC</time>, your time.</p>
 <p>The report was sent <time datetime="2026-11-04T08:00:00Z" data-local="date">Nov 4, 2026, 08:00 UTC</time>.</p>
+<p data-time-format="g:i A">The office opens at <time datetime="2026-11-05T02:00:00Z" data-local>02:00 UTC</time>, your time, by a company's 12-hour setting.</p>
 ```
 
 | Attribute | What it does |
@@ -7550,6 +7596,7 @@ A moment the server knows in UTC, shown by the reader's clock: `data-local` writ
 | `data-elapsed` | The time since the moment as a clock, `m:ss` or `h:mm:ss`, each second. |
 | `data-ago`, `data-ago="short"` | How long ago, or how soon, in words. |
 | `data-local`, `data-local="date"`, `data-local="auto"` | The moment by the reader's clock: the time, the date and time, or as much as its distance from today needs. |
+| `data-time-format` | On the nearest element, a product's pattern of the time in PHP's letters, as time inputs read it: `H:i`, `g:i A`. |
 
 One of the three on a time; given more, `data-elapsed` wins, then `data-ago`. A `title` the page writes itself stays.
 

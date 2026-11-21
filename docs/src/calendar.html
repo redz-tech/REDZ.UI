@@ -1,6 +1,6 @@
 <header class="vstack gap-8">
 	<h1>Calendars</h1>
-	<p class="docs-lead">A month of days with what happens on each, a strip of days across the things that can be busy on them - equipment, rooms, boats -, and months to pick a day, a period or several days from, by the page's own rules and settings.</p>
+	<p class="docs-lead">A month of days with what happens on each, a strip of days across the things that can be busy on them - equipment, rooms, boats -, and months to pick a day, a period, several days or a day and its time from, by the page's own rules and settings.</p>
 </header>
 
 <section class="vstack gap-12" aria-labelledby="calendar-package">
@@ -123,6 +123,35 @@
 	<p>In a tracked form the inputs are one field: <code>data-changed</code> and a refusal's <code>aria-invalid</code> go on the face, and the refusal's words and the focus there too.</p>
 </section>
 
+<section class="vstack gap-12" aria-labelledby="calendar-time">
+	<h2 id="calendar-time">A day and its time</h2>
+	<p><code>date-input</code> around one <code>input type="datetime-local"</code>, or two for a period, draws a day and its time in one frame: each end its day - a button that opens the months, typed under <code>data-typing</code> - and its time, the main script's <a href="form.html#form-time">time input</a> in the page's <code>data-time-format</code>. A day picked closes the months and the focus goes to its time; the end's day opens them to pick the end, the start kept. The input stays the form's value, <code>2026-12-02T09:00</code>, empty until both its day and its time are there, with its <code>name</code>; its <code>min</code> and <code>max</code>, moments, bound the days and, on their own day, the times. <code>data-min="now"</code> and <code>data-max="now"</code> count now in the box's <code>data-time-zone</code>: the days gone by are not to pick, and on today a time before now is refused in the browser's words. A period's end is not before its start, and with <code>data-open-end</code> it may stay empty. The frame wraps between its ends, never inside a time.</p>
+	<div class="docs-example docs-example-stack" id="calendar-date-time" data-time-format="g:i A">
+		<div class="form-field max-w-360">
+			<label class="form-label" for="calendar-time-at">Maintenance at</label>
+			<div class="date-input" data-min="now">
+				<input class="form-control" id="calendar-time-at" type="datetime-local" name="at" value="2026-12-02T09:00">
+			</div>
+		</div>
+		<div class="form-field">
+			<label class="form-label" for="calendar-time-start">Booking</label>
+			<div class="date-input" data-min="now" data-open-end data-max-days="30">
+				<input class="form-control" id="calendar-time-start" type="datetime-local" name="start_at" value="2026-12-04T08:00" aria-label="Start">
+				<input class="form-control" type="datetime-local" name="end_at" aria-label="End">
+			</div>
+		</div>
+	</div>
+	<table class="table docs-table">
+		<thead><tr><th scope="col">Part</th><th scope="col">What it does</th></tr></thead>
+		<tbody>
+			<tr><td><code>input type="datetime-local"</code></td><td>The value the form sends, its <code>name</code> the field's; the library turns it <code>hidden</code>. Each change fires <code>input</code>, and one <code>change</code> comes as the focus leaves the field; a script that sets it has the day and the time drawn again, and the form's reset puts back the moment it came with. Its <code>aria-label</code> names its end of a period.</td></tr>
+			<tr><td><code>date-input-timed</code></td><td>The frame, a <code>form-control</code> with <code>role="group"</code> named by the field's label; each end a <code>date-input-end</code>.</td></tr>
+			<tr><td><code>date-input-day</code></td><td>An end's day, a button that opens the months, its words in <code>date-input-value</code>: the day in the page's pattern, or the end's name, or the page's <code>date.choose</code>, while none is chosen. Typed, it is a <code>date-input-part</code>, and <code>date-input-open</code> opens the months.</td></tr>
+			<tr><td><code>date-input-time</code></td><td>An end's time: a <code>time-input</code> without a frame of its own, over a time field of no name; the main script draws it.</td></tr>
+		</tbody>
+	</table>
+</section>
+
 <section class="vstack gap-16" aria-labelledby="calendar-pick">
 	<h2 id="calendar-pick">A day or a period</h2>
 	<p><code>date-pick</code> draws the month itself, for the page to put on a screen, in its own sheet or below a column's filter: a day for its one <code>input type="date"</code>, a period for its two, the first the start and the second the end. In a period the first pick is a period of that one day at once, and the second its end; a pick before the start starts it again, and the start again keeps the one day. Above the month the choice is in words, a period with its length, and Clear while there is one; the page's quick picks follow, then the bar with the previous and the next month, the lists of the months and the years, and Today when today's month is not shown. Today is tinted and framed, the days before it quiet on the page's grey and still to pick, a day not to pick struck through.</p>
@@ -178,7 +207,7 @@
 		<thead><tr><th scope="col">Attribute</th><th scope="col">What it does</th></tr></thead>
 		<tbody>
 			<tr><td><code>min</code>, <code>max</code></td><td>On the first input, the first and the last day to pick, ISO dates.</td></tr>
-			<tr><td><code>data-min</code>, <code>data-max</code></td><td>On the box, the same counted from today: <code>today</code>, <code>+1</code> from tomorrow, <code>-30</code> thirty days back - or an ISO date, for a box of several days whose input is no date. With the input's own, the stricter holds; counted from today, it never goes stale on a page left open past midnight. <code>data-min="today"</code> takes no day in the past, <code>data-max="today"</code> none in the future.</td></tr>
+			<tr><td><code>data-min</code>, <code>data-max</code></td><td>On the box, the same counted from today: <code>today</code>, <code>+1</code> from tomorrow, <code>-30</code> thirty days back - or an ISO date, for a box of several days whose input is no date; <code>now</code> is today, and on a day and its time also the time. With the input's own, the stricter holds; counted from today, it never goes stale on a page left open past midnight. <code>data-min="today"</code> takes no day in the past, <code>data-max="today"</code> none in the future.</td></tr>
 			<tr><td><code>data-enable</code></td><td>On the box, the days that may be picked, when it has the attribute: comma-separated rules, any of which takes a day.</td></tr>
 			<tr><td><code>data-disable</code></td><td>On the box, the days that may not, whatever <code>data-enable</code> says: the same rules.</td></tr>
 			<tr><td><code>data-min-days</code>, <code>data-max-days</code></td><td>On a period's box, its fewest and its most days: once its start is picked, an end out of reach is not to pick and says <code>date.shortest</code> or <code>date.longest</code>. With more than one day at least, the first pick leaves the end empty.</td></tr>
@@ -219,14 +248,15 @@
 <section class="vstack gap-16" aria-labelledby="calendar-settings">
 	<h2 id="calendar-settings">The page's settings</h2>
 	<p>How a date reads, where a week starts and when today is belong to the person or the company, not to each field: a page sets them once on <code>&lt;html&gt;</code>, and any element around a box - the box itself - sets them for the boxes inside it. Without them a box reads as before: the page language's order, Monday first, the Gregorian year, today on the device's clock.</p>
-	<pre class="docs-code" tabindex="0"><code>&lt;html lang="en" data-date-format="d.m.Y" data-first-day="0" data-time-zone="Asia/Bangkok" data-typing&gt;</code></pre>
+	<pre class="docs-code" tabindex="0"><code>&lt;html lang="en" data-date-format="d.m.Y" data-time-format="g:i A" data-first-day="0" data-time-zone="Asia/Bangkok" data-typing&gt;</code></pre>
 	<table class="table docs-table">
 		<thead><tr><th scope="col">Attribute</th><th scope="col">What it does</th></tr></thead>
 		<tbody>
 			<tr><td><code>data-date-format</code></td><td>A pattern of PHP's date() letters: <code>d</code> and <code>j</code> the day with and without its zero, <code>m</code> and <code>n</code> the month, <code>Y</code> and <code>y</code> the year, <code>M</code> and <code>F</code> the month's short and whole name, <code>D</code> and <code>l</code> the weekday's; a backslash writes a letter as it is. <code>d.m.Y</code>, <code>m/d/Y</code>, <code>j M Y</code>, <code>M j, Y</code>. Names and digits are the page language's, a month's name as it stands beside a day.</td></tr>
+			<tr><td><code>data-time-format</code></td><td>A pattern of PHP's time letters: <code>G</code> and <code>H</code> the hours of 24 without and with their zero, <code>g</code> and <code>h</code> of 12, <code>i</code> the minutes, <code>A</code> and <code>a</code> AM and PM, as PHP prints them. <code>H:i</code>, <code>g:i A</code>. Read by every <a href="form.html#form-time">time input</a> and every <a href="time.html">ticking time</a> on the page, not by the calendar alone.</td></tr>
 			<tr><td><code>data-first-day</code></td><td>The first day of a week, <code>1</code> for Monday to <code>7</code> for Sunday; <code>0</code> is Sunday too.</td></tr>
 			<tr><td><code>data-calendar</code></td><td><code>buddhist</code> writes the year 543 ahead, in the faces, the titles and the year list, and reads a typed one back; <code>gregorian</code> keeps a box to the Gregorian year under a page that says otherwise.</td></tr>
-			<tr><td><code>data-time-zone</code></td><td>The zone today is counted in, an IANA name, <code>Asia/Bangkok</code>: today's frame, the past's grey, Today, <code>data-min</code> and <code>data-max</code>. A company's business day, while the person may be elsewhere.</td></tr>
+			<tr><td><code>data-time-zone</code></td><td>The zone today and now are counted in, an IANA name, <code>Asia/Bangkok</code>: today's frame, the past's grey, Today, <code>data-min</code> and <code>data-max</code>. A company's business day on <code>&lt;html&gt;</code>, while the person may be elsewhere - a box of a day and its time may count in the person's own.</td></tr>
 			<tr><td><code>data-weekend</code></td><td>The weekdays the heads tint and a <code>weekend</code> rule takes, <code>6 7</code> unless it says; <code>5 6</code> for Friday and Saturday.</td></tr>
 			<tr><td><code>data-typing</code></td><td>Days typed in the face where the pointer is not a finger; <code>data-typing="off"</code> below it keeps a box to its button.</td></tr>
 		</tbody>
@@ -255,6 +285,7 @@
 			<tr><td><code>date.today</code></td><td>The button back to today's month, and today's word before its date under <code>data-weekday</code></td><td>Today</td></tr>
 			<tr><td><code>date.tomorrow</code></td><td>Tomorrow's word before its date under <code>data-weekday</code></td><td>Tomorrow</td></tr>
 			<tr><td><code>date.yesterday</code></td><td>Yesterday's word before its date under <code>data-weekday</code></td><td>Yesterday</td></tr>
+			<tr><td><code>time.hours</code>, <code>time.minutes</code>, <code>time.period</code>, <code>time.period_missing</code></td><td>The time of a day and its time, as every time input reads them: see <a href="form.html#form-time">Forms</a></td><td>Hours, Minutes, AM or PM, Choose AM or PM</td></tr>
 			<tr><td><code>date.previous</code></td><td>The button to the month before</td><td>Previous month</td></tr>
 			<tr><td><code>date.next</code></td><td>The button to the month after</td><td>Next month</td></tr>
 		</tbody>
@@ -271,5 +302,6 @@
 		<li>A month to pick from is the WAI-ARIA grid, one grid per month: one day takes the <kbd>Tab</kbd> stop and the arrows move it across the months shown, a screen reader enters it as an application and reads each day by its whole date, its count, chosen, today or not available and why. The month and the choice are read politely as they change; several days make the grids <code>aria-multiselectable</code>, and their list says each day again with its remove.</li>
 		<li>The lists of the months and the years are the browser's own selects, named by the page's words: the keyboard, a screen reader and a phone's wheel take them as any select.</li>
 		<li>A typed day is refused with the browser's own message, the page's words; under a finger the field stays a button, so the keyboard never covers the month.</li>
+		<li>A day and its time is a group named by its label: each end's day a button named by its date - and its end's name in a period -, each time the time input's group of the hours, the minutes and AM or PM. A day picked hands the focus to its time.</li>
 	</ul>
 </section>

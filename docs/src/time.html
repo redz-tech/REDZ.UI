@@ -19,10 +19,11 @@
 
 <section class="vstack gap-16" aria-labelledby="time-local-title">
 	<h2 id="time-local-title">The reader's own clock</h2>
-	<p>A moment the server knows in UTC, shown by the reader's clock: <code>data-local</code> writes its time, <code>data-local="date"</code> its date and time, and <code>data-local="auto"</code> the time when it falls on the reader's today, the weekday and time in the six days ahead, else the date and time. The hours are written as the language writes them - <code>07:00</code> in Russian, <code>7:00 AM</code> in American English - and the <code>title</code> holds the full moment with the reader's time zone. The server's own text, its UTC time, stands without the script.</p>
+	<p>A moment the server knows in UTC, shown by the reader's clock: <code>data-local</code> writes its time, <code>data-local="date"</code> its date and time, and <code>data-local="auto"</code> the time when it falls on the reader's today, the weekday and time in the six days ahead, else the date and time. The hours are written as the language writes them - <code>07:00</code> in Russian, <code>7:00 AM</code> in American English -, or as the nearest <code>data-time-format</code> says, a product's setting in PHP's letters: 24 hours under <code>G:i</code> or <code>H:i</code>, 12 under <code>g:i A</code> with AM and PM as PHP prints them, in every language. The <code>title</code> holds the full moment with the reader's time zone. The server's own text, its UTC time, stands without the script.</p>
 	<div class="docs-example docs-example-stack" id="time-local">
 		<p>The daily limit starts again at <time datetime="2026-11-05T00:00:00Z" data-local="auto" data-docs-utc-day>00:00 UTC</time>, your time.</p>
 		<p>The report was sent <time datetime="2026-11-04T08:00:00Z" data-local="date">Nov 4, 2026, 08:00 UTC</time>.</p>
+		<p data-time-format="g:i A">The office opens at <time datetime="2026-11-05T02:00:00Z" data-local>02:00 UTC</time>, your time, by a company's 12-hour setting.</p>
 	</div>
 	<table class="table docs-table">
 		<thead><tr><th scope="col">Attribute</th><th scope="col">What it does</th></tr></thead>
@@ -30,6 +31,7 @@
 			<tr><td><code>data-elapsed</code></td><td>The time since the moment as a clock, <code>m:ss</code> or <code>h:mm:ss</code>, each second.</td></tr>
 			<tr><td><code>data-ago</code>, <code>data-ago="short"</code></td><td>How long ago, or how soon, in words.</td></tr>
 			<tr><td><code>data-local</code>, <code>data-local="date"</code>, <code>data-local="auto"</code></td><td>The moment by the reader's clock: the time, the date and time, or as much as its distance from today needs.</td></tr>
+			<tr><td><code>data-time-format</code></td><td>On the nearest element, a product's pattern of the time in PHP's letters, as time inputs read it: <code>H:i</code>, <code>g:i A</code>.</td></tr>
 		</tbody>
 	</table>
 	<p>One of the three on a time; given more, <code>data-elapsed</code> wins, then <code>data-ago</code>. A <code>title</code> the page writes itself stays.</p>

@@ -86,6 +86,18 @@ const todayIn = (zone) => {
 	return Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
 };
 
+/** Now in the zone, else on this device, as YYYY-MM-DDTHH:MM. */
+const nowIn = (zone) => {
+	const now = new Date();
+	let [hour, minute] = [now.getHours(), now.getMinutes()];
+	try {
+		const parts = new Intl.DateTimeFormat(locales('en'), {timeZone: zone || undefined, hourCycle: 'h23', hour: 'numeric', minute: 'numeric'}).formatToParts(now);
+		[hour, minute] = ['hour', 'minute'].map((type) => +parts.find((part) => part.type === type).value);
+	} catch {
+	}
+	return isoOf(todayIn(zone)) + 'T' + pad(hour) + ':' + pad(minute);
+};
+
 /** The page language's names in a calendar, made once: the formats, the digits, the months' names as they stand beside
  *  a day and alone, the order of a date's parts. */
 const namesOf = (lang, calendar) => {
@@ -198,10 +210,11 @@ const settingsOf = (box) => {
 	};
 };
 
-/** A bound of a box: "today", "+N" or "-N" days from it, or an ISO date; null for anything else. */
+/** A bound of a box: "today" or "now", "+N" or "-N" days from today, or an ISO date or moment, by its day; null for
+ *  anything else. */
 const relative = (words, today) => {
-	const match = /^\s*(?:(today)|([+-])(\d{1,5}))\s*$/.exec(words ?? '');
-	return match === null ? dayOf((words ?? '').trim()) : match[1] ? today : today + (match[2] === '-' ? -1 : 1) * match[3] * DAY;
+	const match = /^\s*(?:(today|now)|([+-])(\d{1,5}))\s*$/.exec(words ?? '');
+	return match === null ? dayOf((words ?? '').trim().slice(0, 10)) : match[1] ? today : today + (match[2] === '-' ? -1 : 1) * match[3] * DAY;
 };
 
 /** The rules of data-enable or data-disable, read once: each a period - a day, a from/to with open ends, a month, a day
@@ -345,16 +358,88 @@ const write = (state, days) => {
 	state.drawn = state.inputs.map((input) => input.value);
 };
 
-/** A completed choice: change once, on the last input, when the values differ from the last completed ones. */
-const commit = (state) => {
+/** A completed choice: change once, on the last input, when the values differ from the last completed ones; a day and
+ *  its time complete theirs only as the focus leaves the field. */
+const commit = (state, leaving = false) => {
 	state.start = null;
 	state.wall = null;
 	state.hover = null;
-	const values = state.inputs.map((input) => input.value).join('/');
-	if (values !== state.committed) {
+	const inputs = state.timed?.inputs ?? state.inputs;
+	const values = inputs.map((input) => input.value).join('/');
+	if (values !== state.committed && (state.timed === undefined || leaving)) {
 		state.committed = values;
-		state.inputs.at(-1).dispatchEvent(new Event('change', {bubbles: true}));
+		inputs.at(-1).dispatchEvent(new Event('change', {bubbles: true}));
 	}
+};
+
+/** A day and its time: each end's day and time written into its datetime-local, whole or empty, with input on it when
+ *  it changed; each time then held to its day's bounds. */
+const join = (state) => {
+	const {inputs, times} = state.timed;
+	inputs.forEach((input, i) => {
+		const [day, time] = [state.inputs[i].value, times[i].input.value];
+		const value = day !== '' && time !== '' ? day + 'T' + time : '';
+		if (input.value !== value) {
+			input.value = value;
+			input.dispatchEvent(new Event('input', {bubbles: true}));
+		}
+	});
+	state.timed.drawn = inputs.map((input) => input.value);
+	limit(state);
+};
+
+/** Holds each time to the moments that bound its day: the first input's min and max, data-min and data-max as "now" or
+ *  a moment, and for the end the start on the same day; a day chosen asks for its time. */
+const limit = (state) => {
+	const {inputs, times} = state.timed;
+	const now = nowIn(state.s.zone);
+	const moments = (own, words) => [own, words === 'now' ? now : /^\d{4}-\d\d-\d\dT\d\d:\d\d/.test(words ?? '') ? words.slice(0, 16) : ''].filter(Boolean);
+	const lows = moments(inputs[0].min, state.box.getAttribute('data-min'));
+	const highs = moments(inputs[0].max, state.box.getAttribute('data-max'));
+	times.forEach(({input}, i) => {
+		const day = state.inputs[i].value;
+		const on = (list) => list.filter((at) => at.slice(0, 10) === day).map((at) => at.slice(11, 16)).sort();
+		const low = [...on(lows), ...(i === 1 && day !== '' && inputs[0].value.startsWith(day) ? [inputs[0].value.slice(11, 16)] : [])].sort().at(-1);
+		const high = on(highs)[0];
+		put(input, 'min', low ?? null);
+		put(input, 'max', high ?? null);
+		put(input, 'required', inputs[i].required || day !== '');
+		put(input, 'disabled', inputs[i].disabled);
+		put(input, 'readonly', inputs[i].readOnly);
+	});
+};
+
+/** Sets an attribute only when it differs: the same value set again is a change the boxes would draw again for. */
+const put = (element, name, value) => {
+	const words = value === true ? '' : value === false ? null : value;
+	if (element.getAttribute(name) !== words) {
+		words === null ? element.removeAttribute(name) : element.setAttribute(name, words);
+	}
+};
+
+/** A day and its time from their datetime-local: what a script, a Discard or a reset wrote there, split. */
+const split = (state) => {
+	const {inputs, times} = state.timed;
+	inputs.forEach((input, i) => {
+		state.inputs[i].value = input.value.slice(0, 10);
+		times[i].input.value = input.value.slice(11, 16);
+	});
+	state.timed.drawn = inputs.map((input) => input.value);
+};
+
+/** The days' settings from their datetime-local: the first's min and max by their day, each end's disabled, required
+ *  and names. */
+const mirror = (state) => {
+	const {inputs} = state.timed;
+	state.inputs.forEach((day, i) => {
+		put(day, 'min', inputs[0].min.slice(0, 10) || null);
+		put(day, 'max', inputs[0].max.slice(0, 10) || null);
+		put(day, 'disabled', inputs[i].disabled);
+		put(day, 'required', inputs[i].required);
+		for (const name of ['aria-label', 'aria-describedby', 'aria-invalid']) {
+			put(day, name, inputs[i].getAttribute(name));
+		}
+	});
 };
 
 /** The choice ends with no other pick: kept as it stands, or a period that needs an end it lacks given back. */
@@ -746,6 +831,7 @@ const mount = (box, root, inputs, done, quiet = false) => {
 	years.addEventListener('change', () => jump(state, +years.value, new Date(state.shown).getUTCMonth()));
 	clear.addEventListener('click', () => {
 		state.anchor = null;
+		state.timed?.times.forEach(({input}) => (input.value = ''));
 		write(state, []);
 		state.multiple || commit(state);
 		draw(state);
@@ -808,6 +894,7 @@ const mount = (box, root, inputs, done, quiet = false) => {
 		}
 	});
 	shown.addEventListener('keydown', (event) => keyed(state, event));
+	hush(root, state);
 	root.addEventListener('focusout', (event) => {
 		if (state.panel === undefined && !root.contains(event.relatedTarget)) {
 			finish(state);
@@ -817,8 +904,9 @@ const mount = (box, root, inputs, done, quiet = false) => {
 	return state;
 };
 
-/** The inputs of a box: its one input of several days, else its one or two input type="date". */
-const inputsOf = (box) => box.hasAttribute('data-multiple') ? [...box.querySelectorAll(':scope > input')].slice(0, 1) : [...box.querySelectorAll(':scope > input[type="date"]')].slice(0, 2);
+/** The inputs of a box: its one input of several days, else its one or two input type="date" - or, in a date-input,
+ *  input type="datetime-local". */
+const inputsOf = (box, timed = false) => box.hasAttribute('data-multiple') ? [...box.querySelectorAll(':scope > input')].slice(0, 1) : [...box.querySelectorAll(':scope > input[type="date"]' + (timed ? ', :scope > input[type="datetime-local"]' : ''))].slice(0, 2);
 
 /** A date-pick: its inputs turned hidden, the months after them. */
 const buildPick = (box) => {
@@ -914,7 +1002,8 @@ const typedIn = (state, i, final) => {
 };
 
 /** The field's face: a button that opens the months - always under a finger and for several days -, or the day typed
- *  in parts, with a button beside them that opens the months. */
+ *  in parts, with a button beside them that opens the months; a day and its time, each end's day and its time in one
+ *  frame. */
 const makeFace = (state) => {
 	const typed = state.s.typing && !state.multiple;
 	if (state.typed === typed) {
@@ -925,6 +1014,10 @@ const makeFace = (state) => {
 	state.open?.remove();
 	state.panel.toggleAttribute('data-typed', typed);
 	state.panel.style.removeProperty('position-anchor');
+	if (state.timed !== undefined) {
+		timedFace(state, typed);
+		return;
+	}
 	const {label, inputs, panel} = state;
 	const describe = (element) => {
 		for (const name of ['aria-describedby', 'aria-invalid']) {
@@ -1005,19 +1098,101 @@ const makeFace = (state) => {
 		Object.assign(state, {face, parts, open});
 		inputs.at(-1).after(face);
 	}
-	// The months stand below the whole face, not the button beside it: an anchor set through the CSSOM, which a
-	// Content-Security-Policy leaves alone.
-	state.face.style.setProperty('anchor-name', '--' + panel.id);
-	panel.style.setProperty('position-anchor', '--' + panel.id);
+	hush(state.face, state);
+	anchor(state);
 	state.box.append(open);
+};
+
+/** The months stand below the whole face, not the button that opened them: an anchor set through the CSSOM, which a
+ *  Content-Security-Policy leaves alone. */
+const anchor = (state) => {
+	state.face.style.setProperty('anchor-name', '--' + state.panel.id);
+	state.panel.style.setProperty('position-anchor', '--' + state.panel.id);
+};
+
+/** The face of a day and its time: in one frame, each end its day - a button that opens the months, or typed - and
+ *  its time, the main script's time input; a button after them opens the months when the days are typed. */
+const timedFace = (state, typed) => {
+	const {label, panel, timed} = state;
+	const face = Object.assign(document.createElement('div'), {className: 'form-control date-input-face date-input-timed' + (typed ? ' date-input-typed' : ''), id: panel.id + '-face'});
+	face.setAttribute('role', 'group');
+	label === undefined ? face.setAttribute('aria-label', timed.inputs[0].getAttribute('aria-label') ?? '') : face.setAttribute('aria-labelledby', label.id);
+	const open = typed ? button('btn btn-icon btn-text date-input-open', text('date.choose'), 'bi-calendar3') : undefined;
+	const days = [];
+	const parts = [];
+	timed.times.forEach((time, i) => {
+		if (i === 1) {
+			face.append(Object.assign(document.createElement('span'), {textContent: '-'}));
+			face.lastChild.setAttribute('aria-hidden', 'true');
+		}
+		const end = Object.assign(document.createElement('span'), {className: 'date-input-end'});
+		let day;
+		if (typed) {
+			day = Object.assign(document.createElement('input'), {type: 'text', className: 'date-input-part', id: panel.id + '-part-' + i, autocomplete: 'off', spellcheck: false});
+			day.setAttribute('aria-label', timed.inputs[i].getAttribute('aria-label') ?? label?.textContent.trim() ?? '');
+			day.addEventListener('keydown', (event) => {
+				if ((event.key === 'ArrowDown' || event.key === 'ArrowUp') && event.altKey) {
+					event.preventDefault();
+					open.click();
+				} else if (event.key === 'Enter') {
+					typedIn(state, i, true);
+				}
+			});
+			day.addEventListener('change', () => typedIn(state, i, true));
+			parts.push(day);
+		} else {
+			day = button('date-input-day', '');
+			day.replaceChildren(Object.assign(document.createElement('i'), {className: 'bi bi-calendar3'}), Object.assign(document.createElement('span'), {className: 'date-input-value'}));
+			day.firstChild.setAttribute('aria-hidden', 'true');
+			for (const [name, words] of [['aria-haspopup', 'dialog'], ['aria-expanded', 'false'], ['commandfor', panel.id], ['command', 'toggle-popover']]) {
+				day.setAttribute(name, words);
+			}
+			day.addEventListener('click', () => (timed.from = i));
+			days.push(day);
+		}
+		end.append(day, time.box);
+		face.append(end);
+	});
+	if (open !== undefined) {
+		for (const [name, words] of [['aria-haspopup', 'dialog'], ['aria-expanded', 'false'], ['commandfor', panel.id], ['command', 'toggle-popover']]) {
+			open.setAttribute(name, words);
+		}
+		state.box.append(open);
+	}
+	if (label !== undefined) {
+		label.htmlFor = (parts[0] ?? days[0]).id ||= panel.id + '-day';
+	}
+	Object.assign(state, {face, parts, days, open});
+	state.inputs.at(-1).after(face);
+	panel.toggleAttribute('data-timed', true);
+	hush(face, state);
+	anchor(state);
+};
+
+/** The time the focus goes to as the months close after a day was chosen: the first whose day is chosen and time is
+ *  not; null when none waits. */
+const after = (state) => {
+	const {timed} = state;
+	const need = timed.picked ? state.inputs.findIndex((day, j) => day.value !== '' && timed.times[j].input.value === '') : -1;
+	timed.picked = false;
+	return need < 0 ? null : timed.times[need].box.querySelector('.time-input-part');
+};
+
+/** The inner parts and lists speak through the box's inputs alone: their own input and change, a part's or a list's,
+ *  stop where they are. */
+const hush = (element, state) => {
+	for (const type of ['input', 'change']) {
+		element.addEventListener(type, (event) => (state.timed?.inputs ?? state.inputs).includes(event.target) || event.stopPropagation());
+	}
 };
 
 /** A date-input: its inputs turned hidden, a face named by its label, a panel with the months that the face opens. */
 const buildInput = (box) => {
-	const inputs = inputsOf(box);
+	const inputs = inputsOf(box, true);
 	if (inputs.length === 0) {
 		return;
 	}
+	const timed = inputs[0].type === 'datetime-local' ? {inputs, times: [], picked: false, from: null} : undefined;
 	const id = 'redz-date-' + ++made;
 	const label = inputs[0].labels?.[0] ?? box.querySelector(':scope > label') ?? undefined;
 	const panel = Object.assign(document.createElement('div'), {className: 'menu date-input-menu', id: id + '-panel', popover: 'auto'});
@@ -1037,31 +1212,74 @@ const buildInput = (box) => {
 		panel.setAttribute('aria-label', inputs[0].getAttribute('aria-label'));
 	}
 	inputs.forEach((input) => (input.type = 'hidden'));
-	inputs.at(-1).after(panel);
+	// A day and its time: each end's day held apart in an input of no name, the months' own, and its time in the main
+	// script's time input; their datetime-local holds the two together.
+	const days = timed === undefined ? inputs : inputs.map((input, i) => {
+		const time = Object.assign(document.createElement('input'), {type: 'time', value: input.value.slice(11, 16)});
+		time.setAttribute('aria-label', input.getAttribute('aria-label') ?? label?.textContent.trim() ?? '');
+		const holder = Object.assign(document.createElement('span'), {className: 'time-input date-input-time'});
+		holder.append(time);
+		timed.times.push({box: holder, input: time});
+		return Object.assign(document.createElement('input'), {type: 'hidden', value: input.value.slice(0, 10)});
+	});
+	inputs.at(-1).after(...(timed === undefined ? [] : days), panel);
 	panel.append(head, root);
-	const state = mount(box, root, inputs, () => panel.hidePopover(), true);
-	Object.assign(state, {panel, label});
+	const state = mount(box, root, days, () => panel.hidePopover(), true);
+	Object.assign(state, {panel, label, timed});
 	states.set(box, state);
+	if (timed !== undefined) {
+		timed.drawn = inputs.map((input) => input.value);
+		timed.first = [...timed.drawn];
+		state.committed = timed.drawn.join('/');
+		mirror(state);
+		// The days and the times speak through their datetime-local alone.
+		for (const one of [...days, ...timed.times.map((time) => time.input)]) {
+			one.addEventListener('input', (event) => {
+				event.stopPropagation();
+				timed.picked ||= days.includes(one);
+				join(state);
+			});
+			one.addEventListener('change', (event) => event.stopPropagation());
+		}
+		box.addEventListener('focusin', () => limit(state));
+		box.addEventListener('focusout', (event) => {
+			if (!box.contains(event.relatedTarget)) {
+				requestAnimationFrame(() => box.contains(document.activeElement) || panel.matches(':popover-open') || commit(state, true));
+			}
+		});
+	}
 	makeFace(state);
 	panel.addEventListener('beforetoggle', (event) => {
 		if (event.newState === 'open') {
 			state.quiet = false;
 			prepare(state);
 			state.focus = opening(state);
+			const [from, to] = valuesOf(state);
+			if (timed?.from === 1 && from !== null) {
+				state.before = state.inputs.map((input) => input.value);
+				state.start = from;
+				state.focus = to ?? from;
+			}
 			state.shown = monthOf(state.focus);
 			draw(state);
 		}
 	});
 	panel.addEventListener('toggle', (event) => {
 		const open = event.newState === 'open';
-		(state.open ?? state.face).setAttribute('aria-expanded', String(open));
+		(state.days?.length > 0 ? state.days : [state.open ?? state.face]).forEach((one) => one.setAttribute('aria-expanded', String(open)));
 		state.quiet = !open;
 		if (open) {
+			if (timed !== undefined) {
+				timed.picked = false;
+			}
 			state.root.querySelector('td[tabindex="0"]')?.focus();
 		} else {
 			finish(state);
-			if (panel.contains(document.activeElement) || document.activeElement === document.body) {
-				(state.parts[0] ?? state.face).focus();
+			const time = timed === undefined ? null : after(state);
+			if (time !== null) {
+				time.focus();
+			} else if (panel.contains(document.activeElement) || document.activeElement === document.body) {
+				(state.parts[0] ?? state.days?.[timed?.from ?? 0] ?? state.face).focus();
 			}
 		}
 	});
@@ -1074,7 +1292,23 @@ const drawFace = (state, refused) => {
 	if (state.face === undefined) {
 		return;
 	}
+	if (state.timed !== undefined) {
+		mirror(state);
+		limit(state);
+	}
 	const disabled = state.inputs[0].disabled;
+	if (state.days?.length > 0) {
+		valuesOf(state).forEach((t, i) => {
+			const day = state.days[i];
+			const name = state.timed.inputs.length > 1 ? state.timed.inputs[i].getAttribute('aria-label') ?? '' : '';
+			const words = t === null ? name || text('date.choose') : dateWords(state.s, t, state.box.getAttribute('data-format') === 'short');
+			day.lastChild.textContent = words;
+			day.toggleAttribute('data-empty', t === null);
+			day.disabled = state.inputs[i].disabled;
+			name !== '' && t !== null ? day.setAttribute('aria-label', name + ', ' + words) : day.removeAttribute('aria-label');
+		});
+		return;
+	}
 	if (state.parts.length === 0) {
 		state.face.firstChild.textContent = choiceWords(state, true);
 		state.face.disabled = disabled;
@@ -1098,7 +1332,7 @@ const drawFace = (state, refused) => {
 const redraw = (state, moved) => {
 	if (moved) {
 		state.drawn = state.inputs.map((input) => input.value);
-		state.committed = state.drawn.join('/');
+		state.committed = (state.timed?.inputs ?? state.inputs).map((input) => input.value).join('/');
 		state.start = null;
 		prepare(state);
 		state.focus = opening(state);
@@ -1121,22 +1355,28 @@ const start = (records = []) => {
 			if (!box.matches('.date-input .date-pick')) {
 				box.classList.contains('date-input') ? buildInput(box) : buildPick(box);
 			}
+		} else if (state.timed !== undefined && state.timed.inputs.some((input, i) => input.value !== state.timed.drawn[i])) {
+			split(state);
+			redraw(state, true);
 		} else if (state.inputs.some((input, i) => input.value !== state.drawn[i])) {
 			redraw(state, true);
-		} else if (page || records.some((record) => record.attributeName !== 'value' && (record.target === box || state.inputs.includes(record.target)))) {
+		} else if (page || records.some((record) => record.attributeName !== 'value' && (record.target === box || state.inputs.includes(record.target) || state.timed?.inputs.includes(record.target)))) {
 			redraw(state, false);
 		}
 	}
 };
 start();
-new MutationObserver(start).observe(document.documentElement, {childList: true, subtree: true, attributeFilter: ['value', 'min', 'max', 'disabled', 'required', 'data-counts', 'data-counts-note', 'data-count-text', 'data-format', 'data-weekday', 'data-min', 'data-max', 'data-enable', 'data-disable', 'data-min-days', 'data-max-days', 'data-unbroken', 'data-open-start', 'data-open-end', 'data-years', 'data-context', ...PAGE]});
+new MutationObserver(start).observe(document.documentElement, {childList: true, subtree: true, attributeFilter: ['value', 'min', 'max', 'disabled', 'readonly', 'required', 'data-counts', 'data-counts-note', 'data-count-text', 'data-format', 'data-weekday', 'data-min', 'data-max', 'data-enable', 'data-disable', 'data-min-days', 'data-max-days', 'data-unbroken', 'data-open-start', 'data-open-end', 'data-years', 'data-context', ...PAGE]});
 touch.addEventListener('change', () => start([{attributeName: 'data-typing', target: document.documentElement}]));
 
 document.addEventListener('reset', (event) => {
 	setTimeout(() => event.target.querySelectorAll(BOXES).forEach((box) => {
 		const state = states.get(box);
 		if (state !== undefined) {
-			state.inputs.forEach((input, i) => (input.value = state.first[i]));
+			(state.timed?.inputs ?? state.inputs).forEach((input, i) => (input.value = (state.timed ?? state).first[i]));
+			if (state.timed !== undefined) {
+				split(state);
+			}
 			redraw(state, true);
 		}
 	}));

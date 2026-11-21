@@ -22,11 +22,12 @@ The words follow the nearest `lang`, not the page's: a sentence the page keeps i
 
 ## The reader's own clock
 
-A moment the server knows in UTC, shown by the reader's clock: `data-local` writes its time, `data-local="date"` its date and time, and `data-local="auto"` the time when it falls on the reader's today, the weekday and time in the six days ahead, else the date and time. The hours are written as the language writes them - `07:00` in Russian, `7:00 AM` in American English - and the `title` holds the full moment with the reader's time zone. The server's own text, its UTC time, stands without the script.
+A moment the server knows in UTC, shown by the reader's clock: `data-local` writes its time, `data-local="date"` its date and time, and `data-local="auto"` the time when it falls on the reader's today, the weekday and time in the six days ahead, else the date and time. The hours are written as the language writes them - `07:00` in Russian, `7:00 AM` in American English -, or as the nearest `data-time-format` says, a product's setting in PHP's letters: 24 hours under `G:i` or `H:i`, 12 under `g:i A` with AM and PM as PHP prints them, in every language. The `title` holds the full moment with the reader's time zone. The server's own text, its UTC time, stands without the script.
 
 ```html
 <p>The daily limit starts again at <time datetime="2026-11-05T00:00:00Z" data-local="auto" data-docs-utc-day>00:00 UTC</time>, your time.</p>
 <p>The report was sent <time datetime="2026-11-04T08:00:00Z" data-local="date">Nov 4, 2026, 08:00 UTC</time>.</p>
+<p data-time-format="g:i A">The office opens at <time datetime="2026-11-05T02:00:00Z" data-local>02:00 UTC</time>, your time, by a company's 12-hour setting.</p>
 ```
 
 | Attribute | What it does |
@@ -34,6 +35,7 @@ A moment the server knows in UTC, shown by the reader's clock: `data-local` writ
 | `data-elapsed` | The time since the moment as a clock, `m:ss` or `h:mm:ss`, each second. |
 | `data-ago`, `data-ago="short"` | How long ago, or how soon, in words. |
 | `data-local`, `data-local="date"`, `data-local="auto"` | The moment by the reader's clock: the time, the date and time, or as much as its distance from today needs. |
+| `data-time-format` | On the nearest element, a product's pattern of the time in PHP's letters, as time inputs read it: `H:i`, `g:i A`. |
 
 One of the three on a time; given more, `data-elapsed` wins, then `data-ago`. A `title` the page writes itself stays.
 

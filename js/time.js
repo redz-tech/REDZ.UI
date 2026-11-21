@@ -3,8 +3,10 @@
 // comes ("5 minutes ago", or "5 min. ago" with data-ago="short"); one with data-local shows the moment by the reader's
 // own clock - the time, the date and time with data-local="date", and with data-local="auto" the time on the reader's
 // today, the weekday and time in the six days ahead, else the date and time. Words are in the language of the nearest
-// lang, the full moment with the reader's zone in the title. One ticker serves them all: each second while an elapsed
-// time is on the page, else every 30 seconds, still while the page is hidden. They are never read out.
+// lang, the full moment with the reader's zone in the title; the hours as the language writes them, or as the nearest
+// data-time-format says - PHP's letters, 24 hours under G or H, 12 under g or h with AM and PM as PHP prints A or a.
+// One ticker serves them all: each second while an elapsed time is on the page, else every 30 seconds, still while the
+// page is hidden. They are never read out.
 import {langAt, locales} from './text.js';
 
 const SELECTOR = 'time[data-elapsed], time[data-ago], time[data-local]';
@@ -33,18 +35,35 @@ const ago = (seconds, lang, style) => {
 /** Hour and minute as the language writes its short time: 07:00 in Russian, 7:00 AM in American English. */
 const clockOf = (lang) => forms.get(lang) ?? forms.set(lang, {hour: new Intl.DateTimeFormat(locales(lang), {timeStyle: 'short', timeZone: 'UTC'}).formatToParts(Date.UTC(2000, 0, 1, 7)).find((part) => part.type === 'hour')?.value.length === 2 ? '2-digit' : 'numeric', minute: '2-digit'}).get(lang);
 
+/** The hours by the nearest data-time-format: Intl's options and PHP's words for AM and PM; the language's own when no
+ *  element says. */
+const clockAt = (time, lang) => {
+	const pattern = time.closest('[data-time-format]')?.getAttribute('data-time-format') ?? null;
+	if (pattern === null) {
+		return {hours: clockOf(lang), cycle: {}, words: null};
+	}
+	const twelve = /[gh]/.test(pattern);
+	return {hours: {hour: /[Hh]/.test(pattern) ? '2-digit' : 'numeric', minute: '2-digit', hourCycle: twelve ? 'h12' : 'h23'}, cycle: {hourCycle: twelve ? 'h12' : 'h23'}, words: !twelve ? null : /a/.test(pattern) && !/A/.test(pattern) ? ['am', 'pm'] : ['AM', 'PM']};
+};
+
+/** A moment in the options; under a pattern AM and PM in its words, after a plain space as PHP prints them. */
+const written = (moment, lang, options, pattern) => {
+	const format = new Intl.DateTimeFormat(locales(lang), options);
+	return pattern.words === null ? format.format(moment) : format.formatToParts(moment).map((part) => part.type === 'dayPeriod' ? pattern.words[+(moment.getHours() >= 12)] : part.value.replace(/\u202f/g, ' ')).join('');
+};
+
 /** The reader's calendar day of a moment, as a whole number. */
 const day = (date) => Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86400000;
 
 /** The moment by the reader's clock: the time, the date and time, or for "auto" as much as its distance from today needs. */
-const local = (moment, lang, mode) => {
+const local = (moment, lang, mode, pattern) => {
 	const ahead = day(moment) - day(new Date());
-	const hours = clockOf(lang);
-	const options = mode === 'date' ? {dateStyle: 'medium', timeStyle: 'short'}
+	const {hours} = pattern;
+	const options = mode === 'date' ? {dateStyle: 'medium', timeStyle: 'short', ...pattern.cycle}
 		: mode !== 'auto' || ahead === 0 ? hours
 		: ahead > 0 && ahead < 7 ? {weekday: 'short', ...hours}
 		: {day: 'numeric', month: 'short', ...(moment.getFullYear() === new Date().getFullYear() ? {} : {year: 'numeric'}), ...hours};
-	return new Intl.DateTimeFormat(locales(lang), options).format(moment);
+	return written(moment, lang, options, pattern);
 };
 
 /** Writes every ticking time and plans the next tick. */
@@ -58,14 +77,15 @@ const tick = () => {
 		}
 		const lang = langAt(time);
 		const moment = new Date(time.dateTime);
+		const pattern = clockAt(time, lang);
 		if (time.hasAttribute('data-elapsed')) {
 			time.textContent = clock(seconds);
 			next = Math.min(next, 1010 - (Math.max(0, seconds) * 1000) % 1000);
 			continue;
 		}
-		time.textContent = time.hasAttribute('data-ago') ? ago(seconds, lang, time.dataset.ago === 'short' ? 'short' : 'long') : local(moment, lang, time.dataset.local);
+		time.textContent = time.hasAttribute('data-ago') ? ago(seconds, lang, time.dataset.ago === 'short' ? 'short' : 'long') : local(moment, lang, time.dataset.local, pattern);
 		if (time.title === '' || time.title === titles.get(time)) {
-			time.title = new Intl.DateTimeFormat(locales(lang), {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', ...clockOf(lang), timeZoneName: 'short'}).format(moment);
+			time.title = written(moment, lang, {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', ...pattern.hours, timeZoneName: 'short'}, pattern);
 			titles.set(time, time.title);
 		}
 	}
@@ -79,5 +99,5 @@ new MutationObserver((records) => {
 	if (records.some((record) => record.type === 'attributes' || [...record.addedNodes].some((node) => node instanceof Element && (node.matches(SELECTOR) || node.querySelector(SELECTOR))))) {
 		tick();
 	}
-}).observe(document.documentElement, {subtree: true, childList: true, attributes: true, attributeFilter: ['datetime', 'data-elapsed', 'data-ago', 'data-local', 'lang']});
+}).observe(document.documentElement, {subtree: true, childList: true, attributes: true, attributeFilter: ['datetime', 'data-elapsed', 'data-ago', 'data-local', 'data-time-format', 'lang']});
 tick();
