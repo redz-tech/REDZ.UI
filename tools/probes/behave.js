@@ -5418,9 +5418,10 @@ window.REDZ_BEHAVE = (() => {
 			await settled();
 			yield {click: center($$('.date-input-day', rentBox)[1])};
 			await settled();
+			const expanded = $$('.date-input-day', rentBox).map((day) => day.getAttribute('aria-expanded')).join(' ');
 			yield {click: center($('td[data-day="' + iso(today + 5 * DAY) + '"]', rentPanel))};
 			await settled();
-			const two = [start.value === iso(today + 2 * DAY) + 'T08:00', end.value, rentPanel.matches(':popover-open'), document.activeElement === endHours];
+			const two = [expanded, start.value === iso(today + 2 * DAY) + 'T08:00', end.value, rentPanel.matches(':popover-open'), document.activeElement === endHours];
 			yield {type: '600p'};
 			await settled();
 			two.push(end.value === iso(today + 5 * DAY) + 'T18:00', endChanges);
@@ -5437,7 +5438,7 @@ window.REDZ_BEHAVE = (() => {
 				twelve: '|true|AM/PM|Choose AM or PM|09:30|21:30|1|true|15:30',
 				pattern: '9 30 PM|15:30|15 30 -|3 30 PM|15:00',
 				one: 'true|true|true|true|true|false|0|1|true',
-				two: 'true||false|true|true|0|1|true',
+				two: 'false true|true||false|true|true|0|1|true',
 			};
 			if (say(seen) !== say(want)) {
 				out.push('a 12-hour time and a day with its time take AM or PM, the pattern, the days and the times, their bounds and one change each: ' + say(seen));

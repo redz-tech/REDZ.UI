@@ -89,10 +89,10 @@ Times by the same settings, the ERP's and the IT pack's order.
   measures a day by its layout, not while the month's opening transition scales it.
 - The probes' new `timeAndDay` walk holds a 12-hour time - AM or PM asked for when the hours are left without it, set
   by a click and by `p`, 13 to 23 typed as their PM hour, a pasted `3:30 pm`, the pattern read again when it changes -
-  and a day with its time - the months under the frame, a day picked keeping its time, the end's day keeping the
-  start and handing the focus to the end's time, now bounding today's time and the start the end's, one change as the
-  focus leaves each field; proven red on nine planted defects. The `timeLocal` walk holds a ticking time under
-  `data-time-format`: 12 hours with AM or PM, then 24.
+  and a day with its time - the months under the frame, a day picked keeping its time, the end's day marked open
+  alone, keeping the start and handing the focus to the end's time, now bounding today's time and the start the end's,
+  one change as the focus leaves each field; proven red on ten planted defects. The `timeLocal` walk holds a ticking
+  time under `data-time-format`: 12 hours with AM or PM, then 24.
 
 ## 0.31.1 - 2026-11-20
 

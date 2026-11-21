@@ -1266,7 +1266,8 @@ const buildInput = (box) => {
 	});
 	panel.addEventListener('toggle', (event) => {
 		const open = event.newState === 'open';
-		(state.days?.length > 0 ? state.days : [state.open ?? state.face]).forEach((one) => one.setAttribute('aria-expanded', String(open)));
+		const openers = state.days?.length > 0 ? state.days : [state.open ?? state.face];
+		openers.forEach((one, i) => one.setAttribute('aria-expanded', String(open && (openers.length === 1 || i === (timed?.from ?? 0)))));
 		state.quiet = !open;
 		if (open) {
 			if (timed !== undefined) {
