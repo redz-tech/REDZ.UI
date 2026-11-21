@@ -1,6 +1,6 @@
 <header class="vstack gap-8">
 	<h1>Calendars</h1>
-	<p class="docs-lead">A month of days with what happens on each, a strip of days across the things that can be busy on them - equipment, rooms, boats -, and a month to pick a day or a period from.</p>
+	<p class="docs-lead">A month of days with what happens on each, a strip of days across the things that can be busy on them - equipment, rooms, boats -, and months to pick a day, a period or several days from, by the page's own rules and settings.</p>
 </header>
 
 <section class="vstack gap-12" aria-labelledby="calendar-package">
@@ -80,7 +80,7 @@
 
 <section class="vstack gap-16" aria-labelledby="calendar-date">
 	<h2 id="calendar-date">A date field</h2>
-	<p><code>date-input</code> around one <code>input type="date"</code> draws it as a field that shows the day and opens a month below it to pick one from; on a window narrower than 576 px the month is a sheet from the bottom of the dimmed page, with a grab bar, the words of the field's label and a Close button the library makes, dragged down by its head to close. The input stays the form's value, an ISO date such as <code>2026-11-18</code>, with its <code>name</code>, <code>min</code> and <code>max</code>; without the script it is the browser's own date field, and with it the browser's own date picker never opens. Every year shown is the Gregorian one, whatever calendar the phone is set to, and the names of the months and the days are the page language's. A day picked closes the month and gives the focus back to the field. A face reads <code>02.12.2026</code> in the page language's order, <code>02.12</code> under <code>data-format="short"</code>; under <code>data-weekday</code> the page's Today, Tomorrow or Yesterday comes before the date, else the day's whole name, <code>Wednesday, 02.12</code>.</p>
+	<p><code>date-input</code> around one <code>input type="date"</code> draws it as a field that shows the day and opens a month below it to pick one from; on a window narrower than 576 px the month is a sheet from the bottom of the dimmed page, with a grab bar, the words of the field's label and a Close button the library makes, dragged down by its head to close. The input stays the form's value, an ISO date such as <code>2026-11-18</code>, with its <code>name</code>, <code>min</code> and <code>max</code>; without the script it is the browser's own date field, and with it the browser's own date picker never opens. The names of the months and the days are the page language's, and the year is the Gregorian one, whatever calendar the phone is set to, unless the page asks for another. A day picked closes the month and gives the focus back to the field. A face reads the day in the page's pattern, or in its language's order without one - <code>12/02/2026</code> in English -, and leaves out the year under <code>data-format="short"</code>; under <code>data-weekday</code> the page's Today, Tomorrow or Yesterday comes before the date, else the day's whole name.</p>
 	<div class="docs-example docs-example-stack" id="calendar-date-field">
 		<div class="form-floating date-input max-w-240" data-format="short">
 			<input class="form-control" id="calendar-date-start" type="date" name="start" value="2026-12-02" min="2026-11-18" max="2027-03-31">
@@ -98,21 +98,34 @@
 			<div class="form-text" id="calendar-date-due-hint">The day's name shows first; the free places under each day.</div>
 		</div>
 	</div>
+	<p>Two inputs make the field a period: one face over both, the start and the end, the month's first pick the start and its second the end. With a mouse, under <code>data-typing</code>, a day is typed in the face itself, in two parts for a period, and a button beside it opens the month: the page's pattern, <code>21.11</code> for this year, <code>211126</code> run together, a month's name, a pasted ISO date - the up and down arrows step it a day, and a day that reads as none or that cannot be picked is refused in the page's words. Under a finger the face stays the button: a tap opens the month and never the keyboard.</p>
+	<div class="docs-example docs-example-stack" id="calendar-date-period">
+		<div class="form-floating date-input max-w-360" data-typing data-months="2" data-open-start data-open-end data-max-days="92">
+			<input class="form-control" id="calendar-date-from" type="date" name="from" value="2026-11-02" max="2026-12-31" aria-label="From">
+			<input class="form-control" type="date" name="to" value="2026-11-15" max="2026-12-31" aria-label="To">
+			<label for="calendar-date-from">Period</label>
+			<div class="date-pick-quick" role="group" aria-label="Quick periods">
+				<button class="chip" type="button" value="2026-11-01/2026-11-30">November</button>
+				<button class="chip" type="button" value="2026-10-01/2026-12-31">Fourth quarter</button>
+			</div>
+		</div>
+	</div>
 	<table class="table docs-table">
 		<thead><tr><th scope="col">Part</th><th scope="col">What it does</th></tr></thead>
 		<tbody>
-			<tr><td><code>date-input</code></td><td>The box around one <code>input type="date"</code>: in a <code>form-floating</code>, or with a label of its own. <code>data-format="short"</code> leaves the year out of its face; <code>data-weekday</code> puts the page's Today, Tomorrow or Yesterday before the date, else the day's whole name; <code>data-first-day</code>, <code>data-counts</code>, <code>data-counts-note</code>, <code>data-count-text</code> and a <code>date-pick-quick</code> inside it work as on a <code>date-pick</code>, and its <code>redz:month</code> comes only once its month opens.</td></tr>
-			<tr><td><code>input type="date"</code></td><td>The value the form sends, its <code>name</code> the field's; the library turns it <code>hidden</code>. A day picked fires <code>input</code> and <code>change</code> on it; a script that sets it has the field drawn again, and the form's reset puts back the day it came with. Days before <code>min</code> and after <code>max</code> cannot be picked; <code>disabled</code> passes to the face, <code>required</code> as <code>aria-required</code>, and the page checks a required day on its server, as for a combobox.</td></tr>
-			<tr><td><code>date-input-face</code></td><td>The field the library draws, a <code>form-select</code> button with <code>role="combobox"</code> named by the input's label, which then names it; the day's words are in <code>date-input-value</code>. The down and up arrows open it too.</td></tr>
-			<tr><td><code>date-input-menu</code></td><td>The month, a <code>menu</code> popover with <code>role="dialog"</code> after the face, 360 px wide below it; on a phone a sheet with <code>date-input-head</code> holding <code>date-input-title</code> and Close.</td></tr>
+			<tr><td><code>date-input</code></td><td>The box around one <code>input type="date"</code>, two for a period, or the one input of several days under <code>data-multiple</code>: in a <code>form-floating</code>, or with a label of its own. <code>data-format="short"</code> leaves the year out of its face; <code>data-weekday</code> puts the page's Today, Tomorrow or Yesterday before the date, else the day's whole name; everything a <code>date-pick</code> takes works on it, and its <code>redz:month</code> comes only once its month opens.</td></tr>
+			<tr><td><code>input type="date"</code></td><td>The value the form sends, its <code>name</code> the field's; the library turns it <code>hidden</code>. A pick fires <code>input</code>, and a completed choice one <code>change</code>; a script that sets it has the field drawn again, and the form's reset puts back the day it came with. <code>disabled</code> passes to the face, <code>required</code> as <code>aria-required</code>, and the page checks a required day on its server, as for a combobox.</td></tr>
+			<tr><td><code>date-input-face</code></td><td>The field the library draws, a <code>form-select</code> button with <code>role="combobox"</code> named by the input's label, which then names it; the words of the choice are in <code>date-input-value</code>. The down and up arrows open it too. Typed, it is <code>date-input-typed</code>: a text field for a day, a group of two <code>date-input-part</code> for a period, each named by its input's <code>aria-label</code>.</td></tr>
+			<tr><td><code>date-input-open</code></td><td>The button beside a typed face that opens the month, named by the page's <code>date.choose</code>; <kbd>Alt</kbd> <kbd>↓</kbd> in the face opens it too.</td></tr>
+			<tr><td><code>date-input-menu</code></td><td>The month, a <code>menu</code> popover with <code>role="dialog"</code> after the face, 360 px wide below it and wider for more months; on a phone a sheet with <code>date-input-head</code> holding <code>date-input-title</code> and Close.</td></tr>
 		</tbody>
 	</table>
-	<p>In a tracked form the input is one field: <code>data-changed</code> and a refusal's <code>aria-invalid</code> go on the face, and the refusal's words and the focus there too.</p>
+	<p>In a tracked form the inputs are one field: <code>data-changed</code> and a refusal's <code>aria-invalid</code> go on the face, and the refusal's words and the focus there too.</p>
 </section>
 
 <section class="vstack gap-16" aria-labelledby="calendar-pick">
 	<h2 id="calendar-pick">A day or a period</h2>
-	<p><code>date-pick</code> draws the month itself, for the page to put on a screen, in its own sheet or below a column's filter: a day for its one <code>input type="date"</code>, a period for its two, the first the start and the second the end. In a period the first pick is a period of that one day at once, and the second its end; a pick before the start, or after a whole period, starts it again. Above the month the choice is in words, a period with its length; the page's quick picks follow, then the month's bar with the previous and the next month and Today when another month is shown. A week starts on Monday unless <code>data-first-day</code> says, <code>1</code> for Monday to <code>7</code> for Sunday.</p>
+	<p><code>date-pick</code> draws the month itself, for the page to put on a screen, in its own sheet or below a column's filter: a day for its one <code>input type="date"</code>, a period for its two, the first the start and the second the end. In a period the first pick is a period of that one day at once, and the second its end; a pick before the start starts it again, and the start again keeps the one day. Above the month the choice is in words, a period with its length, and Clear while there is one; the page's quick picks follow, then the bar with the previous and the next month, the lists of the months and the years, and Today when today's month is not shown. Today is tinted and framed, the days before it quiet on the page's grey and still to pick, a day not to pick struck through.</p>
 	<div class="docs-example docs-example-stack" id="calendar-pick-period">
 		<div class="date-pick max-w-360" data-counts='{"2026-11-03": 2, "2026-11-04": 5, "2026-11-10": 1, "2026-11-12": 4, "2026-11-17": 3, "2026-11-19": 6, "2026-11-24": 2}'>
 			<input type="date" name="from" value="2026-11-09" aria-label="From">
@@ -127,24 +140,95 @@
 	<table class="table docs-table">
 		<thead><tr><th scope="col">Part</th><th scope="col">What it does</th></tr></thead>
 		<tbody>
-			<tr><td><code>date-pick</code></td><td>The box of one or two <code>input type="date"</code>, which the library turns <code>hidden</code> and keeps as the form's values; days outside the first input's <code>min</code> and <code>max</code> cannot be picked. Each change fires <code>input</code> and <code>change</code> on the input it changed.</td></tr>
-			<tr><td><code>data-counts</code></td><td>On the box, what to show under a day: a number, <code>{"2026-11-04": 5}</code>, or <code>{"n": 0, "tone": "danger", "text": "none"}</code> - its tone <code>danger</code>, <code>warning</code> or <code>success</code>, and words in place of the number. It is said after the day's name with the page's count text <code>data-count-text</code> names, <code>date.count</code> unless it says, so a month of bookings and a month of free seats each say their own. Set it again and the month is drawn again.</td></tr>
+			<tr><td><code>date-pick</code></td><td>The box of one or two <code>input type="date"</code>, which the library turns <code>hidden</code> and keeps as the form's values. A pick fires <code>input</code> on each input it changed, and a completed choice - a period's end, a quick pick, Clear, the focus leaving the box - one <code>change</code> on the last input, so a form sent on <code>change</code> is sent once.</td></tr>
+			<tr><td><code>data-months</code></td><td>On the box, how many months it shows, side by side while each has 280 px and one below another when not; the arrows move by one month, and other months' days are left blank. From four months on, a year on one screen, the days are smaller.</td></tr>
+			<tr><td><code>data-counts</code></td><td>On the box, what to show under a day: a number, <code>{"2026-11-04": 5}</code>, in a pill, or <code>{"n": 0, "tone": "danger", "text": "none"}</code> - its tone <code>danger</code>, <code>warning</code> or <code>success</code>, and words in place of the number; words with no number, a price, show plain. The number is said after the day's name with the page's count text <code>data-count-text</code> names, <code>date.count</code> unless it says, so a month of bookings and a month of free seats each say their own. <code>"off": true</code> makes the day one not to pick and <code>note</code> says why, after the day's name and as its tooltip. Set it again and the month is drawn again.</td></tr>
+			<tr><td><code>data-count-icon</code></td><td>An icon's class, <code>bi-people-fill</code>, drawn before each number - on the box, or once for the page on any element around it.</td></tr>
 			<tr><td><code>data-counts-note</code></td><td>On the box, a line under the month that says what the numbers are, in <code>date-pick-note</code>.</td></tr>
-			<tr><td><code>redz:month</code></td><td>Fired on the box as it shows another month, and once as it is drawn: <code>detail.from</code> and <code>detail.to</code> are the first and the last day of the six weeks shown, for the page to bring their counts.</td></tr>
-			<tr><td><code>date-pick-quick</code></td><td>The page's quick picks, a group of buttons in the box, each with its <code>value</code> a day, <code>2026-11-18</code>, or a period, <code>2026-11-02/2026-11-08</code>; the one the choice equals is <code>aria-pressed="true"</code>.</td></tr>
-			<tr><td><code>date-pick-chosen</code></td><td>The words of the choice, an <code>output</code> read politely: the day, the period and its length, or the page's text <code>date.none</code>.</td></tr>
-			<tr><td><code>date-pick-nav</code>, <code>date-pick-title</code></td><td>The month's bar: the previous and the next month, the month and the year, read politely as they change, and Today.</td></tr>
-			<tr><td><code>date-pick-grid</code></td><td>The month, a table with <code>role="grid"</code> of six weeks; a day is a cell with its whole date as its name, <code>aria-selected</code> when it is chosen, <code>aria-current="date"</code> today, <code>aria-disabled</code> outside the bounds, its count in <code>date-pick-count</code>, drawn from its <code>data-count</code> so the day's text stays its number, the count's words being in its name; a period's ends carry <code>data-from</code> and <code>data-to</code>, the days between <code>data-in</code>, the next month's and the last one's <code>data-other</code>. Under a finger a day is 48 px high, 40 under a mouse.</td></tr>
+			<tr><td><code>redz:month</code></td><td>Fired on the box as it shows other months, and once as it is drawn: <code>detail.from</code> and <code>detail.to</code> are the first and the last day shown, <code>detail.context</code> the box's <code>data-context</code>. A page that answers with <code>detail.respondWith(promise)</code>, the promise of the days' counts in the shape of <code>data-counts</code>, has them kept by month: a month it waits for is <code>aria-busy</code> and quiet, it is asked only for the months it has not answered, a failed answer leaves the days bare, and another <code>data-context</code> - the guests, the unit - asks again. A page that does not answer sets <code>data-counts</code> and is asked at each other range.</td></tr>
+			<tr><td><code>date-pick-quick</code></td><td>The page's quick picks, a group of buttons in the box, each with its <code>value</code> a day, <code>2026-11-18</code>, or a period, <code>2026-11-02/2026-11-08</code>; the one the choice equals is <code>aria-pressed="true"</code>, and one the rules leave out is disabled.</td></tr>
+			<tr><td><code>date-pick-head</code>, <code>date-pick-chosen</code>, <code>date-pick-clear</code></td><td>The words of the choice, an <code>output</code> read politely - the day, the period and its length, its start alone under <code>date.since</code> or its end under <code>date.until</code>, or <code>date.none</code> -, and Clear, shown while there is a choice and the inputs are not <code>required</code>.</td></tr>
+			<tr><td><code>date-pick-nav</code></td><td>The bar: the previous and the next month, the month's and the year's lists for the first month shown, named by <code>date.month</code> and <code>date.year</code>, and Today. The years are those of the bounds, else of <code>data-years="2019/2028"</code>, else ten back and ten ahead; a month all out of the bounds is not offered.</td></tr>
+			<tr><td><code>date-pick-months</code>, <code>date-pick-month</code>, <code>date-pick-title</code></td><td>The months shown, each with its month and year, read politely as they change, shown when there are two or more; a month waiting for its counts is <code>aria-busy="true"</code>.</td></tr>
+			<tr><td><code>date-pick-grid</code></td><td>A month, a table with <code>role="grid"</code> of six weeks; the heads are the weekdays, <code>data-weekend</code> on the weekend's. A day is a cell with its whole date as its name, <code>aria-selected</code> when it is chosen, <code>aria-current="date"</code> today, <code>data-past</code> before it, <code>aria-disabled</code> when it is not to pick, its count in <code>date-pick-count</code>, drawn from its <code>data-count</code> so the day's text stays its number; a period's ends carry <code>data-from</code> and <code>data-to</code>, the days between <code>data-in</code>, the days its end would take under the pointer <code>data-reach</code>, the next month's and the last one's <code>data-other</code>. Under a finger a day is 48 px high, 46 under a mouse.</td></tr>
 		</tbody>
 	</table>
 	<table class="table docs-table">
 		<thead><tr><th scope="col">Key</th><th scope="col">In the month</th></tr></thead>
 		<tbody>
-			<tr><td><kbd>←</kbd> <kbd>→</kbd></td><td>The day before or after, the other way in a right-to-left page</td></tr>
+			<tr><td><kbd>←</kbd> <kbd>→</kbd></td><td>The day before or after, the other way in a right-to-left page, into the next month shown</td></tr>
 			<tr><td><kbd>↑</kbd> <kbd>↓</kbd></td><td>The same day a week before or after</td></tr>
 			<tr><td><kbd>Home</kbd> <kbd>End</kbd></td><td>The first or the last day of the week</td></tr>
 			<tr><td><kbd>Page Up</kbd> <kbd>Page Down</kbd></td><td>The same day a month before or after; with <kbd>Shift</kbd>, a year</td></tr>
-			<tr><td><kbd>Enter</kbd> <kbd>Space</kbd></td><td>Picks the day</td></tr>
+			<tr><td><kbd>Enter</kbd> <kbd>Space</kbd></td><td>Picks the day; among several days, with <kbd>Shift</kbd>, every day from the last one turned</td></tr>
+		</tbody>
+	</table>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="calendar-rules">
+	<h2 id="calendar-rules">Which days to pick</h2>
+	<p>A box picks only the days its bounds and its rules allow; the others are struck through, say why when the page gives a reason, and stay where the focus can reach them. A day the inputs already hold stays chosen even when the rules leave it out now - a booking made before -, and the library never writes such a day itself.</p>
+	<div class="docs-example docs-example-stack" id="calendar-pick-rules">
+		<div class="form-floating date-input max-w-240" data-date-format="j M Y" data-enable="2026-11-01/2027-04-30 1 3 5, 2027-05-01/.." data-disable="--04-13/--04-15, 2026-12-24/2026-12-26" data-counts='{"2026-11-27": {"n": 0, "tone": "danger"}, "2026-12-02": {"off": true, "note": "No guide that day"}}' data-count-text="date.count">
+			<input class="form-control" id="calendar-rules-day" type="date" name="tour" min="2026-11-18">
+			<label for="calendar-rules-day">Tour day</label>
+		</div>
+	</div>
+	<table class="table docs-table">
+		<thead><tr><th scope="col">Attribute</th><th scope="col">What it does</th></tr></thead>
+		<tbody>
+			<tr><td><code>min</code>, <code>max</code></td><td>On the first input, the first and the last day to pick, ISO dates.</td></tr>
+			<tr><td><code>data-min</code>, <code>data-max</code></td><td>On the box, the same counted from today: <code>today</code>, <code>+1</code> from tomorrow, <code>-30</code> thirty days back - or an ISO date, for a box of several days whose input is no date. With the input's own, the stricter holds; counted from today, it never goes stale on a page left open past midnight. <code>data-min="today"</code> takes no day in the past, <code>data-max="today"</code> none in the future.</td></tr>
+			<tr><td><code>data-enable</code></td><td>On the box, the days that may be picked, when it has the attribute: comma-separated rules, any of which takes a day.</td></tr>
+			<tr><td><code>data-disable</code></td><td>On the box, the days that may not, whatever <code>data-enable</code> says: the same rules.</td></tr>
+			<tr><td><code>data-min-days</code>, <code>data-max-days</code></td><td>On a period's box, its fewest and its most days: once its start is picked, an end out of reach is not to pick and says <code>date.shortest</code> or <code>date.longest</code>. With more than one day at least, the first pick leaves the end empty.</td></tr>
+			<tr><td><code>data-unbroken</code></td><td>On a period's box, no day not to pick inside it: once its start is picked, the days after the next such day are not to pick either - a unit rented, a room taken.</td></tr>
+			<tr><td><code>data-open-end</code>, <code>data-open-start</code></td><td>On a period's box, its end may stay empty - a leave with no end yet -, or its start too, a filter's "until": the first pick leaves the end empty, the start picked again keeps it so, and a typed part may be cleared.</td></tr>
+		</tbody>
+	</table>
+	<table class="table docs-table">
+		<thead><tr><th scope="col">Rule</th><th scope="col">Takes</th></tr></thead>
+		<tbody>
+			<tr><td><code>2026-12-05</code></td><td>One day</td></tr>
+			<tr><td><code>2026-12-24/2026-12-26</code></td><td>The days from one to the other, both in; <code>2026-11-01/..</code> and <code>../2027-04-30</code> have one end open</td></tr>
+			<tr><td><code>2026-12</code></td><td>A whole month</td></tr>
+			<tr><td><code>--12-25</code>, <code>--04-13/--04-15</code></td><td>A day, or days, of every year; <code>--12-30/--01-02</code> runs over the year's end</td></tr>
+			<tr><td><code>6 7</code>, <code>weekend</code></td><td>Weekdays, <code>1</code> for Monday to <code>7</code> for Sunday, or the page's weekend</td></tr>
+			<tr><td><code>2026-11-01/2027-04-30 1 3 5</code></td><td>Those weekdays in that period only - a tour on Mondays, Wednesdays and Fridays in its season</td></tr>
+		</tbody>
+	</table>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="calendar-several">
+	<h2 id="calendar-several">Several days</h2>
+	<p><code>data-multiple</code> on a <code>date-pick</code> or a <code>date-input</code> picks separate days for its one input, which holds them as ISO dates with commas between, <code>2026-12-12,2026-12-27</code> - the same text a <code>data-enable</code> takes, so the days a tour runs, kept as they came, are the only ones its booking field offers. A pick turns a day on or off; with <kbd>Shift</kbd>, every day from the last one turned turns the same way, the ones not to pick left out. The chosen days are a list under the months, each with its remove, and the words above count them; a quick pick adds its days. The grids are <code>aria-multiselectable</code>, and a completed choice - the focus leaving, the month closing, Clear, a remove - fires one <code>change</code>.</p>
+	<div class="docs-example" id="calendar-pick-several">
+		<div class="date-pick" data-multiple data-months="4" data-min="2026-11-01" data-disable="2026-12-24/2026-12-26">
+			<input type="text" name="runs" value="2026-11-14,2026-11-29,2026-12-12,2026-12-27,2027-01-09,2027-01-31" aria-label="Run days">
+		</div>
+	</div>
+	<table class="table docs-table">
+		<thead><tr><th scope="col">Part</th><th scope="col">What it does</th></tr></thead>
+		<tbody>
+			<tr><td><code>data-multiple</code></td><td>On the box, several days for its one input, of any type: <code>type="text"</code> keeps a list to type where the script does not run.</td></tr>
+			<tr><td><code>date-pick-days</code></td><td>The chosen days, a list of chips under the months; each removes its day, named by <code>date.remove</code> with the whole date.</td></tr>
+		</tbody>
+	</table>
+</section>
+
+<section class="vstack gap-16" aria-labelledby="calendar-settings">
+	<h2 id="calendar-settings">The page's settings</h2>
+	<p>How a date reads, where a week starts and when today is belong to the person or the company, not to each field: a page sets them once on <code>&lt;html&gt;</code>, and any element around a box - the box itself - sets them for the boxes inside it. Without them a box reads as before: the page language's order, Monday first, the Gregorian year, today on the device's clock.</p>
+	<pre class="docs-code" tabindex="0"><code>&lt;html lang="en" data-date-format="d.m.Y" data-first-day="0" data-time-zone="Asia/Bangkok" data-typing&gt;</code></pre>
+	<table class="table docs-table">
+		<thead><tr><th scope="col">Attribute</th><th scope="col">What it does</th></tr></thead>
+		<tbody>
+			<tr><td><code>data-date-format</code></td><td>A pattern of PHP's date() letters: <code>d</code> and <code>j</code> the day with and without its zero, <code>m</code> and <code>n</code> the month, <code>Y</code> and <code>y</code> the year, <code>M</code> and <code>F</code> the month's short and whole name, <code>D</code> and <code>l</code> the weekday's; a backslash writes a letter as it is. <code>d.m.Y</code>, <code>m/d/Y</code>, <code>j M Y</code>, <code>M j, Y</code>. Names and digits are the page language's, a month's name as it stands beside a day.</td></tr>
+			<tr><td><code>data-first-day</code></td><td>The first day of a week, <code>1</code> for Monday to <code>7</code> for Sunday; <code>0</code> is Sunday too.</td></tr>
+			<tr><td><code>data-calendar</code></td><td><code>buddhist</code> writes the year 543 ahead, in the faces, the titles and the year list, and reads a typed one back; <code>gregorian</code> keeps a box to the Gregorian year under a page that says otherwise.</td></tr>
+			<tr><td><code>data-time-zone</code></td><td>The zone today is counted in, an IANA name, <code>Asia/Bangkok</code>: today's frame, the past's grey, Today, <code>data-min</code> and <code>data-max</code>. A company's business day, while the person may be elsewhere.</td></tr>
+			<tr><td><code>data-weekend</code></td><td>The weekdays the heads tint and a <code>weekend</code> rule takes, <code>6 7</code> unless it says; <code>5 6</code> for Friday and Saturday.</td></tr>
+			<tr><td><code>data-typing</code></td><td>Days typed in the face where the pointer is not a finger; <code>data-typing="off"</code> below it keeps a box to its button.</td></tr>
 		</tbody>
 	</table>
 </section>
@@ -158,6 +242,16 @@
 			<tr><td><code>date.none</code></td><td>The words of the choice while no day is chosen</td><td>No date chosen</td></tr>
 			<tr><td><code>date.days.one</code>, <code>date.days.other</code></td><td>A period's length; <code>{count}</code> is its days, in the page's digits</td><td>{count} days</td></tr>
 			<tr><td><code>date.count.one</code>, <code>date.count.other</code></td><td>A day's number from <code>data-counts</code>, said after its name</td><td>{count} events</td></tr>
+			<tr><td><code>date.chosen.one</code>, <code>date.chosen.other</code></td><td>How many of several days are chosen</td><td>{count} days chosen</td></tr>
+			<tr><td><code>date.since</code>, <code>date.until</code></td><td>A period with its end, or its start, left empty; <code>{date}</code> is the other</td><td>From {date}, Until {date}</td></tr>
+			<tr><td><code>date.longest.one</code>, <code>date.longest.other</code></td><td>Why an end is out of reach under <code>data-max-days</code></td><td>At most {count} days</td></tr>
+			<tr><td><code>date.shortest.one</code>, <code>date.shortest.other</code></td><td>Why an end is out of reach under <code>data-min-days</code></td><td>At least {count} days</td></tr>
+			<tr><td><code>date.unavailable</code></td><td>Why a typed day, or an end past a day not to pick, is refused</td><td>This day cannot be chosen</td></tr>
+			<tr><td><code>date.invalid</code></td><td>A typed day that reads as none; <code>{example}</code> is today in the page's pattern</td><td>Type a date like {example}</td></tr>
+			<tr><td><code>date.clear</code></td><td>The button that empties the choice</td><td>Clear</td></tr>
+			<tr><td><code>date.remove</code></td><td>The name of a chosen day's remove; <code>{date}</code> is its whole date</td><td>Remove {date}</td></tr>
+			<tr><td><code>date.month</code>, <code>date.year</code></td><td>The names of the bar's lists</td><td>Month, Year</td></tr>
+			<tr><td><code>date.choose</code></td><td>The button beside a typed face</td><td>Choose a date</td></tr>
 			<tr><td><code>date.today</code></td><td>The button back to today's month, and today's word before its date under <code>data-weekday</code></td><td>Today</td></tr>
 			<tr><td><code>date.tomorrow</code></td><td>Tomorrow's word before its date under <code>data-weekday</code></td><td>Tomorrow</td></tr>
 			<tr><td><code>date.yesterday</code></td><td>Yesterday's word before its date under <code>data-weekday</code></td><td>Yesterday</td></tr>
@@ -174,6 +268,8 @@
 		<li>A day's number is a <code>time</code> with its date; "+2" says "+2 more" with a hidden word.</li>
 		<li>A busy or over cell says its number; the tint repeats it, and an over cell is also outlined in forced colors.</li>
 		<li>A day's state is in words, never in its tint alone; a day that is a button is named by its whole date and its state, "November 4, waiting for approval", and the picked one says <code>aria-pressed="true"</code>.</li>
-		<li>A month to pick from is the WAI-ARIA grid: one day takes the <kbd>Tab</kbd> stop and the arrows move it, a screen reader enters it as an application and reads each day by its whole date, chosen, today or not available. The month and the choice are read politely as they change.</li>
+		<li>A month to pick from is the WAI-ARIA grid, one grid per month: one day takes the <kbd>Tab</kbd> stop and the arrows move it across the months shown, a screen reader enters it as an application and reads each day by its whole date, its count, chosen, today or not available and why. The month and the choice are read politely as they change; several days make the grids <code>aria-multiselectable</code>, and their list says each day again with its remove.</li>
+		<li>The lists of the months and the years are the browser's own selects, named by the page's words: the keyboard, a screen reader and a phone's wheel take them as any select.</li>
+		<li>A typed day is refused with the browser's own message, the page's words; under a finger the field stays a button, so the keyboard never covers the month.</li>
 	</ul>
 </section>

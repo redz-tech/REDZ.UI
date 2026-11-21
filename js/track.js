@@ -96,8 +96,8 @@ const faceOf = (control) => {
 const targetOf = (control) => control.getAttribute('role') === 'listbox' || control.type === 'hidden' ? faceOf(control) : control;
 
 /** What a target's words are read with and what takes its focus: a chips field's entry for its box, a time input's
- *  hours for its frame, else the target. */
-const entryOf = (target) => target.matches('.chip-input, .time-input-face') ? target.querySelector(':scope > :is(.form-ghost, .time-input-part)') ?? target : target;
+ *  hours for its frame, a typed period's start for its frame, else the target. */
+const entryOf = (target) => target.matches('.chip-input, .time-input-face, div.date-input-typed') ? target.querySelector(':scope > :is(.form-ghost, .time-input-part, .date-input-part)') ?? target : target;
 
 /** Whether a control has nothing on the page to show it: a hidden field that no chips field, time input nor date input
  *  draws. */

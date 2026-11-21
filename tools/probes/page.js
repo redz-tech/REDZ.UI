@@ -516,7 +516,8 @@ window.REDZ_PROBE = (() => {
 					r = now;
 				}
 				const open = command === 'show-modal' ? target.open : target.matches(':popover-open');
-				const q = invoker.getBoundingClientRect();
+				// A date input's typed face stands for the small button beside it that opens the month.
+				const q = (target.matches('.date-input-menu[data-typed]') ? invoker.closest('.date-input')?.querySelector(':scope > .date-input-face') ?? invoker : invoker).getBoundingClientRect();
 				const inside = r.left >= -1 && r.top >= -1 && r.right <= root.clientWidth + 1 && r.bottom <= innerHeight + 1;
 				const near = Math.min(Math.abs(r.top - q.bottom), Math.abs(q.top - r.bottom)) <= 12;
 				const aligned = Math.abs(r.left - q.left) <= 2 || Math.abs(r.right - q.right) <= 2;

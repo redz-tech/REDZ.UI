@@ -127,7 +127,8 @@ document.addEventListener('beforetoggle', (event) => {
 	unplace(menu);
 	const button = buttonOf(menu);
 	if (button !== null) {
-		follow(menu, button);
+		// A date input's typed face stands for the small button beside it that opens the month.
+		follow(menu, menu.matches('.date-input-menu[data-typed]') ? button.closest('.date-input')?.querySelector(':scope > .date-input-face') ?? button : button);
 	}
 }, true);
 

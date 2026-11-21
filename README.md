@@ -229,8 +229,10 @@ Five more packages, linked on the screens that show them, listed in the passport
   from 0 to 1, which the module hands to the stylesheet through the CSSOM - a strict CSP that refuses `style`
   attributes allows it - and a chart table keeps its table roles for screen readers.
 - `css/redz-ui-calendar.min.css` - a month of days (`calendar`) and days across things (`schedule`), which need no
-  script; with the module `js/redz-ui-calendar.min.js`, picking a date: a field over `input type="date"` that opens a
-  month (`date-input`) and a month to pick a day or a period from (`date-pick`), always in the Gregorian year.
+  script; with the module `js/redz-ui-calendar.min.js`, picking dates: a field over `input type="date"` that opens its
+  months, or is typed in the page's pattern (`date-input`), and months to pick a day, a period or several days from
+  (`date-pick`), by the page's regional settings - its pattern, first day of the week, Buddhist or Gregorian year and
+  zone - and the box's rules of the days that can be picked.
 - `css/redz-ui-media.min.css` - a folder of images as tiles or rows (`media-grid`, `media-tile`); its view switch is
   `--view` and its reordering `data-reorder`, both in the main script.
 - the module `js/redz-ui-qr.min.js` - draws the QR code of a text into a `qr` tile as one SVG path: `data-qr` in the
@@ -239,7 +241,7 @@ Five more packages, linked on the screens that show them, listed in the passport
   sent: a paper straightened from four corners, an avatar under a circle, a photo in a frame of a ratio;
   `data-crop`, `data-crop="avatar"` or `data-crop="photo"` on an `input type="file"`, or `REDZ.ui.crop(file, options)`.
 
-Their budgets, gzipped: charts 3 KB of styles and 2 KB of script, the calendar 3 KB of styles and 6 KB of script, the
+Their budgets, gzipped: charts 3 KB of styles and 2 KB of script, the calendar 4 KB of styles and 12 KB of script, the
 media library 2 KB, QR codes 4 KB of script, the crop 2 KB of styles and 10 KB of script.
 
 ## Documentation

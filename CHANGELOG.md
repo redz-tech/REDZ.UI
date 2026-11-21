@@ -4,6 +4,68 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Added
+Picking dates by a product's regional settings and its own rules, the tourism pack's order, shaped with the ERP, the
+IT pack and REDZ CMS; all in the calendar package.
+- The page's settings, read from the nearest element that has them, so a page sets them once on `<html>` and a box or
+  a part overrides: `data-date-format`, a pattern of PHP `date()` letters (`d j m n Y y M F D l`, a backslash for a
+  letter as it is), else the page language's order; `data-first-day`, 1 for Monday to 7 for Sunday, 0 for Sunday too;
+  `data-calendar="buddhist"`, the year plus 543, and `"gregorian"`, which a box sets to keep the Gregorian year;
+  `data-time-zone`, the IANA zone today is counted in, else the device's; `data-weekend`, the weekdays whose heads are
+  tinted, `"6 7"` unless it says; `data-typing`, a day typed in the pattern where the pointer is not a finger,
+  `"off"` below it; `data-count-icon`, an icon before each count.
+- Which days can be picked, the box's own: `data-min` and `data-max` - `"today"`, `"+N"` or `"-N"` days, or an ISO
+  date -, the stricter of them and the input's `min` and `max` holding; `data-enable` and `data-disable`,
+  comma-separated rules - a day `YYYY-MM-DD`, a `from/to` with `..` for an open end, a month `YYYY-MM`, a day or a
+  `from/to` of every year `--MM-DD`, weekdays `1` to `7` or `weekend`, or a period and weekdays together
+  (`2026-11-01/2027-04-30 1 3 5`). A day is picked only when an enable rule takes it, when there are any, and no
+  disable rule does; a day not to pick is struck through and says why.
+- `data-months`: that many months, side by side while they fit, from four as a compact year; the arrows cross from
+  month to month, one tab stop for them all. The head lists the months and the years to jump to.
+- A period's length and ends: `data-min-days`, `data-max-days`, and `data-unbroken`, an end only before the next day
+  not to pick, the days out of reach saying why; `data-open-start` and `data-open-end`, a start or an end that may stay
+  empty, said "From {date}" and "Until {date}". A `date-input` of two inputs is a period in one field.
+- `data-multiple` on a `date-pick` over one text input: several separate days, the input holding them as ISO dates
+  joined by commas, the text a `data-enable` list takes. A pick turns a day on or off, with Shift every day from the
+  last one turned the same way; the chosen days are listed under the months, each with its remove; the grids are
+  `aria-multiselectable`.
+- `data-typing` on a `date-input`: the field typed in the pattern - one part, or two for a period - with a small button
+  beside it that opens the month. It reads the page's digits, a month's name, a missing year or month from today, 4, 6
+  or 8 digits run together, a two-digit or Buddhist year and an ISO date; the up and down arrows step a day, Alt+Down
+  opens the month, and a day that reads as none or cannot be picked is refused in the page's words. On a phone the
+  field stays a button.
+- `data-counts` entries take `off`, a day not to pick, and `note`, why, said after the day's name and as its tooltip; a
+  `text` with no `n` is plain words under the day, such as a price. A page that answers `redz:month` with
+  `event.detail.respondWith(promise)` of such a map has it kept by month and by the box's `data-context`, which the
+  event's detail names: the months it waits for are `aria-busy`, and a new `data-context` asks again. A page that does
+  not answer is asked at each other range, as before.
+- Clear in the head, where a choice is not required.
+- New texts: `date.choose`, `date.chosen`, `date.clear`, `date.invalid`, `date.longest`, `date.month`, `date.remove`,
+  `date.shortest`, `date.since`, `date.unavailable`, `date.until` and `date.year`; `date.chosen`, `date.longest` and
+  `date.shortest` are counts.
+
+### Changed
+- `change` fires once per completed choice - a period's end, a quick pick, Clear, a typed part, the month closing, the
+  focus leaving an inline box; for several days only the last two -, where it fired on every pick; `input` still fires
+  on every pick. A period left with a start alone, its end required, is given back as it was.
+- The month's look: a day is 46 px tall (it was 40) under a 16 px number; a count is a pill in its tone, never read as
+  a second date; today is tinted and framed, the days gone by are quiet on the page's grey, a day of another month
+  lighter, and the heads of the weekend in the warning's text color. Months shown together each carry their title.
+
+### Checks
+- The probes' new `datePickRules` walk holds the rules and the bounds, the page's answer kept by month and asked again
+  for another context, a pattern in the face, a typed period refused past its bound, its end left open and a Buddhist
+  year read back, two months with the end held to its length, several days turned on and off one by one, in Shift
+  runs and by their removes, the week's first day, bounds counted from today, and one change per completed choice.
+  Proven red on rules that take every day, a change on every pick of several days, a Buddhist year read as
+  Gregorian, a page asked again for months it answered, a year picked that shows a month out of the bounds, a remove
+  that fires change at once, an empty field whose face named a day or offered Clear, and a 0 under a day that only
+  gives a reason.
+- The probes judge a typed date field's months against the field, which they stand by, and the `datePick` walk
+  measures a day by its layout, not while the month's opening transition scales it.
+
 ## 0.31.1 - 2026-11-20
 
 ### Fixed

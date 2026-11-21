@@ -263,6 +263,10 @@ interface Window {
 
 /** A moment only the page can carry out, as a cancelable event's detail: the page that takes it cancels the event, and
  *  with respondWith lets the widget wait and finish when the promise settles; left alone, the widget acts on its own. */
+/** A day's entry of a date picker's counts: a number in a pill, said with the box's count text, or words alone; a tone;
+ *  a day not to pick and why. */
+interface RedzDayCount {n?: number; text?: string; tone?: 'danger' | 'warning' | 'success'; off?: boolean; note?: string}
+
 type RedzAsk<Detail, Answer = unknown> = Detail & {respondWith(answer: Answer | PromiseLike<Answer>): void};
 
 /** A form saved: a form method="dialog" in a dialog gives data and submitter, a tracked form changed too, an inline
@@ -336,8 +340,10 @@ interface RedzEventMap {
 	'redz:move': CustomEvent<RedzAsk<{item: Element; list: Element; parent: Element | null; position: number}>>;
 	/** A table's order to sort by: a page that sorts itself takes it, and a refusal puts the order back. */
 	'redz:sort': CustomEvent<RedzAsk<{key: string; direction: 'ascending' | 'descending' | 'none'}>>;
-	/** A date picker of the calendar package drew another month: the first and the last day it shows, ISO dates. */
-	'redz:month': CustomEvent<{from: string; to: string}>;
+	/** A date picker of the calendar package shows other months: the first and the last day they show, ISO dates, and
+	 *  the box's data-context; answered with the days' counts, {"YYYY-MM-DD": n or {n, text, tone, off, note}}, kept by
+	 *  month and context. */
+	'redz:month': CustomEvent<RedzAsk<{from: string; to: string; context: string}, Record<string, number | RedzDayCount>>>;
 }
 
 interface DocumentEventMap extends RedzEventMap {}

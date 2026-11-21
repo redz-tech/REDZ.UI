@@ -2096,3 +2096,18 @@ Pick up	اصطحاب
 Pick up: Alex Sample	اصطحاب: Alex Sample
 Pick up: Ben Sample	اصطحاب: Ben Sample
 Island hopping	التنقل بين الجزر
+Fourth quarter	الربع الرابع
+Tour day	يوم الجولة
+Run days	أيام التشغيل
+From {date}	من {date}
+Until {date}	حتى {date}
+At most {count} day	{count} يوم على الأكثر
+At most {count} days	{count} أيام على الأكثر
+At least {count} day	{count} يوم على الأقل
+At least {count} days	{count} أيام على الأقل
+Type a date like {example}	اكتب تاريخًا مثل {example}
+This day cannot be chosen	لا يمكن اختيار هذا اليوم
+Choose a date	اختر تاريخًا
+{count} day chosen	اختير {count} يوم
+{count} days chosen	اختيرت {count} أيام
+Remove {date}	إزالة {date}

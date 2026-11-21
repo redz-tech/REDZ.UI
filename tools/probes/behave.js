@@ -5067,7 +5067,8 @@ window.REDZ_BEHAVE = (() => {
 			await settled();
 			seen.steps.push(state());
 			const box = panel.getBoundingClientRect();
-			const day = Math.round(cell('2026-12-02', panel).getBoundingClientRect().height);
+			// The day's height by layout: the month's opening transition scales its box.
+			const day = cell('2026-12-02', panel).offsetHeight;
 			seen.place = coarse ? [getComputedStyle(panel).getPropertyValue('--redz-sheet').trim(), Math.round(innerHeight - box.bottom), Math.round(box.left), Math.round(document.documentElement.clientWidth - box.width), day].join(' ') : [Math.round(box.top - face.getBoundingClientRect().bottom), Math.abs(box.left - face.getBoundingClientRect().left) <= 3 ? 0 : Math.round(box.left - face.getBoundingClientRect().left), Math.abs(box.width - 360) <= 6 ? 360 : Math.round(box.width), day].join(' ');
 			yield {key: ['ArrowLeft', 'Enter']};
 			await settled();
@@ -5115,11 +5116,176 @@ window.REDZ_BEHAVE = (() => {
 				steps: ['2026-11-20/2026-11-20 1 day 2026-11-20', '2026-11-20/2026-11-24 5 days 2026-11-24', '2026-11-03/2026-11-03 1 day 2026-11-03', '2026-11-01/2026-11-01 1 day 2026-11-01', '2026-11-01/2026-11-01 1 day 2026-11-15', '2026-11-01/2026-11-01 1 day 2026-12-09 December 2026', '2026-11-01/2026-11-01 1 day 2025-12-09 December 2025', '2025-12-09/2025-12-09 1 day 2025-12-09', '2026-11-09/2026-11-15 7 days - true November 2026', '2026-12-02 12/02 open 2026-12-02', '2026-12-01 12/01 shut face 1', '2026-12-01 12/01 open 2026-11-01 true null', '2026-12-01 12/01 open 2026-11-01', '2026-12-01 12/01 shut face 1', '2027-01-15 01/15 shut face', '2026-11-30 ' + word + ', 11/30/2026 false'],
 				months: '2026-11-30/2027-01-10 2025-12-01/2026-01-11 2026-10-26/2026-12-06',
 				field: 'hidden combobox true true',
-				place: coarse ? '1 0 0 0 48' : '4 0 360 40',
+				place: coarse ? '1 0 0 0 48' : '4 0 360 46',
 				counts: '0|1|none|danger|warning|true|Free places on the 9:00 run|false|true',
 			};
 			if (say(seen) !== say(want)) {
 				out.push('a date-pick takes a period, its keys, quick picks and counts, and a date-input opens, picks, refuses and follows its input: ' + say(seen));
+			}
+		}},
+		// Picking dates by a page's rules: the rules and the bounds take the right days, the page's answer to redz:month is
+		// kept by month and asked again for another context, a pattern reads in the face; a period in one field is typed in
+		// two parts - refused past its bound, its end left open, a Buddhist year read back - and shows two months, its end
+		// held to its length; several days turn on and off one by one and in Shift runs and by their removes; the week
+		// starts on the page's day and the bounds count from today; and every completed choice fires one change.
+		datePickRules: {target: '#calendar-pick-rules', walk: async function* (out) {
+			const coarse = matchMedia('(pointer: coarse)').matches;
+			const day = (root, iso) => $('td[data-day="' + iso + '"]', root);
+			const open = (root) => $$('td[data-day]:not([aria-disabled], [data-other])', root).map((cell) => cell.dataset.day.slice(8)).join(' ');
+			const seen = {};
+			const tour = $('#calendar-pick-rules .date-input');
+			const tourDay = $('#calendar-rules-day');
+			const tourPanel = $('.date-input-menu', tour);
+			const asked = [];
+			const held = [];
+			let changes = 0;
+			tourDay.addEventListener('change', () => changes++);
+			tour.addEventListener('redz:month', (event) => {
+				asked.push(event.detail.from + '|' + event.detail.context);
+				const answer = {'2026-11-20': {off: true, note: 'Closed for ' + (event.detail.context || 'all')}};
+				// The first answer waits for the walk, so the month is seen waiting.
+				event.detail.respondWith(new Promise((done) => (asked.length === 1 ? held.push(() => done(answer)) : setTimeout(() => done(answer), 50))));
+			});
+			tour.scrollIntoView({block: 'start'});
+			await settled();
+			const empty = $('.date-input-value', tour).textContent;
+			yield {click: center($('.date-input-face', tour))};
+			await settled();
+			const busy = $('.date-pick-month', tourPanel).getAttribute('aria-busy');
+			held.forEach((done) => done());
+			await until(() => day(tourPanel, '2026-11-20')?.title !== '');
+			seen.rules = [empty, $('.date-pick-clear', tourPanel).hidden, busy, $('.date-pick-month', tourPanel).getAttribute('aria-busy'), open(tourPanel), day(tourPanel, '2026-12-02').title, $('.date-pick-count', day(tourPanel, '2026-12-02')).dataset.count, day(tourPanel, '2026-11-20').title, day(tourPanel, '2026-11-27').hasAttribute('aria-disabled'), $('.date-pick-count', day(tourPanel, '2026-11-27')).dataset.count].join('|');
+			const [months, years] = $$('.date-pick-nav select', tourPanel);
+			years.value = '2027';
+			years.dispatchEvent(new Event('change'));
+			months.value = '3';
+			months.dispatchEvent(new Event('change'));
+			await settled();
+			seen.april = open(tourPanel);
+			months.value = '4';
+			months.dispatchEvent(new Event('change'));
+			await settled();
+			seen.may = open(tourPanel).split(' ').length;
+			// May 2026 is out of the bounds: the nearest month in them shows.
+			years.value = '2026';
+			years.dispatchEvent(new Event('change'));
+			await settled();
+			seen.may += ' ' + months.value + '/' + years.value + ' ' + months.options[4].disabled;
+			tour.setAttribute('data-context', 'guests=3');
+			await settled();
+			await until(() => day(tourPanel, '2026-11-20')?.title.endsWith('guests=3'));
+			seen.asked = asked.join(' ') + ' ' + day(tourPanel, '2026-11-20').title;
+			yield {click: center(day(tourPanel, '2026-11-23'))};
+			await settled();
+			seen.picked = [tourDay.value, $('.date-input-value', tour).textContent, tourPanel.matches(':popover-open'), changes].join('|');
+			tour.removeAttribute('data-context');
+			const period = $('#calendar-date-period .date-input');
+			const [from, to] = $$(':scope > input', period);
+			const periodPanel = $('.date-input-menu', period);
+			let periodChanges = 0;
+			to.addEventListener('change', () => periodChanges++);
+			period.scrollIntoView({block: 'start'});
+			await settled();
+			if (!coarse) {
+				const [start, end] = $$('.date-input-part', period);
+				const type = (part, words) => {
+					part.focus();
+					part.value = words;
+					part.dispatchEvent(new Event('change', {bubbles: true}));
+				};
+				type(start, '11/3/26');
+				const typed = from.value + '/' + to.value;
+				type(end, '2027-03-01');
+				const refused = [end.getAttribute('aria-invalid'), end.validationMessage, to.value];
+				type(end, '');
+				const opened = from.value + '/' + to.value + '/' + end.validity.valid;
+				period.setAttribute('data-calendar', 'buddhist');
+				await settled();
+				type(start, '4 Nov 2569');
+				const buddhist = from.value + ' ' + start.value.slice(0, 10);
+				period.removeAttribute('data-calendar');
+				await settled();
+				seen.typed = [typed, ...refused, opened, buddhist, periodChanges].join('|');
+			}
+			period.setAttribute('data-max-days', '5');
+			yield {click: center($(coarse ? '.date-input-face' : '.date-input-open', period))};
+			await settled();
+			const titles = $$('.date-pick-title', periodPanel).map((title) => title.textContent);
+			yield {click: center(day(periodPanel, '2026-11-05'))};
+			await settled();
+			seen.period = [titles.join(','), $$('td[data-blank]', periodPanel).length > 0, day(periodPanel, '2026-11-09').hasAttribute('aria-disabled'), day(periodPanel, '2026-11-10').title, periodPanel.matches(':popover-open'), periodChanges].join('|');
+			yield {click: center(day(periodPanel, '2026-11-09'))};
+			await settled();
+			seen.period += '|' + [from.value, to.value, periodPanel.matches(':popover-open'), periodChanges].join('|');
+			period.setAttribute('data-max-days', '92');
+			const several = $('#calendar-pick-several .date-pick');
+			const runs = $(':scope > input', several);
+			const first = runs.value;
+			const count = () => runs.value.split(',').filter(Boolean).length;
+			let severalChanges = 0;
+			runs.addEventListener('change', () => severalChanges++);
+			several.scrollIntoView({block: 'start'});
+			await settled();
+			const turned = [$$('.date-pick-grid[aria-multiselectable="true"]', several).length, count(), $('.date-pick-chosen', several).textContent];
+			yield {click: center(day(several, '2026-11-02'))};
+			await settled();
+			turned.push(count());
+			// The probes press no Shift: a run goes as a click that carries it.
+			day(several, '2026-11-06').dispatchEvent(new MouseEvent('click', {bubbles: true, shiftKey: true}));
+			await settled();
+			turned.push(count());
+			$('.date-pick-days button[data-day="2026-11-14"]', several).click();
+			await settled();
+			turned.push(count(), document.activeElement?.dataset?.day ?? '-');
+			day(several, '2026-11-03').click();
+			day(several, '2026-11-05').dispatchEvent(new MouseEvent('click', {bubbles: true, shiftKey: true}));
+			day(several, '2026-12-23').click();
+			day(several, '2026-12-27').dispatchEvent(new MouseEvent('click', {bubbles: true, shiftKey: true}));
+			await settled();
+			turned.push(runs.value.split(',').filter((one) => one < '2027').join(' '), severalChanges);
+			// Leaving the box: a click on its example's edge, outside the months. A window without the focus - headless
+			// Firefox's - sends no focusout: the walk sends it for it.
+			const example = $('#calendar-pick-several');
+			example.scrollIntoView({block: 'start'});
+			await settled();
+			const edge = example.getBoundingClientRect();
+			const outside = [Math.round(edge.left + 6), Math.round(edge.top + 6)];
+			const was = document.activeElement;
+			yield {click: outside};
+			if (!document.hasFocus() && several.contains(was)) {
+				was.dispatchEvent(new FocusEvent('focusout', {bubbles: true}));
+			}
+			await settled();
+			turned.push(severalChanges, document.elementFromPoint(...outside) === example);
+			seen.several = turned.join('|');
+			runs.value = first;
+			several.setAttribute('data-first-day', '0');
+			await settled();
+			seen.week = $('.date-pick-grid th', several).getAttribute('aria-label');
+			several.removeAttribute('data-first-day');
+			const local = new Date();
+			const today = Date.UTC(local.getFullYear(), local.getMonth(), local.getDate());
+			const iso = (t) => new Date(t).toISOString().slice(0, 10);
+			several.setAttribute('data-min', '+1');
+			await settled();
+			// The months shown are 2026-11 to 2027-02: the bound shows only on a day in them.
+			seen.bound = day(several, iso(today)) === null ? 'unseen' : [day(several, iso(today)).hasAttribute('aria-disabled'), day(several, iso(today + 86400000))?.hasAttribute('aria-disabled') ?? 'unseen'].join(' ');
+			several.setAttribute('data-min', '2026-11-01');
+			await settled();
+			const want = {
+				rules: '|true|true|false|18 23 25 27 30|No guide that day||Closed for all|false|0',
+				april: '02 05 07 09 12 16 19 21 23 26 28 30',
+				may: '31 10/2026 true',
+				asked: '2026-10-26| 2027-11-01| 2027-03-29| 2027-04-26| 2026-10-26|guests=3 Closed for guests=3',
+				picked: '2026-11-23|23 Nov 2026|false|1',
+				...(coarse ? {} : {typed: '2026-11-03/2026-11-15|true|This day cannot be chosen|2026-11-15|2026-11-03//true|2026-11-04 11/04/2569|3'}),
+				period: 'November 2026,December 2026|true|false|At most 5 days|true|' + (coarse ? 0 : 3) + '|2026-11-05|2026-11-09|false|' + (coarse ? 1 : 4),
+				several: '4|6|6 days chosen|7|11|10|2026-11-29|2026-11-02 2026-11-06 2026-11-29 2026-12-12 2026-12-23 2026-12-27|0|1|true',
+				week: 'Sunday',
+				bound: day(several, iso(today)) === null ? 'unseen' : 'true false',
+			};
+			if (say(seen) !== say(want)) {
+				out.push('a date-pick takes the page\'s rules, bounds, pattern, answer and settings, a typed period and several days, with one change per choice: ' + say(seen));
 			}
 		}},
 		// A combobox-clear button shows while its search holds words, empties it, shows the whole list and keeps the focus.
