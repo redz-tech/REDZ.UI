@@ -25,7 +25,8 @@ document.addEventListener('toggle', (event) => {
 	}
 	const items = itemsOf(menu);
 	const checked = items.find((item) => item.getAttribute('aria-checked') === 'true');
-	(from === 'last' ? items.at(-1) : checked ?? items[0])?.focus();
+	// The menu stands beside its button, placed before it opens: its focus never scrolls the page, which Safari did.
+	(from === 'last' ? items.at(-1) : checked ?? items[0])?.focus({preventScroll: true});
 	from = 'first';
 }, true);
 

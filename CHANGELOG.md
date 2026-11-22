@@ -22,6 +22,7 @@ Pack it's items, reviewed with the owner: a long folder path folds, and a trail'
 
 ### Fixed
 - The crop's Done is busy until the photo is drawn: a press before that is told, not lost.
+- An opened menu's focus on its first item never scrolls the page: Safari 27.2 scrolled a menu's button out of sight.
 - `data-show-when`, `data-enable-when` and `data-require-when` on a control outside its form - a dialog footer's
   button tied by `form=` - read the field of that form, not a field of the same name elsewhere on the page.
 
