@@ -3977,6 +3977,100 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a title\'s tooltip ' + say({fromMenu, again, fromDialog}) + ' - focus back from a menu without it, shown on a new focus, focus back from a dialog without it');
 			}
 		}]},
+		// A folding trail: on one line, its middle hidden from the start behind the button in the second place, the menu
+		// listing the hidden items in order and clicking the item each stands for; whole where it fits, tight and titled
+		// where even the ends do not, folded again after the page rewrites its items, and right to left alike.
+		breadcrumbFold: {target: '#breadcrumb-fold', steps: [async (out) => {
+			const nav = $('#breadcrumb-fold nav');
+			const trail = $('ol', nav);
+			const kept = [...trail.children].filter((item) => !item.matches('.breadcrumb-fold')).map((item) => {
+				const copy = item.cloneNode(true);
+				copy.removeAttribute('hidden');
+				copy.removeAttribute('title');
+				return copy;
+			});
+			const frames = () => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done)));
+			const words = (item) => item.textContent.trim();
+			const look = () => {
+				const items = [...trail.children].filter((item) => !item.matches('.breadcrumb-fold'));
+				const fold = $('.breadcrumb-fold', trail);
+				const hidden = items.filter((item) => item.hidden);
+				const tops = items.filter((item) => !item.hidden).map((item) => Math.round(item.getBoundingClientRect().top));
+				return {
+					line: new Set(tops).size === 1 && trail.scrollWidth - trail.clientWidth <= 1,
+					fold: fold !== null && !fold.hidden && fold.previousElementSibling === items[0],
+					hidden: hidden.map(words),
+					prefix: hidden.every((item, k) => item === items[k + 1]),
+					menu: fold ? $$('[role="menuitem"]', fold).map(words) : [],
+					tight: trail.hasAttribute('data-tight'),
+					titled: items.some((item) => item.title !== ''),
+				};
+			};
+			nav.scrollIntoView({block: 'center'});
+			await frames();
+			const seen = {narrow: look()};
+			let clicked = null;
+			const heard = (event) => {
+				clicked = event.target.closest('[data-dir]')?.dataset.dir ?? clicked;
+			};
+			nav.addEventListener('click', heard);
+			$('.breadcrumb-more', trail).click();
+			await frames();
+			const menu = $('.breadcrumb-fold [role="menu"]', trail);
+			const open = menu.matches(':popover-open');
+			$('[role="menuitem"]', menu).click();
+			await frames();
+			seen.chosen = [open, clicked, menu.matches(':popover-open')];
+			nav.removeEventListener('click', heard);
+			nav.style.maxInlineSize = 'none';
+			await frames();
+			seen.wide = look();
+			nav.style.maxInlineSize = '4rem';
+			await frames();
+			seen.tight = look();
+			nav.style.maxInlineSize = '';
+			trail.replaceChildren(...kept.slice(0, 2).map((item) => item.cloneNode(true)), kept.at(-1).cloneNode(true));
+			await frames();
+			seen.rewritten = look();
+			trail.replaceChildren(...kept.map((item) => item.cloneNode(true)));
+			nav.dir = 'rtl';
+			await frames();
+			seen.rtl = look();
+			nav.removeAttribute('dir');
+			await frames();
+			const want = {
+				narrow: {line: true, fold: true, hidden: seen.narrow.hidden, prefix: true, menu: seen.narrow.hidden, tight: false, titled: false},
+				chosen: [true, '1', false],
+				wide: {line: true, fold: false, hidden: [], prefix: true, menu: [], tight: false, titled: false},
+				tight: {line: true, fold: true, hidden: kept.slice(1, -1).map(words), prefix: true, menu: kept.slice(1, -1).map(words), tight: true, titled: true},
+				rewritten: {line: true, fold: false, hidden: [], prefix: true, menu: [], tight: false, titled: false},
+				rtl: {line: true, fold: true, hidden: seen.narrow.hidden, prefix: true, menu: seen.narrow.hidden, tight: false, titled: false},
+			};
+			if (seen.narrow.hidden.length === 0 || say(seen) !== say(want)) {
+				out.push('a folding trail: ' + say(seen) + ', not ' + say(want));
+			}
+		}]},
+		// A dialog's footer button tied to its form by form= takes the rule's field from that form, not from another form
+		// on the page that has a field of the same name.
+		showOwner: {target: '#form-show-tax-region', steps: [async (out) => {
+			const decoy = document.createElement('form');
+			decoy.innerHTML = trusted('<input type="radio" name="probeMode" value="erase" checked>');
+			const own = document.createElement('div');
+			own.innerHTML = trusted('<form id="probe-owner-form"><input type="radio" name="probeMode" value="keep" checked><input type="radio" name="probeMode" value="erase"></form><button type="submit" form="probe-owner-form" data-show-when="probeMode" data-show-in="erase">Erase and switch off</button><button type="submit" form="probe-owner-form" data-show-when="probeMode" data-show-in="keep">Switch off</button>');
+			document.body.append(decoy, own);
+			REDZ.ui.follow();
+			await settled();
+			const [erase, keep] = $$('button', own);
+			const seen = [erase.hidden, keep.hidden];
+			$('input[value="erase"]', own).click();
+			await settled();
+			seen.push(erase.hidden, keep.hidden);
+			decoy.remove();
+			own.remove();
+			if (say(seen) !== say([true, false, false, true])) {
+				out.push('a footer button tied by form= follows its own form\'s field, not a same-named one in another form: hidden ' + say(seen) + ', not ' + say([true, false, false, true]));
+			}
+		}]},
 		showNested: {target: '#form-show-tax-region', steps: [async (out) => {
 			const form = document.createElement('form');
 			form.innerHTML = trusted('<select name="walkKind"><option value="simple">Simple</option><option value="bundle">Bundle</option></select><div data-show-when="walkKind" data-show-in="bundle"><select name="walkMode"><option value="auto">Auto</option><option value="manual">Manual</option></select><div data-show-when="walkMode" data-show-in="manual"><input name="walkPrice" value="9"></div></div>');
@@ -6949,6 +7043,15 @@ window.REDZ_BEHAVE = (() => {
 			};
 			const done = () => center($$('dialog.crop .crop-bar .btn').at(-1));
 			const seen = {};
+			// Done is busy until the photo is drawn, then free.
+			const early = REDZ.ui.crop(svg(drawing), {mode: 'photo', type: 'image/png'});
+			const first = $$('dialog.crop .crop-bar .btn').at(-1);
+			seen.early = [first?.getAttribute('aria-disabled'), first?.getAttribute('aria-busy')];
+			await until(() => $('dialog.crop[data-ready]') !== null, 8000);
+			await settled();
+			seen.early.push(first?.getAttribute('aria-disabled') ?? 'free');
+			yield {key: 'Escape'};
+			await within(early);
 			for (const [name, file] of [['viewBox', svg(drawing)], ['size', svg('<rect width="40" height="20" fill="#0a7f5a"/><circle cx="20" cy="10" r="8" fill="#ffffff"/>', 'width="40" height="20"')]]) {
 				const asked = REDZ.ui.crop(file, {mode: 'photo', type: 'image/png', max: 1000});
 				seen[name] = [await opened(asked)];
@@ -6968,7 +7071,7 @@ window.REDZ_BEHAVE = (() => {
 				seen.foreign = foreignShown;
 			}
 			seen.junk = await opened(REDZ.ui.crop(new File(['<svg xmlns="http://www.w3.org/2000/svg"'], 'logo.svg', {type: 'image/svg+xml'})));
-			const want = {viewBox: ['open', [1000, 500, 'image/png', true, '10 127 90']], size: ['open', [1000, 500, 'image/png', true, '10 127 90']], foreign: seen.foreign === 'framed' ? 'framed' : 'refused', junk: 'refused'};
+			const want = {early: ['true', 'true', 'free'], viewBox: ['open', [1000, 500, 'image/png', true, '10 127 90']], size: ['open', [1000, 500, 'image/png', true, '10 127 90']], foreign: 'refused', junk: 'refused'};
 			if (say(seen) !== say(want)) {
 				out.push('an SVG logo in the crop: ' + say(seen) + ', not ' + say(want));
 			}

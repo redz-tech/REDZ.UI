@@ -1,6 +1,6 @@
 {
 	"name": "REDZ.UI",
-	"version": "0.33.0",
+	"version": "0.34.0",
 	"license": "MIT",
 	"site": "https://redz-tech.github.io/REDZ.UI/",
 	"floor": {"chrome":"130","chrome_android":"130","edge":"130","firefox":"132","firefox_android":"132","safari":"18.0","safari_ios":"18.0"},
@@ -2518,7 +2518,9 @@
 		"brand-logo",
 		"brand-logo-dark",
 		"breadcrumb",
+		"breadcrumb-fold",
 		"breadcrumb-item",
+		"breadcrumb-more",
 		"btn",
 		"btn-check",
 		"btn-close",
@@ -4984,6 +4986,7 @@
 		"toggle-popover"
 	],
 	"texts": [
+		"breadcrumb.more",
 		"busy",
 		"changes.bar",
 		"changes.count.other",
@@ -5128,6 +5131,7 @@
 		"selected"
 	],
 	"args": {
+		"breadcrumb.more": [],
 		"busy": [],
 		"changes.bar": [],
 		"changes.count": ["count","fields","forms"],
@@ -5282,17 +5286,17 @@
 		"css/redz-ui-editor-surface.min.css": "sha256-UM94RO+TgrNvrofD/tKVbnKeTGSvpkK+4JAuqApOO50=",
 		"css/redz-ui-editor.min.css": "sha256-Qxy1eHhfAotYts6tY7a9z2fnYiS2+WjSCFF3jhVCWpE=",
 		"css/redz-ui-media.min.css": "sha256-4+5Di9Nu8wuERNMkrMvc9rU1kVNMpo/7k/T5i1XxGIQ=",
-		"css/redz-ui.min.css": "sha256-lggb6snx7LaEkFig149ndww+fjwsGe2uEj0Uuwrygoo=",
+		"css/redz-ui.min.css": "sha256-GWCDaEwLFeQ0YsWk4tavxan9q/UIzktjqQW9N7Fzh+s=",
 		"js/floor.min.js": "sha256-Tg9XU/+h28pkTxcd3fTRn878+pCd9lmBgG0PALzV7wE=",
 		"js/redz-ui-calendar.min.js": "sha256-7AjbY0gNju3Oz58Sm9NVgZMJLXtu96TpUxhCfiCTt3g=",
 		"js/redz-ui-charts.min.js": "sha256-1dSq946dnPNnXU8k1gMoOGEPo9b4QmG9hyVHxZuFSME=",
 		"js/redz-ui-crop.d.ts": "sha256-SHAGQs2UF1SqNMJC0YYUfUV46cmE5TTGp6RfQ3La/WE=",
-		"js/redz-ui-crop.min.js": "sha256-toq2JGfiNVLjRrS3zdhRLuwjL4S2skhXMPM90HCTNdU=",
+		"js/redz-ui-crop.min.js": "sha256-xTRdFSf+mrgweEgCNGjznesCH6JlXJ45p1G/LBxYy0I=",
 		"js/redz-ui-editor.d.ts": "sha256-j3G8bXJoZ4H4XioOEFbQkhz2bzbk9Gy01X+SETX+JKs=",
 		"js/redz-ui-editor.min.js": "sha256-cOPn3m3f+nzqD9cNXXOh+aiyDey1RITxp+OSYNC0Wy0=",
 		"js/redz-ui-qr.d.ts": "sha256-niMx8le7TCyDzabKAskgpzcDm722QRJakX2G08xqxMY=",
 		"js/redz-ui-qr.min.js": "sha256-8AgWz06SWLYwuOCi7FQA6bXBgjJfxeRYx5tFCWlrEts=",
 		"js/redz-ui.d.ts": "sha256-Nywjq+mQitlyEV7CeWlOk/Ec1UxxwV/ft3OMGxmDTrA=",
-		"js/redz-ui.min.js": "sha256-AdJMK0MZSutcDVT84ccYIHk2HwQ/ivZ8djmPAO+27Cc="
+		"js/redz-ui.min.js": "sha256-7lR6y5P0/nYFQtmuMR5pJs4CcTNnzxFfHMJTBike0uE="
 	}
 }

@@ -32,9 +32,9 @@ const isCurrent = (link) => (link.hasAttribute('aria-current') && link.getAttrib
 const fits = (nav) => nav.scrollWidth - nav.clientWidth <= 1;
 
 /** The menu item that stands for a hidden link: the link's words and icons and its address. A plain click on it closes
- *  the menu and clicks the link itself, so the page's own handlers run; a tab chosen so comes back into the row with
- *  the focus. A click with a modifier key opens the address as the browser does. */
-const itemOf = (link, wrapper) => {
+ *  the menu, clicks the link itself, so the page's own handlers run, then runs AFTER; a link shown again so takes the
+ *  focus. A click with a modifier key opens the address as the browser does. */
+export const itemOf = (link, after = () => {}) => {
 	const anchor = link instanceof HTMLAnchorElement && link.hasAttribute('href');
 	const item = document.createElement(anchor ? 'a' : 'button');
 	item.className = 'menu-item';
@@ -58,7 +58,7 @@ const itemOf = (link, wrapper) => {
 		event.preventDefault();
 		item.closest('[role="menu"]')?.hidePopover();
 		link.click();
-		update(wrapper);
+		after();
 		if (link.getClientRects().length > 0) {
 			link.focus();
 		}
@@ -74,7 +74,7 @@ const groupOf = (link, menu, wrapper) => {
 	header.setAttribute('role', 'presentation');
 	group.setAttribute('role', 'group');
 	group.setAttribute('aria-labelledby', header.id);
-	group.append(header, ...[...menu.querySelectorAll('[role="menuitem"]')].map((item) => itemOf(item, wrapper)));
+	group.append(header, ...[...menu.querySelectorAll('[role="menuitem"]')].map((item) => itemOf(item, () => update(wrapper))));
 	return group;
 };
 
@@ -82,7 +82,7 @@ const groupOf = (link, menu, wrapper) => {
 const entriesOf = (moved, wrapper) => {
 	const entries = moved.map((link) => {
 		const menu = menuOf(link);
-		return menu === null ? itemOf(link, wrapper) : groupOf(link, menu, wrapper);
+		return menu === null ? itemOf(link, () => update(wrapper)) : groupOf(link, menu, wrapper);
 	});
 	return entries.flatMap((entry, i) => i > 0 && [entry, entries[i - 1]].some((one) => one.getAttribute('role') === 'group') ? [Object.assign(document.createElement('hr'), {className: 'menu-divider'}), entry] : [entry]);
 };

@@ -3,7 +3,7 @@
 The interface library of the REDZ products: plain CSS and small JavaScript on the browser platform - no framework, no
 build step.
 
-**Status:** 0.33.0 (2026-11-22) - see [Releases](#releases). Three demo screens in `reference/demo/` -
+**Status:** 0.34.0 (2026-11-22) - see [Releases](#releases). Three demo screens in `reference/demo/` -
 a list, a resource page and a settings form - show it in light and dark themes, left-to-right and right-to-left.
 
 **Site:** [redz-tech.github.io/REDZ.UI](https://redz-tech.github.io/REDZ.UI/) - documentation and the demo screens of
@@ -28,7 +28,7 @@ the latest release at the root, of the main branch under `next/`, and of every r
   fixture checked in real engines, with its Arabic twin (see [Documentation](#documentation)).
 - Two agent skills in `skills/`: building screens with REDZ.UI, and moving a project from Bootstrap 5.3 with a scan
   and a map of every Bootstrap class (see [Skills](#skills)).
-- Budgets held on every commit: the stylesheet at most 40 KB and the script 60 KB, gzipped - the two files a project
+- Budgets held on every commit: the stylesheet at most 40 KB and the script 62 KB, gzipped - the two files a project
   serves.
 
 ## How it reads
@@ -67,7 +67,7 @@ attaches by delegation on `document`, so nothing is set up per element and marku
 
 ```html
 <script type="module" src="js/redz-ui.min.js"></script>
-<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "confirm.phrase": "Type “{phrase}” to confirm", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong", "moved": "Moved to {position} of {count}", "moved.into": "Moved to {list}, {position} of {count}", "more": "More", "slide": "{position} of {count}", "file.type": "{name} is not a kind of file this takes", "file.size": "{name} is larger than {size}"}</script>
+<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "confirm.phrase": "Type “{phrase}” to confirm", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong", "moved": "Moved to {position} of {count}", "moved.into": "Moved to {list}, {position} of {count}", "more": "More", "breadcrumb.more": "Show the levels in between", "slide": "{position} of {count}", "file.type": "{name} is not a kind of file this takes", "file.size": "{name} is larger than {size}"}</script>
 ```
 
 - **Menus** (`role="menu"` on a `popover` opened by its button): the arrow keys move through the items, Home and End go
@@ -397,13 +397,13 @@ holds `css/icons.min.css`, `icons/` and the pack's passport `redz-ui-icons.json`
 the version it needs. `php tools/build.php --check` refuses icons that changed under a published version.
 
 ```sh
-gh release download v0.33.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
-gh release verify-asset v0.33.0 redz-ui-0.33.0.zip --repo redz-tech/REDZ.UI
+gh release download v0.34.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
+gh release verify-asset v0.34.0 redz-ui-0.34.0.zip --repo redz-tech/REDZ.UI
 gh release download icons-1.13.2 --repo redz-tech/REDZ.UI --pattern 'redz-ui-icons-*.zip'
 gh release verify-asset icons-1.13.2 redz-ui-icons-1.13.2.zip --repo redz-tech/REDZ.UI
 ```
 
-jsDelivr serves a release by its tag: `https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.33.0/dist/css/redz-ui.min.css`
+jsDelivr serves a release by its tag: `https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.34.0/dist/css/redz-ui.min.css`
 and `https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@icons-1.13.2/css/icons.min.css`. Versions
 follow Semantic Versioning: a class, token, attribute or JavaScript call removed or renamed is a major release, one
 added is a minor release, a fix is a patch; while the version is 0.x, a removal or a rename is a minor release.

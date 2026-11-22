@@ -13,7 +13,56 @@
 		color: var(--redz-text-faint);
 	}
 
-	.breadcrumb a {
+	.breadcrumb :is(a, button):not(.menu-item) {
 		color: inherit;
+	}
+
+	/* An item that moves in place, a folder in a file browser, is a button that reads as the trail's links. */
+	.breadcrumb button:not(.menu-item) {
+		padding: 0;
+		border: 0;
+		background: none;
+		font: inherit;
+		text-decoration: underline;
+		text-decoration-thickness: from-font;
+		text-underline-offset: 0.15em;
+		cursor: pointer;
+	}
+
+	.breadcrumb .breadcrumb-more {
+		padding-inline: 0.25rem;
+		border-radius: var(--redz-radius-4);
+		text-decoration: none;
+	}
+
+	.breadcrumb .breadcrumb-more:hover {
+		background: var(--redz-bg-hover);
+	}
+
+	/* A trail on one line, its middle folded behind the button; tight, its items cut with an ellipsis, the last least.
+	   It takes the width its container gives it and never widens it. */
+	.breadcrumb[data-fold] {
+		flex-wrap: nowrap;
+		contain: inline-size;
+	}
+
+	.breadcrumb[data-fold] > li {
+		flex-shrink: 0;
+		white-space: nowrap;
+	}
+
+	.breadcrumb[data-tight] > li:not(.breadcrumb-fold) {
+		flex-shrink: 1;
+		min-inline-size: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.breadcrumb[data-tight] > li:last-child {
+		flex-shrink: 0.25;
+	}
+
+	.breadcrumb[data-tight] > li > :is(a, button) {
+		outline-offset: -2px;
 	}
 }

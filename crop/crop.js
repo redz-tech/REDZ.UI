@@ -121,8 +121,9 @@ const readable = async (file) => {
 	const box = attribute('viewBox').trim().split(/[\s,]+/).map(Number);
 	const boxed = box.length === 4 && box[2] > 0 && box[3] > 0;
 	const [width, height] = boxed ? box.slice(2) : ['width', 'height'].map((name) => /^\s*[\d.]+(px)?\s*$/.test(attribute(name)) ? parseFloat(attribute(name)) : 0);
-	if (!(width > 0 && height > 0)) {
-		throw new RangeError('The SVG has no shape of its own');
+	// A foreignObject taints the canvas, at once or - in Safari - only when the frame is written: refused before it opens.
+	if (!(width > 0 && height > 0) || /<foreignObject\b/i.test(source)) {
+		throw new RangeError('The SVG has no shape of its own, or one the browser will not hand back');
 	}
 	const scale = WORK / Math.max(width, height);
 	const size = ' width="' + Math.max(1, Math.round(width * scale)) + '" height="' + Math.max(1, Math.round(height * scale)) + '" viewBox="' + (boxed ? box.join(' ') : '0 0 ' + width + ' ' + height) + '"' + (attribute('xmlns') ? '' : ' xmlns="http://www.w3.org/2000/svg"');
@@ -1090,6 +1091,11 @@ export const crop = (file, given = {}) => new Promise((resolve, reject) => {
 	observer.observe(stage);
 	document.body.append(dialog);
 	dialog.showModal();
+	// Done is busy until the photo is drawn: a press too early is told, not lost.
+	let ready = null;
+	globalThis.REDZ.ui.busy(done, new Promise((go) => {
+		ready = go;
+	}));
 
 	load(file).then(({photo, width}) => {
 		if (closed) {
@@ -1119,6 +1125,7 @@ export const crop = (file, given = {}) => new Promise((resolve, reject) => {
 		wait.remove();
 		fit();
 		dialog.toggleAttribute('data-ready', true);
+		ready();
 		const told = mode === 'own' ? 'crop.again' : paper ? (found ? 'crop.found' : 'crop.none') : '';
 		if (told) {
 			later = setTimeout(() => say(text(told)), 300);

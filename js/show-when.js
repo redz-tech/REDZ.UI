@@ -20,8 +20,9 @@ const ours = {disabled: new WeakSet(), required: new WeakSet()};
 const joined = new Map();
 let told = null;
 
-/** The fields named NAME that the form sends, in the rule's form or in the page, none inside the rule's element. */
-const controlsOf = (rule, name) => [...(rule.closest('form') ?? document).querySelectorAll(FIELDS)].filter((field) => field.name === name && !rule.contains(field) && !field.matches(':disabled'));
+/** The fields named NAME that the form sends, in the rule's form - its form= owner for a button outside it, as in a
+ *  dialog's footer - or in the page, none inside the rule's element. */
+const controlsOf = (rule, name) => [...(rule.form ?? rule.closest('form') ?? document).querySelectorAll(FIELDS)].filter((field) => field.name === name && !rule.contains(field) && !field.matches(':disabled'));
 
 /** Whether the rule of the kind holds: its field holds a value its data-KIND-in lists, or any value without one. */
 const holds = (rule, kind) => {

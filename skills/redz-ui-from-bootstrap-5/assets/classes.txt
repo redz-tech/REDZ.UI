@@ -2509,7 +2509,9 @@ bottom-50
 brand-logo
 brand-logo-dark
 breadcrumb
+breadcrumb-fold
 breadcrumb-item
+breadcrumb-more
 btn
 btn-check
 btn-close

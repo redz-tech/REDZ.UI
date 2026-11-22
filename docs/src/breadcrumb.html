@@ -14,6 +14,24 @@
 			</ol>
 		</nav>
 	</div>
+
+	<h3 id="breadcrumb-fold-title">A long path</h3>
+	<p>An item that moves in place - a folder of a file browser, a level of a tree - is a <code>button</code>, which reads as the trail's links; the page handles its click. <code>data-fold</code> keeps the trail on one line: where it does not fit, the items between the first and the last hide from the start, the last one's parent last of all, and come back in their order in a menu behind a button in the trail's second place, named by the page's text <code>breadcrumb.more</code>. A menu item clicks the item it stands for, so the page's own handlers run, a delegated listener included. Where even the first, that button and the last do not fit, the items shrink with an ellipsis, the last one least, and a cut item's words show in its title. The trail takes the width its container gives it and never widens it: in a row with other things, let its <code>nav</code> grow, <code>flex-fill</code>. A trail that moves in place marks its last item <code>aria-current="location"</code>.</p>
+	<div class="docs-example docs-example-stack" id="breadcrumb-fold">
+		<nav class="max-w-360" aria-label="Folder">
+			<ol class="breadcrumb" data-fold>
+				<li class="breadcrumb-item"><button type="button" data-dir="0">Archive</button></li>
+				<li class="breadcrumb-item"><button type="button" data-dir="1">home</button></li>
+				<li class="breadcrumb-item"><button type="button" data-dir="2">user</button></li>
+				<li class="breadcrumb-item"><button type="button" data-dir="3">web</button></li>
+				<li class="breadcrumb-item"><button type="button" data-dir="4">harbor-tours</button></li>
+				<li class="breadcrumb-item"><button type="button" data-dir="5">public_html</button></li>
+				<li class="breadcrumb-item"><button type="button" data-dir="6">uploads</button></li>
+				<li class="breadcrumb-item"><button type="button" data-dir="7">2024</button></li>
+				<li class="breadcrumb-item" aria-current="location">05</li>
+			</ol>
+		</nav>
+	</div>
 </section>
 
 <section class="vstack gap-12" aria-labelledby="breadcrumb-access">
@@ -21,5 +39,6 @@
 	<ul>
 		<li>A <code>&lt;nav aria-label="Breadcrumb"&gt;</code> around an ordered list; the last item is the page itself, <code>aria-current="page"</code>, not a link.</li>
 		<li>The separators are not read: they are drawn, not written.</li>
+		<li>A folded trail's button stands in the list for the levels it hides; its menu is a menu of the library, arrows and <kbd>Escape</kbd> included, the focus back on the button.</li>
 	</ul>
 </section>

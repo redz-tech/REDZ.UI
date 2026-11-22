@@ -4,6 +4,27 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## 0.34.0 - 2026-11-22
+
+### Added
+Pack it's items, reviewed with the owner: a long folder path folds, and a trail's items may be buttons.
+- `.breadcrumb` takes `button` items that read as its links, for a trail that moves in place - a file browser's
+  folders, a tree's levels.
+- `data-fold` on a `.breadcrumb` keeps the trail on one line: where it does not fit, the items between the first and the
+  last hide from the start - the last one's parent last of all - and come back in their order in a menu behind a button
+  in the trail's second place, named by the new text `breadcrumb.more`. A menu item clicks the item it stands for, so
+  the page's own handlers run, a delegated listener included. Where even the ends do not fit, the items shrink with an
+  ellipsis, the last one least, and a cut item's words show in its title. It looks again when the trail changes size,
+  its items change or the fonts load.
+
+### Changed
+- The main script's budget is 62 KB gzipped, on the owner's word.
+
+### Fixed
+- The crop's Done is busy until the photo is drawn: a press before that is told, not lost.
+- `data-show-when`, `data-enable-when` and `data-require-when` on a control outside its form - a dialog footer's
+  button tied by `form=` - read the field of that form, not a field of the same name elsewhere on the page.
+
 ## 0.33.0 - 2026-11-22
 
 ### Added

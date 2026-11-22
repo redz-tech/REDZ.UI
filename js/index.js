@@ -12,6 +12,7 @@ import './time-input.js';
 import './shortcuts.js';
 import './scrollspy.js';
 import './nav-overflow.js';
+import './breadcrumb.js';
 import './nav-scroll.js';
 import './table-scroll.js';
 import './table-stack.js';

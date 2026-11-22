@@ -16,13 +16,34 @@ The way up from a record to the list it belongs to, above the record's title. Th
 </nav>
 ```
 
+### A long path
+
+An item that moves in place - a folder of a file browser, a level of a tree - is a `button`, which reads as the trail's links; the page handles its click. `data-fold` keeps the trail on one line: where it does not fit, the items between the first and the last hide from the start, the last one's parent last of all, and come back in their order in a menu behind a button in the trail's second place, named by the page's text `breadcrumb.more`. A menu item clicks the item it stands for, so the page's own handlers run, a delegated listener included. Where even the first, that button and the last do not fit, the items shrink with an ellipsis, the last one least, and a cut item's words show in its title. The trail takes the width its container gives it and never widens it: in a row with other things, let its `nav` grow, `flex-fill`. A trail that moves in place marks its last item `aria-current="location"`.
+
+```html
+<nav class="max-w-360" aria-label="Folder">
+	<ol class="breadcrumb" data-fold>
+		<li class="breadcrumb-item"><button type="button" data-dir="0">Archive</button></li>
+		<li class="breadcrumb-item"><button type="button" data-dir="1">home</button></li>
+		<li class="breadcrumb-item"><button type="button" data-dir="2">user</button></li>
+		<li class="breadcrumb-item"><button type="button" data-dir="3">web</button></li>
+		<li class="breadcrumb-item"><button type="button" data-dir="4">harbor-tours</button></li>
+		<li class="breadcrumb-item"><button type="button" data-dir="5">public_html</button></li>
+		<li class="breadcrumb-item"><button type="button" data-dir="6">uploads</button></li>
+		<li class="breadcrumb-item"><button type="button" data-dir="7">2024</button></li>
+		<li class="breadcrumb-item" aria-current="location">05</li>
+	</ol>
+</nav>
+```
+
 ## Accessibility
 
 - A `<nav aria-label="Breadcrumb">` around an ordered list; the last item is the page itself, `aria-current="page"`, not a link.
 - The separators are not read: they are drawn, not written.
+- A folded trail's button stands in the list for the levels it hides; its menu is a menu of the library, arrows and `Escape` included, the focus back on the button.
 
 ## Tokens
 
 From [`css/components/breadcrumb.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/breadcrumb.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-text-muted`, `--redz-fs-12`, `--redz-text-faint`.
+It reads the theme's `--redz-text-muted`, `--redz-fs-12`, `--redz-text-faint`, `--redz-radius-4`, `--redz-bg-hover`.

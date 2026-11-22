@@ -6,11 +6,11 @@ REDZ.UI is a stylesheet, its icons and one small script on the browser platform.
 
 ## Get it
 
-Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. `redz-ui-0.33.0.zip` is the folder a project serves, as it is: `css/` and `js/` with minified files and the declaration files an editor reads, the license files and the passport, `redz-ui.json` - the version, the floor, the files to link, every class, token, command and text key, and the sha256 of every file. The icons are a release of their own, `redz-ui-icons-1.13.2.zip`, which changes only with Bootstrap Icons: the passport's `icons` names the version a release needs, and a project keeps it in a folder of its own, so a new release of the library leaves the icons and their cache alone. `checks.zip` beside the library is the sheet of the probes the release passed in every engine.
+Every release is an immutable release on GitHub: once it is out, neither its tag nor its files can change. `redz-ui-0.34.0.zip` is the folder a project serves, as it is: `css/` and `js/` with minified files and the declaration files an editor reads, the license files and the passport, `redz-ui.json` - the version, the floor, the files to link, every class, token, command and text key, and the sha256 of every file. The icons are a release of their own, `redz-ui-icons-1.13.2.zip`, which changes only with Bootstrap Icons: the passport's `icons` names the version a release needs, and a project keeps it in a folder of its own, so a new release of the library leaves the icons and their cache alone. `checks.zip` beside the library is the sheet of the probes the release passed in every engine.
 
 ```js
-gh release download v0.33.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
-gh release verify-asset v0.33.0 redz-ui-0.33.0.zip --repo redz-tech/REDZ.UI
+gh release download v0.34.0 --repo redz-tech/REDZ.UI --pattern 'redz-ui-*.zip'
+gh release verify-asset v0.34.0 redz-ui-0.34.0.zip --repo redz-tech/REDZ.UI
 gh release download icons-1.13.2 --repo redz-tech/REDZ.UI --pattern 'redz-ui-icons-*.zip'
 gh release verify-asset icons-1.13.2 redz-ui-icons-1.13.2.zip --repo redz-tech/REDZ.UI
 ```
@@ -18,7 +18,7 @@ gh release verify-asset icons-1.13.2 redz-ui-icons-1.13.2.zip --repo redz-tech/R
 Or from jsDelivr, which serves a release by its tag:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.33.0/dist/css/redz-ui.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@v0.34.0/dist/css/redz-ui.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/redz-tech/REDZ.UI@icons-1.13.2/css/icons.min.css">
 ```
 
@@ -41,7 +41,7 @@ The stylesheet, the icons and the scripts, with the page's own words for the few
 
 - `css/redz-ui.min.css` is the layers, the tokens, the components and the utilities in one file, within its budget of 40 KB gzipped: the stylesheets `css/index.css` pulls in, squeezed.
 - `css/icons.min.css` is apart: one mask per Bootstrap Icons file, used only by name. It reaches each file by a URL relative to itself, `../icons/NAME.svg`, so the pack's folders keep their shape where a project serves them. A project that marks its static files by their content (`?h=…`) cannot mark the icons this way, and needs not: the pack's folder is named by its version, which changes only with Bootstrap Icons.
-- `js/redz-ui.min.js` is one ES module of the behaviors, within its budget of 60 KB gzipped: the modules of `js/index.js` joined, squeezed and given short local names. It sets `REDZ.ui` for calls from code.
+- `js/redz-ui.min.js` is one ES module of the behaviors, within its budget of 62 KB gzipped: the modules of `js/index.js` joined, squeezed and given short local names. It sets `REDZ.ui` for calls from code.
 - `js/redz-ui.d.ts` beside it types `REDZ.ui` and every `redz:*` event for an editor - PhpStorm, VS Code - with no TypeScript in the project and nothing for the browser to load; the packages bring `js/redz-ui-editor.d.ts` and `js/redz-ui-qr.d.ts`. PhpStorm reads a listener's event from its annotation, `/** @param {RedzEventMap['redz:save']} event */`. A project adds its own members by declaring `interface Redz` or `interface RedzUi` again in a file of its own.
 - The island `#redz-ui-text` gives the library its words, in the page's language: every key of the passport's `texts`, and for each key of its `plurals` the other forms its language's plural rules name (`found.one`, `found.few`). Its `args` names the `{names}` the library fills in each of them, `[]` for none: a text of the page that uses another name shows it as it is. The example shows four of them.
 - The two files are made from `css/` and `js/`, which stay to read. A project that bundles its own may join the stylesheets in the passport's order instead.
@@ -9465,16 +9465,37 @@ The way up from a record to the list it belongs to, above the record's title. Th
 </nav>
 ```
 
+### A long path
+
+An item that moves in place - a folder of a file browser, a level of a tree - is a `button`, which reads as the trail's links; the page handles its click. `data-fold` keeps the trail on one line: where it does not fit, the items between the first and the last hide from the start, the last one's parent last of all, and come back in their order in a menu behind a button in the trail's second place, named by the page's text `breadcrumb.more`. A menu item clicks the item it stands for, so the page's own handlers run, a delegated listener included. Where even the first, that button and the last do not fit, the items shrink with an ellipsis, the last one least, and a cut item's words show in its title. The trail takes the width its container gives it and never widens it: in a row with other things, let its `nav` grow, `flex-fill`. A trail that moves in place marks its last item `aria-current="location"`.
+
+```html
+<nav class="max-w-360" aria-label="Folder">
+	<ol class="breadcrumb" data-fold>
+		<li class="breadcrumb-item"><button type="button" data-dir="0">Archive</button></li>
+		<li class="breadcrumb-item"><button type="button" data-dir="1">home</button></li>
+		<li class="breadcrumb-item"><button type="button" data-dir="2">user</button></li>
+		<li class="breadcrumb-item"><button type="button" data-dir="3">web</button></li>
+		<li class="breadcrumb-item"><button type="button" data-dir="4">harbor-tours</button></li>
+		<li class="breadcrumb-item"><button type="button" data-dir="5">public_html</button></li>
+		<li class="breadcrumb-item"><button type="button" data-dir="6">uploads</button></li>
+		<li class="breadcrumb-item"><button type="button" data-dir="7">2024</button></li>
+		<li class="breadcrumb-item" aria-current="location">05</li>
+	</ol>
+</nav>
+```
+
 ## Accessibility
 
 - A `<nav aria-label="Breadcrumb">` around an ordered list; the last item is the page itself, `aria-current="page"`, not a link.
 - The separators are not read: they are drawn, not written.
+- A folded trail's button stands in the list for the levels it hides; its menu is a menu of the library, arrows and `Escape` included, the focus back on the button.
 
 ## Tokens
 
 From [`css/components/breadcrumb.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/breadcrumb.css), which declares no custom property of its own.
 
-It reads the theme's `--redz-text-muted`, `--redz-fs-12`, `--redz-text-faint`.
+It reads the theme's `--redz-text-muted`, `--redz-fs-12`, `--redz-text-faint`, `--redz-radius-4`, `--redz-bg-hover`.
 
 # Pagination
 
