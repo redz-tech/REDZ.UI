@@ -4,7 +4,7 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
-## Unreleased
+## 0.33.0 - 2026-11-22
 
 ### Added
 A board for reordering, the tourism pack's order, and the ERP's brand set: logos framed as they are uploaded, an SVG
