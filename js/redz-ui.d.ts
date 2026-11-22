@@ -245,8 +245,9 @@ interface RedzUi {
 	follow(form?: HTMLFormElement): void;
 	/** Takes what the form's chips entries still hold: false, the focus on the first one refused, when one is refused. */
 	settle(form: HTMLFormElement): boolean;
-	/** What a white label of the colour - any CSS colour - paints, theme by theme; null for a value that is no colour. */
-	brand(colour: string): RedzBrand | null;
+	/** What a white label of the colour - any CSS colour - paints, theme by theme, its links of options.link when given;
+	 *  null for a value that is no colour. */
+	brand(colour: string, options?: {link?: string}): RedzBrand | null;
 }
 
 /** REDZ, the family's global; a project adds its own members by declaring interface Redz again. */
@@ -312,8 +313,9 @@ interface RedzEventMap {
 	'redz:theme': CustomEvent<{theme: string}>;
 	/** What an upload holds changed. */
 	'redz:change': CustomEvent<RedzUploadState>;
-	/** A file to send: answered with nothing, the file in another form, or its id on the server. */
-	'redz:files': CustomEvent<RedzAsk<{file: File; row: Element; progress(fraction: number): void; signal: AbortSignal}, Blob | string | number | void>>;
+	/** A file to send: answered with nothing, the file in another form, or its id on the server; a file the crop package
+	 *  framed first carries the file as picked and the frame's corners in the photo's own pixels. */
+	'redz:files': CustomEvent<RedzAsk<{file: File; row: Element; progress(fraction: number): void; signal: AbortSignal; original?: File; points?: [number, number][]}, Blob | string | number | void>>;
 	/** A row to take away: an upload's stored file (id) answers with respondWith; a repeat's row is kept when canceled. */
 	'redz:remove': CustomEvent<{id?: string; row: Element; respondWith?(answer: unknown): void}>;
 	/** A password shown or hidden. */
@@ -336,8 +338,9 @@ interface RedzEventMap {
 	'redz:more': CustomEvent<RedzAsk<{shown: number; signal: AbortSignal}, RedzMoreAnswer | void>>;
 	/** A region filtered: what shows of how many. */
 	'redz:filter': CustomEvent<{count: number; total: number}>;
-	/** An item moved: its new parent, null at the top, and its position from 0; refused, it goes back. */
-	'redz:move': CustomEvent<RedzAsk<{item: Element; list: Element; parent: Element | null; position: number}>>;
+	/** An item moved: its list, the list it left, its new parent, null at the top, and its position from 0; refused, it
+	 *  goes back. */
+	'redz:move': CustomEvent<RedzAsk<{item: Element; list: Element; from: Element; parent: Element | null; position: number}>>;
 	/** A table's order to sort by: a page that sorts itself takes it, and a refusal puts the order back. */
 	'redz:sort': CustomEvent<RedzAsk<{key: string; direction: 'ascending' | 'descending' | 'none'}>>;
 	/** A date picker of the calendar package shows other months: the first and the last day they show, ISO dates, and

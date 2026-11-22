@@ -1,5 +1,5 @@
-// REDZ.UI, a white label measured: brand(colour) answers what data-brand of that colour paints in each theme - the tone,
-// the words on it, the links, the focus ring, the fill of a checked box or a bar and the ground under them, each #rrggbb
+// REDZ.UI, a white label measured: brand(colour, {link}) answers what data-brand of that colour - with data-brand-link of
+// that link colour, when given - paints in each theme - the tone, the words on it, the links, the focus ring, the fill of a checked box or a bar and the ground under them, each #rrggbb
 // in sRGB, and their contrast ratios. It reads them from the stylesheet the page loads, so it never disagrees with the
 // page; null for a value that is no colour.
 const PARTS = {tone: '--redz-primary', text: '--redz-primary-contrast', link: '--redz-link', ring: '--redz-focus', fill: '--redz-primary-fill', ground: '--redz-bg'};
@@ -27,15 +27,22 @@ const ratio = (one, other) => {
 	return Math.round((light + 0.05) / (dark + 0.05) * 100) / 100;
 };
 
-/** What a white label of the colour paints, theme by theme. */
-export const brand = (colour) => {
-	if (typeof colour !== 'string' || colour.trim() === '' || !CSS.supports('color', colour)) {
+/** Whether the value is a colour. */
+const colourful = (value) => typeof value === 'string' && value.trim() !== '' && CSS.supports('color', value);
+
+/** What a white label of the colour - and of the link colour, when given - paints, theme by theme. */
+export const brand = (colour, {link} = {}) => {
+	if (!colourful(colour) || (link !== undefined && !colourful(link))) {
 		return null;
 	}
 	const region = document.createElement('div');
 	region.hidden = true;
 	region.setAttribute('data-brand', colour);
 	region.style.setProperty('--redz-brand', colour);
+	if (link !== undefined) {
+		region.setAttribute('data-brand-link', link);
+		region.style.setProperty('--redz-brand-link', link);
+	}
 	const probes = Object.values(PARTS).map((property) => {
 		const probe = document.createElement('span');
 		probe.style.setProperty('color', 'var(' + property + ')');

@@ -4,12 +4,15 @@
 // its parent) - or by the pointer dragging the handle within its group: a lifted copy follows the pointer while the
 // item's place, an empty slot, goes where it will land - down a column, or, where the group lays its items out in a
 // line - a grid of more than one column, a flex row - before or after the item under the pointer by the half of it the
-// pointer is in -, the other items gliding aside; near an edge of the box the list scrolls in, that box scrolls, and
-// Escape takes the item back. A move by the menu glides as well, unless the reader asks for no motion. Each move ends
-// with the focus back on the handle and the page's text "moved" said politely; then the cancelable redz:move
-// (js/answer.js) with the item, its list, parent and place: a refusal
-// undoes the move and says the page's words; left alone, hidden fields beside the list - beside its table for a
-// tbody - hold the order for the form: each value in data-reorder's name, and with data-parent each one's parent under
+// pointer is in, or to the group's end below its last item -, the other items gliding aside; near an edge of a box
+// under the pointer that scrolls, and of the page, it scrolls, and Escape takes the item back. Lists with one
+// data-reorder-group are a board: an item at the top of its list is dragged into any of them, an empty one included,
+// and data-move="to" with data-to naming one moves it to that list's end. A move by the menu glides as well, unless the
+// reader asks for no motion. Each move ends with the focus back on the handle and the page's text "moved" said
+// politely - "moved.into", with the list's name, into another list; then the cancelable redz:move (js/answer.js) with
+// the item, its list, the list it left, parent and place: a refusal undoes the move and says the page's words; left
+// alone, hidden fields beside each list it changed - beside its table for a tbody - hold the order for the form: each
+// value in data-reorder's name, one empty value for a list left empty, and with data-parent each one's parent under
 // data-parent's name.
 import {ask} from './answer.js';
 import {text} from './text.js';
@@ -24,6 +27,12 @@ const itemOf = (element) => element.closest('[data-value]');
 const itemsOf = (group) => [...group.children].filter((child) => child.matches('[data-value]'));
 const handleOf = (item) => [...item.querySelectorAll('.drag-handle')].find((grip) => itemOf(grip) === item) ?? null;
 const besideOf = (list) => list.matches('tbody') ? list.closest('table') : list;
+
+/** The lists of the list's board - every list of its data-reorder-group -, else the list alone. */
+const boardOf = (list) => list.dataset.reorderGroup ? [...document.querySelectorAll('[data-reorder][data-reorder-group]')].filter((one) => one.dataset.reorderGroup === list.dataset.reorderGroup) : [list];
+
+/** The list's name: its aria-label, else the words of its aria-labelledby. */
+const nameOf = (list) => list.getAttribute('aria-label') || (list.getAttribute('aria-labelledby') ?? '').split(/\s+/).map((id) => document.getElementById(id)?.textContent.trim() ?? '').filter(Boolean).join(' ');
 
 /** Whether the group lays its items out in a line - a grid of more than one column or a flex row. */
 const linesOf = (group) => {
@@ -40,9 +49,12 @@ const parentOf = (item) => {
 	return parent !== null && listOf(item).contains(parent) ? parent : null;
 };
 
-/** Where the move takes the item - [its new group, the item it goes before, null for the end] - or null where it cannot go. */
-const placeOf = (item, move) => {
+/** Where the move takes the item - [its new group, the item it goes before, null for the end] - or null where it cannot
+ *  go; TO is the id of the list of its board a move "to" names. */
+const placeOf = (item, move, to) => {
 	const group = item.parentElement;
+	const list = listOf(item);
+	const other = document.getElementById(to ?? '');
 	const items = itemsOf(group);
 	const at = items.indexOf(item);
 	const parent = parentOf(item);
@@ -53,7 +65,8 @@ const placeOf = (item, move) => {
 		first: at > 0 ? [group, items[0]] : null,
 		last: at < items.length - 1 ? [group, null] : null,
 		in: above === null ? null : [above, null],
-		out: parent === null ? null : [parent.parentElement, itemsOf(parent.parentElement)[itemsOf(parent.parentElement).indexOf(parent) + 1] ?? null]
+		out: parent === null ? null : [parent.parentElement, itemsOf(parent.parentElement)[itemsOf(parent.parentElement).indexOf(parent) + 1] ?? null],
+		to: group === list && other !== list && boardOf(list).includes(other) ? [other, null] : null
 	};
 	return places[move] ?? null;
 };
@@ -74,10 +87,10 @@ const statusOf = (list) => {
 const still = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 const EASE = {duration: 160, easing: 'cubic-bezier(0.2, 0, 0, 1)'};
 
-/** Does MOVE, the items of the group gliding from where they stood to where it leaves them - unless the reader asks
+/** Does MOVE, the items of the groups gliding from where they stood to where it leaves them - unless the reader asks
  *  for no motion; answers what MOVE answers. */
-const glide = (group, move) => {
-	const items = itemsOf(group);
+const glide = (groups, move) => {
+	const items = [...new Set(groups)].flatMap(itemsOf);
 	const from = still() ? [] : items.map((item) => item.getBoundingClientRect());
 	const answer = move();
 	from.forEach((was, k) => {
@@ -90,7 +103,7 @@ const glide = (group, move) => {
 };
 
 /** Puts the item at the place, its group opened and its handle focused; answers the place it left. */
-const put = (item, [group, before]) => glide(item.parentElement, () => {
+const put = (item, [group, before]) => glide([item.parentElement, group], () => {
 	const left = [item.parentElement, item.nextElementSibling];
 	group.insertBefore(item, before);
 	if (group.hidden) {
@@ -122,6 +135,9 @@ const hold = (list) => {
 			field(list.dataset.parent + '[' + item.dataset.value + ']', parentOf(item)?.dataset.value ?? '');
 		}
 	}
+	if (fields.length === 0) {
+		field(list.dataset.reorder, '');
+	}
 	beside.after(...fields);
 	list.dispatchEvent(new Event('change', {bubbles: true}));
 };
@@ -129,17 +145,19 @@ const hold = (list) => {
 /** After a move from the place LEFT: says where the item is now, and asks the page, which may refuse it. */
 const moved = (item, left) => {
 	const list = listOf(item);
+	const from = listOf(left[0]);
 	const items = itemsOf(item.parentElement);
 	const position = items.indexOf(item);
-	statusOf(list).textContent = text('moved', {position: position + 1, count: items.length});
-	const [taken, answer] = ask(item, 'redz:move', {item, list, parent: parentOf(item), position});
+	const name = from === list ? '' : nameOf(list);
+	statusOf(from).textContent = name ? text('moved.into', {list: name, position: position + 1, count: items.length}) : text('moved', {position: position + 1, count: items.length});
+	const [taken, answer] = ask(item, 'redz:move', {item, list, from, parent: parentOf(item), position});
 	if (!taken) {
-		hold(list);
+		new Set([list, from]).forEach(hold);
 		return;
 	}
 	answer?.catch((words) => {
 		put(item, left);
-		statusOf(list).textContent = String(words ?? '');
+		statusOf(from).textContent = String(words ?? '');
 	});
 };
 
@@ -167,47 +185,84 @@ const copyOf = (item, box) => {
 	return shell;
 };
 
-/** The box the list scrolls in - the nearest ancestor that scrolls, else the page. */
-const scrollerOf = (element) => {
-	for (let up = element.parentElement; up !== null; up = up.parentElement) {
-		if (/auto|scroll/.test(getComputedStyle(up).overflowY) && up.scrollHeight > up.clientHeight) {
-			return up;
+/** The boxes that scroll around the element, the nearest first, each with whether it scrolls across and down. */
+const scrollersOf = (element) => {
+	const boxes = [];
+	for (let up = element; up !== null && up !== document.body && up !== document.documentElement; up = up.parentElement) {
+		const style = getComputedStyle(up);
+		const axes = [/auto|scroll/.test(style.overflowX) && up.scrollWidth > up.clientWidth, /auto|scroll/.test(style.overflowY) && up.scrollHeight > up.clientHeight];
+		if (axes[0] || axes[1]) {
+			boxes.push([up, axes]);
 		}
 	}
-	return document.scrollingElement;
+	return boxes;
 };
 
-/** Moves the item before or after the item under the pointer - by its half, across a line or down a column - unless
- *  the items still glide from the last move and NOW is not asked. */
+/** Whether the pointer is inside the box. */
+const inside = (box) => drag.px > box.left && drag.px < box.right && drag.py > box.top && drag.py < box.bottom;
+
+/** Whether the group lays its items out in a line, and whether right to left, read once a drag. */
+const layoutOf = (group) => {
+	if (!drag.layouts.has(group)) {
+		drag.layouts.set(group, [linesOf(group), getComputedStyle(group).direction === 'rtl']);
+	}
+	return drag.layouts.get(group);
+};
+
+/** Moves the item before or after the item under the pointer - by its half, across a line or down a column -, or to
+ *  the end of the group under the pointer below its last item, unless the items still glide from the last move and NOW
+ *  is not asked. The group is the board's list under the pointer, else the item's own. */
 const follow = (now = false) => {
 	if (!now && performance.now() < drag.calm) {
 		return;
 	}
-	for (const other of itemsOf(drag.item.parentElement)) {
+	const under = drag.groups.find((group) => inside(group.getBoundingClientRect())) ?? null;
+	const group = under ?? drag.item.parentElement;
+	const [lines, rtl] = layoutOf(group);
+	const others = itemsOf(group).filter((other) => other !== drag.item);
+	let before;
+	for (const other of others) {
 		const box = other.getBoundingClientRect();
-		if (other === drag.item || drag.py <= box.top || drag.py >= box.bottom || (drag.lines && (drag.px <= box.left || drag.px >= box.right))) {
+		if (drag.py <= box.top || drag.py >= box.bottom || (lines && (drag.px <= box.left || drag.px >= box.right))) {
 			continue;
 		}
-		const after = drag.lines ? (drag.px > box.left + box.width / 2) !== drag.rtl : drag.py > box.top + box.height / 2;
-		const before = after ? other.nextElementSibling : other;
-		if (before !== drag.item && before !== drag.item.nextElementSibling) {
-			glide(drag.item.parentElement, () => drag.item.parentElement.insertBefore(drag.item, before));
-			drag.calm = performance.now() + (still() ? 0 : EASE.duration);
-		}
+		const after = lines ? (drag.px > box.left + box.width / 2) !== rtl : drag.py > box.top + box.height / 2;
+		before = after ? other.nextElementSibling : other;
 		break;
+	}
+	if (before === undefined) {
+		const last = others.at(-1)?.getBoundingClientRect();
+		if (under === null || (last && drag.py < last.bottom && !(lines && drag.py > last.top && (rtl ? drag.px < last.left : drag.px > last.right)))) {
+			return;
+		}
+		before = null;
+	}
+	if (group !== drag.item.parentElement || (before !== drag.item && before !== drag.item.nextElementSibling)) {
+		glide([drag.item.parentElement, group], () => group.insertBefore(drag.item, before));
+		drag.calm = performance.now() + (still() ? 0 : EASE.duration);
 	}
 };
 
-/** Near the top or the bottom of the box the list scrolls in, scrolls it, faster the nearer the edge, every frame. */
+/** Near an edge of a box that scrolls - around the pointer, then around the item while the pointer is across from it -
+ *  or of the page, or past it, scrolls it - the first that still can, each way -, faster the nearer the edge, every
+ *  frame. */
 const tick = () => {
 	if (drag === null || drag.left === null) {
 		return;
 	}
-	const page = drag.scroller === document.scrollingElement;
-	const box = page ? {top: 0, bottom: innerHeight} : drag.scroller.getBoundingClientRect();
-	const by = drag.py < box.top + 48 ? -Math.ceil((box.top + 48 - drag.py) / 6) : (drag.py > box.bottom - 48 ? Math.ceil((drag.py - box.bottom + 48) / 6) : 0);
-	if (by !== 0) {
-		drag.scroller.scrollBy(0, by);
+	const near = (at, start, end) => at < start + 48 ? -Math.ceil((start + 48 - at) / 6) : (at > end - 48 ? Math.ceil((at - end + 48) / 6) : 0);
+	const done = [false, false];
+	for (const [box, axes] of new Map([...scrollersOf(document.elementFromPoint(drag.px, drag.py) ?? drag.item), ...scrollersOf(drag.item), [document.scrollingElement, [false, true]]])) {
+		const edges = box === document.scrollingElement ? {left: -Infinity, right: Infinity, top: 0, bottom: innerHeight} : box.getBoundingClientRect();
+		const by = [axes[0] && !done[0] && drag.py > edges.top && drag.py < edges.bottom ? near(drag.px, edges.left, edges.right) : 0, axes[1] && !done[1] && drag.px > edges.left && drag.px < edges.right ? near(drag.py, edges.top, edges.bottom) : 0];
+		if (by[0] !== 0 || by[1] !== 0) {
+			const was = [box.scrollLeft, box.scrollTop];
+			box.scrollBy(by[0], by[1]);
+			done[0] ||= box.scrollLeft !== was[0];
+			done[1] ||= box.scrollTop !== was[1];
+		}
+	}
+	if (done[0] || done[1]) {
 		follow();
 	}
 	drag.frame = requestAnimationFrame(tick);
@@ -217,17 +272,17 @@ const tick = () => {
  *  item back where it started. */
 const drop = (cancel = false) => {
 	if (drag?.left) {
-		const {item, copy, left} = drag;
+		const {item, copy, left, lists} = drag;
 		cancelAnimationFrame(drag.frame);
 		if (cancel === true) {
-			glide(item.parentElement, () => left[0].insertBefore(item, left[1]));
+			glide([item.parentElement, left[0]], () => left[0].insertBefore(item, left[1]));
 		} else {
 			follow(true);
 		}
 		const land = () => {
 			copy.remove();
 			delete item.dataset.dragging;
-			listOf(item)?.classList.remove('reordering');
+			lists.forEach((list) => list.classList.remove('reordering'));
 		};
 		const to = item.getBoundingClientRect();
 		if (still()) {
@@ -262,7 +317,7 @@ document.addEventListener('click', (event) => {
 	if (choice === null || item === null || !menu?.matches(':popover-open')) {
 		return;
 	}
-	const place = placeOf(item, choice.dataset.move);
+	const place = placeOf(item, choice.dataset.move, choice.dataset.to);
 	if (place !== null) {
 		menu.hidePopover();
 		moved(item, put(item, place));
@@ -275,7 +330,7 @@ document.addEventListener('beforetoggle', (event) => {
 		return;
 	}
 	for (const choice of menu.querySelectorAll('[data-move]')) {
-		choice.setAttribute('aria-disabled', String(placeOf(itemOf(handle), choice.dataset.move) === null));
+		choice.setAttribute('aria-disabled', String(placeOf(itemOf(handle), choice.dataset.move, choice.dataset.to) === null));
 	}
 	const list = listOf(handle);
 	if (list !== null) {
@@ -299,16 +354,17 @@ document.addEventListener('pointermove', (event) => {
 		if (Math.hypot(event.clientX - drag.x, event.clientY - drag.y) < 4) {
 			return;
 		}
+		const list = listOf(drag.item);
 		drag.left = [drag.item.parentElement, drag.item.nextElementSibling];
-		drag.lines = linesOf(drag.item.parentElement);
-		drag.rtl = getComputedStyle(drag.item.parentElement).direction === 'rtl';
+		drag.groups = drag.item.parentElement === list ? boardOf(list) : [drag.item.parentElement];
+		drag.lists = [...new Set(drag.groups.map(listOf))];
+		drag.layouts = new Map();
 		drag.calm = 0;
-		drag.scroller = scrollerOf(drag.item.parentElement);
-		statusOf(listOf(drag.item));
+		statusOf(list);
 		drag.grip.setPointerCapture(event.pointerId);
 		drag.copy = copyOf(drag.item, drag.item.getBoundingClientRect());
 		drag.item.dataset.dragging = '';
-		listOf(drag.item).classList.add('reordering');
+		drag.lists.forEach((one) => one.classList.add('reordering'));
 		drag.frame = requestAnimationFrame(tick);
 	}
 	drag.px = event.clientX;

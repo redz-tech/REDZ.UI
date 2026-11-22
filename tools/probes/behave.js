@@ -2145,6 +2145,21 @@ window.REDZ_BEHAVE = (() => {
 			if (await readable && painted !== yellow?.[theme].tone) {
 				out.push('the #f4c542 region paints its button ' + painted + ', REDZ.ui.brand says ' + say(yellow?.[theme].tone));
 			}
+			// data-brand-link: a pale link colour of its own reads at 4.5:1 in both themes, and a region paints it so.
+			const green = attempt('of #0a7f5a', () => REDZ.ui.brand('#0a7f5a'));
+			const linked = attempt('of #0a7f5a with the link #7fd3ff', () => REDZ.ui.brand('#0a7f5a', {link: '#7fd3ff'}));
+			const wrong = attempt('with a link of no colour', () => REDZ.ui.brand('#0a7f5a', {link: 'nonsense'}));
+			const links = linked === null || linked === undefined ? null : [linked.light.linkOnGround >= 4.5, linked.dark.linkOnGround >= 4.5, linked.light.link !== green?.light.link, linked.dark.link !== green?.dark.link, linked.light.tone === green?.light.tone, wrong];
+			const own = document.createElement('div');
+			own.append(Object.assign(document.createElement('a'), {href: '#tokens', textContent: 'A link'}));
+			own.setAttribute('data-brand-link', '#7fd3ff');
+			$('#tokens-brand-region').append(own);
+			await settled();
+			const paintedLink = '#' + rgb(getComputedStyle($('a', own)).color).split(',').map((one) => Number(one).toString(16).padStart(2, '0')).join('');
+			own.remove();
+			if (say(links) !== say([true, true, true, true, true, null]) || (await readable && paintedLink !== linked?.[theme].link)) {
+				out.push('REDZ.ui.brand(#0a7f5a, {link: #7fd3ff}) answers ' + say(linked) + ' (links at 4.5:1 in both themes, other than the brand\'s own, the tone kept; a link of no colour null: ' + say(wrong) + '), a region with data-brand-link paints its link ' + paintedLink);
+			}
 		}]},
 		brandLogo: {target: '#app-brand-logo', steps: [async (out) => {
 			// The pair follows the page's theme, a light logo alone stands on a white mat in the dark, and under a 576 px
@@ -5858,6 +5873,80 @@ window.REDZ_BEHAVE = (() => {
 				}
 			},
 		]},
+		// A board of three lists: an item dragged into an empty list, after an item of another, to a list's end below its
+		// last item, moved to another list by the menu, its own list's item unavailable; a refusal puts it back across;
+		// both lists' fields written, an emptied one's empty; the status names the list; redz:move names the list left;
+		// no list keeps the drag's class.
+		board: {target: '#list-group-board', steps: [
+			() => {
+				const board = $('#list-group-board');
+				board.scrollIntoView({block: 'center'});
+				window.REDZ_BOARD = [];
+				window.addEventListener('redz:move', (event) => window.REDZ_BOARD.push([event.detail.item.dataset.value, event.detail.from?.id, event.detail.list.id, event.detail.position]));
+				return {drag: [...center($('[data-value="harbor"] .drag-handle', board)), ...center($('#list-group-board-van-2'))]};
+			},
+			async (out) => {
+				await wait(300);
+				const board = $('#list-group-board');
+				const of = (list) => [values('#' + list + ' [data-value]'), $$(':scope > input[type="hidden"]', $('#' + list).parentElement).filter((field) => field.dataset.orderOf === list).map((field) => field.value)];
+				const empty = (list) => getComputedStyle($('#' + list + ' > [data-reorder-empty]')).display !== 'none';
+				const seen = {van2: of('list-group-board-van-2'), open: of('list-group-board-open-list'), shown: [empty('list-group-board-open-list'), empty('list-group-board-van-2')], status: $('#list-group-board-open-list ~ .reorder-status')?.textContent, moves: window.REDZ_BOARD, still: $$('.reordering', board).length};
+				const want = {van2: ['harbor', ['harbor']], open: ['', ['']], shown: [true, false], status: 'Moved to Van 2, 1 of 1', moves: [['harbor', 'list-group-board-open-list', 'list-group-board-van-2', 0]], still: 0};
+				if (say(seen) !== say(want)) {
+					out.push('an item dragged into an empty list of a board: ' + say(seen) + ', not ' + say(want));
+				}
+				return {drag: [...center($('[data-value="palm"] .drag-handle', board)), ...center($('[data-value="harbor"]', board), 0.5, 0.8)]};
+			},
+			async (out) => {
+				await wait(300);
+				const board = $('#list-group-board');
+				const seen = [values('#list-group-board-van-2 [data-value]'), values('#list-group-board-van-1 [data-value]')];
+				if (say(seen) !== say(['harbor palm', 'sea'])) {
+					out.push('an item dragged onto the lower half of an item of another list: ' + say(seen) + ', not ' + say(['harbor palm', 'sea']));
+				}
+				const van1 = $('#list-group-board-van-1');
+				const last = $('[data-value="sea"]', board).getBoundingClientRect();
+				const room = van1.getBoundingClientRect().bottom - last.bottom;
+				if (room < 24) {
+					out.push('the board\'s list "Van 1" stretches ' + Math.round(room) + ' px below its last item, too little to drop in');
+				}
+				return {drag: [...center($('[data-value="palm"] .drag-handle', board)), Math.round(last.left + last.width / 2), Math.round(last.bottom + Math.min(room, 48) / 2)]};
+			},
+			async (out) => {
+				await wait(300);
+				const board = $('#list-group-board');
+				const seen = [values('#list-group-board-van-1 [data-value]'), values('#list-group-board-van-2 [data-value]')];
+				if (say(seen) !== say(['sea palm', 'harbor'])) {
+					out.push('an item dropped below the last item of another list: ' + say(seen) + ', not ' + say(['sea palm', 'harbor']));
+				}
+				const menu = $('#list-group-board-menu');
+				const grip = $('[data-value="palm"] .drag-handle', board);
+				grip.click();
+				await wait(150);
+				const off = $$('[data-move="to"]', menu).map((choice) => choice.getAttribute('aria-disabled'));
+				$('[data-to="list-group-board-open-list"]', menu).click();
+				await wait(300);
+				const moved = [values('#list-group-board-open-list [data-value]'), values('#list-group-board-van-1 [data-value]'), document.activeElement === grip, menu.matches(':popover-open'), window.REDZ_BOARD.at(-1)];
+				const want = [['false', 'true', 'false'], ['palm', 'sea', true, false, ['palm', 'list-group-board-van-1', 'list-group-board-open-list', 0]]];
+				if (say([off, moved]) !== say(want)) {
+					out.push('a board\'s menu move to another list: unavailable ' + say(off) + ' (only its own list), then ' + say(moved) + ', not ' + say(want[1]));
+				}
+				const refuse = (event) => {
+					event.preventDefault();
+					event.detail.respondWith(Promise.reject('Not now'));
+					window.removeEventListener('redz:move', refuse);
+				};
+				window.addEventListener('redz:move', refuse);
+				return {drag: [...center($('[data-value="harbor"] .drag-handle', board)), ...center($('[data-value="sea"]', board), 0.5, 0.8)]};
+			},
+			async (out) => {
+				await wait(400);
+				const seen = [values('#list-group-board-van-2 [data-value]'), values('#list-group-board-van-1 [data-value]'), $('#list-group-board-van-2 ~ .reorder-status')?.textContent];
+				if (say(seen) !== say(['harbor', 'sea', 'Not now'])) {
+					out.push('a move across a board refused: ' + say(seen) + ', not back in its list ' + say(['harbor', 'sea', 'Not now']));
+				}
+			},
+		]},
 		opener: {target: '#list-group-moves-list', steps: [async (out) => {
 			const menu = $('#list-group-moves-menu');
 			const handles = $$('button[commandfor="list-group-moves-menu"]');
@@ -6845,6 +6934,118 @@ window.REDZ_BEHAVE = (() => {
 		// A photo: a frame of the field's ratio as large as the photo holds; an edge dragged keeps the ratio, the frame moves
 		// by the arrow keys and a drag; Done answers that ratio as WebP, or PNG where the browser writes no WebP; a free
 		// frame's edge moves alone; a turn keeps the ratio; a narrowed frame opens again by its points.
+		// A logo as SVG: one with a viewBox alone and one with only its width and height are drawn by their shape at the
+		// work size, so a 1000 px PNG comes of a 40 px drawing; a foreignObject one is refused before the frame opens, or
+		// framed and answered where the engine hands its drawing back; one that is no SVG is refused.
+		cropSvg: {target: '#crop-photo-sample', walk: async function* (out) {
+			if (!await writable()) {
+				return;
+			}
+			const svg = (body, root = 'viewBox="0 0 200 100"') => new File(['<svg xmlns="http://www.w3.org/2000/svg" ' + root + '>' + body + '</svg>'], 'logo.svg', {type: 'image/svg+xml'});
+			const drawing = '<rect width="200" height="100" fill="#0a7f5a"/><circle cx="100" cy="50" r="40" fill="#ffffff"/>';
+			const opened = async (promise) => {
+				const shown = await within(Promise.race([until(() => $('dialog.crop[data-ready]') !== null, 8000).then(() => 'open'), promise.then(() => 'answered', () => 'refused')]));
+				return shown === 'open' && $('dialog.crop[data-ready]') !== null ? 'open' : shown;
+			};
+			const done = () => center($$('dialog.crop .crop-bar .btn').at(-1));
+			const seen = {};
+			for (const [name, file] of [['viewBox', svg(drawing)], ['size', svg('<rect width="40" height="20" fill="#0a7f5a"/><circle cx="20" cy="10" r="8" fill="#ffffff"/>', 'width="40" height="20"')]]) {
+				const asked = REDZ.ui.crop(file, {mode: 'photo', type: 'image/png', max: 1000});
+				seen[name] = [await opened(asked)];
+				if (seen[name][0] === 'open') {
+					yield {click: done()};
+					const answer = await within(asked.catch((error) => String(error)));
+					seen[name].push(answer?.blob ? [answer.width, answer.height, answer.blob.type, (await cropPixel(answer.blob, 500, 250)).slice(0, 3).every((v) => v >= 250), (await cropPixel(answer.blob, 4, 4)).slice(0, 3).join(' ')] : String(answer));
+				}
+			}
+			const foreign = REDZ.ui.crop(svg('<foreignObject width="200" height="100"><div xmlns="http://www.w3.org/1999/xhtml">Logo</div></foreignObject>'), {mode: 'photo', type: 'image/png'});
+			const foreignShown = await opened(foreign);
+			if (foreignShown === 'open') {
+				yield {click: done()};
+				const answer = await within(foreign.catch((error) => 'threw ' + String(error)));
+				seen.foreign = answer?.blob instanceof Blob ? 'framed' : String(answer);
+			} else {
+				seen.foreign = foreignShown;
+			}
+			seen.junk = await opened(REDZ.ui.crop(new File(['<svg xmlns="http://www.w3.org/2000/svg"'], 'logo.svg', {type: 'image/svg+xml'})));
+			const want = {viewBox: ['open', [1000, 500, 'image/png', true, '10 127 90']], size: ['open', [1000, 500, 'image/png', true, '10 127 90']], foreign: seen.foreign === 'framed' ? 'framed' : 'refused', junk: 'refused'};
+			if (say(seen) !== say(want)) {
+				out.push('an SVG logo in the crop: ' + say(seen) + ', not ' + say(want));
+			}
+		}},
+		// An upload whose input has data-crop: a picked file opens the frame once and nothing of the upload changes until
+		// Done - Cancel keeps the stored row and an empty input -; Done takes the cropped file, redz:files carries the
+		// original and the points, redz:crop fires; a dropped SVG is framed too; a dropped file of a type accept refuses is
+		// refused without the frame.
+		cropUpload: {target: '#crop-upload-sample', walk: async function* (out) {
+			if (!await writable()) {
+				return;
+			}
+			const upload = $('#crop-upload-sample .upload');
+			const input = $('input[type="file"]', upload);
+			const files = [];
+			const crops = [];
+			upload.addEventListener('redz:files', (event) => files.push([event.detail.file.name, event.detail.file.type, event.detail.original?.name, event.detail.points?.length]));
+			input.addEventListener('redz:crop', () => crops.push(true));
+			const png = await new Promise((done) => {
+				const canvas = Object.assign(document.createElement('canvas'), {width: 800, height: 400});
+				const paint = canvas.getContext('2d');
+				paint.fillStyle = '#0a7f5a';
+				paint.fillRect(0, 0, 800, 400);
+				canvas.toBlob((blob) => done(new File([blob], 'mark.png', {type: 'image/png'})), 'image/png');
+			});
+			const opened = async () => {
+				await until(() => $('dialog.crop[data-ready]') !== null, 8000);
+				return [$$('dialog.crop').length, $$('.upload-list > *', upload).map((row) => row.dataset.fileStored ?? row.dataset.state).join(' '), files.length];
+			};
+			const rows = () => $$('.upload-list > *', upload).map((row) => (row.dataset.fileStored ?? row.dataset.state) + ':' + ($('[data-file-name]', row)?.textContent ?? '')).join(' ');
+			const drop = (file) => {
+				const carried = new DataTransfer();
+				carried.items.add(file);
+				$('.upload-zone', upload).dispatchEvent(new DragEvent('drop', {dataTransfer: carried, bubbles: true, cancelable: true}));
+			};
+			upload.scrollIntoView({block: 'center'});
+			const seen = {};
+			choose(input, (() => {
+				const box = new DataTransfer();
+				box.items.add(png);
+				return box.files;
+			})());
+			seen.open = await opened();
+			yield {key: 'Escape'};
+			await until(() => $('dialog.crop') === null, 4000);
+			seen.cancel = [rows(), input.files.length, files.length, crops.length];
+			choose(input, (() => {
+				const box = new DataTransfer();
+				box.items.add(png);
+				return box.files;
+			})());
+			await opened();
+			yield {click: center($$('dialog.crop .crop-bar .btn').at(-1))};
+			await until(() => files.length > 0, 8000);
+			await settled();
+			seen.done = [rows(), [...input.files].map((file) => file.name + ' ' + file.type).join(), files.slice(), crops.length];
+			drop(new File(['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 40"><rect width="120" height="40" fill="#cd3428"/></svg>'], 'logo.svg', {type: 'image/svg+xml'}));
+			seen.dropped = (await opened())[0];
+			yield {click: center($$('dialog.crop .crop-bar .btn').at(-1))};
+			await until(() => files.length > 1, 8000);
+			await settled();
+			seen.svg = [rows(), files.at(-1)];
+			drop(new File(['notes'], 'notes.txt', {type: 'text/plain'}));
+			await wait(300);
+			seen.refused = [$('dialog.crop') === null, rows(), files.length];
+			const want = {
+				open: [1, '3', 0],
+				cancel: ['3:logo.png', 0, 0, 0],
+				done: ['ready:mark.png', 'mark.png image/png', [['mark.png', 'image/png', 'mark.png', 4]], 1],
+				dropped: 1,
+				svg: ['ready:logo.png', ['logo.png', 'image/png', 'logo.svg', 4]],
+				refused: [true, 'failed:notes.txt', 2],
+			};
+			if (say(seen) !== say(want)) {
+				out.push('an upload whose input has data-crop: ' + say(seen) + ', not ' + say(want));
+			}
+		}},
 		cropPhoto: {target: '#crop-photo-sample', walk: async function* (out) {
 			if (!await writable()) {
 				return;

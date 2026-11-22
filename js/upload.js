@@ -19,10 +19,14 @@
 // words stays words; of several such uploads the one in the open modal dialog takes them, else the one that shows.
 // REDZ.ui.upload.clear(upload) - and the form's reset - takes away the new rows, their sending aborted, and keeps the
 // stored ones; REDZ.ui.upload.settled(upload) answers a promise of the redz:change detail once nothing is sending. The
-// zone may be a plain button.btn. A file dropped elsewhere on the page does not open in the window.
+// zone may be a plain button.btn. A file dropped elsewhere on the page does not open in the window. An input with
+// data-crop, on a page that loads the crop package, opens each file in its frame before the upload takes it: a framed
+// one is taken as the crop named it, with original and points in redz:files and redz:crop; a cancelled one is not, and
+// nothing of the upload changes.
 import {ask} from './answer.js';
 import {announce} from './say.js';
 import {locales, text} from './text.js';
+import {toast} from './toast.js';
 
 const kept = new WeakMap();
 const files = new WeakMap();
@@ -111,10 +115,37 @@ const end = (row, state, words = '') => {
 	}
 };
 
-/** Checks each file, gives it its row, and asks the page to send it - or keeps it for the form. */
-const take = (upload, given) => {
+/** Opens each file in the crop package's frame, by the input's data-crop, then takes the framed one, its original and
+ *  points told; a cancelled one is not taken and the input holds what it held; a file the input's accept refuses is
+ *  refused as ever, before the frame. */
+const framed = async (upload, input, chosen, crop) => {
+	for (const file of chosen) {
+		if (!accepts(input, file)) {
+			take(upload, [file], {});
+			continue;
+		}
+		const answer = await crop(file, input).catch(() => {
+			toast({text: text('crop.unreadable'), tone: 'danger'});
+			return null;
+		});
+		sync(upload);
+		if (answer) {
+			take(upload, [answer.file], {original: file, points: answer.points});
+			input.dispatchEvent(new CustomEvent('redz:crop', {bubbles: true, detail: {...answer, original: file}}));
+		}
+	}
+};
+
+/** Checks each file, gives it its row, and asks the page to send it - or keeps it for the form; with no EXTRA a field
+ *  with data-crop frames it first, and EXTRA joins redz:files' detail. */
+const take = (upload, given, extra) => {
 	const input = inputOf(upload);
 	const chosen = input.multiple ? given : given.slice(0, 1);
+	const crop = extra === undefined && input.matches('[data-crop]') ? globalThis.REDZ?.ui?.crop : undefined;
+	if (crop && chosen.length > 0) {
+		framed(upload, input, chosen, crop);
+		return;
+	}
 	if (!input.multiple && chosen.length > 0) {
 		upload.querySelectorAll('.upload-list > *').forEach(drop);
 		kept.set(upload, []);
@@ -139,7 +170,7 @@ const take = (upload, given) => {
 		}
 		files.set(row, file);
 		list.append(row);
-		if (!accepts(input, file)) {
+		if (!extra?.original && !accepts(input, file)) {
 			end(row, 'failed', text('file.type', {name: file.name}));
 			continue;
 		}
@@ -162,7 +193,7 @@ const take = (upload, given) => {
 				bar.value = Math.min(1, Math.max(0, fraction));
 			}
 		};
-		const [taken, answer] = ask(upload, 'redz:files', {file, row, progress, signal: controller.signal});
+		const [taken, answer] = ask(upload, 'redz:files', {file, row, progress, signal: controller.signal, ...extra});
 		if (!taken) {
 			kept.set(upload, [...(kept.get(upload) ?? []), file]);
 			end(row, 'ready');

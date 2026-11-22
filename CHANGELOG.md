@@ -4,6 +4,36 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Added
+A board for reordering, the tourism pack's order, and the ERP's brand set: logos framed as they are uploaded, an SVG
+drawn sharp, a white label's own links.
+- `data-reorder-group`: lists that carry one name are a board. An item at the top of its list is dragged into any of
+  them - before or after the item under the pointer by its half, to a list's end below its last item, into an empty
+  list too; Escape and a cancelled pointer take it back to its first list and place. The list that holds the slot is
+  tinted while a drag is on, an empty list keeps a target's height and is framed, and its `data-reorder-empty` child -
+  the page's words - shows while it has no items. Near an edge of a box that scrolls, across or down, and of the page,
+  the box scrolls; the page never scrolls sideways.
+- `data-move="to"` with `data-to` naming a list of the board by its id: the menu moves the item to that list's end, and
+  the item naming its own list is unavailable. A page that names the lists by what they hold fills these items on the
+  menu's `command` event.
+- `redz:move` names the list the item left in `from`; a refusal puts it back there; left alone, both lists' hidden
+  fields are written, and a list left empty writes one empty value under its name. The new text `moved.into`, «Moved
+  to {list}, {position} of {count}», says the list's name - its `aria-label`, else its `aria-labelledby`.
+- An `upload` whose input has `data-crop`, on a page that loads the crop package, opens each file in the frame before it
+  takes it - picked, dropped or pasted: Done takes the cropped file the usual way, `redz:files` carrying `original` and
+  `points` beside `file`, and `redz:crop` fires; Cancel changes nothing, a stored row stays. A file the input's `accept`
+  refuses is refused before the frame; the size and count limits judge the cropped file.
+- `REDZ.ui.crop(file, input)`: an `input type="file"` in place of the options gives its `data-crop` attributes, and
+  Retake picks again in it. The answer carries `file`, the result named as the photo was with its own extension.
+- An SVG in the crop is drawn by its `viewBox` - else by its `width` and `height` in pixels - at 4096 px on its long
+  side, so a logo comes out sharp whatever part the frame holds; one whose drawing the browser will not hand back, with
+  a `foreignObject`, is a file it cannot open.
+- `data-brand-link`: a white label's own link color, `--redz-brand-link`, derived as a tone's `-text` is - darkened in
+  the light theme until it reads at 4.5:1 on white, lightened to an OKLCH lightness of at least 0.72 in the dark -; and
+  `REDZ.ui.brand(color, {link})` measures it.
+
 ## 0.32.0 - 2026-11-21
 
 ### Added

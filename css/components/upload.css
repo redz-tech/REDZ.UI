@@ -179,6 +179,31 @@
 		visibility: hidden;
 	}
 
+	/* A board's lists: an empty one keeps a target's height and shows its own line; while a drag is on, an empty one
+	   is framed and the one holding the slot tinted. */
+	[data-reorder-group]:not(:has(> [data-value])) {
+		min-block-size: 3rem;
+	}
+
+	[data-reorder]:has(> [data-value]) > [data-reorder-empty] {
+		display: none;
+	}
+
+	[data-reorder-empty] {
+		padding: var(--redz-space-12);
+		color: var(--redz-text-muted);
+		text-align: center;
+	}
+
+	.reordering[data-reorder-group]:not(:has(> [data-value])) {
+		outline: 1px dashed var(--redz-border-strong);
+		outline-offset: -1px;
+	}
+
+	.reordering[data-reorder-group]:has(> [data-dragging]) {
+		background-color: var(--redz-primary-subtle);
+	}
+
 	/* The lifted copy that follows the pointer. */
 	[data-drag-copy] {
 		position: fixed;

@@ -311,8 +311,10 @@ window.REDZ_PROBE = (() => {
 					out.push({kind: 'reorder', id: list.id, outside: false});
 				}
 			}
+			// An upload whose input has data-crop frames a file before it takes it, where the crop package is loaded: the
+			// behaviour check cropUpload walks it.
 			for (const upload of document.querySelectorAll('.upload')) {
-				if (shown(upload)) {
+				if (shown(upload) && !(globalThis.REDZ?.ui?.crop && upload.querySelector('input[type="file"][data-crop]'))) {
 					upload.id ||= 'probe-upload-' + out.length;
 					out.push({kind: 'upload', id: upload.id, outside: false});
 				}

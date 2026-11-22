@@ -67,7 +67,7 @@ attaches by delegation on `document`, so nothing is set up per element and marku
 
 ```html
 <script type="module" src="js/redz-ui.min.js"></script>
-<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "confirm.phrase": "Type “{phrase}” to confirm", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong", "moved": "Moved to {position} of {count}", "more": "More", "slide": "{position} of {count}", "file.type": "{name} is not a kind of file this takes", "file.size": "{name} is larger than {size}"}</script>
+<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "confirm.phrase": "Type “{phrase}” to confirm", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong", "moved": "Moved to {position} of {count}", "moved.into": "Moved to {list}, {position} of {count}", "more": "More", "slide": "{position} of {count}", "file.type": "{name} is not a kind of file this takes", "file.size": "{name} is larger than {size}"}</script>
 ```
 
 - **Menus** (`role="menu"` on a `popover` opened by its button): the arrow keys move through the items, Home and End go
@@ -162,6 +162,8 @@ attaches by delegation on `document`, so nothing is set up per element and marku
   a button opening the list's menu of moves (up, down, first, last; in and out in a tree) - or by the pointer dragging
   it, down a column or, in a grid or a row, before or after the item under the pointer; the move is said, then
   `redz:move` lets the page save it or refuse it, which undoes it, and hidden fields hold the order (`js/reorder.js`).
+  Lists with one `data-reorder-group` are a board: an item is dragged from list to list, an empty one included, or
+  moved by the menu's `data-move="to"`.
 - **PIN pads:** a `pin` around one numeric password field draws its dots and a keypad whose keys never take the focus;
   when the PIN is whole it asks the page in `redz:pin` and is busy while the page checks, a wrong one cleared and
   marked; left alone it submits its form (`js/pin.js`).
@@ -240,7 +242,8 @@ Five more packages, linked on the screens that show them, listed in the passport
   markup, or `REDZ.ui.qr(element, text)` for a text such as a secret that should sit in no attribute.
 - `css/redz-ui-crop.min.css` and the module `js/redz-ui-crop.min.js` - a photo framed in the browser before it is
   sent: a paper straightened from four corners, an avatar under a circle, a photo in a frame of a ratio;
-  `data-crop`, `data-crop="avatar"` or `data-crop="photo"` on an `input type="file"`, or `REDZ.ui.crop(file, options)`.
+  `data-crop`, `data-crop="avatar"` or `data-crop="photo"` on an `input type="file"`, or `REDZ.ui.crop(file, options)`;
+  an `upload` whose input has `data-crop` frames each file before it takes it, and an SVG logo is drawn sharp.
 
 Their budgets, gzipped: charts 3 KB of styles and 2 KB of script, the calendar 4 KB of styles and 14 KB of script, the
 media library 2 KB, QR codes 4 KB of script, the crop 2 KB of styles and 10 KB of script.

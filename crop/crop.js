@@ -14,13 +14,17 @@
 //   or by the arrow keys. 1600 px, a JPEG at 0.85, unless told.
 // No side of a frame gets shorter than a handle. Rotate turns the photo by 90, Retake calls the page's options.retake,
 // Escape cancels. The long side is at most options.max and never enlarged past the photo's own pixels. The promise
-// answers {blob, width, height, points}: points are the frame's corners in the photo's own pixels, upright as the photo
+// answers {blob, file, width, height, points} - file is the blob named as the photo was, with the result's extension;
+// points are the frame's corners in the photo's own pixels, upright as the photo
 // shows, the result's top left first, so a turn is in their order; options.points opens the frame there again. The
-// photo is read through an img, which stands it upright by its EXIF, and worked on at most 4096 px. An input
+// photo is read through an img, which stands it upright by its EXIF, and worked on at most 4096 px; an SVG is drawn by
+// its viewBox at 4096 px on its long side, so a logo comes out sharp, and one the engine will not hand back - with a
+// foreignObject - is refused as a photo it cannot open. An input
 // type="file" with data-crop - "avatar" or "photo" for those modes - opens it on its change, data-crop-ratio,
 // data-crop-max, data-crop-quality and data-crop-type its options, and puts the cropped file back into the input, then
 // fires redz:crop with the answer and the original file on it; a photo the browser cannot open empties the input and
-// says so in a toast.
+// says so in a toast. In an upload (js/upload.js) the upload asks the crop itself, by crop(file, input), before it
+// takes a file.
 import {text} from '../js/text.js';
 
 const WORK = 4096;
@@ -104,9 +108,32 @@ const shrink = (image, max) => {
 	}
 };
 
-/** The file's photo upright - an img applies its EXIF orientation - on a canvas of at most WORK px, and its own size. */
+/** The file as an img reads it: an SVG - which has no size of its own, or one of a few pixels - given its viewBox's
+ *  shape at WORK px on its long side, or its width and height in pixels when it has no viewBox. Its root's start tag is
+ *  rewritten as text, as a page under Trusted Types parses no markup; read as an img, nothing in it runs. */
+const readable = async (file) => {
+	if (file.type !== 'image/svg+xml' && !/\.svg$/i.test(file.name)) {
+		return file;
+	}
+	const source = await file.text();
+	const root = /<svg\b[^>]*>/.exec(source.replace(/<!--[\s\S]*?-->/g, (comment) => ' '.repeat(comment.length)));
+	const attribute = (name) => new RegExp('\\s' + name + '\\s*=\\s*(["\'])(.*?)\\1').exec(root?.[0] ?? '')?.[2] ?? '';
+	const box = attribute('viewBox').trim().split(/[\s,]+/).map(Number);
+	const boxed = box.length === 4 && box[2] > 0 && box[3] > 0;
+	const [width, height] = boxed ? box.slice(2) : ['width', 'height'].map((name) => /^\s*[\d.]+(px)?\s*$/.test(attribute(name)) ? parseFloat(attribute(name)) : 0);
+	if (!(width > 0 && height > 0)) {
+		throw new RangeError('The SVG has no shape of its own');
+	}
+	const scale = WORK / Math.max(width, height);
+	const size = ' width="' + Math.max(1, Math.round(width * scale)) + '" height="' + Math.max(1, Math.round(height * scale)) + '" viewBox="' + (boxed ? box.join(' ') : '0 0 ' + width + ' ' + height) + '"' + (attribute('xmlns') ? '' : ' xmlns="http://www.w3.org/2000/svg"');
+	const tag = '<svg' + size + root[0].slice(4).replace(/\s(width|height|viewBox)\s*=\s*(["']).*?\2/g, '');
+	return new Blob([source.slice(0, root.index), tag, source.slice(root.index + root[0].length)], {type: 'image/svg+xml'});
+};
+
+/** The file's photo upright - an img applies its EXIF orientation - on a canvas of at most WORK px, and its own size;
+ *  a canvas the engine would not hand back - an SVG's foreignObject taints it - is refused before the frame opens. */
 const load = async (file) => {
-	const url = URL.createObjectURL(file);
+	const url = URL.createObjectURL(await readable(file));
 	try {
 		const image = new Image();
 		image.src = url;
@@ -114,6 +141,10 @@ const load = async (file) => {
 		if (!image.naturalWidth || !image.naturalHeight) {
 			throw new RangeError('The image has no size of its own');
 		}
+		const probe = canvasOf(1, 1);
+		probe.getContext('2d').drawImage(image, 0, 0, 1, 1);
+		probe.getContext('2d').getImageData(0, 0, 1, 1);
+		release(probe);
 		return {photo: shrink(image, WORK), width: image.naturalWidth, height: image.naturalHeight};
 	} finally {
 		URL.revokeObjectURL(url);
@@ -377,9 +408,31 @@ const ratioOf = (value) => {
 const boxOf = (q) => ({x: q[0][0], y: q[0][1], w: q[2][0] - q[0][0], h: q[2][1] - q[0][1]});
 const rectOf = ({x, y, w, h}) => [[x, y], [x + w, y], [x + w, y + h], [x, y + h]];
 
-/** Opens the file's photo to frame - a paper, an avatar or a photo; answers {blob, width, height, points}, or null when
- *  cancelled. */
-export const crop = (file, options = {}) => new Promise((resolve, reject) => {
+/** A data-crop field's options, read from its attributes; Retake picks a photo again. */
+const optionsOf = (input) => {
+	const number = (name) => {
+		const value = parseFloat(input.getAttribute(name) ?? '');
+		return Number.isFinite(value) && value > 0 ? value : undefined;
+	};
+	const type = input.getAttribute('data-crop-type');
+	return {
+		mode: input.getAttribute('data-crop'),
+		ratio: input.getAttribute('data-crop-ratio'),
+		type: TYPES.includes(type) ? type : undefined,
+		retake: () => {
+			input.value = '';
+			input.click();
+		},
+		max: number('data-crop-max'),
+		quality: number('data-crop-quality'),
+	};
+};
+
+/** Opens the file's photo to frame - a paper, an avatar or a photo -, by the options or by a data-crop field's
+ *  attributes; answers {blob, file, width, height, points} - file the blob named as the photo was, with the result's
+ *  extension -, or null when cancelled. */
+export const crop = (file, given = {}) => new Promise((resolve, reject) => {
+	const options = given instanceof HTMLInputElement ? optionsOf(given) : given;
 	const kind = Object.hasOwn(MODES, options.mode) ? options.mode : 'paper';
 	const paper = kind === 'paper';
 	const {max, type, quality} = {...MODES[kind], ...Object.fromEntries(Object.entries(options).filter(([name, value]) => name in MODES.paper && value !== undefined && value !== null))};
@@ -731,7 +784,7 @@ export const crop = (file, options = {}) => new Promise((resolve, reject) => {
 		if (blob?.type !== type && !(type === 'image/webp' && blob?.type === 'image/png')) {
 			throw new Error(text('crop.failed'));
 		}
-		return {blob, width, height, points: ownPoints()};
+		return {blob, file: new File([blob], String(file.name ?? 'photo').replace(/\.[^.]*$/, '') + '.' + blob.type.split('/')[1].replace('jpeg', 'jpg'), {type: blob.type}), width, height, points: ownPoints()};
 	};
 
 	/** A paper's frame straightened into the asked type. */
@@ -1078,33 +1131,17 @@ export const crop = (file, options = {}) => new Promise((resolve, reject) => {
 
 document.addEventListener('change', (event) => {
 	const input = event.target;
-	const file = input instanceof HTMLInputElement && input.matches('input[type="file"][data-crop]') ? input.files[0] : null;
+	const file = input instanceof HTMLInputElement && input.matches('input[type="file"][data-crop]') && input.closest('.upload') === null ? input.files[0] : null;
 	if (!file) {
 		return;
 	}
-	const number = (name) => {
-		const value = parseFloat(input.getAttribute(name) ?? '');
-		return Number.isFinite(value) && value > 0 ? value : undefined;
-	};
-	const retake = () => {
-		input.value = '';
-		input.click();
-	};
-	const type = input.getAttribute('data-crop-type');
-	crop(file, {
-		mode: input.getAttribute('data-crop'),
-		ratio: input.getAttribute('data-crop-ratio'),
-		type: TYPES.includes(type) ? type : undefined,
-		retake,
-		max: number('data-crop-max'),
-		quality: number('data-crop-quality'),
-	}).then((result) => {
+	crop(file, input).then((result) => {
 		if (!result) {
 			input.value = '';
 			return;
 		}
 		const list = new DataTransfer();
-		list.items.add(new File([result.blob], file.name.replace(/\.[^.]*$/, '') + '.' + result.blob.type.split('/')[1].replace('jpeg', 'jpg'), {type: result.blob.type}));
+		list.items.add(result.file);
 		input.files = list.files;
 		input.dispatchEvent(new CustomEvent('redz:crop', {bubbles: true, detail: {...result, original: file}}));
 	}, () => {

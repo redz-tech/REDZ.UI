@@ -72,6 +72,29 @@ The sizes are the page's: its own settings go into `data-crop-max`, `data-crop-q
 </div>
 ```
 
+## In an upload
+
+An `upload`'s input with `data-crop` opens each file in the frame before the upload takes it - picked, dropped on its zone or pasted - by the input's `data-crop` attributes. Done takes the cropped file the usual way: its row, its preview, and `redz:files` with `original`, the file as picked, and `points`, the frame's corners, beside `file`; `redz:crop` fires on the input as well. Cancel changes nothing: a stored row stays, and the input holds what it held. A file the input's `accept` refuses is refused before the frame; the size and count limits judge the cropped file. A page without the crop package gets the file as it was picked. Here a logo - an SVG too - comes out a PNG of at most 1024 px.
+
+```html
+<div class="upload upload-image max-w-360">
+	<input class="visually-hidden" id="crop-upload-input" type="file" name="logo" accept="image/png,image/jpeg,image/webp,image/svg+xml" data-crop="photo" data-crop-type="image/png" data-crop-max="1024" tabindex="-1" aria-label="Logo">
+	<ul class="upload-list" aria-label="Logo">
+		<li data-file-stored="3"><input type="hidden" name="logo_kept" value="3"><img data-file-preview src="img/lagoon.svg" alt=""><span data-file-name>logo.png</span><span class="invalid-feedback" data-file-error></span><button class="btn btn-xs btn-icon" type="button" data-file-remove aria-label="Remove logo.png"><i class="bi bi-x-lg" aria-hidden="true"></i></button></li>
+	</ul>
+	<button class="upload-zone btn btn-sm" type="button"><i class="bi bi-image" aria-hidden="true"></i>Choose another logo</button>
+	<template>
+		<li>
+			<img data-file-preview alt="">
+			<span data-file-name></span>
+			<progress class="progress progress-xs"></progress>
+			<span class="invalid-feedback" data-file-error></span>
+			<button class="btn btn-xs btn-icon" type="button" data-file-remove><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+		</li>
+	</template>
+</div>
+```
+
 ## From a script
 
 `REDZ.ui.crop(file, options)` opens the same screen for a file the page holds and answers a promise: `{blob, width, height, points}`, or `null` when the person cancelled; it rejects for a file the browser cannot open as an image. A paper's result is the longer of each pair of the frame's opposite edges, read from a copy at most twice its size so small text stays clean. `points` are the frame's corners in the photo's own pixels, upright as the photo shows, the result's top left first, so a turn is in their order: given back as `options.points`, they open the frame where it was, turned as it was, to set it again or to read the original anew.
@@ -94,7 +117,9 @@ if (result !== null) {
 | `points` | The frame to open with, as an answer gave it. |
 | `retake` | A function the Retake button calls after it closes the screen; without it there is no Retake. |
 
-The photo is read through an `img`, which stands it upright by its EXIF orientation, and worked on at most 4096 px on its long side, which every phone's canvas holds; each canvas is emptied as soon as it is done with, as Safari counts an unused one against its memory. The paper is looked for at 256 px: a bright, grey region near the middle of the photo, kept only when its four corners make a plain sheet.
+The photo is read through an `img`, which stands it upright by its EXIF orientation, and worked on at most 4096 px on its long side, which every phone's canvas holds. An SVG - a logo - has no size of its own, or one of a few pixels: it is drawn by its `viewBox`, else by its `width` and `height` in pixels, at 4096 px on its long side, so the result is sharp whatever part the frame holds; read as an `img`, nothing in it runs and nothing outside it loads - live text takes the device's fonts, outlined text keeps its shapes. An SVG whose drawing the browser will not hand back, one with a `foreignObject`, is a file it cannot open. Give a logo `data-crop-type="image/png"`: a JPEG paints what is clear white, a PNG keeps it clear.
+
+Each canvas is emptied as soon as it is done with, as Safari counts an unused one against its memory. The paper is looked for at 256 px: a bright, grey region near the middle of the photo, kept only when its four corners make a plain sheet.
 
 ## Accessibility
 

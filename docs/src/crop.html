@@ -70,6 +70,29 @@
 	</div>
 </section>
 
+<section class="vstack gap-16" aria-labelledby="crop-upload">
+	<h2 id="crop-upload">In an upload</h2>
+	<p>An <code>upload</code>'s input with <code>data-crop</code> opens each file in the frame before the upload takes it - picked, dropped on its zone or pasted - by the input's <code>data-crop</code> attributes. Done takes the cropped file the usual way: its row, its preview, and <code>redz:files</code> with <code>original</code>, the file as picked, and <code>points</code>, the frame's corners, beside <code>file</code>; <code>redz:crop</code> fires on the input as well. Cancel changes nothing: a stored row stays, and the input holds what it held. A file the input's <code>accept</code> refuses is refused before the frame; the size and count limits judge the cropped file. A page without the crop package gets the file as it was picked. Here a logo - an SVG too - comes out a PNG of at most 1024 px.</p>
+	<div class="docs-example docs-example-stack" id="crop-upload-sample">
+		<div class="upload upload-image max-w-360">
+			<input class="visually-hidden" id="crop-upload-input" type="file" name="logo" accept="image/png,image/jpeg,image/webp,image/svg+xml" data-crop="photo" data-crop-type="image/png" data-crop-max="1024" tabindex="-1" aria-label="Logo">
+			<ul class="upload-list" aria-label="Logo">
+				<li data-file-stored="3"><input type="hidden" name="logo_kept" value="3"><img data-file-preview src="img/lagoon.svg" alt=""><span data-file-name>logo.png</span><span class="invalid-feedback" data-file-error></span><button class="btn btn-xs btn-icon" type="button" data-file-remove aria-label="Remove logo.png"><i class="bi bi-x-lg" aria-hidden="true"></i></button></li>
+			</ul>
+			<button class="upload-zone btn btn-sm" type="button"><i class="bi bi-image" aria-hidden="true"></i>Choose another logo</button>
+			<template>
+				<li>
+					<img data-file-preview alt="">
+					<span data-file-name></span>
+					<progress class="progress progress-xs"></progress>
+					<span class="invalid-feedback" data-file-error></span>
+					<button class="btn btn-xs btn-icon" type="button" data-file-remove><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+				</li>
+			</template>
+		</div>
+	</div>
+</section>
+
 <section class="vstack gap-12" aria-labelledby="crop-call">
 	<h2 id="crop-call">From a script</h2>
 	<p><code>REDZ.ui.crop(file, options)</code> opens the same screen for a file the page holds and answers a promise: <code>{blob, width, height, points}</code>, or <code>null</code> when the person cancelled; it rejects for a file the browser cannot open as an image. A paper's result is the longer of each pair of the frame's opposite edges, read from a copy at most twice its size so small text stays clean. <code>points</code> are the frame's corners in the photo's own pixels, upright as the photo shows, the result's top left first, so a turn is in their order: given back as <code>options.points</code>, they open the frame where it was, turned as it was, to set it again or to read the original anew.</p>
@@ -90,7 +113,8 @@ if (result !== null) {
 			<tr><td><code>retake</code></td><td>A function the Retake button calls after it closes the screen; without it there is no Retake.</td></tr>
 		</tbody>
 	</table>
-	<p>The photo is read through an <code>img</code>, which stands it upright by its EXIF orientation, and worked on at most 4096 px on its long side, which every phone's canvas holds; each canvas is emptied as soon as it is done with, as Safari counts an unused one against its memory. The paper is looked for at 256 px: a bright, grey region near the middle of the photo, kept only when its four corners make a plain sheet.</p>
+	<p>The photo is read through an <code>img</code>, which stands it upright by its EXIF orientation, and worked on at most 4096 px on its long side, which every phone's canvas holds. An SVG - a logo - has no size of its own, or one of a few pixels: it is drawn by its <code>viewBox</code>, else by its <code>width</code> and <code>height</code> in pixels, at 4096 px on its long side, so the result is sharp whatever part the frame holds; read as an <code>img</code>, nothing in it runs and nothing outside it loads - live text takes the device's fonts, outlined text keeps its shapes. An SVG whose drawing the browser will not hand back, one with a <code>foreignObject</code>, is a file it cannot open. Give a logo <code>data-crop-type="image/png"</code>: a JPEG paints what is clear white, a PNG keeps it clear.</p>
+	<p>Each canvas is emptied as soon as it is done with, as Safari counts an unused one against its memory. The paper is looked for at 256 px: a bright, grey region near the middle of the photo, kept only when its four corners make a plain sheet.</p>
 </section>
 
 <section class="vstack gap-12" aria-labelledby="crop-access">

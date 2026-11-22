@@ -238,6 +238,41 @@ In a grid of more than one column, or a row, the pointer drags in two dimensions
 </div>
 ```
 
+Lists with one `data-reorder-group` are a board: an item at the top of its list is dragged into any of them - before or after the item under the pointer, to a list's end below its last item, into an empty list too. An empty list keeps a target's height and shows its `data-reorder-empty` child, the page's words; while a drag is on, an empty list is framed and the list that holds the slot is tinted. Near an edge of a box that scrolls, across or down, and of the page, the box scrolls. The menu's `data-move="to"` with `data-to` naming a list of the board by its id moves the item to that list's end, and is unavailable for the item's own list; a page that names the lists by what they hold fills these items on the menu's `command` event, before it opens. Into another list the status says the page's text `moved.into` with the list's name - its `aria-label`, else its `aria-labelledby` -; `redz:move` names the list the item left in `from`, a refusal puts the item back there, and left alone, both lists' fields are written - one empty value for a list left empty, so the server tells it from a list not touched.
+
+```html
+<div class="grid md:cols-3 gap-12">
+	<div class="vstack gap-8">
+		<div class="fw-600" id="list-group-board-open">Not placed</div>
+		<ul class="list-group flex-grow-1" id="list-group-board-open-list" aria-labelledby="list-group-board-open" data-reorder="open[]" data-reorder-group="vans">
+			<li class="list-group-item hstack gap-8" data-value="harbor"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-board-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Harbor Inn"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>Harbor Inn</li>
+			<li class="list-group-item" data-reorder-empty>Drag hotels here</li>
+		</ul>
+	</div>
+	<div class="vstack gap-8">
+		<div class="fw-600" aria-hidden="true">Van 1</div>
+		<ul class="list-group flex-grow-1" id="list-group-board-van-1" aria-label="Van 1" data-reorder="vans[1][]" data-reorder-group="vans">
+			<li class="list-group-item hstack gap-8" data-value="palm"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-board-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Palm Lodge"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>Palm Lodge</li>
+			<li class="list-group-item hstack gap-8" data-value="sea"><button class="btn btn-sm btn-icon btn-text drag-handle" type="button" commandfor="list-group-board-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Move: Sea View Rooms"><i class="bi bi-grip-vertical" aria-hidden="true"></i></button>Sea View Rooms</li>
+			<li class="list-group-item" data-reorder-empty>Drag hotels here</li>
+		</ul>
+	</div>
+	<div class="vstack gap-8">
+		<div class="fw-600" aria-hidden="true">Van 2</div>
+		<ul class="list-group flex-grow-1" id="list-group-board-van-2" aria-label="Van 2" data-reorder="vans[2][]" data-reorder-group="vans">
+			<li class="list-group-item" data-reorder-empty>Drag hotels here</li>
+		</ul>
+	</div>
+</div>
+<div class="menu" id="list-group-board-menu" popover role="menu" aria-label="Move">
+	<button class="menu-item" type="button" role="menuitem" data-move="up"><i class="bi bi-arrow-up" aria-hidden="true"></i>Move up</button>
+	<button class="menu-item" type="button" role="menuitem" data-move="down"><i class="bi bi-arrow-down" aria-hidden="true"></i>Move down</button>
+	<button class="menu-item" type="button" role="menuitem" data-move="to" data-to="list-group-board-open-list">Move to Not placed</button>
+	<button class="menu-item" type="button" role="menuitem" data-move="to" data-to="list-group-board-van-1">Move to Van 1</button>
+	<button class="menu-item" type="button" role="menuitem" data-move="to" data-to="list-group-board-van-2">Move to Van 2</button>
+</div>
+```
+
 ```js
 document.addEventListener('redz:move', (event) => {
 	event.preventDefault();

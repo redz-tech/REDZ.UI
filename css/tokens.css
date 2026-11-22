@@ -95,6 +95,11 @@
 		--redz-app-mark-fg: var(--redz-primary-contrast);
 	}
 
+	/* A white label's own links: its color darkened in the light theme as a tone's text form is, lightened in the dark. */
+	[data-brand-link] {
+		--redz-link: light-dark(color(from var(--redz-brand-link) xyz-d65 calc(x * min(1, 0.13 / y)) calc(y * min(1, 0.13 / y)) calc(z * min(1, 0.13 / y))), oklch(from var(--redz-brand-link) max(l, 0.72) c h));
+	}
+
 	[data-brand-secondary] {
 		--redz-secondary: light-dark(var(--redz-brand-secondary), oklch(from var(--redz-brand-secondary) max(l, 0.72) c h));
 		--redz-secondary-subtle: light-dark(oklch(from var(--redz-brand-secondary) 0.96 calc(c * 0.25) h), oklch(from var(--redz-brand-secondary) 0.3 calc(c * 0.35) h));
@@ -141,6 +146,10 @@
 		[data-brand] {
 			--redz-primary-text: light-dark(lch(from var(--redz-brand) min(l, 40) c h), oklch(from var(--redz-brand) max(l, 0.72) c h));
 			--redz-primary-fill: light-dark(lch(from var(--redz-brand) min(l, 56) c h), oklch(from var(--redz-brand) max(l, 0.72) c h));
+		}
+
+		[data-brand-link] {
+			--redz-link: light-dark(lch(from var(--redz-brand-link) min(l, 40) c h), oklch(from var(--redz-brand-link) max(l, 0.72) c h));
 		}
 
 		[data-brand-secondary] {
