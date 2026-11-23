@@ -87,6 +87,13 @@
 		cursor: not-allowed;
 	}
 
+	.check:is(:checked, :indeterminate):is(:disabled, [aria-disabled="true"]:not([aria-busy="true"])),
+	.radio:checked:is(:disabled, [aria-disabled="true"]:not([aria-busy="true"])),
+	.switch:checked:is(:disabled, [aria-disabled="true"]:not([aria-busy="true"])) {
+		border-color: transparent;
+		background: color-mix(in oklch, var(--redz-primary-fill) 55%, var(--redz-bg-page));
+	}
+
 	/* Busy keeps the look; after 400 ms the mark gives way to a ring, and a switch's knob turns into one. */
 	.check[aria-busy="true"],
 	.radio[aria-busy="true"],
@@ -170,6 +177,10 @@
 		box-shadow: 0 0 0 1px var(--redz-border);
 	}
 
+	.switch:checked:is(:disabled, [aria-disabled="true"]:not([aria-busy="true"]))::before {
+		box-shadow: none;
+	}
+
 	/* Under a finger a check outside a label answers in 44 px around it; in a label the label's words answer. */
 	@media (pointer: coarse) {
 		:is(.check, .radio, .switch):not(label *, [aria-busy="true"]) {
@@ -227,6 +238,19 @@
 		.radio[aria-disabled="true"]:not([aria-busy="true"]),
 		.switch[aria-disabled="true"]:not([aria-busy="true"]) {
 			border-color: GrayText;
+		}
+
+		.check:is(:checked, :indeterminate):is(:disabled, [aria-disabled="true"]:not([aria-busy="true"])),
+		.radio:checked:is(:disabled, [aria-disabled="true"]:not([aria-busy="true"])),
+		.switch:checked:is(:disabled, [aria-disabled="true"]:not([aria-busy="true"])) {
+			border-color: GrayText;
+			background: GrayText;
+		}
+
+		.check:is(:checked, :indeterminate):is(:disabled, [aria-disabled="true"]:not([aria-busy="true"]))::before,
+		.radio:checked:is(:disabled, [aria-disabled="true"]:not([aria-busy="true"]))::before,
+		.switch:checked:is(:disabled, [aria-disabled="true"]:not([aria-busy="true"]))::before {
+			background: Field;
 		}
 
 		.check[aria-busy="true"]::after,

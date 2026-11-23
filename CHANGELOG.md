@@ -4,6 +4,13 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Fixed
+- A checked check, radio or switch that cannot change - `disabled` or `aria-disabled="true"` - looked unchecked: its
+  fill turned the page's grey and its mark vanished on it. It keeps its accent now, half way to the page, its mark as
+  it is; in forced colors it is GrayText with its mark in Field. Found by the ERP's billing screens.
+
 ## 0.35.0 - 2026-11-23
 
 ### Added

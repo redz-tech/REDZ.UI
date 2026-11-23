@@ -8244,6 +8244,37 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a data-apply switch cancelled without an answer: ' + say(alone) + ' (busy, checked after two flips, the signals aborted); in a tracked form the changes are ' + say(tracked));
 			}
 		}]},
+		// A checked check, radio or switch that cannot change keeps a fill of its own and a mark that shows on it, in
+		// both themes: never the look of an unchecked one.
+		lockedOn: {target: '#check-states', steps: [async (out) => {
+			const states = $('#check-states');
+			const lum = (color) => color.split(',').map(Number).map((value) => value / 255).map((value) => value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4).reduce((sum, value, at) => sum + value * [0.2126, 0.7152, 0.0722][at], 0);
+			const ratio = (a, b) => {
+				const [high, low] = [lum(a), lum(b)].sort((x, y) => y - x);
+				return (high + 0.05) / (low + 0.05);
+			};
+			const seen = {};
+			for (const theme of ['light', 'dark']) {
+				states.setAttribute('data-theme', theme);
+				await settled();
+				for (const kind of ['check', 'radio', 'switch']) {
+					const off = Object.assign(document.createElement('input'), {type: kind === 'radio' ? 'radio' : 'checkbox', className: kind, disabled: true, name: 'probe-off-' + kind});
+					states.append(off);
+					const offFill = rgb(getComputedStyle(off).backgroundColor);
+					off.remove();
+					for (const locked of $$('input.' + kind + ':checked:is(:disabled, [aria-disabled="true"])', states)) {
+						const fill = rgb(getComputedStyle(locked).backgroundColor);
+						const mark = rgb(getComputedStyle(locked, '::before').backgroundColor);
+						seen[theme + ' ' + kind + (locked.disabled ? ' disabled' : ' aria')] = [fill !== offFill, ratio(mark, fill) >= 2];
+					}
+				}
+			}
+			states.removeAttribute('data-theme');
+			const wrong = Object.entries(seen).filter(([, [differs, shows]]) => !differs || !shows);
+			if (Object.keys(seen).length !== 12 || wrong.length > 0) {
+				out.push('a checked control that cannot change, [fill not an unchecked one\'s, mark at 2:1 on it]: ' + say(seen));
+			}
+		}]},
 		// The sign-in package's passkeys against a browser stubbed by the check: the options it reads, the JSON it
 		// builds, the codes, the field hint standing aside, the quiet creation and the Signal API. Its refusals take
 		// longer than a person would, so none of them reads as an app's browser.

@@ -85,5 +85,6 @@
 		<li>A set of checks or radios sits in a <code>&lt;fieldset&gt;</code> whose <code>&lt;legend&gt;</code> names it.</li>
 		<li>The marks are drawn from the browser's own <code>:checked</code> and <code>:indeterminate</code>, and keep showing in forced colors and in print.</li>
 		<li><code>aria-disabled="true"</code> keeps the control focusable and readable, so its hint can say why; the library ignores clicks and Space on it, as on a button so marked.</li>
+		<li>A checked control that cannot change, <code>disabled</code> or <code>aria-disabled="true"</code>, keeps its accent half way to the page, its mark as it is: a locked "on" never reads as "off".</li>
 	</ul>
 </section>

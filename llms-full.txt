@@ -3896,6 +3896,7 @@ A check with some of its items chosen is `indeterminate` - a property set from s
 - A set of checks or radios sits in a `<fieldset>` whose `<legend>` names it.
 - The marks are drawn from the browser's own `:checked` and `:indeterminate`, and keep showing in forced colors and in print.
 - `aria-disabled="true"` keeps the control focusable and readable, so its hint can say why; the library ignores clicks and Space on it, as on a button so marked.
+- A checked control that cannot change, `disabled` or `aria-disabled="true"`, keeps its accent half way to the page, its mark as it is: a locked "on" never reads as "off".
 
 ## Tokens
 
