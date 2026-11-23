@@ -4,7 +4,7 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
-## Unreleased
+## 0.35.1 - 2026-11-23
 
 ### Fixed
 - A checked check, radio or switch that cannot change - `disabled` or `aria-disabled="true"` - looked unchecked: its
