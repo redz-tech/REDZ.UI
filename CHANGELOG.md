@@ -4,6 +4,20 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Added
+The browser's side of REDZ.ID's sign-in, ordered by the ERP and shaped with it and REDZ CMS.
+- The sign-in package, `js/redz-ui-signin.min.js` and its types: `REDZ.ui.passkey` - `probe`, `create`, `get`,
+  `autofill`, `upgrade` and `signal.unknown`, `signal.accepted`, `signal.user` - by the WebAuthn Level 3 JSON forms,
+  answering codes, never a browser's words; an explicit call refused under 300 ms answers `in_app` with the app
+  `unknown`. `[data-open-browser]` and the event `redz:handoff`: the way out of an app's own browser to the real one,
+  its press copying the address, said by the new text `handoff.copied` where the app has no way out.
+  `REDZ.ui.solve`: a proof of work in the proof file as a worker, or in the page.
+- The proof file, `js/redz-ui-proof.min.js` and `js/redz-ui-proof.d.ts`: one classic script that needs no other file,
+  a worker or a script tag, the event `redz:solver`. The passport's packages name a classic script by `script`.
+- Docs: the page Sign-in.
+
 ## 0.34.0 - 2026-11-22
 
 ### Added

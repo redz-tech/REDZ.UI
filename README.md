@@ -67,7 +67,7 @@ attaches by delegation on `document`, so nothing is set up per element and marku
 
 ```html
 <script type="module" src="js/redz-ui.min.js"></script>
-<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "confirm.phrase": "Type “{phrase}” to confirm", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong", "moved": "Moved to {position} of {count}", "moved.into": "Moved to {list}, {position} of {count}", "more": "More", "breadcrumb.more": "Show the levels in between", "slide": "{position} of {count}", "file.type": "{name} is not a kind of file this takes", "file.size": "{name} is larger than {size}"}</script>
+<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "confirm.phrase": "Type “{phrase}” to confirm", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong", "moved": "Moved to {position} of {count}", "moved.into": "Moved to {list}, {position} of {count}", "more": "More", "breadcrumb.more": "Show the levels in between", "handoff.copied": "Link copied: open your browser and paste it", "slide": "{position} of {count}", "file.type": "{name} is not a kind of file this takes", "file.size": "{name} is larger than {size}"}</script>
 ```
 
 - **Menus** (`role="menu"` on a `popover` opened by its button): the arrow keys move through the items, Home and End go
@@ -247,6 +247,27 @@ Five more packages, linked on the screens that show them, listed in the passport
 
 Their budgets, gzipped: charts 3 KB of styles and 2 KB of script, the calendar 4 KB of styles and 14 KB of script, the
 media library 2 KB, QR codes 4 KB of script, the crop 2 KB of styles and 10 KB of script.
+
+## Sign-in
+
+The browser's side of a sign-in, for REDZ.ID and any product that signs people in: the page fetches every option,
+ticket and task and posts every answer, as the library holds no network code and no words.
+- the module `js/redz-ui-signin.min.js`, linked after the main script, from `signin/` - `REDZ.ui.passkey`: `probe()`
+  (passkeys here, the device's own authenticator, the field hint, the quiet creation, the Signal API, the app whose
+  browser it is, and the verdict), `create` and `get` by the WebAuthn Level 3 JSON forms (read by the browser where it
+  can, by the library where not; the answer exactly `credential.toJSON()`'s, built member by member where a password
+  manager's credential breaks it), `autofill` (the field hint, standing aside for an explicit call), `upgrade` (the quiet
+  creation after a password) and `signal`; each answers `{ok: true, response}` or `{ok: false, code, name}` - the codes
+  `unsupported`, `in_app`, `cancelled`, `exists`, `blocked`, `aborted`, `failed`. `[data-open-browser]` shows in an app's
+  own browser - LINE, Facebook, Instagram, Telegram, WeChat and the rest by their marks, any other Android WebView, and
+  one a call finds by a refusal faster than a person acts - once the page gives it a ticket by `redz:handoff`, and its
+  press copies the address and leaves by the app's way. `REDZ.ui.solve(task, {worker})` runs a proof of work.
+- the classic script `js/redz-ui-proof.min.js`, from `proof/`, the passport's `packages.proof.script` - the family's one
+  proof-of-work solver, alone: no other file of the library, no markup. A worker answers `{at, task, width}` with
+  `{at, found}` and ends a walk on `{at, stop: true}`; a script tag gives `solve(task, {width, signal})` in the event
+  `redz:solver`. Its types are `js/redz-ui-proof.d.ts`.
+
+Their budgets, gzipped: the sign-in package 6 KB, the proof file 2 KB.
 
 ## Documentation
 `docs/` on the site: getting started, layout, utilities, tokens, icons, the move from Bootstrap 5.3, and a page per

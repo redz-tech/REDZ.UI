@@ -53,8 +53,9 @@ window.REDZ_BEHAVE = (() => {
 		return say([file.size, file.type, head, decoded, drawn, answer]);
 	};
 	// The checks' own markup goes through a policy of theirs: the probes' pages require Trusted Types.
-	const policy = globalThis.trustedTypes?.createPolicy('redz-probe', {createHTML: (markup) => markup});
+	const policy = globalThis.trustedTypes?.createPolicy('redz-probe', {createHTML: (markup) => markup, createScriptURL: (url) => url});
 	const trusted = (markup) => (policy === undefined ? markup : policy.createHTML(markup));
+	const scriptURL = (url) => (policy === undefined ? url : policy.createScriptURL(url));
 	const near = (a, b, by = 2) => Math.abs(a - b) <= by;
 	// Two frames, or a moment where a page gets none: what real input does is done by then.
 	const settled = () => Promise.race([new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))), wait(120)]);
@@ -8241,6 +8242,360 @@ window.REDZ_BEHAVE = (() => {
 			}
 			if (say(alone) !== say([false, false, [true, false]]) || say(tracked) !== say([[], false])) {
 				out.push('a data-apply switch cancelled without an answer: ' + say(alone) + ' (busy, checked after two flips, the signals aborted); in a tracked form the changes are ' + say(tracked));
+			}
+		}]},
+		// The sign-in package's passkeys against a browser stubbed by the check: the options it reads, the JSON it
+		// builds, the codes, the field hint standing aside, the quiet creation and the Signal API. Its refusals take
+		// longer than a person would, so none of them reads as an app's browser.
+		passkeyCodes: {target: '#signin-probe-sample', steps: [async (out) => {
+			const base64url = (bytes) => btoa(Array.from(new Uint8Array(bytes), (byte) => String.fromCharCode(byte)).join('')).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+			const random = (count) => base64url(crypto.getRandomValues(new Uint8Array(count)));
+			const request = (extra = {}) => ({challenge: random(32), rpId: location.hostname, allowCredentials: [], userVerification: 'preferred', hints: null, ...extra});
+			const creation = (extra = {}) => ({rp: {id: location.hostname, name: 'Sample'}, user: {id: random(16), name: 'sample', displayName: 'Sample', icon: null}, challenge: random(32), pubKeyCredParams: [{type: 'public-key', alg: -7}], extensions: null, ...extra});
+			const fake = (kind) => ({id: 'AQID', rawId: Uint8Array.of(1, 2, 3).buffer, type: 'public-key', authenticatorAttachment: 'platform', getClientExtensionResults: () => ({}), response: kind === 'create' ? {clientDataJSON: Uint8Array.of(4).buffer, attestationObject: Uint8Array.of(5, 6).buffer, getTransports: () => ['internal']} : {clientDataJSON: Uint8Array.of(4).buffer, authenticatorData: Uint8Array.of(7).buffer, signature: Uint8Array.of(8).buffer, userHandle: Uint8Array.of(9).buffer}});
+			const refuse = (name, ms = 0) => () => new Promise((done, fail) => setTimeout(() => fail(new DOMException('refused', name)), ms));
+			const keys = navigator.credentials;
+			const statics = ['parseCreationOptionsFromJSON', 'parseRequestOptionsFromJSON', 'getClientCapabilities', 'isConditionalMediationAvailable', 'signalUnknownCredential', 'signalCurrentUserDetails'];
+			const kept = Object.fromEntries(statics.map((name) => [name, Object.getOwnPropertyDescriptor(PublicKeyCredential, name)]));
+			const seen = {};
+			const last = new AbortController();
+			const bytes = (buffer) => buffer instanceof ArrayBuffer ? base64url(buffer) : 'not bytes';
+			try {
+				const probe = await within(REDZ.ui.passkey.probe());
+				seen.probe = [Object.keys(probe).join(' '), Object.values(probe).filter((value) => typeof value === 'boolean').length, probe.app];
+				// The JSON as the browser's own reader is given it, its null members gone, and the credential's JSON
+				// built member by member where the credential has no toJSON.
+				let given = null;
+				let asked = null;
+				PublicKeyCredential.parseCreationOptionsFromJSON = (json) => {
+					given = json;
+					return {challenge: new ArrayBuffer(1)};
+				};
+				keys.create = (options) => Promise.resolve(fake('create'));
+				keys.get = (options) => Promise.resolve(fake('get'));
+				const made = await within(REDZ.ui.passkey.create(creation()));
+				seen.created = [made.ok, 'extensions' in (given ?? {}), 'icon' in (given?.user ?? {}), made.response?.rawId, made.response?.response?.clientDataJSON, made.response?.response?.attestationObject, made.response?.response?.transports?.join(' ')];
+				const signed = await within(REDZ.ui.passkey.get(request()));
+				seen.signed = [signed.ok, signed.response?.response?.authenticatorData, signed.response?.response?.signature, signed.response?.response?.userHandle];
+				// Where the browser has no reader, the library reads the base64url members itself.
+				PublicKeyCredential.parseCreationOptionsFromJSON = undefined;
+				PublicKeyCredential.parseRequestOptionsFromJSON = undefined;
+				keys.create = (options) => {
+					asked = options.publicKey;
+					return Promise.resolve(fake('create'));
+				};
+				keys.get = (options) => {
+					asked = options.publicKey;
+					return Promise.resolve(fake('get'));
+				};
+				const json = creation({excludeCredentials: [{type: 'public-key', id: 'CQoL'}]});
+				await within(REDZ.ui.passkey.create(json));
+				seen.read = [bytes(asked?.challenge) === json.challenge, bytes(asked?.user?.id) === json.user.id, bytes(asked?.excludeCredentials?.[0]?.id), 'extensions' in (asked ?? {})];
+				await within(REDZ.ui.passkey.get(request({allowCredentials: [{type: 'public-key', id: 'DA0O'}]})));
+				seen.read.push(bytes(asked?.allowCredentials?.[0]?.id), 'hints' in (asked ?? {}));
+				// The codes by the error's name, never its words.
+				seen.codes = [];
+				for (const [kind, name, ms] of [['create', 'InvalidStateError'], ['get', 'InvalidStateError'], ['get', 'SecurityError'], ['create', 'NotSupportedError'], ['get', 'UnknownError'], ['create', 'ConstraintError'], ['get', 'NotAllowedError', 400]]) {
+					keys[kind] = refuse(name, ms);
+					const answer = await within(REDZ.ui.passkey[kind](kind === 'create' ? creation() : request()));
+					seen.codes.push(answer.code + ' ' + answer.name + ' ' + Object.keys(answer).join(','));
+				}
+				keys.get = () => Promise.resolve(null);
+				seen.codes.push((await within(REDZ.ui.passkey.get(request()))).code);
+				keys.get = () => Promise.resolve({id: 'AQID', type: 'public-key'});
+				const unreadable = await within(REDZ.ui.passkey.get(request()));
+				seen.codes.push(unreadable.code + ' ' + unreadable.name);
+				keys.get = (options) => new Promise((done, fail) => options.signal.addEventListener('abort', () => fail(options.signal.reason)));
+				const ended = new AbortController();
+				setTimeout(() => ended.abort(), 50);
+				seen.codes.push((await within(REDZ.ui.passkey.get(request(), {signal: ended.signal}))).code);
+				// The pressed control busy for the whole ceremony.
+				const button = Object.assign(document.createElement('button'), {className: 'btn', type: 'button', textContent: 'Sample'});
+				$('#signin-probe-sample').append(button);
+				keys.get = () => new Promise((done) => setTimeout(() => done(fake('get')), 300));
+				const pressed = REDZ.ui.passkey.get(request(), {busy: button});
+				await wait(100);
+				seen.busy = [button.getAttribute('aria-busy')];
+				await within(pressed);
+				await settled();
+				seen.busy.push(button.getAttribute('aria-busy'));
+				button.remove();
+				// The field hint: it stands aside for an explicit call, comes back with fresh options when that one
+				// fails, and ends when one succeeds, by its signal or by a new hint.
+				PublicKeyCredential.isConditionalMediationAvailable = () => Promise.resolve(true);
+				const calls = [];
+				let picked = null;
+				let explicit = 0;
+				keys.get = (options) => new Promise((done, fail) => {
+					const call = {mediation: options.mediation ?? 'modal', aborted: false, challenge: bytes(options.publicKey.challenge)};
+					calls.push(call);
+					options.signal?.addEventListener('abort', () => {
+						call.aborted = true;
+						fail(new DOMException('aborted', 'AbortError'));
+					});
+					if (options.mediation === 'conditional') {
+						picked = done;
+					} else {
+						setTimeout(() => (explicit++ === 0 ? fail(new DOMException('refused', 'UnknownError')) : done(fake('get'))), 100);
+					}
+				});
+				let fresh = 0;
+				let hintAnswer = null;
+				const hint = REDZ.ui.passkey.autofill(() => {
+					fresh++;
+					return request();
+				});
+				hint.then((answer) => {
+					hintAnswer = answer;
+				});
+				await wait(50);
+				const failed = await within(REDZ.ui.passkey.get(request()));
+				await wait(50);
+				seen.hint = [failed.code, calls.map((call) => call.mediation + (call.aborted ? '-' : '')).join(' '), fresh, calls[0]?.challenge !== calls[2]?.challenge, hintAnswer];
+				await within(REDZ.ui.passkey.get(request()));
+				await wait(50);
+				seen.hint.push(calls.map((call) => call.mediation + (call.aborted ? '-' : '')).join(' '), hintAnswer?.code);
+				const field = REDZ.ui.passkey.autofill(request());
+				await wait(50);
+				picked?.(fake('get'));
+				seen.hint.push((await within(field)).response?.response?.signature);
+				const stop = new AbortController();
+				const stopped = REDZ.ui.passkey.autofill(request(), {signal: stop.signal});
+				await wait(30);
+				stop.abort();
+				const replaced = REDZ.ui.passkey.autofill(request());
+				await wait(30);
+				REDZ.ui.passkey.autofill(request(), {signal: last.signal});
+				seen.hint.push((await within(stopped)).code, (await within(replaced)).code);
+				// The quiet creation: only where the browser says it can, by mediation conditional.
+				let mediation = 'none';
+				PublicKeyCredential.getClientCapabilities = () => Promise.resolve({conditionalCreate: false});
+				keys.create = (options) => {
+					mediation = options.mediation;
+					return Promise.reject(new DOMException('refused', 'InvalidStateError'));
+				};
+				seen.upgrade = [(await within(REDZ.ui.passkey.upgrade(creation()))).code, mediation];
+				PublicKeyCredential.getClientCapabilities = () => Promise.resolve({conditionalCreate: true});
+				seen.upgrade.push((await within(REDZ.ui.passkey.upgrade(creation()))).code, mediation);
+				// The Signal API: told, refused, never settled - a second, then true - or not there.
+				PublicKeyCredential.signalUnknownCredential = () => Promise.resolve();
+				seen.signal = [await within(REDZ.ui.passkey.signal.unknown({rpId: location.hostname, credentialId: 'AQID'}))];
+				PublicKeyCredential.signalUnknownCredential = () => Promise.reject(new TypeError('refused'));
+				seen.signal.push(await within(REDZ.ui.passkey.signal.unknown({rpId: location.hostname, credentialId: 'AQID'})));
+				PublicKeyCredential.signalUnknownCredential = () => new Promise(() => {});
+				const started = performance.now();
+				seen.signal.push(await within(REDZ.ui.passkey.signal.unknown({rpId: location.hostname, credentialId: 'AQID'})), performance.now() - started < 2000);
+				PublicKeyCredential.signalCurrentUserDetails = undefined;
+				seen.signal.push(await within(REDZ.ui.passkey.signal.user({rpId: location.hostname, userId: 'AQID', name: 'sample', displayName: 'Sample'})));
+			} finally {
+				last.abort();
+				for (const name of statics) {
+					if (kept[name]) {
+						Object.defineProperty(PublicKeyCredential, name, kept[name]);
+					} else {
+						delete PublicKeyCredential[name];
+					}
+				}
+				delete keys.create;
+				delete keys.get;
+			}
+			const want = {
+				probe: ['passkeys platform autofill quietCreate signal app works', 6, null],
+				created: [true, false, false, 'AQID', 'BA', 'BQY', 'internal'],
+				signed: [true, 'Bw', 'CA', 'CQ'],
+				read: [true, true, 'CQoL', false, 'DA0O', false],
+				codes: ['exists InvalidStateError ok,code,name', 'failed InvalidStateError ok,code,name', 'blocked SecurityError ok,code,name', 'unsupported NotSupportedError ok,code,name', 'failed UnknownError ok,code,name', 'failed ConstraintError ok,code,name', 'cancelled NotAllowedError ok,code,name', 'cancelled', 'failed TypeError', 'aborted'],
+				busy: ['true', null],
+				hint: ['failed', 'conditional- modal conditional', 2, true, null, 'conditional- modal conditional- modal', 'aborted', 'CA', 'aborted', 'aborted'],
+				upgrade: ['unsupported', 'none', 'exists', 'conditional'],
+				signal: [true, false, true, true, false],
+			};
+			if (say(seen) !== say(want)) {
+				out.push('the passkeys answered ' + say(seen) + ', where they must answer ' + say(want));
+			}
+		}]},
+		// The proof of work in the page and in the proof file as a worker, its tasks made by the check: the counter
+		// found, the tasks it must not take, an end by the signal, walks side by side, and the file by a script tag.
+		proofSolve: {target: '#signin-proof-sample', steps: [async (out) => {
+			const encoder = new TextEncoder();
+			const hex = (bytes) => Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
+			const base64url = (bytes) => btoa(Array.from(bytes, (byte) => String.fromCharCode(byte)).join('')).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+			const task = async (counter, max = 512, cost = 500) => {
+				const id = hex(crypto.getRandomValues(new Uint8Array(16)));
+				const salt = new Uint8Array(20);
+				salt.set(Uint8Array.from(id.match(/../g), (pair) => parseInt(pair, 16)));
+				new DataView(salt.buffer).setUint32(16, counter);
+				const base = await crypto.subtle.importKey('raw', encoder.encode('probe label'), 'PBKDF2', false, ['deriveBits']);
+				const key = new Uint8Array(await crypto.subtle.deriveBits({name: 'PBKDF2', hash: 'SHA-256', salt, iterations: cost}, base, 256));
+				const mac = await crypto.subtle.importKey('raw', key, {name: 'HMAC', hash: 'SHA-256'}, false, ['sign']);
+				return {v: 2, alg: 'pbkdf2-sha256', id, cost, max, prefix: hex(key.subarray(0, 1)), kmac: base64url(new Uint8Array(await crypto.subtle.sign('HMAC', mac, encoder.encode(id)))), label: 'probe label'};
+			};
+			const worker = scriptURL(new URL('../dist/js/redz-ui-proof.min.js', location.href).href);
+			const seen = {};
+			const one = await task(300);
+			seen.page = await within(REDZ.ui.solve(one));
+			seen.worker = await within(REDZ.ui.solve(one, {worker}));
+			seen.upper = await within(REDZ.ui.solve({...one, prefix: one.prefix.toUpperCase()}));
+			seen.unknown = await within(Promise.all([{...one, label: undefined}, {...one, alg: 'sha256'}, {...one, id: one.id.slice(2)}, {...one, max: 300}, {...one, cost: 0}, {...one, kmac: one.kmac + '='}, null].map((wrong) => REDZ.ui.solve(wrong))));
+			seen.last = await within(REDZ.ui.solve({...one, max: 301}, {width: 1}));
+			const long = await task(450, 600, 3000);
+			for (const [name, options] of [['endPage', {}], ['endWorker', {worker}]]) {
+				const end = new AbortController();
+				setTimeout(() => end.abort(), 40);
+				const started = performance.now();
+				seen[name] = [await within(REDZ.ui.solve(long, {...options, signal: end.signal})), performance.now() - started < 1000];
+			}
+			const tasks = await Promise.all([task(10), task(200), task(50), long]);
+			const thread = new Worker(worker);
+			const answers = [];
+			await within(new Promise((done) => {
+				thread.addEventListener('message', (event) => {
+					answers.push(event.data);
+					if (answers.length === 4) {
+						done();
+					}
+				});
+				tasks.forEach((each, at) => thread.postMessage({at: at + 1, task: each, width: 2}));
+				setTimeout(() => thread.postMessage({at: 4, stop: true}), 40);
+			}));
+			thread.terminate();
+			seen.walks = answers.sort((a, b) => a.at - b.at).map((answer) => answer.found);
+			const names = Object.keys(globalThis).length;
+			const given = new Promise((done) => document.addEventListener('redz:solver', (event) => done(event.detail), {once: true}));
+			const tag = document.createElement('script');
+			tag.src = worker;
+			document.head.append(tag);
+			const solve = await within(given);
+			seen.tag = typeof solve === 'function' ? await within(solve(await task(123), {width: 3})) : solve;
+			seen.left = Object.keys(globalThis).length - names;
+			tag.remove();
+			const want = {page: 300, worker: 300, upper: 300, unknown: [-1, -1, -1, -1, -1, -1, -1], last: 300, endPage: [-1, true], endWorker: [-1, true], walks: [10, 200, 50, -1], tag: 123, left: 0};
+			if (say(seen) !== say(want)) {
+				out.push('the proof answered ' + say(seen) + ', where it must answer ' + say(want));
+			}
+		}]},
+		// The way out of an app's browser: hidden in a browser of its own; a call refused at once shows it with the
+		// page's ticket; each app's way, read from the link as the press leaves it; the address copied and said; the
+		// ticket asked again in its last minute; a control's own href where the page does not answer.
+		handoff: {target: '#signin-handoff-sample', steps: [async (out) => {
+			const control = $('#signin-handoff-sample [data-open-browser]');
+			const seen = {before: control.hidden};
+			let asks = 0;
+			const counted = () => {
+				asks++;
+			};
+			document.addEventListener('redz:handoff', counted);
+			let copied = null;
+			// The page as shown, as a driver's window behind others is not.
+			Object.defineProperty(document, 'visibilityState', {configurable: true, value: 'visible'});
+			Object.defineProperty(navigator, 'clipboard', {configurable: true, value: {writeText: (words) => {
+				copied = words;
+				return Promise.resolve();
+			}}});
+			let left = null;
+			const keep = (event) => {
+				if (event.target instanceof Element && event.target.closest('[data-open-browser]')) {
+					left = event.defaultPrevented ? null : event.target.closest('[data-open-browser]').getAttribute('href');
+					event.preventDefault();
+				}
+			};
+			addEventListener('click', keep);
+			// The page's tickets as the check gives them: in their last minute from the start.
+			const near = (event) => {
+				if (event.target === control) {
+					event.preventDefault();
+					event.detail.respondWith({url: location.origin + location.pathname + '?ticket=near' + asks, expires: Date.now() + 30000});
+				}
+			};
+			document.addEventListener('redz:handoff', near);
+			const extra = [];
+			try {
+				navigator.credentials.get = () => Promise.reject(new DOMException('refused', 'NotAllowedError'));
+				const refused = await within(REDZ.ui.passkey.get({challenge: 'AAAA'}));
+				delete navigator.credentials.get;
+				await until(() => !control.hidden);
+				seen.refused = [refused.code, refused.app, refused.name, control.hidden, asks, (await within(REDZ.ui.passkey.probe())).app];
+				const ticket = new URL(control.getRootNode().defaultView.location.href);
+				const agents = {
+					line: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Safari Line/14.20.0',
+					instagram: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Instagram 350.0.0.0 (iPhone15,2; iOS 18_0; en_US)',
+					facebook: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 [FBAN/FBIOS;FBAV/450.0.0;FBBV/1]',
+					facebookAndroid: 'Mozilla/5.0 (Linux; Android 14; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/450.0.0;]',
+					kakaotalk: 'Mozilla/5.0 (Linux; Android 14; K; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/130.0.0.0 Mobile Safari/537.36 KAKAOTALK/10.8.0 (INAPP)',
+					wechat: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.57(0x1800392c) NetType/WIFI',
+					webview: 'Mozilla/5.0 (Linux; Android 14; K; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/130.0.0.0 Mobile Safari/537.36',
+				};
+				seen.out = {};
+				for (const [name, agent] of Object.entries(agents)) {
+					Object.defineProperty(navigator, 'userAgent', {configurable: true, value: agent});
+					left = null;
+					copied = null;
+					control.click();
+					await wait(20);
+					const held = copied === null ? null : new URL(copied);
+					const shape = left === null ? null : left.replace(held?.href ?? '-', 'URL').replace(encodeURIComponent(held?.href ?? '-'), 'ENCODED').replace(held === null ? '-' : held.host + held.pathname + held.search, 'PLACE');
+					seen.out[name] = [(await within(REDZ.ui.passkey.probe())).app, held !== null && held.searchParams.has('ticket') && held.pathname === ticket.pathname, shape];
+				}
+				await wait(50);
+				seen.said = $$('.toast').some((toast) => toast.textContent.includes('Link copied'));
+				delete navigator.userAgent;
+				// A ticket in its last minute is asked again when the page shows again.
+				const before = asks;
+				document.dispatchEvent(new Event('visibilitychange'));
+				await wait(50);
+				control.click();
+				await wait(20);
+				seen.renew = [asks - before, copied === location.origin + location.pathname + '?ticket=near' + (before + 1)];
+				// A control the page does not answer keeps its own href; one with none stays hidden; a refusal hides.
+				const own = Object.assign(document.createElement('a'), {href: 'https://example.test/own', textContent: 'Own'});
+				const bare = Object.assign(document.createElement('a'), {textContent: 'Bare'});
+				const failing = Object.assign(document.createElement('a'), {href: 'https://example.test/failing', textContent: 'Failing'});
+				for (const made of [own, bare, failing]) {
+					made.hidden = true;
+					made.setAttribute('data-open-browser', '');
+					extra.push(made);
+				}
+				const refuse = (event) => {
+					if (event.target === failing) {
+						event.preventDefault();
+						event.detail.respondWith(Promise.reject(new Error('no ticket')));
+					}
+				};
+				document.addEventListener('redz:handoff', refuse);
+				document.body.append(own, bare, failing);
+				await wait(100);
+				seen.alone = [own.hidden, bare.hidden, failing.hidden];
+				document.removeEventListener('redz:handoff', refuse);
+			} finally {
+				delete navigator.userAgent;
+				delete navigator.credentials.get;
+				delete navigator.clipboard;
+				delete document.visibilityState;
+				removeEventListener('click', keep);
+				document.removeEventListener('redz:handoff', counted);
+				document.removeEventListener('redz:handoff', near);
+				for (const made of extra) {
+					made.remove();
+				}
+			}
+			const want = {
+				before: true,
+				refused: ['in_app', 'unknown', 'NotAllowedError', false, 1, 'unknown'],
+				out: {
+					line: ['line', true, 'URL&openExternalBrowser=1'],
+					instagram: ['instagram', true, 'instagram://extbrowser/?url=ENCODED'],
+					facebook: ['facebook', true, 'x-safari-URL'],
+					facebookAndroid: ['facebook', true, 'intent://PLACE#Intent;scheme=' + location.protocol.slice(0, -1) + ';action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;end'],
+					kakaotalk: ['kakaotalk', true, 'kakaotalk://web/openExternal?url=ENCODED'],
+					wechat: ['wechat', true, null],
+					webview: ['webview', true, 'intent://PLACE#Intent;scheme=' + location.protocol.slice(0, -1) + ';action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;end'],
+				},
+				said: true,
+				renew: [1, true],
+				alone: [false, true, true],
+			};
+			if (say(seen) !== say(want)) {
+				out.push('the way out answered ' + say(seen) + ', where it must answer ' + say(want));
 			}
 		}]},
 	};

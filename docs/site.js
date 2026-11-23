@@ -680,4 +680,56 @@
 			every = event.target.checked ? setInterval(redraw, 3000) : null;
 		}
 	});
+	// The sign-in page: the browser's own passkey answer in its table; a call refused at once, as an app's browser
+	// refuses it, which shows the way out on a sample ticket; and a proof task made here, solved by the proof file.
+	document.addEventListener('DOMContentLoaded', () => {
+		const shown = document.querySelectorAll('[data-docs-probe]');
+		if (shown.length > 0 && globalThis.REDZ?.ui?.passkey) {
+			REDZ.ui.passkey.probe().then((answer) => {
+				for (const output of shown) {
+					output.textContent = String(answer[output.dataset.docsProbe]);
+				}
+			});
+		}
+	});
+	const hexOf = (bytes) => Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
+	const base64urlOf = (bytes) => btoa(Array.from(bytes, (byte) => String.fromCharCode(byte)).join('')).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+	document.addEventListener('click', (event) => {
+		const button = event.target instanceof Element ? event.target.closest('[data-docs-refuse]') : null;
+		if (button === null || !globalThis.REDZ?.ui?.passkey || !navigator.credentials) {
+			return;
+		}
+		navigator.credentials.get = () => Promise.reject(new DOMException('Refused at once, as an app\'s browser refuses it', 'NotAllowedError'));
+		REDZ.ui.passkey.get({challenge: base64urlOf(crypto.getRandomValues(new Uint8Array(32))), userVerification: 'preferred'}, {busy: button}).then((result) => {
+			delete navigator.credentials.get;
+			button.closest('.docs-example').querySelector('[data-docs-refused]').textContent = result.ok ? 'Signed in' : 'Result: ' + result.code + (result.app ? ', app ' + result.app : '');
+		});
+	});
+	document.addEventListener('redz:handoff', (event) => {
+		if (event.target.closest('#signin-handoff-sample')) {
+			event.preventDefault();
+			event.detail.respondWith({url: location.origin + location.pathname + '?ticket=' + base64urlOf(crypto.getRandomValues(new Uint8Array(12))), expires: Date.now() + 300000});
+		}
+	});
+	document.addEventListener('click', async (event) => {
+		const button = event.target instanceof Element ? event.target.closest('[data-docs-solve]') : null;
+		const shown = button?.closest('.docs-example').querySelector('[data-docs-solved]');
+		if (!shown || !globalThis.REDZ?.ui?.solve) {
+			return;
+		}
+		const words = new TextEncoder();
+		const id = hexOf(crypto.getRandomValues(new Uint8Array(16)));
+		const [cost, max, label] = [1000, 4096, 'REDZ.UI docs'];
+		const counter = crypto.getRandomValues(new Uint32Array(1))[0] % max;
+		const salt = new Uint8Array(20);
+		salt.set(Uint8Array.from(id.match(/../g), (pair) => parseInt(pair, 16)));
+		new DataView(salt.buffer).setUint32(16, counter);
+		const base = await crypto.subtle.importKey('raw', words.encode(label), 'PBKDF2', false, ['deriveBits']);
+		const key = new Uint8Array(await crypto.subtle.deriveBits({name: 'PBKDF2', hash: 'SHA-256', salt, iterations: cost}, base, 256));
+		const mac = await crypto.subtle.importKey('raw', key, {name: 'HMAC', hash: 'SHA-256'}, false, ['sign']);
+		const task = {alg: 'pbkdf2-sha256', id, cost, max, prefix: hexOf(key.subarray(0, 1)), kmac: base64urlOf(new Uint8Array(await crypto.subtle.sign('HMAC', mac, words.encode(id)))), label};
+		const started = performance.now();
+		const found = await REDZ.ui.solve(task, {worker: new URL('../dist/js/redz-ui-proof.min.js', location.href).href, busy: button});
+		shown.textContent = found === counter ? 'Counter ' + found + ' of ' + max + ' found in ' + Math.round(performance.now() - started) + ' ms' : 'Not found';
+	});
 })();

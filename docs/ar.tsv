@@ -2142,3 +2142,19 @@ harbor-tours	harbor-tours
 public_html	public_html
 uploads	uploads
 Show the levels in between	إظهار المستويات بينهما
+Sign-in	تسجيل الدخول
+Member	العضو
+Here	هنا
+What it says	ما يعنيه
+The page can ask for passkeys at all: the API is there, on a secure page.	يمكن للصفحة أن تطلب مفاتيح المرور أصلًا: الواجهة موجودة، في صفحة آمنة.
+The device has an authenticator of its own that checks the person: a fingerprint, a face, a screen lock.	للجهاز أداة مصادقة خاصة به تتحقق من الشخص: بصمة، أو وجه، أو قفل الشاشة.
+Passkeys can be offered in the field's own suggestions.	يمكن عرض مفاتيح المرور ضمن اقتراحات الحقل نفسه.
+A passkey can be created quietly after a password sign-in.	يمكن إنشاء مفتاح مرور بهدوء بعد تسجيل الدخول بكلمة المرور.
+The passkey manager can be told which passkeys the server still knows.	يمكن إبلاغ مدير مفاتيح المرور بالمفاتيح التي ما زال الخادم يعرفها.
+The app whose own browser this is,	التطبيق الذي هذا متصفحه الخاص،
+for a browser of its own.	لمتصفح مستقل.
+The verdict: passkeys here, and no app in between.	الحكم: مفاتيح المرور تعمل هنا، ولا تطبيق في الوسط.
+Sign in as an app's browser would	سجّل الدخول كما يفعل متصفح تطبيق
+Open in browser	افتح في المتصفح
+Solve a task	حلّ مهمة
+Link copied: open your browser and paste it	نُسخ الرابط: افتح متصفحك والصقه فيه
