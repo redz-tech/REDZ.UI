@@ -4,7 +4,7 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
-## Unreleased
+## 0.37.1 - 2026-11-26
 
 ### Fixed
 - A control a widget wrapped floats in a field inside a dialog too. 0.37.0 left out every control with a popover or a
