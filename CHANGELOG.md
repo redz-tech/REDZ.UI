@@ -4,7 +4,7 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
-## Unreleased
+## 0.37.0 - 2026-11-26
 
 ### Added
 The ERP's order for REDZ.Phone's field in a floating field, the general part (the owner's pick B: REDZ.Phone ships
