@@ -105,7 +105,7 @@ A `details` with `form-more` folds what a short hint cannot say. Its chevron tur
 
 ### An icon in the field
 
-`form-adorn` puts an icon inside a field or a select, at its start; the field keeps its own name. With `form-floating` on the same element the label starts after the icon, inside the one border - the way a sign-in form draws its fields.
+`form-adorn` puts an icon inside a field or a select, at its start; the field keeps its own name. With `form-floating` on the same element the label starts after the icon, inside the one border - the way a sign-in form draws its fields: `form-adorn` gives it `--redz-float-start`, as below.
 
 ```html
 <div class="form-adorn">
@@ -129,6 +129,27 @@ A `details` with `form-more` folds what a short hint cannot say. Its chevron tur
 		<label for="form-adorn-password">Password</label>
 	</div>
 	<button class="btn btn-icon" type="button" commandfor="form-adorn-password" command="--reveal" aria-pressed="false" aria-label="Show the password"><i class="bi bi-eye" aria-hidden="true"></i></button>
+</div>
+```
+
+### A control a widget wraps
+
+A script that wraps the field's control in parts of its own - a phone field with its country button, a mask - keeps the float: any `input` or `select` inside `form-floating` is its control, unless it sits in a popover or a dialog of the field, and the label stays the field's last child. What the widget draws before the text moves the text's start: the widget gives that start as `--redz-float-start`, the control's own padding there, and the label starts with it, at rest and lifted. `form-adorn` sets it to 2.125rem.
+
+```html
+<div class="form-floating max-w-320">
+	<div class="docs-prefix">
+		<span aria-hidden="true">BK-</span>
+		<input class="form-control" id="form-wrapped-code" inputmode="numeric" placeholder="0000" autocomplete="off">
+	</div>
+	<label for="form-wrapped-code">Booking code</label>
+</div>
+<div class="form-floating max-w-320">
+	<div class="docs-prefix">
+		<span aria-hidden="true">BK-</span>
+		<input class="form-control" id="form-wrapped-held" inputmode="numeric" placeholder="0000" value="2048" autocomplete="off">
+	</div>
+	<label for="form-wrapped-held">Booking code</label>
 </div>
 ```
 
@@ -467,7 +488,7 @@ The library has no words of its own; it reads these from the page's island `#red
 
 ## Tokens
 
-From [`css/components/form.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/form.css), which declares no custom property of its own.
+From [`css/components/form.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/form.css). It declares `--redz-float-start` on its root, never on rows or items.
 
 It reads the theme's `--redz-space-4`, `--redz-text`, `--redz-fs-12`, `--redz-text-muted`, `--redz-link`, `--redz-motion`, `--redz-ease`, `--redz-danger-text`, `--redz-warning-text`, `--redz-control-height`, `--redz-space-12`, `--redz-border-strong`, `--redz-radius-8`, `--redz-bg`, `--redz-focus`, `--redz-space-8`, `--redz-grow-rows`, `--redz-form-select-chevron`, `--redz-warning-fill`, `--redz-danger-fill`, `--redz-warning-subtle`, `--redz-danger-subtle`, `--redz-success-fill`, `--redz-success-subtle`, `--redz-radius-6`, `--redz-bg-page`, `--redz-primary-subtle`, `--redz-control-height-sm`, `--redz-control-height-lg`, `--redz-fs-16`, `--redz-control-height-float`, `--redz-fs-14`, `--redz-primary-fill`.
 

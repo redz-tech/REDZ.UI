@@ -4,6 +4,21 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Added
+The ERP's order for REDZ.Phone's field in a floating field, the general part (the owner's pick B: REDZ.Phone ships
+its own look for a REDZ.UI page).
+- `form-floating` keeps the float for a control a widget wrapped - a phone field with its country button, a mask: any
+  `input.form-control` or `select.form-select` inside the field is its control, unless it sits in a popover or a
+  dialog of the field. Before, only the field's direct child was: a wrapped one lost the floating height and its label
+  never lifted.
+- `--redz-float-start`: where the control's text starts, the control's own padding there, which a widget sets on the
+  field; the label starts with it, at rest and lifted. `form-adorn` sets it to 2.125rem.
+- The layer `redz` in the order of the cascade layers, after `layout` and before `components`: kept for the widget
+  libraries of the REDZ family, each in a layer of its own under it (REDZ.Phone 0.4.1 in `redz.phone`), so they win
+  over the library's element styles and lose to its components and utilities.
+
 ## 0.36.0 - 2026-11-26
 
 ### Added

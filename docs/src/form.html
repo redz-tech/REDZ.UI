@@ -91,7 +91,7 @@
 	</div>
 
 	<h3>An icon in the field</h3>
-	<p><code>form-adorn</code> puts an icon inside a field or a select, at its start; the field keeps its own name. With <code>form-floating</code> on the same element the label starts after the icon, inside the one border - the way a sign-in form draws its fields.</p>
+	<p><code>form-adorn</code> puts an icon inside a field or a select, at its start; the field keeps its own name. With <code>form-floating</code> on the same element the label starts after the icon, inside the one border - the way a sign-in form draws its fields: <code>form-adorn</code> gives it <code>--redz-float-start</code>, as below.</p>
 	<div class="docs-example docs-example-stack" id="form-adorn">
 		<div class="form-adorn">
 			<i class="bi bi-search" aria-hidden="true"></i>
@@ -114,6 +114,25 @@
 				<label for="form-adorn-password">Password</label>
 			</div>
 			<button class="btn btn-icon" type="button" commandfor="form-adorn-password" command="--reveal" aria-pressed="false" aria-label="Show the password"><i class="bi bi-eye" aria-hidden="true"></i></button>
+		</div>
+	</div>
+
+	<h3>A control a widget wraps</h3>
+	<p>A script that wraps the field's control in parts of its own - a phone field with its country button, a mask - keeps the float: any <code>input</code> or <code>select</code> inside <code>form-floating</code> is its control, unless it sits in a popover or a dialog of the field, and the label stays the field's last child. What the widget draws before the text moves the text's start: the widget gives that start as <code>--redz-float-start</code>, the control's own padding there, and the label starts with it, at rest and lifted. <code>form-adorn</code> sets it to 2.125rem.</p>
+	<div class="docs-example docs-example-stack" id="form-wrapped">
+		<div class="form-floating max-w-320">
+			<div class="docs-prefix">
+				<span aria-hidden="true">BK-</span>
+				<input class="form-control" id="form-wrapped-code" inputmode="numeric" placeholder="0000" autocomplete="off">
+			</div>
+			<label for="form-wrapped-code">Booking code</label>
+		</div>
+		<div class="form-floating max-w-320">
+			<div class="docs-prefix">
+				<span aria-hidden="true">BK-</span>
+				<input class="form-control" id="form-wrapped-held" inputmode="numeric" placeholder="0000" value="2048" autocomplete="off">
+			</div>
+			<label for="form-wrapped-held">Booking code</label>
 		</div>
 	</div>
 

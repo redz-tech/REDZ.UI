@@ -53,6 +53,7 @@ The stylesheet, the icons and the scripts, with the page's own words for the few
 - A condition is a prefix: `md:cols-2`, `print:d-none`. A width prefix measures the region the element sits in - a column, a card, a dialog - not the window.
 - A state is an HTML attribute: `aria-pressed`, `aria-current`, `disabled`, `[open]`. A button opens a menu or a dialog with the browser's own command: `commandfor` + `command`.
 - Tokens are `--redz-` plus the same words: `--redz-text-muted`, `--redz-space-16`.
+- The styles sit in cascade layers, in this order: `reset, tokens, base, layout, redz, components, modules, utilities`. A page's own styles outside the layers beat them all. `redz` is kept for the widget libraries of the REDZ family, each in a layer of its own under it - REDZ.Phone's field sits in `redz.phone` - so they win over the library's element styles and lose to its components and utilities.
 
 ## Theme and direction
 

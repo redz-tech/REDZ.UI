@@ -295,6 +295,13 @@
 		padding-block: 1.25rem 0.25rem;
 	}
 
+	/* A control a widget wrapped - a phone field, a mask - floats as a direct one would; one in a popover or a dialog
+	   inside the field does not. */
+	.form-floating > * :is(input.form-control, select.form-select):not(:where([popover], dialog) *) {
+		block-size: var(--redz-control-height-float);
+		padding-block: 1.25rem 0.25rem;
+	}
+
 	.form-floating > textarea.form-control {
 		block-size: 7rem;
 		padding-block-start: 1.625rem;
@@ -306,6 +313,7 @@
 		inset-inline: 0;
 		z-index: 1;
 		padding: calc(var(--redz-control-height-float) / 2 - 0.625rem) calc(var(--redz-space-12) + 1px) 0;
+		padding-inline-start: calc(var(--redz-float-start, var(--redz-space-12)) + 1px);
 		overflow: hidden;
 		color: var(--redz-text-muted);
 		font-size: var(--redz-fs-14);
@@ -316,22 +324,24 @@
 		pointer-events: none;
 	}
 
-	.form-floating > .form-control::placeholder {
+	.form-floating > .form-control::placeholder,
+	.form-floating > * input.form-control:not(:where([popover], dialog) *)::placeholder {
 		color: transparent;
 	}
 
-	.form-floating > .form-control:focus::placeholder {
+	.form-floating > .form-control:focus::placeholder,
+	.form-floating > * input.form-control:focus:not(:where([popover], dialog) *)::placeholder {
 		color: var(--redz-text-muted);
 	}
 
-	.form-floating:has(> .form-control:focus, > .form-control:not(:placeholder-shown), > .form-select, > textarea.form-control, > .form-control[type="date"], > .form-control[type="time"], > .form-control[type="datetime-local"]) > label {
+	.form-floating:has(> .form-control:focus, > .form-control:not(:placeholder-shown), > .form-select, > textarea.form-control, > .form-control[type="date"], > .form-control[type="time"], > .form-control[type="datetime-local"], > * :is(input.form-control:is(:focus, :not(:placeholder-shown)), select.form-select):not(:where([popover], dialog) *)) > label {
 		padding-block-start: 0.4375rem;
 		font-size: var(--redz-fs-12);
 		font-weight: 550;
 		line-height: 1rem;
 	}
 
-	.form-floating:has(> .form-control:autofill) > label {
+	.form-floating:has(> .form-control:autofill, > * input.form-control:autofill:not(:where([popover], dialog) *)) > label {
 		padding-block-start: 0.4375rem;
 		font-size: var(--redz-fs-12);
 		font-weight: 550;
@@ -375,8 +385,8 @@
 		padding-inline-start: 2.125rem;
 	}
 
-	.form-floating.form-adorn > label {
-		padding-inline-start: calc(2.125rem + 1px);
+	.form-floating.form-adorn {
+		--redz-float-start: 2.125rem;
 	}
 
 	.form-check {

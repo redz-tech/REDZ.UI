@@ -46,6 +46,7 @@ gh release verify-asset icons-1.13.2 redz-ui-icons-1.13.2.zip --repo redz-tech/R
 		<li>A condition is a prefix: <code>md:cols-2</code>, <code>print:d-none</code>. A width prefix measures the region the element sits in - a column, a card, a dialog - not the window.</li>
 		<li>A state is an HTML attribute: <code>aria-pressed</code>, <code>aria-current</code>, <code>disabled</code>, <code>[open]</code>. A button opens a menu or a dialog with the browser's own command: <code>commandfor</code> + <code>command</code>.</li>
 		<li>Tokens are <code>--redz-</code> plus the same words: <code>--redz-text-muted</code>, <code>--redz-space-16</code>.</li>
+		<li>The styles sit in cascade layers, in this order: <code>reset, tokens, base, layout, redz, components, modules, utilities</code>. A page's own styles outside the layers beat them all. <code>redz</code> is kept for the widget libraries of the REDZ family, each in a layer of its own under it - REDZ.Phone's field sits in <code>redz.phone</code> - so they win over the library's element styles and lose to its components and utilities.</li>
 	</ul>
 </section>
 

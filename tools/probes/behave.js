@@ -8330,6 +8330,57 @@ window.REDZ_BEHAVE = (() => {
 				out.push('the toast stack answered ' + say(seen) + ', where it must answer ' + say(want));
 			}
 		}]},
+		// A control a widget wrapped floats as a direct one: the floating height, its label lifted by a value and by the
+		// focus, the label's text where the control's starts by --redz-float-start, in either direction; a select in a
+		// popover of the field is no control of it; form-adorn's label still starts after the icon.
+		floatWrapped: {target: '#form-wrapped', steps: [async (out) => {
+			const box = $('#form-wrapped');
+			const [empty, held] = $$(':scope > .form-floating', box);
+			const direct = Object.assign(document.createElement('div'), {className: 'form-floating'});
+			direct.append(Object.assign(document.createElement('input'), {className: 'form-control', placeholder: ' ', value: '2048'}), Object.assign(document.createElement('label'), {textContent: 'Direct'}));
+			box.append(direct);
+			const input = $('input', empty);
+			const still = async () => {
+				await settled();
+				await Promise.all($$('.form-floating > label', box.parentElement).flatMap((label) => label.getAnimations()).map((one) => one.finished.catch(() => null)));
+			};
+			const size = (field) => parseFloat(getComputedStyle($(':scope > label', field)).fontSize);
+			const lined = (field) => {
+				const rtl = getComputedStyle(field).direction === 'rtl';
+				const at = (element, border) => {
+					const edge = element.getBoundingClientRect();
+					const style = getComputedStyle(element);
+					const pad = parseFloat(style.paddingInlineStart) + (border ? parseFloat(style.borderInlineStartWidth) : 0);
+					return rtl ? edge.right - pad : edge.left + pad;
+				};
+				return Math.abs(at($(':scope > label', field), false) - at($('input, select', field), true)) <= 1;
+			};
+			const seen = {};
+			try {
+				await still();
+				seen.height = [input.offsetHeight, $('input', held).offsetHeight].map((height) => height === $('input', direct).offsetHeight);
+				seen.lift = [size(empty) > size(held), size(held) === size(direct)];
+				seen.start = [lined(empty), lined(held), lined($('#form-adorn-mail').closest('.form-floating')), lined(direct)];
+				input.focus();
+				await still();
+				seen.focused = input.matches(':focus') ? [size(empty) === size(held), lined(empty)] : 'no window focus';
+				input.blur();
+				const pop = Object.assign(document.createElement('div'), {popover: 'manual'});
+				pop.append(Object.assign(document.createElement('select'), {className: 'form-select'}));
+				$('.docs-prefix', empty).append(pop);
+				pop.showPopover();
+				await still();
+				seen.popover = [pop.firstChild.offsetHeight < input.offsetHeight, size(empty) > size(held)];
+				pop.remove();
+			} finally {
+				direct.remove();
+				input.blur();
+			}
+			const want = {height: [true, true], lift: [true, true], start: [true, true, true, true], focused: typeof seen.focused === 'string' ? seen.focused : [true, true], popover: [true, true]};
+			if (say(seen) !== say(want)) {
+				out.push('a floating field\'s wrapped control answered ' + say(seen) + ', where it must answer ' + say(want));
+			}
+		}]},
 		// A checked check, radio or switch that cannot change keeps a fill of its own and a mark that shows on it, in
 		// both themes: never the look of an unchecked one.
 		lockedOn: {target: '#check-states', steps: [async (out) => {

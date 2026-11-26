@@ -285,7 +285,7 @@
 &lt;/div&gt;</code></pre></div>
 
 					<h3>An icon in the field</h3>
-					<p><code>form-adorn</code> puts an icon inside a field or a select, at its start; the field keeps its own name. With <code>form-floating</code> on the same element the label starts after the icon, inside the one border - the way a sign-in form draws its fields.</p>
+					<p><code>form-adorn</code> puts an icon inside a field or a select, at its start; the field keeps its own name. With <code>form-floating</code> on the same element the label starts after the icon, inside the one border - the way a sign-in form draws its fields: <code>form-adorn</code> gives it <code>--redz-float-start</code>, as below.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="form-adorn">
 						<div class="form-adorn">
 							<i class="bi bi-search" aria-hidden="true"></i>
@@ -331,6 +331,39 @@
 		&lt;label for="form-adorn-password"&gt;Password&lt;/label&gt;
 	&lt;/div&gt;
 	&lt;button class="btn btn-icon" type="button" commandfor="form-adorn-password" command="--reveal" aria-pressed="false" aria-label="Show the password"&gt;&lt;i class="bi bi-eye" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;
+&lt;/div&gt;</code></pre></div>
+
+					<h3>A control a widget wraps</h3>
+					<p>A script that wraps the field's control in parts of its own - a phone field with its country button, a mask - keeps the float: any <code>input</code> or <code>select</code> inside <code>form-floating</code> is its control, unless it sits in a popover or a dialog of the field, and the label stays the field's last child. What the widget draws before the text moves the text's start: the widget gives that start as <code>--redz-float-start</code>, the control's own padding there, and the label starts with it, at rest and lifted. <code>form-adorn</code> sets it to 2.125rem.</p>
+					<div class="docs-sample"><div class="docs-example docs-example-stack" id="form-wrapped">
+						<div class="form-floating max-w-320">
+							<div class="docs-prefix">
+								<span aria-hidden="true">BK-</span>
+								<input class="form-control" id="form-wrapped-code" inputmode="numeric" placeholder="0000" autocomplete="off">
+							</div>
+							<label for="form-wrapped-code">Booking code</label>
+						</div>
+						<div class="form-floating max-w-320">
+							<div class="docs-prefix">
+								<span aria-hidden="true">BK-</span>
+								<input class="form-control" id="form-wrapped-held" inputmode="numeric" placeholder="0000" value="2048" autocomplete="off">
+							</div>
+							<label for="form-wrapped-held">Booking code</label>
+						</div>
+					</div>
+					<pre class="docs-code" tabindex="0"><code>&lt;div class="form-floating max-w-320"&gt;
+	&lt;div class="docs-prefix"&gt;
+		&lt;span aria-hidden="true"&gt;BK-&lt;/span&gt;
+		&lt;input class="form-control" id="form-wrapped-code" inputmode="numeric" placeholder="0000" autocomplete="off"&gt;
+	&lt;/div&gt;
+	&lt;label for="form-wrapped-code"&gt;Booking code&lt;/label&gt;
+&lt;/div&gt;
+&lt;div class="form-floating max-w-320"&gt;
+	&lt;div class="docs-prefix"&gt;
+		&lt;span aria-hidden="true"&gt;BK-&lt;/span&gt;
+		&lt;input class="form-control" id="form-wrapped-held" inputmode="numeric" placeholder="0000" value="2048" autocomplete="off"&gt;
+	&lt;/div&gt;
+	&lt;label for="form-wrapped-held"&gt;Booking code&lt;/label&gt;
 &lt;/div&gt;</code></pre></div>
 
 					<h3>Sizes</h3>
@@ -842,7 +875,7 @@ REDZ.ui.follow(form);</code></pre>
 
 						<section class="vstack gap-12" aria-labelledby="form-tokens">
 							<h2 id="form-tokens">Tokens</h2>
-							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/form.css"><code>css/components/form.css</code></a>, which declares no custom property of its own.</p>
+							<p>From <a href="https://github.com/redz-tech/REDZ.UI/blob/main/css/components/form.css"><code>css/components/form.css</code></a>. It declares <code>--redz-float-start</code> on its root, never on rows or items.</p>
 							<p>It reads the theme's <code>--redz-space-4</code>, <code>--redz-text</code>, <code>--redz-fs-12</code>, <code>--redz-text-muted</code>, <code>--redz-link</code>, <code>--redz-motion</code>, <code>--redz-ease</code>, <code>--redz-danger-text</code>, <code>--redz-warning-text</code>, <code>--redz-control-height</code>, <code>--redz-space-12</code>, <code>--redz-border-strong</code>, <code>--redz-radius-8</code>, <code>--redz-bg</code>, <code>--redz-focus</code>, <code>--redz-space-8</code>, <code>--redz-grow-rows</code>, <code>--redz-form-select-chevron</code>, <code>--redz-warning-fill</code>, <code>--redz-danger-fill</code>, <code>--redz-warning-subtle</code>, <code>--redz-danger-subtle</code>, <code>--redz-success-fill</code>, <code>--redz-success-subtle</code>, <code>--redz-radius-6</code>, <code>--redz-bg-page</code>, <code>--redz-primary-subtle</code>, <code>--redz-control-height-sm</code>, <code>--redz-control-height-lg</code>, <code>--redz-fs-16</code>, <code>--redz-control-height-float</code>, <code>--redz-fs-14</code>, <code>--redz-primary-fill</code>.</p>
 						</section>
 

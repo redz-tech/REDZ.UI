@@ -85,6 +85,30 @@
 		display: grid;
 	}
 
+	/* The form page's wrapped control: a prefix a script would draw before the text. */
+	.docs-prefix {
+		position: relative;
+	}
+
+	.docs-prefix > span {
+		position: absolute;
+		inset-block: 0;
+		inset-inline-start: calc(var(--redz-space-12) + 1px);
+		display: flex;
+		align-items: center;
+		padding-block: 1.25rem 0.25rem;
+		color: var(--redz-text-muted);
+		pointer-events: none;
+	}
+
+	.docs-prefix > .form-control {
+		padding-inline-start: 2.75rem;
+	}
+
+	.form-floating:has(> .docs-prefix) {
+		--redz-float-start: 2.75rem;
+	}
+
 	.docs-example {
 		container: region / inline-size;
 		display: flex;
