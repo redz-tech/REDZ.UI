@@ -4,6 +4,13 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Fixed
+- A control a widget wrapped floats in a field inside a dialog too. 0.37.0 left out every control with a popover or a
+  dialog anywhere above it, so a phone field in a modal stood 32 px high under a label that never lifted; only a popover
+  or a dialog inside the field is left out now. Found by the ERP on its first REDZ.Phone page, an "Add user" dialog.
+
 ## 0.37.0 - 2026-11-26
 
 ### Added

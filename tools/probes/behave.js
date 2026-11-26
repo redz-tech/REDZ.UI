@@ -8372,11 +8372,34 @@ window.REDZ_BEHAVE = (() => {
 				await still();
 				seen.popover = [pop.firstChild.offsetHeight < input.offsetHeight, size(empty) > size(held)];
 				pop.remove();
+				// A field in a dialog of the page floats as one outside it: only a popover or a dialog inside the field
+				// is left out.
+				const dialog = document.createElement('dialog');
+				const [inEmpty, inHeld] = [empty, held].map((field) => field.cloneNode(true));
+				for (const field of [inEmpty, inHeld]) {
+					$('input', field).id += '-dialog';
+					$(':scope > label', field).htmlFor += '-dialog';
+				}
+				dialog.append(inEmpty, inHeld);
+				document.body.append(dialog);
+				try {
+					dialog.showModal();
+					// The dialog gives its first field the focus in some engines: the empty one's label is asked at rest.
+					if (dialog.contains(document.activeElement)) {
+						document.activeElement.blur();
+					}
+					await still();
+					await Promise.all($$('label', dialog).flatMap((label) => label.getAnimations()).map((one) => one.finished.catch(() => null)));
+					seen.dialog = [$('input', inEmpty).offsetHeight === $('input', direct).offsetHeight, size(inHeld) === size(direct), size(inEmpty) > size(inHeld), lined(inHeld)];
+				} finally {
+					dialog.close();
+					dialog.remove();
+				}
 			} finally {
 				direct.remove();
 				input.blur();
 			}
-			const want = {height: [true, true], lift: [true, true], start: [true, true, true, true], focused: typeof seen.focused === 'string' ? seen.focused : [true, true], popover: [true, true]};
+			const want = {height: [true, true], lift: [true, true], start: [true, true, true, true], focused: typeof seen.focused === 'string' ? seen.focused : [true, true], popover: [true, true], dialog: [true, true, true, true]};
 			if (say(seen) !== say(want)) {
 				out.push('a floating field\'s wrapped control answered ' + say(seen) + ', where it must answer ' + say(want));
 			}

@@ -297,7 +297,7 @@
 
 	/* A control a widget wrapped - a phone field, a mask - floats as a direct one would; one in a popover or a dialog
 	   inside the field does not. */
-	.form-floating > * :is(input.form-control, select.form-select):not(:where([popover], dialog) *) {
+	.form-floating > * :is(input.form-control, select.form-select):not(:where(.form-floating :is([popover], dialog) *)) {
 		block-size: var(--redz-control-height-float);
 		padding-block: 1.25rem 0.25rem;
 	}
@@ -325,23 +325,23 @@
 	}
 
 	.form-floating > .form-control::placeholder,
-	.form-floating > * input.form-control:not(:where([popover], dialog) *)::placeholder {
+	.form-floating > * input.form-control:not(:where(.form-floating :is([popover], dialog) *))::placeholder {
 		color: transparent;
 	}
 
 	.form-floating > .form-control:focus::placeholder,
-	.form-floating > * input.form-control:focus:not(:where([popover], dialog) *)::placeholder {
+	.form-floating > * input.form-control:focus:not(:where(.form-floating :is([popover], dialog) *))::placeholder {
 		color: var(--redz-text-muted);
 	}
 
-	.form-floating:has(> .form-control:focus, > .form-control:not(:placeholder-shown), > .form-select, > textarea.form-control, > .form-control[type="date"], > .form-control[type="time"], > .form-control[type="datetime-local"], > * :is(input.form-control:is(:focus, :not(:placeholder-shown)), select.form-select):not(:where([popover], dialog) *)) > label {
+	.form-floating:has(> .form-control:focus, > .form-control:not(:placeholder-shown), > .form-select, > textarea.form-control, > .form-control[type="date"], > .form-control[type="time"], > .form-control[type="datetime-local"], > * :is(input.form-control:is(:focus, :not(:placeholder-shown)), select.form-select):not(:where(.form-floating :is([popover], dialog) *))) > label {
 		padding-block-start: 0.4375rem;
 		font-size: var(--redz-fs-12);
 		font-weight: 550;
 		line-height: 1rem;
 	}
 
-	.form-floating:has(> .form-control:autofill, > * input.form-control:autofill:not(:where([popover], dialog) *)) > label {
+	.form-floating:has(> .form-control:autofill, > * input.form-control:autofill:not(:where(.form-floating :is([popover], dialog) *))) > label {
 		padding-block-start: 0.4375rem;
 		font-size: var(--redz-fs-12);
 		font-weight: 550;
