@@ -15,6 +15,30 @@
 		gap: var(--redz-space-8);
 	}
 
+	.toast-container[data-open] {
+		max-block-size: calc(100dvh - 2 * var(--redz-space-16));
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		pointer-events: auto;
+	}
+
+	.toast-container:not([data-open]) .toast[data-folded] {
+		display: none;
+	}
+
+	.toast-bar {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		gap: var(--redz-space-8);
+	}
+
+	.toast-bar > .btn {
+		background: var(--redz-bg-raised);
+		box-shadow: var(--redz-shadow-2);
+		pointer-events: auto;
+	}
+
 	.toast {
 		--redz-toast-mark: var(--redz-text-faint);
 		display: flex;

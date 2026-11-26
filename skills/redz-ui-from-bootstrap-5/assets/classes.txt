@@ -4388,6 +4388,7 @@ time-input-time
 timeline
 timeline-time
 toast
+toast-bar
 toast-body
 toast-container
 toast-danger

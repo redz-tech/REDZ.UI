@@ -5,19 +5,23 @@
 
 <section class="vstack gap-16" aria-labelledby="toast-examples">
 	<h2 id="toast-examples">Examples</h2>
-	<p>Success and info leave after 8 seconds, unless the pointer or the focus rests on them. An error, and a notice with an action, stay until closed.</p>
+	<p>Success and info leave after 8 seconds, unless the pointer or the focus rests on them. An error, and a notice with an action, stay until closed. The stack shows three; the older ones fold behind its bar, whose buttons open the whole stack and close every toast. A toast with a <code>group</code> takes the place of its group's toast before it, so a run of saves keeps one Undo.</p>
 	<div class="docs-example" id="toast-calls">
 		<button class="btn" type="button" data-docs-run="toast-success">Saved</button>
 		<button class="btn" type="button" data-docs-run="toast-info">Import started</button>
 		<button class="btn" type="button" data-docs-run="toast-danger">Not saved</button>
 		<button class="btn" type="button" data-docs-run="toast-action">With an action</button>
+		<button class="btn" type="button" data-docs-run="toast-many">Six saves</button>
+		<button class="btn" type="button" data-docs-run="toast-group">A save in a group</button>
 	</div>
 	<p>The call takes the words and the tone and answers a function that closes the toast:</p>
-	<pre class="docs-code" tabindex="0"><code>const close = REDZ.ui.toast({title: 'Moved to the archive', tone: 'info', action: {label: 'Undo', run: restore}});</code></pre>
+	<pre class="docs-code" tabindex="0"><code>const close = REDZ.ui.toast({title: 'Moved to the archive', tone: 'info', action: {label: 'Undo', run: restore}});
+REDZ.ui.toast({title: 'Price saved', tone: 'success', action: {label: 'Undo', run: undoPrice}, group: 'field'});</code></pre>
 
 	<h3>The stack</h3>
 	<p>The page carries the stack from the start, so that screen readers know its live regions before anything is said in them: <code>role="status"</code> for notices, <code>role="alert"</code> for errors. Without one, the library adds it at load.</p>
 	<pre class="docs-code" tabindex="0"><code>&lt;div class="toast-container"&gt;&lt;div role="status"&gt;&lt;/div&gt;&lt;div role="alert"&gt;&lt;/div&gt;&lt;/div&gt;</code></pre>
+	<p>Three toasts show at once: the newest, an error before any other, and the one holding the focus always. The rest fold behind the stack's bar, <code>toast-bar</code>, which the library puts before the live regions: a button named by the page's text <code>toast.more</code> with their count opens the whole stack, which scrolls when it is taller than the screen, and <code>toast.fewer</code> folds it again; <code>toast.close_all</code> closes every toast of the stack. A folded toast keeps its time: one that leaves by itself still leaves after 8 seconds.</p>
 
 	<h3>How a toast looks</h3>
 	<div class="docs-example docs-example-stack" id="toast-tones">
@@ -36,5 +40,6 @@
 		<li>While a modal dialog is open, toasts show inside it, since everything outside it is inert; as it closes, they go on in the stack below it.</li>
 		<li>The close button's name comes from the page's texts: <code>close</code> in the island <code>#redz-ui-text</code>.</li>
 		<li>Nothing a person must act on lives only in a toast that leaves by itself.</li>
+		<li>The bar sits outside the live regions, so opening the stack says nothing again; its first button tells a screen reader whether the stack is open by <code>aria-expanded</code>.</li>
 	</ul>
 </section>

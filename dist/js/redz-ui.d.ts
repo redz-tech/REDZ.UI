@@ -40,7 +40,7 @@ interface TrustedHTML {
 /** What a swap takes: never a string of markup. */
 type RedzSwapSource = DocumentFragment | Document | Element | TrustedHTML;
 
-/** A toast: its words, its tone, a button of its own, and whether it stays until closed. */
+/** A toast: its words, its tone, a button of its own, whether it stays until closed, and its group. */
 interface RedzToast {
 	title?: string;
 	text?: string;
@@ -48,6 +48,8 @@ interface RedzToast {
 	tone?: RedzTone | 'primary';
 	action?: {label: string; run(): void} | null;
 	persistent?: boolean;
+	/** A name the page gives: the toast takes the place of the group's toast before it, closed as it shows. */
+	group?: string;
 }
 
 /** A choice of radios above the phrase: the answer is then the chosen value. */

@@ -4397,6 +4397,7 @@
 		"timeline",
 		"timeline-time",
 		"toast",
+		"toast-bar",
 		"toast-body",
 		"toast-container",
 		"toast-danger",
@@ -5112,6 +5113,9 @@
 		"time.minutes",
 		"time.period",
 		"time.period_missing",
+		"toast.close_all",
+		"toast.fewer",
+		"toast.more.other",
 		"viewer.count",
 		"viewer.next",
 		"viewer.prev"
@@ -5129,7 +5133,8 @@
 		"found",
 		"leave.text",
 		"more.loaded",
-		"selected"
+		"selected",
+		"toast.more"
 	],
 	"args": {
 		"breadcrumb.more": [],
@@ -5271,6 +5276,10 @@
 		"time.minutes": [],
 		"time.period": [],
 		"time.period_missing": [],
+		"toast.close_all": [],
+		"toast.fewer": [],
+		"toast.more": ["count"],
+		"toast.more.other": ["count"],
 		"viewer.count": ["count","position"],
 		"viewer.next": [],
 		"viewer.prev": []
@@ -5288,7 +5297,7 @@
 		"css/redz-ui-editor-surface.min.css": "sha256-UM94RO+TgrNvrofD/tKVbnKeTGSvpkK+4JAuqApOO50=",
 		"css/redz-ui-editor.min.css": "sha256-Qxy1eHhfAotYts6tY7a9z2fnYiS2+WjSCFF3jhVCWpE=",
 		"css/redz-ui-media.min.css": "sha256-4+5Di9Nu8wuERNMkrMvc9rU1kVNMpo/7k/T5i1XxGIQ=",
-		"css/redz-ui.min.css": "sha256-nlsC2xoYHNY//EOZBItAEXMkh8QuJhux8gRhCIbErHQ=",
+		"css/redz-ui.min.css": "sha256-eT+WjCbsSLUgzfp5sudEiO+wfOtST7qaqLbbeBE7lyg=",
 		"js/floor.min.js": "sha256-Tg9XU/+h28pkTxcd3fTRn878+pCd9lmBgG0PALzV7wE=",
 		"js/redz-ui-calendar.min.js": "sha256-7AjbY0gNju3Oz58Sm9NVgZMJLXtu96TpUxhCfiCTt3g=",
 		"js/redz-ui-charts.min.js": "sha256-1dSq946dnPNnXU8k1gMoOGEPo9b4QmG9hyVHxZuFSME=",
@@ -5302,7 +5311,7 @@
 		"js/redz-ui-qr.min.js": "sha256-8AgWz06SWLYwuOCi7FQA6bXBgjJfxeRYx5tFCWlrEts=",
 		"js/redz-ui-signin.d.ts": "sha256-ZIDl8+f9c0u/kgI/WP7Xw9P0ecr/BR7pfMDxBvFbE1w=",
 		"js/redz-ui-signin.min.js": "sha256-1wBng0T/2jvHvoXRo3FA7y9AmoViiB0E8Rf2oiR8QRU=",
-		"js/redz-ui.d.ts": "sha256-Nywjq+mQitlyEV7CeWlOk/Ec1UxxwV/ft3OMGxmDTrA=",
-		"js/redz-ui.min.js": "sha256-GaIJuV6ZzLGvQmSBvHZm4ZJsf6E+X3qJOGPNDB7kQJc="
+		"js/redz-ui.d.ts": "sha256-9hmpXfXg2BpL16CG29Zg7LXRZKEC9Ss8TcDJ1kbGey4=",
+		"js/redz-ui.min.js": "sha256-d9qw15SyXTNa6E7L+oNk3yHTLUQMZlAqIorYihoQng4="
 	}
 }

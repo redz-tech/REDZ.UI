@@ -67,7 +67,7 @@ attaches by delegation on `document`, so nothing is set up per element and marku
 
 ```html
 <script type="module" src="js/redz-ui.min.js"></script>
-<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "confirm.phrase": "Type “{phrase}” to confirm", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong", "moved": "Moved to {position} of {count}", "moved.into": "Moved to {list}, {position} of {count}", "more": "More", "breadcrumb.more": "Show the levels in between", "handoff.copied": "Link copied: open your browser and paste it", "slide": "{position} of {count}", "file.type": "{name} is not a kind of file this takes", "file.size": "{name} is larger than {size}"}</script>
+<script type="application/json" id="redz-ui-text">{"close": "Close", "confirm.ok": "OK", "confirm.cancel": "Cancel", "confirm.phrase": "Type “{phrase}” to confirm", "busy": "Loading…", "remove": "Remove {label}", "found.one": "{count} result", "found.other": "{count} results", "create": "Create “{label}”", "strength.short": "Too short", "strength.fair": "Fair", "strength.good": "Good", "strength.strong": "Strong", "moved": "Moved to {position} of {count}", "moved.into": "Moved to {list}, {position} of {count}", "more": "More", "breadcrumb.more": "Show the levels in between", "handoff.copied": "Link copied: open your browser and paste it", "toast.more.one": "{count} more", "toast.more.other": "{count} more", "toast.fewer": "Show fewer", "toast.close_all": "Close all", "slide": "{position} of {count}", "file.type": "{name} is not a kind of file this takes", "file.size": "{name} is larger than {size}"}</script>
 ```
 
 - **Menus** (`role="menu"` on a `popover` opened by its button): the arrow keys move through the items, Home and End go
@@ -111,10 +111,12 @@ attaches by delegation on `document`, so nothing is set up per element and marku
 - **A white label:** `data-brand` derives the primary tone of one colour, also on a region set after load; `REDZ.ui.brand(colour)`
   answers what it paints in each theme - the tone, the words on it, the links, the focus ring and the ground, with their
   contrast ratios - for a settings screen that lets a person choose the colour.
-- **Notices:** `REDZ.ui.toast({title, text, tone, action, persistent})` shows a toast in the live regions of
+- **Notices:** `REDZ.ui.toast({title, text, tone, action, persistent, group})` shows a toast in the live regions of
   `.toast-container` - `role="status"`, `role="alert"` for `danger` - or in an open modal dialog's own. Success and info
   leave after 8 seconds unless the pointer or the focus rests on them; an error and a notice with an action stay until
-  closed (`js/toast.js`).
+  closed. A stack shows three - the newest, errors first, the focused one always - and folds the rest behind its bar,
+  `toast-bar`, whose buttons open the whole stack (texts `toast.more`, `toast.fewer`) and close every toast
+  (`toast.close_all`); a toast of a `group` takes the place of its group's toast before it (`js/toast.js`).
 - **Confirmation:** `await REDZ.ui.confirm({title, text, note, sections, ok, cancel, tone, phrase})` asks in a modal
   alert dialog and answers `true` or `false`; the focus starts on cancel. A `note` in a tone and `sections` - a title
   over a list, such as what goes and what stays - say what a deletion takes with it, all of it text. With a `phrase`

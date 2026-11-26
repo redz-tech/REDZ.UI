@@ -6,19 +6,22 @@ A notice after an action - saved, failed, moved with a way to undo - shown by `R
 
 ## Examples
 
-Success and info leave after 8 seconds, unless the pointer or the focus rests on them. An error, and a notice with an action, stay until closed.
+Success and info leave after 8 seconds, unless the pointer or the focus rests on them. An error, and a notice with an action, stay until closed. The stack shows three; the older ones fold behind its bar, whose buttons open the whole stack and close every toast. A toast with a `group` takes the place of its group's toast before it, so a run of saves keeps one Undo.
 
 ```html
 <button class="btn" type="button" data-docs-run="toast-success">Saved</button>
 <button class="btn" type="button" data-docs-run="toast-info">Import started</button>
 <button class="btn" type="button" data-docs-run="toast-danger">Not saved</button>
 <button class="btn" type="button" data-docs-run="toast-action">With an action</button>
+<button class="btn" type="button" data-docs-run="toast-many">Six saves</button>
+<button class="btn" type="button" data-docs-run="toast-group">A save in a group</button>
 ```
 
 The call takes the words and the tone and answers a function that closes the toast:
 
 ```js
 const close = REDZ.ui.toast({title: 'Moved to the archive', tone: 'info', action: {label: 'Undo', run: restore}});
+REDZ.ui.toast({title: 'Price saved', tone: 'success', action: {label: 'Undo', run: undoPrice}, group: 'field'});
 ```
 
 ### The stack
@@ -28,6 +31,8 @@ The page carries the stack from the start, so that screen readers know its live 
 ```html
 <div class="toast-container"><div role="status"></div><div role="alert"></div></div>
 ```
+
+Three toasts show at once: the newest, an error before any other, and the one holding the focus always. The rest fold behind the stack's bar, `toast-bar`, which the library puts before the live regions: a button named by the page's text `toast.more` with their count opens the whole stack, which scrolls when it is taller than the screen, and `toast.fewer` folds it again; `toast.close_all` closes every toast of the stack. A folded toast keeps its time: one that leaves by itself still leaves after 8 seconds.
 
 ### How a toast looks
 
@@ -45,12 +50,13 @@ The page carries the stack from the start, so that screen readers know its live 
 - While a modal dialog is open, toasts show inside it, since everything outside it is inert; as it closes, they go on in the stack below it.
 - The close button's name comes from the page's texts: `close` in the island `#redz-ui-text`.
 - Nothing a person must act on lives only in a toast that leaves by itself.
+- The bar sits outside the live regions, so opening the stack says nothing again; its first button tells a screen reader whether the stack is open by `aria-expanded`.
 
 ## Tokens
 
 From [`css/components/toast.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/toast.css). It declares `--redz-toast-mark` on its root, never on rows or items.
 
-It reads the theme's `--redz-space-16`, `--redz-space-8`, `--redz-text-faint`, `--redz-space-12`, `--redz-border`, `--redz-radius-12`, `--redz-bg-raised`, `--redz-shadow-2`, `--redz-primary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`.
+It reads the theme's `--redz-space-16`, `--redz-space-8`, `--redz-bg-raised`, `--redz-shadow-2`, `--redz-text-faint`, `--redz-space-12`, `--redz-border`, `--redz-radius-12`, `--redz-primary`, `--redz-success`, `--redz-danger`, `--redz-warning`, `--redz-info`.
 
 ## From Bootstrap 5.3
 

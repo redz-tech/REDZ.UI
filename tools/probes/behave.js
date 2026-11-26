@@ -8244,6 +8244,92 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a data-apply switch cancelled without an answer: ' + say(alone) + ' (busy, checked after two flips, the signals aborted); in a tracked form the changes are ' + say(tracked));
 			}
 		}]},
+		// The toast stack shows three - the newest, errors first, the focused one always - and folds the rest behind its
+		// bar, which opens the whole stack and closes every toast; a toast of a group takes its group's place.
+		toastStack: {target: '#toast-calls', steps: [async (out) => {
+			const stack = () => $('body > .toast-container');
+			const toasts = () => $$(':scope > .toast, :scope > [role] > .toast', stack());
+			const shown = () => toasts().filter((one) => one.getClientRects().length > 0).map((one) => one.querySelector('strong')?.textContent);
+			const bar = () => $(':scope > .toast-bar', stack());
+			const look = () => [shown().join(' '), bar() === null || bar().hidden ? 'no bar' : [...bar().children].map((button) => button.textContent + (button.getAttribute('aria-expanded') === null ? '' : '/' + button.getAttribute('aria-expanded'))).join(' | ')];
+			const clear = async () => {
+				for (const one of toasts()) {
+					one.querySelector('.btn-close').click();
+				}
+				await settled();
+			};
+			const save = (name, extra = {}) => REDZ.ui.toast({title: name, tone: 'success', action: {label: 'Undo', run: () => {}}, ...extra});
+			const seen = {};
+			await clear();
+			for (const name of ['A1', 'A2', 'A3', 'A4', 'A5', 'A6']) {
+				save(name);
+			}
+			REDZ.ui.toast({title: 'E1', tone: 'danger', text: 'Refused'});
+			await settled();
+			seen.folded = look();
+			bar().children[0].click();
+			await settled();
+			seen.open = [...look(), getComputedStyle(stack()).overflowY];
+			bar().children[0].click();
+			await settled();
+			seen.closed = look();
+			// The focused toast never folds: the oldest, focused while the stack is open, stays one of the three in view.
+			bar().children[0].click();
+			await settled();
+			toasts().find((one) => one.textContent.includes('A1')).querySelector('.btn').focus();
+			bar().children[0].click();
+			toasts().find((one) => one.textContent.includes('A1')).querySelector('.btn').focus();
+			save('A7');
+			await settled();
+			seen.focused = look();
+			document.activeElement.blur();
+			// Close all, its focus going back where it came from; the bar goes with the last folded toast.
+			const before = Object.assign(document.createElement('button'), {type: 'button', textContent: 'Before'});
+			$('#toast-calls').append(before);
+			before.focus();
+			bar().children[1].focus();
+			bar().children[1].click();
+			await settled();
+			// A window without the focus (headless Firefox) fires no focus events, so where the focus came from is unknown.
+			seen.all = [...look(), toasts().length, document.hasFocus() ? document.activeElement === before : 'no window focus'];
+			before.remove();
+			// Errors before the rest, an older error kept over newer saves; a toast closed brings a folded one back.
+			REDZ.ui.toast({title: 'E2', tone: 'danger'});
+			for (const name of ['B1', 'B2', 'B3']) {
+				save(name);
+			}
+			await settled();
+			seen.errors = look();
+			toasts().find((one) => one.textContent.includes('B3')).querySelector('.btn-close').click();
+			await settled();
+			seen.back = look();
+			await clear();
+			for (const name of ['G1', 'G2', 'G3']) {
+				save(name, {group: 'field'});
+			}
+			save('H1', {group: 'other'});
+			await settled();
+			seen.group = [look()[0], toasts().length];
+			const closeG = REDZ.ui.toast({title: 'G4', tone: 'success', action: {label: 'Undo', run: () => {}}, group: 'field'});
+			await settled();
+			closeG();
+			await settled();
+			seen.group.push(look()[0]);
+			await clear();
+			const want = {
+				folded: ['A5 A6 E1', '4 more/false | Close all'],
+				open: ['A1 A2 A3 A4 A5 A6 E1', 'Show fewer/true | Close all', 'auto'],
+				closed: ['A5 A6 E1', '4 more/false | Close all'],
+				focused: ['A1 A7 E1', '5 more/false | Close all'],
+				all: ['', 'no bar', 0, document.hasFocus() ? true : 'no window focus'],
+				errors: ['B2 B3 E2', '1 more/false | Close all'],
+				back: ['B1 B2 E2', 'no bar'],
+				group: ['G3 H1', 2, 'H1'],
+			};
+			if (say(seen) !== say(want)) {
+				out.push('the toast stack answered ' + say(seen) + ', where it must answer ' + say(want));
+			}
+		}]},
 		// A checked check, radio or switch that cannot change keeps a fill of its own and a mark that shows on it, in
 		// both themes: never the look of an unchecked one.
 		lockedOn: {target: '#check-states', steps: [async (out) => {

@@ -4,6 +4,17 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Added
+The tourism pack's order: a run of saves no longer fills the screen with toasts.
+- A toast stack shows three: the newest, errors before the rest, the one holding the focus always. The others fold
+  behind the stack's new bar, `toast-bar`, outside its live regions: a button named by the new count text `toast.more`
+  opens the whole stack, which scrolls when taller than the screen, and the new text `toast.fewer` folds it again; a
+  button named by the new text `toast.close_all` closes every toast of the stack. A folded toast keeps its time.
+- `group` in `REDZ.ui.toast`'s spec: a toast takes the place of its group's toast before it, so a run of saves keeps
+  one Undo.
+
 ## 0.35.1 - 2026-11-23
 
 ### Fixed

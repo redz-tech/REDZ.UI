@@ -124,6 +124,8 @@
 		'banner-danger': () => REDZ.ui.banner({tone: 'danger', text: 'The connection is lost. Changes made now are not saved.'}),
 		'banner-clear': () => REDZ.ui.banner(null),
 		'toast-action': () => REDZ.ui.toast({title: 'Moved to the archive', tone: 'info', action: {label: 'Undo', run: () => REDZ.ui.toast({title: 'Restored', tone: 'success'})}}),
+		'toast-many': () => ['Price', 'Name', 'Dates', 'Discount', 'Rooms', 'Notes'].forEach((field) => REDZ.ui.toast({title: field + ' saved', tone: 'success', action: {label: 'Undo', run: () => REDZ.ui.toast({title: field + ' restored', tone: 'info'})}})),
+		'toast-group': () => REDZ.ui.toast({title: ['Price', 'Name', 'Dates'][Math.floor(Math.random() * 3)] + ' saved', tone: 'success', action: {label: 'Undo', run: () => REDZ.ui.toast({title: 'Restored', tone: 'info'})}, group: 'field'}),
 		confirm: async (button) => answer(button, await REDZ.ui.confirm({title: 'Delete 2 excursions?', text: 'Their pages go away on all three sites.', ok: 'Delete', tone: 'danger'}) ? 'Confirmed.' : 'Cancelled.'),
 		'confirm-phrase': async (button) => answer(button, await REDZ.ui.confirm({title: 'Delete the site lagoon.example?', text: 'Its pages, its files and its settings go away for good.', ok: 'Delete the site', tone: 'danger', phrase: 'lagoon.example'}) ? 'Confirmed.' : 'Cancelled.'),
 		'confirm-run': async (button) => {
