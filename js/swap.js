@@ -57,9 +57,10 @@ const plan = (region, box) => {
 const inUse = (region, kept) => {
 	const alive = typeof region.moveBefore === 'function' ? [...kept.values()] : [];
 	const within = (element) => element !== null && region.contains(element) && !alive.some((part) => part.contains(element));
-	const layers = [...document.querySelectorAll(':popover-open, dialog[open]')];
+	const layers = [...document.querySelectorAll(':popover-open, dialog[open]')].filter((layer) => layer !== region);
+	const opened = (layer) => layer.id !== '' && [...document.querySelectorAll('[commandfor="' + CSS.escape(layer.id) + '"]')].some((button) => !layer.contains(button) && within(button));
 	const outer = region.parentElement?.closest('form[data-track]');
-	return layers.some((layer) => within(layer) || within(layer.matches('[popover]') ? openerOf(layer) : null) || (layer.id !== '' && within(document.querySelector('[commandfor="' + CSS.escape(layer.id) + '"]'))))
+	return layers.some((layer) => within(layer) || within(layer.matches('[popover]') ? openerOf(layer) : null) || opened(layer))
 		|| [...region.querySelectorAll('form[data-track]')].some((form) => within(form) && track.dirty(form))
 		|| (outer instanceof HTMLFormElement && track.dirty(outer) && region.querySelector('input, select, textarea, [data-name]') !== null)
 		|| within(composing);

@@ -4,6 +4,20 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Fixed
+- A combobox takes only its own lists, `combobox-list` and `palette-list`: any other listbox and its combobox are
+  another widget's and are left alone. Before, every `role="combobox"` and `role="listbox"` on the page was taken, so a
+  phone field's country search in a dialog lost its arrows and Escape to the library, its list was filtered and
+  marked, and a country picked with the mouse closed the dialog (found by the tourism pack on its booking form).
+- "Create …" of a list with `data-create` makes the value when clicked; before, only Enter and a comma took it, and a
+  click inside a dialog closed the dialog. A dialog closes as an option is pressed only when the list lies in the
+  dialog itself, the palette, and a dialog's close resets every combobox in it, not only the first.
+- `REDZ.ui.swap()` into an open dialog itself no longer waits for it to close, and neither does a swap of a part
+  holding the dialog's own Close: a layer is held only by what is in the region and by its openers outside it. Before,
+  a second question put into an open alert dialog showed only after it closed (found by the tourism pack).
+
 ## 0.37.1 - 2026-11-26
 
 ### Fixed

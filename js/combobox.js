@@ -9,11 +9,13 @@
 // role="combobox" belongs on type="text" - refuses words it does not hold. Options in levels (data-level: an option has
 // no aria-level) keep the page's order, a match shown with its parents. A button with command="--clear" for the search
 // empties it and keeps the focus there. On a phone a panel is a sheet: its head shows the face's words and Close, made
-// here, beside the page's combobox-action.
+// here, beside the page's combobox-action. Its lists are .combobox-list and .palette-list: any other listbox and its
+// combobox are another widget's - a phone field's country search - and left alone.
 import {ask} from './answer.js';
 import {locales, text, textCount} from './text.js';
 
 const OPTION = '[role="option"]';
+const LIST = ':is(.combobox-list, .palette-list)[role="listbox"]';
 const MARKS = /[\u{300}-\u{36f}\u{640}\u{64b}-\u{65f}\u{670}]/gu;
 const PAGE = 10;
 const PAUSE = 700;
@@ -100,7 +102,10 @@ const rankOf = (option, words, query) => {
 	return 3;
 };
 
-const listOf = (input) => document.getElementById(input.getAttribute('aria-controls') || '');
+const listOf = (input) => {
+	const list = document.getElementById(input.getAttribute('aria-controls') || '');
+	return list?.matches(LIST) ? list : null;
+};
 const searchOf = (list) => document.querySelector('input[role="combobox"][aria-controls="' + CSS.escape(list.id) + '"]');
 const scopeOf = (list) => list.closest('[popover], dialog') ?? list.parentElement;
 const faceOf = (list) => {
@@ -420,7 +425,7 @@ const choose = (option) => {
 		option.click();
 		return;
 	}
-	const list = option.closest('[role="listbox"]');
+	const list = option.closest(LIST);
 	const value = option.dataset.value;
 	keepFirst(list);
 	const pairs = pairsOf(list);
@@ -451,7 +456,7 @@ const sayLater = (list, words) => requestAnimationFrame(() => setTimeout(() => {
  *  chosen - or reject with words the status says; left alone, the label is held in the field data-create names. The
  *  search empties for the next one, and a list of many, its panel still open, says the new label politely. */
 const create = (option) => {
-	const list = option.closest('[role="listbox"]');
+	const list = option.closest(LIST);
 	const input = searchOf(list);
 	const label = option.dataset.label;
 	const many = list.getAttribute('aria-multiselectable') === 'true';
@@ -549,7 +554,7 @@ const fresh = (input) => {
 const observer = new ResizeObserver((entries) => {
 	for (const entry of entries) {
 		const panel = document.getElementById(entry.target.getAttribute('commandfor') || '');
-		const list = panel?.querySelector('[role="listbox"]');
+		const list = panel?.querySelector(LIST);
 		if (list) {
 			fit(entry.target, list);
 		}
@@ -562,7 +567,7 @@ const started = new WeakSet();
  *  combobox that lands later. */
 const start = () => {
 	for (const face of document.querySelectorAll('.combobox-toggle')) {
-		const list = document.getElementById(face.getAttribute('commandfor') || '')?.querySelector('[role="listbox"]');
+		const list = document.getElementById(face.getAttribute('commandfor') || '')?.querySelector(LIST);
 		if (list && !started.has(face)) {
 			started.add(face);
 			paint(list);
@@ -680,14 +685,14 @@ document.addEventListener('keydown', (event) => {
 }, true);
 
 document.addEventListener('mousedown', (event) => {
-	if (event.target instanceof Element && event.target.closest('[role="listbox"] ' + OPTION) && searchOf(event.target.closest('[role="listbox"]')) !== null) {
+	if (event.target instanceof Element && event.target.closest(LIST + ' ' + OPTION) && searchOf(event.target.closest(LIST)) !== null) {
 		event.preventDefault();
 	}
 });
 
 document.addEventListener('pointermove', (event) => {
 	const option = event.target instanceof Element ? event.target.closest(OPTION) : null;
-	const list = option?.closest('[role="listbox"]');
+	const list = option?.closest(LIST);
 	const input = list ? searchOf(list) : null;
 	if (input !== null && input !== undefined && usable(option) && !option.hasAttribute('data-active')) {
 		activate(input, option);
@@ -699,7 +704,7 @@ document.addEventListener('click', (event) => {
 	const dismiss = target?.closest('.chip-dismiss[data-value]');
 	const box = dismiss?.closest('.combobox-chips');
 	if (box) {
-		const list = document.querySelector('[role="listbox"][data-chips="' + CSS.escape(box.id) + '"]');
+		const list = document.querySelector(LIST + '[data-chips="' + CSS.escape(box.id) + '"]');
 		if (list !== null) {
 			const at = [...box.children].indexOf(dismiss.closest('.chip'));
 			keepFirst(list);
@@ -709,15 +714,17 @@ document.addEventListener('click', (event) => {
 		return;
 	}
 	const option = target?.closest(OPTION);
-	if (option?.closest('[role="listbox"]') && isValue(option)) {
+	if (option?.closest(LIST) && (isValue(option) || option.classList.contains('combobox-create'))) {
 		choose(option);
 	}
 });
 
+/** A link or a button of a list that lies in a dialog itself - the palette - closes the dialog as it is pressed. */
 document.addEventListener('click', (event) => {
 	const option = event.target instanceof Element ? event.target.closest(OPTION) : null;
-	const dialog = option?.closest('[role="listbox"]') ? option.closest('dialog') : null;
-	if (dialog?.open && !isValue(option) && usable(option)) {
+	const list = option?.closest(LIST);
+	const dialog = list ? scopeOf(list) : null;
+	if (dialog?.localName === 'dialog' && dialog.open && !isValue(option) && !option.classList.contains('combobox-create') && usable(option)) {
 		dialog.close();
 	}
 }, true);
@@ -784,10 +791,11 @@ document.addEventListener('focusout', (event) => {
 });
 
 document.addEventListener('close', (event) => {
-	const input = event.target instanceof HTMLDialogElement ? event.target.querySelector('input[role="combobox"]') : null;
-	if (input !== null && listOf(input) !== null) {
-		unwatch(listOf(input), input);
-		fresh(input);
+	for (const input of event.target instanceof HTMLDialogElement ? event.target.querySelectorAll('input[role="combobox"]') : []) {
+		if (listOf(input) !== null) {
+			unwatch(listOf(input), input);
+			fresh(input);
+		}
 	}
 }, true);
 
@@ -817,7 +825,7 @@ document.addEventListener('command', (event) => {
 document.addEventListener('reset', (event) => {
 	const form = event.target;
 	setTimeout(() => {
-		for (const list of form.querySelectorAll('[role="listbox"][data-name]')) {
+		for (const list of form.querySelectorAll(LIST + '[data-name]')) {
 			if (firsts.has(list)) {
 				hold(list, firsts.get(list));
 			}

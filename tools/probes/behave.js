@@ -6781,6 +6781,31 @@ window.REDZ_BEHAVE = (() => {
 			$('#swap-window').open = false;
 			style.remove();
 		}]},
+		// A swap into an open dialog itself, or into its part holding its own Close, does not wait for it to close: the
+		// dialog stays; a popover open in it still holds the swap until it closes.
+		swapLayer: {target: '#swap-servers', steps: [async (out) => {
+			const box = Object.assign(document.createElement('dialog'), {className: 'dialog', id: 'probe-ask'});
+			box.setAttribute('role', 'alertdialog');
+			box.setAttribute('aria-label', 'Question');
+			const parts = (title, close) => '<div class="dialog-body" id="probe-ask-body"><p>' + title + '</p><button class="btn" type="button" commandfor="probe-ask-more" command="toggle-popover">More</button><div class="menu" id="probe-ask-more" popover><p>More words</p></div></div><div class="dialog-footer" id="probe-ask-foot"><button class="btn" type="button" commandfor="probe-ask" command="close">' + close + '</button></div>';
+			const fragment = (markup) => document.createRange().createContextualFragment(trusted(markup));
+			box.innerHTML = trusted(parts('First question', 'No'));
+			document.body.append(box);
+			box.showModal();
+			const self = await Promise.race([REDZ.ui.swap(box, fragment(parts('Second question', 'No'))), wait(400).then(() => 'waiting')]);
+			const foot = await Promise.race([REDZ.ui.swap($('#probe-ask-foot'), fragment('<button class="btn" type="button" commandfor="probe-ask" command="close">Not now</button>')), wait(400).then(() => 'waiting')]);
+			const swapped = [self, foot, box.open, $('#probe-ask-body p')?.textContent, $('#probe-ask-foot')?.textContent];
+			$('#probe-ask-more').showPopover();
+			const held = REDZ.ui.swap(box, fragment(parts('Third question', 'No')));
+			const early = await Promise.race([held, wait(300).then(() => 'waiting')]);
+			$('#probe-ask-more').hidePopover();
+			const late = await Promise.race([held, wait(500).then(() => 'waiting')]);
+			box.close();
+			box.remove();
+			if (say([...swapped, early, late]) !== say([true, true, true, 'Second question', 'Not now', 'waiting', true])) {
+				out.push('a swap into an open dialog (itself, its part with its Close, the dialog open, its words, then a popover open in it: waits, swaps once closed) ' + say([...swapped, early, late]));
+			}
+		}]},
 		comboboxLater: {target: '#combobox-one', steps: [async (out) => {
 			const late = $('#combobox-one').cloneNode(true);
 			for (const element of [late, ...$$('*', late)]) {
@@ -6799,6 +6824,53 @@ window.REDZ_BEHAVE = (() => {
 			late.remove();
 			if (say(drawn) !== say(['true', 'false', 'German'])) {
 				out.push('a combobox put in after load draws its options and face as ' + say(drawn) + ', not German chosen on its face');
+			}
+		}]},
+		// Another widget's combobox - a phone field's country search: a listbox that is no .combobox-list or .palette-list -
+		// is left alone in a modal dialog: its typing, arrows and Escape are its own, its option pressed closes no dialog. A
+		// list of the library's lying in a dialog itself, the palette, closes it as a button of it is pressed; "Create …" of
+		// a list there makes the value with a click and leaves the dialog open.
+		comboboxOwn: {target: '#palette-demo', steps: [async (out) => {
+			const box = Object.assign(document.createElement('dialog'), {className: 'dialog', id: 'probe-own'});
+			box.innerHTML = trusted('<div class="dialog-body"><input id="probe-own-search" type="text" role="combobox" aria-controls="probe-own-options" aria-expanded="true" aria-label="Country"><ul id="probe-own-options" role="listbox" aria-label="Countries"><li role="option" id="probe-own-a">Atlantis</li><li role="option" id="probe-own-b">Borduria</li></ul>'
+				+ '<input class="form-control" id="probe-own-tags" type="text" role="combobox" aria-controls="probe-own-tags-list" aria-expanded="true" aria-label="Tags"><div class="combobox-list" id="probe-own-tags-list" role="listbox" aria-label="Tags" aria-multiselectable="true" data-name="probe-tags[]" data-create="probe-new[]"><div class="menu-item" role="option" data-value="one">One</div></div></div>');
+			document.body.append(box);
+			const search = $('#probe-own-search');
+			const heard = [];
+			search.addEventListener('keydown', (event) => heard.push(event.key));
+			$('#probe-own-options').addEventListener('click', (event) => heard.push(event.target.id));
+			box.showModal();
+			input(search, 'bor');
+			for (const key of ['ArrowDown', 'Enter', 'Escape']) {
+				search.dispatchEvent(new KeyboardEvent('keydown', {key, bubbles: true, cancelable: true}));
+			}
+			$('#probe-own-b').click();
+			await wait(50);
+			const foreign = [heard, box.open, search.value, $$('#probe-own [data-active], #probe-own-options [hidden], #probe-own .combobox-status').length, search.getAttribute('aria-activedescendant')];
+			if (say(foreign) !== say([['ArrowDown', 'Enter', 'Escape', 'probe-own-b'], true, 'bor', 0, null])) {
+				out.push('another widget\'s combobox in a dialog (its keys and click heard, the dialog open, its words, parts the library marked, an active option named) ' + say(foreign));
+			}
+			box.showModal();
+			input($('#probe-own-tags'), 'beach');
+			$('#probe-own-tags-list .combobox-create')?.click();
+			await wait(50);
+			const made = [$$('#probe-own input[name="probe-new[]"]').map((field) => field.value), box.open];
+			box.close();
+			box.remove();
+			if (say(made) !== say([['beach'], true])) {
+				out.push('"Create …" clicked in a list in a dialog (held, the dialog open) ' + say(made));
+			}
+			const palette = $('#palette-demo-dialog');
+			const extra = Object.assign(document.createElement('button'), {className: 'menu-item', type: 'button', id: 'probe-own-run', textContent: 'Probe'});
+			extra.setAttribute('role', 'option');
+			$('#palette-demo-list').append(extra);
+			palette.showModal();
+			extra.click();
+			const shut = !palette.open;
+			palette.close();
+			extra.remove();
+			if (!shut) {
+				out.push('a button of the palette pressed leaves its dialog open');
 			}
 		}]},
 		// The crop: a photo picked into a data-crop field opens a modal screen with the paper's corners found and a handle on
