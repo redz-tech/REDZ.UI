@@ -6590,6 +6590,17 @@ window.REDZ_BEHAVE = (() => {
 			}
 			frame.remove();
 		}]},
+		// Under a finger a check alone in a table's cell answers in the cell, never past it: 44 px around it spilled out of
+		// a narrow column and scrolled the table sideways.
+		checkCell: {target: '.table td > .check:only-child', steps: [async (out) => {
+			if (!matchMedia('(pointer: coarse)').matches) {
+				return;
+			}
+			const spilled = $$('.table :is(td, th) > :is(.check, .radio, .switch):only-child').map((check) => check.parentElement).filter((cell) => cell.getClientRects().length > 0 && cell.scrollWidth > cell.clientWidth).map((cell) => (cell.closest('[id]')?.id ?? '') + ' ' + cell.clientWidth + '/' + cell.scrollWidth);
+			if (spilled.length > 0) {
+				out.push('a check alone in a cell spills past it under a finger: ' + say(spilled.slice(0, 6)));
+			}
+		}]},
 		tabsInView: {target: '#nav-tabs-panel-1', steps: [async (out) => {
 			const panel = $('#nav-tabs-panel-1');
 			const list = $('#nav-tabs [role="tablist"]');

@@ -4,6 +4,13 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Fixed
+- Under a finger a check, radio or switch alone in a table's cell answers in the whole cell. Its 44 px target around
+  it spilled out of a narrow column: the cell grew 6 px wider than itself, and a check in a narrow last column
+  scrolled a `table-scroll` sideways (found by the ERP's billing session at 360 to 414 px).
+
 ## 0.38.0 - 2026-11-27
 
 ### Added

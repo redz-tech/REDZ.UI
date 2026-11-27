@@ -192,6 +192,15 @@
 			position: absolute;
 			inset: min(0px, (100% - 2.75rem) / 2);
 		}
+
+		/* A check alone in a table's cell answers in the whole cell: 44 px around it would spill out of a narrow column. */
+		.table :is(td, th) > :is(.check, .radio, .switch):only-child:not(label *, [aria-busy="true"]) {
+			position: static;
+		}
+
+		.table :is(td, th) > :is(.check, .radio, .switch):only-child:not(label *, [aria-busy="true"])::after {
+			inset: 0;
+		}
 	}
 
 	@media (prefers-reduced-motion: no-preference) {
