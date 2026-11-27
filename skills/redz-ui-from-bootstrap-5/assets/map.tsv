@@ -2165,7 +2165,7 @@ z-n1	z-n1	same	class	utilities	dialogs, menus and toasts stack in the top layer 
 --bs-cyan		review	property	tokens	a palette color: use the tone or the surface that means it
 --bs-danger	--redz-danger	rename	property	tokens	
 --bs-danger-bg-subtle	--redz-danger-subtle	rename	property	tokens	
---bs-danger-border-subtle		review	property	utilities	color-mix(in oklch, var(--redz-danger) 35%, var(--redz-border)), as border-danger-subtle draws it
+--bs-danger-border-subtle		review	property	utilities	color-mix(in oklab, var(--redz-danger) 35%, var(--redz-border)), as border-danger-subtle draws it
 --bs-danger-rgb		review	property	tokens	a relative color in place of the channels: rgb(from var(--redz-danger) r g b / 50%)
 --bs-danger-text-emphasis	--redz-danger	review	property	tokens	the tone itself: REDZ.UI has no darker text of a tone
 --bs-dark		review	property	tokens	light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text
@@ -2236,7 +2236,7 @@ z-n1	z-n1	same	class	utilities	dialogs, menus and toasts stack in the top layer 
 --bs-indigo		review	property	tokens	a palette color: use the tone or the surface that means it
 --bs-info	--redz-info	rename	property	tokens	
 --bs-info-bg-subtle	--redz-info-subtle	rename	property	tokens	
---bs-info-border-subtle		review	property	utilities	color-mix(in oklch, var(--redz-info) 35%, var(--redz-border)), as border-info-subtle draws it
+--bs-info-border-subtle		review	property	utilities	color-mix(in oklab, var(--redz-info) 35%, var(--redz-border)), as border-info-subtle draws it
 --bs-info-rgb		review	property	tokens	a relative color in place of the channels: rgb(from var(--redz-info) r g b / 50%)
 --bs-info-text-emphasis	--redz-info	review	property	tokens	the tone itself: REDZ.UI has no darker text of a tone
 --bs-light		review	property	tokens	light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text
@@ -2385,7 +2385,7 @@ z-n1	z-n1	same	class	utilities	dialogs, menus and toasts stack in the top layer 
 --bs-position		review	property	utilities	ratio-* for the ratio; the property itself for the rest
 --bs-primary	--redz-primary	rename	property	tokens	
 --bs-primary-bg-subtle	--redz-primary-subtle	rename	property	tokens	
---bs-primary-border-subtle		review	property	utilities	color-mix(in oklch, var(--redz-primary) 35%, var(--redz-border)), as border-primary-subtle draws it
+--bs-primary-border-subtle		review	property	utilities	color-mix(in oklab, var(--redz-primary) 35%, var(--redz-border)), as border-primary-subtle draws it
 --bs-primary-rgb		review	property	tokens	a relative color in place of the channels: rgb(from var(--redz-primary) r g b / 50%)
 --bs-primary-text-emphasis	--redz-primary	review	property	tokens	the tone itself: REDZ.UI has no darker text of a tone
 --bs-progress-bar-bg		review	property	tokens	REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility
@@ -2402,7 +2402,7 @@ z-n1	z-n1	same	class	utilities	dialogs, menus and toasts stack in the top layer 
 --bs-secondary-bg	--redz-bg-hover	rename	property	tokens	
 --bs-secondary-bg-rgb		review	property	tokens	a relative color from the matching --redz-* in place of the channels
 --bs-secondary-bg-subtle	--redz-secondary-subtle	rename	property	tokens	
---bs-secondary-border-subtle		review	property	utilities	color-mix(in oklch, var(--redz-secondary) 35%, var(--redz-border)), as border-secondary-subtle draws it
+--bs-secondary-border-subtle		review	property	utilities	color-mix(in oklab, var(--redz-secondary) 35%, var(--redz-border)), as border-secondary-subtle draws it
 --bs-secondary-color	--redz-text-muted	rename	property	tokens	
 --bs-secondary-color-rgb		review	property	tokens	a relative color from the matching --redz-* in place of the channels
 --bs-secondary-rgb		review	property	tokens	a relative color in place of the channels: rgb(from var(--redz-secondary) r g b / 50%)
@@ -2415,7 +2415,7 @@ z-n1	z-n1	same	class	utilities	dialogs, menus and toasts stack in the top layer 
 --bs-spinner-width		review	property	tokens	REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility
 --bs-success	--redz-success	rename	property	tokens	
 --bs-success-bg-subtle	--redz-success-subtle	rename	property	tokens	
---bs-success-border-subtle		review	property	utilities	color-mix(in oklch, var(--redz-success) 35%, var(--redz-border)), as border-success-subtle draws it
+--bs-success-border-subtle		review	property	utilities	color-mix(in oklab, var(--redz-success) 35%, var(--redz-border)), as border-success-subtle draws it
 --bs-success-rgb		review	property	tokens	a relative color in place of the channels: rgb(from var(--redz-success) r g b / 50%)
 --bs-success-text-emphasis	--redz-success	review	property	tokens	the tone itself: REDZ.UI has no darker text of a tone
 --bs-table-accent-bg		review	property	tokens	REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility
@@ -2467,7 +2467,7 @@ z-n1	z-n1	same	class	utilities	dialogs, menus and toasts stack in the top layer 
 --bs-tooltip-zindex		review	property	tokens	REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility
 --bs-warning	--redz-warning	rename	property	tokens	
 --bs-warning-bg-subtle	--redz-warning-subtle	rename	property	tokens	
---bs-warning-border-subtle		review	property	utilities	color-mix(in oklch, var(--redz-warning) 35%, var(--redz-border)), as border-warning-subtle draws it
+--bs-warning-border-subtle		review	property	utilities	color-mix(in oklab, var(--redz-warning) 35%, var(--redz-border)), as border-warning-subtle draws it
 --bs-warning-rgb		review	property	tokens	a relative color in place of the channels: rgb(from var(--redz-warning) r g b / 50%)
 --bs-warning-text-emphasis	--redz-warning	review	property	tokens	the tone itself: REDZ.UI has no darker text of a tone
 --bs-white		review	property	tokens	a palette color: use the tone or the surface that means it

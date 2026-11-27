@@ -59,7 +59,7 @@
 	}
 
 	.chip-dismiss:hover {
-		background: color-mix(in oklch, currentColor 14%, transparent);
+		background: color-mix(in oklab, currentColor 14%, transparent);
 	}
 
 	@media (forced-colors: active) {

@@ -170,7 +170,7 @@
 		display: block;
 		block-size: 0.5rem;
 		border-radius: 999px;
-		background: color-mix(in oklch, var(--redz-text) 9%, transparent);
+		background: color-mix(in oklab, var(--redz-text) 9%, transparent);
 		cursor: pointer;
 	}
 
@@ -180,7 +180,7 @@
 		inset-inline-start: calc((100% - max(2rem, var(--redz-table-bar-size))) * var(--redz-table-bar-at));
 		inline-size: max(2rem, var(--redz-table-bar-size));
 		border-radius: 999px;
-		background: color-mix(in oklch, var(--redz-text) 42%, transparent);
+		background: color-mix(in oklab, var(--redz-text) 42%, transparent);
 		cursor: grab;
 		touch-action: none;
 	}
@@ -322,7 +322,7 @@
 	.table-striped > tbody > tr:nth-child(odd of :not(.table-detail)):not(.table-group) > :is(td, th),
 	.table-striped > tbody > tr:nth-child(odd of :not(.table-detail)) + .table-detail > td,
 	.table-striped-columns :is(th, td):nth-child(even) {
-		box-shadow: inset 0 0 0 100vmax color-mix(in oklch, var(--redz-text) 4%, transparent);
+		box-shadow: inset 0 0 0 100vmax color-mix(in oklab, var(--redz-text) 4%, transparent);
 	}
 
 	.table-bordered :is(th, td):not(:last-child) {
@@ -388,7 +388,7 @@
 	}
 
 	[data-highlighted] {
-		background-color: color-mix(in oklch, var(--redz-primary) 10%, transparent);
+		background-color: color-mix(in oklab, var(--redz-primary) 10%, transparent);
 	}
 
 	.table-sort {
@@ -476,7 +476,7 @@
 
 	:is(.table-danger, .table-warning, .table-active),
 	:is(.table-danger, .table-warning, .table-active) + .table-detail {
-		--redz-row-bg: color-mix(in oklch, var(--redz-row-tint) 55%, var(--redz-bg));
+		--redz-row-bg: color-mix(in oklab, var(--redz-row-tint) 55%, var(--redz-bg));
 	}
 
 	.table-secondary {
@@ -485,7 +485,7 @@
 
 	.table tr:is([aria-selected="true"], :has(> .table-check :checked)),
 	.table tr:is([aria-selected="true"], :has(> .table-check :checked)) + .table-detail {
-		--redz-row-bg: color-mix(in oklch, var(--redz-primary) 10%, var(--redz-bg));
+		--redz-row-bg: color-mix(in oklab, var(--redz-primary) 10%, var(--redz-bg));
 	}
 
 	.table[data-select="rows"] > tbody > tr:has(> .table-check) {
@@ -503,7 +503,7 @@
 		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)):has(+ .table-detail:hover, + .table-detail :is(:popover-open, [commandfor][aria-expanded="true"])),
 		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)) + .table-detail:is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])),
 		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) + .table-detail {
-			--redz-row-bg: color-mix(in oklch, var(--redz-row-tint) 90%, var(--redz-bg));
+			--redz-row-bg: color-mix(in oklab, var(--redz-row-tint) 90%, var(--redz-bg));
 		}
 	}
 

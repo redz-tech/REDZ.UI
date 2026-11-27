@@ -25,8 +25,8 @@
 	.input-group > .btn:not(.btn-primary, .btn-secondary, .btn-success, .btn-danger, .btn-warning, .btn-info, .btn-text, .btn-link, [class*="btn-outline"], [class*="btn-subtle"]) {
 		--redz-btn-bg: var(--redz-group-bg, var(--redz-primary-subtle));
 		--redz-btn-fg: var(--redz-group-fg, var(--redz-primary));
-		--redz-btn-hover: var(--redz-group-hover, color-mix(in oklch, var(--redz-primary-subtle) 85%, var(--redz-primary)));
-		--redz-btn-hover-fg: var(--redz-group-hover-fg, color-mix(in oklch, var(--redz-primary) 70%, var(--redz-text)));
+		--redz-btn-hover: var(--redz-group-hover, color-mix(in oklab, var(--redz-primary-subtle) 85%, var(--redz-primary)));
+		--redz-btn-hover-fg: var(--redz-group-hover-fg, color-mix(in oklab, var(--redz-primary) 70%, var(--redz-text)));
 		border-color: var(--redz-border-strong);
 		font-weight: 600;
 	}

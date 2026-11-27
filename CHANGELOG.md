@@ -17,6 +17,11 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 - `REDZ.ui.swap()` into an open dialog itself no longer waits for it to close, and neither does a swap of a part
   holding the dialog's own Close: a layer is held only by what is in the region and by its openers outside it. Before,
   a second question put into an open alert dialog showed only after it closed (found by the tourism pack).
+- Every `color-mix()` of the styles mixes in `oklab`, not `oklch`. The near greys of the tokens - the background, the
+  text, the border - hold a slight hue, and Firefox and Safari carry a mix's hue round towards it: a danger button's
+  hover text came out magenta, a warning border lilac, and in the dark theme a warning row red and a danger row
+  purple. Chrome drew them as meant, and every engine now draws what Chrome did (found by the tourism pack on its
+  bookings journal). The build refuses a mix in a space with hue.
 
 ## 0.37.1 - 2026-11-26
 

@@ -32,7 +32,7 @@
 	}
 
 	.calendar td[data-weekend] {
-		background: color-mix(in oklch, var(--redz-bg-page) 50%, var(--redz-bg));
+		background: color-mix(in oklab, var(--redz-bg-page) 50%, var(--redz-bg));
 	}
 
 	.calendar td[data-outside] {
@@ -61,7 +61,7 @@
 	}
 
 	.calendar td:not([aria-current="date"]) button.calendar-day:hover {
-		background: color-mix(in oklch, var(--redz-text) 8%, transparent);
+		background: color-mix(in oklab, var(--redz-text) 8%, transparent);
 	}
 
 	button.calendar-day[aria-pressed="true"] {
@@ -377,7 +377,7 @@
 
 	/* The past quiet on the page's grey, a day not to pick struck through, today tinted and framed. */
 	.date-pick-grid td[data-past]:not([aria-selected="true"], [data-reach]) {
-		background: light-dark(color-mix(in oklch, var(--redz-text) 6%, var(--redz-bg-page)), var(--redz-bg-page));
+		background: light-dark(color-mix(in oklab, var(--redz-text) 6%, var(--redz-bg-page)), var(--redz-bg-page));
 	}
 
 	.date-pick-grid td[data-past]:not([aria-selected="true"]) > span:first-child {
@@ -392,7 +392,7 @@
 		color: var(--redz-text-faint);
 		text-decoration-line: line-through;
 		text-decoration-thickness: 1px;
-		text-decoration-color: color-mix(in oklch, var(--redz-text-faint) 70%, transparent);
+		text-decoration-color: color-mix(in oklab, var(--redz-text-faint) 70%, transparent);
 	}
 
 	.date-pick-grid td[aria-current="date"]:not([aria-selected="true"]) {
@@ -421,7 +421,7 @@
 	}
 
 	.date-pick-grid td[data-reach]:not([aria-selected="true"]) {
-		background: color-mix(in oklch, var(--redz-primary) 14%, var(--redz-bg));
+		background: color-mix(in oklab, var(--redz-primary) 14%, var(--redz-bg));
 	}
 
 	.date-pick-grid td[data-from]:not([data-to]) {
@@ -461,7 +461,7 @@
 		margin-block-start: 1px;
 		padding-inline: 5px;
 		border-radius: 999px;
-		background: color-mix(in oklch, var(--redz-text) 9%, transparent);
+		background: color-mix(in oklab, var(--redz-text) 9%, transparent);
 		font-weight: 700;
 	}
 
@@ -493,7 +493,7 @@
 	}
 
 	.date-pick-grid td[aria-selected="true"]:not([data-in]) > .date-pick-count[data-pill] {
-		background: color-mix(in oklch, var(--redz-primary-contrast) 24%, transparent);
+		background: color-mix(in oklab, var(--redz-primary-contrast) 24%, transparent);
 	}
 
 	.date-pick-grid td[aria-disabled] > .date-pick-count {

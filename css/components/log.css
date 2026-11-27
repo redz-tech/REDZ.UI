@@ -89,13 +89,13 @@
 
 	.diff > :not(ins, del) ins {
 		border-radius: 2px;
-		background: color-mix(in oklch, var(--redz-success) 25%, var(--redz-bg));
+		background: color-mix(in oklab, var(--redz-success) 25%, var(--redz-bg));
 		text-decoration: none;
 	}
 
 	.diff > :not(ins, del) del {
 		border-radius: 2px;
-		background: color-mix(in oklch, var(--redz-danger) 25%, var(--redz-bg));
+		background: color-mix(in oklab, var(--redz-danger) 25%, var(--redz-bg));
 	}
 
 	@media (forced-colors: active) {

@@ -425,7 +425,7 @@
 	}
 
 	.chart-line polygon {
-		fill: color-mix(in oklch, var(--redz-chart-1) 14%, transparent);
+		fill: color-mix(in oklab, var(--redz-chart-1) 14%, transparent);
 		stroke: none;
 	}
 
@@ -580,7 +580,7 @@
 	}
 
 	.lanes > tbody > tr[data-highlighted] > td {
-		--redz-lanes-track: color-mix(in oklch, var(--redz-primary) 10%, var(--redz-bg-page));
+		--redz-lanes-track: color-mix(in oklab, var(--redz-primary) 10%, var(--redz-bg-page));
 	}
 
 	.lanes > tbody > tr > td::after {
@@ -655,7 +655,7 @@
 		align-items: center;
 		padding-inline: var(--redz-space-4);
 		overflow: hidden;
-		border: 1px solid color-mix(in oklch, var(--redz-primary) 40%, var(--redz-border));
+		border: 1px solid color-mix(in oklab, var(--redz-primary) 40%, var(--redz-border));
 		border-radius: 3px;
 		background: repeating-linear-gradient(115deg, var(--redz-primary-subtle) 0 6px, var(--redz-bg-page) 6px 12px);
 		color: var(--redz-primary);

@@ -394,12 +394,12 @@
 	.border-danger { border-color: var(--redz-danger); }
 	.border-warning { border-color: var(--redz-warning); }
 	.border-info { border-color: var(--redz-info); }
-	.border-primary-subtle { border-color: color-mix(in oklch, var(--redz-primary) 35%, var(--redz-border)); }
-	.border-secondary-subtle { border-color: color-mix(in oklch, var(--redz-secondary) 35%, var(--redz-border)); }
-	.border-success-subtle { border-color: color-mix(in oklch, var(--redz-success) 35%, var(--redz-border)); }
-	.border-danger-subtle { border-color: color-mix(in oklch, var(--redz-danger) 35%, var(--redz-border)); }
-	.border-warning-subtle { border-color: color-mix(in oklch, var(--redz-warning) 35%, var(--redz-border)); }
-	.border-info-subtle { border-color: color-mix(in oklch, var(--redz-info) 35%, var(--redz-border)); }
+	.border-primary-subtle { border-color: color-mix(in oklab, var(--redz-primary) 35%, var(--redz-border)); }
+	.border-secondary-subtle { border-color: color-mix(in oklab, var(--redz-secondary) 35%, var(--redz-border)); }
+	.border-success-subtle { border-color: color-mix(in oklab, var(--redz-success) 35%, var(--redz-border)); }
+	.border-danger-subtle { border-color: color-mix(in oklab, var(--redz-danger) 35%, var(--redz-border)); }
+	.border-warning-subtle { border-color: color-mix(in oklab, var(--redz-warning) 35%, var(--redz-border)); }
+	.border-info-subtle { border-color: color-mix(in oklab, var(--redz-info) 35%, var(--redz-border)); }
 	.edge-top-color { border-block-start: 3px solid var(--redz-color); }
 	.edge-top-primary { border-block-start: 3px solid var(--redz-primary); }
 	.edge-top-secondary { border-block-start: 3px solid var(--redz-secondary); }

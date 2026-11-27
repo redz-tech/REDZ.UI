@@ -35,7 +35,7 @@
 	.crop .btn-primary {
 		--redz-btn-bg: var(--redz-primary);
 		--redz-btn-fg: var(--redz-primary-contrast);
-		--redz-btn-hover: color-mix(in oklch, var(--redz-primary) 88%, var(--redz-text));
+		--redz-btn-hover: color-mix(in oklab, var(--redz-primary) 88%, var(--redz-text));
 	}
 
 	/* Cancel beside the title and the hint under it, both starting on one line. */

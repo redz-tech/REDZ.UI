@@ -30,8 +30,8 @@
 	}
 
 	:is(.icon-tile-chart-1, .icon-tile-chart-2, .icon-tile-chart-3, .icon-tile-chart-4, .icon-tile-chart-5, .icon-tile-chart-6, .icon-tile-chart-7, .icon-tile-chart-8) {
-		--redz-tile-bg: color-mix(in oklch, var(--redz-tile-chart) 16%, var(--redz-bg));
-		--redz-tile-fg: color-mix(in oklch, var(--redz-tile-chart) 75%, var(--redz-text));
+		--redz-tile-bg: color-mix(in oklab, var(--redz-tile-chart) 16%, var(--redz-bg));
+		--redz-tile-fg: color-mix(in oklab, var(--redz-tile-chart) 75%, var(--redz-text));
 	}
 
 	.icon-tile-chart-1 {

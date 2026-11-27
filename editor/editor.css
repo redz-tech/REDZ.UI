@@ -67,7 +67,7 @@
 	}
 
 	.editor-tool[aria-pressed="true"]:hover {
-		background: color-mix(in oklch, var(--redz-primary), var(--redz-text) 16%);
+		background: color-mix(in oklab, var(--redz-primary), var(--redz-text) 16%);
 		color: var(--redz-primary-contrast);
 	}
 
@@ -143,7 +143,7 @@
 		block-size: 1.25rem;
 		border-radius: 50%;
 		background: var(--editor-swatch);
-		box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--redz-text) 20%, transparent);
+		box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--redz-text) 20%, transparent);
 	}
 
 	.editor-choice.editor-swatches {

@@ -167,7 +167,7 @@
 	}
 
 	.navbar-translucent {
-		background: color-mix(in oklch, var(--redz-bg) 80%, transparent);
+		background: color-mix(in oklab, var(--redz-bg) 80%, transparent);
 		backdrop-filter: blur(8px) saturate(180%);
 	}
 

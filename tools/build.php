@@ -1006,6 +1006,25 @@ function BUILD__MotionCheck(): array
 }
 
 /**
+ * Every color-mix() of the styles mixes in a space without hue - oklab, srgb: a polar one carries the hue round towards
+ * the other colour's, and the near greys of the tokens hold a slight hue that WebKit keeps, so Safari drew a danger
+ * button's hover text magenta and a dark warning row red where Chrome drew both as meant. Answers what is wrong.
+ * @return list<string>
+ */
+function BUILD__MixCheck(): array
+{
+	$wrong = [];
+	foreach (array_merge(...array_map(fn(string $pattern): array => glob(BUILD_ROOT . '/' . $pattern) ?: [], BUILD_STYLES)) as $file) {
+		$css = (string)file_get_contents($file);
+		preg_match_all('~color-mix\(\s*in\s+(?:oklch|lch|hsl|hwb)\b~i', $css, $found, PREG_OFFSET_CAPTURE);
+		foreach ($found[0] as [$call, $at]) {
+			$wrong[] = substr($file, strlen(BUILD_ROOT) + 1) . ':' . (substr_count($css, "\n", 0, $at) + 1) . '  ' . $call . ' turns the hue between the colours: mix in oklab';
+		}
+	}
+	return $wrong;
+}
+
+/**
  * Every formatter of the browser's Intl in a script takes locales() of js/text.js - the page's language, then English:
  * given the page's language alone, one the browser has no data of (Burmese, Lao and Khmer in Chrome) takes the
  * browser's own, and a Burmese page said "5 hours ago" in Russian in a Russian browser. Answers what is wrong.
@@ -1207,7 +1226,7 @@ function BUILD__Main(array $argv): int
 	$check = in_array('--check', $argv, true);
 	$alone = $check && in_array('--files', $argv, true);
 	$vocab = BUILD__Vocabulary();
-	$wrong = $alone ? [] : [...BUILD__TextsCheck($vocab), ...BUILD__CommandsCheck(), ...BUILD__SamplesCheck(), ...BUILD__MotionCheck(), ...BUILD__LocalesCheck(), ...BUILD__SinksCheck(), ...BUILD__TrackCheck(), ...BUILD__SwapCheck(), ...BUILD__ChipsCheck(), ...BUILD__TypesCheck(), ...BUILD__BudgetWordsCheck(), ...BUILD__CatalogCheck(), ...BUILD__ToolsCalls(), ...array_map(fn(string $failure): string => 'tools/min.php  ' . $failure, MIN__SelfTest())];
+	$wrong = $alone ? [] : [...BUILD__TextsCheck($vocab), ...BUILD__CommandsCheck(), ...BUILD__SamplesCheck(), ...BUILD__MotionCheck(), ...BUILD__MixCheck(), ...BUILD__LocalesCheck(), ...BUILD__SinksCheck(), ...BUILD__TrackCheck(), ...BUILD__SwapCheck(), ...BUILD__ChipsCheck(), ...BUILD__TypesCheck(), ...BUILD__BudgetWordsCheck(), ...BUILD__CatalogCheck(), ...BUILD__ToolsCalls(), ...array_map(fn(string $failure): string => 'tools/min.php  ' . $failure, MIN__SelfTest())];
 	if ($wrong !== []) {
 		fwrite(STDERR, implode("\n", $wrong) . "\n");
 		return 1;

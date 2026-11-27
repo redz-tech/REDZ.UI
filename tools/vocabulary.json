@@ -74,7 +74,7 @@
 		{"name": "border-end", "css": "border-inline-end: 1px solid var(--redz-border)"},
 		{"name": "border", "property": "border-width", "values": {"0": "0", "1": "1px", "2": "2px", "4": "4px"}},
 		{"name": "border", "property": "border-color", "tones": "var(--redz-{tone})", "values": {"strong": "var(--redz-border-strong)"}},
-		{"name": "border", "property": "border-color", "tones": "color-mix(in oklch, var(--redz-{tone}) 35%, var(--redz-border))", "suffix": "-subtle"},
+		{"name": "border", "property": "border-color", "tones": "color-mix(in oklab, var(--redz-{tone}) 35%, var(--redz-border))", "suffix": "-subtle"},
 		{"name": "edge-top", "property": "border-block-start", "tones": "3px solid var(--redz-{tone})", "values": {"color": "3px solid var(--redz-color)"}},
 		{"name": "edge-start", "property": "border-inline-start", "tones": "3px solid var(--redz-{tone})", "values": {"color": "3px solid var(--redz-color)"}},
 		{"name": "edge-top-chart", "property": "border-block-start", "count": 8, "pattern": "3px solid var(--redz-chart-{n})"},

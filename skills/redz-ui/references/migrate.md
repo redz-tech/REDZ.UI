@@ -638,7 +638,7 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `--bs-cyan` | - | review | a palette color: use the tone or the surface that means it |
 | `--bs-danger` | `--redz-danger` | rename |  |
 | `--bs-danger-bg-subtle` | `--redz-danger-subtle` | rename |  |
-| `--bs-danger-border-subtle` | - | review | color-mix(in oklch, var(--redz-danger) 35%, var(--redz-border)), as border-danger-subtle draws it |
+| `--bs-danger-border-subtle` | - | review | color-mix(in oklab, var(--redz-danger) 35%, var(--redz-border)), as border-danger-subtle draws it |
 | `--bs-danger-rgb` | - | review | a relative color in place of the channels: rgb(from var(--redz-danger) r g b / 50%) |
 | `--bs-danger-text-emphasis` | `--redz-danger` | review | the tone itself: REDZ.UI has no darker text of a tone |
 | `--bs-dark` | - | review | light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text |
@@ -709,7 +709,7 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `--bs-indigo` | - | review | a palette color: use the tone or the surface that means it |
 | `--bs-info` | `--redz-info` | rename |  |
 | `--bs-info-bg-subtle` | `--redz-info-subtle` | rename |  |
-| `--bs-info-border-subtle` | - | review | color-mix(in oklch, var(--redz-info) 35%, var(--redz-border)), as border-info-subtle draws it |
+| `--bs-info-border-subtle` | - | review | color-mix(in oklab, var(--redz-info) 35%, var(--redz-border)), as border-info-subtle draws it |
 | `--bs-info-rgb` | - | review | a relative color in place of the channels: rgb(from var(--redz-info) r g b / 50%) |
 | `--bs-info-text-emphasis` | `--redz-info` | review | the tone itself: REDZ.UI has no darker text of a tone |
 | `--bs-light` | - | review | light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text |
@@ -858,7 +858,7 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `--bs-position` | - | review | ratio-* for the ratio; the property itself for the rest |
 | `--bs-primary` | `--redz-primary` | rename |  |
 | `--bs-primary-bg-subtle` | `--redz-primary-subtle` | rename |  |
-| `--bs-primary-border-subtle` | - | review | color-mix(in oklch, var(--redz-primary) 35%, var(--redz-border)), as border-primary-subtle draws it |
+| `--bs-primary-border-subtle` | - | review | color-mix(in oklab, var(--redz-primary) 35%, var(--redz-border)), as border-primary-subtle draws it |
 | `--bs-primary-rgb` | - | review | a relative color in place of the channels: rgb(from var(--redz-primary) r g b / 50%) |
 | `--bs-primary-text-emphasis` | `--redz-primary` | review | the tone itself: REDZ.UI has no darker text of a tone |
 | `--bs-progress-bar-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
@@ -875,7 +875,7 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `--bs-secondary-bg` | `--redz-bg-hover` | rename |  |
 | `--bs-secondary-bg-rgb` | - | review | a relative color from the matching --redz-* in place of the channels |
 | `--bs-secondary-bg-subtle` | `--redz-secondary-subtle` | rename |  |
-| `--bs-secondary-border-subtle` | - | review | color-mix(in oklch, var(--redz-secondary) 35%, var(--redz-border)), as border-secondary-subtle draws it |
+| `--bs-secondary-border-subtle` | - | review | color-mix(in oklab, var(--redz-secondary) 35%, var(--redz-border)), as border-secondary-subtle draws it |
 | `--bs-secondary-color` | `--redz-text-muted` | rename |  |
 | `--bs-secondary-color-rgb` | - | review | a relative color from the matching --redz-* in place of the channels |
 | `--bs-secondary-rgb` | - | review | a relative color in place of the channels: rgb(from var(--redz-secondary) r g b / 50%) |
@@ -888,7 +888,7 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `--bs-spinner-width` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
 | `--bs-success` | `--redz-success` | rename |  |
 | `--bs-success-bg-subtle` | `--redz-success-subtle` | rename |  |
-| `--bs-success-border-subtle` | - | review | color-mix(in oklch, var(--redz-success) 35%, var(--redz-border)), as border-success-subtle draws it |
+| `--bs-success-border-subtle` | - | review | color-mix(in oklab, var(--redz-success) 35%, var(--redz-border)), as border-success-subtle draws it |
 | `--bs-success-rgb` | - | review | a relative color in place of the channels: rgb(from var(--redz-success) r g b / 50%) |
 | `--bs-success-text-emphasis` | `--redz-success` | review | the tone itself: REDZ.UI has no darker text of a tone |
 | `--bs-table-accent-bg` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
@@ -940,7 +940,7 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `--bs-tooltip-zindex` | - | review | REDZ.UI's components keep few custom properties: set the property itself on the part, or use a utility |
 | `--bs-warning` | `--redz-warning` | rename |  |
 | `--bs-warning-bg-subtle` | `--redz-warning-subtle` | rename |  |
-| `--bs-warning-border-subtle` | - | review | color-mix(in oklch, var(--redz-warning) 35%, var(--redz-border)), as border-warning-subtle draws it |
+| `--bs-warning-border-subtle` | - | review | color-mix(in oklab, var(--redz-warning) 35%, var(--redz-border)), as border-warning-subtle draws it |
 | `--bs-warning-rgb` | - | review | a relative color in place of the channels: rgb(from var(--redz-warning) r g b / 50%) |
 | `--bs-warning-text-emphasis` | `--redz-warning` | review | the tone itself: REDZ.UI has no darker text of a tone |
 | `--bs-white` | - | review | a palette color: use the tone or the surface that means it |

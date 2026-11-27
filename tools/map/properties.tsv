@@ -8,7 +8,7 @@
 --bs-(primary|secondary|success|danger|warning|info)-bg-subtle	--redz-$1-subtle	rename	tokens
 --bs-(primary|secondary|success|danger|warning|info)-rgb		review	tokens	a relative color in place of the channels: rgb(from var(--redz-$1) r g b / 50%)
 --bs-(primary|secondary|success|danger|warning|info)-text-emphasis	--redz-$1	review	tokens	the tone itself: REDZ.UI has no darker text of a tone
---bs-(primary|secondary|success|danger|warning|info)-border-subtle		review	utilities	color-mix(in oklch, var(--redz-$1) 35%, var(--redz-border)), as border-$1-subtle draws it
+--bs-(primary|secondary|success|danger|warning|info)-border-subtle		review	utilities	color-mix(in oklab, var(--redz-$1) 35%, var(--redz-border)), as border-$1-subtle draws it
 --bs-(light|dark)(-rgb|-bg-subtle|-border-subtle|-text-emphasis)?		review	tokens	light and dark are themes here (data-theme): --redz-bg, --redz-bg-page, --redz-text
 --bs-(white|black|blue|indigo|purple|pink|red|orange|yellow|green|teal|cyan|gray|gray-dark|gray-[0-9]+)(-rgb)?		review	tokens	a palette color: use the tone or the surface that means it
 

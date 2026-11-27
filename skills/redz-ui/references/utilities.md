@@ -491,12 +491,12 @@ row.classList.add('flash');
 | `border-danger` | `border-color: var(--redz-danger);` | - |
 | `border-warning` | `border-color: var(--redz-warning);` | - |
 | `border-info` | `border-color: var(--redz-info);` | - |
-| `border-primary-subtle` | `border-color: color-mix(in oklch, var(--redz-primary) 35%, var(--redz-border));` | - |
-| `border-secondary-subtle` | `border-color: color-mix(in oklch, var(--redz-secondary) 35%, var(--redz-border));` | - |
-| `border-success-subtle` | `border-color: color-mix(in oklch, var(--redz-success) 35%, var(--redz-border));` | - |
-| `border-danger-subtle` | `border-color: color-mix(in oklch, var(--redz-danger) 35%, var(--redz-border));` | - |
-| `border-warning-subtle` | `border-color: color-mix(in oklch, var(--redz-warning) 35%, var(--redz-border));` | - |
-| `border-info-subtle` | `border-color: color-mix(in oklch, var(--redz-info) 35%, var(--redz-border));` | - |
+| `border-primary-subtle` | `border-color: color-mix(in oklab, var(--redz-primary) 35%, var(--redz-border));` | - |
+| `border-secondary-subtle` | `border-color: color-mix(in oklab, var(--redz-secondary) 35%, var(--redz-border));` | - |
+| `border-success-subtle` | `border-color: color-mix(in oklab, var(--redz-success) 35%, var(--redz-border));` | - |
+| `border-danger-subtle` | `border-color: color-mix(in oklab, var(--redz-danger) 35%, var(--redz-border));` | - |
+| `border-warning-subtle` | `border-color: color-mix(in oklab, var(--redz-warning) 35%, var(--redz-border));` | - |
+| `border-info-subtle` | `border-color: color-mix(in oklab, var(--redz-info) 35%, var(--redz-border));` | - |
 | `edge-top-color` | `border-block-start: 3px solid var(--redz-color);` | - |
 | `edge-top-primary` | `border-block-start: 3px solid var(--redz-primary);` | - |
 | `edge-top-secondary` | `border-block-start: 3px solid var(--redz-secondary);` | - |
@@ -965,11 +965,11 @@ row.classList.add('flash');
 | `--bs-aspect-ratio` | - | review | ratio-* for the ratio; the property itself for the rest |
 | `--bs-bg-opacity` | - | review | a relative color or color-mix in place of the opacity |
 | `--bs-border-opacity` | - | review | a relative color or color-mix in place of the opacity |
-| `--bs-danger-border-subtle` | - | review | color-mix(in oklch, var(--redz-danger) 35%, var(--redz-border)), as border-danger-subtle draws it |
-| `--bs-info-border-subtle` | - | review | color-mix(in oklch, var(--redz-info) 35%, var(--redz-border)), as border-info-subtle draws it |
+| `--bs-danger-border-subtle` | - | review | color-mix(in oklab, var(--redz-danger) 35%, var(--redz-border)), as border-danger-subtle draws it |
+| `--bs-info-border-subtle` | - | review | color-mix(in oklab, var(--redz-info) 35%, var(--redz-border)), as border-info-subtle draws it |
 | `--bs-position` | - | review | ratio-* for the ratio; the property itself for the rest |
-| `--bs-primary-border-subtle` | - | review | color-mix(in oklch, var(--redz-primary) 35%, var(--redz-border)), as border-primary-subtle draws it |
-| `--bs-secondary-border-subtle` | - | review | color-mix(in oklch, var(--redz-secondary) 35%, var(--redz-border)), as border-secondary-subtle draws it |
-| `--bs-success-border-subtle` | - | review | color-mix(in oklch, var(--redz-success) 35%, var(--redz-border)), as border-success-subtle draws it |
+| `--bs-primary-border-subtle` | - | review | color-mix(in oklab, var(--redz-primary) 35%, var(--redz-border)), as border-primary-subtle draws it |
+| `--bs-secondary-border-subtle` | - | review | color-mix(in oklab, var(--redz-secondary) 35%, var(--redz-border)), as border-secondary-subtle draws it |
+| `--bs-success-border-subtle` | - | review | color-mix(in oklab, var(--redz-success) 35%, var(--redz-border)), as border-success-subtle draws it |
 | `--bs-text-opacity` | - | review | a relative color or color-mix in place of the opacity |
-| `--bs-warning-border-subtle` | - | review | color-mix(in oklch, var(--redz-warning) 35%, var(--redz-border)), as border-warning-subtle draws it |
+| `--bs-warning-border-subtle` | - | review | color-mix(in oklab, var(--redz-warning) 35%, var(--redz-border)), as border-warning-subtle draws it |
