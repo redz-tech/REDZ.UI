@@ -689,11 +689,11 @@ row.classList.add('flash');
 | `bg-gradient` | - | remove | no gradients |
 | `bg-light` | - | review | bg-body, bg-page, bg-raised or a tone |
 | `bg-light-subtle` | - | review | bg-page, or a tone's -subtle |
-| `bg-opacity-10` | - | review | Bootstrap 6 dropped it too: bg-{tone}-subtle |
-| `bg-opacity-100` | - | review | Bootstrap 6 dropped it too: bg-{tone}-subtle |
-| `bg-opacity-25` | - | review | Bootstrap 6 dropped it too: bg-{tone}-subtle |
-| `bg-opacity-50` | - | review | Bootstrap 6 dropped it too: bg-{tone}-subtle |
-| `bg-opacity-75` | - | review | Bootstrap 6 dropped it too: bg-{tone}-subtle |
+| `bg-opacity-10` | - | review | bg-{tone}-subtle |
+| `bg-opacity-100` | - | review | bg-{tone}-subtle |
+| `bg-opacity-25` | - | review | bg-{tone}-subtle |
+| `bg-opacity-50` | - | review | bg-{tone}-subtle |
+| `bg-opacity-75` | - | review | bg-{tone}-subtle |
 | `bg-white` | - | review | bg-body, bg-page, bg-raised or a tone |
 | `blockquote` | - | missing |  |
 | `blockquote-footer` | - | missing |  |
@@ -776,46 +776,46 @@ row.classList.add('flash');
 | `link-dark` | - | review | a link is the accent; text-* for a tone |
 | `link-info` | - | review | a link is the accent; text-* for a tone |
 | `link-light` | - | review | a link is the accent; text-* for a tone |
-| `link-offset-1` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-offset-1-hover` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-offset-2` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-offset-2-hover` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-offset-3` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-offset-3-hover` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-opacity-10` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-opacity-10-hover` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-opacity-100` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-opacity-100-hover` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-opacity-25` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-opacity-25-hover` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-opacity-50` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-opacity-50-hover` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-opacity-75` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-opacity-75-hover` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-offset-1` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-offset-1-hover` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-offset-2` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-offset-2-hover` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-offset-3` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-offset-3-hover` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-opacity-10` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-opacity-10-hover` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-opacity-100` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-opacity-100-hover` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-opacity-25` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-opacity-25-hover` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-opacity-50` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-opacity-50-hover` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-opacity-75` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-opacity-75-hover` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
 | `link-primary` | - | review | a link is the accent; text-* for a tone |
 | `link-secondary` | - | review | a link is the accent; text-* for a tone |
 | `link-success` | - | review | a link is the accent; text-* for a tone |
-| `link-underline` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-underline-danger` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-underline-dark` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-underline-info` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-underline-light` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-underline-opacity-0` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-underline-opacity-0-hover` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-underline-opacity-10` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-underline-opacity-10-hover` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-underline-opacity-100` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-underline-opacity-100-hover` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-underline-opacity-25` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-underline-opacity-25-hover` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-underline-opacity-50` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-underline-opacity-50-hover` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-underline-opacity-75` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-underline-opacity-75-hover` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-underline-primary` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-underline-secondary` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-underline-success` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
-| `link-underline-warning` | - | review | Bootstrap 6 dropped them too: text-decoration-underline or -none on the link |
+| `link-underline` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-underline-danger` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-underline-dark` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-underline-info` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-underline-light` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-underline-opacity-0` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-underline-opacity-0-hover` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-underline-opacity-10` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-underline-opacity-10-hover` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-underline-opacity-100` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-underline-opacity-100-hover` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-underline-opacity-25` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-underline-opacity-25-hover` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-underline-opacity-50` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-underline-opacity-50-hover` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-underline-opacity-75` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-underline-opacity-75-hover` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-underline-primary` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-underline-secondary` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-underline-success` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
+| `link-underline-warning` | - | review | text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*) |
 | `link-warning` | - | review | a link is the accent; text-* for a tone |
 | `list-inline` | - | review | hstack flex-wrap |
 | `list-inline-item` | - | review | hstack flex-wrap |
@@ -952,10 +952,10 @@ row.classList.add('flash');
 | `text-info-emphasis` | `text-info` | rename | a tone's text color is already its emphasis |
 | `text-light` | - | review | no white, black, light or dark: text-body, text-muted or a tone; on bg-TONE, text-TONE-contrast |
 | `text-light-emphasis` | `text-body` | review | no light or dark: the text color |
-| `text-opacity-100` | - | review | Bootstrap 6 dropped it too: text-muted or text-faint |
-| `text-opacity-25` | - | review | Bootstrap 6 dropped it too: text-muted or text-faint |
-| `text-opacity-50` | - | review | Bootstrap 6 dropped it too: text-muted or text-faint |
-| `text-opacity-75` | - | review | Bootstrap 6 dropped it too: text-muted or text-faint |
+| `text-opacity-100` | - | review | text-muted or text-faint (Bootstrap 6 calls it fg-opacity-*) |
+| `text-opacity-25` | - | review | text-muted or text-faint (Bootstrap 6 calls it fg-opacity-*) |
+| `text-opacity-50` | - | review | text-muted or text-faint (Bootstrap 6 calls it fg-opacity-*) |
+| `text-opacity-75` | - | review | text-muted or text-faint (Bootstrap 6 calls it fg-opacity-*) |
 | `text-primary-emphasis` | `text-primary` | rename | a tone's text color is already its emphasis |
 | `text-secondary-emphasis` | `text-secondary` | rename | a tone's text color is already its emphasis |
 | `text-success-emphasis` | `text-success` | rename | a tone's text color is already its emphasis |

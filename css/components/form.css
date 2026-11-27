@@ -167,6 +167,11 @@
 		border-color: var(--redz-danger-fill);
 	}
 
+	:is(.form-control, .form-select):is([aria-invalid="true"], :user-invalid):focus {
+		border-color: var(--redz-danger-fill);
+		outline-color: var(--redz-danger-fill);
+	}
+
 	/* A form with data-required="show" shows what waits for words: a required field empty or unfinished in the warning's
 	   soft ground at once, a refused one in the danger's - after a failed send, or by aria-invalid. */
 	[data-required="show"] :is(.form-control, .form-select):invalid:not(:user-invalid, [aria-invalid="true"]),

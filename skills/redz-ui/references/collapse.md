@@ -72,6 +72,7 @@ A row under a row opens and closes the same way: the region is a `<tr>` with one
 | `Enter`, `Space` | Opens or closes the region; every button for it says the new state |
 
 - Find in page opens a closed region on a match where the browser has `hidden="until-found"` - Chrome, Firefox 148 and Safari 26.2 on - and the library marks its buttons open; in older browsers the region stays closed until its button opens it.
+- A link to a closed region or to something in it - an address that ends in `#collapse-help-text` - opens it in the same browsers, and its buttons say so.
 - Put the region right after its button in the reading order, or name it, so a reader who opens it finds it.
 - From script: `region.hidden = false` opens it - set `aria-expanded` on its buttons yourself then.
 

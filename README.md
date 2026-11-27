@@ -289,16 +289,18 @@ Two skills in the open [Agent Skills](https://agentskills.io/) format, released 
   Bootstrap class, `data-bs-*` attribute and `bootstrap.*` call left with its REDZ.UI form, and every class REDZ.UI does
   not have; the agent rewrites each file whole and scans again until nothing is left.
 
-Both carry `assets/map.tsv` - every class of Bootstrap 5.3.8 and its REDZ.UI form, written by `php tools/map.php` from
+Both carry `assets/map.tsv` - every class of Bootstrap 5.3.9 and its REDZ.UI form, written by `php tools/map.php` from
 Bootstrap's own stylesheet and `tools/map/rules.tsv` - and `assets/classes.txt`, every class of the library. Install
 them with `npx skills add redz-tech/REDZ.UI`, or copy the folders into `.agents/skills/`.
 
 ## Browsers
-Bootstrap 6's floor: Chrome and Edge 130+, Firefox 132+, Safari 18+ (macOS and iOS) - the browsers of autumn 2024.
-What must work rests on features of the floor. Invoker commands, anchor positioning and `closedby` are enhancements: the
-library writes them, and its scripts stand in below them and where an engine gets them wrong - `js/commands.js` hands a
-command to the browser's own `popovertarget` or calls the dialog, `js/menu-place.js` places a menu the engine did not
-put beside its button, `js/dialog.js` closes a dialog by a click outside it. Nothing is written for older browsers.
+The floor: Chrome and Edge 130+, Firefox 132+, Safari 18+ (macOS and iOS) - the browsers of autumn 2024. Bootstrap 6 set
+the same floor in its first alpha and raised its own to Chrome 138, Firefox 147 and Safari 26 in the second; REDZ.UI
+keeps 130, 132 and 18. What must work rests on features of the floor. Invoker commands, anchor positioning and
+`closedby` are enhancements: the library writes them, and its scripts stand in below them and where an engine gets them
+wrong - `js/commands.js` hands a command to the browser's own `popovertarget` or calls the dialog, `js/menu-place.js`
+places a menu the engine did not put beside its button, `js/dialog.js` closes a dialog by a click outside it. Nothing is
+written for older browsers.
 
 **The floor gate.** `php tools/floor.php check` reads every stylesheet, page and script of the library and checks each
 property, value, function, unit, selector, at-rule, media feature, element, attribute and script API against MDN's

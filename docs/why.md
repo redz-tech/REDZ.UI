@@ -1,6 +1,7 @@
 # Why REDZ.UI
 
-*As of October 28, 2026: Bootstrap 5.3.8 and Bootstrap 6.0.0-alpha.1. Bootstrap 6 is an alpha, and its authors say
+*As of October 28, 2026: Bootstrap 5.3.8 and Bootstrap 6.0.0-alpha.1, measured then; the browser floor and the release
+line brought up to Bootstrap 5.3.9 and 6.0.0-alpha.2 on November 27, 2026. Bootstrap 6 is an alpha, and its authors say
 "things can still meaningfully change before beta" - we will revisit this page when it reaches beta.*
 
 [Русская версия](why.ru.md)
@@ -21,8 +22,8 @@
 - Server-rendered products: a CMS whose modules come from third parties, and an ERP.
 - No build step anywhere - not for us and not for anyone who downloads the library: no Node, no Sass, no bundler. Copy a
   release folder, or link it from a CDN.
-- Bootstrap 6's browser floor: Chrome and Edge 130+, Firefox 132+, Safari 18+ on macOS and iOS - the browsers of
-  autumn 2024. What must work rests on features of that floor; newer ones, such as invoker commands and anchor
+- A browser floor of Chrome and Edge 130+, Firefox 132+, Safari 18+ on macOS and iOS - the browsers of autumn 2024,
+  the floor of Bootstrap 6's first alpha. What must work rests on features of that floor; newer ones, such as invoker commands and anchor
   positioning, are enhancements, with a small script standing in below them.
 - WCAG 2.2 AA in the light and the dark theme; left-to-right and right-to-left from one stylesheet; the system theme
   followed without JavaScript.
@@ -59,13 +60,13 @@ instead of on `:root` - at ×10.9 the style recalculation of a list screen, ×2.
 shown to everyone: Apple's Lockdown Mode, for one, says that ["web fonts might not be displayed"](https://support.apple.com/en-us/105120),
 and content blockers can switch them off.
 
-**The line is ending.** 5.3.8 (August 2025) is the latest release, and the Bootstrap 6 announcement says
+**The line is ending.** 5.3.9 (November 2026) is the latest release, and the Bootstrap 6 announcement says
 ["v5.4.0 will be released as soon as we can before we share an end of life date for Bootstrap 5"](https://blog.getbootstrap.com/2026/10/08/bootstrap-6-alpha/).
 Staying on 5.3 means moving later anyway - to Bootstrap 6.
 
 ## 3. What Bootstrap 6 does right - and we take
-Credit where it is due. Bootstrap 6 raises its browser floor (Chrome and Edge 130, Firefox 132, Safari 18) - the floor
-REDZ.UI keeps too. It puts its
+Credit where it is due. Bootstrap 6 raises its browser floor - Chrome and Edge 130, Firefox 132, Safari 18 in its first
+alpha, the floor REDZ.UI keeps, and Chrome 138, Firefox 147, Safari 26 in its second. It puts its
 CSS into cascade layers and writes logical properties - one stylesheet for both directions, about 1,060 logical
 declarations to 30 physical ones by our count. It builds dialogs on `<dialog>` and accordions on `<details>` with fewer
 wrappers, and puts the floating label before its control. It follows the system theme by default with `light-dark()`,
@@ -121,8 +122,9 @@ files Bootstrap ships target npm, Vite, Parcel and Webpack. It is a world of bui
 it works".
 
 ### e. Its menus are placed by script in every browser
-Anchor positioning is not in Bootstrap 6's floor, nor in ours - it arrived in Firefox 147 and Safari 26 - so both need a
-script for menus. Bootstrap 6 places every menu and tooltip with Floating UI, in every browser, inside its 60 KB bundle.
+Anchor positioning is not in our floor - it arrived in Firefox 147 and Safari 26 - so we need a script for menus.
+Bootstrap 6's second alpha raised its floor to those browsers and still places every menu and tooltip with Floating UI,
+in every browser, inside its 60 KB bundle.
 REDZ.UI writes the platform's way - invoker commands and anchor positioning - and about 3 KB gzip of script stands in
 only where the browser lacks them or gets them wrong: it hands a command to the browser's own `popovertarget`, so the
 browser still reports the menu as expanded and returns focus, and it places a menu the engine did not put beside its

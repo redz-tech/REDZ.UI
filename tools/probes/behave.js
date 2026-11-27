@@ -6615,6 +6615,88 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a disabled pressed button keeps its pressed ground (plain, outline), a disabled unchecked btn-check its hover off: ' + say(seen));
 			}
 		}]},
+		// A field refused by aria-invalid keeps the danger's tone in focus: its border and its ring, drawn over the border,
+		// keep the border's color at rest - a plain field, a chips box, a time, a typed day, a period typed and a day with
+		// its time.
+		invalidRing: {target: '.form-control, .form-select', steps: [async (out) => {
+			const box = Object.assign(document.createElement('div'), {innerHTML: trusted('<input class="form-control" aria-label="Field" aria-invalid="true"><select class="form-select" aria-label="List" aria-invalid="true"><option>A</option></select><div class="chip-input"><input class="form-ghost" type="text" aria-label="Chips" aria-invalid="true"></div>')});
+			document.body.append(box);
+			await wait(50);
+			const ring = (frame, focus) => {
+				const rest = getComputedStyle(frame).borderInlineStartColor;
+				focus.focus();
+				const style = getComputedStyle(frame);
+				const seen = style.borderInlineStartColor === rest && (style.outlineStyle === 'none' || style.outlineColor === rest);
+				focus.blur();
+				return seen;
+			};
+			const seen = {};
+			for (const field of $$('.form-control, .form-select', box)) {
+				seen[field.localName] = ring(field, field);
+			}
+			seen.chips = ring($('.chip-input', box), $('.form-ghost', box));
+			box.remove();
+			const marked = (frame, focus, name) => {
+				if (frame === undefined || focus === undefined || frame.hasAttribute('aria-invalid')) {
+					return;
+				}
+				frame.setAttribute('aria-invalid', 'true');
+				seen[name] = ring(frame, focus);
+				frame.removeAttribute('aria-invalid');
+			};
+			const time = $$('.time-input:not(.date-input-time) > .time-input-face').find((face) => face.getClientRects().length > 0 && $('.time-input-part:not(:disabled)', face) !== null);
+			marked(time, time && $('.time-input-part:not(:disabled)', time), 'time');
+			const single = $$('.date-input > input.date-input-typed').find((field) => field.getClientRects().length > 0 && !field.disabled);
+			marked(single, single, 'day');
+			const period = $$('.date-input > div.date-input-typed').find((face) => face.getClientRects().length > 0 && $('.date-input-part:not(:disabled)', face) !== null);
+			marked(period, period && $('.date-input-part:not(:disabled)', period), 'period');
+			const timed = $$('.date-input > .date-input-timed').find((face) => face.getClientRects().length > 0 && $('.time-input-part:not(:disabled)', face) !== null);
+			marked(timed, timed && $('.time-input-part:not(:disabled)', timed), 'timed');
+			const off = Object.entries(seen).filter(([, ok]) => !ok).map(([name]) => name);
+			if (off.length > 0) {
+				out.push('a refused field in focus takes the focus color over its danger border: ' + say(off) + ' of ' + say(Object.keys(seen)));
+			}
+		}]},
+		// A password's kinds of characters: punctuation and symbols are one, a space, a mark or an unseen character none.
+		strengthKinds: {target: '[data-strength]', steps: [async (out) => {
+			const box = Object.assign(document.createElement('div'), {innerHTML: trusted('<input class="form-control" type="password" id="probe-kinds" aria-label="Password"><meter id="probe-kinds-meter" data-strength="probe-kinds" min="0" max="4"></meter>')});
+			document.body.append(box);
+			const field = $('#probe-kinds');
+			const level = (value) => {
+				field.value = value;
+				field.dispatchEvent(new Event('input', {bubbles: true}));
+				return $('#probe-kinds-meter').value;
+			};
+			const seen = ['!', String.fromCodePoint(0x20ac), ' ', String.fromCodePoint(0xa0), String.fromCodePoint(0x200b), String.fromCodePoint(0x301)].map((one) => level('abcdefg1' + one));
+			box.remove();
+			if (say(seen) !== say([3, 3, 2, 2, 2, 2])) {
+				out.push('a password of small letters, a digit and one more character (!, euro, space, no-break space, zero-width space, a mark) rates ' + say(seen) + ', not [3,3,2,2,2,2]');
+			}
+		}]},
+		// A period whose start is picked says that its end is next, then its length once the end is picked.
+		rangeEnd: {target: '.date-pick, .date-input', steps: [async (out) => {
+			const words = JSON.parse(document.getElementById('redz-ui-text')?.textContent || '{}');
+			const box = Object.assign(document.createElement('div'), {className: 'date-pick', innerHTML: trusted('<input type="date" aria-label="From"><input type="date" aria-label="To">')});
+			document.body.append(box);
+			await wait(150);
+			const line = () => $('.date-pick-chosen > span', box)?.textContent ?? null;
+			const days = $$('td[data-day]:not([aria-disabled="true"])', box);
+			if (days.length < 3) {
+				box.remove();
+				out.push('a period picker made no days to pick');
+				return;
+			}
+			days[0].click();
+			await settled();
+			const waiting = line();
+			days[2].click();
+			await settled();
+			const done = line();
+			box.remove();
+			if (waiting !== words['date.end'] || done === words['date.end'] || done === '') {
+				out.push('a period picker says ' + say(waiting) + ' after its start and ' + say(done) + ' after its end, not ' + say(words['date.end']) + ' and its length');
+			}
+		}]},
 		// A checked switch's thumb keeps its circle: its offset and size fit the track.
 		switchRound: {target: '.switch', steps: [async (out) => {
 			const box = Object.assign(document.createElement('div'), {innerHTML: trusted('<input class="switch" type="checkbox" role="switch" aria-label="Off"><input class="switch" type="checkbox" role="switch" aria-label="On" checked>')});
@@ -6697,7 +6779,8 @@ window.REDZ_BEHAVE = (() => {
 		}]},
 		// Small looks: a long chip breaks inside its box, pills fill their nav, a link drawn as an avatar or a badge has no
 		// underline, a pre and its code share the monospace face and size, the paragraphs of a quote or a details in prose
-		// are spaced, a link holding an open menu keeps its color, the last accordion item's body keeps the corners.
+		// are spaced, a link holding an open menu keeps its color, the last accordion item's body keeps the corners, a prose
+		// paragraph wraps "pretty" where the engine can.
 		smallLooks: {target: '.prose', steps: [async (out) => {
 			const box = Object.assign(document.createElement('div'), {innerHTML: trusted(
 				'<div class="chip-input" style="inline-size: 220px"><ul class="chip-list"><li class="chip">averyveryverylongwordwithoutanyspacesinsideit<button class="chip-dismiss" type="button" aria-label="Remove"></button></li></ul></div>'
@@ -6719,6 +6802,7 @@ window.REDZ_BEHAVE = (() => {
 				quote: parseFloat(style('blockquote p + p').marginBlockStart) > 0 && parseFloat(style('details summary + p').marginBlockStart) > 0,
 				menu: style('.nav-link[aria-expanded]').color === style('.nav-link[aria-selected]').color,
 				accordion: style('.accordion-body').overflow === 'clip' && parseFloat(style('.accordion-body').borderEndEndRadius) > 0,
+				pretty: !CSS.supports('text-wrap', 'pretty') || style('blockquote p').textWrapStyle === 'pretty',
 			};
 			box.remove();
 			const wrong = Object.keys(seen).filter((key) => !seen[key]);

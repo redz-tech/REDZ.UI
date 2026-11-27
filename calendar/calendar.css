@@ -615,6 +615,12 @@
 		border-color: var(--redz-danger-fill);
 	}
 
+	.date-input:is(:focus-within, :has(> .date-input-menu:popover-open)) > .date-input-timed:is([aria-invalid="true"], :has(:user-invalid)),
+	.date-input:focus-within > div.date-input-typed[aria-invalid="true"] {
+		border-color: var(--redz-danger-fill);
+		outline-color: var(--redz-danger-fill);
+	}
+
 	.date-input > .date-input-timed:has(.time-input-part:disabled) {
 		background-color: var(--redz-bg-page);
 		color: var(--redz-text-muted);
@@ -726,7 +732,7 @@
 	}
 
 	.date-input > .date-input-face[aria-invalid="true"] {
-		border-color: var(--redz-danger);
+		border-color: var(--redz-danger-fill);
 	}
 
 	.date-input-value {

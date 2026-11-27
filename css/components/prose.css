@@ -18,6 +18,10 @@
 		text-wrap: balance;
 	}
 
+	.prose p {
+		text-wrap: pretty;
+	}
+
 	.prose h1 {
 		font-size: var(--redz-fs-32);
 	}

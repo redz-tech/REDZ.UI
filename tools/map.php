@@ -1,10 +1,10 @@
 <?php
-// map - the machine map Bootstrap 5.3.8 → REDZ.UI for the migration skill and the docs: every class of Bootstrap's
+// map - the machine map Bootstrap 5.3.9 → REDZ.UI for the migration skill and the docs: every class of Bootstrap's
 // stylesheet gets a row (its REDZ.UI form and the kind of change) by the first rule of tools/map/rules.tsv that
 // matches it, a breakpoint infix turned into a width prefix; the attributes and calls of tools/map/extra.tsv follow.
 // Writes skills/*/assets/map.tsv and classes.txt (every class of the library, the icons included): real copies in
 // each skill, as installers copy a skill's folder alone. A class with no rule, or a target the library does not have,
-// is an error. Usage: php tools/map.php [--check] | refresh - refresh downloads bootstrap@5.3.8 from npm, checks its
+// is an error. Usage: php tools/map.php [--check] | refresh - refresh downloads bootstrap@5.3.9 from npm, checks its
 // sha512 and writes the class list tools/map/bootstrap.txt.
 require __DIR__ . '/lib.php';
 
@@ -15,10 +15,10 @@ const MAP_RESPONSIVE = '~^(d|flex|justify-content|align-items|align-self|align-c
 const MAP_HEAD = "bs5\tredz\tkind\tscope\tpage\tnote";
 const MAP_KINDS = ['same', 'rename', 'value', 'grid', 'state', 'trigger', 'remove', 'missing', 'review'];
 
-/** refresh: downloads Bootstrap 5.3.8, checks the registry's sha512 and writes its sorted class list. */
+/** refresh: downloads Bootstrap 5.3.9, checks the registry's sha512 and writes its sorted class list. */
 function MAP__Refresh(): int
 {
-	$package = TOOL__NpmFile('bootstrap', '5.3.8', 'package/dist/css/bootstrap.css');
+	$package = TOOL__NpmFile('bootstrap', '5.3.9', 'package/dist/css/bootstrap.css');
 	$css = (string)preg_replace('~/\*.*?\*/~s', '', $package['body']);
 	preg_match_all('~([^{}]+)\{~', $css, $selectors);
 	$classes = [];

@@ -68,6 +68,7 @@
 	</table>
 	<ul>
 		<li>Find in page opens a closed region on a match where the browser has <code>hidden="until-found"</code> - Chrome, Firefox 148 and Safari 26.2 on - and the library marks its buttons open; in older browsers the region stays closed until its button opens it.</li>
+		<li>A link to a closed region or to something in it - an address that ends in <code>#collapse-help-text</code> - opens it in the same browsers, and its buttons say so.</li>
 		<li>Put the region right after its button in the reading order, or name it, so a reader who opens it finds it.</li>
 		<li>From script: <code>region.hidden = false</code> opens it - set <code>aria-expanded</code> on its buttons yourself then.</li>
 	</ul>

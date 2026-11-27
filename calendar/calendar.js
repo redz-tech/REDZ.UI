@@ -606,7 +606,7 @@ const draw = (state, keep = false) => {
 	state.note.hidden = note === '';
 	const [words, length] = state.chosen.children;
 	words.textContent = choiceWords(state);
-	length.textContent = state.start !== null && (state.maxDays || state.minDays) ? textCount(state.maxDays ? 'date.longest' : 'date.shortest', state.maxDays || state.minDays) : !single && chosen === null && from !== null && to !== null ? textCount('date.days', Math.round((to - from) / DAY) + 1) : '';
+	length.textContent = state.start !== null && (state.maxDays || state.minDays) ? textCount(state.maxDays ? 'date.longest' : 'date.shortest', state.maxDays || state.minDays) : state.start !== null && !state.openEnd ? text('date.end') : !single && chosen === null && from !== null && to !== null ? textCount('date.days', Math.round((to - from) / DAY) + 1) : '';
 	state.clear.hidden = (chosen !== null ? chosen.size === 0 : from === null && to === null) || state.inputs.every((input) => input.required);
 	if (chosen !== null) {
 		// Each day keeps its chip, so the one in focus keeps the focus.

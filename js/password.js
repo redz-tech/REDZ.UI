@@ -2,7 +2,8 @@
 // hides it again, saying which in aria-pressed, and the field is hidden again on its form's submit and when the page
 // comes back from the history; each change bubbles from the field as redz:reveal (detail.revealed). Each element with data-strength naming the field shows its level as it is typed - 0
 // nothing, 1 shorter than its minlength (8 without one), 2 long enough, 3 long enough with four characters more or three
-// kinds of characters (small or uncased letters, capitals, digits, the rest), 4 both, or twice the minimum: a meter at
+// kinds of characters (small or uncased letters, capitals, digits, punctuation and symbols; a space, a mark or an
+// unseen character is none), 4 both, or twice the minimum: a meter at
 // once as its value, and the level's words once the typing pauses - a meter's aria-valuetext, any other element's
 // text - said politely when they change by a live region of the field's own: VoiceOver says nothing of a password
 // field's own description changing, live or not.
@@ -11,7 +12,7 @@ import {text} from './text.js';
 const COMMAND = '--reveal';
 const PAUSE = 700;
 const WORDS = ['', 'strength.short', 'strength.fair', 'strength.good', 'strength.strong'];
-const KINDS = [/[\p{Ll}\p{Lm}\p{Lo}\p{Lt}]/u, /\p{Lu}/u, /\p{N}/u, /[^\p{L}\p{N}\s]/u];
+const KINDS = [/[\p{Ll}\p{Lm}\p{Lo}\p{Lt}]/u, /\p{Lu}/u, /\p{N}/u, /[\p{P}\p{S}]/u];
 const timers = new WeakMap();
 const voices = new WeakMap();
 

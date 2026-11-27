@@ -6,6 +6,23 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 
 ## Unreleased
 
+### Added
+- A period being picked says that its end comes next: under its start the choice's words read `date.end`, "Now choose
+  the end" in English, where they read "1 day" - unless `data-max-days` or `data-min-days` gives the bound there, as
+  before. A page that picks periods adds the text `date.end` to its island (found by reading Bootstrap
+  6.0.0-alpha.2's fixes).
+
+### Changed
+- A paragraph of `prose` wraps with `text-wrap: pretty`, so it does not end on a lone word, in Chrome and Safari 26;
+  Firefox and Safari 18 wrap it as before.
+- The browser floor is the library's own: Chrome and Edge 130, Firefox 132, Safari 18. It was Bootstrap 6's first
+  alpha's, and its second raised its own to Chrome 138, Firefox 147 and Safari 26 (the owner's pick); the README, the
+  docs and "Why REDZ.UI" say so, and "Why REDZ.UI" names Bootstrap's latest release, 5.3.9.
+- The migration map is of Bootstrap 5.3.9: `modal-xxl` is new there and goes the way of `modal-xl`. Its notes on
+  `text-opacity-*`, `bg-opacity-*` and the link utilities no longer say Bootstrap 6 dropped them: its second alpha keeps
+  them as `fg-opacity-*`, `bg-opacity-*` and `underline-*`.
+- The collapse docs say that a link to a closed region, or to something in it, opens it, as find in page does.
+
 ### Fixed
 - Under a finger a check, radio or switch alone in a table's cell answers in the whole cell. Its 44 px target around
   it spilled out of a narrow column: the cell grew 6 px wider than itself, and a check in a narrow last column
@@ -44,6 +61,11 @@ Found by reading Bootstrap 6.0.0-alpha.2's and 5.3.9's fixes against the library
 - A typed date takes no step from the arrows while words are being composed (IME).
 - In forced colors a stepper's line, a `vr` and an avatar's edge stay drawn, and a floating field's placeholder stays
   hidden under its label.
+- A refused field keeps the danger's tone in focus - a field or a select with `aria-invalid` or refused by the browser,
+  a chips box, a time, a typed day or period, a day with its time: the focus ring is drawn over the border, and it was
+  the focus color. A time, a typed period and a day with its time turned their border to the focus color as well.
+- A password's kinds of characters count punctuation and symbols only: a zero-width space or a combining mark counted
+  as a symbol and raised the level; a space was none, and stays so.
 
 ## 0.38.0 - 2026-11-27
 

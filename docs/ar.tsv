@@ -2108,6 +2108,7 @@ At least {count} days	{count} أيام على الأقل
 Type a date like {example}	اكتب تاريخًا مثل {example}
 This day cannot be chosen	لا يمكن اختيار هذا اليوم
 Choose a date	اختر تاريخًا
+Now choose the end	اختر النهاية الآن
 {count} day chosen	اختير {count} يوم
 {count} days chosen	اختيرت {count} أيام
 Remove {date}	إزالة {date}

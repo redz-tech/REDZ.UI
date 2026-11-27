@@ -141,11 +141,11 @@ bg-info	bg-info	same	class	utilities
 bg-info-subtle	bg-info-subtle	same	class	utilities	
 bg-light		review	class	utilities	bg-body, bg-page, bg-raised or a tone
 bg-light-subtle		review	class	utilities	bg-page, or a tone's -subtle
-bg-opacity-10		review	class	utilities	Bootstrap 6 dropped it too: bg-{tone}-subtle
-bg-opacity-100		review	class	utilities	Bootstrap 6 dropped it too: bg-{tone}-subtle
-bg-opacity-25		review	class	utilities	Bootstrap 6 dropped it too: bg-{tone}-subtle
-bg-opacity-50		review	class	utilities	Bootstrap 6 dropped it too: bg-{tone}-subtle
-bg-opacity-75		review	class	utilities	Bootstrap 6 dropped it too: bg-{tone}-subtle
+bg-opacity-10		review	class	utilities	bg-{tone}-subtle
+bg-opacity-100		review	class	utilities	bg-{tone}-subtle
+bg-opacity-25		review	class	utilities	bg-{tone}-subtle
+bg-opacity-50		review	class	utilities	bg-{tone}-subtle
+bg-opacity-75		review	class	utilities	bg-{tone}-subtle
 bg-primary	bg-primary	same	class	utilities	
 bg-primary-subtle	bg-primary-subtle	same	class	utilities	
 bg-secondary	bg-secondary	same	class	utilities	
@@ -876,46 +876,46 @@ link-danger		review	class	utilities	a link is the accent; text-* for a tone
 link-dark		review	class	utilities	a link is the accent; text-* for a tone
 link-info		review	class	utilities	a link is the accent; text-* for a tone
 link-light		review	class	utilities	a link is the accent; text-* for a tone
-link-offset-1		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-offset-1-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-offset-2		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-offset-2-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-offset-3		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-offset-3-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-opacity-10		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-opacity-10-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-opacity-100		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-opacity-100-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-opacity-25		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-opacity-25-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-opacity-50		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-opacity-50-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-opacity-75		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-opacity-75-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-offset-1		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-offset-1-hover		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-offset-2		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-offset-2-hover		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-offset-3		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-offset-3-hover		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-opacity-10		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-opacity-10-hover		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-opacity-100		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-opacity-100-hover		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-opacity-25		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-opacity-25-hover		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-opacity-50		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-opacity-50-hover		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-opacity-75		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-opacity-75-hover		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
 link-primary		review	class	utilities	a link is the accent; text-* for a tone
 link-secondary		review	class	utilities	a link is the accent; text-* for a tone
 link-success		review	class	utilities	a link is the accent; text-* for a tone
-link-underline		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-underline-danger		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-underline-dark		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-underline-info		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-underline-light		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-underline-opacity-0		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-underline-opacity-0-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-underline-opacity-10		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-underline-opacity-10-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-underline-opacity-100		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-underline-opacity-100-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-underline-opacity-25		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-underline-opacity-25-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-underline-opacity-50		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-underline-opacity-50-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-underline-opacity-75		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-underline-opacity-75-hover		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-underline-primary		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-underline-secondary		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-underline-success		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
-link-underline-warning		review	class	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-underline		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-underline-danger		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-underline-dark		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-underline-info		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-underline-light		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-underline-opacity-0		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-underline-opacity-0-hover		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-underline-opacity-10		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-underline-opacity-10-hover		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-underline-opacity-100		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-underline-opacity-100-hover		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-underline-opacity-25		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-underline-opacity-25-hover		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-underline-opacity-50		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-underline-opacity-50-hover		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-underline-opacity-75		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-underline-opacity-75-hover		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-underline-primary		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-underline-secondary		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-underline-success		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
+link-underline-warning		review	class	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
 link-warning		review	class	utilities	a link is the accent; text-* for a tone
 list-group	list-group	same	class	list-group	
 list-group-flush	list-group-flush	same	class	list-group	
@@ -1089,6 +1089,7 @@ modal-sm	dialog-sm	rename	class	dialog
 modal-static		remove	class	dialog	closedby="closerequest"
 modal-title	dialog-title	rename	class	dialog	
 modal-xl		review	class	dialog	dialog-lg is the widest
+modal-xxl		review	class	dialog	dialog-lg is the widest
 ms-0	ms-0	same	class	utilities	
 ms-1	ms-4	value	class	utilities	the number is the pixels
 ms-2	ms-8	value	class	utilities	reused: ms-2 means another thing in REDZ.UI; the number is the pixels
@@ -1960,10 +1961,10 @@ text-md-end	md:text-end	rename	class	utilities
 text-md-start	md:text-start	rename	class	utilities	
 text-muted	text-muted	same	class	utilities	
 text-nowrap	text-nowrap	same	class	utilities	
-text-opacity-100		review	class	utilities	Bootstrap 6 dropped it too: text-muted or text-faint
-text-opacity-25		review	class	utilities	Bootstrap 6 dropped it too: text-muted or text-faint
-text-opacity-50		review	class	utilities	Bootstrap 6 dropped it too: text-muted or text-faint
-text-opacity-75		review	class	utilities	Bootstrap 6 dropped it too: text-muted or text-faint
+text-opacity-100		review	class	utilities	text-muted or text-faint (Bootstrap 6 calls it fg-opacity-*)
+text-opacity-25		review	class	utilities	text-muted or text-faint (Bootstrap 6 calls it fg-opacity-*)
+text-opacity-50		review	class	utilities	text-muted or text-faint (Bootstrap 6 calls it fg-opacity-*)
+text-opacity-75		review	class	utilities	text-muted or text-faint (Bootstrap 6 calls it fg-opacity-*)
 text-primary	text-primary	same	class	utilities	
 text-primary-emphasis	text-primary	rename	class	utilities	a tone's text color is already its emphasis
 text-reset	text-reset	same	class	utilities	

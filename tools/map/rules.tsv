@@ -1,4 +1,4 @@
-# The rules of tools/map.php: a Bootstrap 5.3.8 class, its breakpoint infix taken off, meets the first pattern that
+# The rules of tools/map.php: a Bootstrap 5.3.9 class, its breakpoint infix taken off, meets the first pattern that
 # matches it whole. Columns: pattern (a regular expression), the REDZ.UI form ($1 for a group, {space:N} for
 # Bootstrap's spacing step N in px), the kind (same, rename, value, grid, state, trigger, remove, missing, review), the
 # docs page (empty: the page of the target's stylesheet), a note. "missing" is a gap planned in an order of its own.
@@ -36,7 +36,7 @@ text-body-tertiary	text-faint	rename	utilities
 text-body-emphasis	text-body	rename	utilities
 text-(primary|secondary|success|danger|warning|info)-emphasis	text-$1	rename	utilities	a tone's text color is already its emphasis
 text-(light|dark)-emphasis	text-body	review	utilities	no light or dark: the text color
-text-opacity-(25|50|75|100)		review	utilities	Bootstrap 6 dropped it too: text-muted or text-faint
+text-opacity-(25|50|75|100)		review	utilities	text-muted or text-faint (Bootstrap 6 calls it fg-opacity-*)
 text-bg-(primary|secondary|success|danger|warning|info)	badge-$1	review	badge	on a badge; elsewhere bg-$1 with the tone's -contrast text in the module's CSS
 text-bg-dark	badge-inverse	review	badge	on a badge: the text color as its background, light in the dark theme
 text-bg-light		review	badge	a plain badge, or a tone
@@ -45,7 +45,7 @@ bg-body-secondary	bg-page	rename	utilities
 bg-body-tertiary	bg-raised	rename	utilities
 bg-(light|dark)-subtle		review	utilities	bg-page, or a tone's -subtle
 bg-gradient		remove	utilities	no gradients
-bg-opacity-(10|25|50|75|100)		review	utilities	Bootstrap 6 dropped it too: bg-{tone}-subtle
+bg-opacity-(10|25|50|75|100)		review	utilities	bg-{tone}-subtle
 border-(top|end|bottom|start)-0		missing	utilities	draw only the sides you need: border-top and the others
 border-(3|5)		review	utilities	the widths are 1, 2 and 4 px
 border-(white|black|light|dark)		review	utilities	border-strong, or a tone
@@ -93,7 +93,7 @@ vr	vr	same	utilities	a 1 px rule as tall as its flex row
 clearfix		remove	utilities	no floats
 focus-ring(-[a-z]+)?		remove	utilities	the focus ring is built in, 3:1 in both themes
 link-(primary|secondary|success|danger|warning|info|light|dark|body-emphasis)		review	utilities	a link is the accent; text-* for a tone
-link-underline(-.+)?|link-opacity-.+|link-offset-.+		review	utilities	Bootstrap 6 dropped them too: text-decoration-underline or -none on the link
+link-underline(-.+)?|link-opacity-.+|link-offset-.+		review	utilities	text-decoration-underline or -none on the link (Bootstrap 6 calls them underline-*)
 icon-link	icon-link	same	utilities	the icon sits in the link's line, its gap in em
 icon-link-hover		remove	utilities	the icon does not move on hover
 img-fluid		review	utilities	images never overflow their box here; w-100 to fill it
@@ -120,7 +120,7 @@ modal	dialog	rename	dialog	on a <dialog>, opened by commandfor + command="show-m
 modal-dialog|modal-content		remove	dialog	no wrappers: the <dialog> is the box
 modal-(header|title|body|footer)	dialog-$1	rename	dialog
 modal-(sm|lg)	dialog-$1	rename	dialog
-modal-xl		review	dialog	dialog-lg is the widest
+modal-(xl|xxl)		review	dialog	dialog-lg is the widest
 modal-fullscreen	dialog-fullscreen	rename	dialog
 modal-fullscreen-(sm|md|lg|xl|xxl)-down		remove	dialog	under 576 px a dialog fills the screen by itself; dialog-fullscreen fills it everywhere
 modal-dialog-centered		remove	dialog	a dialog is centered

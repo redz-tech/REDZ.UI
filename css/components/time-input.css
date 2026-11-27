@@ -27,6 +27,11 @@
 		border-color: var(--redz-danger-fill);
 	}
 
+	.time-input:focus-within > .time-input-face:is([aria-invalid="true"], :has(> .time-input-part:user-invalid)) {
+		border-color: var(--redz-danger-fill);
+		outline-color: var(--redz-danger-fill);
+	}
+
 	.time-input-face:has(> .time-input-part:disabled) {
 		background-color: var(--redz-bg-page);
 		color: var(--redz-text-muted);

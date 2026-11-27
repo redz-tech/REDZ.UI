@@ -1,4 +1,4 @@
-# The rules of tools/map.php for Bootstrap 5.3.8's custom properties (tools/map/bootstrap-properties.txt), which a
+# The rules of tools/map.php for Bootstrap 5.3.9's custom properties (tools/map/bootstrap-properties.txt), which a
 # project's own CSS, inline styles and scripts read or set: a name meets the first pattern that matches it whole.
 # Columns as in rules.tsv: pattern, the REDZ.UI form ($1 for a group), the kind, the docs page, a note. A form is one of
 # the library's custom properties.

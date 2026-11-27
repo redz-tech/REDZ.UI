@@ -4,7 +4,7 @@ description: Move a project's markup, styles and scripts from Bootstrap 5.3 to R
 license: MIT
 metadata:
   version: "0.38.0"
-  from: "bootstrap 5.3.8"
+  from: "bootstrap 5.3.9"
 ---
 
 # From Bootstrap 5.3 to REDZ.UI
@@ -99,7 +99,7 @@ menus, tabs and dialogs need no start-up call.
 - `references/grid.md` - rows, columns, gutters and containers.
 - `references/states-and-triggers.md` - state classes, `data-bs-*`, the JS API and events.
 - `references/components.md` - modal, dropdown, offcanvas, forms, tables, toasts, navs, badges, alerts.
-- `assets/map.tsv` - every class of Bootstrap 5.3.8 and its REDZ.UI form: `bs5`, `redz`, `kind`, `scope`, `page`,
+- `assets/map.tsv` - every class of Bootstrap 5.3.9 and its REDZ.UI form: `bs5`, `redz`, `kind`, `scope`, `page`,
   `note`. `page` names the docs page: `https://redz-tech.github.io/REDZ.UI/docs/PAGE.html`.
 - `assets/classes.txt` - every class REDZ.UI has, the packages' among them (a page that uses `calendar` links
   `css/redz-ui-calendar.min.css`); a class that is not there does not exist.

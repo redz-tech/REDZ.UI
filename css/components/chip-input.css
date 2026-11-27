@@ -31,6 +31,11 @@
 		border-color: var(--redz-danger-fill);
 	}
 
+	.chip-input:is([aria-invalid="true"], :has(> .form-ghost:is([aria-invalid="true"], :user-invalid))):has(:focus) {
+		border-color: var(--redz-danger-fill);
+		outline-color: var(--redz-danger-fill);
+	}
+
 	.chip-input[data-changed] {
 		box-shadow: inset 3px 0 0 var(--redz-warning-fill);
 	}
