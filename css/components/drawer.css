@@ -39,6 +39,7 @@
 	}
 
 	.drawer-body {
+		position: relative;
 		padding: var(--redz-space-16);
 		overflow: auto;
 	}

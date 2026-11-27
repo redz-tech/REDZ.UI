@@ -273,7 +273,7 @@ A row `table-group` heads the rows under it: one `th scope="rowgroup"` across th
 </table>
 ```
 
-The head of a table sticks under the app's header as the page scrolls; inside a region that scrolls on its own - a `dialog-body`, a `card-scroll` card's body - it sticks to the region's top.
+The head of a table sticks under the app's header as the page scrolls; inside a region that scrolls on its own - a `dialog-body`, a `drawer-body`, a `card-scroll` card's body - it sticks to the region's top edge, over its padding.
 
 ### Wider than its card
 
@@ -461,7 +461,7 @@ A row's tone says the state of its record: `table-danger` failed, `table-warning
 
 From [`css/components/table.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css). It declares `--redz-row-bg`, `--redz-table-head-border`, `--redz-table-head-weight`, `--redz-table-shade-flip`, `--redz-table-fade-start`, `--redz-table-fade-end`, `--redz-table-shade-side`, `--redz-table-shade-at`, `--redz-row-tint`, `--redz-row-mark` on its root, never on rows or items.
 
-It reads the theme's `--redz-sticky-top`, `--redz-space-12`, `--redz-space-8`, `--redz-row-pad`, `--redz-border`, `--redz-table-head-bg`, `--redz-bg`, `--redz-table-head-text`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-fs-14`, `--redz-shadow-strength`, `--redz-table-bar-gap`, `--redz-space-4`, `--redz-table-bar-size`, `--redz-table-bar-at`, `--redz-bg-page`, `--redz-space-16`, `--redz-table-scroll-size`, `--redz-border-strong`, `--redz-row-hover`, `--redz-primary`, `--redz-radius-12`, `--redz-font-mono`, `--redz-primary-subtle`, `--redz-primary-fill`, `--redz-secondary-subtle`, `--redz-secondary-fill`, `--redz-success-subtle`, `--redz-success-fill`, `--redz-info-subtle`, `--redz-info-fill`, `--redz-warning-subtle`, `--redz-warning-fill`, `--redz-danger-subtle`, `--redz-danger-fill`.
+It reads the theme's `--redz-sticky-top`, `--redz-space-12`, `--redz-space-8`, `--redz-row-pad`, `--redz-border`, `--redz-table-head-bg`, `--redz-bg`, `--redz-table-head-text`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-fs-14`, `--redz-space-16`, `--redz-shadow-strength`, `--redz-table-bar-gap`, `--redz-space-4`, `--redz-table-bar-size`, `--redz-table-bar-at`, `--redz-bg-page`, `--redz-table-scroll-size`, `--redz-border-strong`, `--redz-row-hover`, `--redz-primary`, `--redz-radius-12`, `--redz-font-mono`, `--redz-primary-subtle`, `--redz-primary-fill`, `--redz-secondary-subtle`, `--redz-secondary-fill`, `--redz-success-subtle`, `--redz-success-fill`, `--redz-info-subtle`, `--redz-info-fill`, `--redz-warning-subtle`, `--redz-warning-fill`, `--redz-danger-subtle`, `--redz-danger-fill`.
 
 ## From Bootstrap 5.3
 

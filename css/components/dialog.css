@@ -122,6 +122,7 @@
 	}
 
 	.dialog-body {
+		position: relative;
 		padding: var(--redz-space-12) var(--redz-space-24) var(--redz-space-24);
 		overflow: auto;
 		color: var(--redz-text-muted);

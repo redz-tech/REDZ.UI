@@ -6697,6 +6697,31 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a period picker says ' + say(waiting) + ' after its start and ' + say(done) + ' after its end, not ' + say(words['date.end']) + ' and its length');
 			}
 		}]},
+		// A drawer and a dialog scroll in their body alone: a check hidden far down the body scrolls with it, not the
+		// layer, and a table's head sticks at the body's top edge, past its padding, whatever the page's sticky bar.
+		layerScroll: {target: '.drawer', steps: [async (out) => {
+			const rows = Array.from({length: 60}, (_, i) => '<tr><td>Row ' + i + '</td></tr>').join('');
+			const body = (cls) => '<div class="' + cls + '"><table class="table"><thead><tr><th scope="col">Head</th></tr></thead><tbody>' + rows + '</tbody></table><input class="btn-check" type="checkbox" id="probe-scroll-' + cls + '"><label class="btn" for="probe-scroll-' + cls + '">Last</label></div>';
+			const box = Object.assign(document.createElement('div'), {className: 'app', innerHTML: trusted('<dialog class="drawer" id="probe-scroll-drawer" aria-label="Drawer"><div class="drawer-header"><h2 class="drawer-title">Drawer</h2></div>' + body('drawer-body') + '</dialog><dialog class="dialog" id="probe-scroll-dialog" aria-label="Dialog" style="max-block-size: 400px">' + body('dialog-body') + '</dialog>')});
+			document.body.append(box);
+			const seen = {};
+			for (const [name, cls] of [['drawer', 'drawer-body'], ['dialog', 'dialog-body']]) {
+				const layer = $('#probe-scroll-' + name);
+				layer.showModal();
+				await wait(300);
+				const inner = $('.' + cls, layer);
+				inner.scrollTop = 400;
+				await settled();
+				const head = $('th', inner).getBoundingClientRect().top - inner.getBoundingClientRect().top - parseFloat(getComputedStyle(inner).borderBlockStartWidth);
+				seen[name] = [layer.scrollHeight <= layer.clientHeight + 1, Math.round(head)];
+				layer.close();
+			}
+			await wait(250);
+			box.remove();
+			if (say(seen) !== say({drawer: [true, 0], dialog: [true, 0]})) {
+				out.push('a layer scrolls in its body alone, its table head at the body\'s top (no scroll of its own, the head\'s distance): ' + say(seen));
+			}
+		}]},
 		// A checked switch's thumb keeps its circle: its offset and size fit the track.
 		switchRound: {target: '.switch', steps: [async (out) => {
 			const box = Object.assign(document.createElement('div'), {innerHTML: trusted('<input class="switch" type="checkbox" role="switch" aria-label="Off"><input class="switch" type="checkbox" role="switch" aria-label="On" checked>')});

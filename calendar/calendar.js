@@ -1250,12 +1250,13 @@ const buildInput = (box) => {
 		box.addEventListener('focusin', () => limit(state));
 		box.addEventListener('focusout', (event) => {
 			if (!box.contains(event.relatedTarget)) {
-				requestAnimationFrame(() => box.contains(document.activeElement) || panel.matches(':popover-open') || commit(state, true));
+				requestAnimationFrame(() => state.closing || box.contains(document.activeElement) || panel.matches(':popover-open') || commit(state, true));
 			}
 		});
 	}
 	makeFace(state);
 	panel.addEventListener('beforetoggle', (event) => {
+		state.closing = event.newState !== 'open';
 		if (event.newState === 'open') {
 			state.quiet = false;
 			prepare(state);
@@ -1272,6 +1273,7 @@ const buildInput = (box) => {
 	});
 	panel.addEventListener('toggle', (event) => {
 		const open = event.newState === 'open';
+		state.closing = false;
 		const openers = state.days?.length > 0 ? state.days : [state.open ?? state.face];
 		openers.forEach((one, i) => one.setAttribute('aria-expanded', String(open && (openers.length === 1 || i === (timed?.from ?? 0)))));
 		state.quiet = !open;
@@ -1287,6 +1289,9 @@ const buildInput = (box) => {
 				time.focus();
 			} else if (panel.contains(document.activeElement) || document.activeElement === document.body) {
 				(state.parts[0] ?? state.days?.[timed?.from ?? 0] ?? state.face).focus();
+			}
+			if (timed !== undefined && !box.contains(document.activeElement)) {
+				commit(state, true);
 			}
 		}
 	});

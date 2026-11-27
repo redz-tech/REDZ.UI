@@ -22,6 +22,7 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   `text-opacity-*`, `bg-opacity-*` and the link utilities no longer say Bootstrap 6 dropped them: its second alpha keeps
   them as `fg-opacity-*`, `bg-opacity-*` and `underline-*`.
 - The collapse docs say that a link to a closed region, or to something in it, opens it, as find in page does.
+- The sign-in docs' example button reads "Sign in from an app": the longer words ran past a 320 px phone.
 
 ### Fixed
 - Under a finger a check, radio or switch alone in a table's cell answers in the whole cell. Its 44 px target around
@@ -66,6 +67,15 @@ Found by reading Bootstrap 6.0.0-alpha.2's and 5.3.9's fixes against the library
   the focus color. A time, a typed period and a day with its time turned their border to the focus color as well.
 - A password's kinds of characters count punctuation and symbols only: a zero-width space or a combining mark counted
   as a symbol and raised the level; a space was none, and stays so.
+
+Found by the tourism pack on its agent's drawer, and by the release's checks:
+- A drawer or a dialog scrolls in its body alone. A check or a radio hidden in the body - a `btn-check` - was placed
+  against the layer itself, far down, and gave the layer a scrollbar of its own beside the body's; `drawer-body` and
+  `dialog-body` now hold what they place.
+- A table's head in a drawer's body sticks at the body's top edge. It took the page's sticky bar's offset and stopped
+  52 px low; in a dialog's body and a scrolling card's body it stopped at the padding, and the rows showed above it.
+- A day with its time changes once, as the focus leaves it. In Safari, picking a day could fire `change` as its panel
+  closed, before the focus went on to its time.
 
 ## 0.38.0 - 2026-11-27
 
