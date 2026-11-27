@@ -340,5 +340,5 @@ document.addEventListener('paste', (event) => {
 
 document.addEventListener('reset', (event) => {
 	const uploads = event.target instanceof HTMLFormElement ? [...event.target.querySelectorAll('.upload')] : [];
-	setTimeout(() => uploads.forEach(clear));
+	setTimeout(() => event.defaultPrevented || uploads.forEach(clear));
 });

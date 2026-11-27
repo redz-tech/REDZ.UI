@@ -1371,7 +1371,7 @@ new MutationObserver(start).observe(document.documentElement, {childList: true, 
 touch.addEventListener('change', () => start([{attributeName: 'data-typing', target: document.documentElement}]));
 
 document.addEventListener('reset', (event) => {
-	setTimeout(() => event.target.querySelectorAll(BOXES).forEach((box) => {
+	setTimeout(() => event.defaultPrevented || event.target.querySelectorAll(BOXES).forEach((box) => {
 		const state = states.get(box);
 		if (state !== undefined) {
 			(state.timed?.inputs ?? state.inputs).forEach((input, i) => (input.value = (state.timed ?? state).first[i]));

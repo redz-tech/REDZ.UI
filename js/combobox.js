@@ -825,6 +825,9 @@ document.addEventListener('command', (event) => {
 document.addEventListener('reset', (event) => {
 	const form = event.target;
 	setTimeout(() => {
+		if (event.defaultPrevented) {
+			return;
+		}
 		for (const list of form.querySelectorAll(LIST + '[data-name]')) {
 			if (firsts.has(list)) {
 				hold(list, firsts.get(list));

@@ -59,6 +59,10 @@
 		cursor: not-allowed;
 	}
 
+	.btn-check:disabled:not(:checked) + .btn {
+		--redz-btn-hover: var(--redz-bg-page);
+	}
+
 	.btn .bi {
 		font-size: 1rem;
 	}
@@ -273,9 +277,12 @@
 	.btn[aria-disabled="true"]:not([aria-busy="true"]) {
 		--redz-btn-bg: var(--redz-bg-page);
 		--redz-btn-fg: var(--redz-text-faint);
-		--redz-btn-hover: var(--redz-bg-page);
 		border-color: transparent;
 		cursor: not-allowed;
+	}
+
+	.btn:is(:disabled, [aria-disabled="true"]):not([aria-busy="true"], [aria-pressed="true"], [aria-current]:not([aria-current="false"])) {
+		--redz-btn-hover: var(--redz-bg-page);
 	}
 
 	.btn[aria-busy="true"] {

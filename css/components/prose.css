@@ -7,7 +7,8 @@
 		overflow-wrap: break-word;
 	}
 
-	.prose > * + * {
+	.prose > * + *,
+	.prose :is(blockquote, details) > * + * {
 		margin-block-start: 1em;
 	}
 

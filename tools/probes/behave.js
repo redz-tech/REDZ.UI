@@ -6601,6 +6601,131 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a check alone in a cell spills past it under a finger: ' + say(spilled.slice(0, 6)));
 			}
 		}]},
+		// A pressed or current button keeps its ground when it cannot be pressed, as a checked btn-check does; the label of
+		// a disabled, unchecked btn-check lights no hover.
+		pressedLocked: {target: '.btn', steps: [async (out) => {
+			const box = Object.assign(document.createElement('div'), {innerHTML: trusted('<button class="btn" type="button" aria-pressed="true">A</button><button class="btn" type="button" aria-pressed="true" disabled>B</button><button class="btn btn-outline-primary" type="button" aria-pressed="true">C</button><button class="btn btn-outline-primary" type="button" aria-pressed="true" disabled>D</button><button class="btn" type="button" disabled>E</button><input class="btn-check" type="radio" id="probe-locked-f" disabled><label class="btn" for="probe-locked-f">F</label>')});
+			document.body.append(box);
+			const [a, b, c, d, e] = $$('button', box);
+			const ground = (element) => getComputedStyle(element).backgroundColor;
+			const hover = (element) => getComputedStyle(element).getPropertyValue('--redz-btn-hover').trim();
+			const seen = [ground(b) === ground(a), ground(d) === ground(c), hover($('label', box)) === hover(e)];
+			box.remove();
+			if (seen.includes(false)) {
+				out.push('a disabled pressed button keeps its pressed ground (plain, outline), a disabled unchecked btn-check its hover off: ' + say(seen));
+			}
+		}]},
+		// A checked switch's thumb keeps its circle: its offset and size fit the track.
+		switchRound: {target: '.switch', steps: [async (out) => {
+			const box = Object.assign(document.createElement('div'), {innerHTML: trusted('<input class="switch" type="checkbox" role="switch" aria-label="Off"><input class="switch" type="checkbox" role="switch" aria-label="On" checked>')});
+			document.body.append(box);
+			const fits = $$('input', box).map((track) => {
+				const style = getComputedStyle(track);
+				const room = track.clientWidth - parseFloat(style.paddingInlineStart) - parseFloat(style.paddingInlineEnd);
+				const thumb = getComputedStyle(track, '::before');
+				return parseFloat(thumb.marginInlineStart) + parseFloat(thumb.width) <= room + 0.01 && thumb.flexShrink === '0';
+			});
+			box.remove();
+			if (fits.includes(false)) {
+				out.push('a switch\'s thumb does not fit its track, so it is squeezed (off, on): ' + say(fits));
+			}
+		}]},
+		// A reset the page cancels leaves a chips field as it is; one that goes on gives back what the page sent.
+		resetCancelled: {target: '#form-chips-days', steps: [async (out) => {
+			const form = Object.assign(document.createElement('form'), {innerHTML: trusted('<div class="chip-input"><input type="hidden" name="probe_days" value="3,2"><input class="form-ghost" id="probe-reset-entry" type="number" aria-label="Days"></div>')});
+			document.body.append(form);
+			await wait(50);
+			const entry = $('#probe-reset-entry');
+			const held = () => $('input[type="hidden"]', form).value;
+			entry.value = '9';
+			entry.dispatchEvent(new Event('input', {bubbles: true}));
+			entry.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true, cancelable: true}));
+			await wait(20);
+			const typed = held();
+			form.addEventListener('reset', (event) => event.preventDefault(), {once: true});
+			form.reset();
+			await wait(50);
+			const kept = held();
+			form.reset();
+			await wait(50);
+			const back = held();
+			form.remove();
+			if (!typed.includes('9') || kept !== typed || back !== '3,2') {
+				out.push('a chips field and the form\'s reset: typed ' + say(typed) + ', after a cancelled reset ' + say(kept) + ', after a reset ' + say(back));
+			}
+		}]},
+		// A PIN pad leaves a field the page made read-only, sends no input when a key changes nothing, and a pasted code
+		// keeps its digits past the spaces the field's maxlength would count.
+		pinGuard: {target: '#pin-unlock .pin', steps: [async (out) => {
+			const pad = $('#pin-unlock .pin');
+			const field = $('input', pad);
+			const press = (key) => {
+				const button = $('[data-key="' + key + '"]', pad);
+				button.dispatchEvent(new MouseEvent('mousedown', {bubbles: true, cancelable: true}));
+				button.click();
+			};
+			let inputs = 0;
+			const count = () => inputs++;
+			field.addEventListener('input', count);
+			field.value = '';
+			field.readOnly = true;
+			press('5');
+			const locked = field.value;
+			field.readOnly = false;
+			inputs = 0;
+			press('delete');
+			const empty = inputs;
+			let pasted = null;
+			if (field.maxLength >= 4) {
+				const data = new DataTransfer();
+				data.setData('text/plain', '1 2 3');
+				const paste = new ClipboardEvent('paste', {clipboardData: data, bubbles: true, cancelable: true});
+				if (paste.clipboardData !== null) {
+					field.focus();
+					field.setSelectionRange(0, 0);
+					field.dispatchEvent(paste);
+					pasted = field.value;
+				}
+			}
+			field.removeEventListener('input', count);
+			field.value = '';
+			field.dispatchEvent(new Event('input', {bubbles: true}));
+			field.blur();
+			if (locked !== '' || empty !== 0 || (pasted !== null && pasted !== '123')) {
+				out.push('a PIN pad: a key on a read-only field gives ' + say(locked) + ', delete on an empty one fires ' + empty + ' input, "1 2 3" pasted gives ' + say(pasted));
+			}
+		}]},
+		// Small looks: a long chip breaks inside its box, pills fill their nav, a link drawn as an avatar or a badge has no
+		// underline, a pre and its code share the monospace face and size, the paragraphs of a quote or a details in prose
+		// are spaced, a link holding an open menu keeps its color, the last accordion item's body keeps the corners.
+		smallLooks: {target: '.prose', steps: [async (out) => {
+			const box = Object.assign(document.createElement('div'), {innerHTML: trusted(
+				'<div class="chip-input" style="inline-size: 220px"><ul class="chip-list"><li class="chip">averyveryverylongwordwithoutanyspacesinsideit<button class="chip-dismiss" type="button" aria-label="Remove"></button></li></ul></div>'
+				+ '<div style="inline-size: 600px"><nav class="nav nav-pills nav-fill"><a class="nav-link" href="#probe">One</a><a class="nav-link" href="#probe">Two</a></nav></div>'
+				+ '<a class="avatar" href="#probe">AB</a><a class="badge" href="#probe">New</a>'
+				+ '<pre><code>x</code></pre>'
+				+ '<div class="prose"><blockquote><p>One</p><p>Two</p></blockquote><details open><summary>More</summary><p>Three</p></details></div>'
+				+ '<nav class="nav"><a class="nav-link" href="#probe" aria-expanded="true">Menu</a><a class="nav-link" href="#probe" aria-selected="true">Here</a></nav>'
+				+ '<div class="accordion"><details class="accordion-item" open><summary class="accordion-header">A</summary><div class="accordion-body p-0">B</div></details></div>')});
+			document.body.append(box);
+			const style = (selector, pseudo) => getComputedStyle($(selector, box), pseudo);
+			const chips = $('.chip-input', box);
+			const seen = {
+				chip: chips.scrollWidth <= chips.clientWidth,
+				pills: $('.nav-pills', box).getBoundingClientRect().width > 590,
+				avatar: style('a.avatar').textDecorationLine === 'none',
+				badge: style('a.badge').textDecorationLine === 'none',
+				pre: style('pre').fontFamily === style('pre code').fontFamily && style('pre').fontSize === style('pre code').fontSize,
+				quote: parseFloat(style('blockquote p + p').marginBlockStart) > 0 && parseFloat(style('details summary + p').marginBlockStart) > 0,
+				menu: style('.nav-link[aria-expanded]').color === style('.nav-link[aria-selected]').color,
+				accordion: style('.accordion-body').overflow === 'clip' && parseFloat(style('.accordion-body').borderEndEndRadius) > 0,
+			};
+			box.remove();
+			const wrong = Object.keys(seen).filter((key) => !seen[key]);
+			if (wrong.length > 0) {
+				out.push('small looks wrong: ' + wrong.join(', '));
+			}
+		}]},
 		tabsInView: {target: '#nav-tabs-panel-1', steps: [async (out) => {
 			const panel = $('#nav-tabs-panel-1');
 			const list = $('#nav-tabs [role="tablist"]');

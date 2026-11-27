@@ -250,7 +250,7 @@ const follow = (event) => {
 document.addEventListener('input', follow);
 document.addEventListener('change', follow);
 document.addEventListener('reset', (event) => {
-	setTimeout(() => event.target.querySelectorAll(BOX).forEach((box) => firsts.has(box) && write(box, firsts.get(box))));
+	setTimeout(() => event.defaultPrevented || event.target.querySelectorAll(BOX).forEach((box) => firsts.has(box) && write(box, firsts.get(box))));
 });
 
 // Leaving the entry for a place outside its box takes what it holds; another window taking the focus does not.

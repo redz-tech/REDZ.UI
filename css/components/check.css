@@ -157,6 +157,7 @@
 
 	.switch::before {
 		content: "";
+		flex: none;
 		inline-size: 0.875rem;
 		block-size: 0.875rem;
 		border-radius: 50%;
@@ -167,7 +168,7 @@
 	}
 
 	.switch:checked::before {
-		margin-inline-start: 0.875rem;
+		margin-inline-start: 0.75rem;
 		background: var(--redz-primary-contrast);
 		box-shadow: 0 1px 2px rgb(16 18 24 / 0.3);
 	}

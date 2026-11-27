@@ -12,6 +12,7 @@
 		background: var(--redz-badge-bg);
 		color: var(--redz-badge-fg);
 		font-size: var(--redz-fs-12);
+		text-decoration: none;
 		font-weight: 550;
 		line-height: 1rem;
 		white-space: nowrap;

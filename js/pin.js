@@ -96,15 +96,32 @@ const setUp = (pin) => {
 	keys.addEventListener('mousedown', (event) => event.preventDefault());
 	keys.addEventListener('click', (event) => {
 		const button = event.target instanceof Element ? event.target.closest('button') : null;
-		if (button === null || busy) {
+		if (button === null || busy || field.readOnly || field.disabled) {
 			return;
 		}
 		if (button.dataset.key === 'enter') {
 			send();
 			return;
 		}
-		field.value = button.dataset.key === 'delete' ? field.value.slice(0, -1) : field.value + button.dataset.key;
-		field.dispatchEvent(new Event('input', {bubbles: true}));
+		const next = button.dataset.key === 'delete' ? field.value.slice(0, -1) : (field.value + button.dataset.key).slice(0, length);
+		if (next !== field.value) {
+			field.value = next;
+			field.dispatchEvent(new Event('input', {bubbles: true}));
+		}
+	});
+	field.addEventListener('paste', (event) => {
+		const pasted = event.clipboardData?.getData('text') ?? '';
+		if (field.readOnly || field.disabled || !/\D/.test(pasted)) {
+			return;
+		}
+		event.preventDefault();
+		const start = field.selectionStart ?? field.value.length;
+		const end = field.selectionEnd ?? start;
+		const next = (field.value.slice(0, start) + pasted.replace(/\D/g, '') + field.value.slice(end)).slice(0, length);
+		if (next !== field.value) {
+			field.value = next;
+			field.dispatchEvent(new Event('input', {bubbles: true}));
+		}
 	});
 	draw();
 };

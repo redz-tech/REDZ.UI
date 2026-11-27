@@ -66,11 +66,16 @@
 		unicode-bidi: isolate;
 	}
 
+	pre,
 	code,
 	kbd,
 	samp {
 		font-family: var(--redz-font-mono);
 		font-size: 0.875em;
+	}
+
+	pre code {
+		font-size: inherit;
 	}
 
 	kbd {

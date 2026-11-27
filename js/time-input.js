@@ -455,7 +455,7 @@ start();
 new MutationObserver(start).observe(document.documentElement, {childList: true, subtree: true, attributeFilter: ['disabled', 'readonly', 'value', 'min', 'max', 'required', 'data-time-format']});
 
 document.addEventListener('reset', (event) => {
-	setTimeout(() => event.target.querySelectorAll(BOX).forEach((box) => {
+	setTimeout(() => event.defaultPrevented || event.target.querySelectorAll(BOX).forEach((box) => {
 		const state = states.get(box);
 		if (state !== undefined) {
 			state.input.value = state.first;

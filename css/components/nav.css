@@ -42,6 +42,7 @@
 	}
 
 	.nav-link:hover,
+	.nav-link[aria-expanded="true"],
 	.nav-link[aria-selected="true"],
 	.nav-link[aria-current="page"],
 	.nav-link[aria-current="location"] {
@@ -104,6 +105,10 @@
 		padding: 0.1875rem;
 		border-radius: var(--redz-radius-8);
 		background: var(--redz-bg-hover);
+	}
+
+	.nav-pills:is(.nav-fill, .nav-justified) {
+		display: flex;
 	}
 
 	.nav-pills > .nav-link {

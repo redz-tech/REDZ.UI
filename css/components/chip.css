@@ -20,6 +20,13 @@
 		background: var(--redz-bg-hover);
 	}
 
+	/* A value longer than its box of chips breaks inside its chip, never past the box. */
+	:is(.chip-input, .combobox-chips) .chip {
+		max-inline-size: 100%;
+		white-space: normal;
+		overflow-wrap: anywhere;
+	}
+
 	.chip[aria-pressed="true"],
 	.chip[aria-current="true"] {
 		border-color: transparent;

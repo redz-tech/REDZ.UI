@@ -53,6 +53,12 @@
 		border-start-end-radius: calc(var(--redz-radius-12) - 1px);
 	}
 
+	.accordion:not(.accordion-flush) > .accordion-item:last-child > .accordion-body {
+		border-end-start-radius: calc(var(--redz-radius-12) - 1px);
+		border-end-end-radius: calc(var(--redz-radius-12) - 1px);
+		overflow: clip;
+	}
+
 	.accordion:not(.accordion-flush) > .accordion-item:last-child:not([open]) > .accordion-header {
 		border-end-start-radius: calc(var(--redz-radius-12) - 1px);
 		border-end-end-radius: calc(var(--redz-radius-12) - 1px);

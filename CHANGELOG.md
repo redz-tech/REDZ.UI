@@ -11,6 +11,26 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   it spilled out of a narrow column: the cell grew 6 px wider than itself, and a check in a narrow last column
   scrolled a `table-scroll` sideways (found by the ERP's billing session at 360 to 414 px).
 
+Found by reading Bootstrap 6.0.0-alpha.2's and 5.3.9's fixes against the library:
+- A pressed or current button keeps its pressed ground when it is disabled, as a checked `btn-check` did; it looked
+  like any disabled button. The label of a disabled, unchecked `btn-check` no longer lights up on hover.
+- A checked switch's thumb is a circle again: its offset and its size were 2 px wider than the track, so it shrank
+  to 12 by 14 px.
+- A form's reset that the page cancels leaves chips fields, time inputs, date picks, comboboxes and uploads as they
+  are; they reset all the same.
+- A PIN pad's keys leave a field the page made read-only or disabled, delete on an empty field and a digit on a full
+  one fire nothing (a full code was sent again), and a code pasted with spaces keeps its digits: the field's
+  `maxlength` cut "123 456" to "12345".
+- A value longer than its box of chips - a `chip-input`, a combobox's chips - breaks inside its chip instead of running
+  past the box.
+- `nav-fill` and `nav-justified` widen `nav-pills` too; the pills hugged their words.
+- An `avatar` or a `badge` that is a link has no underline.
+- A `pre` takes the monospace face, and a `code` in it the `pre`'s size: it took the browser's monospace face, and its
+  code came out smaller than the block.
+- The paragraphs in a quote or a `details` of `prose` are spaced as the prose's own.
+- A `nav-link` holding an open menu, the overflow's "More" too, keeps its color while the menu is open.
+- The body of an accordion's last item keeps the rounded corners, with no padding too.
+
 ## 0.38.0 - 2026-11-27
 
 ### Added
