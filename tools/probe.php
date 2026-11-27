@@ -356,7 +356,12 @@ function PROBE__Do(array &$h, string $verb, mixed ...$args): mixed
 		throw new RuntimeException(sprintf('%s ran over %d s - the engine is stalling; its slowest call, %.0f s: %s', $h['cell']['page'], PROBE_CELL_MAX, $h['cell']['slowest'], $h['cell']['call']));
 	}
 	$start = microtime(true);
-	$answer = ('PROBE__' . ucfirst($h['kind']) . $verb)($h, ...$args);
+	try {
+		$answer = ('PROBE__' . ucfirst($h['kind']) . $verb)($h, ...$args);
+	} catch (RuntimeException $e) {
+		// A driver's timeout names neither the cell nor the call.
+		throw isset($h['cell']) && $verb !== 'Stop' ? new RuntimeException($h['cell']['page'] . ', ' . $what . ': ' . $e->getMessage(), 0, $e) : $e;
+	}
 	$took = microtime(true) - $start;
 	if (isset($h['cell']) && $took > $h['cell']['slowest']) {
 		$h['cell']['slowest'] = $took;

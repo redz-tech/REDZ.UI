@@ -6702,7 +6702,8 @@ window.REDZ_BEHAVE = (() => {
 		layerScroll: {target: '.drawer', steps: [async (out) => {
 			const rows = Array.from({length: 60}, (_, i) => '<tr><td>Row ' + i + '</td></tr>').join('');
 			const body = (cls) => '<div class="' + cls + '"><table class="table"><thead><tr><th scope="col">Head</th></tr></thead><tbody>' + rows + '</tbody></table><input class="btn-check" type="checkbox" id="probe-scroll-' + cls + '"><label class="btn" for="probe-scroll-' + cls + '">Last</label></div>';
-			const box = Object.assign(document.createElement('div'), {className: 'app', innerHTML: trusted('<dialog class="drawer" id="probe-scroll-drawer" aria-label="Drawer"><div class="drawer-header"><h2 class="drawer-title">Drawer</h2></div>' + body('drawer-body') + '</dialog><dialog class="dialog" id="probe-scroll-dialog" aria-label="Dialog" style="max-block-size: 400px">' + body('dialog-body') + '</dialog>')});
+			// The page's sticky bar's offset, as an app's: a head that took it stood that far below the body's top.
+			const box = Object.assign(document.createElement('div'), {style: '--redz-sticky-top: calc(3.25rem + 12px)', innerHTML: trusted('<dialog class="drawer" id="probe-scroll-drawer" aria-label="Drawer"><div class="drawer-header"><h2 class="drawer-title">Drawer</h2></div>' + body('drawer-body') + '</dialog><dialog class="dialog" id="probe-scroll-dialog" aria-label="Dialog" style="max-block-size: 400px">' + body('dialog-body') + '</dialog>')});
 			document.body.append(box);
 			const seen = {};
 			for (const [name, cls] of [['drawer', 'drawer-body'], ['dialog', 'dialog-body']]) {
