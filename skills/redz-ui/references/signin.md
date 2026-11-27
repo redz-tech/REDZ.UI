@@ -77,7 +77,7 @@ A link opened in a messenger opens in the app's own browser, which refuses passk
 
 ```html
 <div class="hstack flex-wrap gap-12">
-	<button class="btn" type="button" data-docs-refuse><i class="bi bi-person-badge" aria-hidden="true"></i>Sign in as an app's browser would</button>
+	<button class="btn" type="button" data-docs-refuse><i class="bi bi-person-badge" aria-hidden="true"></i>Sign in from an app</button>
 	<a class="btn btn-primary" href="#signin-handoff" data-open-browser hidden><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>Open in browser</a>
 	<output class="text-muted" data-docs-refused></output>
 </div>

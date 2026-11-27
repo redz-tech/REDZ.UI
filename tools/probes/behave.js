@@ -7281,14 +7281,26 @@ window.REDZ_BEHAVE = (() => {
 			$('#probe-own-options').addEventListener('click', (event) => heard.push(event.target.id));
 			box.showModal();
 			input(search, 'bor');
+			// What shut the dialog, if anything did: the step before it and the dialog's own events.
+			const shutBy = [];
+			box.addEventListener('cancel', (event) => shutBy.push('cancel' + (event.isTrusted ? '' : ' by script')));
+			box.addEventListener('close', () => shutBy.push('close'));
+			const step = async (name, act) => {
+				const was = box.open;
+				act();
+				await wait(0);
+				if (was && !box.open) {
+					shutBy.push('after ' + name);
+				}
+			};
 			for (const key of ['ArrowDown', 'Enter', 'Escape']) {
-				search.dispatchEvent(new KeyboardEvent('keydown', {key, bubbles: true, cancelable: true}));
+				await step(key, () => search.dispatchEvent(new KeyboardEvent('keydown', {key, bubbles: true, cancelable: true})));
 			}
-			$('#probe-own-b').click();
+			await step('the click', () => $('#probe-own-b').click());
 			await wait(50);
 			const foreign = [heard, box.open, search.value, $$('#probe-own [data-active], #probe-own-options [hidden], #probe-own .combobox-status').length, search.getAttribute('aria-activedescendant')];
 			if (say(foreign) !== say([['ArrowDown', 'Enter', 'Escape', 'probe-own-b'], true, 'bor', 0, null])) {
-				out.push('another widget\'s combobox in a dialog (its keys and click heard, the dialog open, its words, parts the library marked, an active option named) ' + say(foreign));
+				out.push('another widget\'s combobox in a dialog (its keys and click heard, the dialog open, its words, parts the library marked, an active option named) ' + say(foreign) + ', shut: ' + say(shutBy));
 			}
 			box.showModal();
 			input($('#probe-own-tags'), 'beach');

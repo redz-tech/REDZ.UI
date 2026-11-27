@@ -448,7 +448,7 @@ function PROBE__NvdaRun(string $name, array $engine, string $binary, string $dir
 	$r = PROBE__NvdaStart($name, $exe, $dir, $log);
 	$h = null;
 	try {
-		$h = $engine['browser'] === 'chrome' ? PROBE__ChromeStart($binary, $dir, true) : PROBE__FirefoxStart($binary, $dir, ['browser.aboutwelcome.enabled' => false, 'browser.startup.homepage_override.mstone' => 'ignore', 'browser.startup.upgradeDialog.enabled' => false], true);
+		$h = $engine['browser'] === 'chrome' ? PROBE__ChromeStart($binary, $dir, true) : PROBE__FirefoxStart($binary, $dir, ['browser.aboutwelcome.enabled' => false, 'browser.startup.homepage_override.mstone' => 'ignore', 'browser.startup.upgradeDialog.enabled' => false, 'browser.shell.skipDefaultBrowserCheckOnFirstRun' => true, 'browser.taskbarTabs.enabled' => false, 'messaging-system.rsexperimentloader.enabled' => false, 'app.normandy.enabled' => false, 'browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features' => false, 'browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons' => false], true);
 		$report['engines'][$name] = ['version' => $h['version'] . ' · NVDA ' . $run['config']['nvda']['version'] . ' · Windows ' . php_uname('r') . ' ' . php_uname('v'), 'cells' => 0];
 		PROBE__SpeechHear($r, $h, $run, $report);
 	} catch (Throwable $e) {
@@ -483,10 +483,11 @@ function PROBE__NvdaStop(array &$r): void
 	PROBE__Wait($r['proc']);
 }
 
-/** Readies CI's Windows for NVDA: the apps' notifications off - NVDA reads one aloud and follows it, as it did Firefox's
- *  "pin to taskbar" in the middle of a page -, and a window the probe starts may come in front of the others: Windows'
- *  foreground lock off for later sessions, and for this one where Windows lets the setup change it - otherwise NVDA's
- *  Alt+Escape brings the window. */
+/** Readies CI's Windows for NVDA: the apps' notifications off, and Firefox's own asking by its policies - NVDA reads a
+ *  notification aloud and follows it, as it did Firefox's "pin to taskbar" in the middle of a page, again on Windows
+ *  Server 2025 with Firefox 160 though the apps' toasts were off -, and a window the probe starts may come in front of
+ *  the others: Windows' foreground lock off for later sessions, and for this one where Windows lets the setup change it
+ *  - otherwise NVDA's Alt+Escape brings the window. */
 function PROBE__NvdaSetup(): int
 {
 	if (PROBE__NvdaBlocked() !== '') {
@@ -494,6 +495,10 @@ function PROBE__NvdaSetup(): int
 		return 1;
 	}
 	PROBE__Run(['reg', 'add', 'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications', '/v', 'ToastEnabled', '/t', 'REG_DWORD', '/d', '0', '/f']);
+	PROBE__Run(['reg', 'add', 'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings', '/v', 'NOC_GLOBAL_SETTING_TOASTS_ENABLED', '/t', 'REG_DWORD', '/d', '0', '/f']);
+	foreach ([['', 'DontCheckDefaultBrowser', 1], ['', 'DisableTelemetry', 1], ['\\UserMessaging', 'SkipOnboarding', 1], ['\\UserMessaging', 'FeatureRecommendations', 0], ['\\UserMessaging', 'ExtensionRecommendations', 0], ['\\UserMessaging', 'MoreFromMozilla', 0]] as [$under, $name, $value]) {
+		PROBE__Run(['reg', 'add', 'HKCU\\Software\\Policies\\Mozilla\\Firefox' . $under, '/v', $name, '/t', 'REG_DWORD', '/d', (string)$value, '/f']);
+	}
 	foreach (['ForegroundLockTimeout', 'ForegroundFlashCount'] as $value) {
 		PROBE__Run(['reg', 'add', 'HKCU\\Control Panel\\Desktop', '/v', $value, '/t', 'REG_DWORD', '/d', '0', '/f']);
 	}

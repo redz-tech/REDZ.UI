@@ -2155,7 +2155,7 @@ The passkey manager can be told which passkeys the server still knows.	يمكن 
 The app whose own browser this is,	التطبيق الذي هذا متصفحه الخاص،
 for a browser of its own.	لمتصفح مستقل.
 The verdict: passkeys here, and no app in between.	الحكم: مفاتيح المرور تعمل هنا، ولا تطبيق في الوسط.
-Sign in as an app's browser would	سجّل الدخول كما يفعل متصفح تطبيق
+Sign in from an app	سجّل الدخول من تطبيق
 Open in browser	افتح في المتصفح
 Solve a task	حلّ مهمة
 Link copied: open your browser and paste it	نُسخ الرابط: افتح متصفحك والصقه فيه

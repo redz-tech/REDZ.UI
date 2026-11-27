@@ -220,13 +220,13 @@ REDZ.ui.passkey.autofill(() =&gt; fetch('/sign-in/options').then((answer) =&gt; 
 					<p>A link opened in a messenger opens in the app's own browser, which refuses passkeys and keeps its cookies apart from the real browser. <code>data-open-browser</code> on a link or a button, <code>hidden</code>, shows it there once it holds an address: it asks the page by <code>redz:handoff</code> for a ticket - an address that carries everything the real browser needs, as the cookies stay behind - asks again in the ticket's last minute while the page shows and when it shows again, and keeps its own <code>href</code> when the page does not answer. Its press copies the address and leaves by the app's way; where the app has none, or the page is still there a moment later, the page's text <code>handoff.copied</code> says the address was copied. Keep the ticket in the query: an Android intent drops what follows the <code>#</code>.</p>
 					<div class="docs-sample"><div class="docs-example docs-example-stack" id="signin-handoff-sample">
 						<div class="hstack flex-wrap gap-12">
-							<button class="btn" type="button" data-docs-refuse><i class="bi bi-person-badge" aria-hidden="true"></i>Sign in as an app's browser would</button>
+							<button class="btn" type="button" data-docs-refuse><i class="bi bi-person-badge" aria-hidden="true"></i>Sign in from an app</button>
 							<a class="btn btn-primary" href="#signin-handoff" data-open-browser hidden><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>Open in browser</a>
 							<output class="text-muted" data-docs-refused></output>
 						</div>
 					</div>
 					<pre class="docs-code" tabindex="0"><code>&lt;div class="hstack flex-wrap gap-12"&gt;
-	&lt;button class="btn" type="button" data-docs-refuse&gt;&lt;i class="bi bi-person-badge" aria-hidden="true"&gt;&lt;/i&gt;Sign in as an app's browser would&lt;/button&gt;
+	&lt;button class="btn" type="button" data-docs-refuse&gt;&lt;i class="bi bi-person-badge" aria-hidden="true"&gt;&lt;/i&gt;Sign in from an app&lt;/button&gt;
 	&lt;a class="btn btn-primary" href="#signin-handoff" data-open-browser hidden&gt;&lt;i class="bi bi-box-arrow-up-right" aria-hidden="true"&gt;&lt;/i&gt;Open in browser&lt;/a&gt;
 	&lt;output class="text-muted" data-docs-refused&gt;&lt;/output&gt;
 &lt;/div&gt;</code></pre></div>
