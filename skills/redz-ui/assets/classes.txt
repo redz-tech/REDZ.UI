@@ -4332,7 +4332,9 @@ table-group
 table-group-divider
 table-group-end
 table-group-line
+table-info
 table-note
+table-primary
 table-scroll
 table-scroll-bar
 table-scroll-first
@@ -4345,6 +4347,7 @@ table-striped
 table-striped-columns
 table-sub
 table-subtotal
+table-success
 table-title
 table-warning
 tabular-nums

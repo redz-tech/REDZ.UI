@@ -262,18 +262,6 @@
 		padding-block-start: 0;
 	}
 
-	.table-danger + .table-detail {
-		--redz-row-tint: var(--redz-danger-subtle);
-	}
-
-	.table-warning + .table-detail {
-		--redz-row-tint: var(--redz-warning-subtle);
-	}
-
-	.table-active + .table-detail {
-		--redz-row-tint: var(--redz-primary-subtle);
-	}
-
 	.table > * > .table-subtotal > :is(td, th) {
 		border-block-start: 1px solid var(--redz-border-strong);
 		color: var(--redz-text);
@@ -458,29 +446,53 @@
 		inset: 0;
 	}
 
-	.table-danger {
-		--redz-row-tint: var(--redz-danger-subtle);
-		--redz-row-mark: var(--redz-danger-fill);
+	.table-primary,
+	.table-primary + .table-detail {
+		--redz-row-tint: var(--redz-primary-subtle);
+		--redz-row-mark: var(--redz-primary-fill);
 	}
 
-	.table-warning {
+	.table-secondary,
+	.table-secondary + .table-detail {
+		--redz-row-tint: var(--redz-secondary-subtle);
+		--redz-row-mark: var(--redz-secondary-fill);
+	}
+
+	.table-success,
+	.table-success + .table-detail {
+		--redz-row-tint: var(--redz-success-subtle);
+		--redz-row-mark: var(--redz-success-fill);
+	}
+
+	.table-info,
+	.table-info + .table-detail {
+		--redz-row-tint: var(--redz-info-subtle);
+		--redz-row-mark: var(--redz-info-fill);
+	}
+
+	.table-warning,
+	.table-warning + .table-detail {
 		--redz-row-tint: var(--redz-warning-subtle);
 		--redz-row-mark: var(--redz-warning-fill);
 	}
 
+	.table-danger,
+	.table-danger + .table-detail {
+		--redz-row-tint: var(--redz-danger-subtle);
+		--redz-row-mark: var(--redz-danger-fill);
+	}
+
 	.table-active,
+	.table-active + .table-detail,
 	.table tr[aria-current]:not([aria-current="false"]) {
 		--redz-row-tint: var(--redz-primary-subtle);
 		--redz-row-mark: var(--redz-primary-fill);
 	}
 
-	:is(.table-danger, .table-warning, .table-active),
-	:is(.table-danger, .table-warning, .table-active) + .table-detail {
-		--redz-row-bg: color-mix(in oklab, var(--redz-row-tint) 55%, var(--redz-bg));
-	}
-
-	.table-secondary {
-		--redz-row-bg: var(--redz-bg-page);
+	/* A tone's subtle with a tenth of its colour in the light theme, the subtle whole in the dark: the tones read apart in both. */
+	:is(.table-primary, .table-secondary, .table-success, .table-info, .table-warning, .table-danger, .table-active),
+	:is(.table-primary, .table-secondary, .table-success, .table-info, .table-warning, .table-danger, .table-active) + .table-detail {
+		--redz-row-bg: light-dark(color-mix(in oklab, var(--redz-row-tint) 90%, var(--redz-row-mark)), var(--redz-row-tint));
 	}
 
 	.table tr:is([aria-selected="true"], :has(> .table-check :checked)),
@@ -499,20 +511,20 @@
 			--redz-row-bg: var(--redz-row-hover, color-mix(in srgb, var(--redz-primary) 7%, var(--redz-bg)));
 		}
 
-		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])),
-		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)):has(+ .table-detail:hover, + .table-detail :is(:popover-open, [commandfor][aria-expanded="true"])),
-		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)) + .table-detail:is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])),
-		.table:not(.table-static) > tbody > tr:is(.table-danger, .table-warning, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) + .table-detail {
-			--redz-row-bg: color-mix(in oklab, var(--redz-row-tint) 90%, var(--redz-bg));
+		.table:not(.table-static) > tbody > tr:is(.table-primary, .table-secondary, .table-success, .table-info, .table-warning, .table-danger, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])),
+		.table:not(.table-static) > tbody > tr:is(.table-primary, .table-secondary, .table-success, .table-info, .table-warning, .table-danger, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)):has(+ .table-detail:hover, + .table-detail :is(:popover-open, [commandfor][aria-expanded="true"])),
+		.table:not(.table-static) > tbody > tr:is(.table-primary, .table-secondary, .table-success, .table-info, .table-warning, .table-danger, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)) + .table-detail:is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])),
+		.table:not(.table-static) > tbody > tr:is(.table-primary, .table-secondary, .table-success, .table-info, .table-warning, .table-danger, .table-active):not(.table-static, [aria-selected="true"], :has(> .table-check :checked)):is(:hover, :has(:popover-open, [commandfor][aria-expanded="true"])) + .table-detail {
+			--redz-row-bg: light-dark(color-mix(in oklab, var(--redz-row-tint) 84%, var(--redz-row-mark)), color-mix(in oklab, var(--redz-row-tint) 88%, var(--redz-row-mark)));
 		}
 	}
 
 	/* The row's mark stands on its first cell, and on a phone on the first one the phone shows: a pseudo-element of a row would take a column in Chrome. */
-	:is(.table-danger, .table-warning, .table-active, .table tr[aria-current]:not([aria-current="false"])) > :is(td, th):first-child::before {
+	:is(.table-primary, .table-secondary, .table-success, .table-info, .table-warning, .table-danger, .table-active, .table tr[aria-current]:not([aria-current="false"])) > :is(td, th):first-child::before {
 		content: "";
 	}
 
-	:is(.table-danger, .table-warning, .table-active, .table tr[aria-current]:not([aria-current="false"])) > :is(td, th)::before {
+	:is(.table-primary, .table-secondary, .table-success, .table-info, .table-warning, .table-danger, .table-active, .table tr[aria-current]:not([aria-current="false"])) > :is(td, th)::before {
 		position: absolute;
 		inset-block-start: 50%;
 		inset-inline-start: 0;
@@ -524,17 +536,13 @@
 	}
 
 	@container region (width < 768px) {
-		:is(.table-danger, .table-warning, .table-active, .table tr[aria-current]:not([aria-current="false"])) > :is(td, th):nth-child(1 of :not(.d-none))::before {
+		:is(.table-primary, .table-secondary, .table-success, .table-info, .table-warning, .table-danger, .table-active, .table tr[aria-current]:not([aria-current="false"])) > :is(td, th):nth-child(1 of :not(.d-none))::before {
 			content: "";
 		}
 	}
 
-	.table-danger .table-note .bi {
-		color: var(--redz-danger-fill);
-	}
-
-	.table-warning .table-note .bi {
-		color: var(--redz-warning-fill);
+	:is(.table-primary, .table-secondary, .table-success, .table-info, .table-warning, .table-danger, .table-active) .table-note .bi {
+		color: var(--redz-row-mark);
 	}
 
 	.table-secondary .table-title {
@@ -736,7 +744,7 @@
 	}
 
 	@media (forced-colors: active) {
-		:is(.table-danger, .table-warning, .table-active, .table tr[aria-current]:not([aria-current="false"])) > :is(td, th)::before {
+		:is(.table-primary, .table-secondary, .table-success, .table-info, .table-warning, .table-danger, .table-active, .table tr[aria-current]:not([aria-current="false"])) > :is(td, th)::before {
 			forced-color-adjust: none;
 			background: CanvasText;
 		}

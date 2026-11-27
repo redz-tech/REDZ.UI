@@ -96,7 +96,8 @@ body are `drawer-header`, `drawer-title`, `drawer-body`. It opens like a dialog:
 ## Tables
 
 `table`, `table-hover`, `table-striped`, `table-striped-columns`, `table-bordered`, `table-borderless`,
-`table-group-divider` and the tones `table-danger`, `table-warning`, `table-secondary` keep their names. The row's
+`table-group-divider` and the row tones `table-primary`, `table-secondary`, `table-success`, `table-info`,
+`table-warning`, `table-danger` keep their names; `table-light` and `table-dark` have none. The row's
 title is a `table-title` link, the line under it `table-sub`, a problem `table-note`, the checks column `table-check`,
 the actions `table-actions`. Drop `table-responsive`: the card's body holds the table and columns hide below `md:`.
 

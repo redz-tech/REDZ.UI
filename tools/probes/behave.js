@@ -4922,7 +4922,7 @@ window.REDZ_BEHAVE = (() => {
 				if (!stacked && ground(row.cells[0]) !== ground(row.cells[1])) {
 					wrong.push(say({row: name(row), head: ground(row.cells[0]), cell: ground(row.cells[1])}));
 				}
-				if (row.matches('[aria-current="true"], .table-danger, .table-warning, .table-active') && !marked(row)) {
+				if (row.matches('[aria-current="true"], .table-primary, .table-secondary, .table-success, .table-info, .table-warning, .table-danger, .table-active') && !marked(row)) {
 					wrong.push(say({row: name(row), stacked, mark: 'none'}));
 				}
 			}
@@ -6522,6 +6522,73 @@ window.REDZ_BEHAVE = (() => {
 			if (shifted || !phone[1] || !wide[0] || wide[1]) {
 				out.push('a row\'s mark: the row is ' + (shifted ? 'shifted a column' : 'in its columns') + ', on a phone the cells mark ' + say(phone) + ', wide ' + say(wide));
 			}
+		}]},
+		// Every row tone in both themes: its mark on the first cell, its ground passed to its detail row, the muted text on
+		// it at 4.5 : 1 at least, and the tones apart from each other and from a plain row by an OKLab distance of 0.03 -
+		// diluted to 55 % over the ground they stood 0.025 apart in the dark theme, one brown. The primary and the info
+		// tone are the same blue by their tokens and are not held apart.
+		rowTones: {target: 'tr.table-danger', steps: [async (out) => {
+			const tones = ['primary', 'secondary', 'success', 'info', 'warning', 'danger'];
+			const frame = document.createElement('iframe');
+			frame.style.cssText = 'position: fixed; inset: 0; inline-size: 800px; block-size: 600px; visibility: hidden';
+			const sheet = document.querySelector('link[rel="stylesheet"][href*="redz-ui"]').href;
+			document.body.append(frame);
+			const rows = ['', ...tones].map((tone) => '<tr' + (tone === '' ? '' : ' class="table-' + tone + '"') + '><td>A tour</td><td><span class="text-muted">A note</span></td></tr>' + (tone === '' ? '' : '<tr class="table-detail"><td colspan="2">More</td></tr>')).join('');
+			frame.srcdoc = trusted('<!doctype html><html data-theme="light"><link rel="stylesheet" href="' + sheet + '"><body class="region"><table class="table"><tbody>' + rows + '</tbody></table>');
+			await new Promise((done) => {
+				frame.onload = done;
+			});
+			const inside = frame.contentDocument;
+			const view = frame.contentWindow;
+			const lin = (v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+			const channels = (color) => rgb(color).split(',').map((v) => lin(Number(v) / 255));
+			const luminance = (color) => {
+				const [r, g, b] = channels(color);
+				return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+			};
+			const oklab = (color) => {
+				const [r, g, b] = channels(color);
+				const [l, m, z] = [0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b, 0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b, 0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b].map(Math.cbrt);
+				return [0.2104542553 * l + 0.793617785 * m - 0.0040720468 * z, 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * z, 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * z];
+			};
+			const apart = (a, b) => Math.hypot(...oklab(a).map((v, i) => v - oklab(b)[i]));
+			for (const theme of ['light', 'dark']) {
+				inside.documentElement.dataset.theme = theme;
+				await settled();
+				const ground = (row) => {
+					const color = view.getComputedStyle(row.cells[0]).backgroundColor;
+					return color === 'rgba(0, 0, 0, 0)' || color === 'transparent' ? view.getComputedStyle(inside.body).backgroundColor : color;
+				};
+				const plain = ground(inside.querySelector('tbody > tr:not([class])'));
+				const seen = {};
+				for (const tone of tones) {
+					const row = inside.querySelector('tr.table-' + tone);
+					const here = ground(row);
+					seen[tone] = here;
+					const muted = view.getComputedStyle(row.querySelector('.text-muted')).color;
+					const [hi, lo] = [luminance(here), luminance(muted)].sort((x, y) => y - x);
+					const ratio = (hi + 0.05) / (lo + 0.05);
+					const wrong = [
+						view.getComputedStyle(row.cells[0], '::before').content === 'none' ? 'no mark' : '',
+						rgb(ground(row.nextElementSibling)) !== rgb(here) ? 'its detail row on ' + rgb(ground(row.nextElementSibling)) : '',
+						ratio < 4.5 ? 'the muted text at ' + ratio.toFixed(2) + ' : 1' : '',
+						apart(here, plain) < 0.03 ? apart(here, plain).toFixed(3) + ' from a plain row' : '',
+					].filter(Boolean);
+					if (wrong.length > 0) {
+						out.push('the ' + theme + ' table-' + tone + ' row on ' + rgb(here) + ': ' + wrong.join(', '));
+					}
+				}
+				const close = [];
+				tones.forEach((one, i) => tones.slice(i + 1).forEach((two) => {
+					if (!(one === 'primary' && two === 'info') && apart(seen[one], seen[two]) < 0.03) {
+						close.push(one + '-' + two + ' ' + apart(seen[one], seen[two]).toFixed(3));
+					}
+				}));
+				if (close.length > 0) {
+					out.push('row tones too near in the ' + theme + ' theme: ' + close.join(', '));
+				}
+			}
+			frame.remove();
 		}]},
 		tabsInView: {target: '#nav-tabs-panel-1', steps: [async (out) => {
 			const panel = $('#nav-tabs-panel-1');

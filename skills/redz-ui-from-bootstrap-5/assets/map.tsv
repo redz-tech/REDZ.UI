@@ -1904,12 +1904,12 @@ table-active	table-active	same	class	table	the row that runs now; aria-current m
 table-bordered	table-bordered	same	class	table	in a card the card's border is the table's frame
 table-borderless	table-borderless	same	class	table	
 table-danger	table-danger	same	class	table	
-table-dark		review	class	table	row tones are danger, warning and secondary
+table-dark		review	class	table	no light or dark row: a row's tone is primary, secondary, success, info, warning or danger, and data-theme="dark" darkens a part
 table-group-divider	table-group-divider	same	class	table	
 table-hover		remove	class	table	every table lights its row under the pointer; table-static keeps one still
-table-info		review	class	table	row tones are danger, warning and secondary
-table-light		review	class	table	row tones are danger, warning and secondary
-table-primary		review	class	table	row tones are danger, warning and secondary
+table-info	table-info	same	class	table	
+table-light		review	class	table	no light or dark row: a row's tone is primary, secondary, success, info, warning or danger, and data-theme="dark" darkens a part
+table-primary	table-primary	same	class	table	
 table-responsive	table-scroll	review	class	table	decide by how the table is read: by rows (fields to fill, a list to act on) drop the wrapper and put table-stack on the table, cards on a phone; across its columns keep table-scroll, only where the product's owner agreed
 table-responsive-lg	table-scroll	review	class	table	as table-responsive: table-stack for a table read by rows; table-scroll scrolls at every width, only where the product's owner agreed
 table-responsive-md	table-scroll	review	class	table	as table-responsive: table-stack for a table read by rows; table-scroll scrolls at every width, only where the product's owner agreed
@@ -1920,7 +1920,7 @@ table-secondary	table-secondary	same	class	table
 table-sm		review	class	table	data-density="compact" on the table, its card or <html>
 table-striped	table-striped	same	class	table	
 table-striped-columns	table-striped-columns	same	class	table	
-table-success		review	class	table	row tones are danger, warning and secondary
+table-success	table-success	same	class	table	
 table-warning	table-warning	same	class	table	
 text-bg-danger	badge-danger	review	class	badge	on a badge; elsewhere bg-danger with the tone's -contrast text in the module's CSS
 text-bg-dark	badge-inverse	review	class	badge	on a badge: the text color as its background, light in the dark theme

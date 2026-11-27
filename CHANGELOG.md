@@ -6,6 +6,20 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 
 ## Unreleased
 
+### Added
+The tourism pack's order of a green row for a tour that took place, grown by the owner to every tone.
+- Row tones `table-primary`, `table-success` and `table-info`, full tones as `table-danger` and `table-warning` are:
+  the row's tint, a mark on its first cell, a deeper tint on hover and while a menu of the row is open, the icon of a
+  `table-note` in the tone, all of it passed to the `table-detail` row under it, and the mark in forced colors.
+
+### Changed
+- `table-secondary` is a full tone too: a grey tint and a grey mark, its title still muted. It was the page's ground,
+  with no mark and the plain row's hover.
+- A row's tint reads at a glance in both themes (the owner's picks of two live mocks): in the light theme the tone's
+  subtle with a tenth of the tone's color, a sixth on hover; in the dark theme the subtle whole, as an alert's ground,
+  with an eighth of the tone's color on hover. At 55 % over the ground the tones were faint in the light theme and ran
+  into one brown in the dark one. The muted text stands at 5.2 : 1 or more on every tone at rest, 4.7 on hover.
+
 ### Fixed
 - A combobox takes only its own lists, `combobox-list` and `palette-list`: any other listbox and its combobox are
   another widget's and are left alone. Before, every `role="combobox"` and `role="listbox"` on the page was taken, so a

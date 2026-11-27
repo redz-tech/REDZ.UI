@@ -2273,13 +2273,10 @@ Every class of Bootstrap 5.3.8 that changes, with what it becomes; a class not l
 | `sticky-bottom` | - | review | position-sticky with bottom-0 |
 | `tab-content` | - | remove | panels are siblings with role="tabpanel", hidden when not selected |
 | `tab-pane` | - | remove | panels are siblings with role="tabpanel", hidden when not selected |
-| `table-dark` | - | review | row tones are danger, warning and secondary |
+| `table-dark` | - | review | no light or dark row: a row's tone is primary, secondary, success, info, warning or danger, and data-theme="dark" darkens a part |
 | `table-hover` | - | remove | every table lights its row under the pointer; table-static keeps one still |
-| `table-info` | - | review | row tones are danger, warning and secondary |
-| `table-light` | - | review | row tones are danger, warning and secondary |
-| `table-primary` | - | review | row tones are danger, warning and secondary |
+| `table-light` | - | review | no light or dark row: a row's tone is primary, secondary, success, info, warning or danger, and data-theme="dark" darkens a part |
 | `table-responsive` | `table-scroll` | review | decide by how the table is read: by rows (fields to fill, a list to act on) drop the wrapper and put table-stack on the table, cards on a phone; across its columns keep table-scroll, only where the product's owner agreed |
-| `table-success` | - | review | row tones are danger, warning and secondary |
 | `text-bg-danger` | `badge-danger` | review | on a badge; elsewhere bg-danger with the tone's -contrast text in the module's CSS |
 | `text-bg-dark` | `badge-inverse` | review | on a badge: the text color as its background, light in the dark theme |
 | `text-bg-info` | `badge-info` | review | on a badge; elsewhere bg-info with the tone's -contrast text in the module's CSS |
@@ -7095,7 +7092,7 @@ The row's title link with Bootstrap's `stretched-link` makes the whole row a lin
 
 ## States
 
-A row's tone marks what needs attention: `table-danger` failed, `table-warning` needs a look, `table-secondary` is out of use. On a pointer screen the row's actions show on hover and on focus; on a touch screen they always show.
+A row's tone says the state of its record: `table-danger` failed, `table-warning` needs a look, `table-success` is done, `table-info` has a word to note, `table-primary` stands apart, `table-secondary` is out of use; `table-active` is the row that runs now. Each tints the row - the tone's subtle with a tenth of its color in the light theme, the subtle whole in the dark one, so the tones read apart in both -, marks its first cell, deepens on hover and while a menu of the row is open, colors the icon of a `table-note`, and passes all of it to the `table-detail` row under it. On a pointer screen the row's actions show on hover and on focus; on a touch screen they always show.
 
 ## Keyboard and accessibility
 
@@ -7109,20 +7106,17 @@ A row's tone marks what needs attention: `table-danger` failed, `table-warning` 
 
 From [`css/components/table.css`](https://github.com/redz-tech/REDZ.UI/blob/main/css/components/table.css). It declares `--redz-row-bg`, `--redz-table-head-border`, `--redz-table-head-weight`, `--redz-table-shade-flip`, `--redz-table-fade-start`, `--redz-table-fade-end`, `--redz-table-shade-side`, `--redz-table-shade-at`, `--redz-row-tint`, `--redz-row-mark` on its root, never on rows or items.
 
-It reads the theme's `--redz-sticky-top`, `--redz-space-12`, `--redz-space-8`, `--redz-row-pad`, `--redz-border`, `--redz-table-head-bg`, `--redz-bg`, `--redz-table-head-text`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-fs-14`, `--redz-shadow-strength`, `--redz-table-bar-gap`, `--redz-space-4`, `--redz-table-bar-size`, `--redz-table-bar-at`, `--redz-bg-page`, `--redz-space-16`, `--redz-table-scroll-size`, `--redz-danger-subtle`, `--redz-warning-subtle`, `--redz-primary-subtle`, `--redz-border-strong`, `--redz-row-hover`, `--redz-primary`, `--redz-radius-12`, `--redz-font-mono`, `--redz-danger-fill`, `--redz-warning-fill`, `--redz-primary-fill`.
+It reads the theme's `--redz-sticky-top`, `--redz-space-12`, `--redz-space-8`, `--redz-row-pad`, `--redz-border`, `--redz-table-head-bg`, `--redz-bg`, `--redz-table-head-text`, `--redz-text-muted`, `--redz-fs-12`, `--redz-text`, `--redz-fs-14`, `--redz-shadow-strength`, `--redz-table-bar-gap`, `--redz-space-4`, `--redz-table-bar-size`, `--redz-table-bar-at`, `--redz-bg-page`, `--redz-space-16`, `--redz-table-scroll-size`, `--redz-border-strong`, `--redz-row-hover`, `--redz-primary`, `--redz-radius-12`, `--redz-font-mono`, `--redz-primary-subtle`, `--redz-primary-fill`, `--redz-secondary-subtle`, `--redz-secondary-fill`, `--redz-success-subtle`, `--redz-success-fill`, `--redz-info-subtle`, `--redz-info-fill`, `--redz-warning-subtle`, `--redz-warning-fill`, `--redz-danger-subtle`, `--redz-danger-fill`.
 
 ## From Bootstrap 5.3
 
 | Bootstrap 5.3 | REDZ.UI | Change | Note |
 | --- | --- | --- | --- |
 | `caption-top` | - | missing |  |
-| `table-dark` | - | review | row tones are danger, warning and secondary |
+| `table-dark` | - | review | no light or dark row: a row's tone is primary, secondary, success, info, warning or danger, and data-theme="dark" darkens a part |
 | `table-hover` | - | remove | every table lights its row under the pointer; table-static keeps one still |
-| `table-info` | - | review | row tones are danger, warning and secondary |
-| `table-light` | - | review | row tones are danger, warning and secondary |
-| `table-primary` | - | review | row tones are danger, warning and secondary |
+| `table-light` | - | review | no light or dark row: a row's tone is primary, secondary, success, info, warning or danger, and data-theme="dark" darkens a part |
 | `table-responsive` | `table-scroll` | review | decide by how the table is read: by rows (fields to fill, a list to act on) drop the wrapper and put table-stack on the table, cards on a phone; across its columns keep table-scroll, only where the product's owner agreed |
-| `table-success` | - | review | row tones are danger, warning and secondary |
 
 # Redrawn regions
 

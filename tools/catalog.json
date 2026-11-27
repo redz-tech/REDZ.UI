@@ -12,7 +12,7 @@
 			{"key": "density", "kind": "size", "attr": "data-density", "family": ["compact", "", "comfortable", "spacious"]}
 		]},
 		{"id": "row", "match": "tr", "props": [
-			{"key": "tone", "kind": "tone", "family": ["", "table-active", "table-secondary", "table-warning", "table-danger"]},
+			{"key": "tone", "kind": "tone", "family": ["", "table-active", "table-primary", "table-secondary", "table-success", "table-info", "table-warning", "table-danger"]},
 			{"key": "subtotal", "family": ["", "table-subtotal"]}
 		]},
 		{"id": "card", "match": ".card", "icon": "card-text", "props": [
