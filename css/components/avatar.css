@@ -6,6 +6,8 @@
 		inline-size: 2rem;
 		block-size: 2rem;
 		border-radius: 50%;
+		outline: 1px solid transparent;
+		outline-offset: -1px;
 		background: var(--redz-primary-subtle);
 		color: var(--redz-primary-text);
 		font-size: var(--redz-fs-12);

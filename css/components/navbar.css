@@ -105,6 +105,9 @@
 
 	html:has(.navbar .drawer:popover-open) {
 		overflow: hidden;
+	}
+
+	html:not([data-page-fits]):has(.navbar .drawer:popover-open) {
 		scrollbar-gutter: stable;
 	}
 

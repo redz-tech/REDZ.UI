@@ -1059,6 +1059,9 @@ const makeFace = (state) => {
 			part.setAttribute('aria-label', input.getAttribute('aria-label') ?? '');
 		}
 		part.addEventListener('keydown', (event) => {
+			if (event.isComposing) {
+				return;
+			}
 			if ((event.key === 'ArrowDown' || event.key === 'ArrowUp') && event.altKey) {
 				event.preventDefault();
 				state.open.click();
@@ -1131,6 +1134,9 @@ const timedFace = (state, typed) => {
 			day = Object.assign(document.createElement('input'), {type: 'text', className: 'date-input-part', id: panel.id + '-part-' + i, autocomplete: 'off', spellcheck: false});
 			day.setAttribute('aria-label', timed.inputs[i].getAttribute('aria-label') ?? label?.textContent.trim() ?? '');
 			day.addEventListener('keydown', (event) => {
+				if (event.isComposing) {
+					return;
+				}
 				if ((event.key === 'ArrowDown' || event.key === 'ArrowUp') && event.altKey) {
 					event.preventDefault();
 					open.click();

@@ -60,14 +60,16 @@ const hold = (owner) => {
 	}
 };
 
-/** Gives the element its title back. */
+/** Gives the element its title back, unless the page gave it a new one meanwhile. */
 const release = (owner) => {
 	const was = held.get(owner);
 	if (was === undefined) {
 		return;
 	}
 	held.delete(owner);
-	owner.setAttribute('title', was.title);
+	if (!owner.hasAttribute('title')) {
+		owner.setAttribute('title', was.title);
+	}
 	if (!was.named) {
 		owner.removeAttribute('aria-label');
 	}

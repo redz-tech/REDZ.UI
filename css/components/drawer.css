@@ -92,5 +92,23 @@
 				opacity: 0;
 			}
 		}
+
+		:is(dialog.drawer:not([open]), .drawer[popover]:not(:popover-open, .navbar *)),
+		:is(dialog.drawer:not([open]), .drawer[popover]:not(:popover-open, .navbar *))::backdrop {
+			opacity: 0;
+		}
+
+		:is(dialog.drawer:not([open]), .drawer[popover]:not(:popover-open, .navbar *)) {
+			translate: 1.5rem 0;
+		}
+
+		:is(dialog.drawer:not([open]), .drawer[popover]:not(:popover-open, .navbar *)):dir(rtl),
+		:is(dialog.drawer-start:not([open]), .drawer-start[popover]:not(:popover-open, .navbar *)) {
+			translate: -1.5rem 0;
+		}
+
+		:is(dialog.drawer-start:not([open]), .drawer-start[popover]:not(:popover-open, .navbar *)):dir(rtl) {
+			translate: 1.5rem 0;
+		}
 	}
 }

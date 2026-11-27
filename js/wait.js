@@ -37,11 +37,15 @@ export const wait = (dialog, button, promise, controller) => {
 		body.inert = true;
 	});
 	const hold = (event) => event.preventDefault();
+	// Chrome lets a page cancel one close request per user activation, and Escape is none: the key itself is held.
+	const still = (event) => event.key === 'Escape' && event.preventDefault();
 	const forced = () => controller.abort();
 	dialog.addEventListener('cancel', hold);
+	dialog.addEventListener('keydown', still);
 	dialog.addEventListener('close', forced);
 	const wake = () => {
 		dialog.removeEventListener('cancel', hold);
+		dialog.removeEventListener('keydown', still);
 		dialog.removeEventListener('close', forced);
 		others.forEach((one) => one.removeAttribute('aria-disabled'));
 		bodies.forEach((body) => {

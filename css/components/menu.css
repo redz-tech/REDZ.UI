@@ -7,6 +7,7 @@
 		position-try-fallbacks: flip-block, flip-inline;
 		min-inline-size: 13rem;
 		max-inline-size: min(22rem, calc(100vw - 1rem));
+		max-block-size: calc(100dvh - 2 * var(--redz-space-4));
 		margin: var(--redz-space-4) 0;
 		padding: var(--redz-space-4);
 		border: 1px solid var(--redz-border);
@@ -40,6 +41,7 @@
 		color: var(--redz-text);
 		text-align: start;
 		text-decoration: none;
+		overflow-wrap: anywhere;
 		cursor: pointer;
 	}
 
@@ -138,6 +140,11 @@
 				opacity: 0;
 				scale: 0.97;
 			}
+		}
+
+		.menu[popover]:not(:popover-open) {
+			opacity: 0;
+			scale: 0.97;
 		}
 	}
 }

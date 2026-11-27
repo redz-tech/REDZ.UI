@@ -128,7 +128,7 @@
 		{"name": "stretched-link", "selector": ".stretched-link::after", "css": "content: \"\"; position: absolute; inset: 0; z-index: 1"},
 		{"name": "divide-x", "selector": ".divide-x > * + *", "css": "border-inline-start: 1px solid var(--redz-border)"},
 		{"name": "divide-y", "selector": ".divide-y > * + *", "css": "border-block-start: 1px solid var(--redz-border)"},
-		{"name": "vr", "css": "display: inline-block; align-self: stretch; inline-size: 1px; min-block-size: 1em; background: var(--redz-border-strong)"},
+		{"name": "vr", "css": "display: inline-block; align-self: stretch; inline-size: 0; min-block-size: 1em; border-inline-start: 1px solid var(--redz-border-strong)"},
 		{"name": "icon-link", "css": "display: inline-flex; align-items: center; gap: 0.375em; text-underline-offset: 0.2em"},
 		{"name": "flip-rtl", "selector": ".flip-rtl:dir(rtl)", "css": "scale: -1 1"}
 	]

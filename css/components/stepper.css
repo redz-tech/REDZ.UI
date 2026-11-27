@@ -152,6 +152,11 @@
 			border-color: CanvasText;
 		}
 
+		.stepper-item:not(:last-child)::after {
+			forced-color-adjust: none;
+			background: CanvasText;
+		}
+
 		.stepper-item:has(~ [aria-current="step"])::before,
 		.stepper-item[aria-current="step"]::before {
 			border-color: Highlight;

@@ -30,6 +30,20 @@ Found by reading Bootstrap 6.0.0-alpha.2's and 5.3.9's fixes against the library
 - The paragraphs in a quote or a `details` of `prose` are spaced as the prose's own.
 - A `nav-link` holding an open menu, the overflow's "More" too, keeps its color while the menu is open.
 - The body of an accordion's last item keeps the rounded corners, with no padding too.
+- Where the browser has no `closedby`, a dialog with `closedby="any"` closes only when a press and a release both land
+  on its backdrop: a selection dragged out of a field closed it.
+- A dialog that waits for the page's work holds Escape however often it is pressed. Chrome lets a page cancel one
+  close request per user activation, and Escape is none: a second Escape closed the dialog and aborted the work.
+- A menu or a popover taller than the window stays inside it and scrolls, and a long word wraps in a menu's item; a
+  menu ran off the bottom of the window, its last items out of reach.
+- A dialog, a drawer, the palette and a menu fade as they close; they stood still for 0.2 s and then vanished.
+- The scroll lock of a modal layer keeps no room for a scrollbar on a page that has none: with classic scrollbars a
+  short page narrowed by the scrollbar's width as a dialog opened. `data-page-fits` on the root says so.
+- A title the page sets while its tooltip shows is kept when the tooltip goes.
+- The value of a native date or time field starts at the field's start on iOS, where WebKit centred it.
+- A typed date takes no step from the arrows while words are being composed (IME).
+- In forced colors a stepper's line, a `vr` and an avatar's edge stay drawn, and a floating field's placeholder stays
+  hidden under its label.
 
 ## 0.38.0 - 2026-11-27
 

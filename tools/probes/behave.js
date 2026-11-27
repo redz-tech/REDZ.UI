@@ -6726,6 +6726,152 @@ window.REDZ_BEHAVE = (() => {
 				out.push('small looks wrong: ' + wrong.join(', '));
 			}
 		}]},
+		// A selection dragged out of a field in a dialog with closedby="any" ends on the backdrop and leaves the dialog
+		// open; a press and a release on the backdrop close it - natively, or by js/dialog.js where closedby is missing.
+		backdropDrag: {target: '.dialog', walk: async function* (out) {
+			const box = Object.assign(document.createElement('dialog'), {className: 'dialog', id: 'probe-drag', innerHTML: trusted('<div class="dialog-body"><input class="form-control" id="probe-drag-field" value="words to select by dragging" aria-label="Words"></div>')});
+			box.setAttribute('closedby', 'any');
+			box.setAttribute('aria-label', 'Drag');
+			document.body.append(box);
+			box.showModal();
+			await settled();
+			await wait(300);
+			const field = $('#probe-drag-field').getBoundingClientRect();
+			const edge = box.getBoundingClientRect();
+			yield {drag: [Math.round(field.left + 12), Math.round(field.top + field.height / 2), Math.round(Math.min(innerWidth - 4, edge.right + 40)), Math.round(field.top + field.height / 2)]};
+			await wait(100);
+			const dragged = box.open;
+			yield {click: [4, 4]};
+			await wait(300);
+			const clicked = box.open;
+			box.close();
+			box.remove();
+			if (!dragged || clicked) {
+				out.push('a dialog with closedby="any": a selection dragged out to the backdrop leaves it ' + (dragged ? 'open' : 'closed') + ', a click on the backdrop ' + (clicked ? 'open' : 'closed'));
+			}
+		}},
+		// A dialog that waits holds Escape, pressed as often as a person may: Chrome lets a page cancel one close request
+		// per user activation, and Escape is none.
+		waitEscape: {target: '.dialog', walk: async function* (out) {
+			const box = Object.assign(document.createElement('dialog'), {className: 'dialog', id: 'probe-hold', innerHTML: trusted('<form method="dialog"><div class="dialog-body"><input class="form-control" name="n" value="x" aria-label="Name"></div><div class="dialog-footer"><button class="btn btn-primary" id="probe-hold-save" value="save">Save</button></div></form>')});
+			box.setAttribute('aria-label', 'Hold');
+			document.body.append(box);
+			let done = null;
+			let aborted = false;
+			box.addEventListener('redz:save', (event) => {
+				event.preventDefault();
+				event.detail.signal?.addEventListener('abort', () => {
+					aborted = true;
+				});
+				event.detail.respondWith(new Promise((answer) => {
+					done = answer;
+				}));
+			}, {once: true});
+			box.showModal();
+			await wait(300);
+			yield {click: center($('#probe-hold-save'))};
+			await wait(200);
+			yield {key: ['Escape', 'Escape', 'Escape']};
+			await wait(300);
+			const held = [box.open, aborted];
+			done?.();
+			await wait(300);
+			if (box.open) {
+				box.close();
+			}
+			box.remove();
+			if (say(held) !== say([true, false])) {
+				out.push('a waiting dialog after Escape three times is ' + (held[0] ? 'open' : 'closed') + ', its work ' + (held[1] ? 'aborted' : 'going on'));
+			}
+		}},
+		// A menu taller than the window stays inside it and scrolls; a long word wraps in its item.
+		menuTall: {target: '.menu', steps: [async (out) => {
+			const box = Object.assign(document.createElement('div'), {innerHTML: trusted('<button class="btn" type="button" id="probe-tall-button" commandfor="probe-tall" command="toggle-popover" style="position: fixed; inset-block-end: 40px; inset-inline-start: 40px">Open</button><div class="menu" id="probe-tall" popover role="menu">' + Array.from({length: 60}, (_, i) => '<button class="menu-item" type="button" role="menuitem">Item ' + i + '</button>').join('') + '<button class="menu-item" type="button" role="menuitem">Averyveryverylongwordwithoutanyspacesthatgoesonandonandon</button></div>')});
+			document.body.append(box);
+			const menu = $('#probe-tall');
+			$('#probe-tall-button').click();
+			await wait(400);
+			const r = menu.getBoundingClientRect();
+			const seen = [r.top >= -1 && r.bottom <= innerHeight + 1, menu.scrollHeight > menu.clientHeight, menu.scrollWidth <= menu.clientWidth];
+			menu.hidePopover();
+			box.remove();
+			if (seen.includes(false)) {
+				out.push('a menu taller than the window (inside it, scrolls, no sideways scroll): ' + say(seen) + ' at ' + Math.round(r.top) + '-' + Math.round(r.bottom) + ' of ' + innerHeight);
+			}
+		}]},
+		// A dialog and a menu fade as they close, while their display is held, instead of standing still.
+		closeFade: {target: '.dialog', steps: [async (out) => {
+			if (!matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+				return;
+			}
+			const box = Object.assign(document.createElement('div'), {innerHTML: trusted('<dialog class="dialog" id="probe-fade-dialog" aria-label="Fade"><div class="dialog-body">Words</div></dialog><div class="menu" id="probe-fade-menu" popover role="menu"><button class="menu-item" type="button" role="menuitem">Item</button></div>')});
+			document.body.append(box);
+			const fade = async (layer, open, close) => {
+				open();
+				await wait(400);
+				close();
+				await wait(70);
+				return Number(getComputedStyle(layer).opacity) < 0.95;
+			};
+			const seen = [await fade($('#probe-fade-dialog'), () => $('#probe-fade-dialog').showModal(), () => $('#probe-fade-dialog').close()), await fade($('#probe-fade-menu'), () => $('#probe-fade-menu').showPopover(), () => $('#probe-fade-menu').hidePopover())];
+			await wait(300);
+			box.remove();
+			if (seen.includes(false)) {
+				out.push('a closing layer stands still instead of fading (dialog, menu): ' + say(seen));
+			}
+		}]},
+		// A modal dialog marks on the root whether the page fits the window: the scroll lock keeps no room for a
+		// scrollbar the page did not have.
+		pageFits: {target: '.dialog', steps: [async (out) => {
+			const box = Object.assign(document.createElement('dialog'), {className: 'dialog', id: 'probe-fits', innerHTML: trusted('<div class="dialog-body">Words</div>')});
+			box.setAttribute('aria-label', 'Fits');
+			document.body.append(box);
+			const short = Object.assign(document.createElement('style'), {textContent: 'body > :not(#probe-fits) { display: none !important; }'});
+			document.head.append(short);
+			const root = document.documentElement;
+			box.showModal();
+			await wait(50);
+			const seen = [root.hasAttribute('data-page-fits'), root.scrollHeight <= root.clientHeight, getComputedStyle(root).scrollbarGutter];
+			box.close();
+			short.remove();
+			box.remove();
+			if (!seen[1] || !seen[0] || seen[2].includes('stable')) {
+				out.push('a modal dialog: data-page-fits ' + seen[0] + ' where the page ' + (seen[1] ? 'fits' : 'does not fit') + ' the window, scrollbar-gutter ' + seen[2]);
+			}
+		}]},
+		// A title the page sets while its tooltip shows stays when the tooltip goes.
+		tooltipKeeps: {target: '[title]', steps: [async (out) => {
+			const host = document.createElement('div');
+			host.dataset.tooltips = '';
+			const button = Object.assign(document.createElement('button'), {className: 'btn btn-icon', type: 'button', title: 'Old words'});
+			button.append(Object.assign(document.createElement('i'), {className: 'bi bi-pencil'}));
+			host.append(button);
+			document.body.append(host);
+			button.dispatchEvent(new PointerEvent('pointerover', {bubbles: true, pointerType: 'mouse'}));
+			await wait(900);
+			button.setAttribute('title', 'New words');
+			button.dispatchEvent(new PointerEvent('pointerout', {bubbles: true, pointerType: 'mouse'}));
+			await wait(100);
+			const kept = button.getAttribute('title');
+			host.remove();
+			if (kept !== 'New words') {
+				out.push('a title the page changed while its tooltip showed comes back as ' + say(kept));
+			}
+		}]},
+		// A typed date takes no step from the arrows while a person composes words (IME).
+		typedIme: {target: '.date-input-part, .date-input-typed', steps: [async (out) => {
+			const part = $$('.date-input-part, .date-input-typed').find((one) => one instanceof HTMLInputElement && one.value !== '' && one.getClientRects().length > 0);
+			if (part === undefined) {
+				return;
+			}
+			const was = part.value;
+			part.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowUp', isComposing: true, bubbles: true, cancelable: true}));
+			const now = part.value;
+			part.value = was;
+			if (now !== was) {
+				out.push('ArrowUp while composing steps a typed date from ' + say(was) + ' to ' + say(now));
+			}
+		}]},
 		tabsInView: {target: '#nav-tabs-panel-1', steps: [async (out) => {
 			const panel = $('#nav-tabs-panel-1');
 			const list = $('#nav-tabs [role="tablist"]');

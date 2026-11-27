@@ -86,6 +86,10 @@
 		-webkit-appearance: button;
 	}
 
+	::-webkit-date-and-time-value {
+		text-align: start;
+	}
+
 	summary {
 		display: list-item;
 		cursor: pointer;

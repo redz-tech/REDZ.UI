@@ -1,6 +1,11 @@
 @layer components {
+	/* A modal layer locks the page's scroll and keeps its scrollbar's room - none where the page had no scrollbar,
+	   which js/dialog.js marks with data-page-fits. */
 	html:has(dialog:modal) {
 		overflow: hidden;
+	}
+
+	html:not([data-page-fits]):has(dialog:modal) {
 		scrollbar-gutter: stable;
 	}
 
@@ -169,6 +174,16 @@
 			.dialog[open]::backdrop {
 				opacity: 0;
 			}
+		}
+
+		/* Where a closing dialog goes while its display is held: it fades as it came, not 0.2 s still. */
+		dialog.dialog:not([open]),
+		dialog.dialog:not([open])::backdrop {
+			opacity: 0;
+		}
+
+		dialog.dialog:not([open]) {
+			scale: 0.97;
 		}
 	}
 }

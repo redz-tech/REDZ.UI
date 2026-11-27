@@ -146,6 +146,16 @@
 			forced-color-adjust: none;
 			background: CanvasText;
 		}
+
+		.form-floating > .form-control::placeholder,
+		.form-floating > * input.form-control:not(:where(.form-floating :is([popover], dialog) *))::placeholder {
+			opacity: 0;
+		}
+
+		.form-floating > .form-control:focus::placeholder,
+		.form-floating > * input.form-control:focus:not(:where(.form-floating :is([popover], dialog) *))::placeholder {
+			opacity: 1;
+		}
 	}
 
 	:is(.form-control, .form-select)[data-warn] {

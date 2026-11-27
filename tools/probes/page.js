@@ -138,6 +138,11 @@ window.REDZ_PROBE = (() => {
 				unmasked: unmasked.slice(0, 5).map(name),
 				unregioned: unregioned.slice(0, 8),
 				cut: cut.slice(0, 8),
+				faded: matchMedia('(forced-colors: active)').matches ? [
+					...[...document.querySelectorAll('.vr')].filter((el) => shown(el) && parseFloat(getComputedStyle(el).borderInlineStartWidth) === 0).map(name),
+					...[...document.querySelectorAll('.stepper-item:not(:last-child)')].filter((el) => shown(el) && getComputedStyle(el, '::after').backgroundColor === getComputedStyle(document.body).backgroundColor).map(name),
+					...[...document.querySelectorAll('.avatar')].filter((el) => shown(el) && getComputedStyle(el).outlineStyle === 'none').map(name),
+				].slice(0, 8) : [],
 				busyLive: [...document.querySelectorAll('[aria-busy="true"]')].filter((el) => el.matches(live) || el.querySelector(live) !== null).slice(0, 8).map(name),
 				toggles: [...document.querySelectorAll('button[command="--toggle"]')].filter((button) => {
 					const target = targetOf(button);

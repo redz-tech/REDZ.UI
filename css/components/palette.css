@@ -94,5 +94,14 @@
 				opacity: 0;
 			}
 		}
+
+		dialog.palette:not([open]),
+		dialog.palette:not([open])::backdrop {
+			opacity: 0;
+		}
+
+		dialog.palette:not([open]) {
+			translate: 0 -0.5rem;
+		}
 	}
 }

@@ -892,7 +892,7 @@ row.classList.add('flash');
 | `flash` | `animation: flash 1.2s ease-out;` | - |
 | `offscreen` | `position: absolute; inset-block-start: 0; inset-inline-start: -100vw; inline-size: 1px; block-size: 1px; overflow: hidden;` | - |
 | `stretched-link::after` | `content: ""; position: absolute; inset: 0; z-index: 1;` | - |
-| `vr` | `display: inline-block; align-self: stretch; inline-size: 1px; min-block-size: 1em; background: var(--redz-border-strong);` | - |
+| `vr` | `display: inline-block; align-self: stretch; inline-size: 0; min-block-size: 1em; border-inline-start: 1px solid var(--redz-border-strong);` | - |
 | `icon-link` | `display: inline-flex; align-items: center; gap: 0.375em; text-underline-offset: 0.2em;` | - |
 | `flip-rtl:dir(rtl)` | `scale: -1 1;` | - |
 | `d-none` | `display: none;` | yes |
