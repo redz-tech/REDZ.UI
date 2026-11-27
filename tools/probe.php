@@ -51,7 +51,8 @@ const PROBE_FORCED_PREFS = ['browser.display.document_color_use' => 2];
 const PROBE_SHOT_MAX = 8000;
 // The most steps of real input a behaviour check may take.
 const PROBE_BEHAVE_STEPS = 1200;
-// The longest a cell may run, in seconds: CI's iOS 26 simulator, the slowest engine, spends about a minute on a cell.
+// The longest a cell may run, in seconds: CI's iOS 26 simulator, the slowest engine, spends about a minute on a cell. A
+// page's behaviour checks are a cell each: a full page's suite outgrew one cell in CI's Safari (docs/all.html, 0.39.0).
 const PROBE_CELL_MAX = 300;
 // The probe code by the engines that run it, as PROBE__Reach's marks: the engines of a kind, "browser:NAME" for a reader
 // in that browser, "behave" for the full pages in the desktop engines. A change to one is tried on the config's sample
@@ -634,7 +635,9 @@ function PROBE__Behave(array &$h, string $page, string $url, int $height, array 
 	PROBE__Do($h, 'Inject', $run['page']);
 	PROBE__Do($h, 'Eval', 'document.fonts.ready.then(() => true)');
 	PROBE__Do($h, 'Inject', $run['behave']);
+	$cell = $h['cell']['page'] ?? $page;
 	foreach ($checks as $check) {
+		$h['cell'] = ['page' => $cell . ', the behaviour of ' . $check, 'since' => microtime(true), 'slowest' => 0.0, 'call' => ''];
 		$walked[] = 'the behaviour of ' . $check;
 		for ($step = 0; $step < PROBE_BEHAVE_STEPS; $step++) {
 			$answer = PROBE__Do($h, 'Eval', 'REDZ_BEHAVE.step(' . json_encode($check) . ')');

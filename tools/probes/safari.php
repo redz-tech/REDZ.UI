@@ -52,7 +52,7 @@ function PROBE__SafariStart(string $dir, string $ios = '', string $driver = '/us
 			sleep(5);
 		}
 	}
-	PROBE__SafariCall($h, 'POST', $h['session'] . '/timeouts', ['script' => 120000, 'pageLoad' => 60000]);
+	PROBE__SafariCall($h, 'POST', $h['session'] . '/timeouts', ['script' => 280000, 'pageLoad' => 60000]);
 	$left = $h;
 	register_shutdown_function(function () use ($left): void {
 		if (is_resource($left['proc'])) {
