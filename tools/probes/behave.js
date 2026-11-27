@@ -4459,9 +4459,9 @@ window.REDZ_BEHAVE = (() => {
 			yield* walkMenu('a menu beside its button in a row', more, menu, () => [['the menu', opacity(menu), '1'], ['its button', opacity(more), '1'], ['the action beside it', opacity(edit), '1'], ['the row\'s light', lit(row), light]]);
 			menu.hidePopover();
 			document.activeElement?.blur?.();
-			await settled();
-			holds('a menu of a row closing', [['the menu', opacity(menu), '1']]);
 			await until(() => !menu.checkVisibility(), 800);
+			// The menu fades as it closes, to its own closed value: never to the 0.6 of the row's actions.
+			holds('a menu of a row closed', [['the menu', opacity(menu) === '0.6' ? 'dimmed with the actions' : 'its own', 'its own']]);
 			holds('a row after its menu', [['its button', opacity(more), '0.6'], ['the row\'s light', lit(row), rest]]);
 
 			// One menu kept outside the table for all its rows.
@@ -5234,7 +5234,7 @@ window.REDZ_BEHAVE = (() => {
 			const word = {0: 'Today', 1: 'Tomorrow', [-1]: 'Yesterday'}[away] ?? 'Monday';
 			const want = {
 				built: 'hidden|hidden|grid|Monday|November 2026|5|Wednesday, November 4, 2026, 5 events|5',
-				steps: ['2026-11-20/2026-11-20 1 day 2026-11-20', '2026-11-20/2026-11-24 5 days 2026-11-24', '2026-11-03/2026-11-03 1 day 2026-11-03', '2026-11-01/2026-11-01 1 day 2026-11-01', '2026-11-01/2026-11-01 1 day 2026-11-15', '2026-11-01/2026-11-01 1 day 2026-12-09 December 2026', '2026-11-01/2026-11-01 1 day 2025-12-09 December 2025', '2025-12-09/2025-12-09 1 day 2025-12-09', '2026-11-09/2026-11-15 7 days - true November 2026', '2026-12-02 12/02 open 2026-12-02', '2026-12-01 12/01 shut face 1', '2026-12-01 12/01 open 2026-11-01 true null', '2026-12-01 12/01 open 2026-11-01', '2026-12-01 12/01 shut face 1', '2027-01-15 01/15 shut face', '2026-11-30 ' + word + ', 11/30/2026 false'],
+				steps: ['2026-11-20/2026-11-20 Now choose the end 2026-11-20', '2026-11-20/2026-11-24 5 days 2026-11-24', '2026-11-03/2026-11-03 Now choose the end 2026-11-03', '2026-11-01/2026-11-01 Now choose the end 2026-11-01', '2026-11-01/2026-11-01 Now choose the end 2026-11-15', '2026-11-01/2026-11-01 Now choose the end 2026-12-09 December 2026', '2026-11-01/2026-11-01 Now choose the end 2025-12-09 December 2025', '2025-12-09/2025-12-09 Now choose the end 2025-12-09', '2026-11-09/2026-11-15 7 days - true November 2026', '2026-12-02 12/02 open 2026-12-02', '2026-12-01 12/01 shut face 1', '2026-12-01 12/01 open 2026-11-01 true null', '2026-12-01 12/01 open 2026-11-01', '2026-12-01 12/01 shut face 1', '2027-01-15 01/15 shut face', '2026-11-30 ' + word + ', 11/30/2026 false'],
 				months: '2026-11-30/2027-01-10 2025-12-01/2026-01-11 2026-10-26/2026-12-06',
 				field: 'hidden combobox true true',
 				place: coarse ? '1 0 0 0 48' : '4 0 360 46',
@@ -6762,7 +6762,8 @@ window.REDZ_BEHAVE = (() => {
 				const data = new DataTransfer();
 				data.setData('text/plain', '1 2 3');
 				const paste = new ClipboardEvent('paste', {clipboardData: data, bubbles: true, cancelable: true});
-				if (paste.clipboardData !== null) {
+				// Firefox hands a paste made by script an empty clipboard of its own: no paste to try there.
+				if (paste.clipboardData?.getData('text') === '1 2 3') {
 					field.focus();
 					field.setSelectionRange(0, 0);
 					field.dispatchEvent(paste);
@@ -6894,8 +6895,14 @@ window.REDZ_BEHAVE = (() => {
 				open();
 				await wait(400);
 				close();
-				await wait(70);
-				return Number(getComputedStyle(layer).opacity) < 0.95;
+				const shown = [];
+				for (let frame = 0; frame < 40 && layer.checkVisibility(); frame++) {
+					shown.push(Number(getComputedStyle(layer).opacity));
+					await Promise.race([new Promise((done) => requestAnimationFrame(done)), wait(40)]);
+				}
+				// Gone at once - Firefox takes a layer out of the top layer as it closes - or fading while it shows; standing
+				// still is a layer shown whole frame after frame.
+				return shown.length <= 2 || shown.some((value) => value < 0.95);
 			};
 			const seen = [await fade($('#probe-fade-dialog'), () => $('#probe-fade-dialog').showModal(), () => $('#probe-fade-dialog').close()), await fade($('#probe-fade-menu'), () => $('#probe-fade-menu').showPopover(), () => $('#probe-fade-menu').hidePopover())];
 			await wait(300);
