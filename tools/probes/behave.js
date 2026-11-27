@@ -7277,26 +7277,27 @@ window.REDZ_BEHAVE = (() => {
 			document.body.append(box);
 			const search = $('#probe-own-search');
 			const heard = [];
-			search.addEventListener('keydown', (event) => heard.push(event.key));
+			// The widget keeps its Escape from the dialog, as one that closes its own list on it does.
+			search.addEventListener('keydown', (event) => {
+				heard.push(event.key);
+				if (event.key === 'Escape') {
+					event.preventDefault();
+				}
+			});
 			$('#probe-own-options').addEventListener('click', (event) => heard.push(event.target.id));
 			box.showModal();
 			input(search, 'bor');
-			// What shut the dialog, if anything did: the step before it and the dialog's own events.
+			// What shut the dialog, if anything did: the step it was shut by at once, and the dialog's own events.
 			const shutBy = [];
 			box.addEventListener('cancel', (event) => shutBy.push('cancel' + (event.isTrusted ? '' : ' by script')));
 			box.addEventListener('close', () => shutBy.push('close'));
-			const step = async (name, act) => {
-				const was = box.open;
-				act();
-				await wait(0);
-				if (was && !box.open) {
-					shutBy.push('after ' + name);
-				}
-			};
+			const shutAfter = (name) => !box.open && !shutBy.some((one) => one.startsWith('after')) && shutBy.push('after ' + name);
 			for (const key of ['ArrowDown', 'Enter', 'Escape']) {
-				await step(key, () => search.dispatchEvent(new KeyboardEvent('keydown', {key, bubbles: true, cancelable: true})));
+				search.dispatchEvent(new KeyboardEvent('keydown', {key, bubbles: true, cancelable: true}));
+				shutAfter(key);
 			}
-			await step('the click', () => $('#probe-own-b').click());
+			$('#probe-own-b').click();
+			shutAfter('the click');
 			await wait(50);
 			const foreign = [heard, box.open, search.value, $$('#probe-own [data-active], #probe-own-options [hidden], #probe-own .combobox-status').length, search.getAttribute('aria-activedescendant')];
 			if (say(foreign) !== say([['ArrowDown', 'Enter', 'Escape', 'probe-own-b'], true, 'bor', 0, null])) {
