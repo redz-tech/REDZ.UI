@@ -4,7 +4,7 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
-## Unreleased
+## 0.39.1 - 2026-11-28
 
 ### Changed
 - The main script's budget is 64 KB gzipped, on the owner's word: room for the engine pieces of REDZ.ID's sign-in by
