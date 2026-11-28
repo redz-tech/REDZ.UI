@@ -112,11 +112,12 @@ function PROBE__SafariSimulator(string $ios): array
 	throw new RuntimeException('no iPhone simulator of iOS ' . $ios);
 }
 
-/** Sends a WebDriver command and answers its value; an error answer throws. */
+/** Sends a WebDriver command and answers its value; an error answer throws. It waits past the session's script
+ *  timeout, so the driver's own timeout answers first. */
 function PROBE__SafariCall(array $h, string $method, string $path, ?array $body = null): mixed
 {
 	$ch = curl_init($h['base'] . $path);
-	curl_setopt_array($ch, [CURLOPT_CUSTOMREQUEST => $method, CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 240, CURLOPT_HTTPHEADER => ['Content-Type: application/json']]);
+	curl_setopt_array($ch, [CURLOPT_CUSTOMREQUEST => $method, CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 290, CURLOPT_HTTPHEADER => ['Content-Type: application/json']]);
 	if ($body !== null) {
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 	}

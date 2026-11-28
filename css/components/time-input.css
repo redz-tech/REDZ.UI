@@ -19,8 +19,9 @@
 		outline-offset: -1px;
 	}
 
-	:where(.time-input:has(> input[data-warn])) > .time-input-face {
+	.time-input:has(> input[data-warn]) > .time-input-face:not([aria-invalid="true"], :has(> .time-input-part:user-invalid)) {
 		border-color: var(--redz-warning-fill);
+		outline-color: var(--redz-warning-fill);
 	}
 
 	.time-input-face:has(> .time-input-part:user-invalid) {

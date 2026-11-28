@@ -719,8 +719,9 @@
 		margin-block: auto;
 	}
 
-	:where(.date-input:has(> input[data-warn])) > .date-input-face {
+	.date-input:has(> input[data-warn]) > .date-input-face:not([aria-invalid="true"], :user-invalid, :has(:user-invalid)) {
 		border-color: var(--redz-warning-fill);
+		outline-color: var(--redz-warning-fill);
 	}
 
 	[data-required="show"] :is(.date-input-face[aria-required="true"]:has(> .date-input-value:empty), .date-input-typed:required:placeholder-shown, .date-input-typed:has(> .date-input-part:required:placeholder-shown)):not([aria-invalid="true"]) {

@@ -3256,7 +3256,7 @@ Text fields, selects and text areas with Bootstrap 5's names: a label floating i
 
 ### A label above, a hint, an error
 
-`form-field` stacks a field's parts: `form-label`, the control, `form-text` for a hint and `invalid-feedback` for an error. The control points at both with `aria-describedby`; an error sets `aria-invalid="true"`, and the browser's own `:user-invalid` draws the same after the person has edited the field. A hint that is no refusal - a value past what is usual, which the form still takes - sets `data-warn` on the control and says why in `warning-feedback`: the border takes the warning's tone, and a time input's or a date input's face follows its input's `data-warn`.
+`form-field` stacks a field's parts: `form-label`, the control, `form-text` for a hint and `invalid-feedback` for an error. The control points at both with `aria-describedby`; an error sets `aria-invalid="true"`, and the browser's own `:user-invalid` draws the same after the person has edited the field. A hint that is no refusal - a value past what is usual, which the form still takes - sets `data-warn` on the control and says why in `warning-feedback`: the border takes the warning's tone, under the pointer and in focus too, and so does the focus ring; a time input's or a date input's face follows its input's `data-warn`, and an error wins over a warning.
 
 ```html
 <div class="form-field">

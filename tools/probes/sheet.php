@@ -126,6 +126,13 @@ function PROBE__SheetWrite(string $dir, array $report): void
 		}
 		$out[] = '</ul></div></section>';
 	}
+	if (($report['slow'] ?? []) !== []) {
+		$out[] = '<section class="card"><div class="card-header"><h2>Slow calls</h2></div><div class="card-body vstack gap-8"><p class="text-muted">Calls of a driver that took over ' . PROBE_SLOW_CALL . ' s - no finding: the checks to make quicker before they reach the driver\'s timeout.</p><ul class="sheet-findings">';
+		foreach ($report['slow'] as $note) {
+			$out[] = '<li>' . PROBE__Html($note) . '</li>';
+		}
+		$out[] = '</ul></div></section>';
+	}
 	foreach ($report['shots'] as $page => $engines) {
 		$out[] = '<section class="card"><div class="card-header"><h2>' . PROBE__Html($page) . '</h2></div><div class="card-body vstack gap-24">';
 		foreach ($engines as $name => $shots) {

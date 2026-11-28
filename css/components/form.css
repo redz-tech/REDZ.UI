@@ -158,8 +158,10 @@
 		}
 	}
 
-	:is(.form-control, .form-select)[data-warn] {
+	/* The ring takes the tone too, when the focus draws one. */
+	:is(.form-control, .form-select)[data-warn]:not([aria-invalid="true"], :user-invalid) {
 		border-color: var(--redz-warning-fill);
+		outline-color: var(--redz-warning-fill);
 	}
 
 	:is(.form-control, .form-select)[aria-invalid="true"],

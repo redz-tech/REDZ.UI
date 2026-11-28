@@ -11,6 +11,8 @@ window.REDZ_BEHAVE = (() => {
 	const say = JSON.stringify;
 	/** A promise's answer, or 'timeout' after ms: a walk never hangs on a layer that never answers. */
 	const within = (promise, ms = 8000) => Promise.race([promise, wait(ms).then(() => 'timeout')]);
+	// The end of the elements' running animations, within a while: an engine that stops drawing a page never ends them.
+	const ended = (elements) => within(Promise.all(elements.flatMap((el) => el.getAnimations()).map((one) => one.finished.catch(() => null))), 3000);
 	/** A pixel of an image file, [r, g, b, a]. */
 	const cropPixel = async (blob, x, y) => {
 		const bitmap = await createImageBitmap(blob);
@@ -2010,7 +2012,7 @@ window.REDZ_BEHAVE = (() => {
 		}]},
 		brand: {target: '#tokens-brand-region [data-brand]', steps: [async (out) => {
 			const [green, yellow] = $$('#tokens-brand-region [data-brand]');
-			await Promise.all([green, yellow].flatMap((one) => $('.btn-primary', one).getAnimations()).map((one) => one.finished.catch(() => null)));
+			await ended([green, yellow].map((one) => $('.btn-primary', one)));
 			const look = await readable ? [rgb(getComputedStyle($('.btn-primary', green)).backgroundColor), green.style.getPropertyValue('--redz-brand'), rgb(getComputedStyle($('.btn-primary', yellow)).color)] : ['10,127,90', green.style.getPropertyValue('--redz-brand'), '0,0,0'];
 			if (say(look) !== say(['10,127,90', '#0a7f5a', '0,0,0'])) {
 				out.push('a white label of #0a7f5a draws its button ' + say(look[0]) + ' with --redz-brand ' + say(look[1]) + ', one of #f4c542 its words ' + say(look[2]));
@@ -2140,7 +2142,7 @@ window.REDZ_BEHAVE = (() => {
 			}
 			const region = $$('#tokens-brand-region [data-brand]')[1];
 			const button = $('.btn-primary', region);
-			await Promise.all(button.getAnimations().map((one) => one.finished.catch(() => null)));
+			await ended([button]);
 			const theme = document.documentElement.dataset.theme ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 			const painted = '#' + rgb(getComputedStyle(button).backgroundColor).split(',').map((one) => Number(one).toString(16).padStart(2, '0')).join('');
 			if (await readable && painted !== yellow?.[theme].tone) {
@@ -4601,7 +4603,7 @@ window.REDZ_BEHAVE = (() => {
 			const button = $('#collapse-chevron button');
 			const chevron = $('.toggle-chevron', button);
 			const state = async () => {
-				await Promise.all(chevron.getAnimations().map((animation) => animation.finished));
+				await ended([chevron]);
 				const shown = (selector) => getComputedStyle($(selector, button)).display === 'none' ? 'hidden' : 'shown';
 				return [button.getAttribute('aria-expanded'), getComputedStyle(chevron).rotate, shown('.toggle-open'), shown('.toggle-closed')].join(' ');
 			};
@@ -6657,6 +6659,75 @@ window.REDZ_BEHAVE = (() => {
 				out.push('a refused field in focus takes the focus color over its danger border: ' + say(off) + ' of ' + say(Object.keys(seen)));
 			}
 		}]},
+		// A field with data-warn keeps the warning's tone at rest, under a real pointer and in focus, its ring too - a plain
+		// field, a select, a time, a day, a typed day, a period typed and a day with its time; a refusal beside the
+		// warning keeps the danger's.
+		warnRing: {target: '.form-control, .form-select', walk: async function* (out) {
+			const tones = (() => {
+				const probe = document.createElement('i');
+				document.body.append(probe);
+				const of = (token) => {
+					probe.style.color = 'var(' + token + ')';
+					return getComputedStyle(probe).color;
+				};
+				const seen = {warn: of('--redz-warning-fill'), danger: of('--redz-danger-fill')};
+				probe.remove();
+				return seen;
+			})();
+			const box = Object.assign(document.createElement('div'), {innerHTML: trusted('<input class="form-control" aria-label="Field" data-warn><select class="form-select" aria-label="List" data-warn><option>A</option></select><input class="form-control" aria-label="Refused" data-warn aria-invalid="true">')});
+			document.body.prepend(box);
+			const [field, list, refused] = box.children;
+			const frames = [['field', field, field, 'warn'], ['select', list, list, 'warn'], ['refused', refused, refused, 'danger']];
+			const marked = [];
+			const warn = (frame, focus, input, name) => {
+				if (frame !== undefined && focus !== undefined && input !== null && !input.hasAttribute('data-warn')) {
+					input.setAttribute('data-warn', '');
+					marked.push(input);
+					frames.push([name, frame, focus, 'warn']);
+				}
+			};
+			const shown = (el) => el.getClientRects().length > 0;
+			const time = $$('.time-input:not(.date-input-time) > .time-input-face').find((face) => shown(face) && $('.time-input-part:not(:disabled)', face) !== null);
+			warn(time, time && $('.time-input-part:not(:disabled)', time), time && $(':scope > input', time.parentElement), 'time');
+			const day = $$('.date-input > button.date-input-face').find((face) => shown(face) && !face.disabled);
+			warn(day, day, day && $(':scope > input', day.parentElement), 'day');
+			const single = $$('.date-input > input.date-input-typed').find((face) => shown(face) && !face.disabled);
+			warn(single, single, single && $(':scope > input:not(.date-input-typed)', single.parentElement), 'typed day');
+			const period = $$('.date-input > div.date-input-typed:not(.date-input-timed)').find((face) => shown(face) && $('.date-input-part:not(:disabled)', face) !== null);
+			warn(period, period && $('.date-input-part:not(:disabled)', period), period && $(':scope > input', period.parentElement), 'period');
+			const timed = $$('.date-input > .date-input-timed').find((face) => shown(face) && $('.time-input-part:not(:disabled)', face) !== null);
+			warn(timed, timed && $('.time-input-part:not(:disabled)', timed), timed && $(':scope > input', timed.parentElement), 'timed');
+			const hover = matchMedia('(hover: hover)').matches;
+			const off = [];
+			for (const [name, frame, focus, want] of frames) {
+				frame.scrollIntoView({block: 'center', behavior: 'instant'});
+				await settled();
+				const seen = {rest: getComputedStyle(frame).borderInlineStartColor};
+				if (hover) {
+					yield {hover: center(frame, 0.1)};
+					seen.hover = getComputedStyle(frame).borderInlineStartColor;
+					yield {hover: [5, 5]};
+				}
+				// The field is in view already: with a focus that scrolls, Firefox's pointer for the next field fell outside the
+				// window.
+				focus.focus({preventScroll: true});
+				const style = getComputedStyle(frame);
+				seen.focus = style.borderInlineStartColor;
+				seen.ring = style.outlineStyle === 'none' ? tones[want] : style.outlineColor;
+				focus.blur();
+				const wrong = Object.keys(seen).filter((key) => seen[key] !== tones[want]);
+				if (wrong.length > 0) {
+					off.push(name + ' (' + wrong.join(', ') + ')');
+				}
+			}
+			for (const input of marked) {
+				input.removeAttribute('data-warn');
+			}
+			box.remove();
+			if (off.length > 0) {
+				out.push('a warned field loses the warning\'s tone, or a refused one the danger\'s: ' + off.join('; ') + ' of ' + say(frames.map(([name]) => name)));
+			}
+		}},
 		// A password's kinds of characters: punctuation and symbols are one, a space, a mark or an unseen character none.
 		strengthKinds: {target: '[data-strength]', steps: [async (out) => {
 			const box = Object.assign(document.createElement('div'), {innerHTML: trusted('<input class="form-control" type="password" id="probe-kinds" aria-label="Password"><meter id="probe-kinds-meter" data-strength="probe-kinds" min="0" max="4"></meter>')});
@@ -8893,7 +8964,7 @@ window.REDZ_BEHAVE = (() => {
 			const input = $('input', empty);
 			const still = async () => {
 				await settled();
-				await Promise.all($$('.form-floating > label', box.parentElement).flatMap((label) => label.getAnimations()).map((one) => one.finished.catch(() => null)));
+				await ended($$('.form-floating > label', box.parentElement));
 			};
 			const size = (field) => parseFloat(getComputedStyle($(':scope > label', field)).fontSize);
 			const lined = (field) => {
@@ -8940,7 +9011,7 @@ window.REDZ_BEHAVE = (() => {
 						document.activeElement.blur();
 					}
 					await still();
-					await Promise.all($$('label', dialog).flatMap((label) => label.getAnimations()).map((one) => one.finished.catch(() => null)));
+					await ended($$('label', dialog));
 					seen.dialog = [$('input', inEmpty).offsetHeight === $('input', direct).offsetHeight, size(inHeld) === size(direct), size(inEmpty) > size(inHeld), lined(inHeld)];
 				} finally {
 					dialog.close();

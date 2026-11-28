@@ -4,6 +4,14 @@ All notable changes of the library. Newest first. Versions follow Semantic Versi
 or JavaScript call removed or renamed is a major release, one added is a minor release, a fix is a patch. While the
 version is 0.x, a removal or a rename is a minor release, as Semantic Versioning allows, and its section says so.
 
+## Unreleased
+
+### Fixed
+- A field with `data-warn` keeps the warning's tone in focus: its focus ring takes it, as its border does - as a refused
+  field keeps the danger's since 0.39.0; a field, a select, a time, a day, a typed day, a typed period and a day with
+  its time. The face of a time input or a date input with `data-warn` kept its warning's border at rest only: under the
+  pointer it took the hover's and in focus the focus color. An error still wins over a warning.
+
 ## 0.39.0 - 2026-11-28
 
 ### Added

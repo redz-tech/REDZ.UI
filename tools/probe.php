@@ -46,6 +46,8 @@ const PROBE_BEHAVE = __DIR__ . '/probes/behave.js';
 const PROBE_BEHAVE_HOME = 'docs/all.html';
 const PROBE_NULL = PHP_OS_FAMILY === 'Windows' ? 'NUL' : '/dev/null';
 const PROBE_SHEET = __DIR__ . '/../.dev/probes';
+// The file of a sheet's work folder that names the process writing it.
+const PROBE_SHEET_HOLDER = '.writer';
 const PROBE_FORCED_PREFS = ['browser.display.document_color_use' => 2];
 // The tallest shot, in CSS px: twice that is the most a 2× phone shot can be, under the engines' 16 384 px canvas.
 const PROBE_SHOT_MAX = 8000;
@@ -54,6 +56,9 @@ const PROBE_BEHAVE_STEPS = 1200;
 // The longest a cell may run, in seconds: CI's iOS 26 simulator, the slowest engine, spends about a minute on a cell. A
 // page's behaviour checks are a cell each: a full page's suite outgrew one cell in CI's Safari (docs/all.html, 0.39.0).
 const PROBE_CELL_MAX = 300;
+// A call longer than this, in seconds, is noted on the sheet by its cell and name - no finding: a check near the
+// driver's script timeout, seen before it hits it (Safari's is 280 s since 0.39.0, where 120 s once ran out).
+const PROBE_SLOW_CALL = 60;
 // The probe code by the engines that run it, as PROBE__Reach's marks: the engines of a kind, "browser:NAME" for a reader
 // in that browser, "behave" for the full pages in the desktop engines. A change to one is tried on the config's sample
 // pages in those engines - a change to the rest of the probe code in every engine -, never on every page.
@@ -94,6 +99,20 @@ function PROBE__FreePort(): int
 	$port = (int)substr((string)strrchr((string)stream_socket_get_name($server, false), ':'), 1);
 	fclose($server);
 	return $port;
+}
+
+/** Takes $work, the work folder of a sheet, for this process, empty: '' - or why not, while the process that took it
+ *  lives: two writers of one sheet would remove each other's work. */
+function PROBE__SheetClaim(string $work): string
+{
+	$pid = (int)@file_get_contents($work . '/' . PROBE_SHEET_HOLDER);
+	if ($pid > 0 && $pid !== getmypid() && function_exists('posix_kill') && posix_kill($pid, 0)) {
+		return 'process ' . $pid . ' is writing ' . $work . ' - wait for it to end, or give this run a sheet of its own: --sheet=DIR';
+	}
+	PROBE__Remove($work);
+	mkdir($work, 0777, true);
+	file_put_contents($work . '/' . PROBE_SHEET_HOLDER, (string)getmypid());
+	return '';
 }
 
 /** Runs $command without a shell, with $env added to the environment, and answers its output; a failure throws with
@@ -343,7 +362,7 @@ function PROBE__ServerStart(string $dir): array
 
 /** Calls the engine driver's $verb (Load, Inject, Eval, Key, Click, Hover, Shot, Print, Errors, Stop) on the handle. A
  *  cell runs from its Load; past PROBE_CELL_MAX the engine is stalling, and the next call throws with the cell and its
- *  slowest call named. */
+ *  slowest call named. A call past PROBE_SLOW_CALL is kept in the handle's slow, for the sheet. */
 function PROBE__Do(array &$h, string $verb, mixed ...$args): mixed
 {
 	$what = $verb . ' ' . substr(json_encode(array_map(fn(mixed $arg): mixed => is_string($arg) && strlen($arg) > 200 ? strlen($arg) . ' bytes' : $arg, $args), JSON_UNESCAPED_SLASHES), 0, 160);
@@ -363,6 +382,10 @@ function PROBE__Do(array &$h, string $verb, mixed ...$args): mixed
 		throw isset($h['cell']) && $verb !== 'Stop' ? new RuntimeException($h['cell']['page'] . ', ' . $what . ': ' . $e->getMessage(), 0, $e) : $e;
 	}
 	$took = microtime(true) - $start;
+	if (isset($h['cell']) && $took > PROBE_SLOW_CALL) {
+		$h['slow'][] = sprintf('%s, %s: %.0f s', $h['cell']['page'], $what, $took);
+		echo 'note: slow call, ', end($h['slow']), "\n";
+	}
 	if (isset($h['cell']) && $took > $h['cell']['slowest']) {
 		$h['cell']['slowest'] = $took;
 		$h['cell']['call'] = $what;
@@ -435,6 +458,7 @@ function PROBE__EngineRun(string $name, array $engine, string $binary, string $d
 			PROBE__MinCell($h, $name, $run, $report);
 		}
 	} finally {
+		PROBE__SlowKeep($h, $name, $report);
 		PROBE__Do($h, 'Stop');
 	}
 	if ($engine['kind'] === 'firefox') {
@@ -445,8 +469,17 @@ function PROBE__EngineRun(string $name, array $engine, string $binary, string $d
 				PROBE__Cell($forced, $name, $page, 'light-ltr', 'light', 'ltr', 1440, 900, 'forced', $run, $report);
 			}
 		} finally {
+			PROBE__SlowKeep($forced, $name, $report);
 			PROBE__FirefoxStop($forced);
 		}
+	}
+}
+
+/** The slow calls of the engine $name's handle into the report. */
+function PROBE__SlowKeep(array $h, string $name, array &$report): void
+{
+	foreach ($h['slow'] ?? [] as $slow) {
+		$report['slow'][] = $name . ' · ' . $slow;
 	}
 }
 
@@ -1219,9 +1252,9 @@ function PROBE__LiveEnd(string $name, int $findings): void
 }
 
 /** The entry point: every engine of the config, or the ones named. */
-/** Prints the findings and the verdict of $report and checks the config's exceptions against the engines that ran;
- *  the exit code. */
-function PROBE__Verdict(array $config, array &$report): int
+/** Prints the findings and the verdict of $report, with its sheet $sheet, and checks the config's exceptions against
+ *  the engines that ran; the exit code. */
+function PROBE__Verdict(array $config, array &$report, string $sheet = PROBE_SHEET): int
 {
 	$ran = array_keys(array_filter($report['engines'], fn(array $engine): bool => $engine['cells'] > 0));
 	// A run of chosen pages leaves the other pages' exceptions unused by design, and so does an engine that ran some of
@@ -1238,7 +1271,7 @@ function PROBE__Verdict(array $config, array &$report): int
 	foreach ($report['findings'] as $finding) {
 		echo $finding, "\n";
 	}
-	echo count($report['findings']) === 0 ? 'CLEAN' : count($report['findings']) . ' findings', ' · sheet .dev/probes/index.html', "\n";
+	echo count($report['findings']) === 0 ? 'CLEAN' : count($report['findings']) . ' findings', ' · sheet ', $sheet === PROBE_SHEET ? '.dev/probes' : $sheet, '/index.html', "\n";
 	return $report['findings'] === [] ? 0 : 1;
 }
 
@@ -1259,7 +1292,11 @@ function PROBE__UsedJoin(array $a, array $b): array
 function PROBE__Merge(array $config, array $dirs, string $base = ''): int
 {
 	$work = PROBE_SHEET . '.new';
-	PROBE__Remove($work);
+	$held = PROBE__SheetClaim($work);
+	if ($held !== '') {
+		fwrite(STDERR, $held . "\n");
+		return 2;
+	}
 	$report = null;
 	$from = [];
 	if ($base !== '') {
@@ -1296,6 +1333,7 @@ function PROBE__Merge(array $config, array $dirs, string $base = ''): int
 			$report['used'] = PROBE__UsedJoin($report['used'], $part['used']);
 			$report['findings'] = [...$report['findings'], ...$part['findings']];
 			$report['guarded'] = [...$report['guarded'], ...$part['guarded']];
+			$report['slow'] = [...$report['slow'] ?? [], ...$part['slow'] ?? []];
 			$report['walked'] = array_replace_recursive($report['walked'], $part['walked']);
 			$report['spoken'] = array_merge_recursive($report['spoken'], $part['spoken']);
 			$report['read'] = array_merge_recursive($report['read'] ?? [], $part['read'] ?? []);
@@ -1335,6 +1373,7 @@ function PROBE__Merge(array $config, array $dirs, string $base = ''): int
 		$report['used'] = PROBE__UsedJoin($kept, $fresh['used']);
 		$report['findings'] = [...$under['findings'], ...$fresh['findings']];
 		$report['guarded'] = [...$under['guarded'], ...$fresh['guarded']];
+		$report['slow'] = [...$under['slow'] ?? [], ...$fresh['slow'] ?? []];
 		foreach (['walked', 'spoken', 'read', 'shots'] as $key) {
 			$report[$key] = array_replace($under[$key] ?? [], $fresh[$key] ?? []);
 		}
@@ -1343,6 +1382,7 @@ function PROBE__Merge(array $config, array $dirs, string $base = ''): int
 	$status = PROBE__Verdict($config, $report);
 	PROBE__SheetWrite($work, $report);
 	file_put_contents($work . '/report.json', json_encode($report, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+	unlink($work . '/' . PROBE_SHEET_HOLDER);
 	PROBE__Remove(PROBE_SHEET);
 	rename($work, PROBE_SHEET);
 	return $status;
@@ -2946,7 +2986,11 @@ function PROBE__Main(array $argv): int
 	$sheet = $options['sheet'];
 	$tmp = sys_get_temp_dir() . '/redz-ui-probe-' . getmypid();
 	$work = $sheet . '.new';
-	PROBE__Remove($work);
+	$held = PROBE__SheetClaim($work);
+	if ($held !== '') {
+		fwrite(STDERR, $held . "\n");
+		return 2;
+	}
 	foreach ([$tmp, $work . '/shots', $work . '/print'] as $folder) {
 		mkdir($folder, 0777, true);
 	}
@@ -2955,7 +2999,7 @@ function PROBE__Main(array $argv): int
 	} catch (RuntimeException) {
 		$commit = '';
 	}
-	$report = ['when' => gmdate('Y-m-d H:i') . ' UTC', 'commit' => $commit === '' ? 'no commit' : 'commit ' . $commit, 'widths' => array_keys($config['widths']), 'only' => $config['only'] ?? [], 'whole' => $options['whole'], 'share' => $options['share'] === '' ? [] : array_fill_keys($names, [$options['share']]), 'engines' => [], 'skipped' => [], 'findings' => [], 'guarded' => [], 'walked' => [], 'spoken' => [], 'read' => [], 'shots' => [], 'used' => []];
+	$report = ['when' => gmdate('Y-m-d H:i') . ' UTC', 'commit' => $commit === '' ? 'no commit' : 'commit ' . $commit, 'widths' => array_keys($config['widths']), 'only' => $config['only'] ?? [], 'whole' => $options['whole'], 'share' => $options['share'] === '' ? [] : array_fill_keys($names, [$options['share']]), 'engines' => [], 'skipped' => [], 'findings' => [], 'guarded' => [], 'slow' => [], 'walked' => [], 'spoken' => [], 'read' => [], 'shots' => [], 'used' => []];
 	$run = ['config' => $config, 'page' => (string)file_get_contents(PROBE_PAGE), 'read' => (string)file_get_contents(PROBE_READ), 'behave' => (string)file_get_contents(PROBE_BEHAVE), 'axe' => PROBE__Axe($config['axe']), 'sheet' => $work];
 	[$server, $run['base']] = PROBE__ServerStart($tmp);
 	register_shutdown_function(fn() => is_resource($server) && proc_terminate($server));
@@ -2998,9 +3042,10 @@ function PROBE__Main(array $argv): int
 	foreach (glob($tmp . '/{,*/,*/*/}*.log', GLOB_BRACE) ?: [] as $log) {
 		copy($log, $work . '/logs/' . PROBE__Slug(substr(dirname($log), strlen($tmp))) . (dirname($log) === $tmp ? '' : '-') . basename($log));
 	}
-	$status = PROBE__Verdict($config, $report);
+	$status = PROBE__Verdict($config, $report, $sheet);
 	PROBE__SheetWrite($work, $report);
 	file_put_contents($work . '/report.json', json_encode($report, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+	unlink($work . '/' . PROBE_SHEET_HOLDER);
 	PROBE__Remove($sheet);
 	rename($work, $sheet);
 	PROBE__Remove($tmp);
