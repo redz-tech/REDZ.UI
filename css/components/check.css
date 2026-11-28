@@ -202,6 +202,17 @@
 		.table :is(td, th) > :is(.check, .radio, .switch):only-child:not(label *, [aria-busy="true"])::after {
 			inset: 0;
 		}
+
+		/* A stacked table's cells are no columns: its check takes the 44 px around it again. */
+		@container region (width < 576px) {
+			.table-stack :is(td, th) > :is(.check, .radio, .switch):only-child:not(label *, [aria-busy="true"]) {
+				position: relative;
+			}
+
+			.table-stack :is(td, th) > :is(.check, .radio, .switch):only-child:not(label *, [aria-busy="true"])::after {
+				inset: min(0px, (100% - 2.75rem) / 2);
+			}
+		}
 	}
 
 	@media (prefers-reduced-motion: no-preference) {

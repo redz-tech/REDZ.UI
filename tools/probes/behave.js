@@ -6592,15 +6592,39 @@ window.REDZ_BEHAVE = (() => {
 			}
 			frame.remove();
 		}]},
-		// Under a finger a check alone in a table's cell answers in the cell, never past it: 44 px around it spilled out of
-		// a narrow column and scrolled the table sideways.
+		// Under a finger a check alone in a table's column answers in the cell, never past it: 44 px around it spilled out
+		// of a narrow column and scrolled the table sideways. A stacked table's cells are no columns (stackCheck).
 		checkCell: {target: '.table td > .check:only-child', steps: [async (out) => {
 			if (!matchMedia('(pointer: coarse)').matches) {
 				return;
 			}
-			const spilled = $$('.table :is(td, th) > :is(.check, .radio, .switch):only-child').map((check) => check.parentElement).filter((cell) => cell.getClientRects().length > 0 && cell.scrollWidth > cell.clientWidth).map((cell) => (cell.closest('[id]')?.id ?? '') + ' ' + cell.clientWidth + '/' + cell.scrollWidth);
+			const spilled = $$('.table :is(td, th) > :is(.check, .radio, .switch):only-child').map((check) => check.parentElement).filter((cell) => cell.getClientRects().length > 0 && getComputedStyle(cell).display === 'table-cell' && cell.scrollWidth > cell.clientWidth).map((cell) => (cell.closest('[id]')?.id ?? '') + ' ' + cell.clientWidth + '/' + cell.scrollWidth);
 			if (spilled.length > 0) {
 				out.push('a check alone in a cell spills past it under a finger: ' + say(spilled.slice(0, 6)));
+			}
+		}]},
+		// Under a finger a stacked table's lone check answers in its own 44 px, not in the whole card or page: its cell is no
+		// column there, and its whole-cell target took the card's or the page's box (tourism, 0.39.0) - every tap on a card
+		// ticked the head's select-all.
+		stackCheck: {target: '.table-stack', steps: [async (out) => {
+			if (!matchMedia('(pointer: coarse)').matches) {
+				return;
+			}
+			const box = Object.assign(document.createElement('section'), {className: 'card', innerHTML: trusted('<table class="table table-stack"><thead><tr><th class="table-check"><input class="check" type="checkbox" aria-label="Select all"></th><th><button class="table-sort" type="button">Name</button></th></tr></thead><tbody><tr><td class="table-check"><input class="check" type="checkbox" aria-label="Pick one"></td><td data-label="Name"><a href="#probe-stack-one" id="probe-stack-one">First row</a></td></tr><tr><td class="table-check"><input class="check" type="checkbox" aria-label="Pick two"></td><td data-label="Name"><a href="#probe-stack-two" id="probe-stack-two">Second row</a></td></tr></tbody></table>')});
+			box.style.inlineSize = '360px';
+			document.body.prepend(box);
+			box.scrollIntoView({block: 'start', behavior: 'instant'});
+			await settled();
+			const hit = (el, dx = 0, dy = 0) => {
+				const rect = el.getBoundingClientRect();
+				const at = document.elementFromPoint(rect.left + rect.width / 2 + dx, rect.top + rect.height / 2 + dy);
+				return at === null ? null : at.id || at.getAttribute('aria-label') || at.localName;
+			};
+			const seen = {stacked: getComputedStyle($('tbody tr', box)).display !== 'table-row', links: $$('a', box).map((link) => hit(link)), checks: $$('.check', box).map((check) => [hit(check, 18), hit(check, -18, -18)])};
+			box.remove();
+			const want = {stacked: true, links: ['probe-stack-one', 'probe-stack-two'], checks: [['Select all', 'Select all'], ['Pick one', 'Pick one'], ['Pick two', 'Pick two']]};
+			if (say(seen) !== say(want)) {
+				out.push('a stacked table\'s lone check under a finger answers past its 44 px, or not in them: ' + say(seen));
 			}
 		}]},
 		// A pressed or current button keeps its ground when it cannot be pressed, as a checked btn-check does; the label of

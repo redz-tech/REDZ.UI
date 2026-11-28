@@ -11,6 +11,9 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
   phone (a countdown to a deadline, a touch or pointer switch), the script at 61.1 KB of 62.
 
 ### Fixed
+- Under a finger a stacked table's lone check - the select-all in its head bar, a check alone in a card's cell - answers
+  in its 44 px again. Since 0.39.0 its whole-cell target took the box of the card or of the page, as a stacked table's
+  cells are no columns and no positioned box, and every tap on a card landed on the head's select-all.
 - A field with `data-warn` keeps the warning's tone in focus: its focus ring takes it, as its border does - as a refused
   field keeps the danger's since 0.39.0; a field, a select, a time, a day, a typed day, a typed period and a day with
   its time. The face of a time input or a date input with `data-warn` kept its warning's border at rest only: under the
