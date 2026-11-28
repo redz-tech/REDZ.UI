@@ -6,6 +6,10 @@ version is 0.x, a removal or a rename is a minor release, as Semantic Versioning
 
 ## Unreleased
 
+### Changed
+- The main script's budget is 64 KB gzipped, on the owner's word: room for the engine pieces of REDZ.ID's sign-in by
+  phone (a countdown to a deadline, a touch or pointer switch), the script at 61.1 KB of 62.
+
 ### Fixed
 - A field with `data-warn` keeps the warning's tone in focus: its focus ring takes it, as its border does - as a refused
   field keeps the danger's since 0.39.0; a field, a select, a time, a day, a typed day, a typed period and a day with
